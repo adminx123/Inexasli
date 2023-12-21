@@ -19,8 +19,8 @@
     </style>
 </head>
 <body>
-    <!-- Replace 'your-logo.jpg' with the actual filename of your logo -->
-    <img src="your-logo.jpg" alt="Your Logo">
+    <!-- Replace 'logo.png' with the actual filename of your logo -->
+    <img src="logo.png" alt="Your Logo">
 
     <h1>Empowering Thee</h1>
 </body>
