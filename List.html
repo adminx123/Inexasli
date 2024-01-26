@@ -281,12 +281,24 @@
     <label for="liabilities_tax_arrears">Tax Arrears:</label>
     <input type="text" id="liabilities_tax_arrears">
 
-    <button onclick="submitValues()" style="background-color: #000; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">Submit</button>
+    <button onclick="createAndSendEmail()" style="background-color: #000; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">Submit</button>
 
     <script>
-        function submitValues() {
-            // You can add JavaScript code here to collect and process the input values
-            alert("Values submitted successfully!"); // For demonstration purposes, you can replace this with your logic
+        function createAndSendEmail() {
+            // Collect form data
+            var incomeData = document.getElementById('income_salary_wages').value; // repeat for other fields
+
+            // Create text content
+            var emailContent = "Income Salary/Wages: " + incomeData + "\n"; // repeat for other fields
+
+            // Create a Blob containing the email content
+            var blob = new Blob([emailContent], { type: 'text/plain' });
+
+            // Create a data URI for the Blob
+            var blobUrl = URL.createObjectURL(blob);
+
+            // Open the user's default email client with a pre-populated email
+            window.location.href = 'mailto:your-email@example.com?subject=New Form Submission&body=Please find the attached data&attachment=' + blobUrl;
         }
     </script>
 </body>
