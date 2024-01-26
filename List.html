@@ -281,229 +281,48 @@
     <label for="liabilities_tax_arrears">Tax Arrears:</label>
     <input type="text" id="liabilities_tax_arrears">
 
-    <button onclick="createAndSendEmail()" style="background-color: #000; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">Submit</button>
+     <button onclick="createAndSaveTaxFile()" style="background-color: #000; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">Submit</button>
 
-    <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
-    $income_salary_wages = $_POST['income_salary_wages'];
-    $income_tips = $_POST['income_tips'];
-    $income_bonuses = $_POST['income_bonuses'];
-    $income_sole_prop = $_POST['income_sole_prop'];
-    $income_investment_property = $_POST['income_investment_property'];
-    $income_interest = $_POST['income_interest'];
-    $income_capital_gains_losses = $_POST['income_capital_gains_losses'];
-    $income_owner_dividend = $_POST['income_owner_dividend'];
-    $income_public_dividend = $_POST['income_public_dividend'];
-    $income_trust = $_POST['income_trust'];
-    $income_federal_pension = $_POST['income_federal_pension'];
-    $income_work_pension = $_POST['income_work_pension'];
-    $income_social_security = $_POST['income_social_security'];
-    $income_employment_insurance = $_POST['income_employment_insurance'];
-    $income_alimony = $_POST['income_alimony'];
-    $income_scholarships_grants = $_POST['income_scholarships_grants'];
-    $income_royalties = $_POST['income_royalties'];
-    $income_gambling_winnings = $_POST['income_gambling_winnings'];
-    $income_peer_to_peer_lending = $_POST['income_peer_to_peer_lending'];
-    $income_venture_capital = $_POST['income_venture_capital'];
-    $income_tax_free_income = $_POST['income_tax_free_income'];
+    <script>
+        // Define the JavaScript function for creating and saving tax file
+        function createAndSaveTaxFile() {
+            // Gather the form data
+            var formData = gatherFormData();
 
-    $expenses_grocery = $_POST['expenses_grocery'];
-    $expenses_dining = $_POST['expenses_dining'];
-    $expenses_fitness = $_POST['expenses_fitness'];
-    $expenses_subscriptions = $_POST['expenses_subscriptions'];
-    $expenses_pet = $_POST['expenses_pet'];
-    $expenses_clothing = $_POST['expenses_clothing'];
-    $expenses_vacation = $_POST['expenses_vacation'];
-    $expenses_travel_life_insurance = $_POST['expenses_travel_life_insurance'];
-    $expenses_cellphone_service = $_POST['expenses_cellphone_service'];
-    $expenses_medical_dental = $_POST['expenses_medical_dental'];
-    $expenses_line_of_credit_payment = $_POST['expenses_line_of_credit_payment'];
-    $expenses_student_loan_payment = $_POST['expenses_student_loan_payment'];
-    $expenses_credit_card_payment = $_POST['expenses_credit_card_payment'];
-    $expenses_tax_arrears_payment = $_POST['expenses_tax_arrears_payment'];
-    $expenses_small_business_loan_payment = $_POST['expenses_small_business_loan_payment'];
+            // Format the data into a JSON string
+            var jsonData = JSON.stringify(formData, null, 2);
 
-    $housing_mortgage_payment = $_POST['housing_mortgage_payment'];
-    $housing_rent_payment = $_POST['housing_rent_payment'];
-    $housing_property_tax = $_POST['housing_property_tax'];
-    $housing_condo_fee = $_POST['housing_condo_fee'];
-    $housing_insurance = $_POST['housing_insurance'];
-    $housing_repairs = $_POST['housing_repairs'];
-    $housing_hydro = $_POST['housing_hydro'];
-    $housing_water = $_POST['housing_water'];
-    $housing_gas = $_POST['housing_gas'];
-    $housing_internet = $_POST['housing_internet'];
+            // Create a Blob object containing the JSON data
+            var blob = new Blob([jsonData], { type: 'application/json' });
 
-    $transportation_car_loan_payment = $_POST['transportation_car_loan_payment'];
-    $transportation_insurance = $_POST['transportation_insurance'];
-    $transportation_fuel = $_POST['transportation_fuel'];
-    $transportation_maintenance = $_POST['transportation_maintenance'];
-    $transportation_public_transit = $_POST['transportation_public_transit'];
-    $transportation_ride_hailing = $_POST['transportation_ride_hailing'];
+            // Create a link element
+            var a = document.createElement('a');
 
-    $dependant_day_care = $_POST['dependant_day_care'];
-    $dependant_medical_dental = $_POST['dependant_medical_dental'];
-    $dependant_clothing = $_POST['dependant_clothing'];
-    $dependant_sports_recreation = $_POST['dependant_sports_recreation'];
-    $dependant_transportation = $_POST['dependant_transportation'];
-    $dependant_tuition = $_POST['dependant_tuition'];
-    $dependant_housing = $_POST['dependant_housing'];
-    $dependant_cellular_service = $_POST['dependant_cellular_service'];
+            // Set the download attribute with the file name
+            a.download = 'tax_data.json';
 
-    $assets_checking_accounts = $_POST['assets_checking_accounts'];
-    $assets_savings_accounts = $_POST['assets_savings_accounts'];
-    $assets_other_liquid_accounts = $_POST['assets_other_liquid_accounts'];
-    $assets_long_term_investment_accounts = $_POST['assets_long_term_investment_accounts'];
-    $assets_primary_residence = $_POST['assets_primary_residence'];
-    $assets_investment_properties = $_POST['assets_investment_properties'];
-    $assets_small_business = $_POST['assets_small_business'];
-    $assets_vehicles = $_POST['assets_vehicles'];
-    $assets_art_jewelry = $_POST['assets_art_jewelry'];
+            // Create a URL for the Blob and set it as the href attribute of the link
+            a.href = URL.createObjectURL(blob);
 
-    $liabilities_small_business_loan = $_POST['liabilities_small_business_loan'];
-    $liabilities_primary_residence = $_POST['liabilities_primary_residence'];
-    $liabilities_investment_properties = $_POST['liabilities_investment_properties'];
-    $liabilities_vehicle_loan = $_POST['liabilities_vehicle_loan'];
-    $liabilities_student_loan = $_POST['liabilities_student_loan'];
-    $liabilities_line_of_credit = $_POST['liabilities_line_of_credit'];
-    $liabilities_credit_card = $_POST['liabilities_credit_card'];
-    $liabilities_tax_arrears = $_POST['liabilities_tax_arrears'];
+            // Append the link to the body
+            document.body.appendChild(a);
 
-    // Create a text file with the form data
-    $file_content = "
-    INCOME, PRE TAX & CONTRIBUTION
-    Salary/Wages: $income_salary_wages
-    Tips: $income_tips
-    Bonuses: $income_bonuses
-    Sole Proprietorship/Partnership: $income_sole_prop
-    Investment Property: $income_investment_property
-    Interest: $income_interest
-    Capital Gains/Losses: $income_capital_gains_losses
-    Owner Dividend: $income_owner_dividend
-    Public Dividend: $income_public_dividend
-    Trust: $income_trust
-    Federal Pension: $income_federal_pension
-    Work Pension: $income_work_pension
-    Social Security: $income_social_security
-    Employment Insurance & Benefits: $income_employment_insurance
-    Alimony: $income_alimony
-    Scholarships and Grants: $income_scholarships_grants
-    Royalties: $income_royalties
-    Gambling Winnings: $income_gambling_winnings
-    Peer to Peer Lending: $income_peer_to_peer_lending
-    Venture Capital Investment Income: $income_venture_capital
-    Tax-Free Income: $income_tax_free_income
+            // Trigger a click on the link to initiate the download
+            a.click();
 
-    EXPENSES, MISCELLANEOUS
-    Grocery: $expenses_grocery
-    Dining: $expenses_dining
-    Fitness: $expenses_fitness
-    Subscriptions: $expenses_subscriptions
-    Pet: $expenses_pet
-    Clothing: $expenses_clothing
-    Vacation: $expenses_vacation
-    Travel and Life Insurance: $expenses_travel_life_insurance
-    Cellphone Service: $expenses_cellphone_service
-    Medical & Dental: $expenses_medical_dental
-    Line of Credit Payment: $expenses_line_of_credit_payment
-    Student Loan Payment: $expenses_student_loan_payment
-    Credit Card Payment: $expenses_credit_card_payment
-    Tax Arrears Payment: $expenses_tax_arrears_payment
-    Small Business Loan Payment: $expenses_small_business_loan_payment
+            // Remove the link from the body
+            document.body.removeChild(a);
+        }
 
-    EXPENSES, HOUSING
-    Mortgage Payment: $housing_mortgage_payment
-    Rent Payment: $housing_rent_payment
-    Property Tax: $housing_property_tax
-    Condo Fee: $housing_condo_fee
-    Insurance: $housing_insurance
-    Repairs: $housing_repairs
-    Hydro: $housing_hydro
-    Water: $housing_water
-    Gas: $housing_gas
-    Internet: $housing_internet
-
-    EXPENSES, TRANSPORTATION
-    Car Loan Payment: $transportation_car_loan_payment
-    Insurance: $transportation_insurance
-    Fuel: $transportation_fuel
-    Maintenance: $transportation_maintenance
-    Public Transit: $transportation_public_transit
-    Ride Hailing: $transportation_ride_hailing
-
-    EXPENSES, DEPENDANT
-    Day Care: $dependant_day_care
-    Medical & Dental: $dependant_medical_dental
-    Clothing: $dependant_clothing
-    Sports & Recreation: $dependant_sports_recreation
-    Transportation: $dependant_transportation
-    Tuition: $dependant_tuition
-    Housing: $dependant_housing
-    Cellular Service: $dependant_cellular_service
-
-    ASSETS
-    Checking Account(s): $assets_checking_accounts
-    Savings Account(s): $assets_savings_accounts
-    Other Liquid Account(s): $assets_other_liquid_accounts
-    Long Term Investment Account(s): $assets_long_term_investment_accounts
-    Primary Residence: $assets_primary_residence
-    Investment Property(s): $assets_investment_properties
-    Small Business: $assets_small_business
-    Vehicle(s): $assets_vehicles
-    Art/Jewelry: $assets_art_jewelry
-
-    LIABILITIES
-    Small Business Loan: $liabilities_small_business_loan
-    Primary Residence: $liabilities_primary_residence
-    Investment Property(s): $liabilities_investment_properties
-    Vehicle Loan: $liabilities_vehicle_loan
-    Student Loan: $liabilities_student_loan
-    Line of Credit: $liabilities_line_of_credit
-    Credit Card: $liabilities_credit_card
-    Tax Arrears: $liabilities_tax_arrears
-    ";
-
-    $file_name = "form_data_" . date("Ymd_His") . ".txt";
-    file_put_contents($file_name, $file_content);
-
-    // Email the text file
-    $to = "your_email@example.com"; // Replace with your email address
-    $subject = "Form Data Submission";
-    $message = "The user has submitted the form data. Please find attached the details.";
-    $headers = "From: webmaster@example.com"; // Replace with your email or leave it as is
-
-    $attachment = chunk_split(base64_encode(file_get_contents($file_name)));
-    // Continue from the previous code block
-
-    $boundary = md5("sanweb123456"); // random boundary
-    $headers .= PHP_EOL . "MIME-Version: 1.0" . PHP_EOL;
-    $headers .= "Content-Type: multipart/mixed; boundary=\"" . $boundary . "\"" . PHP_EOL . PHP_EOL;
-
-    // Email text
-    $body = "--" . $boundary . PHP_EOL;
-    $body .= "Content-Type: text/plain; charset=ISO-8859-1" . PHP_EOL;
-    $body .= "Content-Transfer-Encoding: base64" . PHP_EOL . PHP_EOL;
-    $body .= chunk_split(base64_encode($message)) . PHP_EOL;
-
-    // Email attachment
-    $body .= "--" . $boundary . PHP_EOL;
-    $body .= "Content-Type: text/plain; name=\"" . $file_name . "\"" . PHP_EOL;
-    $body .= "Content-Transfer-Encoding: base64" . PHP_EOL;
-    $body .= "Content-Disposition: attachment; filename=\"" . $file_name . "\"" . PHP_EOL . PHP_EOL;
-    $body .= $attachment . PHP_EOL;
-
-    $body .= "--" . $boundary . "--";
-
-    // Send the email
-    mail($to, $subject, $body, $headers);
-
-    // Delete the temporary text file
-    unlink($file_name);
-}
-?>
-
-
+        // Implement this function to gather the form data
+        function gatherFormData() {
+            // Your code to collect form data and return it as an object
+            return {
+                income_salary_wages: document.getElementById('income_salary_wages').value,
+                // Repeat for other form fields
+            };
+        }
+    </script>
 </body>
 
 </html>
