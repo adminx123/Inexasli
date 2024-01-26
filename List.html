@@ -283,24 +283,55 @@
 
     <button onclick="createAndSendEmail()" style="background-color: #000; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">Submit</button>
 
-    <script>
-        function createAndSendEmail() {
-            // Collect form data
-            var incomeData = document.getElementById('income_salary_wages').value; // repeat for other fields
+    <?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $incomeData = $_POST['income_salary_wages']; // repeat for other fields
 
-            // Create text content
-            var emailContent = "Income Salary/Wages: " + incomeData + "\n"; // repeat for other fields
+    // Email content
+    $emailContent = "Income Salary/Wages: $incomeData\n"; // repeat for other fields
 
-            // Create a Blob containing the email content
-            var blob = new Blob([emailContent], { type: 'text/plain' });
+    // Create a temporary file with the form data
+    $tempFile = tempnam(sys_get_temp_dir(), 'form_data');
+    file_put_contents($tempFile, $emailContent);
 
-            // Create a data URI for the Blob
-            var blobUrl = URL.createObjectURL(blob);
+    // Email configuration
+    $to = "your-email@example.com"; // replace with your email address
+    $subject = "New Form Submission";
 
-            // Open the user's default email client with a pre-populated email
-            window.location.href = 'mailto:your-email@example.com?subject=New Form Submission&body=Please find the attached data&attachment=' + blobUrl;
-        }
-    </script>
+    // Email headers
+    $headers = "From: webmaster@example.com"; // replace with your email or leave it empty
+
+    // Boundary for multipart email
+    $boundary = md5(time());
+
+    // Email content type
+    $headers .= "\r\nContent-Type: multipart/mixed; boundary=\"$boundary\"";
+
+    // Email body
+    $emailBody = "--$boundary\r\n";
+    $emailBody .= "Content-Type: text/plain; charset=\"utf-8\"\r\n";
+    $emailBody .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+    $emailBody .= "$emailContent\r\n";
+    $emailBody .= "--$boundary\r\n";
+    $emailBody .= "Content-Type: application/octet-stream; name=\"form_data.txt\"\r\n";
+    $emailBody .= "Content-Transfer-Encoding: base64\r\n";
+    $emailBody .= "Content-Disposition: attachment; filename=\"form_data.txt\"\r\n\r\n";
+    $emailBody .= chunk_split(base64_encode(file_get_contents($tempFile)));
+    $emailBody .= "--$boundary--";
+
+    // Send email
+    mail($to, $subject, $emailBody, $headers);
+
+    // Delete temporary file
+    unlink($tempFile);
+
+    // Optionally, you can redirect the user to a thank-you page
+    header("Location: thank_you.html");
+    exit();
+}
+?>
+
 </body>
 
 </html>
