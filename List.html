@@ -281,37 +281,57 @@
     <label for="liabilities_tax_arrears">Tax Arrears:</label>
     <input type="text" id="liabilities_tax_arrears">
 
-     <button onclick="createAndSaveTaxFile()" style="background-color: #000; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">Submit</button>
+    <!-- Terms and Conditions Checkbox -->
+    <label for="agree_terms_conditions">
+        <input type="checkbox" id="agree_terms_conditions">
+        I agree to the terms and conditions of service.
+    </label>
+
+    <button onclick="createAndSaveTaxFile()" style="background-color: #000; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">
+        Submit
+    </button>
 
     <script>
         // Define the JavaScript function for creating and saving tax file
         function createAndSaveTaxFile() {
-            // Gather the form data
-            var formData = gatherFormData();
+            // Check if the user has agreed to terms and conditions
+            var agreed = document.getElementById('agree_terms_conditions').checked;
 
-            // Format the data into a JSON string
-            var jsonData = JSON.stringify(formData, null, 2);
+            if (agreed) {
+                // Gather the form data
+                var formData = gatherFormData();
 
-            // Create a Blob object containing the JSON data
-            var blob = new Blob([jsonData], { type: 'application/json' });
+                // Format the data into a JSON string
+                var jsonData = JSON.stringify(formData, null, 2);
 
-            // Create a link element
-            var a = document.createElement('a');
+                // Create a Blob object containing the JSON data
+                var blob = new Blob([jsonData], { type: 'application/json' });
 
-            // Set the download attribute with the file name
-            a.download = 'tax_data.json';
+                // Create a link element
+                var a = document.createElement('a');
 
-            // Create a URL for the Blob and set it as the href attribute of the link
-            a.href = URL.createObjectURL(blob);
+                // Set the download attribute with the file name
+                a.download = 'tax_data.json';
 
-            // Append the link to the body
-            document.body.appendChild(a);
+                // Create a URL for the Blob and set it as the href attribute of the link
+                a.href = URL.createObjectURL(blob);
 
-            // Trigger a click on the link to initiate the download
-            a.click();
+                // Append the link to the body
+                document.body.appendChild(a);
 
-            // Remove the link from the body
-            document.body.removeChild(a);
+                // Trigger a click on the link to initiate the download
+                a.click();
+
+                // Remove the link from the body
+                document.body.removeChild(a);
+
+                // Open user's email with pre-filled terms and conditions
+                var emailBody = "I agree to the following terms and conditions of service:\n\nTerms and conditions content here.";
+
+                window.location.href = 'mailto:user@example.com?subject=Agreement to Terms and Conditions&body=' + encodeURIComponent(emailBody);
+            } else {
+                alert("Please agree to the terms and conditions before submitting.");
+            }
         }
 
         // Implement this function to gather the form data
@@ -323,6 +343,8 @@
             };
         }
     </script>
+</body>
+
 </body>
 
 </html>
