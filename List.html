@@ -304,17 +304,21 @@
     <button type="button" onclick="calculateTaxes()">Calculate</button>
 <p id="calculatedFederalTax"></p>
 <p id="calculatedProvincialTax"></p>
+<p id="calculatedCppPayable"></p>
 
 <script>
-  function calculateTaxes() {
+ function calculateTaxes() {
     var totalIncome = getTotalIncome();
     var selectedProvince = document.getElementById("provinceDropdown").value;
     var federalTaxPayable = getFederalTaxPayable(totalIncome);
     var provincialTaxPayable = getProvincialTaxPayable(selectedProvince, totalIncome);
+    var cppPayable = getCppPayable(); // Updated line for CPP calculation
 
     document.getElementById("calculatedFederalTax").innerHTML = "Federal Tax Payable: $" + federalTaxPayable.toFixed(2);
     document.getElementById("calculatedProvincialTax").innerHTML = "Provincial Tax Payable: $" + provincialTaxPayable.toFixed(2);
-  }
+    document.getElementById("calculatedCppPayable").innerHTML = "CPP Payable: $" + cppPayable.toFixed(2); // Updated line to display CPP payable
+}
+
 
   function getTotalIncome() {
     var salaryWages = parseFloat(document.getElementById("income_salary_wages").value) || 0;
