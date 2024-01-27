@@ -39,7 +39,7 @@
 </head>
 
 <body>
-   <h1 style="text-align: center;">The Four Pillars of Finance</h1>
+   <h1 style="text-align: center;">The Four Pillars of Finance WARNING: WILL CONTAIN ERRORS NOT TO BE USED AS FINANCIAL ADVICE. CONSULT WITH A LICENSED PROFESSIONAL. WEBSITE IS NOT FUNCTIONAL YOU ASSUME ALL RISK WHEN USING</h1>
 <h1 style="text-align: center;">Income - Expenses - Assets - Liabilities</h1>
 <select id="provinceDropdown">
   <option value="AB">Alberta</option>
@@ -512,15 +512,24 @@ function calculateTaxes() {
 
     return cppPayableEmployed + cppPayableSelfEmployed;
 }
-function getEIPayable() {
-    var employmentInsurance = parseFloat(document.getElementById("income_employment_insurance").value) || 0;
+ function getEIPayable() {
+    var salaryWages = parseFloat(document.getElementById("income_salary_wages").value) || 0;
+    var bonuses = parseFloat(document.getElementById("income_bonuses").value) || 0;
+    var solePropIncome = parseFloat(document.getElementById("income_sole_prop").value) || 0;
+
+    var employedIncome = salaryWages + bonuses;
+    var selfEmployedIncome = solePropIncome;
+
     var eiRateEmployed = 0.0166;
+    var eiRateSelfEmployed = 0.0166;
     var eiInsurableEarningsMax = 63200;
     var eiEmployeePremiumMax = 1049.12;
     var eiEmployerPremiumMax = 1468.77;
 
-    var eiPayable = Math.min(eiEmployeePremiumMax, employmentInsurance * eiRateEmployed);
-    return eiPayable;
+    var eiPayableEmployed = Math.min(eiEmployeePremiumMax, Math.max(0, employedIncome) * eiRateEmployed);
+    var eiPayableSelfEmployed = Math.min(eiEmployeePremiumMax, Math.max(0, selfEmployedIncome) * eiRateSelfEmployed);
+
+    return eiPayableEmployed + eiPayableSelfEmployed;
   }
 </script>
 
