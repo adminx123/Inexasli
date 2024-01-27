@@ -286,63 +286,35 @@
         <input type="checkbox" id="agree_terms_conditions">
         I agree to the terms and conditions of service.
     </label>
+    <h1>Canadian Tax Calculator</h1>
 
-    <button onclick="createAndSaveTaxFile()" style="background-color: #000; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">
-        Submit
-    </button>
+    <form id="taxCalculatorForm">
+        <label for="income">Enter Income:</label>
+        <input type="number" id="income" name="income" required>
+        <br>
+        <button type="button" onclick="calculateTax()">Calculate Tax</button>
+    </form>
+
+    <h2>Calculated Tax:</h2>
+    <p id="calculatedTax"></p>
 
     <script>
-        // Define the JavaScript function for creating and saving tax file
-        function createAndSaveTaxFile() {
-            // Check if the user has agreed to terms and conditions
-            var agreed = document.getElementById('agree_terms_conditions').checked;
-
-            if (agreed) {
-                // Gather the form data
-                var formData = gatherFormData();
-
-                // Format the data into a JSON string
-                var jsonData = JSON.stringify(formData, null, 2);
-
-                // Create a Blob object containing the JSON data
-                var blob = new Blob([jsonData], { type: 'application/json' });
-
-                // Create a link element
-                var a = document.createElement('a');
-
-                // Set the download attribute with the file name
-                a.download = 'tax_data.json';
-
-                // Create a URL for the Blob and set it as the href attribute of the link
-                a.href = URL.createObjectURL(blob);
-
-                // Append the link to the body
-                document.body.appendChild(a);
-
-                // Trigger a click on the link to initiate the download
-                a.click();
-
-                // Remove the link from the body
-                document.body.removeChild(a);
-
-                // Open user's email with pre-filled terms and conditions
-                var emailBody = "I agree to the following terms and conditions of service:\n\nTerms and conditions content here.";
-
-                window.location.href = 'mailto:user@example.com?subject=Agreement to Terms and Conditions&body=' + encodeURIComponent(emailBody);
-            } else {
-                alert("Please agree to the terms and conditions before submitting.");
-            }
+        function calculateTax() {
+            var income = parseFloat(document.getElementById("income").value);
+            var taxRate = getTaxRate(income);
+            var calculatedTax = income * taxRate;
+            document.getElementById("calculatedTax").innerHTML = "Tax Payable: $" + calculatedTax.toFixed(2);
         }
 
-        // Implement this function to gather the form data
-        function gatherFormData() {
-            // Your code to collect form data and return it as an object
-            return {
-                income_salary_wages: document.getElementById('income_salary_wages').value,
-                // Repeat for other form fields
-            };
+        function getTaxRate(income) {
+            if (income >= 235675) return 0.33;
+            else if (income >= 165430) return 0.29;
+            else if (income >= 106717) return 0.26;
+            else if (income >= 53359) return 0.205;
+            else return 0.15;
         }
     </script>
+    
 </body>
 
 </body>
