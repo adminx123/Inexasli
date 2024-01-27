@@ -348,6 +348,123 @@
         else return 0.15;
     }
 </script>
+<script>
+    function calculateProvincialTax() {
+        var income = parseFloat(document.getElementById("incomeInput").value) || 0;
+        var selectedProvince = document.getElementById("provinceDropdown").value;
+
+        var provincialTaxRate = getProvincialTaxRate(selectedProvince, income);
+        var provincialTaxPayable = income * provincialTaxRate;
+
+        document.getElementById("calculatedProvincialTax").innerHTML = "Provincial Tax Payable: $" + provincialTaxPayable.toFixed(2);
+    }
+
+    function getProvincialTaxRate(province, totalIncome) {
+        switch (province) {
+            case 'AB':
+                if (totalIncome >= 341502) return 0.15;
+                else if (totalIncome >= 227668) return 0.14;
+                else if (totalIncome >= 170751) return 0.13;
+                else if (totalIncome >= 142292) return 0.12;
+                else if (totalIncome >= 0) return 0.10;
+                else return 0;
+
+            case 'BC':
+                if (totalIncome >= 240716) return 0.205;
+                else if (totalIncome >= 172602) return 0.168;
+                else if (totalIncome >= 127299) return 0.147;
+                else if (totalIncome >= 104835) return 0.1229;
+                else if (totalIncome >= 91310) return 0.105;
+                else if (totalIncome >= 45654) return 0.077;
+                else if (totalIncome >= 0) return 0.0506;
+                else return 0;
+
+            case 'MB':
+                if (totalIncome >= 79625) return 0.174;
+                else if (totalIncome >= 36842) return 0.1275;
+                else if (totalIncome >= 0) return 0.108;
+                else return 0;
+
+            case 'NB':
+                if (totalIncome >= 176756) return 0.195;
+                else if (totalIncome >= 95431) return 0.16;
+                else if (totalIncome >= 47715) return 0.14;
+                else if (totalIncome >= 0) return 0.094;
+                else return 0;
+
+            case 'NL':
+                if (totalIncome >= 1059000) return 0.218;
+                else if (totalIncome >= 529500) return 0.213;
+                else if (totalIncome >= 264750) return 0.208;
+                else if (totalIncome >= 207239) return 0.198;
+                else if (totalIncome >= 148027) return 0.178;
+                else if (totalIncome >= 82913) return 0.158;
+                else if (totalIncome >= 41457) return 0.145;
+                else if (totalIncome >= 0) return 0.087;
+                else return 0;
+
+            case 'NT':
+                if (totalIncome >= 157139) return 0.1405;
+                else if (totalIncome >= 96655) return 0.122;
+                else if (totalIncome >= 48326) return 0.086;
+                else if (totalIncome >= 0) return 0.059;
+                else return 0;
+
+            case 'NS':
+                if (totalIncome >= 150000) return 0.21;
+                else if (totalIncome >= 93000) return 0.175;
+                else if (totalIncome >= 59180) return 0.1667;
+                else if (totalIncome >= 29590) return 0.1495;
+                else if (totalIncome >= 0) return 0.0879;
+                else return 0;
+
+            case 'NU':
+                if (totalIncome >= 165429) return 0.115;
+                else if (totalIncome >= 101754) return 0.09;
+                else if (totalIncome >= 50877) return 0.07;
+                else if (totalIncome >= 0) return 0.04;
+                else return 0;
+
+            case 'ON':
+                if (totalIncome >= 220000) return 0.1316;
+                else if (totalIncome >= 150000) return 0.1216;
+                else if (totalIncome >= 98463) return 0.1116;
+                else if (totalIncome >= 49231) return 0.0915;
+                else if (totalIncome >= 0) return 0.0505;
+                else return 0;
+
+            case 'PE':
+                if (totalIncome >= 63969) return 0.167;
+                else if (totalIncome >= 31984) return 0.138;
+                else if (totalIncome >= 0) return 0.098;
+                else return 0;
+
+            case 'QC':
+                if (totalIncome >= 119910) return 0.2575;
+                else if (totalIncome >= 98540) return 0.24;
+                else if (totalIncome >= 49275) return 0.19;
+                else if (totalIncome >= 0) return 0.14;
+                else return 0;
+
+            case 'SK':
+                if (totalIncome >= 142058) return 0.145;
+                else if (totalIncome >= 49720) return 0.125;
+                else if (totalIncome >= 0) return 0.105;
+                else return 0;
+
+            case 'YT':
+                if (totalIncome >= 500000) return 0.15;
+                else if (totalIncome >= 165430) return 0.128;
+                else if (totalIncome >= 106717) return 0.109;
+                else if (totalIncome >= 53359) return 0.09;
+                else if (totalIncome >= 0) return 0.064;
+                else return 0;
+
+            default:
+                return 0; // Default to 0 if province not found
+        }
+    }
+</script>
 
     
 </body>
