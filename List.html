@@ -301,7 +301,7 @@
         <input type="checkbox" id="agree_terms_conditions">
         I agree to the terms and conditions of service.
     </label>
-    <button type="button" onclick="calculateTaxes()">Calculate Taxes</button>
+    <button type="button" onclick="calculateTaxes()">Calculate</button>
 <p id="calculatedFederalTax"></p>
 <p id="calculatedProvincialTax"></p>
 
@@ -487,6 +487,26 @@
 
     return totalTax;
   }
+    function getCppPayable() {
+    var salaryWages = parseFloat(document.getElementById("income_salary_wages").value) || 0;
+    var bonuses = parseFloat(document.getElementById("income_bonuses").value) || 0;
+    var employedIncome = salaryWages + bonuses;
+
+    var solePropIncome = parseFloat(document.getElementById("income_sole_prop").value) || 0;
+    var selfEmployedIncome = solePropIncome;
+
+    var cppRateEmployed = 0.0595;
+    var cppRateSelfEmployed = 0.1190;
+    var cppMaxEmployed = 3867.5;
+    var cppMaxSelfEmployed = 7735;
+    var cppExemptionAmount = 3500;
+
+    var cppPayableEmployed = Math.min(cppMaxEmployed, Math.max(0, employedIncome - cppExemptionAmount) * cppRateEmployed);
+    var cppPayableSelfEmployed = Math.min(cppMaxSelfEmployed, Math.max(0, selfEmployedIncome - cppExemptionAmount) * cppRateSelfEmployed);
+
+    return cppPayableEmployed + cppPayableSelfEmployed;
+}
+
 </script>
 
 
