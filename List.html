@@ -306,6 +306,7 @@
 <p id="calculatedProvincialTax"></p>
 <p id="calculatedCppPayable"></p>
 <p id="calculatedEIPayable"></p>
+<p id="employmentIncomeDisplay"></p>    
 <script>
 function calculateTaxes() {
     var totalIncome = getTotalIncome();
@@ -314,11 +315,13 @@ function calculateTaxes() {
     var provincialTaxPayable = getProvincialTaxPayable(selectedProvince, totalIncome);
     var cppPayable = getCppPayable();
     var eiPayable = getEIPayable();
+    var employmentIncome = getEmploymentIncome();
 
     document.getElementById("calculatedFederalTax").innerHTML = "Federal Tax Payable: $" + federalTaxPayable.toFixed(2);
     document.getElementById("calculatedProvincialTax").innerHTML = "Provincial Tax Payable: $" + provincialTaxPayable.toFixed(2);
     document.getElementById("calculatedCppPayable").innerHTML = "CPP Payable: $" + cppPayable.toFixed(2);
     document.getElementById("calculatedEIPayable").innerHTML = "EI Payable: $" + eiPayable.toFixed(2);
+    document.getElementById("employmentIncomeDisplay").innerHTML = "Employment Income: $" + employmentIncome.toFixed(2);
   }
 
 
@@ -530,6 +533,11 @@ function calculateTaxes() {
     var eiPayableSelfEmployed = Math.min(eiEmployeePremiumMax, Math.max(0, selfEmployedIncome) * eiRateSelfEmployed);
 
     return eiPayableEmployed + eiPayableSelfEmployed;
+  }
+    function getEmploymentIncome() {
+    var salaryWages = parseFloat(document.getElementById("income_salary_wages").value) || 0;
+    var bonuses = parseFloat(document.getElementById("income_bonuses").value) || 0;
+    return salaryWages + bonuses;
   }
 </script>
 
