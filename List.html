@@ -306,7 +306,7 @@
 <p id="calculatedProvincialTax"></p>
 <p id="calculatedCppPayable"></p>
 <p id="calculatedEIPayable"></p>
-<p id="employmentIncomeDisplay"></p>    
+<p id="totalExpensesDisplay">Total Expenses: $0.00</p>    
 <script>
 function calculateTaxes() {
     var totalIncome = getTotalIncome();
@@ -534,6 +534,64 @@ function calculateTaxes() {
   var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, selfEmployedIncome * eiRateSelfEmployed);
 
   return eiPayableEmployed + eiPayableSelfEmployed;
+}
+function calculateTotalExpenses() {
+  // Expenses, Miscellaneous
+  var grocery = parseFloat(document.getElementById("expenses_grocery").value) || 0;
+  var dining = parseFloat(document.getElementById("expenses_dining").value) || 0;
+  var fitness = parseFloat(document.getElementById("expenses_fitness").value) || 0;
+  var subscriptions = parseFloat(document.getElementById("expenses_subscriptions").value) || 0;
+  var pet = parseFloat(document.getElementById("expenses_pet").value) || 0;
+  var clothing = parseFloat(document.getElementById("expenses_clothing").value) || 0;
+  var vacation = parseFloat(document.getElementById("expenses_vacation").value) || 0;
+  var travelLifeInsurance = parseFloat(document.getElementById("expenses_travel_life_insurance").value) || 0;
+  var cellphoneService = parseFloat(document.getElementById("expenses_cellphone_service").value) || 0;
+  var medicalDental = parseFloat(document.getElementById("expenses_medical_dental").value) || 0;
+  var lineOfCreditPayment = parseFloat(document.getElementById("expenses_line_of_credit_payment").value) || 0;
+  var studentLoanPayment = parseFloat(document.getElementById("expenses_student_loan_payment").value) || 0;
+  var creditCardPayment = parseFloat(document.getElementById("expenses_credit_card_payment").value) || 0;
+  var taxArrearsPayment = parseFloat(document.getElementById("expenses_tax_arrears_payment").value) || 0;
+  var smallBusinessLoanPayment = parseFloat(document.getElementById("expenses_small_business_loan_payment").value) || 0;
+
+  // Expenses, Housing
+  var mortgagePayment = parseFloat(document.getElementById("housing_mortgage_payment").value) || 0;
+  var rentPayment = parseFloat(document.getElementById("housing_rent_payment").value) || 0;
+  var propertyTax = parseFloat(document.getElementById("housing_property_tax").value) || 0;
+  var condoFee = parseFloat(document.getElementById("housing_condo_fee").value) || 0;
+  var insurance = parseFloat(document.getElementById("housing_insurance").value) || 0;
+  var repairs = parseFloat(document.getElementById("housing_repairs").value) || 0;
+  var hydro = parseFloat(document.getElementById("housing_hydro").value) || 0;
+  var water = parseFloat(document.getElementById("housing_water").value) || 0;
+  var gas = parseFloat(document.getElementById("housing_gas").value) || 0;
+  var internet = parseFloat(document.getElementById("housing_internet").value) || 0;
+
+  // Expenses, Transportation
+  var carLoanPayment = parseFloat(document.getElementById("transportation_car_loan_payment").value) || 0;
+  var insuranceTransportation = parseFloat(document.getElementById("transportation_insurance").value) || 0;
+  var fuel = parseFloat(document.getElementById("transportation_fuel").value) || 0;
+  var maintenance = parseFloat(document.getElementById("transportation_maintenance").value) || 0;
+  var publicTransit = parseFloat(document.getElementById("transportation_public_transit").value) || 0;
+  var rideHailing = parseFloat(document.getElementById("transportation_ride_hailing").value) || 0;
+
+  // Expenses, Dependant
+  var dayCare = parseFloat(document.getElementById("dependant_day_care").value) || 0;
+  var medicalDentalDependant = parseFloat(document.getElementById("dependant_medical_dental").value) || 0;
+  var clothingDependant = parseFloat(document.getElementById("dependant_clothing").value) || 0;
+  var sportsRecreation = parseFloat(document.getElementById("dependant_sports_recreation").value) || 0;
+  var transportationDependant = parseFloat(document.getElementById("dependant_transportation").value) || 0;
+  var tuition = parseFloat(document.getElementById("dependant_tuition").value) || 0;
+  var housingDependant = parseFloat(document.getElementById("dependant_housing").value) || 0;
+  var cellularService = parseFloat(document.getElementById("dependant_cellular_service").value) || 0;
+
+  var totalExpenses = grocery + dining + fitness + subscriptions + pet + clothing +
+    vacation + travelLifeInsurance + cellphoneService + medicalDental + lineOfCreditPayment +
+    studentLoanPayment + creditCardPayment + taxArrearsPayment + smallBusinessLoanPayment +
+    mortgagePayment + rentPayment + propertyTax + condoFee + insurance + repairs + hydro +
+    water + gas + internet + carLoanPayment + insuranceTransportation + fuel + maintenance +
+    publicTransit + rideHailing + dayCare + medicalDentalDependant + clothingDependant +
+    sportsRecreation + transportationDependant + tuition + housingDependant + cellularService;
+
+  return totalExpenses;
 }
 
 </script>
