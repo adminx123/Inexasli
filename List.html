@@ -302,7 +302,6 @@
         I agree to the terms and conditions of service.
     </label>
     <button type="button" onclick="calculateFederalTax()">Calculate Federal Tax</button>
-
 <p id="calculatedFederalTax"></p>
 <p id="calculatedProvincialTax"></p>
 
@@ -345,164 +344,151 @@
       socialSecurity + employmentInsurance + alimony + scholarshipsGrants + royalties + gamblingWinnings +
       peerToPeerLending + ventureCapital + taxFreeIncome;
   }
-</script>
 
+  function getFederalTaxPayable(totalIncome) {
+    return calculateTax(totalIncome, [
+      { limit: 235675, rate: 0.33 },
+      { limit: 165430, rate: 0.29 },
+      { limit: 106717, rate: 0.26 },
+      { limit: 53359, rate: 0.205 },
+      { limit: 0, rate: 0.15 }
+    ]);
+  }
 
-    
-    function calculateTaxes() {
-        var income = parseFloat(document.getElementById("incomeInput").value) || 0;
-        var selectedProvince = document.getElementById("provinceDropdown").value;
-
-        var federalTaxPayable = getFederalTaxPayable(income);
-        var provincialTaxPayable = getProvincialTaxPayable(selectedProvince, income);
-
-        document.getElementById("calculatedFederalTax").innerHTML = "Federal Tax Payable: $" + federalTaxPayable.toFixed(2);
-        document.getElementById("calculatedProvincialTax").innerHTML = "Provincial Tax Payable: $" + provincialTaxPayable.toFixed(2);
-    }
-
-    function getFederalTaxPayable(totalIncome) {
+  function getProvincialTaxPayable(province, totalIncome) {
+    switch (province) {
+      case 'AB':
         return calculateTax(totalIncome, [
-            { limit: 235675, rate: 0.33 },
-            { limit: 165430, rate: 0.29 },
-            { limit: 106717, rate: 0.26 },
-            { limit: 53359, rate: 0.205 },
-            { limit: 0, rate: 0.15 }
+          { limit: 341502, rate: 0.15 },
+          { limit: 227668, rate: 0.14 },
+          { limit: 170751, rate: 0.13 },
+          { limit: 142292, rate: 0.12 },
+          { limit: 0, rate: 0.10 }
         ]);
+
+      case 'BC':
+        return calculateTax(totalIncome, [
+          { limit: 240716, rate: 0.205 },
+          { limit: 172602, rate: 0.168 },
+          { limit: 127299, rate: 0.147 },
+          { limit: 104835, rate: 0.1229 },
+          { limit: 91310, rate: 0.105 },
+          { limit: 45654, rate: 0.077 },
+          { limit: 0, rate: 0.0506 }
+        ]);
+
+      case 'MB':
+        return calculateTax(totalIncome, [
+          { limit: 79625, rate: 0.174 },
+          { limit: 36842, rate: 0.1275 },
+          { limit: 0, rate: 0.108 }
+        ]);
+
+      case 'NB':
+        return calculateTax(totalIncome, [
+          { limit: 176756, rate: 0.195 },
+          { limit: 95431, rate: 0.16 },
+          { limit: 47715, rate: 0.14 },
+          { limit: 0, rate: 0.094 }
+        ]);
+
+      case 'NL':
+        return calculateTax(totalIncome, [
+          { limit: 1059000, rate: 0.218 },
+          { limit: 529500, rate: 0.213 },
+          { limit: 264750, rate: 0.208 },
+          { limit: 207239, rate: 0.198 },
+          { limit: 148027, rate: 0.178 },
+          { limit: 82913, rate: 0.158 },
+          { limit: 41457, rate: 0.145 },
+          { limit: 0, rate: 0.087 }
+        ]);
+
+      case 'NT':
+        return calculateTax(totalIncome, [
+          { limit: 157139, rate: 0.1405 },
+          { limit: 96655, rate: 0.122 },
+          { limit: 48326, rate: 0.086 },
+          { limit: 0, rate: 0.059 }
+        ]);
+
+      case 'NS':
+        return calculateTax(totalIncome, [
+          { limit: 150000, rate: 0.21 },
+          { limit: 93000, rate: 0.175 },
+          { limit: 59180, rate: 0.1667 },
+          { limit: 29590, rate: 0.1495 },
+          { limit: 0, rate: 0.0879 }
+        ]);
+
+      case 'NU':
+        return calculateTax(totalIncome, [
+          { limit: 165429, rate: 0.115 },
+          { limit: 101754, rate: 0.09 },
+          { limit: 50877, rate: 0.07 },
+          { limit: 0, rate: 0.04 }
+        ]);
+
+      case 'ON':
+        return calculateTax(totalIncome, [
+          { limit: 220000, rate: 0.1316 },
+          { limit: 150000, rate: 0.1216 },
+          { limit: 98463, rate: 0.1116 },
+          { limit: 49231, rate: 0.0915 },
+          { limit: 0, rate: 0.0505 }
+        ]);
+
+      case 'PE':
+        return calculateTax(totalIncome, [
+          { limit: 63969, rate: 0.167 },
+          { limit: 31984, rate: 0.138 },
+          { limit: 0, rate: 0.098 }
+        ]);
+
+      case 'QC':
+        return calculateTax(totalIncome, [
+          { limit: 119910, rate: 0.2575 },
+          { limit: 98540, rate: 0.24 },
+          { limit: 49275, rate: 0.19 },
+          { limit: 0, rate: 0.14 }
+        ]);
+
+      case 'SK':
+        return calculateTax(totalIncome, [
+          { limit: 142058, rate: 0.145 },
+          { limit: 49720, rate: 0.125 },
+          { limit: 0, rate: 0.105 }
+        ]);
+
+      case 'YT':
+        return calculateTax(totalIncome, [
+          { limit: 500000, rate: 0.15 },
+          { limit: 165430, rate: 0.128 },
+          { limit: 106717, rate: 0.109 },
+          { limit: 53359, rate: 0.09 },
+          { limit: 0, rate: 0.064 }
+        ]);
+
+      default:
+        return 0; // Default to 0 if province not found
+    }
+  }
+
+  function calculateTax(income, brackets) {
+    brackets.sort((a, b) => b.limit - a.limit);
+    let totalTax = 0;
+
+    for (const bracket of brackets) {
+      if (income >= bracket.limit) {
+        totalTax += (income - bracket.limit) * bracket.rate;
+        income = bracket.limit;
+      }
     }
 
-    function getProvincialTaxPayable(province, totalIncome) {
-        switch (province) {
-            case 'AB':
-                return calculateTax(totalIncome, [
-                    { limit: 341502, rate: 0.15 },
-                    { limit: 227668, rate: 0.14 },
-                    { limit: 170751, rate: 0.13 },
-                    { limit: 142292, rate: 0.12 },
-                    { limit: 0, rate: 0.10 }
-                ]);
-
-            case 'BC':
-                return calculateTax(totalIncome, [
-                    { limit: 240716, rate: 0.205 },
-                    { limit: 172602, rate: 0.168 },
-                    { limit: 127299, rate: 0.147 },
-                    { limit: 104835, rate: 0.1229 },
-                    { limit: 91310, rate: 0.105 },
-                    { limit: 45654, rate: 0.077 },
-                    { limit: 0, rate: 0.0506 }
-                ]);
-
-            case 'MB':
-                return calculateTax(totalIncome, [
-                    { limit: 79625, rate: 0.174 },
-                    { limit: 36842, rate: 0.1275 },
-                    { limit: 0, rate: 0.108 }
-                ]);
-
-            case 'NB':
-                return calculateTax(totalIncome, [
-                    { limit: 176756, rate: 0.195 },
-                    { limit: 95431, rate: 0.16 },
-                    { limit: 47715, rate: 0.14 },
-                    { limit: 0, rate: 0.094 }
-                ]);
-
-            case 'NL':
-                return calculateTax(totalIncome, [
-                    { limit: 1059000, rate: 0.218 },
-                    { limit: 529500, rate: 0.213 },
-                    { limit: 264750, rate: 0.208 },
-                    { limit: 207239, rate: 0.198 },
-                    { limit: 148027, rate: 0.178 },
-                    { limit: 82913, rate: 0.158 },
-                    { limit: 41457, rate: 0.145 },
-                    { limit: 0, rate: 0.087 }
-                ]);
-
-            case 'NT':
-                return calculateTax(totalIncome, [
-                    { limit: 157139, rate: 0.1405 },
-                    { limit: 96655, rate: 0.122 },
-                    { limit: 48326, rate: 0.086 },
-                    { limit: 0, rate: 0.059 }
-                ]);
-
-            case 'NS':
-                return calculateTax(totalIncome, [
-                    { limit: 150000, rate: 0.21 },
-                    { limit: 93000, rate: 0.175 },
-                    { limit: 59180, rate: 0.1667 },
-                    { limit: 29590, rate: 0.1495 },
-                    { limit: 0, rate: 0.0879 }
-                ]);
-
-            case 'NU':
-                return calculateTax(totalIncome, [
-                    { limit: 165429, rate: 0.115 },
-                    { limit: 101754, rate: 0.09 },
-                    { limit: 50877, rate: 0.07 },
-                    { limit: 0, rate: 0.04 }
-                ]);
-
-            case 'ON':
-                return calculateTax(totalIncome, [
-                    { limit: 220000, rate: 0.1316 },
-                    { limit: 150000, rate: 0.1216 },
-                    { limit: 98463, rate: 0.1116 },
-                    { limit: 49231, rate: 0.0915 },
-                    { limit: 0, rate: 0.0505 }
-                ]);
-
-            case 'PE':
-                return calculateTax(totalIncome, [
-                    { limit: 63969, rate: 0.167 },
-                    { limit: 31984, rate: 0.138 },
-                    { limit: 0, rate: 0.098 }
-                ]);
-
-            case 'QC':
-                return calculateTax(totalIncome, [
-                    { limit: 119910, rate: 0.2575 },
-                    { limit: 98540, rate: 0.24 },
-                    { limit: 49275, rate: 0.19 },
-                    { limit: 0, rate: 0.14 }
-                ]);
-
-            case 'SK':
-                return calculateTax(totalIncome, [
-                    { limit: 142058, rate: 0.145 },
-                    { limit: 49720, rate: 0.125 },
-                    { limit: 0, rate: 0.105 }
-                ]);
-
-            case 'YT':
-                return calculateTax(totalIncome, [
-                    { limit: 500000, rate: 0.15 },
-                    { limit: 165430, rate: 0.128 },
-                    { limit: 106717, rate: 0.109 },
-                    { limit: 53359, rate: 0.09 },
-                    { limit: 0, rate: 0.064 }
-                ]);
-
-            default:
-                return 0; // Default to 0 if province not found
-        }
-    }
-
-    function calculateTax(income, brackets) {
-        brackets.sort((a, b) => b.limit - a.limit);
-        let totalTax = 0;
-
-        for (const bracket of brackets) {
-            if (income >= bracket.limit) {
-                totalTax += (income - bracket.limit) * bracket.rate;
-                income = bracket.limit;
-            }
-        }
-
-        return totalTax;
-    }
+    return totalTax;
+  }
 </script>
+
 
 </body>
 </body>
