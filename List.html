@@ -315,13 +315,13 @@ function calculateTaxes() {
     var provincialTaxPayable = getProvincialTaxPayable(selectedProvince, totalIncome);
     var cppPayable = getCppPayable();
     var eiPayable = getEIPayable();
-    var employmentIncome = getEmploymentIncome();
+  
 
     document.getElementById("calculatedFederalTax").innerHTML = "Federal Tax Payable: $" + federalTaxPayable.toFixed(2);
     document.getElementById("calculatedProvincialTax").innerHTML = "Provincial Tax Payable: $" + provincialTaxPayable.toFixed(2);
     document.getElementById("calculatedCppPayable").innerHTML = "CPP Payable: $" + cppPayable.toFixed(2);
     document.getElementById("calculatedEIPayable").innerHTML = "EI Payable: $" + eiPayable.toFixed(2);
-    document.getElementById("employmentIncomeDisplay").innerHTML = "Employment Income: $" + employmentIncome.toFixed(2);
+   
   }
 
 
@@ -499,9 +499,9 @@ function calculateTaxes() {
     function getCppPayable() {
     var salaryWages = parseFloat(document.getElementById("income_salary_wages").value) || 0;
     var bonuses = parseFloat(document.getElementById("income_bonuses").value) || 0;
-    var employedIncome = salaryWages + bonuses;
-
     var solePropIncome = parseFloat(document.getElementById("income_sole_prop").value) || 0;
+
+    var employedIncome = salaryWages + bonuses;
     var selfEmployedIncome = solePropIncome;
 
     var cppRateEmployed = 0.0595;
@@ -511,34 +511,31 @@ function calculateTaxes() {
     var cppExemptionAmount = 3500;
 
     var cppPayableEmployed = Math.min(cppMaxEmployed, Math.max(0, employedIncome - cppExemptionAmount) * cppRateEmployed);
-    var cppPayableSelfEmployed = Math.min(cppMaxSelfEmployed, Math.max(0, selfEmployedIncome - cppExemptionAmount) * cppRateSelfEmployed);
+    var cppPayableSelfEmployed = Math.min(cppMaxSelfEmployed - cppPayableEmployed, Math.max(0, selfEmployedIncome - cppExemptionAmount) * cppRateSelfEmployed);
 
     return cppPayableEmployed + cppPayableSelfEmployed;
 }
+
  function getEIPayable() {
-    var salaryWages = parseFloat(document.getElementById("income_salary_wages").value) || 0;
-    var bonuses = parseFloat(document.getElementById("income_bonuses").value) || 0;
-    var solePropIncome = parseFloat(document.getElementById("income_sole_prop").value) || 0;
+  var salaryWages = parseFloat(document.getElementById("income_salary_wages").value) || 0;
+  var bonuses = parseFloat(document.getElementById("income_bonuses").value) || 0;
+  var solePropIncome = parseFloat(document.getElementById("income_sole_prop").value) || 0;
 
-    var employedIncome = salaryWages + bonuses;
-    var selfEmployedIncome = solePropIncome;
+  var employedIncome = salaryWages + bonuses;
+  var selfEmployedIncome = solePropIncome;
 
-    var eiRateEmployed = 0.0166;
-    var eiRateSelfEmployed = 0.0166;
-    var eiInsurableEarningsMax = 63200;
-    var eiEmployeePremiumMax = 1049.12;
-    var eiEmployerPremiumMax = 1468.77;
+  var eiRateEmployed = 0.0166;
+  var eiRateSelfEmployed = 0.0166;
+  var eiInsurableEarningsMax = 63200;
+  var eiEmployeePremiumMax = 1049.12;
+  var eiEmployerPremiumMax = 1468.77;
 
-    var eiPayableEmployed = Math.min(eiEmployeePremiumMax, Math.max(0, employedIncome) * eiRateEmployed);
-    var eiPayableSelfEmployed = Math.min(eiEmployeePremiumMax, Math.max(0, selfEmployedIncome) * eiRateSelfEmployed);
+  var eiPayableEmployed = Math.min(eiEmployeePremiumMax, employedIncome * eiRateEmployed);
+  var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, selfEmployedIncome * eiRateSelfEmployed);
 
-    return eiPayableEmployed + eiPayableSelfEmployed;
-  }
-    function getEmploymentIncome() {
-    var salaryWages = parseFloat(document.getElementById("income_salary_wages").value) || 0;
-    var bonuses = parseFloat(document.getElementById("income_bonuses").value) || 0;
-    return salaryWages + bonuses;
-  }
+  return eiPayableEmployed + eiPayableSelfEmployed;
+}
+
 </script>
 
 </body>
