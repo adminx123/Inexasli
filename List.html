@@ -305,19 +305,21 @@
 <p id="calculatedFederalTax"></p>
 <p id="calculatedProvincialTax"></p>
 <p id="calculatedCppPayable"></p>
-
+<p id="calculatedEIPayable"></p>
 <script>
- function calculateTaxes() {
+function calculateTaxes() {
     var totalIncome = getTotalIncome();
     var selectedProvince = document.getElementById("provinceDropdown").value;
     var federalTaxPayable = getFederalTaxPayable(totalIncome);
     var provincialTaxPayable = getProvincialTaxPayable(selectedProvince, totalIncome);
-    var cppPayable = getCppPayable(); // Updated line for CPP calculation
+    var cppPayable = getCppPayable();
+    var eiPayable = getEIPayable();
 
     document.getElementById("calculatedFederalTax").innerHTML = "Federal Tax Payable: $" + federalTaxPayable.toFixed(2);
     document.getElementById("calculatedProvincialTax").innerHTML = "Provincial Tax Payable: $" + provincialTaxPayable.toFixed(2);
-    document.getElementById("calculatedCppPayable").innerHTML = "CPP Payable: $" + cppPayable.toFixed(2); // Updated line to display CPP payable
-}
+    document.getElementById("calculatedCppPayable").innerHTML = "CPP Payable: $" + cppPayable.toFixed(2);
+    document.getElementById("calculatedEIPayable").innerHTML = "EI Payable: $" + eiPayable.toFixed(2);
+  }
 
 
   function getTotalIncome() {
@@ -510,7 +512,16 @@
 
     return cppPayableEmployed + cppPayableSelfEmployed;
 }
+function getEIPayable() {
+    var employmentInsurance = parseFloat(document.getElementById("income_employment_insurance").value) || 0;
+    var eiRateEmployed = 0.0166;
+    var eiInsurableEarningsMax = 63200;
+    var eiEmployeePremiumMax = 1049.12;
+    var eiEmployerPremiumMax = 1468.77;
 
+    var eiPayable = Math.min(eiEmployeePremiumMax, employmentInsurance * eiRateEmployed);
+    return eiPayable;
+  }
 </script>
 
 </body>
