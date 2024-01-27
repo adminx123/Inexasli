@@ -302,39 +302,53 @@
         I agree to the terms and conditions of service.
     </label>
     <button type="button" onclick="calculateFederalTax()">Calculate Federal Tax</button>
-<h2>Calculated Federal Tax:</h2>
+
 <p id="calculatedFederalTax"></p>
+<p id="calculatedProvincialTax"></p>
 
-    <script>
-    function calculateFederalTax() {
-        var salaryWages = parseFloat(document.getElementById("income_salary_wages").value) || 0;
-        var tips = parseFloat(document.getElementById("income_tips").value) || 0;
-        var bonuses = parseFloat(document.getElementById("income_bonuses").value) || 0;
-        var soleProp = parseFloat(document.getElementById("income_sole_prop").value) || 0;
-        var investmentProperty = parseFloat(document.getElementById("income_investment_property").value) || 0;
-        var interest = parseFloat(document.getElementById("income_interest").value) || 0;
-        var capitalGainsLosses = parseFloat(document.getElementById("income_capital_gains_losses").value) || 0;
-        var ownerDividend = parseFloat(document.getElementById("income_owner_dividend").value) || 0;
-        var publicDividend = parseFloat(document.getElementById("income_public_dividend").value) || 0;
-        var trust = parseFloat(document.getElementById("income_trust").value) || 0;
-        var federalPension = parseFloat(document.getElementById("income_federal_pension").value) || 0;
-        var workPension = parseFloat(document.getElementById("income_work_pension").value) || 0;
-        var socialSecurity = parseFloat(document.getElementById("income_social_security").value) || 0;
-        var employmentInsurance = parseFloat(document.getElementById("income_employment_insurance").value) || 0;
-        var alimony = parseFloat(document.getElementById("income_alimony").value) || 0;
-        var scholarshipsGrants = parseFloat(document.getElementById("income_scholarships_grants").value) || 0;
-        var royalties = parseFloat(document.getElementById("income_royalties").value) || 0;
-        var gamblingWinnings = parseFloat(document.getElementById("income_gambling_winnings").value) || 0;
-        var peerToPeerLending = parseFloat(document.getElementById("income_peer_to_peer_lending").value) || 0;
-        var ventureCapital = parseFloat(document.getElementById("income_venture_capital").value) || 0;
-        var taxFreeIncome = parseFloat(document.getElementById("income_tax_free_income").value) || 0;
+<script>
+  function calculateTaxes() {
+    var totalIncome = getTotalIncome();
+    var selectedProvince = document.getElementById("provinceDropdown").value;
+    var federalTaxPayable = getFederalTaxPayable(totalIncome);
+    var provincialTaxPayable = getProvincialTaxPayable(selectedProvince, totalIncome);
 
-        var totalIncome = salaryWages + tips + bonuses + soleProp + investmentProperty + interest +
-            capitalGainsLosses + ownerDividend + publicDividend + trust + federalPension + workPension +
-            socialSecurity + employmentInsurance + alimony + scholarshipsGrants + royalties + gamblingWinnings +
-            peerToPeerLending + ventureCapital + taxFreeIncome;
+    document.getElementById("calculatedFederalTax").innerHTML = "Federal Tax Payable: $" + federalTaxPayable.toFixed(2);
+    document.getElementById("calculatedProvincialTax").innerHTML = "Provincial Tax Payable: $" + provincialTaxPayable.toFixed(2);
+  }
 
-        <script>
+  function getTotalIncome() {
+    var salaryWages = parseFloat(document.getElementById("income_salary_wages").value) || 0;
+    var tips = parseFloat(document.getElementById("income_tips").value) || 0;
+    var bonuses = parseFloat(document.getElementById("income_bonuses").value) || 0;
+    var soleProp = parseFloat(document.getElementById("income_sole_prop").value) || 0;
+    var investmentProperty = parseFloat(document.getElementById("income_investment_property").value) || 0;
+    var interest = parseFloat(document.getElementById("income_interest").value) || 0;
+    var capitalGainsLosses = parseFloat(document.getElementById("income_capital_gains_losses").value) || 0;
+    var ownerDividend = parseFloat(document.getElementById("income_owner_dividend").value) || 0;
+    var publicDividend = parseFloat(document.getElementById("income_public_dividend").value) || 0;
+    var trust = parseFloat(document.getElementById("income_trust").value) || 0;
+    var federalPension = parseFloat(document.getElementById("income_federal_pension").value) || 0;
+    var workPension = parseFloat(document.getElementById("income_work_pension").value) || 0;
+    var socialSecurity = parseFloat(document.getElementById("income_social_security").value) || 0;
+    var employmentInsurance = parseFloat(document.getElementById("income_employment_insurance").value) || 0;
+    var alimony = parseFloat(document.getElementById("income_alimony").value) || 0;
+    var scholarshipsGrants = parseFloat(document.getElementById("income_scholarships_grants").value) || 0;
+    var royalties = parseFloat(document.getElementById("income_royalties").value) || 0;
+    var gamblingWinnings = parseFloat(document.getElementById("income_gambling_winnings").value) || 0;
+    var peerToPeerLending = parseFloat(document.getElementById("income_peer_to_peer_lending").value) || 0;
+    var ventureCapital = parseFloat(document.getElementById("income_venture_capital").value) || 0;
+    var taxFreeIncome = parseFloat(document.getElementById("income_tax_free_income").value) || 0;
+
+    return salaryWages + tips + bonuses + soleProp + investmentProperty + interest +
+      capitalGainsLosses + ownerDividend + publicDividend + trust + federalPension + workPension +
+      socialSecurity + employmentInsurance + alimony + scholarshipsGrants + royalties + gamblingWinnings +
+      peerToPeerLending + ventureCapital + taxFreeIncome;
+  }
+</script>
+
+
+    
     function calculateTaxes() {
         var income = parseFloat(document.getElementById("incomeInput").value) || 0;
         var selectedProvince = document.getElementById("provinceDropdown").value;
