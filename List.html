@@ -986,6 +986,44 @@ function calculateAndDisplayResults() {
 // Example: Call the function when the page loads
 document.addEventListener('DOMContentLoaded', calculateAndDisplayResults);
 
+// ... (your existing code)
+
+// Function to update HTML element content by ID
+function updateElementContent(elementId, content) {
+    document.getElementById(elementId).textContent = content;
+}
+
+// Function to calculate and display results
+function calculateAndDisplayResults() {
+    // Calculate total income and expenses
+    var totalIncome = getTotalIncome();
+    var totalExpenses = getTotalExpenses();
+
+    // Calculate tax payable, CPP payable, and EI payable
+    var federalTaxPayable = getFederalTaxPayable(totalIncome);
+    var provincialTaxPayable = getProvincialTaxPayable('ON', totalIncome); // Replace 'ON' with the user's province
+    var cppPayable = getCppPayable();
+    var eiPayable = getEIPayable();
+
+    // Display the results on the website
+    updateElementContent('calculatedTotalIncome', '$' + totalIncome.toFixed(2));
+    updateElementContent('calculatedTotalExpenses', '$' + totalExpenses.toFixed(2));
+    updateElementContent('calculatedFederalTax', '$' + federalTaxPayable.toFixed(2));
+    updateElementContent('calculatedProvincialTax', '$' + provincialTaxPayable.toFixed(2));
+    updateElementContent('calculatedCppPayable', '$' + cppPayable.toFixed(2));
+    updateElementContent('calculatedEIPayable', '$' + eiPayable.toFixed(2));
+
+    // Update the total expenses display
+    var totalExpensesDisplay = document.getElementById('totalExpensesDisplay');
+    totalExpensesDisplay.textContent = 'Total Expenses: $' + totalExpenses.toFixed(2);
+}
+
+// Call the calculateAndDisplayResults function when the page loads or when a relevant event occurs
+// For example, you can call it when a button is clicked, or on input change events.
+
+// Example: Call the function when the page loads
+document.addEventListener('DOMContentLoaded', calculateAndDisplayResults);
+
 </script>
 
 </body>
