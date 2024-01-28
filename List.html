@@ -654,7 +654,7 @@
         <input type="checkbox" id="agree_terms_conditions">
         I agree to the terms and conditions of service.
     </label>
-    
+    <button id="calculateButton">Calculate</button>
 <script>
 console.log("Script executed");
     function normalizeValue(inputId, frequencyId) {
@@ -943,37 +943,25 @@ function getTotalExpenses() {
     return eiPayableEmployed + eiPayableSelfEmployed;
 }
 
- // ... (your existing script)
+ function calculateAndDisplayResults() {
+    // ... (your existing code)
 
-        // Corrected function name
-        function normalizeValue(inputId, frequencyId) {
-            // ... (your existing code)
-        }
+    // Display the results on the website
+    updateElementContent('calculatedTotalIncome', '$' + totalIncome.toFixed(2));
+    updateElementContent('calculatedTotalExpenses', '$' + totalExpenses.toFixed(2));
+    updateElementContent('calculatedFederalTax', '$' + federalTaxPayable.toFixed(2));
+    updateElementContent('calculatedProvincialTax', '$' + provincialTaxPayable.toFixed(2));
+    updateElementContent('calculatedCppPayable', '$' + cppPayable.toFixed(2));
+    updateElementContent('calculatedEIPayable', '$' + eiPayable.toFixed(2));
+}
+// Assuming you have an HTML button with the id 'calculateButton'
+var calculateButton = document.getElementById('calculateButton');
 
-        // Function to update HTML element content by ID
-        function updateElementContent(elementId, content) {
-            document.getElementById(elementId).textContent = content;
-        }
+// Adding a click event listener to the button
+calculateButton.addEventListener('click', function() {
+    calculateAndDisplayResults();
+});
 
-        // Function to calculate and display results
-        function calculateAndDisplayResults() {
-            // ... (your existing code)
-
-            // Display the results on the website
-            updateElementContent('calculatedTotalIncome', '$' + totalIncome.toFixed(2));
-            updateElementContent('calculatedTotalExpenses', '$' + totalExpenses.toFixed(2));
-            updateElementContent('calculatedFederalTax', '$' + federalTaxPayable.toFixed(2));
-            updateElementContent('calculatedProvincialTax', '$' + provincialTaxPayable.toFixed(2));
-            updateElementContent('calculatedCppPayable', '$' + cppPayable.toFixed(2));
-            updateElementContent('calculatedEIPayable', '$' + eiPayable.toFixed(2));
-
-            // Update the total expenses display
-            var totalExpensesDisplay = document.getElementById('totalExpensesDisplay');
-            totalExpensesDisplay.textContent = 'Total Expenses: $' + totalExpenses.toFixed(2);
-        }
-
-        // Example: Call the function when the page loads
-        document.addEventListener('DOMContentLoaded', calculateAndDisplayResults);
     </script>
 
 </body>
