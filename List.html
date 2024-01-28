@@ -661,6 +661,24 @@
 <p id="calculatedEIPayable"></p>
 <p id="totalExpensesDisplay">Total Expenses: $0.00</p>    
 <script>
+
+    function normalizeValue(inputId, frequencyId) {
+    var value = parseFloat(document.getElementById(inputId).value) || 0;
+    var frequency = document.getElementById(frequencyId).value;
+
+    switch (frequency) {
+        case "annually":
+            return value;
+        case "quarterly":
+            return value * 4;
+        case "monthly":
+            return value * 12;
+        case "weekly":
+            return value * 52;
+        default:
+            return 0;
+    }
+}
 var normalizedSalaryWages = normalizeIncome("income_salary_wages", "income_salary_wages_frequency");
 var normalizedTips = normalizeIncome("income_tips", "income_tips_frequency");
 var normalizedBonuses = normalizeIncome("income_bonuses", "income_bonuses_frequency");
@@ -724,23 +742,6 @@ var normalizedTuition = normalizeIncome("dependant_tuition", "dependant_tuition_
 var normalizedHousingDependant = normalizeIncome("dependant_housing", "dependant_housing_frequency");
 var normalizedCellularServiceDependant = normalizeIncome("dependant_cellular_service", "dependant_cellular_service_frequency");
 
-function normalizeIncome(inputId, frequencyId) {
-    var income = parseFloat(document.getElementById(inputId).value) || 0;
-    var frequency = document.getElementById(frequencyId).value;
-
-    switch (frequency) {
-        case "annually":
-            return income;
-        case "quarterly":
-            return income * 4;
-        case "monthly":
-            return income * 12;
-        case "weekly":
-            return income * 52;
-        default:
-            return 0;
-    }
-}
 
     function getTotalIncome() {
     return (
@@ -748,6 +749,17 @@ function normalizeIncome(inputId, frequencyId) {
         normalizedCapitalGainsLosses + normalizedOwnerDividend + normalizedPublicDividend + normalizedTrust + normalizedFederalPension + normalizedWorkPension +
         normalizedSocialSecurity + normalizedEmploymentInsurance + normalizedAlimony + normalizedScholarshipsGrants + normalizedRoyalties + normalizedGamblingWinnings +
         normalizedPeerToPeerLending + normalizedVentureCapital + normalizedTaxFreeIncome
+    );
+}
+function getTotalExpenses() {
+    return (
+        normalizedGrocery + normalizedDining + normalizedFitness + normalizedSubscriptions + normalizedPet + normalizedClothing +
+        normalizedVacation + normalizedTravelLifeInsurance + normalizedCellphoneService + normalizedMedicalDental + normalizedLineOfCreditPayment +
+        normalizedStudentLoanPayment + normalizedCreditCardPayment + normalizedTaxArrearsPayment + normalizedSmallBusinessLoanPayment +
+        normalizedMortgagePayment + normalizedRentPayment + normalizedPropertyTax + normalizedCondoFee + normalizedHomeInsurance + normalizedHomeRepairs +
+        normalizedWater + normalizedGas + normalizedInternet + normalizedCarLoanPayment + normalizedInsurance + normalizedFuel +
+        normalizedMaintenance + normalizedPublicTransit + normalizedRideHailing + normalizedDayCare + normalizedMedicalDentalDependant + normalizedClothingDependant +
+        normalizedSportsRecreation + normalizedTransportationDependant + normalizedTuition + normalizedHousingDependant + normalizedCellularServiceDependant
     );
 }
 
@@ -935,17 +947,6 @@ function normalizeIncome(inputId, frequencyId) {
     return eiPayableEmployed + eiPayableSelfEmployed;
 }
 
-function calculateTotalExpenses() {
-var totalExpenses = normalizedGrocery + normalizedDining + normalizedFitness + normalizedSubscriptions + normalizedPet + normalizedClothing +
-        normalizedVacation + normalizedTravelLifeInsurance + normalizedCellphoneService + normalizedMedicalDental + normalizedLineOfCreditPayment +
-        normalizedStudentLoanPayment + normalizedCreditCardPayment + normalizedTaxArrearsPayment + normalizedSmallBusinessLoanPayment +
-        normalizedMortgagePayment + normalizedRentPayment + normalizedPropertyTax + normalizedCondoFee + normalizedInsurance + normalizedRepairs +
-        normalizedWater + normalizedGas + normalizedInternet + normalizedCarLoanPayment + normalizedInsuranceTransportation + normalizedFuel +
-        normalizedMaintenance + normalizedPublicTransit + normalizedRideHailing + normalizedDayCare + normalizedMedicalDentalDependant + normalizedClothingDependant +
-        normalizedSportsRecreation + normalizedTransportationDependant + normalizedTuition + normalizedHousingDependant + normalizedCellularService;
-
-    return totalExpenses;
-}
 
 </script>
 
