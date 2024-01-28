@@ -742,17 +742,15 @@ function normalizeIncome(inputId, frequencyId) {
     }
 }
 
-
-    
     function getTotalIncome() {
-
     return (
-        salaryWages + tips + bonuses + soleProp + investmentProperty + interest +
-        capitalGainsLosses + ownerDividend + publicDividend + trust + federalPension + workPension +
-        socialSecurity + employmentInsurance + alimony + scholarshipsGrants + royalties + gamblingWinnings +
-        peerToPeerLending + ventureCapital + taxFreeIncome
+        normalizedSalaryWages + normalizedTips + normalizedBonuses + normalizedSelfEmployment + normalizedInvestmentProperty + normalizedInterest +
+        normalizedCapitalGainsLosses + normalizedOwnerDividend + normalizedPublicDividend + normalizedTrust + normalizedFederalPension + normalizedWorkPension +
+        normalizedSocialSecurity + normalizedEmploymentInsurance + normalizedAlimony + normalizedScholarshipsGrants + normalizedRoyalties + normalizedGamblingWinnings +
+        normalizedPeerToPeerLending + normalizedVentureCapital + normalizedTaxFreeIncome
     );
 }
+
 
   function getFederalTaxPayable(totalIncome) {
     return calculateTax(totalIncome, [
