@@ -661,7 +661,89 @@
 <p id="calculatedEIPayable"></p>
 <p id="totalExpensesDisplay">Total Expenses: $0.00</p>    
 <script>
+var normalizedSalaryWages = normalizeIncome("income_salary_wages", "income_salary_wages_frequency");
+var normalizedTips = normalizeIncome("income_tips", "income_tips_frequency");
+var normalizedBonuses = normalizeIncome("income_bonuses", "income_bonuses_frequency");
+var normalizedSelfEmployment = normalizeIncome("income_sole_prop", "income_sole_prop_frequency");
+var normalizedInvestmentProperty = normalizeIncome("income_investment_property", "income_investment_property_frequency");
+var normalizedInterest = normalizeIncome("income_interest", "income_interest_frequency");
+var normalizedCapitalGainsLosses = normalizeIncome("income_capital_gains_losses", "income_capital_gains_losses_frequency");
+var normalizedOwnerDividend = normalizeIncome("income_owner_dividend", "income_owner_dividend_frequency");
+var normalizedPublicDividend = normalizeIncome("income_public_dividend", "income_public_dividend_frequency");
+var normalizedTrust = normalizeIncome("income_trust", "income_trust_frequency");
+var normalizedFederalPension = normalizeIncome("income_federal_pension", "income_federal_pension_frequency");
+var normalizedWorkPension = normalizeIncome("income_work_pension", "income_work_pension_frequency");
+var normalizedSocialSecurity = normalizeIncome("income_social_security", "income_social_security_frequency");
+var normalizedEmploymentInsurance = normalizeIncome("income_employment_insurance", "income_employment_insurance_frequency");
+var normalizedAlimony = normalizeIncome("income_alimony", "income_alimony_frequency");
+var normalizedScholarshipsGrants = normalizeIncome("income_scholarships_grants", "income_scholarships_grants_frequency");
+var normalizedRoyalties = normalizeIncome("income_royalties", "income_royalties_frequency");
+var normalizedGamblingWinnings = normalizeIncome("income_gambling_winnings", "income_gambling_winnings_frequency");
+var normalizedPeerToPeerLending = normalizeIncome("income_peer_to_peer_lending", "income_peer_to_peer_lending_frequency");
+var normalizedVentureCapital = normalizeIncome("income_venture_capital", "income_venture_capital_frequency");
+var normalizedTaxFreeIncome = normalizeIncome("income_tax_free_income", "income_tax_free_income_frequency");
 
+var normalizedGrocery = normalizeIncome("expenses_grocery", "expenses_grocery_frequency");
+var normalizedDining = normalizeIncome("expenses_dining", "expenses_dining_frequency");
+var normalizedFitness = normalizeIncome("expenses_fitness", "expenses_fitness_frequency");
+var normalizedSubscriptions = normalizeIncome("expenses_subscriptions", "expenses_subscriptions_frequency");
+var normalizedPet = normalizeIncome("expenses_pet", "expenses_pet_frequency");
+var normalizedClothing = normalizeIncome("expenses_clothing", "expenses_clothing_frequency");
+var normalizedVacation = normalizeIncome("expenses_vacation", "expenses_vacation_frequency");
+var normalizedTravelLifeInsurance = normalizeIncome("expenses_travel_life_insurance", "expenses_travel_life_insurance_frequency");
+var normalizedCellphoneService = normalizeIncome("expenses_cellphone_service", "expenses_cellphone_service_frequency");
+var normalizedMedicalDental = normalizeIncome("expenses_medical_dental", "expenses_medical_dental_frequency");
+var normalizedLineOfCreditPayment = normalizeIncome("expenses_line_of_credit_payment", "expenses_line_of_credit_payment_frequency");
+var normalizedStudentLoanPayment = normalizeIncome("expenses_student_loan_payment", "expenses_student_loan_payment_frequency");
+var normalizedCreditCardPayment = normalizeIncome("expenses_credit_card_payment", "expenses_credit_card_payment_frequency");
+var normalizedTaxArrearsPayment = normalizeIncome("expenses_tax_arrears_payment", "expenses_tax_arrears_payment_frequency");
+var normalizedSmallBusinessLoanPayment = normalizeIncome("expenses_small_business_loan_payment", "expenses_small_business_loan_payment_frequency");
+var normalizedMortgagePayment = normalizeIncome("housing_mortgage_payment", "housing_mortgage_payment_frequency");
+var normalizedRentPayment = normalizeIncome("housing_rent_payment", "housing_rent_payment_frequency");
+var normalizedPropertyTax = normalizeIncome("housing_property_tax", "housing_property_tax_frequency");
+var normalizedCondoFee = normalizeIncome("housing_condo_fee", "housing_condo_fee_frequency");
+var normalizedHomeInsurance = normalizeIncome("housing_insurance", "housing_insurance_frequency");
+var normalizedHomeRepairs = normalizeIncome("housing_repairs", "housing_repairs_frequency");
+var normalizedWater = normalizeIncome("housing_water", "housing_water_frequency");
+var normalizedGas = normalizeIncome("housing_gas", "housing_gas_frequency");
+var normalizedInternet = normalizeIncome("housing_internet", "housing_internet_frequency");
+
+var normalizedCarLoanPayment = normalizeIncome("transportation_car_loan_payment", "transportation_car_loan_payment_frequency");
+var normalizedInsurance = normalizeIncome("transportation_insurance", "transportation_insurance_frequency");
+var normalizedFuel = normalizeIncome("transportation_fuel", "transportation_fuel_frequency");
+var normalizedMaintenance = normalizeIncome("transportation_maintenance", "transportation_maintenance_frequency");
+var normalizedPublicTransit = normalizeIncome("transportation_public_transit", "transportation_public_transit_frequency");
+var normalizedRideHailing = normalizeIncome("transportation_ride_hailing", "transportation_ride_hailing_frequency");
+
+var normalizedDayCare = normalizeIncome("dependant_day_care", "dependant_day_care_frequency");
+var normalizedMedicalDentalDependant = normalizeIncome("dependant_medical_dental", "dependant_medical_dental_frequency");
+var normalizedClothingDependant = normalizeIncome("dependant_clothing", "dependant_clothing_frequency");
+var normalizedSportsRecreation = normalizeIncome("dependant_sports_recreation", "dependant_sports_recreation_frequency");
+var normalizedTransportationDependant = normalizeIncome("dependant_transportation", "dependant_transportation_frequency");
+var normalizedTuition = normalizeIncome("dependant_tuition", "dependant_tuition_frequency");
+var normalizedHousingDependant = normalizeIncome("dependant_housing", "dependant_housing_frequency");
+var normalizedCellularServiceDependant = normalizeIncome("dependant_cellular_service", "dependant_cellular_service_frequency");
+
+function normalizeIncome(inputId, frequencyId) {
+    var income = parseFloat(document.getElementById(inputId).value) || 0;
+    var frequency = document.getElementById(frequencyId).value;
+
+    switch (frequency) {
+        case "annually":
+            return income;
+        case "quarterly":
+            return income * 4;
+        case "monthly":
+            return income * 12;
+        case "weekly":
+            return income * 52;
+        default:
+            return 0;
+    }
+}
+
+
+    
     function getTotalIncome() {
     var salaryWages = normalizeIncome("income_salary_wages");
     var tips = normalizeIncome("income_tips");
