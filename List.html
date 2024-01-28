@@ -655,6 +655,28 @@
         I agree to the terms and conditions of service.
     </label>
     <button id="calculateButton">Calculate</button>
+ <script>
+ function calculateAndDisplayResults() {
+
+
+    // Display the results on the website
+    updateElementContent('calculatedTotalIncome', '$' + totalIncome.toFixed(2));
+    updateElementContent('calculatedTotalExpenses', '$' + totalExpenses.toFixed(2));
+    updateElementContent('calculatedFederalTax', '$' + federalTaxPayable.toFixed(2));
+    updateElementContent('calculatedProvincialTax', '$' + provincialTaxPayable.toFixed(2));
+    updateElementContent('calculatedCppPayable', '$' + cppPayable.toFixed(2));
+    updateElementContent('calculatedEIPayable', '$' + eiPayable.toFixed(2));
+}
+// Assuming you have an HTML button with the id 'calculateButton'
+var calculateButton = document.getElementById('calculateButton');
+
+// Adding a click event listener to the button
+calculateButton.addEventListener('click', function() {
+    calculateAndDisplayResults();
+});
+
+    </script>
+    
 <script>
 
     function normalizeValue(inputId, frequencyId) {
@@ -949,27 +971,7 @@ function getTotalExpenses() {
 }
     </script>
 
-    <script>
- function calculateAndDisplayResults() {
-
-
-    // Display the results on the website
-    updateElementContent('calculatedTotalIncome', '$' + totalIncome.toFixed(2));
-    updateElementContent('calculatedTotalExpenses', '$' + totalExpenses.toFixed(2));
-    updateElementContent('calculatedFederalTax', '$' + federalTaxPayable.toFixed(2));
-    updateElementContent('calculatedProvincialTax', '$' + provincialTaxPayable.toFixed(2));
-    updateElementContent('calculatedCppPayable', '$' + cppPayable.toFixed(2));
-    updateElementContent('calculatedEIPayable', '$' + eiPayable.toFixed(2));
-}
-// Assuming you have an HTML button with the id 'calculateButton'
-var calculateButton = document.getElementById('calculateButton');
-
-// Adding a click event listener to the button
-calculateButton.addEventListener('click', function() {
-    calculateAndDisplayResults();
-});
-
-    </script>
+   
 
 </body>
 </html>
