@@ -903,9 +903,9 @@ function getTotalExpenses() {
     return totalTax;
   }
     function getCppPayable() {
-    var normalizedSalaryWages = normalizeIncome("income_salary_wages", "income_salary_wages_frequency");
-    var normalizedBonuses = normalizeIncome("income_bonuses", "income_bonuses_frequency");
-    var normalizedSolePropIncome = normalizeIncome("income_sole_prop", "income_sole_prop_frequency");
+    var normalizedSalaryWages = normalizeValue("income_salary_wages", "income_salary_wages_frequency");
+    var normalizedBonuses = normalizeValue("income_bonuses", "income_bonuses_frequency");
+    var normalizedSolePropIncome = normalizeValue("income_sole_prop", "income_sole_prop_frequency");
 
     var employedIncome = normalizedSalaryWages + normalizedBonuses;
     var selfEmployedIncome = normalizedSolePropIncome;
@@ -924,9 +924,9 @@ function getTotalExpenses() {
 
 
  function getEIPayable() {
-    var normalizedSalaryWages = normalizeIncome("income_salary_wages", "income_salary_wages_frequency");
-    var normalizedBonuses = normalizeIncome("income_bonuses", "income_bonuses_frequency");
-    var normalizedSolePropIncome = normalizeIncome("income_sole_prop", "income_sole_prop_frequency");
+    var normalizedSalaryWages = normalizeValue("income_salary_wages", "income_salary_wages_frequency");
+    var normalizedBonuses = normalizeValue("income_bonuses", "income_bonuses_frequency");
+    var normalizedSolePropIncome = normalizeValue("income_sole_prop", "income_sole_prop_frequency");
 
     var employedIncome = normalizedSalaryWages + normalizedBonuses;
     var selfEmployedIncome = normalizedSolePropIncome;
