@@ -674,6 +674,8 @@
             return 0;
     }
 }
+</script>
+<script>    
 var normalizedSalaryWages = normalizeValue("income_salary_wages", "income_salary_wages_frequency");
 var normalizedTips = normalizeValue("income_tips", "income_tips_frequency");
 var normalizedBonuses = normalizeValue("income_bonuses", "income_bonuses_frequency");
@@ -759,7 +761,8 @@ function getTotalExpenses() {
     );
 }
 
-
+</script>
+    <script>
   function getFederalTaxPayable(totalIncome) {
     return calculateTax(totalIncome, [
       { limit: 235675, rate: 0.33 },
@@ -902,6 +905,8 @@ function getTotalExpenses() {
 
     return totalTax;
   }
+    </script>
+    <script>
     function getCppPayable() {
     var normalizedSalaryWages = normalizeValue("income_salary_wages", "income_salary_wages_frequency");
     var normalizedBonuses = normalizeValue("income_bonuses", "income_bonuses_frequency");
@@ -942,9 +947,11 @@ function getTotalExpenses() {
 
     return eiPayableEmployed + eiPayableSelfEmployed;
 }
+    </script>
 
+    <script>
  function calculateAndDisplayResults() {
-    // ... (your existing code)
+
 
     // Display the results on the website
     updateElementContent('calculatedTotalIncome', '$' + totalIncome.toFixed(2));
