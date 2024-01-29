@@ -650,7 +650,27 @@
     <input type="text" id="liabilities_tax_arrears">
 
    <button id="calculateButton">Calculate</button>
+<script>
 
+    function normalizeValue(inputId, frequencyId) {
+    var value = parseFloat(document.getElementById(inputId).value) || 0;
+    var frequency = document.getElementById(frequencyId).value;
+
+    switch (frequency) {
+        case "Annually":
+            return value;
+        case "Quarterly":
+            return value * 4;
+        case "Monthly":
+            return value * 12;
+        case "Weekly":
+            return value * 52;
+        default:
+            return 0;
+    }
+}
+</script>
+    
 <script>
    document.getElementById('calculateButton').addEventListener('click', function () {
     // Income
