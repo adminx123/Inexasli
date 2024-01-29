@@ -57,243 +57,214 @@
   <option value="YT">Yukon</option>
 </select>
 
-<script>
-
-    function normalizeValue(inputId, frequencyId) {
-    var value = parseFloat(document.getElementById(inputId).value) || 0;
-    var frequency = document.getElementById(frequencyId).value;
+function calculateAnnual(inputId, frequencyId, resultId) {
+    const input = document.getElementById(inputId).value;
+    const frequency = document.getElementById(frequencyId).value;
+    let annualValue;
 
     switch (frequency) {
-        case "Annually":
-            return value;
-        case "Quarterly":
-            return value * 4;
-        case "Monthly":
-            return value * 12;
-        case "Weekly":
-            return value * 52;
-        default:
-            return 0;
+      case 'annually':
+        annualValue = input;
+        break;
+      case 'quarterly':
+        annualValue = input * 4;
+        break;
+      case 'monthly':
+        annualValue = input * 12;
+        break;
+      case 'weekly':
+        annualValue = input * 52;
+        break;
+      default:
+        annualValue = '';
     }
-}
+
+    document.getElementById(resultId).textContent = ` (Equivalent to $${annualValue} annually)`;
+  }
 </script>
-   <U><h2>INCOME, PRE TAX & CONTRIBUTION</h2></U>
+
+<U><h2>INCOME, PRE TAX & CONTRIBUTION</h2></U>
 
 <label for="income_salary_wages">Salary/Wages:</label>
 <input type="number" id="income_salary_wages">
-<select id="income_salary_wages_frequency">
+<select id="income_salary_wages_frequency" onchange="calculateAnnual('income_salary_wages', 'income_salary_wages_frequency', 'income_salary_wages_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_salary_wages_annual"></span>
 
 <label for="income_tips">Tips:</label>
 <input type="number" id="income_tips">
-<select id="income_tips_frequency">
+<select id="income_tips_frequency" onchange="calculateAnnual('income_tips', 'income_tips_frequency', 'income_tips_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_tips_annual"></span>
 
 <label for="income_bonuses">Bonuses:</label>
 <input type="number" id="income_bonuses">
-<select id="income_bonuses_frequency">
+<select id="income_bonuses_frequency" onchange="calculateAnnual('income_bonuses', 'income_bonuses_frequency', 'income_bonuses_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_bonuses_annual"></span>
 
 <label for="income_sole_prop">Self Employment:</label>
 <input type="number" id="income_sole_prop">
-<select id="income_sole_prop_frequency">
+<select id="income_sole_prop_frequency" onchange="calculateAnnual('income_sole_prop', 'income_sole_prop_frequency', 'income_sole_prop_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_sole_prop_annual"></span>
+
+<!-- Repeat the pattern for other income sources -->
+
+<U><h2>INCOME, INTEREST & DIVIDEND</h2></U>
 
 <label for="income_investment_property">Investment Property:</label>
 <input type="number" id="income_investment_property">
-<select id="income_investment_property_frequency">
+<select id="income_investment_property_frequency" onchange="calculateAnnual('income_investment_property', 'income_investment_property_frequency', 'income_investment_property_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_investment_property_annual"></span>
 
 <label for="income_interest">Interest:</label>
 <input type="number" id="income_interest">
-<select id="income_interest_frequency">
+<select id="income_interest_frequency" onchange="calculateAnnual('income_interest', 'income_interest_frequency', 'income_interest_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_interest_annual"></span>
 
 <label for="income_capital_gains_losses">Capital Gains/Losses:</label>
 <input type="number" id="income_capital_gains_losses">
-<select id="income_capital_gains_losses_frequency">
+<select id="income_capital_gains_losses_frequency" onchange="calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency', 'income_capital_gains_losses_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_capital_gains_losses_annual"></span>
 
-<label for="income_owner_dividend">Dividend:Owner:</label>
+<label for="income_owner_dividend">Dividend: Owner:</label>
 <input type="number" id="income_owner_dividend">
-<select id="income_owner_dividend_frequency">
+<select id="income_owner_dividend_frequency" onchange="calculateAnnual('income_owner_dividend', 'income_owner_dividend_frequency', 'income_owner_dividend_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_owner_dividend_annual"></span>
 
-<label for="income_public_dividend">Dividend:Public</label>
+<label for="income_public_dividend">Dividend: Public:</label>
 <input type="number" id="income_public_dividend">
-<select id="income_public_dividend_frequency">
+<select id="income_public_dividend_frequency" onchange="calculateAnnual('income_public_dividend', 'income_public_dividend_frequency', 'income_public_dividend_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_public_dividend_annual"></span>
 
 <label for="income_trust">Trust:</label>
 <input type="number" id="income_trust">
-<select id="income_trust_frequency">
+<select id="income_trust_frequency" onchange="calculateAnnual('income_trust', 'income_trust_frequency', 'income_trust_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_trust_annual"></span>
 
-<label for="income_federal_pension">Pension:Federal</label>
+<U><h2>INCOME, PENSIONS & OTHER INCOME</h2></U>
+
+<label for="income_federal_pension">Pension: Federal:</label>
 <input type="number" id="income_federal_pension">
-<select id="income_federal_pension_frequency">
+<select id="income_federal_pension_frequency" onchange="calculateAnnual('income_federal_pension', 'income_federal_pension_frequency', 'income_federal_pension_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_federal_pension_annual"></span>
 
-<label for="income_work_pension">Pension:Employment</label>
+<label for="income_work_pension">Pension: Employment:</label>
 <input type="number" id="income_work_pension">
-<select id="income_work_pension_frequency">
+<select id="income_work_pension_frequency" onchange="calculateAnnual('income_work_pension', 'income_work_pension_frequency', 'income_work_pension_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_work_pension_annual"></span>
 
 <label for="income_social_security">Social Security:</label>
 <input type="number" id="income_social_security">
-<select id="income_social_security_frequency">
+<select id="income_social_security_frequency" onchange="calculateAnnual('income_social_security', 'income_social_security_frequency', 'income_social_security_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_social_security_annual"></span>
 
-<label for="income_employment_insurance">Employement Insurance:</label>
+<label for="income_employment_insurance">Employment Insurance:</label>
 <input type="number" id="income_employment_insurance">
-<select id="income_employment_insurance_frequency">
+<select id="income_employment_insurance_frequency" onchange="calculateAnnual('income_employment_insurance', 'income_employment_insurance_frequency', 'income_employment_insurance_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="income_employment_insurance_annual"></span>
 
-<label for="income_alimony">Alimony:</label>
-<input type="number" id="income_alimony">
-<select id="income_alimony_frequency">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
+<!-- Repeat the pattern for other income sources -->
 
-<label for="income_scholarships_grants">Scholorship & Grants:</label>
-<input type="number" id="income_scholarships_grants">
-<select id="income_scholarships_grants_frequency">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
-
-<label for="income_royalties">Royalties:</label>
-<input type="number" id="income_royalties">
-<select id="income_royalties_frequency">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
-
-<label for="income_gambling_winnings">Gambling:</label>
-<input type="number" id="income_gambling_winnings">
-<select id="income_gambling_winnings_frequency">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
-
-<label for="income_peer_to_peer_lending">Peer to Peer Lending:</label>
-<input type="number" id="income_peer_to_peer_lending">
-<select id="income_peer_to_peer_lending_frequency">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
-
-<label for="income_venture_capital">Venture:</label>
-<input type="number" id="income_venture_capital">
-<select id="income_venture_capital_frequency">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
-
-<label for="income_tax_free_income">Tax Free:</label>
-<input type="number" id="income_tax_free_income">
-<select id="income_tax_free_income_frequency">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
+<U><h2>EXPENSES, LIVING</h2></U>
 
 <label for="expenses_grocery">Grocery:</label>
 <input type="number" id="expenses_grocery">
-<select id="expenses_grocery_frequency">
+<select id="expenses_grocery_frequency" onchange="calculateAnnual('expenses_grocery', 'expenses_grocery_frequency', 'expenses_grocery_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="expenses_grocery_annual"></span>
 
 <label for="expenses_dining">Dining:</label>
 <input type="number" id="expenses_dining">
-<select id="expenses_dining_frequency">
+<select id="expenses_dining_frequency" onchange="calculateAnnual('expenses_dining', 'expenses_dining_frequency', 'expenses_dining_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="expenses_dining_annual"></span>
 
 <label for="expenses_fitness">Fitness:</label>
 <input type="number" id="expenses_fitness">
-<select id="expenses_fitness_frequency">
+<select id="expenses_fitness_frequency" onchange="calculateAnnual('expenses_fitness', 'expenses_fitness_frequency', 'expenses_fitness_annual')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
+<span id="expenses_fitness_annual"></span>
+
 
 <label for="expenses_subscriptions">Subscriptions:</label>
 <input type="number" id="expenses_subscriptions">
@@ -670,113 +641,7 @@
 
    <button id="calculateButton">Calculate</button>
     
-<script>
-   document.getElementById('calculateButton').addEventListener('click', function () {
-    // Income
-    var normalizedSalaryWages = normalizeValue("income_salary_wages", "income_salary_wages_frequency");
-    var normalizedTips = normalizeValue("income_tips", "income_tips_frequency");
-    var normalizedBonuses = normalizeValue("income_bonuses", "income_bonuses_frequency");
-    var normalizedSelfEmployment = normalizeValue("income_sole_prop", "income_sole_prop_frequency");
-    var normalizedInvestmentProperty = normalizeValue("income_investment_property", "income_investment_property_frequency");
-    var normalizedInterest = normalizeValue("income_interest", "income_interest_frequency");
-    var normalizedCapitalGainsLosses = normalizeValue("income_capital_gains_losses", "income_capital_gains_losses_frequency");
-    var normalizedOwnerDividend = normalizeValue("income_owner_dividend", "income_owner_dividend_frequency");
-    var normalizedPublicDividend = normalizeValue("income_public_dividend", "income_public_dividend_frequency");
-    var normalizedTrust = normalizeValue("income_trust", "income_trust_frequency");
-    var normalizedFederalPension = normalizeValue("income_federal_pension", "income_federal_pension_frequency");
-    var normalizedWorkPension = normalizeValue("income_work_pension", "income_work_pension_frequency");
-    var normalizedSocialSecurity = normalizeValue("income_social_security", "income_social_security_frequency");
-    var normalizedEmploymentInsurance = normalizeValue("income_employment_insurance", "income_employment_insurance_frequency");
-    var normalizedAlimony = normalizeValue("income_alimony", "income_alimony_frequency");
-    var normalizedScholarshipsGrants = normalizeValue("income_scholarships_grants", "income_scholarships_grants_frequency");
-    var normalizedRoyalties = normalizeValue("income_royalties", "income_royalties_frequency");
-    var normalizedGamblingWinnings = normalizeValue("income_gambling_winnings", "income_gambling_winnings_frequency");
-    var normalizedPeerToPeerLending = normalizeValue("income_peer_to_peer_lending", "income_peer_to_peer_lending_frequency");
-    var normalizedVentureCapital = normalizeValue("income_venture_capital", "income_venture_capital_frequency");
-    var normalizedTaxFreeIncome = normalizeValue("income_tax_free_income", "income_tax_free_income_frequency");
 
-    // Expenses
-    var normalizedGrocery = normalizeValue("expenses_grocery", "expenses_grocery_frequency");
-    var normalizedDining = normalizeValue("expenses_dining", "expenses_dining_frequency");
-    var normalizedFitness = normalizeValue("expenses_fitness", "expenses_fitness_frequency");
-    var normalizedSubscriptions = normalizeValue("expenses_subscriptions", "expenses_subscriptions_frequency");
-    var normalizedPet = normalizeValue("expenses_pet", "expenses_pet_frequency");
-    var normalizedClothing = normalizeValue("expenses_clothing", "expenses_clothing_frequency");
-    var normalizedVacation = normalizeValue("expenses_vacation", "expenses_vacation_frequency");
-    var normalizedTravelLifeInsurance = normalizeValue("expenses_travel_life_insurance", "expenses_travel_life_insurance_frequency");
-    var normalizedCellphoneService = normalizeValue("expenses_cellphone_service", "expenses_cellphone_service_frequency");
-    var normalizedMedicalDental = normalizeValue("expenses_medical_dental", "expenses_medical_dental_frequency");
-    var normalizedLineOfCreditPayment = normalizeValue("expenses_line_of_credit_payment", "expenses_line_of_credit_payment_frequency");
-    var normalizedStudentLoanPayment = normalizeValue("expenses_student_loan_payment", "expenses_student_loan_payment_frequency");
-    var normalizedCreditCardPayment = normalizeValue("expenses_credit_card_payment", "expenses_credit_card_payment_frequency");
-    var normalizedTaxArrearsPayment = normalizeValue("expenses_tax_arrears_payment", "expenses_tax_arrears_payment_frequency");
-    var normalizedSmallBusinessLoanPayment = normalizeValue("expenses_small_business_loan_payment", "expenses_small_business_loan_payment_frequency");
-    var normalizedMortgagePayment = normalizeValue("housing_mortgage_payment", "housing_mortgage_payment_frequency");
-    var normalizedRentPayment = normalizeValue("housing_rent_payment", "housing_rent_payment_frequency");
-    var normalizedPropertyTax = normalizeValue("housing_property_tax", "housing_property_tax_frequency");
-    var normalizedCondoFee = normalizeValue("housing_condo_fee", "housing_condo_fee_frequency");
-    var normalizedHomeInsurance = normalizeValue("housing_insurance", "housing_insurance_frequency");
-    var normalizedHomeRepairs = normalizeValue("housing_repairs", "housing_repairs_frequency");
-    var normalizedWater = normalizeValue("housing_water", "housing_water_frequency");
-    var normalizedGas = normalizeValue("housing_gas", "housing_gas_frequency");
-    var normalizedInternet = normalizeValue("housing_internet", "housing_internet_frequency");
-    var normalizedCarLoanPayment = normalizeValue("transportation_car_loan_payment", "transportation_car_loan_payment_frequency");
-    var normalizedInsurance = normalizeValue("transportation_insurance", "transportation_insurance_frequency");
-    var normalizedFuel = normalizeValue("transportation_fuel", "transportation_fuel_frequency");
-    var normalizedMaintenance = normalizeValue("transportation_maintenance", "transportation_maintenance_frequency");
-    var normalizedPublicTransit = normalizeValue("transportation_public_transit", "transportation_public_transit_frequency");
-    var normalizedRideHailing = normalizeValue("transportation_ride_hailing", "transportation_ride_hailing_frequency");
-    var normalizedDayCare = normalizeValue("dependant_day_care", "dependant_day_care_frequency");
-    var normalizedDependantMedicalDental = normalizeValue("dependant_medical_dental", "dependant_medical_dental_frequency");
-    var normalizedDependantClothing = normalizeValue("dependant_clothing", "dependant_clothing_frequency");
-    var normalizedSportsRecreation = normalizeValue("dependant_sports_recreation", "dependant_sports_recreation_frequency");
-    var normalizedDependantTransportation = normalizeValue("dependant_transportation", "dependant_transportation_frequency");
-    var normalizedDependantTuition = normalizeValue("dependant_tuition", "dependant_tuition_frequency");
-    var normalizedDependantHousing = normalizeValue("dependant_housing", "dependant_housing_frequency");
-    var normalizedDependantCellularService = normalizeValue("dependant_cellular_service", "dependant_cellular_service_frequency");
-
-    // Perform calculations and display results
-    var totalIncome = normalizedSalaryWages + normalizedTips + normalizedBonuses + normalizedSelfEmployment +
-        normalizedInvestmentProperty + normalizedInterest + normalizedCapitalGainsLosses + normalizedOwnerDividend +
-        normalizedPublicDividend + normalizedTrust + normalizedFederalPension + normalizedWorkPension +
-        normalizedSocialSecurity + normalizedEmploymentInsurance + normalizedAlimony + normalizedScholarshipsGrants +
-        normalizedRoyalties + normalizedGamblingWinnings + normalizedPeerToPeerLending + normalizedVentureCapital +
-        normalizedTaxFreeIncome;
-
-    var totalExpenses = normalizedGrocery + normalizedDining + normalizedFitness + normalizedSubscriptions +
-        normalizedPet + normalizedClothing + normalizedVacation + normalizedTravelLifeInsurance +
-        normalizedCellphoneService + normalizedMedicalDental + normalizedLineOfCreditPayment +
-        normalizedStudentLoanPayment + normalizedCreditCardPayment + normalizedTaxArrearsPayment +
-        normalizedSmallBusinessLoanPayment + normalizedMortgagePayment + normalizedRentPayment +
-        normalizedPropertyTax + normalizedCondoFee + normalizedHomeInsurance + normalizedHomeRepairs +
-        normalizedWater + normalizedGas + normalizedInternet + normalizedCarLoanPayment +
-        normalizedInsurance + normalizedFuel + normalizedMaintenance + normalizedPublicTransit +
-        normalizedRideHailing + normalizedDayCare + normalizedDependantMedicalDental + normalizedDependantClothing +
-        normalizedSportsRecreation + normalizedDependantTransportation + normalizedDependantTuition +
-        normalizedDependantHousing + normalizedDependantCellularService;
-
-    var netIncome = totalIncome - totalExpenses;
-
-    alert("Total Income: $" + totalIncome.toFixed(2) + "\nTotal Expenses: $" + totalExpenses.toFixed(2) + "\nNet Income: $" + netIncome.toFixed(2));
-});
-
-function normalizeValue(inputId, frequencyId) {
-    var value = parseFloat(document.getElementById(inputId).value) || 0;
-    var frequency = parseInt(document.getElementById(frequencyId).value) || 0;
-
-    switch (frequency) {
-        case 1:
-            return value;
-        case 4:
-            return value * 4;
-        case 12:
-            return value * 12;
-        case 52:
-            return value * 52;
-        default:
-            return 0;
-    }
-}
 
 
 </script>
