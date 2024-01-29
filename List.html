@@ -762,14 +762,21 @@
 });
 
 function normalizeValue(inputId, frequencyId) {
-    var value = parseFloat(document.getElementById(inputId).value);
-    var frequency = parseFloat(document.getElementById(frequencyId).value);
+    var value = parseFloat(document.getElementById(inputId).value) || 0;
+    var frequency = parseInt(document.getElementById(frequencyId).value) || 0;
 
-    if (isNaN(value) || isNaN(frequency)) {
-        return 0;
+    switch (frequency) {
+        case 1:
+            return value;
+        case 4:
+            return value * 4;
+        case 12:
+            return value * 12;
+        case 52:
+            return value * 52;
+        default:
+            return 0;
     }
-
-    return value * frequency;
 }
 
 
