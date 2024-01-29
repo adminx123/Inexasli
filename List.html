@@ -745,7 +745,12 @@ function normalizeValue(inputId, frequencyId) {
     var value = parseFloat(document.getElementById(inputId).value);
     var frequency = parseFloat(document.getElementById(frequencyId).value);
 
-    return isNaN(value) || isNaN(frequency) ? 0 : value * frequency;
+    if (isNaN(value) || isNaN(frequency)) {
+        return 0;
+    }
+
+    return value * frequency;
 }
+
 
 </script>
