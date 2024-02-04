@@ -98,6 +98,23 @@
             // Display the result (you can modify this part based on your requirement)
             alert(`Normalized Sum: $${normalizedSum.toFixed(2)}`);
         }
+
+        function calculateAnnualValue(input, frequencyId) {
+            const frequency = document.getElementById(frequencyId).value;
+
+            switch (frequency) {
+                case 'annually':
+                    return input;
+                case 'quarterly':
+                    return input * 4;
+                case 'monthly':
+                    return input * 12;
+                case 'weekly':
+                    return input * 52;
+                default:
+                    return 0;
+            }
+        }
     </script>
 
     <h2>INCOME, PRE TAX & CONTRIBUTION</h2>
