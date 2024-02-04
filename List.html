@@ -105,9 +105,41 @@ function calculateAnnual(inputId, frequencyId, resultId) {
 </select>
 <span id="income_tips_annual"></span>
 
+</script>
 
+    <button onclick="calculateNormalizedSum()">Calculate Normalized Sum</button>
 
+<script>
+  function calculateNormalizedSum() {
+    // Get values for salary/wages and tips
+    const salaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
+    const tips = parseFloat(document.getElementById('income_tips').value) || 0;
 
+    // Calculate annual values
+    const annualSalaryWages = calculateAnnualValue(salaryWages, 'income_salary_wages_frequency');
+    const annualTips = calculateAnnualValue(tips, 'income_tips_frequency');
 
+    // Calculate normalized sum
+    const normalizedSum = annualSalaryWages + annualTips;
 
+    // Display the result (you can modify this part based on your requirement)
+    alert(`Normalized Sum: $${normalizedSum.toFixed(2)}`);
+  }
+
+  function calculateAnnualValue(input, frequencyId) {
+    const frequency = document.getElementById(frequencyId).value;
+
+    switch (frequency) {
+      case 'annually':
+        return input;
+      case 'quarterly':
+        return input * 4;
+      case 'monthly':
+        return input * 12;
+      case 'weekly':
+        return input * 52;
+      default:
+        return 0;
+    }
+  }
 </script>
