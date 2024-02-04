@@ -39,107 +39,93 @@
 </head>
 
 <body>
-   <h1 style="text-align: center;">The Four Pillars of Finance WARNING: WILL CONTAIN ERRORS NOT TO BE USED AS FINANCIAL ADVICE. CONSULT WITH A LICENSED PROFESSIONAL. WEBSITE IS NOT FUNCTIONAL YOU ASSUME ALL RISK WHEN USING</h1>
-<h1 style="text-align: center;">Income - Expenses - Assets - Liabilities</h1>
-<select id="provinceDropdown">
-  <option value="AB">Alberta</option>
-  <option value="BC">British Columbia</option>
-  <option value="MB">Manitoba</option>
-  <option value="NB">New Brunswick</option>
-  <option value="NL">Newfoundland and Labrador</option>
-  <option value="NS">Nova Scotia</option>
-  <option value="NT">Northwest Territories</option>
-  <option value="NU">Nunavut</option>
-  <option value="ON">Ontario</option>
-  <option value="PE">Prince Edward Island</option>
-  <option value="QC">Quebec</option>
-  <option value="SK">Saskatchewan</option>
-  <option value="YT">Yukon</option>
-</select>
+    <h1 style="text-align: center;">The Four Pillars of Finance WARNING: WILL CONTAIN ERRORS NOT TO BE USED AS FINANCIAL ADVICE. CONSULT WITH A LICENSED PROFESSIONAL. WEBSITE IS NOT FUNCTIONAL YOU ASSUME ALL RISK WHEN USING</h1>
+    <h1 style="text-align: center;">Income - Expenses - Assets - Liabilities</h1>
+    <select id="provinceDropdown">
+        <option value="AB">Alberta</option>
+        <option value="BC">British Columbia</option>
+        <option value="MB">Manitoba</option>
+        <option value="NB">New Brunswick</option>
+        <option value="NL">Newfoundland and Labrador</option>
+        <option value="NS">Nova Scotia</option>
+        <option value="NT">Northwest Territories</option>
+        <option value="NU">Nunavut</option>
+        <option value="ON">Ontario</option>
+        <option value="PE">Prince Edward Island</option>
+        <option value="QC">Quebec</option>
+        <option value="SK">Saskatchewan</option>
+        <option value="YT">Yukon</option>
+    </select>
 
-function calculateAnnual(inputId, frequencyId, resultId) {
-    const input = document.getElementById(inputId).value;
-    const frequency = document.getElementById(frequencyId).value;
-    let annualValue;
+    <script>
+        function calculateAnnual(inputId, frequencyId, resultId) {
+            const input = document.getElementById(inputId).value;
+            const frequency = document.getElementById(frequencyId).value;
+            let annualValue;
 
-    switch (frequency) {
-      case 'annually':
-        annualValue = input;
-        break;
-      case 'quarterly':
-        annualValue = input * 4;
-        break;
-      case 'monthly':
-        annualValue = input * 12;
-        break;
-      case 'weekly':
-        annualValue = input * 52;
-        break;
-      default:
-        annualValue = '';
-    }
+            switch (frequency) {
+                case 'annually':
+                    annualValue = input;
+                    break;
+                case 'quarterly':
+                    annualValue = input * 4;
+                    break;
+                case 'monthly':
+                    annualValue = input * 12;
+                    break;
+                case 'weekly':
+                    annualValue = input * 52;
+                    break;
+                default:
+                    annualValue = '';
+            }
 
-    document.getElementById(resultId).textContent = ` (Equivalent to $${annualValue} annually)`;
-  }
-</script>
+            document.getElementById(resultId).textContent = ` (Equivalent to $${annualValue} annually)`;
+        }
 
-<U><h2>INCOME, PRE TAX & CONTRIBUTION</h2></U>
+        function calculateNormalizedSum() {
+            // Get values for salary/wages and tips
+            const salaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
+            const tips = parseFloat(document.getElementById('income_tips').value) || 0;
 
-<label for="income_salary_wages">Salary/Wages:</label>
-<input type="number" id="income_salary_wages">
-<select id="income_salary_wages_frequency" onchange="calculateAnnual('income_salary_wages', 'income_salary_wages_frequency', 'income_salary_wages_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
-<span id="income_salary_wages_annual"></span>
+            // Calculate annual values
+            const annualSalaryWages = calculateAnnualValue(salaryWages, 'income_salary_wages_frequency');
+            const annualTips = calculateAnnualValue(tips, 'income_tips_frequency');
 
-<label for="income_tips">Tips:</label>
-<input type="number" id="income_tips">
-<select id="income_tips_frequency" onchange="calculateAnnual('income_tips', 'income_tips_frequency', 'income_tips_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
-<span id="income_tips_annual"></span>
+            // Calculate normalized sum
+            const normalizedSum = annualSalaryWages + annualTips;
 
-</script>
+            // Display the result (you can modify this part based on your requirement)
+            alert(`Normalized Sum: $${normalizedSum.toFixed(2)}`);
+        }
+    </script>
+
+    <h2>INCOME, PRE TAX & CONTRIBUTION</h2>
+
+    <label for="income_salary_wages">Salary/Wages:</label>
+    <input type="number" id="income_salary_wages">
+    <select id="income_salary_wages_frequency"
+        onchange="calculateAnnual('income_salary_wages', 'income_salary_wages_frequency', 'income_salary_wages_annual')">
+        <option value="annually">Annually</option>
+        <option value="quarterly">Quarterly</option>
+        <option value="monthly">Monthly</option>
+        <option value="weekly">Weekly</option>
+    </select>
+    <span id="income_salary_wages_annual"></span>
+
+    <label for="income_tips">Tips:</label>
+    <input type="number" id="income_tips">
+    <select id="income_tips_frequency"
+        onchange="calculateAnnual('income_tips', 'income_tips_frequency', 'income_tips_annual')">
+        <option value="annually">Annually</option>
+        <option value="quarterly">Quarterly</option>
+        <option value="monthly">Monthly</option>
+        <option value="weekly">Weekly</option>
+    </select>
+    <span id="income_tips_annual"></span>
 
     <button onclick="calculateNormalizedSum()">Calculate Normalized Sum</button>
 
-<script>
-  function calculateNormalizedSum() {
-    // Get values for salary/wages and tips
-    const salaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
-    const tips = parseFloat(document.getElementById('income_tips').value) || 0;
+</body>
 
-    // Calculate annual values
-    const annualSalaryWages = calculateAnnualValue(salaryWages, 'income_salary_wages_frequency');
-    const annualTips = calculateAnnualValue(tips, 'income_tips_frequency');
-
-    // Calculate normalized sum
-    const normalizedSum = annualSalaryWages + annualTips;
-
-    // Display the result (you can modify this part based on your requirement)
-    alert(`Normalized Sum: $${normalizedSum.toFixed(2)}`);
-  }
-
-  function calculateAnnualValue(input, frequencyId) {
-    const frequency = document.getElementById(frequencyId).value;
-
-    switch (frequency) {
-      case 'annually':
-        return input;
-      case 'quarterly':
-        return input * 4;
-      case 'monthly':
-        return input * 12;
-      case 'weekly':
-        return input * 52;
-      default:
-        return 0;
-    }
-  }
-</script>
+</html>
