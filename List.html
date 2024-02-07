@@ -88,131 +88,14 @@
             const salaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
             const tips = parseFloat(document.getElementById('income_tips').value) || 0;
            const salaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
-const bonuses = parseFloat(document.getElementById('income_bonuses').value) || 0;
-const soleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
-const investmentProperty = parseFloat(document.getElementById('income_investment_property').value) || 0;
-const interest = parseFloat(document.getElementById('income_interest').value) || 0;
-const capitalGainsLosses = parseFloat(document.getElementById('income_capital_gains_losses').value) || 0;
-const ownerDividend = parseFloat(document.getElementById('income_owner_dividend').value) || 0;
-const publicDividend = parseFloat(document.getElementById('income_public_dividend').value) || 0;
-const trust = parseFloat(document.getElementById('income_trust').value) || 0;
-const federalPension = parseFloat(document.getElementById('income_federal_pension').value) || 0;
-const workPension = parseFloat(document.getElementById('income_work_pension').value) || 0;
-const socialSecurity = parseFloat(document.getElementById('income_social_security').value) || 0;
-const employmentInsurance = parseFloat(document.getElementById('income_employment_insurance').value) || 0;
-const alimony = parseFloat(document.getElementById('income_alimony').value) || 0;
-const scholarshipsGrants = parseFloat(document.getElementById('income_scholarships_grants').value) || 0;
-const royalties = parseFloat(document.getElementById('income_royalties').value) || 0;
-const gamblingWinnings = parseFloat(document.getElementById('income_gambling_winnings').value) || 0;
-const peerToPeerLending = parseFloat(document.getElementById('income_peer_to_peer_lending').value) || 0;
-const ventureCapital = parseFloat(document.getElementById('income_venture_capital').value) || 0;
-const taxFreeIncome = parseFloat(document.getElementById('income_tax_free_income').value) || 0;
 
-const grocery = parseFloat(document.getElementById('expenses_grocery').value) || 0;
-const dining = parseFloat(document.getElementById('expenses_dining').value) || 0;
-const fitness = parseFloat(document.getElementById('expenses_fitness').value) || 0;
-const subscriptions = parseFloat(document.getElementById('expenses_subscriptions').value) || 0;
-const pet = parseFloat(document.getElementById('expenses_pet').value) || 0;
-const clothing = parseFloat(document.getElementById('expenses_clothing').value) || 0;
-const vacation = parseFloat(document.getElementById('expenses_vacation').value) || 0;
-const travelLifeInsurance = parseFloat(document.getElementById('expenses_travel_life_insurance').value) || 0;
-const cellphoneService = parseFloat(document.getElementById('expenses_cellphone_service').value) || 0;
-const medicalDental = parseFloat(document.getElementById('expenses_medical_dental').value) || 0;
-const lineOfCreditPayment = parseFloat(document.getElementById('expenses_line_of_credit_payment').value) || 0;
-const studentLoanPayment = parseFloat(document.getElementById('expenses_student_loan_payment').value) || 0;
-const creditCardPayment = parseFloat(document.getElementById('expenses_credit_card_payment').value) || 0;
-const taxArrearsPayment = parseFloat(document.getElementById('expenses_tax_arrears_payment').value) || 0;
-const smallBusinessLoanPayment = parseFloat(document.getElementById('expenses_small_business_loan_payment').value) || 0;
-const mortgagePayment = parseFloat(document.getElementById('housing_mortgage_payment').value) || 0;
-const rentPayment = parseFloat(document.getElementById('housing_rent_payment').value) || 0;
-const propertyTax = parseFloat(document.getElementById('housing_property_tax').value) || 0;
-const condoFee = parseFloat(document.getElementById('housing_condo_fee').value) || 0;
-const homeInsurance = parseFloat(document.getElementById('housing_insurance').value) || 0;
-const homeRepairs = parseFloat(document.getElementById('housing_repairs').value) || 0;
-const water = parseFloat(document.getElementById('housing_water').value) || 0;
-const gas = parseFloat(document.getElementById('housing_gas').value) || 0;
-const internet = parseFloat(document.getElementById('housing_internet').value) || 0;
-
-const carLoanPayment = parseFloat(document.getElementById('transportation_car_loan_payment').value) || 0;
-const insurance = parseFloat(document.getElementById('transportation_insurance').value) || 0;
-const fuel = parseFloat(document.getElementById('transportation_fuel').value) || 0;
-const maintenance = parseFloat(document.getElementById('transportation_maintenance').value) || 0;
-const publicTransit = parseFloat(document.getElementById('transportation_public_transit').value) || 0;
-const rideHailing = parseFloat(document.getElementById('transportation_ride_hailing').value) || 0;
-
-const dayCare = parseFloat(document.getElementById('dependant_day_care').value) || 0;
-const dependantMedicalDental = parseFloat(document.getElementById('dependant_medical_dental').value) || 0;
-const dependantClothing = parseFloat(document.getElementById('dependant_clothing').value) || 0;
-const sportsRecreation = parseFloat(document.getElementById('dependant_sports_recreation').value) || 0;
-const dependantTransportation = parseFloat(document.getElementById('dependant_transportation').value) || 0;
-const tuition = parseFloat(document.getElementById('dependant_tuition').value) || 0;
-const housing = parseFloat(document.getElementById('dependant_housing').value) || 0;
-const cellularService = parseFloat(document.getElementById('dependant_cellular_service').value) || 0;
 
 
             // Calculate annual values
             const annualSalaryWages = calculateAnnualValue(salaryWages, 'income_salary_wages_frequency');
             const annualTips = calculateAnnualValue(tips, 'income_tips_frequency');
             const annualBonuses = calculateAnnualValue(bonuses, 'income_bonuses_frequency');
-const annualSoleProp = calculateAnnualValue(soleProp, 'income_sole_prop_frequency');
-const annualInvestmentProperty = calculateAnnualValue(investmentProperty, 'income_investment_property_frequency');
-const annualInterest = calculateAnnualValue(interest, 'income_interest_frequency');
-const annualCapitalGainsLosses = calculateAnnualValue(capitalGainsLosses, 'income_capital_gains_losses_frequency');
-const annualOwnerDividend = calculateAnnualValue(ownerDividend, 'income_owner_dividend_frequency');
-const annualPublicDividend = calculateAnnualValue(publicDividend, 'income_public_dividend_frequency');
-const annualTrust = calculateAnnualValue(trust, 'income_trust_frequency');
-const annualFederalPension = calculateAnnualValue(federalPension, 'income_federal_pension_frequency');
-const annualWorkPension = calculateAnnualValue(workPension, 'income_work_pension_frequency');
-const annualSocialSecurity = calculateAnnualValue(socialSecurity, 'income_social_security_frequency');
-const annualEmploymentInsurance = calculateAnnualValue(employmentInsurance, 'income_employment_insurance_frequency');
-const annualAlimony = calculateAnnualValue(alimony, 'income_alimony_frequency');
-const annualScholarshipsGrants = calculateAnnualValue(scholarshipsGrants, 'income_scholarships_grants_frequency');
-const annualRoyalties = calculateAnnualValue(royalties, 'income_royalties_frequency');
-const annualGamblingWinnings = calculateAnnualValue(gamblingWinnings, 'income_gambling_winnings_frequency');
-const annualPeerToPeerLending = calculateAnnualValue(peerToPeerLending, 'income_peer_to_peer_lending_frequency');
-const annualVentureCapital = calculateAnnualValue(ventureCapital, 'income_venture_capital_frequency');
-const annualTaxFreeIncome = calculateAnnualValue(taxFreeIncome, 'income_tax_free_income_frequency');
 
-const annualGrocery = calculateAnnualValue(grocery, 'expenses_grocery_frequency');
-const annualDining = calculateAnnualValue(dining, 'expenses_dining_frequency');
-const annualFitness = calculateAnnualValue(fitness, 'expenses_fitness_frequency');
-const annualSubscriptions = calculateAnnualValue(subscriptions, 'expenses_subscriptions_frequency');
-const annualPet = calculateAnnualValue(pet, 'expenses_pet_frequency');
-const annualClothing = calculateAnnualValue(clothing, 'expenses_clothing_frequency');
-const annualVacation = calculateAnnualValue(vacation, 'expenses_vacation_frequency');
-const annualTravelLifeInsurance = calculateAnnualValue(travel_life_insurance, 'expenses_travel_life_insurance_frequency');
-const annualCellphoneService = calculateAnnualValue(cellphone_service, 'expenses_cellphone_service_frequency');
-const annualMedicalDental = calculateAnnualValue(medical_dental, 'expenses_medical_dental_frequency');
-const annualLineOfCreditPayment = calculateAnnualValue(line_of_credit_payment, 'expenses_line_of_credit_payment_frequency');
-const annualStudentLoanPayment = calculateAnnualValue(student_loan_payment, 'expenses_student_loan_payment_frequency');
-const annualCreditCardPayment = calculateAnnualValue(credit_card_payment, 'expenses_credit_card_payment_frequency');
-const annualTaxArrearsPayment = calculateAnnualValue(tax_arrears_payment, 'expenses_tax_arrears_payment_frequency');
-const annualSmallBusinessLoanPayment = calculateAnnualValue(small_business_loan_payment, 'expenses_small_business_loan_payment_frequency');
-const annualMortgagePayment = calculateAnnualValue(mortgage_payment, 'housing_mortgage_payment_frequency');
-const annualRentPayment = calculateAnnualValue(rent_payment, 'housing_rent_payment_frequency');
-const annualPropertyTax = calculateAnnualValue(property_tax, 'housing_property_tax_frequency');
-const annualCondoFee = calculateAnnualValue(condo_fee, 'housing_condo_fee_frequency');
-const annualHomeInsurance = calculateAnnualValue(home_insurance, 'housing_insurance_frequency');
-const annualHomeRepairs = calculateAnnualValue(home_repairs, 'housing_repairs_frequency');
-const annualWater = calculateAnnualValue(water, 'housing_water_frequency');
-const annualGas = calculateAnnualValue(gas, 'housing_gas_frequency');
-const annualInternet = calculateAnnualValue(internet, 'housing_internet_frequency');
-
-const annualCarLoanPayment = calculateAnnualValue(car_loan_payment, 'transportation_car_loan_payment_frequency');
-const annualInsurance = calculateAnnualValue(insurance, 'transportation_insurance_frequency');
-const annualFuel = calculateAnnualValue(fuel, 'transportation_fuel_frequency');
-const annualMaintenance = calculateAnnualValue(maintenance, 'transportation_maintenance_frequency');
-const annualPublicTransit = calculateAnnualValue(public_transit, 'transportation_public_transit_frequency');
-const annualRideHailing = calculateAnnualValue(ride_hailing, 'transportation_ride_hailing_frequency');
-
-const annualDayCare = calculateAnnualValue(day_care, 'dependant_day_care_frequency');
-const annualDependantMedicalDental = calculateAnnualValue(dependant_medical_dental, 'dependant_medical_dental_frequency');
-const annualDependantClothing = calculateAnnualValue(dependant_clothing, 'dependant_clothing_frequency');
-const annualSportsRecreation = calculateAnnualValue(sports_recreation, 'dependant_sports_recreation_frequency');
-const annualDependantTransportation = calculateAnnualValue(dependant_transportation, 'dependant_transportation_frequency');
-const annualTuition = calculateAnnualValue(tuition, 'dependant_tuition_frequency');
-const annualHousing = calculateAnnualValue(housing, 'dependant_housing_frequency');
-const annualCellularService = calculateAnnualValue(cellular_service, 'dependant_cellular_service_frequency');
 
 
             // Calculate normalized sum
