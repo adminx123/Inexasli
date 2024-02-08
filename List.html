@@ -83,7 +83,7 @@
             document.getElementById(resultId).textContent = ` (Equivalent to $${annualValue} annually)`;
         }
 
-        function calculateNormalizedSum() {
+        function calculatenormalizedsum() {
             // Get values for all labels
             const salaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
             const tips = parseFloat(document.getElementById('income_tips').value) || 0;
@@ -281,8 +281,8 @@ const annualCellularService = calculateAnnual(cellular_service, 'dependant_cellu
 
 
             // Display the result (you can modify this part based on your requirement)
-            alert(`Annual Income Sum: $${annualIncomeSum.toFixed(2)}\n Annual Expense Sum: $${annualExpenseSum.toFixed(2)}`);
-
+             document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
+        document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
         }
 
         function calculateAnnualValue(input, frequencyId) {
@@ -955,9 +955,12 @@ const annualCellularService = calculateAnnual(cellular_service, 'dependant_cellu
     <label for="liabilities_tax_arrears">Tax Arrears:</label>
     <input type="text" id="liabilities_tax_arrears">
 
-   <button onclick="annualincomesome(); annualexpensesum()">Calculate</button>
+   <button onclick="calculatenormalizedsum()">Calculate</button>
 
-
+<div>
+    <p>Annual Income Sum: <span id="annual_income_sum"></span></p>
+    <p>Annual Expense Sum: <span id="annual_expense_sum"></span></p>
+</div>
 </body>
 
 </html>
