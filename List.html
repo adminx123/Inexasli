@@ -285,7 +285,7 @@ const annualCellularService = calculateAnnual(cellular_service, 'dependant_cellu
         document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
         }
 
-        function calculateAnnualValue(input, frequencyId) {
+        function calculateAnnual(input, frequencyId) {
             const frequency = document.getElementById(frequencyId).value;
 
             switch (frequency) {
