@@ -57,253 +57,117 @@
         <option value="YT">Yukon</option>
     </select>
 
-    <script>
-        function calculateAnnual(inputId, frequencyId, resultId) {
-            const input = document.getElementById(inputId).value;
-            const frequency = document.getElementById(frequencyId).value;
-            let annualValue;
+   <script>
+    function calculateAnnual(inputId, frequencyId) {
+        const input = parseFloat(document.getElementById(inputId).value) || 0;
+        const frequency = document.getElementById(frequencyId).value;
 
-            switch (frequency) {
-                case 'annually':
-                    annualValue = input;
-                    break;
-                case 'quarterly':
-                    annualValue = input * 4;
-                    break;
-                case 'monthly':
-                    annualValue = input * 12;
-                    break;
-                case 'weekly':
-                    annualValue = input * 52;
-                    break;
-                default:
-                    annualValue = '';
-            }
-
-            document.getElementById(resultId).textContent = ` (Equivalent to $${annualValue} annually)`;
+        switch (frequency) {
+            case 'annually':
+                return input;
+            case 'quarterly':
+                return input * 4;
+            case 'monthly':
+                return input * 12;
+            case 'weekly':
+                return input * 52;
+            default:
+                return 0;
         }
+    }
 
-        function calculatenormalizedsum() {
-            // Get values for all labels
-            const salaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
-            const tips = parseFloat(document.getElementById('income_tips').value) || 0;
-           const bonuses = parseFloat(document.getElementById('income_bonuses').value) || 0;
-const soleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
-const investmentProperty = parseFloat(document.getElementById('income_investment_property').value) || 0;
-const interest = parseFloat(document.getElementById('income_interest').value) || 0;
-const capitalGainsLosses = parseFloat(document.getElementById('income_capital_gains_losses').value) || 0;
-const ownerDividend = parseFloat(document.getElementById('income_owner_dividend').value) || 0;
-const publicDividend = parseFloat(document.getElementById('income_public_dividend').value) || 0;
-const trust = parseFloat(document.getElementById('income_trust').value) || 0;
-const federalPension = parseFloat(document.getElementById('income_federal_pension').value) || 0;
-const workPension = parseFloat(document.getElementById('income_work_pension').value) || 0;
-const socialSecurity = parseFloat(document.getElementById('income_social_security').value) || 0;
-const employmentInsurance = parseFloat(document.getElementById('income_employment_insurance').value) || 0;
-const alimony = parseFloat(document.getElementById('income_alimony').value) || 0;
-const scholarshipsGrants = parseFloat(document.getElementById('income_scholarships_grants').value) || 0;
-const royalties = parseFloat(document.getElementById('income_royalties').value) || 0;
-const gamblingWinnings = parseFloat(document.getElementById('income_gambling_winnings').value) || 0;
-const peerToPeerLending = parseFloat(document.getElementById('income_peer_to_peer_lending').value) || 0;
-const ventureCapital = parseFloat(document.getElementById('income_venture_capital').value) || 0;
-const taxFreeIncome = parseFloat(document.getElementById('income_tax_free_income').value) || 0;
+    function calculateNormalizedSum() {
+        // Define all income fields with their corresponding frequency fields
+        const incomeFields = [
+            ['income_salary_wages', 'income_salary_wages_frequency'],
+            ['income_tips', 'income_tips_frequency'],
+            ['income_bonuses', 'income_bonuses_frequency'],
+            ['income_sole_prop', 'income_sole_prop_frequency'],
+            ['income_investment_property', 'income_investment_property_frequency'],
+            ['income_interest', 'income_interest_frequency'],
+            ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
+            ['income_owner_dividend', 'income_owner_dividend_frequency'],
+            ['income_public_dividend', 'income_public_dividend_frequency'],
+            ['income_trust', 'income_trust_frequency'],
+            ['income_federal_pension', 'income_federal_pension_frequency'],
+            ['income_work_pension', 'income_work_pension_frequency'],
+            ['income_social_security', 'income_social_security_frequency'],
+            ['income_employment_insurance', 'income_employment_insurance_frequency'],
+            ['income_alimony', 'income_alimony_frequency'],
+            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
+            ['income_royalties', 'income_royalties_frequency'],
+            ['income_gambling_winnings', 'income_gambling_winnings_frequency'],
+            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+            ['income_venture_capital', 'income_venture_capital_frequency'],
+            ['income_tax_free_income', 'income_tax_free_income_frequency']
+            // Add more income fields here
+        ];
 
-const grocery = parseFloat(document.getElementById('expenses_grocery').value) || 0;
-const dining = parseFloat(document.getElementById('expenses_dining').value) || 0;
-const fitness = parseFloat(document.getElementById('expenses_fitness').value) || 0;
-const subscriptions = parseFloat(document.getElementById('expenses_subscriptions').value) || 0;
-const pet = parseFloat(document.getElementById('expenses_pet').value) || 0;
-const clothing = parseFloat(document.getElementById('expenses_clothing').value) || 0;
-const vacation = parseFloat(document.getElementById('expenses_vacation').value) || 0;
-const travelLifeInsurance = parseFloat(document.getElementById('expenses_travel_life_insurance').value) || 0;
-const cellphoneService = parseFloat(document.getElementById('expenses_cellphone_service').value) || 0;
-const medicalDental = parseFloat(document.getElementById('expenses_medical_dental').value) || 0;
-const lineOfCreditPayment = parseFloat(document.getElementById('expenses_line_of_credit_payment').value) || 0;
-const studentLoanPayment = parseFloat(document.getElementById('expenses_student_loan_payment').value) || 0;
-const creditCardPayment = parseFloat(document.getElementById('expenses_credit_card_payment').value) || 0;
-const taxArrearsPayment = parseFloat(document.getElementById('expenses_tax_arrears_payment').value) || 0;
-const smallBusinessLoanPayment = parseFloat(document.getElementById('expenses_small_business_loan_payment').value) || 0;
-const mortgagePayment = parseFloat(document.getElementById('housing_mortgage_payment').value) || 0;
-const rentPayment = parseFloat(document.getElementById('housing_rent_payment').value) || 0;
-const propertyTax = parseFloat(document.getElementById('housing_property_tax').value) || 0;
-const condoFee = parseFloat(document.getElementById('housing_condo_fee').value) || 0;
-const homeInsurance = parseFloat(document.getElementById('housing_insurance').value) || 0;
-const homeRepairs = parseFloat(document.getElementById('housing_repairs').value) || 0;
-const water = parseFloat(document.getElementById('housing_water').value) || 0;
-const gas = parseFloat(document.getElementById('housing_gas').value) || 0;
-const internet = parseFloat(document.getElementById('housing_internet').value) || 0;
+        // Define all expense fields with their corresponding frequency fields
+        const expenseFields = [
+            ['expenses_grocery', 'expenses_grocery_frequency'],
+            ['expenses_dining', 'expenses_dining_frequency'],
+            ['expenses_fitness', 'expenses_fitness_frequency'],
+            ['expenses_subscriptions', 'expenses_subscriptions_frequency'],
+            ['expenses_pet', 'expenses_pet_frequency'],
+            ['expenses_clothing', 'expenses_clothing_frequency'],
+            ['expenses_vacation', 'expenses_vacation_frequency'],
+            ['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
+            ['expenses_cellphone_service', 'expenses_cellphone_service_frequency'],
+            ['expenses_medical_dental', 'expenses_medical_dental_frequency'],
+            ['expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency'],
+            ['expenses_student_loan_payment', 'expenses_student_loan_payment_frequency'],
+            ['expenses_credit_card_payment', 'expenses_credit_card_payment_frequency'],
+            ['expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency'],
+            ['expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency'],
+            ['housing_mortgage_payment', 'housing_mortgage_payment_frequency'],
+            ['housing_rent_payment', 'housing_rent_payment_frequency'],
+            ['housing_property_tax', 'housing_property_tax_frequency'],
+            ['housing_condo_fee', 'housing_condo_fee_frequency'],
+            ['housing_insurance', 'housing_insurance_frequency'],
+            ['housing_repairs', 'housing_repairs_frequency'],
+            ['housing_water', 'housing_water_frequency'],
+            ['housing_gas', 'housing_gas_frequency'],
+            ['housing_internet', 'housing_internet_frequency'],
+            ['transportation_car_loan_payment', 'transportation_car_loan_payment_frequency'],
+            ['transportation_insurance', 'transportation_insurance_frequency'],
+            ['transportation_fuel', 'transportation_fuel_frequency'],
+            ['transportation_maintenance', 'transportation_maintenance_frequency'],
+            ['transportation_public_transit', 'transportation_public_transit_frequency'],
+            ['transportation_ride_hailing', 'transportation_ride_hailing_frequency'],
+            ['dependant_day_care', 'dependant_day_care_frequency'],
+            ['dependant_medical_dental', 'dependant_medical_dental_frequency'],
+            ['dependant_clothing', 'dependant_clothing_frequency'],
+            ['dependant_sports_recreation', 'dependant_sports_recreation_frequency'],
+            ['dependant_transportation', 'dependant_transportation_frequency'],
+            ['dependant_tuition', 'dependant_tuition_frequency'],
+            ['dependant_housing', 'dependant_housing_frequency'],
+            ['dependant_cellular_service', 'dependant_cellular_service_frequency']
+            // Add more expense fields here
+        ];
 
-const carLoanPayment = parseFloat(document.getElementById('transportation_car_loan_payment').value) || 0;
-const insurance = parseFloat(document.getElementById('transportation_insurance').value) || 0;
-const fuel = parseFloat(document.getElementById('transportation_fuel').value) || 0;
-const maintenance = parseFloat(document.getElementById('transportation_maintenance').value) || 0;
-const publicTransit = parseFloat(document.getElementById('transportation_public_transit').value) || 0;
-const rideHailing = parseFloat(document.getElementById('transportation_ride_hailing').value) || 0;
+        let annualIncomeSum = 0;
+        let annualExpenseSum = 0;
 
-const dayCare = parseFloat(document.getElementById('dependant_day_care').value) || 0;
-const dependantMedicalDental = parseFloat(document.getElementById('dependant_medical_dental').value) || 0;
-const dependantClothing = parseFloat(document.getElementById('dependant_clothing').value) || 0;
-const sportsRecreation = parseFloat(document.getElementById('dependant_sports_recreation').value) || 0;
-const dependantTransportation = parseFloat(document.getElementById('dependant_transportation').value) || 0;
-const tuition = parseFloat(document.getElementById('dependant_tuition').value) || 0;
-const housing = parseFloat(document.getElementById('dependant_housing').value) || 0;
-const cellularService = parseFloat(document.getElementById('dependant_cellular_service').value) || 0;
+        // Calculate annual income sum
+        incomeFields.forEach(field => {
+            const [inputId, frequencyId] = field;
+            annualIncomeSum += calculateAnnual(inputId, frequencyId);
+        });
 
+        // Calculate annual expense sum
+        expenseFields.forEach(field => {
+            const [inputId, frequencyId] = field;
+            annualExpenseSum += calculateAnnual(inputId, frequencyId);
+        });
 
-            // Calculate annual values
-            const annualSalaryWages = calculateAnnual(salaryWages, 'income_salary_wages_frequency');
-            const annualTips = calculateAnnual(tips, 'income_tips_frequency');
-            const annualBonuses = calculateAnnual(bonuses, 'income_bonuses_frequency');
-const annualSoleProp = calculateAnnual(soleProp, 'income_sole_prop_frequency');
-const annualInvestmentProperty = calculateAnnual(investmentProperty, 'income_investment_property_frequency');
-const annualInterest = calculateAnnual(interest, 'income_interest_frequency');
-const annualCapitalGainsLosses = calculateAnnual(capitalGainsLosses, 'income_capital_gains_losses_frequency');
-const annualOwnerDividend = calculateAnnual(ownerDividend, 'income_owner_dividend_frequency');
-const annualPublicDividend = calculateAnnual(publicDividend, 'income_public_dividend_frequency');
-const annualTrust = calculateAnnual(trust, 'income_trust_frequency');
-const annualFederalPension = calculateAnnual(federalPension, 'income_federal_pension_frequency');
-const annualWorkPension = calculateAnnual(workPension, 'income_work_pension_frequency');
-const annualSocialSecurity = calculateAnnual(socialSecurity, 'income_social_security_frequency');
-const annualEmploymentInsurance = calculateAnnual(employmentInsurance, 'income_employment_insurance_frequency');
-const annualAlimony = calculateAnnual(alimony, 'income_alimony_frequency');
-const annualScholarshipsGrants = calculateAnnual(scholarshipsGrants, 'income_scholarships_grants_frequency');
-const annualRoyalties = calculateAnnual(royalties, 'income_royalties_frequency');
-const annualGamblingWinnings = calculateAnnual(gamblingWinnings, 'income_gambling_winnings_frequency');
-const annualPeerToPeerLending = calculateAnnual(peerToPeerLending, 'income_peer_to_peer_lending_frequency');
-const annualVentureCapital = calculateAnnual(ventureCapital, 'income_venture_capital_frequency');
-const annualTaxFreeIncome = calculateAnnual(taxFreeIncome, 'income_tax_free_income_frequency');
-
-const annualGrocery = calculateAnnual(grocery, 'expenses_grocery_frequency');
-const annualDining = calculateAnnual(dining, 'expenses_dining_frequency');
-const annualFitness = calculateAnnual(fitness, 'expenses_fitness_frequency');
-const annualSubscriptions = calculateAnnual(subscriptions, 'expenses_subscriptions_frequency');
-const annualPet = calculateAnnual(pet, 'expenses_pet_frequency');
-const annualClothing = calculateAnnual(clothing, 'expenses_clothing_frequency');
-const annualVacation = calculateAnnual(vacation, 'expenses_vacation_frequency');
-const annualTravelLifeInsurance = calculateAnnual(travel_life_insurance, 'expenses_travel_life_insurance_frequency');
-const annualCellphoneService = calculateAnnual(cellphone_service, 'expenses_cellphone_service_frequency');
-const annualMedicalDental = calculateAnnual(medical_dental, 'expenses_medical_dental_frequency');
-const annualLineOfCreditPayment = calculateAnnual(line_of_credit_payment, 'expenses_line_of_credit_payment_frequency');
-const annualStudentLoanPayment = calculateAnnual(student_loan_payment, 'expenses_student_loan_payment_frequency');
-const annualCreditCardPayment = calculateAnnual(credit_card_payment, 'expenses_credit_card_payment_frequency');
-const annualTaxArrearsPayment = calculateAnnual(tax_arrears_payment, 'expenses_tax_arrears_payment_frequency');
-const annualSmallBusinessLoanPayment = calculateAnnual(small_business_loan_payment, 'expenses_small_business_loan_payment_frequency');
-const annualMortgagePayment = calculateAnnual(mortgage_payment, 'housing_mortgage_payment_frequency');
-const annualRentPayment = calculateAnnual(rent_payment, 'housing_rent_payment_frequency');
-const annualPropertyTax = calculateAnnual(property_tax, 'housing_property_tax_frequency');
-const annualCondoFee = calculateAnnual(condo_fee, 'housing_condo_fee_frequency');
-const annualHomeInsurance = calculateAnnual(home_insurance, 'housing_insurance_frequency');
-const annualHomeRepairs = calculateAnnual(home_repairs, 'housing_repairs_frequency');
-const annualWater = calculateAnnual(water, 'housing_water_frequency');
-const annualGas = calculateAnnual(gas, 'housing_gas_frequency');
-const annualInternet = calculateAnnual(internet, 'housing_internet_frequency');
-
-const annualCarLoanPayment = calculateAnnual(car_loan_payment, 'transportation_car_loan_payment_frequency');
-const annualInsurance = calculateAnnual(insurance, 'transportation_insurance_frequency');
-const annualFuel = calculateAnnual(fuel, 'transportation_fuel_frequency');
-const annualMaintenance = calculateAnnual(maintenance, 'transportation_maintenance_frequency');
-const annualPublicTransit = calculateAnnual(public_transit, 'transportation_public_transit_frequency');
-const annualRideHailing = calculateAnnual(ride_hailing, 'transportation_ride_hailing_frequency');
-
-const annualDayCare = calculateAnnual(day_care, 'dependant_day_care_frequency');
-const annualDependantMedicalDental = calculateAnnual(dependant_medical_dental, 'dependant_medical_dental_frequency');
-const annualDependantClothing = calculateAnnual(dependant_clothing, 'dependant_clothing_frequency');
-const annualSportsRecreation = calculateAnnual(sports_recreation, 'dependant_sports_recreation_frequency');
-const annualDependantTransportation = calculateAnnual(dependant_transportation, 'dependant_transportation_frequency');
-const annualTuition = calculateAnnual(tuition, 'dependant_tuition_frequency');
-const annualHousing = calculateAnnual(housing, 'dependant_housing_frequency');
-const annualCellularService = calculateAnnual(cellular_service, 'dependant_cellular_service_frequency');
-
-
-          // Calculate annual income sum
-    const annualIncomeSum = calculateAnnual(salaryWages, 'income_salary_wages_frequency') + 
-                            calculateAnnual(tips, 'income_tips_frequency') + 
-                            calculateAnnual(bonuses, 'income_bonuses_frequency') + 
-                            calculateAnnual(soleProp, 'income_sole_prop_frequency') + 
-                            calculateAnnual(investmentProperty, 'income_investment_property_frequency') + 
-                            calculateAnnual(interest, 'income_interest_frequency') + 
-                            calculateAnnual(capitalGainsLosses, 'income_capital_gains_losses_frequency') + 
-                            calculateAnnual(ownerDividend, 'income_owner_dividend_frequency') + 
-                            calculateAnnual(publicDividend, 'income_public_dividend_frequency') + 
-                            calculateAnnual(trust, 'income_trust_frequency') + 
-                            calculateAnnual(federalPension, 'income_federal_pension_frequency') + 
-                            calculateAnnual(workPension, 'income_work_pension_frequency') + 
-                            calculateAnnual(socialSecurity, 'income_social_security_frequency') + 
-                            calculateAnnual(employmentInsurance, 'income_employment_insurance_frequency') + 
-                            calculateAnnual(alimony, 'income_alimony_frequency') + 
-                            calculateAnnual(scholarshipsGrants, 'income_scholarships_grants_frequency') + 
-                            calculateAnnual(royalties, 'income_royalties_frequency') + 
-                            calculateAnnual(gamblingWinnings, 'income_gambling_winnings_frequency') + 
-                            calculateAnnual(peerToPeerLending, 'income_peer_to_peer_lending_frequency') + 
-                            calculateAnnual(ventureCapital, 'income_venture_capital_frequency') + 
-                            calculateAnnual(taxFreeIncome, 'income_tax_free_income_frequency');
-
-    // Calculate annual expense sum
-    const annualExpenseSum = calculateAnnual(grocery, 'expenses_grocery_frequency') + 
-                             calculateAnnual(dining, 'expenses_dining_frequency') + 
-                             calculateAnnual(fitness, 'expenses_fitness_frequency') + 
-                             calculateAnnual(subscriptions, 'expenses_subscriptions_frequency') + 
-                             calculateAnnual(pet, 'expenses_pet_frequency') + 
-                             calculateAnnual(clothing, 'expenses_clothing_frequency') + 
-                             calculateAnnual(vacation, 'expenses_vacation_frequency') + 
-                             calculateAnnual(travelLifeInsurance, 'expenses_travel_life_insurance_frequency') + 
-                             calculateAnnual(cellphoneService, 'expenses_cellphone_service_frequency') + 
-                             calculateAnnual(medicalDental, 'expenses_medical_dental_frequency') + 
-                             calculateAnnual(lineOfCreditPayment, 'expenses_line_of_credit_payment_frequency') + 
-                             calculateAnnual(studentLoanPayment, 'expenses_student_loan_payment_frequency') + 
-                             calculateAnnual(creditCardPayment, 'expenses_credit_card_payment_frequency') + 
-                             calculateAnnual(taxArrearsPayment, 'expenses_tax_arrears_payment_frequency') + 
-                             calculateAnnual(smallBusinessLoanPayment, 'expenses_small_business_loan_payment_frequency') + 
-                             calculateAnnual(mortgagePayment, 'housing_mortgage_payment_frequency') + 
-                             calculateAnnual(rentPayment, 'housing_rent_payment_frequency') + 
-                             calculateAnnual(propertyTax, 'housing_property_tax_frequency') + 
-                             calculateAnnual(condoFee, 'housing_condo_fee_frequency') + 
-                             calculateAnnual(homeInsurance, 'housing_insurance_frequency') + 
-                             calculateAnnual(homeRepairs, 'housing_repairs_frequency') + 
-                             calculateAnnual(water, 'housing_water_frequency') + 
-                             calculateAnnual(gas, 'housing_gas_frequency') + 
-                             calculateAnnual(internet, 'housing_internet_frequency') + 
-                             calculateAnnual(carLoanPayment, 'transportation_car_loan_payment_frequency') + 
-                             calculateAnnual(insurance, 'transportation_insurance_frequency') + 
-                             calculateAnnual(fuel, 'transportation_fuel_frequency') + 
-                             calculateAnnual(maintenance, 'transportation_maintenance_frequency') + 
-                             calculateAnnual(publicTransit, 'transportation_public_transit_frequency') + 
-                             calculateAnnual(rideHailing, 'transportation_ride_hailing_frequency') + 
-                             calculateAnnual(dayCare, 'dependant_day_care_frequency') + 
-                             calculateAnnual(dependantMedicalDental, 'dependant_medical_dental_frequency') + 
-                             calculateAnnual(dependantClothing, 'dependant_clothing_frequency') + 
-                             calculateAnnual(sportsRecreation, 'dependant_sports_recreation_frequency') + 
-                             calculateAnnual(dependantTransportation, 'dependant_transportation_frequency') + 
-                             calculateAnnual(tuition, 'dependant_tuition_frequency') + 
-                             calculateAnnual(housing, 'dependant_housing_frequency') + 
-                             calculateAnnual(cellularService, 'dependant_cellular_service_frequency');
-
-    // You can use the annualIncomeSum and annualExpenseSum variables as needed
-
-
-            // Display the result (you can modify this part based on your requirement)
-             document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
+        // Display the results
+        document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
         document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
-        }
+    }
+</script>
 
-        function calculateAnnual(input, frequencyId) {
-            const frequency = document.getElementById(frequencyId).value;
 
-            switch (frequency) {
-                case 'annually':
-                    return input;
-                case 'quarterly':
-                    return input * 4;
-                case 'monthly':
-                    return input * 12;
-                case 'weekly':
-                    return input * 52;
-                default:
-                    return 0;
-            }
-        }
-        
-
-    </script>
 
     <h2>INCOME, PRE TAX & CONTRIBUTION</h2>
 
