@@ -214,8 +214,71 @@ const annualHousing = calculateAnnual(housing, 'dependant_housing_frequency');
 const annualCellularService = calculateAnnual(cellular_service, 'dependant_cellular_service_frequency');
 
 
-            // Calculate normalized sum
-            const normalizedSum = annualSalaryWages + annualTips;
+          // Calculate annual income sum
+    const annualIncomeSum = calculateAnnual(salaryWages, 'income_salary_wages_frequency') + 
+                            calculateAnnual(tips, 'income_tips_frequency') + 
+                            calculateAnnual(bonuses, 'income_bonuses_frequency') + 
+                            calculateAnnual(soleProp, 'income_sole_prop_frequency') + 
+                            calculateAnnual(investmentProperty, 'income_investment_property_frequency') + 
+                            calculateAnnual(interest, 'income_interest_frequency') + 
+                            calculateAnnual(capitalGainsLosses, 'income_capital_gains_losses_frequency') + 
+                            calculateAnnual(ownerDividend, 'income_owner_dividend_frequency') + 
+                            calculateAnnual(publicDividend, 'income_public_dividend_frequency') + 
+                            calculateAnnual(trust, 'income_trust_frequency') + 
+                            calculateAnnual(federalPension, 'income_federal_pension_frequency') + 
+                            calculateAnnual(workPension, 'income_work_pension_frequency') + 
+                            calculateAnnual(socialSecurity, 'income_social_security_frequency') + 
+                            calculateAnnual(employmentInsurance, 'income_employment_insurance_frequency') + 
+                            calculateAnnual(alimony, 'income_alimony_frequency') + 
+                            calculateAnnual(scholarshipsGrants, 'income_scholarships_grants_frequency') + 
+                            calculateAnnual(royalties, 'income_royalties_frequency') + 
+                            calculateAnnual(gamblingWinnings, 'income_gambling_winnings_frequency') + 
+                            calculateAnnual(peerToPeerLending, 'income_peer_to_peer_lending_frequency') + 
+                            calculateAnnual(ventureCapital, 'income_venture_capital_frequency') + 
+                            calculateAnnual(taxFreeIncome, 'income_tax_free_income_frequency');
+
+    // Calculate annual expense sum
+    const annualExpenseSum = calculateAnnual(grocery, 'expenses_grocery_frequency') + 
+                             calculateAnnual(dining, 'expenses_dining_frequency') + 
+                             calculateAnnual(fitness, 'expenses_fitness_frequency') + 
+                             calculateAnnual(subscriptions, 'expenses_subscriptions_frequency') + 
+                             calculateAnnual(pet, 'expenses_pet_frequency') + 
+                             calculateAnnual(clothing, 'expenses_clothing_frequency') + 
+                             calculateAnnual(vacation, 'expenses_vacation_frequency') + 
+                             calculateAnnual(travelLifeInsurance, 'expenses_travel_life_insurance_frequency') + 
+                             calculateAnnual(cellphoneService, 'expenses_cellphone_service_frequency') + 
+                             calculateAnnual(medicalDental, 'expenses_medical_dental_frequency') + 
+                             calculateAnnual(lineOfCreditPayment, 'expenses_line_of_credit_payment_frequency') + 
+                             calculateAnnual(studentLoanPayment, 'expenses_student_loan_payment_frequency') + 
+                             calculateAnnual(creditCardPayment, 'expenses_credit_card_payment_frequency') + 
+                             calculateAnnual(taxArrearsPayment, 'expenses_tax_arrears_payment_frequency') + 
+                             calculateAnnual(smallBusinessLoanPayment, 'expenses_small_business_loan_payment_frequency') + 
+                             calculateAnnual(mortgagePayment, 'housing_mortgage_payment_frequency') + 
+                             calculateAnnual(rentPayment, 'housing_rent_payment_frequency') + 
+                             calculateAnnual(propertyTax, 'housing_property_tax_frequency') + 
+                             calculateAnnual(condoFee, 'housing_condo_fee_frequency') + 
+                             calculateAnnual(homeInsurance, 'housing_insurance_frequency') + 
+                             calculateAnnual(homeRepairs, 'housing_repairs_frequency') + 
+                             calculateAnnual(water, 'housing_water_frequency') + 
+                             calculateAnnual(gas, 'housing_gas_frequency') + 
+                             calculateAnnual(internet, 'housing_internet_frequency') + 
+                             calculateAnnual(carLoanPayment, 'transportation_car_loan_payment_frequency') + 
+                             calculateAnnual(insurance, 'transportation_insurance_frequency') + 
+                             calculateAnnual(fuel, 'transportation_fuel_frequency') + 
+                             calculateAnnual(maintenance, 'transportation_maintenance_frequency') + 
+                             calculateAnnual(publicTransit, 'transportation_public_transit_frequency') + 
+                             calculateAnnual(rideHailing, 'transportation_ride_hailing_frequency') + 
+                             calculateAnnual(dayCare, 'dependant_day_care_frequency') + 
+                             calculateAnnual(dependantMedicalDental, 'dependant_medical_dental_frequency') + 
+                             calculateAnnual(dependantClothing, 'dependant_clothing_frequency') + 
+                             calculateAnnual(sportsRecreation, 'dependant_sports_recreation_frequency') + 
+                             calculateAnnual(dependantTransportation, 'dependant_transportation_frequency') + 
+                             calculateAnnual(tuition, 'dependant_tuition_frequency') + 
+                             calculateAnnual(housing, 'dependant_housing_frequency') + 
+                             calculateAnnual(cellularService, 'dependant_cellular_service_frequency');
+
+    // You can use the annualIncomeSum and annualExpenseSum variables as needed
+
 
             // Display the result (you can modify this part based on your requirement)
             alert(`Normalized Sum: $${normalizedSum.toFixed(2)}`);
