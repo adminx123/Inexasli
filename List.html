@@ -167,225 +167,225 @@
     }
 </script>
 
+<h2>INCOME, PRE TAX & CONTRIBUTION</h2>
 
+<label for="income_salary_wages">Salary/Wages:</label>
+<input type="number" id="income_salary_wages">
+<select id="income_salary_wages_frequency" onchange="calculateAnnual('income_salary_wages', 'income_salary_wages_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
+</select>
+<span id="income_salary_wages_annual"></span>
 
-    <h2>INCOME, PRE TAX & CONTRIBUTION</h2>
+<label for="income_tips">Tips:</label>
+<input type="number" id="income_tips">
+<select id="income_tips_frequency" onchange="calculateAnnual('income_tips', 'income_tips_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
+</select>
+<span id="income_tips_annual"></span>
 
-    <label for="income_salary_wages">Salary/Wages:</label>
-    <input type="number" id="income_salary_wages">
-    <select id="income_salary_wages_frequency"
-        onchange="calculateAnnual('income_salary_wages', 'income_salary_wages_frequency', 'income_salary_wages_annual')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-    </select>
-    <span id="income_salary_wages_annual"></span>
-
-    <label for="income_tips">Tips:</label>
-    <input type="number" id="income_tips">
-    <select id="income_tips_frequency"
-        onchange="calculateAnnual('income_tips', 'income_tips_frequency', 'income_tips_annual')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-    </select>
-    <span id="income_tips_annual"></span>
-
-    <label for="income_bonuses">Bonuses:</label>
+<label for="income_bonuses">Bonuses:</label>
 <input type="number" id="income_bonuses">
-<select id="income_bonuses_frequency" onchange="calculateAnnual('income_bonuses', 'income_bonuses_frequency', 'income_bonuses_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_bonuses_frequency" onchange="calculateAnnual('income_bonuses', 'income_bonuses_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_bonuses_annual"></span>
 
 <label for="income_sole_prop">Self Employment:</label>
 <input type="number" id="income_sole_prop">
-<select id="income_sole_prop_frequency" onchange="calculateAnnual('income_sole_prop', 'income_sole_prop_frequency', 'income_sole_prop_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_sole_prop_frequency" onchange="calculateAnnual('income_sole_prop', 'income_sole_prop_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_sole_prop_annual"></span>
 
-    <label for="income_investment_property">Investment Property:</label>
+<label for="income_investment_property">Investment Property:</label>
 <input type="number" id="income_investment_property">
-<select id="income_investment_property_frequency" onchange="calculateAnnual('income_investment_property', 'income_investment_property_frequency', 'income_investment_property_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_investment_property_frequency" onchange="calculateAnnual('income_investment_property', 'income_investment_property_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_investment_property_annual"></span>
 
-    <label for="income_interest">Interest:</label>
+<label for="income_interest">Interest:</label>
 <input type="number" id="income_interest">
-<select id="income_interest_frequency" onchange="calculateAnnual('income_interest', 'income_interest_frequency', 'income_interest_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_interest_frequency" onchange="calculateAnnual('income_interest', 'income_interest_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_interest_annual"></span>
 
-    <label for="income_capital_gains_losses">Capital Gains/Losses:</label>
+<label for="income_capital_gains_losses">Capital Gains/Losses:</label>
 <input type="number" id="income_capital_gains_losses">
-<select id="income_capital_gains_losses_frequency" onchange="calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency', 'income_capital_gains_losses_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_capital_gains_losses_frequency" onchange="calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_capital_gains_losses_annual"></span>
 
-    <label for="income_owner_dividend">Dividend: Owner:</label>
+<label for="income_owner_dividend">Dividend: Owner:</label>
 <input type="number" id="income_owner_dividend">
-<select id="income_owner_dividend_frequency" onchange="calculateAnnual('income_owner_dividend', 'income_owner_dividend_frequency', 'income_owner_dividend_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_owner_dividend_frequency" onchange="calculateAnnual('income_owner_dividend', 'income_owner_dividend_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_owner_dividend_annual"></span>
 
-    <label for="income_public_dividend">Dividend: Public</label>
+<label for="income_public_dividend">Dividend: Public</label>
 <input type="number" id="income_public_dividend">
-<select id="income_public_dividend_frequency" onchange="calculateAnnual('income_public_dividend', 'income_public_dividend_frequency', 'income_public_dividend_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_public_dividend_frequency" onchange="calculateAnnual('income_public_dividend', 'income_public_dividend_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_public_dividend_annual"></span>
 
-    <label for="income_trust">Trust:</label>
+<label for="income_trust">Trust:</label>
 <input type="number" id="income_trust">
-<select id="income_trust_frequency" onchange="calculateAnnual('income_trust', 'income_trust_frequency', 'income_trust_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_trust_frequency" onchange="calculateAnnual('income_trust', 'income_trust_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_trust_annual"></span>
 
 <label for="income_federal_pension">Pension: Federal</label>
 <input type="number" id="income_federal_pension">
-<select id="income_federal_pension_frequency" onchange="calculateAnnual('income_federal_pension', 'income_federal_pension_frequency', 'income_federal_pension_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_federal_pension_frequency" onchange="calculateAnnual('income_federal_pension', 'income_federal_pension_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_federal_pension_annual"></span>
 
-    <label for="income_work_pension">Pension: Employment</label>
+<label for="income_work_pension">Pension: Employment</label>
 <input type="number" id="income_work_pension">
-<select id="income_work_pension_frequency" onchange="calculateAnnual('income_work_pension', 'income_work_pension_frequency', 'income_work_pension_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_work_pension_frequency" onchange="calculateAnnual('income_work_pension', 'income_work_pension_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_work_pension_annual"></span>
 
-    <label for="income_social_security">Social Security:</label>
+<label for="income_social_security">Social Security:</label>
 <input type="number" id="income_social_security">
-<select id="income_social_security_frequency" onchange="calculateAnnual('income_social_security', 'income_social_security_frequency', 'income_social_security_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_social_security_frequency" onchange="calculateAnnual('income_social_security', 'income_social_security_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_social_security_annual"></span>
 
-    <label for="income_employment_insurance">Employment Insurance:</label>
+<label for="income_employment_insurance">Employment Insurance:</label>
 <input type="number" id="income_employment_insurance">
-<select id="income_employment_insurance_frequency" onchange="calculateAnnual('income_employment_insurance', 'income_employment_insurance_frequency', 'income_employment_insurance_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_employment_insurance_frequency" onchange="calculateAnnual('income_employment_insurance', 'income_employment_insurance_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_employment_insurance_annual"></span>
 
-    <label for="income_alimony">Alimony:</label>
+<label for="income_alimony">Alimony:</label>
 <input type="number" id="income_alimony">
-<select id="income_alimony_frequency" onchange="calculateAnnual('income_alimony', 'income_alimony_frequency', 'income_alimony_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_alimony_frequency" onchange="calculateAnnual('income_alimony', 'income_alimony_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_alimony_annual"></span>
 
-    <label for="income_scholarships_grants">Scholarship & Grants:</label>
+<label for="income_scholarships_grants">Scholarship & Grants:</label>
 <input type="number" id="income_scholarships_grants">
-<select id="income_scholarships_grants_frequency" onchange="calculateAnnual('income_scholarships_grants', 'income_scholarships_grants_frequency', 'income_scholarships_grants_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_scholarships_grants_frequency" onchange="calculateAnnual('income_scholarships_grants', 'income_scholarships_grants_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_scholarships_grants_annual"></span>
 
-    <label for="income_royalties">Royalties:</label>
+<label for="income_royalties">Royalties:</label>
 <input type="number" id="income_royalties">
-<select id="income_royalties_frequency" onchange="calculateAnnual('income_royalties', 'income_royalties_frequency', 'income_royalties_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_royalties_frequency" onchange="calculateAnnual('income_royalties', 'income_royalties_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_royalties_annual"></span>
 
 <label for="income_gambling_winnings">Gambling:</label>
 <input type="number" id="income_gambling_winnings">
-<select id="income_gambling_winnings_frequency" onchange="calculateAnnual('income_gambling_winnings', 'income_gambling_winnings_frequency', 'income_gambling_winnings_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_gambling_winnings_frequency" onchange="calculateAnnual('income_gambling_winnings', 'income_gambling_winnings_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_gambling_winnings_annual"></span>
 
-    <label for="income_peer_to_peer_lending">Peer to Peer Lending:</label>
+<label for="income_peer_to_peer_lending">Peer to Peer Lending:</label>
 <input type="number" id="income_peer_to_peer_lending">
-<select id="income_peer_to_peer_lending_frequency" onchange="calculateAnnual('income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency', 'income_peer_to_peer_lending_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_peer_to_peer_lending_frequency" onchange="calculateAnnual('income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_peer_to_peer_lending_annual"></span>
 
 <label for="income_venture_capital">Venture:</label>
 <input type="number" id="income_venture_capital">
-<select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency', 'income_venture_capital_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_venture_capital_annual"></span>
 
- <label for="income_tax_free_income">Tax Free:</label>
+<label for="income_tax_free_income">Tax Free:</label>
 <input type="number" id="income_tax_free_income">
-<select id="income_tax_free_income_frequency" onchange="calculateAnnual('income_tax_free_income', 'income_tax_free_income_frequency', 'income_tax_free_income_annual')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
+<select id="income_tax_free_income_frequency" onchange="calculateAnnual('income_tax_free_income', 'income_tax_free_income_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
 </select>
 <span id="income_tax_free_income_annual"></span>
 
+
+
+<h2> EXPENSES, MISCELLANEOUS</h2>
+
     <label for="expenses_grocery">Grocery:</label>
 <input type="number" id="expenses_grocery">
-<select id="expenses_grocery_frequency" onchange="calculateAnnual('expenses_grocery', 'expenses_grocery_frequency', 'expenses_grocery_annual')">
+<select id="expenses_grocery_frequency" onchange="calculateAnnual('expenses_grocery', 'expenses_grocery_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -395,7 +395,7 @@
 
 <label for="expenses_dining">Dining:</label>
 <input type="number" id="expenses_dining">
-<select id="expenses_dining_frequency" onchange="calculateAnnual('expenses_dining', 'expenses_dining_frequency', 'expenses_dining_annual')">
+<select id="expenses_dining_frequency" onchange="calculateAnnual('expenses_dining', 'expenses_dining_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -405,7 +405,7 @@
 
 <label for="expenses_fitness">Fitness:</label>
 <input type="number" id="expenses_fitness">
-<select id="expenses_fitness_frequency" onchange="calculateAnnual('expenses_fitness', 'expenses_fitness_frequency', 'expenses_fitness_annual')">
+<select id="expenses_fitness_frequency" onchange="calculateAnnual('expenses_fitness', 'expenses_fitness_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -415,7 +415,7 @@
 
 <label for="expenses_subscriptions">Subscriptions:</label>
 <input type="number" id="expenses_subscriptions">
-<select id="expenses_subscriptions_frequency" onchange="calculateAnnual('expenses_subscriptions', 'expenses_subscriptions_frequency', 'expenses_subscriptions_annual')">
+<select id="expenses_subscriptions_frequency" onchange="calculateAnnual('expenses_subscriptions', 'expenses_subscriptions_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -425,7 +425,7 @@
 
 <label for="expenses_pet">Pet:</label>
 <input type="number" id="expenses_pet">
-<select id="expenses_pet_frequency" onchange="calculateAnnual('expenses_pet', 'expenses_pet_frequency', 'expenses_pet_annual')">
+<select id="expenses_pet_frequency" onchange="calculateAnnual('expenses_pet', 'expenses_pet_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -435,7 +435,7 @@
 
 <label for="expenses_clothing">Clothing:</label>
 <input type="number" id="expenses_clothing">
-<select id="expenses_clothing_frequency" onchange="calculateAnnual('expenses_clothing', 'expenses_clothing_frequency', 'expenses_clothing_annual')">
+<select id="expenses_clothing_frequency" onchange="calculateAnnual('expenses_clothing', 'expenses_clothing_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -445,7 +445,7 @@
 
 <label for="expenses_vacation">Vacation:</label>
 <input type="number" id="expenses_vacation">
-<select id="expenses_vacation_frequency" onchange="calculateAnnual('expenses_vacation', 'expenses_vacation_frequency', 'expenses_vacation_annual')">
+<select id="expenses_vacation_frequency" onchange="calculateAnnual('expenses_vacation', 'expenses_vacation_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -455,7 +455,7 @@
 
 <label for="expenses_travel_life_insurance">Life & Travel Insurance:</label>
 <input type="number" id="expenses_travel_life_insurance">
-<select id="expenses_travel_life_insurance_frequency" onchange="calculateAnnual('expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency', 'expenses_travel_life_insurance_annual')">
+<select id="expenses_travel_life_insurance_frequency" onchange="calculateAnnual('expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -465,7 +465,7 @@
 
 <label for="expenses_cellphone_service">Cellphone:</label>
 <input type="number" id="expenses_cellphone_service">
-<select id="expenses_cellphone_service_frequency" onchange="calculateAnnual('expenses_cellphone_service', 'expenses_cellphone_service_frequency', 'expenses_cellphone_service_annual')">
+<select id="expenses_cellphone_service_frequency" onchange="calculateAnnual('expenses_cellphone_service', 'expenses_cellphone_service_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -473,9 +473,10 @@
 </select>
 <span id="expenses_cellphone_service_annual"></span>
 
+
 <label for="expenses_medical_dental">Medical & Dental:</label>
 <input type="number" id="expenses_medical_dental">
-<select id="expenses_medical_dental_frequency" onchange="calculateAnnual('expenses_medical_dental', 'expenses_medical_dental_frequency', 'expenses_medical_dental_annual')">
+<select id="expenses_medical_dental_frequency" onchange="calculateAnnual('expenses_medical_dental', 'expenses_medical_dental_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -485,7 +486,7 @@
 
 <label for="expenses_line_of_credit_payment">Line of Credit Payment:</label>
 <input type="number" id="expenses_line_of_credit_payment">
-<select id="expenses_line_of_credit_payment_frequency" onchange="calculateAnnual('expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency', 'expenses_line_of_credit_payment_annual')">
+<select id="expenses_line_of_credit_payment_frequency" onchange="calculateAnnual('expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -495,7 +496,7 @@
 
 <label for="expenses_student_loan_payment">Student Loan Payment:</label>
 <input type="number" id="expenses_student_loan_payment">
-<select id="expenses_student_loan_payment_frequency" onchange="calculateAnnual('expenses_student_loan_payment', 'expenses_student_loan_payment_frequency', 'expenses_student_loan_payment_annual')">
+<select id="expenses_student_loan_payment_frequency" onchange="calculateAnnual('expenses_student_loan_payment', 'expenses_student_loan_payment_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -505,7 +506,7 @@
 
 <label for="expenses_credit_card_payment">Credit Card Payment:</label>
 <input type="number" id="expenses_credit_card_payment">
-<select id="expenses_credit_card_payment_frequency" onchange="calculateAnnual('expenses_credit_card_payment', 'expenses_credit_card_payment_frequency', 'expenses_credit_card_payment_annual')">
+<select id="expenses_credit_card_payment_frequency" onchange="calculateAnnual('expenses_credit_card_payment', 'expenses_credit_card_payment_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -515,7 +516,7 @@
 
 <label for="expenses_tax_arrears_payment">Tax Arrears Payment:</label>
 <input type="number" id="expenses_tax_arrears_payment">
-<select id="expenses_tax_arrears_payment_frequency" onchange="calculateAnnual('expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency', 'expenses_tax_arrears_payment_annual')">
+<select id="expenses_tax_arrears_payment_frequency" onchange="calculateAnnual('expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -523,9 +524,9 @@
 </select>
 <span id="expenses_tax_arrears_payment_annual"></span>
 
-  <label for="expenses_small_business_loan_payment">Small Business Loan Payment:</label>
+<label for="expenses_small_business_loan_payment">Small Business Loan Payment:</label>
 <input type="number" id="expenses_small_business_loan_payment">
-<select id="expenses_small_business_loan_payment_frequency" onchange="calculateAnnual('expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency', 'expenses_small_business_loan_payment_annual')">
+<select id="expenses_small_business_loan_payment_frequency" onchange="calculateAnnual('expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -535,7 +536,7 @@
 
 <label for="housing_mortgage_payment">Mortgage Payment:</label>
 <input type="number" id="housing_mortgage_payment">
-<select id="housing_mortgage_payment_frequency" onchange="calculateAnnual('housing_mortgage_payment', 'housing_mortgage_payment_frequency', 'housing_mortgage_payment_annual')">
+<select id="housing_mortgage_payment_frequency" onchange="calculateAnnual('housing_mortgage_payment', 'housing_mortgage_payment_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -545,7 +546,7 @@
 
 <label for="housing_rent_payment">Rent:</label>
 <input type="number" id="housing_rent_payment">
-<select id="housing_rent_payment_frequency" onchange="calculateAnnual('housing_rent_payment', 'housing_rent_payment_frequency', 'housing_rent_payment_annual')">
+<select id="housing_rent_payment_frequency" onchange="calculateAnnual('housing_rent_payment', 'housing_rent_payment_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -555,7 +556,7 @@
 
 <label for="housing_property_tax">Property Tax:</label>
 <input type="number" id="housing_property_tax">
-<select id="housing_property_tax_frequency" onchange="calculateAnnual('housing_property_tax', 'housing_property_tax_frequency', 'housing_property_tax_annual')">
+<select id="housing_property_tax_frequency" onchange="calculateAnnual('housing_property_tax', 'housing_property_tax_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -565,7 +566,7 @@
 
 <label for="housing_condo_fee">Condo Fee:</label>
 <input type="number" id="housing_condo_fee">
-<select id="housing_condo_fee_frequency" onchange="calculateAnnual('housing_condo_fee', 'housing_condo_fee_frequency', 'housing_condo_fee_annual')">
+<select id="housing_condo_fee_frequency" onchange="calculateAnnual('housing_condo_fee', 'housing_condo_fee_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -575,7 +576,7 @@
 
 <label for="housing_insurance">Home Insurance:</label>
 <input type="number" id="housing_insurance">
-<select id="housing_insurance_frequency" onchange="calculateAnnual('housing_insurance', 'housing_insurance_frequency', 'housing_insurance_annual')">
+<select id="housing_insurance_frequency" onchange="calculateAnnual('housing_insurance', 'housing_insurance_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -585,7 +586,7 @@
 
 <label for="housing_repairs">Home Repairs:</label>
 <input type="number" id="housing_repairs">
-<select id="housing_repairs_frequency" onchange="calculateAnnual('housing_repairs', 'housing_repairs_frequency', 'housing_repairs_annual')">
+<select id="housing_repairs_frequency" onchange="calculateAnnual('housing_repairs', 'housing_repairs_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -595,7 +596,7 @@
 
 <label for="housing_water">Water:</label>
 <input type="number" id="housing_water">
-<select id="housing_water_frequency" onchange="calculateAnnual('housing_water', 'housing_water_frequency', 'housing_water_annual')">
+<select id="housing_water_frequency" onchange="calculateAnnual('housing_water', 'housing_water_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -605,7 +606,7 @@
 
 <label for="housing_gas">Gas:</label>
 <input type="number" id="housing_gas">
-<select id="housing_gas_frequency" onchange="calculateAnnual('housing_gas', 'housing_gas_frequency', 'housing_gas_annual')">
+<select id="housing_gas_frequency" onchange="calculateAnnual('housing_gas', 'housing_gas_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -615,7 +616,7 @@
 
 <label for="housing_internet">Internet:</label>
 <input type="number" id="housing_internet">
-<select id="housing_internet_frequency" onchange="calculateAnnual('housing_internet', 'housing_internet_frequency', 'housing_internet_annual')">
+<select id="housing_internet_frequency" onchange="calculateAnnual('housing_internet', 'housing_internet_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -623,10 +624,11 @@
 </select>
 <span id="housing_internet_annual"></span>
 
+
 <u><h2>EXPENSES, TRANSPORTATION</h2></u>
 <label for="transportation_car_loan_payment">Car Loan Payment:</label>
 <input type="number" id="transportation_car_loan_payment">
-<select id="transportation_car_loan_payment_frequency" onchange="calculateAnnual('transportation_car_loan_payment', 'transportation_car_loan_payment_frequency', 'transportation_car_loan_payment_annual')">
+<select id="transportation_car_loan_payment_frequency" onchange="calculateAnnual('transportation_car_loan_payment', 'transportation_car_loan_payment_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -636,7 +638,7 @@
 
 <label for="transportation_insurance">Insurance:</label>
 <input type="number" id="transportation_insurance">
-<select id="transportation_insurance_frequency" onchange="calculateAnnual('transportation_insurance', 'transportation_insurance_frequency', 'transportation_insurance_annual')">
+<select id="transportation_insurance_frequency" onchange="calculateAnnual('transportation_insurance', 'transportation_insurance_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -646,7 +648,7 @@
 
 <label for="transportation_fuel">Fuel:</label>
 <input type="number" id="transportation_fuel">
-<select id="transportation_fuel_frequency" onchange="calculateAnnual('transportation_fuel', 'transportation_fuel_frequency', 'transportation_fuel_annual')">
+<select id="transportation_fuel_frequency" onchange="calculateAnnual('transportation_fuel', 'transportation_fuel_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -656,7 +658,7 @@
 
 <label for="transportation_maintenance">Maintenance:</label>
 <input type="number" id="transportation_maintenance">
-<select id="transportation_maintenance_frequency" onchange="calculateAnnual('transportation_maintenance', 'transportation_maintenance_frequency', 'transportation_maintenance_annual')">
+<select id="transportation_maintenance_frequency" onchange="calculateAnnual('transportation_maintenance', 'transportation_maintenance_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -666,7 +668,7 @@
 
 <label for="transportation_public_transit">Public Transit:</label>
 <input type="number" id="transportation_public_transit">
-<select id="transportation_public_transit_frequency" onchange="calculateAnnual('transportation_public_transit', 'transportation_public_transit_frequency', 'transportation_public_transit_annual')">
+<select id="transportation_public_transit_frequency" onchange="calculateAnnual('transportation_public_transit', 'transportation_public_transit_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -676,7 +678,7 @@
 
 <label for="transportation_ride_hailing">Ride Hailing:</label>
 <input type="number" id="transportation_ride_hailing">
-<select id="transportation_ride_hailing_frequency" onchange="calculateAnnual('transportation_ride_hailing', 'transportation_ride_hailing_frequency', 'transportation_ride_hailing_annual')">
+<select id="transportation_ride_hailing_frequency" onchange="calculateAnnual('transportation_ride_hailing', 'transportation_ride_hailing_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -687,7 +689,7 @@
 <u><h2>EXPENSES, DEPENDANT</h2></u>
 <label for="dependant_day_care">Day Care:</label>
 <input type="number" id="dependant_day_care">
-<select id="dependant_day_care_frequency" onchange="calculateAnnual('dependant_day_care', 'dependant_day_care_frequency', 'dependant_day_care_annual')">
+<select id="dependant_day_care_frequency" onchange="calculateAnnual('dependant_day_care', 'dependant_day_care_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -697,7 +699,7 @@
 
 <label for="dependant_medical_dental">Medical & Dental:</label>
 <input type="number" id="dependant_medical_dental">
-<select id="dependant_medical_dental_frequency" onchange="calculateAnnual('dependant_medical_dental', 'dependant_medical_dental_frequency', 'dependant_medical_dental_annual')">
+<select id="dependant_medical_dental_frequency" onchange="calculateAnnual('dependant_medical_dental', 'dependant_medical_dental_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -707,7 +709,7 @@
 
 <label for="dependant_clothing">Clothing:</label>
 <input type="number" id="dependant_clothing">
-<select id="dependant_clothing_frequency" onchange="calculateAnnual('dependant_clothing', 'dependant_clothing_frequency', 'dependant_clothing_annual')">
+<select id="dependant_clothing_frequency" onchange="calculateAnnual('dependant_clothing', 'dependant_clothing_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -717,7 +719,7 @@
 
 <label for="dependant_sports_recreation">Sports & Recreation:</label>
 <input type="number" id="dependant_sports_recreation">
-<select id="dependant_sports_recreation_frequency" onchange="calculateAnnual('dependant_sports_recreation', 'dependant_sports_recreation_frequency', 'dependant_sports_recreation_annual')">
+<select id="dependant_sports_recreation_frequency" onchange="calculateAnnual('dependant_sports_recreation', 'dependant_sports_recreation_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -727,7 +729,7 @@
 
 <label for="dependant_transportation">Transportation:</label>
 <input type="number" id="dependant_transportation">
-<select id="dependant_transportation_frequency" onchange="calculateAnnual('dependant_transportation', 'dependant_transportation_frequency', 'dependant_transportation_annual')">
+<select id="dependant_transportation_frequency" onchange="calculateAnnual('dependant_transportation', 'dependant_transportation_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -737,7 +739,7 @@
 
 <label for="dependant_tuition">Tuition:</label>
 <input type="number" id="dependant_tuition">
-<select id="dependant_tuition_frequency" onchange="calculateAnnual('dependant_tuition', 'dependant_tuition_frequency', 'dependant_tuition_annual')">
+<select id="dependant_tuition_frequency" onchange="calculateAnnual('dependant_tuition', 'dependant_tuition_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -747,7 +749,7 @@
 
 <label for="dependant_housing">Housing:</label>
 <input type="number" id="dependant_housing">
-<select id="dependant_housing_frequency" onchange="calculateAnnual('dependant_housing', 'dependant_housing_frequency', 'dependant_housing_annual')">
+<select id="dependant_housing_frequency" onchange="calculateAnnual('dependant_housing', 'dependant_housing_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
@@ -757,16 +759,16 @@
 
 <label for="dependant_cellular_service">Cellular Service:</label>
 <input type="number" id="dependant_cellular_service">
-<select id="dependant_cellular_service_frequency" onchange="calculateAnnual('dependant_cellular_service', 'dependant_cellular_service_frequency', 'dependant_cellular_service_annual')">
+<select id="dependant_cellular_service_frequency" onchange="calculateAnnual('dependant_cellular_service', 'dependant_cellular_service_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
   <option value="monthly">Monthly</option>
   <option value="weekly">Weekly</option>
 </select>
 <span id="dependant_cellular_service_annual"></span>
-  
 
- <h2>ASSETS</h2>
+  
+<h2>ASSETS</h2>
     <label for="assets_checking_accounts">Checking Account(s):</label>
     <input type="text" id="assets_checking_accounts">
 
@@ -819,7 +821,7 @@
     <label for="liabilities_tax_arrears">Tax Arrears:</label>
     <input type="text" id="liabilities_tax_arrears">
 
-   <button onclick="calculateNormalizedsum()">Calculate</button>
+   <button onclick="calculateNormalizedSum()">Calculate</button>
 
 <div>
     <p>Annual Income Sum: <span id="annual_income_sum"></span></p>
