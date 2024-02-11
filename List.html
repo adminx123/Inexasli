@@ -831,6 +831,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
             ['income_bonuses', 'income_bonuses_frequency'],
             ['income_sole_prop', 'income_sole_prop_frequency'],
             ['income_investment_property', 'income_investment_property_frequency'],
+['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
             ['income_interest', 'income_interest_frequency'],
             ['income_owner_dividend', 'income_owner_dividend_frequency'],
             ['income_public_dividend', 'income_public_dividend_frequency'],
@@ -867,10 +868,10 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 
 
 
-</script>
 
 
-<script>
+
+
     // Assume calculateAnnual function has been defined and it calculates annual income sums
 
     function getCppPayable(annualIncomeSum) {
@@ -921,7 +922,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 <div>
     <p>Annual Income Sum: <span id="annual_income_sum"></span></p>
     <p>Annual Expense Sum: <span id="annual_expense_sum"></span></p>
-<p>Taxable Income: <span id="taxable_sum"></span></p>
+<p>Annual Taxable Income: <span id="taxable_sum"></span></p>
 
 <p>CPP Payable: <span id="cpp_result"></span></p>
 <p>Employment Insurance Payable: <span id="ei_result"></span></p>
