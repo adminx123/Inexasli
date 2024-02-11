@@ -850,7 +850,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
          let annualTaxableSum = 0;
 
         // Calculate taxable sum
-        taxaableincomeFields.forEach(field => {
+        taxableincomeFields.forEach(field => {
             const [inputId, frequencyId] = field;
             let income = calculateAnnual(inputId, frequencyId);
             // If it's capital gains and losses, add 50% of the income
