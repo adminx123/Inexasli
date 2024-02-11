@@ -57,206 +57,6 @@
         <option value="YT">Yukon</option>
     </select>
 
-<script>
-    function calculateAnnual(inputId, frequencyId) {
-        const input = parseFloat(document.getElementById(inputId).value) || 0;
-        const frequency = document.getElementById(frequencyId).value;
-
-        switch (frequency) {
-            case 'annually':
-                return input;
-            case 'quarterly':
-                return input * 4;
-            case 'monthly':
-                return input * 12;
-            case 'weekly':
-                return input * 52;
-            default:
-                return 0;
-        }
-    }
-
-    function calculateNormalizedSum() {
-        // Define all income fields with their corresponding frequency fields
-        const incomeFields = [
-            ['income_salary_wages', 'income_salary_wages_frequency'],
-            ['income_tips', 'income_tips_frequency'],
-            ['income_bonuses', 'income_bonuses_frequency'],
-            ['income_sole_prop', 'income_sole_prop_frequency'],
-            ['income_investment_property', 'income_investment_property_frequency'],
-            ['income_interest', 'income_interest_frequency'],
-            ['income_owner_dividend', 'income_owner_dividend_frequency'],
-            ['income_public_dividend', 'income_public_dividend_frequency'],
-            ['income_trust', 'income_trust_frequency'],
-            ['income_federal_pension', 'income_federal_pension_frequency'],
-            ['income_work_pension', 'income_work_pension_frequency'],
-            ['income_social_security', 'income_social_security_frequency'],
-            ['income_employment_insurance', 'income_employment_insurance_frequency'],
-            ['income_alimony', 'income_alimony_frequency'],
-            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
-            ['income_royalties', 'income_royalties_frequency'],
-            ['income_gambling_winnings', 'income_gambling_winnings_frequency'],
-            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
-            ['income_venture_capital', 'income_venture_capital_frequency'],
-            ['income_tax_free_income', 'income_tax_free_income_frequency']
-            // Add more income fields here
-        ];
- 
-let annualIncomeSum = 0;
-
-  // Calculate annual income sum
-        incomeFields.forEach(field => {
-            const [inputId, frequencyId] = field;
-            annualIncomeSum += calculateAnnual(inputId, frequencyId);
-        });
-
- // Display the results
-        document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
-
-        // Define all expense fields with their corresponding frequency fields
-        const expenseFields = [
-            ['expenses_grocery', 'expenses_grocery_frequency'],
-            ['expenses_dining', 'expenses_dining_frequency'],
-            ['expenses_fitness', 'expenses_fitness_frequency'],
-            ['expenses_subscriptions', 'expenses_subscriptions_frequency'],
-            ['expenses_pet', 'expenses_pet_frequency'],
-            ['expenses_clothing', 'expenses_clothing_frequency'],
-            ['expenses_vacation', 'expenses_vacation_frequency'],
-            ['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
-            ['expenses_cellphone_service', 'expenses_cellphone_service_frequency'],
-            ['expenses_medical_dental', 'expenses_medical_dental_frequency'],
-            ['expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency'],
-            ['expenses_student_loan_payment', 'expenses_student_loan_payment_frequency'],
-            ['expenses_credit_card_payment', 'expenses_credit_card_payment_frequency'],
-            ['expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency'],
-            ['expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency'],
-            ['housing_mortgage_payment', 'housing_mortgage_payment_frequency'],
-            ['housing_rent_payment', 'housing_rent_payment_frequency'],
-            ['housing_property_tax', 'housing_property_tax_frequency'],
-            ['housing_condo_fee', 'housing_condo_fee_frequency'],
-            ['housing_insurance', 'housing_insurance_frequency'],
-            ['housing_repairs', 'housing_repairs_frequency'],
-            ['housing_water', 'housing_water_frequency'],
-            ['housing_gas', 'housing_gas_frequency'],
-            ['housing_internet', 'housing_internet_frequency'],
-            ['transportation_car_loan_payment', 'transportation_car_loan_payment_frequency'],
-            ['transportation_insurance', 'transportation_insurance_frequency'],
-            ['transportation_fuel', 'transportation_fuel_frequency'],
-            ['transportation_maintenance', 'transportation_maintenance_frequency'],
-            ['transportation_public_transit', 'transportation_public_transit_frequency'],
-            ['transportation_ride_hailing', 'transportation_ride_hailing_frequency'],
-            ['dependant_day_care', 'dependant_day_care_frequency'],
-            ['dependant_medical_dental', 'dependant_medical_dental_frequency'],
-            ['dependant_clothing', 'dependant_clothing_frequency'],
-            ['dependant_sports_recreation', 'dependant_sports_recreation_frequency'],
-            ['dependant_transportation', 'dependant_transportation_frequency'],
-            ['dependant_tuition', 'dependant_tuition_frequency'],
-            ['dependant_housing', 'dependant_housing_frequency'],
-            ['dependant_cellular_service', 'dependant_cellular_service_frequency']
-            // Add more expense fields here
-        ];
-let annualExpenseSum = 0;
-
- // Calculate annual expense sum
-        expenseFields.forEach(field => {
-            const [inputId, frequencyId] = field;
-            annualExpenseSum += calculateAnnual(inputId, frequencyId);
-        });
-
- // Display the results
-document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
-
-// Define all  taxable income fields with their corresponding frequency fields
-        const taxableincomeFields = [
-            ['income_salary_wages', 'income_salary_wages_frequency'],
-            ['income_tips', 'income_tips_frequency'],
-            ['income_bonuses', 'income_bonuses_frequency'],
-            ['income_sole_prop', 'income_sole_prop_frequency'],
-            ['income_investment_property', 'income_investment_property_frequency'],
-            ['income_interest', 'income_interest_frequency'],
-            ['income_owner_dividend', 'income_owner_dividend_frequency'],
-            ['income_public_dividend', 'income_public_dividend_frequency'],
-            ['income_trust', 'income_trust_frequency'],
-            ['income_federal_pension', 'income_federal_pension_frequency'],
-            ['income_work_pension', 'income_work_pension_frequency'],
-            ['income_social_security', 'income_social_security_frequency'],
-            ['income_employment_insurance', 'income_employment_insurance_frequency'],
-            ['income_alimony', 'income_alimony_frequency'],
-            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
-            ['income_royalties', 'income_royalties_frequency'],
-            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
-            ['income_venture_capital', 'income_venture_capital_frequency'],
-                        // Add more income fields here
-        ];
-
-         let annualTaxableSum = 0;
-
-        // Calculate taxable sum
-        incomeFields.forEach(field => {
-            const [inputId, frequencyId] = field;
-            let income = calculateAnnual(inputId, frequencyId);
-            // If it's capital gains and losses, add 50% of the income
-            if (inputId === 'income_capital_gains_losses') {
-                income *= 0.5; // Consider 50% of capital gains and losses
-            }
-            annualTaxableSum += income;
-        });
-
-             
-        // Display the results
-        document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
-    }
-
-
-
-</script>
-
-
-<script>
-    // Assume calculateAnnual function has been defined and it calculates annual income sums
-
-    function getCppPayable(annualIncomeSum) {
-        // Define CPP rates and maximums
-        var cppRateEmployed = 0.0595;
-        var cppRateSelfEmployed = 0.1190;
-        var cppMaxEmployed = 3867.5;
-        var cppMaxSelfEmployed = 7735;
-        var cppExemptionAmount = 3500;
-
-        // Calculate CPP payable for employed and self-employed individuals
-        var cppPayableEmployed = Math.min(cppMaxEmployed, Math.max(0, annualIncomeSum - cppExemptionAmount) * cppRateEmployed);
-        var cppPayableSelfEmployed = Math.min(cppMaxSelfEmployed - cppPayableEmployed, 0); // Assuming self-employed income already included in employedIncome
-
-        // Return total CPP payable
-        return cppPayableEmployed + cppPayableSelfEmployed;
-    }
-
-    function getEIPayable(annualIncomeSum) {
-        // Define EI rates and maximums
-        var eiRateEmployed = 0.0166;
-        var eiRateSelfEmployed = 0.0166;
-        var eiEmployeePremiumMax = 1049.12;
-        var eiEmployerPremiumMax = 1468.77;
-
-        // Calculate EI payable for employed and self-employed individuals
-        var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualIncomeSum * eiRateEmployed);
-        var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, 0); // Assuming self-employed income already included in employedIncome
-
-        // Return total EI payable
-        return eiPayableEmployed + eiPayableSelfEmployed;
-    }
-
-    // Retrieve annual income sums from the DOM (assuming they are already calculated)
-    var annualIncomeSum = parseFloat(document.getElementById('annual_income_sum').textContent) || 0;
-
-    // Calculate CPP and EI payable
-    var cppPayable = getCppPayable(annualIncomeSum);
-    var eiPayable = getEIPayable(annualIncomeSum);
-
-    // Update <p> elements with the calculated values
-    document.getElementById('cpp_result').textContent = '$' + cppPayable.toFixed(2);
-    document.getElementById('ei_result').textContent = '$' + eiPayable.toFixed(2);
-</script>
 
 <h2>INCOME, PRE TAX & CONTRIBUTION</h2>
 
@@ -914,10 +714,213 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 
    <button onclick="calculateNormalizedSum()">Calculate</button>
 
+<script>
+    function calculateAnnual(inputId, frequencyId) {
+        const input = parseFloat(document.getElementById(inputId).value) || 0;
+        const frequency = document.getElementById(frequencyId).value;
+
+        switch (frequency) {
+            case 'annually':
+                return input;
+            case 'quarterly':
+                return input * 4;
+            case 'monthly':
+                return input * 12;
+            case 'weekly':
+                return input * 52;
+            default:
+                return 0;
+        }
+    }
+
+    function calculateNormalizedSum() {
+        // Define all income fields with their corresponding frequency fields
+        const incomeFields = [
+            ['income_salary_wages', 'income_salary_wages_frequency'],
+            ['income_tips', 'income_tips_frequency'],
+            ['income_bonuses', 'income_bonuses_frequency'],
+            ['income_sole_prop', 'income_sole_prop_frequency'],
+            ['income_investment_property', 'income_investment_property_frequency'],
+            ['income_interest', 'income_interest_frequency'],
+            ['income_owner_dividend', 'income_owner_dividend_frequency'],
+            ['income_public_dividend', 'income_public_dividend_frequency'],
+            ['income_trust', 'income_trust_frequency'],
+            ['income_federal_pension', 'income_federal_pension_frequency'],
+            ['income_work_pension', 'income_work_pension_frequency'],
+            ['income_social_security', 'income_social_security_frequency'],
+            ['income_employment_insurance', 'income_employment_insurance_frequency'],
+            ['income_alimony', 'income_alimony_frequency'],
+            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
+            ['income_royalties', 'income_royalties_frequency'],
+            ['income_gambling_winnings', 'income_gambling_winnings_frequency'],
+            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+            ['income_venture_capital', 'income_venture_capital_frequency'],
+            ['income_tax_free_income', 'income_tax_free_income_frequency']
+            // Add more income fields here
+        ];
+ 
+let annualIncomeSum = 0;
+
+  // Calculate annual income sum
+        incomeFields.forEach(field => {
+            const [inputId, frequencyId] = field;
+            annualIncomeSum += calculateAnnual(inputId, frequencyId);
+        });
+
+ // Display the results
+        document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
+
+        // Define all expense fields with their corresponding frequency fields
+        const expenseFields = [
+            ['expenses_grocery', 'expenses_grocery_frequency'],
+            ['expenses_dining', 'expenses_dining_frequency'],
+            ['expenses_fitness', 'expenses_fitness_frequency'],
+            ['expenses_subscriptions', 'expenses_subscriptions_frequency'],
+            ['expenses_pet', 'expenses_pet_frequency'],
+            ['expenses_clothing', 'expenses_clothing_frequency'],
+            ['expenses_vacation', 'expenses_vacation_frequency'],
+            ['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
+            ['expenses_cellphone_service', 'expenses_cellphone_service_frequency'],
+            ['expenses_medical_dental', 'expenses_medical_dental_frequency'],
+            ['expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency'],
+            ['expenses_student_loan_payment', 'expenses_student_loan_payment_frequency'],
+            ['expenses_credit_card_payment', 'expenses_credit_card_payment_frequency'],
+            ['expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency'],
+            ['expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency'],
+            ['housing_mortgage_payment', 'housing_mortgage_payment_frequency'],
+            ['housing_rent_payment', 'housing_rent_payment_frequency'],
+            ['housing_property_tax', 'housing_property_tax_frequency'],
+            ['housing_condo_fee', 'housing_condo_fee_frequency'],
+            ['housing_insurance', 'housing_insurance_frequency'],
+            ['housing_repairs', 'housing_repairs_frequency'],
+            ['housing_water', 'housing_water_frequency'],
+            ['housing_gas', 'housing_gas_frequency'],
+            ['housing_internet', 'housing_internet_frequency'],
+            ['transportation_car_loan_payment', 'transportation_car_loan_payment_frequency'],
+            ['transportation_insurance', 'transportation_insurance_frequency'],
+            ['transportation_fuel', 'transportation_fuel_frequency'],
+            ['transportation_maintenance', 'transportation_maintenance_frequency'],
+            ['transportation_public_transit', 'transportation_public_transit_frequency'],
+            ['transportation_ride_hailing', 'transportation_ride_hailing_frequency'],
+            ['dependant_day_care', 'dependant_day_care_frequency'],
+            ['dependant_medical_dental', 'dependant_medical_dental_frequency'],
+            ['dependant_clothing', 'dependant_clothing_frequency'],
+            ['dependant_sports_recreation', 'dependant_sports_recreation_frequency'],
+            ['dependant_transportation', 'dependant_transportation_frequency'],
+            ['dependant_tuition', 'dependant_tuition_frequency'],
+            ['dependant_housing', 'dependant_housing_frequency'],
+            ['dependant_cellular_service', 'dependant_cellular_service_frequency']
+            // Add more expense fields here
+        ];
+let annualExpenseSum = 0;
+
+ // Calculate annual expense sum
+        expenseFields.forEach(field => {
+            const [inputId, frequencyId] = field;
+            annualExpenseSum += calculateAnnual(inputId, frequencyId);
+        });
+
+ // Display the results
+document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
+
+// Define all  taxable income fields with their corresponding frequency fields
+        const taxableincomeFields = [
+            ['income_salary_wages', 'income_salary_wages_frequency'],
+            ['income_tips', 'income_tips_frequency'],
+            ['income_bonuses', 'income_bonuses_frequency'],
+            ['income_sole_prop', 'income_sole_prop_frequency'],
+            ['income_investment_property', 'income_investment_property_frequency'],
+            ['income_interest', 'income_interest_frequency'],
+            ['income_owner_dividend', 'income_owner_dividend_frequency'],
+            ['income_public_dividend', 'income_public_dividend_frequency'],
+            ['income_trust', 'income_trust_frequency'],
+            ['income_federal_pension', 'income_federal_pension_frequency'],
+            ['income_work_pension', 'income_work_pension_frequency'],
+            ['income_social_security', 'income_social_security_frequency'],
+            ['income_employment_insurance', 'income_employment_insurance_frequency'],
+            ['income_alimony', 'income_alimony_frequency'],
+            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
+            ['income_royalties', 'income_royalties_frequency'],
+            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+            ['income_venture_capital', 'income_venture_capital_frequency'],
+                        // Add more income fields here
+        ];
+
+         let annualTaxableSum = 0;
+
+        // Calculate taxable sum
+        incomeFields.forEach(field => {
+            const [inputId, frequencyId] = field;
+            let income = calculateAnnual(inputId, frequencyId);
+            // If it's capital gains and losses, add 50% of the income
+            if (inputId === 'income_capital_gains_losses') {
+                income *= 0.5; // Consider 50% of capital gains and losses
+            }
+            annualTaxableSum += income;
+        });
+
+             
+        // Display the results
+        document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
+    }
+
+
+
+</script>
+
+
+<script>
+    // Assume calculateAnnual function has been defined and it calculates annual income sums
+
+    function getCppPayable(annualIncomeSum) {
+        // Define CPP rates and maximums
+        var cppRateEmployed = 0.0595;
+        var cppRateSelfEmployed = 0.1190;
+        var cppMaxEmployed = 3867.5;
+        var cppMaxSelfEmployed = 7735;
+        var cppExemptionAmount = 3500;
+
+        // Calculate CPP payable for employed and self-employed individuals
+        var cppPayableEmployed = Math.min(cppMaxEmployed, Math.max(0, annualIncomeSum - cppExemptionAmount) * cppRateEmployed);
+        var cppPayableSelfEmployed = Math.min(cppMaxSelfEmployed - cppPayableEmployed, 0); // Assuming self-employed income already included in employedIncome
+
+        // Return total CPP payable
+        return cppPayableEmployed + cppPayableSelfEmployed;
+    }
+
+    function getEIPayable(annualIncomeSum) {
+        // Define EI rates and maximums
+        var eiRateEmployed = 0.0166;
+        var eiRateSelfEmployed = 0.0166;
+        var eiEmployeePremiumMax = 1049.12;
+        var eiEmployerPremiumMax = 1468.77;
+
+        // Calculate EI payable for employed and self-employed individuals
+        var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualIncomeSum * eiRateEmployed);
+        var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, 0); // Assuming self-employed income already included in employedIncome
+
+        // Return total EI payable
+        return eiPayableEmployed + eiPayableSelfEmployed;
+    }
+
+    // Retrieve annual income sums from the DOM (assuming they are already calculated)
+    var annualIncomeSum = parseFloat(document.getElementById('annual_income_sum').textContent) || 0;
+
+    // Calculate CPP and EI payable
+    var cppPayable = getCppPayable(annualIncomeSum);
+    var eiPayable = getEIPayable(annualIncomeSum);
+
+    // Update <p> elements with the calculated values
+    document.getElementById('cpp_result').textContent = '$' + cppPayable.toFixed(2);
+    document.getElementById('ei_result').textContent = '$' + eiPayable.toFixed(2);
+</script>
+
+
+
 <div>
     <p>Annual Income Sum: <span id="annual_income_sum"></span></p>
     <p>Annual Expense Sum: <span id="annual_expense_sum"></span></p>
-<p id="taxable_sum"></p>
+<p Taxable Income: <span id="taxable_sum"></span></p>
 
 <p>CPP Payable: <span id="cpp_result"></span></p>
 <p>Employment Insurance Payable: <span id="ei_result"></span></p>
