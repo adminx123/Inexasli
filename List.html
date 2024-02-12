@@ -896,6 +896,8 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
            
         // Update <p> elements with the calculated values
     document.getElementById('cpp_result').textContent = '$' + cppPayable.toFixed(2);
+
+        let CPPPayable = 0;
     }
 
     function getEIPayable(annualIncomeSum) {
@@ -911,7 +913,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 
         // Return total EI payable
         return eiPayableEmployed + eiPayableSelfEmployed;
-    }
+    
 
     // Retrieve annual income sums from the DOM (assuming they are already calculated)
     var annualIncomeSum = parseFloat(document.getElementById('annual_income_sum').textContent) || 0;
@@ -919,6 +921,8 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 // Update <p> elements with the calculated values
     document.getElementById('ei_result').textContent = '$' + eiPayable.toFixed(2);
 
+        let EIPayable = 0;
+    }
 </script>
 
 
