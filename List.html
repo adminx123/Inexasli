@@ -879,7 +879,17 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 
     // Assume calculateAnnual function has been defined and it calculates annual income sums
 
-    function getCppPayable(annualIncomeSum) {
+      function getCppPayable() {
+        // Retrieve annual income sums from the DOM (assuming they are already calculated)
+        var annualSalaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
+        var annualBonuses = parseFloat(document.getElementById('income_bonuses').value) || 0;
+        var annualTips = parseFloat(document.getElementById('income_tips').value) || 0;
+        var annualSoleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
+
+        // Calculate total annual income for employed and self-employed individuals
+        var annualIncomeEmployed = annualSalaryWages + annualBonuses + annualTips;
+        var annualIncomeSelfEmployed = annualSoleProp;
+
         // Define CPP rates and maximums
         var cppRateEmployed = 0.0595;
         var cppRateSelfEmployed = 0.1190;
@@ -888,14 +898,12 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
         var cppExemptionAmount = 3500;
 
         // Calculate CPP payable for employed and self-employed individuals
-        var cppPayableEmployed = Math.min(cppMaxEmployed, Math.max(0, annualIncomeSum - cppExemptionAmount) * cppRateEmployed);
-        var cppPayableSelfEmployed = Math.min(cppMaxSelfEmployed - cppPayableEmployed, 0); // Assuming self-employed income already included in employedIncome
+        var cppPayableEmployed = Math.min(cppMaxEmployed, Math.max(0, annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
+        var cppPayableSelfEmployed = Math.min(cppMaxSelfEmployed, Math.max(0, annualIncomeSelfEmployed - cppExemptionAmount) * cppRateSelfEmployed);
 
-        // Return total CPP payable
-        return cppPayableEmployed + cppPayableSelfEmployed;
-           
         // Update <p> elements with the calculated values
-    document.getElementById('cpp_result').textContent = '$' + cppPayable.toFixed(2);
+        document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployed).toFixed(2);
+    
 
         
     }
