@@ -766,7 +766,7 @@ let annualIncomeSum = 0;
         incomeFields.forEach(field => {
             const [inputId, frequencyId] = field;
             annualIncomeSum += calculateAnnual(inputId, frequencyId);
-        });
+        };
 
  // Display the results
         document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
@@ -806,7 +806,7 @@ let annualIncomeSum = 0;
                 income *= 0.5; // Consider 50% of capital gains and losses
             }
             annualTaxableSum += income;
-        });
+        };
 
              
         // Display the results
