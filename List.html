@@ -712,9 +712,17 @@
     <label for="liabilities_tax_arrears">Tax Arrears:</label>
     <input type="text" id="liabilities_tax_arrears">
 
-   <button onclick="calculateNormalizedSum()">Calculate</button>
+   <button onclick="calculateAll()">Calculate</button>
 
 <script>
+function calculateAll() {
+    calculateNormalizedSum();
+    calculateAndDisplayCppEi();
+    getCppPayable();
+    getEIPayable();
+    
+}
+    
     function calculateAnnual(inputId, frequencyId) {
         const input = parseFloat(document.getElementById(inputId).value) || 0;
         const frequency = document.getElementById(frequencyId).value;
@@ -885,6 +893,9 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 
         // Return total CPP payable
         return cppPayableEmployed + cppPayableSelfEmployed;
+           
+        // Update <p> elements with the calculated values
+    document.getElementById('cpp_result').textContent = '$' + cppPayable.toFixed(2);
     }
 
     function getEIPayable(annualIncomeSum) {
@@ -905,12 +916,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
     // Retrieve annual income sums from the DOM (assuming they are already calculated)
     var annualIncomeSum = parseFloat(document.getElementById('annual_income_sum').textContent) || 0;
 
-    // Calculate CPP and EI payable
-    var cppPayable = getCppPayable(annualIncomeSum);
-    var eiPayable = getEIPayable(annualIncomeSum);
-
-    // Update <p> elements with the calculated values
-    document.getElementById('cpp_result').textContent = '$' + cppPayable.toFixed(2);
+// Update <p> elements with the calculated values
     document.getElementById('ei_result').textContent = '$' + eiPayable.toFixed(2);
 
 </script>
