@@ -765,54 +765,12 @@ let annualIncomeSum = 0;
   // Calculate annual income sum
         incomeFields.forEach(field => {
             const [inputId, frequencyId] = field;
-            annualIncomeSum += calculateAnnual(inputId, frequencyId);
+            //annualIncomeSum += calculateAnnual(inputId, frequencyId);
+            annualIncomeSum = annualIncomeSum + calculateAnnual(inputId, frequencyId);        
         });
 
  // Display the results
         document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
-
-// Define all  taxable income fields with their corresponding frequency fields
-        const taxableincomeFields = [
-            ['income_salary_wages', 'income_salary_wages_frequency'],
-            ['income_tips', 'income_tips_frequency'],
-            ['income_bonuses', 'income_bonuses_frequency'],
-            ['income_sole_prop', 'income_sole_prop_frequency'],
-            ['income_investment_property', 'income_investment_property_frequency'],
-['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
-            ['income_interest', 'income_interest_frequency'],
-            ['income_owner_dividend', 'income_owner_dividend_frequency'],
-            ['income_public_dividend', 'income_public_dividend_frequency'],
-            ['income_trust', 'income_trust_frequency'],
-            ['income_federal_pension', 'income_federal_pension_frequency'],
-            ['income_work_pension', 'income_work_pension_frequency'],
-            ['income_social_security', 'income_social_security_frequency'],
-            ['income_employment_insurance', 'income_employment_insurance_frequency'],
-            ['income_alimony', 'income_alimony_frequency'],
-            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
-            ['income_royalties', 'income_royalties_frequency'],
-            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
-            ['income_venture_capital', 'income_venture_capital_frequency'],
-                        // Add more income fields here
-        ];
-
-         let annualTaxableSum = 0;
-
-        // Calculate taxable sum
-        taxableincomeFields.forEach(field => {
-            const [inputId, frequencyId] = field;
-            let income = calculateAnnual(inputId, frequencyId);
-            // If it's capital gains and losses, add 50% of the income
-            if (inputId === 'income_capital_gains_losses') {
-                income *= 0.5; // Consider 50% of capital gains and losses
-            }
-            annualTaxableSum += income;
-        });
-
-             
-        // Display the results
-        document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
-    }
-
 
         // Define all expense fields with their corresponding frequency fields
         const expenseFields = [
@@ -865,8 +823,49 @@ let annualExpenseSum = 0;
         });
 
  // Display the results
-document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(3)}`;
+document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
 
+// Define all  taxable income fields with their corresponding frequency fields
+        const taxableincomeFields = [
+            ['income_salary_wages', 'income_salary_wages_frequency'],
+            ['income_tips', 'income_tips_frequency'],
+            ['income_bonuses', 'income_bonuses_frequency'],
+            ['income_sole_prop', 'income_sole_prop_frequency'],
+            ['income_investment_property', 'income_investment_property_frequency'],
+['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
+            ['income_interest', 'income_interest_frequency'],
+            ['income_owner_dividend', 'income_owner_dividend_frequency'],
+            ['income_public_dividend', 'income_public_dividend_frequency'],
+            ['income_trust', 'income_trust_frequency'],
+            ['income_federal_pension', 'income_federal_pension_frequency'],
+            ['income_work_pension', 'income_work_pension_frequency'],
+            ['income_social_security', 'income_social_security_frequency'],
+            ['income_employment_insurance', 'income_employment_insurance_frequency'],
+            ['income_alimony', 'income_alimony_frequency'],
+            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
+            ['income_royalties', 'income_royalties_frequency'],
+            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+            ['income_venture_capital', 'income_venture_capital_frequency'],
+                        // Add more income fields here
+        ];
+
+         let annualTaxableSum = 0;
+
+        // Calculate taxable sum
+        taxableincomeFields.forEach(field => {
+            const [inputId, frequencyId] = field;
+            let income = calculateAnnual(inputId, frequencyId);
+            // If it's capital gains and losses, add 50% of the income
+            if (inputId === 'income_capital_gains_losses') {
+                income *= 0.5; // Consider 50% of capital gains and losses
+            }
+            annualTaxableSum += income;
+        });
+
+             
+        // Display the results
+        document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
+    }
 
 
 
