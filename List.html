@@ -930,7 +930,6 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
     document.getElementById('ei_result').textContent = '$' + (eiPayableEmployed + eiPayableSelfEmployed).toFixed(2);
 }
 
-    <script>
     function getFederalTaxPayable(totalIncome) {
         return calculateTax(totalIncome, [
             { limit: 235675, rate: 0.33 },
