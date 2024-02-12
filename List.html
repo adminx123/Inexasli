@@ -717,7 +717,6 @@
 <script>
 function calculateAll() {
     calculateNormalizedSum();
-    calculateAndDisplayCppEi();
     getCppPayable();
     getEIPayable();
     
@@ -901,7 +900,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
         var cppPayableEmployed = Math.min(cppMaxEmployed, Math.max(0, annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
         var cppPayableSelfEmployed = Math.min(cppMaxSelfEmployed, Math.max(0, annualIncomeSelfEmployed - cppExemptionAmount) * cppRateSelfEmployed);
 
-        // Update <p> elements with the calculated values
+        // Display the results
         document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployed).toFixed(2);
     
 
@@ -929,7 +928,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
     var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualEmployedIncome * eiRateEmployed);
     var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, annualSelfEmployedIncome * eiRateSelfEmployed); // Fixed calculation for self-employed EI payable
 
-    // Update <p> element with the calculated EI payable
+    // Display the results
     document.getElementById('ei_result').textContent = '$' + (eiPayableEmployed + eiPayableSelfEmployed).toFixed(2);
 }
 
