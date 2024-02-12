@@ -765,7 +765,8 @@ let annualIncomeSum = 0;
   // Calculate annual income sum
         incomeFields.forEach(field => {
             const [inputId, frequencyId] = field;
-            annualIncomeSum += calculateAnnual(inputId, frequencyId);
+            //annualIncomeSum += calculateAnnual(inputId, frequencyId);
+            annualIncomeSum = annualIncomeSum + calculateAnnual(inputId, frequencyId);        
         });
 
  // Display the results
