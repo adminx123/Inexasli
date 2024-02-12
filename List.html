@@ -765,8 +765,7 @@ let annualIncomeSum = 0;
   // Calculate annual income sum
         incomeFields.forEach(field => {
             const [inputId, frequencyId] = field;
-            //annualIncomeSum += calculateAnnual(inputId, frequencyId);
-            annualIncomeSum = annualIncomeSum + calculateAnnual(inputId, frequencyId);        
+            annualIncomeSum += calculateAnnual(inputId, frequencyId);
         });
 
  // Display the results
@@ -865,8 +864,14 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
              
         // Display the results
         document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
-  
-/*    
+    }
+
+
+
+
+
+
+
     // Assume calculateAnnual function has been defined and it calculates annual income sums
 
     function getCppPayable(annualIncomeSum) {
@@ -885,7 +890,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
         return cppPayableEmployed + cppPayableSelfEmployed;
     }
 
-            function getEIPayable(annualIncomeSum) {
+    function getEIPayable(annualIncomeSum) {
         // Define EI rates and maximums
         var eiRateEmployed = 0.0166;
         var eiRateSelfEmployed = 0.0166;
@@ -898,10 +903,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 
         // Return total EI payable
         return eiPayableEmployed + eiPayableSelfEmployed;
-    }    
-    
-    
-    
+    }
 
     // Retrieve annual income sums from the DOM (assuming they are already calculated)
     var annualIncomeSum = parseFloat(document.getElementById('annual_income_sum').textContent) || 0;
@@ -912,10 +914,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 
     // Update <p> elements with the calculated values
     document.getElementById('cpp_result').textContent = '$' + cppPayable.toFixed(2);
-    document.getElementById('ei_result').textContent = '$' + eiPayable.toFixed(2);    
-    }
-   */ 
-
+    document.getElementById('ei_result').textContent = '$' + eiPayable.toFixed(2);
 </script>
 
 
