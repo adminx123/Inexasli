@@ -908,27 +908,31 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
         
     }
 
-    function getEIPayable(annualIncomeSum) {
-        // Define EI rates and maximums
-        var eiRateEmployed = 0.0166;
-        var eiRateSelfEmployed = 0.0166;
-        var eiEmployeePremiumMax = 1049.12;
-        var eiEmployerPremiumMax = 1468.77;
+   function getEIPayable() {
+    // Retrieve annual salary, bonuses, tips, and self-employment income from the DOM
+    var annualSalaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
+    var annualTips = parseFloat(document.getElementById('income_tips').value) || 0;
+    var annualBonuses = parseFloat(document.getElementById('income_bonuses').value) || 0;
+    var annualSoleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
 
-        // Calculate EI payable for employed and self-employed individuals
-        var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualIncomeSum * eiRateEmployed);
-        var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, 0); // Assuming self-employed income already included in employedIncome
+    // Calculate total annual income from employed and self-employed sources
+    var annualEmployedIncome = annualSalaryWages + annualTips + annualBonuses;
+    var annualSelfEmployedIncome = annualSoleProp;
 
-        // Return total EI payable
-        return eiPayableEmployed + eiPayableSelfEmployed;
-    
+    // Define EI rates and maximums
+    var eiRateEmployed = 0.0166;
+    var eiRateSelfEmployed = 0.0166;
+    var eiEmployeePremiumMax = 1049.12;
+    var eiEmployerPremiumMax = 1468.77;
 
-    // Retrieve annual income sums from the DOM (assuming they are already calculated)
-    var annualIncomeSum = parseFloat(document.getElementById('annual_income_sum').textContent) || 0;
+    // Calculate EI payable for employed and self-employed individuals
+    var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualEmployedIncome * eiRateEmployed);
+    var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, annualSelfEmployedIncome * eiRateSelfEmployed); // Fixed calculation for self-employed EI payable
 
-// Update <p> elements with the calculated values
-    document.getElementById('ei_result').textContent = '$' + eiPayable.toFixed(2);
+    // Update <p> element with the calculated EI payable
+    document.getElementById('ei_result').textContent = '$' + (eiPayableEmployed + eiPayableSelfEmployed).toFixed(2);
 }
+
 </script>
 
 
