@@ -903,13 +903,18 @@ function getCppPayable() {
     else if ((annualIncomeEmployed - cppExemptionAmount)>=0) {LEA = 0}
 
     // Calculate CPP payable for employed 
-    var cppPayableEmployed;
-   
-    if (LCR <= 0 ) {
-        cppPayableEmployed = cppMaxEmployed;
-        } 
-    else if (LCR >= 1) { cppPayableEmployed = ((annualIncomeEmployed-cppExemptionAmount) * cppRateEmployed)}
-        
+   var cppPayableEmployed;
+
+if (LCR <= 0) {
+    cppPayableEmployed = cppMaxEmployed;
+} else if (LCR >= 1) { 
+    if (annualIncomeEmployed <= cppExemptionAmount) {
+        cppPayableEmployed = 0; // No CPP payable if annual income is less than or equal to the exemption amount
+    } else {
+        cppPayableEmployed = ((annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
+    }
+}
+
        // Calculate CPP payable for self-employed individuals                  
  var cppPayableSelfEmployed;
 if (LCR <= 0) {
