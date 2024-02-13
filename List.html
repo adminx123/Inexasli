@@ -931,6 +931,9 @@ function getCppPayable() {
 
     // Display the results
     document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployed).toFixed(2);
+document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).toFixed(2);
+    document.getElementById('cpp_seresult').textContent = '$' + (cppPayableSelfEmployed).toFixed(2);
+    
 }
 
 
@@ -1111,8 +1114,8 @@ function getCppPayable() {
     <p>Annual Expense Sum: <span id="annual_expense_sum"></span></p>
 <p>Annual Taxable Income: <span id="taxable_sum"></span></p>
 <p>Annual CPP Payable: <span id="cpp_result"></span></p>
-    <p>employed CPP Payable: <span id="cppEmployedPayable"></span></p>
-    <p>employed CPP Payable: <span id="cppSelfEmployedPayable"></span></p>
+    <p>employed CPP Payable: <span id="cpp_eresult"></span></p>
+    <p> self employed CPP Payable: <span id="cpp_seresult"></span></p>
 <p>Annual Employment Insurance Payable: <span id="ei_result"></span></p>
     <p>Federal Tax Payable: <spanid="federal_tax_payable"></span></p>
     <p>Provincial Tax Payable:<spanid="provincial_tax_payable"></span></p>
