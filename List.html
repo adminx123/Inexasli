@@ -879,7 +879,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 
    
 
-      function getCppPayable() {
+function getCppPayable() {
     // Retrieve annual income sums from the DOM (assuming they are already calculated)
     var annualSalaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
     var annualBonuses = parseFloat(document.getElementById('income_bonuses').value) || 0;
@@ -897,13 +897,17 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
     var cppMaxSelfEmployed = 7735;
     var cppExemptionAmount = 3500;
 
-    // Calculate CPP payable for employed and self-employed individuals
+    // Calculate CPP payable for employed individuals
     var cppPayableEmployed = Math.min(cppMaxEmployed, Math.max(0, annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
-    var cppPayableSelfEmployed = Math.min(cppMaxSelfEmployed - cppPayableEmployed, Math.max(0, annualIncomeSelfEmployed - cppExemptionAmount) * cppRateSelfEmployed);
+
+    // Calculate CPP payable for self-employed individuals (considering both employee and employer portions)
+    var cppPayableSelfEmployedEmployee = Math.min(cppMaxEmployed - cppPayableEmployed, Math.max(0, annualIncomeSelfEmployed - cppExemptionAmount) * cppRateSelfEmployed);
+    var cppPayableSelfEmployedEmployer = cppPayableSelfEmployedEmployee;
 
     // Display the results
-    document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployed).toFixed(2);
+    document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployedEmployee + cppPayableSelfEmployedEmployer).toFixed(2);
 }
+
 
    function getEIPayable() {
     // Retrieve annual salary, bonuses, tips, and self-employment income from the DOM
