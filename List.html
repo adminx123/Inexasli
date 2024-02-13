@@ -891,41 +891,48 @@ function getCppPayable() {
     var cppRateEmployed = 0.0595;
     var cppRateSelfEmployed = 0.1190;
     var cppMaxEmployed = 3867.5;
-    var cppMaxEmployer = 7735
+    var cppMaxEmployer = 7735;
     var cppExemptionAmount = 3500;
 
-    //Calcualte left over contribution room employed
-      var LCR;
-    if (annualIncomeEmployed <= cppExemptionAmount) {cppMaxEmployer}
-    else (annualIncomeEmployed > cppExemptionAmount) {cppMaxEmployer - ((annualIncomeEmployed - cppExemptionAmount)*cppRateEmployed)}
+    // Calculate left over contribution room employed
+    var LCR;
+    if (annualIncomeEmployed <= cppExemptionAmount) {
+        LCR = cppMaxEmployer; 
+    } else {
+        LCR = cppMaxEmployer - ((annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
+    }
 
-    //Calculate left over exmption amount
+    // Calculate left over exemption amount
     var LEA;
-    if ((annualIncomeEmployed - cppExemptionAmount)<=0) { LEA = Math.abs (annualIncomeEmployed-cppExemptionAmount)}
-    else if ((annualIncomeEmployed - cppExemptionAmount)>=0) {LEA = 0}
+    if ((annualIncomeEmployed - cppExemptionAmount) <= 0) { 
+        LEA = Math.abs(annualIncomeEmployed - cppExemptionAmount);
+    } else {
+        LEA = 0;
+    }
 
     // Calculate CPP payable for employed 
     var cppPayableEmployed;
-   
-    if (LCR <= 0 ) {
+    if (LCR <= 0) {
         cppPayableEmployed = cppMaxEmployed;
-        } 
-    else if (LCR >= 1) { cppPayableEmployed = ((annualIncomeEmployed-cppExemptionAmount) * cppRateEmployed)}
-        
-       // Calculate CPP payable for self-employed individuals         
- var cppPayableSelfEmployed;
-if (LCR <= 0) {
-    cppPayableSelfEmployed = 0;
-} else if (LCR >= 1) {
-    cppPayableSelfEmployed = (annualIncomeSelfEmployed-LEA) * cppRateSelfEmployed;
-    if (cppPayableSelfEmployed > LCR) {
-        cppPayableSelfEmployed = LCR * 2;
+    } else {
+        cppPayableEmployed = (annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed;
     }
-}
+
+    // Calculate CPP payable for self-employed individuals
+    var cppPayableSelfEmployed;
+    if (LCR <= 0) {
+        cppPayableSelfEmployed = 0;
+    } else {
+        cppPayableSelfEmployed = (annualIncomeSelfEmployed - LEA) * cppRateSelfEmployed;
+        if (cppPayableSelfEmployed > LCR) {
+            cppPayableSelfEmployed = LCR * 2;
+        }
+    }
 
     // Display the results
     document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployed).toFixed(2);
 }
+
 
    function getEIPayable() {
     // Retrieve annual salary, bonuses, tips, and self-employment income from the DOM
