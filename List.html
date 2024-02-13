@@ -915,7 +915,7 @@ function getCppPayable() {
 if (LCR <= 0) {
     cppPayableSelfEmployed = 0;
 } else if (LCR >= 1) {
-    cppPayableSelfEmployed = (annualIncomeSelfEmployed150000-LEA 0) * cppRateSelfEmployed;
+    cppPayableSelfEmployed = (annualIncomeSelfEmployed-LEA) * cppRateSelfEmployed;
     if (cppPayableSelfEmployed > LCR) {
         cppPayableSelfEmployed = LCR * 2;
     }
