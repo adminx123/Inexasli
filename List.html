@@ -895,8 +895,14 @@ function getCppPayable() {
     var cppExemptionAmount = 3500;
 
     
- //Calcualte left over contribution room employed
-      var LCR = cppMaxEmployed - ((annualIncomeEmployed - cppExemptionAmount)*cppRateEmployed);
+ // Calculate left over contribution room employed
+var LCR;
+if (annualIncomeEmployed <= cppExemptionAmount) {
+    LCR = cppMaxEmployer; 
+} else {
+    LCR = cppMaxEmployer - ((annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
+}
+
 
     //Calculate left over exmption amount
     var LEA;
@@ -905,16 +911,12 @@ function getCppPayable() {
 
     // Calculate CPP payable for employed 
    var cppPayableEmployed;
-
 if (LCR <= 0) {
     cppPayableEmployed = cppMaxEmployed;
-} else if (LCR >= 1) { 
-    if (annualIncomeEmployed <= cppExemptionAmount) {
-        cppPayableEmployed = 0; // No CPP payable if annual income is less than or equal to the exemption amount
-    } else {
-        cppPayableEmployed = ((annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
+} 
+else if (LCR >= 1) {  cppPayableEmployed = ((annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
     }
-}
+
 
        // Calculate CPP payable for self-employed individuals                  
  var cppPayableSelfEmployed;
