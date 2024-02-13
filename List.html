@@ -876,7 +876,6 @@ let annualExpenseSum = 0;
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
 
  }
-    
 function getCppPayable() {
     // Retrieve annual income sums from the DOM (assuming they are already calculated)
     var annualSalaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
@@ -892,44 +891,37 @@ function getCppPayable() {
     var cppRateEmployed = 0.0595;
     var cppRateSelfEmployed = 0.1190;
     var cppMaxEmployed = 3867.5;
-    var cppMaxEmployer = 7735; // Added semicolon here
+    var cppMaxEmployer = 7735
     var cppExemptionAmount = 3500;
 
-    
-    // Calculate left over contribution room employed
-    var LCR;
-    if (annualIncomeEmployed <= cppExemptionAmount) {
-        LCR = cppMaxEmployer; 
-    } else {
-        LCR = cppMaxEmployer - ((annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
-    }
+    //Calcualte left over contribution room employed
+      var LCR;
+    if (annualIncomeEmployed <= cppExemptionAmount) {cppMaxEmployer}
+    else if (annualIncomeEmployed > cppExemptionAmount) {cppMaxEmployer - ((annualIncomeEmployed - cppExemptionAmount)*cppRateEmployed)}
 
-    // Calculate left over exemption amount
+    //Calculate left over exmption amount
     var LEA;
-    if ((annualIncomeEmployed - cppExemptionAmount) <= 0) { 
-        LEA = Math.abs(annualIncomeEmployed - cppExemptionAmount);
-    } else if ((annualIncomeEmployed - cppExemptionAmount) >= 0) {
-        LEA = 0;
-    }
+    if ((annualIncomeEmployed - cppExemptionAmount)<=0) { LEA = Math.abs (annualIncomeEmployed-cppExemptionAmount)}
+    else if ((annualIncomeEmployed - cppExemptionAmount)>=0) {LEA = 0}
 
     // Calculate CPP payable for employed 
-    var cppPayableEmployed; 
-    if (annualIncomeEmployed >= cppExemptionAmount) { 
-        cppPayableEmployed = (annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed; // Added missing equal sign here
-    } else if (annualIncomeEmployed < cppExemptionAmount) {
-        cppPayableEmployed = 0;
+    var cppPayableEmployed;
+   
+    if (LCR <= 0 ) {
+        cppPayableEmployed = cppMaxEmployed;
+        } 
+    else if (LCR >= 1) { cppPayableEmployed = ((annualIncomeEmployed-cppExemptionAmount) * cppRateEmployed)}
+        
+       // Calculate CPP payable for self-employed individuals         
+ var cppPayableSelfEmployed;
+if (LCR <= 0) {
+    cppPayableSelfEmployed = 0;
+} else if (LCR >= 1) {
+    cppPayableSelfEmployed = (annualIncomeSelfEmployed-LEA) * cppRateSelfEmployed;
+    if (cppPayableSelfEmployed > LCR) {
+        cppPayableSelfEmployed = LCR * 2;
     }
- 
-    // Calculate CPP payable for self-employed individuals                  
-    var cppPayableSelfEmployed;
-    if (LCR <= 0) {
-        cppPayableSelfEmployed = 0;
-    } else if (LCR >= 1) {
-        cppPayableSelfEmployed = (annualIncomeSelfEmployed - LEA) * cppRateSelfEmployed;
-        if (cppPayableSelfEmployed > LCR) {
-            cppPayableSelfEmployed = LCR * 2;
-        }
-    }
+}
 
     // Display the results
     document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployed).toFixed(2);
