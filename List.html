@@ -914,7 +914,7 @@ if (annualIncomeEmployed <= cppExemptionAmount) {
 if (LCR <= 0) {
     cppPayableEmployed = cppMaxEmployed;
 } 
-else if (LCR >= 1) {  cppPayableEmployed = ((annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
+else if (LCR <= cppEmployerMax) {  cppPayableEmployed = ((annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
     }
 
 
