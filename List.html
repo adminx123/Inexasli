@@ -910,15 +910,11 @@ if (annualIncomeEmployed <= cppExemptionAmount) {
     else if ((annualIncomeEmployed - cppExemptionAmount)>=0) {LEA = 0}
 
     // Calculate CPP payable for employed 
-   var cppPayableEmployed;
-if (LCR <= 0) {
-    cppPayableEmployed = cppMaxEmployed;
-} 
-else if (LCR <= cppEmployerMax) {  cppPayableEmployed = ((annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
-    }
-
-
-       // Calculate CPP payable for self-employed individuals                  
+   var cppPayableEmployed; 
+    if (annualIncomeEmployed >= cppExemptionAmount) { (annualIncomeEmployed - cppExemptionAmount)*cppEmployedRate)}
+    else if (annualIncomeEmployed < cppExemptionAmount) {0}
+ 
+// Calculate CPP payable for self-employed individuals                  
  var cppPayableSelfEmployed;
 if (LCR <= 0) {
     cppPayableSelfEmployed = 0;
