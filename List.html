@@ -916,7 +916,7 @@ if (LCR <= 0) {
 } else if (LCR >= 1) {
     cppPayableSelfEmployed = (annualIncomeSelfEmployed-LEA) * cppRateSelfEmployed;
     if (cppPayableSelfEmployed > LCR) {
-        cppPayableSelfEmployed = LCR * cppRateSelfEmployed;
+        cppPayableSelfEmployed = LCR * 2;
     }
 }
 
