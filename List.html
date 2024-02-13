@@ -897,7 +897,7 @@ function getCppPayable() {
     //Calcualte left over contribution room employed
       var LCR;
     if (annualIncomeEmployed <= cppExemptionAmount) {cppMaxEmployer}
-    else if (annualIncomeEmployed > cppExemptionAmount) {cppMaxEmployer - ((annualIncomeEmployed - cppExemptionAmount)*cppRateEmployed)}
+    else (annualIncomeEmployed > cppExemptionAmount) {cppMaxEmployer - ((annualIncomeEmployed - cppExemptionAmount)*cppRateEmployed)}
 
     //Calculate left over exmption amount
     var LEA;
