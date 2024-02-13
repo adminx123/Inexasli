@@ -893,21 +893,32 @@ function getCppPayable() {
     var cppMaxEmployed = 3867.5;
     var cppExemptionAmount = 3500;
 
-    // Calculate CPP payable for employed and self-employed individuals
+    //Calcualte left over contribution room employed
+      var LCR = cppMaxEmployed - ((annualIncomeEmployed - cppExemptionAmount)*cppRateEmployed);
+
+    //Calculate left over exmption amount
+    var LEA;
+    if ((annualIncomeEmployed - cppExemptionAmount)<=0) { LEA = Math.abs (annualIncomeEmployed-cppExemptionAmount)}
+    else if ((annualIncomeEmployed - cppExemptionAmount)>=0) {LEA = 0}
+
+    // Calculate CPP payable for employed 
     var cppPayableEmployed;
-    var cppPayableSelfEmployed;
-
-    if (annualIncomeEmployed > cppMaxEmployed) {
+   
+    if (LCR <= 0 ) {
         cppPayableEmployed = cppMaxEmployed;
-    } else if ((annualIncomeEmployed + (annualIncomeSelfEmployed / 2)) < cppMaxEmployed) {
-        cppPayableEmployed = annualIncomeEmployed + (annualIncomeSelfEmployed / 2);
-    } else if ((annualIncomeEmployed + (annualIncomeSelfEmployed / 2)) > cppMaxEmployed) {
-        cppPayableEmployed = annualIncomeEmployed + ((cppMaxEmployed - annualIncomeEmployed) * 2);
-    } else {
-        cppPayableEmployed = annualIncomeEmployed;
+        } 
+    else if (LCR >= 1) { cppPayableEmployed = ((annualIncomeEmployed-cppExemptionAmount) * cppRateEmployed)}
+        
+       // Calculate CPP payable for self-employed individuals         
+ var cppPayableSelfEmployed;
+if (LCR <= 0) {
+    cppPayableSelfEmployed = 0;
+} else if (LCR >= 1) {
+    cppPayableSelfEmployed = (annualIncomeSelfEmployed-LEA) * cppRateSelfEmployed;
+    if (cppPayableSelfEmployed > LCR) {
+        cppPayableSelfEmployed = LCR * cppRateSelfEmployed;
     }
-
-    cppPayableSelfEmployed = Math.min((cppMaxEmployed - cppPayableEmployed) * 2, Math.max(0, annualIncomeSelfEmployed - cppExemptionAmount) * cppRateSelfEmployed);
+}
 
     // Display the results
     document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployed).toFixed(2);
