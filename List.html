@@ -876,8 +876,7 @@ let annualExpenseSum = 0;
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
 
  }
-
- function getCppPayable() {
+function getCppPayable() {
     // Retrieve annual income sums from the DOM (assuming they are already calculated)
     var annualSalaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
     var annualBonuses = parseFloat(document.getElementById('income_bonuses').value) || 0;
@@ -900,9 +899,9 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 
     if (annualIncomeEmployed > cppMaxEmployed) {
         cppPayableEmployed = cppMaxEmployed;
-    } else if (annualIncomeEmployed < (annualIncomeSelfEmployed / 2) && (annualIncomeSelfEmployed / 2) < cppMaxEmployed) {
+    } else if ((annualIncomeEmployed + (annualIncomeSelfEmployed / 2)) < cppMaxEmployed) {
         cppPayableEmployed = annualIncomeEmployed + (annualIncomeSelfEmployed / 2);
-    } else if (annualIncomeEmployed + (annualIncomeSelfEmployed / 2) > cppMaxEmployed) {
+    } else if ((annualIncomeEmployed + (annualIncomeSelfEmployed / 2)) > cppMaxEmployed) {
         cppPayableEmployed = annualIncomeEmployed + ((cppMaxEmployed - annualIncomeEmployed) * 2);
     } else {
         cppPayableEmployed = annualIncomeEmployed;
@@ -913,8 +912,6 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
     // Display the results
     document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployed).toFixed(2);
 }
-
-
 
    function getEIPayable() {
     // Retrieve annual salary, bonuses, tips, and self-employment income from the DOM
