@@ -968,7 +968,7 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
 }
 
     function getFederalTaxPayable(annualTaxableSum) {
-        return calculateTax(annualTaxablesum, [
+        return calculateTax(annualTaxableSum, [
             { limit: 235675, rate: 0.33 },
             { limit: 165430, rate: 0.29 },
             { limit: 106717, rate: 0.26 },
@@ -1102,7 +1102,7 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
 
         for (const bracket of brackets) {
             if (annualTaxableIncome >= bracket.limit) {
-                totalTax += (income - bracket.limit) * bracket.rate;
+                totalTax += (annualTaxableIncome - bracket.limit) * bracket.rate;
                 annualTaxableIncome = bracket.limit;
             }
         }
@@ -1113,8 +1113,8 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
     
     // Display the results
     document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
-    document.getElementById('FederalTaxPayable').textContent = '$' + federalTax.toFixed(2);
-    document.getElementById('ProvincialTaxPayable').textContent = '$' + provincialTax.toFixed(2);
+    document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
+    document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);
 
     
 </script>
