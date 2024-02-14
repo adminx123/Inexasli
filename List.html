@@ -968,7 +968,8 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
             { limit: 53359, rate: 0.205 },
             { limit: 0, rate: 0.15 }
         ]);
-                 }
+                 return FederalTaxPayable
+    }
 
     function getProvincialTaxPayable(province, annualTaxableSum) {
         switch (province) {
