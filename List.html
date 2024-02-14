@@ -1114,7 +1114,7 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
     calculateNormalizedSum();
     getCppPayable();
     getEIPayable();
-    Calculatetax(federalTax, provincialTax); // Passing federalTax and provincialTax to Calculatetax function
+    calculatetax(federalTax, provincialTax); // Passing federalTax and provincialTax to Calculatetax function
     let federalTax = getFederalTaxPayable(annualTaxableSum);
     let provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
 
