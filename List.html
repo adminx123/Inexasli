@@ -715,15 +715,6 @@
    <button onclick="calculateAll()">Calculate</button>
 
 <script>
-function calculateAll() {
-    calculateNormalizedSum();
-    getCppPayable();
-    getEIPayable();
-    Calculatetax(federalTax, provincialTax); // Passing federalTax and provincialTax to Calculatetax function
-    let federalTax = getFederalTaxPayable(annualTaxableSum);
-    let provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
-
-}
     
     function calculateAnnual(inputId, frequencyId) {
         const input = parseFloat(document.getElementById(inputId).value) || 0;
@@ -1118,7 +1109,16 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
         document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
     document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);
     }
-    
+
+    function calculateAll() {
+    calculateNormalizedSum();
+    getCppPayable();
+    getEIPayable();
+    Calculatetax(federalTax, provincialTax); // Passing federalTax and provincialTax to Calculatetax function
+    let federalTax = getFederalTaxPayable(annualTaxableSum);
+    let provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
+
+}
 </script>
 
 
