@@ -976,8 +976,7 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
             { limit: 53359, rate: 0.205 },
             { limit: 0, rate: 0.15 }
         ]);
-        return { id: 'federal_tax_payable', amount: federalTax };
-             }
+                 }
 
     function getProvincialTaxPayable(province, annualTaxableSum) {
         switch (province) {
@@ -1096,8 +1095,7 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
             default:
                 return 0; // Default to 0 if province not found
         }
-            return { id: 'provincial_tax_payable_' + province.toLowerCase(), amount: provincialTax };
-    }
+                }
 
     function calculateTax(annualTaxableIncome, brackets) {
         brackets.sort((a, b) => b.limit - a.limit);
