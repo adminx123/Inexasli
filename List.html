@@ -970,7 +970,7 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
     document.getElementById('ei_result').textContent = '$' + (eiPayableEmployed + eiPayableSelfEmployed).toFixed(2);
 }
 
-    function getFederalTaxPayable(totalIncome) {
+    function getFederalTaxPayable(annualTaxableSum) {
         return calculateTax(annualTaxablesum, [
             { limit: 235675, rate: 0.33 },
             { limit: 165430, rate: 0.29 },
@@ -980,7 +980,7 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
         ]);
     }
 
-    function getProvincialTaxPayable(province, totalIncome) {
+    function getProvincialTaxPayable(province, annualTaxableSum) {
         switch (province) {
             case 'AB':
                 return calculateTax(annualTaxableSum, [
