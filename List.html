@@ -971,7 +971,7 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
 }
 
     function getFederalTaxPayable(totalIncome) {
-        return calculateTax(annualTaxableIncome, [
+        return calculateTax(annualTaxablesum, [
             { limit: 235675, rate: 0.33 },
             { limit: 165430, rate: 0.29 },
             { limit: 106717, rate: 0.26 },
