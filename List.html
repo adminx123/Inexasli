@@ -719,9 +719,9 @@ function calculateAll() {
     calculateNormalizedSum();
     getCppPayable();
     getEIPayable();
-    let federalTax = getFederalTaxPayable(annualTaxableSum);
-        let provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
     Calculatetax(federalTax, provincialTax); // Passing federalTax and provincialTax to Calculatetax function
+    let federalTax = getFederalTaxPayable(annualTaxableSum);
+    let provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
 
 }
     
