@@ -1113,12 +1113,14 @@ function calculateTax(annualTaxableIncome, brackets) {
     getCppPayable();
     getEIPayable();
     federalTax = getFederalTaxPayable(annualTaxableSum);
-    provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
+    //provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
 
     // Step 3 Display the results (AKA Call the functions. Calling functions must be done only after running the calculations in the fucntions)
-    document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
-    document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
-    document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);    
+    //document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
+        document.getElementById('federal_tax_payable').textContent = '$' + 123.63;
+    //document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
+    
+    //document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);    
     }
 </script>
 
