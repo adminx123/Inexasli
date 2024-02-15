@@ -868,7 +868,7 @@ let annualExpenseSum = 0;
 
  // Display the results
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
-
+document.getElementById('federal_tax_payable').textContent = `$${annualExpenseSum.toFixed(2)}`;
  }
 function getCppPayable() {
     // Retrieve annual income sums from the DOM (assuming they are already calculated)
