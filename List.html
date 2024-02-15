@@ -969,7 +969,8 @@ function calculateTax(annualTaxableIncome, brackets) {
                 totalTax += (annualTaxableIncome - bracket.limit) * bracket.rate;
                 annualTaxableIncome = bracket.limit;
             }
-
+        }
+    
     function getFederalTaxPayable(annualTaxableSum) {
         return calculateTax(annualTaxableSum, [
             { limit: 235675, rate: 0.33 },
