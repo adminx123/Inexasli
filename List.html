@@ -973,17 +973,19 @@ function calculateTax(annualTaxableIncome, brackets) {
                 annualTaxableIncome = bracket.limit;
             }
         }
+    return totalTax
+}
     
     function getFederalTaxPayable(annualTaxableSum) {
-        return calculateTax(annualTaxableSum, [
+        result = calculateTax(annualTaxableSum, [
             { limit: 235675, rate: 0.33 },
             { limit: 165430, rate: 0.29 },
             { limit: 106717, rate: 0.26 },
             { limit: 53359, rate: 0.205 },
-            { limit: 0, rate: 0.15 }
+            { limit: 0, rate: 0.15 }       
+        return result
         ]);
-
-    
+}    
 
     function getProvincialTaxPayable(province, annualTaxableSum) {
         switch (province) {
@@ -1101,22 +1103,9 @@ function calculateTax(annualTaxableIncome, brackets) {
 
             default:
                 return 0; // Default to 0 if province not found
-        }
                 }
-
-    
-        }
-
-        return totalTax;
-    
-
-    
-    // Display the results
-    document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
-        document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
-    document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);
-    }
-
+       }
+   
     function calculateAll() {
     calculateNormalizedSum();
     getCppPayable();
@@ -1124,7 +1113,12 @@ function calculateTax(annualTaxableIncome, brackets) {
     federalTax = getFederalTaxPayable(annualTaxableSum);
     provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
     totalTax = calculateTax(annualTaxableSum, federalTax, ProvincialTax);
-}
+
+    // Display the results (AKA Call the functions. Calling functions must be done only after running the calculations in the fucntions)
+    document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
+    document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
+    document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);    
+    }
 </script>
 
 
