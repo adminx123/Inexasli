@@ -1117,7 +1117,7 @@ function calculateTax(annualTaxableIncome, brackets) {
     calculateNormalizedSum();
     getCppPayable();
     getEIPayable();
-    calculatetax(federalTax, provincialTax); // Passing federalTax and provincialTax to Calculatetax function
+    calculateTax(federalTax, provincialTax); // Passing federalTax and provincialTax to Calculatetax function
     let federalTax = getFederalTaxPayable(annualTaxableSum);
     let provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
 
