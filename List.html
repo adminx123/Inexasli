@@ -978,14 +978,13 @@ function calculateTax(annualTaxableIncome, brackets) {
 }
     
     function getFederalTaxPayable(annualTaxableSum) {
-        result = calculateTax(annualTaxableSum, [
+        return calculateTax(annualTaxableSum, [
             { limit: 235675, rate: 0.33 },
             { limit: 165430, rate: 0.29 },
             { limit: 106717, rate: 0.26 },
             { limit: 53359, rate: 0.205 },
             { limit: 0, rate: 0.15 }       
              ]);
-   return result;
     }    
 
     function getProvincialTaxPayable(province, annualTaxableSum) {
