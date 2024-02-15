@@ -1110,14 +1110,13 @@ function calculateTax(annualTaxableIncome, brackets) {
     calculateNormalizedSum();
     getCppPayable();
     getEIPayable();
-    //federalTax = getFederalTaxPayable(annualTaxableSum);
-    //provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
+    federalTax = getFederalTaxPayable(annualTaxableSum);
+    provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
 
     // Step 3 Display the results (AKA Call the functions. Calling functions must be done only after running the calculations in the fucntions)
-   //document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
-    //document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
-    
-    //document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);    
+   document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
+  document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
+    document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);    
     }
 </script>
 
@@ -1133,7 +1132,7 @@ function calculateTax(annualTaxableIncome, brackets) {
 <p>Annual Employment Insurance Payable: <span id="ei_result"></span></p>
     <p>Federal Tax Payable: <span id="federal_tax_payable"></span></p>
     <p>Provincial Tax Payable:<span id="provincial_tax_payable"></span></p>
-    <p>Total Tax Payable:<span id="totalTax"></span></p>
+    <p>Total Tax Payable:<span id="ei_result"></span></p>
 
 
 </div>
