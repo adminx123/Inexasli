@@ -813,8 +813,7 @@ let annualIncomeSum = 0;
              
         // Display the results
         document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
-    
-
+        document.getElementById('federal_tax_payable').textContent = `$${annualTaxableSum.toFixed(2)}`;
 
         // Define all expense fields with their corresponding frequency fields
         const expenseFields = [
@@ -1111,11 +1110,11 @@ function calculateTax(annualTaxableIncome, brackets) {
     calculateNormalizedSum();
     getCppPayable();
     getEIPayable();
-    federalTax = getFederalTaxPayable(annualTaxableSum);
+    //federalTax = getFederalTaxPayable(annualTaxableSum);
     //provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
 
     // Step 3 Display the results (AKA Call the functions. Calling functions must be done only after running the calculations in the fucntions)
-   document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
+   //document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
     //document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
     
     //document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);    
