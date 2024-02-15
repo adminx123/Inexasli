@@ -985,7 +985,8 @@ function calculateTax(annualTaxableIncome, brackets) {
              ]);
         return result1;
     }    
-
+document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
+    
     function getProvincialTaxPayable(province, annualTaxableSum) {
         switch (province) {
             case 'AB':
@@ -1104,6 +1105,9 @@ function calculateTax(annualTaxableIncome, brackets) {
                 return 0; // Default to 0 if province not found
                 }
     }
+
+    document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);    
+
     
    //Step 2 run the calculations
     function calculateAll() {
@@ -1113,12 +1117,12 @@ function calculateTax(annualTaxableIncome, brackets) {
     federalTax = getFederalTaxPayable(annualTaxableSum);
     provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
     totalTax = federalTax + provincialTax
+    disposableIncome = annualIncomeSum - annualExpenseSum    
 
-    // Step 3 Display the results (AKA Call the functions. Calling functions must be done only after running the calculations in the fucntions)
-   document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);
-  document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
-    document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);    
+   
     }
+       document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
+
 </script>
 
 
