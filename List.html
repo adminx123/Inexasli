@@ -813,9 +813,7 @@ let annualIncomeSum = 0;
              
         // Display the results
         document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
-        annualTaxableSum = 45856.23
-        document.getElementById('federal_tax_payable').textContent = `$${annualTaxableSum.toFixed(2)}`;
-
+       
         // Define all expense fields with their corresponding frequency fields
         const expenseFields = [
             ['expenses_grocery', 'expenses_grocery_frequency'],
@@ -868,7 +866,11 @@ let annualExpenseSum = 0;
 
  // Display the results
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
- }
+
+     annualTaxableSum = 22222.22
+        document.getElementById('federal_tax_payable').textContent = `$${annualTaxableSum.toFixed(2)}`;
+    }
+    
 function getCppPayable() {
     // Retrieve annual income sums from the DOM (assuming they are already calculated)
     var annualSalaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
