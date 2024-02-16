@@ -813,9 +813,6 @@ let annualIncomeSum = 0;
              
         // Display the results
         document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
-
-         annualTaxableSum = 22222.22
-        document.getElementById('federal_tax_payable').textContent = `$${annualTaxableSum.toFixed(2)}`;
         
         // Define all expense fields with their corresponding frequency fields
         const expenseFields = [
@@ -869,9 +866,6 @@ let annualExpenseSum = 0;
 
  // Display the results
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
-
-     annualTaxableSum = 22222.22
-        document.getElementById('federal_tax_payable').textContent = `$${annualTaxableSum.toFixed(2)}`;
     }
     
 function getCppPayable() {
@@ -936,7 +930,6 @@ if (LCR <= 0) {
     document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployed).toFixed(2);
 document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).toFixed(2);
     document.getElementById('cpp_seresult').textContent = '$' + (cppPayableSelfEmployed).toFixed(2);
-    
 }
 
 
@@ -1120,18 +1113,21 @@ function calculateTax(annualTaxableIncome, brackets) {
     calculateNormalizedSum();
     getCppPayable();
     getEIPayable();
+
+         var AAAA = 11111.11
+        document.getElementById('federal_tax_payable').textContent = `$${AAAA.toFixed(2)}`;
         
-    var federalTax = getFederalTaxPayable(annualTaxableSum);
-    federalTax = 21256.32
-    document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);        
-    provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
+    //var federalTax = getFederalTaxPayable(annualTaxableSum);
+    //federalTax = 21256.32
+    //document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);        
+    //provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
     
-    totalTax = federalTax + provincialTax
-    disposableIncome = annualIncomeSum - annualExpenseSum    
+    //totalTax = federalTax + provincialTax
+    //disposableIncome = annualIncomeSum - annualExpenseSum    
 
    
     }
-       document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
+       //document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
 
 </script>
 
