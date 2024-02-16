@@ -1079,17 +1079,18 @@ function calculateProvincialTax(province, annualTaxableSum) {
 
 // Define the getFederalTaxPayable function to calculate federal tax
 function getFederalTaxPayable(annualTaxableSum) {
-    return calculateTax(annualTaxableSum, federalTaxBrackets);
-
+    const federalTaxPayable = calculateTax(annualTaxableSum, federalTaxBrackets);
     document.getElementById('federal_tax_payable').textContent = federalTaxPayable.toFixed(2);
+    return federalTaxPayable;
 
 }
 
 // Define the getProvincialTaxPayable function to calculate provincial tax
 function getProvincialTaxPayable(province, annualTaxableSum) {
-    return calculateProvincialTax(province, annualTaxableSum);
-    
+    const provincialTaxPayable = calculateProvincialTax(province, annualTaxableSum);
     document.getElementById('provincial_tax_payable').textContent = provincialTaxPayable.toFixed(2);
+    return provincialTaxPayable;
+    
 }
     
 // Example usage:
@@ -1105,8 +1106,8 @@ function getProvincialTaxPayable(province, annualTaxableSum) {
     const provinceDropdown = document.getElementById('provinceDropdown');
 const province = provinceDropdown.value;
 
-const federalTaxPayable = getFederalTaxPayable(annualTaxableIncome);
-const provincialTaxPayable = getProvincialTaxPayable(province, annualTaxableIncome); 
+getFederalTaxPayable();
+        getProvincialTaxPayable();
     }
 
 </script>
