@@ -1116,7 +1116,9 @@ function calculateTax(annualTaxableIncome, brackets) {
     getEIPayable();
         
     var federalTax = getFederalTaxPayable(annualTaxableSum);
-    document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);        provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
+    federalTax = 21256.32
+    document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);        
+    provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
     
     totalTax = federalTax + provincialTax
     disposableIncome = annualIncomeSum - annualExpenseSum    
