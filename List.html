@@ -958,154 +958,143 @@ document.getElementById('cpp_eresult').textContent = '$' + (cppPayableEmployed).
     document.getElementById('ei_result').textContent = '$' + (eiPayableEmployed + eiPayableSelfEmployed).toFixed(2);
 }
     
-// step 1 Properly define the function
-function calculateTax(annualTaxableIncome, brackets) {
-        brackets.sort((a, b) => b.limit - a.limit);
-    //Step 2 Create/define a variable let totalTax = 0;
-        let totalTax = 0;
+// Define the tax brackets
+const federalTaxBrackets = [
+    { limit: 235675, rate: 0.33 },
+    { limit: 165430, rate: 0.29 },
+    { limit: 106717, rate: 0.26 },
+    { limit: 53359, rate: 0.205 },
+    { limit: 0, rate: 0.15 }
+];
 
-        for (const bracket of brackets) {
-            if (annualTaxableIncome >= bracket.limit) {
-                totalTax += (annualTaxableIncome - bracket.limit) * bracket.rate;
-                annualTaxableIncome = bracket.limit;
-            }
+// Define the provincial tax brackets
+const provincialTaxBrackets = {
+    'AB': [
+        { limit: 341502, rate: 0.15 },
+        { limit: 227668, rate: 0.14 },
+        { limit: 170751, rate: 0.13 },
+        { limit: 142292, rate: 0.12 },
+        { limit: 0, rate: 0.10 }
+    ],
+    'BC': [
+        { limit: 240716, rate: 0.205 },
+        { limit: 172602, rate: 0.168 },
+        { limit: 127299, rate: 0.147 },
+        { limit: 104835, rate: 0.1229 },
+        { limit: 91310, rate: 0.105 },
+        { limit: 45654, rate: 0.077 },
+        { limit: 0, rate: 0.0506 }
+    ],
+    'MB': [
+        { limit: 79625, rate: 0.174 },
+        { limit: 36842, rate: 0.1275 },
+        { limit: 0, rate: 0.108 }
+    ],
+    'NB': [
+        { limit: 176756, rate: 0.195 },
+        { limit: 95431, rate: 0.16 },
+        { limit: 47715, rate: 0.14 },
+        { limit: 0, rate: 0.094 }
+    ],
+    'NL': [
+        { limit: 1059000, rate: 0.218 },
+        { limit: 529500, rate: 0.213 },
+        { limit: 264750, rate: 0.208 },
+        { limit: 207239, rate: 0.198 },
+        { limit: 148027, rate: 0.178 },
+        { limit: 82913, rate: 0.158 },
+        { limit: 41457, rate: 0.145 },
+        { limit: 0, rate: 0.087 }
+    ],
+    'NT': [
+        { limit: 157139, rate: 0.1405 },
+        { limit: 96655, rate: 0.122 },
+        { limit: 48326, rate: 0.086 },
+        { limit: 0, rate: 0.059 }
+    ],
+    'NS': [
+        { limit: 150000, rate: 0.21 },
+        { limit: 93000, rate: 0.175 },
+        { limit: 59180, rate: 0.1667 },
+        { limit: 29590, rate: 0.1495 },
+        { limit: 0, rate: 0.0879 }
+    ],
+    'NU': [
+        { limit: 165429, rate: 0.115 },
+        { limit: 101754, rate: 0.09 },
+        { limit: 50877, rate: 0.07 },
+        { limit: 0, rate: 0.04 }
+    ],
+    'ON': [
+        { limit: 220000, rate: 0.1316 },
+        { limit: 150000, rate: 0.1216 },
+        { limit: 98463, rate: 0.1116 },
+        { limit: 49231, rate: 0.0915 },
+        { limit: 0, rate: 0.0505 }
+    ],
+    'PE': [
+        { limit: 63969, rate: 0.167 },
+        { limit: 31984, rate: 0.138 },
+        { limit: 0, rate: 0.098 }
+    ],
+    'QC': [
+        { limit: 119910, rate: 0.2575 },
+        { limit: 98540, rate: 0.24 },
+        { limit: 49275, rate: 0.19 },
+        { limit: 0, rate: 0.14 }
+    ],
+    'SK': [
+        { limit: 142058, rate: 0.145 },
+        { limit: 49720, rate: 0.125 },
+        { limit: 0, rate: 0.105 }
+    ],
+    'YT': [
+        { limit: 500000, rate: 0.15 },
+        { limit: 165430, rate: 0.128 },
+        { limit: 106717, rate: 0.109 },
+        { limit: 53359, rate: 0.09 },
+        { limit: 0, rate: 0.064 }
+    ]
+};
+
+// Define the calculateTax function to calculate both federal and provincial tax
+function calculateTax(annualTaxableSum, taxBrackets) {
+    let tax = 0;
+    let taxableIncome = annualTaxableSum;
+
+    for (const bracket of taxBrackets) {
+        if (taxableIncome > bracket.limit) {
+            tax += (taxableIncome - bracket.limit) * bracket.rate;
+            taxableIncome = bracket.limit;
         }
-    return totalTax;
-}
-    
-    function getFederalTaxPayable(annualTaxableSum) {
-                        let result1 = 0;
-        result1 = calculateTax(annualTaxableSum, [
-            { limit: 235675, rate: 0.33 },
-            { limit: 165430, rate: 0.29 },
-            { limit: 106717, rate: 0.26 },
-            { limit: 53359, rate: 0.205 },
-            { limit: 0, rate: 0.15 }       
-             ]);
-        return result1;
-    }    
-
-    
-    function getProvincialTaxPayable(province, annualTaxableSum) {
-        switch (province) {
-            case 'AB':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 341502, rate: 0.15 },
-                    { limit: 227668, rate: 0.14 },
-                    { limit: 170751, rate: 0.13 },
-                    { limit: 142292, rate: 0.12 },
-                    { limit: 0, rate: 0.10 }
-                ]);
-
-            case 'BC':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 240716, rate: 0.205 },
-                    { limit: 172602, rate: 0.168 },
-                    { limit: 127299, rate: 0.147 },
-                    { limit: 104835, rate: 0.1229 },
-                    { limit: 91310, rate: 0.105 },
-                    { limit: 45654, rate: 0.077 },
-                    { limit: 0, rate: 0.0506 }
-                ]);
-
-            case 'MB':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 79625, rate: 0.174 },
-                    { limit: 36842, rate: 0.1275 },
-                    { limit: 0, rate: 0.108 }
-                ]);
-
-            case 'NB':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 176756, rate: 0.195 },
-                    { limit: 95431, rate: 0.16 },
-                    { limit: 47715, rate: 0.14 },
-                    { limit: 0, rate: 0.094 }
-                ]);
-
-            case 'NL':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 1059000, rate: 0.218 },
-                    { limit: 529500, rate: 0.213 },
-                    { limit: 264750, rate: 0.208 },
-                    { limit: 207239, rate: 0.198 },
-                    { limit: 148027, rate: 0.178 },
-                    { limit: 82913, rate: 0.158 },
-                    { limit: 41457, rate: 0.145 },
-                    { limit: 0, rate: 0.087 }
-                ]);
-
-            case 'NT':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 157139, rate: 0.1405 },
-                    { limit: 96655, rate: 0.122 },
-                    { limit: 48326, rate: 0.086 },
-                    { limit: 0, rate: 0.059 }
-                ]);
-
-            case 'NS':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 150000, rate: 0.21 },
-                    { limit: 93000, rate: 0.175 },
-                    { limit: 59180, rate: 0.1667 },
-                    { limit: 29590, rate: 0.1495 },
-                    { limit: 0, rate: 0.0879 }
-                ]);
-
-            case 'NU':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 165429, rate: 0.115 },
-                    { limit: 101754, rate: 0.09 },
-                    { limit: 50877, rate: 0.07 },
-                    { limit: 0, rate: 0.04 }
-                ]);
-
-            case 'ON':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 220000, rate: 0.1316 },
-                    { limit: 150000, rate: 0.1216 },
-                    { limit: 98463, rate: 0.1116 },
-                    { limit: 49231, rate: 0.0915 },
-                    { limit: 0, rate: 0.0505 }
-                ]);
-
-            case 'PE':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 63969, rate: 0.167 },
-                    { limit: 31984, rate: 0.138 },
-                    { limit: 0, rate: 0.098 }
-                ]);
-
-            case 'QC':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 119910, rate: 0.2575 },
-                    { limit: 98540, rate: 0.24 },
-                    { limit: 49275, rate: 0.19 },
-                    { limit: 0, rate: 0.14 }
-                ]);
-
-            case 'SK':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 142058, rate: 0.145 },
-                    { limit: 49720, rate: 0.125 },
-                    { limit: 0, rate: 0.105 }
-                ]);
-
-            case 'YT':
-                return calculateTax(annualTaxableSum, [
-                    { limit: 500000, rate: 0.15 },
-                    { limit: 165430, rate: 0.128 },
-                    { limit: 106717, rate: 0.109 },
-                    { limit: 53359, rate: 0.09 },
-                    { limit: 0, rate: 0.064 }
-                ]);
-
-            default:
-                return 0; // Default to 0 if province not found
-                }
     }
 
-    document.getElementById('provincial_tax_payable').textContent = '$' + provincialTax.toFixed(2);    
+    return tax;
+}
+
+// Define the calculateProvincialTax function
+function calculateProvincialTax(province, annualTaxableSum) {
+    return calculateTax(annualTaxableSum, provincialTaxBrackets[province]);
+}
+
+// Define the getFederalTaxPayable function to calculate federal tax
+function getFederalTaxPayable(annualTaxableSum) {
+    return calculateTax(annualTaxableSum, federalTaxBrackets);
+
+    document.getElementById('federal_tax_payable').textContent = federalTaxPayable.toFixed(2);
+
+}
+
+// Define the getProvincialTaxPayable function to calculate provincial tax
+function getProvincialTaxPayable(province, annualTaxableSum) {
+    return calculateProvincialTax(province, annualTaxableSum);
+    
+    document.getElementById('provincial_tax_payable').textContent = provincialTaxPayable.toFixed(2);
+}
+    
+// Example usage:
+
+
 
     
    //Step 2 run the calculations
@@ -1113,21 +1102,12 @@ function calculateTax(annualTaxableIncome, brackets) {
     calculateNormalizedSum();
     getCppPayable();
     getEIPayable();
+    const provinceDropdown = document.getElementById('provinceDropdown');
+const province = provinceDropdown.value;
 
-         var AAAA = 11111.11
-        document.getElementById('federal_tax_payable').textContent = `$${AAAA.toFixed(2)}`;
-        
-    //var federalTax = getFederalTaxPayable(annualTaxableSum);
-    //federalTax = 21256.32
-    //document.getElementById('federal_tax_payable').textContent = '$' + federalTax.toFixed(2);        
-    //provincialTax = getProvincialTaxPayable(province, annualTaxableSum);
-    
-    //totalTax = federalTax + provincialTax
-    //disposableIncome = annualIncomeSum - annualExpenseSum    
-
-   
+const federalTaxPayable = getFederalTaxPayable(annualTaxableIncome);
+const provincialTaxPayable = getProvincialTaxPayable(province, annualTaxableIncome); 
     }
-       //document.getElementById('total_tax').textContent = '$' + totalTax.toFixed(2);
 
 </script>
 
