@@ -1107,14 +1107,14 @@ function getProvincialTaxPayable(province, annualTaxableSum) {
     calculateNormalizedSum();
     getCppPayable();
     getEIPayable();
-     document.getElementById('provincial_tax_payable').textContent = '$' + provincialTaxPayable.toFixed(2);
-    document.getElementById('federal_tax_payable').textContent = '$' + federalTaxPayable.toFixed(2);
-
     const provinceDropdown = document.getElementById('provinceDropdown');
 const province = provinceDropdown.value;
     const annualTaxableSum = parseFloat(document.getElementById('annualTaxableIncome').value);
 getFederalTaxPayable();
         getProvincialTaxPayable();
+             document.getElementById('provincial_tax_payable').textContent = '$' + provincialTaxPayable.toFixed(2);
+    document.getElementById('federal_tax_payable').textContent = '$' + federalTaxPayable.toFixed(2);
+
     }
 
 </script>
