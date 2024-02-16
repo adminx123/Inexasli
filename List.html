@@ -813,7 +813,10 @@ let annualIncomeSum = 0;
              
         // Display the results
         document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
-       
+
+         annualTaxableSum = 22222.22
+        document.getElementById('federal_tax_payable').textContent = `$${annualTaxableSum.toFixed(2)}`;
+        
         // Define all expense fields with their corresponding frequency fields
         const expenseFields = [
             ['expenses_grocery', 'expenses_grocery_frequency'],
