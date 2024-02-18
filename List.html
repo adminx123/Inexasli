@@ -1085,7 +1085,8 @@ function calculateProvincialTax(province, annualTaxableSum) {
 // Define the getFederalTaxPayable function to calculate federal tax
 function getFederalTaxPayable(annualTaxableSum) {
     const federalTaxPayable = calculateTax(annualTaxableSum, federalTaxBrackets);
-    return federalTaxPayable;
+    document.getElementById('federal_tax_payable').textContent = '$' + federalTaxPayable.toFixed(2);
+
 
 }
 
@@ -1112,8 +1113,6 @@ function getProvincialTaxPayable(province, annualTaxableSum) {
     const provinceDropdown = document.getElementById('provinceDropdown');
 const province = provinceDropdown.value;
     const annualTaxableSum = parseFloat(document.getElementById('annualTaxableIncome').value);
-const federalTax = getFederalTaxPayable(annualTaxableSum); // Call the function with the annual taxable sum
-    document.getElementById('federal_tax_payable').textContent = '$' + federalTaxPayable.toFixed(2);
 
     }
 
