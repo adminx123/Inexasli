@@ -712,10 +712,24 @@
     <label for="liabilities_tax_arrears">Tax Arrears:</label>
     <input type="text" id="liabilities_tax_arrears">
 
-   <button onclick="calculateAll()">Calculate</button>
+  <div>
+<button onclick="calculateAll()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate</button>
+</div>
 
 <script>
    
+    var ANNUALTAXABLEINCOME;
+    var ANNUALFEDERALTAX;
+    var ANNUALPROVINCIALTAX;
+    var ANNUALTAX;
+    var ANNUALDISPOSABLEINCOME;
+    var ANNUALINCOME;
+    var ANNUALEXPENSE;
+    var ANNUALCPP;
+    var ANNUALEI; 
+    var ASSETS;
+    var LIABILITIES;
+    var NETWORTH;
     
     function calculateAnnual(inputId, frequencyId) {
         const input = parseFloat(document.getElementById(inputId).value) || 0;
@@ -734,6 +748,7 @@
                 return 0;
         }
     }
+
 
     function calculateNormalizedSum() {
         // Define all income fields with their corresponding frequency fields
@@ -769,7 +784,7 @@ let annualIncomeSum = 0;
             const [inputId, frequencyId] = field;
             annualIncomeSum += calculateAnnual(inputId, frequencyId);
         });
-
+ANNUALINCOME = annualIncomeSum
  // Display the results
         document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
 
@@ -810,6 +825,7 @@ let annualIncomeSum = 0;
             annualTaxableSum += taxableincome;
         });
 
+          ANNUALTAXABLEINCOME = annualTaxableSum;
              
         // Display the results
         document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
@@ -863,7 +879,7 @@ let annualExpenseSum = 0;
             const [inputId, frequencyId] = field;
             annualExpenseSum += calculateAnnual(inputId, frequencyId);
         });
-
+ANNUALEXPENSE = annualExpenseSum
  // Display the results
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
     }
@@ -926,10 +942,12 @@ if (LCR <= 0) {
     }
 }
 
+ANNUALCPP = cppPayableEmployed + cppPayableSelfEmployed
+
     // Display the results
-    document.getElementById('cpp_result').textContent = '$' + (cppPayableEmployed + cppPayableSelfEmployed).toFixed(2);
-document.getElementById('cpp_eresult').textContent = '$xxxx' + (cppPayableEmployed).toFixed(2);
-    document.getElementById('cpp_seresult').textContent = '$' + (cppPayableSelfEmployed).toFixed(2);
+    document.getElementById('ANNUALCPP').textContent = '$' + (ANNUALCPP).toFixed(2);
+document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmployed).toFixed(2);
+    document.getElementById('annual_cpp_seresult').textContent = '$' + (cppPayableSelfEmployed).toFixed(2);
 }
 
 
@@ -954,12 +972,14 @@ document.getElementById('cpp_eresult').textContent = '$xxxx' + (cppPayableEmploy
     var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualEmployedIncome * eiRateEmployed);
     var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, annualSelfEmployedIncome * eiRateSelfEmployed); // Fixed calculation for self-employed EI payable
 
+ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed
+
     // Display the results
-    document.getElementById('ei_result').textContent = '$' + (eiPayableEmployed + eiPayableSelfEmployed).toFixed(2);
+    document.getElementById('ANNUALEI').textContent = '$' + (ANNUALEI).toFixed(2);
 }
     
 // Define the tax brackets
-const federalTaxBrackets = [
+const FEDERALTAXBRACKETS = [
     { limit: 235675, rate: 0.33 },
     { limit: 165430, rate: 0.29 },
     { limit: 106717, rate: 0.26 },
@@ -968,7 +988,7 @@ const federalTaxBrackets = [
 ];
 
 // Define the provincial tax brackets
-const provincialTaxBrackets = {
+const PROVINCIALTAXBRACKETS = {
     'AB': [
         { limit: 341502, rate: 0.15 },
         { limit: 227668, rate: 0.14 },
@@ -1058,64 +1078,118 @@ const provincialTaxBrackets = {
 };
 
 // Define the calculateTax function to calculate both federal and provincial tax
-function calculateTax(annualTaxableSum, taxBrackets) {
+function calculateTax(taxBrackets) {
     let tax = 0;
-    let taxableIncome = annualTaxableSum;
+    let taxableIncome = ANNUALTAXABLEINCOME;
 
     for (const bracket of taxBrackets) {
         if (taxableIncome > bracket.limit) {
             tax += (taxableIncome - bracket.limit) * bracket.rate;
             taxableIncome = bracket.limit;
-        }
+           }
     }
-
     return tax;
 }
 
+
     // Define the calculateFederalTax function
-function calculateFederalTax(annualTaxableSum) {
-    return calculateTax(annualTaxableSum, federalTaxBrackets);
+function calculateFederalTax() {
+ANNUALFEDERALTAX = calculateTax(FEDERALTAXBRACKETS);
+document.getElementById('ANNUALFEDERALTAX').textContent = '$' + (ANNUALFEDERALTAX).toFixed(2);
 }
 
-// Define the getFederalTaxPayable function to calculate federal tax
-function getFederalTaxPayable(annualTaxableSum) {
-    const federalTaxPayable = calculateTax(annualTaxableSum, federalTaxBrackets);
-    document.getElementById('federal_tax_payable').textContent = '$' + federalTaxPayable.toFixed(2);
 
-}
-  
 // Define the calculateProvincialTax function
-function calculateProvincialTax(province, annualTaxableSum) {
-    return calculateTax(annualTaxableSum, provincialTaxBrackets[province]);
+function calculateProvincialTax(province, PROVINCIALTAXBRACKETS) {
+ANNUALPROVINCIALTAX = calculateTax(PROVINCIALTAXBRACKETS[province]);
+document.getElementById('ANNUALPROVINCIALTAX').textContent = '$' + (ANNUALPROVINCIALTAX).toFixed(2);
+}
+
+function calculateAssets() {
+    const assetFields = [
+        'assets_checking_accounts', 
+        'assets_savings_accounts', 
+        'assets_other_liquid_accounts', 
+        'assets_long_term_investment_accounts', 
+        'assets_primary_residence', 
+        'assets_investment_properties', 
+        'assets_small_business', 
+        'assets_vehicles', 
+        'assets_art_jewelry'
+    ];
+
+    let assets = 0;
+
+    for (let i = 0; i < assetFields.length; i++) {
+        const fieldValue = document.getElementById(assetFields[i]).value;
+        console.log(`Field value for ${assetFields[i]}: ${fieldValue}`);
+        const parsedValue = parseFloat(fieldValue);
+        if (!isNaN(parsedValue)) {
+            assets += parsedValue;
+        } else {
+            console.error(`Invalid value for ${assetFields[i]}: ${fieldValue}`);
+        }
+    }
+
+    ASSETS = assets;
+    document.getElementById('ASSETS').textContent = '$' + ASSETS.toFixed(2);
+}
+
+function calculateLiabilities() {
+    const liabilitiesFields = [
+    'liabilities_small_business_loan',
+    'liabilities_primary_residence',
+    'liabilities_investment_properties',
+    'liabilities_vehicle_loan',
+    'liabilities_student_loan',
+    'liabilities_line_of_credit',
+    'liabilities_credit_card',
+    'liabilities_tax_arrears'
+    ];
+
+    let liabilities = 0;
+
+    for (let i = 0; i < liabilitiesFields.length; i++) {
+        const fieldValue = document.getElementById(liabilitiesFields[i]).value;
+        console.log(`Field value for ${liabilitiesFields[i]}: ${fieldValue}`);
+        const parsedValue = parseFloat(fieldValue);
+        if (!isNaN(parsedValue)) {
+            liabilities += parsedValue;
+        } else {
+            console.error(`Invalid value for ${liabilities[i]}: ${fieldValue}`);
+        }
+    }
+
+    LIABILITIES = liabilities;
+    document.getElementById('LIABILITIES').textContent = '$' + LIABILITIES.toFixed(2);
 }
 
 
-// Define the getProvincialTaxPayable function to calculate provincial tax
-function getProvincialTaxPayable(province, annualTaxableSum) {
-
-
-    const provincialTaxPayable = calculateProvincialTax(province, annualTaxableSum);
-   
-    //return provincialTaxPayable;
-    document.getElementById('provincial_tax_payable').textContent = '$' + provincialTaxPayable.toFixed(2);
-    }
-    
-// Example usage:
-
-
-
-    
    //Step 2 run the calculations
     function calculateAll() {
+        
     calculateNormalizedSum();
+    
     getCppPayable();
+    
     getEIPayable();
-    calculateTax();
-    getFederalTaxpayable();
-    getProvincialTaxPayable();
+    
+    calculateFederalTax();
     const provinceDropdown = document.getElementById('provinceDropdown');
-const province = provinceDropdown.value;
-    const annualTaxableSum = parseFloat(document.getElementById('annualTaxableIncome').value);
+    const province = provinceDropdown.value;
+    calculateProvincialTax(province, PROVINCIALTAXBRACKETS);
+    ANNUALTAX = ANNUALFEDERALTAX + ANNUALPROVINCIALTAX;
+    document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
+    
+    ANNUALDISPOSABLEINCOME = ANNUALINCOME - ANNUALEXPENSE - ANNUALEI - ANNUALCPP - ANNUALTAX;
+    document.getElementById('ANNUALDISPOSABLEINCOME').textContent = '$' + ANNUALDISPOSABLEINCOME.toFixed(2);
+    
+    calculateAssets();
+    
+    calculateLiabilities();
+    
+    NETWORTH = ASSETS - LIABILITIES;
+    document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
 
     }
 
@@ -1127,14 +1201,17 @@ const province = provinceDropdown.value;
     <p>Annual Income Sum: <span id="annual_income_sum"></span></p>
     <p>Annual Expense Sum: <span id="annual_expense_sum"></span></p>
 <p>Annual Taxable Income: <span id="taxable_sum"></span></p>
-<p>Annual CPP Payable: <span id="cpp_result"></span></p>
-    <p>Employed CPP Payable: <span id="cpp_eresult"></span></p>
-    <p>Self employed CPP Payable: <span id="cpp_seresult"></span></p>
-<p>Annual Employment Insurance Payable: <span id="ei_result"></span></p>
-    <p>Federal Tax Payable: <span id="federal_tax_payable"></span></p>
-    <p>Provincial Tax Payable:<span id="provincial_tax_payable"></span></p>
-    <p>Total Tax Payable:<span id="totalTax"></span></p>
-    <p>Disposable Income:<span id="disposableIncome"</span></p>
+<p>Annual CPP Payable: <span id="ANNUALCPP"></span></p>
+    <p>Employed CPP Payable: <span id="annual_cpp_eresult"></span></p>
+    <p>Self employed CPP Payable: <span id="annual_cpp_seresult"></span></p>
+<p>Annual Employment Insurance Payable: <span id="ANNUALEI"></span></p>
+    <p>Federal Tax Payable: <span id="ANNUALFEDERALTAX"></span></p>
+    <p>Provincial Tax Payable:<span id="ANNUALPROVINCIALTAX"></span></p>
+    <p>Total Tax Payable:<span id="ANNUALTAX"></span></p>
+    <p>Disposable Income:<span id="ANNUALDISPOSABLEINCOME"></span></p>
+    <p>Assets:<span id="ASSETS"></span></p>
+    <p>Liabilities:<span id="LIABILITIES"></span></p>
+    <p>Net Worth: <span id="NETWORTH"></span></p>
 
 
 </div>
