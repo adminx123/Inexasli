@@ -1091,8 +1091,10 @@ function getFederalTaxPayable(annualTaxableSum) {
 }
 
 // Define the getProvincialTaxPayable function to calculate provincial tax
-function getProvincialTaxPayable(province, annualTaxableSum) {
-    const provincialTaxPayable = calculateProvincialTax(province, annualTaxableSum);
+//function getProvincialTaxPayable(province, annualTaxableSum) {
+    function getProvincialTaxPayable( annualTaxableSum) {
+
+    //const provincialTaxPayable = calculateProvincialTax(province, annualTaxableSum);
    
     //return provincialTaxPayable;
     document.getElementById('provincial_tax_payable').textContent = '$' + provincialTaxPayable.toFixed(2);
