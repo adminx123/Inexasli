@@ -1076,25 +1076,25 @@ function calculateTax(annualTaxableSum, taxBrackets) {
 function calculateFederalTax(province, annualTaxableSum) {
     return calculateTax(annualTaxableSum, federalTaxBrackets[province]);
 }
-    
-// Define the calculateProvincialTax function
-function calculateProvincialTax(province, annualTaxableSum) {
-    return calculateTax(annualTaxableSum, provincialTaxBrackets[province]);
-}
 
 // Define the getFederalTaxPayable function to calculate federal tax
 function getFederalTaxPayable(annualTaxableSum) {
     const federalTaxPayable = calculateTax(annualTaxableSum, federalTaxBrackets);
     document.getElementById('federal_tax_payable').textContent = '$' + federalTaxPayable.toFixed(2);
 
-
+}
+  
+// Define the calculateProvincialTax function
+function calculateProvincialTax(province, annualTaxableSum) {
+    return calculateTax(annualTaxableSum, provincialTaxBrackets[province]);
 }
 
-// Define the getProvincialTaxPayable function to calculate provincial tax
-//function getProvincialTaxPayable(province, annualTaxableSum) {
-    function getProvincialTaxPayable( annualTaxableSum) {
 
-    //const provincialTaxPayable = calculateProvincialTax(province, annualTaxableSum);
+// Define the getProvincialTaxPayable function to calculate provincial tax
+function getProvincialTaxPayable(province, annualTaxableSum) {
+
+
+    const provincialTaxPayable = calculateProvincialTax(province, annualTaxableSum);
    
     //return provincialTaxPayable;
     document.getElementById('provincial_tax_payable').textContent = '$' + provincialTaxPayable.toFixed(2);
