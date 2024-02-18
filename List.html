@@ -1107,6 +1107,8 @@ function getProvincialTaxPayable(province, annualTaxableSum) {
     calculateNormalizedSum();
     getCppPayable();
     getEIPayable();
+    getFederalTaxpayable();
+    getProvincialTaxPayable();
     const provinceDropdown = document.getElementById('provinceDropdown');
 const province = provinceDropdown.value;
     const annualTaxableSum = parseFloat(document.getElementById('annualTaxableIncome').value);
