@@ -1073,8 +1073,8 @@ function calculateTax(annualTaxableSum, taxBrackets) {
 }
 
     // Define the calculateFederalTax function
-function calculateFederalTax(province, annualTaxableSum) {
-    return calculateTax(annualTaxableSum, federalTaxBrackets[province]);
+function calculateFederalTax(annualTaxableSum) {
+    return calculateTax(annualTaxableSum, federalTaxBrackets);
 }
 
 // Define the getFederalTaxPayable function to calculate federal tax
