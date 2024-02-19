@@ -41,22 +41,89 @@
 <body>
     <h1 style="text-align: center;">The Four Pillars of Finance WARNING: WILL CONTAIN ERRORS NOT TO BE USED AS FINANCIAL ADVICE. CONSULT WITH A LICENSED PROFESSIONAL. WEBSITE IS NOT FUNCTIONAL YOU ASSUME ALL RISK WHEN USING</h1>
     <h1 style="text-align: center;">Income - Expenses - Assets - Liabilities</h1>
-    <select id="provinceDropdown">
-        <option value="AB">Alberta</option>
-        <option value="BC">British Columbia</option>
-        <option value="MB">Manitoba</option>
-        <option value="NB">New Brunswick</option>
-        <option value="NL">Newfoundland and Labrador</option>
-        <option value="NS">Nova Scotia</option>
-        <option value="NT">Northwest Territories</option>
-        <option value="NU">Nunavut</option>
-        <option value="ON">Ontario</option>
-        <option value="PE">Prince Edward Island</option>
-        <option value="QC">Quebec</option>
-        <option value="SK">Saskatchewan</option>
-        <option value="YT">Yukon</option>
+    
+    <select id="RegionDropdown">
+        <option value="CAN">Canada</option>
+        <option value="USA">USA</option>
     </select>
+    
+    <select id="SubregionDropdown">
+    <option value="AB" class="CAN">Alberta</option>
+    <option value="BC" class="CAN">British Columbia</option>
+    <option value="MB" class="CAN">Manitoba</option>
+    <option value="NB" class="CAN">New Brunswick</option>
+    <option value="NL" class="CAN">Newfoundland and Labrador</option>
+    <option value="NS" class="CAN">Nova Scotia</option>
+    <option value="NT" class="CAN">Northwest Territories</option>
+    <option value="NU" class="CAN">Nunavut</option>
+    <option value="ON" class="CAN">Ontario</option>
+    <option value="PE" class="CAN">Prince Edward Island</option>
+    <option value="QC" class="CAN">Quebec</option>
+    <option value="SK" class="CAN">Saskatchewan</option>
+    <option value="YT" class="CAN">Yukon</option>
+    <option value="AL" class="USA">Alabama</option>
+    <option value="AK" class="USA">Alaska</option>
+    <option value="AZ" class="USA">Arizona</option>
+    <option value="AR" class="USA">Arkansas</option>
+    <option value="CA" class="USA">California</option>
+    <option value="CO" class="USA">Colorado</option>
+    <option value="CT" class="USA">Connecticut</option>
+    <option value="DE" class="USA">Delaware</option>
+    <option value="FL" class="USA">Florida</option>
+    <option value="GA" class="USA">Georgia</option>
+    <option value="HI" class="USA">Hawaii</option>
+    <option value="ID" class="USA">Idaho</option>
+    <option value="IL" class="USA">Illinois</option>
+    <option value="IN" class="USA">Indiana</option>
+    <option value="IA" class="USA">Iowa</option>
+    <option value="KS" class="USA">Kansas</option>
+    <option value="KY" class="USA">Kentucky</option>
+    <option value="LA" class="USA">Louisiana</option>
+    <option value="ME" class="USA">Maine</option>
+    <option value="MD" class="USA">Maryland</option>
+    <option value="MA" class="USA">Massachusetts</option>
+    <option value="MI" class="USA">Michigan</option>
+    <option value="MN" class="USA">Minnesota</option>
+    <option value="MS" class="USA">Mississippi</option>
+    <option value="MO" class="USA">Missouri</option>
+    <option value="MT" class="USA">Montana</option>
+    <option value="NE" class="USA">Nebraska</option>
+    <option value="NV" class="USA">Nevada</option>
+    <option value="NH" class="USA">New Hampshire</option>
+    <option value="NJ" class="USA">New Jersey</option>
+    <option value="NM" class="USA">New Mexico</option>
+    <option value="NY" class="USA">New York</option>
+    <option value="NC" class="USA">North Carolina</option>
+    <option value="ND" class="USA">North Dakota</option>
+    <option value="OH" class="USA">Ohio</option>
+    <option value="OK" class="USA">Oklahoma</option>
+    <option value="OR" class="USA">Oregon</option>
+    <option value="PA" class="USA">Pennsylvania</option>
+    <option value="RI" class="USA">Rhode Island</option>
+    <option value="SC" class="USA">South Carolina</option>
+    <option value="SD" class="USA">South Dakota</option>
+    <option value="TN" class="USA">Tennessee</option>
+    <option value="TX" class="USA">Texas</option>
+    <option value="UT" class="USA">Utah</option>
+    <option value="VT" class="USA">Vermont</option>
+    <option value="VA" class="USA">Virginia</option>
+    <option value="WA" class="USA">Washington</option>
+    <option value="WV" class="USA">West Virginia</option>
+    <option value="WI" class="USA">Wisconsin</option>
+    <option value="WY" class="USA">Wyoming</option>
+</select>
 
+<script>document.getElementById("RegionDropdown").addEventListener("change", function() {
+    var Region = this.value;
+    var options = document.getElementById("SubregionDropdown").getElementsByTagName("option");
+    for (var i = 0; i < options.length; i++) {
+        if (options[i].classList.contains(Region)) {
+            options[i].style.display = "block";
+        } else {
+            options[i].style.display = "none";
+        }
+    }
+});</script>
 
 <h2>INCOME, PRE TAX & CONTRIBUTION</h2>
 
@@ -730,6 +797,8 @@
     var ASSETS;
     var LIABILITIES;
     var NETWORTH;
+    var DEBTTOINCOME;
+    var SAVINGSTODEBT;
     
     function calculateAnnual(inputId, frequencyId) {
         const input = parseFloat(document.getElementById(inputId).value) || 0;
@@ -1077,6 +1146,292 @@ const PROVINCIALTAXBRACKETS = {
     ]
 };
 
+const FEDERALTAXBRACKETSUSA =
+
+     [
+        { limit: 609350, rate: 0.37 },
+        { limit: 243725, rate: 0.35 },
+        { limit: 191950, rate: 0.32 },
+        { limit: 100525, rate: 0.24 },
+        { limit: 47150, rate: 0.22 },
+        { limit: 11600, rate: 0.12 },
+        { limit: 0, rate: 0.10 }
+    ];
+
+
+
+const STATETAXBRACKETS = {
+    "AL": [
+        { "limit": 3000, "rate": 0.05 },
+        { "limit": 500, "rate": 0.04 },
+        { "limit": 0, "rate": 0.02 }
+    ],
+    "AK": [],
+    "AZ": [
+        { "limit": 0, "rate": 0.025 }
+    ],
+    "AR": [
+        { "limit": 8500, "rate": 0.049 },
+        { "limit": 4300, "rate": 0.04 },
+        { "limit": 0, "rate": 0.02 }
+    ],
+    "CA": [
+        { "limit": 1000000, "rate": 0.133 },
+        { "limit": 677275, "rate": 0.123 },
+        { "limit": 406364, "rate": 0.113 },
+        { "limit": 338639, "rate": 0.103 },
+        { "limit": 66295, "rate": 0.093 },
+        { "limit": 52455, "rate": 0.08 },
+        { "limit": 37788, "rate": 0.06 },
+        { "limit": 23942, "rate": 0.04 },
+        { "limit": 10099, "rate": 0.02 },
+        { "limit": 0, "rate": 0.01 }
+    ],
+    "CO": [
+        { "limit": 0, "rate": 0.044 }
+    ],
+    "CT": [
+        { "limit": 500000, "rate": 0.0699 },
+        { "limit": 250000, "rate": 0.069 },
+        { "limit": 200000, "rate": 0.065 },
+        { "limit": 100000, "rate": 0.06 },
+        { "limit": 50000, "rate": 0.055 },
+        { "limit": 10000, "rate": 0.05 },
+        { "limit": 0, "rate": 0.03 }
+    ],
+    "DC": [
+        { "limit": 1000000, "rate": 0.1075 },
+        { "limit": 500000, "rate": 0.0975 },
+        { "limit": 250000, "rate": 0.0925 },
+        { "limit": 60000, "rate": 0.085 },
+        { "limit": 40000, "rate": 0.065 },
+        { "limit": 10000, "rate": 0.06 },
+        { "limit": 0, "rate": 0.04 }
+    ],
+    "DE": [
+        { "limit": 60000, "rate": 0.066 },
+        { "limit": 25000, "rate": 0.0555 },
+        { "limit": 20000, "rate": 0.052 },
+        { "limit": 10000, "rate": 0.048 },
+        { "limit": 5000, "rate": 0.039 },
+        { "limit": 2000, "rate": 0.022 }
+    ],
+    "FL": [],
+    "GA": [
+        { "limit": 7000, "rate": 0.0575 },
+        { "limit": 5250, "rate": 0.05 },
+        { "limit": 3750, "rate": 0.04 },
+        { "limit": 2250, "rate": 0.03 },
+        { "limit": 750, "rate": 0.02 },
+        { "limit": 0, "rate": 0.01 }
+    ],
+    "HI": [
+        { "limit": 200000, "rate": 0.11 },
+        { "limit": 175000, "rate": 0.1 },
+        { "limit": 150000, "rate": 0.09 },
+        { "limit": 48000, "rate": 0.0825 },
+        { "limit": 36000, "rate": 0.079 },
+        { "limit": 24000, "rate": 0.076 },
+        { "limit": 19200, "rate": 0.072 },
+        { "limit": 14400, "rate": 0.068 },
+        { "limit": 9600, "rate": 0.064 },
+        { "limit": 4800, "rate": 0.055 },
+        { "limit": 2400, "rate": 0.032 },
+        { "limit": 0, "rate": 0.014 }
+    ],
+    "ID": [
+        { "limit": 0, "rate": 0.058 }
+    ],
+    "IL": [
+        { "limit": 0, "rate": 0.0495 }
+    ],
+    "IN": [
+        { "limit": 0, "rate": 0.0315 }
+    ],
+    "IA": [
+        { "limit": 75000, "rate": 0.06 },
+        { "limit": 30000, "rate": 0.057 },
+        { "limit": 6000, "rate": 0.0482 },
+        { "limit": 0, "rate": 0.044 }
+    ],
+    "KS": [
+        { "limit": 30000, "rate": 0.057 },
+        { "limit": 15000, "rate": 0.0525 },
+        { "limit": 0, "rate": 0.031 }
+    ],
+    "KY": [
+        { "limit": 0, "rate": 0.045 }
+    ],
+    "LA": [
+        { "limit": 50000, "rate": 0.0425 },
+        { "limit": 12500, "rate": 0.035 },
+        { "limit": 0, "rate": 0.0185 }
+    ],
+    "ME": [
+        { "limit": 58050, "rate": 0.0715 },
+        { "limit": 24500, "rate": 0.0675 },
+        { "limit": 0, "rate": 0.058 }
+    ],
+    "MD": [
+        { "limit": 250000, "rate": 0.0575 },
+        { "limit": 150000, "rate": 0.055 },
+        { "limit": 125000, "rate": 0.0525 },
+        { "limit": 100000, "rate": 0.05 },
+        { "limit": 3000, "rate": 0.0475 },
+        { "limit": 2000, "rate": 0.04 },
+        { "limit": 1000, "rate": 0.03 },
+        { "limit": 0, "rate": 0.02 }
+    ],
+    "MA": [
+        { "limit": 1000000, "rate": 0.09 },
+        { "limit": 0, "rate": 0.05 }
+    ],
+    "MI": [
+        { "limit": 0, "rate": 0.0425 }
+    ],
+    "MN": [
+        { "limit": 183340, "rate": 0.0985 },
+        { "limit": 98760, "rate": 0.0785 },
+        { "limit": 30070, "rate": 0.068 },
+        { "limit": 0, "rate": 0.0535 }
+    ],
+    "MS": [
+        { "limit": 10000, "rate": 0.05 }
+    ],
+    "MO": [
+        { "limit": 7847, "rate": 0.0495 },
+        { "limit": 6726, "rate": 0.045 },
+        { "limit": 5605, "rate": 0.04 },
+        { "limit": 4484, "rate": 0.035 },
+        { "limit": 3363, "rate": 0.03 },
+        { "limit": 2242, "rate": 0.025 },
+        { "limit": 1121, "rate": 0.02 }
+    ],
+    "MT": [
+        { "limit": 21600, "rate": 0.0675 },
+        { "limit": 16800, "rate": 0.06 },
+        { "limit": 13000, "rate": 0.05 },
+        { "limit": 9700, "rate": 0.04 },
+        { "limit": 6300, "rate": 0.03 },
+        { "limit": 3600, "rate": 0.02 },
+        { "limit": 0, "rate": 0.01 }
+    ],
+    "NC": [
+        { "limit": 0, "rate": 0.0475 }
+    ],
+    "ND": [
+        { "limit": 458350, "rate": 0.029 },
+        { "limit": 210825, "rate": 0.0264 },
+        { "limit": 101050, "rate": 0.0227 },
+        { "limit": 41775, "rate": 0.0204 },
+        { "limit": 0, "rate": 0.011 }
+    ],
+    "NH": [],
+    "NJ": [
+        { "limit": 1000000, "rate": 0.1075 },
+        { "limit": 500000, "rate": 0.0897 },
+        { "limit": 75000, "rate": 0.0637 },
+        { "limit": 40000, "rate": 0.05525 },
+        { "limit": 35000, "rate": 0.035 },
+        { "limit": 20000, "rate": 0.0175 },
+        { "limit": 0, "rate": 0.014 }
+    ],
+    "NM": [
+        { "limit": 210000, "rate": 0.059 },
+        { "limit": 16000, "rate": 0.049 },
+        { "limit": 11000, "rate": 0.047 },
+        { "limit": 5500, "rate": 0.032 },
+        { "limit": 0, "rate": 0.017 }
+    ],
+    "NY": [
+        { "limit": 25000000, "rate": 0.109 },
+        { "limit": 5000000, "rate": 0.103 },
+        { "limit": 1077550, "rate": 0.0965 },
+        { "limit": 215400, "rate": 0.0685 },
+        { "limit": 80650, "rate": 0.06 },
+        { "limit": 13900, "rate": 0.055 },
+        { "limit": 11700, "rate": 0.0525 },
+        { "limit": 8500, "rate": 0.045 },
+        { "limit": 0, "rate": 0.04 }
+    ],
+    "NE": [
+        { "limit": 35730, "rate": 0.0664 },
+        { "limit": 22170, "rate": 0.0501 },
+        { "limit": 3700, "rate": 0.0351 },
+        { "limit": 0, "rate": 0.0246 }
+    ],
+    "NV": [],
+    "OH": [
+        { "limit": 115300, "rate": 0.0399 },
+        { "limit": 92150, "rate": 0.03688 },
+        { "limit": 46100, "rate": 0.03226 },
+        { "limit": 26050, "rate": 0.02765 }
+    ],
+    "OK": [
+        { "limit": 7200, "rate": 0.0475 },
+        { "limit": 4900, "rate": 0.0375 },
+        { "limit": 3750, "rate": 0.0275 },
+        { "limit": 2500, "rate": 0.0175 },
+        { "limit": 1000, "rate": 0.0075 },
+        { "limit": 0, "rate": 0.0025 }
+    ],
+    "OR": [
+        { "limit": 125000, "rate": 0.099 },
+        { "limit": 10200, "rate": 0.0875 },
+        { "limit": 4050, "rate": 0.0675 },
+        { "limit": 0, "rate": 0.0475 }
+    ],
+    "PA": [
+        { "limit": 0, "rate": 0.0307 }
+    ],
+    "RI": [
+        { "limit": 155050, "rate": 0.0599 },
+        { "limit": 68200, "rate": 0.0475 },
+        { "limit": 0, "rate": 0.0375 }
+    ],
+    "SC": [
+        { "limit": 16040, "rate": 0.065 },
+        { "limit": 3200, "rate": 0.03 },
+        { "limit": 0, "rate": 0.00 }
+    ],
+    "SD": [],
+    "TN": [],
+    "TX": [],
+    "UT": [
+        { "limit": 0, "rate": 0.0485 }
+    ],
+    "VA": [
+        { "limit": 17000, "rate": 0.0575 },
+        { "limit": 5000, "rate": 0.05 },
+        { "limit": 3000, "rate": 0.03 },
+        { "limit": 0, "rate": 0.02 }
+    ],
+    
+    "VT": [
+        { "limit": 213150, "rate": 0.0875 },
+        { "limit": 102200, "rate": 0.076 },
+        { "limit": 42150, "rate": 0.066 },
+        { "limit": 0, "rate": 0.0335 }
+    ],
+    "WV": [
+        { "limit": 60000, "rate": 0.065 },
+        { "limit": 40000, "rate": 0.06 },
+        { "limit": 25000, "rate": 0.045 },
+        { "limit": 10000, "rate": 0.04 },
+        { "limit": 0, "rate": 0.03 }
+    ],
+    "WA": [],
+    "WI": [
+        { "limit": 304170, "rate": 0.0765 },
+        { "limit": 27630, "rate": 0.053 },
+        { "limit": 13810, "rate": 0.0465 },
+        { "limit": 0, "rate": 0.0354 }
+    ],
+    "WY": []
+}
+
+
+
 // Define the calculateTax function to calculate both federal and provincial tax
 function calculateTax(taxBrackets) {
     let tax = 0;
@@ -1165,7 +1520,30 @@ function calculateLiabilities() {
 }
 
 
-   //Step 2 run the calculations
+////////
+
+function savingstodebt() {
+    const liquidAssetsFields = [
+        'assets_checking_accounts',
+        'assets_savings_accounts',
+        'assets_other_liquid_accounts'
+    ];
+    let liquidAssets; // Remove the initialization here
+    
+    // Calculate the sum of liquid assets
+    for (const field of liquidAssetsFields) {
+        liquidAssets += parseFloat(document.getElementById(field).value) || 0;
+    }
+
+    SAVINGSTODEBT = liquidAssets / LIABILITIES
+
+    
+    document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
+}
+
+
+
+   
     function calculateAll() {
         
     calculateNormalizedSum();
@@ -1175,8 +1553,8 @@ function calculateLiabilities() {
     getEIPayable();
     
     calculateFederalTax();
-    const provinceDropdown = document.getElementById('provinceDropdown');
-    const province = provinceDropdown.value;
+    const SubregionDropdown = document.getElementById('SubregionDropdown');
+    const province = SubregionDropdown.value;
     calculateProvincialTax(province, PROVINCIALTAXBRACKETS);
     ANNUALTAX = ANNUALFEDERALTAX + ANNUALPROVINCIALTAX;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
@@ -1190,11 +1568,17 @@ function calculateLiabilities() {
     
     NETWORTH = ASSETS - LIABILITIES;
     document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
+    
+    DEBTTOINCOME = LIABILITIES / ANNUALINCOME;
+        document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
+    
+    savingstodebt();
 
     }
 
-</script>
 
+
+</script>
 
 
 <div>
@@ -1212,7 +1596,8 @@ function calculateLiabilities() {
     <p>Assets:<span id="ASSETS"></span></p>
     <p>Liabilities:<span id="LIABILITIES"></span></p>
     <p>Net Worth: <span id="NETWORTH"></span></p>
-
+    <p>Debt to Income: <span id="DEBTTOINCOME"></span></p>
+<p>Savings to Debt: <span id="SAVINGSTODEBT"></span></p>
 
 </div>
 </body>
