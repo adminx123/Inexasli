@@ -13,9 +13,10 @@
             margin: 20px;
         }
 
-        input {
+        input [type=number] {
             width: 200px;
             margin-bottom: 10px;
+        
         }
 
         label {
@@ -44,87 +45,89 @@
     <h1 style="text-align: center;">Income - Expenses - Assets - Liabilities</h1>
     
     <select id="RegionDropdown">
+        <option vlaue="">Select Region</option> 
         <option value="CAN">Canada</option>
         <option value="USA">USA</option>
     </select>
     
     <select id="SubregionDropdown">
-    <option value="AB" class="CAN">Alberta</option>
-    <option value="BC" class="CAN">British Columbia</option>
-    <option value="MB" class="CAN">Manitoba</option>
-    <option value="NB" class="CAN">New Brunswick</option>
-    <option value="NL" class="CAN">Newfoundland and Labrador</option>
-    <option value="NS" class="CAN">Nova Scotia</option>
-    <option value="NT" class="CAN">Northwest Territories</option>
-    <option value="NU" class="CAN">Nunavut</option>
-    <option value="ON" class="CAN">Ontario</option>
-    <option value="PE" class="CAN">Prince Edward Island</option>
-    <option value="QC" class="CAN">Quebec</option>
-    <option value="SK" class="CAN">Saskatchewan</option>
-    <option value="YT" class="CAN">Yukon</option>
-    <option value="AL" class="USA">Alabama</option>
-    <option value="AK" class="USA">Alaska</option>
-    <option value="AZ" class="USA">Arizona</option>
-    <option value="AR" class="USA">Arkansas</option>
-    <option value="CA" class="USA">California</option>
-    <option value="CO" class="USA">Colorado</option>
-    <option value="CT" class="USA">Connecticut</option>
-    <option value="DE" class="USA">Delaware</option>
-    <option value="FL" class="USA">Florida</option>
-    <option value="GA" class="USA">Georgia</option>
-    <option value="HI" class="USA">Hawaii</option>
-    <option value="ID" class="USA">Idaho</option>
-    <option value="IL" class="USA">Illinois</option>
-    <option value="IN" class="USA">Indiana</option>
-    <option value="IA" class="USA">Iowa</option>
-    <option value="KS" class="USA">Kansas</option>
-    <option value="KY" class="USA">Kentucky</option>
-    <option value="LA" class="USA">Louisiana</option>
-    <option value="ME" class="USA">Maine</option>
-    <option value="MD" class="USA">Maryland</option>
-    <option value="MA" class="USA">Massachusetts</option>
-    <option value="MI" class="USA">Michigan</option>
-    <option value="MN" class="USA">Minnesota</option>
-    <option value="MS" class="USA">Mississippi</option>
-    <option value="MO" class="USA">Missouri</option>
-    <option value="MT" class="USA">Montana</option>
-    <option value="NE" class="USA">Nebraska</option>
-    <option value="NV" class="USA">Nevada</option>
-    <option value="NH" class="USA">New Hampshire</option>
-    <option value="NJ" class="USA">New Jersey</option>
-    <option value="NM" class="USA">New Mexico</option>
-    <option value="NY" class="USA">New York</option>
-    <option value="NC" class="USA">North Carolina</option>
-    <option value="ND" class="USA">North Dakota</option>
-    <option value="OH" class="USA">Ohio</option>
-    <option value="OK" class="USA">Oklahoma</option>
-    <option value="OR" class="USA">Oregon</option>
-    <option value="PA" class="USA">Pennsylvania</option>
-    <option value="RI" class="USA">Rhode Island</option>
-    <option value="SC" class="USA">South Carolina</option>
-    <option value="SD" class="USA">South Dakota</option>
-    <option value="TN" class="USA">Tennessee</option>
-    <option value="TX" class="USA">Texas</option>
-    <option value="UT" class="USA">Utah</option>
-    <option value="VT" class="USA">Vermont</option>
-    <option value="VA" class="USA">Virginia</option>
-    <option value="WA" class="USA">Washington</option>
-    <option value="WV" class="USA">West Virginia</option>
-    <option value="WI" class="USA">Wisconsin</option>
-    <option value="WY" class="USA">Wyoming</option>
-</select>
+        <option vlaue="">Select Subregion</option> </select>
+        
+        <script>
+const regionDropdown = document.getElementById("RegionDropdown");
+const subregionDropdown = document.getElementById("SubregionDropdown");
 
-<script>document.getElementById("RegionDropdown").addEventListener("change", function() {
-    var Region = this.value;
-    var options = document.getElementById("SubregionDropdown").getElementsByTagName("option");
-    for (var i = 0; i < options.length; i++) {
-        if (options[i].classList.contains(Region)) {
-            options[i].style.display = "block";
-        } else {
-            options[i].style.display = "none";
-        }
-    }
-});</script>
+const subregionMap = {
+  CAN: ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
+  USA: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+};
+
+function updateSubregionDropdown() {
+  const selectedRegion = regionDropdown.value;
+
+  subregionDropdown.innerHTML = ""; // Clear existing options
+
+  if (selectedRegion in subregionMap) {
+    subregionMap[selectedRegion].forEach(subregionCode => {
+      const subregionOption = document.createElement("option");
+      subregionOption.text = subregionCode;
+      subregionOption.value = subregionCode;
+      subregionDropdown.appendChild(subregionOption);
+    });
+  }
+}
+
+regionDropdown.addEventListener("change", updateSubregionDropdown);
+</script>
+    
+
+<script>
+
+
+
+function updateSubregionDropdown() {
+  const regionDropdown = document.getElementById("RegionDropdown");
+  const subregionDropdown = document.getElementById("SubregionDropdown");
+
+  // Get the selected region value
+  const selectedRegion = regionDropdown.value;
+
+  // Create a mapping of regions to subregions
+  const subregionMap = {
+    CAN: ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
+USA: USA: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY",
+    "AS", // American Samoa
+    "DC", // District of Columbia
+    "GU", // Guam
+    "MP", // Northern Mariana Islands
+    "PR"  // Puerto Rico
+  ],
+  };
+
+  // Clear the subregion dropdown
+  subregionDropdown.innerHTML = "";
+
+  // Add a default "Select Subregion" option
+  const defaultOption = document.createElement("option");
+  defaultOption.text = "Select Subregion";
+  defaultOption.value = "";
+  subregionDropdown.appendChild(defaultOption);
+
+  // Add subregion options based on the selected region
+  if (selectedRegion in subregionMap) {
+    subregionMap[selectedRegion].forEach(subregionCode => {
+      const subregionOption = document.createElement("option");
+      subregionOption.text = subregionCode;
+      subregionOption.value = subregionCode;
+      subregionDropdown.appendChild(subregionOption);
+    });
+  }
+}
+
+// Add an event listener to update the subregion dropdown when the region is selected
+regionDropdown.addEventListener("change", updateSubregionDropdown);
+
+</script>
 
 <h2>INCOME, PRE TAX & CONTRIBUTION</h2>
 
@@ -1635,6 +1638,8 @@ FIRE = income / ANNUALEXPENSE
     housingtoincome();
     
     fire();
+    
+    
     }
 
 
