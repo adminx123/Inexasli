@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Input Page</title>
     <style>
-    body {
+ body {
     background-color: #000;
     color: #fff;
     text-align: left;
@@ -15,6 +15,7 @@
 
 .input-row {
     display: flex;
+    flex-wrap: wrap;
     margin-bottom: 10px;
 }
 
@@ -22,8 +23,7 @@ label,
 input[type=number],
 select {
     flex: 1; /* Equal width for all elements */
-    margin-right: 10px;
-    max-width: 33.33%; /* Each element takes up 33.33% of the row space */
+    margin-right: 0px;
 }
 
 button {
@@ -61,8 +61,8 @@ button {
     label,
     input[type=number],
     select {
-        width: 100%; /* Set width to 100% for smaller screens */
-        margin-right: 0; /* Remove margin between elements */
+        width: 33.33%; /* Set width to 100% for smaller screens */
+        margin-right: 10px; /* Remove margin between elements */
     }
 }
 
@@ -71,7 +71,7 @@ button {
 
 <body>
     <div class="tab-container">
-    <div class="tab" onclick="scrollToSection('income')">$$Income</div>
+    <div class="tab" onclick="scrollToSection('income')">Income</div>
     <div class="tab" onclick="scrollToSection('misc')">Miscellaneous</div>
     <div class="tab" onclick="scrollToSection('housing')"> Housing</div>
     <div class="tab" onclick="scrollToSection('transportation')">Transportation</div>
