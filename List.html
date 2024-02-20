@@ -6,40 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Input Page</title>
     <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            text-align: left;
-            margin: 20px;
-        }
+    body {
+    background-color: #000;
+    color: #fff;
+    text-align: left;
+    margin: 20px;
+}
 
-        input [type=number] {
-            width: 200px;
-            margin-bottom: 10px;
-        
-        }
+.input-row {
+    display: flex;
+    margin-bottom: 10px;
+}
 
-        label {
-            display: inline-block;
-        width: calc(40% - 10px); /* Adjust width as needed */
-        margin-right: 0px; /* Adjust margin between labels */
-        margin-bottom: 10px; /* Adjust margin between rows */
-        font-size: 12px;
-        font-style:times;
-        }
+label,
+input[type=number],
+select {
+    flex: 1; /* Equal width for all elements */
+    margin-right: 10px;
+    max-width: 33.33%; /* Each element takes up 33.33% of the row space */
+}
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        
-   .tab-container {
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.tab-container {
     display: flex;
     justify-content: center; /* Center-align tabs */
 }
@@ -58,13 +56,22 @@
     background-color: white;
 }
 
-        
+/* Media Query for smaller screens (e.g., mobile) */
+@media (max-width: 768px) {
+    label,
+    input[type=number],
+    select {
+        width: 100%; /* Set width to 100% for smaller screens */
+        margin-right: 0; /* Remove margin between elements */
+    }
+}
+
     </style>
 </head>
 
 <body>
     <div class="tab-container">
-    <div class="tab" onclick="scrollToSection('income')">Income</div>
+    <div class="tab" onclick="scrollToSection('income')">$$Income</div>
     <div class="tab" onclick="scrollToSection('misc')">Miscellaneous</div>
     <div class="tab" onclick="scrollToSection('housing')"> Housing</div>
     <div class="tab" onclick="scrollToSection('transportation')">Transportation</div>
@@ -164,8 +171,12 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </script>
 
 
+</script>
+
+
 <h2 id="Income">INCOME, PRE-TAX & CONTRIBUTION</h2>
 
+<div class ="row">
 <label for="income_salary_wages">Salary/Wages:</label>
 <input type="number" id="income_salary_wages">
 <select id="income_salary_wages_frequency" onchange="calculateAnnual('income_salary_wages', 'income_salary_wages_frequency')">
@@ -175,7 +186,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_salary_wages_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_tips">Tips:</label>
 <input type="number" id="income_tips">
 <select id="income_tips_frequency" onchange="calculateAnnual('income_tips', 'income_tips_frequency')">
@@ -185,7 +198,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_tips_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_bonuses">Bonuses:</label>
 <input type="number" id="income_bonuses">
 <select id="income_bonuses_frequency" onchange="calculateAnnual('income_bonuses', 'income_bonuses_frequency')">
@@ -195,7 +210,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_bonuses_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_sole_prop">Self Employment:</label>
 <input type="number" id="income_sole_prop">
 <select id="income_sole_prop_frequency" onchange="calculateAnnual('income_sole_prop', 'income_sole_prop_frequency')">
@@ -205,7 +222,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_sole_prop_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_investment_property">Investment Property:</label>
 <input type="number" id="income_investment_property">
 <select id="income_investment_property_frequency" onchange="calculateAnnual('income_investment_property', 'income_investment_property_frequency')">
@@ -215,7 +234,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_investment_property_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_interest">Interest:</label>
 <input type="number" id="income_interest">
 <select id="income_interest_frequency" onchange="calculateAnnual('income_interest', 'income_interest_frequency')">
@@ -225,7 +246,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_interest_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_capital_gains_losses">Capital Gains/Losses:</label>
 <input type="number" id="income_capital_gains_losses">
 <select id="income_capital_gains_losses_frequency" onchange="calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency')">
@@ -235,7 +258,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_capital_gains_losses_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_owner_dividend">Dividend: Owner:</label>
 <input type="number" id="income_owner_dividend">
 <select id="income_owner_dividend_frequency" onchange="calculateAnnual('income_owner_dividend', 'income_owner_dividend_frequency')">
@@ -245,7 +270,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_owner_dividend_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_public_dividend">Dividend: Public</label>
 <input type="number" id="income_public_dividend">
 <select id="income_public_dividend_frequency" onchange="calculateAnnual('income_public_dividend', 'income_public_dividend_frequency')">
@@ -255,7 +282,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_public_dividend_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_trust">Trust:</label>
 <input type="number" id="income_trust">
 <select id="income_trust_frequency" onchange="calculateAnnual('income_trust', 'income_trust_frequency')">
@@ -265,7 +294,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_trust_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_federal_pension">Pension: Federal</label>
 <input type="number" id="income_federal_pension">
 <select id="income_federal_pension_frequency" onchange="calculateAnnual('income_federal_pension', 'income_federal_pension_frequency')">
@@ -275,7 +306,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_federal_pension_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_work_pension">Pension: Employment</label>
 <input type="number" id="income_work_pension">
 <select id="income_work_pension_frequency" onchange="calculateAnnual('income_work_pension', 'income_work_pension_frequency')">
@@ -285,7 +318,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_work_pension_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_social_security">Social Security:</label>
 <input type="number" id="income_social_security">
 <select id="income_social_security_frequency" onchange="calculateAnnual('income_social_security', 'income_social_security_frequency')">
@@ -295,7 +330,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_social_security_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_employment_insurance">Employment Insurance:</label>
 <input type="number" id="income_employment_insurance">
 <select id="income_employment_insurance_frequency" onchange="calculateAnnual('income_employment_insurance', 'income_employment_insurance_frequency')">
@@ -305,7 +342,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_employment_insurance_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_alimony">Alimony:</label>
 <input type="number" id="income_alimony">
 <select id="income_alimony_frequency" onchange="calculateAnnual('income_alimony', 'income_alimony_frequency')">
@@ -315,7 +354,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_alimony_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_scholarships_grants">Scholarship & Grants:</label>
 <input type="number" id="income_scholarships_grants">
 <select id="income_scholarships_grants_frequency" onchange="calculateAnnual('income_scholarships_grants', 'income_scholarships_grants_frequency')">
@@ -325,7 +366,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_scholarships_grants_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_royalties">Royalties:</label>
 <input type="number" id="income_royalties">
 <select id="income_royalties_frequency" onchange="calculateAnnual('income_royalties', 'income_royalties_frequency')">
@@ -335,7 +378,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_royalties_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_gambling_winnings">Gambling:</label>
 <input type="number" id="income_gambling_winnings">
 <select id="income_gambling_winnings_frequency" onchange="calculateAnnual('income_gambling_winnings', 'income_gambling_winnings_frequency')">
@@ -345,7 +390,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_gambling_winnings_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_peer_to_peer_lending">Peer to Peer Lending:</label>
 <input type="number" id="income_peer_to_peer_lending">
 <select id="income_peer_to_peer_lending_frequency" onchange="calculateAnnual('income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency')">
@@ -355,7 +402,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_peer_to_peer_lending_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_venture_capital">Venture:</label>
 <input type="number" id="income_venture_capital">
 <select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency')">
@@ -365,7 +414,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_venture_capital_annual"></span>
+</div>
 
+<div class ="row">
 <label for="income_tax_free_income">Tax Free:</label>
 <input type="number" id="income_tax_free_income">
 <select id="income_tax_free_income_frequency" onchange="calculateAnnual('income_tax_free_income', 'income_tax_free_income_frequency')">
@@ -375,11 +426,14 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_tax_free_income_annual"></span>
+</div>
+
 
 
 
 <h2 id ="misc">EXPENSES, MISCELLANEOUS</h2>
 
+<div class ="row">
     <label for="expenses_grocery">Grocery:</label>
 <input type="number" id="expenses_grocery">
 <select id="expenses_grocery_frequency" onchange="calculateAnnual('expenses_grocery', 'expenses_grocery_frequency')">
@@ -389,7 +443,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_grocery_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_dining">Dining:</label>
 <input type="number" id="expenses_dining">
 <select id="expenses_dining_frequency" onchange="calculateAnnual('expenses_dining', 'expenses_dining_frequency')">
@@ -399,7 +455,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_dining_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_fitness">Fitness:</label>
 <input type="number" id="expenses_fitness">
 <select id="expenses_fitness_frequency" onchange="calculateAnnual('expenses_fitness', 'expenses_fitness_frequency')">
@@ -409,7 +467,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_fitness_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_subscriptions">Subscriptions:</label>
 <input type="number" id="expenses_subscriptions">
 <select id="expenses_subscriptions_frequency" onchange="calculateAnnual('expenses_subscriptions', 'expenses_subscriptions_frequency')">
@@ -419,7 +479,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_subscriptions_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_pet">Pet:</label>
 <input type="number" id="expenses_pet">
 <select id="expenses_pet_frequency" onchange="calculateAnnual('expenses_pet', 'expenses_pet_frequency')">
@@ -429,7 +491,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_pet_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_clothing">Clothing:</label>
 <input type="number" id="expenses_clothing">
 <select id="expenses_clothing_frequency" onchange="calculateAnnual('expenses_clothing', 'expenses_clothing_frequency')">
@@ -439,7 +503,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_clothing_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_vacation">Vacation:</label>
 <input type="number" id="expenses_vacation">
 <select id="expenses_vacation_frequency" onchange="calculateAnnual('expenses_vacation', 'expenses_vacation_frequency')">
@@ -449,7 +515,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_vacation_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_travel_life_insurance">Life & Travel Insurance:</label>
 <input type="number" id="expenses_travel_life_insurance">
 <select id="expenses_travel_life_insurance_frequency" onchange="calculateAnnual('expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency')">
@@ -459,7 +527,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_travel_life_insurance_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_cellphone_service">Cellphone:</label>
 <input type="number" id="expenses_cellphone_service">
 <select id="expenses_cellphone_service_frequency" onchange="calculateAnnual('expenses_cellphone_service', 'expenses_cellphone_service_frequency')">
@@ -469,8 +539,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_cellphone_service_annual"></span>
+</div>
 
-
+<div class ="row">
 <label for="expenses_medical_dental">Medical & Dental:</label>
 <input type="number" id="expenses_medical_dental">
 <select id="expenses_medical_dental_frequency" onchange="calculateAnnual('expenses_medical_dental', 'expenses_medical_dental_frequency')">
@@ -480,7 +551,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_medical_dental_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_line_of_credit_payment">Line of Credit Payment:</label>
 <input type="number" id="expenses_line_of_credit_payment">
 <select id="expenses_line_of_credit_payment_frequency" onchange="calculateAnnual('expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency')">
@@ -490,7 +563,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_line_of_credit_payment_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_student_loan_payment">Student Loan Payment:</label>
 <input type="number" id="expenses_student_loan_payment">
 <select id="expenses_student_loan_payment_frequency" onchange="calculateAnnual('expenses_student_loan_payment', 'expenses_student_loan_payment_frequency')">
@@ -500,7 +575,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_student_loan_payment_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_credit_card_payment">Credit Card Payment:</label>
 <input type="number" id="expenses_credit_card_payment">
 <select id="expenses_credit_card_payment_frequency" onchange="calculateAnnual('expenses_credit_card_payment', 'expenses_credit_card_payment_frequency')">
@@ -510,7 +587,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_credit_card_payment_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_tax_arrears_payment">Tax Arrears Payment:</label>
 <input type="number" id="expenses_tax_arrears_payment">
 <select id="expenses_tax_arrears_payment_frequency" onchange="calculateAnnual('expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency')">
@@ -520,7 +599,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_tax_arrears_payment_annual"></span>
+</div>
 
+<div class ="row">
 <label for="expenses_small_business_loan_payment">Small Business Loan Payment:</label>
 <input type="number" id="expenses_small_business_loan_payment">
 <select id="expenses_small_business_loan_payment_frequency" onchange="calculateAnnual('expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency')">
@@ -530,9 +611,12 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="expenses_small_business_loan_payment_annual"></span>
+</div>
+
 
 <h2 id="housing"> EXPENSES, HOUSING</h2>
 
+<div class ="row">
 <label for="housing_mortgage_payment">Mortgage Payment:</label>
 <input type="number" id="housing_mortgage_payment">
 <select id="housing_mortgage_payment_frequency" onchange="calculateAnnual('housing_mortgage_payment', 'housing_mortgage_payment_frequency')">
@@ -542,7 +626,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="housing_mortgage_payment_annual"></span>
+</div>
 
+<div class ="row">
 <label for="housing_rent_payment">Rent:</label>
 <input type="number" id="housing_rent_payment">
 <select id="housing_rent_payment_frequency" onchange="calculateAnnual('housing_rent_payment', 'housing_rent_payment_frequency')">
@@ -552,7 +638,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="housing_rent_payment_annual"></span>
+</div>
 
+<div class ="row">
 <label for="housing_property_tax">Property Tax:</label>
 <input type="number" id="housing_property_tax">
 <select id="housing_property_tax_frequency" onchange="calculateAnnual('housing_property_tax', 'housing_property_tax_frequency')">
@@ -562,7 +650,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="housing_property_tax_annual"></span>
+</div>
 
+<div class ="row">
 <label for="housing_condo_fee">Condo Fee:</label>
 <input type="number" id="housing_condo_fee">
 <select id="housing_condo_fee_frequency" onchange="calculateAnnual('housing_condo_fee', 'housing_condo_fee_frequency')">
@@ -572,7 +662,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="housing_condo_fee_annual"></span>
+</div>
 
+<div class ="row">
 <label for="housing_hydro">Hydro:</label>
 <input type="number" id="housing_hydro">
 <select id="housing_hydro_frequency" onchange="calculateAnnual('housing_hydro', 'housing_hydro_frequency')">
@@ -582,8 +674,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="housing_hydro_annual"></span>
+</div>
 
-
+<div class ="row">
 <label for="housing_water">Water:</label>
 <input type="number" id="housing_water">
 <select id="housing_water_frequency" onchange="calculateAnnual('housing_water', 'housing_water_frequency')">
@@ -593,7 +686,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="housing_water_annual"></span>
+</div>
 
+<div class ="row">
 <label for="housing_gas">Gas:</label>
 <input type="number" id="housing_gas">
 <select id="housing_gas_frequency" onchange="calculateAnnual('housing_gas', 'housing_gas_frequency')">
@@ -603,7 +698,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="housing_gas_annual"></span>
+</div>
 
+<div class ="row">
 <label for="housing_insurance">Home Insurance:</label>
 <input type="number" id="housing_insurance">
 <select id="housing_insurance_frequency" onchange="calculateAnnual('housing_insurance', 'housing_insurance_frequency')">
@@ -613,7 +710,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="housing_insurance_annual"></span>
+</div>
 
+<div class ="row">
 <label for="housing_repairs">Home Repairs:</label>
 <input type="number" id="housing_repairs">
 <select id="housing_repairs_frequency" onchange="calculateAnnual('housing_repairs', 'housing_repairs_frequency')">
@@ -623,7 +722,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="housing_repairs_annual"></span>
+</div>
 
+<div class ="row">
 <label for="housing_internet">Internet:</label>
 <input type="number" id="housing_internet">
 <select id="housing_internet_frequency" onchange="calculateAnnual('housing_internet', 'housing_internet_frequency')">
@@ -633,10 +734,12 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="housing_internet_annual"></span>
+</div>
 
 
 <h2 id ="transportation">EXPENSES, TRANSPORTATION</h2>
 
+<div class ="row">
 <label for="transportation_car_loan_payment">Car Loan Payment:</label>
 <input type="number" id="transportation_car_loan_payment">
 <select id="transportation_car_loan_payment_frequency" onchange="calculateAnnual('transportation_car_loan_payment', 'transportation_car_loan_payment_frequency')">
@@ -646,7 +749,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="transportation_car_loan_payment_annual"></span>
+</div>
 
+<div class ="row">
 <label for="transportation_insurance">Insurance:</label>
 <input type="number" id="transportation_insurance">
 <select id="transportation_insurance_frequency" onchange="calculateAnnual('transportation_insurance', 'transportation_insurance_frequency')">
@@ -656,7 +761,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="transportation_insurance_annual"></span>
+</div>
 
+<div class ="row">
 <label for="transportation_fuel">Fuel:</label>
 <input type="number" id="transportation_fuel">
 <select id="transportation_fuel_frequency" onchange="calculateAnnual('transportation_fuel', 'transportation_fuel_frequency')">
@@ -666,7 +773,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="transportation_fuel_annual"></span>
+</div>
 
+<div class ="row">
 <label for="transportation_maintenance">Maintenance:</label>
 <input type="number" id="transportation_maintenance">
 <select id="transportation_maintenance_frequency" onchange="calculateAnnual('transportation_maintenance', 'transportation_maintenance_frequency')">
@@ -676,7 +785,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="transportation_maintenance_annual"></span>
+</div>
 
+<div class ="row">
 <label for="transportation_public_transit">Public Transit:</label>
 <input type="number" id="transportation_public_transit">
 <select id="transportation_public_transit_frequency" onchange="calculateAnnual('transportation_public_transit', 'transportation_public_transit_frequency')">
@@ -686,7 +797,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="transportation_public_transit_annual"></span>
+</div>
 
+<div class ="row">
 <label for="transportation_ride_hailing">Ride Hailing:</label>
 <input type="number" id="transportation_ride_hailing">
 <select id="transportation_ride_hailing_frequency" onchange="calculateAnnual('transportation_ride_hailing', 'transportation_ride_hailing_frequency')">
@@ -696,9 +809,11 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="transportation_ride_hailing_annual"></span>
+</div>
 
 <h2 id="dependant">EXPENSES, DEPENDANT</h2>
 
+<div class ="row">
 <label for="dependant_day_care">Day Care:</label>
 <input type="number" id="dependant_day_care">
 <select id="dependant_day_care_frequency" onchange="calculateAnnual('dependant_day_care', 'dependant_day_care_frequency')">
@@ -708,7 +823,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="dependant_day_care_annual"></span>
+</div>
 
+<div class ="row">
 <label for="dependant_medical_dental">Medical & Dental:</label>
 <input type="number" id="dependant_medical_dental">
 <select id="dependant_medical_dental_frequency" onchange="calculateAnnual('dependant_medical_dental', 'dependant_medical_dental_frequency')">
@@ -718,7 +835,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="dependant_medical_dental_annual"></span>
+</div>
 
+<div class ="row">
 <label for="dependant_clothing">Clothing:</label>
 <input type="number" id="dependant_clothing">
 <select id="dependant_clothing_frequency" onchange="calculateAnnual('dependant_clothing', 'dependant_clothing_frequency')">
@@ -728,7 +847,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="dependant_clothing_annual"></span>
+</div>
 
+<div class ="row">
 <label for="dependant_sports_recreation">Sports & Recreation:</label>
 <input type="number" id="dependant_sports_recreation">
 <select id="dependant_sports_recreation_frequency" onchange="calculateAnnual('dependant_sports_recreation', 'dependant_sports_recreation_frequency')">
@@ -738,7 +859,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="dependant_sports_recreation_annual"></span>
+</div>
 
+<div class ="row">
 <label for="dependant_transportation">Transportation:</label>
 <input type="number" id="dependant_transportation">
 <select id="dependant_transportation_frequency" onchange="calculateAnnual('dependant_transportation', 'dependant_transportation_frequency')">
@@ -748,7 +871,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="dependant_transportation_annual"></span>
+</div>
 
+<div class ="row">
 <label for="dependant_tuition">Tuition:</label>
 <input type="number" id="dependant_tuition">
 <select id="dependant_tuition_frequency" onchange="calculateAnnual('dependant_tuition', 'dependant_tuition_frequency')">
@@ -758,7 +883,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="dependant_tuition_annual"></span>
+</div>
 
+<div class ="row">
 <label for="dependant_housing">Housing:</label>
 <input type="number" id="dependant_housing">
 <select id="dependant_housing_frequency" onchange="calculateAnnual('dependant_housing', 'dependant_housing_frequency')">
@@ -768,7 +895,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="dependant_housing_annual"></span>
+</div>
 
+<div class ="row">
 <label for="dependant_cellular_service">Cellular Service:</label>
 <input type="number" id="dependant_cellular_service">
 <select id="dependant_cellular_service_frequency" onchange="calculateAnnual('dependant_cellular_service', 'dependant_cellular_service_frequency')">
@@ -778,60 +907,96 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <option value="weekly">Weekly</option>
 </select>
 <span id="dependant_cellular_service_annual"></span>
-
+</div>
   
 <h2 id="assets">ASSETS</h2>
+
+<div class ="row">
     <label for="assets_checking_accounts">Checking Account(s):</label>
     <input type="text" id="assets_checking_accounts">
+</div>
 
+<div class ="row">
     <label for="assets_savings_accounts">Savings Account(s):</label>
     <input type="text" id="assets_savings_accounts">
+</div>
 
+<div class ="row">
     <label for="assets_other_liquid_accounts">Other Liquid Account(s):</label>
     <input type="text" id="assets_other_liquid_accounts">
+</div>
 
+<div class ="row">
     <label for="assets_long_term_investment_accounts">Long Term Investment Account(s):</label>
     <input type="text" id="assets_long_term_investment_accounts">
+</div>
 
+<div class ="row">
     <label for="assets_primary_residence">Primary Residence:</label>
     <input type="text" id="assets_primary_residence">
+</div>
 
+<div class ="row">
     <label for="assets_investment_properties">Investment Property(s):</label>
     <input type="text" id="assets_investment_properties">
+</div>
 
+<div class ="row">
     <label for="assets_small_business">Small Business:</label>
     <input type="text" id="assets_small_business">
+</div>
 
+<div class ="row">
     <label for="assets_vehicles">Vehicle(s):</label>
     <input type="text" id="assets_vehicles">
+</div>
 
+<div class ="row">
     <label for="assets_art_jewelry">Art/Jewelry:</label>
     <input type="text" id="assets_art_jewelry">
+</div>
 
     <h2 id= "liabilities">LIABILITIES</h2>
+    
+    <div class ="row">
     <label for="liabilities_small_business_loan">Small Business Loan:</label>
     <input type="text" id="liabilities_small_business_loan">
+</div>
 
+<div class ="row">
     <label for="liabilities_primary_residence">Primary Residence:</label>
     <input type="text" id="liabilities_primary_residence">
+</div>
 
+<div class ="row">
     <label for="liabilities_investment_properties">Investment Property(s):</label>
     <input type="text" id="liabilities_investment_properties">
+</div>
 
+<div class ="row">
     <label for="liabilities_vehicle_loan">Vehicle Loan:</label>
     <input type="text" id="liabilities_vehicle_loan">
+</div>
 
+<div class ="row">
     <label for="liabilities_student_loan">Student Loan:</label>
     <input type="text" id="liabilities_student_loan">
+</div>
 
+<div class ="row">
     <label for="liabilities_line_of_credit">Line of Credit:</label>
     <input type="text" id="liabilities_line_of_credit">
+</div>
 
+<div class ="row">
     <label for="liabilities_credit_card">Credit Card:</label>
     <input type="text" id="liabilities_credit_card">
+</div>
 
+<div class ="row">
     <label for="liabilities_tax_arrears">Tax Arrears:</label>
     <input type="text" id="liabilities_tax_arrears">
+</div>
 
   <div>
       <input type="checkbox" id="termsCheckbox">
