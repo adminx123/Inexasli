@@ -1032,6 +1032,8 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var NETWORTH;
     var DEBTTOINCOME;
     var SAVINGSTODEBT;
+    var BASICPERSONALAMOUNT = 15705;
+    var STANDARDDEDUCTION = 14600;
     
     function calculateAnnual(inputId, frequencyId) {
         const input = parseFloat(document.getElementById(inputId).value) || 0;
@@ -1669,7 +1671,7 @@ const STATETAXBRACKETS = {
 // Define the calculateTax function to calculate both federal and provincial tax
 function calculateTax(taxBrackets) {
     let tax = 0;
-    let taxableIncome = ANNUALTAXABLEINCOME;
+    let taxableIncome = ANNUALTAXABLEINCOME - BASICPERSONALAMOUNT;
 
     for (const bracket of taxBrackets) {
         if (taxableIncome > bracket.limit) {
