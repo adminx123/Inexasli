@@ -56,13 +56,13 @@
 
 <body>
     
-    <div class="tab" onclick="scrollToSection('INCOME, PRE-TAX & CONTRIBUTION')">Income, Pre-Tax & Contribution</div>
-    <div class="tab" onclick="scrollToSection('EXPENSES, MISCELLANEOUS')">Expenses, Miscellaneous</div>
-    <div class="tab" onclick="scrollToSection('EXPENSES, HOUSING')">Expenses, Housing</div>
-    <div class="tab" onclick="scrollToSection('EXPENSES, TRANSPORTATION')">Expenses, Transportation</div>
-    <div class="tab" onclick="scrollToSection('EXPENSES, DEPENDANT')">Expenses, Dependant</div>
-    <div class="tab" onclick="scrollToSection('ASSETS')">Assets</div>
-    <div class="tab" onclick="scrollToSection('LIABILITIES')">Liabilities</div>
+    <div class="tab" onclick="scrollToSection('income')">Income, Pre-Tax & Contribution</div>
+    <div class="tab" onclick="scrollToSection('misc')">Expenses, Miscellaneous</div>
+    <div class="tab" onclick="scrollToSection('housing')">Expenses, Housing</div>
+    <div class="tab" onclick="scrollToSection('transportation')">Expenses, Transportation</div>
+    <div class="tab" onclick="scrollToSection('dependant')">Expenses, Dependant</div>
+    <div class="tab" onclick="scrollToSection('assets')">Assets</div>
+    <div class="tab" onclick="scrollToSection('liabilities')">Liabilities</div>
 
 
 
@@ -156,7 +156,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </script>
 
 
-<h2 style = "text-align:center">INCOME, PRE-TAX & CONTRIBUTION</h2>
+<h2 id="Income">INCOME, PRE-TAX & CONTRIBUTION</h2>
 
 <label for="income_salary_wages">Salary/Wages:</label>
 <input type="number" id="income_salary_wages">
@@ -370,7 +370,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 
 
 
-<h2>EXPENSES, MISCELLANEOUS</h2>
+<h2 id ="misc">EXPENSES, MISCELLANEOUS</h2>
 
     <label for="expenses_grocery">Grocery:</label>
 <input type="number" id="expenses_grocery">
@@ -523,7 +523,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </select>
 <span id="expenses_small_business_loan_payment_annual"></span>
 
-<h2> EXPENSES, HOUSING</h2>
+<h2 id="housing"> EXPENSES, HOUSING</h2>
 
 <label for="housing_mortgage_payment">Mortgage Payment:</label>
 <input type="number" id="housing_mortgage_payment">
@@ -627,7 +627,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 <span id="housing_internet_annual"></span>
 
 
-<h2>EXPENSES, TRANSPORTATION</h2>
+<h2 id ="transportation">EXPENSES, TRANSPORTATION</h2>
 
 <label for="transportation_car_loan_payment">Car Loan Payment:</label>
 <input type="number" id="transportation_car_loan_payment">
@@ -689,7 +689,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </select>
 <span id="transportation_ride_hailing_annual"></span>
 
-<h2>EXPENSES, DEPENDANT</h2>
+<h2 id="dependant">EXPENSES, DEPENDANT</h2>
 
 <label for="dependant_day_care">Day Care:</label>
 <input type="number" id="dependant_day_care">
@@ -772,7 +772,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 <span id="dependant_cellular_service_annual"></span>
 
   
-<h2>ASSETS</h2>
+<h2 id="assets">ASSETS</h2>
     <label for="assets_checking_accounts">Checking Account(s):</label>
     <input type="text" id="assets_checking_accounts">
 
@@ -800,7 +800,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <label for="assets_art_jewelry">Art/Jewelry:</label>
     <input type="text" id="assets_art_jewelry">
 
-    <h2>LIABILITIES</h2>
+    <h2 id= "liabilities">LIABILITIES</h2>
     <label for="liabilities_small_business_loan">Small Business Loan:</label>
     <input type="text" id="liabilities_small_business_loan">
 
