@@ -21,10 +21,10 @@
 
         label {
             display: inline-block;
-        width: calc(33.33% - 10px); /* Adjust width as needed */
-        margin-right: 20px; /* Adjust margin between labels */
+        width: calc(40% - 10px); /* Adjust width as needed */
+        margin-right: 0px; /* Adjust margin between labels */
         margin-bottom: 10px; /* Adjust margin between rows */
-        font-size: 18px;
+        font-size: 12px;
         }
 
         button {
@@ -37,10 +37,37 @@
             cursor: pointer;
             margin-top: 20px;
         }
+        
+        .tab {
+    display: inline-block;
+    padding: 10px 10px;
+    cursor: pointer;
+    background-color: black;
+    border: 1px solid ;
+    border-radius: 5px 5px 0 0;
+  }
+  /* Style for the active tab */
+  .active {
+    background-color: white;
+  }
+        
     </style>
 </head>
 
 <body>
+    
+    <div class="tab" onclick="scrollToSection('INCOME, PRE-TAX & CONTRIBUTION')">Income, Pre-Tax & Contribution</div>
+    <div class="tab" onclick="scrollToSection('miscellaneous')">Miscellaneous</div>
+    <div class="tab" onclick="scrollToSection('EXPENSES, MISCELLANEOUS')">Expenses, Miscellaneous</div>
+    <div class="tab" onclick="scrollToSection('EXPENSES, Housing')">Expenses, Housing</div>
+    <div class="tab" onclick="scrollToSection('EXPENSES, TRANSPORTATION')">Expenses, Transportation</div>
+    <div class="tab" onclick="scrollToSection('EXPENSES, DEPENDANT')">Expenses, Dependant</div>
+    <div class="tab" onclick="scrollToSection('ASSETS')">Assets</div>
+    <div class="tab" onclick="scrollToSection('LIABILITIES')">Liabilities</div>
+
+
+
+    
     <h1 style="text-align: center;">The Four Pillars of Finance WARNING: WILL CONTAIN ERRORS NOT TO BE USED AS FINANCIAL ADVICE. CONSULT WITH A LICENSED PROFESSIONAL. WEBSITE IS NOT FUNCTIONAL YOU ASSUME ALL RISK WHEN USING</h1>
     <h1 style="text-align: center;">Income - Expenses - Assets - Liabilities</h1>
     
@@ -129,7 +156,8 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 
 </script>
 
-<h2>INCOME, PRE TAX & CONTRIBUTION</h2>
+
+<h2 style = "text-align:center">INCOME, PRE-TAX & CONTRIBUTION</h2>
 
 <label for="income_salary_wages">Salary/Wages:</label>
 <input type="number" id="income_salary_wages">
@@ -343,7 +371,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 
 
 
-<h2> EXPENSES, MISCELLANEOUS</h2>
+<h2>EXPENSES, MISCELLANEOUS</h2>
 
     <label for="expenses_grocery">Grocery:</label>
 <input type="number" id="expenses_grocery">
@@ -600,7 +628,8 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 <span id="housing_internet_annual"></span>
 
 
-<u><h2>EXPENSES, TRANSPORTATION</h2></u>
+<h2>EXPENSES, TRANSPORTATION</h2>
+
 <label for="transportation_car_loan_payment">Car Loan Payment:</label>
 <input type="number" id="transportation_car_loan_payment">
 <select id="transportation_car_loan_payment_frequency" onchange="calculateAnnual('transportation_car_loan_payment', 'transportation_car_loan_payment_frequency')">
@@ -661,7 +690,8 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </select>
 <span id="transportation_ride_hailing_annual"></span>
 
-<u><h2>EXPENSES, DEPENDANT</h2></u>
+<h2>EXPENSES, DEPENDANT</h2>
+
 <label for="dependant_day_care">Day Care:</label>
 <input type="number" id="dependant_day_care">
 <select id="dependant_day_care_frequency" onchange="calculateAnnual('dependant_day_care', 'dependant_day_care_frequency')">
@@ -771,7 +801,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <label for="assets_art_jewelry">Art/Jewelry:</label>
     <input type="text" id="assets_art_jewelry">
 
-    <u><h2>LIABILITIES</h2></u>
+    <h2>LIABILITIES</h2>
     <label for="liabilities_small_business_loan">Small Business Loan:</label>
     <input type="text" id="liabilities_small_business_loan">
 
@@ -1612,6 +1642,13 @@ FIRE = income / ANNUALEXPENSE
 function displayTerms() {
     var terms = "<Your terms of service here>";
     alert(terms);
+}
+
+function scrollToSection(sectionId) {
+  var section = document.getElementById(sectionId);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
     function calculateAll() {
