@@ -25,6 +25,7 @@
         margin-right: 0px; /* Adjust margin between labels */
         margin-bottom: 10px; /* Adjust margin between rows */
         font-size: 12px;
+        font-style:times;
         }
 
         button {
@@ -38,36 +39,43 @@
             margin-top: 20px;
         }
         
-        .tab {
-    display: inline-block;
+   .tab-container {
+    display: flex;
+    justify-content: center; /* Center-align tabs */
+}
+
+.tab {
     padding: 10px 10px;
     cursor: pointer;
     background-color: black;
-    border: 1px solid ;
+    border: .01px solid;
     border-radius: 5px 5px 0 0;
-  }
-  /* Style for the active tab */
-  .active {
+    margin: 0 px; /* Adjust spacing between tabs */
+}
+
+/* Style for the active tab */
+.active {
     background-color: white;
-  }
+}
+
         
     </style>
 </head>
 
 <body>
-    
-    <div class="tab" onclick="scrollToSection('income')">Income, Pre-Tax & Contribution</div>
-    <div class="tab" onclick="scrollToSection('misc')">Expenses, Miscellaneous</div>
-    <div class="tab" onclick="scrollToSection('housing')">Expenses, Housing</div>
-    <div class="tab" onclick="scrollToSection('transportation')">Expenses, Transportation</div>
-    <div class="tab" onclick="scrollToSection('dependant')">Expenses, Dependant</div>
+    <div class="tab-container">
+    <div class="tab" onclick="scrollToSection('income')">Income</div>
+    <div class="tab" onclick="scrollToSection('misc')">Miscellaneous</div>
+    <div class="tab" onclick="scrollToSection('housing')"> Housing</div>
+    <div class="tab" onclick="scrollToSection('transportation')">Transportation</div>
+    <div class="tab" onclick="scrollToSection('dependant')"> Dependant(s)</div>
     <div class="tab" onclick="scrollToSection('assets')">Assets</div>
     <div class="tab" onclick="scrollToSection('liabilities')">Liabilities</div>
-
+</div>
 
 
     
-    <h1 style="text-align: center;">The Four Pillars of Finance WARNING: **WILL CONTAIN ERRORS NOT TO BE USED AS FINANCIAL ADVICE. CONSULT WITH A LICENSED PROFESSIONAL. WEBSITE IS NOT FUNCTIONAL YOU ASSUME ALL RISK WHEN USING</h1>
+    <h1 style="text-align: center; font-family: Helvetica; font-size: 12px">The Four Pillars of Finance WARNING: **WILL CONTAIN ERRORS NOT TO BE USED AS FINANCIAL ADVICE. CONSULT WITH A LICENSED PROFESSIONAL. WEBSITE IS NOT FUNCTIONAL YOU ASSUME ALL RISK WHEN USING</h1>
     <h1 style="text-align: center;">Income - Expenses - Assets - Liabilities</h1>
     
     <select id="RegionDropdown">
