@@ -797,6 +797,10 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     <input type="text" id="liabilities_tax_arrears">
 
   <div>
+      <input type="checkbox" id="termsCheckbox">
+<label for="termsCheckbox">I have read, understand and agree to the <a href="#" onclick="displayTerms()">terms of service</a>.</label><br>
+
+
 <button onclick="calculateAll()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate</button>
 </div>
 
@@ -1604,7 +1608,12 @@ FIRE = income / ANNUALEXPENSE
     document.getElementById('FIRE').textContent = FIRE.toFixed(3);
 
 }
-   
+
+function displayTerms() {
+    var terms = "<Your terms of service here>";
+    alert(terms);
+}
+
     function calculateAll() {
         
     calculateNormalizedSum();
@@ -1639,7 +1648,13 @@ FIRE = income / ANNUALEXPENSE
     
     fire();
     
-    
+    var checkbox = document.getElementById("termsCheckbox");
+    if (checkbox.checked) {
+        // Perform calculations
+        alert("Calculations triggered.");
+    } else {
+        alert("Please agree to the terms of service.");
+    }
     }
 
 
