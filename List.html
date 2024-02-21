@@ -1011,10 +1011,13 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
   <div>
       <input type="checkbox" id="termsCheckbox">
 <label for="termsCheckbox">I have read, understand and agree to the <a href="#" onclick="displayTerms()">terms of service</a>.</label><br>
+<div id="termsContent" style="display: none;"></div>
 
 
 <button onclick="calculateAll()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate</button>
-</div>
+
+  
+  </div>
 
 <script>
    
@@ -1823,18 +1826,19 @@ FIRE = income / ANNUALEXPENSE
 
 }
 
-function displayTerms() {
+    function displayTerms() {
     fetch('LEGAL.txt')
         .then(response => response.text())
         .then(data => {
-            var termsWindow = window.open("", "Terms of Service", "width=600,height=400");
-            termsWindow.document.write('<pre>' + data + '</pre>');
+            document.getElementById('termsContent').innerText = data;
+            document.getElementById('termsContent').style.display = 'block';
         })
         .catch(error => {
             console.error('Error fetching terms of service:', error);
             alert("Failed to fetch terms of service. Please try again later.");
         });
 }
+
 
 
 
@@ -1912,7 +1916,7 @@ function scrollToSection(sectionId) {
     <p>Debt to Income: <span id="DEBTTOINCOME"></span></p>
 <p>Savings to Debt: <span id="SAVINGSTODEBT"></span></p>
 <p>Housing to Income:<span id = "housingtoincome"></span></p>
-<p>FIRE:<span id ="FIRE"></span></p>
+<p>F$IRE:<span id ="FIRE"></span></p>
 
 </div>
 </body>
