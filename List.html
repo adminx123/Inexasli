@@ -96,7 +96,7 @@ button {
 
     
     <h1 style="text-align: center; font-family: Helvetica; font-size: 12px">The Four Pillars of Finance WARNING: **WILL CONTAIN ERRORS NOT TO BE USED AS FINANCIAL ADVICE. CONSULT WITH A LICENSED PROFESSIONAL. WEBSITE IS NOT FUNCTIONAL YOU ASSUME ALL RISK WHEN USING</h1>
-    <h1 style="text-align: center;">#Income - Expenses - Assets - Liabilities</h1>
+    <h1 style="text-align: center;">&Income - Expenses - Assets - Liabilities</h1>
     
     <select id="RegionDropdown">
         <option vlaue="">Select Region</option> 
@@ -184,7 +184,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </script>
 
 
-<h2 id="Income">INCOME, PRE-TAX & CONTRIBUTION</h2>
+<h2 id="Income">###INCOME, PRE-TAX & CONTRIBUTION</h2>
 
 <div class ="row">
 <label for="income_salary_wages">Salary/Wages:</label>
@@ -1671,7 +1671,7 @@ const STATETAXBRACKETS = {
 // Define the calculateTax function to calculate both federal and provincial tax
 function calculateTax(taxBrackets) {
     let tax = 0;
-    let taxableIncome = ANNUALTAXABLEINCOME - BASICPERSONALAMOUNT;
+    let taxableIncome = ANNUALTAXABLEINCOME;
 
     for (const bracket of taxBrackets) {
         if (taxableIncome > bracket.limit) {
@@ -1869,8 +1869,14 @@ function scrollToSection(sectionId) {
     
     fire();
     
-
-
+    var checkbox = document.getElementById("termsCheckbox");
+    if (checkbox.checked) {
+        // Perform calculations
+        alert("Calculations triggered.");
+    } else {
+        alert("Please agree to the terms of service.");
+    }
+    }
 
 
 
