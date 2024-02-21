@@ -184,7 +184,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </script>
 
 
-<h2 id="Income">###INCOME, PRE-TAX & CONTRIBUTION</h2>
+<h2 id="Income">INCOME, PRE-TAX & CONTRIBUTION</h2>
 
 <div class ="row">
 <label for="income_salary_wages">Salary/Wages:</label>
@@ -1870,13 +1870,21 @@ function scrollToSection(sectionId) {
     fire();
     
     var checkbox = document.getElementById("termsCheckbox");
-    if (checkbox.checked) {
-        // Perform calculations
-        alert("Calculations triggered.");
-    } else {
-        alert("Please agree to the terms of service.");
-    }
-    }
+if (checkbox.checked) {
+    // Perform calculations
+    alert("Calculations triggered.");
+} else {
+    fetch('LEGAL')
+        .then(response => response.text())
+        .then(data => {
+            alert(data);
+        })
+        .catch(error => {
+            console.error('Error fetching terms of service:', error);
+            alert("Failed to fetch terms of service. Please try again later.");
+        });
+}
+
 
 
 
