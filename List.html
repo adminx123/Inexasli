@@ -1824,9 +1824,17 @@ FIRE = income / ANNUALEXPENSE
 }
 
 function displayTerms() {
-    var terms = "<Your terms of service here>";
-    alert(terms);
+    fetch('LEGAL.txt')
+        .then(response => response.text())
+        .then(data => {
+            alert(data);
+        })
+        .catch(error => {
+            console.error('Error fetching terms of service:', error);
+            alert("Failed to fetch terms of service. Please try again later.");
+        });
 }
+
 
 function scrollToSection(sectionId) {
   var section = document.getElementById(sectionId);
@@ -1902,7 +1910,7 @@ function scrollToSection(sectionId) {
     <p>Debt to Income: <span id="DEBTTOINCOME"></span></p>
 <p>Savings to Debt: <span id="SAVINGSTODEBT"></span></p>
 <p>Housing to Income:<span id = "housingtoincome"></span></p>
-<p>FIRE:<span id ="FIRE"></span></p>
+<p>$FIRE:<span id ="FIRE"></span></p>
 
 </div>
 </body>
