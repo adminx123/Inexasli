@@ -124,6 +124,12 @@ button {
           opacity: 1;
         }
 
+.container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
     </style>
 </head>
 
@@ -1943,100 +1949,112 @@ function scrollToSection(sectionId) {
 </script>
 
 
-<div>
+
+    
+    
     
     <h2>PERSONAL FINANCIAL STATEMENT</h2>
     
-    <div class ="tab tooltip">
+    <div class="container">
+    
+    <div class ="tooltip">
             <p>Income: <span id="annual_income_sum"></span></p>
 <span class="tooltiptext">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</span>
 </div>
 
-<div class ="tab tooltip">
+<div class ="tooltip">
            <p>Expense: <span id="annual_expense_sum"></span></p>
 <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
 </div>
 
-    <div class ="tab tooltip">
+    <div class ="tooltip">
             <p>Disposable Income:<span id="ANNUALDISPOSABLEINCOME"></span></p>
     <span class="tooltiptext">Income left after taxes and expenses. Use: Discretionary spending, savings, investments.</span>
 </div>
 
-<div class ="tab tooltip">
+<div class ="tooltip">
             <p>Assets:<span id="ASSETS"></span></p>
     <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
 </div>
    
-<div class ="tab tooltip">
+<div class ="tooltip">
          <p>Liabilities:<span id="LIABILITIES"></span></p>
 <span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy formulation.</span>
 </div>
 
-<div class ="tab tooltip">
+<div class ="tooltip">
         <p>Net Worth: <span id="NETWORTH"></span></p>
 <span class="tooltiptext">Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</span>
 </div>
     
+    </div>
+    
     <h2>GOVERMENT OBLIGATIONS</h2>
    
-    <div class ="tab tooltip">
+   <div class="container">
+   
+    <div class ="tooltip">
         <p>Taxable Income: <span id="taxable_sum"></span></p>
 <span class="tooltiptext"> Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</span>
 </div>
     
-      <div class ="tab tooltip">
+      <div class ="tooltip">
     <p>Regional Tax Payable: <span id="ANNUALFEDERALTAX"></span></p>
 <span class="tooltiptext">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</span>
 </div>
 
-    <div class ="tab tooltip">
+    <div class ="tooltip">
    <p>Subregional Tax Payable:<span id="ANNUALPROVINCIALTAX"></span></p> 
 <span class="tooltiptext">Tax owed to subregion government. Use: Budgeting for taxe obligations, financial planning.</span>
 </div>
 
-    <div class ="tab tooltip">
+    <div class ="tooltip">
     <p>Total Tax Payable:<span id="ANNUALTAX"></span></p>
 <span class="tooltiptext">Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</span>
 </div>
     
-   <div class ="tab tooltip">
+   <div class ="tooltip">
             <p>Self Employed CPP Payable: <span id="annual_cpp_seresult"></span></p>
 <span class="tooltiptext">Canada Pension Plan contributions for self-employed individuals. Use: Retirement planning for self-employed.</span>
 </div>
 
-<div class ="tab tooltip">
+<div class ="tooltip">
         <p>Total Employment Insurance Payable: <span id="ANNUALEI"></span></p>
     <span class="tooltiptext"> Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</span>
 </div>
     
-<div class ="tab tooltip">
+<div class ="tooltip">
         <p>Total CPP Payable: <span id="ANNUALCPP"></span></p>
 <span class="tooltiptext"> General contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the goverment on your behlaf</span>
 </div>
 
-    <div class ="tab tooltip">
+    <div class ="tooltip">
     <p>Employed CPP Payable: <span id="annual_cpp_eresult"></span></p>
 <span class="tooltiptext">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</span>
 </div>
     
+    </div>
+    
 <h2>RATIOS</h2>
 
-<div class ="tab tooltip">
+<div class = "container">
+
+<div class ="tooltip">
         <p>Debt to Income: <span id="DEBTTOINCOME"></span></p>
 <span class="tooltiptext">Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health.</span>
 </div>
 
-<div class ="tab tooltip">
+<div class ="tooltip">
         <p>Savings to Debt: <span id="SAVINGSTODEBT"></span></p>
 <span class="tooltiptext">Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.</span>
 </div>
 
-<div class ="tab tooltip">
+<div class ="tooltip">
         <p>Housing to Income:<span id = "housingtoincome"></span></p>
 <span class="tooltiptext">Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.</span>
 </div>
 
-<div class ="tab tooltip">
+<div class ="tooltip">
 <p>F$IRE:<span id ="FIRE"></span></p>
 <span class="tooltiptext">Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</span>
 </div>
