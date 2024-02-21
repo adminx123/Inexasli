@@ -96,7 +96,7 @@ button {
 
     
     <h1 style="text-align: center; font-family: Helvetica; font-size: 12px">The Four Pillars of Finance WARNING: **WILL CONTAIN ERRORS NOT TO BE USED AS FINANCIAL ADVICE. CONSULT WITH A LICENSED PROFESSIONAL. WEBSITE IS NOT FUNCTIONAL YOU ASSUME ALL RISK WHEN USING</h1>
-    <h1 style="text-align: center;">Income - Expenses - Assets - Liabilities</h1>
+    <h1 style="text-align: center;">#Income - Expenses - Assets - Liabilities</h1>
     
     <select id="RegionDropdown">
         <option vlaue="">Select Region</option> 
@@ -1869,21 +1869,7 @@ function scrollToSection(sectionId) {
     
     fire();
     
-    var checkbox = document.getElementById("termsCheckbox");
-if (checkbox.checked) {
-    // Perform calculations
-    alert("Calculations triggered.");
-} else {
-    fetch('LEGAL.txt')
-        .then(response => response.text())
-        .then(data => {
-            alert(data);
-        })
-        .catch(error => {
-            console.error('Error fetching terms of service:', error);
-            alert("Failed to fetch terms of service. Please try again later.");
-        });
-}
+
 
 
 
