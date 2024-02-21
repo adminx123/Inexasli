@@ -1826,16 +1826,16 @@ FIRE = income / ANNUALEXPENSE
 
 }
 
-    function displayTerms() {
+   function displayTerms() {
     fetch('LEGAL.txt')
         .then(response => response.text())
         .then(data => {
-            document.getElementById('termsContent').innerText = data;
-            document.getElementById('termsContent').style.display = 'block';
+            var termsWindow = window.open("", "Terms of Service", "width=600,height=400");
+            termsWindow.document.write('<pre>' + data + '</pre>');
         })
         .catch(error => {
             console.error('Error fetching terms of service:', error);
-            alert("Failed to fetch terms of service. Please try again later.");
+            alert("Failed to fetch terms of service. Please disable pop-up blocker. If still unable to view Terms of Service do not proceed and email admin@inexasli.com for a copy");
         });
 }
 
