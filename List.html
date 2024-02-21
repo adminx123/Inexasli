@@ -1827,13 +1827,15 @@ function displayTerms() {
     fetch('LEGAL.txt')
         .then(response => response.text())
         .then(data => {
-            alert(data);
+            var termsWindow = window.open("", "Terms of Service", "width=600,height=400");
+            termsWindow.document.write('<pre>' + data + '</pre>');
         })
         .catch(error => {
             console.error('Error fetching terms of service:', error);
             alert("Failed to fetch terms of service. Please try again later.");
         });
 }
+
 
 
 function scrollToSection(sectionId) {
@@ -1910,7 +1912,7 @@ function scrollToSection(sectionId) {
     <p>Debt to Income: <span id="DEBTTOINCOME"></span></p>
 <p>Savings to Debt: <span id="SAVINGSTODEBT"></span></p>
 <p>Housing to Income:<span id = "housingtoincome"></span></p>
-<p>$FIRE:<span id ="FIRE"></span></p>
+<p>FIRE:<span id ="FIRE"></span></p>
 
 </div>
 </body>
