@@ -1106,7 +1106,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     fetch('LEGAL.txt')
         .then(response => response.text())
         .then(data => {
-            var termsWindow = window.open("", "Terms of Service", "width=600,height=400");
+            var termsWindow = window.open("", "_blank");
             termsWindow.document.write('<pre>' + data + '</pre>');
         })
         .catch(error => {
