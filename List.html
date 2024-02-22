@@ -1126,14 +1126,18 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     }
 }
     
-   function openTermsModal() {
+function openTermsModal() {
+    console.log('openTermsModal() function called'); // Add this line for debugging
     document.getElementById('termsModal').style.display = 'block';
     fetch('LEGAL.txt')
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById('modalContent').innerHTML = data;
-    })
-    .catch(error => console.error('Error fetching legal content:', error));
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('modalContent').innerHTML = data;
+        })
+        .catch(error => console.error('Error fetching legal content:', error));
+}
+
+
 }
 
 
@@ -2101,7 +2105,7 @@ function scrollToSection(sectionId) {
 </div>
 
 <div class ="tooltip">
-<p>FIRE:<span id ="FIRE"></span></p>
+<p>FIRE:<span id ="FAIRE"></span></p>
 <span class="tooltiptext">Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</span>
 </div>
 
