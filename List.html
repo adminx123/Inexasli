@@ -1060,12 +1060,13 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </div>
 
   <div>
-      <input type="checkbox" id="termsCheckbox">
-<label for="termsCheckbox">I have read, understand and agree to the <a href="#" onclick="displayTerms()">terms of service</a>.</label><br>
-<div id="termsContent" style="display: none;"></div>
+      <input type="checkbox" id="termscheckbox">
+<label for="termscheckbox">I have read, understand and agree to the <a href="#" onclick="displayTerms()">terms of service</a>.</label><br>
 
+   <input type="checkbox" id="notintended">
+<label for="notintended"> I understand IEAL™ is designed to provide a report for estimation and entertainment purposes only. It is not intended to be used as legal, financial, or professional advice. You should seek independent advice from qualified professionals.</label><br>
 
-<button onclick="calculateAll()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate</button>
+<button onclick="validatecheckbox()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate</button>
 
   
   </div>
@@ -1088,6 +1089,31 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var SAVINGSTODEBT;
     var BASICPERSONALAMOUNT = 15705;
     var STANDARDDEDUCTION = 14600;
+    
+    function validatecheckbox() {
+  var termscheckbox = document.getElementById("termscheckbox");
+    var notintended = document.getElementById("notintended");
+    
+    if (termscheckbox.checked && notintended.checked) {
+        // Perform calculations
+            calculateAll();
+    } else {
+        alert("Please agree to the terms of service & disclaimer.");
+    }
+}
+
+   function displayTerms() {
+    fetch('LEGAL.txt')
+        .then(response => response.text())
+        .then(data => {
+            var termsWindow = window.open("", "Terms of Service", "width=600,height=400");
+            termsWindow.document.write('<pre>' + data + '</pre>');
+        })
+        .catch(error => {
+            console.error('Error fetching terms of service:', error);
+            alert("Failed to fetch terms of service. Please disable pop-up blocker. If still unable to view Terms of Service do not proceed and email admin@inexasli.com for a copy");
+        });
+}
     
     function calculateAnnual(inputId, frequencyId) {
         const input = parseFloat(document.getElementById(inputId).value) || 0;
@@ -1877,21 +1903,6 @@ FIRE = income / ANNUALEXPENSE
 
 }
 
-   function displayTerms() {
-    fetch('LEGAL.txt')
-        .then(response => response.text())
-        .then(data => {
-            var termsWindow = window.open("", "Terms of Service", "width=600,height=400");
-            termsWindow.document.write('<pre>' + data + '</pre>');
-        })
-        .catch(error => {
-            console.error('Error fetching terms of service:', error);
-            alert("Failed to fetch terms of service. Please disable pop-up blocker. If still unable to view Terms of Service do not proceed and email admin@inexasli.com for a copy");
-        });
-}
-
-
-
 
 function scrollToSection(sectionId) {
   var section = document.getElementById(sectionId);
@@ -1899,6 +1910,8 @@ function scrollToSection(sectionId) {
     section.scrollIntoView({ behavior: 'smooth' });
   }
 }
+
+       
 
     function calculateAll() {
         
@@ -1934,17 +1947,8 @@ function scrollToSection(sectionId) {
     
     fire();
     
-    var checkbox = document.getElementById("termsCheckbox");
-    if (checkbox.checked) {
-        // Perform calculations
-        alert("Calculations triggered.");
-    } else {
-        alert("Please agree to the terms of service.");
+    
     }
-    }
-
-
-
 
 </script>
 
