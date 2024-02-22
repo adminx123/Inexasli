@@ -24,7 +24,9 @@ input[type="number"],
 select {
     flex: 1; /* Equal width for all elements */
     margin-right: 10px;
+    
 }
+
 
 span {
     /* Adjust as needed */
@@ -130,6 +132,28 @@ button {
         gap: 20px;
     }
 
+/* Style for the modal */
+    .modal {
+        display: none; /* Hide the modal by default */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    }
+
+    /* Style for the modal content */
+    .modal-content {
+        background-color: white;
+        margin: 20% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
     </style>
 </head>
 
@@ -146,10 +170,11 @@ button {
 
 
     
-    <h1 style="text-align: center; font-family: Helvetica; font-size: 12px">The Four Pillars of Finance WARNING: **WILL CONTAIN ERRORS NOT TO BE USED AS FINANCIAL ADVICE. CONSULT WITH A LICENSED PROFESSIONAL. WEBSITE IS NOT FUNCTIONAL YOU ASSUME ALL RISK WHEN USING</h1>
-    <h1 style="text-align: center;">Income - Expenses - Assets - Liabilities</h1>
+    <h2 style="text-align: center; font-family: Helvetica; font-size: 24px">The Four Pillars of Finance:</h2>
     
-    <select id="RegionDropdown">
+    <h2 style="text-align: center; font-family: Helvetica; font-size: 18px">Income - Expenses - Assets - Liabilities</h2>
+    
+        <select id="RegionDropdown">
         <option vlaue="">Select Region</option> 
         <option value="CAN">Canada</option>
         <option value="USA">USA</option>
@@ -235,7 +260,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </script>
 
 
-<h2 id="Income">###INCOME, PRE-TAX & CONTRIBUTION</h2>
+<h2 id="Income">INCOME, PRE-TAX & CONTRIBUTION</h2>
 
 <div class ="row">
 <label for="income_salary_wages">Salary/Wages:</label>
@@ -1060,15 +1085,14 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </div>
 
   <div>
-      <input type="checkbox" id="termscheckbox">
-<label for="termscheckbox">I have read, understand and agree to the <a href="#" onclick="displayTerms()">terms of service</a>.</label><br>
+  
+   <input type="checkbox" id="termscheckbox">
+<label for="termscheckbox">I have read, understand and agree to the <a href="#" onclick="openTermsModal()">terms of service</a>.</label><br>
 
    <input type="checkbox" id="notintended">
 <label for="notintended"> I understand IEAL™ is designed to provide a report for estimation and entertainment purposes only. It is not intended to be used as legal, financial, or professional advice. You should seek independent advice from qualified professionals.</label><br>
-
-<button onclick="validatecheckbox()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate</button>
-
   
+<button onclick="validatecheckbox()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate</button>
   </div>
 
 <script>
@@ -1102,36 +1126,30 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     }
 }
 
-   function displayTerms() {
-    fetch('LEGAL.txt')
-        .then(response => response.text())
-        .then(data => {
-            var termsWindow = window.open("", "_blank");
-            termsWindow.document.write('<pre>' + data + '</pre>');
-        })
-        .catch(error => {
-            console.error('Error fetching terms of service:', error);
-            alert("Failed to fetch terms of service. Please disable pop-up blocker. If still unable to view Terms of Service do not proceed and email admin@inexasli.com for a copy");
-        });
-}
-    
-    function calculateAnnual(inputId, frequencyId) {
-        const input = parseFloat(document.getElementById(inputId).value) || 0;
-        const frequency = document.getElementById(frequencyId).value;
-
-        switch (frequency) {
-            case 'annually':
-                return input;
-            case 'quarterly':
-                return input * 4;
-            case 'monthly':
-                return input * 12;
-            case 'weekly':
-                return input * 52;
-            default:
-                return 0;
-        }
+      // Function to open the modal and fetch terms content
+    function openTermsModal() {
+        document.getElementById('termsModal').style.display = 'block';
+        fetchTermsContent();
     }
+
+    // Function to close the modal
+    function closeTermsModal() {
+        document.getElementById('termsModal').style.display = 'none';
+    }
+
+    // Function to fetch terms content from LEGAL.txt file
+    function fetchTermsContent() {
+        fetch('LEGAL.txt')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('termsContent').textContent = data; // Populate modal content with fetched data
+            })
+            .catch(error => {
+                console.error('Error fetching terms of service:', error);
+                document.getElementById('termsContent').textContent = 'Failed to fetch terms of service. Please try again later.';
+            });
+    }
+
 
 
     function calculateNormalizedSum() {
