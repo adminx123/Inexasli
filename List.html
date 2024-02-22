@@ -1126,11 +1126,15 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     }
 }
     
-    // Function to open the modal and fetch terms content
-    function openTermsModal() {
-        document.getElementById('termsModal').style.display = 'block';
-        fetchTermsContent();
-    }
+   function openTermsModal() {
+    document.getElementById('termsModal').style.display = 'block';
+    fetch('LEGAL.txt')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('modalContent').innerHTML = data;
+    })
+    .catch(error => console.error('Error fetching legal content:', error));
+}
 
 
     // Function to fetch terms content from LEGAL.txt file
