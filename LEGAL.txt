@@ -1,6 +1,4 @@
-<div id="termsModal" class="modal">
-    <div class="modal-content">
-        
+
 Terms of Service
 
 Introduction:
