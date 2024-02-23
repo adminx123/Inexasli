@@ -1091,7 +1091,10 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 <label for="notintended"> I understand IEAL™ is designed to provide a report for estimation and entertainment purposes only. It is not intended to be used as legal, financial, or professional advice. You should seek independent advice from qualified professionals.</label><br>
 
 <div id="termsModal" class="modal">
-    <div class="modal-content">
+        <div class="modal-content" id="modalContent">
+        </div>
+    </div>
+    
         
     
     </div>
@@ -1132,35 +1135,15 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     }
 }
 
-<div id="termsModal" class="modal">
-    <div class="modal-content">
-        
-    </div>
-
-
-    
 function openTermsModal() {
-    console.log('openTermsModal() function called'); // Add this line for debugging
-    document.getElementById('termsModal').style.display = 'block';
-    fetch('LEGAL.txt')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('modalContent').innerHTML = data;
-        })
-        .catch(error => console.error('Error fetching legal content:', error));
-}
-
-    // Function to fetch terms content from LEGAL.txt file
-    function fetchTermsContent() {
+        console.log('openTermsModal() function called');
+        document.getElementById('termsModal').style.display = 'block';
         fetch('LEGAL.txt')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('termsContent').textContent = data; // Populate modal content with fetched data
+                document.getElementById('modalContent').innerHTML = data;
             })
-            .catch(error => {
-                console.error('Error fetching terms of service:', error);
-                document.getElementById('termsContent').textContent = 'Failed to fetch terms of service. Please try again later.';
-            });
+            .catch(error => console.error('Error fetching legal content:', error));
     }
 
     // Function to close the modal
