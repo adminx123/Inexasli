@@ -1151,19 +1151,19 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     }
 }
 
-  function openTermsModal() {
+    function openTermsModal() {
         console.log('openTermsModal() function called');
         document.getElementById('termsModal').style.display = 'block';
-        fetch('LEGAL')
+        fetch('LEGAL.txt') // Corrected file extension to '.txt'
             .then(response => response.text())
             .then(data => {
-                document.getElementById('modalContent').innerText = data; // Changed here: Set innerText instead of innerHTML.
+                document.getElementById('modalContent').innerText = data;
             })
             .catch(error => console.error('Error fetching legal content:', error));
     }
 
-     function closeTermsModal() {
-        document.getElementById('termsModal').style.display = 'none'; // Changed here: Updated to properly close the modal.
+    function closeTermsModal() {
+        document.getElementById('termsModal').style.display = 'none';
     }
 
 
