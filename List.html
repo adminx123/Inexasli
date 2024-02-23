@@ -1085,14 +1085,15 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 
   <div>
       <input type="checkbox" id="termscheckbox">
-<label for="termscheckbox">I have read, understand and agree to the <a href="#" onclick="OpenTermsModal()">terms of service</a>.</label><br>
+<label for="termscheckbox">I have read, understand and agree to the <a href="#" onclick="openTermsModal()">terms of service</a>.</label><br>
 
    <input type="checkbox" id="notintended">
 <label for="notintended"> I understand IEAL™ is designed to provide a report for estimation and entertainment purposes only. It is not intended to be used as legal, financial, or professional advice. You should seek independent advice from qualified professionals.</label><br>
 
 <div id="termsModal" class="modal">
     <div class="modal-content">
-        <!-- Modal content will be dynamically loaded here -->
+        
+    
     </div>
       
 <button onclick="validatecheckbox()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate</button>
