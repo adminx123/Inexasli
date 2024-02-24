@@ -1100,7 +1100,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 
   <div>
       <input type="checkbox" id="termscheckbox">
-<label for="termscheckbox">I have read, understand and agree to the <a href="#" onclick="openModal()">terms of service</a>.</label><br>
+<label for="termscheckbox">I have read, understand and agree to the <a href="#" onclick="openTermsModal()">terms of service</a>.</label><br>
 
    <input type="checkbox" id="notintended">
 <label for="notintended"> I understand IEAL™ is designed to provide a report for estimation and entertainment purposes only. It is not intended to be used as legal, financial, or professional advice. You should seek independent advice from qualified professionals.</label><br>
@@ -1151,16 +1151,18 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     }
 }
 
-    function openModal() {
-        console.log('openTermsModal() function called');
-        document.getElementById('termsModal').style.display = 'block';
-        fetch('legal.txt') // Corrected file extension to '.txt'
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('modalContent').innerText = data;
-            })
-            .catch(error => console.error('Error fetching legal content:', error));
-    }
+    function openTermsModal() {
+  console.log('openTermsModal() function called');
+  // **Change:** Move setting modal display to within the then block after content is retrieved
+  fetch('legal.txt') // Corrected file extension to '.txt'
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('modalContent').innerText = data;
+      // Set modal display to block after content is retrieved
+      document.getElementById('termsModal').style.display = 'block';
+    })
+    .catch(error => console.error('Error fetching legal content:', error));
+}
 
     function closeModal() {
         document.getElementById('termsModal').style.display = 'none';
