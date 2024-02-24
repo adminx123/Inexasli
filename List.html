@@ -1154,7 +1154,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     function openTermsModal() {
         console.log('openTermsModal() function called');
         document.getElementById('termsModal').style.display = 'block';
-        fetch('LEGAL.txt') // Corrected file extension to '.txt'
+        fetch('LEGAL') // Corrected file extension to '.txt'
             .then(response => response.text())
             .then(data => {
                 document.getElementById('modalContent').innerText = data;
