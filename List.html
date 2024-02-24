@@ -31,7 +31,7 @@
 
     /* Close button styles */
     .close {
-        color: #000000;
+        color: #FFFFFF;
         float: right;
         font-size: 28px;
         font-weight: bold;
@@ -1165,9 +1165,14 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     .catch(error => console.error('Error fetching legal content:', error));
 }
 
-    function closeModal() {
-        document.getElementById('termsModal').style.display = 'none';
+    function closeModal(event) {
+    const modal = document.getElementById('termsModal');
+    const modalContent = document.getElementById('modalContent');
+
+    if (event.target === modal && event.target !== modalContent) {
+        modal.style.display = 'none';
     }
+}
 
 
     
