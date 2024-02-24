@@ -1173,7 +1173,14 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
         modal.style.display = 'none';
     }
 }
-
+    
+document.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
+        closeModal();
+    }
+});
 
     
     function calculateAnnual(inputId, frequencyId) {
