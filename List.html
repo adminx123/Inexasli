@@ -1377,7 +1377,8 @@ if (cppPayableEmployed > cppMaxEmployed) {
  // Calculate CPP payable for self-employed individuals
 var cppPayableSelfEmployed;
 if (LCR <= 0) {
-    cppPayableSelfEmployed = 0;
+    cppPayableSelfEmployed = Math.max((annualIncomeSelfEmployed - LEA) * cppRateSelfEmployed, 0);
+
 } else {
     cppPayableSelfEmployed = (annualIncomeSelfEmployed - LEA) * cppRateSelfEmployed;
     if (cppPayableSelfEmployed > LCR) {
