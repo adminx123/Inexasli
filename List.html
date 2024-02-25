@@ -1432,7 +1432,7 @@ const REGIONALTAXBRACKETSCAN = [
 ];
 
 // Define the provincial tax brackets
-const SUBREGIONALTAXBRACKETS = {
+const SUBREGIONALTAXBRACKETSCAN = {
     'AB': [
         { limit: 341502, rate: 0.15 },
         { limit: 227668, rate: 0.14 },
@@ -1535,7 +1535,7 @@ const REGIONALTAXBRACKETSUSA =
 
 
 
-const STATETAXBRACKETSUSA = {
+const SUBREGIONALTAXBRACKETSUSA = {
     "AL": [
         { "limit": 3000, "rate": 0.05 },
         { "limit": 500, "rate": 0.04 },
@@ -1824,7 +1824,7 @@ function calculateTax(taxBrackets) {
 
 function calculateRegionalTax() {
   const region = document.getElementById('RegionDropdown').value;
-  const taxBrackets = region === 'USA' ? REGIONALTAXBRACKETSUSA : REGIONALTAXBRACKETS;
+  const taxBrackets = region === 'USA' ? REGIONALTAXBRACKETSUSA : REGIONALTAXBRACKETSCAN;
   ANNUALREGIONALTAX = calculateTax(taxBrackets);
   document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONALTAX).toFixed(2);
 }
@@ -1832,7 +1832,7 @@ function calculateRegionalTax() {
 // Define the calculateProvincialTax function
 function calculateSubregionalTax(Subregion) {
   const region = document.getElementById('RegionDropdown').value;
-  const taxBrackets = region === 'USA' ? STATETAXBRACKETSUSA[Subregion] : SUBREGIONALTAXBRACKETS[Subregion];
+  const taxBrackets = region === 'USA' ? SUBREGIONALTAXBRACKETSUSA[Subregion] : SUBREGIONALTAXBRACKETSCAN[Subregion];
   ANNUALSUBREGIONALTAX = calculateTax(taxBrackets);
   document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
 }
