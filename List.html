@@ -1998,9 +1998,11 @@ tooltipElements.forEach(tooltip => {
     getEIPayable();
     
     calculateRegionalTax();
+        
     const SubregionDropdown = document.getElementById('SubregionDropdown');
     const province = SubregionDropdown.value;
     calculateProvincialTax(province, PROVINCIALTAXBRACKETS);
+        
     ANNUALTAX = ANNUALREGIONALTAX + ANNUALPROVINCIALTAX;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
