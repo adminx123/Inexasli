@@ -1829,14 +1829,6 @@ function calculateRegionalTax() {
   document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONALTAX).toFixed(2);
 }
 
-// Define the calculateProvincialTax function
-function calculateSubregionalTax(Subregion) {
-  const region = document.getElementById('RegionDropdown').value;
-  const taxBrackets = region === 'USA' ? SUBREGIONALTAXBRACKETSUSA[Subregion] : SUBREGIONALTAXBRACKETSCAN[Subregion];
-  ANNUALSUBREGIONALTAX = calculateTax(taxBrackets);
-  document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
-}
-
 function calculateAssets() {
     const assetFields = [
         'assets_checking_accounts', 
@@ -1998,9 +1990,26 @@ tooltipElements.forEach(tooltip => {
     
     calculateRegionalTax();
         
-    const SubregionDropdown = document.getElementById('SubregionDropdown');
-    const Subregion = SubregionDropdown.value;
-    calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
+    function calculateSubregionalTax(Subregion) {
+  const region = document.getElementById('RegionDropdown').value;
+  let taxBrackets;
+
+  // Determine appropriate tax brackets based on region
+  if (region === 'USA') {
+    taxBrackets = SUBREGIONALTAXBRACKETSUSA;
+  } else {
+    taxBrackets = SUBREGIONALTAXBRACKETS[Subregion];
+  }
+
+  // Handle unavailable brackets and proceed with calculation if available
+  if (taxBrackets) {
+    ANNUALSUBREGIONALTAX = calculateTax(taxBrackets);
+    document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
+  } else {
+    console.warn("Subregional tax brackets not found for", Subregion, "in", region);
+  }
+}
+
         
     ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
