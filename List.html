@@ -1001,89 +1001,89 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 
 <div class ="row">
     <label for="assets_checking_accounts">Checking Account(s):</label>
-    <input type="number" id="assets_checking_accounts">
+    <input type="text" id="assets_checking_accounts">
 </div>
 
 <div class ="row">
     <label for="assets_savings_accounts">Savings Account(s):</label>
-    <input type="number" id="assets_savings_accounts">
+    <input type="text" id="assets_savings_accounts">
 </div>
 
 <div class ="row">
     <label for="assets_other_liquid_accounts">Other Liquid Account(s):</label>
-    <input type="number" id="assets_other_liquid_accounts">
+    <input type="text" id="assets_other_liquid_accounts">
 </div>
 
 <div class ="row">
     <label for="assets_long_term_investment_accounts">Long Term Investment Account(s):</label>
-    <input type="number" id="assets_long_term_investment_accounts">
+    <input type="text" id="assets_long_term_investment_accounts">
 </div>
 
 <div class ="row">
     <label for="assets_primary_residence">Primary Residence:</label>
-    <input type="number" id="assets_primary_residence">
+    <input type="text" id="assets_primary_residence">
 </div>
 
 <div class ="row">
     <label for="assets_investment_properties">Investment Property(s):</label>
-    <input type="number" id="assets_investment_properties">
+    <input type="text" id="assets_investment_properties">
 </div>
 
 <div class ="row">
     <label for="assets_small_business">Small Business:</label>
-    <input type="number" id="assets_small_business">
+    <input type="text" id="assets_small_business">
 </div>
 
 <div class ="row">
     <label for="assets_vehicles">Vehicle(s):</label>
-    <input type="number" id="assets_vehicles">
+    <input type="text" id="assets_vehicles">
 </div>
 
 <div class ="row">
     <label for="assets_art_jewelry">Art/Jewelry:</label>
-    <input type="number" id="assets_art_jewelry">
+    <input type="text" id="assets_art_jewelry">
 </div>
 
     <h2 id= "liabilities">LIABILITIES</h2>
     
     <div class ="row">
     <label for="liabilities_small_business_loan">Small Business Loan:</label>
-    <input type="number" id="liabilities_small_business_loan">
+    <input type="text" id="liabilities_small_business_loan">
 </div>
 
 <div class ="row">
     <label for="liabilities_primary_residence">Primary Residence:</label>
-    <input type="number" id="liabilities_primary_residence">
+    <input type="text" id="liabilities_primary_residence">
 </div>
 
 <div class ="row">
     <label for="liabilities_investment_properties">Investment Property(s):</label>
-    <input type="number" id="liabilities_investment_properties">
+    <input type="text" id="liabilities_investment_properties">
 </div>
 
 <div class ="row">
     <label for="liabilities_vehicle_loan">Vehicle Loan:</label>
-    <input type="number" id="liabilities_vehicle_loan">
+    <input type="text" id="liabilities_vehicle_loan">
 </div>
 
 <div class ="row">
     <label for="liabilities_student_loan">Student Loan:</label>
-    <input type="number" id="liabilities_student_loan">
+    <input type="text" id="liabilities_student_loan">
 </div>
 
 <div class ="row">
     <label for="liabilities_line_of_credit">Line of Credit:</label>
-    <input type="number" id="liabilities_line_of_credit">
+    <input type="text" id="liabilities_line_of_credit">
 </div>
 
 <div class ="row">
     <label for="liabilities_credit_card">Credit Card:</label>
-    <input type="number" id="liabilities_credit_card">
+    <input type="text" id="liabilities_credit_card">
 </div>
 
 <div class ="row">
     <label for="liabilities_tax_arrears">Tax Arrears:</label>
-    <input type="number" id="liabilities_tax_arrears">
+    <input type="text" id="liabilities_tax_arrears">
 </div>
 
   <div>
@@ -1377,12 +1377,16 @@ if (cppPayableEmployed > cppMaxEmployed) {
  // Calculate CPP payable for self-employed individuals
 var cppPayableSelfEmployed;
 if (LCR <= 0) {
-    cppPayableSelfEmployed = 0;
+  cppPayableSelfEmployed = 0;
 } else {
-    cppPayableSelfEmployed = (annualIncomeSelfEmployed - LEA) * cppRateSelfEmployed;
-    if (cppPayableSelfEmployed > LCR) {
-        cppPayableSelfEmployed = LCR * 2;
-    }
+  // Ensure non-negative income after LEA subtraction
+  var adjustedIncome = Math.max(annualIncomeSelfEmployed - LEA, 0);
+  cppPayableSelfEmployed = adjustedIncome * cppRateSelfEmployed;
+  
+  // Check if cppPayableSelfEmployed exceeds LCR
+  if (cppPayableSelfEmployed > LCR) {
+    cppPayableSelfEmployed = LCR * 2;
+  }
 }
 
 ANNUALCPP = cppPayableEmployed + cppPayableSelfEmployed
@@ -1820,25 +1824,18 @@ function calculateTax(taxBrackets) {
     return tax;
 }
 
-// Define the calculateFederalTax function
+
+    // Define the calculateFederalTax function
 function calculateFederalTax() {
-  const region = document.getElementById('RegionDropdown').value;
-  const taxBrackets = region === 'USA' ? FEDERALTAXBRACKETSUSA : FEDERALTAXBRACKETS;
-  ANNUALFEDERALTAX = calculateTax(taxBrackets);
-  document.getElementById('ANNUALFEDERALTAX').textContent = '$' + (ANNUALFEDERALTAX).toFixed(2);
+ANNUALFEDERALTAX = calculateTax(FEDERALTAXBRACKETS);
+document.getElementById('ANNUALFEDERALTAX').textContent = '$' + (ANNUALFEDERALTAX).toFixed(2);
 }
+
 
 // Define the calculateProvincialTax function
-function calculateProvincialTax(province) {
-  const region = document.getElementById('RegionDropdown').value;
-  const taxBrackets = region === 'USA' ? STATETAXBRACKETSUSA[province] : PROVINCIALTAXBRACKETS[province];
-  ANNUALPROVINCIALTAX = calculateTax(taxBrackets);
-  document.getElementById('ANNUALPROVINCIALTAX').textContent = '$' + (ANNUALPROVINCIALTAX).toFixed(2);
-}
-
-// Assuming calculateTax function is defined elsewhere, it should take an array of tax brackets as input
-function calculateTax(taxBrackets) {
-  // ... your tax calculation logic using the provided tax brackets ...
+function calculateProvincialTax(province, PROVINCIALTAXBRACKETS) {
+ANNUALPROVINCIALTAX = calculateTax(PROVINCIALTAXBRACKETS[province]);
+document.getElementById('ANNUALPROVINCIALTAX').textContent = '$' + (ANNUALPROVINCIALTAX).toFixed(2);
 }
 
 function calculateAssets() {
@@ -2078,28 +2075,22 @@ tooltipElements.forEach(tooltip => {
 
 <div class ="tooltip">
         <p><u>Debt to Income:</u> <span id="DEBTTOINCOME"></span></p>
-<span class="tooltiptext">Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health. Healthy Range: Below 36%
-Acceptable: Up to 43% (may vary by lender)
-Concerning: Above 43%</span>
+<span class="tooltiptext">Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health.</span>
 </div>
 
 <div class ="tooltip">
         <p><u>Savings to Debt:</u> <span id="SAVINGSTODEBT"></span></p>
-<span class="tooltiptext">Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.Healthy Range: Above 100%
-Acceptable: 50% - 100%
-Concerning: Below 50%</span>
+<span class="tooltiptext">Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.</span>
 </div>
 
 <div class ="tooltip">
         <p><u>Housing to Income:</u><span id = "housingtoincome"></span></p>
-<span class="tooltiptext">Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.Healthy Range: Below 30%
-Acceptable: 30% - 36%
-Concerning: Above 36%</span>
+<span class="tooltiptext">Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.</span>
 </div>
 
 <div class ="tooltip">
 <p><u>FIRE:</u><span id ="$FARE"></span></p>
-<span class="tooltiptext">Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning. Goal: Above 25%</span>
+<span class="tooltiptext">Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</span>
 </div>
     </div>
     
