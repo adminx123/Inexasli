@@ -121,17 +121,9 @@ button {
 
 
 
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  tabindex: 0; /* Added tabindex attribute */
-}
-
 /* Tooltip text */
 .tooltip .tooltiptext {
-  visibility: hidden;
+  visibility: hidden; /* Initially hidden */
   width: 200px; /* Adjust width as needed */
   background-color: #333;
   color: #fff;
@@ -157,12 +149,6 @@ button {
   border-width: 5px;
   border-style: solid;
   border-color: #333 transparent transparent transparent;
-}
-
-/* Show the tooltip text on focus */
-.tooltip:focus .tooltiptext {
-  visibility: visible;
-  opacity: 1;
 }
 
 .container {
@@ -1975,6 +1961,17 @@ function scrollToSection(sectionId) {
   }
 }
 
+    const tooltipElements = document.querySelectorAll(".tooltip");
+
+tooltipElements.forEach(tooltip => {
+  tooltip.addEventListener("touchstart", function() {
+    this.querySelector(".tooltiptext").classList.add("active");
+  });
+  
+  tooltip.addEventListener("touchend", function() {
+    this.querySelector(".tooltiptext").classList.remove("active");
+  });
+});
        
 
     function calculateAll() {
