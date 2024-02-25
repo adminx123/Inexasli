@@ -1106,7 +1106,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 <script>
    
     var ANNUALTAXABLEINCOME;
-    var ANNUALFEDERALTAX;
+    var ANNUALREGIONALTAX;
     var ANNUALPROVINCIALTAX;
     var ANNUALTAX;
     var ANNUALDISPOSABLEINCOME;
@@ -1426,7 +1426,7 @@ ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed
 }
     
 // Define the tax brackets
-const FEDERALTAXBRACKETS = [
+const REGIONALTAXBRACKETS = [
     { limit: 235675, rate: 0.33 },
     { limit: 165430, rate: 0.29 },
     { limit: 106717, rate: 0.26 },
@@ -1524,7 +1524,7 @@ const PROVINCIALTAXBRACKETS = {
     ]
 };
 
-const FEDERALTAXBRACKETSUSA =
+const REGIONALTAXBRACKETSUSA =
 
      [
         { limit: 609350, rate: 0.37 },
@@ -1826,9 +1826,9 @@ function calculateTax(taxBrackets) {
 
 
     // Define the calculateFederalTax function
-function calculateFederalTax() {
-ANNUALFEDERALTAX = calculateTax(FEDERALTAXBRACKETS);
-document.getElementById('ANNUALFEDERALTAX').textContent = '$' + (ANNUALFEDERALTAX).toFixed(2);
+function calculateRegionalTax() {
+ANNUALREGIONALTAX = calculateTax(REGIONALTAXBRACKETS);
+document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONALTAX).toFixed(2);
 }
 
 
@@ -1997,11 +1997,11 @@ tooltipElements.forEach(tooltip => {
     
     getEIPayable();
     
-    calculateFederalTax();
+    calculateRegionalTax();
     const SubregionDropdown = document.getElementById('SubregionDropdown');
     const province = SubregionDropdown.value;
     calculateProvincialTax(province, PROVINCIALTAXBRACKETS);
-    ANNUALTAX = ANNUALFEDERALTAX + ANNUALPROVINCIALTAX;
+    ANNUALTAX = ANNUALREGIONALTAX + ANNUALPROVINCIALTAX;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
     ANNUALDISPOSABLEINCOME = ANNUALINCOME - ANNUALEXPENSE - ANNUALEI - ANNUALCPP - ANNUALTAX;
@@ -2104,7 +2104,7 @@ tooltipElements.forEach(tooltip => {
 </div>
     
       <div class ="tooltip">
-    <p><u>Regional Tax Payable:</u> <span id="ANNUALFEDERALTAX"></span></p>
+    <p><u>Regional Tax Payable:</u> <span id="ANNUALREGIONALTAX"></span></p>
 <span class="tooltiptext">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</span>
 </div>
 
