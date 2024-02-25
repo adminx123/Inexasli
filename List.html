@@ -1122,16 +1122,24 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var BASICPERSONALAMOUNT = 15705;
     var STANDARDDEDUCTION = 14600;
     
-     function validatecheckbox() {
+    function validatecheckbox() {
   var termscheckbox = document.getElementById("termscheckbox");
-    var notintended = document.getElementById("notintended");
-    
-    if (termscheckbox.checked && notintended.checked) {
-        // Perform calculations
-            calculateAll();
-    } else {
-        alert("Please agree to the terms of service & disclaimer.");
-    }
+  var notintended = document.getElementById("notintended");
+  var regionDropdown = document.getElementById("RegionDropdown");
+
+  // Check if a valid region is selected
+  if (regionDropdown.value === "" || regionDropdown.value === "Select Region") {
+    alert("Please select a region from the dropdown.");
+    return;
+  }
+
+  // Check if checkboxes are checked
+  if (termscheckbox.checked && notintended.checked) {
+    // Perform calculations
+    calculateAll();
+  } else {
+    alert("Please agree to the terms of service & disclaimer.");
+  }
 }
 
     function openTermsModal() {
