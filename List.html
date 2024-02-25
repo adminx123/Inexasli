@@ -121,7 +121,7 @@ button {
 
 
 
-/* Tooltip text */
+* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden; /* Initially hidden */
   width: 200px; /* Adjust width as needed */
@@ -1961,13 +1961,16 @@ function scrollToSection(sectionId) {
   }
 }
 
-    const tooltipElements = document.querySelectorAll(".tooltip");
+ const tooltipElements = document.querySelectorAll(".tooltip");
 
 tooltipElements.forEach(tooltip => {
+  // Add tabindex for focusability (optional, but recommended for accessibility)
+  tooltip.setAttribute("tabindex", 0);
+
   tooltip.addEventListener("touchstart", function() {
     this.querySelector(".tooltiptext").classList.add("active");
   });
-  
+
   tooltip.addEventListener("touchend", function() {
     this.querySelector(".tooltiptext").classList.remove("active");
   });
