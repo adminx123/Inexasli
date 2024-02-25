@@ -1106,8 +1106,8 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 <script>
    
     var ANNUALTAXABLEINCOME;
-    var ANNUALFEDERALTAX;
-    var ANNUALPROVINCIALTAX;
+    var ANNUALREGIONALTAX;
+    var ANNUALSUBREGIONALTAX;
     var ANNUALTAX;
     var ANNUALDISPOSABLEINCOME;
     var ANNUALINCOME;
@@ -1423,7 +1423,7 @@ ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed
 }
     
 // Define the tax brackets
-const FEDERALTAXBRACKETS = [
+const REGIONALTAXBRACKETSCAN = [
     { limit: 235675, rate: 0.33 },
     { limit: 165430, rate: 0.29 },
     { limit: 106717, rate: 0.26 },
@@ -1432,7 +1432,7 @@ const FEDERALTAXBRACKETS = [
 ];
 
 // Define the provincial tax brackets
-const PROVINCIALTAXBRACKETS = {
+const SUBREGIONALTAXBRACKETS = {
     'AB': [
         { limit: 341502, rate: 0.15 },
         { limit: 227668, rate: 0.14 },
@@ -1521,7 +1521,7 @@ const PROVINCIALTAXBRACKETS = {
     ]
 };
 
-const FEDERALTAXBRACKETSUSA =
+const REGIONALTAXBRACKETSUSA =
 
      [
         { limit: 609350, rate: 0.37 },
@@ -1822,19 +1822,19 @@ function calculateTax(taxBrackets) {
 }
 
 
-function calculateFederalTax() {
+function calculateRegionalTax() {
   const region = document.getElementById('RegionDropdown').value;
-  const taxBrackets = region === 'USA' ? FEDERALTAXBRACKETSUSA : FEDERALTAXBRACKETS;
-  ANNUALFEDERALTAX = calculateTax(taxBrackets);
-  document.getElementById('ANNUALFEDERALTAX').textContent = '$' + (ANNUALFEDERALTAX).toFixed(2);
+  const taxBrackets = region === 'USA' ? REGIONALTAXBRACKETSUSA : REGIONALTAXBRACKETS;
+  ANNUALREGIONALTAX = calculateTax(taxBrackets);
+  document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONALTAX).toFixed(2);
 }
 
 // Define the calculateProvincialTax function
-function calculateProvincialTax(province) {
+function calculateSubregionalTax(Subregion) {
   const region = document.getElementById('RegionDropdown').value;
-  const taxBrackets = region === 'USA' ? STATETAXBRACKETSUSA[province] : PROVINCIALTAXBRACKETS[province];
-  ANNUALPROVINCIALTAX = calculateTax(taxBrackets);
-  document.getElementById('ANNUALPROVINCIALTAX').textContent = '$' + (ANNUALPROVINCIALTAX).toFixed(2);
+  const taxBrackets = region === 'USA' ? STATETAXBRACKETSUSA[Subregion] : SUBREGIONALTAXBRACKETS[Subregion];
+  ANNUALSUBREGIONALTAX = calculateTax(taxBrackets);
+  document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
 }
 
 function calculateAssets() {
@@ -1996,11 +1996,11 @@ tooltipElements.forEach(tooltip => {
     
     getEIPayable();
     
-    calculateFederalTax();
+    calculateRegionalTax();
     const SubregionDropdown = document.getElementById('SubregionDropdown');
-    const province = SubregionDropdown.value;
-    calculateProvincialTax(province, PROVINCIALTAXBRACKETS);
-    ANNUALTAX = ANNUALFEDERALTAX + ANNUALPROVINCIALTAX;
+    const Subregion = SubregionDropdown.value;
+    calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
+    ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
     ANNUALDISPOSABLEINCOME = ANNUALINCOME - ANNUALEXPENSE - ANNUALEI - ANNUALCPP - ANNUALTAX;
@@ -2109,12 +2109,12 @@ Concerning: Above 36%</span>
 </div>
     
       <div class ="tooltip">
-    <p><u>Regional Tax Payable:</u> <span id="ANNUALFEDERALTAX"></span></p>
+    <p><u>Regional Tax Payable:</u> <span id="ANNUALREGIONALTAX"></span></p>
 <span class="tooltiptext">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</span>
 </div>
 
     <div class ="tooltip">
-   <p><u>Subregional Tax Payable:</u><span id="ANNUALPROVINCIALTAX"></span></p> 
+   <p><u>Subregional Tax Payable:</u><span id="ANNUALSUBREGIONALTAX"></span></p> 
 <span class="tooltiptext">Tax owed to subregion government. Use: Budgeting for taxe obligations, financial planning.</span>
 </div>
 
