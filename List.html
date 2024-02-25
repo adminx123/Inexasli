@@ -1535,7 +1535,7 @@ const FEDERALTAXBRACKETSUSA =
 
 
 
-const STATETAXBRACKETS = {
+const STATETAXBRACKETSUSA = {
     "AL": [
         { "limit": 3000, "rate": 0.05 },
         { "limit": 500, "rate": 0.04 },
@@ -1822,17 +1822,19 @@ function calculateTax(taxBrackets) {
 }
 
 
-    // Define the calculateFederalTax function
 function calculateFederalTax() {
-ANNUALFEDERALTAX = calculateTax(FEDERALTAXBRACKETS);
-document.getElementById('ANNUALFEDERALTAX').textContent = '$' + (ANNUALFEDERALTAX).toFixed(2);
+  const region = document.getElementById('RegionDropdown').value;
+  const taxBrackets = region === 'USA' ? FEDERALTAXBRACKETSUSA : FEDERALTAXBRACKETS;
+  ANNUALFEDERALTAX = calculateTax(taxBrackets);
+  document.getElementById('ANNUALFEDERALTAX').textContent = '$' + (ANNUALFEDERALTAX).toFixed(2);
 }
 
-
 // Define the calculateProvincialTax function
-function calculateProvincialTax(province, PROVINCIALTAXBRACKETS) {
-ANNUALPROVINCIALTAX = calculateTax(PROVINCIALTAXBRACKETS[province]);
-document.getElementById('ANNUALPROVINCIALTAX').textContent = '$' + (ANNUALPROVINCIALTAX).toFixed(2);
+function calculateProvincialTax(province) {
+  const region = document.getElementById('RegionDropdown').value;
+  const taxBrackets = region === 'USA' ? STATETAXBRACKETSUSA[province] : PROVINCIALTAXBRACKETS[province];
+  ANNUALPROVINCIALTAX = calculateTax(taxBrackets);
+  document.getElementById('ANNUALPROVINCIALTAX').textContent = '$' + (ANNUALPROVINCIALTAX).toFixed(2);
 }
 
 function calculateAssets() {
