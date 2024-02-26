@@ -1426,7 +1426,7 @@ ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed
 }
     
 // Define the tax brackets
-const REGIONALTAXBRACKETS = [
+const REGIONALTAXBRACKETSCAN = [
     { limit: 235675, rate: 0.33 },
     { limit: 165430, rate: 0.29 },
     { limit: 106717, rate: 0.26 },
@@ -1827,7 +1827,7 @@ function calculateTax(taxBrackets) {
 
     // Define the calculateFederalTax function
 function calculateRegionalTax() {
-ANNUALREGIONALTAX = calculateTax(REGIONALTAXBRACKETS);
+ANNUALREGIONALTAX = calculateTax(REGIONALTAXBRACKETSCAN);
 document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONALTAX).toFixed(2);
 }
 
