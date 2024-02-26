@@ -1833,8 +1833,8 @@ document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONAL
 
 
 // Define the calculateProvincialTax function
-function calculateProvincialTax(province, PROVINCIALTAXBRACKETS) {
-ANNUALSUBREGIONALTAX = calculateTax(PROVINCIALTAXBRACKETS[province]);
+function calculateProvincialTax(Subregion, PROVINCIALTAXBRACKETS) {
+ANNUALSUBREGIONALTAX = calculateTax(PROVINCIALTAXBRACKETS[Subregion]);
 document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
 }
 
@@ -2000,8 +2000,8 @@ tooltipElements.forEach(tooltip => {
     calculateRegionalTax();
         
     const SubregionDropdown = document.getElementById('SubregionDropdown');
-    const province = SubregionDropdown.value;
-    calculateProvincialTax(province, PROVINCIALTAXBRACKETS);
+    const Subregion = SubregionDropdown.value;
+    calculateProvincialTax(Subregion, PROVINCIALTAXBRACKETS);
         
     ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
