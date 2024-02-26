@@ -1107,7 +1107,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
    
     var ANNUALTAXABLEINCOME;
     var ANNUALREGIONALTAX;
-    var ANNUALPROVINCIALTAX;
+    var ANNUALSUBREGIONALTAX;
     var ANNUALTAX;
     var ANNUALDISPOSABLEINCOME;
     var ANNUALINCOME;
@@ -1834,8 +1834,8 @@ document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONAL
 
 // Define the calculateProvincialTax function
 function calculateProvincialTax(province, PROVINCIALTAXBRACKETS) {
-ANNUALPROVINCIALTAX = calculateTax(PROVINCIALTAXBRACKETS[province]);
-document.getElementById('ANNUALPROVINCIALTAX').textContent = '$' + (ANNUALPROVINCIALTAX).toFixed(2);
+ANNUALSUBREGIONALTAX = calculateTax(PROVINCIALTAXBRACKETS[province]);
+document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
 }
 
 function calculateAssets() {
@@ -2003,7 +2003,7 @@ tooltipElements.forEach(tooltip => {
     const province = SubregionDropdown.value;
     calculateProvincialTax(province, PROVINCIALTAXBRACKETS);
         
-    ANNUALTAX = ANNUALREGIONALTAX + ANNUALPROVINCIALTAX;
+    ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
     ANNUALDISPOSABLEINCOME = ANNUALINCOME - ANNUALEXPENSE - ANNUALEI - ANNUALCPP - ANNUALTAX;
@@ -2111,7 +2111,7 @@ tooltipElements.forEach(tooltip => {
 </div>
 
     <div class ="tooltip">
-   <p><u>Subregional Tax Payable:</u><span id="ANNUALPROVINCIALTAX"></span></p> 
+   <p><u>Subregional Tax Payable:</u><span id="ANNUALSUBREGIONALTAX"></span></p> 
 <span class="tooltiptext">Tax owed to subregion government. Use: Budgeting for taxe obligations, financial planning.</span>
 </div>
 
