@@ -1832,11 +1832,23 @@ document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONAL
 }
 
 
-// Define the calculateProvincialTax function
-function calculateProvincialTax(Subregion, PROVINCIALTAXBRACKETS) {
-ANNUALSUBREGIONALTAX = calculateTax(PROVINCIALTAXBRACKETS[Subregion]);
-document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
+// Define the calculateSubregionalTax function
+function calculateSubregionalTax(Subregion, taxBrackets) {
+  ANNUALSUBREGIONALTAX = calculateTax(taxBrackets[Subregion]);
+  document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
 }
+
+// Main logic to handle dropdown selection and call appropriate function
+const SubregionDropdown = document.getElementById('SubregionDropdown'); // Assuming this is the dropdown element's ID
+SubregionDropdown.addEventListener('change', (event) => {
+  const selectedSubregion = event.target.value;
+
+  if (selectedSubregion === 'CAN') {
+    calculateSubregionalTax(selectedSubregion, PROVINCIALTAXBRACKETS); // Use PROVINCIALTAXBRACKETS for Canadian provinces
+  } else if (selectedSubregion === 'USA') {
+    calculateSubregionalTax(selectedSubregion, STATETAXBRACKETS); // Use STATETAXBRACKETS for US states
+  }
+});
 
 function calculateAssets() {
     const assetFields = [
@@ -2001,7 +2013,7 @@ tooltipElements.forEach(tooltip => {
         
     const SubregionDropdown = document.getElementById('SubregionDropdown');
     const Subregion = SubregionDropdown.value;
-    calculateProvincialTax(Subregion, PROVINCIALTAXBRACKETS);
+    calculateSubregionalTax(Subregion, PROVINCIALTAXBRACKETS);
         
     ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
