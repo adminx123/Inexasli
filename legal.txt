@@ -13,6 +13,7 @@ IEAL™ User Responsibility: As a user, you agree to the following responsibilit
 	•	Typographical Errors: Unintentional mistakes from hitting the wrong button.
 	•	Unit Errors: Attributing an amount to the incorrect field within the specified time frame.
 	•	Transposition Errors: Unintentional errors where numbers or letters are swapped or reversed.
+        •	Failing to Update: Making changes to the an already submitted calculation and not pressing the calculate/update button again
 
 2. Appropriate Use: You agree to use IEAL™ for lawful purposes only. IEAL™ must not be used in a way that violates any laws, infringes on anyone’s rights, is offensive, or interferes with IEAL™ or any features on IEAL™. In the event of unauthorized use, notify admin@inexasli.com immediately.
 
