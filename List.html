@@ -1917,25 +1917,35 @@ function housingtoincome() {
 
 
 function fire() {
-    const fireFields=[
-     ['income_investment_property', 'income_investment_property_frequency'],
-     ['income_interest', 'income_interest_frequency'],
-     ['income_public_dividend', 'income_public_dividend_frequency'],
-     ['income_trust', 'income_trust_frequency'],
-     ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency']
-     ];
-     
-let income = 0;
+  const fireFields = [
+    ['income_investment_property', 'income_investment_property_frequency'],
+    ['income_interest', 'income_interest_frequency'],
+    ['income_public_dividend', 'income_public_dividend_frequency'],
+    ['income_trust', 'income_trust_frequency'],
+    ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency']
+  ];
 
-for (const [incomeField, frequencyField] of fireFields) {
-        const incomeValue = parseFloat(document.getElementById(incomeField).value) || 0;
-        const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
-        income += incomeValue * frequency;
+  let income = 0;
 
-}
-FIRE = income / ANNUALEXPENSE
-    document.getElementById('FIRE').textContent = FIRE.toFixed(3);
+  for (const [incomeField, frequencyField] of fireFields) {
+    const incomeValue = document.getElementById(incomeField)?.value || "";
+    const frequencyValue = document.getElementById(frequencyField)?.value || 1;
 
+    if (incomeValue !== "") {
+      const income = parseFloat(incomeValue); // Use the parsed income value
+      const frequency = parseFloat(frequencyValue);
+      income += income * frequency;
+    } else {
+      console.warn(`Skipping empty field: ${incomeField}`);
+    }
+  }
+
+  if (ANNUALEXPENSE > 0) { // Check for division by zero
+    FIRE = income / ANNUALEXPENSE;
+  } else {
+    FIRE = 0; // Or handle it differently if annual expense is zero
+  }
+  document.getElementById('FIRE').textContent = FIRE.toFixed(3);
 }
 
 
