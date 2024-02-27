@@ -1852,49 +1852,69 @@ function calculateLiabilities() {
 
 
 function savingstodebt() {
-    const liquidAssetsFields = [
-        'assets_checking_accounts',
-        'assets_savings_accounts',
-        'assets_other_liquid_accounts'
-    ];
-    let liquidAssets = 0; 
-    
-    // Calculate the sum of liquid assets
-    for (const field of liquidAssetsFields) {
-        liquidAssets += parseFloat(document.getElementById(field).value) || 0;
-    }
+  const liquidAssetsFields = [
+    'assets_checking_accounts',
+    'assets_savings_accounts',
+    'assets_other_liquid_accounts'
+  ];
+  let liquidAssets = 0;
 
-    SAVINGSTODEBT = liquidAssets / LIABILITIES
-    document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
+  // Calculate the sum of liquid assets
+  for (const field of liquidAssetsFields) {
+    const fieldValue = document.getElementById(field)?.value || "";
+    if (fieldValue !== "") {
+      liquidAssets += parseFloat(fieldValue);
+    } else {
+      console.warn(`Skipping empty field: ${field}`);
+    }
+  }
+
+  if (LIABILITIES > 0) { // Check for division by zero
+    SAVINGSTODEBT = liquidAssets / LIABILITIES;
+  } else {
+    SAVINGSTODEBT = 0; // Or handle it differently if liabilities are zero
+  }
+  document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
 }
+
 
 function housingtoincome() {
-    const housingFields = [
-        ['housing_mortgage_payment', 'housing_mortgage_payment_frequency'],
-        ['housing_rent_payment', 'housing_rent_payment_frequency'],
-        ['housing_property_tax', 'housing_property_tax_frequency'],
-        ['housing_condo_fee', 'housing_condo_fee_frequency'],
-        ['housing_hydro', 'housing_hydro_frequency'],
-        ['housing_insurance', 'housing_insurance_frequency'],
-        ['housing_repairs', 'housing_repairs_frequency'],
-        ['housing_water', 'housing_water_frequency'],
-        ['housing_gas', 'housing_gas_frequency'],
-        ['housing_internet', 'housing_internet_frequency']
-    ];
+  const housingFields = [
+    ['housing_mortgage_payment', 'housing_mortgage_payment_frequency'],
+    ['housing_rent_payment', 'housing_rent_payment_frequency'],
+    ['housing_property_tax', 'housing_property_tax_frequency'],
+    ['housing_condo_fee', 'housing_condo_fee_frequency'],
+    ['housing_hydro', 'housing_hydro_frequency'],
+    ['housing_insurance', 'housing_insurance_frequency'],
+    ['housing_repairs', 'housing_repairs_frequency'],
+    ['housing_water', 'housing_water_frequency'],
+    ['housing_gas', 'housing_gas_frequency'],
+    ['housing_internet', 'housing_internet_frequency']
+  ];
 
-    let housing = 0;
+  let housing = 0;
 
-    for (const [expenseField, frequencyField] of housingFields) {
-        const expense = parseFloat(document.getElementById(expenseField).value) || 0;
-        const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
-        housing += expense * frequency; 
+  for (const [expenseField, frequencyField] of housingFields) {
+    const expenseValue = document.getElementById(expenseField)?.value || "";
+    const frequencyValue = document.getElementById(frequencyField)?.value || 1;
+
+    if (expenseValue !== "") {
+      const expense = parseFloat(expenseValue);
+      const frequency = parseFloat(frequencyValue);
+      housing += expense * frequency;
+    } else {
+      console.warn(`Skipping empty field: ${expenseField}`);
     }
+  }
 
-    housingtoincome = housing / ANNUALINCOME; 
-    document.getElementById('housingtoincome').textContent = housingtoincome.toFixed(3);
-    
-    
+  if (ANNUALINCOME > 0) { // Check for division by zero
+    housingtoincome = housing / ANNUALINCOME;
+  } else {
+    housingtoincome = 0; // Or handle it differently if income is zero
+  }
+  document.getElementById('housingtoincome').textContent = housingtoincome.toFixed(3);
 }
+
 
 function fire() {
     const fireFields=[
