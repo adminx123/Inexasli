@@ -1384,8 +1384,22 @@ const REGIONALTAXBRACKETSCAN = [
     { limit: 0, rate: 0.15 }
 ];
 
-// Define the provincial tax brackets
-const PROVINCIALTAXBRACKETS = {
+
+const REGIONALTAXBRACKETSUSA =
+
+     [
+        { limit: 609350, rate: 0.37 },
+        { limit: 243725, rate: 0.35 },
+        { limit: 191950, rate: 0.32 },
+        { limit: 100525, rate: 0.24 },
+        { limit: 47150, rate: 0.22 },
+        { limit: 11600, rate: 0.12 },
+        { limit: 0, rate: 0.10 }
+    ];
+    
+// Define the SUBREGIONAL tax brackets
+const SUBREGIONALTAXBRACKETS = {
+    //Canada Provinces
     'AB': [
         { limit: 341502, rate: 0.15 },
         { limit: 227668, rate: 0.14 },
@@ -1471,24 +1485,9 @@ const PROVINCIALTAXBRACKETS = {
         { limit: 106717, rate: 0.109 },
         { limit: 53359, rate: 0.09 },
         { limit: 0, rate: 0.064 }
-    ]
-};
+    ],
 
-const REGIONALTAXBRACKETSUSA =
-
-     [
-        { limit: 609350, rate: 0.37 },
-        { limit: 243725, rate: 0.35 },
-        { limit: 191950, rate: 0.32 },
-        { limit: 100525, rate: 0.24 },
-        { limit: 47150, rate: 0.22 },
-        { limit: 11600, rate: 0.12 },
-        { limit: 0, rate: 0.10 }
-    ];
-
-
-
-const STATETAXBRACKETS = {
+    //US STATES
     "AL": [
         { "limit": 3000, "rate": 0.05 },
         { "limit": 500, "rate": 0.04 },
@@ -1756,11 +1755,11 @@ const STATETAXBRACKETS = {
         { "limit": 0, "rate": 0.0354 }
     ],
     "WY": []
-}
+};
 
 
 
-// Define the calculateTax function to calculate both federal and provincial tax
+// Define the calculateTax function to calculate both federal and SUBREGIONAL tax
 function calculateTax(taxBrackets) {
     let tax = 0;
     let taxableIncome = ANNUALTAXABLEINCOME;
@@ -1788,17 +1787,6 @@ function calculateSubregionalTax(Subregion, taxBrackets) {
   document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
 }
 
-// Main logic to handle dropdown selection and call appropriate function
-const SubregionDropdown = document.getElementById('SubregionDropdown'); // Assuming this is the dropdown element's ID
-SubregionDropdown.addEventListener('change', (event) => {
-  const selectedSubregion = event.target.value;
-
-  if (selectedSubregion === 'CAN') {
-    calculateSubregionalTax(selectedSubregion, PROVINCIALTAXBRACKETS); // Use PROVINCIALTAXBRACKETS for Canadian provinces
-  } else if (selectedSubregion === 'USA') {
-    calculateSubregionalTax(selectedSubregion, STATETAXBRACKETS); // Use STATETAXBRACKETS for US states
-  }
-});
 
 function calculateAssets() {
     const assetFields = [
@@ -1963,7 +1951,7 @@ tooltipElements.forEach(tooltip => {
         
     const SubregionDropdown = document.getElementById('SubregionDropdown');
     const Subregion = SubregionDropdown.value;
-    calculateSubregionalTax(Subregion, PROVINCIALTAXBRACKETS);
+    calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
         
     ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
