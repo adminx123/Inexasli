@@ -1789,37 +1789,39 @@ function calculateSubregionalTax(Subregion, taxBrackets) {
 
 
 function calculateAssets() {
-    const assetFields = [
-        'assets_checking_accounts', 
-        'assets_savings_accounts', 
-        'assets_other_liquid_accounts', 
-        'assets_long_term_investment_accounts', 
-        'assets_primary_residence', 
-        'assets_investment_properties', 
-        'assets_small_business', 
-        'assets_vehicles', 
-        'assets_art_jewelry'
-    ];
+  const assetFields = [
+    'assets_checking_accounts', 
+    'assets_savings_accounts', 
+    'assets_other_liquid_accounts', 
+    'assets_long_term_investment_accounts', 
+    'assets_primary_residence', 
+    'assets_investment_properties', 
+    'assets_small_business', 
+    'assets_vehicles', 
+    'assets_art_jewelry'
+  ];
 
-    let assets = 0;
+  let assets = 0;
 
-    for (let i = 0; i < assetFields.length; i++) {
-        const fieldValue = document.getElementById(assetFields[i]).value;
-        console.log(`Field value for ${assetFields[i]}: ${fieldValue}`);
-        const parsedValue = parseFloat(fieldValue);
-        if (!isNaN(parsedValue)) {
-            assets += parsedValue;
-        } else {
-            console.error(`Invalid value for ${assetFields[i]}: ${fieldValue}`);
-        }
+  for (let i = 0; i < assetFields.length; i++) {
+    const fieldValue = document.getElementById(assetFields[i])?.value || "";
+    console.log(`Field value for ${assetFields[i]}: ${fieldValue}`);
+
+    if (fieldValue !== "") {
+      const parsedValue = parseFloat(fieldValue);
+      assets += parsedValue;
+    } else {
+      console.warn(`Skipping empty field: ${assetFields[i]}`);
     }
+  }
 
-    ASSETS = assets;
-    document.getElementById('ASSETS').textContent = '$' + ASSETS.toFixed(2);
+  ASSETS = assets;
+  document.getElementById('ASSETS').textContent = '$' + ASSETS.toFixed(2);
 }
 
+
 function calculateLiabilities() {
-    const liabilitiesFields = [
+  const liabilitiesFields = [
     'liabilities_small_business_loan',
     'liabilities_primary_residence',
     'liabilities_investment_properties',
@@ -1828,24 +1830,26 @@ function calculateLiabilities() {
     'liabilities_line_of_credit',
     'liabilities_credit_card',
     'liabilities_tax_arrears'
-    ];
+  ];
 
-    let liabilities = 0;
+  let liabilities = 0;
 
-    for (let i = 0; i < liabilitiesFields.length; i++) {
-        const fieldValue = document.getElementById(liabilitiesFields[i]).value;
-        console.log(`Field value for ${liabilitiesFields[i]}: ${fieldValue}`);
-        const parsedValue = parseFloat(fieldValue);
-        if (!isNaN(parsedValue)) {
-            liabilities += parsedValue;
-        } else {
-            console.error(`Invalid value for ${liabilities[i]}: ${fieldValue}`);
-        }
+  for (let i = 0; i < liabilitiesFields.length; i++) {
+    const fieldValue = document.getElementById(liabilitiesFields[i])?.value || "";
+    console.log(`Field value for ${liabilitiesFields[i]}: ${fieldValue}`);
+
+    if (fieldValue !== "") {
+      const parsedValue = parseFloat(fieldValue);
+      liabilities += parsedValue;
+    } else {
+      console.warn(`Skipping empty field: ${liabilitiesFields[i]}`);
     }
+  }
 
-    LIABILITIES = liabilities;
-    document.getElementById('LIABILITIES').textContent = '$' + LIABILITIES.toFixed(2);
+  LIABILITIES = liabilities;
+  document.getElementById('LIABILITIES').textContent = '$' + LIABILITIES.toFixed(2);
 }
+
 
 function savingstodebt() {
     const liquidAssetsFields = [
@@ -1898,7 +1902,6 @@ function fire() {
      ['income_interest', 'income_interest_frequency'],
      ['income_public_dividend', 'income_public_dividend_frequency'],
      ['income_trust', 'income_trust_frequency'],
-     ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
      ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency']
      ];
      
