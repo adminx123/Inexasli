@@ -1166,9 +1166,7 @@ document.addEventListener('click', closeModal);
             ['income_tax_free_income', 'income_tax_free_income_frequency']
             // Add more income fields here
         ];
- 
 let annualIncomeSum = 0;
-
   // Calculate annual income sum
         incomeFields.forEach(field => {
             const [inputId, frequencyId] = field;
@@ -1201,10 +1199,7 @@ ANNUALINCOME = annualIncomeSum
             ['income_venture_capital', 'income_venture_capital_frequency'],
                         // Add more income fields here
         ];
-
          let annualTaxableSum = 0;
-
-        // Calculate taxable sum
         taxableincomeFields.forEach(field => {
             const [inputId, frequencyId] = field;
             let taxableincome = calculateAnnual(inputId, frequencyId);
@@ -1219,6 +1214,8 @@ ANNUALINCOME = annualIncomeSum
              
         // Display the results
         document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
+        
+     
         
         // Define all expense fields with their corresponding frequency fields
         const expenseFields = [
@@ -1273,18 +1270,22 @@ let annualExpenseSum = 0;
 ANNUALEXPENSE = annualExpenseSum
  // Display the results
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
-    }
+   
+ }
     
 function getCppPayable() {
-    // Retrieve annual income sums from the DOM (assuming they are already calculated)
-    var annualSalaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
-    var annualBonuses = parseFloat(document.getElementById('income_bonuses').value) || 0;
-    var annualTips = parseFloat(document.getElementById('income_tips').value) || 0;
-    var annualSoleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
 
-    // Calculate total annual income for employed and self-employed individuals
-    var annualIncomeEmployed = annualSalaryWages + annualBonuses + annualTips;
-    var annualIncomeSelfEmployed = annualSoleProp;
+    var SalaryWagesValue=parseFloat(document.getElementById('income_salary_wages').value) || 0;
+    var SalaryWagesFrequency=parseFloat(document.getElementById('income_salary_wages_frequency').value) || 0;
+    var TipsValue=parseFloat(document.getElementById('income_tips').value) || 0;
+    var TipsFrequency=parseFloat(document.getElementById('income_tips_frequency').value) || 0;
+    var BonusesValue=parseFloat(document.getElementById('income_bonuses').value) || 0;
+    var BonusesFrequency=parseFloat(document.getElementById('income_bonuses_frequency').value) || 0;
+    var annualIncomeEmployed= (calculateAnnual(SalaryWagesValue, SalaryWagesFrequency)+ calculateAnnual(TipsValue, TipsFrequency)+ calculateAnnual(BonusesValue, BonusesFrequency))
+    
+    var SolePropValue = parseFloat(document.getElementById('income_sole_prop').value) || 0;
+    var SolePropFrequency = parseFloat(document.getElementById('income_sole_prop_frequency').value) || 0;
+    var annualIncomeSelfEmployed = calculateAnnual(SolePropValue, SolePropFrequency);
 
     // Define CPP rates and maximums
     var cppRateEmployed = 0.0595;
@@ -1344,7 +1345,6 @@ ANNUALCPP = cppPayableEmployed + cppPayableSelfEmployed
 document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmployed).toFixed(2);
     document.getElementById('annual_cpp_seresult').textContent = '$' + (cppPayableSelfEmployed).toFixed(2);
 }
-
 
    function getEIPayable() {
     // Retrieve annual salary, bonuses, tips, and self-employment income from the DOM
