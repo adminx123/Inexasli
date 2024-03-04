@@ -1,3 +1,4 @@
+// cleaned up cpp cals not working both, ANNUALEMPLOYMENTINCOME variable works.
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1059,6 +1060,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var ANNUALREGIONALTAX;
     var ANNUALSUBREGIONALTAX;
     var ANNUALTAX;
+    var ANNUALEMPLOYMENTINCOME;
     var ANNUALDISPOSABLEINCOME;
     var ANNUALINCOME;
     var ANNUALEXPENSE;
@@ -1271,21 +1273,22 @@ ANNUALEXPENSE = annualExpenseSum
  // Display the results
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
    
+      const employmentincomeFields = 
+      [[ 'income_salary_wages', 'income_salary_wages_frequency'],
+      ['income_tips', 'income_tips_frequency'],
+      ['income_bonuses', 'income_bonuses_frequency']];
+      let annualEmploymentIncome = 0;
+    employmentincomeFields.forEach(field => {
+      const [inputId, frequencyId] = field;
+      annualEmploymentIncome += calculateAnnual(inputId, frequencyId);
+    });
+ANNUALEMPLOYMENTINCOME = annualEmploymentIncome;
  }
     
 function getCppPayable() {
-
-    var SalaryWagesValue=parseFloat(document.getElementById('income_salary_wages').value) || 0;
-    var SalaryWagesFrequency=parseFloat(document.getElementById('income_salary_wages_frequency').value) || 0;
-    var TipsValue=parseFloat(document.getElementById('income_tips').value) || 0;
-    var TipsFrequency=parseFloat(document.getElementById('income_tips_frequency').value) || 0;
-    var BonusesValue=parseFloat(document.getElementById('income_bonuses').value) || 0;
-    var BonusesFrequency=parseFloat(document.getElementById('income_bonuses_frequency').value) || 0;
-    var annualIncomeEmployed= (calculateAnnual(SalaryWagesValue, SalaryWagesFrequency)+ calculateAnnual(TipsValue, TipsFrequency)+ calculateAnnual(BonusesValue, BonusesFrequency))
-    
-    var SolePropValue = parseFloat(document.getElementById('income_sole_prop').value) || 0;
+    var annualSoleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
     var SolePropFrequency = parseFloat(document.getElementById('income_sole_prop_frequency').value) || 0;
-    var annualIncomeSelfEmployed = calculateAnnual(SolePropValue, SolePropFrequency);
+    var annualIncomeSelfEmployed = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
 
     // Define CPP rates and maximums
     var cppRateEmployed = 0.0595;
@@ -1296,26 +1299,26 @@ function getCppPayable() {
 
     // Calculate left over contribution room employed
     var LCR;
-    if (annualIncomeEmployed <= cppExemptionAmount) {
+    if (ANNUALEMPLOYMENTINCOME <= cppExemptionAmount) {
         LCR = cppMaxEmployed; 
     } else {
-        LCR = cppMaxEmployed - ((annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed);
+        LCR = cppMaxEmployed - ((ANNUALEMPLOYMENTINCOME - cppExemptionAmount) * cppRateEmployed);
     }
 
     // Calculate left over exemption amount
     var LEA;
-    if ((annualIncomeEmployed - cppExemptionAmount) <= 0) { 
-        LEA = Math.abs(annualIncomeEmployed - cppExemptionAmount);
+    if ((ANNUALEMPLOYMENTINCOME - cppExemptionAmount) <= 0) { 
+        LEA = Math.abs(ANNUALEMPLOYMENTINCOME - cppExemptionAmount);
     } else {
         LEA = 0;
     }
 
     // Calculate CPP payable for employed
 var cppPayableEmployed;
-if (annualIncomeEmployed <= cppExemptionAmount) {
+if (ANNUALEMPLOYMENTINCOME <= cppExemptionAmount) {
     cppPayableEmployed = 0;
 } else {
-    cppPayableEmployed = (annualIncomeEmployed - cppExemptionAmount) * cppRateEmployed;
+    cppPayableEmployed = (ANNUALEMPLOYMENTINCOME - cppExemptionAmount) * cppRateEmployed;
 }
 
 // Check if cppPayableEmployed exceeds cppMaxEmployed
@@ -1345,6 +1348,7 @@ ANNUALCPP = cppPayableEmployed + cppPayableSelfEmployed
 document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmployed).toFixed(2);
     document.getElementById('annual_cpp_seresult').textContent = '$' + (cppPayableSelfEmployed).toFixed(2);
 }
+
 
    function getEIPayable() {
     // Retrieve annual salary, bonuses, tips, and self-employment income from the DOM
