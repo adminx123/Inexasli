@@ -4,49 +4,853 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INEXASLI</title>
-    <link rel="icon" href="Logo.png" type="image/png">
+    <title>Input Page</title>
     <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
+    
+     /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+         cursor: pointer;
+    }
 
-        img {
-            max-width: 75%;
-            height: auto;
-            cursor: pointer;
-        }
+    .modal-content {
+        background-color: #000000;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
 
-        h1 {
-            margin-top: 20px;
-        }
+    /* Close button styles */
+    .close {
+        color: #FFFFFF;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
 
-        a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 18px;
-            margin-top: 20px;
-        }
+    .close:hover,
+    .close:focus {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
+
+    
+    body {
+    background-color: #000;
+    color: #fff;
+    text-align: left;
+    margin: 20px;
+}
+
+.row {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    margin-bottom: 10px;
+}
+
+label,
+input[type="number"],
+select {
+    flex: 1; /* Equal width for all elements */
+    margin-right: 10px;
+}
+
+span {
+    /* Adjust as needed */
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.tab-container {
+    display: flex;
+    justify-content: center; /* Center-align tabs */
+}
+
+.tab {
+    padding: 10px 10px;
+    cursor: pointer;
+    background-color: black;
+    border: .01px solid;
+    border-radius: 5px 5px 0 0;
+    margin: 0 px; /* Adjust spacing between tabs */
+}
+
+/* Style for the active tab */
+.active {
+    background-color: white;
+}
+
+/* Media Query for smaller screens (e.g., mobile) */
+@media (max-width: 768px) {
+    label,
+    input[type="number"],
+    select {
+        width: 100%; /* Set width to 100% for smaller screens */
+        margin-right: 0; /* Remove margin between elements */
+    }
+}
+
+.numeric-input {
+    /* Apply styling as needed */
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+
+
+* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden; /* Initially hidden */
+  width: 200px; /* Adjust width as needed */
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Adjust positioning as needed */
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
     </style>
 </head>
 
-<body>     <iframe src="/edit?usp=sharing" width="800" height="800" frameborder="0" scrolling="no"></iframe> </body>
+  <body>
+    <div class="tab-container">
+    <div class="tab" onclick="scrollToSection('income')">Income</div>
+    <div class="tab" onclick="scrollToSection('expense')">Expense</div>
+     <div class="tab" onclick="scrollToSection('asset')">Asset</div>
+    <div class="tab" onclick="scrollToSection('liability')">Liability</div>
+    <div class="tab" onclick="scrollToSection('summary')">Summary</div>
+</div>
+
+
+<h2 id ="misc">EXPENSES, MISCELLANEOUS</h2>
+
+<div class ="row">
+    <label for="expenses_grocery">Grocery:</label>
+<input type="number" id="expenses_grocery">
+<select id="expenses_grocery_frequency" onchange="calculateAnnual('expenses_grocery', 'expenses_grocery_frequency')">
+  <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_grocery_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_dining">Dining:</label>
+<input type="number" id="expenses_dining">
+<select id="expenses_dining_frequency" onchange="calculateAnnual('expenses_dining', 'expenses_dining_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_dining_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_fitness">Fitness:</label>
+<input type="number" id="expenses_fitness">
+<select id="expenses_fitness_frequency" onchange="calculateAnnual('expenses_fitness', 'expenses_fitness_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_fitness_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_hygiene">Hygiene:</label>
+<input type="number" id="expenses_hygiene">
+<select id="expenses_hygiene_frequency" onchange="calculateAnnual('expenses_hygiene', 'expenses_hygiene_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_hygiene_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_subscriptions">Subscriptions:</label>
+<input type="number" id="expenses_subscriptions">
+<select id="expenses_subscriptions_frequency" onchange="calculateAnnual('expenses_subscriptions', 'expenses_subscriptions_frequency')">
+  <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_subscriptions_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_pet">Pet:</label>
+<input type="number" id="expenses_pet">
+<select id="expenses_pet_frequency" onchange="calculateAnnual('expenses_pet', 'expenses_pet_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_pet_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_clothing">Clothing:</label>
+<input type="number" id="expenses_clothing">
+<select id="expenses_clothing_frequency" onchange="calculateAnnual('expenses_clothing', 'expenses_clothing_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_clothing_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_vacation">Vacation:</label>
+<input type="number" id="expenses_vacation">
+<select id="expenses_vacation_frequency" onchange="calculateAnnual('expenses_vacation', 'expenses_vacation_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_vacation_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_travel_life_insurance">Life & Travel Insurance:</label>
+<input type="number" id="expenses_travel_life_insurance">
+<select id="expenses_travel_life_insurance_frequency" onchange="calculateAnnual('expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_travel_life_insurance_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_cellphone_service">Cellphone:</label>
+<input type="number" id="expenses_cellphone_service">
+<select id="expenses_cellphone_service_frequency" onchange="calculateAnnual('expenses_cellphone_service', 'expenses_cellphone_service_frequency')">
+  <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_cellphone_service_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_medical_dental">Medical & Dental:</label>
+<input type="number" id="expenses_medical_dental">
+<select id="expenses_medical_dental_frequency" onchange="calculateAnnual('expenses_medical_dental', 'expenses_medical_dental_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_medical_dental_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_line_of_credit_payment">Line of Credit Payment:</label>
+<input type="number" id="expenses_line_of_credit_payment">
+<select id="expenses_line_of_credit_payment_frequency" onchange="calculateAnnual('expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+    <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_line_of_credit_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_student_loan_payment">Student Loan Payment:</label>
+<input type="number" id="expenses_student_loan_payment">
+<select id="expenses_student_loan_payment_frequency" onchange="calculateAnnual('expenses_student_loan_payment', 'expenses_student_loan_payment_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_student_loan_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_credit_card_payment">Credit Card Payment:</label>
+<input type="number" id="expenses_credit_card_payment">
+<select id="expenses_credit_card_payment_frequency" onchange="calculateAnnual('expenses_credit_card_payment', 'expenses_credit_card_payment_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+    <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_credit_card_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_tax_arrears_payment">Tax Arrears Payment:</label>
+<input type="number" id="expenses_tax_arrears_payment">
+<select id="expenses_tax_arrears_payment_frequency" onchange="calculateAnnual('expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_tax_arrears_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_small_business_loan_payment">Small Business Loan Payment:</label>
+<input type="number" id="expenses_small_business_loan_payment">
+<select id="expenses_small_business_loan_payment_frequency" onchange="calculateAnnual('expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="expenses_small_business_loan_payment_annual"></span>
+</div>
+
+
+<h2 id="housing"> EXPENSES, HOUSING</h2>
+
+<div class ="row">
+<label for="housing_mortgage_payment">Mortgage Payment:</label>
+<input type="number" id="housing_mortgage_payment">
+<select id="housing_mortgage_payment_frequency" onchange="calculateAnnual('housing_mortgage_payment', 'housing_mortgage_payment_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="housing_mortgage_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="housing_rent_payment">Rent:</label>
+<input type="number" id="housing_rent_payment">
+<select id="housing_rent_payment_frequency" onchange="calculateAnnual('housing_rent_payment', 'housing_rent_payment_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="housing_rent_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="housing_property_tax">Property Tax:</label>
+<input type="number" id="housing_property_tax">
+<select id="housing_property_tax_frequency" onchange="calculateAnnual('housing_property_tax', 'housing_property_tax_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="housing_property_tax_annual"></span>
+</div>
+
+<div class ="row">
+<label for="housing_condo_fee">Condo Fee:</label>
+<input type="number" id="housing_condo_fee">
+<select id="housing_condo_fee_frequency" onchange="calculateAnnual('housing_condo_fee', 'housing_condo_fee_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="housing_condo_fee_annual"></span>
+</div>
+
+<div class ="row">
+<label for="housing_hydro">Hydro:</label>
+<input type="number" id="housing_hydro">
+<select id="housing_hydro_frequency" onchange="calculateAnnual('housing_hydro', 'housing_hydro_frequency')">
+    <option value="quarterly">Quarterly</option>
+  <option value="annually">Annually</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="housing_hydro_annual"></span>
+</div>
+
+<div class ="row">
+<label for="housing_water">Water:</label>
+<input type="number" id="housing_water">
+<select id="housing_water_frequency" onchange="calculateAnnual('housing_water', 'housing_water_frequency')">
+  <option value="quarterly">Quarterly</option>
+  <option value="annually">Annually</option>
+    <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="housing_water_annual"></span>
+</div>
+
+<div class ="row">
+<label for="housing_gas">Gas:</label>
+<input type="number" id="housing_gas">
+<select id="housing_gas_frequency" onchange="calculateAnnual('housing_gas', 'housing_gas_frequency')">
+  <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="housing_gas_annual"></span>
+</div>
+
+<div class ="row">
+<label for="housing_insurance">Home Insurance:</label>
+<input type="number" id="housing_insurance">
+<select id="housing_insurance_frequency" onchange="calculateAnnual('housing_insurance', 'housing_insurance_frequency')">
+  <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="housing_insurance_annual"></span>
+</div>
+
+<div class ="row">
+<label for="housing_repairs">Home Repairs:</label>
+<input type="number" id="housing_repairs">
+<select id="housing_repairs_frequency" onchange="calculateAnnual('housing_repairs', 'housing_repairs_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="housing_repairs_annual"></span>
+</div>
+
+<div class ="row">
+<label for="housing_internet">Internet:</label>
+<input type="number" id="housing_internet">
+<select id="housing_internet_frequency" onchange="calculateAnnual('housing_internet', 'housing_internet_frequency')">
+  <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="housing_internet_annual"></span>
+</div>
+
+
+<h2 id ="transportation">EXPENSES, TRANSPORTATION</h2>
+
+<div class ="row">
+<label for="transportation_car_loan_payment">Car Loan Payment:</label>
+<input type="number" id="transportation_car_loan_payment">
+<select id="transportation_car_loan_payment_frequency" onchange="calculateAnnual('transportation_car_loan_payment', 'transportation_car_loan_payment_frequency')">
+  <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="transportation_car_loan_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="transportation_insurance">Insurance:</label>
+<input type="number" id="transportation_insurance">
+<select id="transportation_insurance_frequency" onchange="calculateAnnual('transportation_insurance', 'transportation_insurance_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="transportation_insurance_annual"></span>
+</div>
+
+<div class ="row">
+<label for="transportation_fuel">Fuel:</label>
+<input type="number" id="transportation_fuel">
+<select id="transportation_fuel_frequency" onchange="calculateAnnual('transportation_fuel', 'transportation_fuel_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="transportation_fuel_annual"></span>
+</div>
+
+<div class ="row">
+<label for="transportation_maintenance">Maintenance:</label>
+<input type="number" id="transportation_maintenance">
+<select id="transportation_maintenance_frequency" onchange="calculateAnnual('transportation_maintenance', 'transportation_maintenance_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="transportation_maintenance_annual"></span>
+</div>
+
+<div class ="row">
+<label for="transportation_public_transit">Public Transit:</label>
+<input type="number" id="transportation_public_transit">
+<select id="transportation_public_transit_frequency" onchange="calculateAnnual('transportation_public_transit', 'transportation_public_transit_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="transportation_public_transit_annual"></span>
+</div>
+
+<div class ="row">
+<label for="transportation_ride_hailing">Ride Hailing:</label>
+<input type="number" id="transportation_ride_hailing">
+<select id="transportation_ride_hailing_frequency" onchange="calculateAnnual('transportation_ride_hailing', 'transportation_ride_hailing_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="transportation_ride_hailing_annual"></span>
+</div>
+
+<h2 id="dependant">EXPENSES, DEPENDANT</h2>
+
+<div class ="row">
+<label for="dependant_day_care">Day Care:</label>
+<input type="number" id="dependant_day_care">
+<select id="dependant_day_care_frequency" onchange="calculateAnnual('dependant_day_care', 'dependant_day_care_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="dependant_day_care_annual"></span>
+</div>
+
+<div class ="row">
+<label for="dependant_medical_dental">Medical & Dental:</label>
+<input type="number" id="dependant_medical_dental">
+<select id="dependant_medical_dental_frequency" onchange="calculateAnnual('dependant_medical_dental', 'dependant_medical_dental_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="dependant_medical_dental_annual"></span>
+</div>
+
+<div class ="row">
+<label for="dependant_clothing">Clothing:</label>
+<input type="number" id="dependant_clothing">
+<select id="dependant_clothing_frequency" onchange="calculateAnnual('dependant_clothing', 'dependant_clothing_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="dependant_clothing_annual"></span>
+</div>
+
+<div class ="row">
+<label for="dependant_sports_recreation">Sports & Recreation:</label>
+<input type="number" id="dependant_sports_recreation">
+<select id="dependant_sports_recreation_frequency" onchange="calculateAnnual('dependant_sports_recreation', 'dependant_sports_recreation_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="dependant_sports_recreation_annual"></span>
+</div>
+
+<div class ="row">
+<label for="dependant_transportation">Transportation:</label>
+<input type="number" id="dependant_transportation">
+<select id="dependant_transportation_frequency" onchange="calculateAnnual('dependant_transportation', 'dependant_transportation_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="dependant_transportation_annual"></span>
+</div>
+
+<div class ="row">
+<label for="dependant_tuition">Tuition:</label>
+<input type="number" id="dependant_tuition">
+<select id="dependant_tuition_frequency" onchange="calculateAnnual('dependant_tuition', 'dependant_tuition_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="dependant_tuition_annual"></span>
+</div>
+
+<div class ="row">
+<label for="dependant_housing">Housing:</label>
+<input type="number" id="dependant_housing">
+<select id="dependant_housing_frequency" onchange="calculateAnnual('dependant_housing', 'dependant_housing_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="dependant_housing_annual"></span>
+</div>
+
+<div class ="row">
+<label for="dependant_cellular_service">Cellular Service:</label>
+<input type="number" id="dependant_cellular_service">
+<select id="dependant_cellular_service_frequency" onchange="calculateAnnual('dependant_cellular_service', 'dependant_cellular_service_frequency')">
+    <option value="monthly">Monthly</option>
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="dependant_cellular_service_annual"></span>
+</div>
+  
+  <button onclick="calculateAll()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate/Update</button>
+  
+<button onclick="window.location.href='asset.html'" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
+
+<script>
+   
+    var ANNUALEXPENSE;
+    
+    
+ 
+
+document.getElementById('RegionDropdown').addEventListener('change', function() {
+ if (this.value === 'USA' || this.value === '') { // Check for USA or empty value
+  capitalGainsTaxRates.style.display = 'block';
+ } else {
+  capitalGainsTaxRates.style.display = 'none';
+ }
+});
+
+    function validatecheckbox() {
+  var termscheckbox = document.getElementById("termscheckbox");
+  var notintended = document.getElementById("notintended");
+  var regionDropdown = document.getElementById("RegionDropdown");
+
+  // Check if a valid region is selected
+  if (regionDropdown.value === "" || regionDropdown.value === "Select Region") {
+    alert("Please select a region from the dropdown.");
+    return;
+  }
+
+  // Check if checkboxes are checked
+  if (termscheckbox.checked && notintended.checked) {
+    // Perform calculations
+    calculateAll();
+  } else {
+    alert("Please agree to the terms of service & disclaimer.");
+  }
+}
+
+    function openTermsModal() {
+  console.log('openTermsModal() function called');
+  // **Change:** Move setting modal display to within the then block after content is retrieved
+  fetch('legal.txt') // Corrected file extension to '.txt'
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('modalContent').innerText = data;
+      // Set modal display to block after content is retrieved
+      document.getElementById('termsModal').style.display = 'block';
+    })
+    .catch(error => console.error('Error fetching legal content:', error));
+}
+
+    function closeModal(event) {
+    const modal = document.getElementById('termsModal');
+    const modalContent = document.getElementById('modalContent');
+
+    if (event.target === modal && event.target !== modalContent) {
+        modal.style.display = 'none';
+    }
+}
+    
+document.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
+        closeModal();
+    }
+});
+
+    
+    function calculateAnnual(inputId, frequencyId) {
+        const input = parseFloat(document.getElementById(inputId).value) || 0;
+        const frequency = document.getElementById(frequencyId).value;
+
+        switch (frequency) {
+            case 'annually':
+                return input;
+            case 'quarterly':
+                return input * 4;
+            case 'monthly':
+                return input * 12;
+            case 'weekly':
+                return input * 52;
+            default:
+                return 0;
+        }
+    }
+
+
+    function calculateNormalizedSum() {
+            // Define all expense fields with their corresponding frequency fields
+        const expenseFields = [
+            ['expenses_grocery', 'expenses_grocery_frequency'],
+            ['expenses_dining', 'expenses_dining_frequency'],
+            ['expenses_fitness', 'expenses_fitness_frequency'],
+	        ['expenses_hygiene', 'expenses_hygiene_frequency'],	
+            ['expenses_subscriptions', 'expenses_subscriptions_frequency'],
+            ['expenses_pet', 'expenses_pet_frequency'],
+            ['expenses_clothing', 'expenses_clothing_frequency'],
+            ['expenses_vacation', 'expenses_vacation_frequency'],
+            ['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
+            ['expenses_cellphone_service', 'expenses_cellphone_service_frequency'],
+            ['expenses_medical_dental', 'expenses_medical_dental_frequency'],
+            ['expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency'],
+            ['expenses_student_loan_payment', 'expenses_student_loan_payment_frequency'],
+            ['expenses_credit_card_payment', 'expenses_credit_card_payment_frequency'],
+            ['expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency'],
+            ['expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency'],
+            ['housing_mortgage_payment', 'housing_mortgage_payment_frequency'],
+            ['housing_rent_payment', 'housing_rent_payment_frequency'],
+            ['housing_property_tax', 'housing_property_tax_frequency'],
+            ['housing_condo_fee', 'housing_condo_fee_frequency'],
+            ['housing_hydro', 'housing_hydro_frequency'],
+            ['housing_insurance', 'housing_insurance_frequency'],
+            ['housing_repairs', 'housing_repairs_frequency'],
+            ['housing_water', 'housing_water_frequency'],
+            ['housing_gas', 'housing_gas_frequency'],
+            ['housing_internet', 'housing_internet_frequency'],
+            ['transportation_car_loan_payment', 'transportation_car_loan_payment_frequency'],
+            ['transportation_insurance', 'transportation_insurance_frequency'],
+            ['transportation_fuel', 'transportation_fuel_frequency'],
+            ['transportation_maintenance', 'transportation_maintenance_frequency'],
+            ['transportation_public_transit', 'transportation_public_transit_frequency'],
+            ['transportation_ride_hailing', 'transportation_ride_hailing_frequency'],
+            ['dependant_day_care', 'dependant_day_care_frequency'],
+            ['dependant_medical_dental', 'dependant_medical_dental_frequency'],
+            ['dependant_clothing', 'dependant_clothing_frequency'],
+            ['dependant_sports_recreation', 'dependant_sports_recreation_frequency'],
+            ['dependant_transportation', 'dependant_transportation_frequency'],
+            ['dependant_tuition', 'dependant_tuition_frequency'],
+            ['dependant_housing', 'dependant_housing_frequency'],
+            ['dependant_cellular_service', 'dependant_cellular_service_frequency']
+            // Add more expense fields here
+        ];
+let annualExpenseSum = 0;
+
+ // Calculate annual expense sum
+        expenseFields.forEach(field => {
+            const [inputId, frequencyId] = field;
+            annualExpenseSum += calculateAnnual(inputId, frequencyId);
+        });
+ANNUALEXPENSE = annualExpenseSum
+ // Display the results
+document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
+    }
+     
+function scrollToSection(sectionId) {
+  var section = document.getElementById(sectionId);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+ const tooltipElements = document.querySelectorAll(".tooltip");
+
+tooltipElements.forEach(tooltip => {
+  // Add tabindex for focusability (optional, but recommended for accessibility)
+  tooltip.setAttribute("tabindex", 0);
+
+  tooltip.addEventListener("touchstart", function() {
+    this.querySelector(".tooltiptext").classList.add("active");
+  });
+
+  tooltip.addEventListener("touchend", function() {
+    this.querySelector(".tooltiptext").classList.remove("active");
+  });
+});
+       
+
+    function calculateAll() {
+        
+    calculateNormalizedSum();
+    
+   
+    }
+
+</script>
+
+    
+    
+    <div class="container">
+    
+   
+<div class ="tooltip">
+           <p><u>Expense:</u> <span id="annual_expense_sum"></span></p>
+<span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
+</div>
+
+
+    </div>
+    
+</body>
+
+</html>
