@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,43 +6,365 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Input Page</title>
     <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            text-align: left;
-            margin: 20px;
-        }
+    
+     /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+         cursor: pointer;
+    }
 
-        input {
-            width: 200px;
-            margin-bottom: 10px;
-        }
+    .modal-content {
+        background-color: #000000;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
 
-        label {
-            display: block;
-            font-size: 18px;
-            margin-bottom: 5px;
-            margin-top: 15px;
-        }
+    /* Close button styles */
+    .close {
+        color: #FFFFFF;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
+    .close:hover,
+    .close:focus {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+
+    
+    body {
+    background-color: #000;
+    color: #fff;
+    text-align: left;
+    margin: 20px;
+}
+
+.row {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    margin-bottom: 10px;
+}
+
+label,
+input[type="number"],
+select {
+    flex: 1; /* Equal width for all elements */
+    margin-right: 10px;
+}
+
+span {
+    /* Adjust as needed */
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.tab-container {
+    display: flex;
+    justify-content: center; /* Center-align tabs */
+}
+
+.tab {
+    padding: 10px 10px;
+    cursor: pointer;
+    background-color: black;
+    border: .01px solid;
+    border-radius: 5px 5px 0 0;
+    margin: 0 px; /* Adjust spacing between tabs */
+}
+
+/* Style for the active tab */
+.active {
+    background-color: white;
+}
+
+/* Media Query for smaller screens (e.g., mobile) */
+@media (max-width: 768px) {
+    label,
+    input[type="number"],
+    select {
+        width: 100%; /* Set width to 100% for smaller screens */
+        margin-right: 0; /* Remove margin between elements */
+    }
+}
+
+.numeric-input {
+    /* Apply styling as needed */
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+
+
+* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden; /* Initially hidden */
+  width: 200px; /* Adjust width as needed */
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Adjust positioning as needed */
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
     </style>
 </head>
 
 <body>
+    <div class="tab-container">
+    <div class="tab" onclick="scrollToSection('income')">Income</div>
+    <div class="tab" onclick="scrollToSection('expense')">Expense</div>
+     <div class="tab" onclick="scrollToSection('asset')">Asset</div>
+    <div class="tab" onclick="scrollToSection('liability')">Liability</div>
+    <div class="tab" onclick="scrollToSection('summary')">Summary</div>
+</div>
 
+
+<h2 id="assets">ASSETS</h2>
+
+<div class ="row">
+    <label for="assets_checking_accounts">Checking Account(s):</label>
+    <input type="text" id="assets_checking_accounts">
+</div>
+
+<div class ="row">
+    <label for="assets_savings_accounts">Savings Account(s):</label>
+    <input type="text" id="assets_savings_accounts">
+</div>
+
+<div class ="row">
+    <label for="assets_other_liquid_accounts">Other Liquid Account(s):</label>
+    <input type="text" id="assets_other_liquid_accounts">
+</div>
+
+<div class ="row">
+    <label for="assets_long_term_investment_accounts">Long Term Investment Account(s):</label>
+    <input type="text" id="assets_long_term_investment_accounts">
+</div>
+
+<div class ="row">
+    <label for="assets_primary_residence">Primary Residence:</label>
+    <input type="text" id="assets_primary_residence">
+</div>
+
+<div class ="row">
+    <label for="assets_investment_properties">Investment Property(s):</label>
+    <input type="text" id="assets_investment_properties">
+</div>
+
+<div class ="row">
+    <label for="assets_small_business">Small Business:</label>
+    <input type="text" id="assets_small_business">
+</div>
+
+<div class ="row">
+    <label for="assets_vehicles">Vehicle(s):</label>
+    <input type="text" id="assets_vehicles">
+</div>
+
+<div class ="row">
+    <label for="assets_art_jewelry">Art/Jewelry:</label>
+    <input type="text" id="assets_art_jewelry">
+</div>
+
+    <button onclick="calculateAll()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate/Update</button>
+  
+<button onclick="window.location.href='liability.html'" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
+   
+<script>
+   
+    
+    var ASSETS;
+    
+ 
+document.getElementById('RegionDropdown').addEventListener('change', function() {
+ if (this.value === 'USA' || this.value === '') { // Check for USA or empty value
+  capitalGainsTaxRates.style.display = 'block';
+ } else {
+  capitalGainsTaxRates.style.display = 'none';
+ }
+});
+
+    function validatecheckbox() {
+  var termscheckbox = document.getElementById("termscheckbox");
+  var notintended = document.getElementById("notintended");
+  var regionDropdown = document.getElementById("RegionDropdown");
+
+  // Check if a valid region is selected
+  if (regionDropdown.value === "" || regionDropdown.value === "Select Region") {
+    alert("Please select a region from the dropdown.");
+    return;
+  }
+
+  // Check if checkboxes are checked
+  if (termscheckbox.checked && notintended.checked) {
+    // Perform calculations
+    calculateAll();
+  } else {
+    alert("Please agree to the terms of service & disclaimer.");
+  }
+}
+
+    function openTermsModal() {
+  console.log('openTermsModal() function called');
+  // **Change:** Move setting modal display to within the then block after content is retrieved
+  fetch('legal.txt') // Corrected file extension to '.txt'
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('modalContent').innerText = data;
+      // Set modal display to block after content is retrieved
+      document.getElementById('termsModal').style.display = 'block';
+    })
+    .catch(error => console.error('Error fetching legal content:', error));
+}
+
+    function closeModal(event) {
+    const modal = document.getElementById('termsModal');
+    const modalContent = document.getElementById('modalContent');
+
+    if (event.target === modal && event.target !== modalContent) {
+        modal.style.display = 'none';
+    }
+}
+    
+document.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
+        closeModal();
+    }
+});
+
+
+function calculateAssets() {
+    const assetFields = [
+        'assets_checking_accounts', 
+        'assets_savings_accounts', 
+        'assets_other_liquid_accounts', 
+        'assets_long_term_investment_accounts', 
+        'assets_primary_residence', 
+        'assets_investment_properties', 
+        'assets_small_business', 
+        'assets_vehicles', 
+        'assets_art_jewelry'
+    ];
+
+    let assets = 0;
+
+    for (let i = 0; i < assetFields.length; i++) {
+        const fieldValue = document.getElementById(assetFields[i]).value;
+        console.log(`Field value for ${assetFields[i]}: ${fieldValue}`);
+        const parsedValue = parseFloat(fieldValue);
+        if (!isNaN(parsedValue)) {
+            assets += parsedValue;
+        } else {
+            console.error(`Invalid value for ${assetFields[i]}: ${fieldValue}`);
+        }
+    }
+
+    ASSETS = assets;
+    document.getElementById('ASSETS').textContent = '$' + ASSETS.toFixed(2);
+}
+
+
+
+function scrollToSection(sectionId) {
+  var section = document.getElementById(sectionId);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+ const tooltipElements = document.querySelectorAll(".tooltip");
+
+tooltipElements.forEach(tooltip => {
+  // Add tabindex for focusability (optional, but recommended for accessibility)
+  tooltip.setAttribute("tabindex", 0);
+
+  tooltip.addEventListener("touchstart", function() {
+    this.querySelector(".tooltiptext").classList.add("active");
+  });
+
+  tooltip.addEventListener("touchend", function() {
+    this.querySelector(".tooltiptext").classList.remove("active");
+  });
+});
+       
+
+    function calculateAll() {
+        
+    calculateAssets();
+    
+    }
+
+</script>
+
+
+   
+    
+    <div class="container">
+    
+ 
+<div class ="tooltip">
+            <p><u>Assets:</u><span id="ASSETS"></span></p>
+    <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
+</div>
+   
 
     
-</body>
+
+   
+
 
 </body>
 
