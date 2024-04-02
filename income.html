@@ -1289,17 +1289,18 @@ tooltipElements.forEach(tooltip => {
     
     }
     
-    document.cookie = "annualIncome=" + annualIncome;
-document.cookie = "taxableIncome=" + taxableIncome;
-document.cookie = "regionalTax=" + regionalTax;
-document.cookie = "subregionalTax=" + subregionalTax;
-document.cookie = "totalTax=" + totalTax;
-document.cookie = "selfEmployedCPP=" + selfEmployedCPP;
-document.cookie = "totalEmploymentInsurance=" + totalEmploymentInsurance;
-document.cookie = "totalCPP=" + totalCPP;
-document.cookie = "employedCPP=" + employedCPP;
-document.cookie = "capitalGainsTax=" + capitalGainsTax;
-    
+   // Save global variables as cookies
+document.cookie = "ANNUALTAXABLEINCOME=" + encodeURIComponent(ANNUALTAXABLEINCOME);
+document.cookie = "ANNUALREGIONALTAX=" + encodeURIComponent(ANNUALREGIONALTAX);
+document.cookie = "ANNUALSUBREGIONALTAX=" + encodeURIComponent(ANNUALSUBREGIONALTAX);
+document.cookie = "ANNUALTAX=" + encodeURIComponent(ANNUALTAX);
+document.cookie = "ANNUALEMPLOYMENTINCOME=" + encodeURIComponent(ANNUALEMPLOYMENTINCOME);
+document.cookie = "ANNUALDISPOSABLEINCOME=" + encodeURIComponent(ANNUALDISPOSABLEINCOME);
+document.cookie = "ANNUALINCOME=" + encodeURIComponent(ANNUALINCOME);
+document.cookie = "ANNUALEXPENSE=" + encodeURIComponent(ANNUALEXPENSE);
+document.cookie = "ANNUALCPP=" + encodeURIComponent(ANNUALCPP);
+document.cookie = "ANNUALEI=" + encodeURIComponent(ANNUALEI);
+
 </script>
 
     
