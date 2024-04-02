@@ -46,17 +46,37 @@
             cursor: pointer;
             margin-top: 20px;
         }
+
+        /* Invisible area */
+        #invisibleArea {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100px; /* Adjust width/height to fit your needs */
+            height: 100px; /* Adjust width/height to fit your needs */
+            background-color: transparent;
+            z-index: -1; /* To ensure it's under other elements */
+        }
     </style>
 </head>
 
 <body>
-<a href="income.html">
+
         <img src="Logo.png" alt="Your Logo">
-  </a>
+
 
     <h1>Empowering Thee</h1>
     <h1>Updating Website, Please Stand By</h1>
 
+    <!-- Invisible area -->
+    <div id="invisibleArea"></div>
+
+    <script>
+        // Add click event to invisible area
+        document.getElementById('invisibleArea').addEventListener('click', function() {
+            window.location.href = 'income.html';
+        });
+    </script>
 </body>
 
 </html>
