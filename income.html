@@ -162,12 +162,14 @@ button {
 
 <body>
     <div class="tab-container">
-    <div class="tab" onclick="scrollToSection('income')">Income</div>
-    <div class="tab" onclick="scrollToSection('expense')">Expense</div>
-     <div class="tab" onclick="scrollToSection('asset')">Asset</div>
-    <div class="tab" onclick="scrollToSection('liability')">Liability</div>
-    <div class="tab" onclick="scrollToSection('summary')">Summary</div>
-</div>
+        <a href="income.html" class="tab">Income</a>
+        <a href="expense.html" class="tab">Expense</a>
+        <a href="asset.html" class="tab">Asset</a>
+        <a href="liability.html" class="tab">Liability</a>
+        <a href="summary.html" class="tab">Summary</a>
+    </div>
+</body>
+
 
 
     
@@ -1286,7 +1288,18 @@ tooltipElements.forEach(tooltip => {
    
     
     }
-
+    
+    document.cookie = "annualIncome=" + annualIncome;
+document.cookie = "taxableIncome=" + taxableIncome;
+document.cookie = "regionalTax=" + regionalTax;
+document.cookie = "subregionalTax=" + subregionalTax;
+document.cookie = "totalTax=" + totalTax;
+document.cookie = "selfEmployedCPP=" + selfEmployedCPP;
+document.cookie = "totalEmploymentInsurance=" + totalEmploymentInsurance;
+document.cookie = "totalCPP=" + totalCPP;
+document.cookie = "employedCPP=" + employedCPP;
+document.cookie = "capitalGainsTax=" + capitalGainsTax;
+    
 </script>
 
     
