@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense</title>
+    <title>Expensde</title>
     <style>
     
      /* Modal styles */
@@ -805,17 +805,18 @@ ANNUALEXPENSE = annualExpenseSum
  // Display the results
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
     }
-     
-     
+          
+document.cookie = "ANNUALEXPENSE=" + encodeURIComponent(ANNUALEXPENSE);
+
 
     function calculateAll() {
         
     calculateNormalizedSum();
     
+setCookie("ANNUALEXPENSE", ANNUALEXPENSE, 365);
    
     }
 
-document.cookie = "ANNUALEXPENSE=" + encodeURIComponent(ANNUALEXPENSE);
 
 </script>
 
