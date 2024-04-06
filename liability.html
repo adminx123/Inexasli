@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Page</title>
+    <title>Liability</title>
     <style>
     
      /* Modal styles */
@@ -304,27 +304,7 @@ function calculateLiabilities() {
 }
 
 
-function scrollToSection(sectionId) {
-  var section = document.getElementById(sectionId);
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth' });
-  }
-}
 
- const tooltipElements = document.querySelectorAll(".tooltip");
-
-tooltipElements.forEach(tooltip => {
-  // Add tabindex for focusability (optional, but recommended for accessibility)
-  tooltip.setAttribute("tabindex", 0);
-
-  tooltip.addEventListener("touchstart", function() {
-    this.querySelector(".tooltiptext").classList.add("active");
-  });
-
-  tooltip.addEventListener("touchend", function() {
-    this.querySelector(".tooltiptext").classList.remove("active");
-  });
-});
        
 
     function calculateAll() {
