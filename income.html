@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income</title>
+    <title>Incompe</title>
     <style>
     
      /* Modal styles */
@@ -1263,18 +1263,15 @@ tooltipElements.forEach(tooltip => {
   });
 });
     
-    function saveGlobalVariablesAsCookies() {
-    document.cookie = "ANNUALTAXABLEINCOME=" + encodeURIComponent(ANNUALTAXABLEINCOME);
-    document.cookie = "ANNUALREGIONALTAX=" + encodeURIComponent(ANNUALREGIONALTAX);
-    document.cookie = "ANNUALSUBREGIONALTAX=" + encodeURIComponent(ANNUALSUBREGIONALTAX);
-    document.cookie = "ANNUALTAX=" + encodeURIComponent(ANNUALTAX);
-    document.cookie = "ANNUALEMPLOYMENTINCOME=" + encodeURIComponent(ANNUALEMPLOYMENTINCOME);
-    document.cookie = "ANNUALDISPOSABLEINCOME=" + encodeURIComponent(ANNUALDISPOSABLEINCOME);
-    document.cookie = "ANNUALINCOME=" + encodeURIComponent(ANNUALINCOME);
-    document.cookie = "ANNUALEXPENSE=" + encodeURIComponent(ANNUALEXPENSE);
-    document.cookie = "ANNUALCPP=" + encodeURIComponent(ANNUALCPP);
-    document.cookie = "ANNUALEI=" + encodeURIComponent(ANNUALEI);
-}   
+    function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
+}
 
     function calculateAll() {
         
@@ -1295,7 +1292,17 @@ tooltipElements.forEach(tooltip => {
     
     calculateCapitalGainsTax();
     
-  saveGlobalVariablesAsCookies();
+// Save global variables as cookies with a longer expiration date
+setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
+setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
+setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
+setCookie("ANNUALTAX", ANNUALTAX, 365);
+setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
+setCookie("ANNUALDISPOSABLEINCOME", ANNUALDISPOSABLEINCOME, 365);
+setCookie("ANNUALINCOME", ANNUALINCOME, 365);
+setCookie("ANNUALEXPENSE", ANNUALEXPENSE, 365);
+setCookie("ANNUALCPP", ANNUALCPP, 365);
+setCookie("ANNUALEI", ANNUALEI, 365); 
     
     }
     
