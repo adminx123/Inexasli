@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summarmppy</title>
+    <title>Summary</title>
     <style>
     
      /* Modal styles */
@@ -162,14 +162,12 @@ button {
 
 <body onload="retrieveCookieValues()">
     
-
-
-    <div class="tab-container">
-    <div class="tab" onclick="scrollToSection('income')">Income</div>
-    <div class="tab" onclick="scrollToSection('expense')">Expense</div>
-     <div class="tab" onclick="scrollToSection('asset')">Asset</div>
-    <div class="tab" onclick="scrollToSection('liability')">Liability</div>
-    <div class="tab" onclick="scrollToSection('summary')">Summary</div>
+<div class="tab-container">
+    <div class="tab" onclick="income.html">Income</div>
+    <div class="tab" onclick="expense.html">Expense</div>
+     <div class="tab" onclick="asset.html">Asset</div>
+    <div class="tab" onclick="liability.html">Liability</div>
+    <div class="tab" onclick="summary.html">Summary</div>
 </div>
   
     
@@ -304,33 +302,32 @@ Below 0.15: This ratio indicates passive income covering a lower portion of expe
             }
 
 // Get cookie values
-    var annualTaxableIncome = getCookie('ANNUALTAXABLEINCOME');
-    var annualRegionTax = getCookie('ANNUALREGIONALTAX');
-    var annualSubregionTax = getCookie('ANNUALSUBREGIONALTAX');
-    var annualTax = getCookie('ANNUALTAX');
-    var annualEmploymentIncome = getCookie('ANNUALEMPLOYMENTINCOME');
-    var annualDisposableIncome = getCookie('ANNUALDISPOSABLEINCOME');
-    var annualIncome = getCookie('ANNUALINCOME');
-    var annualExpense = getCookie('ANNUALEXPENSE');
-    var annualCPP = getCookie('ANNUALCPP');
-    var annualEI = getCookie('ANNUALEI');
-    var assets = getCookie('ASSETS');
-    var liabilities = getCookie('LIABILITIES');
+    getCookie('ANNUALTAXABLEINCOME');
+    getCookie('ANNUALREGIONALTAX');
+    getCookie('ANNUALSUBREGIONALTAX');
+    getCookie('ANNUALTAX');
+    getCookie('ANNUALEMPLOYMENTINCOME');
+    getCookie('ANNUALDISPOSABLEINCOME');
+    getCookie('ANNUALINCOME');
+    getCookie('ANNUALEXPENSE');
+    getCookie('ANNUALCPP');
+    getCookie('ANNUALEI');
+    getCookie('ASSETS');
+    getCookie('LIABILITIES');
 
     // Update HTML elements with cookie values
-    document.getElementById('taxable_sum').textContent = annualTaxableIncome || 'N/A';
-    document.getElementById('region_tax_sum').textContent = annualRegionTax || 'N/A';
-    document.getElementById('subregion_tax_sum').textContent = annualSubregionTax || 'N/A';
-    document.getElementById('tax_sum').textContent = annualTax || 'N/A';
-    document.getElementById('employment_income_sum').textContent = annualEmploymentIncome || 'N/A';
-    document.getElementById('disposable_income_sum').textContent = annualDisposableIncome || 'N/A';
-    document.getElementById('annual_income_sum').textContent = annualIncome || 'N/A';
-    document.getElementById('annual_expense_sum').textContent = annualExpense || 'N/A';
-    document.getElementById('cpp_sum').textContent = annualCPP || 'N/A';
-    document.getElementById('ei_sum').textContent = annualEI || 'N/A';
-    document.getElementById('assets_sum').textContent = assets || 'N/A';
-    document.getElementById('liabilities_sum').textContent = liabilities || 'N/A';
- });
+    document.getElementById('taxable_sum').textContent = ANNUALTAXABLEINCOME || 'N/A';
+    document.getElementById('region_tax_sum').textContent = ANNUALREGIONALTAX || 'N/A';
+    document.getElementById('subregion_tax_sum').textContent = ANNUALSUBREGIONALTAX || 'N/A';
+    document.getElementById('tax_sum').textContent = ANNUALTAX || 'N/A';
+    document.getElementById('employment_income_sum').textContent = ANNUALEMPLOYMENTINCOME || 'N/A';
+    document.getElementById('disposable_income_sum').textContent = ANNUALDISPOSABLEINCOME || 'N/A';
+    document.getElementById('annual_income_sum').textContent = ANNUALINCOME || 'N/A';
+    document.getElementById('annual_expense_sum').textContent = ANNUALEXPENSE || 'N/A';
+    document.getElementById('cpp_sum').textContent = ANNUALCPP || 'N/A';
+    document.getElementById('ei_sum').textContent = ANNUALEI || 'N/A';
+    document.getElementById('assets_sum').textContent = ASSETS || 'N/A';
+    document.getElementById('liabilities_sum').textContent = liabilities || 'N/A';LIABILITIES });
 </script>
 
 </body>
