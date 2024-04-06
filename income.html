@@ -1238,31 +1238,7 @@ function calculateCapitalGainsTax() {
   const resultDiv = document.getElementById('capital_gains_tax_result');
   document.getElementById('AnnualCG').textContent = '$' + (totalTax).toFixed(2);;
 }
-
-
-
-function scrollToSection(sectionId) {
-  var section = document.getElementById(sectionId);
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth' });
-  }
-}
-
- const tooltipElements = document.querySelectorAll(".tooltip");
-
-tooltipElements.forEach(tooltip => {
-  // Add tabindex for focusability (optional, but recommended for accessibility)
-  tooltip.setAttribute("tabindex", 0);
-
-  tooltip.addEventListener("touchstart", function() {
-    this.querySelector(".tooltiptext").classList.add("active");
-  });
-
-  tooltip.addEventListener("touchend", function() {
-    this.querySelector(".tooltiptext").classList.remove("active");
-  });
-});
-    
+   
     function setCookie(name, value, days) {
     var expires = "";
     if (days) {
