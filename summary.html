@@ -293,41 +293,27 @@ Below 0.15: This ratio indicates passive income covering a lower portion of expe
 
         
 <script>
- document.addEventListener('DOMContentLoaded', function() {
-            // Function to retrieve cookie value by name
-            function getCookie(name) {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
-            }
-
-// Get cookie values
-    getCookie('ANNUALTAXABLEINCOME');
-    getCookie('ANNUALREGIONALTAX');
-    getCookie('ANNUALSUBREGIONALTAX');
-    getCookie('ANNUALTAX');
-    getCookie('ANNUALEMPLOYMENTINCOME');
-    getCookie('ANNUALDISPOSABLEINCOME');
-    getCookie('ANNUALINCOME');
-    getCookie('ANNUALEXPENSE');
-    getCookie('ANNUALCPP');
-    getCookie('ANNUALEI');
-    getCookie('ASSETS');
-    getCookie('LIABILITIES');
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to retrieve cookie value by name
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        return parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : 'N/A';
+    }
 
     // Update HTML elements with cookie values
-    document.getElementById('taxable_sum').textContent = ANNUALTAXABLEINCOME || 'N/A';
-    document.getElementById('region_tax_sum').textContent = ANNUALREGIONALTAX || 'N/A';
-    document.getElementById('subregion_tax_sum').textContent = ANNUALSUBREGIONALTAX || 'N/A';
-    document.getElementById('tax_sum').textContent = ANNUALTAX || 'N/A';
-    document.getElementById('employment_income_sum').textContent = ANNUALEMPLOYMENTINCOME || 'N/A';
-    document.getElementById('disposable_income_sum').textContent = ANNUALDISPOSABLEINCOME || 'N/A';
-    document.getElementById('annual_income_sum').textContent = ANNUALINCOME || 'N/A';
-    document.getElementById('annual_expense_sum').textContent = ANNUALEXPENSE || 'N/A';
-    document.getElementById('cpp_sum').textContent = ANNUALCPP || 'N/A';
-    document.getElementById('ei_sum').textContent = ANNUALEI || 'N/A';
-    document.getElementById('assets_sum').textContent = ASSETS || 'N/A';
-    document.getElementById('liabilities_sum').textContent = liabilities || 'N/A';LIABILITIES });
+    document.getElementById('taxable_sum').textContent = getCookie('ANNUALTAXABLEINCOME');
+    document.getElementById('region_tax_sum').textContent = getCookie('ANNUALREGIONALTAX');
+    document.getElementById('subregion_tax_sum').textContent = getCookie('ANNUALSUBREGIONALTAX');
+    document.getElementById('tax_sum').textContent = getCookie('ANNUALTAX');
+    document.getElementById('employment_income_sum').textContent = getCookie('ANNUALEMPLOYMENTINCOME');
+    document.getElementById('disposable_income_sum').textContent = getCookie('ANNUALDISPOSABLEINCOME');
+    document.getElementById('annual_income_sum').textContent = getCookie('ANNUALINCOME');
+    document.getElementById('annual_expense_sum').textContent = getCookie('ANNUALEXPENSE');
+    document.getElementById('cpp_sum').textContent = getCookie('ANNUALCPP');
+    document.getElementById('ei_sum').textContent = getCookie('ANNUALEI');
+    document.getElementById('assets_sum').textContent = getCookie('ASSETS');
+    document.getElementById('liabilities_sum').textContent = getCookie('LIABILITIES');
 </script>
 
 </body>
