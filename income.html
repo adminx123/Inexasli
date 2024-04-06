@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incom</title>
+    <title>Income</title>
     <style>
     
      /* Modal styles */
@@ -1262,7 +1262,19 @@ tooltipElements.forEach(tooltip => {
     this.querySelector(".tooltiptext").classList.remove("active");
   });
 });
-       
+    
+    function saveGlobalVariablesAsCookies() {
+    document.cookie = "ANNUALTAXABLEINCOME=" + encodeURIComponent(ANNUALTAXABLEINCOME);
+    document.cookie = "ANNUALREGIONALTAX=" + encodeURIComponent(ANNUALREGIONALTAX);
+    document.cookie = "ANNUALSUBREGIONALTAX=" + encodeURIComponent(ANNUALSUBREGIONALTAX);
+    document.cookie = "ANNUALTAX=" + encodeURIComponent(ANNUALTAX);
+    document.cookie = "ANNUALEMPLOYMENTINCOME=" + encodeURIComponent(ANNUALEMPLOYMENTINCOME);
+    document.cookie = "ANNUALDISPOSABLEINCOME=" + encodeURIComponent(ANNUALDISPOSABLEINCOME);
+    document.cookie = "ANNUALINCOME=" + encodeURIComponent(ANNUALINCOME);
+    document.cookie = "ANNUALEXPENSE=" + encodeURIComponent(ANNUALEXPENSE);
+    document.cookie = "ANNUALCPP=" + encodeURIComponent(ANNUALCPP);
+    document.cookie = "ANNUALEI=" + encodeURIComponent(ANNUALEI);
+}   
 
     function calculateAll() {
         
@@ -1283,25 +1295,10 @@ tooltipElements.forEach(tooltip => {
     
     calculateCapitalGainsTax();
     
-   
-    
-   
+  saveGlobalVariablesAsCookies();
     
     }
     
-calculateAll();
-
-   // Save global variables as cookies
-document.cookie = "ANNUALTAXABLEINCOME=" + encodeURIComponent(ANNUALTAXABLEINCOME);
-document.cookie = "ANNUALREGIONALTAX=" + encodeURIComponent(ANNUALREGIONALTAX);
-document.cookie = "ANNUALSUBREGIONALTAX=" + encodeURIComponent(ANNUALSUBREGIONALTAX);
-document.cookie = "ANNUALTAX=" + encodeURIComponent(ANNUALTAX);
-document.cookie = "ANNUALEMPLOYMENTINCOME=" + encodeURIComponent(ANNUALEMPLOYMENTINCOME);
-document.cookie = "ANNUALDISPOSABLEINCOME=" + encodeURIComponent(ANNUALDISPOSABLEINCOME);
-document.cookie = "ANNUALINCOME=" + encodeURIComponent(ANNUALINCOME);
-document.cookie = "ANNUALEXPENSE=" + encodeURIComponent(ANNUALEXPENSE);
-document.cookie = "ANNUALCPP=" + encodeURIComponent(ANNUALCPP);
-document.cookie = "ANNUALEI=" + encodeURIComponent(ANNUALEI);
 
 </script>
 
