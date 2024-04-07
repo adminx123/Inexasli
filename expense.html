@@ -827,9 +827,35 @@ function calculateNext() {
     function calculateAll() {
         
     calculateNormalizedSum();
+
+	    function housingExpenses() {
+  const housingFields = [
+    ['housing_mortgage_payment', 'housing_mortgage_payment_frequency'],
+    ['housing_rent_payment', 'housing_rent_payment_frequency'],
+    ['housing_property_tax', 'housing_property_tax_frequency'],
+    ['housing_condo_fee', 'housing_condo_fee_frequency'],
+    ['housing_hydro', 'housing_hydro_frequency'],
+    ['housing_insurance', 'housing_insurance_frequency'],
+    ['housing_repairs', 'housing_repairs_frequency'],
+    ['housing_water', 'housing_water_frequency'],
+    ['housing_gas', 'housing_gas_frequency'],
+    ['housing_internet', 'housing_internet_frequency']
+  ];
+
+  let housing = 0;
+
+  for (const [expenseField, frequencyField] of housingFields) {
+    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
+    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
+    housing += expense * frequency;
+
+	  document.getElementById('housing').textContent = `$${housing.toFixed(2)}`;
+
+  }
     
 setCookie("ANNUALEXPENSE", ANNUALEXPENSE, 365);
-   
+ setCookie("housingExpenses", housingExpenses, 365);
+  
     }
 
 
@@ -845,6 +871,10 @@ setCookie("ANNUALEXPENSE", ANNUALEXPENSE, 365);
 <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
 </div>
 
+	    <div class ="tooltip">
+           <p><u>Housing:</u> <span id="Housing"></span></p>
+<span class="tooltiptext">Total housing expenses.</span>
+</div>
 
     </div>
     
