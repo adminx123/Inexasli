@@ -819,16 +819,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
     document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
 
-function calculateNext() {
-  calculateAll();
-  window.location.href = 'asset.html';
-}   
-
-    function calculateAll() {
-        
-    calculateNormalizedSum();
-
-	    function housingExpenses() {
+  function housingExpenses() {
   const housingFields = [
     ['housing_mortgage_payment', 'housing_mortgage_payment_frequency'],
     ['housing_rent_payment', 'housing_rent_payment_frequency'],
@@ -852,6 +843,17 @@ function calculateNext() {
 	  document.getElementById('housing').textContent = `$${housing.toFixed(2)}`;
 
   }
+	
+function calculateNext() {
+  calculateAll();
+  window.location.href = 'asset.html';
+}   
+
+    function calculateAll() {
+        
+    calculateNormalizedSum();
+ housingExpenses();
+ 
     
 setCookie("ANNUALEXPENSE", ANNUALEXPENSE, 365);
  setCookie("housingExpenses", housingExpenses, 365);
