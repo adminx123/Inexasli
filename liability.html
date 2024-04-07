@@ -317,6 +317,25 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
 
+    function populateInputFields() {
+            const liabilitiesFields = [
+                'liabilities_small_business_loan',
+                'liabilities_primary_residence',
+                'liabilities_investment_properties',
+                'liabilities_vehicle_loan',
+                'liabilities_student_loan',
+                'liabilities_line_of_credit',
+                'liabilities_credit_card',
+                'liabilities_tax_arrears'
+            ];
+
+            liabilitiesFields.forEach(field => {
+                const value = getCookie(field);
+                if (value !== null) {
+                    document.getElementById(field).value = value;
+                }
+            });
+        }
       
     function calculateAll() {
         
