@@ -214,9 +214,8 @@ button {
 
 
 
-<button onclick="calculateAll()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Calculate/Update</button>
   
-<button onclick="window.location.href='summary.html'" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
+<button onclick="calculateNext()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
 
 <script>
    
@@ -317,39 +316,6 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
 
-   // Function to retrieve cookie value by name
-        function getCookie(name) {
-            const cookies = document.cookie.split(';').map(cookie => cookie.trim().split('='));
-            const cookie = cookies.find(cookie => cookie[0] === name);
-            return cookie ? decodeURIComponent(cookie[1]) : null;
-        }
-
-        // Function to populate input fields with values from cookies
-        function populateInputFields() {
-            const liabilitiesFields = [
-                'liabilities_small_business_loan',
-                'liabilities_primary_residence',
-                'liabilities_investment_properties',
-                'liabilities_vehicle_loan',
-                'liabilities_student_loan',
-                'liabilities_line_of_credit',
-                'liabilities_credit_card',
-                'liabilities_tax_arrears'
-            ];
-
-            liabilitiesFields.forEach(field => {
-                const value = getCookie(field);
-                if (value !== null) {
-                    document.getElementById(field).value = value;
-                }
-            });
-        }
-
-        // Event listener for DOMContentLoaded event
-        document.addEventListener('DOMContentLoaded', function() {
-            // Call populateInputFields when the page loads
-            populateInputFields();
-        });
       
     function calculateAll() {
         
@@ -359,7 +325,11 @@ function setCookie(name, value, days) {
 
     }
 
-
+function calculateNext() {
+  calculateAll();
+  window.location.href = 'summary.html';
+}
+    
 </script>
 
 <div class ="tooltip">
