@@ -121,7 +121,7 @@ button {
 
 
 
-* Tooltip text */
+/* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden; /* Initially hidden */
   width: 200px; /* Adjust width as needed */
@@ -742,11 +742,14 @@ let annualExpenseSum = 0;
             const [inputId, frequencyId] = field;
             annualExpenseSum += calculateAnnual(inputId, frequencyId);
         });
-ANNUALEXPENSE = annualExpenseSum
+
  // Display the results
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
+    
+    return annualExpenseSum;
     }
-          
+        
+      
  function setCookie(name, value, days) {
     var expires = "";
     if (value === undefined || value === null || value === '') {
@@ -781,10 +784,11 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
     const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
     housing += expense * frequency;
 
+	}
 	  
-
-  }
-	  document.getElementById('housing').textContent = `$${housing.toFixed(2)}`;
+	  document.getElementById('housingExpense').textContent = `$${housing.toFixed(2)}`;
+	  
+	return housing;
   }	
 	
 function calculateNext() {
@@ -795,10 +799,10 @@ function calculateNext() {
     function calculateAll() {
         
     calculateNormalizedSum();
- housingExpenses();
+    housingExpenses();
  
     
-setCookie("ANNUALEXPENSE", ANNUALEXPENSE, 365);
+setCookie("annualExpenseSum", annualExpenseSum, 365);
  setCookie("housing", housing, 365);
   
     }
@@ -817,8 +821,9 @@ setCookie("ANNUALEXPENSE", ANNUALEXPENSE, 365);
 </div>
 
 	    <div class ="tooltip">
-           <p><u>Housing:</u> <span id="Housing"></span></p>
+           <p><u>Housing:</u> <span id="housingExpense"></span></p>
 <span class="tooltiptext">Total housing expenses.</span>
+
 </div>
 
     </div>
