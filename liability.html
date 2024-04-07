@@ -161,13 +161,13 @@ button {
 </head>
 
 <body>
-    <div class="tab-container">
-    <div class="tab" onclick="scrollToSection('income')">Income</div>
-    <div class="tab" onclick="scrollToSection('expense')">Expense</div>
-     <div class="tab" onclick="scrollToSection('asset')">Asset</div>
-    <div class="tab" onclick="scrollToSection('liability')">Liability</div>
-    <div class="tab" onclick="scrollToSection('summary')">Summary</div>
-</div>
+  <div class="tab-container">
+        <a href="http://inexasli.com/income.html" class="tab">Income</a>
+        <a href="http://inexasli.com/expense.html" class="tab">Expense</a>
+        <a href="http://inexasli.com/asset.html" class="tab">Asset</a>
+        <a href="http://inexasli.com/liability.html" class="tab">Liability</a>
+        <a href="http://inexasli.com/summary.html" class="tab">Summary</a>
+    </div>
 
 
  <h2 id= "liabilities">LIABILITIES</h2>
@@ -317,8 +317,7 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
 
-       
-
+      
     function calculateAll() {
         
     calculateLiabilities();
