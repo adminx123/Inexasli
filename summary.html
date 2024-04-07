@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summary</title>
+    <title>Sumfmary</title>
     <style>
     
      /* Modal styles */
@@ -312,6 +312,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('ei_sum').textContent = " $" + getCookie('ANNUALEI');
     document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
     document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
+
+// Calculate ANNUALDISPOSABLEINCOME using getCookie function
+const ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
+    parseFloat(getCookie('ANNUALEXPENSE')) -
+    parseFloat(getCookie('ANNUALEI')) -
+    parseFloat(getCookie('ANNUALCPP')) -
+    parseFloat(getCookie('ANNUALTAX'));
+
+// Update HTML element with the calculated value
+document.getElementById('ANNUALDISPOSABLEINCOME').textContent = '$' + ANNUALDISPOSABLEINCOME.toFixed(2);
+
+
 });
 </script>
 
