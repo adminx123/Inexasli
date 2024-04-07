@@ -222,71 +222,7 @@ button {
 <button onclick="calculateNext()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
    
 <script>
-   
-    
-    var ASSETS;
-    
- 
-document.getElementById('RegionDropdown').addEventListener('change', function() {
- if (this.value === 'USA' || this.value === '') { // Check for USA or empty value
-  capitalGainsTaxRates.style.display = 'block';
- } else {
-  capitalGainsTaxRates.style.display = 'none';
- }
-});
-
-    function validatecheckbox() {
-  var termscheckbox = document.getElementById("termscheckbox");
-  var notintended = document.getElementById("notintended");
-  var regionDropdown = document.getElementById("RegionDropdown");
-
-  // Check if a valid region is selected
-  if (regionDropdown.value === "" || regionDropdown.value === "Select Region") {
-    alert("Please select a region from the dropdown.");
-    return;
-  }
-
-  // Check if checkboxes are checked
-  if (termscheckbox.checked && notintended.checked) {
-    // Perform calculations
-    calculateAll();
-  } else {
-    alert("Please agree to the terms of service & disclaimer.");
-  }
-}
-
-    function openTermsModal() {
-  console.log('openTermsModal() function called');
-  // **Change:** Move setting modal display to within the then block after content is retrieved
-  fetch('legal.txt') // Corrected file extension to '.txt'
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('modalContent').innerText = data;
-      // Set modal display to block after content is retrieved
-      document.getElementById('termsModal').style.display = 'block';
-    })
-    .catch(error => console.error('Error fetching legal content:', error));
-}
-
-    function closeModal(event) {
-    const modal = document.getElementById('termsModal');
-    const modalContent = document.getElementById('modalContent');
-
-    if (event.target === modal && event.target !== modalContent) {
-        modal.style.display = 'none';
-    }
-}
-    
-document.addEventListener('click', closeModal);
-    
-    document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
-        closeModal();
-    }
-});
-
-
-function calculateAssets() {
+     function calculateAssets() {
     const assetFields = [
         'assets_checking_accounts', 
         'assets_savings_accounts', 
@@ -312,10 +248,38 @@ function calculateAssets() {
         }
     }
 
-    ASSETS = assets;
-    document.getElementById('ASSETS').textContent = '$' + ASSETS.toFixed(2);
-}
+    document.getElementById('assets').textContent = '$' + assets.toFixed(2);
 
+return assets;
+
+}
+ 
+ function calculateLiquidAssets() {
+    const liquidAssetFields = [
+        'assets_checking_accounts', 
+        'assets_savings_accounts', 
+        'assets_other_liquid_accounts'
+    ];
+
+    let liquidAssets = 0;
+
+    for (let i = 0; i < liquidAssetFields.length; i++) {
+        const fieldValue = document.getElementById(liquidAssetFields[i]).value;
+        console.log(`Field value for ${liquidAssetFields[i]}: ${fieldValue}`);
+        const parsedValue = parseFloat(fieldValue);
+        if (!isNaN(parsedValue)) {
+            liquidAssets += parsedValue;
+        } else {
+            console.error(`Invalid value for ${liquidAssetFields[i]}: ${fieldValue}`);
+        }
+    }
+
+
+    document.getElementById('liquidAssets').textContent = '$' + liquidAssets.toFixed(2);
+
+return liquidAssets;
+  
+}
 
 function setCookie(name, value, days) {
     var expires = "";
@@ -338,13 +302,14 @@ function calculateNext() {
 
     function calculateAll() {
         
-    calculateAssets();
+ calculateAssets();
+ 
+ calculateLiquidAssets();
 
-        setCookie("ASSETS", ASSETS, 365);
+        setCookie("assets", assets, 365);
+        setCookie("liquidAssets", liquidAssets, 365);
 
     }
-
-
 
 
 </script>
@@ -356,15 +321,16 @@ function calculateNext() {
     
  
 <div class ="tooltip">
-            <p><u>Assets:</u><span id="ASSETS"></span></p>
+            <p><u>Assets:</u><span id="assets"></span></p>
     <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
 </div>
+
+<div class ="tooltip">
+            <p><u>Liquid Assets:</u><span id="liquidAssets"></span></p>
+    <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
+</div>
+
    </div>
-
-    
-
-   
-
 
 </body>
 
