@@ -161,12 +161,12 @@ button {
 </head>
 
 <body>
- <div class="tab-container">
-    <div class="tab" onclick="income.html">Income</div>
-    <div class="tab" onclick="expense.html">Expense</div>
-     <div class="tab" onclick="asset.html">Asset</div>
-    <div class="tab" onclick="liability.html">Liability</div>
-    <div class="tab" onclick="summary.html">Summary</div>
+    <div class="tab-container">
+    <div class="tab" onclick="scrollToSection('income')">Income</div>
+    <div class="tab" onclick="scrollToSection('expense')">Expense</div>
+     <div class="tab" onclick="scrollToSection('asset')">Asset</div>
+    <div class="tab" onclick="scrollToSection('liability')">Liability</div>
+    <div class="tab" onclick="scrollToSection('summary')">Summary</div>
 </div>
 
 
@@ -304,6 +304,18 @@ function calculateLiabilities() {
 }
 
 
+function setCookie(name, value, days) {
+    var expires = "";
+    if (value === undefined || value === null || value === '') {
+        value = '0';
+    }
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
+}
 
        
 
@@ -311,10 +323,10 @@ function calculateLiabilities() {
         
     calculateLiabilities();
     
-    
+    setCookie("LIABILITIES", LIABILITIES, 365);
+
     }
 
-document.cookie = "LIABILITIES=" + encodeURIComponent(LIABILITIES);
 
 </script>
 
