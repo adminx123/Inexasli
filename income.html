@@ -508,15 +508,17 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     
  
 
-document.getElementById('RegionDropdown').addEventListener('change', function() {
+
     
-    var USAHIDE = document.var USAHIDE = document.querySelector('.USAHIDE'); // Use querySelector with class selector
- if (this.value === 'USA' || this.value === '') { // Check for USA or empty value
-  USAHIDE.style.display = 'block';
- } else {
-  USAHIDE.style.display = 'none';
- }
+document.getElementById('RegionDropdown').addEventListener('change', function() {
+    var USAHIDE = document.querySelector('.USAHIDE'); // Use querySelector with class selector
+    if (this.value === 'USA' || this.value === '') { // Check for USA or empty value
+        USAHIDE.style.display = 'block';
+    } else {
+        USAHIDE.style.display = 'none';
+    }
 });
+
 
     function validatecheckbox() {
   var termscheckbox = document.getElementById("termscheckbox");
