@@ -501,6 +501,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var ANNUALEI; 
     var BPA = 15705;
     var SD = 14600;
+    var PASSIVEINCOME;
     
  
 
@@ -1231,7 +1232,26 @@ function calculateCapitalGainsTax() {
   const resultDiv = document.getElementById('capital_gains_tax_result');
   document.getElementById('AnnualCG').textContent = '$' + (totalTax).toFixed(2);;
 }
-   
+
+function passiveincome() {
+  const fireFields = [
+    ['income_investment_property', 'income_investment_property_frequency'],
+    ['income_interest', 'income_interest_frequency'],
+    ['income_public_dividend', 'income_public_dividend_frequency'],
+    ['income_trust', 'income_trust_frequency'],
+    ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency']
+  ];
+
+  let income = 0;
+
+  for (const [incomeField, frequencyField] of fireFields) {
+    const incomeValue = parseFloat(document.getElementById(incomeField).value) || 0;
+    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
+    income += incomeValue * frequency;
+  }
+    PASSIVEINCOME = income
+}
+    
     function setCookie(name, value, days) {
     var expires = "";
     if (value === undefined || value === null || value === '') {
@@ -1259,6 +1279,8 @@ calculateAll();
     getEIPayable();
     
     calculateRegionalTax();
+
+        passiveincome();
         
     const SubregionDropdown = document.getElementById('SubregionDropdown');
     const Subregion = SubregionDropdown.value;
@@ -1278,6 +1300,7 @@ setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
 setCookie("ANNUALINCOME", ANNUALINCOME, 365);
 setCookie("ANNUALCPP", ANNUALCPP, 365);
 setCookie("ANNUALEI", ANNUALEI, 365); 
+        setCookie("PASSIVEINCOME", PASSIVEINCOME, 365); 
     
     }
     
