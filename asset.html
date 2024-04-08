@@ -222,6 +222,9 @@ button {
 <button onclick="calculateNext()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
    
 <script>
+Var ASSETS;
+Var LIQUIDASSETS;
+
      function calculateAssets() {
     const assetFields = [
         'assets_checking_accounts', 
@@ -248,9 +251,11 @@ button {
         }
     }
 
-    document.getElementById('assets').textContent = '$' + assets.toFixed(2);
+ASSETS = assets;
 
-return assets;
+    document.getElementById('ASSETS').textContent = '$' + ASSETS.toFixed(2);
+
+
 
 }
  
@@ -274,10 +279,11 @@ return assets;
         }
     }
 
+LIQUIDASSETS = liquidAssets;
 
-    document.getElementById('liquidAssets').textContent = '$' + liquidAssets.toFixed(2);
 
-return liquidAssets;
+    document.getElementById('LIQUIDASSETS').textContent = '$' + LIQUIDASSETS.toFixed(2);
+
   
 }
 
@@ -306,8 +312,8 @@ function calculateNext() {
  
  calculateLiquidAssets();
 
-        setCookie("assets", assets, 365);
-        setCookie("liquidAssets", liquidAssets, 365);
+        setCookie("ASSETS", ASSETS, 365);
+        setCookie("LIQUIDASSETS", LIQUIDASSETS, 365);
 
     }
 
@@ -321,12 +327,12 @@ function calculateNext() {
     
  
 <div class ="tooltip">
-            <p><u>Assets:</u><span id="assets"></span></p>
+            <p><u>Assets:</u><span id="ASSETS"></span></p>
     <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
 </div>
 
 <div class ="tooltip">
-            <p><u>Liquid Assets:</u><span id="liquidAssets"></span></p>
+            <p><u>Liquid Assets:</u><span id="LIQUIDASSETS"></span></p>
     <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
 </div>
 
