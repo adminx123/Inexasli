@@ -667,7 +667,7 @@ button {
 <script>
    
     var ANNUALEXPENSESUM;
-  var HOUSING;
+    var HOUSING;
     
 ;
 
@@ -744,10 +744,12 @@ let annualExpenseSum = 0;
             annualExpenseSum += calculateAnnual(inputId, frequencyId);
         });
 
+ANNUALEXPENSESUM = annualExpenseSum;
+
  // Display the results
 document.getElementById('ANNUALEXPENSESUM').textContent = `$${ANNUALEXPENSESUM.toFixed(2)}`;
     
-    ANNUALEXPENSESUM = annualExpenseSum;
+    
     }
         
       
@@ -787,9 +789,11 @@ document.getElementById('ANNUALEXPENSESUM').textContent = `$${ANNUALEXPENSESUM.t
 
 	}
 	  
+HOUSING = housing;
+
 	  document.getElementById('HOUSING').textContent = `$${HOUSING.toFixed(2)}`;
 	  
-	HOUSING = housing;
+	
   }	
 	
 function calculateNext() {
