@@ -502,6 +502,8 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var BPA = 15705;
     var SD = 14600;
     var PASSIVEINCOME;
+    var CPPPAYABLESELFEMPLOYED;
+    var CPPPAYABLEEMPLOYED;
     
  
 
@@ -753,8 +755,10 @@ if (LCR <= 0) {
   }
 }
 
-ANNUALCPP = cppPayableEmployed + cppPayableSelfEmployed
-
+ANNUALCPP = cppPayableEmployed + cppPayableSelfEmployed;
+CPPPAYABLEEMPLOYED = cppPayableEmployed;
+    CPPPAYABLESELFEMPLOYED = cppPayableSelfEmployed;
+    
     // Display the results
     document.getElementById('ANNUALCPP').textContent = '$' + (ANNUALCPP).toFixed(2);
 document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmployed).toFixed(2);
@@ -1302,7 +1306,8 @@ setCookie("ANNUALINCOME", ANNUALINCOME, 365);
 setCookie("ANNUALCPP", ANNUALCPP, 365);
 setCookie("ANNUALEI", ANNUALEI, 365); 
         setCookie("PASSIVEINCOME", PASSIVEINCOME, 365); 
-    
+        setCookie("CPPPAYABLEEMPLOYED", cppPayableEmployed, 365);
+    setCookie("CPPPAYABLEEMPLOYED", cppPayableSelfEmployed, 365);
     }
     
 
