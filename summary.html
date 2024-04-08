@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sumfmfary</title>
+    <title>Summary</title>
     <style>
     
      /* Modal styles */
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('ei_sum').textContent = " $" + getCookie('ANNUALEI');
     document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
     document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
-    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
+   // document.getElementById('xxxx').textContent = " $" + getCookie('xxxx');
 
 // Calculate ANNUALDISPOSABLEINCOME using getCookie function
 const ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
@@ -329,6 +329,9 @@ document.getElementById('ANNUALDISPOSABLEINCOME').textContent = '$' + ANNUALDISP
 
 DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
         document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
+
+HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
+  document.getElementById('housingtoincome').textContent = HOUSINGTOINCOME.toFixed(3);
     
 });
 </script>
