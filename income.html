@@ -293,13 +293,14 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 <span id="income_capital_gains_losses_annual"></span>
 </div>
 
- 
+ <div class = "USA">
  <div class = "row">
     <label for = "capital_gain_state_rate">Capital Gain State Tax Rate</label>
     <input type="number" id="income_capital_gain_state_rate">
     <label>%</label>
  </div>
-
+</div>
+    
 <div class ="row">
 <label for="income_owner_dividend">Dividend: Owner:</label>
 <input type="number" id="income_owner_dividend">
@@ -508,10 +509,12 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
  
 
 document.getElementById('RegionDropdown').addEventListener('change', function() {
+    
+    var USAHIDE = document.getElementById('USA');
  if (this.value === 'USA' || this.value === '') { // Check for USA or empty value
-  income_capital_gain_state_rate.style.display = 'block';
+  USAHIDE.style.display = 'block';
  } else {
-  income_capital_gain_state_rate.style.display = 'none';
+  USAHIDE.style.display = 'none';
  }
 });
 
