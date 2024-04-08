@@ -666,7 +666,8 @@ button {
 
 <script>
    
-    var ANNUALEXPENSE;
+    var ANNUALEXPENSESUM;
+  var HOUSING;
     
 ;
 
@@ -746,7 +747,7 @@ let annualExpenseSum = 0;
  // Display the results
 document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum.toFixed(2)}`;
     
-    return annualExpenseSum;
+    ANNUALEXPENSESUM = annualExpenseSum;
     }
         
       
@@ -788,7 +789,7 @@ document.getElementById('annual_expense_sum').textContent = `$${annualExpenseSum
 	  
 	  document.getElementById('housingExpense').textContent = `$${housing.toFixed(2)}`;
 	  
-	return housing;
+	HOUSING = housing;
   }	
 	
 function calculateNext() {
@@ -799,11 +800,12 @@ function calculateNext() {
     function calculateAll() {
         
     calculateNormalizedSum();
+
     housingExpenses();
  
     
-setCookie("annualExpenseSum", annualExpenseSum, 365);
- setCookie("housing", housing, 365);
+setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
+ setCookie("HOUSING", HOUSING, 365);
   
     }
     
@@ -816,12 +818,12 @@ setCookie("annualExpenseSum", annualExpenseSum, 365);
     
    
 <div class ="tooltip">
-           <p><u>Expense:</u> <span id="annual_expense_sum"></span></p>
+           <p><u>Expense:</u> <span id="ANNUALEXPENSESUM"></span></p>
 <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
 </div>
 
 	    <div class ="tooltip">
-           <p><u>Housing:</u> <span id="housingExpense"></span></p>
+           <p><u>Housing:</u> <span id="HOUSING"></span></p>
 <span class="tooltiptext">Total housing expenses.</span>
 
 </div>
