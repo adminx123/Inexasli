@@ -332,6 +332,9 @@ DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNU
 
 HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
   document.getElementById('housingtoincome').textContent = HOUSINGTOINCOME.toFixed(3);
+
+    SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
+  document.getElementById('savingstodebt').textContent = SAVINGSTODEBT.toFixed(3);
     
 });
 </script>
