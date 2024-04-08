@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('ei_sum').textContent = " $" + getCookie('ANNUALEI');
     document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
     document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
-   // document.getElementById('xxxx').textContent = " $" + getCookie('xxxx');
+   document.getElementById('savingstodebt').textContent = " $" + ('SAVINGSTODEBT');
 
 // Calculate ANNUALDISPOSABLEINCOME using getCookie function
 const ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
