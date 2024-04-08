@@ -510,14 +510,28 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 
 
     
-document.getElementById('RegionDropdown').addEventListener('change', function() {
-    var USAHIDE = document.querySelector('.USAHIDE'); // Use querySelector with class selector
-    if (this.value === 'USA' || this.value === '') { // Check for USA or empty value
-        USAHIDE.style.display = 'block';
-    } else {
-        USAHIDE.style.display = 'none';
+document.addEventListener('DOMContentLoaded', function() {
+    var USAHIDE = document.querySelector('.USAHIDE');
+    
+    // Initially hide the field
+    USAHIDE.style.display = 'none';
+
+    // Function to handle the change in dropdown value
+    function handleRegionChange() {
+        if (this.value === 'USA' || this.value === '') { // Check for USA or empty value
+            USAHIDE.style.display = 'block';
+        } else {
+            USAHIDE.style.display = 'none';
+        }
     }
+
+    // Call handleRegionChange function to handle initial state
+    handleRegionChange.call(document.getElementById('RegionDropdown'));
+
+    // Add event listener to the dropdown for change in value
+    document.getElementById('RegionDropdown').addEventListener('change', handleRegionChange);
 });
+
 
 
     function validatecheckbox() {
