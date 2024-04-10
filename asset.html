@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assets</title>
-    <style>
+   <style>
     
      /* Modal styles */
     .modal {
@@ -102,7 +102,6 @@ button {
     color: black; /* Set the text color of the active tab to black */
 }
 
-
 /* Media Query for smaller screens (e.g., mobile) */
 @media (max-width: 768px) {
     label,
@@ -124,8 +123,9 @@ button {
 
 
 
-* Tooltip text */
+/* Tooltip text */
 .tooltip .tooltiptext {
+  display: none; /* Hide the tooltip */
   visibility: hidden; /* Initially hidden */
   width: 200px; /* Adjust width as needed */
   background-color: #333;
@@ -142,25 +142,15 @@ button {
   transition: opacity 0.3s;
 }
 
-/* Tooltip arrow */
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #333 transparent transparent transparent;
-}
 
 .container {
-        display: grid;
+        display: none;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
 
     </style>
+
 </head>
 
 <body>
@@ -323,7 +313,7 @@ function calculateNext() {
 
 </script>
 
-<!--
+
    
     
     <div class="container">
@@ -340,7 +330,7 @@ function calculateNext() {
 </div>
 
    </div>
--->
+
 </body>
 
 </html>
