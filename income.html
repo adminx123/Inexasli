@@ -1261,20 +1261,24 @@ function passiveincome() {
 }
 
 function storeIncomeData() {
-  // Loop through each income field and its frequency select element
-  const incomeFields = document.querySelectorAll(".income-field");
+  // Loop through all income field elements (assuming they are direct children of the document body)
+  const incomeFields = document.body.querySelectorAll("[id^='income_']");
+
   for (const incomeField of incomeFields) {
-    const fieldId = incomeField.id.replace("income_", "");
-    const valueInput = document.getElementById(`income_${fieldId}`);
-    const frequencySelect = document.getElementById(`income_${fieldId}_frequency`);
-    
+    const fieldId = incomeField.id; // Use the entire ID as the field identifier
+
+    // Extract income value and frequency using existing IDs
+    const valueInput = document.getElementById(fieldId);
+    const frequencySelect = document.getElementById(`${fieldId}_frequency`);
+
     // Combine value and frequency into a single string
     const data = `${valueInput.value},${frequencySelect.value}`;
-    
+
     // Create and store cookie with combined data (URL encoded)
-    document.cookie = `income_${fieldId}=${encodeURIComponent(data)}`;
+    document.cookie = `${fieldId}=${encodeURIComponent(data)}`;
   }
 }
+
 
 function populateIncomeFields() {
   // Loop through potential income field cookies
@@ -1296,7 +1300,6 @@ function populateIncomeFields() {
 
     
 function calculateNext() {
-storeIncomeData();
     calculateAll();
 window.location.href = 'expense.html';
 }   
