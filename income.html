@@ -1271,8 +1271,12 @@ function storeIncomeData() {
     const valueInput = document.getElementById(fieldId);
     const frequencySelect = document.getElementById(`${fieldId}_frequency`);
 
-    // Combine value and frequency into a single string
+    // Combine value and frequency into a single string (Option 1: Direct concatenation)
     const data = `${valueInput.value},${frequencySelect.value}`;
+
+    // OR (Option 2: Ensure frequency is a string before concatenation)
+    // const frequencyValue = frequencySelect.value.toString();
+    // const data = `${valueInput.value},${frequencyValue}`;
 
     // Create and store cookie with combined data (URL encoded)
     document.cookie = `${fieldId}=${encodeURIComponent(data)}`;
