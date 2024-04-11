@@ -121,28 +121,6 @@ button {
     font-size: 14px;
 }
 
-
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-  display: none; /* Hide the tooltip */
-  visibility: hidden; /* Initially hidden */
-  width: 200px; /* Adjust width as needed */
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%; /* Adjust positioning as needed */
-  left: 50%;
-  margin-left: -100px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-
 .container {
         display: none;
         grid-template-columns: repeat(2, 1fr);
@@ -324,10 +302,13 @@ function calculateNext() {
     
 </script>
 
+    <div class = "container">
 
          <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
 <span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy formulation.</span>
 
+    </div>
+        
 </body>
 
     
