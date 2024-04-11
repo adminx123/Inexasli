@@ -1319,7 +1319,9 @@ calculateAll();
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
     calculateCapitalGainsTax();
-    
+
+ storeIncomeData();
+        
 // Save global variables as cookies with a longer expiration date
 setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
 setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
@@ -1332,8 +1334,6 @@ setCookie("ANNUALEI", ANNUALEI, 365);
         setCookie("PASSIVEINCOME", PASSIVEINCOME, 365); 
         setCookie("CPPPAYABLEEMPLOYED",CPPPAYABLEEMPLOYED , 365);
     setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
-
-        storeIncomeData();
     }
     
 
