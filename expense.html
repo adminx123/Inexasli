@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense</title>
+    <title>Expenses</title>
     <style>
     
      /* Modal styles */
@@ -155,7 +155,7 @@ button {
 }
 
 .container {
-        display: none;
+        display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
@@ -821,19 +821,21 @@ setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
 
    
     
-  
+
     
    
-
+<div class ="tooltip">
            <p><u>Expense:</u> <span id="ANNUALEXPENSESUM"></span></p>
 <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
 
 
-	    
+	   
            <p><u>Housing:</u> <span id="HOUSING"></span></p>
 <span class="tooltiptext">Total housing expenses.</span>
 
 
+
+    </div>
     
 </body>
 
