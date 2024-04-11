@@ -1296,6 +1296,7 @@ function populateIncomeFields() {
     
 function calculateNext() {
 calculateAll();
+    storeIncomeData();
   window.location.href = 'expense.html';
 }   
 
@@ -1319,8 +1320,6 @@ calculateAll();
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
     calculateCapitalGainsTax();
-
- storeIncomeData();
         
 // Save global variables as cookies with a longer expiration date
 setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
