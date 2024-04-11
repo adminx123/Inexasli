@@ -1281,6 +1281,45 @@ function passiveincome() {
     document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
 
+function storeIncomeData() {
+  // Loop through each income field and its frequency select element
+  const incomeFields = document.querySelectorAll(".income-field");
+  for (const incomeField of incomeFields) {
+    const fieldId = incomeField.id.replace("income_", "");
+    const valueInput = document.getElementById(`income_${fieldId}`);
+    const frequencySelect = document.getElementById(`income_${fieldId}_frequency`);
+    
+    // Combine value and frequency into a single string
+    const data = `${valueInput.value},${frequencySelect.value}`;
+    
+    // Create and store cookie with combined data (URL encoded)
+    document.cookie = `income_${fieldId}=${encodeURIComponent(data)}`;
+  }
+}
+
+    document.addEventListener("DOMContentLoaded", function() {
+  populateIncomeFields();
+});
+
+function populateIncomeFields() {
+  // Loop through potential income field cookies
+  for (let i = 0; document.cookie.split(';').length > i; i++) {
+    const cookie = document.cookie.split(';')[i].trim();
+    const [cookieName, cookieValue] = cookie.split('=');
+    
+    if (cookieName.startsWith("income_")) {
+      const fieldId = cookieName.split("_")[1];
+      const data = decodeURIComponent(cookieValue).split(",");
+      
+      if (data.length === 2) {
+        document.getElementById(`income_${fieldId}_value`).value = data[0];
+        document.getElementById(`income_${fieldId}_frequency`).value = data[1];
+      }
+    }
+  }
+}
+
+    
 function calculateNext() {
 calculateAll();
   window.location.href = 'expense.html';
@@ -1319,6 +1358,8 @@ setCookie("ANNUALEI", ANNUALEI, 365);
         setCookie("PASSIVEINCOME", PASSIVEINCOME, 365); 
         setCookie("CPPPAYABLEEMPLOYED",CPPPAYABLEEMPLOYED , 365);
     setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
+
+        storeIncomeData();
     }
     
 
