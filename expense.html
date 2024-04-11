@@ -124,38 +124,9 @@ button {
 
 
 
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden; /* Initially hidden */
-  width: 200px; /* Adjust width as needed */
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%; /* Adjust positioning as needed */
-  left: 50%;
-  margin-left: -100px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-/* Tooltip arrow */
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #333 transparent transparent transparent;
-}
 
 .container {
-        display: grid;
+        display: none;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
@@ -824,7 +795,7 @@ setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
 
     
    
-<div class ="tooltip">
+<div class ="container">
            <p><u>Expense:</u> <span id="ANNUALEXPENSESUM"></span></p>
 <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
 
