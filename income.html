@@ -1272,34 +1272,68 @@ const incomeFields = [
 ];
 
 function storeIncomeData() {
-  for (const incomeField of incomeFields) {
-    const fieldId = incomeField[0]; // Use the first element as income field ID
-    const frequencyId = incomeField[1]; // Use the second element as frequency ID
+  const frequencyFields = [
+    "income_salary_wages_frequency",
+    "income_tips_frequency",
+    "income_bonuses_frequency",
+    "income_sole_prop_frequency",
+    "income_investment_property_frequency",
+    "income_capital_gains_losses_frequency",
+    "income_interest_frequency",
+    "income_owner_dividend_frequency",
+    "income_public_dividend_frequency",
+    "income_trust_frequency",
+    "income_federal_pension_frequency",
+    "income_work_pension_frequency",
+    "income_social_security_frequency",
+    "income_employment_insurance_frequency",
+    "income_alimony_frequency",
+    "income_scholarships_grants_frequency",
+    "income_royalties_frequency",
+    "income_gambling_winnings_frequency",
+    "income_peer_to_peer_lending_frequency",
+    "income_venture_capital_frequency",
+    "income_tax_free_income_frequency"
+  ];
 
-    // Check if value input element exists (skip if not)
-    const valueInput = document.getElementById(fieldId);
-    if (!valueInput) {
-      console.error("Income input element not found:", fieldId);
-      continue;
+  const incomeFields = [
+    "income_salary_wages",
+    "income_tips",
+    "income_bonuses",
+    "income_sole_prop",
+    "income_investment_property",
+    "income_capital_gains_losses",
+    "income_interest",
+    "income_owner_dividend",
+    "income_public_dividend",
+    "income_trust",
+    "income_federal_pension",
+    "income_work_pension",
+    "income_social_security",
+    "income_employment_insurance",
+    "income_alimony",
+    "income_scholarships_grants",
+    "income_royalties",
+    "income_gambling_winnings",
+    "income_peer_to_peer_lending",
+    "income_venture_capital",
+    "income_tax_free_income"
+  ];
+
+  for (let i = 0; i < frequencyFields.length; i++) {
+    const frequencyInput = document.getElementById(frequencyFields[i]);
+    if (frequencyInput.value.trim() !== "") {
+      const frequency = frequencyInput.value;
+      document.cookie = `${frequencyFields[i]}=${frequency}`;
     }
+  }
 
-    // Check if value is empty (skip if blank)
-    const incomeValue = Number(valueInput.value);
-    if (isNaN(incomeValue)) {
-      console.warn("Skipping blank income field:", fieldId);
-      continue;
+  for (let i = 0; i < incomeFields.length; i++) {
+    const incomeInput = document.getElementById(incomeFields[i]);
+    if (incomeInput.value.trim() !== "") {
+      const income = incomeInput.value;
+      document.cookie = `${incomeFields[i]}=${income}`;
     }
-
-    const frequencySelect = document.getElementById(frequencyId);
-
-    // Extract text value from frequency selection
-    const frequencyValue = frequencySelect.value;
-
-    // Combine income and frequency (ensure both are strings)
-    const data = `${incomeValue},${frequencyValue}`;
-
-    // Create and store cookie with combined data (URL encoded)
-    document.cookie = `${fieldId}=${encodeURIComponent(data)}`;
   }
 }
 
