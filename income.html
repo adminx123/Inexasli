@@ -1262,21 +1262,44 @@ function passiveincome() {
 
 function storeIncomeData() {
   // Loop through all income field elements (assuming they are direct children of the document body)
-  const incomeFields = document.body.querySelectorAll("[id^='income_']");
+  const incomeFields = [
+            ['income_salary_wages', 'income_salary_wages_frequency'],
+            ['income_tips', 'income_tips_frequency'],
+            ['income_bonuses', 'income_bonuses_frequency'],
+            ['income_sole_prop', 'income_sole_prop_frequency'],
+            ['income_investment_property', 'income_investment_property_frequency'],
+            ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
+            ['income_interest', 'income_interest_frequency'],
+            ['income_owner_dividend', 'income_owner_dividend_frequency'],
+            ['income_public_dividend', 'income_public_dividend_frequency'],
+            ['income_trust', 'income_trust_frequency'],
+            ['income_federal_pension', 'income_federal_pension_frequency'],
+            ['income_work_pension', 'income_work_pension_frequency'],
+            ['income_social_security', 'income_social_security_frequency'],
+            ['income_employment_insurance', 'income_employment_insurance_frequency'],
+            ['income_alimony', 'income_alimony_frequency'],
+            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
+            ['income_royalties', 'income_royalties_frequency'],
+            ['income_gambling_winnings', 'income_gambling_winnings_frequency'],
+            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+            ['income_venture_capital', 'income_venture_capital_frequency'],
+            ['income_tax_free_income', 'income_tax_free_income_frequency']
+            // Add more income fields here
+        ];
 
-  for (const incomeField of incomeFields) {
-    const fieldId = incomeField.id; // Use the entire ID as the field identifier
-
-    // Extract income value and frequency using existing IDs
+    for (const incomeField of incomeFields) {
+    const fieldId = incomeField.id;
     const valueInput = document.getElementById(fieldId);
     const frequencySelect = document.getElementById(`${fieldId}_frequency`);
 
-    // Combine value and frequency into a single string (Option 1: Direct concatenation)
-    const data = `${valueInput.value},${frequencySelect.value}`;
+    // Extract numerical income value (assuming valueInput.value is a number)
+    const incomeValue = Number(valueInput.value); // Convert to a number (if needed)
 
-    // OR (Option 2: Ensure frequency is a string before concatenation)
-    // const frequencyValue = frequencySelect.value.toString();
-    // const data = `${valueInput.value},${frequencyValue}`;
+    // Extract text value from frequency selection
+    const frequencyValue = frequencySelect.value;
+
+    // Combine income and frequency (ensure both are strings)
+    const data = `${incomeValue},${frequencyValue}`;
 
     // Create and store cookie with combined data (URL encoded)
     document.cookie = `${fieldId}=${encodeURIComponent(data)}`;
