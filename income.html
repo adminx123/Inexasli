@@ -1316,6 +1316,7 @@ function storeIncomeData() {
     document.cookie = `${fieldId}=${encodeURIComponent(data)}`;
   }
 }
+    
 function populateIncomeFields() {
   // Loop through potential income field cookies
   for (let i = 0; document.cookie.split(';').length > i; i++) {
