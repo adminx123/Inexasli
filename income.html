@@ -1260,6 +1260,10 @@ function passiveincome() {
     document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+  populateIncomeFields();
+});
+    
 function storeIncomeData() {
   const incomeFields = [
             ['income_salary_wages', 'income_salary_wages_frequency'],
