@@ -1263,13 +1263,6 @@ function passiveincome() {
 document.addEventListener("DOMContentLoaded", function() {
   populateIncomeData();
 });
-    const frequencyFields = [
-  // ... your frequency field list
-];
-
-const incomeFields = [
- // ... your income field list
-];
 
 function storeIncomeData() {
   const frequencyFields = [
@@ -1338,44 +1331,91 @@ function storeIncomeData() {
 }
 
 function populateIncomeData() {
-  // Loop through potential income field cookies
-  for (let i = 0; document.cookie.split(';').length > i; i++) {
-    const cookie = document.cookie.split(';')[i].trim();
-    const [cookieName, cookieValue] = cookie.split('=');
+  const frequencyFields = [
+    "income_salary_wages_frequency",
+    "income_tips_frequency",
+    "income_bonuses_frequency",
+    "income_sole_prop_frequency",
+    "income_investment_property_frequency",
+    "income_capital_gains_losses_frequency",
+    "income_interest_frequency",
+    "income_owner_dividend_frequency",
+    "income_public_dividend_frequency",
+    "income_trust_frequency",
+    "income_federal_pension_frequency",
+    "income_work_pension_frequency",
+    "income_social_security_frequency",
+    "income_employment_insurance_frequency",
+    "income_alimony_frequency",
+    "income_scholarships_grants_frequency",
+    "income_royalties_frequency",
+    "income_gambling_winnings_frequency",
+    "income_peer_to_peer_lending_frequency",
+    "income_venture_capital_frequency",
+    "income_tax_free_income_frequency"
+  ];
 
-    if (cookieName.startsWith("income_")) {
+  const incomeFields = [
+    "income_salary_wages",
+    "income_tips",
+    "income_bonuses",
+    "income_sole_prop",
+    "income_investment_property",
+    "income_capital_gains_losses",
+    "income_interest",
+    "income_owner_dividend",
+    "income_public_dividend",
+    "income_trust",
+    "income_federal_pension",
+    "income_work_pension",
+    "income_social_security",
+    "income_employment_insurance",
+    "income_alimony",
+    "income_scholarships_grants",
+    "income_royalties",
+    "income_gambling_winnings",
+    "income_peer_to_peer_lending",
+    "income_venture_capital",
+    "income_tax_free_income"
+  ];
+
+  for (let i = 0; i < frequencyFields.length; i++) {
+    const cookieName = frequencyFields[i];
+    const cookieValue = getCookie(cookieName);
+
+    if (cookieValue !== "") {
       const fieldId = cookieName.split("_")[1];
-
-      // Decode and split data according to separator (comma or pipe)
-      let separator = ","; // Default separator (comma)
-      const decodedValue = decodeURIComponent(cookieValue).split(separator);
-
-      // Check if data has expected length (2)
-      if (decodedValue.length === 2) {
-        const incomeValue = decodedValue[0];
-        const frequencyValue = decodedValue[1];
-
-        // Update input value (handle potential missing elements)
-        const incomeInput = document.getElementById(`income_${fieldId}_value`);
-        if (incomeInput) {
-          incomeInput.value = incomeValue;
-        } else {
-          console.warn("Missing income input element:", `income_${fieldId}_value`);
-        }
-
-        // Update dropdown selection (handle potential missing elements)
-        const frequencySelect = document.getElementById(`income_${fieldId}_frequency`);
-        if (frequencySelect) {
-          frequencySelect.value = frequencyValue;
-        } else {
-          console.warn("Missing frequency dropdown element:", `income_${fieldId}_frequency`);
-        }
-      } else {
-        // Handle unexpected data length (optional: log or ignore)
-        console.warn("Unexpected cookie data length for:", cookieName);
+      const frequencySelect = document.getElementById(`income_${fieldId}_frequency`);
+      if (frequencySelect) {
+        frequencySelect.value = cookieValue;
       }
     }
   }
+
+  for (let i = 0; i < incomeFields.length; i++) {
+    const cookieName = incomeFields[i];
+    const cookieValue = getCookie(cookieName);
+
+    if (cookieValue !== "") {
+      const fieldId = cookieName.split("_")[1];
+      const incomeInput = document.getElementById(`income_${fieldId}`);
+      if (incomeInput) {
+        incomeInput.value = cookieValue;
+      }
+    }
+  }
+}
+
+// Function to get cookie value by name
+function getCookie(name) {
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(name + '=')) {
+      return cookie.substring(name.length + 1);
+    }
+  }
+  return "";
 }
 
 
