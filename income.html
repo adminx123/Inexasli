@@ -1261,7 +1261,6 @@ function passiveincome() {
 }
 
 function storeIncomeData() {
-  // Loop through all income field elements (assuming they are direct children of the document body)
   const incomeFields = [
             ['income_salary_wages', 'income_salary_wages_frequency'],
             ['income_tips', 'income_tips_frequency'],
@@ -1289,11 +1288,18 @@ function storeIncomeData() {
 
     for (const incomeField of incomeFields) {
     const fieldId = incomeField.id;
+
+    // Check if value input element exists before accessing properties
     const valueInput = document.getElementById(fieldId);
-    const frequencySelect = document.getElementById(`${fieldId}_frequency`);
+    if (!valueInput) {
+      console.error("Income input element not found:", fieldId);
+      continue; // Skip to the next iteration if element is missing
+    }
+
+    const frequencySelect = documentgetElementById(`${fieldId}_frequency`);
 
     // Extract numerical income value (assuming valueInput.value is a number)
-    const incomeValue = Number(valueInput.value); // Convert to a number (if needed)
+    const incomeValue = Number(valueInput.value) || 0; // Handle blank fields (set to 0)
 
     // Extract text value from frequency selection
     const frequencyValue = frequencySelect.value;
@@ -1305,7 +1311,6 @@ function storeIncomeData() {
     document.cookie = `${fieldId}=${encodeURIComponent(data)}`;
   }
 }
-
 
 function populateIncomeFields() {
   // Loop through potential income field cookies
