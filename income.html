@@ -1322,14 +1322,37 @@ function populateIncomeFields() {
   for (let i = 0; document.cookie.split(';').length > i; i++) {
     const cookie = document.cookie.split(';')[i].trim();
     const [cookieName, cookieValue] = cookie.split('=');
-    
+
     if (cookieName.startsWith("income_")) {
       const fieldId = cookieName.split("_")[1];
-      const data = decodeURIComponent(cookieValue).split(",");
-      
-      if (data.length === 2) {
-        document.getElementById(`income_${fieldId}_value`).value = data[0];
-        document.getElementById(`income_${fieldId}_frequency`).value = data[1];
+
+      // Decode and split data according to separator (comma or pipe)
+      let separator = ","; // Default separator (comma)
+      const decodedValue = decodeURIComponent(cookieValue).split(separator);
+
+      // Check if data has expected length (2)
+      if (decodedValue.length === 2) {
+        const incomeValue = decodedValue[0];
+        const frequencyValue = decodedValue[1];
+
+        // Update input value (handle potential missing elements)
+        const incomeInput = document.getElementById(`income_${fieldId}_value`);
+        if (incomeInput) {
+          incomeInput.value = incomeValue;
+        } else {
+          console.warn("Missing income input element:", `income_${fieldId}_value`);
+        }
+
+        // Update dropdown selection (handle potential missing elements)
+        const frequencySelect = document.getElementById(`income_${fieldId}_frequency`);
+        if (frequencySelect) {
+          frequencySelect.value = frequencyValue;
+        } else {
+          console.warn("Missing frequency dropdown element:", `income_${fieldId}_frequency`);
+        }
+      } else {
+        // Handle unexpected data length (optional: log or ignore)
+        console.warn("Unexpected cookie data length for:", cookieName);
       }
     }
   }
