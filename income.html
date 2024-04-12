@@ -1329,9 +1329,87 @@ function storeIncomeData() {
   }
 }
 
-//document.addEventListener("DOMContentLoaded", function() {
- // populateIncomeData()
-   // });
+document.addEventListener("DOMContentLoaded", function() {
+ populateIncomeData()
+ });
+ function populateIncomeData() {
+  const frequencyFields = [
+    "income_salary_wages_frequency",
+    "income_tips_frequency",
+    "income_bonuses_frequency",
+    "income_sole_prop_frequency",
+    "income_investment_property_frequency",
+    "income_capital_gains_losses_frequency",
+    "income_interest_frequency",
+    "income_owner_dividend_frequency",
+    "income_public_dividend_frequency",
+    "income_trust_frequency",
+    "income_federal_pension_frequency",
+    "income_work_pension_frequency",
+    "income_social_security_frequency",
+    "income_employment_insurance_frequency",
+    "income_alimony_frequency",
+    "income_scholarships_grants_frequency",
+    "income_royalties_frequency",
+    "income_gambling_winnings_frequency",
+    "income_peer_to_peer_lending_frequency",
+    "income_venture_capital_frequency",
+    "income_tax_free_income_frequency"
+  ];
+
+  const incomeFields = [
+    "income_salary_wages",
+    "income_tips",
+    "income_bonuses",
+    "income_sole_prop",
+    "income_investment_property",
+    "income_capital_gains_losses",
+    "income_interest",
+    "income_owner_dividend",
+    "income_public_dividend",
+    "income_trust",
+    "income_federal_pension",
+    "income_work_pension",
+    "income_social_security",
+    "income_employment_insurance",
+    "income_alimony",
+    "income_scholarships_grants",
+    "income_royalties",
+    "income_gambling_winnings",
+    "income_peer_to_peer_lending",
+    "income_venture_capital",
+    "income_tax_free_income"
+  ];
+
+  for (let i = 0; i < frequencyFields.length; i++) {
+    const cookieName = frequencyFields[i];
+    const cookieValue = getCookie(cookieName);
+
+    if (cookieValue !== "") {
+      const fieldId = cookieName.split("_")[1];
+      const frequencySelect = document.getElementById(`income_${fieldId}_frequency`);
+      if (frequencySelect) {
+        frequencySelect.value = cookieValue;
+      }
+    }
+  }
+
+  for (let i = 0; i < incomeFields.length; i++) {
+    const cookieName = incomeFields[i];
+    const cookieValue = getCookie(cookieName);
+
+    if (cookieValue !== "") {
+      const fieldId = cookieName.split("_")[1];
+      const incomeInput = document.getElementById(`income_${fieldId}`);
+      if (incomeInput) {
+        incomeInput.value = cookieValue;
+      }
+    }
+  }
+}
+
+
+
     
 function calculateNext() {
     calculateAll();
@@ -1358,6 +1436,8 @@ window.location.href = 'expense.html';
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
     calculateCapitalGainsTax();
+
+storeIncomeData();
         
 // Save global variables as cookies with a longer expiration date
 setCookie("ANNUALINCOME", ANNUALINCOME, 365);
