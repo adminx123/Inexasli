@@ -1260,8 +1260,7 @@ function passiveincome() {
     document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  populateIncomeData();
+
 });
 
 function storeIncomeData() {
@@ -1330,7 +1329,8 @@ function storeIncomeData() {
   }
 }
 
-
+//document.addEventListener("DOMContentLoaded", function() {
+ // populateIncomeData();
     
 function calculateNext() {
     calculateAll();
