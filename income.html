@@ -1263,34 +1263,16 @@ function passiveincome() {
 document.addEventListener("DOMContentLoaded", function() {
   populateIncomeFields();
 });
-    
-function storeIncomeData() {
-  const incomeFields = [
-            ['income_salary_wages', 'income_salary_wages_frequency'],
-            ['income_tips', 'income_tips_frequency'],
-            ['income_bonuses', 'income_bonuses_frequency'],
-            ['income_sole_prop', 'income_sole_prop_frequency'],
-            ['income_investment_property', 'income_investment_property_frequency'],
-            ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
-            ['income_interest', 'income_interest_frequency'],
-            ['income_owner_dividend', 'income_owner_dividend_frequency'],
-            ['income_public_dividend', 'income_public_dividend_frequency'],
-            ['income_trust', 'income_trust_frequency'],
-            ['income_federal_pension', 'income_federal_pension_frequency'],
-            ['income_work_pension', 'income_work_pension_frequency'],
-            ['income_social_security', 'income_social_security_frequency'],
-            ['income_employment_insurance', 'income_employment_insurance_frequency'],
-            ['income_alimony', 'income_alimony_frequency'],
-            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
-            ['income_royalties', 'income_royalties_frequency'],
-            ['income_gambling_winnings', 'income_gambling_winnings_frequency'],
-            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
-            ['income_venture_capital', 'income_venture_capital_frequency'],
-            ['income_tax_free_income', 'income_tax_free_income_frequency']
-            // Add more income fields here
-        ];
+    const frequencyFields = [
+  // ... your frequency field list
+];
 
-    for (const incomeField of incomeFields) {
+const incomeFields = [
+ // ... your income field list
+];
+
+function storeIncomeData() {
+  for (const incomeField of incomeFields) {
     const fieldId = incomeField[0]; // Use the first element as income field ID
     const frequencyId = incomeField[1]; // Use the second element as frequency ID
 
@@ -1320,8 +1302,8 @@ function storeIncomeData() {
     document.cookie = `${fieldId}=${encodeURIComponent(data)}`;
   }
 }
-    
-function populateIncomeFields() {
+
+function populateIncomeData() {
   // Loop through potential income field cookies
   for (let i = 0; document.cookie.split(';').length > i; i++) {
     const cookie = document.cookie.split(';')[i].trim();
@@ -1361,6 +1343,7 @@ function populateIncomeFields() {
     }
   }
 }
+
 
     
 function calculateNext() {
