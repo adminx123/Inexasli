@@ -1287,19 +1287,24 @@ function storeIncomeData() {
         ];
 
     for (const incomeField of incomeFields) {
-    const fieldId = incomeField.id;
+    const fieldId = incomeField[0]; // Use the first element as income field ID
+    const frequencyId = incomeField[1]; // Use the second element as frequency ID
 
-    // Check if value input element exists before accessing properties
+    // Check if value input element exists (skip if not)
     const valueInput = document.getElementById(fieldId);
     if (!valueInput) {
       console.error("Income input element not found:", fieldId);
-      continue; // Skip to the next iteration if element is missing
+      continue;
     }
 
-    const frequencySelect = documentgetElementById(`${fieldId}_frequency`);
+    // Check if value is empty (skip if blank)
+    const incomeValue = Number(valueInput.value);
+    if (isNaN(incomeValue)) {
+      console.warn("Skipping blank income field:", fieldId);
+      continue;
+    }
 
-    // Extract numerical income value (assuming valueInput.value is a number)
-    const incomeValue = Number(valueInput.value) || 0; // Handle blank fields (set to 0)
+    const frequencySelect = document.getElementById(frequencyId);
 
     // Extract text value from frequency selection
     const frequencyValue = frequencySelect.value;
@@ -1311,7 +1316,6 @@ function storeIncomeData() {
     document.cookie = `${fieldId}=${encodeURIComponent(data)}`;
   }
 }
-
 function populateIncomeFields() {
   // Loop through potential income field cookies
   for (let i = 0; document.cookie.split(';').length > i; i++) {
