@@ -1336,9 +1336,9 @@ function storeIncomeData() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
- populateIncomeData()
- });
+//document.addEventListener("DOMContentLoaded", function() {
+// populateIncomeData()
+// });
  function populateIncomeData() {
   console.log("Populating income data...");
 
@@ -1453,17 +1453,18 @@ window.location.href = 'expense.html';
 storeIncomeData();
         
 // Save global variables as cookies with a longer expiration date
-setCookie("ANNUALINCOME", ANNUALINCOME, 365);
-setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
-setCookie("PASSIVEINCOME", PASSIVEINCOME, 365); 
-setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
-setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
-setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
-setCookie("ANNUALTAX", ANNUALTAX, 365);
-setCookie("ANNUALCPP", ANNUALCPP, 365);
-setCookie("ANNUALEI", ANNUALEI, 365); 
-setCookie("CPPPAYABLEEMPLOYED",CPPPAYABLEEMPLOYED , 365);
-setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
+//setCookie("ANNUALINCOME", ANNUALINCOME, 365);
+//setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
+//setCookie("PASSIVEINCOME", PASSIVEINCOME, 365); 
+//setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
+//setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
+//setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
+//setCookie("ANNUALTAX", ANNUALTAX, 365);
+//setCookie("ANNUALCPP", ANNUALCPP, 365);
+//setCookie("ANNUALEI", ANNUALEI, 365); 
+//setCookie("CPPPAYABLEEMPLOYED",CPPPAYABLEEMPLOYED , 365);
+//setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
+        populateIncomeData();
     }
     
 
