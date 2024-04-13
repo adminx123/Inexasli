@@ -1261,7 +1261,14 @@ function passiveincome() {
 }
 
 
-
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts.pop().split(';').shift();
+  }
+  return "";
+}
 
 function storeIncomeData() {
   const frequencyFields = [
@@ -1417,17 +1424,6 @@ document.addEventListener("DOMContentLoaded", function() {
 }
 
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    return parts.pop().split(';').shift();
-  }
-  return "";
-}
-
-
-    
 function calculateNext() {
     calculateAll();
 window.location.href = 'expense.html';
