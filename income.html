@@ -1333,6 +1333,8 @@ document.addEventListener("DOMContentLoaded", function() {
  populateIncomeData()
  });
  function populateIncomeData() {
+  console.log("Populating income data...");
+
   const frequencyFields = [
     "income_salary_wages_frequency",
     "income_tips_frequency",
@@ -1385,11 +1387,14 @@ document.addEventListener("DOMContentLoaded", function() {
     const cookieName = frequencyFields[i];
     const cookieValue = getCookie(cookieName);
 
+    console.log("Frequency cookie:", cookieName, cookieValue);
+
     if (cookieValue !== "") {
       const fieldId = cookieName.split("_")[1];
       const frequencySelect = document.getElementById(`income_${fieldId}_frequency`);
       if (frequencySelect) {
         frequencySelect.value = cookieValue;
+        console.log("Frequency field populated:", frequencySelect.id, cookieValue);
       }
     }
   }
@@ -1398,15 +1403,19 @@ document.addEventListener("DOMContentLoaded", function() {
     const cookieName = incomeFields[i];
     const cookieValue = getCookie(cookieName);
 
+    console.log("Income cookie:", cookieName, cookieValue);
+
     if (cookieValue !== "") {
       const fieldId = cookieName.split("_")[1];
       const incomeInput = document.getElementById(`income_${fieldId}`);
       if (incomeInput) {
         incomeInput.value = cookieValue;
+        console.log("Income field populated:", incomeInput.id, cookieValue);
       }
     }
   }
 }
+
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
