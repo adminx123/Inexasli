@@ -457,7 +457,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 
 <button onclick="validatecheckbox()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
 
-<button onclick="storeIncomeData()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Cookie</button>
+<button onclick="populateIncomeData()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Cookie</button>
 
 <script>
    
@@ -1450,21 +1450,21 @@ window.location.href = 'expense.html';
     
     calculateCapitalGainsTax();
 
-//storeIncomeData();
+storeIncomeData();
         
 // Save global variables as cookies with a longer expiration date
-//setCookie("ANNUALINCOME", ANNUALINCOME, 365);
-//setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
-//setCookie("PASSIVEINCOME", PASSIVEINCOME, 365); 
-//setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
-//setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
-//setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
-//setCookie("ANNUALTAX", ANNUALTAX, 365);
-//setCookie("ANNUALCPP", ANNUALCPP, 365);
-//setCookie("ANNUALEI", ANNUALEI, 365); 
-//setCookie("CPPPAYABLEEMPLOYED",CPPPAYABLEEMPLOYED , 365);
-//setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
-        populateIncomeData();
+setCookie("ANNUALINCOME", ANNUALINCOME, 365);
+setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
+setCookie("PASSIVEINCOME", PASSIVEINCOME, 365); 
+setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
+setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
+setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
+setCookie("ANNUALTAX", ANNUALTAX, 365);
+setCookie("ANNUALCPP", ANNUALCPP, 365);
+setCookie("ANNUALEI", ANNUALEI, 365); 
+setCookie("CPPPAYABLEEMPLOYED",CPPPAYABLEEMPLOYED , 365);
+setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
+       
     }
     
 
