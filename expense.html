@@ -779,7 +779,7 @@ function getCookie(name) {
   return "";
 }
 
-setCookie(){
+setIncomeData(){
 	const expenseValue = ['expenses_grocery'],
 ['expenses_dining'],
 ['expenses_fitness'],
@@ -862,8 +862,23 @@ setCookie(){
 ['dependant_housing_frequency'],
 ['dependant_cellular_service']
 
-	
-}
+ for (let i = 0; i < frequencyFields.length; i++) {
+    const frequencyInput = document.getElementById(frequencyFields[i]);
+    if (frequencyInput.value.trim() !== "") {
+      const frequency = frequencyInput.value;
+      document.cookie = `${frequencyFields[i]}=${frequency}`;
+    }
+  }
+
+  for (let i = 0; i < incomeFields.length; i++) {
+    const incomeInput = document.getElementById(incomeFields[i]);
+    if (incomeInput.value.trim() !== "") {
+      const income = incomeInput.value;
+      document.cookie = `${incomeFields[i]}=${income}`;
+    }
+  }
+}	
+
 
 	
 	
@@ -881,7 +896,7 @@ function calculateNext() {
     
 setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
  setCookie("HOUSING", HOUSING, 365);
-  
+  setIncomeData();
     }
     
 
