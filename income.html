@@ -1270,7 +1270,7 @@ function getCookie(name) {
   return "";
 }
 
-function storeIncomeData() {
+function setIncomeData() {
   const frequencyFields = [
     "income_salary_wages_frequency",
     "income_tips_frequency",
@@ -1393,7 +1393,7 @@ window.location.href = 'expense.html';
     
     calculateCapitalGainsTax();
 
-storeIncomeData();
+setIncomeData();
         
 // Save global variables as cookies with a longer expiration date
 setCookie("ANNUALINCOME", ANNUALINCOME, 365);
