@@ -328,7 +328,7 @@ function setIncomeData(){
     const assetsInput = document.getElementById(assetsFields[i]);
     if (assetsInput.value.trim() !== "") {
       const assets = assetsInput.value;
-      document.cookie = `${assetFields[i]}=${assets}`;
+      document.cookie = `${assetsFields[i]}=${assets}`;
     }
   }
 }	
