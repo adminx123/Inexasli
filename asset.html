@@ -308,20 +308,24 @@ function setIncomeData(){
 
 
 // for (let i = 0; i < frequencyFields.length; i++) {
-   // const frequencyInput = document.getElementById(frequencyFields[i]);
-   // if (frequencyInput.value.trim() !== "") {
-    //  const frequency = frequencyInput.value;
-    //  document.cookie = `${frequencyFields[i]}=${frequency}`;
-    //}
-  
+//   const frequencyInput = document.getElementById(frequencyFields[i]);
+//   if (frequencyInput.value.trim() !== "") {
+//     const frequency = frequencyInput.value;
+//     document.cookie = `${frequencyFields[i]}=${frequency}`;
+//   }
+// }
 
-  for (let i = 0; i < assetsFields.length; i++) {
-    const assetsInput = document.getElementById(assetsFields[i]);
-    if (assetsInput.value.trim() !== "") {
-      const assets = assetsInput.value;
-      document.cookie = `${assetsFields[i]}=${assets}`;
-    }
+for (let i = 0; i < assetsFields.length; i++) {
+  const assetsInput = document.getElementById(assetsFields[i]);
+  if (assetsInput.value.trim() !== "") {
+    const assets = assetsInput.value;
+    // Set the expiration to 30 days from now
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 30);
+    document.cookie = `${assetsFields[i]}=${assets}; expires=${expirationDate.toUTCString()}`;
   }
+}
+
 }
 
 	document.addEventListener('DOMContentLoaded', function() {
