@@ -866,21 +866,28 @@ function setIncomeData(){
         'dependant_cellular_service_frequency'
     ];
 
- for (let i = 0; i < frequencyFields.length; i++) {
-    const frequencyInput = document.getElementById(frequencyFields[i]);
-    if (frequencyInput.value.trim() !== "") {
-      const frequency = frequencyInput.value;
-      document.cookie = `${frequencyFields[i]}=${frequency}`;
-    }
+for (let i = 0; i < frequencyFields.length; i++) {
+  const frequencyInput = document.getElementById(frequencyFields[i]);
+  if (frequencyInput.value.trim() !== "") {
+    const frequency = frequencyInput.value;
+    // Set the expiration to 30 days from now
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 30);
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
   }
+}
 
-  for (let i = 0; i < expensesFields.length; i++) {
-    const expensesInput = document.getElementById(expensesFields[i]);
-    if (expensesInput.value.trim() !== "") {
-      const expenses = expensesInput.value;
-      document.cookie = `${expensesFields[i]}=${expenses}`;
-    }
+for (let i = 0; i < expensesFields.length; i++) {
+  const expensesInput = document.getElementById(expensesFields[i]);
+  if (expensesInput.value.trim() !== "") {
+    const expenses = expensesInput.value;
+    // Set the expiration to 30 days from now
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 30);
+    document.cookie = `${expensesFields[i]}=${expenses}; expires=${expirationDate.toUTCString()}`;
   }
+}
+
 }	
 
 	document.addEventListener('DOMContentLoaded', function() {
