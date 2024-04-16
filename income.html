@@ -1344,29 +1344,28 @@ document.addEventListener('DOMContentLoaded', function() {
         return parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : 'N/A';
     }
     
- document.getElementById('income_salary_wages').textContent = " $" + getCookie('income_salary_wages');
-document.getElementById('income_tips').textContent = " $" + getCookie('income_tips');
-document.getElementById('income_bonuses').textContent = " $" + getCookie('income_bonuses');
-document.getElementById('income_sole_prop').textContent = " $" + getCookie('income_sole_prop');
-document.getElementById('income_investment_property').textContent = " $" + getCookie('income_investment_property');
-document.getElementById('income_capital_gains_losses').textContent = " $" + getCookie('income_capital_gains_losses');
-document.getElementById('income_interest').textContent = " $" + getCookie('income_interest');
-document.getElementById('income_owner_dividend').textContent = " $" + getCookie('income_owner_dividend');
-document.getElementById('income_public_dividend').textContent = " $" + getCookie('income_public_dividend');
-document.getElementById('income_trust').textContent = " $" + getCookie('income_trust');
-document.getElementById('income_federal_pension').textContent = " $" + getCookie('income_federal_pension');
-document.getElementById('income_work_pension').textContent = " $" + getCookie('income_work_pension');
-document.getElementById('income_social_security').textContent = " $" + getCookie('income_social_security');
-document.getElementById('income_employment_insurance').textContent = " $" + getCookie('income_employment_insurance');
-document.getElementById('income_alimony').textContent = " $" + getCookie('income_alimony');
-document.getElementById('income_scholarships_grants').textContent = " $" + getCookie('income_scholarships_grants');
-document.getElementById('income_royalties').textContent = " $" + getCookie('income_royalties');
-document.getElementById('income_gambling_winnings').textContent = " $" + getCookie('income_gambling_winnings');
-document.getElementById('income_peer_to_peer_lending').textContent = " $" + getCookie('income_peer_to_peer_lending');
-document.getElementById('income_venture_capital').textContent = " $" + getCookie('income_venture_capital');
-document.getElementById('income_tax_free_income').textContent = " $" + getCookie('income_tax_free_income');
- }
-)
+document.getElementById('income_salary_wages').value = getCookie('income_salary_wages');
+document.getElementById('income_tips').value = getCookie('income_tips');
+document.getElementById('income_bonuses').value = getCookie('income_bonuses');
+document.getElementById('income_sole_prop').value = getCookie('income_sole_prop');
+document.getElementById('income_investment_property').value = getCookie('income_investment_property');
+document.getElementById('income_capital_gains_losses').value = getCookie('income_capital_gains_losses');
+document.getElementById('income_interest').value = getCookie('income_interest');
+document.getElementById('income_owner_dividend').value = getCookie('income_owner_dividend');
+document.getElementById('income_public_dividend').value = getCookie('income_public_dividend');
+document.getElementById('income_trust').value = getCookie('income_trust');
+document.getElementById('income_federal_pension').value = getCookie('income_federal_pension');
+document.getElementById('income_work_pension').value = getCookie('income_work_pension');
+document.getElementById('income_social_security').value = getCookie('income_social_security');
+document.getElementById('income_employment_insurance').value = getCookie('income_employment_insurance');
+document.getElementById('income_alimony').value = getCookie('income_alimony');
+document.getElementById('income_scholarships_grants').value = getCookie('income_scholarships_grants');
+document.getElementById('income_royalties').value = getCookie('income_royalties');
+document.getElementById('income_gambling_winnings').value = getCookie('income_gambling_winnings');
+document.getElementById('income_peer_to_peer_lending').value = getCookie('income_peer_to_peer_lending');
+document.getElementById('income_venture_capital').value = getCookie('income_venture_capital');
+document.getElementById('income_tax_free_income').value = getCookie('income_tax_free_income');
+})
 
 function calculateNext() {
     calculateAll();
