@@ -1336,10 +1336,14 @@ function storeIncomeData() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
- populateIncomeData()
- });
- function populateIncomeData() {
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to retrieve cookie value by name
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        return parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : 'N/A';
+    }
+    
  document.getElementById('income_salary_wages').textContent = " $" + getCookie('income_salary_wages');
 document.getElementById('income_tips').textContent = " $" + getCookie('income_tips');
 document.getElementById('income_bonuses').textContent = " $" + getCookie('income_bonuses');
