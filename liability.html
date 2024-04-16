@@ -336,20 +336,22 @@ document.getElementById('liabilities_credit_card').value = getCookie('liabilitie
 document.getElementById('liabilities_tax_arrears').value = getCookie('liabilities_tax_arrears');
   })	
 
+function calculateNext() {
+  calculateAll();
+  window.location.href = 'summary.html';
+}
     
+	
     function calculateAll() {
         
     calculateLiabilities();
     
     setCookie("LIABILITIES", LIABILITIES, 365);
 
+	    setIncomeData();
     }
 
-function calculateNext() {
-  calculateAll();
-  window.location.href = 'summary.html';
-}
-    
+
 </script>
 
     <div class = "container">
