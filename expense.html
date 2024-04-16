@@ -780,7 +780,7 @@ function getCookie(name) {
 }
 
 setIncomeData(){
-const incomeFields = ['expenses_grocery'],
+const expensesFields = ['expenses_grocery'],
 ['expenses_dining'],
 ['expenses_fitness'],
 ['expenses_hygiene'],
@@ -870,11 +870,11 @@ const incomeFields = ['expenses_grocery'],
     }
   }
 
-  for (let i = 0; i < incomeFields.length; i++) {
-    const incomeInput = document.getElementById(incomeFields[i]);
-    if (incomeInput.value.trim() !== "") {
-      const income = incomeInput.value;
-      document.cookie = `${incomeFields[i]}=${income}`;
+  for (let i = 0; i < expensesFields.length; i++) {
+    const expensesInput = document.getElementById(expensesFields[i]);
+    if (expensesInput.value.trim() !== "") {
+      const expenses = expensesInput.value;
+      document.cookie = `${expensesFields[i]}=${expenses}`;
     }
   }
 }	
