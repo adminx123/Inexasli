@@ -293,17 +293,8 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    return parts.pop().split(';').shift();
-  }
-  return "";
-}
-
 function setIncomeData(){ 
-	const assetFields = [
+	const assetsFields = [
         'assets_checking_accounts', 
         'assets_savings_accounts', 
         'assets_other_liquid_accounts', 
@@ -316,12 +307,12 @@ function setIncomeData(){
     ];
 
 
- for (let i = 0; i < frequencyFields.length; i++) {
-    const frequencyInput = document.getElementById(frequencyFields[i]);
-    if (frequencyInput.value.trim() !== "") {
-      const frequency = frequencyInput.value;
-      document.cookie = `${frequencyFields[i]}=${frequency}`;
-    }
+// for (let i = 0; i < frequencyFields.length; i++) {
+   // const frequencyInput = document.getElementById(frequencyFields[i]);
+   // if (frequencyInput.value.trim() !== "") {
+    //  const frequency = frequencyInput.value;
+    //  document.cookie = `${frequencyFields[i]}=${frequency}`;
+    //}
   }
 
   for (let i = 0; i < assetsFields.length; i++) {
