@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income</title>
+    <title>Incomes</title>
  <style>
     
      /* Modal styles */
@@ -1370,14 +1370,16 @@ function clearWebsiteCookies() {
 
     for (var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i];
-        var cookieName = cookie.split("=")[0].trim(); // Extract the cookie name
-        var cookieDomain = cookie.split(";")[1].trim().split("=")[1]; // Extract the domain from the cookie string
+        var cookieParts = cookie.split("\t"); // Split using tab character instead of "="
+        var cookieName = cookieParts[0].trim(); // Extract the cookie name
+        var cookieDomain = cookieParts.length > 2 ? cookieParts[2].trim() : ''; // Extract the domain from the cookie string if available
         // Check if the cookie's domain is inexasli.com
         if (cookieDomain === 'inexasli.com') {
             document.cookie = cookieName + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=inexasli.com;path=/";
         }
     }
 }
+
 
 
     
