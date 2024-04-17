@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income</title>
+    <title>Incomes</title>
  <style>
     
      /* Modal styles */
@@ -1311,27 +1311,24 @@ function setIncomeData() {
     "income_tax_free_income"
   ];
 
-for (let i = 0; i < frequencyFields.length; i++) {
-  const frequencyInput = document.getElementById(frequencyFields[i]);
-  if (frequencyInput.value.trim() !== "") {
-    const frequency = frequencyInput.value;
-    // Set the expiration to 30 days from now
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
-  }
-}
+ const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + 365); // Set expiration to 1 year from now
 
-for (let i = 0; i < incomeFields.length; i++) {
-  const incomeInput = document.getElementById(incomeFields[i]);
-  if (incomeInput.value.trim() !== "") {
-    const income = incomeInput.value;
-    // Set the expiration to 30 days from now
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}`;
+  for (let i = 0; i < frequencyFields.length; i++) {
+    const frequencyInput = document.getElementById(frequencyFields[i]);
+    if (frequencyInput.value.trim() !== "") {
+      const frequency = frequencyInput.value;
+      document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; Secure; HttpOnly; SameSite=Strict`;
+    }
   }
-}
+
+  for (let i = 0; i < incomeFields.length; i++) {
+    const incomeInput = document.getElementById(incomeFields[i]);
+    if (incomeInput.value.trim() !== "") {
+      const income = incomeInput.value;
+      document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}; Secure; HttpOnly; SameSite=Strict`;
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
