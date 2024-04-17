@@ -1370,13 +1370,15 @@ function clearWebsiteCookies() {
 
     for (var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i];
-        var cookieDomain = cookie.split("=")[0].trim(); // Extract the domain from the cookie string
+        var cookieName = cookie.split("=")[0].trim(); // Extract the cookie name
+        var cookieDomain = cookie.split(";")[1].trim().split("=")[1]; // Extract the domain from the cookie string
         // Check if the cookie's domain is inexasli.com
-        if (cookieDomain.endsWith('.inexasli.com')) {
-            document.cookie = cookieDomain + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+        if (cookieDomain === 'inexasli.com') {
+            document.cookie = cookieName + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=inexasli.com;path=/";
         }
     }
 }
+
 
     
 function calculateNext() {
