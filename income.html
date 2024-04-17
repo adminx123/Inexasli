@@ -149,7 +149,7 @@ button {
     <select id="SubregionDropdown">
         <option vlaue="">Select Tax Subregion</option> </select>
 
-<button onclick="deleteCookiesForDomain('inexasli.com')" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
+<button onclick="deleteCookiesForDomain('inexasli.com');" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
 
     
         <script>
@@ -1409,7 +1409,7 @@ setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
     }
 
 
-    function deleteCookiesForDomain(domainToDelete) {
+ function deleteCookiesForDomain(domainToDelete) {
     var cookies = document.cookie.split("; ");
     for (var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i];
@@ -1421,6 +1421,7 @@ setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
     }
     console.log("Cookies with domain " + domainToDelete + " deleted.");
 }
+
 
 </script>
 
