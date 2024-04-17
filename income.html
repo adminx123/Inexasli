@@ -149,7 +149,7 @@ button {
     <select id="SubregionDropdown">
         <option vlaue="">Select Tax Subregion</option> </select>
 
-    <button onclick="clearWebsiteCookies()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Clear Form</button>
+    <button onclick="populateIncomeData()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Cookie</button>
 
     
         <script>
@@ -255,21 +255,21 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </div>
 
 <div class ="row">
-<label for="income_capital_gains_losses"> Gains/Losses:</label>
-<input type="number" id="income__gains_losses">
-<select id="income__gains_losses_frequency" onchange="calculateAnnual('income__gains_losses', 'income__gains_losses_frequency')">
+<label for="income_capital_gains_losses">Capital Gains/Losses:</label>
+<input type="number" id="income_capital_gains_losses">
+<select id="income_capital_gains_losses_frequency" onchange="calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency')">
     <option value="annually">Annually</option>
     <option value="quarterly">Quarterly</option>
     <option value="monthly">Monthly</option>
     <option value="weekly">Weekly</option>
 </select>
-<span id="income__gains_losses_annual"></span>
+<span id="income_capital_gains_losses_annual"></span>
 </div>
 
  <div class = "USAHIDE">
  <div class = "row">
-    <label for = "_gain_state_rate">State Tax Rate for Capital Gains</label>
-    <input type="number" id="income__gain_state_rate">
+    <label for = "capital_gain_state_rate">Capital Gain State Tax Rate</label>
+    <input type="number" id="income_capital_gain_state_rate">
     <label>%</label>
  </div>
 </div>
@@ -419,15 +419,15 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </div>
 
 <div class ="row">
-<label for="income_venture_">Venture:</label>
-<input type="number" id="income_venture_">
-<select id="income_venture__frequency" onchange="calculateAnnual('income_venture_', 'income_venture__frequency')">
+<label for="income_venture_capital">Venture:</label>
+<input type="number" id="income_venture_capital">
+<select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency')">
     <option value="annually">Annually</option>
     <option value="quarterly">Quarterly</option>
     <option value="monthly">Monthly</option>
     <option value="weekly">Weekly</option>
 </select>
-<span id="income_venture__annual"></span>
+<span id="income_venture_capital_annual"></span>
 </div>
 
 <div class ="row">
@@ -584,7 +584,7 @@ document.addEventListener('click', closeModal);
             ['income_bonuses', 'income_bonuses_frequency'],
             ['income_sole_prop', 'income_sole_prop_frequency'],
             ['income_investment_property', 'income_investment_property_frequency'],
-            ['income__gains_losses', 'income__gains_losses_frequency'],
+            ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
             ['income_interest', 'income_interest_frequency'],
             ['income_owner_dividend', 'income_owner_dividend_frequency'],
             ['income_public_dividend', 'income_public_dividend_frequency'],
@@ -598,7 +598,7 @@ document.addEventListener('click', closeModal);
             ['income_royalties', 'income_royalties_frequency'],
             ['income_gambling_winnings', 'income_gambling_winnings_frequency'],
             ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
-            ['income_venture_', 'income_venture_capital_frequency'],
+            ['income_venture_capital', 'income_venture_capital_frequency'],
             ['income_tax_free_income', 'income_tax_free_income_frequency']
             // Add more income fields here
         ];
@@ -1227,8 +1227,7 @@ function calculateCapitalGainsTax() {
   const resultDiv = document.getElementById('capital_gains_tax_result');
   document.getElementById('AnnualCG').textContent = '$' + (totalTax).toFixed(2);
 }
-
-
+    
 function passiveincome() {
   const fireFields = [
     ['income_investment_property', 'income_investment_property_frequency'],
@@ -1366,23 +1365,6 @@ document.getElementById('income_venture_capital').value = getCookie('income_vent
 document.getElementById('income_tax_free_income').value = getCookie('income_tax_free_income');
 })
 
-function clearWebsiteCookies() {
-    var cookies = document.cookie.split(";");
-
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i];
-        if (cookie.includes('inexasli.com')) {
-            var cookieName = cookie.split("=")[0].trim();
-            document.cookie = cookieName + "=;domain=inexasli.com;path=/";
-        }
-    }
-}
-
-
-
-
-
-    
 function calculateNext() {
     calculateAll();
 window.location.href = 'expense.html';
