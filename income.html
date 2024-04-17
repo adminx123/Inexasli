@@ -149,7 +149,7 @@ button {
     <select id="SubregionDropdown">
         <option vlaue="">Select Tax Subregion</option> </select>
 
-    <button onclick="populateIncomeData()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Cookie</button>
+    <button onclick="clearWebsiteCookies()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Clear Form</button>
 
     
         <script>
@@ -1365,6 +1365,20 @@ document.getElementById('income_venture_capital').value = getCookie('income_vent
 document.getElementById('income_tax_free_income').value = getCookie('income_tax_free_income');
 })
 
+function clearWebsiteCookies() {
+    var cookies = document.cookie.split(";");
+
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var cookieDomain = cookie.split("=")[0].trim(); // Extract the domain from the cookie string
+        // Check if the cookie's domain is inexasli.com
+        if (cookieDomain.endsWith('.inexasli.com')) {
+            document.cookie = cookieDomain + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+        }
+    }
+}
+
+    
 function calculateNext() {
     calculateAll();
 window.location.href = 'expense.html';
