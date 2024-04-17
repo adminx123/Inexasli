@@ -1207,26 +1207,27 @@ function calculateCapitalGainsTax() {
 
   // Get user inputs
   const capitalGain = calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency');
-    const stateRate = parseFloat(document.getElementById('income_capital_gain_state_rate').value) / 100;
+  const stateRate = parseFloat(document.getElementById('income_capital_gain_state_rate').value) / 100;
 
   // Calculate capital gains tax (considering long-term capital gains rates for USA)
-  let federalTax = 0;
-  let stateTax = 0;
-  if (capitalGain <= 417750) { // Tax rate 0% for single filers in 2024
-    federalTax = 0;
-  } else if (capitalGain <= 450000) { // Tax rate 15% for single filers in 2024
-    federalTax = capitalGain * 0.15 ;
-  } else { // Tax rate 20% for single filers exceeding the threshold
-    federalTax = (capitalGain - 450000) * 0.2  + (450000 * 0.15 );
-  }
+  let federalTaxCG = 0;
+  let stateTaxCG = 0;
+  if (capitalGain <= 47025) { // Tax rate 0% for single filers in 2024
+    federalTaxCG = 0;
+} else if (capitalGain <= 518000) { // Tax rate 15% for single filers in 2024
+    federalTaxCG = (capitalGain - 47025) * 0.15 ;
+} else { // Tax rate 20% for single filers exceeding the threshold
+    federalTaxCG = (capitalGain - 518000) * 0.2  + (518000 - 47025) * 0.15 ;
+}
 
-  stateTax = capitalGain * stateRate; // Placeholder for state-specific calculations
+  stateTaxCG = capitalGain * stateRate; // Placeholder for state-specific calculations
 
   // Display the result (you can modify this to fit your needs)
-  const totalTax = federalTax + stateTax;
+  const totalTax = federalTaxCG + stateTaxCG;
   const resultDiv = document.getElementById('capital_gains_tax_result');
-  document.getElementById('AnnualCG').textContent = '$' + (totalTax).toFixed(2);;
+  document.getElementById('AnnualCG').textContent = '$' + (totalTax).toFixed(2);
 }
+
 
 function passiveincome() {
   const fireFields = [
