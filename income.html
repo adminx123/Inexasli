@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income</title>
+    <title>Incomes</title>
  <style>
     
      /* Modal styles */
@@ -1175,12 +1175,14 @@ function calculateTax(taxBrackets) {
 
     for (const bracket of taxBrackets) {
         if (taxableIncome > bracket.limit) {
-            tax += (taxableIncome - bracket.limit) * bracket.rate;
+            let bracketTax = (taxableIncome - bracket.limit) * bracket.rate;
+            tax += parseFloat(bracketTax.toFixed(2)); // Round to two decimal places and add to total tax
             taxableIncome = bracket.limit;
-           }
+        }
     }
     return tax;
 }
+
 
 
     // Define the calculateFederalTax function
