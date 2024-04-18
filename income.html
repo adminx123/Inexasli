@@ -1323,7 +1323,11 @@ for (let i = 0; i < frequencyFields.length; i++) {
   const frequencyInput = document.getElementById(frequencyFields[i]);
   if (frequencyInput.value.trim() !== "") {
     const frequency = frequencyInput.value;
-    // Set the expiration to 30 days from now
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 365);
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
+  } else {
+    const frequency = "0";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
     document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
@@ -1334,7 +1338,11 @@ for (let i = 0; i < incomeFields.length; i++) {
   const incomeInput = document.getElementById(incomeFields[i]);
   if (incomeInput.value.trim() !== "") {
     const income = incomeInput.value;
-    // Set the expiration to 30 days from now
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 365);
+    document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}`;
+  } else {
+    const income = "0";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
     document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}`;
