@@ -1406,7 +1406,7 @@ window.location.href = 'expense.html';
     const Subregion = SubregionDropdown.value;
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
         
-    ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX + totalTaxCG;
+    ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX + TOTALTAXCG;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
     calculateCapitalGainsTax();
