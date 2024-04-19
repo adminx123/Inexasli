@@ -466,7 +466,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var ANNUALTAXABLEINCOME;
     var ANNUALREGIONALTAX;
     var ANNUALSUBREGIONALTAX;
-    var totalTaxCG;
+    var TOTALTAXCG;
     var ANNUALTAX;
     var ANNUALEMPLOYMENTINCOME;
     var ANNUALDISPOSABLEINCOME;
@@ -1236,6 +1236,8 @@ function calculateCapitalGainsTax() {
   const totalTaxCG = federalTaxCG + stateTaxCG;
   const resultDiv = document.getElementById('capital_gains_tax_result');
   document.getElementById('AnnualCG').textContent = '$' + (totalTaxCG).toFixed(2);
+
+    TOTALTAXCG = totalTaxCG
 }
     
 function passiveincome() {
