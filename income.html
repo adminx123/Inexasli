@@ -612,7 +612,7 @@ let annualIncomeSum = 0;
         });
 ANNUALINCOME = annualIncomeSum
  // Display the results
-        document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
+        document.getElementById('annual_income_sum').value = `$${annualIncomeSum.toFixed(2)}`;
 
 // Define all  taxable income fields with their corresponding frequency fields
         const taxableincomeFields = [
@@ -675,7 +675,7 @@ annualTaxableSum = Math.max(annualTaxableSum, 0); // Clamp to minimum of 0
 ANNUALTAXABLEINCOME = annualTaxableSum;
 
 // Display the results
-document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
+document.getElementById('taxable_sum').value = `$${annualTaxableSum.toFixed(2)}`;
 
      
         
@@ -753,9 +753,9 @@ CPPPAYABLEEMPLOYED = cppPayableEmployed;
     CPPPAYABLESELFEMPLOYED = cppPayableSelfEmployed;
     
     // Display the results
-    document.getElementById('ANNUALCPP').textContent = '$' + (ANNUALCPP).toFixed(2);
-document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmployed).toFixed(2);
-    document.getElementById('annual_cpp_seresult').textContent = '$' + (cppPayableSelfEmployed).toFixed(2);
+    document.getElementById('ANNUALCPP').value = '$' + (ANNUALCPP).toFixed(2);
+document.getElementById('annual_cpp_eresult').value = '$' + (cppPayableEmployed).toFixed(2);
+    document.getElementById('annual_cpp_seresult').value = '$' + (cppPayableSelfEmployed).toFixed(2);
 }
 
 
@@ -783,7 +783,7 @@ document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmp
 ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed
 
     // Display the results
-    document.getElementById('ANNUALEI').textContent = '$' + (ANNUALEI).toFixed(2);
+    document.getElementById('ANNUALEI').value = '$' + (ANNUALEI).toFixed(2);
 }
     
 // Define the tax brackets
@@ -1190,14 +1190,14 @@ function calculateTax(taxBrackets) {
     // Define the calculateFederalTax function
 function calculateRegionalTax() {
 ANNUALREGIONALTAX = calculateTax(REGIONALTAXBRACKETSCAN);
-document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONALTAX).toFixed(2);
+document.getElementById('ANNUALREGIONALTAX').value = '$' + (ANNUALREGIONALTAX).toFixed(2);
 }
 
 
 // Define the calculateSubregionalTax function
 function calculateSubregionalTax(Subregion, taxBrackets) {
   ANNUALSUBREGIONALTAX = calculateTax(taxBrackets[Subregion]);
-  document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
+  document.getElementById('ANNUALSUBREGIONALTAX').value = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
 }
 
 
@@ -1233,7 +1233,7 @@ function calculateCapitalGainsTax() {
   // Display the result
   const totalTaxCG = federalTaxCG + stateTaxCG;
   const resultDiv = document.getElementById('capital_gains_tax_result');
-  document.getElementById('AnnualCG').textContent = '$' + (totalTaxCG).toFixed(2);
+  document.getElementById('AnnualCG').value = '$' + (totalTaxCG).toFixed(2);
     TOTALTAXCG = totalTaxCG
 }
     
@@ -1406,7 +1406,7 @@ window.location.href = 'expense.html';
    ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
             (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
             (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
-    document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
+    document.getElementById('ANNUALTAX').value = '$' + ANNUALTAX.toFixed(2);
     
     calculateCapitalGainsTax();
 
