@@ -1231,9 +1231,9 @@ function calculateCapitalGainsTax() {
   const stateTaxCG = capitalGain * stateRate;
 
   // Display the result
-  const totalTax = federalTaxCG + stateTaxCG;
+  const totalTaxCG = federalTaxCG + stateTaxCG;
   const resultDiv = document.getElementById('capital_gains_tax_result');
-  document.getElementById('AnnualCG').textContent = '$' + (totalTax).toFixed(2);
+  document.getElementById('AnnualCG').textContent = '$' + (totalTaxCG).toFixed(2);
 }
     
 function passiveincome() {
@@ -1402,7 +1402,7 @@ window.location.href = 'expense.html';
     const Subregion = SubregionDropdown.value;
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
         
-    ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX;
+    ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX + totalTaxCG;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
     calculateCapitalGainsTax();
