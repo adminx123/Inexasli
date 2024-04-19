@@ -1208,7 +1208,6 @@ function calculateCapitalGainsTax() {
     alert('Capital gains tax calculation only available for USA');
     return;
   }
-
   // Get user inputs
   const capitalGain = calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency');
   const stateRateInput = document.getElementById('income_capital_gain_state_rate').value;
@@ -1228,17 +1227,15 @@ function calculateCapitalGainsTax() {
   } else {
     federalTaxCG = (capitalGain - 518000) * 0.2 + (518000 - 47025) * 0.15;
   }
-
-  // Calculate state capital gains tax
+// Calculate state capital gains tax
   const stateTaxCG = capitalGain * stateRate;
 
   // Display the result
   const totalTaxCG = federalTaxCG + stateTaxCG;
   const resultDiv = document.getElementById('capital_gains_tax_result');
   document.getElementById('AnnualCG').textContent = '$' + (totalTaxCG).toFixed(2);
-
+  }
     TOTALTAXCG = totalTaxCG
-}
     
 function passiveincome() {
   const fireFields = [
