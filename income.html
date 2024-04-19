@@ -149,8 +149,7 @@ button {
     <select id="SubregionDropdown">
         <option vlaue="">Select Tax Subregion</option> </select>
 
-//<button onclick="deleteCookiesForDomain('inexasli.com');" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
-<button onclick="calculateAll();" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
+<button onclick="deleteCookiesForDomain('inexasli.com');" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
 
     
         <script>
@@ -460,12 +459,14 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
       
 
 <button onclick="validatecheckbox()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
+<button onclick="calculateAll()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Nexeeet</button>
 
 <script>
    
     var ANNUALTAXABLEINCOME;
     var ANNUALREGIONALTAX;
     var ANNUALSUBREGIONALTAX;
+    var totalTaxCG;
     var ANNUALTAX;
     var ANNUALEMPLOYMENTINCOME;
     var ANNUALDISPOSABLEINCOME;
@@ -1232,9 +1233,9 @@ function calculateCapitalGainsTax() {
   const stateTaxCG = capitalGain * stateRate;
 
   // Display the result
-  const totalTax = federalTaxCG + stateTaxCG;
+  const totalTaxCG = federalTaxCG + stateTaxCG;
   const resultDiv = document.getElementById('capital_gains_tax_result');
-  document.getElementById('AnnualCG').textContent = '$' + (totalTax).toFixed(2);
+  document.getElementById('AnnualCG').textContent = '$' + (totalTaxCG).toFixed(2);
 }
     
 function passiveincome() {
@@ -1403,7 +1404,7 @@ window.location.href = 'expense.html';
     const Subregion = SubregionDropdown.value;
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
         
-    ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX;
+    ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX + totalTaxCG;
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
     calculateCapitalGainsTax();
