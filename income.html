@@ -1402,14 +1402,15 @@ window.location.href = 'expense.html';
     const SubregionDropdown = document.getElementById('SubregionDropdown');
     const Subregion = SubregionDropdown.value;
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
+   
+        calculateCapitalGainsTax();
+
         
    ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
             (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
             (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
-    calculateCapitalGainsTax();
-
 setIncomeData();
         
 // Save global variables as cookies with a longer expiration date
