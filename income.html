@@ -1403,7 +1403,9 @@ window.location.href = 'expense.html';
     const Subregion = SubregionDropdown.value;
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
         
-    ANNUALTAX = ANNUALREGIONALTAX + ANNUALSUBREGIONALTAX + TOTALTAXCG;
+   ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+            (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
+            (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
     
     calculateCapitalGainsTax();
