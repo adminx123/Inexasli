@@ -859,13 +859,13 @@ function setIncomeData(){
 
 for (let i = 0; i < frequencyFields.length; i++) {
   const frequencyInput = document.getElementById(frequencyFields[i]);
-  if (frequencyInput.value.trim() !== "") {
+  if (frequencyInput.value.trim() !== "annually") {
     const frequency = frequencyInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
     document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
   } else {
-    const frequency = "annually";
+    const frequency = "";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
     document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
