@@ -1449,8 +1449,8 @@ setIncomeData();
 
 const regionDropdown = document.getElementById("RegionDropdown");
 const subregionDropdown = document.getElementById("SubregionDropdown");
-setCookie("RegionDropdown", RegionDropdown, 365); 
-        setCookie("SubregionDropdown", SubregionDropdown, 365); 
+setCookie("RegionDropdown", RegionDropdown.value, 365); 
+        setCookie("SubregionDropdown", SubregionDropdown.value, 365); 
         
 // Save global variables as cookies with a longer expiration date
 setCookie("ANNUALINCOME", ANNUALINCOME, 365);
