@@ -1356,8 +1356,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
-        return parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : 'N/A';
+        if (parts.length === 2) {
+            // Decode the cookie value
+            const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
+            // If the value is empty and it's a frequency field, set it to 'annually'
+            if (decodedValue === '' && name.includes('_frequency')) {
+                return 'annually';
+            }
+            return decodedValue;
+        } else {
+            return 'N/A';
+        }
     }
+    // Your other code goes here...
     
 document.getElementById('income_salary_wages').value = getCookie('income_salary_wages');
 document.getElementById('income_tips').value = getCookie('income_tips');
@@ -1380,7 +1391,30 @@ document.getElementById('income_gambling_winnings').value = getCookie('income_ga
 document.getElementById('income_peer_to_peer_lending').value = getCookie('income_peer_to_peer_lending');
 document.getElementById('income_venture_capital').value = getCookie('income_venture_capital');
 document.getElementById('income_tax_free_income').value = getCookie('income_tax_free_income');
-})
+
+document.getElementById('income_salary_wages_frequency').value = getCookie('income_salary_wages_frequency');
+document.getElementById('income_tips_frequency').value = getCookie('income_tips_frequency');
+document.getElementById('income_bonuses_frequency').value = getCookie('income_bonuses_frequency');
+document.getElementById('income_sole_prop_frequency').value = getCookie('income_sole_prop_frequency');
+document.getElementById('income_investment_property_frequency').value = getCookie('income_investment_property_frequency');
+document.getElementById('income_capital_gains_losses_frequency').value = getCookie('income_capital_gains_losses_frequency');
+document.getElementById('income_interest_frequency').value = getCookie('income_interest_frequency');
+document.getElementById('income_owner_dividend_frequency').value = getCookie('income_owner_dividend_frequency');
+document.getElementById('income_public_dividend_frequency').value = getCookie('income_public_dividend_frequency');
+document.getElementById('income_trust_frequency').value = getCookie('income_trust_frequency');
+document.getElementById('income_federal_pension_frequency').value = getCookie('income_federal_pension_frequency');
+document.getElementById('income_work_pension_frequency').value = getCookie('income_work_pension_frequency');
+document.getElementById('income_social_security_frequency').value = getCookie('income_social_security_frequency');
+document.getElementById('income_employment_insurance_frequency').value = getCookie('income_employment_insurance_frequency');
+document.getElementById('income_alimony_frequency').value = getCookie('income_alimony_frequency');
+document.getElementById('income_scholarships_grants_frequency').value = getCookie('income_scholarships_grants_frequency');
+document.getElementById('income_royalties_frequency').value = getCookie('income_royalties_frequency');
+document.getElementById('income_gambling_winnings_frequency').value = getCookie('income_gambling_winnings_frequency');
+document.getElementById('income_peer_to_peer_lending_frequency').value = getCookie('income_peer_to_peer_lending_frequency');
+document.getElementById('income_venture_capital_frequency').value = getCookie('income_venture_capital_frequency');
+document.getElementById('income_tax_free_income_frequency').value = getCookie('income_tax_free_income_frequency');
+
+});
 
 function calculateNext() {
     calculateAll();
