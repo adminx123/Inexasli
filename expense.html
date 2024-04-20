@@ -859,7 +859,7 @@ function setIncomeData(){
 
 for (let i = 0; i < frequencyFields.length; i++) {
   const frequencyInput = document.getElementById(frequencyFields[i]);
-  if (frequencyInput.value.trim() !== "annually") {
+  if (frequencyInput.value.trim() !== "") {
     const frequency = frequencyInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
@@ -936,7 +936,7 @@ document.getElementById('dependant_tuition').value = getCookie('dependant_tuitio
 document.getElementById('dependant_housing').value = getCookie('dependant_housing');
 document.getElementById('dependant_cellular_service').value = getCookie('dependant_cellular_service');
 
-document.getElementById('expenses_grocery_frequency').value = getCookie('expenses_grocery_frequency');
+/* document.getElementById('expenses_grocery_frequency').value = getCookie('expenses_grocery_frequency');
 document.getElementById('expenses_dining_frequency').value = getCookie('expenses_dining_frequency');
 document.getElementById('expenses_fitness_frequency').value = getCookie('expenses_fitness_frequency');
 document.getElementById('expenses_hygiene_frequency').value = getCookie('expenses_hygiene_frequency');
@@ -976,7 +976,7 @@ document.getElementById('dependant_transportation_frequency').value = getCookie(
 document.getElementById('dependant_tuition_frequency').value = getCookie('dependant_tuition_frequency');
 document.getElementById('dependant_housing_frequency').value = getCookie('dependant_housing_frequency');
 document.getElementById('dependant_cellular_service_frequency').value = getCookie('dependant_cellular_service_frequency');
-	})	
+	*/ })	
 	
 function calculateNext() {
   calculateAll();
