@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense</title>
+    <title>Expexnse</title>
     <style>
     
      /* Modal styles */
@@ -865,7 +865,7 @@ for (let i = 0; i < frequencyFields.length; i++) {
     expirationDate.setDate(expirationDate.getDate() + 365);
     document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
   } else {
-    const frequency = "annually";
+    const frequency = "Annually";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
     document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
