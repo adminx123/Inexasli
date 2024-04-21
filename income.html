@@ -174,10 +174,7 @@ function updateSubregionDropdown() {
       subregionDropdown.appendChild(subregionOption);
     });
   }
-    const regionDropdown = document.getElementById("RegionDropdown");
-const subregionDropdown = document.getElementById("SubregionDropdown");
-    document.getElementById('RegionDropdown').value = getCookie('RegionDropdown');
-    document.getElementById('SubregionDropdown').value = getCookie('SubregionDropdown');
+    
 }
 
 regionDropdown.addEventListener("change", updateSubregionDropdown);
