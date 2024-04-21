@@ -165,7 +165,9 @@ button {
     
     <h2>PERSONAL FINANCIAL ESTIMATE</h2>
 
-    <p><u>Location:</u> <span id="RegionDropdown"><span id="SubregionDropdown"></span></span></p>
+    <p><u>Location:</u> 
+        <span id="RegionDropdown"></span>
+        <span id="SubregionDropdown"></span></p>
  
             <p><u>Income:</u> <span id="annual_income_sum"></span></p>
 <span class="tooltiptext">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</span>
@@ -249,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Update HTML elements with cookie values
-        document.getElementById('RegionDropdown').textContent = " $" + getCookie('RegionDropdown');
+        document.getElementById('RegionDropdown').textContent = getCookie('RegionDropdown');
         document.getElementById('SubregionDropdown').textContent = " $" + getCookie('SubregionDropdown');
     
     document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME');
