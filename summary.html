@@ -249,6 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Update HTML elements with cookie values
+        document.getElementById('RegionDropdown').textContent = " $" + getCookie('RegionDropdown');
+        document.getElementById('SubregionDropdown').textContent = " $" + getCookie('SubregionDropdown');
+    
     document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME');
     document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX');
     document.getElementById('subregion_tax_sum').textContent = " $" + getCookie('ANNUALSUBREGIONALTAX');
