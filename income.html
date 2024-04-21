@@ -856,9 +856,9 @@ function getSocialSecurity() {
     totalMedicareTax += totalAnnualIncome * medicareRate;
 
     // Total US equivalent tax
-    let totalTax = totalMedicareTax;
+    let totalMedicare = totalMedicareTax;
 
-    return totalTax;
+    return totalMedicare;
 }
 
     
@@ -1516,7 +1516,14 @@ window.location.href = 'expense.html';
     const Subregion = SubregionDropdown.value;
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
    
+
+        function handleUSAResponse(regionDropdown) {
+    if (regionDropdown === "USA") {
         calculateCapitalGainsTax();
+        getMedicare();
+        getSocialSecurity();
+    }
+}
 
         
    ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
@@ -1593,6 +1600,11 @@ function deleteCookiesForDomain(domainToDelete) {
     <p><u>CG:</u> <span id="AnnualCG"></span></p>
 <span class="tooltiptext">asdasdasd</span>
 
+    <p><u>Social Security US:</u> <span id="annual_cpp_eresult"></span></p>
+<span class="tooltiptext">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</span>
+
+<p><u>Medicare:</u> <span id="annual_cpp_eresult"></span></p>
+<span class="tooltiptext">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</span>
     
 </div>
 
