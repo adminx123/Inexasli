@@ -794,6 +794,42 @@ document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmp
     document.getElementById('ANNUALEI').textContent = '$' + ANNUALEI.toFixed(2);
 }
 
+    function getMedicare() {
+    // Normalize annual employment income
+    const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
+    const annualTips = calculateAnnual('income_tips', 'income_tips_frequency');
+    const annualBonuses = calculateAnnual('income_bonuses', 'income_bonuses_frequency');
+    const annualEmployedIncome = annualSalaryWages + annualTips + annualBonuses;
+
+    // Normalize annual self-employment income
+    const annualSoleProp = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
+    const annualSelfEmployedIncome = annualSoleProp;
+
+    // Total normalized annual income
+    const totalAnnualIncome = annualEmployedIncome + annualSelfEmployedIncome;
+
+    // Medicare tax rates and thresholds
+    const medicareRate = 0.0145; // 1.45%
+    const medicareAdditionalRate = 0.009; // Additional 0.9% for high earners
+    const medicareThreshold = 200000; // Threshold for additional Medicare tax
+
+    // Calculate Medicare tax for total income
+    let totalMedicareTax = 0;
+
+    // If total income exceeds Medicare threshold, apply additional rate
+    if (totalAnnualIncome > medicareThreshold) {
+        totalMedicareTax = (totalAnnualIncome - medicareThreshold) * medicareAdditionalRate;
+    }
+
+    // Apply standard Medicare rate to total income
+    totalMedicareTax += totalAnnualIncome * medicareRate;
+
+    // Total US equivalent tax
+    let totalTax = totalMedicareTax;
+
+    return totalTax;
+}
+
     
 // Define the tax brackets
 const REGIONALTAXBRACKETSCAN = [
