@@ -279,7 +279,7 @@ const ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
     parseFloat(getCookie('ANNUALTAX'));
 
 // Update HTML element with the calculated value
-document.getElementById('ANNUALDISPOSABLEINCOME').textContent = '$' + ANNUALDISPOSABLEINCOME.toFixed(2);
+document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
 
     NETWORTH = parseFloat(getCookie('ASSETS')) - parseFloat(getCookie('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
