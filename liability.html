@@ -321,12 +321,12 @@ for (let i = 0; i < liabilitiesFields.length; i++) {
     const liabilities = liabilitiesInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}`;
+    document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
   } else {
     const liabilities = "0";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}`;
+    document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
   }
 }
 }
