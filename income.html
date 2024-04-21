@@ -758,16 +758,25 @@ document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmp
 }
 
 
-   function getEIPayable() {
-    // Retrieve annual salary, bonuses, tips, and self-employment income from the DOM
-    var annualSalaryWages = parseFloat(document.getElementById('income_salary_wages').value) || 0;
-    var annualTips = parseFloat(document.getElementById('income_tips').value) || 0;
-    var annualBonuses = parseFloat(document.getElementById('income_bonuses').value) || 0;
-    var annualSoleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
+ function getEIPayable() {
+    const employmentIncomeFields = [
+        ['income_salary_wages', 'income_salary_wages_frequency'],
+        ['income_tips', 'income_tips_frequency'],
+        ['income_bonuses', 'income_bonuses_frequency']
+    ];
+    
+    const selfEmploymentIncomeField = ['income_sole_prop', 'income_sole_prop_frequency'];
 
-    // Calculate total annual income from employed and self-employed sources
-    var annualEmployedIncome = annualSalaryWages + annualTips + annualBonuses;
-    var annualSelfEmployedIncome = annualSoleProp;
+    // Calculate normalized annual employment income
+    var annualEmployedIncome = 0;
+
+    employmentIncomeFields.forEach(function (incomeField) {
+        var annualIncome = calculateAnnual(incomeField[0], incomeField[1]);
+        annualEmployedIncome += annualIncome;
+    });
+
+    // Calculate normalized annual self-employment income
+    var annualSelfEmployedIncome = calculateAnnual(selfEmploymentIncomeField[0], selfEmploymentIncomeField[1]);
 
     // Define EI rates and maximums
     var eiRateEmployed = 0.0166;
@@ -777,13 +786,14 @@ document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmp
 
     // Calculate EI payable for employed and self-employed individuals
     var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualEmployedIncome * eiRateEmployed);
-    var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, annualSelfEmployedIncome * eiRateSelfEmployed); // Fixed calculation for self-employed EI payable
+    var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, annualSelfEmployedIncome * eiRateSelfEmployed);
 
-ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed
+    var ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed;
 
     // Display the results
-    document.getElementById('ANNUALEI').textContent = '$' + (ANNUALEI).toFixed(2);
+    document.getElementById('ANNUALEI').textContent = '$' + ANNUALEI.toFixed(2);
 }
+
     
 // Define the tax brackets
 const REGIONALTAXBRACKETSCAN = [
