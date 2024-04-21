@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incomess</title>
+    <title>Incomes</title>
  <style>
     
      /* Modal styles */
@@ -176,6 +176,8 @@ function updateSubregionDropdown() {
   }
     const regionDropdown = document.getElementById("RegionDropdown");
 const subregionDropdown = document.getElementById("SubregionDropdown");
+    document.getElementById('RegionDropdown').value = getCookie('RegionDropdown');
+    document.getElementById('SubregionDropdown').value = getCookie('SubregionDropdown');
 }
 
 regionDropdown.addEventListener("change", updateSubregionDropdown);
