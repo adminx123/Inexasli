@@ -251,8 +251,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Update HTML elements with cookie values
-        document.getElementById('RegionDropdown').textContent = "Region" + getCookie('RegionDropdown');
-        document.getElementById('SubregionDropdown').textContent =  "Subregion" + getCookie('SubregionDropdown');
+        document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
+        document.getElementById('SubregionDropdown').textContent =  "Subregion: " + getCookie('SubregionDropdown');
     
     document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME');
     document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX');
