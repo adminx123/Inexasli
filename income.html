@@ -794,6 +794,37 @@ document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmp
     document.getElementById('ANNUALEI').textContent = '$' + ANNUALEI.toFixed(2);
 }
 
+function getSocialSecurity() {
+    // Normalize annual employment income
+    const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
+    const annualTips = calculateAnnual('income_tips', 'income_tips_frequency');
+    const annualBonuses = calculateAnnual('income_bonuses', 'income_bonuses_frequency');
+    const annualEmployedIncome = annualSalaryWages + annualTips + annualBonuses;
+
+    // Normalize annual self-employment income
+    const annualSoleProp = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
+    const annualSelfEmployedIncome = annualSoleProp;
+
+    // Total normalized annual income
+    const totalAnnualIncome = annualEmployedIncome + annualSelfEmployedIncome;
+
+    // Social Security tax rate and maximum taxable earnings
+    const socialSecurityRate = 0.062; // 6.2%
+    const socialSecurityMaxTaxable = 142800; // Maximum taxable earnings for Social Security
+
+    // Calculate Social Security tax for employed income (up to the maximum taxable earnings)
+    let employmentSocialSecurityTax = Math.min(annualEmployedIncome, socialSecurityMaxTaxable) * socialSecurityRate;
+
+    // Calculate Social Security tax for self-employed income (up to the maximum taxable earnings)
+    let selfEmploymentSocialSecurityTax = Math.min(annualSelfEmployedIncome * 0.9235, socialSecurityMaxTaxable) * socialSecurityRate * 2;
+
+    // Total US equivalent Social Security tax
+    let totalSocialSecurityTax = employmentSocialSecurityTax + selfEmploymentSocialSecurityTax;
+
+    return totalSocialSecurityTax;
+}
+
+    
     function getMedicare() {
     // Normalize annual employment income
     const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
