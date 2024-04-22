@@ -478,7 +478,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var PASSIVEINCOME;
     var CPPPAYABLESELFEMPLOYED;
     var CPPPAYABLEEMPLOYED;
-    
+    var TOTALMEDICARE;
  
 
 
@@ -859,11 +859,9 @@ function getSocialSecurity() {
     let totalMedicare = totalMedicareTax;
 
     return totalMedicare;
-
-document.getElementById('totalMedicare').textContent = '$' + (totalMedicare).toFixed(2);
-
 }
-
+    TOTALMEDICARE = totalMedicare
+document.getElementById('TOTALMEDICARE').textContent = '$' + (TOTALMEDICARE).toFixed(2);
     
 // Define the tax brackets
 const REGIONALTAXBRACKETSCAN = [
