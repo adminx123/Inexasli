@@ -241,7 +241,20 @@ Below 0.15: This ratio indicates passive income covering a lower portion of expe
     
    <p><u>Total Employment Insurance Payable:</u> <span id="ei_sum"></span></p>
     <span class="tooltiptext"> Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</span>
-        
+
+    <p><u>CG:</u> <span id="TOTALTAXCG"></span></p>
+<span class="tooltiptext">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket.
+Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</span>
+
+    <p><u>Social Security US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
+<span class="tooltiptext">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors.
+Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</span>
+
+<p><u>Medicare:</u> <span id="TOTALMEDICARE"></span></p>
+<span class="tooltiptext">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use:
+Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals. </span>
+
+    
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Function to retrieve cookie value by name
@@ -270,7 +283,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('annual_cpp_seresult').textContent = " $" + getCookie('CPPPAYABLESELFEMPLOYED');
     document.getElementById('annual_cpp_eresult').textContent = " $" + getCookie('CPPPAYABLEEMPLOYED');
-  
+
+        document.getElementById('TOTALMEDICARE').textContent = " $" + getCookie('TOTALMEDICARE');
+    document.getElementById('TOTALSOCIALSECURITY').textContent = " $" + getCookie('TOTALSOCIALSECURITY');
+    document.getElementById('TOTALTAXCG').textContent = " $" + getCookie('TOTALTAXCG');
+
 
 // Calculate ANNUALDISPOSABLEINCOME using getCookie function
 const ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
