@@ -856,13 +856,13 @@ function getSocialSecurity() {
     totalMedicareTax += totalAnnualIncome * medicareRate;
 
     // Total US equivalent tax
-    let totalMedicare = totalMedicareTax;
+   TOTALMEDICARE = totalMedicareTax;
 
-    return totalMedicare;
+    // Update the DOM element with the calculated value
+    document.getElementById('TOTALMEDICARE').textContent = '$' + TOTALMEDICARE.toFixed(2);
 }
-    TOTALMEDICARE = totalMedicare
-document.getElementById('TOTALMEDICARE').textContent = '$' + (TOTALMEDICARE).toFixed(2);
-    
+
+
 // Define the tax brackets
 const REGIONALTAXBRACKETSCAN = [
     { limit: 235675, rate: 0.33 },
