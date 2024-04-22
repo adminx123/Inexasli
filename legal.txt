@@ -26,21 +26,19 @@ If you receive any confidential or proprietary information from the Developer or
 4. Changes in Financial Situation:
 As a user, you acknowledge that your financial situation may change over time. IEAL™'s accuracy depends on current information. It is your responsibility to update your information in IEAL™ for accurate results. Failure to update may result in inaccurate calculations.
 
-Data Security, Introduction: Transparency is crucial in our data practices. By utilizing our IEAL worksheet, you consent to the following practices. The developer utilizes data solely for the purpose of providing estimations and facilitating your use of IEAL. We do not store user data; instead, it is temporarily stored in cookies on the user's computer and accessed as you progress through IEAL. Data entered by you is held temporarily for the duration of your session and may be retained for a maximum of 365 days on your computer unless you clear your cookies. While we currently do not implement specific measures to protect data, we are committed to taking reasonable steps to ensure its confidentiality and integrity.
+Data Security, Introduction: By utilizing our IEAL worksheet, you consent to the following practices. The developer utilizes data solely for the purpose of providing estimations and facilitating your use of IEAL. We do not store user data; instead, it is temporarily stored in secure cookies on the user's computer and accessed as you progress through IEAL. Financial information entered by you is held temporarily for the duration of your session and may be retained for a maximum of 365 days on your computer unless you clear your cookies. While we utilize secure cookies as a data protection measure, we are committed to taking further reasonable steps to ensure the confidentiality and integrity of your information.
 
-Data Security, User Responsibilities:
-During financial consultations, individuals play a crucial role in data security. Users should be cautious about shared information, as our practices do not involve specific data protection measures. Being mindful of data sensitivity contributes to a secure experience.
-Data Security, Reporting Concerns:
-If individuals have concerns regarding data security during consultations, we welcome and value their feedback. Given our current practices, we are dedicated to addressing concerns promptly.
+Data Security, User Responsibilities: During financial consultations, individuals play a crucial role in data security. Users should be cautious about shared information, as even with secure cookies, additional data protection measures may be necessary. Being mindful of data sensitivity contributes to a secure experience.
 
-Data Security, Limitation of Liability:
-Transparent about our practices, we presently lack specific data protection measures. While we strive for accurate estimations, no system is entirely free from vulnerabilities. Our liability is limited, as described in the terms and conditions. The security of information during internet transmission cannot be guaranteed.
+Data Security, Reporting Concerns: If individuals have concerns regarding data security during consultations, we welcome and value their feedback. Given our current practices, which include the use of secure cookies, we are dedicated to addressing concerns promptly.
+
+Data Security, Limitation of Liability: Transparent about our practices, while we utilize secure cookies, we recognize that additional measures may be required for comprehensive data protection. While we strive for accurate estimations, no system is entirely free from vulnerabilities. Our liability is limited, as described in the terms and conditions. The security of information during internet transmission cannot be guaranteed.
 
 IEAL™ Consent:
 By using IEAL™, you consent to the collection, use, and disposal of your financial information as described in these terms of service.
 
 IEAL™ Liability Disclaimer:
-The Developer is not liable for damages arising from IEAL™ use, including but not limited to loss of profits, business interruption, or loss of data. No one involved is personally liable for outcomes or consequences. IEAL™ results should not be solely relied upon for financial decisions.
+The Developer is not liable for damages arising from IEAL™ use, including but not limited to loss of profits, business interruption, or loss of data. No one involved is personally liable for outcomes or consequences. IEAL™ results should not be solely relied upon for financial decisions. By using IEAL™, you acknowledge and agree to do so at your own risk.
 
 IEAL™ Changes:
 The Developer reserves the right to modify or discontinue IEAL™ at any time without notice. Not liable for any modification or discontinuation.
