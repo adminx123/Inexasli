@@ -479,7 +479,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var CPPPAYABLESELFEMPLOYED;
     var CPPPAYABLEEMPLOYED;
     var TOTALMEDICARE;
- 
+     var TOTALSOCIALSECURITY;
 
 
     
@@ -821,7 +821,11 @@ function getSocialSecurity() {
     // Total US equivalent Social Security tax
     let totalSocialSecurityTax = employmentSocialSecurityTax + selfEmploymentSocialSecurityTax;
 
-    return totalSocialSecurityTax;
+  // Total US equivalent tax
+   TOTALSOCIALSECURITY = totalSocialSecurityTax;
+
+    // Update the DOM element with the calculated value
+    document.getElementById('TOTALSOCIALSECURITY').textContent = '$' + TOTALSOCIALSECURITY.toFixed(2);
 }
 
     
@@ -1496,6 +1500,17 @@ document.getElementById('income_tax_free_income_frequency').value = getCookie('i
 
 });
 
+function handleUSAResponse() {
+    var regionDropdown = document.getElementById('RegionDropdown').value; // Assuming 'RegionDropdown' is the ID of your dropdown element
+    if (regionDropdown === "USA") {
+        calculateCapitalGainsTax();
+        getMedicare();
+        getSocialSecurity();
+    }
+}
+
+
+
 function calculateNext() {
     calculateAll();
 //window.location.href = 'expense.html';
@@ -1517,20 +1532,13 @@ function calculateNext() {
     const Subregion = SubregionDropdown.value;
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
    
-
-        function handleUSAResponse(regionDropdown) {
-    if (regionDropdown === "USA") {
-        calculateCapitalGainsTax();
-        getMedicare();
-        getSocialSecurity();
-    }
-}
-
         
    ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
             (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
             (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
     document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
+    
+    handleUSAResponse();
     
 setIncomeData();
 
@@ -1601,11 +1609,13 @@ function deleteCookiesForDomain(domainToDelete) {
     <p><u>CG:</u> <span id="AnnualCG"></span></p>
 <span class="tooltiptext">asdasdasd</span>
 
-    <p><u>Social Security US:</u> <span id="annual_cpp_eresult"></span></p>
+    <p><u>Social Security US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
 <span class="tooltiptext">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</span>
 
 <p><u>Medicare:</u> <span id="TOTALMEDICARE"></span></p>
 <span class="tooltiptext">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</span>
+
+
     
 </div>
 
