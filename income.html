@@ -1315,8 +1315,11 @@ function calculateCapitalGainsTax() {
   // Display the result
   const totalTaxCG = federalTaxCG + stateTaxCG;
   const resultDiv = document.getElementById('capital_gains_tax_result');
-  document.getElementById('AnnualCG').textContent = '$' + (totalTaxCG).toFixed(2);
-    TOTALTAXCG = totalTaxCG
+  
+   TOTALTAXCG = totalTaxCG
+  
+  document.getElementById('TOTALTAXCG').textContent = '$' + (TOTALTAXCG).toFixed(2);
+   
 }
     
 function passiveincome() {
@@ -1607,7 +1610,7 @@ function deleteCookiesForDomain(domainToDelete) {
 <p><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
 <span class="tooltiptext">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</span>
 
-    <p><u>CG:</u> <span id="AnnualCG"></span></p>
+    <p><u>CG:</u> <span id="TOTALTAXCG"></span></p>
 <span class="tooltiptext">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket.
 Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</span>
 
