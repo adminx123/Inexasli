@@ -149,7 +149,7 @@ button {
     <select id="SubregionDropdown">
         <option value="">Select Tax Subregion</option> </select>
 
-<button onclick=" handleUSAResponse(regionDropdown)();" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
+<button onclick="calculateAll();" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
 
     
         <script>
@@ -825,7 +825,7 @@ function getSocialSecurity() {
 }
 
     
-    void getMedicare() {
+    function getMedicare() {
     // Normalize annual employment income
     const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
     const annualTips = calculateAnnual('income_tips', 'income_tips_frequency');
