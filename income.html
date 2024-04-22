@@ -825,7 +825,7 @@ function getSocialSecurity() {
 }
 
     
-    function getMedicare() {
+    void getMedicare() {
     // Normalize annual employment income
     const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
     const annualTips = calculateAnnual('income_tips', 'income_tips_frequency');
