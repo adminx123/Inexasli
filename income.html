@@ -1513,6 +1513,21 @@ function handleUSAResponse() {
     }
 }
 
+function calculateAnnualTax() {
+    var regionDropdown = document.getElementById("RegionDropdown");
+    let ANNUALTAX;
+    if (regionDropdown.value === 'USA') {
+        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
+                    (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
+    } else {
+        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX);
+    }
+
+document.getElementById('ANNUALTAX').textContent = '$' + (ANNUALTAX).toFixed(2);
+
+}
 
 
 function calculateNext() {
@@ -1537,18 +1552,7 @@ window.location.href = 'expense.html';
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
    
         
-   function calculateAnnualTax(RegionDropdown, ANNUALREGIONALTAX, ANNUALSUBREGIONALTAX, TOTALTAXCG) {
-    let ANNUALTAX;
-    if (RegionDropdown === 'USA') {
-        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
-                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
-                    (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
-    } else {
-        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
-                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX);
-    }
-    return '$' + ANNUALTAX.toFixed(2);
-}
+calculateAnnualTax();
 
     
     handleUSAResponse();
