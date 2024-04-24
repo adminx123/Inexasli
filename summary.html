@@ -166,8 +166,7 @@ button {
     
     <h2>PERSONAL FINANCIAL ESTIMATE</h2>
 
-    <p> 
-        <span id="RegionDropdown"></span>
+    <p> <span id="RegionDropdown"></span>
         <span id="SubregionDropdown"></span></p>
  
             <p><u>Income:</u> <span id="annual_income_sum"></span></p>
@@ -254,21 +253,29 @@ Medicare taxes fund the Medicare program, covering hospital stays, skilled nursi
     
 <script>
 
-   document.addEventListener('DOMContentLoaded', function() {
-       var USAHIDE = document.getElementById('RegionDropdown');
+document.addEventListener('DOMContentLoaded', function() {
+    var RegionDropdown = document.getElementById('RegionDropdown');
+    var TOTALMEDICARE = document.getElementById('TOTALMEDICARE');
+    var TOTALSOCIALSECURITY = document.getElementById('TOTALSOCIALSECURITY');
+    var TOTALCGTAX = document.getElementById('TOTALCGTAX');
 
-    // Initially hide the field
-    USAHIDE.style.display = 'none';
-
-    // Function to handle the change in dropdown value
-    function handleRegionChange() {
-        if (RegionDropdown.value === 'USA' || RegionDropdown.value === '') { // Check for USA or empty value
-            USAHIDE.style.display = 'block';
+    // Function to handle the initial value of the dropdown
+    function handleInitialRegion() {
+        if (RegionDropdown.value === 'USA' || RegionDropdown.value === '') {
+            TOTALMEDICARE.style.display = 'block';
+            TOTALSOCIALSECURITY.style.display = 'block';
+            TOTALCGTAX.style.display = 'block';
         } else {
-            USAHIDE.style.display = 'none';
+            TOTALMEDICARE.style.display = 'none';
+            TOTALSOCIALSECURITY.style.display = 'none';
+            TOTALCGTAX.style.display = 'none';
         }
     }
+
+    // Call the function to handle the initial value
+    handleInitialRegion();
 });
+
 
 
     
