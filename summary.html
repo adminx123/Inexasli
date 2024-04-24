@@ -253,6 +253,25 @@ Medicare taxes fund the Medicare program, covering hospital stays, skilled nursi
 
     
 <script>
+
+   document.addEventListener('DOMContentLoaded', function() {
+       var USAHIDE = document.getElementById('RegionDropdown');
+
+    // Initially hide the field
+    USAHIDE.style.display = 'none';
+
+    // Function to handle the change in dropdown value
+    function handleRegionChange() {
+        if (RegionDropdown.value === 'USA' || RegionDropdown.value === '') { // Check for USA or empty value
+            USAHIDE.style.display = 'block';
+        } else {
+            USAHIDE.style.display = 'none';
+        }
+    }
+});
+
+
+    
 document.addEventListener('DOMContentLoaded', function() {
     // Function to retrieve cookie value by name
     function getCookie(name) {
