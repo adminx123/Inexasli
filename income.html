@@ -1537,10 +1537,19 @@ window.location.href = 'expense.html';
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
    
         
-   ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
-            (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
-            (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
-    document.getElementById('ANNUALTAX').textContent = '$' + ANNUALTAX.toFixed(2);
+   function calculateAnnualTax(RegionDropdown, ANNUALREGIONALTAX, ANNUALSUBREGIONALTAX, TOTALTAXCG) {
+    let ANNUALTAX;
+    if (RegionDropdown === 'USA') {
+        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
+                    (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
+    } else {
+        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX);
+    }
+    return '$' + ANNUALTAX.toFixed(2);
+}
+
     
     handleUSAResponse();
     
