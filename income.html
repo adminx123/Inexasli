@@ -639,38 +639,34 @@ ANNUALINCOME = annualIncomeSum
         ];
       
 let annualTaxableSum = 0;
-let totalCapitalGains = 0; // Store capital gains for USA exclusion
 
 taxableincomeFields.forEach(field => {
-  const [inputId, frequencyId] = field;
-  let taxableincome = calculateAnnual(inputId, frequencyId);
+    const [inputId, frequencyId] = field;
+    let taxableincome = calculateAnnual(inputId, frequencyId);
 
-  // Separate logic for USA (excluding capital gains before SD)
-  if (document.getElementById('RegionDropdown').value === 'USA') {
-    if (inputId !== 'income_capital_gains_losses') {
-      annualTaxableSum += taxableincome;
-    } else {
-      totalCapitalGains = taxableincome; // Store capital gains for later
+    // Exclude capital gains completely for USA
+    if (document.getElementById('RegionDropdown').value === 'USA' && inputId === 'income_capital_gains_losses') {
+        return; // Skip this iteration
     }
-  } else {
-    // Existing logic for other regions (including capital gains)
-    if (inputId === 'income_capital_gains_losses') {
-      taxableincome *= (document.getElementById('RegionDropdown').value === 'CAN') ? 0.5 : 1; // 50% for Canada, 100% otherwise
+
+    // Apply Canada-specific adjustments for capital gains
+    if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_capital_gains_losses') {
+        taxableincome *= 0.5; // Adjust for Canada
     }
+
     annualTaxableSum += taxableincome;
-  }
 });
 
-// Apply standard deduction for USA after excluding capital gains
+// Apply standard deduction for USA
 if (document.getElementById('RegionDropdown').value === 'USA') {
-  annualTaxableSum -= SD; // Subtract standard deduction after excluding capital gains
+    annualTaxableSum -= SD;
 } else {
-  // Apply BPA for other regions
-  annualTaxableSum -= BPA;
+    // Apply BPA for other regions
+    annualTaxableSum -= BPA;
 }
 
 // Ensure result is not less than 0
-annualTaxableSum = Math.max(annualTaxableSum, 0); // Clamp to minimum of 0
+annualTaxableSum = Math.max(annualTaxableSum, 0);
 
 ANNUALTAXABLEINCOME = annualTaxableSum;
 
