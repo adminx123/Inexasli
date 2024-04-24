@@ -235,7 +235,7 @@ Below 0.15: This ratio indicates passive income covering a lower portion of expe
     <p><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
 <span class="tooltiptext">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</span>
     
-   <p><u>Total Employment Insurance Payable:</u> <span id="ei_sum"></span></p>
+   <p><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
     <span class="tooltiptext"> Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</span>
 
     <p><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('annual_income_sum').textContent = " $" + getCookie('ANNUALINCOME');
     document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM');
     document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP');
-    document.getElementById('ei_sum').textContent = " $" + getCookie('ANNUALEI');
+    document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI');
     document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
     document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
 
