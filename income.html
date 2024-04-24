@@ -789,7 +789,7 @@ document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmp
     var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualEmployedIncome * eiRateEmployed);
     var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, annualSelfEmployedIncome * eiRateSelfEmployed);
 
-    var ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed;
+    ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed;
 
     // Display the results
     document.getElementById('ANNUALEI').textContent = '$' + ANNUALEI.toFixed(2);
