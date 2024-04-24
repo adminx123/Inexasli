@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summary</title>
+    <title>Summarysy</title>
      <link rel="icon" href="Logo.png" type="image/png">
    <style>
     
@@ -175,7 +175,7 @@ button {
            <p><u>Expense:</u> <span id="annual_expense_sum"></span></p>
 <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
 
- <p><u>Disposable Income:</u><span id="ANNUALDISPOSABLEINCOME"></span></p>
+ <p><u> Income:</u><span id="ANNUALINCOME"></span></p>
     <span class="tooltiptext">Income left after taxes and expenses. Use: Discretionary spending, savings, investments.</span>
 
            
@@ -315,12 +315,22 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('TOTALSOCIALSECURITY').textContent = " $" + getCookie('TOTALSOCIALSECURITY');
 
 
-// Calculate ANNUALDISPOSABLEINCOME using getCookie function
-const ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
-    parseFloat(getCookie('ANNUALEXPENSESUM')) -
-    parseFloat(getCookie('ANNUALEI')) -
-    parseFloat(getCookie('ANNUALCPP')) -
-    parseFloat(getCookie('ANNUALTAX'));
+let ANNUALDISPOSABLEINCOME;
+
+if (getCookie('RegionDropdown') === 'USA') {
+    ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
+        parseFloat(getCookie('ANNUALEXPENSESUM')) -
+        parseFloat(getCookie('ANNUALMEDICARE')) -
+        parseFloat(getCookie('ANNUALSOCIALSECURITY')) -
+        parseFloat(getCookie('ANNUALTAXCG')) -
+        parseFloat(getCookie('ANNUALTAX'));
+} else if (getCookie('RegionDropdown') === 'CAN') {
+    ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
+        parseFloat(getCookie('ANNUALEXPENSESUM')) -
+        parseFloat(getCookie('ANNUALEI')) -
+        parseFloat(getCookie('ANNUALCPP')) -
+        parseFloat(getCookie('ANNUALTAX'));
+}
 
 // Update HTML element with the calculated value
 document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
