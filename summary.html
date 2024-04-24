@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
         return cookieValue === '' ? '0' : cookieValue;
     }
-});
+
 
 
     // Update HTML elements with cookie values
@@ -339,7 +339,7 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
 
   FIRERATIO = parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSE')); // Descriptive variable name
   document.getElementById('fire').textContent = FIRERATIO.toFixed(3);
-    
+    });
 
 </script>
 
