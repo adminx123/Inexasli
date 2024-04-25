@@ -4,7 +4,7 @@
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incomes</title>
+    <title>Income</title>
      <link rel="icon" href="Logo.png" type="image/png">
  <style>
     
@@ -1320,16 +1320,17 @@ function calculateCapitalGainsTax() {
 
 function calculateAnnualTax() {
     var regionDropdown = document.getElementById("RegionDropdown");
-    let ANNUALTAX;
+    let annualtaxx;
     if (regionDropdown.value === 'USA') {
-        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+        annualtaxx = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
                     (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
                     (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
     } else if (regionDropdown.value === 'CAN') {
-        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+        annualtaxx = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
                     (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX);
     }
-
+ANNUALTAX = annualtaxx
+    
     document.getElementById('ANNUALTAX').textContent = '$' + (ANNUALTAX).toFixed(2);
 }
     
@@ -1561,7 +1562,7 @@ setCookie("PASSIVEINCOME", PASSIVEINCOME, 365);
 setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
 setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
 setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
-setCookie("ANNUALTAXx", ANNUALTAX, 365);
+setCookie("ANNUALTAX", ANNUALTAX, 365);
 setCookie("ANNUALCPP", ANNUALCPP, 365);
 setCookie("ANNUALEI", ANNUALEI, 365); 
 setCookie("CPPPAYABLEEMPLOYED",CPPPAYABLEEMPLOYED , 365);
