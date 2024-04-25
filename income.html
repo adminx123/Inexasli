@@ -1530,22 +1530,22 @@ window.location.href = 'expense.html';
     function calculateAll() {
         
     calculateNormalizedSum();
-    
-    getCppPayable();
-    
-    getEIPayable();
-    
-    calculateRegionalTax();
-
-    passiveincome();
         
-    const SubregionDropdown = document.getElementById('SubregionDropdown');
+calculateRegionalTax();
+
+        const SubregionDropdown = document.getElementById('SubregionDropdown');
     const Subregion = SubregionDropdown.value;
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
 
-handleUSAResident();
-        
 calculateAnnualTax();
+        
+    getCppPayable();
+    
+    getEIPayable();
+        
+    passiveincome();
+
+handleUSAResident();
     
 setIncomeData();
 
