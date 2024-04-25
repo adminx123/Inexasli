@@ -298,9 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX');
     document.getElementById('subregion_tax_sum').textContent = " $" + getCookie('ANNUALSUBREGIONALTAX');
     document.getElementById('tax_sum').textContent = " $" + getCookie('ANNUALTAX');
-        document.getElementById('TOTALTAXCG').textContent = " $" + getCookie('TOTALTAXCG');
-
-
+        
     document.getElementById('annual_income_sum').textContent = " $" + getCookie('ANNUALINCOME');
     document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM');
     document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP');
@@ -313,6 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('TOTALMEDICARE').textContent = " $" + getCookie('TOTALMEDICARE');
     document.getElementById('TOTALSOCIALSECURITY').textContent = " $" + getCookie('TOTALSOCIALSECURITY');
+    document.getElementById('TOTALTAXCG').textContent = " $" + getCookie('TOTALTAXCG');
 
 
 let ANNUALDISPOSABLEINCOME;
@@ -320,9 +319,9 @@ let ANNUALDISPOSABLEINCOME;
 if (getCookie('RegionDropdown') === 'USA') {
     ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
         parseFloat(getCookie('ANNUALEXPENSESUM')) -
-        parseFloat(getCookie('ANNUALMEDICARE')) -
-        parseFloat(getCookie('ANNUALSOCIALSECURITY')) -
-        parseFloat(getCookie('ANNUALTAXCG')) -
+        parseFloat(getCookie('TOTALMEDICARE')) -
+        parseFloat(getCookie('TOTALSOCIALSECURITY')) -
+        parseFloat(getCookie('TOTALTAXCG')) -
         parseFloat(getCookie('ANNUALTAX'));
 } else if (getCookie('RegionDropdown') === 'CAN') {
     ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
