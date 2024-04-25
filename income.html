@@ -1499,7 +1499,7 @@ document.getElementById('income_tax_free_income_frequency').value = getCookie('i
 
 });
 
-function handleUSAResponse() {
+function handleUSAResident() {
     var regionDropdown = document.getElementById('RegionDropdown').value; // Assuming 'RegionDropdown' is the ID of your dropdown element
     if (regionDropdown === "USA") {
         calculateCapitalGainsTax();
@@ -1548,7 +1548,7 @@ window.location.href = 'expense.html';
    
 calculateAnnualTax();
 
-handleUSAResponse();
+handleUSAResident();
     
 setIncomeData();
 
