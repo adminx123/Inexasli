@@ -1515,14 +1515,14 @@ function calculateAnnualTax() {
         ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
                     (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
                     (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
-    } else {
+    } else if (regionDropdown.value === 'CAN') {
         ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
                     (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX);
     }
 
-document.getElementById('ANNUALTAX').textContent = '$' + (ANNUALTAX).toFixed(2);
-
+    document.getElementById('ANNUALTAX').textContent = '$' + (ANNUALTAX).toFixed(2);
 }
+
 
 
 function calculateNext() {
