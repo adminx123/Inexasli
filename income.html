@@ -4,7 +4,7 @@
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incomes</title>
+    <title>Incomes2</title>
      <link rel="icon" href="Logo.png" type="image/png">
  <style>
     
@@ -1316,6 +1316,22 @@ function calculateCapitalGainsTax() {
   document.getElementById('TOTALTAXCG').textContent = '$' + (TOTALTAXCG).toFixed(2);
    
 }
+
+
+function calculateAnnualTax() {
+    var regionDropdown = document.getElementById("RegionDropdown");
+    let ANNUALTAX;
+    if (regionDropdown.value === 'USA') {
+        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
+                    (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
+    } else if (regionDropdown.value === 'CAN') {
+        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX);
+    }
+
+    document.getElementById('ANNUALTAX').textContent = '$' + (ANNUALTAX).toFixed(2);
+}
     
 function passiveincome() {
   const fireFields = [
@@ -1507,23 +1523,6 @@ function handleUSAResident() {
         getSocialSecurity();
     }
 }
-
-function calculateAnnualTax() {
-    var regionDropdown = document.getElementById("RegionDropdown");
-    let ANNUALTAX;
-    if (regionDropdown.value === 'USA') {
-        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
-                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
-                    (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
-    } else if (regionDropdown.value === 'CAN') {
-        ANNUALTAX = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
-                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX);
-    }
-
-    document.getElementById('ANNUALTAX').textContent = '$' + (ANNUALTAX).toFixed(2);
-}
-
-
 
 function calculateNext() {
     calculateAll();
