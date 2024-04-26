@@ -227,7 +227,8 @@ Below 0.15: This ratio indicates passive income covering a lower portion of expe
 <span class="tooltiptext">Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</span>
     
          <!-- CAN -->
-          <div style="display: none;">  <p><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
+         <div class= "can">
+            <p><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
 <span class="tooltiptext">Canada Pension Plan contributions for self-employed individuals. Use: Retirement planning for self-employed.</span>
 
    <p><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
@@ -237,10 +238,11 @@ Below 0.15: This ratio indicates passive income covering a lower portion of expe
 <span class="tooltiptext"> General contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the goverment on your behlaf</span>
     
    <p><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
-    <span class="tooltiptext"> Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</span></div>
+    <span class="tooltiptext"> Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</span>
+</div>
 
 <!-- USA -->
-   
+   <div class="USA">
    <p><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
 <span class="tooltiptext">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket.
 Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</span>
@@ -252,7 +254,7 @@ Use: Social Security taxes are utilized to provide financial assistance to retir
 <p><u>Medicare:</u> <span id="TOTALMEDICARE"></span></p>
 <span class="tooltiptext">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use:
 Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals. </span>
-
+</div>
     
 <script>
 
@@ -264,49 +266,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
         return cookieValue === '' ? '0' : cookieValue;
     }
-
-document.addEventListener('DOMContentLoaded', function() {
-    var RegionDropdown = document.getElementById(getCookie('RegionDropdown'));
-    var TOTALMEDICARE = document.getElementById('TOTALMEDICARE');
-    var TOTALSOCIALSECURITY = document.getElementById('TOTALSOCIALSECURITY');
-    var TOTALCGTAX = document.getElementById('TOTALCGTAX');
-    
-    var annual_cpp_eresult = document.getElementById('annual_cpp_eresult');
-    var annual_cpp_seresult = document.getElementById('annual_cpp_seresult');
-    var cpp_sum = document.getElementById('cpp_sum');
-    var ANNUALEI = document.getElementById('ANNUALEI');
-
-    // Function to handle the initial value of the dropdown
-    function handleInitialRegion() {
-        if (RegionDropdown.value === 'USA') {
-            TOTALMEDICARE.style.display = 'block';
-            TOTALSOCIALSECURITY.style.display = 'block';
-            TOTALCGTAX.style.display = 'block';
-            
-            cpp_sum.style.display = 'none';
-            annual_cpp_eresult.style.display = 'none';
-            annual_cpp_seresult.style.display = 'none';
-            ANNUALEI.style.display = 'none';
-            
-        } else if (RegionDropdown.value === 'CAN') {
-            cpp_sum.style.display = 'block';
-            annual_cpp_eresult.style.display = 'block';
-            annual_cpp_seresult.style.display = 'block';
-            ANNUALEI.style.display = 'block';
-            
-            TOTALMEDICARE.style.display = 'none';
-            TOTALSOCIALSECURITY.style.display = 'none';
-            TOTALCGTAX.style.display = 'none';
-        }
-    }
-
-    // Call the function to handle the initial value
-    handleInitialRegion();
-});
-
-
-
-
 
     // Update HTML elements with cookie values
         document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
@@ -368,6 +327,21 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
   document.getElementById('fire').textContent = FIRERATIO.toFixed(3);
     });
 
+document.addEventListener('DOMContentLoaded', function() {
+    var usaDiv = document.querySelector('.usa');
+    var canDiv = document.querySelector('.can');
+
+    var regionDropdownValue = getCookie('RegionDropdown');
+
+    if (regionDropdownValue === 'USA') {
+        usaDiv.style.display = 'block';
+        canDiv.style.display = 'none';
+    } else if (regionDropdownValue === 'CAN') {
+        usaDiv.style.display = 'none';
+        canDiv.style.display = 'block';
+    }
+});
+    
 </script>
 
 </body>
