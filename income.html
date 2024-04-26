@@ -1333,7 +1333,7 @@ ANNUALTAX = annualtaxx
     
     document.getElementById('ANNUALTAX').textContent = '$' + (ANNUALTAX).toFixed(2);
 }
-    
+
 function passiveincome() {
   const fireFields = [
     ['income_investment_property', 'income_investment_property_frequency'],
@@ -1341,18 +1341,20 @@ function passiveincome() {
     ['income_public_dividend', 'income_public_dividend_frequency'],
     ['income_trust', 'income_trust_frequency'],
     ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
-        ['income_royalties', 'income_royalties_frequency'],
+    ['income_royalties', 'income_royalties_frequency'],
   ];
 
   let income = 0;
 
   for (const [incomeField, frequencyField] of fireFields) {
-    const incomeValue = parseFloat(document.getElementById(incomeField).value) || 0;
-    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
-    income += incomeValue * frequency;
+    const incomeValue = calculateAnnual(incomeField, frequencyField);
+    income += incomeValue;
   }
-    PASSIVEINCOME = income
+
+  PASSIVEINCOME = income;
 }
+
+    
     
 function setIncomeData() {
   const frequencyFields = [
