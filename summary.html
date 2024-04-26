@@ -326,7 +326,7 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
     SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
  document.getElementById('savingstodebt').textContent = SAVINGSTODEBT.toFixed(3);
 
-  FIRERATIO = parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSE')); // Descriptive variable name
+  FIRERATIO = parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSESUM')); // Descriptive variable name
   document.getElementById('fire').textContent = FIRERATIO.toFixed(3);
     });
 
