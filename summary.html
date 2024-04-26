@@ -242,7 +242,7 @@ Below 0.15: This ratio indicates passive income covering a lower portion of expe
 </div>
 
 <!-- USA -->
-   <div class="USA">
+   <div class="usa">
    <p><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
 <span class="tooltiptext">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket.
 Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</span>
@@ -258,14 +258,16 @@ Medicare taxes fund the Medicare program, covering hospital stays, skilled nursi
     
 <script>
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Function to retrieve cookie value by name
-    function getCookie(name) {
+function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         const cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
         return cookieValue === '' ? '0' : cookieValue;
     }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to retrieve cookie value by name
+    
 
     // Update HTML elements with cookie values
         document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
