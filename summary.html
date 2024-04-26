@@ -164,7 +164,7 @@ button {
     </div>
   
     
-    <h2>PERSONAL FINANCIAL ESTIMATE</h2>
+   <summary><h2>PERSONAL FINANCIAL ESTIMATE</h2></summary> <details>
 
     <p> <span id="RegionDropdown"></span>
         <span id="SubregionDropdown"></span></p>
@@ -178,8 +178,7 @@ button {
  <p><u>Disposable Income:</u><span id="ANNUALDISPOSABLEINCOME"></span></p>
     <span class="tooltiptext">Income left after taxes and expenses. Use: Discretionary spending, savings, investments.</span>
 
-           
-             <p><u>Assets:</u><span id="assets_sum"></span></p>
+           <p><u>Assets:</u><span id="assets_sum"></span></p>
     <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
    
          <p><u>Liabilities:</u><span id="liabilities_sum"></span></p>
@@ -188,9 +187,9 @@ button {
 <p><u>Net Worth:</u> <span id="NETWORTH"></span></p>
 <span class="tooltiptext">Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</span>
 
-           
+   </details>    
     
-    <h2>RATIOS</h2>
+   <summary> <h2>RATIOS</h2> </summary> <details>
 
         <p><u>Debt to Income:</u> <span id="DEBTTOINCOME"></span></p>
 <span class="tooltiptext">Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health. Below 0.36: This DTI ratio indicates a lower proportion of debt compared to income.
@@ -211,8 +210,9 @@ Above 0.40: This ratio indicates a higher proportion of housing costs compared t
 <span class="tooltiptext">Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.Above 0.25: This ratio shows passive income covering a significant portion of expenses.
 0.15 to 0.25: This ratio reflects passive income covering a moderate portion of expenses.
 Below 0.15: This ratio indicates passive income covering a lower portion of expenses.</span>
-    
-    <h2>GOVERMENT OBLIGATIONS</h2>
+   </details>
+       
+  <summary>  <h2>GOVERMENT OBLIGATIONS</h2></summary><details>
    
         <p><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
 <span class="tooltiptext"> Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</span>
@@ -255,7 +255,8 @@ Use: Social Security taxes are utilized to provide financial assistance to retir
 <span class="tooltiptext">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use:
 Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals. </span>
 </div>
-    
+  </details>
+      
 <script>
 
 function getCookie(name) {
