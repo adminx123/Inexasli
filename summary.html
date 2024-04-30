@@ -299,8 +299,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateOnChange() {    
         // Update HTML elements with cookie values
-        document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown').toFixed(2);
-        document.getElementById('SubregionDropdown').textContent =  "Subregion: " + getCookie('SubregionDropdown').toFixed(2);
+        document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
+        document.getElementById('SubregionDropdown').textContent =  "Subregion: " + getCookie('SubregionDropdown');
         
         document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME').toFixed(2);
         document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX').toFixed(2);
