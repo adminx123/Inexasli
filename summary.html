@@ -297,29 +297,30 @@ function getCookie(name) {
 document.addEventListener('DOMContentLoaded', function() {
     // Function to retrieve cookie value by name
     
-function updateOnChange(){    // Update HTML elements with cookie values
-        document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown').tofixed(2);
-        document.getElementById('SubregionDropdown').textContent =  "Subregion: " + getCookie('SubregionDropdown').tofixed(2);
-    
-    document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME').tofixed(2);
-    document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX').tofixed(2);
-    document.getElementById('subregion_tax_sum').textContent = " $" + getCookie('ANNUALSUBREGIONALTAX').tofixed(2);
-    document.getElementById('tax_sum').textContent = " $" + getCookie('ANNUALTAX').tofixed(2);
+    function updateOnChange() {    
+        // Update HTML elements with cookie values
+        document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown').toFixed(2);
+        document.getElementById('SubregionDropdown').textContent =  "Subregion: " + getCookie('SubregionDropdown').toFixed(2);
         
-    document.getElementById('annual_income_sum').textContent = " $" + getCookie('ANNUALINCOME').tofixed(2);
-    document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM').tofixed(2);
-    document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP').tofixed(2);
-    document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI').tofixed(2);
-    document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS').tofixed(2);
-    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES').tofixed(2);
-
-    document.getElementById('annual_cpp_seresult').textContent = " $" + getCookie('CPPPAYABLESELFEMPLOYED').tofixed(2);
-    document.getElementById('annual_cpp_eresult').textContent = " $" + getCookie('CPPPAYABLEEMPLOYED').tofixed(2);
-
-        document.getElementById('TOTALMEDICARE').textContent = " $" + getCookie('TOTALMEDICARE').tofixed(2);
-    document.getElementById('TOTALSOCIALSECURITY').textContent = " $" + getCookie('TOTALSOCIALSECURITY').tofixed(2);
-    document.getElementById('TOTALTAXCG').textContent = " $" + getCookie('TOTALTAXCG').tofixed(2);
-
+        document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME').toFixed(2);
+        document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX').toFixed(2);
+        document.getElementById('subregion_tax_sum').textContent = " $" + getCookie('ANNUALSUBREGIONALTAX').toFixed(2);
+        document.getElementById('tax_sum').textContent = " $" + getCookie('ANNUALTAX').toFixed(2);
+        
+        document.getElementById('annual_income_sum').textContent = " $" + getCookie('ANNUALINCOME').toFixed(2);
+        document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM').toFixed(2);
+        document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP').toFixed(2);
+        document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI').toFixed(2);
+        document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS').toFixed(2);
+        document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES').toFixed(2);
+        
+        document.getElementById('annual_cpp_seresult').textContent = " $" + getCookie('CPPPAYABLESELFEMPLOYED').toFixed(2);
+        document.getElementById('annual_cpp_eresult').textContent = " $" + getCookie('CPPPAYABLEEMPLOYED').toFixed(2);
+        
+        document.getElementById('TOTALMEDICARE').textContent = " $" + getCookie('TOTALMEDICARE').toFixed(2);
+        document.getElementById('TOTALSOCIALSECURITY').textContent = " $" + getCookie('TOTALSOCIALSECURITY').toFixed(2);
+        document.getElementById('TOTALTAXCG').textContent = " $" + getCookie('TOTALTAXCG').toFixed(2);
+   
 
 let ANNUALDISPOSABLEINCOME;
 
