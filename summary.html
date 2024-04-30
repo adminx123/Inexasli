@@ -298,27 +298,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to retrieve cookie value by name
     
 function updateOnChange(){    // Update HTML elements with cookie values
-        document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
-        document.getElementById('SubregionDropdown').textContent =  "Subregion: " + getCookie('SubregionDropdown');
+        document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown').tofixed(2);
+        document.getElementById('SubregionDropdown').textContent =  "Subregion: " + getCookie('SubregionDropdown').tofixed(2);
     
-    document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME');
-    document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX');
-    document.getElementById('subregion_tax_sum').textContent = " $" + getCookie('ANNUALSUBREGIONALTAX');
-    document.getElementById('tax_sum').textContent = " $" + getCookie('ANNUALTAX');
+    document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME').tofixed(2);
+    document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX').tofixed(2);
+    document.getElementById('subregion_tax_sum').textContent = " $" + getCookie('ANNUALSUBREGIONALTAX').tofixed(2);
+    document.getElementById('tax_sum').textContent = " $" + getCookie('ANNUALTAX').tofixed(2);
         
-    document.getElementById('annual_income_sum').textContent = " $" + getCookie('ANNUALINCOME');
-    document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM');
-    document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP');
-    document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI');
-    document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
-    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
+    document.getElementById('annual_income_sum').textContent = " $" + getCookie('ANNUALINCOME').tofixed(2);
+    document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM').tofixed(2);
+    document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP').tofixed(2);
+    document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI').tofixed(2);
+    document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS').tofixed(2);
+    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES').tofixed(2);
 
-    document.getElementById('annual_cpp_seresult').textContent = " $" + getCookie('CPPPAYABLESELFEMPLOYED');
-    document.getElementById('annual_cpp_eresult').textContent = " $" + getCookie('CPPPAYABLEEMPLOYED');
+    document.getElementById('annual_cpp_seresult').textContent = " $" + getCookie('CPPPAYABLESELFEMPLOYED').tofixed(2);
+    document.getElementById('annual_cpp_eresult').textContent = " $" + getCookie('CPPPAYABLEEMPLOYED').tofixed(2);
 
-        document.getElementById('TOTALMEDICARE').textContent = " $" + getCookie('TOTALMEDICARE');
-    document.getElementById('TOTALSOCIALSECURITY').textContent = " $" + getCookie('TOTALSOCIALSECURITY');
-    document.getElementById('TOTALTAXCG').textContent = " $" + getCookie('TOTALTAXCG');
+        document.getElementById('TOTALMEDICARE').textContent = " $" + getCookie('TOTALMEDICARE').tofixed(2);
+    document.getElementById('TOTALSOCIALSECURITY').textContent = " $" + getCookie('TOTALSOCIALSECURITY').tofixed(2);
+    document.getElementById('TOTALTAXCG').textContent = " $" + getCookie('TOTALTAXCG').tofixed(2);
 
 
 let ANNUALDISPOSABLEINCOME;
