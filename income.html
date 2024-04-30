@@ -82,6 +82,12 @@ button {
     margin-top: 20px;
 }
 
+      .button-container {
+        position: fixed;
+        bottom: 20px; /* adjust as needed */
+        right: 20px; /* adjust as needed */
+    }
+     
 .tab-container {
     display: flex;
     justify-content: center; /* Center-align tabs */
@@ -132,8 +138,11 @@ button {
 </head>
 
 <body>
-    <button onclick="validatecheckbox()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
 
+    <div class = "button-container">
+    <button onclick="validatecheckbox()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
+    </div>
+        
    <!-- <div class="tab-container">
         <a href="http://inexasli.com/income.html" class="tab">Income</a>
         <a href="http://inexasli.com/expense.html" class="tab">Expense</a>
@@ -460,9 +469,11 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 <label for="notintended"> I understand IEAL™ is designed to provide a report for estimation and entertainment purposes only. It is not intended to be used as legal, financial, or professional advice. You should seek independent advice from qualified professionals.</label><br>
 
     </div>
-      
+    
+    <div class ="button-container">  
 <button onclick="validatecheckbox()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
-
+    </div>
+    
 <script>
    
     var ANNUALTAXABLEINCOME;
