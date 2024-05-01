@@ -303,6 +303,9 @@ function getCookie(name) {
 
 document.addEventListener('DOMContentLoaded', function() {
     // Function to retrieve cookie value by name
+
+document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
+    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
     
 function updateOnChange(){    // Update HTML elements with cookie values
         document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
@@ -317,8 +320,7 @@ function updateOnChange(){    // Update HTML elements with cookie values
     document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM');
     document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP');
     document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI');
-    document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
-    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
+    
 
     document.getElementById('annual_cpp_seresult').textContent = " $" + getCookie('CPPPAYABLESELFEMPLOYED');
     document.getElementById('annual_cpp_eresult').textContent = " $" + getCookie('CPPPAYABLEEMPLOYED');
