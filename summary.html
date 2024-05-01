@@ -359,7 +359,7 @@ if (getCookie('RegionDropdown') === 'USA') {
 // Update HTML element with the calculated value
 document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
 
-    NETWORTH = parseFloat(getCookie('ASSETS')) - parseFloat(getCookie('LIABILITIES'));
+    NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
 
 DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
