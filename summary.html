@@ -349,8 +349,6 @@ if (getCookie('RegionDropdown') === 'USA') {
         parseFloat(getCookie('ANNUALTAX'));
 }
 
-document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
-    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
     
 // Update HTML element with the calculated value
 document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
@@ -370,7 +368,10 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
   FIRERATIO = parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSESUM')); // Descriptive variable name
   document.getElementById('fire').textContent = FIRERATIO.toFixed(3);
   } 
-  
+
+    document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
+    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
+    
   updateOnChange();
   
    // Add an event listener to the frequency dropdown
