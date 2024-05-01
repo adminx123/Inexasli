@@ -317,8 +317,7 @@ function updateOnChange(){    // Update HTML elements with cookie values
     document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM');
     document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP');
     document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI');
-    document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
-    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
+    
 
     document.getElementById('annual_cpp_seresult').textContent = " $" + getCookie('CPPPAYABLESELFEMPLOYED');
     document.getElementById('annual_cpp_eresult').textContent = " $" + getCookie('CPPPAYABLEEMPLOYED');
@@ -367,7 +366,8 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
   document.getElementById('fire').textContent = FIRERATIO.toFixed(3);
   } 
   
- 
+  updateOnChange();
+  
    // Add an event listener to the frequency dropdown
     const frequencyDropdown = document.getElementById('frequency');
     frequencyDropdown.addEventListener('change', function() {
@@ -391,6 +391,8 @@ document.addEventListener('DOMContentLoaded', function() {
         usaDiv.style.display = 'none';
         canDiv.style.display = 'block';
     }
+    document.getElementById('ASSETS').textContent = " $" + getCookie('ASSETS');
+    document.getElementById('LIABILTIES').textContent = " $" + getCookie('LIABILITIES');
 });
     
 </script>
