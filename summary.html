@@ -279,6 +279,15 @@ button {
       
 <script>
 
+function getCookie1(name) {
+    const value1 = `; ${document.cookie}`;
+    const parts1 = value1.split(`; ${name}=`);
+    let cookieValue1 = parts1.length === 2 ? decodeURIComponent(parts1.pop().split(';').shift()) : '';
+    
+    return cookieValue1 === '' ? '0' : cookieValue1;
+}
+
+    
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -391,8 +400,8 @@ document.addEventListener('DOMContentLoaded', function() {
         usaDiv.style.display = 'none';
         canDiv.style.display = 'block';
     }
-    document.getElementById('ASSETS').textContent = " $" + getCookie('ASSETS');
-    document.getElementById('LIABILTIES').textContent = " $" + getCookie('LIABILITIES');
+    document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
+    document.getElementById('LIABILTIES').textContent = " $" + getCookie1('LIABILITIES');
 });
     
 </script>
