@@ -179,12 +179,10 @@ button {
      <p> <span id="RegionDropdown"></span>
         <span id="SubregionDropdown"></span></p>
         
-   <h2>PERSONAL FINANCIAL ESTIMATE</h2>
-
-    
-
- <summary><p><u>Disposable Income:</u><span id="ANNUALDISPOSABLEINCOME"></span></p></summary>
-    <span class="tooltiptext">Income left after taxes and expenses. Use: Discretionary spending, savings, investments.</span><details>
+   
+ <summary><h2><u>Disposable Income:</u></h2><span id="ANNUALDISPOSABLEINCOME"></span></summary>
+    <span class="tooltiptext">Income left after taxes, expenses & social security obligations. 
+    Use: Discretionary spending, savings, investments.</span><details>
         
         <p><u>Income:</u> <span id="annual_income_sum"></span></p>
 <span class="tooltiptext">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</span>
@@ -238,18 +236,21 @@ Medicare taxes fund the Medicare program, covering hospital stays, skilled nursi
         
     </details>
 
-           <p><u>Assets:</u><span id="assets_sum"></span></p>
+           
+
+<summary><h2><u>Net Worth:</u></h2> <span id="NETWORTH"></span></summary>
+<span class="tooltiptext">Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</span><details>
+    
+    <p><u>Assets:</u><span id="assets_sum"></span></p>
     <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
    
          <p><u>Liabilities:</u><span id="liabilities_sum"></span></p>
 <span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy formulation.</span>
+</details>
 
-<p><u>Net Worth:</u> <span id="NETWORTH"></span></p>
-<span class="tooltiptext">Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</span>
-
-   </details>    
+   
     
-   <summary> <h2>RATIOS</h2> </summary> <details>
+   <summary> <h2>Ratios</h2> </summary> <details>
 
         <p><u>Debt to Income:</u> <span id="DEBTTOINCOME"></span></p>
 <span class="tooltiptext">Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health. Below 0.36: This DTI ratio indicates a lower proportion of debt compared to income.
