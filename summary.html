@@ -181,96 +181,89 @@ button {
     <p> <span id="RegionDropdown"></span>
         <span id="SubregionDropdown"></span></p>
  
-         <summary><h2>Disposable Income:<span id="ANNUALDISPOSABLEINCOME"></span></h2>
-    <span class="tooltiptext">Income left after taxes and expenses. Use: Discretionary spending, savings, investments.</span></summary>
-    <details> <p><u>Income:</u> <span id="annual_income_sum"></span></p>
-<span class="tooltiptext">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</span>
+         <summary>
+    <h2>Disposable Income:<span id="ANNUALDISPOSABLEINCOME"></span></h2>
+    <p>Income left after taxes and expenses. Use: Discretionary spending, savings, investments.</p>
+</summary>
+<details>
+    <p><u>Income:</u> <span id="annual_income_sum"></span></p>
+    <p>Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</p>
 
-           <p><u>Expense:</u> <span id="annual_expense_sum"></span></p>
-<span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
+    <p><u>Expense:</u> <span id="annual_expense_sum"></span></p>
+    <p>Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</p>
 
     <p><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
-<span class="tooltiptext"> Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</span>
-    
-    <p><u>Regional Tax Payable:</u> <span id="region_tax_sum"></span></p>
-<span class="tooltiptext">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</span>
+    <p>Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</p>
 
-   <p><u>Subregional Tax Payable:</u><span id="subregion_tax_sum"></span></p> 
-<span class="tooltiptext">Tax owed to subregion government. Use: Budgeting for taxe obligations, financial planning.</span>
+    <p><u>Regional Tax Payable:</u> <span id="region_tax_sum"></span></p>
+    <p>Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</p>
+
+    <p><u>Subregional Tax Payable:</u><span id="subregion_tax_sum"></span></p> 
+    <p>Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.</p>
 
     <p><u>Total Tax Payable:</u><span id="tax_sum"></span></p>
-<span class="tooltiptext">Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</span>
-    
-         <!-- CAN -->
-         <div class= "can">
-            <p><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
-<span class="tooltiptext">Canada Pension Plan contributions for self-employed individuals. Use: Retirement planning for self-employed.</span>
+    <p>Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</p>
 
-   <p><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
-<span class="tooltiptext">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</span>
-    
+    <!-- CAN -->
+    <div class="can">
+        <p><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
+        <p>Canada Pension Plan contributions for self-employed individuals. Use: Retirement planning for self-employed.</p>
+
+        <p><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
+        <p>Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</p>
+
         <p><u>Total CPP Payable:</u> <span id="cpp_sum"></span></p>
-<span class="tooltiptext"> General contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the goverment on your behlaf</span>
-    
-   <p><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
-    <span class="tooltiptext"> Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</span>
-</div>
+        <p>General contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the government on your behalf.</p>
 
-<!-- USA -->
-   <div class="usa">
-   <p><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
-<span class="tooltiptext">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket.
-Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</span>
+        <p><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
+        <p>Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</p>
+    </div>
 
-    <p><u>Social Security US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
-<span class="tooltiptext">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors.
-Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</span>
+    <!-- USA -->
+    <div class="usa">
+        <p><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
+        <p>Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</p>
 
-<p><u>Medicare:</u> <span id="TOTALMEDICARE"></span></p>
-<span class="tooltiptext">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use:
-Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals. </span>
-</div></details>
-          
-           
+        <p><u>Social Security US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
+        <p>Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</p>
 
- <summary><h2>Net Worth <span id="NETWORTH"></span></h2></summary>
- <span class="tooltiptext">Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</span> <details>
+        <p><u>Medicare:</u> <span id="TOTALMEDICARE"></span></p>
+        <p>Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use: Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals.</p>
+    </div>
+</details>
 
-<p><u>Assets:</u><span id="assets_sum"></span></p>
-    <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
+<summary>
+    <h2>Net Worth <span id="NETWORTH"></span></h2>
+    <p>Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</p>
+</summary>
+<details>
+    <p><u>Assets:</u><span id="assets_sum"></span></p>
+    <p>Resources with economic value owned. Use: Wealth assessment, collateral for loans.</p>
    
-         <p><u>Liabilities:</u><span id="liabilities_sum"></span></p>
-<span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy formulation.</span></details>
+    <p><u>Liabilities:</u><span id="liabilities_sum"></span></p>
+    <p>Financial debts or obligations. Use: Debt management, financial strategy formulation.</p>
+</details>
 
+<summary>
+    <h2>Ratios</h2>
+</summary>
+<span class="tooltiptext">
+    Ratios serve to provide a quantitative comparison between two relevant financial metrics. They offer insights into various aspects of financial health, such as debt management, savings efficiency, affordability, and progress towards financial goals.
+</span>
+<details>
+    <p><u>Debt to Income:</u> <span id="DEBTTOINCOME"></span></p>
+    <p>Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health.</p>
 
+    <p><u>Savings to Debt:</u> <span id="savingstodebt"></span></p>
+    <p>Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.</p>
 
-       
-    
-   <summary> <h2>Ratios</h2> </summary> 
-    <span class="tooltiptext">
-Ratios serve to provide a quantitative comparison between two relevant financial metrics. They offer insights into various aspects of financial health, such as debt management, savings efficiency, affordability, and progress towards financial goals. </span>
-    <details>
+    <p><u>Housing to Income:</u> <span id="housingtoincome"></span></p>
+    <p>Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.</p>
 
-        <p><u>Debt to Income:</u> <span id="DEBTTOINCOME"></span></p>
-<span class="tooltiptext">Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health. Below 0.36: This DTI ratio indicates a lower proportion of debt compared to income.
-0.36 to 0.43: This DTI ratio reflects a moderate proportion of debt compared to income.
-Above 0.43: This DTI ratio indicates a higher proportion of debt compared to income.</span>
+    <p><u>FIRE:</u> <span id="fire"></span></p>
+    <p>Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</p>
+</details>
 
-        <p><u>Savings to Debt:</u> <span id="savingstodebt"></span></p>
-<span class="tooltiptext">Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency. Below 0.10: This ratio shows a lower proportion of savings compared to debt.
-0.10 to 0.20: This ratio reflects a moderate proportion of savings compared to debt.
-Above 0.20: This ratio indicates a higher proportion of savings compared to debt.</span>
-    
-        <p><u>Housing to Income:</u> <span id = "housingtoincome"></span></p>
-<span class="tooltiptext">Housing costs as a percentage of income. Use: Assess housing affordability, financial stress. Below 0.30: This ratio shows a lower proportion of housing costs compared to income.
-0.30 to 0.40: This ratio reflects a moderate proportion of housing costs compared to income.
-Above 0.40: This ratio indicates a higher proportion of housing costs compared to income.</span>
-    
-<p><u>FIRE:</u> <span id ="fire"></span></p>
-<span class="tooltiptext">Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.Above 0.25: This ratio shows passive income covering a significant portion of expenses.
-0.15 to 0.25: This ratio reflects passive income covering a moderate portion of expenses.
-Below 0.15: This ratio indicates passive income covering a lower portion of expenses.</span>
-   </details>
        
   
    
