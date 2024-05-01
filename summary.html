@@ -244,10 +244,10 @@ button {
     <p>Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</p>
 </summary>
 <details>
-    <p><u>Assets:</u><span id="assets_sum"></span></p>
+    <p><u>Assets:</u><span id="ASSETS"></span></p>
     <p>Resources with economic value owned. Use: Wealth assessment, collateral for loans.</p>
    
-    <p><u>Liabilities:</u><span id="liabilities_sum"></span></p>
+    <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
     <p>Financial debts or obligations. Use: Debt management, financial strategy formulation.</p>
 </details>
 
@@ -317,7 +317,8 @@ function updateOnChange(){    // Update HTML elements with cookie values
     document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM');
     document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP');
     document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI');
-    
+    document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
+    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
 
     document.getElementById('annual_cpp_seresult').textContent = " $" + getCookie('CPPPAYABLESELFEMPLOYED');
     document.getElementById('annual_cpp_eresult').textContent = " $" + getCookie('CPPPAYABLEEMPLOYED');
