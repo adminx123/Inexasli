@@ -304,8 +304,7 @@ function getCookie(name) {
 document.addEventListener('DOMContentLoaded', function() {
     // Function to retrieve cookie value by name
 
-document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
-    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
+
     
 function updateOnChange(){    // Update HTML elements with cookie values
         document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
@@ -350,6 +349,9 @@ if (getCookie('RegionDropdown') === 'USA') {
         parseFloat(getCookie('ANNUALTAX'));
 }
 
+document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
+    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
+    
 // Update HTML element with the calculated value
 document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
 
