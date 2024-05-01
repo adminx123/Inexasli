@@ -369,8 +369,7 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
   document.getElementById('fire').textContent = FIRERATIO.toFixed(3);
   } 
 
-    document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
-    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
+    
     
   updateOnChange();
   
@@ -381,6 +380,8 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
         updateOnChange();
     
 });
+    document.getElementById('assets_sum').textContent = " $" + getCookie('ASSETS');
+    document.getElementById('liabilities_sum').textContent = " $" + getCookie('LIABILITIES');
 });
 
 
