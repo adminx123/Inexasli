@@ -244,10 +244,10 @@ button {
     <p>Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</p>
 </summary>
 <details>
-    <p><u>Assets:</u><span id="ASSETS"></span></p>
+    <p><u>Assets:</u><span id="assets_sum"></span></p>
     <p>Resources with economic value owned. Use: Wealth assessment, collateral for loans.</p>
    
-    <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
+    <p><u>Liabilities:</u><span id="liabilities_sum"></span></p>
     <p>Financial debts or obligations. Use: Debt management, financial strategy formulation.</p>
 </details>
 
@@ -367,8 +367,7 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
   document.getElementById('fire').textContent = FIRERATIO.toFixed(3);
   } 
   
-  updateOnChange();
-  
+ 
    // Add an event listener to the frequency dropdown
     const frequencyDropdown = document.getElementById('frequency');
     frequencyDropdown.addEventListener('change', function() {
