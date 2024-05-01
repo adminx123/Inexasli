@@ -499,7 +499,8 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var CPPPAYABLEEMPLOYED;
     var TOTALMEDICARE;
      var TOTALSOCIALSECURITY;
-
+    var TOTALSOCIALSECURITYSE;
+    var TOTALSOCIALSECURITYE;
 
     
 document.addEventListener('DOMContentLoaded', function() {
@@ -838,7 +839,10 @@ function getSocialSecurity() {
 
   // Total US equivalent tax
    TOTALSOCIALSECURITY = totalSocialSecurityTax;
+   TOTALSOCIALSECURITYSE = selfEmploymentSocialSecurityTax;
+TOTALSOCIALSECURITYE = employmentSocialSecurityTax;
 
+    
     // Update the DOM element with the calculated value
     document.getElementById('TOTALSOCIALSECURITY').textContent = '$' + TOTALSOCIALSECURITY.toFixed(2);
 }
