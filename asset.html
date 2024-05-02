@@ -100,15 +100,17 @@ button {
 }
 
 .tab {
-    padding: 10px 10px;
+    flex: 1; /* Make each tab equally spaced */
+    padding: 10px; /* Adjust padding as needed */
     cursor: pointer;
     background-color: black;
-    border: .01px solid;
+    border: 1px solid; /* Adjust border thickness as needed */
     border-radius: 5px 5px 0 0;
-    margin: 0 px; /* Adjust spacing between tabs */
+    margin: 0 5px; /* Adjust spacing between tabs */
     color: white; /* Set the text color to white */
+    text-align: center; /* Center-align text within the tab */
+    box-sizing: border-box; /* Include padding and border in the width */
 }
-
 /* Style for the active tab */
 .active {
     background-color: white;
