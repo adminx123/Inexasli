@@ -192,7 +192,26 @@ button {
     <p><u>Expense:</u> <span id="annual_expense_sum"></span></p>
     <p>Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</p>
 
-<u><p>Social Security Obligations</p></u>
+<p><u>Total Tax Payable:</u><span id="tax_sum"></span></p>
+    <p>Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</p>
+    <details>
+        <p><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
+    <p>Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</p>
+
+    <p><u>Regional Tax Payable:</u> <span id="region_tax_sum"></span></p>
+    <p>Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</p>
+
+    <p><u>Subregional Tax Payable:</u><span id="subregion_tax_sum"></span></p> 
+    <p>Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.</p>
+    
+    <div class="usa">
+        <p><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
+        <p>Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</p>
+    </div>
+    
+</details>
+    
+<u><p>Other Goverment Obligations: <span id="ANNUALGOVERNMENTOBLIGATIONS"></span></p></u>
 <details>
     <!-- CAN -->
     <div class="can">
@@ -212,8 +231,7 @@ button {
     <!-- USA -->
     <div class="usa">
         
-
-        <p><u>Social Security Total US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
+    <p><u>Social Security Total US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
         <p>Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</p>
 
         <p><u>Social Security Employed US:</u> <span id="TOTALSOCIALSECURITYE"></span></p>
@@ -229,24 +247,7 @@ button {
     </details>
     
     
-    <p><u>Total Tax Payable:</u><span id="tax_sum"></span></p>
-    <p>Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</p>
-    <details>
-        <p><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
-    <p>Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</p>
-
-    <p><u>Regional Tax Payable:</u> <span id="region_tax_sum"></span></p>
-    <p>Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</p>
-
-    <p><u>Subregional Tax Payable:</u><span id="subregion_tax_sum"></span></p> 
-    <p>Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.</p>
-    
-    <div class="usa">
-        <p><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
-        <p>Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</p>
-    </div>
-    
-</details></summary>
+    </summary>
 
 <summary>
     <h2>Net Worth <span id="NETWORTH"></span></h2>
@@ -371,6 +372,21 @@ if (getCookie('RegionDropdown') === 'USA') {
 // Update HTML element with the calculated value
 document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
 
+let ANNUALGOVERNMENTOBLIGATIONS;
+
+    if (getCookie('RegionDropdown') === 'USA') {
+    ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('TOTALSOCIALSECURITY')) +
+        parseFloat(getCookie('TOTALMEDICARE'));
+} else if (getCookie('RegionDropdown') === 'CAN') {
+    ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('ANNUALCPP')) +
+        parseFloat(getCookie('ANNUALEI'))  ;
+}
+
+// Update HTML element with the calculated value
+document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
+    
+
+    
     NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
 
