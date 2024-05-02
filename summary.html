@@ -423,9 +423,9 @@ document.addEventListener('change', function() {
 
     if (regionDropdownValue === 'USA') {
         usaDiv.style.display = 'block';
-        canDiv.style.display = 'none';
+        canDiv.style.display = 'hidden';
     } else if (regionDropdownValue === 'CAN') {
-        usaDiv.style.display = 'none';
+        usaDiv.style.display = 'hidden';
         canDiv.style.display = 'block';
     }
     document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
