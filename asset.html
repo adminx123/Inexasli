@@ -81,6 +81,12 @@ span {
         bottom: 0px; /* adjust as needed */
         right: 20px; /* adjust as needed */
     }
+
+   .button-container2 {
+        position: fixed;
+        bottom: 0px; /* adjust as needed */
+        right: 100px; /* adjust as needed */
+    }
 	   
 button {
     background-color: #4CAF50;
@@ -231,6 +237,9 @@ button {
 <button onclick="calculateNext()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
   </div>
 
+	 <div class = "button-container2">
+<button onclick="calculateBack()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Back</button>
+  </div>
 	
 <script>
 var ASSETS;
@@ -384,7 +393,11 @@ function calculateNext() {
   calculateAll();
   window.location.href = 'liability.html';
 }    
-   
+
+	function calculateBack() {
+  calculateAll();
+  window.location.href = 'expense.html';
+}    
 
     function calculateAll() {
         
