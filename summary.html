@@ -462,10 +462,35 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
 document.getElementById('HOUSINGTOINCOME').textContent = HOUSINGTOINCOME.toFixed(3); 
 colorChangeHTI(); 
 
+   SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
 
-    SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
- document.getElementById('savingstodebt').textContent = SAVINGSTODEBT.toFixed(3);
+function colorChangeSavingsToDebt() {
+    // Get the savings-to-debt ratio value
+    var savingsToDebtText = document.getElementById("SAVINGSTODEBT").textContent;
+    var savingsToDebt = parseFloat(savingsToDebtText);
 
+    // Define the ranges
+    var greatRange = 2; // Example threshold for "great" savings-to-debt ratio
+    var goodMinRange = 1; // Example lower threshold for "good" savings-to-debt ratio
+    var goodMaxRange = 2; // Example upper threshold for "good" savings-to-debt ratio
+
+    // Apply color based on the value
+    if (savingsToDebt >= greatRange) {
+        document.getElementById("SAVINGSTODEBT").style.color = "green";
+    } else if (savingsToDebt >= goodMinRange && savingsToDebt <= goodMaxRange) {
+        document.getElementById("SAVINGSTODEBT").style.color = "yellow";
+    } else {
+        document.getElementById("SAVINGSTODEBT").style.color = "red";
+    }
+}
+
+// Assuming "SAVINGSTODEBT" is the ID of the element displaying the savings-to-debt ratio
+document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
+colorChangeSavingsToDebt();
+
+
+
+    
   FIRERATIO = parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSESUM')); // Descriptive variable name
 
 function colorChangeFIRE() {
