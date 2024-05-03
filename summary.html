@@ -414,7 +414,7 @@ document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' -$' + ANN
 
 DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
         
- function colorChange() {
+ function colorChangeDTI() {
     // Get the debt-to-income ratio value
     var debtToIncomeText = document.getElementById("DEBTTOINCOME").textContent;
     var debtToIncome = parseFloat(debtToIncomeText);
@@ -434,10 +434,34 @@ DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNU
     }
 }
     document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3); 
-    colorChange();
+    colorChangeDTI();
     
 HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
-  document.getElementById('housingtoincome').textContent = HOUSINGTOINCOME.toFixed(3);
+
+    function colorChangeHTI() {
+    // Get the housing-to-income ratio value
+    var htiText = document.getElementById("HOUSINGTOINCOME").textContent;
+    var hti = parseFloat(htiText);
+
+    // Define the ranges
+    var greatRange = 25;
+    var okayMinRange = 25;
+    var okayMaxRange = 35;
+
+    // Apply color based on the value
+    if (hti < greatRange) {
+        document.getElementById("HOUSINGTOINCOME").style.color = "green";
+    } else if (hti >= okayMinRange && hti <= okayMaxRange) {
+        document.getElementById("HOUSINGTOINCOME").style.color = "yellow";
+    } else {
+        document.getElementById("HOUSINGTOINCOME").style.color = "red";
+    }
+}
+
+// Assuming HOUSINGTOINCOME is the ID of the element displaying HTI ratio
+document.getElementById('HOUSINGTOINCOME').textContent = HOUSINGTOINCOME.toFixed(3); 
+colorChangeHTI(); 
+
 
     SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
  document.getElementById('savingstodebt').textContent = SAVINGSTODEBT.toFixed(3);
