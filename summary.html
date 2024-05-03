@@ -411,11 +411,11 @@ document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
     
     // Apply color based on the value
     if (debtToIncome < greatRange) {
-        document.getElementById("DEBTTOINCOME").style.color = "green";
+        document.getElementById("DEBTTOINCOME").style.color = "green !important";
     } else if (debtToIncome >= goodMinRange && debtToIncome <= goodMaxRange) {
-        document.getElementById("DEBTTOINCOME").style.color = "yellow";
+        document.getElementById("DEBTTOINCOME").style.color = "yellow !important";
     } else {
-        document.getElementById("DEBTTOINCOME").style.color = "red";
+        document.getElementById("DEBTTOINCOME").style.color = "red !important";
     }
 }
     
