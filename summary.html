@@ -302,7 +302,7 @@ button {
     <p><u>Housing to Income:</u> <span id="HOUSINGTOINCOME"></span></p>
     <i>Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.</i>
 
-    <p><u>FIRE:</u> <span id="fire"></span></p>
+    <p><u>FIRE:</u> <span id="FIRE"></span></p>
     <i>Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</i>
 </details>
 
@@ -467,7 +467,36 @@ colorChangeHTI();
  document.getElementById('savingstodebt').textContent = SAVINGSTODEBT.toFixed(3);
 
   FIRERATIO = parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSESUM')); // Descriptive variable name
-  document.getElementById('fire').textContent = FIRERATIO.toFixed(3);
+
+// Calculate the FIRE ratio (Financial Independence, Retire Early)
+var FIRERatio = parseFloat(getCookie('ASSETS')) / parseFloat(getCookie('EXPENSES'));
+
+function colorChangeFIRE() {
+    // Get the FIRE ratio value
+    var FIREText = document.getElementById("FIRERATIO").textContent;
+    var FIRE = parseFloat(FIREText);
+
+    // Define the ranges for FIRE ratio
+    var greatRange = 25; // Example threshold for "great" FIRE ratio
+    var okayMinRange = 15; // Example lower threshold for "okay" FIRE ratio
+    var okayMaxRange = 25; // Example upper threshold for "okay" FIRE ratio
+
+    // Apply color based on the value
+    if (FIRE >= greatRange) {
+        document.getElementById("FIRERATIO").style.color = "green";
+    } else if (FIRE >= okayMinRange && FIRE <= okayMaxRange) {
+        document.getElementById("FIRERATIO").style.color = "yellow";
+    } else {
+        document.getElementById("FIRERATIO").style.color = "red";
+    }
+}
+
+// Assuming FIRERATIO is the ID of the element displaying the FIRE ratio
+document.getElementById('FIRERATIO').textContent = FIRERatio.toFixed(3);
+colorChangeFIRE();
+
+    
+    document.getElementById('FIRE').textContent = FIRERATIO.toFixed(3);
   } 
   
   updateOnChange();
