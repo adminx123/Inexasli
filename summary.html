@@ -169,83 +169,85 @@ button {
         <a href="http://inexasli.com/liability.html" class="tab">Liability</a>
             </div>
   
-<div>
+
    
-    <select id="frequency">
+   <div style="text-align:center;"><select id="frequency">
         <option value="annual">Annual Frequency</option>
         <option value="monthly">Monthly Frequency</option>
         <option value="weekly">Weekly Frequency</option>
-    </select>
-</div>
+    </select></div>
+    
+
 
     
    
     <h2> <span id="RegionDropdown"></span>
         <span id="SubregionDropdown"></span></h2>
-        <p> Residence for tax and obligatory purposes</p>
+        <i>Residence for tax and obligatory purposes</i>
  
          <summary>
     <h2>Disposable Income:<span id="ANNUALDISPOSABLEINCOME"></span></h2>
-    <p>Income left after expenses, taxes & other obligations. Use: Discretionary spending, savings, investments.</p>
+    <i>Income left after expenses, taxes & other obligations. Use: Discretionary spending, savings, investments.</i>
 
 <details>
     <p style=" margin-left: 20px;"><u>Income:</u> <span id="annual_income_sum"></span></p>
-    <p>Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</p>
+    <i>Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</i>
 
     <p style=" margin-left: 20px;"><u>Expense:</u> <span id="annual_expense_sum"></span></p>
-    <p>Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</p>
+    <i>Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</i>
 
 <p style=" margin-left: 20px;"><u>Total Tax Payable:</u><span id="tax_sum"></span></p>
-    <p>Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</p>
+    <i>Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</i>
     <details>
         <p style=" margin-left: 60px;"><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
-    <p style=" margin-left: 60px;">Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</p>
+    <i style=" margin-left: 60px;">Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</i>
 
     <p style=" margin-left: 60px;"><u>Regional Tax Payable:</u> <span id="region_tax_sum"></span></p>
-    <p style=" margin-left: 60px;">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</p>
+    <i style=" margin-left: 60px;">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</i>
 
     <p style=" margin-left: 60px;"><u>Subregional Tax Payable:</u><span id="subregion_tax_sum"></span></p> 
-    <p style=" margin-left: 60px;">Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.</p>
+    <i style=" margin-left: 60px;">Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.</i>
     
     <div class="usa">
         <p style=" margin-left: 60px;"><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
-        <p style=" margin-left: 60px;">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</p>
+        <i style=" margin-left: 60px;">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</i>
     </div>
     
 </details>
     
-<u><p style=" margin-left: 20px;">Other Obligations:</u><span id="ANNUALGOVERNMENTOBLIGATIONS"></span></p>
+<p style=" margin-left: 20px;"><u>Other Obligations:</u><span id="ANNUALGOVERNMENTOBLIGATIONS"></span></p>
+
 <details>
     <!-- CAN -->
     <div class="can">
         <p style=" margin-left: 60px;"><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
-        <p style=" margin-left: 60px;">Canada Pension Plan contributions for self-employed individuals. Use: Retirement planning for self-employed.</p>
+        <i style=" margin-left: 60px;">Canada Pension Plan contributions for self-employed individuals. Use: Retirement planning for self-employed.</i>
 
         <p style=" margin-left: 60px;"><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
-        <p style=" margin-left: 60px;">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</p>
+        <i style=" margin-left: 60px;">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</i>
 
         <p style=" margin-left: 60px;"><u>Total CPP Payable:</u> <span id="cpp_sum"></span></p>
-        <p style=" margin-left: 60px;">General contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the government on your behalf.</p>
+        <i style=" margin-left: 60px;">General contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the government on your behalf.</i>
 
         <p style=" margin-left: 60px;"><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
-        <p style=" margin-left: 60px;">Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</p>
+        <i style=" margin-left: 60px;">Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</i>
     </div>
 
     <!-- USA -->
     <div class="usa">
         
     <p style=" margin-left: 60px;">    <u>Social Security Total US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
-        <p style=" margin-left: 60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</p>
+        <i style=" margin-left: 60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</i>
 
         <p style=" margin-left: 60px;">    <u>Social Security Employed US:</u> <span id="TOTALSOCIALSECURITYE"></span></p>
-        <p style=" margin-left: 60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</p>
+        <i style=" margin-left: 60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</i>
 
                 <p style=" margin-left: 60px;">    <u>Social Security Self Employed US:</u> <span id="TOTALSOCIALSECURITYSE"></span></p>
-        <p style=" margin-left: 60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</p>
+        <i style=" margin-left: 60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</i>
 
         
         <p style=" margin-left: 60px;">    <u>Medicare:</u> <span id="TOTALMEDICARE"></span></p>
-        <p style=" margin-left: 60px;">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use: Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals.</p>
+        <i style=" margin-left: 60px;">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use: Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals.</i>
     </div>
     </details>
     
@@ -254,37 +256,38 @@ button {
 
 <summary>
     <h2>Net Worth <span id="NETWORTH"></span></h2>
-    <p>Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</p>
+    <i>Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</i>
 
 
 
 <details>
     <p style= margin-left: 40px;"><u>Assets:</u><span id="ASSETS"></span></p>
-    <p style= margin-left: 40px;">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</p>
+    <i style= margin-left: 40px;">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</i>
    
     <p style= margin-left: 40px;"><u>Liabilities:</u><span id="LIABILITIES"></span></p>
-    <p style= margin-left: 40px;">Financial debts or obligations. Use: Debt management, financial strategy formulation.</p>
+    <i style= margin-left: 40px;">Financial debts or obligations. Use: Debt management, financial strategy formulation.</i>
     
 </details></summary>
 
 <summary>
     <h2>Ratios</h2>
 </summary>
-<span class="tooltiptext">
-    Ratios serve to provide a quantitative comparison between two relevant financial metrics. They offer insights into various aspects of financial health, such as debt management, savings efficiency, affordability, and progress towards financial goals.
-</span>
+
+<i>    Ratios serve to provide a quantitative comparison between two relevant financial metrics. They offer insights into various aspects of financial health, such as debt management, savings efficiency, affordability, and progress towards financial goals.</i>
+
+
 <details>
     <p><u>Debt to Income:</u> <span id="DEBTTOINCOME"></span></p>
-    <p>Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health.</p>
+    <i>Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health.</i>
 
     <p><u>Savings to Debt:</u> <span id="savingstodebt"></span></p>
-    <p>Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.</p>
+    <i>Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.</i>
 
     <p><u>Housing to Income:</u> <span id="housingtoincome"></span></p>
-    <p>Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.</p>
+    <i>Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.</i>
 
     <p><u>FIRE:</u> <span id="fire"></span></p>
-    <p>Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</p>
+    <i>Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</i>
 </details>
 
        
