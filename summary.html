@@ -47,7 +47,12 @@
 
 
     
-
+    body {
+    background-color: #000;
+    color: #fff;
+    text-align: left;
+    margin: 20px;
+}
 
 .row {
     display: flex;
@@ -271,7 +276,7 @@ button {
 <i>    Ratios serve to provide a quantitative comparison between two relevant financial metrics. They offer insights into various aspects of financial health, such as debt management, savings efficiency, affordability, and progress towards financial goals.</i>
 
 
-
+<details>
     <p><u>Debt to Income:</u> <span id="DEBTTOINCOME"></span></p>
     <i>Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health.</i>
 
@@ -283,7 +288,7 @@ button {
 
     <p><u>FIRE:</u> <span id="fire"></span></p>
     <i>Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</i>
-
+</details>
 
        
   
@@ -393,27 +398,7 @@ document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' -$' + ANN
 
 DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
         document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
-    
- function colorChange() {
-    // Get the debt-to-income ratio value
-    var debtToIncome = parseFloat(document.getElementById("DEBTTOINCOME").textContent);
-    
-    // Define the ranges
-    var greatRange = 20;
-    var goodMinRange = 20;
-    var goodMaxRange = 36;
-    
-    // Apply color based on the value
-    if (debtToIncome < greatRange) {
-        document.getElementById("DEBTTOINCOME").style.color = "green";
-    } else if (debtToIncome >= goodMinRange && debtToIncome <= goodMaxRange) {
-        document.getElementById("DEBTTOINCOME").style.color = "yellow";
-    } else {
-        document.getElementById("DEBTTOINCOME").style.color = "red";
-    }
-}
 
-    
 HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
   document.getElementById('housingtoincome').textContent = HOUSINGTOINCOME.toFixed(3);
 
