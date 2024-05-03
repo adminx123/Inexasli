@@ -440,24 +440,6 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
     
 });
 
-function colorChange() {
-            // Get the debt-to-income ratio value
-            var debtToIncome = parseFloat(document.getElementById("DEBTTOINCOME").textContent);
-            
-            // Define the ranges
-            var greatRange = 20;
-            var goodMinRange = 20;
-            var goodMaxRange = 36;
-            
-            // Apply color based on the value
-            if (debtToIncome < greatRange) {
-                document.getElementById("DEBTTOINCOME").style.color = "green";
-            } else if (debtToIncome >= goodMinRange && debtToIncome <= goodMaxRange) {
-                document.getElementById("DEBTTOINCOME").style.color = "yellow";
-            } else {
-                document.getElementById("DEBTTOINCOME").style.color = "red";
-            }
-        };
 
 
 });
