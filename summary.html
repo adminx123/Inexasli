@@ -499,9 +499,9 @@ function colorChangeFIRE() {
     var FIRE = parseFloat(FIREText);
 
     // Define the ranges for FIRE ratio
-    var greatRange = 25; // Example threshold for "great" FIRE ratio
-    var okayMinRange = 15; // Example lower threshold for "okay" FIRE ratio
-    var okayMaxRange = 25; // Example upper threshold for "okay" FIRE ratio
+    var greatRange = .25; // Example threshold for "great" FIRE ratio
+    var okayMinRange = .10; // Example lower threshold for "okay" FIRE ratio
+    var okayMaxRange = .25; // Example upper threshold for "okay" FIRE ratio
 
     // Apply color based on the value
     if (FIRE >= greatRange) {
