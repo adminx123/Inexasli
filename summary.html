@@ -153,22 +153,6 @@ button {
         gap: 20px;
     }
 
-
-       .debt-ratio {
-  /* Default color for the value */
-}
-
-.good {
-  color: green;
-}
-
-.warning {
-  color: yellow;
-}
-
-.critical {
-  color: red;
-}
     </style>
 </head>
 
@@ -299,10 +283,10 @@ button {
     <p><u>Savings to Debt:</u> <span id="savingstodebt"></span></p>
     <i>Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.</i>
 
-    <p><u>Housing to Income:</u> <span id="HOUSINGTOINCOME"></span></p>
+    <p><u>Housing to Income:</u> <span id="housingtoincome"></span></p>
     <i>Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.</i>
 
-    <p><u>FIRE:</u> <span id="FIRERATIO"></span></p>
+    <p><u>FIRE:</u> <span id="fire"></span></p>
     <i>Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</i>
 </details>
 
@@ -413,86 +397,17 @@ document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' -$' + ANN
     document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
 
 DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
-        
- function colorChangeDTI() {
-    // Get the debt-to-income ratio value
-    var debtToIncomeText = document.getElementById("DEBTTOINCOME").textContent;
-    var debtToIncome = parseFloat(debtToIncomeText);
+        document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
 
-    // Define the ranges
-    var greatRange = 20;
-    var goodMinRange = 20;
-    var goodMaxRange = 36;
-    
-    // Apply color based on the value
-    if (debtToIncome < greatRange) {
-        document.getElementById("DEBTTOINCOME").style.color = "green";
-    } else if (debtToIncome >= goodMinRange && debtToIncome <= goodMaxRange) {
-        document.getElementById("DEBTTOINCOME").style.color = "yellow";
-    } else {
-        document.getElementById("DEBTTOINCOME").style.color = "red";
-    }
-}
-    document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3); 
-    colorChangeDTI();
-    
 HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
-
-    function colorChangeHTI() {
-    // Get the housing-to-income ratio value
-    var htiText = document.getElementById("HOUSINGTOINCOME").textContent;
-    var hti = parseFloat(htiText);
-
-    // Define the ranges
-    var greatRange = 25;
-    var okayMinRange = 25;
-    var okayMaxRange = 35;
-
-    // Apply color based on the value
-    if (hti < greatRange) {
-        document.getElementById("HOUSINGTOINCOME").style.color = "green";
-    } else if (hti >= okayMinRange && hti <= okayMaxRange) {
-        document.getElementById("HOUSINGTOINCOME").style.color = "yellow";
-    } else {
-        document.getElementById("HOUSINGTOINCOME").style.color = "red";
-    }
-}
-
-// Assuming HOUSINGTOINCOME is the ID of the element displaying HTI ratio
-document.getElementById('HOUSINGTOINCOME').textContent = HOUSINGTOINCOME.toFixed(3); 
-colorChangeHTI(); 
-
+  document.getElementById('housingtoincome').textContent = HOUSINGTOINCOME.toFixed(3);
 
     SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
  document.getElementById('savingstodebt').textContent = SAVINGSTODEBT.toFixed(3);
 
   FIRERATIO = parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSESUM')); // Descriptive variable name
-
-function colorChangeFIRE() {
-    // Get the FIRE ratio value
-    var FIREText = document.getElementById("FIRERATIO").textContent;
-    var FIRE = parseFloat(FIREText);
-
-    // Define the ranges for FIRE ratio
-    var greatRange = 25; // Example threshold for "great" FIRE ratio
-    var okayMinRange = 15; // Example lower threshold for "okay" FIRE ratio
-    var okayMaxRange = 25; // Example upper threshold for "okay" FIRE ratio
-
-    // Apply color based on the value
-    if (FIRE >= greatRange) {
-        document.getElementById("FIRERATIO").style.color = "green";
-    } else if (FIRE >= okayMinRange && FIRE <= okayMaxRange) {
-        document.getElementById("FIRERATIO").style.color = "yellow";
-    } else {
-        document.getElementById("FIRERATIO").style.color = "red";
-    }
-}
-
-// Assuming FIRERATIO is the ID of the element displaying the FIRE ratio
-document.getElementById('FIRERATIO').textContent = FIRERATIO.toFixed(3);
-colorChangeFIRE();
-
-
+  document.getElementById('fire').textContent = FIRERATIO.toFixed(3);
+  } 
   
   updateOnChange();
   
