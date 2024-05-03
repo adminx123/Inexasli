@@ -155,34 +155,7 @@ button {
 <!-- <button onclick="calculateAll();" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
 -->
     
-        <script>
-const regionDropdown = document.getElementById("RegionDropdown");
-const subregionDropdown = document.getElementById("SubregionDropdown");
-
-const subregionMap = {
-  CAN: ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
-  USA: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
-};
-
-function updateSubregionDropdown() {
-  const selectedRegion = regionDropdown.value;
-
-  subregionDropdown.innerHTML = ""; // Clear existing options
-
-  if (selectedRegion in subregionMap) {
-    subregionMap[selectedRegion].forEach(subregionCode => {
-      const subregionOption = document.createElement("option");
-      subregionOption.text = subregionCode;
-      subregionOption.value = subregionCode;
-      subregionDropdown.appendChild(subregionOption);
-    });
-  }
-    
-}
-
-regionDropdown.addEventListener("change", updateSubregionDropdown);
-
-</script>
+      
     
 <h2 style="text-align: center;">INCOME, PRE-TAX & CONTRIBUTION</h2>
 
@@ -474,7 +447,34 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     
       <div style="text-align: right;"><button onclick="validatecheckbox()" style=" border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">&gt;</button></div>
 
+      <script>
+const regionDropdown = document.getElementById("RegionDropdown");
+const subregionDropdown = document.getElementById("SubregionDropdown");
+
+const subregionMap = {
+  CAN: ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
+  USA: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+};
+
+function updateSubregionDropdown() {
+  const selectedRegion = regionDropdown.value;
+
+  subregionDropdown.innerHTML = ""; // Clear existing options
+
+  if (selectedRegion in subregionMap) {
+    subregionMap[selectedRegion].forEach(subregionCode => {
+      const subregionOption = document.createElement("option");
+      subregionOption.text = subregionCode;
+      subregionOption.value = subregionCode;
+      subregionDropdown.appendChild(subregionOption);
+    });
+  }
     
+}
+
+regionDropdown.addEventListener("change", updateSubregionDropdown);
+
+</script>
     
 <script>
    
