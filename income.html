@@ -151,14 +151,6 @@ button {
     </div> -->
 
     
-    <select id="RegionDropdown">
-        <option value="NONE">Select Tax Region</option> 
-        <option value="CAN">Canada</option>
-        <option value="USA">USA</option>
-    </select>
-    
-    <select id="SubregionDropdown">
-        <option value="">Select Tax Subregion</option> </select>
 
 <!-- <button onclick="calculateAll();" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
 -->
@@ -193,6 +185,17 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 </script>
     
 <h2 style="text-align: center;">INCOME, PRE-TAX & CONTRIBUTION</h2>
+
+<div style=" padding-bottom: 10px;"><select id="RegionDropdown">
+        <option value="NONE">Select Tax Region</option> 
+        <option value="CAN">Canada</option>
+        <option value="USA">USA</option>
+    </select></div>
+    
+    <div style=" padding-bottom: 10px;">
+    <select id="SubregionDropdown">
+        <option value="">Select Tax Subregion</option> </select></div>
+    
 
 <div class ="row">
 <label for="income_salary_wages">Salary/Wages:</label>
@@ -469,8 +472,8 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
 
     </div>
     
-      
-<button onclick="validatecheckbox()" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Next</button>
+      <div style="text-align: right;"><button onclick="validatecheckbox()" style=" border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">&gt;</button></div>
+
     
     
 <script>
