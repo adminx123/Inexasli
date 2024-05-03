@@ -396,7 +396,11 @@ document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' -$' + ANN
     NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
 
-function colorChange() {
+// Calculate debt-to-income ratio and update content
+var DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
+document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
+
+    function colorChange() {
     // Get the debt-to-income ratio value
     var debtToIncome = parseFloat(document.getElementById("DEBTTOINCOME").textContent);
     
@@ -414,11 +418,6 @@ function colorChange() {
         document.getElementById("DEBTTOINCOME").style.color = "red";
     }
 }
-
-// Calculate debt-to-income ratio and update content
-var DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
-document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
-
 
 HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
   document.getElementById('housingtoincome').textContent = HOUSINGTOINCOME.toFixed(3);
