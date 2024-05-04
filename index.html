@@ -1,76 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>INEXASLI</title>
-     <link rel="icon" type="image/x-icon" href="Logo.ico">
+    <link rel="icon" type="image/x-icon" href="Logo.ico">
     <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center; 
-            height: 100vh;
-            margin: 0;
-        }
+      body {
+        background-color: #000;
+        color: #fff;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0
+      }
 
-        img {
-            max-width: 75%;
-            height: auto;
-            cursor: pointer;
-        }
+      img {
+        max-width: 75%;
+        height: auto;
+        cursor: pointer
+      }
 
-        h1 {
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
+      h1 {
+        margin-top: 5px;
+        margin-bottom: 5px
+      }
 
-       
+ #addToHomeScreenBanner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    justify-content: space-around; /* Change to space-around for symmetrical spacing */
+    align-items: center;
+    padding: 10px;
+}
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
+#addToHomeScreenBanner p {
+    margin: 0; /* Remove default margin for the paragraph */
+}
+
+#addToHomeScreenBanner button {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 10px 20px; /* Adjust padding for symmetrical size */
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 
     </style>
-</head>
-
-<body>
-
-        <img src="Logo.png" alt="Your Logo">
- <h1 style="font-size: 48px;">Empowering Thee</h1>
-<!-- <h1 style="text-align: center; font-family: Helvetica; font-size: 30px;">The Four Pillars of Finance: </h1>
-    <h1 style="text-align: center; font-size:18px;">Income - Expenses - Assets - Liabilities</h1>
-    -->
-
-    
-</body>
-
-    <script>
+  </head>
+  <body>
+    <div id="addToHomeScreenBanner">
+      <p>Download the Web App</p>
+      <button>Install</button>
+    </div>
+    <img src="Logo.png" alt="Your Logo">
+    <h1 style="font-size:48px">Empowering Thee</h1>
+ 
+  
+  <script>
+  
+  
     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then(function(registration) {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                })
-                .catch(function(err) {
-                    console.error('ServiceWorker registration failed: ', err);
-                });
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }).catch(function(err) {
+          console.error('ServiceWorker registration failed: ', err);
         });
+      });
     }
 
-</script>
-
+    function addToHomeScreen() {
+      // Check if browser supports adding to home screen
+      if (navigator.homescreen !== undefined) {
+        // If supported, prompt user to add
+        navigator.homescreen.getManifest().then(() => {
+          // User has already added to home screen, hide banner (optional)
+          document.getElementById("addToHomeScreenBanner").style.display = "none";
+        }).catch(() => {
+          // User has not added yet, display prompt
+          alert("Click 'Add to Home Screen' to launch this website like an app.");
+        });
+      } else {
+        // Not supported, display message
+        alert("This browser does not support adding to Home Screen.");
+      }
+    }
+    // Add event listener to the button
+    const addToHomeScreenButton = document.getElementById("addToHomeScreenBanner").querySelector("button");
+    addToHomeScreenButton.addEventListener("click", addToHomeScreen);
+  </script>
+   </body>
 </html>
