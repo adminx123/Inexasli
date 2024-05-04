@@ -449,6 +449,22 @@ button {
       <div style="text-align: right;"><button onclick="validatecheckbox()" style=" border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">&gt;</button></div>
 
       <script>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(function(err) {
+                    console.error('ServiceWorker registration failed: ', err);
+                });
+        });
+    }
+</script>
+
+          
 const regionDropdown = document.getElementById("RegionDropdown");
 const subregionDropdown = document.getElementById("SubregionDropdown");
 
