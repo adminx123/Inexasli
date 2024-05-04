@@ -1,6 +1,24 @@
 // Service Worker Logic
 self.addEventListener('install', function(event) {
     // Perform install steps, like caching assets
+    event.waitUntil(
+        caches.open('app-cache').then(function(cache) {
+            return cache.addAll([
+                '/',
+                '/index.html',
+                '/styles/main.css',
+                '/scripts/main.js',
+                '/images/logo.png',
+                '/logo.ico',
+                '/asset.html',
+                '/expense.html',
+                '/liability.html',
+                '/income.html',
+                '/legal.txt',
+                '/summary.html'
+            ]);
+        })
+    );
     console.log('Service Worker installed');
 });
 
