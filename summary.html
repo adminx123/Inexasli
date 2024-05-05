@@ -362,10 +362,10 @@ function updateOnChange(){    // Update HTML elements with cookie values
     document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME');
     document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX');
     document.getElementById('subregion_tax_sum').textContent = " $" + getCookie('ANNUALSUBREGIONALTAX');
-    document.getElementById('tax_sum').textContent = " -$" + getCookie('ANNUALTAX');
+    document.getElementById('tax_sum').textContent = " $" + getCookie('ANNUALTAX');
         
     document.getElementById('annual_income_sum').textContent = " $" + getCookie('ANNUALINCOME');
-    document.getElementById('annual_expense_sum').textContent = " -$" + getCookie('ANNUALEXPENSESUM');
+    document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM');
     document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP');
     document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI');
     
@@ -415,7 +415,7 @@ let ANNUALGOVERNMENTOBLIGATIONS;
 }
 
 // Update HTML element with the calculated value
-document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' -$' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
+document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
     
 
     
