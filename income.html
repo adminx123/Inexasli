@@ -8,47 +8,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income</title>
          <link rel="icon" type="image/x-icon" href="Logo.png">
- 
  <style>
-     
- /* Modal styles */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-}
+    
+     /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+         cursor: pointer;
+    }
 
-.modal-content {
-    background-color: #000000;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
+    .modal-content {
+        background-color: #000000;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
 
-/* Close button styles */
-.close {
-    color: #FFFFFF;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
+    /* Close button styles */
+    .close {
+        color: #FFFFFF;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
 
-.close:hover,
-.close:focus {
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
-}
+    .close:hover,
+    .close:focus {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-body {
+
+    
+    body {
     background-color: #000;
     color: #fff;
     text-align: left;
@@ -61,17 +62,11 @@ body {
     margin-bottom: 10px;
 }
 
-label {
-    width: 100px; /* Set a fixed width for labels */
-    flex-shrink: 0; /* Prevent labels from shrinking */
-    text-align: right; /* Align label text to the right */
-    margin-right: 10px; /* Adjust margin between label and input */
-}
-
+label,
 input[type="number"],
 select {
-    width: 150px; /* Set a fixed width for number inputs and selects */
-    margin-right: 10px; /* Adjust margin between inputs and selects */
+    flex: 1; /* Equal width for all elements */
+    margin-right: 10px;
 }
 
 span {
@@ -89,12 +84,13 @@ button {
     margin-top: 20px;
 }
 
-.button-container {
-    position: fixed;
-    bottom: 0px; /* adjust as needed */
-    right: 20px; /* adjust as needed */
-}
-
+     
+      .button-container {
+        position: fixed;
+        bottom: 0px; /* adjust as needed */
+        right: 20px; /* adjust as needed */
+    }
+     
 .tab-container {
     display: flex;
     justify-content: center; /* Center-align tabs */
@@ -118,15 +114,11 @@ button {
 
 /* Media Query for smaller screens (e.g., mobile) */
 @media (max-width: 768px) {
-    label {
-        width: auto; /* Reset label width for smaller screens */
-        text-align: left; /* Align label text to the left for smaller screens */
-        margin-right: 5px; /* Adjust margin between label and input */
-    }
+    label,
     input[type="number"],
     select {
         width: 100%; /* Set width to 100% for smaller screens */
-        margin-right: 5px; /* Adjust margin between inputs and selects */
+        margin-right: 1; /* Remove margin between elements */
     }
 }
 
@@ -140,12 +132,12 @@ button {
 }
 
 .container {
-    display: none;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
-</style>
- 
+        display:none;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    </style>
 </head>
 
 <body>
@@ -177,7 +169,7 @@ button {
         <option value="">Select Tax Subregion</option> </select></div>
     
 
-<h2>Employment/Self Employment/Investment Income</h2>
+<h2 style="text-align: center;">Employment/Self Employment/Investment Income</h2>
 
 <div class ="row">
 <label for="income_salary_wages">Salary/Wages:</label>
@@ -263,7 +255,20 @@ button {
 <span id="income_owner_dividend_annual"></span>
 </div>
 
-<h2>Retirement/Social Benefit Income</h2>
+    <div class ="row">
+<label for="income_venture_capital">Venture:</label>
+<input type="number" id="income_venture_capital">
+<select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
+</select>
+<span id="income_venture_capital_annual"></span>
+</div>
+
+
+<h2 style="text-align: center;">Retirement/Social Benefit Income</h2>
 
 <div class ="row">
 <label for="income_federal_pension">Pension: Federal</label>
@@ -314,19 +319,8 @@ button {
 </div>
 
 
-<div class ="row">
-<label for="income_venture_capital">Venture:</label>
-<input type="number" id="income_venture_capital">
-<select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_venture_capital_annual"></span>
-</div>
 
-    <h2>Passive Income</h2>
+    <h2 style ="text-align:center;">Passive Income</h2>
     
     <div class ="row">
 <label for="income_investment_property">Investment Property:</label>
@@ -403,7 +397,7 @@ button {
 </div>
 
 
-    <h2>Other Income</h2>
+    <h2 style ="text-align:center;">Other Income</h2>
 
 
 <div class ="row">
