@@ -1501,7 +1501,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const regionDropdown = document.getElementById('RegionDropdown');
 
     // Set RegionDropdown value from cookie or default to "Select"
-    regionDropdown.value = getCookie('RegionDropdown') || "Select Tax Region";
+regionDropdown.value = getCookie('RegionDropdown') || regionDropdown.options[0].value;
     
     // Your other code goes here...
 
