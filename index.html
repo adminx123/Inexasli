@@ -74,16 +74,7 @@
   
   <script>
   
-  
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }).catch(function(err) {
-          console.error('ServiceWorker registration failed: ', err);
-        });
-      });
-    }
+
 
     function addToHomeScreen() {
       // Check if browser supports adding to home screen
