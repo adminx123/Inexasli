@@ -255,6 +255,19 @@ button {
 <span id="income_owner_dividend_annual"></span>
 </div>
 
+    <div class ="row">
+<label for="income_venture_capital">Venture:</label>
+<input type="number" id="income_venture_capital">
+<select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
+</select>
+<span id="income_venture_capital_annual"></span>
+</div>
+
+
 <h2 style="text-align: center;">Retirement/Social Benefit Income</h2>
 
 <div class ="row">
@@ -306,17 +319,6 @@ button {
 </div>
 
 
-<div class ="row">
-<label for="income_venture_capital">Venture:</label>
-<input type="number" id="income_venture_capital">
-<select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_venture_capital_annual"></span>
-</div>
 
     <h2 style ="text-align:center;">Passive Income</h2>
     
