@@ -157,7 +157,7 @@ button {
 <!-- <button onclick="calculateAll();" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
 -->
     
-
+<p>Select Region & Subregion:</p>
 <div style=" padding-bottom: 10px;"><select id="RegionDropdown">
         <option value="NONE">Select Tax Region</option> 
         <option value="CAN">Canada</option>
@@ -1497,15 +1497,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-// Get RegionDropdown element
-    const regionDropdown = document.getElementById('RegionDropdown');
-
-    // Set RegionDropdown value from cookie or default to "Select"
-regionDropdown.value = getCookie('RegionDropdown') || regionDropdown.options[0].value;
-    
-    // Your other code goes here...
-
-       // document.getElementById('RegionDropdown').value = getCookie('RegionDropdown');
+    document.getElementById('RegionDropdown').value = getCookie('RegionDropdown');
     document.getElementById('RegionDropdown').dispatchEvent(new Event('change')); // Manually trigger change event
 document.getElementById('SubregionDropdown').value = getCookie('SubregionDropdown');
     
