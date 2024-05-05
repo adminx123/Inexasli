@@ -1496,6 +1496,13 @@ document.addEventListener('DOMContentLoaded', function() {
             return 'annually';
         }
     }
+
+// Get RegionDropdown element
+    const regionDropdown = document.getElementById('RegionDropdown');
+
+    // Set RegionDropdown value from cookie or default to "Select"
+    regionDropdown.value = getCookie('RegionDropdown') || "Select";
+    
     // Your other code goes here...
 
         document.getElementById('RegionDropdown').value = getCookie('RegionDropdown');
