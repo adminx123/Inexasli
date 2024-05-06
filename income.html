@@ -137,6 +137,26 @@ button {
         gap: 20px;
     }
 
+
+
+#income_salary_wages {
+  /* Style the input field as needed */
+}
+
+#income_salary_wages::placeholder {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+     
     </style>
 </head>
 
@@ -522,32 +542,9 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var TOTALSOCIALSECURITYSE;
     var TOTALSOCIALSECURITYE;
 
-
-    const salaryInput = document.getElementById("income_salary_wages");
-const frequencySelect = document.getElementById("income_salary_wages_frequency");
-
-// Add placeholder animation for input
-salaryInput.addEventListener("focus", () => {
-  salaryInput.placeholder = ""; // Remove default placeholder
-  setTimeout(() => {
-    salaryInput.placeholder = "Enter amount here"; // Add animated placeholder
-  }, 100); // Adjust delay for animation effect (optional)
-});
-
-salaryInput.addEventListener("blur", () => {
-  salaryInput.placeholder = ""; // Remove placeholder on blur
-});
-
-// Add annotation for frequency selection
-const frequencyLabel = document.createElement("label");
-frequencyLabel.textContent = "Select the frequency of the amount";
-frequencyLabel.setAttribute("for", "income_salary_wages_frequency");
-frequencyLabel.style.fontSize = "smaller"; // Adjust styling as needed
-
-frequencySelect.parentNode.insertBefore(frequencyLabel, frequencySelect);
-
-
-    
+const salaryInput = document.getElementById("income_salary_wages");
+salaryInput.placeholder = "ENTER VALUE";
+      
 document.addEventListener('DOMContentLoaded', function() {
     var USAHIDE = document.querySelector('.USAHIDE');
     
