@@ -137,29 +137,6 @@ button {
         gap: 20px;
     }
 
-
-
-#income_salary_wages {
-  /* Style the input field as needed */
-}
-
-#income_salary_wages::placeholder {
-  /* Ensure important property for blinking */
-  color: inherit;
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-
-     
     </style>
 </head>
 
@@ -545,9 +522,7 @@ regionDropdown.addEventListener("change", updateSubregionDropdown);
     var TOTALSOCIALSECURITYSE;
     var TOTALSOCIALSECURITYE;
 
-const salaryInput = document.getElementById("income_salary_wages");
-salaryInput.placeholder = "ENTER VALUE";
-      
+    
 document.addEventListener('DOMContentLoaded', function() {
     var USAHIDE = document.querySelector('.USAHIDE');
     
