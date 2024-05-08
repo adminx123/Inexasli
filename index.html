@@ -82,6 +82,15 @@ Just as you reference your daily calorie intake to make informed dietary choices
   <script>
  
 
+if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+
+
+
+
 
     function addToHomeScreen() {
       // Check if browser supports adding to home screen
