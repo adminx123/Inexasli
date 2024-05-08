@@ -469,7 +469,13 @@ button {
       
 
 <script>
+if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
 
+    
 var ANNUALTAXABLEINCOME;
     var ANNUALREGIONALTAX;
     var ANNUALSUBREGIONALTAX;
