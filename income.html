@@ -469,39 +469,8 @@ button {
       
 
 <script>
-    
-          
-const regionDropdown = document.getElementById("RegionDropdown");
-const subregionDropdown = document.getElementById("SubregionDropdown");
 
-const subregionMap = {
-  CAN: ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
-  USA: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
-};
-
-function updateSubregionDropdown() {
-  const selectedRegion = regionDropdown.value;
-
-  subregionDropdown.innerHTML = ""; // Clear existing options
-
-  if (selectedRegion in subregionMap) {
-    subregionMap[selectedRegion].forEach(subregionCode => {
-      const subregionOption = document.createElement("option");
-      subregionOption.text = subregionCode;
-      subregionOption.value = subregionCode;
-      subregionDropdown.appendChild(subregionOption);
-    });
-  }
-    
-}
-
-regionDropdown.addEventListener("change", updateSubregionDropdown);
-
-</script>
-    
-<script>
-   
-    var ANNUALTAXABLEINCOME;
+var ANNUALTAXABLEINCOME;
     var ANNUALREGIONALTAX;
     var ANNUALSUBREGIONALTAX;
     var TOTALTAXCG;
@@ -594,10 +563,35 @@ document.addEventListener('click', closeModal);
     if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
         closeModal();
     }
-});
+});    
+          
+const regionDropdown = document.getElementById("RegionDropdown");
+const subregionDropdown = document.getElementById("SubregionDropdown");
 
+const subregionMap = {
+  CAN: ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
+  USA: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+};
+
+function updateSubregionDropdown() {
+  const selectedRegion = regionDropdown.value;
+
+  subregionDropdown.innerHTML = ""; // Clear existing options
+
+  if (selectedRegion in subregionMap) {
+    subregionMap[selectedRegion].forEach(subregionCode => {
+      const subregionOption = document.createElement("option");
+      subregionOption.text = subregionCode;
+      subregionOption.value = subregionCode;
+      subregionDropdown.appendChild(subregionOption);
+    });
+  }
     
-    function calculateAnnual(inputId, frequencyId) {
+}
+
+regionDropdown.addEventListener("change", updateSubregionDropdown);
+    
+function calculateAnnual(inputId, frequencyId) {
         const input = parseFloat(document.getElementById(inputId).value) || 0;
         const frequency = document.getElementById(frequencyId).value;
 
