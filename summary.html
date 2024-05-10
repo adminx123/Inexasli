@@ -444,14 +444,30 @@ if (getCookie('RegionDropdown') === 'USA') {
 // Update HTML element with the calculated value
 document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
 
-     const frequencyDropdown = document.getElementById('frequency');
+    const frequencyDropdown = document.getElementById('frequency');
 
-     
 let TIMETOPAYDEBT;
-     
-     TIMETOPAYDEBT =  parseFloat(getCookie1('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
-    document.getElementById('TIMETOPAYDEBT').textContent =  TIMETOPAYDEBT.toFixed(2) + frequencyDropdown.value;
-     
+
+TIMETOPAYDEBT = parseFloat(getCookie1('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
+
+// Determine the text based on the selected frequency
+let frequencyText = '';
+switch (frequencyDropdown.value) {
+    case 'annually':
+        frequencyText = 'Years';
+        break;
+    case 'monthly':
+        frequencyText = 'Months';
+        break;
+    case 'weekly':
+        frequencyText = 'Weeks';
+        break;
+    default:
+        frequencyText = 'Unknown';
+}
+
+document.getElementById('TIMETOPAYDEBT').textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
+ 
      
 let ANNUALGOVERNMENTOBLIGATIONS;
 
