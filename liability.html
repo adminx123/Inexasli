@@ -358,12 +358,12 @@ function calculateNext() {
     function calculateAll() {
         
     calculateLiabilities();
-    
-    setCookie("LIABILITIES", LIABILITIES, 365);
-	    setCookie("LIABILITIESNA", LIABILITIESNA, 365);
-    
 
-	    setIncomeData();
+setIncomeData();    
+    setCookie("LIABILITIES", LIABILITIES, 365);
+	    
+    	    setDebtData2();
+	    setCookie("LIABILITIESNA", LIABILITIESNA, 365);
     }
 
 
