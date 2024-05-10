@@ -422,13 +422,6 @@ function updateOnChange(){    // Update HTML elements with cookie values
 
      document.getElementById('ASSETS').textContent = " $" + getCookie('ASSETS');
      document.getElementById('LIABILITIES').textContent = " $" + getCookie('LIABILITIES');
-
-
-
-     TIMETOPAYDEBT = parseFloat(getCookie('LIABILTIESNA')) - parseFloat(getCookie('ANNUALDISPOSABLEINCOME'));
-    document.getElementById('TIMETOPAYDEBT').textContent = 'Time' + TIMETOPAYDEBT.toFixed(2);
-
-
      
 
 let ANNUALDISPOSABLEINCOME;
@@ -464,11 +457,10 @@ let ANNUALGOVERNMENTOBLIGATIONS;
 // Update HTML element with the calculated value
 document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
     
-
-    
     NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
 
+     
 DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
         
  function colorChangeDTI() {
@@ -586,6 +578,11 @@ colorChangeFIRE();
         updateOnChange();
     
 });
+
+     TIMETOPAYDEBT = parseFloat(getCookie('LIABILTIESNA')) - parseFloat(getCookie('ANNUALDISPOSABLEINCOME'));
+    document.getElementById('TIMETOPAYDEBT').textContent = 'Time' + TIMETOPAYDEBT.toFixed(2);
+
+     
 });
 
 
