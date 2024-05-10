@@ -446,7 +446,7 @@ document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDIS
 
 let TIMETOPAYDEBT;
      
-     TIMETOPAYDEBT = parseFloat(getCookie('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
+     TIMETOPAYDEBT =  ANNUALDISPOSABLEINCOME;
     document.getElementById('TIMETOPAYDEBT').textContent = 'Time' + TIMETOPAYDEBT.toFixed(2);
      
      
