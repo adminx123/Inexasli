@@ -581,7 +581,7 @@ colorChangeFIRE();
 
 let TIMETOPAYDEBT;
      
-     TIMETOPAYDEBT = parseFloat(getCookie('LIABILITIESNA')) - parseFloat(getCookie('ANNUALDISPOSABLEINCOME'));
+     TIMETOPAYDEBT = parseFloat(getCookie('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
     document.getElementById('TIMETOPAYDEBT').textContent = 'Time' + TIMETOPAYDEBT.toFixed(2);
 
      
