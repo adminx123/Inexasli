@@ -148,7 +148,7 @@ button {
     </div> -->
 
 
- <h2 style="text-align: center;">Liabilities</h2>
+ <h2 style="text-align: center;"> Ammortized Liabilities</h2>
 
 <div style="text-align:left; padding-bottom: 10px;">
 <button onclick="calculateBack()"style="border: 1px solid #aaa; border-radius: 8px; background-color: #eee; padding: 1px 20px; font-size: 24px; box-shadow: 10px 2px 5px #888; color: black;">&lt; </div>
@@ -160,7 +160,7 @@ button {
 </div>
 
 <div class ="row">
-    <label for="liabilities_primary_residence">Primary Residence:</label>
+    <label for="liabilities_primary_residence">Primary Residence Mortgage:</label>
     <input type="text" id="liabilities_primary_residence">
 </div>
 
@@ -174,6 +174,8 @@ button {
     <input type="text" id="liabilities_vehicle_loan">
 </div>
 
+<h2 style="text-align: center;">Non - Ammortized Liabilities</h2>
+	
 <div class ="row">
     <label for="liabilities_student_loan">Student Loan:</label>
     <input type="text" id="liabilities_student_loan">
@@ -198,60 +200,10 @@ button {
 <button onclick="calculateNext()" style="border: 1px solid #aaa; border-radius: 8px; background-color: #eee; padding: 1px 20px; font-size: 24px; box-shadow: 10px 2px 5px #888; color: black;">&gt;</div>
 	
 <script>
-	
+	var LIABILITIESNA;
     var LIABILITIES;
  
-    function validatecheckbox() {
-  var termscheckbox = document.getElementById("termscheckbox");
-  var notintended = document.getElementById("notintended");
-  var regionDropdown = document.getElementById("RegionDropdown");
-
-  // Check if a valid region is selected
-  if (regionDropdown.value === "" || regionDropdown.value === "Select Region") {
-    alert("Please select a region from the dropdown.");
-    return;
-  }
-
-  // Check if checkboxes are checked
-  if (termscheckbox.checked && notintended.checked) {
-    // Perform calculations
-    calculateAll();
-  } else {
-    alert("Please agree to the terms of service & disclaimer.");
-  }
-}
-
-    function openTermsModal() {
-  console.log('openTermsModal() function called');
-  // **Change:** Move setting modal display to within the then block after content is retrieved
-  fetch('legal.txt') // Corrected file extension to '.txt'
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('modalContent').innerText = data;
-      // Set modal display to block after content is retrieved
-      document.getElementById('termsModal').style.display = 'block';
-    })
-    .catch(error => console.error('Error fetching legal content:', error));
-}
-
-    function closeModal(event) {
-    const modal = document.getElementById('termsModal');
-    const modalContent = document.getElementById('modalContent');
-
-    if (event.target === modal && event.target !== modalContent) {
-        modal.style.display = 'none';
-    }
-}
-    
-document.addEventListener('click', closeModal);
-    
-    document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
-        closeModal();
-    }
-});
-
-    
+  
   
 function calculateLiabilities() {
     const liabilitiesFields = [
@@ -341,7 +293,35 @@ for (let i = 0; i < liabilitiesFields.length; i++) {
 }
 }
 
+let LIABILITIESNA;
 
+function setDebtData2() {
+    const liabilitiesFields = [
+        'liabilities_vehicle_loan',
+        'liabilities_student_loan',
+        'liabilities_line_of_credit',
+        'liabilities_credit_card',
+        'liabilities_tax_arrears'
+    ];
+
+    let totalDebt = 0;
+
+    // Iterate over the fields and sum their values
+    liabilitiesFields.forEach(field => {
+        const fieldValue = parseFloat(document.getElementById(field).value) || 0;
+        totalDebt += fieldValue;
+    });
+
+    // Update the total debt value
+    document.getElementById('total_debt').value = totalDebt.toFixed(2); // assuming 'total_debt' is the ID of the element where you want to display the total
+
+    // Assign the total debt value to LIABILITIESNA
+    LIABILITIESNA = totalDebt; // Making it a global variable
+}
+
+
+
+	
 	document.addEventListener('DOMContentLoaded', function() {
     // Function to retrieve cookie value by name
 		function getCookie(name) {
@@ -361,6 +341,10 @@ document.getElementById('liabilities_credit_card').value = getCookie('liabilitie
 document.getElementById('liabilities_tax_arrears').value = getCookie('liabilities_tax_arrears');
   })	
 
+
+
+
+	
 function calculateNext() {
   calculateAll();
   window.location.href = 'summary.html';
@@ -376,6 +360,8 @@ function calculateNext() {
     calculateLiabilities();
     
     setCookie("LIABILITIES", LIABILITIES, 365);
+	    setCookie("LIABILITIESNA", LIABILITIESNA, 365);
+    
 
 	    setIncomeData();
     }
