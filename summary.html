@@ -566,6 +566,11 @@ function colorChangeFIRE() {
 document.getElementById('FIRERATIO').textContent = FIRERATIO.toFixed(3);
 colorChangeFIRE();
 
+
+     let TIMETOPAYDEBT;
+     
+     TIMETOPAYDEBT = parseFloat(getCookie('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
+    document.getElementById('TIMETOPAYDEBT').textContent = 'Time' + TIMETOPAYDEBT.toFixed(2);
      
   } 
   
@@ -579,10 +584,7 @@ colorChangeFIRE();
     
 });
 
-let TIMETOPAYDEBT;
-     
-     TIMETOPAYDEBT = parseFloat(getCookie('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
-    document.getElementById('TIMETOPAYDEBT').textContent = 'Time' + TIMETOPAYDEBT.toFixed(2);
+
      
 });
 
