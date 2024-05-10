@@ -331,6 +331,11 @@ button {
 
     <p><u>FIRE:</u> <span id="FIRERATIO"></span></p>
     <i>Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</i>
+
+    <p><u>Time to Pay Non-Ammortized Debt:</u> <span id="TIMETOPAYDEBT"></span></p>
+    <i>The amount of time to pay of debt that you can make lump sum payments Use: nce, retirement planning.</i>
+
+     
 </details>
 
        
@@ -418,6 +423,13 @@ function updateOnChange(){    // Update HTML elements with cookie values
      document.getElementById('ASSETS').textContent = " $" + getCookie('ASSETS');
      document.getElementById('LIABILITIES').textContent = " $" + getCookie('LIABILITIES');
 
+
+
+     TIMETOPAYDEBT = parseFloat(getCookie('LIABILTIESNA')) - parseFloat(getCookie('ANNUALDISPOSABLEINCOME'));
+    document.getElementById('TIMETOPAYDEBT').textContent = '$' + TIMETOPAYDEBT.toFixed(2);
+
+
+     
 
 let ANNUALDISPOSABLEINCOME;
 
