@@ -312,9 +312,7 @@ function setDebtData2() {
         totalDebt += fieldValue;
     });
 
-    // Update the total debt value
-    document.getElementById('total_debt').value = totalDebt.toFixed(2); // assuming 'total_debt' is the ID of the element where you want to display the total
-
+    
     // Assign the total debt value to LIABILITIESNA
     LIABILITIESNA = totalDebt; // Making it a global variable
 }
