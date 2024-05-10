@@ -444,10 +444,13 @@ if (getCookie('RegionDropdown') === 'USA') {
 // Update HTML element with the calculated value
 document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
 
+     const frequencyDropdown = document.getElementById('frequency');
+
+     
 let TIMETOPAYDEBT;
      
      TIMETOPAYDEBT =  parseFloat(getCookie1('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
-    document.getElementById('TIMETOPAYDEBT').textContent = 'Time' + TIMETOPAYDEBT.toFixed(2);
+    document.getElementById('TIMETOPAYDEBT').textContent =  TIMETOPAYDEBT.toFixed(2) + frequencyDropdown.value;
      
      
 let ANNUALGOVERNMENTOBLIGATIONS;
