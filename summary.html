@@ -420,8 +420,8 @@ function updateOnChange(){    // Update HTML elements with cookie values
 
     document.getElementById('TOTALTAXCG').textContent = " $" + getCookie('TOTALTAXCG');
 
-     document.getElementById('ASSETS').textContent = " $" + getCookie('ASSETS');
-     document.getElementById('LIABILITIES').textContent = " $" + getCookie('LIABILITIES');
+     document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
+     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
      
 
 let ANNUALDISPOSABLEINCOME;
@@ -446,7 +446,7 @@ document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDIS
 
 let TIMETOPAYDEBT;
      
-     TIMETOPAYDEBT =  parseFloat(getCookie('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
+     TIMETOPAYDEBT =  parseFloat(getCookie1('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
     document.getElementById('TIMETOPAYDEBT').textContent = 'Time' + TIMETOPAYDEBT.toFixed(2);
      
      
