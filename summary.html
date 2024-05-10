@@ -444,6 +444,12 @@ if (getCookie('RegionDropdown') === 'USA') {
 // Update HTML element with the calculated value
 document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
 
+let TIMETOPAYDEBT;
+     
+     TIMETOPAYDEBT = parseFloat(getCookie('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
+    document.getElementById('TIMETOPAYDEBT').textContent = 'Time' + TIMETOPAYDEBT.toFixed(2);
+     
+     
 let ANNUALGOVERNMENTOBLIGATIONS;
 
     if (getCookie('RegionDropdown') === 'USA') {
@@ -566,12 +572,6 @@ function colorChangeFIRE() {
 document.getElementById('FIRERATIO').textContent = FIRERATIO.toFixed(3);
 colorChangeFIRE();
 
-
-     let TIMETOPAYDEBT;
-     
-     TIMETOPAYDEBT = parseFloat(getCookie('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
-    document.getElementById('TIMETOPAYDEBT').textContent = 'Time' + TIMETOPAYDEBT.toFixed(2);
-     
   } 
   
   updateOnChange();
