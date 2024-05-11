@@ -587,28 +587,21 @@ document.addEventListener('change', function() {
     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
 });
 
+     <div style="padding: 20px;text-align:center;">
+    <a target="_blank" data-url="https://square.link/u/1LOQ6j38?src=embd" href="https://square.link/u/1LOQ6j38?src=embed" style="
+    display: inline-block;
+    font-size: 18px;
+    line-height: 48px;
+    height: 48px;
+    color: #000;
+    min-width: 212px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.1) inset;
+    border-radius: 6px;
+  ">Pay Now</a>
+  </div>
 
-// Function to open the modal and load content from the Square payment link
-function openPaymentModal() {
-  console.log('openPaymentModal() function called');
-  // Fetch payment content from Square link
-  fetch('https://square.link/u/1LOQ6j38?src=embed')
-    .then(response => response.text())
-    .then(data => {
-      // Load fetched content into modal
-      document.getElementById('modalContent').innerHTML = data;
-      // Display modal
-      document.getElementById('termsModal').style.display = 'block';
-    })
-    .catch(error => console.error('Error fetching payment content:', error));
-}
-
-// Function to close the modal
-function closeModal() {
-  const modal = document.getElementById('termsModal');
-  modal.style.display = 'none';
-}
-     
 </script>
 
 </body>
