@@ -180,7 +180,6 @@ button {
 </head>
 
 <body>
-    
 
  <div class="tab-container" style="margin-bottom: 20px;">
         <a href="http://inexasli.com/income.html" class="tab">Income</a>
@@ -310,22 +309,18 @@ button {
 </details>
 
        
-<div style="padding: 20px;text-align:center;">
-    <a target="_blank" data-url="https://square.link/u/1LOQ6j38?src=embd" href="https://square.link/u/1LOQ6j38?src=embed" style="
-    display: inline-block;
-    font-size: 18px;
-    line-height: 48px;
-    height: 48px;
-    color: #000;
-    min-width: 212px;
-    background-color: #fff;
-    text-align: center;
-    box-shadow: 0 0 0 1px rgba(0,0,0,.1) inset;
-    border-radius: 6px;
-  ">Pay Now</a>
+<div style="padding: 20px; text-align: center;">
+    <a href="#" onclick="openPaymentModal()" style="display: inline-block; font-size: 18px; line-height: 48px; height: 48px; color: #000; min-width: 212px; background-color: #fff; text-align: center; box-shadow: 0 0 0 1px rgba(0,0,0,.1) inset; border-radius: 6px;">Pay Now</a>
   </div>
 
-  
+  <!-- Modal -->
+  <div id="termsModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modalContent"></div>
+    </div>
+  </div>
     
 <script>
     
@@ -594,7 +589,35 @@ document.addEventListener('change', function() {
 });
 
 
+// Function to open the modal and load content from the Square payment link
+    function openPaymentModal() {
+      console.log('openPaymentModal() function called');
+      // **Change:** Move setting modal display to within the then block after content is retrieved
+      fetch('https://square.link/u/1LOQ6j38?src=embed')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('modalContent').innerHTML = data;
+          // Set modal display to block after content is retrieved
+          document.getElementById('termsModal').style.display = 'block';
+        })
+        .catch(error => console.error('Error fetching payment content:', error));
+    }
 
+    // Function to close the modal
+    function closeModal(event) {
+      const modal = document.getElementById('termsModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    document.getElementById('openPaymentModal').addEventListener('click', openPaymentModal);
+    document.addEventListener('click', closeModal);
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
+        closeModal(event);
+      }
+    });
      
 </script>
 
