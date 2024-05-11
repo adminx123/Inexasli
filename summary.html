@@ -589,34 +589,25 @@ document.addEventListener('change', function() {
 
 
 // Function to open the modal and load content from the Square payment link
-    function openPaymentModal() {
-      console.log('openPaymentModal() function called');
-      // **Change:** Move setting modal display to within the then block after content is retrieved
-      fetch('https://square.link/u/1LOQ6j38?src=embed')
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('modalContent').innerHTML = data;
-          // Set modal display to block after content is retrieved
-          document.getElementById('termsModal').style.display = 'block';
-        })
-        .catch(error => console.error('Error fetching payment content:', error));
-    }
+function openPaymentModal() {
+  console.log('openPaymentModal() function called');
+  // Fetch payment content from Square link
+  fetch('https://square.link/u/1LOQ6j38?src=embed')
+    .then(response => response.text())
+    .then(data => {
+      // Load fetched content into modal
+      document.getElementById('modalContent').innerHTML = data;
+      // Display modal
+      document.getElementById('termsModal').style.display = 'block';
+    })
+    .catch(error => console.error('Error fetching payment content:', error));
+}
 
-    // Function to close the modal
-    function closeModal(event) {
-      const modal = document.getElementById('termsModal');
-      if (event.target === modal) {
-        modal.style.display = 'none';
-      }
-    }
-
-    document.getElementById('openPaymentModal').addEventListener('click', openPaymentModal);
-    document.addEventListener('click', closeModal);
-    document.addEventListener('keydown', function(event) {
-      if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
-        closeModal(event);
-      }
-    });
+// Function to close the modal
+function closeModal() {
+  const modal = document.getElementById('termsModal');
+  modal.style.display = 'none';
+}
      
 </script>
 
