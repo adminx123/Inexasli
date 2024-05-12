@@ -615,7 +615,7 @@ document.addEventListener('change', function() {
   function createPaymentForm() {
     // Create a new instance of Square's payment form
     const paymentForm = new SqPaymentForm({
-      applicationId: 'sandbox-sq0idb-4Qcxb-xZKkXLvQBXQZZwvQ',
+      applicationId: window.Square.applicationId, // Using the applicationId from Square object
       inputClass: 'sq-input',
       inputStyles: [{
         fontSize: '16px',
@@ -636,7 +636,7 @@ document.addEventListener('change', function() {
   }
 
   // Call the function to create and render the payment form
-  createPaymentForm();
+  window.addEventListener('DOMContentLoaded', createPaymentForm);
 </script>
 
 
