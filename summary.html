@@ -357,9 +357,6 @@ function getCookie(name) {
         }
     }
     
-    // Limit the number of decimal places to two
-    cookieValue = parseFloat(cookieValue).toFixed(2);
-
     return cookieValue === '' ? '0' : cookieValue;
 }
 
