@@ -334,14 +334,9 @@ button {
 <!-- Define the placeholder element for the payment form -->
 <div id="payment-form"></div>
 
-<!-- JavaScript code for creating and rendering the payment form -->
 
-  // Set Square application credentials
-  window.Square = {
-    applicationId: 'sandbox-sq0idb-4Qcxb-xZKkXLvQBXQZZwvQ',
-    locationId: '', // Optionally specify a location ID
-  };
-     
+
+  
 <script>
     
 function getCookie1(name) {
@@ -611,7 +606,12 @@ document.addEventListener('change', function() {
 
 
 
-
+// Set Square application credentials
+  window.Square = {
+    applicationId: 'sandbox-sq0idb-4Qcxb-xZKkXLvQBXQZZwvQ',
+    locationId: '', // Optionally specify a location ID
+  };
+     
 
   // Function to create and render Square payment form
   function createPaymentForm() {
