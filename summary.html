@@ -7,16 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Summary</title>
          <link rel="icon" type="image/x-icon" href="Logo.png">
-
-<script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
-<script>
-  window.Square = {
-    applicationId: 'sandbox-sq0idb-4Qcxb-xZKkXLvQBXQZZwvQ',
-    locationId: '', // Optionally specify a location ID
-  };
-</script>
-
-     
+    
    <style>
     
      /* Modal styles */
@@ -336,10 +327,7 @@ button {
   ">Pay Now</a>
   </div>
  
-
-<div id="payment-form"></div>
-
-     
+    
 <script>
     
 function getCookie1(name) {
@@ -607,34 +595,51 @@ document.addEventListener('change', function() {
 });
 
 
-     
-  // Create a new instance of Square's payment form
-  const paymentForm = new SqPaymentForm({
-    // Replace 'YOUR_APPLICATION_ID' with your Square Application ID
-    applicationId: 'sandbox-sq0idb-4Qcxb-xZKkXLvQBXQZZwvQ',
-    inputClass: 'sq-input',
-    inputStyles: [{
-      fontSize: '16px',
-      lineHeight: '24px',
-      padding: '16px',
-      placeholderColor: '#a0a0a0'
-    }],
-    // Customize the appearance of the payment form
-    // Add additional configuration options as needed
-  });
-
-  // Create a placeholder element for the payment form
-  const paymentFormElement = document.getElementById('payment-form');
-
-  // Build the payment form
-  paymentForm.build();
-
-  // Render the payment form in the placeholder element
-  paymentForm.render(paymentFormElement);
-
-
-     
 </script>
 
+<!-- Include Square's JavaScript SDK -->
+<script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+
+<!-- Define the placeholder element for the payment form -->
+<div id="payment-form"></div>
+
+<!-- JavaScript code for creating and rendering the payment form -->
+<script>
+  // Set Square application credentials
+  window.Square = {
+    applicationId: 'sandbox-sq0idb-4Qcxb-xZKkXLvQBXQZZwvQ',
+    locationId: '', // Optionally specify a location ID
+  };
+
+  // Function to create and render Square payment form
+  function createPaymentForm() {
+    // Create a new instance of Square's payment form
+    const paymentForm = new SqPaymentForm({
+      applicationId: 'sandbox-sq0idb-4Qcxb-xZKkXLvQBXQZZwvQ',
+      inputClass: 'sq-input',
+      inputStyles: [{
+        fontSize: '16px',
+        lineHeight: '24px',
+        padding: '16px',
+        placeholderColor: '#a0a0a0'
+      }],
+      // Customize the appearance of the payment form
+      // Add additional configuration options as needed
+    });
+
+    // Create a placeholder element for the payment form
+    const paymentFormElement = document.getElementById('payment-form');
+
+    // Build and render the payment form
+    paymentForm.build();
+    paymentForm.render(paymentFormElement);
+  }
+
+  // Call the function to create and render the payment form
+  createPaymentForm();
+</script>
+
+
+     
 </body>
 </html>
