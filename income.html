@@ -156,7 +156,7 @@ button {
 <!-- <button onclick="calculateAll();" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
 -->
     
-<p>Select Region & Subregion:</p>
+<p> Step 1: Select Region & Subregion:</p>
 <div style=" padding-bottom: 10px;"><select id="RegionDropdown">
         <option value="NONE">Select Tax Region</option> 
         <option value="CAN">Canada</option>
@@ -168,8 +168,8 @@ button {
         <option value="">Select Tax Subregion</option> </select></div>
     
 
-<input type="checkbox" id="notintended">
-<label for="notintended"> Enter Income amounts pre-tax and pre-contributions.</label><br>
+<p> Step 2: Enter pre-tax & pre-contributions income amounts & select the corresponding frequency.</p>
+
 
 
 <h2 style="text-align: center;">Employment/Self Employment/Investment Income</h2>
@@ -462,9 +462,10 @@ button {
              <button onclick="closeModal()">Close</button>
         </div>
     </div>
-
-   
     </div>
+    
+    <input type="checkbox" id="notintended">
+<label for="notintended"> Enter pre-tax & pre-contributions income amounts & select the corresponding frequency. </label><br>
     
       <div style="text-align: right;"><button onclick="validatecheckbox()" style=" border: 1px solid #aaa; border-radius: 8px; background-color: #fff; padding: 1px 20px; font-size: 24px; box-shadow: 10px 2px 5px #888; color: black;">&gt;</button></div>
 
