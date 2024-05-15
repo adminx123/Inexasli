@@ -1,1 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Metrics Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input, .input-group select {
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .input-group .input-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .input-group .input-container input, .input-group .input-container select {
+            width: 33%;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Business Metrics Calculator</h1>
+        <div class="input-group">
+            <label for="cogs">Does your business have Cost of Goods Sold?</label>
+            <select id="cogs">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="ventureType">Is it a new venture or an ongoing operation?</label>
+            <select id="ventureType">
+                <option value="new">New Venture</option>
+                <option value="ongoing">Ongoing Operation</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="revenueType">Type of Revenue</label>
+            <select id="revenueType">
+                <option value="rental">Rental</option>
+                <option value="service">Service</option>
+                <option value="product">Product</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="sales">Sales (units, hours, rentals)</label>
+            <div class="input-container">
+                <input type="number" id="sales">
+                <span id="salesFrequency"></span>
+            </div>
+        </div>
+        <h2>Cost of Goods Sold (COGS) Details (if applicable, per unit basis)</h2>
+        <div class="input-group">
+            <label for="cogsMaterials">Materials</label>
+            <div class="input-container">
+                <input type="number" id="cogsMaterials">
+                <span id="cogsMaterialsFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="cogsLabor">Labor</label>
+            <div class="input-container">
+                <input type="number" id="cogsLabor">
+                <span id="cogsLaborFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="cogsOverhead">Overhead</label>
+            <div class="input-container">
+                <input type="number" id="cogsOverhead">
+                <span id="cogsOverheadFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="cogsShipping">Shipping</label>
+            <div class="input-container">
+                <input type="number" id="cogsShipping">
+                <span id="cogsShippingFrequency"></span>
+            </div>
+        </div>
+        <h2>Operational Costs</h2>
+        <div class="input-group">
+            <label for="rent">Rent</label>
+            <div class="input-container">
+                <input type="number" id="rent">
+                <span id="rentFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="utilities">Utilities</label>
+            <div class="input-container">
+                <input type="number" id="utilities">
+                <span id="utilitiesFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="salaries">Salaries</label>
+            <div class="input-container">
+                <input type="number" id="salaries">
+                <span id="salariesFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="marketing">Marketing</label>
+            <div class="input-container">
+                <input type="number" id="marketing">
+                <span id="marketingFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="insurance">Insurance</label>
+            <div class="input-container">
+                <input type="number" id="insurance">
+                <span id="insuranceFrequency"></span>
+            </div>
+        </div>
+        <h2>Building Costs</h2>
+        <div class="input-group">
+            <label for="buildingRent">Rent</label>
+            <div class="input-container">
+                <input type="number" id="buildingRent">
+                <span id="buildingRentFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="buildingMaintenance">Maintenance</label>
+            <div class="input-container">
+                <input type="number" id="buildingMaintenance">
+                <span id="buildingMaintenanceFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="buildingUtilities">Utilities</label>
+            <div class="input-container">
+                <input type="number" id="buildingUtilities">
+                <span id="buildingUtilitiesFrequency"></span>
+            </div>
+        </div>
+        <h2>Vehicle Costs</h2>
+        <div class="input-group">
+            <label for="vehicleGas">Gas</label>
+            <div class="input-container">
+                <input type="number" id="vehicleGas">
+                <span id="vehicleGasFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="vehicleMaintenance">Maintenance</label>
+            <div class="input-container">
+                <input type="number" id="vehicleMaintenance">
+                <span id="vehicleMaintenanceFrequency"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="vehicleInsurance">Insurance</label>
+            <div class="input-container">
+                <input type="number" id="vehicleInsurance">
+                <span id="vehicleInsuranceFrequency"></span>
+            </div>
+        </div>
+        <h2>Assets</h2>
+        <div class="input-group">
+            <label for="cash">Cash</label>
+            <input type="number" id="cash">
+        </div>
+        <div class="input-group">
+            <label for="accountsReceivable">Accounts Receivable</label>
+            <input type="number" id="accountsReceivable">
+        </div>
+        <div class="input-group">
+            <label for="inventory">Inventory</label>
+            <input type="number" id="inventory">
+        </div>
+        <div class="input-group">
+            <label for="property">Property</label>
+            <input type="number" id="property">
+        </div>
+        <div class="input-group">
+            <label for="equipment">Equipment</label>
+            <input type="number" id="equipment">
+        </div>
+        <h2>Liabilities</h2>
+        <div class="input-group">
+            <label for="accountsPayable">Accounts Payable</label>
+            <input type="number" id="accountsPayable">
+        </div>
+        <div class="input-group">
+            <label for="loans">Loans</label>
+            <input type="number" id="loans">
+        </div>
+        <div class="input-group">
+            <label for="mortgages">Mortgages</label>
+            <input type="number" id="mortgages">
+        </div>
+        <div class="input-group">
+            <label for="taxesPayable">Taxes Payable</label>
+            <input type="number" id="taxesPayable">
+        </div>
+        <div class="input-group">
+            <label for="otherLiabilities">Other Liabilities</label>
+            <input type="number" id="otherLiabilities">
+        </div>
+        <button onclick="calculateAndSave()">Calculate and Save</button>
+        
+        <h2>Results</h2>
+        <div class="input-group">
+            <label for="resultFrequency">Display results as:</label>
+            <select id="resultFrequency" onchange="updateResults()">
+                <option value="annual">Annual</option>
+                <option value="monthly">Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="daily">Daily</option>
+            </select>
+        </div>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function createFrequencyDropdown(id) {
+            const frequencies = ['annually', 'quarterly', 'monthly', 'weekly'];
+            let dropdown = `<select id="${id}">`;
+            frequencies.forEach(frequency => {
+                dropdown += `<option value="${frequency}">${frequency.charAt(0).toUpperCase() + frequency.slice(1)}</option>`;
+            });
+            dropdown += `</select>`;
+            return dropdown;
+        }
+
+        function createInputWithFrequency(labelId, inputId) {
+            const input = document.getElementById(inputId);
+            const frequencyId = `${inputId}Frequency`;
+            const dropdown = createFrequencyDropdown(frequencyId);
+            document.getElementById(frequencyId).innerHTML = dropdown;
+        }
+
+        function initializeFrequencyDropdowns() {
+            const ids = ['sales', 'cogsMaterials', 'cogsLabor', 'cogsOverhead', 'cogsShipping', 'rent', 'utilities', 'salaries', 'marketing', 'insurance', 'buildingRent', 'buildingMaintenance', 'buildingUtilities', 'vehicleGas', 'vehicleMaintenance', 'vehicleInsurance'];
+            ids.forEach(id => {
+                createInputWithFrequency(id, id);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", initializeFrequencyDropdowns);
+    </script>
+</body>
+</html>
 
