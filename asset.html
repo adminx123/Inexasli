@@ -129,24 +129,6 @@ button {
 
 
 
-/* Tooltip text */
-.tooltip .tooltiptext {
-  display: none; /* Hide the tooltip */
-  visibility: hidden; /* Initially hidden */
-  width: 200px; /* Adjust width as needed */
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%; /* Adjust positioning as needed */
-  left: 50%;
-  margin-left: -100px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
 
 
 .container {
@@ -173,7 +155,7 @@ button {
 <p>Step 4: Enter the MARKET value of the following assets. Market value can be defined as the value of the particular asset if you were to sell it today.</p>
 
 
-<h2 style="text-align: center;">Asset</h2>
+<h2 style="text-align: center;">Current</h2>
 
   <div style = "text-align:left; padding-bottom:10px;">
 <button onclick="calculateBack()" style="border: 1px solid #aaa; border-radius: 8px; background-color: #eee; padding: 1px 20px; font-size: 24px; box-shadow: 10px 2px 5px #888; color: black;">&lt;
@@ -195,10 +177,16 @@ button {
     <input type="text" id="assets_other_liquid_accounts">
 </div>
 
+
+	<h2 style="text-align: center;">Long Term</h2>
+
 <div class ="row">
     <label for="assets_long_term_investment_accounts">Long Term Investment Account(s):</label>
     <input type="text" id="assets_long_term_investment_accounts">
 </div>
+
+
+	<h2 style="text-align: center;">Fixed</h2>
 
 <div class ="row">
     <label for="assets_primary_residence">Primary Residence:</label>
@@ -219,6 +207,8 @@ button {
     <label for="assets_vehicles">Vehicle(s):</label>
     <input type="text" id="assets_vehicles">
 </div>
+
+	<h2 style="text-align: center;">Non-Current</h2>
 
 <div class ="row">
     <label for="assets_art_jewelry">Art/Jewelry:</label>
