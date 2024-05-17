@@ -323,13 +323,8 @@ button {
     border-radius: 6px;
   ">Pay Now</a>
   </div>
- 
 
-<!-- Include Square's JavaScript SDK -->
-<script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
-
-<!-- Define the placeholder element for the payment form -->
-<div id="payment-form"></div>
+     
 
 
 
@@ -601,41 +596,6 @@ document.addEventListener('change', function() {
 });
 
 
-
-
-// Set Square application credentials
-  window.Square = {
-    applicationId: 'sandbox-sq0idb-4Qcxb-xZKkXLvQBXQZZwvQ',
-    locationId: '', // Optionally specify a location ID
-  };
-     
-
-  // Function to create and render Square payment form
-  function createPaymentForm() {
-    // Create a new instance of Square's payment form
-    const paymentForm = new SqPaymentForm({
-      applicationId: window.Square.applicationId, // Using the applicationId from Square object
-      inputClass: 'sq-input',
-      inputStyles: [{
-        fontSize: '16px',
-        lineHeight: '24px',
-        padding: '16px',
-        placeholderColor: '#a0a0a0'
-      }],
-      // Customize the appearance of the payment form
-      // Add additional configuration options as needed
-    });
-
-    // Create a placeholder element for the payment form
-    const paymentFormElement = document.getElementById('payment-form');
-
-    // Build and render the payment form
-    paymentForm.build();
-    paymentForm.render(paymentFormElement);
-  }
-
-  // Call the function to create and render the payment form
-  window.addEventListener('DOMContentLoaded', createPaymentForm);
 </script>
 
 
