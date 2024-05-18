@@ -162,8 +162,20 @@ button {
         <a href="http://inexasli.com/summary.html" class="tab">Summary</a>
     </div> -->
     
-<div style="text-align:left; padding-bottom: 10px;">
-    <button onclick="calculateBack()" style="border: 1px solid #aaa; border-radius: 8px; background-color: #eee; padding: 1px 20px; font-size: 24px; box-shadow: 10px 2px 5px #888; color: black;">&lt;</button>
+
+<div style="display: flex; justify-content: space-between;padding-top:10px;">
+    <div style="text-align: left;">
+        <button onclick="calculatePrevious()" style="border: 1px solid #aaa; border-radius: 8px; background-color: #eee; padding: 1px 20px; font-size: 24px; box-shadow: 10px 2px 5px #888; color: black;">&lt;</button>
+    </div>
+    
+    	  <h2 style="text-align: center;font-size: 24px;"><u>EXPENSES</u></h2>
+
+    
+    <div style="text-align: right;">
+        <button onclick="calculateNext()" style="border: 1px solid #aaa; border-radius: 8px; background-color: #eee; padding: 1px 20px; font-size: 24px; box-shadow: 10px 2px 5px #888; color: black;">&gt;</button>
+    </div>
+
+
 </div>
 
 
@@ -660,11 +672,15 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 <span id="dependant_cellular_service_annual"></span>
 </div>
 
+<div style="display: flex; justify-content: space-between;padding-top:10px;">
+    <div style="text-align: left;">
+        <button onclick="calculatePrevious()" style="border: 1px solid #aaa; border-radius: 8px; background-color: #eee; padding: 1px 20px; font-size: 24px; box-shadow: 10px 2px 5px #888; color: black;">&lt;</button>
+    </div>
+    <div style="text-align: right;">
+        <button onclick="calculateNext()" style="border: 1px solid #aaa; border-radius: 8px; background-color: #eee; padding: 1px 20px; font-size: 24px; box-shadow: 10px 2px 5px #888; color: black;">&gt;</button>
+    </div>
+</div>
 
-
-  <div style="text-align: right;padding-top:10px;">
-<button onclick="calculateNext()" style="border: 1px solid #aaa; border-radius: 8px; background-color: #eee; padding: 1px 20px; font-size: 24px; box-shadow: 10px 2px 5px #888; color: black;">&gt;</button></div> 
-  
 	  
 <script>
 	
