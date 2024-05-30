@@ -60,7 +60,9 @@
         </div>
 
         <div class="input-group">
-            <label for="sales">Sales (Units, Hours, Rentals)</label>
+            <label> Price Per</label>
+            <input type="number" id="price">
+            <label for="sales"></label>
             <div class="input-container">
                 <input type="number" id="sales">
                 <select class="frequency-dropdown" onchange="updateFrequency('sales')">
@@ -354,11 +356,11 @@
             const revenueType = document.getElementById('revenueType').value;
             const salesLabel = document.querySelector('label[for="sales"]');
             if (revenueType === 'rental') {
-                salesLabel.textContent = 'Rentals';
+                salesLabel.textContent = 'Rentals Contracted';
             } else if (revenueType === 'service') {
-                salesLabel.textContent = 'Hours';
+                salesLabel.textContent = 'Hours Billed';
             } else {
-                salesLabel.textContent = 'Units';
+                salesLabel.textContent = 'Units Sold';
             }
         }
 
