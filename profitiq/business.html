@@ -412,20 +412,27 @@ const totalCOGS = cogsMaterialsValue + cogsLaborValue + cogsOverheadValue + cogs
                 calculateAnnual('vehicleMaintenance', 'vehicleMaintenanceFrequency') +
                 calculateAnnual('vehicleInsurance', 'vehicleInsuranceFrequency');
 
-            // Calculate sum for Assets
-            const totalAssets = parseFloat(document.getElementById('cash').value) || 0 +
-                parseFloat(document.getElementById('accountsReceivable').value) || 0 +
-                parseFloat(document.getElementById('inventory').value) || 0 +
-                parseFloat(document.getElementById('property').value) || 0 +
-                parseFloat(document.getElementById('equipment').value) || 0;
+            
+            // Define variables to hold the values for assets
+const cashValue = parseFloat(document.getElementById('cash').value) || 0;
+const accountsReceivableValue = parseFloat(document.getElementById('accountsReceivable').value) || 0;
+const inventoryValue = parseFloat(document.getElementById('inventory').value) || 0;
+const propertyValue = parseFloat(document.getElementById('property').value) || 0;
+const equipmentValue = parseFloat(document.getElementById('equipment').value) || 0;
 
-            // Calculate sum for Liabilities
-            const totalLiabilities = parseFloat(document.getElementById('accountsPayable').value) || 0 +
-                parseFloat(document.getElementById('loans').value) || 0 +
-                parseFloat(document.getElementById('mortgages').value) || 0 +
-                parseFloat(document.getElementById('taxesPayable').value) || 0 +
-                parseFloat(document.getElementById('otherLiabilities').value) || 0;
-                
+// Calculate total assets
+const totalAssets = cashValue + accountsReceivableValue + inventoryValue + propertyValue + equipmentValue;
+
+// Define variables to hold the values for liabilities
+const accountsPayableValue = parseFloat(document.getElementById('accountsPayable').value) || 0;
+const loansValue = parseFloat(document.getElementById('loans').value) || 0;
+const mortgagesValue = parseFloat(document.getElementById('mortgages').value) || 0;
+const taxesPayableValue = parseFloat(document.getElementById('taxesPayable').value) || 0;
+const otherLiabilitiesValue = parseFloat(document.getElementById('otherLiabilities').value) || 0;
+
+// Calculate total liabilities
+const totalLiabilities = accountsPayableValue + loansValue + mortgagesValue + taxesPayableValue + otherLiabilitiesValue;
+
                 
                 
 
