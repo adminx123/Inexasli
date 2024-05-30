@@ -384,11 +384,14 @@
             const resultDiv = document.getElementById('results');
             let result = '';
 
-            // Calculate sum for Cost of Goods Sold (COGS) Details
-            const totalCOGS = calculateAnnual('cogsMaterials', 'cogsMaterialsFrequency') +
-                calculateAnnual('cogsLabor', 'cogsLaborFrequency') +
-                calculateAnnual('cogsOverhead', 'cogsOverheadFrequency') +
-                calculateAnnual('cogsShipping', 'cogsShippingFrequency');
+
+const cogsMaterialsValue = parseFloat(document.getElementById('cogsMaterials').value);
+const cogsLaborValue = parseFloat(document.getElementById('cogsLabor').value);
+const cogsOverheadValue = parseFloat(document.getElementById('cogsOverhead').value);
+const cogsShippingValue = parseFloat(document.getElementById('cogsShipping').value);
+
+const totalCOGS = cogsMaterialsValue + cogsLaborValue + cogsOverheadValue + cogsShippingValue;
+
 
             // Calculate sum for Operational Costs
             const totalOperationalCosts = calculateAnnual('rent', 'rentFrequency') +
@@ -420,6 +423,9 @@
                 parseFloat(document.getElementById('mortgages').value) || 0 +
                 parseFloat(document.getElementById('taxesPayable').value) || 0 +
                 parseFloat(document.getElementById('otherLiabilities').value) || 0;
+                
+                
+                
 
 const selectedValue = parseFloat(document.getElementById('resultChange').value);
 
@@ -429,7 +435,7 @@ const selectedValue = parseFloat(document.getElementById('resultChange').value);
     const totalVehicleCostsDivided = totalVehicleCosts / selectedValue;
 
 
-            result += `<h3>Cost of Goods Sold (COGS) Total: ${totalCOGS}</h3>`;
+            result += `<h3>Cost of Goods Sold (COGS) Per Unit: ${totalCOGS}</h3>`;
             result += `<h3>Operational Costs Total: ${totalOperationalCostsDivided}</h3>`;
             result += `<h3>Building Costs Total: ${totalBuildingCostsDivided}</h3>`;
             result += `<h3>Vehicle Costs Total: ${totalVehicleCostsDivided}</h3>`;
