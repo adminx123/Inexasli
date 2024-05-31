@@ -60,7 +60,7 @@
         </div>
 
         <div class="input-group">
-            <label> Price Per</label>
+            <label for="price"></label>
             <input type="number" id="price">
             <label for="sales"></label>
             <div class="input-container">
@@ -355,12 +355,19 @@
         function toggleRevenueType() {
             const revenueType = document.getElementById('revenueType').value;
             const salesLabel = document.querySelector('label[for="sales"]');
+            const priceLabel = document.querySelector('label[for="price"]');
+
             if (revenueType === 'rental') {
                 salesLabel.textContent = 'Rentals Contracted';
+                priceLabel.textContent = 'Price Per Rental';
             } else if (revenueType === 'service') {
                 salesLabel.textContent = 'Hours Billed';
+                                priceLabel.textContent = 'Price Per Hour';
+
             } else {
                 salesLabel.textContent = 'Units Sold';
+                                priceLabel.textContent = 'Price Per Unit';
+
             }
         }
 
