@@ -82,7 +82,7 @@
         <h1>Business Metrics Calculator</h1>
 
         <div class="input-group">
-            <label for="cogs">Does your business have Cost of Goods Sold?</label>
+            <label for="cogs">Cost of goods sold applicable?</label>
             <select id="cogs" onchange="toggleCogs()">
                 <option value="no">No</option>
                 <option value="yes">Yes</option>
@@ -91,9 +91,9 @@
         </div>
 
         <div id="cogsSection">
-            <h2>Cost of Goods Sold (COGS) Details (if applicable, per unit basis)</h2>
+            <h2>Cost of Goods Sold</h2>
             <div class="input-group">
-                <label for="cogsMaterials">Materials</label>
+                <label for="cogsMaterials">Material Cost Per Unit</label>
                 <div class="input-container">
                     <input type="number" id="cogsMaterials">
                     <span id="cogsMaterialsFrequency"></span>
@@ -102,7 +102,7 @@
             
             
             <div class="input-group">
-                <label for="cogsLabor">Labor</label>
+                <label for="cogsLabor">Labor Cost Per Unit</label>
                 <div class="input-container">
                     <input type="number" id="cogsLabor">
                     <span id="cogsLaborFrequency"></span>
@@ -110,7 +110,7 @@
             </div>
             
             <div class="input-group">
-                <label for="cogsOverhead">Overhead</label>
+                <label for="cogsOverhead">Overhead Cost Per Unit</label>
                 <div class="input-container">
                     <input type="number" id="cogsOverhead">
                     <span id="cogsOverheadFrequency"></span>
@@ -118,7 +118,7 @@
             </div>
             
             <div class="input-group">
-                <label for="cogsShipping">Shipping</label>
+                <label for="cogsShipping">Shipping Cost Per Unit</label>
                 <div class="input-container">
                     <input type="number" id="cogsShipping">
                     <span id="cogsShippingFrequency"></span>
