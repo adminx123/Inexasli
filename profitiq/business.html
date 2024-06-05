@@ -347,14 +347,16 @@
     <script>
         // Define your JavaScript functions here
         
-          
-
         function toggleCogs() {
             const cogs = document.getElementById('cogs').value;
             const cogsSection = document.getElementById('cogsSection');
             cogsSection.style.display = cogs === 'yes' ? 'block' : 'none';
         }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleCogs();
+        });
+        
         function toggleRevenueType() {
             const revenueType = document.getElementById('revenueType').value;
             const salesLabel = document.querySelector('label[for="sales"]');
