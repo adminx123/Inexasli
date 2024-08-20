@@ -68,12 +68,13 @@
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  z-index: 2; /* Ensure it appears above other elements */
 }
 
 .menu div {
   width: 25px;
   height: 3px;
-  background-color: #fff;
+  background-color: #fff; /* Change to white to be visible against a black background */
   margin: 4px 0;
   transition: 0.3s;
 }
@@ -83,7 +84,7 @@
   position: absolute;
   top: 50px;
   right: 10px;
-  background-color: #333;
+  background-color: #000;
   border-radius: 5px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
@@ -159,37 +160,53 @@ Just as you reference your daily calorie intake to make informed dietary choices
     
     -->
     
-  <script>
- 
-
+ <script>
 // Hamburger menu toggle
 const menuToggle = document.getElementById('menuToggle');
 const dropdownMenu = document.getElementById('dropdownMenu');
 
+// Event listener for the hamburger menu
 menuToggle.addEventListener('click', () => {
   menuToggle.classList.toggle('active');
-  dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+  // Toggle display of dropdown menu
+  if (dropdownMenu.style.display === 'block') {
+    dropdownMenu.style.display = 'none';
+  } else {
+    dropdownMenu.style.display = 'block';
+  }
 });
 
-    function addToHomeScreen() {
-      // Check if browser supports adding to home screen
-      if (navigator.homescreen !== undefined) {
-        // If supported, prompt user to add
-        navigator.homescreen.getManifest().then(() => {
-          // User has already added to home screen, hide banner (optional)
-          document.getElementById("addToHomeScreenBanner").style.display = "none";
-        }).catch(() => {
-          // User has not added yet, display prompt
-          alert("Click 'Add to Home Screen' to launch this website like an app.");
-        });
-      } else {
-        // Not supported, display message
-        alert("Click your browsers share button & 'Add to Home Screen'");
-      }
-    }
-    // Add event listener to the button
-    const addToHomeScreenButton = document.getElementById("addToHomeScreenBanner").querySelector("button");
-    addToHomeScreenButton.addEventListener("click", addToHomeScreen);
-  </script>
+// Optional: Close the dropdown menu if clicked outside
+document.addEventListener('click', (event) => {
+  if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+    dropdownMenu.style.display = 'none';
+    menuToggle.classList.remove('active');
+  }
+});
+
+function addToHomeScreen() {
+  // Check if browser supports adding to home screen
+  if ('addEventListener' in window) {
+    window.addEventListener('beforeinstallprompt', (event) => {
+      // Prevent the mini-infobar from appearing on mobile
+      event.preventDefault();
+      // Show the install prompt
+      document.getElementById("addToHomeScreenBanner").style.display = "block";
+      document.getElementById("addToHomeScreenBanner").querySelector("button").addEventListener("click", () => {
+        event.prompt();
+      });
+    });
+  } else {
+    // Not supported, display message
+    alert("Click your browser's share button & 'Add to Home Screen'");
+  }
+}
+
+// Add event listener to the button
+const addToHomeScreenButton = document.getElementById("addToHomeScreenBanner").querySelector("button");
+addToHomeScreenButton.addEventListener("click", addToHomeScreen);
+</script>
+
+ 
    </body>
 </html>
