@@ -60,10 +60,82 @@
     cursor: pointer;
 }
 
+/* Hamburger menu styles */
+.menu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.menu div {
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  margin: 4px 0;
+  transition: 0.3s;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  background-color: #333;
+  border-radius: 5px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+.dropdown a:hover {
+  background-color: #575757;
+}
+
+.menu.active div:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.menu.active div:nth-child(2) {
+  opacity: 0;
+}
+
+.menu.active div:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
 
     </style>
   </head>
   <body>
+      
+      <!-- Hamburger Menu -->
+<div class="menu" id="menuToggle">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<!-- Dropdown Menu -->
+<div class="dropdown" id="dropdownMenu">
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#contact">Contact</a>
+</div>
+
+      
+      
+      
     <div id="addToHomeScreenBanner">
       <p>Download the Web App</p>
       <button>Install</button>
@@ -90,7 +162,14 @@ Just as you reference your daily calorie intake to make informed dietary choices
   <script>
  
 
+// Hamburger menu toggle
+const menuToggle = document.getElementById('menuToggle');
+const dropdownMenu = document.getElementById('dropdownMenu');
 
+menuToggle.addEventListener('click', () => {
+  menuToggle.classList.toggle('active');
+  dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+});
 
     function addToHomeScreen() {
       // Check if browser supports adding to home screen
