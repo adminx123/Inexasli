@@ -9,62 +9,7 @@
     <title>INCOME</title>
          <link rel="icon" type="image/x-icon" href="Logo.png">
  <style>
-
-/* Hamburger menu styles */
-.menu {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    z-index: 2; /* Ensure it appears above other elements */
-}
-
-.menu div {
-    width: 25px;
-    height: 3px;
-    background-color: #fff; /* Change to white to be visible against a black background */
-    margin: 4px 0;
-    transition: 0.3s;
-}
-
-.dropdown {
-    display: none;
-    position: absolute;
-    top: 50px;
-    right: 10px;
-    background-color: #000;
-    border-radius: 5px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-}
-
-.dropdown a {
-    color: white;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: center;
-}
-
-.dropdown a:hover {
-    background-color: #575757;
-}
-
-.menu.active div:nth-child(1) {
-    transform: rotate(-45deg) translate(-5px, 6px);
-}
-
-.menu.active div:nth-child(2) {
-    opacity: 0;
-}
-
-.menu.active div:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -6px);
-}
-
-     
+    
      /* Modal styles */
     .modal {
         display: none;
@@ -196,20 +141,7 @@ button {
 
 <body>
 
-   <!-- Hamburger Menu -->
-<div class="menu" id="menuToggle">
-    <div></div>
-    <div></div>
-    <div></div>
-</div>
-
-<!-- Dropdown Menu -->
-<div class="dropdown" id="dropdownMenu">
-    <a href="#finance">Finance</a>
-    <a href="#minimal">Minimalism</a>
-    <a href="#discipline">Discipline</a>
-</div>
- 
+    
         
    <!-- <div class="tab-container">
         <a href="http://inexasli.com/income.html" class="tab">Income</a>
@@ -549,26 +481,6 @@ button {
       
 
 <script>
-
-    // Hamburger menu toggle
-const menuToggle = document.getElementById('menuToggle');
-const dropdownMenu = document.getElementById('dropdownMenu');
-
-menuToggle.addEventListener('click', () => {
-    menuToggle.classList.toggle('active');
-    if (dropdownMenu.style.display === 'block') {
-        dropdownMenu.style.display = 'none';
-    } else {
-        dropdownMenu.style.display = 'block';
-    }
-});
-
-document.addEventListener('click', (event) => {
-    if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
-        dropdownMenu.style.display = 'none';
-        menuToggle.classList.remove('active');
-    }
-});
 
 
     
