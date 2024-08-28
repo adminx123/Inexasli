@@ -324,12 +324,79 @@ button {
 
      
 
+<div id="result"></div>
+
+
+     <form id="payment-form">
+    <div id="card-element">
+        <!-- A Stripe Element will be inserted here. -->
+    </div>
+
+    <!-- Used to display form errors. -->
+    <div id="card-errors" role="alert"></div>
+
+    <button type="submit">Submit Payment</button>
+</form>
 
 
   
 <script>
-    
-function getCookie1(name) {
+
+// Initialize Stripe with your publishable key
+const stripe = Stripe('your-publishable-key-here');
+
+// Create an instance of Elements
+const elements = stripe.elements();
+
+// Create an instance of the card Element
+const card = elements.create('card');
+
+// Add an instance of the card Element into the `card-element` div
+card.mount('#card-element');
+
+
+// Handle real-time validation errors from the card Element.
+card.on('change', (event) => {
+    const displayError = document.getElementById('card-errors');
+    if (event.error) {
+        displayError.textContent = event.error.message;
+    } else {
+        displayError.textContent = '';
+    }
+});
+
+// Get your form element
+const form = document.getElementById('payment-form');
+
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    // Disable the submit button to prevent repeated clicks
+    document.getElementById('submit-button').disabled = true;
+
+    // Create a payment method using the card element
+    const { paymentMethod, error } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: card,
+    });
+
+    if (error) {
+        // Display error.message in the card-errors element
+        document.getElementById('card-errors').textContent = error.message;
+
+        // Re-enable the submit button
+        document.getElementById('submit-button').disabled = false;
+    } else {
+        // If successful, submit the payment method ID to your server or handle the payment
+        console.log('PaymentMethod created:', paymentMethod);
+
+        // You can also redirect the user or show them a success message
+    }
+});
+
+     
+     
+     function getCookie1(name) {
     const value1 = `; ${document.cookie}`;
     const parts1 = value1.split(`; ${name}=`);
     let cookieValue1 = parts1.length === 2 ? decodeURIComponent(parts1.pop().split(';').shift()) : '';
@@ -337,7 +404,9 @@ function getCookie1(name) {
     return cookieValue1 === '' ? '0' : cookieValue1;
 }
 
-    
+
+
+     
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -593,6 +662,54 @@ document.addEventListener('change', function() {
     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
 });
 
+// Initialize Stripe with your publishable key
+var stripe = Stripe('YOUR_PUBLISHABLE_KEY');
+var elements = stripe.elements();
+
+// Create an instance of the card Element
+var card = elements.create('card');
+
+// Add an instance of the card Element into the `card-element` div
+card.mount('#card-element');
+
+
+     var form = document.getElementById('payment-form');
+
+form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    stripe.createPaymentMethod({
+        type: 'card',
+        card: card,
+        billing_details: {
+            name: 'Customer Name' // Replace with real customer name
+        },
+    }).then(function(result) {
+        if (result.error) {
+            // Show error in payment form
+            console.error(result.error.message);
+        } else {
+            // Send the payment method ID to your server
+            // Replace '/your-server-endpoint' with your actual server endpoint
+            fetch('/your-server-endpoint', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ payment_method_id: result.paymentMethod.id })
+            }).then(function(response) {
+                return response.json();
+            }).then(function(responseData) {
+                // Display the result on the page
+                document.getElementById('result').textContent = responseData.message;
+            }).catch(function(error) {
+                console.error('Error:', error);
+            });
+        }
+    });
+});
+
+     
 
 </script>
 
