@@ -311,18 +311,17 @@ button {
 <p>Revolving debt, such as student loans, lines of credit, credit cards, and tax arrears, allows for lump sum payments but usually incurs higher interest rates. This calculation estimates the time it will take to pay off the debt using disposable income if no savings are available.</p>
 
            <div style="padding: 20px;text-align:center;">
-    <script async
-  src="https://js.stripe.com/v3/buy-button.js">
-</script>
+   
 
-<stripe-buy-button
-  buy-button-id="buy_btn_1PP6gMILSdrwu9bg2MEKrKQv"
-  publishable-key="pk_live_51POOigILSdrwu9bgkEjpKt5ftc9eO6hsRqMfF8jpHurE4dMbJsCmyCa24qNHTpZ0YYjvNuM6QK5NGuLdwRIeixGw00r9CQZqME"
->
-</stripe-buy-button>
+
+   <form id="payment-form">
+  <div id="card-element">
+    <!-- A Stripe Element will be inserted here. -->
   </div>
-
-     
+  <button id="submit">Pay</button>
+  <div id="error-message"></div>
+</form>
+  
 
 
 
@@ -593,6 +592,38 @@ document.addEventListener('change', function() {
     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
 });
 
+
+
+
+     // Initialize Stripe
+const stripe = Stripe('YOUR_PUBLISHABLE_KEY'); // Replace with your actual publishable key
+const elements = stripe.elements();
+
+// Create an instance of the card Element
+const card = elements.create('card');
+
+// Add an instance of the card Element into the `card-element` div
+card.mount('#card-element');
+
+// Handle form submission
+const form = document.getElementById('payment-form');
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const {paymentMethod, error} = await stripe.createPaymentMethod({
+    type: 'card',
+    card: card,
+  });
+
+  if (error) {
+    // Display error.message in your UI
+    document.getElementById('error-message').textContent = error.message;
+  } else {
+    // Send paymentMethod.id to your server
+    // For example, you can use fetch or another method to send it to your server
+    console.log('PaymentMethod ID:', paymentMethod.id);
+  }
+});
 
 </script>
 
