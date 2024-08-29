@@ -594,6 +594,80 @@ document.addEventListener('change', function() {
 });
 
 
+
+
+// Stripe.js initialization
+const stripe = Stripe('pk_live_51POOigILSdrwu9bgkEjpKt5ftc9eO6hsRqMfF8jpHurE4dMbJsCmyCa24qNHTpZ0YYjvNuM6QK5NGuLdwRIeixGw00r9CQZqME'); // Replace with your public key
+
+// Create an instance of Elements
+const elements = stripe.elements();
+
+// Create an instance of the card Element
+const card = elements.create('card');
+
+// Add an instance of the card Element into the `card-element` div
+card.mount('#stripe-card-element');
+
+// Handle form submission
+const payButton = document.getElementById('pay-button');
+payButton.addEventListener('click', async () => {
+    const { token, error } = await stripe.createToken(card);
+
+    if (error) {
+        console.error('Error:', error);
+        alert('Payment failed: ' + error.message);
+    } else {
+        console.log('Token:', token);
+        
+        // Placeholder for actual payment processing
+        // For client-side only, simulate a successful payment
+        simulatePayment(token);
+    }
+});
+
+function simulatePayment(token) {
+    // Simulate a payment processing and result check
+    // Normally, you would send the token to your server to handle the payment
+    // For client-side only, assume the payment is successful and show results
+    setTimeout(() => {
+        showResults();
+    }, 1000); // Simulate a delay for processing
+}
+
+function showResults() {
+    // Hide the payment form
+    document.getElementById('stripe-card-element').style.display = 'none';
+    document.getElementById('pay-button').style.display = 'none';
+
+    // Show results
+    const results = document.querySelectorAll('summary, details');
+    results.forEach(result => result.style.display = 'block');
+
+    // Open modal with success message
+    const modal = document.getElementById("paymentModal");
+    modal.style.display = "block";
+}
+
+// Get the modal
+const modal = document.getElementById("paymentModal");
+
+// Get the <span> element that closes the modal
+const closeSpan = document.getElementsByClassName("close")[0];
+
+// When the user clicks the <span> (x), close the modal
+closeSpan.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+     
 </script>
 
 
