@@ -2,592 +2,351 @@
 <html lang="en">
 
 <head>
-     <script src="https://js.stripe.com/v3/"></script>
-     <link rel="manifest" href="/manifest.json">
+    <script src="https://js.stripe.com/v3/"></script>
+    <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUMMARY</title>
-         <link rel="icon" type="image/x-icon" href="Logo.png">
-    
-   <style>
-    
-     /* Modal styles */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.5);
-         cursor: pointer;
-    }
+    <link rel="icon" type="image/x-icon" href="Logo.png">
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
 
-    .modal-content {
-        background-color: #000000;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-    }
+        .modal-content {
+            background-color: #000000;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
 
-    /* Close button styles */
-    .close {
-        color: #FFFFFF;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
+        /* Close button styles */
+        .close {
+            color: #FFFFFF;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-    .close:hover,
-    .close:focus {
-        color: white;
-        text-decoration: none;
-        cursor: pointer;
-    }
+        .close:hover,
+        .close:focus {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
+        body {
+            background-color: #000;
+            color: #fff;
+            text-align: left;
+            margin: 20px;
+        }
 
-    
-    body {
-    background-color: #000;
-    color: #fff;
-    text-align: left;
-    margin: 20px;
-}
+        .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
 
-.row {
-    display: flex;
-    align-items: center; /* Align items vertically */
-    margin-bottom: 10px;
-}
+        label,
+        input[type="number"],
+        select {
+            flex: 1;
+            margin-right: 10px;
+        }
 
-label,
-input[type="number"],
-select {
-    flex: 1; /* Equal width for all elements */
-    margin-right: 10px;
-}
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
 
-span {
-    /* Adjust as needed */
-}
+        .tab-container {
+            display: flex;
+            justify-content: center;
+        }
 
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-}
+        .tab {
+            flex: 1;
+            padding: 10px;
+            cursor: pointer;
+            background-color: black;
+            border: 1px solid;
+            border-radius: 5px 5px 0 0;
+            margin: 0 5px;
+            color: white;
+            text-align: center;
+            box-sizing: border-box;
+        }
 
-.tab-container {
-    display: flex;
-    justify-content: center; /* Center-align tabs */
-}
+        .active {
+            background-color: white;
+            color: black;
+        }
 
-.tab {
-    flex: 1; /* Make each tab equally spaced */
-    padding: 10px; /* Adjust padding as needed */
-    cursor: pointer;
-    background-color: black;
-    border: 1px solid; /* Adjust border thickness as needed */
-    border-radius: 5px 5px 0 0;
-    margin: 0 5px; /* Adjust spacing between tabs */
-    color: white; /* Set the text color to white */
-    text-align: center; /* Center-align text within the tab */
-    box-sizing: border-box; /* Include padding and border in the width */
-}
+        @media (max-width: 768px) {
+            label,
+            input[type="number"],
+            select {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
 
-/* Style for the active tab */
-.active {
-    background-color: white;
-    color: black; /* Set the text color of the active tab to black */
-}
+        .numeric-input {
+            width: 200px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
 
-/* Media Query for smaller screens (e.g., mobile) */
-@media (max-width: 768px) {
-    label,
-    input[type="number"],
-    select {
-        width: 100%; /* Set width to 100% for smaller screens */
-        margin-right: 0; /* Remove margin between elements */
-    }
-}
+        .tooltip .tooltiptext {
+            display: none;
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
 
-.numeric-input {
-    /* Apply styling as needed */
-    width: 200px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-}
+        .container {
+            display: none;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
 
+        .debt-ratio {
+        }
 
+        .good {
+            color: green;
+        }
 
-/* Tooltip text */
-.tooltip .tooltiptext {
-  display: none; /* Hide the tooltip */
-  visibility: hidden; /* Initially hidden */
-  width: 200px; /* Adjust width as needed */
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%; /* Adjust positioning as needed */
-  left: 50%;
-  margin-left: -100px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
+        .warning {
+            color: yellow;
+        }
 
-
-.container {
-        display: none;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-    }
-
-
-       .debt-ratio {
-  /* Default color for the value */
-}
-
-.good {
-  color: green;
-}
-
-.warning {
-  color: yellow;
-}
-
-.critical {
-  color: red;
-}
-
- 
-
-    
+        .critical {
+            color: red;
+        }
     </style>
 </head>
 
 <body>
-<h3 style="text-align: center;"> 2024 PERSONAL FINANCIAL ESTIMATE</h3>
- <div class="tab-container" style="margin-bottom: 20px;">
+    <h3 style="text-align: center;">2024 PERSONAL FINANCIAL ESTIMATE</h3>
+    <div class="tab-container" style="margin-bottom: 20px;">
         <a href="http://inexasli.com/finance/income.html" class="tab">Income</a>
         <a href="http://inexasli.com/finance/expense.html" class="tab">Expense</a>
         <a href="http://inexasli.com/finance/asset.html" class="tab">Asset</a>
         <a href="http://inexasli.com/finance/liability.html" class="tab">Liability</a>
-            </div>
-  
+    </div>
 
-   
-   <div style="text-align:center;"><select id="frequency">
-        <option value="annual">Annual Frequency</option>
-        <option value="monthly">Monthly Frequency</option>
-        <option value="weekly">Weekly Frequency</option>
-    </select></div>
-    
-   
+    <div style="text-align:center;">
+        <select id="frequency">
+            <option value="annual">Annual Frequency</option>
+            <option value="monthly">Monthly Frequency</option>
+            <option value="weekly">Weekly Frequency</option>
+        </select>
+    </div>
+
     <summary>
-    <h2>Disposable Income<span id="ANNUALDISPOSABLEINCOME"></span></h2>
-    <i>Income left after expenses, taxes & other obligations. Use: Debt repayment, savings, investments & discretionary spending.</i>
-</summary>
-
-<details style="margin-top:10px;">
-    <p style="margin-left:20px;"><span id="RegionDropdown"></span>
-        <span id="SubregionDropdown"></span></p>
-    <i style="margin-left:20px;">Residence for tax and obligatory purposes</i>
-
-    <p style="margin-left:20px;"><u>Income:</u> <span id="annual_income_sum"></span></p>
-    <i style="margin-left:20px;">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</i>
-
-    <p style="margin-left:20px;"><u>Expense:</u> <span id="annual_expense_sum"></span></p>
-    <i style="margin-left:20px;">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</i>
-
-    <p style="margin-left:20px;"><u>Total Tax Payable:</u><span id="tax_sum"></span></p>
-    <i style="margin-left:20px;">Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</i>
-    
-    <details>
-        <p style="margin-left:60px;"><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
-        <i style="margin-left:60px;">Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</i>
-
-        <p style="margin-left:60px;"><u>Regional Tax Payable:</u> <span id="region_tax_sum"></span></p>
-        <i style="margin-left:60px;">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</i>
-
-        <p style="margin-left:60px;"><u>Subregional Tax Payable:</u><span id="subregion_tax_sum"></span></p> 
-        <i style="margin-left:60px;">Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.</i>
-        
-        <div class="usa">
-            <p style="margin-left:60px;"><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
-            <i style="margin-left:60px;">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</i>
-        </div>
-    </details>
-    
-    <p style="margin-left:20px;"><u>Other Obligations:</u><span id="ANNUALGOVERNMENTOBLIGATIONS"></span></p>
+        <h2>Disposable Income<span id="ANNUALDISPOSABLEINCOME"></span></h2>
+        <i>Income left after expenses, taxes & other obligations. Use: Debt repayment, savings, investments & discretionary spending.</i>
+    </summary>
 
     <details style="margin-top:10px;">
-        <!-- CAN -->
-        <div class="can">
-            <p style="margin-left:60px;"><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
-            <i style="margin-left:60px;">Canada Pension Plan contributions for self-employed individuals. Use: Retirement planning for self-employed.</i>
+        <p style="margin-left:20px;"><span id="RegionDropdown"></span> <span id="SubregionDropdown"></span></p>
+        <i style="margin-left:20px;">Residence for tax and obligatory purposes</i>
+        <p style="margin-left:20px;"><u>Income:</u> <span id="annual_income_sum"></span></p>
+        <i style="margin-left:20px;">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</i>
+        <p style="margin-left:20px;"><u>Expense:</u> <span id="annual_expense_sum"></span></p>
+        <i style="margin-left:20px;">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</i>
+        <p style="margin-left:20px;"><u>Total Tax Payable:</u><span id="tax_sum"></span></p>
+        <i style="margin-left:20px;">Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</i>
+        <details>
+            <p style="margin-left:60px;"><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
+            <i style="margin-left:60px;">Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</i>
+            <p style="margin-left:60px;"><u>Regional Tax Payable:</u> <span id="region_tax_sum"></span></p>
+            <i style="margin-left:60px;">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</i>
+            <p style="margin-left:60px;"><u>Subregional Tax Payable:</u><span id="subregion_tax_sum"></span></p>
+            <i style="margin-left:60px;">Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.</i>
+            <div class="usa">
+                <p style="margin-left:60px;"><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
+                <i style="margin-left:60px;">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</i>
+            </div>
+        </details>
+        <p style="margin-left:20px;"><u>Other Obligations:</u><span id="ANNUALGOVERNMENTOBLIGATIONS"></span></p>
+        <details style="margin-top:10px;">
+            <!-- CAN -->
+            <div class="can">
+                <p style="margin-left:60px;"><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
+                <i style="margin-left:60px;">Canada Pension Plan contributions for self-employed individuals. Use: Retirement planning for self-employed.</i>
+                <p style="margin-left:60px;"><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
+                <i style="margin-left:60px;">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</i>
+                <p style="margin-left:60px;"><u>Total CPP Payable:</u> <span id="cpp_sum"></span></p>
+                <i style="margin-left:60px;">General contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the government on your behalf.</i>
+                <p style="margin-left:60px;"><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
+                <i style="margin-left:60px;">Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</i>
+            </div>
 
-            <p style="margin-left:60px;"><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
-            <i style="margin-left:60px;">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</i>
+            <!-- USA -->
+            <div class="usa">
+                <p style="margin-left:60px;"><u>Social Security Total US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
+                <i style="margin-left:60px;">Social Security taxes in the United States. Use: Retirement and disability benefits.</i>
+                <p style="margin-left:60px;"><u>Medicare Total US:</u><span id="TOTALMEDICARE"></span></p>
+                <i style="margin-left:60px;">Medicare taxes in the United States. Use: Health coverage for seniors.</i>
+            </div>
 
-            <p style="margin-left:60px;"><u>Total CPP Payable:</u> <span id="cpp_sum"></span></p>
-            <i style="margin-left:60px;">General contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the government on your behalf.</i>
+            <!-- UK -->
+            <div class="uk">
+                <p style="margin-left:60px;"><u>National Insurance Total UK:</u> <span id="NATIONALINSURANCE"></span></p>
+                <i style="margin-left:60px;">National Insurance contributions in the United Kingdom. Use: Social security benefits and pensions.</i>
+            </div>
 
-            <p style="margin-left:60px;"><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
-            <i style="margin-left:60px;">Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</i>
-        </div>
-
-        <!-- USA -->
-        <div class="usa">
-            <p style="margin-left:60px;"><u>Social Security Total US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
-            <i style="margin-left:60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</i>
-
-            <p style="margin-left:60px;"><u>Social Security Employed US:</u> <span id="TOTALSOCIALSECURITYE"></span></p>
-            <i style="margin-left:60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</i>
-
-            <p style="margin-left:60px;"><u>Social Security Self Employed US:</u> <span id="TOTALSOCIALSECURITYSE"></span></p>
-            <i style="margin-left:60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</i>
-
-            <p style="margin-left:60px;"><u>Medicare:</u> <span id="TOTALMEDICARE"></span></p>
-            <i style="margin-left:60px;">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use: Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals.</i>
-        </div>
+            <!-- EU -->
+            <div class="eu">
+                <p style="margin-left:60px;"><u>Total Social Security Contributions:</u> <span id="TOTALSOCIALSECURITY"></span></p>
+                <i style="margin-left:60px;">Social security contributions in the European Union. Use: Access to social benefits and pensions.</i>
+            </div>
+        </details>
+        <details>
+            <p style="margin-left:20px;"><u>Charitable Contributions:</u> <span id="charitable_contributions"></span></p>
+            <i style="margin-left:20px;">Total charitable donations. Use: Tax deductions, financial planning.</i>
+            <p style="margin-left:20px;"><u>Other Deductions:</u> <span id="other_deductions"></span></p>
+            <i style="margin-left:20px;">Other non-taxable deductions. Use: Accurate financial overview.</i>
+        </details>
     </details>
-</details>
 
-    
-<summary>
-    <h2>Net Worth <span id="NETWORTH"></span></h2>
-    <i>Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</i>
-</summary>
+    <summary style="margin-top:10px;">
+        <h2>Net Worth<span id="NETWORTH"></span></h2>
+        <i>Assets - Liabilities. Use: Evaluate overall financial health and stability.</i>
+    </summary>
 
-<details style="margin-top:10px;">
-    <p style="margin-left:40px;"><u>Assets:</u><span id="ASSETS"></span></p>
-    <i style="margin-left:40px;">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</i>
-   
-    <p style="margin-left:40px;"><u>Liabilities:</u><span id="LIABILITIES"></span></p>
-    <i style="margin-left:40px;">Financial debts or obligations. Use: Debt management, financial strategy formulation.</i>
-</details>
+    <details>
+        <p style="margin-left:20px;"><u>Total Assets:</u> <span id="total_assets"></span></p>
+        <i style="margin-left:20px;">Sum of all owned assets. Use: Evaluate financial strength and investment potential.</i>
+        <p style="margin-left:20px;"><u>Total Liabilities:</u> <span id="total_liabilities"></span></p>
+        <i style="margin-left:20px;">Sum of all owed liabilities. Use: Financial planning and debt management.</i>
+        <p style="margin-left:20px;"><u>Total Debt Ratio:</u> <span id="total_debt_ratio"></span></p>
+        <i style="margin-left:20px;">Ratio of total debt to total assets. Use: Assess financial risk and leverage.</i>
+        <details>
+            <div class="debt-ratio">
+                <p class="good">Debt Ratio < 0.3: Good</p>
+                <p class="warning">Debt Ratio 0.3 - 0.6: Warning</p>
+                <p class="critical">Debt Ratio > 0.6: Critical</p>
+            </div>
+        </details>
+    </details>
 
-<summary>
-    <h2>Ratios</h2>
-</summary>
+    <summary style="margin-top:10px;">
+        <h2>Income Distribution</h2>
+    </summary>
 
-<i>    Ratios serve to provide a quantitative comparison between two relevant financial metrics. They offer insights into various aspects of financial health, such as debt management, savings efficiency, affordability, and progress towards financial goals.</i>
+    <details>
+        <p style="margin-left:20px;"><u>Income Percentage by Source:</u> <span id="income_percentage_by_source"></span></p>
+        <i style="margin-left:20px;">Distribution of income among various sources. Use: Diversify income streams, plan for financial stability.</i>
+    </details>
 
+    <summary style="margin-top:10px;">
+        <h2>Expenses Distribution</h2>
+    </summary>
 
+    <details>
+        <p style="margin-left:20px;"><u>Expense Percentage by Category:</u> <span id="expense_percentage_by_category"></span></p>
+        <i style="margin-left:20px;">Distribution of expenses among various categories. Use: Budget adjustments and savings planning.</i>
+    </details>
 
-<details style = "margin-top:10px;">
-    <p><u>Debt to Income:</u> <span id="DEBTTOINCOME"></span></p>
-    <i>Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health.</i>
+    <div id="stripe-card-element"></div>
+    <button id="pay-button">Pay</button>
 
-    <p><u>Savings to Debt:</u> <span id="SAVINGSTODEBT"></span></p>
-    <i>Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.</i>
+    <!-- Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Your payment was successful!</p>
+        </div>
+    </div>
 
-    <p><u>Housing to Income:</u> <span id="HOUSINGTOINCOME"></span></p>
-    <i>Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.</i>
+    <script>
+        // Stripe.js initialization
+        const stripe = Stripe('pk_live_51POOigILSdrwu9bgkEjpKt5ftc9eO6hsRqMfF8jpHurE4dMbJsCmyCa24qNHTpZ0YYjvNuM6QK5NGuLdwRIeixGw00r9CQZqME'); // Replace with your public key
 
-    <p><u>FIRE:</u> <span id="FIRERATIO"></span></p>
-    <i>Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</i>
+        // Create an instance of Elements
+        const elements = stripe.elements();
 
+        // Create an instance of the card Element
+        const card = elements.create('card');
 
-</details>
-     
-   <h2>Financial Projections</h2>
-   
-   <p><u>Revolving Debt - Time to Pay:</u> <span id="TIMETOPAYDEBT"></span></p>
-<p>Revolving debt, such as student loans, lines of credit, credit cards, and tax arrears, allows for lump sum payments but usually incurs higher interest rates. This calculation estimates the time it will take to pay off the debt using disposable income if no savings are available.</p>
+        // Add an instance of the card Element into the `card-element` div
+        card.mount('#stripe-card-element');
 
-           <div style="padding: 20px;text-align:center;">
-    
+        // Handle form submission
+        const payButton = document.getElementById('pay-button');
+        payButton.addEventListener('click', async () => {
+            const { token, error } = await stripe.createToken(card);
 
-     
+            if (error) {
+                console.error('Error:', error);
+                // Handle error
+            } else {
+                console.log('Token:', token);
+                // Send the token to your server for processing
+                // For client-side only, this will just log the token
+            }
+        });
 
+        // Get the modal
+        const modal = document.getElementById("paymentModal");
 
+        // Get the button that opens the modal
+        const payButtonModal = document.getElementById("pay-button");
 
-  
-<script>
-    
-function getCookie1(name) {
-    const value1 = `; ${document.cookie}`;
-    const parts1 = value1.split(`; ${name}=`);
-    let cookieValue1 = parts1.length === 2 ? decodeURIComponent(parts1.pop().split(';').shift()) : '';
-    
-    return cookieValue1 === '' ? '0' : cookieValue1;
-}
+        // Get the <span> element that closes the modal
+        const closeSpan = document.getElementsByClassName("close")[0];
 
-    
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    let cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
-    
-    // Get the selected frequency from the dropdown
-    const frequencyDropdown = document.getElementById('frequency');
-    const selectedFrequency = frequencyDropdown.value;
-
-    // Convert the annual amount based on the selected frequency, if applicable
-    if (selectedFrequency !== 'annually' && !isNaN(cookieValue)) {
-        if (selectedFrequency === 'monthly') {
-            cookieValue /= 12;
-        } else if (selectedFrequency === 'weekly') {
-            cookieValue /= 52;
+        // When the user clicks the button, open the modal
+        payButtonModal.onclick = function() {
+            modal.style.display = "block";
         }
-    }
-    
-    return cookieValue === '' ? '0' : cookieValue;
-}
 
+        // When the user clicks on <span> (x), close the modal
+        closeSpan.onclick = function() {
+            modal.style.display = "none";
+        }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Function to retrieve cookie value by name
-    
-function updateOnChange(){    // Update HTML elements with cookie values
-        document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
-        document.getElementById('SubregionDropdown').textContent =  "Subregion: " + getCookie('SubregionDropdown');
-    
-    document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME');
-    document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX');
-    document.getElementById('subregion_tax_sum').textContent = " $" + getCookie('ANNUALSUBREGIONALTAX');
-    document.getElementById('tax_sum').textContent = " $" + getCookie('ANNUALTAX');
-        
-    document.getElementById('annual_income_sum').textContent = " $" + getCookie('ANNUALINCOME');
-    document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM');
-    document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP');
-    document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI');
-    
-
-    document.getElementById('annual_cpp_seresult').textContent = " $" + getCookie('CPPPAYABLESELFEMPLOYED');
-    document.getElementById('annual_cpp_eresult').textContent = " $" + getCookie('CPPPAYABLEEMPLOYED');
-
-        document.getElementById('TOTALMEDICARE').textContent = " $" + getCookie('TOTALMEDICARE');
-    document.getElementById('TOTALSOCIALSECURITY').textContent = " $" + getCookie('TOTALSOCIALSECURITY');
-        document.getElementById('TOTALSOCIALSECURITYE').textContent = " $" + getCookie('TOTALSOCIALSECURITYE');
-    document.getElementById('TOTALSOCIALSECURITYSE').textContent = " $" + getCookie('TOTALSOCIALSECURITYSE');
-
-    document.getElementById('TOTALTAXCG').textContent = " $" + getCookie('TOTALTAXCG');
-
-     document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
-     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
-     
-
-let ANNUALDISPOSABLEINCOME;
-
-if (getCookie('RegionDropdown') === 'USA') {
-    ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
-        parseFloat(getCookie('ANNUALEXPENSESUM')) -
-        parseFloat(getCookie('TOTALMEDICARE')) -
-        parseFloat(getCookie('TOTALSOCIALSECURITY')) -
-        parseFloat(getCookie('TOTALTAXCG')) -
-        parseFloat(getCookie('ANNUALTAX'));
-} else if (getCookie('RegionDropdown') === 'CAN') {
-    ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
-        parseFloat(getCookie('ANNUALEXPENSESUM')) -
-        parseFloat(getCookie('ANNUALEI')) -
-        parseFloat(getCookie('ANNUALCPP')) -
-        parseFloat(getCookie('ANNUALTAX'));
-}
-
-// Update HTML element with the calculated value
-document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
-
-    const frequencyDropdown = document.getElementById('frequency');
-
-let TIMETOPAYDEBT;
-
-TIMETOPAYDEBT = parseFloat(getCookie1('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
-
-// Determine the text based on the selected frequency
-let frequencyText = '';
-switch (frequencyDropdown.value) {
-    case 'annual':
-        frequencyText = 'Years';
-        break;
-    case 'monthly':
-        frequencyText = 'Months';
-        break;
-    case 'weekly':
-        frequencyText = 'Weeks';
-        break;
-    default:
-        frequencyText = 'Unknown';
-}
-
-document.getElementById('TIMETOPAYDEBT').textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
- 
-     
-let ANNUALGOVERNMENTOBLIGATIONS;
-
-    if (getCookie('RegionDropdown') === 'USA') {
-    ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('TOTALSOCIALSECURITY')) +
-        parseFloat(getCookie('TOTALMEDICARE'));
-} else if (getCookie('RegionDropdown') === 'CAN') {
-    ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('ANNUALCPP')) +
-        parseFloat(getCookie('ANNUALEI'))  ;
-}
-
-// Update HTML element with the calculated value
-document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
-    
-    NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
-    document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
-
-     
-DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
-        
- function colorChangeDTI() {
-    // Get the debt-to-income ratio value
-    var debtToIncomeText = document.getElementById("DEBTTOINCOME").textContent;
-    var debtToIncome = parseFloat(debtToIncomeText);
-
-    // Define the ranges
-    var greatRange = 20;
-    var goodMinRange = 20;
-    var goodMaxRange = 36;
-    
-    // Apply color based on the value
-    if (debtToIncome < greatRange) {
-        document.getElementById("DEBTTOINCOME").style.color = "green";
-    } else if (debtToIncome >= goodMinRange && debtToIncome <= goodMaxRange) {
-        document.getElementById("DEBTTOINCOME").style.color = "yellow";
-    } else {
-        document.getElementById("DEBTTOINCOME").style.color = "red";
-    }
-}
-    document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3); 
-    colorChangeDTI();
-    
-HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
-
-    function colorChangeHTI() {
-    // Get the housing-to-income ratio value
-    var htiText = document.getElementById("HOUSINGTOINCOME").textContent;
-    var hti = parseFloat(htiText);
-
-    // Define the ranges
-    var greatRange = 25;
-    var okayMinRange = 25;
-    var okayMaxRange = 35;
-
-    // Apply color based on the value
-    if (hti < greatRange) {
-        document.getElementById("HOUSINGTOINCOME").style.color = "green";
-    } else if (hti >= okayMinRange && hti <= okayMaxRange) {
-        document.getElementById("HOUSINGTOINCOME").style.color = "yellow";
-    } else {
-        document.getElementById("HOUSINGTOINCOME").style.color = "red";
-    }
-}
-
-// Assuming HOUSINGTOINCOME is the ID of the element displaying HTI ratio
-document.getElementById('HOUSINGTOINCOME').textContent = HOUSINGTOINCOME.toFixed(3); 
-colorChangeHTI(); 
-
-   SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
-
-function colorChangeSavingsToDebt() {
-    // Get the savings-to-debt ratio value
-    var savingsToDebtText = document.getElementById("SAVINGSTODEBT").textContent;
-    var savingsToDebt = parseFloat(savingsToDebtText);
-
-    // Define the ranges
-    var greatRange = 2; // Example threshold for "great" savings-to-debt ratio
-    var goodMinRange = 1; // Example lower threshold for "good" savings-to-debt ratio
-    var goodMaxRange = 2; // Example upper threshold for "good" savings-to-debt ratio
-
-    // Apply color based on the value
-    if (savingsToDebt >= greatRange) {
-        document.getElementById("SAVINGSTODEBT").style.color = "green";
-    } else if (savingsToDebt >= goodMinRange && savingsToDebt <= goodMaxRange) {
-        document.getElementById("SAVINGSTODEBT").style.color = "yellow";
-    } else {
-        document.getElementById("SAVINGSTODEBT").style.color = "red";
-    }
-}
-
-// Assuming "SAVINGSTODEBT" is the ID of the element displaying the savings-to-debt ratio
-document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
-colorChangeSavingsToDebt();
-
-
-
-    
-  FIRERATIO = parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSESUM')); // Descriptive variable name
-
-function colorChangeFIRE() {
-    // Get the FIRE ratio value
-    var FIREText = document.getElementById("FIRERATIO").textContent;
-    var FIRE = parseFloat(FIREText);
-
-    // Define the ranges for FIRE ratio
-    var greatRange = .25; // Example threshold for "great" FIRE ratio
-    var okayMinRange = .10; // Example lower threshold for "okay" FIRE ratio
-    var okayMaxRange = .25; // Example upper threshold for "okay" FIRE ratio
-
-    // Apply color based on the value
-    if (FIRE >= greatRange) {
-        document.getElementById("FIRERATIO").style.color = "green";
-    } else if (FIRE >= okayMinRange && FIRE <= okayMaxRange) {
-        document.getElementById("FIRERATIO").style.color = "yellow";
-    } else {
-        document.getElementById("FIRERATIO").style.color = "red";
-    }
-}
-
-// Assuming FIRERATIO is the ID of the element displaying the FIRE ratio
-document.getElementById('FIRERATIO').textContent = FIRERATIO.toFixed(3);
-colorChangeFIRE();
-
-  } 
-  
-  updateOnChange();
-  
-   // Add an event listener to the frequency dropdown
-    const frequencyDropdown = document.getElementById('frequency');
-    frequencyDropdown.addEventListener('change', function() {
-        // Call the update function when the frequency dropdown value changes
-        updateOnChange();
-    
-});
-
-
-     
-});
-
-
-document.addEventListener('change', function() {
-    var usaDiv = document.querySelector('.usa');
-    var canDiv = document.querySelector('.can');
-
-    var regionDropdownValue = getCookie('RegionDropdown');
-
-    if (regionDropdownValue === 'USA') {
-        usaDiv.style.display = 'block';
-        canDiv.style.display = 'hidden';
-    } else if (regionDropdownValue === 'CAN') {
-        usaDiv.style.display = 'hidden';
-        canDiv.style.display = 'block';
-    }
-    document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
-    document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
-});
-
-
-</script>
-
-
-     
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
+
 </html>
