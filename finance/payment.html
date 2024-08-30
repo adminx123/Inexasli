@@ -194,17 +194,19 @@
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const {token, error} = await stripe.createToken(cardElement);
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+        });
 
         if (error) {
           const errorElement = document.getElementById('card-errors');
           errorElement.textContent = error.message;
         } else {
-          // Store the token in a secure cookie
-          document.cookie = `payment_token=${token.id}; Secure; HttpOnly; SameSite=Strict; path=/`;
-
-          // Redirect to the result page
-          window.location.href = 'summary.html';
+          // Send the payment method ID to your server for processing
+          // For this case, we'll just redirect to the summary page
+          // Replace this with actual server-side handling if needed
+          window.location.href = `summary.html?payment_method=${paymentMethod.id}`;
         }
       });
     </script>
