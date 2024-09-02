@@ -210,8 +210,8 @@ const addToHomeScreenButton = document.getElementById("addToHomeScreenBanner").q
 addToHomeScreenButton.addEventListener("click", addToHomeScreen);
 
  // Password prompt 
-        const binRentalLink = document.getElementById('FHE');
-        binRentalLink.addEventListener('click', function(event) {
+        const FHE = document.getElementById('FHE');
+        FHE.addEventListener('click', function(event) {
             event.preventDefault(); // Prevent the default action
             const password = prompt('Please enter the password for access:');
             if (password === 'incomeiq') { 
@@ -221,7 +221,9 @@ addToHomeScreenButton.addEventListener("click", addToHomeScreen);
             }
         });
    
- 
+
+
+   
  </script>
 
  
