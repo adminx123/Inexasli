@@ -228,29 +228,25 @@
         }
       });
 
-      // Form submission
-      document.getElementById('costSavingsForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const company = document.getElementById('company').value;
-        const industry = document.getElementById('industry').value;
-        const csEmployees = document.getElementById('csEmployees').value;
-        const avgSalary = document.getElementById('avgSalary').value;
-        const tasks = document.getElementById('tasks').value;
-        
-        const subject = 'AI Cost Savings Inquiry from ' + company;
-        const body = `Name: ${name}%0D%0A
-Email: ${email}%0D%0A
-Company: ${company}%0D%0A
-Industry: ${industry}%0D%0A
-Customer Service Employees: ${csEmployees}%0D%0A
-Average Annual Salary: $${(csEmployees * avgSalary).toFixed(2)}%0D%0A
-Tasks: ${tasks}`;
-        
-        window.location.href = `mailto:admin@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      });
+     // Form submission
+document.getElementById('costSavingsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const company = document.getElementById('company').value;
+    const industry = document.getElementById('industry').value;
+    const csEmployees = document.getElementById('csEmployees').value;
+    const avgSalary = document.getElementById('avgSalary').value;
+    const tasks = document.getElementById('tasks').value;
+    
+    const subject = 'AI Cost Savings Inquiry from ' + company;
+    const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nCustomer Service Employees: ${csEmployees}\nAverage Annual Salary: $${(csEmployees * avgSalary).toFixed(2)}\nTasks: ${tasks}`;
+    
+    // Use encodeURIComponent for the subject and body
+    window.location.href = `mailto:admin@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+});
+
     </script>
   </body>
 </html>
