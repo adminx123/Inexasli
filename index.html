@@ -204,7 +204,21 @@ function addToHomeScreen() {
 // Add event listener to the button
 const addToHomeScreenButton = document.getElementById("addToHomeScreenBanner").querySelector("button");
 addToHomeScreenButton.addEventListener("click", addToHomeScreen);
-</script>
+
+ // Password prompt 
+        const binRentalLink = document.getElementById('binRentalLink');
+        binRentalLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default action
+            const password = prompt('Please enter the password for access:');
+            if (password === 'facebook') { // Replace 'facebook' with the actual password
+                window.location.href = '/service/box.html'; // Redirect to Bin Rental page
+            } else {
+                alert('Incorrect password. Access denied.');
+            }
+        });
+   
+ 
+ </script>
 
  
    </body>
