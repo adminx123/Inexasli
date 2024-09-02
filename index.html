@@ -128,7 +128,7 @@
 
 <!-- Dropdown Menu -->
 <div class="dropdown" id="dropdownMenu">
-  <a href="finance/income.html">FHE</a>
+  <a href="finance/income.html" id="FHE">FHE</a>
   <a href="#minimal">AI Integration</a>
   <!-- <a href="#contact">Contact</a> --
 </div>
@@ -206,12 +206,12 @@ const addToHomeScreenButton = document.getElementById("addToHomeScreenBanner").q
 addToHomeScreenButton.addEventListener("click", addToHomeScreen);
 
  // Password prompt 
-        const binRentalLink = document.getElementById('binRentalLink');
+        const binRentalLink = document.getElementById('FHE');
         binRentalLink.addEventListener('click', function(event) {
             event.preventDefault(); // Prevent the default action
             const password = prompt('Please enter the password for access:');
-            if (password === 'facebook') { // Replace 'facebook' with the actual password
-                window.location.href = '/service/box.html'; // Redirect to Bin Rental page
+            if (password === 'incomeiq') { 
+                window.location.href = finance/income.html'; // Redirect to Bin Rental page
             } else {
                 alert('Incorrect password. Access denied.');
             }
