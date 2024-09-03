@@ -151,10 +151,18 @@ button {
 
 
 .container {
-        display: none;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-    }
+    background-color: #fff; /* White background */
+    color: #000; /* Black text color for contrast */
+    max-width: 800px; /* Maximum width of the container */
+    margin: 20px; /* Margin around the container */
+    padding: 20px; /* Padding inside the container */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    text-align: left; /* Text alignment inside the container */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Stretch items to fill container */
+}
 
 
        .debt-ratio {
@@ -180,6 +188,8 @@ button {
 </head>
 
 <body>
+
+     <div class="container">
 <h3 style="text-align: center;"> 2024 PERSONAL FINANCIAL ESTIMATE</h3>
  <div class="tab-container" style="margin-bottom: 20px;">
         <a href="http://inexasli.com/finance/income.html" class="tab">Income</a>
@@ -312,7 +322,7 @@ button {
 
            <div style="padding: 20px;text-align:center;">
 
-
+           </div>
   
 <script>
     
