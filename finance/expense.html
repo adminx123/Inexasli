@@ -145,10 +145,18 @@ button {
 
 
 .container {
-        display: none;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-    }
+    background-color: #fff; /* White background */
+    color: #000; /* Black text color for contrast */
+    max-width: 800px; /* Maximum width of the container */
+    margin: 20px; /* Margin around the container */
+    padding: 20px; /* Padding inside the container */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    text-align: left; /* Text alignment inside the container */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Stretch items to fill container */
+}
 
     </style>
 </head>
@@ -161,8 +169,9 @@ button {
         <a href="http://inexasli.com/liability.html" class="tab">Liability</a>
         <a href="http://inexasli.com/summary.html" class="tab">Summary</a>
     </div> -->
-    
-<div style="display: flex; justify-content: space-between; padding-top: 10px;">
+
+	  <div class="container">
+<div style="display: flex; justify-content: space-between; padding-top: 10px;" >
     <div style="text-align: left;">
         <button onclick="calculateBack()" style="border: none; background-color: transparent; font-size: 24px; color: black;">&lt;</button>
     </div>
@@ -176,7 +185,7 @@ button {
 
 
 
-</div>
+
 
 
 	 
@@ -683,7 +692,7 @@ Step 3: Enter expense amounts & select the corresponding frequency.
         <button onclick="calculateNext()" style="border: none; background-color: transparent; font-size: 24px; color: black;">&gt;</button>
     </div>
 </div>
-
+	  </div>
 	  
 <script>
 	
@@ -1068,7 +1077,7 @@ setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
     
 
     
-   
+  <!-- 
 <div class ="container">
            <p><u>Expense:</u> <span id="ANNUALEXPENSESUM"></span></p>
 <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
@@ -1081,6 +1090,7 @@ setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
 
 
     </div>
+    -->
     
 </body>
 
