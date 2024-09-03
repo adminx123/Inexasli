@@ -255,7 +255,7 @@ document.getElementById('costSavingsForm').addEventListener('submit', function(e
     const tasks = document.getElementById('tasks').value;
     
     const subject = 'AI Cost Savings Inquiry from ' + company;
-    const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nCustomer Service Employees: ${csEmployees}\nAverage Annual Salary: $${(csEmployees * avgSalary).toFixed(2)}\nTasks: ${tasks}`;
+    const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nCustomer Service Employees: ${csEmployees}\nAverage Annual Salary: $${(csEmployees * avgSalary * 1.14).toFixed(2)}\nTasks: ${tasks}`;
     
     // Use encodeURIComponent for the subject and body
     window.location.href = `mailto:admin@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
