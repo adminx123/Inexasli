@@ -131,10 +131,18 @@ button {
 }
 
 .container {
-        display:none;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-    }
+    background-color: #fff; /* White background */
+    color: #000; /* Black text color for contrast */
+    max-width: 800px; /* Maximum width of the container */
+    margin: 20px; /* Margin around the container */
+    padding: 20px; /* Padding inside the container */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    text-align: left; /* Text alignment inside the container */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Stretch items to fill container */
+}
 
     </style>
 </head>
@@ -158,7 +166,7 @@ button {
 
    <h2 style="text-align: center;font-size: 24px;"><u>INCOME</u></h2>
 
-    
+    <div class="container">
    <h2 style="text-align: center;font-size: 18px;">Tax Residency</h2>
 
 <p> Step 1: Select Region & Subregion:</p>
@@ -460,6 +468,8 @@ button {
 <span id="income_gambling_winnings_annual"></span>
 </div>
 
+   <div>
+       
   <div style="padding-top:10px;">
       <input type="checkbox" id="termscheckbox">
 <label for="termscheckbox">I have read, understand, and agree to the <a href="#" onclick="openTermsModal()" >terms of service</a> and consent to the creation and use of cookies for calculations and functionality.</label><br>
@@ -1645,7 +1655,7 @@ function deleteCookiesForDomain(domainToDelete) {
 
 </script>
 
-<div class = "container">
+<!--
             <p><u>Income:</u> <span id="annual_income_sum"></span></p>
 <span class="tooltiptext">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</span>
    
@@ -1687,7 +1697,7 @@ Medicare taxes fund the Medicare program, covering hospital stays, skilled nursi
 
 
     
-</div>
+-->
 
 </body>
 
