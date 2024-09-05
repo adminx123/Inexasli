@@ -189,16 +189,30 @@
       const addToHomeScreenButton = document.getElementById("addToHomeScreenBanner").querySelector("button");
       addToHomeScreenButton.addEventListener("click", addToHomeScreen); */
 
-      const FHE = document.getElementById('FHE');
-      FHE.addEventListener('click', function(event) {
-        event.preventDefault();
-        const password = prompt('Please enter the password for access:');
-        if (password === 'incomeiq') {
-          window.location.href = 'finance/income.html';
-        } else {
-          alert('Incorrect password. Access denied.');
-        }
-      });
+     // Function to handle password protection
+function handlePasswordProtection(url) {
+  const password = prompt('Please enter the password for access:');
+  if (password === 'incomeiq') {
+    window.location.href = url;
+  } else {
+    alert('Incorrect password. Access denied.');
+  }
+}
+
+// Event listener for the FHE element
+const FHE = document.getElementById('FHE');
+FHE.addEventListener('click', function(event) {
+  event.preventDefault();
+  handlePasswordProtection('finance/income.html');
+});
+
+
+const newElement = document.getElementById('ai');
+newElement.addEventListener('click', function(event) {
+  event.preventDefault();
+  handlePasswordProtection('ai/form.html'); // Replace with the actual URL you want to redirect to
+});
+
     </script>
   </body>
 </html>
