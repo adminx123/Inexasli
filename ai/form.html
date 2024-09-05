@@ -208,6 +208,7 @@
         <h2>Estimate Your Potential Savings</h2>
         <input type="text" id="name" placeholder="Your Name" required>
         <input type="text" id="position" placeholder="Your Position" required>
+        <input type="text" id="phone" placeholder="Your Phone" required>
         <input type="text" id="company" placeholder="Company Name" required>
         <select id="industry" required>
           <option value="">Select Your Industry</option>
@@ -248,6 +249,8 @@ document.getElementById('costSavingsForm').addEventListener('submit', function(e
     
     const name = document.getElementById('name').value;
     const position = document.getElementById('position').value;
+      const phone = document.getElementById('phone').value;
+
     const company = document.getElementById('company').value;
     const industry = document.getElementById('industry').value;
     const csEmployees = document.getElementById('csEmployees').value;
@@ -255,7 +258,7 @@ document.getElementById('costSavingsForm').addEventListener('submit', function(e
     const tasks = document.getElementById('tasks').value;
     
     const subject = 'AI Cost Savings Inquiry from ' + company;
-    const body = `Name: ${name}\nEmail: ${position}\nCompany: ${company}\nIndustry: ${industry}\nCustomer Service Employees: ${csEmployees}\nAnnual Employee Cost Rough Estimate: $${(csEmployees * avgSalary * 1.14).toFixed(2)}\nTasks: ${tasks}`;
+    const body = `Name: ${name}\nPhone:{phone} ${position}\nCompany: ${company}\nIndustry: ${industry}\nCustomer Service Employees: ${csEmployees}\nAnnual Employee Cost Rough Estimate: $${(csEmployees * avgSalary * 1.14).toFixed(2)}\nTasks: ${tasks}`;
     
     // Use encodeURIComponent for the subject and body
     window.location.href = `mailto:admin@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
