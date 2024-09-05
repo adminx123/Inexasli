@@ -221,7 +221,7 @@
         <input type="number" id="csEmployees" placeholder="Number of Customer Service Employees" required>
         <input type="number" id="avgSalary" placeholder="Average Annual Salary per Employee ($)" required>
         <textarea id="tasks" placeholder="List main repetitive tasks that could be automated" rows="4" required></textarea>
-        <button type="submit">Get Your Savings Estimate & AI Integration Quote Today</button>
+        <button type="submit">Get Your AI Integration Quote Today</button>
       </form>
     </div>
 
@@ -255,7 +255,7 @@ document.getElementById('costSavingsForm').addEventListener('submit', function(e
     const tasks = document.getElementById('tasks').value;
     
     const subject = 'AI Cost Savings Inquiry from ' + company;
-    const body = `Name: ${name}\nEmail: ${position}\nCompany: ${company}\nIndustry: ${industry}\nCustomer Service Employees: ${csEmployees}\nAnnual Salary Expense Saving Potential: $${(csEmployees * avgSalary * 1.14).toFixed(2)}\nTasks: ${tasks}`;
+    const body = `Name: ${name}\nEmail: ${position}\nCompany: ${company}\nIndustry: ${industry}\nCustomer Service Employees: ${csEmployees}\nAnnual Employee Cost Rough Estimate: $${(csEmployees * avgSalary * 1.14).toFixed(2)}\nTasks: ${tasks}`;
     
     // Use encodeURIComponent for the subject and body
     window.location.href = `mailto:admin@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
