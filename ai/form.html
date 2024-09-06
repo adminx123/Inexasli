@@ -92,11 +92,12 @@
       margin-bottom: 1rem;
     }
     .benefits {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* Three columns */
       gap: 1rem;
       margin-top: 1rem;
+      max-width: 1000px;
+      width: 100%;
     }
     .benefit-card {
       background-color: #fff;
@@ -104,8 +105,6 @@
       border-radius: 5px;
       padding: 1rem;
       text-align: center;
-      width: 100%;
-      max-width: 300px;
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
       margin: 0;
     }
