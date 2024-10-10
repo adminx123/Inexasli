@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INCOME</title>
-         <link rel="icon" type="image/x-icon" href="/images/Logo.png">
+         <link rel="icon" type="image/x-icon" href="../images/Logo.png">
  <style>
     
      /* Modal styles */
@@ -54,8 +54,6 @@
     color: #000;
     text-align: left;
     margin: 20px;
-    font-size: 11px;
-
 }
 
 .row {
@@ -75,6 +73,22 @@ span {
     /* Adjust as needed */
 }
 
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+     
+      .button-container {
+        position: fixed;
+        bottom: 0px; /* adjust as needed */
+        right: 20px; /* adjust as needed */
+    }
      
 .tab-container {
     display: flex;
@@ -113,7 +127,7 @@ span {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 11px;
+    font-size: 14px;
 }
 
 .container {
@@ -154,14 +168,14 @@ span {
 <!-- <button onclick="calculateAll();" style="border: 2px solid #aaa; border-radius: 8px; background-color: #eee; padding: 10px 20px; font-size: 16px; box-shadow: 2px 2px 5px #888; color: black;">Delete Cookies</button>
 -->
 
-<img src="/images/Logo.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
+<img src="../images/Logo.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
 
     
     <div class="container">
-   <h2 style="text-align: center;font-size: 21px;"><u>INCOME</u></h2>
+   <h2 style="text-align: center;font-size: 24px;"><u>INCOME</u></h2>
 
     
-   <h2 style="text-align: center;font-size: 13px;">Tax Residency</h2>
+   <h2 style="text-align: center;font-size: 18px;">Tax Residency</h2>
 
 <p> Step 1: Select Region & Subregion:</p>
 <div style=" padding-bottom: 10px;"><select id="RegionDropdown">
@@ -179,7 +193,7 @@ span {
 
 <p>Step 2: Enter gross income amounts (pre-tax and pre-contribution) and select the corresponding frequency.</p>
 
-<h2 style="text-align: center;font-size: 13px;">Employment - Self Employment - Investment</h2>
+<h2 style="text-align: center;font-size: 18px;">Employment - Self Employment - Investment</h2>
 
 
     
@@ -280,7 +294,7 @@ span {
 </div>
 
 
-<h2 style="text-align: center;font-size: 13px;">Retirement - Social Benefit</h2>
+<h2 style="text-align: center;font-size: 18px;">Retirement - Social Benefit</h2>
 
 <div class ="row">
 <label for="income_federal_pension">Pension, Federal:</label>
@@ -332,7 +346,7 @@ span {
 
 
 
-    <h2 style="text-align: center;font-size: 13px;">Passive</h2>
+    <h2 style="text-align: center;font-size: 18px;">Passive</h2>
     
     <div class ="row">
 <label for="income_investment_property">Investment Property:</label>
@@ -409,7 +423,7 @@ span {
 </div>
 
 
-    <h2 style="text-align: center;font-size: 13px;">Other</h2>
+    <h2 style="text-align: center;font-size: 18px;">Other</h2>
 
 
 <div class ="row">
@@ -478,9 +492,1178 @@ span {
     <input type="checkbox" id="notintended">
 <label for="notintended"> Enter pre-tax & pre-contributions income amounts & select the corresponding frequency. </label><br>
     
+<div style="text-align: right;">
+    <button onclick="validatecheckbox()" style="border: none; background-color: transparent; font-size: 24px; color: black;">&gt;</button>
+</div>
+
+      
+
+<script>
 
 
-      <div class="hidden">
+    
+var ANNUALTAXABLEINCOME;
+    var ANNUALREGIONALTAX;
+    var ANNUALSUBREGIONALTAX;
+    var TOTALTAXCG;
+    var ANNUALTAX;
+    var ANNUALEMPLOYMENTINCOME;
+    var ANNUALINCOME;
+    var ANNUALEXPENSE;
+    var ANNUALCPP;
+    var ANNUALEI; 
+    var BPA = 15705;
+    var SD = 14600;
+    var PASSIVEINCOME;
+    var CPPPAYABLESELFEMPLOYED;
+    var CPPPAYABLEEMPLOYED;
+    var TOTALMEDICARE;
+     var TOTALSOCIALSECURITY;
+    var TOTALSOCIALSECURITYSE;
+    var TOTALSOCIALSECURITYE;
+
+    
+document.addEventListener('DOMContentLoaded', function() {
+    var USAHIDE = document.querySelector('.USAHIDE');
+    
+    // Initially hide the field
+    USAHIDE.style.display = 'none';
+
+    // Function to handle the change in dropdown value
+    function handleRegionChange() {
+        if (this.value === 'USA' || this.value === '') { // Check for USA or empty value
+            USAHIDE.style.display = 'block';
+        } else {
+            USAHIDE.style.display = 'none';
+        }
+    }
+
+    // Call handleRegionChange function to handle initial state
+    handleRegionChange.call(document.getElementById('RegionDropdown'));
+
+    // Add event listener to the dropdown for change in value
+    document.getElementById('RegionDropdown').addEventListener('change', handleRegionChange);
+});
+
+
+
+    function validatecheckbox() {
+  var termscheckbox = document.getElementById("termscheckbox");
+  var notintended = document.getElementById("notintended");
+  var regionDropdown = document.getElementById("RegionDropdown");
+
+  // Check if a valid region is selected
+  if (regionDropdown.value === "" || regionDropdown.value === "NONE") {
+    alert("Please select a region from the dropdown.");
+    return;
+  }
+
+  // Check if checkboxes are checked
+  if (termscheckbox.checked && notintended.checked) {
+    // Perform calculations
+    calculateNext();
+  } else {
+    alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contribtuions");
+  }
+}
+
+    function openTermsModal() {
+  console.log('openTermsModal() function called');
+  // **Change:** Move setting modal display to within the then block after content is retrieved
+  fetch('legal.txt') // Corrected file extension to '.txt'
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('modalContent').innerText = data;
+      // Set modal display to block after content is retrieved
+      document.getElementById('termsModal').style.display = 'block';
+    })
+    .catch(error => console.error('Error fetching legal content:', error));
+}
+
+    function closeModal(event) {
+    const modal = document.getElementById('termsModal');
+    const modalContent = document.getElementById('modalContent');
+
+    if (event.target === modal && event.target !== modalContent) {
+        modal.style.display = 'none';
+    }
+}
+    
+document.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
+        closeModal();
+    }
+});    
+          
+const regionDropdown = document.getElementById("RegionDropdown");
+const subregionDropdown = document.getElementById("SubregionDropdown");
+
+const subregionMap = {
+  CAN: ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
+  USA: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+};
+
+function updateSubregionDropdown() {
+  const selectedRegion = regionDropdown.value;
+
+  subregionDropdown.innerHTML = ""; // Clear existing options
+
+  if (selectedRegion in subregionMap) {
+    subregionMap[selectedRegion].forEach(subregionCode => {
+      const subregionOption = document.createElement("option");
+      subregionOption.text = subregionCode;
+      subregionOption.value = subregionCode;
+      subregionDropdown.appendChild(subregionOption);
+    });
+  }
+    
+}
+
+regionDropdown.addEventListener("change", updateSubregionDropdown);
+    
+function calculateAnnual(inputId, frequencyId) {
+        const input = parseFloat(document.getElementById(inputId).value) || 0;
+        const frequency = document.getElementById(frequencyId).value;
+
+        switch (frequency) {
+            case 'annually':
+                return input;
+            case 'quarterly':
+                return input * 4;
+            case 'monthly':
+                return input * 12;
+            case 'weekly':
+                return input * 52;
+            default:
+                return 0;
+        }
+    }
+
+
+    function calculateNormalizedSum() {
+        // Define all income fields with their corresponding frequency fields
+        const incomeFields = [
+            ['income_salary_wages', 'income_salary_wages_frequency'],
+            ['income_tips', 'income_tips_frequency'],
+            ['income_bonuses', 'income_bonuses_frequency'],
+            ['income_sole_prop', 'income_sole_prop_frequency'],
+            ['income_investment_property', 'income_investment_property_frequency'],
+            ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
+            ['income_interest', 'income_interest_frequency'],
+            ['income_owner_dividend', 'income_owner_dividend_frequency'],
+            ['income_public_dividend', 'income_public_dividend_frequency'],
+            ['income_trust', 'income_trust_frequency'],
+            ['income_federal_pension', 'income_federal_pension_frequency'],
+            ['income_work_pension', 'income_work_pension_frequency'],
+            ['income_social_security', 'income_social_security_frequency'],
+            ['income_employment_insurance', 'income_employment_insurance_frequency'],
+            ['income_alimony', 'income_alimony_frequency'],
+            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
+            ['income_royalties', 'income_royalties_frequency'],
+            ['income_gambling_winnings', 'income_gambling_winnings_frequency'],
+            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+            ['income_venture_capital', 'income_venture_capital_frequency'],
+            ['income_tax_free_income', 'income_tax_free_income_frequency']
+            // Add more income fields here
+        ];
+let annualIncomeSum = 0;
+  // Calculate annual income sum
+        incomeFields.forEach(field => {
+            const [inputId, frequencyId] = field;
+            annualIncomeSum += calculateAnnual(inputId, frequencyId);
+        });
+ANNUALINCOME = annualIncomeSum
+ // Display the results
+        document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
+
+// Define all  taxable income fields with their corresponding frequency fields
+        const taxableincomeFields = [
+            ['income_salary_wages', 'income_salary_wages_frequency'],
+            ['income_tips', 'income_tips_frequency'],
+            ['income_bonuses', 'income_bonuses_frequency'],
+            ['income_sole_prop', 'income_sole_prop_frequency'],
+            ['income_investment_property', 'income_investment_property_frequency'],
+            ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
+            ['income_interest', 'income_interest_frequency'],
+            ['income_owner_dividend', 'income_owner_dividend_frequency'],
+            ['income_public_dividend', 'income_public_dividend_frequency'],
+            ['income_trust', 'income_trust_frequency'],
+            ['income_federal_pension', 'income_federal_pension_frequency'],
+            ['income_work_pension', 'income_work_pension_frequency'],
+            ['income_social_security', 'income_social_security_frequency'],
+            ['income_employment_insurance', 'income_employment_insurance_frequency'],
+            ['income_alimony', 'income_alimony_frequency'],
+            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
+            ['income_royalties', 'income_royalties_frequency'],
+            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+            ['income_venture_capital', 'income_venture_capital_frequency'],
+                        // Add more income fields here
+        ];
+      
+let annualTaxableSum = 0;
+
+taxableincomeFields.forEach(field => {
+    const [inputId, frequencyId] = field;
+    let taxableincome = calculateAnnual(inputId, frequencyId);
+
+    // Exclude capital gains completely for USA
+    if (document.getElementById('RegionDropdown').value === 'USA' && inputId === 'income_capital_gains_losses') {
+        return; // Skip this iteration
+    }
+
+    // Apply Canada-specific adjustments for capital gains
+    if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_capital_gains_losses') {
+        taxableincome *= 0.5; // Adjust for Canada
+    }
+
+    annualTaxableSum += taxableincome;
+});
+
+// Apply standard deduction for USA
+if (document.getElementById('RegionDropdown').value === 'USA') {
+    annualTaxableSum -= SD;
+} else {
+    // Apply BPA for other regions
+    annualTaxableSum -= BPA;
+}
+
+// Ensure result is not less than 0
+annualTaxableSum = Math.max(annualTaxableSum, 0);
+
+ANNUALTAXABLEINCOME = annualTaxableSum;
+
+// Display the results
+document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
+
+     
+        
+       
+      const employmentincomeFields = 
+      [[ 'income_salary_wages', 'income_salary_wages_frequency'],
+      ['income_tips', 'income_tips_frequency'],
+      ['income_bonuses', 'income_bonuses_frequency']];
+      let annualEmploymentIncome = 0;
+    employmentincomeFields.forEach(field => {
+      const [inputId, frequencyId] = field;
+      annualEmploymentIncome += calculateAnnual(inputId, frequencyId);
+    });
+ANNUALEMPLOYMENTINCOME = annualEmploymentIncome;
+ }
+    
+function getCppPayable() {
+    var annualSoleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
+    var SolePropFrequency = parseFloat(document.getElementById('income_sole_prop_frequency').value) || 0;
+    var annualIncomeSelfEmployed = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
+
+    // Define CPP rates and maximums
+    var cppRateEmployed = 0.0595;
+    var cppRateSelfEmployed = 0.1190;
+    var cppMaxEmployed = 3867.5;
+    var cppMaxEmployer = 7735;
+    var cppExemptionAmount = 3500;
+
+    // Calculate left over contribution room employed
+    var LCR;
+    if (ANNUALEMPLOYMENTINCOME <= cppExemptionAmount) {
+        LCR = cppMaxEmployed; 
+    } else {
+        LCR = cppMaxEmployed - ((ANNUALEMPLOYMENTINCOME - cppExemptionAmount) * cppRateEmployed);
+    }
+
+    // Calculate left over exemption amount
+    var LEA;
+    if ((ANNUALEMPLOYMENTINCOME - cppExemptionAmount) <= 0) { 
+        LEA = Math.abs(ANNUALEMPLOYMENTINCOME - cppExemptionAmount);
+    } else {
+        LEA = 0;
+    }
+
+    // Calculate CPP payable for employed
+var cppPayableEmployed;
+if (ANNUALEMPLOYMENTINCOME <= cppExemptionAmount) {
+    cppPayableEmployed = 0;
+} else {
+    cppPayableEmployed = (ANNUALEMPLOYMENTINCOME - cppExemptionAmount) * cppRateEmployed;
+}
+
+// Check if cppPayableEmployed exceeds cppMaxEmployed
+if (cppPayableEmployed > cppMaxEmployed) {
+    cppPayableEmployed = cppMaxEmployed;
+}
+
+ // Calculate CPP payable for self-employed individuals
+var cppPayableSelfEmployed;
+if (LCR <= 0) {
+  cppPayableSelfEmployed = 0;
+} else {
+  // Ensure non-negative income after LEA subtraction
+  var adjustedIncome = Math.max(annualIncomeSelfEmployed - LEA, 0);
+  cppPayableSelfEmployed = adjustedIncome * cppRateSelfEmployed;
+  
+  // Check if cppPayableSelfEmployed exceeds LCR
+  if (cppPayableSelfEmployed > LCR) {
+    cppPayableSelfEmployed = LCR * 2;
+  }
+}
+
+ANNUALCPP = cppPayableEmployed + cppPayableSelfEmployed;
+CPPPAYABLEEMPLOYED = cppPayableEmployed;
+    CPPPAYABLESELFEMPLOYED = cppPayableSelfEmployed;
+    
+    // Display the results
+    document.getElementById('ANNUALCPP').textContent = '$' + (ANNUALCPP).toFixed(2);
+document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmployed).toFixed(2);
+    document.getElementById('annual_cpp_seresult').textContent = '$' + (cppPayableSelfEmployed).toFixed(2);
+}
+
+
+ function getEIPayable() {
+    const employmentIncomeFields = [
+        ['income_salary_wages', 'income_salary_wages_frequency'],
+        ['income_tips', 'income_tips_frequency'],
+        ['income_bonuses', 'income_bonuses_frequency']
+    ];
+    
+    const selfEmploymentIncomeField = ['income_sole_prop', 'income_sole_prop_frequency'];
+
+    // Calculate normalized annual employment income
+    var annualEmployedIncome = 0;
+
+    employmentIncomeFields.forEach(function (incomeField) {
+        var annualIncome = calculateAnnual(incomeField[0], incomeField[1]);
+        annualEmployedIncome += annualIncome;
+    });
+
+    // Calculate normalized annual self-employment income
+    var annualSelfEmployedIncome = calculateAnnual(selfEmploymentIncomeField[0], selfEmploymentIncomeField[1]);
+
+    // Define EI rates and maximums
+    var eiRateEmployed = 0.0166;
+    var eiRateSelfEmployed = 0.0166;
+    var eiEmployeePremiumMax = 1049.12;
+    var eiEmployerPremiumMax = 1468.77;
+
+    // Calculate EI payable for employed and self-employed individuals
+    var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualEmployedIncome * eiRateEmployed);
+    var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, annualSelfEmployedIncome * eiRateSelfEmployed);
+
+    ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed;
+
+    // Display the results
+    document.getElementById('ANNUALEI').textContent = '$' + ANNUALEI.toFixed(2);
+}
+
+function getSocialSecurity() {
+    // Normalize annual employment income
+    const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
+    const annualTips = calculateAnnual('income_tips', 'income_tips_frequency');
+    const annualBonuses = calculateAnnual('income_bonuses', 'income_bonuses_frequency');
+    const annualEmployedIncome = annualSalaryWages + annualTips + annualBonuses;
+
+    // Normalize annual self-employment income
+    const annualSoleProp = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
+    const annualSelfEmployedIncome = annualSoleProp;
+
+    // Total normalized annual income
+    const totalAnnualIncome = annualEmployedIncome + annualSelfEmployedIncome;
+
+    // Social Security tax rate and maximum taxable earnings
+    const socialSecurityRate = 0.062; // 6.2%
+    const socialSecurityMaxTaxable = 142800; // Maximum taxable earnings for Social Security
+
+    // Calculate Social Security tax for employed income (up to the maximum taxable earnings)
+    let employmentSocialSecurityTax = Math.min(annualEmployedIncome, socialSecurityMaxTaxable) * socialSecurityRate;
+
+    // Calculate Social Security tax for self-employed income (up to the maximum taxable earnings)
+    let selfEmploymentSocialSecurityTax = Math.min(annualSelfEmployedIncome * 0.9235, socialSecurityMaxTaxable) * socialSecurityRate * 2;
+
+    // Total US equivalent Social Security tax
+    let totalSocialSecurityTax = employmentSocialSecurityTax + selfEmploymentSocialSecurityTax;
+
+  // Total US equivalent tax
+   TOTALSOCIALSECURITY = totalSocialSecurityTax;
+   TOTALSOCIALSECURITYSE = selfEmploymentSocialSecurityTax;
+TOTALSOCIALSECURITYE = employmentSocialSecurityTax;
+
+    
+    // Update the DOM element with the calculated value
+    document.getElementById('TOTALSOCIALSECURITY').textContent = '$' + TOTALSOCIALSECURITY.toFixed(2);
+}
+
+    
+    function getMedicare() {
+    // Normalize annual employment income
+    const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
+    const annualTips = calculateAnnual('income_tips', 'income_tips_frequency');
+    const annualBonuses = calculateAnnual('income_bonuses', 'income_bonuses_frequency');
+    const annualEmployedIncome = annualSalaryWages + annualTips + annualBonuses;
+
+    // Normalize annual self-employment income
+    const annualSoleProp = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
+    const annualSelfEmployedIncome = annualSoleProp;
+
+    // Total normalized annual income
+    const totalAnnualIncome = annualEmployedIncome + annualSelfEmployedIncome;
+
+    // Medicare tax rates and thresholds
+    const medicareRate = 0.0145; // 1.45%
+    const medicareAdditionalRate = 0.009; // Additional 0.9% for high earners
+    const medicareThreshold = 200000; // Threshold for additional Medicare tax
+
+    // Calculate Medicare tax for total income
+    let totalMedicareTax = 0;
+
+    // If total income exceeds Medicare threshold, apply additional rate
+    if (totalAnnualIncome > medicareThreshold) {
+        totalMedicareTax = (totalAnnualIncome - medicareThreshold) * medicareAdditionalRate;
+    }
+
+    // Apply standard Medicare rate to total income
+    totalMedicareTax += totalAnnualIncome * medicareRate;
+
+    // Total US equivalent tax
+   TOTALMEDICARE = totalMedicareTax;
+
+    // Update the DOM element with the calculated value
+    document.getElementById('TOTALMEDICARE').textContent = '$' + TOTALMEDICARE.toFixed(2);
+}
+
+
+// Define the tax brackets
+const REGIONALTAXBRACKETSCAN = [
+    { limit: 235675, rate: 0.33 },
+    { limit: 165430, rate: 0.29 },
+    { limit: 106717, rate: 0.26 },
+    { limit: 53359, rate: 0.205 },
+    { limit: 0, rate: 0.15 }
+];
+
+
+const REGIONALTAXBRACKETSUSA =
+
+     [
+        { limit: 609350, rate: 0.37 },
+        { limit: 243725, rate: 0.35 },
+        { limit: 191950, rate: 0.32 },
+        { limit: 100525, rate: 0.24 },
+        { limit: 47150, rate: 0.22 },
+        { limit: 11600, rate: 0.12 },
+        { limit: 0, rate: 0.10 }
+    ];
+    
+// Define the SUBREGIONAL tax brackets
+const SUBREGIONALTAXBRACKETS = {
+    //Canada Provinces
+    'AB': [
+        { limit: 341502, rate: 0.15 },
+        { limit: 227668, rate: 0.14 },
+        { limit: 170751, rate: 0.13 },
+        { limit: 142292, rate: 0.12 },
+        { limit: 0, rate: 0.10 }
+    ],
+    'BC': [
+        { limit: 240716, rate: 0.205 },
+        { limit: 172602, rate: 0.168 },
+        { limit: 127299, rate: 0.147 },
+        { limit: 104835, rate: 0.1229 },
+        { limit: 91310, rate: 0.105 },
+        { limit: 45654, rate: 0.077 },
+        { limit: 0, rate: 0.0506 }
+    ],
+    'MB': [
+        { limit: 79625, rate: 0.174 },
+        { limit: 36842, rate: 0.1275 },
+        { limit: 0, rate: 0.108 }
+    ],
+    'NB': [
+        { limit: 176756, rate: 0.195 },
+        { limit: 95431, rate: 0.16 },
+        { limit: 47715, rate: 0.14 },
+        { limit: 0, rate: 0.094 }
+    ],
+    'NL': [
+        { limit: 1059000, rate: 0.218 },
+        { limit: 529500, rate: 0.213 },
+        { limit: 264750, rate: 0.208 },
+        { limit: 207239, rate: 0.198 },
+        { limit: 148027, rate: 0.178 },
+        { limit: 82913, rate: 0.158 },
+        { limit: 41457, rate: 0.145 },
+        { limit: 0, rate: 0.087 }
+    ],
+    'NT': [
+        { limit: 157139, rate: 0.1405 },
+        { limit: 96655, rate: 0.122 },
+        { limit: 48326, rate: 0.086 },
+        { limit: 0, rate: 0.059 }
+    ],
+    'NS': [
+        { limit: 150000, rate: 0.21 },
+        { limit: 93000, rate: 0.175 },
+        { limit: 59180, rate: 0.1667 },
+        { limit: 29590, rate: 0.1495 },
+        { limit: 0, rate: 0.0879 }
+    ],
+    'NU': [
+        { limit: 165429, rate: 0.115 },
+        { limit: 101754, rate: 0.09 },
+        { limit: 50877, rate: 0.07 },
+        { limit: 0, rate: 0.04 }
+    ],
+    'ON': [
+        { limit: 220000, rate: 0.1316 },
+        { limit: 150000, rate: 0.1216 },
+        { limit: 98463, rate: 0.1116 },
+        { limit: 49231, rate: 0.0915 },
+        { limit: 0, rate: 0.0505 }
+    ],
+    'PE': [
+        { limit: 63969, rate: 0.167 },
+        { limit: 31984, rate: 0.138 },
+        { limit: 0, rate: 0.098 }
+    ],
+    'QC': [
+        { limit: 119910, rate: 0.2575 },
+        { limit: 98540, rate: 0.24 },
+        { limit: 49275, rate: 0.19 },
+        { limit: 0, rate: 0.14 }
+    ],
+    'SK': [
+        { limit: 142058, rate: 0.145 },
+        { limit: 49720, rate: 0.125 },
+        { limit: 0, rate: 0.105 }
+    ],
+    'YT': [
+        { limit: 500000, rate: 0.15 },
+        { limit: 165430, rate: 0.128 },
+        { limit: 106717, rate: 0.109 },
+        { limit: 53359, rate: 0.09 },
+        { limit: 0, rate: 0.064 }
+    ],
+
+    //US STATES
+    "AL": [
+        { "limit": 3000, "rate": 0.05 },
+        { "limit": 500, "rate": 0.04 },
+        { "limit": 0, "rate": 0.02 }
+    ],
+    "AK": [],
+    "AZ": [
+        { "limit": 0, "rate": 0.025 }
+    ],
+    "AR": [
+        { "limit": 8500, "rate": 0.049 },
+        { "limit": 4300, "rate": 0.04 },
+        { "limit": 0, "rate": 0.02 }
+    ],
+    "CA": [
+        { "limit": 1000000, "rate": 0.133 },
+        { "limit": 677275, "rate": 0.123 },
+        { "limit": 406364, "rate": 0.113 },
+        { "limit": 338639, "rate": 0.103 },
+        { "limit": 66295, "rate": 0.093 },
+        { "limit": 52455, "rate": 0.08 },
+        { "limit": 37788, "rate": 0.06 },
+        { "limit": 23942, "rate": 0.04 },
+        { "limit": 10099, "rate": 0.02 },
+        { "limit": 0, "rate": 0.01 }
+    ],
+    "CO": [
+        { "limit": 0, "rate": 0.044 }
+    ],
+    "CT": [
+        { "limit": 500000, "rate": 0.0699 },
+        { "limit": 250000, "rate": 0.069 },
+        { "limit": 200000, "rate": 0.065 },
+        { "limit": 100000, "rate": 0.06 },
+        { "limit": 50000, "rate": 0.055 },
+        { "limit": 10000, "rate": 0.05 },
+        { "limit": 0, "rate": 0.03 }
+    ],
+    "DC": [
+        { "limit": 1000000, "rate": 0.1075 },
+        { "limit": 500000, "rate": 0.0975 },
+        { "limit": 250000, "rate": 0.0925 },
+        { "limit": 60000, "rate": 0.085 },
+        { "limit": 40000, "rate": 0.065 },
+        { "limit": 10000, "rate": 0.06 },
+        { "limit": 0, "rate": 0.04 }
+    ],
+    "DE": [
+        { "limit": 60000, "rate": 0.066 },
+        { "limit": 25000, "rate": 0.0555 },
+        { "limit": 20000, "rate": 0.052 },
+        { "limit": 10000, "rate": 0.048 },
+        { "limit": 5000, "rate": 0.039 },
+        { "limit": 2000, "rate": 0.022 }
+    ],
+    "FL": [],
+    "GA": [
+        { "limit": 7000, "rate": 0.0575 },
+        { "limit": 5250, "rate": 0.05 },
+        { "limit": 3750, "rate": 0.04 },
+        { "limit": 2250, "rate": 0.03 },
+        { "limit": 750, "rate": 0.02 },
+        { "limit": 0, "rate": 0.01 }
+    ],
+    "HI": [
+        { "limit": 200000, "rate": 0.11 },
+        { "limit": 175000, "rate": 0.1 },
+        { "limit": 150000, "rate": 0.09 },
+        { "limit": 48000, "rate": 0.0825 },
+        { "limit": 36000, "rate": 0.079 },
+        { "limit": 24000, "rate": 0.076 },
+        { "limit": 19200, "rate": 0.072 },
+        { "limit": 14400, "rate": 0.068 },
+        { "limit": 9600, "rate": 0.064 },
+        { "limit": 4800, "rate": 0.055 },
+        { "limit": 2400, "rate": 0.032 },
+        { "limit": 0, "rate": 0.014 }
+    ],
+    "ID": [
+        { "limit": 0, "rate": 0.058 }
+    ],
+    "IL": [
+        { "limit": 0, "rate": 0.0495 }
+    ],
+    "IN": [
+        { "limit": 0, "rate": 0.0315 }
+    ],
+    "IA": [
+        { "limit": 75000, "rate": 0.06 },
+        { "limit": 30000, "rate": 0.057 },
+        { "limit": 6000, "rate": 0.0482 },
+        { "limit": 0, "rate": 0.044 }
+    ],
+    "KS": [
+        { "limit": 30000, "rate": 0.057 },
+        { "limit": 15000, "rate": 0.0525 },
+        { "limit": 0, "rate": 0.031 }
+    ],
+    "KY": [
+        { "limit": 0, "rate": 0.045 }
+    ],
+    "LA": [
+        { "limit": 50000, "rate": 0.0425 },
+        { "limit": 12500, "rate": 0.035 },
+        { "limit": 0, "rate": 0.0185 }
+    ],
+    "ME": [
+        { "limit": 58050, "rate": 0.0715 },
+        { "limit": 24500, "rate": 0.0675 },
+        { "limit": 0, "rate": 0.058 }
+    ],
+    "MD": [
+        { "limit": 250000, "rate": 0.0575 },
+        { "limit": 150000, "rate": 0.055 },
+        { "limit": 125000, "rate": 0.0525 },
+        { "limit": 100000, "rate": 0.05 },
+        { "limit": 3000, "rate": 0.0475 },
+        { "limit": 2000, "rate": 0.04 },
+        { "limit": 1000, "rate": 0.03 },
+        { "limit": 0, "rate": 0.02 }
+    ],
+    "MA": [
+        { "limit": 1000000, "rate": 0.09 },
+        { "limit": 0, "rate": 0.05 }
+    ],
+    "MI": [
+        { "limit": 0, "rate": 0.0425 }
+    ],
+    "MN": [
+        { "limit": 183340, "rate": 0.0985 },
+        { "limit": 98760, "rate": 0.0785 },
+        { "limit": 30070, "rate": 0.068 },
+        { "limit": 0, "rate": 0.0535 }
+    ],
+    "MS": [
+        { "limit": 10000, "rate": 0.05 }
+    ],
+    "MO": [
+        { "limit": 7847, "rate": 0.0495 },
+        { "limit": 6726, "rate": 0.045 },
+        { "limit": 5605, "rate": 0.04 },
+        { "limit": 4484, "rate": 0.035 },
+        { "limit": 3363, "rate": 0.03 },
+        { "limit": 2242, "rate": 0.025 },
+        { "limit": 1121, "rate": 0.02 }
+    ],
+    "MT": [
+        { "limit": 21600, "rate": 0.0675 },
+        { "limit": 16800, "rate": 0.06 },
+        { "limit": 13000, "rate": 0.05 },
+        { "limit": 9700, "rate": 0.04 },
+        { "limit": 6300, "rate": 0.03 },
+        { "limit": 3600, "rate": 0.02 },
+        { "limit": 0, "rate": 0.01 }
+    ],
+    "NC": [
+        { "limit": 0, "rate": 0.0475 }
+    ],
+    "ND": [
+        { "limit": 458350, "rate": 0.029 },
+        { "limit": 210825, "rate": 0.0264 },
+        { "limit": 101050, "rate": 0.0227 },
+        { "limit": 41775, "rate": 0.0204 },
+        { "limit": 0, "rate": 0.011 }
+    ],
+    "NH": [],
+    "NJ": [
+        { "limit": 1000000, "rate": 0.1075 },
+        { "limit": 500000, "rate": 0.0897 },
+        { "limit": 75000, "rate": 0.0637 },
+        { "limit": 40000, "rate": 0.05525 },
+        { "limit": 35000, "rate": 0.035 },
+        { "limit": 20000, "rate": 0.0175 },
+        { "limit": 0, "rate": 0.014 }
+    ],
+    "NM": [
+        { "limit": 210000, "rate": 0.059 },
+        { "limit": 16000, "rate": 0.049 },
+        { "limit": 11000, "rate": 0.047 },
+        { "limit": 5500, "rate": 0.032 },
+        { "limit": 0, "rate": 0.017 }
+    ],
+    "NY": [
+        { "limit": 25000000, "rate": 0.109 },
+        { "limit": 5000000, "rate": 0.103 },
+        { "limit": 1077550, "rate": 0.0965 },
+        { "limit": 215400, "rate": 0.0685 },
+        { "limit": 80650, "rate": 0.06 },
+        { "limit": 13900, "rate": 0.055 },
+        { "limit": 11700, "rate": 0.0525 },
+        { "limit": 8500, "rate": 0.045 },
+        { "limit": 0, "rate": 0.04 }
+    ],
+    "NE": [
+        { "limit": 35730, "rate": 0.0664 },
+        { "limit": 22170, "rate": 0.0501 },
+        { "limit": 3700, "rate": 0.0351 },
+        { "limit": 0, "rate": 0.0246 }
+    ],
+    "NV": [],
+    "OH": [
+        { "limit": 115300, "rate": 0.0399 },
+        { "limit": 92150, "rate": 0.03688 },
+        { "limit": 46100, "rate": 0.03226 },
+        { "limit": 26050, "rate": 0.02765 }
+    ],
+    "OK": [
+        { "limit": 7200, "rate": 0.0475 },
+        { "limit": 4900, "rate": 0.0375 },
+        { "limit": 3750, "rate": 0.0275 },
+        { "limit": 2500, "rate": 0.0175 },
+        { "limit": 1000, "rate": 0.0075 },
+        { "limit": 0, "rate": 0.0025 }
+    ],
+    "OR": [
+        { "limit": 125000, "rate": 0.099 },
+        { "limit": 10200, "rate": 0.0875 },
+        { "limit": 4050, "rate": 0.0675 },
+        { "limit": 0, "rate": 0.0475 }
+    ],
+    "PA": [
+        { "limit": 0, "rate": 0.0307 }
+    ],
+    "RI": [
+        { "limit": 155050, "rate": 0.0599 },
+        { "limit": 68200, "rate": 0.0475 },
+        { "limit": 0, "rate": 0.0375 }
+    ],
+    "SC": [
+        { "limit": 16040, "rate": 0.065 },
+        { "limit": 3200, "rate": 0.03 },
+        { "limit": 0, "rate": 0.00 }
+    ],
+    "SD": [],
+    "TN": [],
+    "TX": [],
+    "UT": [
+        { "limit": 0, "rate": 0.0485 }
+    ],
+    "VA": [
+        { "limit": 17000, "rate": 0.0575 },
+        { "limit": 5000, "rate": 0.05 },
+        { "limit": 3000, "rate": 0.03 },
+        { "limit": 0, "rate": 0.02 }
+    ],
+    
+    "VT": [
+        { "limit": 213150, "rate": 0.0875 },
+        { "limit": 102200, "rate": 0.076 },
+        { "limit": 42150, "rate": 0.066 },
+        { "limit": 0, "rate": 0.0335 }
+    ],
+    "WV": [
+        { "limit": 60000, "rate": 0.065 },
+        { "limit": 40000, "rate": 0.06 },
+        { "limit": 25000, "rate": 0.045 },
+        { "limit": 10000, "rate": 0.04 },
+        { "limit": 0, "rate": 0.03 }
+    ],
+    "WA": [],
+    "WI": [
+        { "limit": 304170, "rate": 0.0765 },
+        { "limit": 27630, "rate": 0.053 },
+        { "limit": 13810, "rate": 0.0465 },
+        { "limit": 0, "rate": 0.0354 }
+    ],
+    "WY": []
+};
+
+
+
+// Define the calculateTax function to calculate both federal and SUBREGIONAL tax
+function calculateTax(taxBrackets) {
+    let tax = 0;
+    let taxableIncome = ANNUALTAXABLEINCOME;
+
+    for (const bracket of taxBrackets) {
+        if (taxableIncome > bracket.limit) {
+            let bracketTax = (taxableIncome - bracket.limit) * bracket.rate;
+            tax += parseFloat(bracketTax.toFixed(2)); // Round to two decimal places and add to total tax
+            taxableIncome = bracket.limit;
+        }
+    }
+    return tax;
+}
+
+
+
+    // Define the calculateFederalTax function
+function calculateRegionalTax() {
+ANNUALREGIONALTAX = calculateTax(REGIONALTAXBRACKETSCAN);
+document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONALTAX).toFixed(2);
+}
+
+
+// Define the calculateSubregionalTax function
+function calculateSubregionalTax(Subregion, taxBrackets) {
+  ANNUALSUBREGIONALTAX = calculateTax(taxBrackets[Subregion]);
+  document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
+}
+
+
+function calculateCapitalGainsTax() {
+  // Check if region is USA
+  const region = document.getElementById('RegionDropdown').value;
+  if (region !== 'USA') {
+    alert('Capital gains tax calculation only available for USA');
+    return;
+  }
+  // Get user inputs
+  const capitalGain = calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency');
+  const stateRateInput = document.getElementById('income_capital_gain_state_rate').value;
+  let stateRate = 0;
+  
+  // Check if state rate input is empty or 0, then set state rate to 0
+  if (stateRateInput !== '' && parseFloat(stateRateInput) !== 0) {
+    stateRate = parseFloat(stateRateInput) / 100;
+  }
+
+  // Calculate federal capital gains tax
+  let federalTaxCG = 0;
+  if (capitalGain <= 47025) {
+    federalTaxCG = 0;
+  } else if (capitalGain <= 518000) {
+    federalTaxCG = (capitalGain - 47025) * 0.15;
+  } else {
+    federalTaxCG = (capitalGain - 518000) * 0.2 + (518000 - 47025) * 0.15;
+  }
+// Calculate state capital gains tax
+  const stateTaxCG = capitalGain * stateRate;
+
+  // Display the result
+  const totalTaxCG = federalTaxCG + stateTaxCG;
+  const resultDiv = document.getElementById('capital_gains_tax_result');
+  
+   TOTALTAXCG = totalTaxCG
+  
+  document.getElementById('TOTALTAXCG').textContent = '$' + (TOTALTAXCG).toFixed(2);
+   
+}
+
+
+function calculateAnnualTax() {
+    var regionDropdown = document.getElementById("RegionDropdown");
+    let annualtaxx;
+    if (regionDropdown.value === 'USA') {
+        annualtaxx = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
+                    (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
+    } else if (regionDropdown.value === 'CAN') {
+        annualtaxx = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
+                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX);
+    }
+ANNUALTAX = annualtaxx
+    
+    document.getElementById('ANNUALTAX').textContent = '$' + (ANNUALTAX).toFixed(2);
+}
+
+function passiveincome() {
+  const fireFields = [
+    ['income_investment_property', 'income_investment_property_frequency'],
+    ['income_interest', 'income_interest_frequency'],
+    ['income_public_dividend', 'income_public_dividend_frequency'],
+    ['income_trust', 'income_trust_frequency'],
+    ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+    ['income_royalties', 'income_royalties_frequency'],
+  ];
+
+  let income = 0;
+
+  for (const [incomeField, frequencyField] of fireFields) {
+    const incomeValue = calculateAnnual(incomeField, frequencyField);
+    income += incomeValue;
+  }
+
+  PASSIVEINCOME = income;
+}
+
+    
+    
+function setIncomeData() {
+  const frequencyFields = [
+    "income_salary_wages_frequency",
+    "income_tips_frequency",
+    "income_bonuses_frequency",
+    "income_sole_prop_frequency",
+    "income_investment_property_frequency",
+    "income_capital_gains_losses_frequency",
+    "income_interest_frequency",
+    "income_owner_dividend_frequency",
+    "income_public_dividend_frequency",
+    "income_trust_frequency",
+    "income_federal_pension_frequency",
+    "income_work_pension_frequency",
+    "income_social_security_frequency",
+    "income_employment_insurance_frequency",
+    "income_alimony_frequency",
+    "income_scholarships_grants_frequency",
+    "income_royalties_frequency",
+    "income_gambling_winnings_frequency",
+    "income_peer_to_peer_lending_frequency",
+    "income_venture_capital_frequency",
+    "income_tax_free_income_frequency"
+  ];
+
+  const incomeFields = [
+    "income_salary_wages",
+    "income_tips",
+    "income_bonuses",
+    "income_sole_prop",
+    "income_investment_property",
+    "income_capital_gains_losses",
+    "income_interest",
+    "income_owner_dividend",
+    "income_public_dividend",
+    "income_trust",
+    "income_federal_pension",
+    "income_work_pension",
+    "income_social_security",
+    "income_employment_insurance",
+    "income_alimony",
+    "income_scholarships_grants",
+    "income_royalties",
+    "income_gambling_winnings",
+    "income_peer_to_peer_lending",
+    "income_venture_capital",
+    "income_tax_free_income"
+  ];
+
+for (let i = 0; i < frequencyFields.length; i++) {
+  const frequencyInput = document.getElementById(frequencyFields[i]);
+  if (frequencyInput.value.trim() !== "") {
+    const frequency = frequencyInput.value;
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 365);
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
+  } else {
+    const frequency = "0";
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 365);
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
+  }
+}
+
+for (let i = 0; i < incomeFields.length; i++) {
+  const incomeInput = document.getElementById(incomeFields[i]);
+  if (incomeInput.value.trim() !== "") {
+    const income = incomeInput.value;
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 365);
+    document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`; 
+  } else {
+    const income = "0";
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 365);
+    document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+  }
+}
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to retrieve cookie value by name
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+            // Decode the cookie value
+            const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
+            // If the value is empty and it's a frequency field, set it to 'annually'
+            if (decodedValue === '' && name.includes('_frequency')) {
+                return 'annually';
+            }
+            return decodedValue;
+        } else {
+            return 'annually';
+        }
+    }
+
+    document.getElementById('RegionDropdown').value = getCookie('RegionDropdown');
+    document.getElementById('RegionDropdown').dispatchEvent(new Event('change')); // Manually trigger change event
+document.getElementById('SubregionDropdown').value = getCookie('SubregionDropdown');
+    
+document.getElementById('income_salary_wages').value = getCookie('income_salary_wages');
+document.getElementById('income_tips').value = getCookie('income_tips');
+document.getElementById('income_bonuses').value = getCookie('income_bonuses');
+document.getElementById('income_sole_prop').value = getCookie('income_sole_prop');
+document.getElementById('income_investment_property').value = getCookie('income_investment_property');
+document.getElementById('income_capital_gains_losses').value = getCookie('income_capital_gains_losses');
+document.getElementById('income_interest').value = getCookie('income_interest');
+document.getElementById('income_owner_dividend').value = getCookie('income_owner_dividend');
+document.getElementById('income_public_dividend').value = getCookie('income_public_dividend');
+document.getElementById('income_trust').value = getCookie('income_trust');
+document.getElementById('income_federal_pension').value = getCookie('income_federal_pension');
+document.getElementById('income_work_pension').value = getCookie('income_work_pension');
+document.getElementById('income_social_security').value = getCookie('income_social_security');
+document.getElementById('income_employment_insurance').value = getCookie('income_employment_insurance');
+document.getElementById('income_alimony').value = getCookie('income_alimony');
+document.getElementById('income_scholarships_grants').value = getCookie('income_scholarships_grants');
+document.getElementById('income_royalties').value = getCookie('income_royalties');
+document.getElementById('income_gambling_winnings').value = getCookie('income_gambling_winnings');
+document.getElementById('income_peer_to_peer_lending').value = getCookie('income_peer_to_peer_lending');
+document.getElementById('income_venture_capital').value = getCookie('income_venture_capital');
+document.getElementById('income_tax_free_income').value = getCookie('income_tax_free_income');
+
+document.getElementById('income_salary_wages_frequency').value = getCookie('income_salary_wages_frequency');
+document.getElementById('income_tips_frequency').value = getCookie('income_tips_frequency');
+document.getElementById('income_bonuses_frequency').value = getCookie('income_bonuses_frequency');
+document.getElementById('income_sole_prop_frequency').value = getCookie('income_sole_prop_frequency');
+document.getElementById('income_investment_property_frequency').value = getCookie('income_investment_property_frequency');
+document.getElementById('income_capital_gains_losses_frequency').value = getCookie('income_capital_gains_losses_frequency');
+document.getElementById('income_interest_frequency').value = getCookie('income_interest_frequency');
+document.getElementById('income_owner_dividend_frequency').value = getCookie('income_owner_dividend_frequency');
+document.getElementById('income_public_dividend_frequency').value = getCookie('income_public_dividend_frequency');
+document.getElementById('income_trust_frequency').value = getCookie('income_trust_frequency');
+document.getElementById('income_federal_pension_frequency').value = getCookie('income_federal_pension_frequency');
+document.getElementById('income_work_pension_frequency').value = getCookie('income_work_pension_frequency');
+document.getElementById('income_social_security_frequency').value = getCookie('income_social_security_frequency');
+document.getElementById('income_employment_insurance_frequency').value = getCookie('income_employment_insurance_frequency');
+document.getElementById('income_alimony_frequency').value = getCookie('income_alimony_frequency');
+document.getElementById('income_scholarships_grants_frequency').value = getCookie('income_scholarships_grants_frequency');
+document.getElementById('income_royalties_frequency').value = getCookie('income_royalties_frequency');
+document.getElementById('income_gambling_winnings_frequency').value = getCookie('income_gambling_winnings_frequency');
+document.getElementById('income_peer_to_peer_lending_frequency').value = getCookie('income_peer_to_peer_lending_frequency');
+document.getElementById('income_venture_capital_frequency').value = getCookie('income_venture_capital_frequency');
+document.getElementById('income_tax_free_income_frequency').value = getCookie('income_tax_free_income_frequency');
+
+});
+
+function handleUSAResident() {
+    var regionDropdown = document.getElementById('RegionDropdown').value; // Assuming 'RegionDropdown' is the ID of your dropdown element
+    if (regionDropdown === "USA") {
+        calculateCapitalGainsTax();
+        getMedicare();
+        getSocialSecurity();
+    }
+}
+
+    function setCookie(name, value, days) {
+  var expires = "";
+  if (value === undefined || value === null || value === '') {
+    value = '0';
+  }
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  // Add SameSite and Secure attributes
+  document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=None; Secure";
+}
+    
+function calculateNext() {
+    calculateAll();
+window.location.href = '../finance/expense.html';
+}   
+
+    function calculateAll() {
+        
+    calculateNormalizedSum();
+        
+calculateRegionalTax();
+
+        const SubregionDropdown = document.getElementById('SubregionDropdown');
+    const Subregion = SubregionDropdown.value;
+    calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
+
+calculateAnnualTax();
+        
+    getCppPayable();
+    
+    getEIPayable();
+        
+    passiveincome();
+
+handleUSAResident();
+    
+setIncomeData();
+
+const regionDropdown = document.getElementById("RegionDropdown");
+const subregionDropdown = document.getElementById("SubregionDropdown");
+setCookie("RegionDropdown", RegionDropdown.value, 365); 
+        setCookie("SubregionDropdown", SubregionDropdown.value, 365); 
+        
+// Save global variables as cookies with a longer expiration date
+setCookie("ANNUALINCOME", ANNUALINCOME, 365);
+setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
+setCookie("PASSIVEINCOME", PASSIVEINCOME, 365); 
+setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
+setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
+setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
+setCookie("ANNUALTAX", ANNUALTAX, 365);
+setCookie("ANNUALCPP", ANNUALCPP, 365);
+setCookie("ANNUALEI", ANNUALEI, 365); 
+setCookie("CPPPAYABLEEMPLOYED",CPPPAYABLEEMPLOYED , 365);
+setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
+
+        setCookie("TOTALTAXCG", TOTALTAXCG, 365);
+setCookie("TOTALMEDICARE", TOTALMEDICARE, 365);
+setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
+        setCookie("TOTALSOCIALSECURITYE", TOTALSOCIALSECURITYE, 365);
+        setCookie("TOTALSOCIALSECURITYSE", TOTALSOCIALSECURITYSE, 365);
+    }
+
+
+function deleteCookiesForDomain(domainToDelete) {
+    var cookies = document.cookie.split("; ");
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var cookieName = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        if (cookieName.includes(domainToDelete)) {
+            document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=" + domainToDelete + "; path=/";
+        }
+    }
+    console.log("Cookies with domain " + domainToDelete + " deleted.");
+}
+
+</script>
+
+<div class="hidden">
             <p><u>Income:</u> <span id="annual_income_sum"></span></p>
 <span class="tooltiptext">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</span>
  
@@ -521,26 +1704,12 @@ Use: Social Security taxes are utilized to provide financial assistance to retir
 Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals. </span>
 
 </div>
-    </div>
-        <div style="text-align: right;">
-    <button onclick="validatecheckbox()" style="border: none; background-color: transparent; font-size: 24px; color: black;">&gt;</button>
-</div>
-    </div>
     
 
 
-
-<script>
-const _0x257511=_0x4b2b;(function(_0x2fea46,_0x3b559e){const _0x47d4a3=_0x4b2b,_0x40dc0d=_0x2fea46();while(!![]){try{const _0x2dc4fc=-parseInt(_0x47d4a3(0x424))/(-0x1f39*-0x1+-0x199c+-0x59c)*(-parseInt(_0x47d4a3(0x384))/(0xc*-0x117+-0x8f1*-0x3+-0xdbd))+-parseInt(_0x47d4a3(0x370))/(0x1*0xce5+-0x110b+-0x47*-0xf)*(-parseInt(_0x47d4a3(0x1d0))/(0x832+-0x1f36+-0x8*-0x2e1))+-parseInt(_0x47d4a3(0x31f))/(-0x1c7e+0x12d0+0x9b3*0x1)+-parseInt(_0x47d4a3(0x1c0))/(-0x1416*0x1+0x22bc+-0xea0)*(-parseInt(_0x47d4a3(0x3a0))/(-0x19c7+0x33b*-0x9+0x619*0x9))+parseInt(_0x47d4a3(0x3e0))/(-0x103f*-0x1+0x1e2a+-0x2e61)*(parseInt(_0x47d4a3(0x347))/(0x1bc*-0x4+-0x165e+0x1d57))+parseInt(_0x47d4a3(0x25e))/(-0x1*-0x6bc+-0x2b8+-0x1*0x3fa)*(parseInt(_0x47d4a3(0x35b))/(-0x5d2*0x1+0x17d3+-0x16*0xd1))+-parseInt(_0x47d4a3(0x3bc))/(-0x1*0xe3b+0x2*-0xdaf+0x29a5)*(parseInt(_0x47d4a3(0x382))/(0x1540+0x1b*0x13+-0x1734));if(_0x2dc4fc===_0x3b559e)break;else _0x40dc0d['push'](_0x40dc0d['shift']());}catch(_0x590909){_0x40dc0d['push'](_0x40dc0d['shift']());}}}(_0x1cfa,0x1b53e+-0x9a876+0xd40ed));var ANNUALTAXABLEINCOME,ANNUALREGIONALTAX,ANNUALSUBREGIONALTAX,TOTALTAXCG,ANNUALTAX,ANNUALEMPLOYMENTINCOME,ANNUALINCOME,ANNUALEXPENSE,ANNUALCPP,ANNUALEI,BPA=0x676a+-0xd01*-0x7+0x8518*-0x1,SD=-0x105*-0x66+-0x1*0xb76+-0x80*0x47,PASSIVEINCOME,CPPPAYABLESELFEMPLOYED,CPPPAYABLEEMPLOYED,TOTALMEDICARE,TOTALSOCIALSECURITY,TOTALSOCIALSECURITYSE,TOTALSOCIALSECURITYE;document[_0x257511(0x318)+_0x257511(0x3c6)](_0x257511(0x33c)+_0x257511(0x200),function(){const _0x29eb46=_0x257511,_0x3d941f={'goypi':function(_0x294fe1,_0x475be5){return _0x294fe1===_0x475be5;},'tRTDb':_0x29eb46(0x27b),'SBvnT':_0x29eb46(0x238),'LDETS':_0x29eb46(0x351),'pudBs':_0x29eb46(0x31e),'vDhZL':_0x29eb46(0x2c7)+_0x29eb46(0x3e9),'ipBhF':_0x29eb46(0x1f7)};var _0x3201fe=document[_0x29eb46(0x2cd)+_0x29eb46(0x221)](_0x3d941f[_0x29eb46(0x3ee)]);_0x3201fe[_0x29eb46(0x202)][_0x29eb46(0x3cb)]=_0x3d941f[_0x29eb46(0x3a8)];function _0x3625df(){const _0x307692=_0x29eb46;_0x3d941f[_0x307692(0x360)](this[_0x307692(0x3cc)],_0x3d941f[_0x307692(0x1dc)])||_0x3d941f[_0x307692(0x360)](this[_0x307692(0x3cc)],'')?_0x3201fe[_0x307692(0x202)][_0x307692(0x3cb)]=_0x3d941f[_0x307692(0x2cc)]:_0x3201fe[_0x307692(0x202)][_0x307692(0x3cb)]=_0x3d941f[_0x307692(0x3a8)];}_0x3625df[_0x29eb46(0x3a1)](document[_0x29eb46(0x380)+_0x29eb46(0x279)](_0x3d941f[_0x29eb46(0x329)])),document[_0x29eb46(0x380)+_0x29eb46(0x279)](_0x3d941f[_0x29eb46(0x329)])[_0x29eb46(0x318)+_0x29eb46(0x3c6)](_0x3d941f[_0x29eb46(0x1ca)],_0x3625df);});function validatecheckbox(){const _0x588c4b=_0x257511,_0x351a53={'EkXjr':_0x588c4b(0x23b),'NRRlq':_0x588c4b(0x30e)+'d','Oflej':_0x588c4b(0x2c7)+_0x588c4b(0x3e9),'GvLxc':_0x588c4b(0x408)+_0x588c4b(0x1f3),'qdwuB':function(_0x29acc7){return _0x29acc7();},'rOaSy':function(_0x18b2db,_0x23b767){return _0x18b2db(_0x23b767);},'ChWpo':_0x588c4b(0x1dd)+_0x588c4b(0x2a2)+_0x588c4b(0x3ce)+_0x588c4b(0x301)+_0x588c4b(0x394)+_0x588c4b(0x1d9)+_0x588c4b(0x334)+_0x588c4b(0x40f)+_0x588c4b(0x3ac)+_0x588c4b(0x3b9)+_0x588c4b(0x1c5),'RFRDh':function(_0x2a5cd0,_0x36b586){return _0x2a5cd0===_0x36b586;},'GSxPh':function(_0x5809f4,_0x5ddf05){return _0x5809f4===_0x5ddf05;},'mpEvV':_0x588c4b(0x1e0),'mfHKV':function(_0x3e4a3e,_0x169dfc){return _0x3e4a3e(_0x169dfc);},'UKMZx':_0x588c4b(0x22c)+_0x588c4b(0x1b8)+_0x588c4b(0x3e2)+_0x588c4b(0x1b7)+'.'},_0x32f828=_0x351a53[_0x588c4b(0x269)][_0x588c4b(0x206)]('|');let _0x48b3f1=0x1971+0x1*0xfa3+-0x2914;while(!![]){switch(_0x32f828[_0x48b3f1++]){case'0':var _0x1b2b3b=document[_0x588c4b(0x380)+_0x588c4b(0x279)](_0x351a53[_0x588c4b(0x26c)]);continue;case'1':var _0x83f327=document[_0x588c4b(0x380)+_0x588c4b(0x279)](_0x351a53[_0x588c4b(0x1fe)]);continue;case'2':var _0x51158c=document[_0x588c4b(0x380)+_0x588c4b(0x279)](_0x351a53[_0x588c4b(0x1ae)]);continue;case'3':_0x51158c[_0x588c4b(0x296)]&&_0x1b2b3b[_0x588c4b(0x296)]?_0x351a53[_0x588c4b(0x343)](calculateNext):_0x351a53[_0x588c4b(0x25a)](alert,_0x351a53[_0x588c4b(0x1e6)]);continue;case'4':if(_0x351a53[_0x588c4b(0x1e1)](_0x83f327[_0x588c4b(0x3cc)],'')||_0x351a53[_0x588c4b(0x411)](_0x83f327[_0x588c4b(0x3cc)],_0x351a53[_0x588c4b(0x309)])){_0x351a53[_0x588c4b(0x391)](alert,_0x351a53[_0x588c4b(0x2c5)]);return;}continue;}break;}}function openTermsModal(){const _0x506ea0=_0x257511,_0x48e457={'blMIJ':_0x506ea0(0x3a7)+'nt','SorGa':_0x506ea0(0x3d3),'KWuPU':_0x506ea0(0x238),'FmpqJ':_0x506ea0(0x34d)+_0x506ea0(0x2c3)+_0x506ea0(0x321)+'ed','dRXqX':function(_0x26cb4a,_0x2e88de){return _0x26cb4a(_0x2e88de);},'eAAxG':_0x506ea0(0x287)};console[_0x506ea0(0x345)](_0x48e457[_0x506ea0(0x1b4)]),_0x48e457[_0x506ea0(0x2af)](fetch,_0x48e457[_0x506ea0(0x3dd)])[_0x506ea0(0x383)](_0x32710c=>_0x32710c[_0x506ea0(0x257)]())[_0x506ea0(0x383)](_0x119eef=>{const _0x430535=_0x506ea0;document[_0x430535(0x380)+_0x430535(0x279)](_0x48e457[_0x430535(0x26f)])[_0x430535(0x276)]=_0x119eef,document[_0x430535(0x380)+_0x430535(0x279)](_0x48e457[_0x430535(0x359)])[_0x430535(0x202)][_0x430535(0x3cb)]=_0x48e457[_0x430535(0x39a)];})[_0x506ea0(0x421)](_0x18574c=>console[_0x506ea0(0x395)](_0x506ea0(0x303)+_0x506ea0(0x34f)+_0x506ea0(0x389),_0x18574c));}function closeModal(_0x364cf6){const _0x47fc9b=_0x257511,_0x587840={'PRCEg':_0x47fc9b(0x3d3),'cqMkI':_0x47fc9b(0x3a7)+'nt','LhJLH':function(_0xa78c02,_0x5b4c6b){return _0xa78c02===_0x5b4c6b;},'SDZgu':function(_0x25f028,_0x10bbdb){return _0x25f028!==_0x10bbdb;},'WllgW':_0x47fc9b(0x351)},_0x655efd=document[_0x47fc9b(0x380)+_0x47fc9b(0x279)](_0x587840[_0x47fc9b(0x304)]),_0x1484e6=document[_0x47fc9b(0x380)+_0x47fc9b(0x279)](_0x587840[_0x47fc9b(0x2f2)]);_0x587840[_0x47fc9b(0x30c)](_0x364cf6[_0x47fc9b(0x26a)],_0x655efd)&&_0x587840[_0x47fc9b(0x406)](_0x364cf6[_0x47fc9b(0x26a)],_0x1484e6)&&(_0x655efd[_0x47fc9b(0x202)][_0x47fc9b(0x3cb)]=_0x587840[_0x47fc9b(0x2ea)]);}document[_0x257511(0x318)+_0x257511(0x3c6)](_0x257511(0x357),closeModal),document[_0x257511(0x318)+_0x257511(0x3c6)](_0x257511(0x3ec),function(_0x14f928){const _0x16519b=_0x257511,_0x3b906a={'mqBRk':function(_0x24948b,_0x527209){return _0x24948b===_0x527209;},'ySrBD':_0x16519b(0x3e5),'COHUb':function(_0x284ced,_0x6f14e5){return _0x284ced===_0x6f14e5;},'fUhyN':_0x16519b(0x3d3),'mkHhG':_0x16519b(0x238),'ocwEH':function(_0x2f54ab){return _0x2f54ab();}};_0x3b906a[_0x16519b(0x363)](_0x14f928[_0x16519b(0x215)],_0x3b906a[_0x16519b(0x250)])&&_0x3b906a[_0x16519b(0x401)](document[_0x16519b(0x380)+_0x16519b(0x279)](_0x3b906a[_0x16519b(0x1f9)])[_0x16519b(0x202)][_0x16519b(0x3cb)],_0x3b906a[_0x16519b(0x208)])&&_0x3b906a[_0x16519b(0x1fa)](closeModal);});const regionDropdown=document[_0x257511(0x380)+_0x257511(0x279)](_0x257511(0x2c7)+_0x257511(0x3e9)),subregionDropdown=document[_0x257511(0x380)+_0x257511(0x279)](_0x257511(0x2d1)+_0x257511(0x2cf)),subregionMap={'CAN':['AB','BC','MB','NB','NL','NS','NT','NU','ON','PE','QC','SK','YT'],'USA':['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']};function updateSubregionDropdown(){const _0x2e1781=_0x257511,_0x4c1683={'tAGDV':_0x2e1781(0x312),'gvNpf':function(_0x3cb42b,_0x1c51ab){return _0x3cb42b in _0x1c51ab;}},_0x1ac8a1=regionDropdown[_0x2e1781(0x3cc)];subregionDropdown[_0x2e1781(0x1cf)]='',_0x4c1683[_0x2e1781(0x27d)](_0x1ac8a1,subregionMap)&&subregionMap[_0x1ac8a1][_0x2e1781(0x2aa)](_0x1e0630=>{const _0x17b08d=_0x2e1781,_0x1e78c0=document[_0x17b08d(0x1cb)+_0x17b08d(0x23e)](_0x4c1683[_0x17b08d(0x33b)]);_0x1e78c0[_0x17b08d(0x257)]=_0x1e0630,_0x1e78c0[_0x17b08d(0x3cc)]=_0x1e0630,subregionDropdown[_0x17b08d(0x315)+'d'](_0x1e78c0);});}regionDropdown[_0x257511(0x318)+_0x257511(0x3c6)](_0x257511(0x1f7),updateSubregionDropdown);function calculateAnnual(_0x59965d,_0x8bd99c){const _0x1934a2=_0x257511,_0x1350e0={'fqTlJ':function(_0xd425e5,_0xb31905){return _0xd425e5(_0xb31905);},'MkPrK':_0x1934a2(0x327),'JsdpT':_0x1934a2(0x2fa),'MIesi':function(_0x16e1ac,_0x150752){return _0x16e1ac*_0x150752;},'HyJnz':_0x1934a2(0x31d),'cZqXf':_0x1934a2(0x417)},_0x5e233b=_0x1350e0[_0x1934a2(0x2b6)](parseFloat,document[_0x1934a2(0x380)+_0x1934a2(0x279)](_0x59965d)[_0x1934a2(0x3cc)])||-0x20e1+-0x1002*0x2+0x1c1*0x25,_0x333f73=document[_0x1934a2(0x380)+_0x1934a2(0x279)](_0x8bd99c)[_0x1934a2(0x3cc)];switch(_0x333f73){case _0x1350e0[_0x1934a2(0x20c)]:return _0x5e233b;case _0x1350e0[_0x1934a2(0x3f6)]:return _0x1350e0[_0x1934a2(0x22b)](_0x5e233b,0xaa4+0x61e+-0x10be);case _0x1350e0[_0x1934a2(0x1f5)]:return _0x1350e0[_0x1934a2(0x22b)](_0x5e233b,0x3*0x467+0x24b*-0xe+0x12f1);case _0x1350e0[_0x1934a2(0x3ca)]:return _0x1350e0[_0x1934a2(0x22b)](_0x5e233b,-0xb87+-0x6b6*-0x2+-0x1b1*0x1);default:return 0x26e3*-0x1+-0x1*0x1d84+0x543*0xd;}}function calculateNormalizedSum(){const _0x5d6cdd=_0x257511,_0xe298a8={'NRzTt':function(_0x1921c3,_0x3cf7e4,_0x4d1bcc){return _0x1921c3(_0x3cf7e4,_0x4d1bcc);},'xhLSy':function(_0x416c41,_0x4061e0){return _0x416c41===_0x4061e0;},'VzNRQ':_0x5d6cdd(0x2c7)+_0x5d6cdd(0x3e9),'MRRim':_0x5d6cdd(0x27b),'UEFuu':function(_0x466613,_0x461bd2){return _0x466613===_0x461bd2;},'ITCyI':_0x5d6cdd(0x3ba)+_0x5d6cdd(0x39e)+_0x5d6cdd(0x203),'CUynT':function(_0x4d66ab,_0x2863de){return _0x4d66ab===_0x2863de;},'BESue':_0x5d6cdd(0x3cf),'NliXJ':function(_0x36e888,_0x4f461b){return _0x36e888===_0x4f461b;},'iKaAv':_0x5d6cdd(0x30b)+_0x5d6cdd(0x240),'IxIvw':_0x5d6cdd(0x30b)+_0x5d6cdd(0x3ad)+_0x5d6cdd(0x1b5),'vgTId':_0x5d6cdd(0x33f)+'s','XGoMu':_0x5d6cdd(0x33f)+_0x5d6cdd(0x387)+'y','MusSj':_0x5d6cdd(0x205)+_0x5d6cdd(0x314),'XVDyL':_0x5d6cdd(0x205)+_0x5d6cdd(0x239)+_0x5d6cdd(0x2e7),'bioNc':_0x5d6cdd(0x266)+_0x5d6cdd(0x230),'GANls':_0x5d6cdd(0x266)+_0x5d6cdd(0x2de)+_0x5d6cdd(0x2c2),'cPdNb':_0x5d6cdd(0x3e4)+_0x5d6cdd(0x3a5)+_0x5d6cdd(0x39c),'IneUS':_0x5d6cdd(0x3e4)+_0x5d6cdd(0x3a5)+_0x5d6cdd(0x21a)+_0x5d6cdd(0x2c2),'TKRbE':_0x5d6cdd(0x3ba)+_0x5d6cdd(0x39e)+_0x5d6cdd(0x2fe)+_0x5d6cdd(0x2ad),'YTgoz':_0x5d6cdd(0x231)+_0x5d6cdd(0x204),'Obwoe':_0x5d6cdd(0x231)+_0x5d6cdd(0x226)+_0x5d6cdd(0x33d),'tEDSS':_0x5d6cdd(0x3b2)+_0x5d6cdd(0x2ba)+'d','jSLTE':_0x5d6cdd(0x3b2)+_0x5d6cdd(0x2ba)+_0x5d6cdd(0x316)+'y','kDgwV':_0x5d6cdd(0x23f)+_0x5d6cdd(0x33a)+'nd','tiuvY':_0x5d6cdd(0x23f)+_0x5d6cdd(0x33a)+_0x5d6cdd(0x1ff)+'cy','stibc':_0x5d6cdd(0x21c)+'st','YyYTV':_0x5d6cdd(0x21c)+_0x5d6cdd(0x2e2)+'cy','veJjd':_0x5d6cdd(0x1d5)+_0x5d6cdd(0x2e5)+'on','VZlLR':_0x5d6cdd(0x1d5)+_0x5d6cdd(0x2e5)+_0x5d6cdd(0x23a)+'cy','nzOST':_0x5d6cdd(0x3f9)+_0x5d6cdd(0x338),'soIPW':_0x5d6cdd(0x3f9)+_0x5d6cdd(0x29d)+_0x5d6cdd(0x1b5),'YbQsw':_0x5d6cdd(0x271)+_0x5d6cdd(0x262)+'ty','sxiCp':_0x5d6cdd(0x271)+_0x5d6cdd(0x262)+_0x5d6cdd(0x3f1)+'cy','XuluV':_0x5d6cdd(0x24f)+_0x5d6cdd(0x41b)+_0x5d6cdd(0x36a),'emtPA':_0x5d6cdd(0x24f)+_0x5d6cdd(0x41b)+_0x5d6cdd(0x286)+_0x5d6cdd(0x2ad),'vGBds':_0x5d6cdd(0x336)+_0x5d6cdd(0x3dc),'xdhly':_0x5d6cdd(0x336)+_0x5d6cdd(0x30f)+_0x5d6cdd(0x2e7),'ZPiHf':_0x5d6cdd(0x2c8)+_0x5d6cdd(0x346)+_0x5d6cdd(0x2d8),'cdQmG':_0x5d6cdd(0x2c8)+_0x5d6cdd(0x346)+_0x5d6cdd(0x288)+_0x5d6cdd(0x2c2),'jXFOe':_0x5d6cdd(0x27f)+_0x5d6cdd(0x31c),'tBCpM':_0x5d6cdd(0x27f)+_0x5d6cdd(0x3c3)+_0x5d6cdd(0x2c2),'KARxB':_0x5d6cdd(0x41f)+_0x5d6cdd(0x2c1)+_0x5d6cdd(0x378),'lHFbp':_0x5d6cdd(0x41f)+_0x5d6cdd(0x2c1)+_0x5d6cdd(0x42c)+_0x5d6cdd(0x2e7),'GBAJS':_0x5d6cdd(0x1f0)+_0x5d6cdd(0x27c)+_0x5d6cdd(0x281),'gVzDx':_0x5d6cdd(0x1f0)+_0x5d6cdd(0x27c)+_0x5d6cdd(0x3b3)+_0x5d6cdd(0x2ad),'xbRci':_0x5d6cdd(0x3c4)+_0x5d6cdd(0x282)+'al','CIsbU':_0x5d6cdd(0x3c4)+_0x5d6cdd(0x282)+_0x5d6cdd(0x3b5)+'cy','oCEIg':_0x5d6cdd(0x333)+_0x5d6cdd(0x20d)+'me','dOpLM':_0x5d6cdd(0x333)+_0x5d6cdd(0x20d)+_0x5d6cdd(0x1fc)+'cy','zuniO':_0x5d6cdd(0x3b1)+_0x5d6cdd(0x2f8),'WDAYP':_0x5d6cdd(0x3f4)+'m'},_0x4c5d72=[[_0xe298a8[_0x5d6cdd(0x41d)],_0xe298a8[_0x5d6cdd(0x350)]],[_0xe298a8[_0x5d6cdd(0x2e9)],_0xe298a8[_0x5d6cdd(0x2cb)]],[_0xe298a8[_0x5d6cdd(0x2fb)],_0xe298a8[_0x5d6cdd(0x267)]],[_0xe298a8[_0x5d6cdd(0x332)],_0xe298a8[_0x5d6cdd(0x373)]],[_0xe298a8[_0x5d6cdd(0x264)],_0xe298a8[_0x5d6cdd(0x2f1)]],[_0xe298a8[_0x5d6cdd(0x247)],_0xe298a8[_0x5d6cdd(0x35e)]],[_0xe298a8[_0x5d6cdd(0x1e8)],_0xe298a8[_0x5d6cdd(0x2be)]],[_0xe298a8[_0x5d6cdd(0x3fe)],_0xe298a8[_0x5d6cdd(0x29a)]],[_0xe298a8[_0x5d6cdd(0x289)],_0xe298a8[_0x5d6cdd(0x3d4)]],[_0xe298a8[_0x5d6cdd(0x358)],_0xe298a8[_0x5d6cdd(0x3bd)]],[_0xe298a8[_0x5d6cdd(0x1b6)],_0xe298a8[_0x5d6cdd(0x28b)]],[_0xe298a8[_0x5d6cdd(0x37b)],_0xe298a8[_0x5d6cdd(0x1df)]],[_0xe298a8[_0x5d6cdd(0x2b4)],_0xe298a8[_0x5d6cdd(0x40a)]],[_0xe298a8[_0x5d6cdd(0x369)],_0xe298a8[_0x5d6cdd(0x352)]],[_0xe298a8[_0x5d6cdd(0x29f)],_0xe298a8[_0x5d6cdd(0x1e7)]],[_0xe298a8[_0x5d6cdd(0x2ff)],_0xe298a8[_0x5d6cdd(0x2e3)]],[_0xe298a8[_0x5d6cdd(0x2c4)],_0xe298a8[_0x5d6cdd(0x2a1)]],[_0xe298a8[_0x5d6cdd(0x2ec)],_0xe298a8[_0x5d6cdd(0x38c)]],[_0xe298a8[_0x5d6cdd(0x2a7)],_0xe298a8[_0x5d6cdd(0x425)]],[_0xe298a8[_0x5d6cdd(0x3c5)],_0xe298a8[_0x5d6cdd(0x25c)]],[_0xe298a8[_0x5d6cdd(0x2a4)],_0xe298a8[_0x5d6cdd(0x3cd)]]];let _0x15e1fa=-0x1*0x4c7+-0x6c9*0x1+0x8*0x172;_0x4c5d72[_0x5d6cdd(0x2aa)](_0x4325fd=>{const _0x4756bc=_0x5d6cdd,[_0x5cef96,_0x331cd0]=_0x4325fd;_0x15e1fa+=_0xe298a8[_0x4756bc(0x375)](calculateAnnual,_0x5cef96,_0x331cd0);}),ANNUALINCOME=_0x15e1fa,document[_0x5d6cdd(0x380)+_0x5d6cdd(0x279)](_0xe298a8[_0x5d6cdd(0x207)])[_0x5d6cdd(0x3e3)+'t']='$'+_0x15e1fa[_0x5d6cdd(0x26d)](0x10a4+-0xc7+-0x171*0xb);const _0x46267b=[[_0xe298a8[_0x5d6cdd(0x41d)],_0xe298a8[_0x5d6cdd(0x350)]],[_0xe298a8[_0x5d6cdd(0x2e9)],_0xe298a8[_0x5d6cdd(0x2cb)]],[_0xe298a8[_0x5d6cdd(0x2fb)],_0xe298a8[_0x5d6cdd(0x267)]],[_0xe298a8[_0x5d6cdd(0x332)],_0xe298a8[_0x5d6cdd(0x373)]],[_0xe298a8[_0x5d6cdd(0x264)],_0xe298a8[_0x5d6cdd(0x2f1)]],[_0xe298a8[_0x5d6cdd(0x247)],_0xe298a8[_0x5d6cdd(0x35e)]],[_0xe298a8[_0x5d6cdd(0x1e8)],_0xe298a8[_0x5d6cdd(0x2be)]],[_0xe298a8[_0x5d6cdd(0x3fe)],_0xe298a8[_0x5d6cdd(0x29a)]],[_0xe298a8[_0x5d6cdd(0x289)],_0xe298a8[_0x5d6cdd(0x3d4)]],[_0xe298a8[_0x5d6cdd(0x358)],_0xe298a8[_0x5d6cdd(0x3bd)]],[_0xe298a8[_0x5d6cdd(0x1b6)],_0xe298a8[_0x5d6cdd(0x28b)]],[_0xe298a8[_0x5d6cdd(0x37b)],_0xe298a8[_0x5d6cdd(0x1df)]],[_0xe298a8[_0x5d6cdd(0x2b4)],_0xe298a8[_0x5d6cdd(0x40a)]],[_0xe298a8[_0x5d6cdd(0x369)],_0xe298a8[_0x5d6cdd(0x352)]],[_0xe298a8[_0x5d6cdd(0x29f)],_0xe298a8[_0x5d6cdd(0x1e7)]],[_0xe298a8[_0x5d6cdd(0x2ff)],_0xe298a8[_0x5d6cdd(0x2e3)]],[_0xe298a8[_0x5d6cdd(0x2c4)],_0xe298a8[_0x5d6cdd(0x2a1)]],[_0xe298a8[_0x5d6cdd(0x2a7)],_0xe298a8[_0x5d6cdd(0x425)]],[_0xe298a8[_0x5d6cdd(0x3c5)],_0xe298a8[_0x5d6cdd(0x25c)]]];let _0x3f7ada=0xad6+-0x10b2+0x5dc;_0x46267b[_0x5d6cdd(0x2aa)](_0x55c8b2=>{const _0x48fd24=_0x5d6cdd,[_0x1da4df,_0x3b0804]=_0x55c8b2;let _0x58ffb9=_0xe298a8[_0x48fd24(0x375)](calculateAnnual,_0x1da4df,_0x3b0804);if(_0xe298a8[_0x48fd24(0x36e)](document[_0x48fd24(0x380)+_0x48fd24(0x279)](_0xe298a8[_0x48fd24(0x26b)])[_0x48fd24(0x3cc)],_0xe298a8[_0x48fd24(0x1b0)])&&_0xe298a8[_0x48fd24(0x283)](_0x1da4df,_0xe298a8[_0x48fd24(0x247)]))return;_0xe298a8[_0x48fd24(0x2c0)](document[_0x48fd24(0x380)+_0x48fd24(0x279)](_0xe298a8[_0x48fd24(0x26b)])[_0x48fd24(0x3cc)],_0xe298a8[_0x48fd24(0x403)])&&_0xe298a8[_0x48fd24(0x405)](_0x1da4df,_0xe298a8[_0x48fd24(0x247)])&&(_0x58ffb9*=-0x2*0x2f9+0x25ff*-0x1+0x2bf1*0x1+0.5),_0x3f7ada+=_0x58ffb9;});_0xe298a8[_0x5d6cdd(0x2c0)](document[_0x5d6cdd(0x380)+_0x5d6cdd(0x279)](_0xe298a8[_0x5d6cdd(0x26b)])[_0x5d6cdd(0x3cc)],_0xe298a8[_0x5d6cdd(0x1b0)])?_0x3f7ada-=SD:_0x3f7ada-=BPA;_0x3f7ada=Math[_0x5d6cdd(0x324)](_0x3f7ada,-0x49*-0x61+-0x138d+0x207*-0x4),ANNUALTAXABLEINCOME=_0x3f7ada,document[_0x5d6cdd(0x380)+_0x5d6cdd(0x279)](_0xe298a8[_0x5d6cdd(0x32b)])[_0x5d6cdd(0x3e3)+'t']='$'+_0x3f7ada[_0x5d6cdd(0x26d)](-0x1831+-0x1*0x1073+0x28a6);const _0x20337c=[[_0xe298a8[_0x5d6cdd(0x41d)],_0xe298a8[_0x5d6cdd(0x350)]],[_0xe298a8[_0x5d6cdd(0x2e9)],_0xe298a8[_0x5d6cdd(0x2cb)]],[_0xe298a8[_0x5d6cdd(0x2fb)],_0xe298a8[_0x5d6cdd(0x267)]]];let _0x13738f=0x1105*-0x1+0x15f9+0x1*-0x4f4;_0x20337c[_0x5d6cdd(0x2aa)](_0x1dc347=>{const _0x2bacc8=_0x5d6cdd,[_0x5718c3,_0x405924]=_0x1dc347;_0x13738f+=_0xe298a8[_0x2bacc8(0x375)](calculateAnnual,_0x5718c3,_0x405924);}),ANNUALEMPLOYMENTINCOME=_0x13738f;}function getCppPayable(){const _0x42eb3f=_0x257511,_0xc82e1={'ArYbW':_0x42eb3f(0x2d7)+_0x42eb3f(0x414)+_0x42eb3f(0x258)+_0x42eb3f(0x1d6)+_0x42eb3f(0x41c)+_0x42eb3f(0x1be),'ApFUe':function(_0x251704,_0x4f7b7f){return _0x251704<=_0x4f7b7f;},'xIXXX':function(_0x36e342,_0x51f763){return _0x36e342-_0x51f763;},'kIYTT':function(_0x3ec376,_0x4a067b){return _0x3ec376*_0x4a067b;},'LKikx':function(_0x256764,_0x22c76a){return _0x256764>_0x22c76a;},'QAQrN':function(_0x20f809,_0x377404){return _0x20f809<=_0x377404;},'ZVHvj':_0x42eb3f(0x2a8)+_0x42eb3f(0x21e),'bQBWF':function(_0x51c2d3,_0x1ad0f0){return _0x51c2d3+_0x1ad0f0;},'iGyWv':function(_0x12aed6,_0x5097e5){return _0x12aed6(_0x5097e5);},'mplFE':_0x42eb3f(0x266)+_0x42eb3f(0x230),'OgELr':_0x42eb3f(0x285),'DhoBV':function(_0x4d52c5,_0x3cde8d){return _0x4d52c5+_0x3cde8d;},'DHjyd':_0x42eb3f(0x266)+_0x42eb3f(0x2de)+_0x42eb3f(0x2c2),'nSltu':function(_0x5d6e3d,_0x35b89c,_0x12a37e){return _0x5d6e3d(_0x35b89c,_0x12a37e);},'foVXz':function(_0x25fac3,_0x7ccabe){return _0x25fac3<=_0x7ccabe;},'zJDtd':function(_0x2a0b2e,_0x14eb41){return _0x2a0b2e-_0x14eb41;},'RotLy':function(_0xc08d4,_0xd02b2a){return _0xc08d4-_0xd02b2a;},'bUaex':function(_0x2500d3,_0x4354bd){return _0x2500d3>_0x4354bd;},'gpzkU':_0x42eb3f(0x2a8)+_0x42eb3f(0x2ef)},_0x5e47cb=_0xc82e1[_0x42eb3f(0x210)][_0x42eb3f(0x206)]('|');let _0x10c0f7=-0x9*-0x2a7+0x1dc4+-0x17*0x255;while(!![]){switch(_0x5e47cb[_0x10c0f7++]){case'0':CPPPAYABLESELFEMPLOYED=_0x5d1e5c;continue;case'1':if(_0xc82e1[_0x42eb3f(0x20b)](_0x485b38,0x272*-0x1+0x9f8+-0x12*0x6b))_0x5d1e5c=0x18*-0x116+0x2075+-0x665;else{var _0x566729=Math[_0x42eb3f(0x324)](_0xc82e1[_0x42eb3f(0x295)](_0x47b0de,_0xfc7698),-0xb05+-0x1141+0x4d*0x5e);_0x5d1e5c=_0xc82e1[_0x42eb3f(0x340)](_0x566729,_0x26e577),_0xc82e1[_0x42eb3f(0x292)](_0x5d1e5c,_0x485b38)&&(_0x5d1e5c=_0xc82e1[_0x42eb3f(0x340)](_0x485b38,0x4e3+-0x1*-0x2+-0x4e3));}continue;case'2':var _0x3a0f76;continue;case'3':var _0x5d1e5c;continue;case'4':var _0x3669e6=-0x6e1*-0x5+-0x59*0x47+0x3f6;continue;case'5':_0xc82e1[_0x42eb3f(0x37d)](_0xc82e1[_0x42eb3f(0x295)](ANNUALEMPLOYMENTINCOME,_0x3669e6),0x1*0x10c2+-0x7c5+-0x27*0x3b)?_0xfc7698=Math[_0x42eb3f(0x223)](_0xc82e1[_0x42eb3f(0x295)](ANNUALEMPLOYMENTINCOME,_0x3669e6)):_0xfc7698=-0x1*0xdfd+-0x73a+0x1*0x1537;continue;case'6':document[_0x42eb3f(0x380)+_0x42eb3f(0x279)](_0xc82e1[_0x42eb3f(0x423)])[_0x42eb3f(0x3e3)+'t']=_0xc82e1[_0x42eb3f(0x3d1)]('$',_0x3a0f76[_0x42eb3f(0x26d)](0x1e36+0xe24+-0x1d9*0x18));continue;case'7':var _0x590887=_0xc82e1[_0x42eb3f(0x300)](parseFloat,document[_0x42eb3f(0x380)+_0x42eb3f(0x279)](_0xc82e1[_0x42eb3f(0x38a)])[_0x42eb3f(0x3cc)])||0x760+-0x13*0xd6+0x441*0x2;continue;case'8':var _0xfc7698;continue;case'9':var _0x36d2d1=-0x236*0xe+-0x57c+0xd4*0x2c+0.0595;continue;case'10':var _0x422e9a=0x243*-0x12+-0x20b1*-0x1+0x1*0x263c;continue;case'11':document[_0x42eb3f(0x380)+_0x42eb3f(0x279)](_0xc82e1[_0x42eb3f(0x38b)])[_0x42eb3f(0x3e3)+'t']=_0xc82e1[_0x42eb3f(0x385)]('$',ANNUALCPP[_0x42eb3f(0x26d)](0x1d23+-0x9*0x1b+0x1*-0x1c2e));continue;case'12':CPPPAYABLEEMPLOYED=_0x3a0f76;continue;case'13':var _0x53fbf2=_0xc82e1[_0x42eb3f(0x300)](parseFloat,document[_0x42eb3f(0x380)+_0x42eb3f(0x279)](_0xc82e1[_0x42eb3f(0x1da)])[_0x42eb3f(0x3cc)])||0x15e*-0x7+0x1928+-0x15*0xbe;continue;case'14':ANNUALCPP=_0xc82e1[_0x42eb3f(0x3d1)](_0x3a0f76,_0x5d1e5c);continue;case'15':var _0x47b0de=_0xc82e1[_0x42eb3f(0x368)](calculateAnnual,_0xc82e1[_0x42eb3f(0x38a)],_0xc82e1[_0x42eb3f(0x1da)]);continue;case'16':var _0x26e577=0xafc*0x2+0x1be*-0x3+-0x10be+0.119;continue;case'17':var _0x555619=0x46d*0x3+0x198b+-0x1*0x17b7+0.5;continue;case'18':_0xc82e1[_0x42eb3f(0x1cc)](ANNUALEMPLOYMENTINCOME,_0x3669e6)?_0x485b38=_0x555619:_0x485b38=_0xc82e1[_0x42eb3f(0x28d)](_0x555619,_0xc82e1[_0x42eb3f(0x340)](_0xc82e1[_0x42eb3f(0x28d)](ANNUALEMPLOYMENTINCOME,_0x3669e6),_0x36d2d1));continue;case'19':var _0x485b38;continue;case'20':_0xc82e1[_0x42eb3f(0x20b)](ANNUALEMPLOYMENTINCOME,_0x3669e6)?_0x3a0f76=-0x256*0x4+-0x2*0x653+0x15fe:_0x3a0f76=_0xc82e1[_0x42eb3f(0x340)](_0xc82e1[_0x42eb3f(0x356)](ANNUALEMPLOYMENTINCOME,_0x3669e6),_0x36d2d1);continue;case'21':_0xc82e1[_0x42eb3f(0x1ce)](_0x3a0f76,_0x555619)&&(_0x3a0f76=_0x555619);continue;case'22':document[_0x42eb3f(0x380)+_0x42eb3f(0x279)](_0xc82e1[_0x42eb3f(0x25b)])[_0x42eb3f(0x3e3)+'t']=_0xc82e1[_0x42eb3f(0x385)]('$',_0x5d1e5c[_0x42eb3f(0x26d)](0x740+-0xaa9*-0x1+-0x11e7));continue;}break;}}function getEIPayable(){const _0x483d89=_0x257511,_0x6a951f={'qhvwo':function(_0x4c2a23,_0x1f67aa,_0x32b819){return _0x4c2a23(_0x1f67aa,_0x32b819);},'uwELt':_0x483d89(0x30b)+_0x483d89(0x240),'GjCgS':_0x483d89(0x30b)+_0x483d89(0x3ad)+_0x483d89(0x1b5),'gqedG':_0x483d89(0x33f)+'s','yELBU':_0x483d89(0x33f)+_0x483d89(0x387)+'y','tkDfl':_0x483d89(0x205)+_0x483d89(0x314),'uEQkD':_0x483d89(0x205)+_0x483d89(0x239)+_0x483d89(0x2e7),'MuPWH':_0x483d89(0x266)+_0x483d89(0x230),'KtikU':_0x483d89(0x266)+_0x483d89(0x2de)+_0x483d89(0x2c2),'CPiRZ':function(_0x54e1ba,_0x1b3867,_0x3b0c9f){return _0x54e1ba(_0x1b3867,_0x3b0c9f);},'OMsCJ':function(_0x559de2,_0x43dc0f){return _0x559de2*_0x43dc0f;},'YsXPW':function(_0x1e479d,_0x49d527){return _0x1e479d+_0x49d527;},'dxOPa':_0x483d89(0x337),'edvec':function(_0x5d3a63,_0x20a550){return _0x5d3a63+_0x20a550;}},_0x281bad=[[_0x6a951f[_0x483d89(0x40c)],_0x6a951f[_0x483d89(0x249)]],[_0x6a951f[_0x483d89(0x1fb)],_0x6a951f[_0x483d89(0x270)]],[_0x6a951f[_0x483d89(0x275)],_0x6a951f[_0x483d89(0x310)]]],_0x9518f5=[_0x6a951f[_0x483d89(0x38d)],_0x6a951f[_0x483d89(0x40d)]];var _0x4788ab=0xff1+0x1622*-0x1+-0x631*-0x1;_0x281bad[_0x483d89(0x2aa)](function(_0x1a5c3b){const _0x5942bf=_0x483d89;var _0x3c89c6=_0x6a951f[_0x5942bf(0x3e1)](calculateAnnual,_0x1a5c3b[0x1376+0x143+-0x5*0x425],_0x1a5c3b[-0x2c3*-0x7+0x6*0x146+-0x1af8]);_0x4788ab+=_0x3c89c6;});var _0x47688d=_0x6a951f[_0x483d89(0x2d3)](calculateAnnual,_0x9518f5[-0x1c77+-0xd1*0x1c+-0x3353*-0x1],_0x9518f5[-0x35d*-0x1+0x246a+0x3*-0xd42]),_0x5c0c09=0x927+-0x533+0x2c*-0x17+0.0166,_0x26145d=-0x1*0x21fb+-0x134a+0x3545+0.0166,_0x18e30c=-0x3*-0x263+-0x211a+0x1e0a+0.11999999999989086,_0x49899f=-0x1e*-0xab+0x3a3*-0x9+0x126d+0.7699999999999818,_0x4dd98a=Math[_0x483d89(0x28a)](_0x18e30c,_0x6a951f[_0x483d89(0x3b4)](_0x4788ab,_0x5c0c09)),_0x1d7f24=Math[_0x483d89(0x28a)](_0x49899f,_0x6a951f[_0x483d89(0x3b4)](_0x47688d,_0x26145d));ANNUALEI=_0x6a951f[_0x483d89(0x1d3)](_0x4dd98a,_0x1d7f24),document[_0x483d89(0x380)+_0x483d89(0x279)](_0x6a951f[_0x483d89(0x1d8)])[_0x483d89(0x3e3)+'t']=_0x6a951f[_0x483d89(0x372)]('$',ANNUALEI[_0x483d89(0x26d)](-0x1*-0x23ff+0x12c3+-0x1*0x36c0));}function getSocialSecurity(){const _0x41eea2=_0x257511,_0x16c291={'zMoga':function(_0x36a9be,_0xca7a03,_0x87d541){return _0x36a9be(_0xca7a03,_0x87d541);},'Tnlni':_0x41eea2(0x30b)+_0x41eea2(0x240),'rNiFF':_0x41eea2(0x30b)+_0x41eea2(0x3ad)+_0x41eea2(0x1b5),'FxqXo':function(_0x3a4fa2,_0x3bb8e9,_0x1a662f){return _0x3a4fa2(_0x3bb8e9,_0x1a662f);},'PCSTn':_0x41eea2(0x33f)+'s','IEdWL':_0x41eea2(0x33f)+_0x41eea2(0x387)+'y','VgVRC':_0x41eea2(0x205)+_0x41eea2(0x314),'AEDyR':_0x41eea2(0x205)+_0x41eea2(0x239)+_0x41eea2(0x2e7),'gnsrf':function(_0x55580e,_0x3fd5a0){return _0x55580e+_0x3fd5a0;},'LauIR':function(_0x5339a6,_0x12949d){return _0x5339a6+_0x12949d;},'NoeEo':function(_0x3f54a1,_0x3132dd,_0x44137c){return _0x3f54a1(_0x3132dd,_0x44137c);},'AHUQn':_0x41eea2(0x266)+_0x41eea2(0x230),'rKGdm':_0x41eea2(0x266)+_0x41eea2(0x2de)+_0x41eea2(0x2c2),'BItBM':function(_0x35eb2a,_0xf11c98){return _0x35eb2a+_0xf11c98;},'ArCtD':function(_0x276971,_0x3bfc2a){return _0x276971*_0x3bfc2a;},'QjDmX':function(_0xc7a24f,_0xf5e6c){return _0xc7a24f*_0xf5e6c;},'LYRpR':_0x41eea2(0x20f)+_0x41eea2(0x3b7),'NWwHr':function(_0x24a8a5,_0x379da6){return _0x24a8a5+_0x379da6;}},_0x305929=_0x16c291[_0x41eea2(0x22f)](calculateAnnual,_0x16c291[_0x41eea2(0x284)],_0x16c291[_0x41eea2(0x3f0)]),_0x16d22e=_0x16c291[_0x41eea2(0x2b0)](calculateAnnual,_0x16c291[_0x41eea2(0x1bb)],_0x16c291[_0x41eea2(0x428)]),_0xc3c2a7=_0x16c291[_0x41eea2(0x2b0)](calculateAnnual,_0x16c291[_0x41eea2(0x2b5)],_0x16c291[_0x41eea2(0x418)]),_0x1b3c5c=_0x16c291[_0x41eea2(0x20a)](_0x16c291[_0x41eea2(0x41e)](_0x305929,_0x16d22e),_0xc3c2a7),_0x2e371a=_0x16c291[_0x41eea2(0x3d7)](calculateAnnual,_0x16c291[_0x41eea2(0x1d2)],_0x16c291[_0x41eea2(0x27e)]),_0x384b4e=_0x2e371a,_0x24ee8f=_0x16c291[_0x41eea2(0x42a)](_0x1b3c5c,_0x384b4e),_0x10a115=0x2df*-0xd+0x161d+-0x2*-0x79b+0.062,_0x57a34d=0x3fae9*-0x1+-0x43912+-0xa61cb*-0x1;let _0x4f2836=_0x16c291[_0x41eea2(0x31a)](Math[_0x41eea2(0x28a)](_0x1b3c5c,_0x57a34d),_0x10a115),_0x7ebf99=_0x16c291[_0x41eea2(0x365)](_0x16c291[_0x41eea2(0x31a)](Math[_0x41eea2(0x28a)](_0x16c291[_0x41eea2(0x365)](_0x384b4e,-0x1d21*-0x1+0x2ee+-0x200f*0x1+0.9235),_0x57a34d),_0x10a115),0x20ba+0x254b+-0x4603*0x1),_0x214c10=_0x16c291[_0x41eea2(0x20a)](_0x4f2836,_0x7ebf99);TOTALSOCIALSECURITY=_0x214c10,TOTALSOCIALSECURITYSE=_0x7ebf99,TOTALSOCIALSECURITYE=_0x4f2836,document[_0x41eea2(0x380)+_0x41eea2(0x279)](_0x16c291[_0x41eea2(0x245)])[_0x41eea2(0x3e3)+'t']=_0x16c291[_0x41eea2(0x3a2)]('$',TOTALSOCIALSECURITY[_0x41eea2(0x26d)](0x1ef7+-0x1e75+0x20*-0x4));}function getMedicare(){const _0x3638ab=_0x257511,_0x52a9f1={'udAfJ':function(_0x4561c0,_0x1ba977,_0x54c48e){return _0x4561c0(_0x1ba977,_0x54c48e);},'scTDm':_0x3638ab(0x30b)+_0x3638ab(0x240),'AqqaG':_0x3638ab(0x30b)+_0x3638ab(0x3ad)+_0x3638ab(0x1b5),'HnkrX':_0x3638ab(0x33f)+'s','VWzTl':_0x3638ab(0x33f)+_0x3638ab(0x387)+'y','Gxsxt':_0x3638ab(0x205)+_0x3638ab(0x314),'ZVsnG':_0x3638ab(0x205)+_0x3638ab(0x239)+_0x3638ab(0x2e7),'kIhIj':function(_0x499b7a,_0x568e28){return _0x499b7a+_0x568e28;},'XZHjo':function(_0x23802e,_0x1ad839,_0x4bdda9){return _0x23802e(_0x1ad839,_0x4bdda9);},'HLgKI':_0x3638ab(0x266)+_0x3638ab(0x230),'ILBvr':_0x3638ab(0x266)+_0x3638ab(0x2de)+_0x3638ab(0x2c2),'ipvkE':function(_0x27034a,_0x179467){return _0x27034a>_0x179467;},'DyCIA':function(_0x5c3e55,_0x4443f9){return _0x5c3e55*_0x4443f9;},'aJLqU':function(_0x485c01,_0x2ba904){return _0x485c01-_0x2ba904;},'WIkiW':_0x3638ab(0x2bf)+_0x3638ab(0x3bf),'aRkHr':function(_0x30d510,_0x4deff7){return _0x30d510+_0x4deff7;}},_0x2d5e0a=_0x52a9f1[_0x3638ab(0x3b8)](calculateAnnual,_0x52a9f1[_0x3638ab(0x355)],_0x52a9f1[_0x3638ab(0x335)]),_0x26f732=_0x52a9f1[_0x3638ab(0x3b8)](calculateAnnual,_0x52a9f1[_0x3638ab(0x39b)],_0x52a9f1[_0x3638ab(0x228)]),_0x578328=_0x52a9f1[_0x3638ab(0x3b8)](calculateAnnual,_0x52a9f1[_0x3638ab(0x2f3)],_0x52a9f1[_0x3638ab(0x3fd)]),_0x26e3a2=_0x52a9f1[_0x3638ab(0x1d7)](_0x52a9f1[_0x3638ab(0x1d7)](_0x2d5e0a,_0x26f732),_0x578328),_0x2dd07a=_0x52a9f1[_0x3638ab(0x31b)](calculateAnnual,_0x52a9f1[_0x3638ab(0x24c)],_0x52a9f1[_0x3638ab(0x2f0)]),_0x1b7bee=_0x2dd07a,_0x5a5481=_0x52a9f1[_0x3638ab(0x1d7)](_0x26e3a2,_0x1b7bee),_0x4f0ab7=-0x1*-0x306+0x2367+-0x266d+0.0145,_0x338ecc=-0x245f*0x1+0x91*-0x3b+0x45ca+0.009,_0x4be256=0x446cf*-0x1+-0x4b5*0xe9+0xb9ccc;let _0x51beda=0x2617*-0x1+0x1*0x18b9+-0x6af*-0x2;_0x52a9f1[_0x3638ab(0x3c7)](_0x5a5481,_0x4be256)&&(_0x51beda=_0x52a9f1[_0x3638ab(0x259)](_0x52a9f1[_0x3638ab(0x291)](_0x5a5481,_0x4be256),_0x338ecc)),_0x51beda+=_0x52a9f1[_0x3638ab(0x259)](_0x5a5481,_0x4f0ab7),TOTALMEDICARE=_0x51beda,document[_0x3638ab(0x380)+_0x3638ab(0x279)](_0x52a9f1[_0x3638ab(0x30a)])[_0x3638ab(0x3e3)+'t']=_0x52a9f1[_0x3638ab(0x25f)]('$',TOTALMEDICARE[_0x3638ab(0x26d)](-0x1*0x1d12+-0x1*-0x525+0x17ef));}const REGIONALTAXBRACKETSCAN=[{'limit':0x3989b,'rate':0.33},{'limit':0x28636,'rate':0.29},{'limit':0x1a0dd,'rate':0.26},{'limit':0xd06f,'rate':0.205},{'limit':0x0,'rate':0.15}],REGIONALTAXBRACKETSUSA=[{'limit':0x94c46,'rate':0.37},{'limit':0x3b80d,'rate':0.35},{'limit':0x2edce,'rate':0.32},{'limit':0x188ad,'rate':0.24},{'limit':0xb82e,'rate':0.22},{'limit':0x2d50,'rate':0.12},{'limit':0x0,'rate':0.1}],SUBREGIONALTAXBRACKETS={'AB':[{'limit':0x535fe,'rate':0.15},{'limit':0x37954,'rate':0.14},{'limit':0x29aff,'rate':0.13},{'limit':0x22bd4,'rate':0.12},{'limit':0x0,'rate':0.1}],'BC':[{'limit':0x3ac4c,'rate':0.205},{'limit':0x2a23a,'rate':0.168},{'limit':0x1f143,'rate':0.147},{'limit':0x19983,'rate':0.1229},{'limit':0x164ae,'rate':0.105},{'limit':0xb256,'rate':0.077},{'limit':0x0,'rate':0.0506}],'MB':[{'limit':0x13709,'rate':0.174},{'limit':0x8fea,'rate':0.1275},{'limit':0x0,'rate':0.108}],'NB':[{'limit':0x2b274,'rate':0.195},{'limit':0x174c7,'rate':0.16},{'limit':0xba63,'rate':0.14},{'limit':0x0,'rate':0.094}],'NL':[{'limit':0x1028b8,'rate':0.218},{'limit':0x8145c,'rate':0.213},{'limit':0x40a2e,'rate':0.208},{'limit':0x32987,'rate':0.198},{'limit':0x2423b,'rate':0.178},{'limit':0x143e1,'rate':0.158},{'limit':0xa1f1,'rate':0.145},{'limit':0x0,'rate':0.087}],'NT':[{'limit':0x265d3,'rate':0.1405},{'limit':0x1798f,'rate':0.122},{'limit':0xbcc6,'rate':0.086},{'limit':0x0,'rate':0.059}],'NS':[{'limit':0x249f0,'rate':0.21},{'limit':0x16b48,'rate':0.175},{'limit':0xe72c,'rate':0.1667},{'limit':0x7396,'rate':0.1495},{'limit':0x0,'rate':0.0879}],'NU':[{'limit':0x28635,'rate':0.115},{'limit':0x18d7a,'rate':0.09},{'limit':0xc6bd,'rate':0.07},{'limit':0x0,'rate':0.04}],'ON':[{'limit':0x35b60,'rate':0.1316},{'limit':0x249f0,'rate':0.1216},{'limit':0x1809f,'rate':0.1116},{'limit':0xc04f,'rate':0.0915},{'limit':0x0,'rate':0.0505}],'PE':[{'limit':0xf9e1,'rate':0.167},{'limit':0x7cf0,'rate':0.138},{'limit':0x0,'rate':0.098}],'QC':[{'limit':0x1d466,'rate':0.2575},{'limit':0x180ec,'rate':0.24},{'limit':0xc07b,'rate':0.19},{'limit':0x0,'rate':0.14}],'SK':[{'limit':0x22aea,'rate':0.145},{'limit':0xc238,'rate':0.125},{'limit':0x0,'rate':0.105}],'YT':[{'limit':0x7a120,'rate':0.15},{'limit':0x28636,'rate':0.128},{'limit':0x1a0dd,'rate':0.109},{'limit':0xd06f,'rate':0.09},{'limit':0x0,'rate':0.064}],'AL':[{'limit':0xbb8,'rate':0.05},{'limit':0x1f4,'rate':0.04},{'limit':0x0,'rate':0.02}],'AK':[],'AZ':[{'limit':0x0,'rate':0.025}],'AR':[{'limit':0x2134,'rate':0.049},{'limit':0x10cc,'rate':0.04},{'limit':0x0,'rate':0.02}],'CA':[{'limit':0xf4240,'rate':0.133},{'limit':0xa559b,'rate':0.123},{'limit':0x6335c,'rate':0.113},{'limit':0x52acf,'rate':0.103},{'limit':0x102f7,'rate':0.093},{'limit':0xcce7,'rate':0.08},{'limit':0x939c,'rate':0.06},{'limit':0x5d86,'rate':0.04},{'limit':0x2773,'rate':0.02},{'limit':0x0,'rate':0.01}],'CO':[{'limit':0x0,'rate':0.044}],'CT':[{'limit':0x7a120,'rate':0.0699},{'limit':0x3d090,'rate':0.069},{'limit':0x30d40,'rate':0.065},{'limit':0x186a0,'rate':0.06},{'limit':0xc350,'rate':0.055},{'limit':0x2710,'rate':0.05},{'limit':0x0,'rate':0.03}],'DC':[{'limit':0xf4240,'rate':0.1075},{'limit':0x7a120,'rate':0.0975},{'limit':0x3d090,'rate':0.0925},{'limit':0xea60,'rate':0.085},{'limit':0x9c40,'rate':0.065},{'limit':0x2710,'rate':0.06},{'limit':0x0,'rate':0.04}],'DE':[{'limit':0xea60,'rate':0.066},{'limit':0x61a8,'rate':0.0555},{'limit':0x4e20,'rate':0.052},{'limit':0x2710,'rate':0.048},{'limit':0x1388,'rate':0.039},{'limit':0x7d0,'rate':0.022}],'FL':[],'GA':[{'limit':0x1b58,'rate':0.0575},{'limit':0x1482,'rate':0.05},{'limit':0xea6,'rate':0.04},{'limit':0x8ca,'rate':0.03},{'limit':0x2ee,'rate':0.02},{'limit':0x0,'rate':0.01}],'HI':[{'limit':0x30d40,'rate':0.11},{'limit':0x2ab98,'rate':0.1},{'limit':0x249f0,'rate':0.09},{'limit':0xbb80,'rate':0.0825},{'limit':0x8ca0,'rate':0.079},{'limit':0x5dc0,'rate':0.076},{'limit':0x4b00,'rate':0.072},{'limit':0x3840,'rate':0.068},{'limit':0x2580,'rate':0.064},{'limit':0x12c0,'rate':0.055},{'limit':0x960,'rate':0.032},{'limit':0x0,'rate':0.014}],'ID':[{'limit':0x0,'rate':0.058}],'IL':[{'limit':0x0,'rate':0.0495}],'IN':[{'limit':0x0,'rate':0.0315}],'IA':[{'limit':0x124f8,'rate':0.06},{'limit':0x7530,'rate':0.057},{'limit':0x1770,'rate':0.0482},{'limit':0x0,'rate':0.044}],'KS':[{'limit':0x7530,'rate':0.057},{'limit':0x3a98,'rate':0.0525},{'limit':0x0,'rate':0.031}],'KY':[{'limit':0x0,'rate':0.045}],'LA':[{'limit':0xc350,'rate':0.0425},{'limit':0x30d4,'rate':0.035},{'limit':0x0,'rate':0.0185}],'ME':[{'limit':0xe2c2,'rate':0.0715},{'limit':0x5fb4,'rate':0.0675},{'limit':0x0,'rate':0.058}],'MD':[{'limit':0x3d090,'rate':0.0575},{'limit':0x249f0,'rate':0.055},{'limit':0x1e848,'rate':0.0525},{'limit':0x186a0,'rate':0.05},{'limit':0xbb8,'rate':0.0475},{'limit':0x7d0,'rate':0.04},{'limit':0x3e8,'rate':0.03},{'limit':0x0,'rate':0.02}],'MA':[{'limit':0xf4240,'rate':0.09},{'limit':0x0,'rate':0.05}],'MI':[{'limit':0x0,'rate':0.0425}],'MN':[{'limit':0x2cc2c,'rate':0.0985},{'limit':0x181c8,'rate':0.0785},{'limit':0x7576,'rate':0.068},{'limit':0x0,'rate':0.0535}],'MS':[{'limit':0x2710,'rate':0.05}],'MO':[{'limit':0x1ea7,'rate':0.0495},{'limit':0x1a46,'rate':0.045},{'limit':0x15e5,'rate':0.04},{'limit':0x1184,'rate':0.035},{'limit':0xd23,'rate':0.03},{'limit':0x8c2,'rate':0.025},{'limit':0x461,'rate':0.02}],'MT':[{'limit':0x5460,'rate':0.0675},{'limit':0x41a0,'rate':0.06},{'limit':0x32c8,'rate':0.05},{'limit':0x25e4,'rate':0.04},{'limit':0x189c,'rate':0.03},{'limit':0xe10,'rate':0.02},{'limit':0x0,'rate':0.01}],'NC':[{'limit':0x0,'rate':0.0475}],'ND':[{'limit':0x6fe6e,'rate':0.029},{'limit':0x33789,'rate':0.0264},{'limit':0x18aba,'rate':0.0227},{'limit':0xa32f,'rate':0.0204},{'limit':0x0,'rate':0.011}],'NH':[],'NJ':[{'limit':0xf4240,'rate':0.1075},{'limit':0x7a120,'rate':0.0897},{'limit':0x124f8,'rate':0.0637},{'limit':0x9c40,'rate':0.05525},{'limit':0x88b8,'rate':0.035},{'limit':0x4e20,'rate':0.0175},{'limit':0x0,'rate':0.014}],'NM':[{'limit':0x33450,'rate':0.059},{'limit':0x3e80,'rate':0.049},{'limit':0x2af8,'rate':0.047},{'limit':0x157c,'rate':0.032},{'limit':0x0,'rate':0.017}],'NY':[{'limit':0x17d7840,'rate':0.109},{'limit':0x4c4b40,'rate':0.103},{'limit':0x10712e,'rate':0.0965},{'limit':0x34968,'rate':0.0685},{'limit':0x13b0a,'rate':0.06},{'limit':0x364c,'rate':0.055},{'limit':0x2db4,'rate':0.0525},{'limit':0x2134,'rate':0.045},{'limit':0x0,'rate':0.04}],'NE':[{'limit':0x8b92,'rate':0.0664},{'limit':0x569a,'rate':0.0501},{'limit':0xe74,'rate':0.0351},{'limit':0x0,'rate':0.0246}],'NV':[],'OH':[{'limit':0x1c264,'rate':0.0399},{'limit':0x167f6,'rate':0.03688},{'limit':0xb414,'rate':0.03226},{'limit':0x65c2,'rate':0.02765}],'OK':[{'limit':0x1c20,'rate':0.0475},{'limit':0x1324,'rate':0.0375},{'limit':0xea6,'rate':0.0275},{'limit':0x9c4,'rate':0.0175},{'limit':0x3e8,'rate':0.0075},{'limit':0x0,'rate':0.0025}],'OR':[{'limit':0x1e848,'rate':0.099},{'limit':0x27d8,'rate':0.0875},{'limit':0xfd2,'rate':0.0675},{'limit':0x0,'rate':0.0475}],'PA':[{'limit':0x0,'rate':0.0307}],'RI':[{'limit':0x25daa,'rate':0.0599},{'limit':0x10a68,'rate':0.0475},{'limit':0x0,'rate':0.0375}],'SC':[{'limit':0x3ea8,'rate':0.065},{'limit':0xc80,'rate':0.03},{'limit':0x0,'rate':0x0}],'SD':[],'TN':[],'TX':[],'UT':[{'limit':0x0,'rate':0.0485}],'VA':[{'limit':0x4268,'rate':0.0575},{'limit':0x1388,'rate':0.05},{'limit':0xbb8,'rate':0.03},{'limit':0x0,'rate':0.02}],'VT':[{'limit':0x3409e,'rate':0.0875},{'limit':0x18f38,'rate':0.076},{'limit':0xa4a6,'rate':0.066},{'limit':0x0,'rate':0.0335}],'WV':[{'limit':0xea60,'rate':0.065},{'limit':0x9c40,'rate':0.06},{'limit':0x61a8,'rate':0.045},{'limit':0x2710,'rate':0.04},{'limit':0x0,'rate':0.03}],'WA':[],'WI':[{'limit':0x4a42a,'rate':0.0765},{'limit':0x6bee,'rate':0.053},{'limit':0x35f2,'rate':0.0465},{'limit':0x0,'rate':0.0354}],'WY':[]};function _0x4b2b(_0x6eec39,_0xed769b){const _0x5ad590=_0x1cfa();return _0x4b2b=function(_0x516237,_0xfa3cb){_0x516237=_0x516237-(-0x263e+0x12*0x115+0x1472);let _0x5944c2=_0x5ad590[_0x516237];return _0x5944c2;},_0x4b2b(_0x6eec39,_0xed769b);}function _0x1cfa(){const _0x40a81d=['dPulO','NtSRp','kSIIg','er_dividen','dOvWe','oAMkw','=;\x20expires','Obwoe','TOTALMEDIC','CUynT','bling_winn','quency','odal()\x20fun','jXFOe','UKMZx','mYhHm','RegionDrop','income_sch','tJetS','vXtCh','XGoMu','SBvnT','querySelec','one;\x20Secur','ropdown','able\x20for\x20U','SubregionD','NdNjj','CPiRZ','th\x20domain\x20','ZzfQf','cookie','7|13|15|9|','grants','kSUab','ins\x20tax\x20ca','gvcbe','DEqRQ','FShxW','e_prop_fre','ulsYT','NOjzN','YJvhz','st_frequen','cdQmG','eoMRg','eral_pensi','ezbPe','ency','kkJir','vgTId','WllgW','ofHTk','KARxB','ANNUALEMPL','Wpsgg','_seresult','ILBvr','IneUS','cqMkI','Gxsxt','KCxKV','LSECURITYE','EZmVo','EwTtO','ome_sum','only\x20avail','quarterly','MusSj','/expense.h','LSECURITYS','_losses_fr','ZPiHf','iGyWv','ervice\x20&\x20a','pop','Error\x20fetc','PRCEg','mCwuI','Izsom','PJdbC','gKgqG','mpEvV','WIkiW','income_sal','LhJLH','DJMzs','notintende','mony_frequ','uEQkD','WCnZs','option','sQmfR','uses','appendChil','d_frequenc','PHXzD','addEventLi','SELFEMPLOY','ArCtD','XZHjo','alties','monthly','.USAHIDE','463430DhVzkq','setTime','ction\x20call','sult','ylqkA','max','etgiA','CNSJD','annually',';\x20path=/','vDhZL','PPPxI','WDAYP','TvRJw','cXfiZ','mGCUB','NQAWw','VzGXA','pcDfq','bioNc','income_tax','amounts\x20en','AqqaG','income_ali','ANNUALEI','k_pension','EsCrX','lic_divide','tAGDV','DOMContent','uency','ksXkK','income_tip','kIYTT','iGAuC','EMPLOYED','qdwuB','ewQZU','log','olarships_','288ZhLmOp','sYLlx','href','BbxkM','uNbLi','VnfWE','openTermsM','BLEINCOME','hing\x20legal','IxIvw','none','emtPA','RUGXr','location','scTDm','RotLy','click','stibc','SorGa','hwkFp','6696778fTOPYA','substr','CPPPAYABLE','TKRbE','yoGPL','goypi','vFmLU','LNDCp','mqBRk','mLrPq','QjDmX','Brrcf','rate','nSltu','XuluV','surance','BoVuI','ins_tax_re','bplhN','xhLSy','CUzsc','354BfbIbp','bmCcr','edvec','GANls','EGIONALTAX','NRzTt','HOOeF','lNyrC','ings','getDate','jntcP','nzOST','ital_gain_','QAQrN','ZDAjA','dlmvO','getElement','toUTCStrin','429xuuoZz','then','281198SMSAPp','DhoBV','gEbOu','s_frequenc','Bkjae','\x20content:','mplFE','OgELr','lHFbp','MuPWH','ECJik','dzGIB','MYGFs','mfHKV','vfYYx','TPDgw','cknowledge','error','InpwH','giXon','JsIkW','CdhsO','KWuPU','HnkrX','operty','BXLzM','ital_gains','ZMNnm','73717nrFrLD','call','NWwHr','YjctY','OKKBR','estment_pr','eruwW','modalConte','LDETS','UqvZD','getTime','../finance','pre-tax\x20&\x20','ary_wages_','rLnYV','zLImm','OKOGi','annual_inc','income_own','lending_fr','OMsCJ','al_frequen','LNpOk','LSECURITY','udAfJ','contribtui','income_cap','FygdD','703944eupOIK','YyYTV',';\x20expires=','ARE','jVWrI','TAJsC','VBLWO','alties_fre','income_ven','xbRci','stener','ipvkE','gHQLO','SjvKd','cZqXf','display','value','dOpLM','terms\x20of\x20s','CAN','Jxomx','bQBWF','ure','termsModal','tiuvY','acxGW','OsLlQ','NoeEo','roXxR','FCuRr','RDczP','ccQbU','mony','eAAxG','RRqwh','YOdLC','161560jOOmvZ','qhvwo','on\x20from\x20th','textConten','income_inv','Escape','hqHoj','GQSzu','LSUvF','down','sFmBN','hqCza','keydown','Ttpmo','pudBs','xajcT','rNiFF','ty_frequen','ODEui','KvAgt','taxable_su','psqBU','JsdpT','JlGXE','bfaSE','income_wor','ANNUALTAXA','LFhiR','pEcSI','ZVsnG','tEDSS','KaJJv','PWWfm','COHUb','adgud','BESue','NQNTM','NliXJ','SDZgu','ycUBv','termscheck','xXASm','sxiCp','length','uwELt','KtikU','UxXda','tered\x20are\x20','OXMbZ','GSxPh','zuCJS','eZxXj','16|17|10|4',';\x20SameSite','fIQqP','weekly','AEDyR','JyqvJ','ITwPc','loyment_in','|1|14|12|0','iKaAv','LauIR','income_gam','jmylR','catch','KAmAd','ZVHvj','2ZNeoLS','gVzDx','FgtHN','KuFCK','IEdWL','imAfM','BItBM','ANNUALINCO','ings_frequ','GvLxc','FHbBn','MRRim','jCcnl','YMvrQ','capital_ga','FmpqJ','frequency','veJjd','e\x20dropdown','ect\x20a\x20regi','KSXAc','IjYZF','PCSTn','rPnth','yxDIB','|11|6|22','eLARC','306TbEBCo','ihcJV','SVfmH','=None;\x20Sec','ZuSJv','ons','Lgbln','TYDrM','UUtYf','ANNUALSUBR','ipBhF','createElem','foVXz','KeDmT','bUaex','innerHTML','10264OANVDf','cvhEM','AHUQn','YsXPW','RAUPk','income_fed','|2|20|21|3','kIhIj','dxOPa','\x20that\x20all\x20','DHjyd','qaAIF','tRTDb','Please\x20agr','whpSK','soIPW','NONE','RFRDh','=Thu,\x2001\x20J','wlmHC','FjZNh','phuzJ','ChWpo','xdhly','YTgoz','qBsSp','JCDks','yypsZ','FlWRz','EXAkE','wteup','JFlbL','income_pee','JEjty','HqWGN','box','Ihcez','HyJnz','gdKjv','change','zXRCJ','fUhyN','ocwEH','gqedG','me_frequen','szryV','Oflej','nd_frequen','Loaded','esuWp','style','_losses','erest','income_bon','split','zuniO','mkHhG','dSGjE','gnsrf','ApFUe','MkPrK','_free_inco','limit','TOTALSOCIA','ArYbW','qVUZV','Capital\x20ga','trim','PPYng','key','veMvh','OYMENTINCO','mYThR','icrLc','operty_fre','aIPTQ','income_tru','ZKjBf','_eresult','mANsO','ZmzLc','tor','includes','abs','IYJBW','eFXRz','erest_freq','Urpzc','VWzTl','MOles','lculation\x20','MIesi','Please\x20sel','haxpH','ANNUALTAX','zMoga','e_prop','income_int','sFvFw','EXmUb','ooCfr','YsRvq','VBXaa','KEcwz','block','uses_frequ','on_frequen','2|0|1|4|3','Ovqoa','ezlOL','ent','income_pub','ary_wages','ThUmO','ejjok',';\x20path=/;\x20','EGvgT','LYRpR','ENLiW','ITCyI','OME','GjCgS','hZgxg','ZilMW','HLgKI','tml','VsXIp','income_emp','ySrBD','setDate','oxNnA','mENsO','NrBzR','an\x201970\x2000',':00:00\x20GMT','text','|19|18|8|5','DyCIA','rOaSy','gpzkU','CIsbU','state_rate','10eFNzFi','aRkHr','ONALTAX','YjcSq','ial_securi','uUpKm','cPdNb','indexOf','income_sol','XVDyL','lLtcz','EkXjr','target','VzNRQ','NRRlq','toFixed',';\x20domain=','blMIJ','yELBU','income_soc','XqMTl','RUVXK','IiIXB','tkDfl','innerText','CiCES','SameSite=N','ById','CfZdd','USA','r_to_peer_','gvNpf','rKGdm','income_roy','TOTALTAXCG','lending','ture_capit','UEFuu','Tnlni','ANNUALCPP','surance_fr','legal.txt','grants_fre','kDgwV','min','VZlLR','GXfvL','zJDtd','sIXNf','nBfNs','ZQdDx','aJLqU','LKikx','OgRvl','dispatchEv','xIXXX','checked','hVIxn','UtkDK','\x20deleted.','jSLTE','ANNUALREGI','rbtAE','k_pension_','owpSx','vGBds','iyMrD','tBCpM','ee\x20to\x20the\x20','mpFRq','oCEIg','GgKxf','ogJxE','GBAJS','annual_cpp','CaJht','forEach','HyArj','_frequency','equency','Cookies\x20wi','dRXqX','FxqXo','shift','PASSIVEINC','ReaTs','YbQsw','VgVRC','fqTlJ'];_0x1cfa=function(){return _0x40a81d;};return _0x1cfa();}function calculateTax(_0x20b696){const _0x32b8f9=_0x257511,_0x486539={'bplhN':function(_0x125c7a,_0x4a3db9){return _0x125c7a>_0x4a3db9;},'KaJJv':function(_0x2e5c2d,_0x5b52ee){return _0x2e5c2d*_0x5b52ee;},'pcDfq':function(_0x11f4c8,_0x3dfd5e){return _0x11f4c8-_0x3dfd5e;},'LSUvF':function(_0x1e10dc,_0x1a441e){return _0x1e10dc(_0x1a441e);}};let _0x18b65c=-0x2*0x241+0x261d*0x1+-0x219b,_0x2fbce2=ANNUALTAXABLEINCOME;for(const _0x502b07 of _0x20b696){if(_0x486539[_0x32b8f9(0x36d)](_0x2fbce2,_0x502b07[_0x32b8f9(0x20e)])){let _0x5d2293=_0x486539[_0x32b8f9(0x3ff)](_0x486539[_0x32b8f9(0x331)](_0x2fbce2,_0x502b07[_0x32b8f9(0x20e)]),_0x502b07[_0x32b8f9(0x367)]);_0x18b65c+=_0x486539[_0x32b8f9(0x3e8)](parseFloat,_0x5d2293[_0x32b8f9(0x26d)](-0xa12*-0x1+-0x2*0xad4+0xe*0xd4)),_0x2fbce2=_0x502b07[_0x32b8f9(0x20e)];}}return _0x18b65c;}function calculateRegionalTax(){const _0x601bb3=_0x257511,_0x5cdfdb={'etgiA':function(_0x309eec,_0xbb1fb7){return _0x309eec(_0xbb1fb7);},'ofHTk':_0x601bb3(0x29b)+_0x601bb3(0x260),'ZuSJv':function(_0xb1de36,_0x51a558){return _0xb1de36+_0x51a558;}};ANNUALREGIONALTAX=_0x5cdfdb[_0x601bb3(0x325)](calculateTax,REGIONALTAXBRACKETSCAN),document[_0x601bb3(0x380)+_0x601bb3(0x279)](_0x5cdfdb[_0x601bb3(0x2eb)])[_0x601bb3(0x3e3)+'t']=_0x5cdfdb[_0x601bb3(0x1c4)]('$',ANNUALREGIONALTAX[_0x601bb3(0x26d)](0x20*0x124+0x1*0x99d+-0x2e1b));}function calculateSubregionalTax(_0x434712,_0x19f17f){const _0x5a5e81=_0x257511,_0x2792e7={'LNpOk':function(_0x374419,_0x5e4b0a){return _0x374419(_0x5e4b0a);},'cvhEM':_0x5a5e81(0x1c9)+_0x5a5e81(0x374),'Brrcf':function(_0x19e2af,_0x42f1d9){return _0x19e2af+_0x42f1d9;}};ANNUALSUBREGIONALTAX=_0x2792e7[_0x5a5e81(0x3b6)](calculateTax,_0x19f17f[_0x434712]),document[_0x5a5e81(0x380)+_0x5a5e81(0x279)](_0x2792e7[_0x5a5e81(0x1d1)])[_0x5a5e81(0x3e3)+'t']=_0x2792e7[_0x5a5e81(0x366)]('$',ANNUALSUBREGIONALTAX[_0x5a5e81(0x26d)](-0x2475+0x10*0x6e+0x1d97));}function calculateCapitalGainsTax(){const _0x55e35d=_0x257511,_0x7c105b={'TPDgw':_0x55e35d(0x2c7)+_0x55e35d(0x3e9),'eruwW':function(_0x2f4d0b,_0x14022c){return _0x2f4d0b!==_0x14022c;},'mYhHm':_0x55e35d(0x27b),'uNbLi':function(_0x3c1735,_0x4f7aaa){return _0x3c1735(_0x4f7aaa);},'ZKjBf':_0x55e35d(0x212)+_0x55e35d(0x2da)+_0x55e35d(0x22a)+_0x55e35d(0x2f9)+_0x55e35d(0x2d0)+'SA','Lgbln':function(_0xdb5d64,_0x17c142,_0xc66aef){return _0xdb5d64(_0x17c142,_0xc66aef);},'BbxkM':_0x55e35d(0x3ba)+_0x55e35d(0x39e)+_0x55e35d(0x203),'qaAIF':_0x55e35d(0x3ba)+_0x55e35d(0x39e)+_0x55e35d(0x2fe)+_0x55e35d(0x2ad),'TYDrM':_0x55e35d(0x3ba)+_0x55e35d(0x37c)+_0x55e35d(0x25d),'TvRJw':function(_0x4f1292,_0x46e0a4){return _0x4f1292!==_0x46e0a4;},'Bkjae':function(_0x401895,_0x350aaa){return _0x401895!==_0x350aaa;},'psqBU':function(_0x39a38a,_0x267647){return _0x39a38a(_0x267647);},'ezbPe':function(_0x36a29d,_0x34fc99){return _0x36a29d/_0x34fc99;},'ITwPc':function(_0x58170c,_0x46eae7){return _0x58170c<=_0x46eae7;},'VBXaa':function(_0xe2fde1,_0x1b6a12){return _0xe2fde1*_0x1b6a12;},'ccQbU':function(_0x50f44f,_0x3e6368){return _0x50f44f-_0x3e6368;},'XqMTl':function(_0x25e632,_0x171e4){return _0x25e632+_0x171e4;},'sYLlx':function(_0x3b8553,_0x596a47){return _0x3b8553-_0x596a47;},'FCuRr':function(_0x2537c1,_0x5bba6e){return _0x2537c1*_0x5bba6e;},'roXxR':function(_0x598707,_0x5d6730){return _0x598707-_0x5d6730;},'fIQqP':_0x55e35d(0x1b3)+_0x55e35d(0x36c)+_0x55e35d(0x322),'icrLc':_0x55e35d(0x280)},_0x518762=document[_0x55e35d(0x380)+_0x55e35d(0x279)](_0x7c105b[_0x55e35d(0x393)])[_0x55e35d(0x3cc)];if(_0x7c105b[_0x55e35d(0x3a6)](_0x518762,_0x7c105b[_0x55e35d(0x2c6)])){_0x7c105b[_0x55e35d(0x34b)](alert,_0x7c105b[_0x55e35d(0x21d)]);return;}const _0x2ac26b=_0x7c105b[_0x55e35d(0x1c6)](calculateAnnual,_0x7c105b[_0x55e35d(0x34a)],_0x7c105b[_0x55e35d(0x1db)]),_0x192cc1=document[_0x55e35d(0x380)+_0x55e35d(0x279)](_0x7c105b[_0x55e35d(0x1c7)])[_0x55e35d(0x3cc)];let _0x3c7e37=-0x13a*0xf+-0x22f7+0x355d;_0x7c105b[_0x55e35d(0x32c)](_0x192cc1,'')&&_0x7c105b[_0x55e35d(0x388)](_0x7c105b[_0x55e35d(0x3f5)](parseFloat,_0x192cc1),-0x86+-0x8*-0x266+0x12aa*-0x1)&&(_0x3c7e37=_0x7c105b[_0x55e35d(0x2e6)](_0x7c105b[_0x55e35d(0x3f5)](parseFloat,_0x192cc1),0x1890+0x139+0xb*-0x24f));let _0x28534c=0x4*0x823+-0x1*0xb95+-0x14f7;if(_0x7c105b[_0x55e35d(0x41a)](_0x2ac26b,-0x1548b*-0x1+0x13d71+-0x1da4b))_0x28534c=0x1c06+-0x17d4+-0x432;else _0x7c105b[_0x55e35d(0x41a)](_0x2ac26b,-0x4bab1*-0x1+-0x8550c+-0xb81cb*-0x1)?_0x28534c=_0x7c105b[_0x55e35d(0x236)](_0x7c105b[_0x55e35d(0x3db)](_0x2ac26b,-0xc85d+-0x2e5*-0x5+-0x17195*-0x1),-0x1e12+-0xd23+0x2b35+0.15):_0x28534c=_0x7c105b[_0x55e35d(0x272)](_0x7c105b[_0x55e35d(0x236)](_0x7c105b[_0x55e35d(0x348)](_0x2ac26b,-0x15dc1+-0xbb310+0x14f841),0x45*-0x53+-0x1*-0x12fd+0x362+0.2),_0x7c105b[_0x55e35d(0x3d9)](_0x7c105b[_0x55e35d(0x3d8)](0x8985+-0x79888+-0xb*-0x15c39,0x1af2+0xe1be+0x11*-0x40f),0x1f43+-0x1c08+0x33b*-0x1+0.15));const _0xe9635b=_0x7c105b[_0x55e35d(0x236)](_0x2ac26b,_0x3c7e37),_0x2809e9=_0x7c105b[_0x55e35d(0x272)](_0x28534c,_0xe9635b),_0x240f46=document[_0x55e35d(0x380)+_0x55e35d(0x279)](_0x7c105b[_0x55e35d(0x416)]);TOTALTAXCG=_0x2809e9,document[_0x55e35d(0x380)+_0x55e35d(0x279)](_0x7c105b[_0x55e35d(0x219)])[_0x55e35d(0x3e3)+'t']=_0x7c105b[_0x55e35d(0x272)]('$',TOTALTAXCG[_0x55e35d(0x26d)](0x8*-0x1e4+0x27d+0xca5));}function calculateAnnualTax(){const _0x538cf2=_0x257511,_0x373d57={'sFmBN':_0x538cf2(0x2c7)+_0x538cf2(0x3e9),'PJdbC':function(_0xf20047,_0x407922){return _0xf20047===_0x407922;},'eLARC':_0x538cf2(0x27b),'VnfWE':function(_0x161b97,_0x57b37f){return _0x161b97+_0x57b37f;},'gKgqG':function(_0x579af9,_0x4d8372){return _0x579af9+_0x4d8372;},'YJvhz':function(_0x5712a9,_0xc48db7){return _0x5712a9(_0xc48db7);},'PWWfm':function(_0x157e4e,_0xc5ad31){return _0x157e4e===_0xc5ad31;},'VBLWO':_0x538cf2(0x3cf),'FlWRz':function(_0x46cf8f,_0x5ba56a){return _0x46cf8f+_0x5ba56a;},'EwTtO':_0x538cf2(0x22e),'NrBzR':function(_0x2a5793,_0x56b175){return _0x2a5793+_0x56b175;}};var _0x309fce=document[_0x538cf2(0x380)+_0x538cf2(0x279)](_0x373d57[_0x538cf2(0x3ea)]);let _0x333e70;if(_0x373d57[_0x538cf2(0x307)](_0x309fce[_0x538cf2(0x3cc)],_0x373d57[_0x538cf2(0x1bf)]))_0x333e70=_0x373d57[_0x538cf2(0x34c)](_0x373d57[_0x538cf2(0x308)](_0x373d57[_0x538cf2(0x2e1)](isNaN,ANNUALREGIONALTAX)?-0x17c8+-0x3*-0x84+0x4*0x58f:ANNUALREGIONALTAX,_0x373d57[_0x538cf2(0x2e1)](isNaN,ANNUALSUBREGIONALTAX)?-0x2578+-0xd0f*-0x1+0x1869:ANNUALSUBREGIONALTAX),_0x373d57[_0x538cf2(0x2e1)](isNaN,TOTALTAXCG)?0x14b2+-0x4*0x24e+-0xb7a:TOTALTAXCG);else _0x373d57[_0x538cf2(0x400)](_0x309fce[_0x538cf2(0x3cc)],_0x373d57[_0x538cf2(0x3c2)])&&(_0x333e70=_0x373d57[_0x538cf2(0x1ec)](_0x373d57[_0x538cf2(0x2e1)](isNaN,ANNUALREGIONALTAX)?-0xc26*-0x2+-0x5*0x3ef+-0x4a1:ANNUALREGIONALTAX,_0x373d57[_0x538cf2(0x2e1)](isNaN,ANNUALSUBREGIONALTAX)?0xb*-0x1bb+-0x22b2+0x35bb*0x1:ANNUALSUBREGIONALTAX));ANNUALTAX=_0x333e70,document[_0x538cf2(0x380)+_0x538cf2(0x279)](_0x373d57[_0x538cf2(0x2f7)])[_0x538cf2(0x3e3)+'t']=_0x373d57[_0x538cf2(0x254)]('$',ANNUALTAX[_0x538cf2(0x26d)](0x1e1c+0xf1f*-0x2+0x24));}function passiveincome(){const _0x45963d=_0x257511,_0x29264a={'YOdLC':_0x45963d(0x3e4)+_0x45963d(0x3a5)+_0x45963d(0x39c),'imAfM':_0x45963d(0x3e4)+_0x45963d(0x3a5)+_0x45963d(0x21a)+_0x45963d(0x2c2),'KuFCK':_0x45963d(0x231)+_0x45963d(0x204),'UxXda':_0x45963d(0x231)+_0x45963d(0x226)+_0x45963d(0x33d),'NQAWw':_0x45963d(0x23f)+_0x45963d(0x33a)+'nd','yxDIB':_0x45963d(0x23f)+_0x45963d(0x33a)+_0x45963d(0x1ff)+'cy','CiCES':_0x45963d(0x21c)+'st','xajcT':_0x45963d(0x21c)+_0x45963d(0x2e2)+'cy','UtkDK':_0x45963d(0x1f0)+_0x45963d(0x27c)+_0x45963d(0x281),'uUpKm':_0x45963d(0x1f0)+_0x45963d(0x27c)+_0x45963d(0x3b3)+_0x45963d(0x2ad),'WCnZs':_0x45963d(0x27f)+_0x45963d(0x31c),'KCxKV':_0x45963d(0x27f)+_0x45963d(0x3c3)+_0x45963d(0x2c2),'OXMbZ':function(_0x22b0a2,_0x99c857,_0x2573c4){return _0x22b0a2(_0x99c857,_0x2573c4);}},_0x58b7e2=[[_0x29264a[_0x45963d(0x3df)],_0x29264a[_0x45963d(0x429)]],[_0x29264a[_0x45963d(0x427)],_0x29264a[_0x45963d(0x40e)]],[_0x29264a[_0x45963d(0x32f)],_0x29264a[_0x45963d(0x1bd)]],[_0x29264a[_0x45963d(0x277)],_0x29264a[_0x45963d(0x3ef)]],[_0x29264a[_0x45963d(0x298)],_0x29264a[_0x45963d(0x263)]],[_0x29264a[_0x45963d(0x311)],_0x29264a[_0x45963d(0x2f4)]]];let _0x467a86=0x584+0x2604+-0x2b88;for(const [_0x477a22,_0x38a702]of _0x58b7e2){const _0x4d278b=_0x29264a[_0x45963d(0x410)](calculateAnnual,_0x477a22,_0x38a702);_0x467a86+=_0x4d278b;}PASSIVEINCOME=_0x467a86;}function setIncomeData(){const _0x5bf813=_0x257511,_0x149abd={'eZxXj':_0x5bf813(0x30b)+_0x5bf813(0x3ad)+_0x5bf813(0x1b5),'InpwH':_0x5bf813(0x33f)+_0x5bf813(0x387)+'y','OsLlQ':_0x5bf813(0x205)+_0x5bf813(0x239)+_0x5bf813(0x2e7),'RDczP':_0x5bf813(0x266)+_0x5bf813(0x2de)+_0x5bf813(0x2c2),'dOvWe':_0x5bf813(0x3e4)+_0x5bf813(0x3a5)+_0x5bf813(0x21a)+_0x5bf813(0x2c2),'bfaSE':_0x5bf813(0x3ba)+_0x5bf813(0x39e)+_0x5bf813(0x2fe)+_0x5bf813(0x2ad),'NQNTM':_0x5bf813(0x231)+_0x5bf813(0x226)+_0x5bf813(0x33d),'Ovqoa':_0x5bf813(0x3b2)+_0x5bf813(0x2ba)+_0x5bf813(0x316)+'y','sFvFw':_0x5bf813(0x23f)+_0x5bf813(0x33a)+_0x5bf813(0x1ff)+'cy','YsRvq':_0x5bf813(0x21c)+_0x5bf813(0x2e2)+'cy','CaJht':_0x5bf813(0x1d5)+_0x5bf813(0x2e5)+_0x5bf813(0x23a)+'cy','TAJsC':_0x5bf813(0x3f9)+_0x5bf813(0x29d)+_0x5bf813(0x1b5),'hqCza':_0x5bf813(0x271)+_0x5bf813(0x262)+_0x5bf813(0x3f1)+'cy','CdhsO':_0x5bf813(0x24f)+_0x5bf813(0x41b)+_0x5bf813(0x286)+_0x5bf813(0x2ad),'FgtHN':_0x5bf813(0x336)+_0x5bf813(0x30f)+_0x5bf813(0x2e7),'JlGXE':_0x5bf813(0x2c8)+_0x5bf813(0x346)+_0x5bf813(0x288)+_0x5bf813(0x2c2),'BXLzM':_0x5bf813(0x27f)+_0x5bf813(0x3c3)+_0x5bf813(0x2c2),'mENsO':_0x5bf813(0x41f)+_0x5bf813(0x2c1)+_0x5bf813(0x42c)+_0x5bf813(0x2e7),'mCwuI':_0x5bf813(0x1f0)+_0x5bf813(0x27c)+_0x5bf813(0x3b3)+_0x5bf813(0x2ad),'ycUBv':_0x5bf813(0x3c4)+_0x5bf813(0x282)+_0x5bf813(0x3b5)+'cy','nBfNs':_0x5bf813(0x333)+_0x5bf813(0x20d)+_0x5bf813(0x1fc)+'cy','dPulO':_0x5bf813(0x30b)+_0x5bf813(0x240),'jmylR':_0x5bf813(0x33f)+'s','EXAkE':_0x5bf813(0x205)+_0x5bf813(0x314),'Urpzc':_0x5bf813(0x266)+_0x5bf813(0x230),'ZDAjA':_0x5bf813(0x3e4)+_0x5bf813(0x3a5)+_0x5bf813(0x39c),'UqvZD':_0x5bf813(0x3ba)+_0x5bf813(0x39e)+_0x5bf813(0x203),'mYThR':_0x5bf813(0x231)+_0x5bf813(0x204),'Wpsgg':_0x5bf813(0x3b2)+_0x5bf813(0x2ba)+'d','Ttpmo':_0x5bf813(0x23f)+_0x5bf813(0x33a)+'nd','mANsO':_0x5bf813(0x21c)+'st','jntcP':_0x5bf813(0x1d5)+_0x5bf813(0x2e5)+'on','kSIIg':_0x5bf813(0x3f9)+_0x5bf813(0x338),'FHbBn':_0x5bf813(0x271)+_0x5bf813(0x262)+'ty','qBsSp':_0x5bf813(0x24f)+_0x5bf813(0x41b)+_0x5bf813(0x36a),'ejjok':_0x5bf813(0x336)+_0x5bf813(0x3dc),'NOjzN':_0x5bf813(0x2c8)+_0x5bf813(0x346)+_0x5bf813(0x2d8),'KeDmT':_0x5bf813(0x27f)+_0x5bf813(0x31c),'MYGFs':_0x5bf813(0x41f)+_0x5bf813(0x2c1)+_0x5bf813(0x378),'Ihcez':_0x5bf813(0x1f0)+_0x5bf813(0x27c)+_0x5bf813(0x281),'OKOGi':_0x5bf813(0x3c4)+_0x5bf813(0x282)+'al','JCDks':_0x5bf813(0x333)+_0x5bf813(0x20d)+'me','gEbOu':function(_0x17b54b,_0x3ac3d1){return _0x17b54b<_0x3ac3d1;},'ZmzLc':function(_0x1b6b90,_0x5600a2){return _0x1b6b90!==_0x5600a2;},'PPYng':function(_0x344994,_0x258cf7){return _0x344994+_0x258cf7;},'eFXRz':function(_0x12c18a,_0x34468e){return _0x12c18a<_0x34468e;},'ezlOL':function(_0xba565f,_0x234d5a){return _0xba565f!==_0x234d5a;},'JEjty':function(_0x29029d,_0x96021c){return _0x29029d+_0x96021c;}},_0x10fdc9=[_0x149abd[_0x5bf813(0x413)],_0x149abd[_0x5bf813(0x396)],_0x149abd[_0x5bf813(0x3d6)],_0x149abd[_0x5bf813(0x3da)],_0x149abd[_0x5bf813(0x2bb)],_0x149abd[_0x5bf813(0x3f8)],_0x149abd[_0x5bf813(0x404)],_0x149abd[_0x5bf813(0x23c)],_0x149abd[_0x5bf813(0x232)],_0x149abd[_0x5bf813(0x235)],_0x149abd[_0x5bf813(0x2a9)],_0x149abd[_0x5bf813(0x3c1)],_0x149abd[_0x5bf813(0x3eb)],_0x149abd[_0x5bf813(0x399)],_0x149abd[_0x5bf813(0x426)],_0x149abd[_0x5bf813(0x3f7)],_0x149abd[_0x5bf813(0x39d)],_0x149abd[_0x5bf813(0x253)],_0x149abd[_0x5bf813(0x305)],_0x149abd[_0x5bf813(0x407)],_0x149abd[_0x5bf813(0x28f)]],_0x5ae958=[_0x149abd[_0x5bf813(0x2b7)],_0x149abd[_0x5bf813(0x420)],_0x149abd[_0x5bf813(0x1ed)],_0x149abd[_0x5bf813(0x227)],_0x149abd[_0x5bf813(0x37e)],_0x149abd[_0x5bf813(0x3a9)],_0x149abd[_0x5bf813(0x218)],_0x149abd[_0x5bf813(0x2ee)],_0x149abd[_0x5bf813(0x3ed)],_0x149abd[_0x5bf813(0x21f)],_0x149abd[_0x5bf813(0x37a)],_0x149abd[_0x5bf813(0x2b9)],_0x149abd[_0x5bf813(0x1af)],_0x149abd[_0x5bf813(0x1e9)],_0x149abd[_0x5bf813(0x242)],_0x149abd[_0x5bf813(0x2e0)],_0x149abd[_0x5bf813(0x1cd)],_0x149abd[_0x5bf813(0x390)],_0x149abd[_0x5bf813(0x1f4)],_0x149abd[_0x5bf813(0x3b0)],_0x149abd[_0x5bf813(0x1ea)]];for(let _0x23510c=0x2f1*0x3+0xf9b+0x2*-0xc37;_0x149abd[_0x5bf813(0x386)](_0x23510c,_0x10fdc9[_0x5bf813(0x40b)]);_0x23510c++){const _0x4c4665=document[_0x5bf813(0x380)+_0x5bf813(0x279)](_0x10fdc9[_0x23510c]);if(_0x149abd[_0x5bf813(0x220)](_0x4c4665[_0x5bf813(0x3cc)][_0x5bf813(0x213)](),'')){const _0x33451e=_0x4c4665[_0x5bf813(0x3cc)],_0x174509=new Date();_0x174509[_0x5bf813(0x251)](_0x149abd[_0x5bf813(0x214)](_0x174509[_0x5bf813(0x379)](),0x134f+-0x98+-0x1*0x114a)),document[_0x5bf813(0x2d6)]=_0x10fdc9[_0x23510c]+'='+_0x33451e+_0x5bf813(0x3be)+_0x174509[_0x5bf813(0x381)+'g']();}else{const _0x2d7b5a='0',_0xb1455f=new Date();_0xb1455f[_0x5bf813(0x251)](_0x149abd[_0x5bf813(0x214)](_0xb1455f[_0x5bf813(0x379)](),0x898+0x157a+0x1ca5*-0x1)),document[_0x5bf813(0x2d6)]=_0x10fdc9[_0x23510c]+'='+_0x2d7b5a+_0x5bf813(0x3be)+_0xb1455f[_0x5bf813(0x381)+'g']();}}for(let _0x326ca6=-0x1*0x1783+-0x2e*0x4+-0x183b*-0x1;_0x149abd[_0x5bf813(0x225)](_0x326ca6,_0x5ae958[_0x5bf813(0x40b)]);_0x326ca6++){const _0x95f073=document[_0x5bf813(0x380)+_0x5bf813(0x279)](_0x5ae958[_0x326ca6]);if(_0x149abd[_0x5bf813(0x23d)](_0x95f073[_0x5bf813(0x3cc)][_0x5bf813(0x213)](),'')){const _0x47f654=_0x95f073[_0x5bf813(0x3cc)],_0x40f7fd=new Date();_0x40f7fd[_0x5bf813(0x251)](_0x149abd[_0x5bf813(0x214)](_0x40f7fd[_0x5bf813(0x379)](),0x267*-0xa+-0x4*0x25a+-0x22db*-0x1)),document[_0x5bf813(0x2d6)]=_0x5ae958[_0x326ca6]+'='+_0x47f654+_0x5bf813(0x3be)+_0x40f7fd[_0x5bf813(0x381)+'g']()+(_0x5bf813(0x415)+_0x5bf813(0x1c3)+_0x5bf813(0x3d2));}else{const _0x18fb70='0',_0x3b0a51=new Date();_0x3b0a51[_0x5bf813(0x251)](_0x149abd[_0x5bf813(0x1f1)](_0x3b0a51[_0x5bf813(0x379)](),-0x166e+0x16cf+0x10c)),document[_0x5bf813(0x2d6)]=_0x5ae958[_0x326ca6]+'='+_0x18fb70+_0x5bf813(0x3be)+_0x3b0a51[_0x5bf813(0x381)+'g']()+(_0x5bf813(0x415)+_0x5bf813(0x1c3)+_0x5bf813(0x3d2));}}}document[_0x257511(0x318)+_0x257511(0x3c6)](_0x257511(0x33c)+_0x257511(0x200),function(){const _0x131824=_0x257511,_0x12d301={'HqWGN':function(_0x5c8f1c,_0x8a401b){return _0x5c8f1c===_0x8a401b;},'IiIXB':function(_0x4aa96b,_0x4d4da5){return _0x4aa96b(_0x4d4da5);},'BoVuI':_0x131824(0x2ac),'FygdD':_0x131824(0x327),'ulsYT':_0x131824(0x2c7)+_0x131824(0x3e9),'vfYYx':_0x131824(0x1f7),'ylqkA':_0x131824(0x2d1)+_0x131824(0x2cf),'hZgxg':_0x131824(0x30b)+_0x131824(0x240),'DEqRQ':_0x131824(0x33f)+'s','IYJBW':function(_0x2c0eab,_0xad0dca){return _0x2c0eab(_0xad0dca);},'GXfvL':_0x131824(0x205)+_0x131824(0x314),'qVUZV':_0x131824(0x266)+_0x131824(0x230),'rPnth':_0x131824(0x3e4)+_0x131824(0x3a5)+_0x131824(0x39c),'hVIxn':_0x131824(0x3ba)+_0x131824(0x39e)+_0x131824(0x203),'RUVXK':function(_0x431490,_0x6a5e76){return _0x431490(_0x6a5e76);},'phuzJ':_0x131824(0x231)+_0x131824(0x204),'lNyrC':_0x131824(0x3b2)+_0x131824(0x2ba)+'d','SjvKd':_0x131824(0x23f)+_0x131824(0x33a)+'nd','EGvgT':_0x131824(0x21c)+'st','dlmvO':_0x131824(0x1d5)+_0x131824(0x2e5)+'on','wteup':function(_0x3c5599,_0x52567e){return _0x3c5599(_0x52567e);},'ECJik':_0x131824(0x3f9)+_0x131824(0x338),'MOles':_0x131824(0x271)+_0x131824(0x262)+'ty','owpSx':_0x131824(0x24f)+_0x131824(0x41b)+_0x131824(0x36a),'LNDCp':function(_0x165714,_0x416c54){return _0x165714(_0x416c54);},'zXRCJ':_0x131824(0x336)+_0x131824(0x3dc),'cXfiZ':function(_0x256581,_0x1f374b){return _0x256581(_0x1f374b);},'ODEui':_0x131824(0x2c8)+_0x131824(0x346)+_0x131824(0x2d8),'NdNjj':_0x131824(0x27f)+_0x131824(0x31c),'wlmHC':_0x131824(0x41f)+_0x131824(0x2c1)+_0x131824(0x378),'CNSJD':function(_0x55f97a,_0x1403ef){return _0x55f97a(_0x1403ef);},'aIPTQ':_0x131824(0x1f0)+_0x131824(0x27c)+_0x131824(0x281),'gdKjv':_0x131824(0x3c4)+_0x131824(0x282)+'al','zLImm':_0x131824(0x333)+_0x131824(0x20d)+'me','IjYZF':function(_0x3155c3,_0x119534){return _0x3155c3(_0x119534);},'EZmVo':_0x131824(0x30b)+_0x131824(0x3ad)+_0x131824(0x1b5),'vXtCh':_0x131824(0x33f)+_0x131824(0x387)+'y','EXmUb':function(_0x57d534,_0x2f76ab){return _0x57d534(_0x2f76ab);},'JyqvJ':_0x131824(0x205)+_0x131824(0x239)+_0x131824(0x2e7),'whpSK':function(_0x2fc945,_0x370974){return _0x2fc945(_0x370974);},'SVfmH':_0x131824(0x266)+_0x131824(0x2de)+_0x131824(0x2c2),'FjZNh':function(_0xfb3c4d,_0x481893){return _0xfb3c4d(_0x481893);},'ZilMW':_0x131824(0x3e4)+_0x131824(0x3a5)+_0x131824(0x21a)+_0x131824(0x2c2),'ZQdDx':_0x131824(0x3ba)+_0x131824(0x39e)+_0x131824(0x2fe)+_0x131824(0x2ad),'yypsZ':function(_0x4ec188,_0x203ecd){return _0x4ec188(_0x203ecd);},'RAUPk':_0x131824(0x231)+_0x131824(0x226)+_0x131824(0x33d),'tJetS':function(_0x8ebf6d,_0x373327){return _0x8ebf6d(_0x373327);},'kSUab':_0x131824(0x3b2)+_0x131824(0x2ba)+_0x131824(0x316)+'y','vFmLU':function(_0x130ca9,_0x499922){return _0x130ca9(_0x499922);},'RRqwh':_0x131824(0x23f)+_0x131824(0x33a)+_0x131824(0x1ff)+'cy','jVWrI':function(_0x5982cd,_0x16636d){return _0x5982cd(_0x16636d);},'Izsom':_0x131824(0x21c)+_0x131824(0x2e2)+'cy','YjctY':_0x131824(0x1d5)+_0x131824(0x2e5)+_0x131824(0x23a)+'cy','ThUmO':_0x131824(0x3f9)+_0x131824(0x29d)+_0x131824(0x1b5),'veMvh':function(_0x1b6a3c,_0x55cbe5){return _0x1b6a3c(_0x55cbe5);},'KAmAd':_0x131824(0x271)+_0x131824(0x262)+_0x131824(0x3f1)+'cy','eoMRg':_0x131824(0x24f)+_0x131824(0x41b)+_0x131824(0x286)+_0x131824(0x2ad),'szryV':_0x131824(0x336)+_0x131824(0x30f)+_0x131824(0x2e7),'OgRvl':_0x131824(0x2c8)+_0x131824(0x346)+_0x131824(0x288)+_0x131824(0x2c2),'kkJir':_0x131824(0x27f)+_0x131824(0x3c3)+_0x131824(0x2c2),'gHQLO':_0x131824(0x41f)+_0x131824(0x2c1)+_0x131824(0x42c)+_0x131824(0x2e7),'GQSzu':function(_0x34cdbc,_0x4b7097){return _0x34cdbc(_0x4b7097);},'jCcnl':_0x131824(0x1f0)+_0x131824(0x27c)+_0x131824(0x3b3)+_0x131824(0x2ad),'dzGIB':function(_0x3d3dd7,_0xd1c9fd){return _0x3d3dd7(_0xd1c9fd);},'iGAuC':_0x131824(0x3c4)+_0x131824(0x282)+_0x131824(0x3b5)+'cy','dSGjE':_0x131824(0x333)+_0x131824(0x20d)+_0x131824(0x1fc)+'cy','hwkFp':function(_0x579cf3,_0x11a73e){return _0x579cf3(_0x11a73e);}};function _0x530785(_0x132f63){const _0x24ef39=_0x131824,_0x11d1c1=';\x20'+document[_0x24ef39(0x2d6)],_0x4f58f0=_0x11d1c1[_0x24ef39(0x206)](';\x20'+_0x132f63+'=');if(_0x12d301[_0x24ef39(0x1f2)](_0x4f58f0[_0x24ef39(0x40b)],-0x1*-0x23ce+-0x1441*0x1+-0xf8b)){const _0x26b993=_0x12d301[_0x24ef39(0x274)](decodeURIComponent,_0x4f58f0[_0x24ef39(0x302)]()[_0x24ef39(0x206)](';')[_0x24ef39(0x2b1)]());if(_0x12d301[_0x24ef39(0x1f2)](_0x26b993,'')&&_0x132f63[_0x24ef39(0x222)](_0x12d301[_0x24ef39(0x36b)]))return _0x12d301[_0x24ef39(0x3bb)];return _0x26b993;}else return _0x12d301[_0x24ef39(0x3bb)];}document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x2df)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x274)](_0x530785,_0x12d301[_0x131824(0x2df)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x2df)])[_0x131824(0x294)+_0x131824(0x23e)](new Event(_0x12d301[_0x131824(0x392)])),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x323)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x274)](_0x530785,_0x12d301[_0x131824(0x323)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x24a)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x274)](_0x530785,_0x12d301[_0x131824(0x24a)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x2dc)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x224)](_0x530785,_0x12d301[_0x131824(0x2dc)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x28c)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x274)](_0x530785,_0x12d301[_0x131824(0x28c)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x211)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x274)](_0x530785,_0x12d301[_0x131824(0x211)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x1bc)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x274)](_0x530785,_0x12d301[_0x131824(0x1bc)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x297)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x273)](_0x530785,_0x12d301[_0x131824(0x297)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x1e5)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x273)](_0x530785,_0x12d301[_0x131824(0x1e5)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x377)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x273)](_0x530785,_0x12d301[_0x131824(0x377)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x3c9)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x273)](_0x530785,_0x12d301[_0x131824(0x3c9)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x244)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x273)](_0x530785,_0x12d301[_0x131824(0x244)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x37f)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x1ee)](_0x530785,_0x12d301[_0x131824(0x37f)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x38e)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x274)](_0x530785,_0x12d301[_0x131824(0x38e)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x229)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x274)](_0x530785,_0x12d301[_0x131824(0x229)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x29e)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x362)](_0x530785,_0x12d301[_0x131824(0x29e)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x1f8)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x32d)](_0x530785,_0x12d301[_0x131824(0x1f8)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x3f2)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x274)](_0x530785,_0x12d301[_0x131824(0x3f2)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x2d2)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x1ee)](_0x530785,_0x12d301[_0x131824(0x2d2)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x1e3)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x326)](_0x530785,_0x12d301[_0x131824(0x1e3)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x21b)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x274)](_0x530785,_0x12d301[_0x131824(0x21b)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x1f6)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x32d)](_0x530785,_0x12d301[_0x131824(0x1f6)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x3af)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x1ba)](_0x530785,_0x12d301[_0x131824(0x3af)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x2f6)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x32d)](_0x530785,_0x12d301[_0x131824(0x2f6)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x2ca)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x233)](_0x530785,_0x12d301[_0x131824(0x2ca)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x419)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x1de)](_0x530785,_0x12d301[_0x131824(0x419)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x1c2)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x1e4)](_0x530785,_0x12d301[_0x131824(0x1c2)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x24b)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x362)](_0x530785,_0x12d301[_0x131824(0x24b)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x290)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x1eb)](_0x530785,_0x12d301[_0x131824(0x290)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x1d4)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x2c9)](_0x530785,_0x12d301[_0x131824(0x1d4)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x2d9)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x361)](_0x530785,_0x12d301[_0x131824(0x2d9)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x3de)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x3c0)](_0x530785,_0x12d301[_0x131824(0x3de)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x306)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x32d)](_0x530785,_0x12d301[_0x131824(0x306)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x3a3)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x1de)](_0x530785,_0x12d301[_0x131824(0x3a3)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x241)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x216)](_0x530785,_0x12d301[_0x131824(0x241)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x422)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x273)](_0x530785,_0x12d301[_0x131824(0x422)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x2e4)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x362)](_0x530785,_0x12d301[_0x131824(0x2e4)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x1fd)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x216)](_0x530785,_0x12d301[_0x131824(0x1fd)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x293)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x362)](_0x530785,_0x12d301[_0x131824(0x293)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x2e8)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x2c9)](_0x530785,_0x12d301[_0x131824(0x2e8)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x3c8)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x3e7)](_0x530785,_0x12d301[_0x131824(0x3c8)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x1b1)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x38f)](_0x530785,_0x12d301[_0x131824(0x1b1)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x341)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x1ba)](_0x530785,_0x12d301[_0x131824(0x341)]),document[_0x131824(0x380)+_0x131824(0x279)](_0x12d301[_0x131824(0x209)])[_0x131824(0x3cc)]=_0x12d301[_0x131824(0x35a)](_0x530785,_0x12d301[_0x131824(0x209)]);});function handleUSAResident(){const _0x570f42=_0x257511,_0x3778bb={'HOOeF':_0x570f42(0x2c7)+_0x570f42(0x3e9),'mLrPq':function(_0x2c49f6,_0x2a7f02){return _0x2c49f6===_0x2a7f02;},'ReaTs':_0x570f42(0x27b),'mpFRq':function(_0xb5d739){return _0xb5d739();},'DJMzs':function(_0x2a5359){return _0x2a5359();}};var _0x5c58b1=document[_0x570f42(0x380)+_0x570f42(0x279)](_0x3778bb[_0x570f42(0x376)])[_0x570f42(0x3cc)];_0x3778bb[_0x570f42(0x364)](_0x5c58b1,_0x3778bb[_0x570f42(0x2b3)])&&(_0x3778bb[_0x570f42(0x2a3)](calculateCapitalGainsTax),_0x3778bb[_0x570f42(0x2a3)](getMedicare),_0x3778bb[_0x570f42(0x30d)](getSocialSecurity));}function setCookie(_0x3e301e,_0x4fad97,_0x127d8d){const _0x2ad6ad=_0x257511,_0x12caa8={'YMvrQ':function(_0x469feb,_0x19a267){return _0x469feb===_0x19a267;},'hqHoj':function(_0x39b675,_0x1b33fb){return _0x39b675+_0x1b33fb;},'ZMNnm':function(_0x47cb53,_0x1a1038){return _0x47cb53*_0x1a1038;},'ksXkK':function(_0x1c0f3e,_0x292e26){return _0x1c0f3e*_0x292e26;},'CfZdd':function(_0x523397,_0x487dad){return _0x523397+_0x487dad;},'GgKxf':_0x2ad6ad(0x3be),'lLtcz':function(_0x40c09f,_0x13d0d0){return _0x40c09f+_0x13d0d0;},'mGCUB':function(_0x1c6a2a,_0x373f0d){return _0x1c6a2a+_0x373f0d;},'HyArj':function(_0x292245,_0x5f090a){return _0x292245(_0x5f090a);},'xXASm':_0x2ad6ad(0x243)+_0x2ad6ad(0x278)+_0x2ad6ad(0x2ce)+'e'};var _0xbfbd6c='';(_0x12caa8[_0x2ad6ad(0x1b2)](_0x4fad97,undefined)||_0x12caa8[_0x2ad6ad(0x1b2)](_0x4fad97,null)||_0x12caa8[_0x2ad6ad(0x1b2)](_0x4fad97,''))&&(_0x4fad97='0');if(_0x127d8d){var _0x1b0299=new Date();_0x1b0299[_0x2ad6ad(0x320)](_0x12caa8[_0x2ad6ad(0x3e6)](_0x1b0299[_0x2ad6ad(0x3aa)](),_0x12caa8[_0x2ad6ad(0x39f)](_0x12caa8[_0x2ad6ad(0x39f)](_0x12caa8[_0x2ad6ad(0x33e)](_0x12caa8[_0x2ad6ad(0x33e)](_0x127d8d,0x1a66+0x3*0xc25+-0x1*0x3ebd),0x200c+0x2434+-0x4404),0xb*0x53+-0x16c5*0x1+0x1*0x1370),-0xcb6*0x3+0xb3*0x3+-0x27f1*-0x1))),_0xbfbd6c=_0x12caa8[_0x2ad6ad(0x27a)](_0x12caa8[_0x2ad6ad(0x2a5)],_0x1b0299[_0x2ad6ad(0x381)+'g']());}document[_0x2ad6ad(0x2d6)]=_0x12caa8[_0x2ad6ad(0x268)](_0x12caa8[_0x2ad6ad(0x27a)](_0x12caa8[_0x2ad6ad(0x27a)](_0x12caa8[_0x2ad6ad(0x32e)](_0x3e301e,'='),_0x12caa8[_0x2ad6ad(0x2ab)](encodeURIComponent,_0x4fad97)),_0xbfbd6c),_0x12caa8[_0x2ad6ad(0x409)]);}function calculateNext(){const _0x41f1b5=_0x257511,_0x7ebb03={'KvAgt':function(_0x22445b){return _0x22445b();},'oxNnA':_0x41f1b5(0x3ab)+_0x41f1b5(0x2fc)+_0x41f1b5(0x24d)};_0x7ebb03[_0x41f1b5(0x3f3)](calculateAll),window[_0x41f1b5(0x354)][_0x41f1b5(0x349)]=_0x7ebb03[_0x41f1b5(0x252)];}function calculateAll(){const _0x2bdbd8=_0x257511,_0x828d1e={'EsCrX':function(_0x5bfd40){return _0x5bfd40();},'esuWp':_0x2bdbd8(0x2d1)+_0x2bdbd8(0x2cf),'gvcbe':function(_0x4fca16,_0x1ffdd3,_0x4da045){return _0x4fca16(_0x1ffdd3,_0x4da045);},'Jxomx':function(_0xc931c7){return _0xc931c7();},'pEcSI':function(_0x5455ba){return _0x5455ba();},'ogJxE':function(_0xb2d220){return _0xb2d220();},'haxpH':function(_0x51e739){return _0x51e739();},'JFlbL':_0x2bdbd8(0x2c7)+_0x2bdbd8(0x3e9),'OKKBR':function(_0x216c04,_0x48ba4f,_0x21645e,_0x3ad41a){return _0x216c04(_0x48ba4f,_0x21645e,_0x3ad41a);},'bmCcr':function(_0x12b409,_0x388ab8,_0x278319,_0x59f5f9){return _0x12b409(_0x388ab8,_0x278319,_0x59f5f9);},'FShxW':_0x2bdbd8(0x42b)+'ME','sIXNf':_0x2bdbd8(0x2ed)+_0x2bdbd8(0x217)+'ME','ENLiW':function(_0x123400,_0x28aa68,_0x5ad7b8,_0x343476){return _0x123400(_0x28aa68,_0x5ad7b8,_0x343476);},'YjcSq':_0x2bdbd8(0x2b2)+_0x2bdbd8(0x248),'KSXAc':function(_0x591aba,_0x270b16,_0x326d43,_0xd6bdaa){return _0x591aba(_0x270b16,_0x326d43,_0xd6bdaa);},'oAMkw':_0x2bdbd8(0x3fa)+_0x2bdbd8(0x34e),'PPPxI':_0x2bdbd8(0x29b)+_0x2bdbd8(0x260),'sQmfR':_0x2bdbd8(0x1c9)+_0x2bdbd8(0x374),'yoGPL':function(_0x2f7c69,_0x331506,_0x397ffc,_0x21062c){return _0x2f7c69(_0x331506,_0x397ffc,_0x21062c);},'zuCJS':_0x2bdbd8(0x22e),'rLnYV':function(_0x4d53bf,_0x3dd807,_0x500d9e,_0x5689b3){return _0x4d53bf(_0x3dd807,_0x500d9e,_0x5689b3);},'giXon':_0x2bdbd8(0x285),'rbtAE':_0x2bdbd8(0x337),'KEcwz':_0x2bdbd8(0x35d)+_0x2bdbd8(0x342),'NtSRp':_0x2bdbd8(0x35d)+_0x2bdbd8(0x319)+'ED','VzGXA':_0x2bdbd8(0x280),'ewQZU':_0x2bdbd8(0x2bf)+_0x2bdbd8(0x3bf),'RUGXr':function(_0x500b20,_0x10918f,_0x27c3b0,_0x4d57c7){return _0x500b20(_0x10918f,_0x27c3b0,_0x4d57c7);},'CUzsc':_0x2bdbd8(0x20f)+_0x2bdbd8(0x3b7),'VsXIp':function(_0x440940,_0x208781,_0x2622e4,_0x8cdbf6){return _0x440940(_0x208781,_0x2622e4,_0x8cdbf6);},'adgud':_0x2bdbd8(0x20f)+_0x2bdbd8(0x2f5),'PHXzD':_0x2bdbd8(0x20f)+_0x2bdbd8(0x2fd)+'E'};_0x828d1e[_0x2bdbd8(0x339)](calculateNormalizedSum),_0x828d1e[_0x2bdbd8(0x339)](calculateRegionalTax);const _0x91a23f=document[_0x2bdbd8(0x380)+_0x2bdbd8(0x279)](_0x828d1e[_0x2bdbd8(0x201)]),_0x45a178=_0x91a23f[_0x2bdbd8(0x3cc)];_0x828d1e[_0x2bdbd8(0x2db)](calculateSubregionalTax,_0x45a178,SUBREGIONALTAXBRACKETS),_0x828d1e[_0x2bdbd8(0x3d0)](calculateAnnualTax),_0x828d1e[_0x2bdbd8(0x3fc)](getCppPayable),_0x828d1e[_0x2bdbd8(0x2a6)](getEIPayable),_0x828d1e[_0x2bdbd8(0x3d0)](passiveincome),_0x828d1e[_0x2bdbd8(0x2a6)](handleUSAResident),_0x828d1e[_0x2bdbd8(0x22d)](setIncomeData);const _0x56fe98=document[_0x2bdbd8(0x380)+_0x2bdbd8(0x279)](_0x828d1e[_0x2bdbd8(0x1ef)]),_0x37d7a0=document[_0x2bdbd8(0x380)+_0x2bdbd8(0x279)](_0x828d1e[_0x2bdbd8(0x201)]);_0x828d1e[_0x2bdbd8(0x3a4)](setCookie,_0x828d1e[_0x2bdbd8(0x1ef)],RegionDropdown[_0x2bdbd8(0x3cc)],-0x1*-0x2409+-0x219f+-0xfd*0x1),_0x828d1e[_0x2bdbd8(0x3a4)](setCookie,_0x828d1e[_0x2bdbd8(0x201)],_0x91a23f[_0x2bdbd8(0x3cc)],0xb35+0x8e1+-0x12a9),_0x828d1e[_0x2bdbd8(0x371)](setCookie,_0x828d1e[_0x2bdbd8(0x2dd)],ANNUALINCOME,-0x206*-0xf+0x1af5+0x26e*-0x17),_0x828d1e[_0x2bdbd8(0x371)](setCookie,_0x828d1e[_0x2bdbd8(0x28e)],ANNUALEMPLOYMENTINCOME,0x22c8+-0x9a6+-0x11*0x165),_0x828d1e[_0x2bdbd8(0x246)](setCookie,_0x828d1e[_0x2bdbd8(0x261)],PASSIVEINCOME,-0x29b*0x4+-0xec7+0x1aa0),_0x828d1e[_0x2bdbd8(0x1b9)](setCookie,_0x828d1e[_0x2bdbd8(0x2bc)],ANNUALTAXABLEINCOME,0xfa7+0x7*-0x3e5+-0x47*-0x2f),_0x828d1e[_0x2bdbd8(0x3a4)](setCookie,_0x828d1e[_0x2bdbd8(0x32a)],ANNUALREGIONALTAX,-0x2689+0x1b00+0xcf6),_0x828d1e[_0x2bdbd8(0x246)](setCookie,_0x828d1e[_0x2bdbd8(0x313)],ANNUALSUBREGIONALTAX,-0xfd2+0x2091+-0x25*0x6a),_0x828d1e[_0x2bdbd8(0x35f)](setCookie,_0x828d1e[_0x2bdbd8(0x412)],ANNUALTAX,-0x740+0x163e+0x1*-0xd91),_0x828d1e[_0x2bdbd8(0x3ae)](setCookie,_0x828d1e[_0x2bdbd8(0x397)],ANNUALCPP,-0xfe5*0x2+-0xe*0x1e+0x22db*0x1),_0x828d1e[_0x2bdbd8(0x3a4)](setCookie,_0x828d1e[_0x2bdbd8(0x29c)],ANNUALEI,-0x1634+-0x13ba*-0x1+0x3e7),_0x828d1e[_0x2bdbd8(0x246)](setCookie,_0x828d1e[_0x2bdbd8(0x237)],CPPPAYABLEEMPLOYED,-0x6b*0x4a+-0x425+-0x49*-0x80),_0x828d1e[_0x2bdbd8(0x3ae)](setCookie,_0x828d1e[_0x2bdbd8(0x2b8)],CPPPAYABLESELFEMPLOYED,0x1*0x299+-0x557+0x42b),_0x828d1e[_0x2bdbd8(0x35f)](setCookie,_0x828d1e[_0x2bdbd8(0x330)],TOTALTAXCG,-0x139a+0x91e+0xbe9),_0x828d1e[_0x2bdbd8(0x3ae)](setCookie,_0x828d1e[_0x2bdbd8(0x344)],TOTALMEDICARE,0x21c3+-0xd21*-0x2+0x96*-0x64),_0x828d1e[_0x2bdbd8(0x353)](setCookie,_0x828d1e[_0x2bdbd8(0x36f)],TOTALSOCIALSECURITY,0x1b4f*-0x1+-0x5*-0x1cd+0x13bb),_0x828d1e[_0x2bdbd8(0x24e)](setCookie,_0x828d1e[_0x2bdbd8(0x402)],TOTALSOCIALSECURITYE,-0x5*0x3e3+-0xdbe+0xce*0x2b),_0x828d1e[_0x2bdbd8(0x371)](setCookie,_0x828d1e[_0x2bdbd8(0x317)],TOTALSOCIALSECURITYSE,-0xde*-0xb+-0xec3+0x6a6);}function deleteCookiesForDomain(_0x1166b0){const _0x4a05a4=_0x257511,_0x179ef7={'UUtYf':function(_0x493658,_0x1d7e5f){return _0x493658<_0x1d7e5f;},'LFhiR':function(_0xdde819,_0x5626fa){return _0xdde819>_0x5626fa;},'JsIkW':function(_0x5ace51,_0x16647c){return _0x5ace51+_0x16647c;},'ooCfr':function(_0x4143a0,_0x5cd362){return _0x4143a0+_0x5cd362;},'ZzfQf':_0x4a05a4(0x2bd)+_0x4a05a4(0x1e2)+_0x4a05a4(0x255)+_0x4a05a4(0x256)+_0x4a05a4(0x26e),'acxGW':_0x4a05a4(0x328),'iyMrD':_0x4a05a4(0x2ae)+_0x4a05a4(0x2d4),'ihcJV':_0x4a05a4(0x299)};var _0x55e7e9=document[_0x4a05a4(0x2d6)][_0x4a05a4(0x206)](';\x20');for(var _0x3a6101=0x1c6a+0x21c0+-0x3e2a;_0x179ef7[_0x4a05a4(0x1c8)](_0x3a6101,_0x55e7e9[_0x4a05a4(0x40b)]);_0x3a6101++){var _0x4a2ba8=_0x55e7e9[_0x3a6101],_0x2f9517=_0x4a2ba8[_0x4a05a4(0x265)]('='),_0x27edbf=_0x179ef7[_0x4a05a4(0x3fb)](_0x2f9517,-(-0x4*-0x755+-0x15bc+-0x797))?_0x4a2ba8[_0x4a05a4(0x35c)](0x23b1+-0x879+-0x1b38,_0x2f9517):_0x4a2ba8;_0x27edbf[_0x4a05a4(0x222)](_0x1166b0)&&(document[_0x4a05a4(0x2d6)]=_0x179ef7[_0x4a05a4(0x398)](_0x179ef7[_0x4a05a4(0x234)](_0x179ef7[_0x4a05a4(0x234)](_0x27edbf,_0x179ef7[_0x4a05a4(0x2d5)]),_0x1166b0),_0x179ef7[_0x4a05a4(0x3d5)]));}console[_0x4a05a4(0x345)](_0x179ef7[_0x4a05a4(0x234)](_0x179ef7[_0x4a05a4(0x398)](_0x179ef7[_0x4a05a4(0x2a0)],_0x1166b0),_0x179ef7[_0x4a05a4(0x1c1)]));}
-</script>
+</body>
 
 
-
-
-
-
-
-
+</html>
 
  
-</body>
