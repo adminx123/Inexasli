@@ -54,7 +54,6 @@
     color: #000;
     text-align: left;
     margin: 20px;
-	    font-size: 11px;
 }
 
 .row {
@@ -88,7 +87,28 @@ button {
 
 }
 
+.tab-container {
+    display: flex;
+    justify-content: center; /* Center-align tabs */
+}
 
+.tab {
+    flex: 1; /* Make each tab equally spaced */
+    padding: 10px; /* Adjust padding as needed */
+    cursor: pointer;
+    background-color: black;
+    border: 1px solid; /* Adjust border thickness as needed */
+    border-radius: 5px 5px 0 0;
+    margin: 0 5px; /* Adjust spacing between tabs */
+    color: white; /* Set the text color to white */
+    text-align: center; /* Center-align text within the tab */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+/* Style for the active tab */
+.active {
+    background-color: white;
+    color: black; /* Set the text color of the active tab to black */
+}
 
 /* Media Query for smaller screens (e.g., mobile) */
 @media (max-width: 768px) {
@@ -106,7 +126,7 @@ button {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 11px;
+    font-size: 14px;
 }
 
 .container {
@@ -149,7 +169,7 @@ button {
         <button onclick="calculateBack()" style="border: none; background-color: transparent; font-size: 24px; color: black;">&lt;</button>
     </div>
 
-	 <h2 style="text-align: center;font-size: 21px;"><u>LIABILITY</u></h2>
+	 <h2 style="text-align: center;font-size: 24px;"><u>LIABILITY</u></h2>
 
     
     <div style="text-align: right; padding-top: 10px;">
@@ -160,7 +180,7 @@ button {
 	<p>Step 5: Enter any debts that you have in the feilds below.</p>
 
 		
- <h2 style="text-align: center;font-size: 13px;"> Non Revolving Liabilities</h2>
+ <h2 style="text-align: center;font-size: 18px;"> Non Revolving Liabilities</h2>
 
 
 	
@@ -184,7 +204,7 @@ button {
     <input type="text" id="liabilities_vehicle_loan">
 </div>
 
-<h2 style="text-align: center;font-size: 13px;">Revolving Liabilities</h2>
+<h2 style="text-align: center;font-size: 18px;">Revolving Liabilities</h2>
 	
 <div class ="row">
     <label for="liabilities_student_loan">Student Loan:</label>
@@ -218,7 +238,169 @@ button {
 	</div>
 <script>
 	
-   function _0x33c3(){const _0x2179ac=['BRBrx','EZSgX','summary.ht','length','xsFJu','lvPti','CuWoQ','nt_propert','s_small_bu','120VioiEy','split','UnNaH','xcnCg','location','xFlsi','205HjBxLH','trim','eVDki','kTbCn','toUTCStrin','TluwF','s_line_of_','pop','s_primary_','eDUzD','forEach','aGMqh','qcoWS','ARcNs','XRtcI','ure','s_tax_arre','log','=None;\x20Sec','liHwQ','dAfxQ','asset.html','wNjnR','qVFYf','aCrvB','LIABILITIE','2|3|1|4|0','81rqGYzM','klzQT','rqgRf','rpsdV','getTime','lue\x20for\x20','getDate','value','ById','joCtj','getElement','ZhIAk','CpncB','373944eNEAYW','ehJtf','NRwnI','ard','SNMFL','DOMContent','mUxcC',';\x20SameSite','ars','ies',';\x20path=/','liabilitie','bqjJN','QNfxP','credit','SVNrE','s_credit_c','setTime','SNA','1456765cztjga','iyWog','IzIwI','222556dzARzd','CbYOA','eyWNu','YnNGV','error','agWHt','gwbgq','yuByH','xlAdK','uEJtZ',';\x20expires=','addEventLi','FGQdO','cookie','UeuyJ','stener','vDZpu','oYCsV','oHBEn','s_vehicle_','tOtvm','21yoyGAo','GUEMv','zujwK','shift','toFixed','HxBrA','zgexx','2972896QLdcjC','nQTjR','s_investme','urcih','e\x20for\x20','s_student_','siness_loa','Invalid\x20va','textConten','oFqHo','loan','Loaded','setDate','href','jZjeu','jxptg','azMfh','105849jKIQxr','gTEaE','residence','doQRP','vjYTp','SpRQn','JJNIB','56749187QBuVfr','aNqyJ','Field\x20valu','SsLqF','102wkHILo','pnGvD'];_0x33c3=function(){return _0x2179ac;};return _0x33c3();}const _0x4c4717=_0x2b3f;function _0x2b3f(_0x129418,_0x475ddc){const _0x23cb6a=_0x33c3();return _0x2b3f=function(_0x2cd661,_0xdb0650){_0x2cd661=_0x2cd661-(-0x1*-0xfc5+0x3*-0xb95+0x1*0x1455);let _0xb394ed=_0x23cb6a[_0x2cd661];return _0xb394ed;},_0x2b3f(_0x129418,_0x475ddc);}(function(_0x335041,_0x3b83c1){const _0xdcee45=_0x2b3f,_0x20a8cc=_0x335041();while(!![]){try{const _0x27a7d7=-parseInt(_0xdcee45(0x188))/(-0x1a8f+0x1*0x1f66+0x2*-0x26b)+-parseInt(_0xdcee45(0x175))/(-0x1740+-0x1*0xf92+0x26d4*0x1)+parseInt(_0xdcee45(0x168))/(-0x5d1*-0x3+0x1e25+-0xd*0x3a9)*(-parseInt(_0xdcee45(0x18b))/(0x5ad*-0x2+0x22b2+-0x1754))+-parseInt(_0xdcee45(0x1d4))/(-0x13c6+0x137+0x1294)*(parseInt(_0xdcee45(0x1c3))/(0x1*0x1e4a+-0x1aa7*0x1+-0x39d))+parseInt(_0xdcee45(0x1a0))/(-0xccd+0x142b+0x1*-0x757)*(-parseInt(_0xdcee45(0x1a7))/(0xee1*-0x1+0x219b+-0x12b2))+parseInt(_0xdcee45(0x1b8))/(0x420+-0x17d5+0x13be)*(-parseInt(_0xdcee45(0x1ce))/(0x33c+-0x942+0xc2*0x8))+parseInt(_0xdcee45(0x1bf))/(-0x2624*0x1+0xe5d+0xbe9*0x2);if(_0x27a7d7===_0x3b83c1)break;else _0x20a8cc['push'](_0x20a8cc['shift']());}catch(_0x34a9ba){_0x20a8cc['push'](_0x20a8cc['shift']());}}}(_0x33c3,0x3173*-0xb+-0xab3cd+0x185e48));var LIABILITIES;function calculateLiabilities(){const _0x1c7982=_0x2b3f,_0x2b967d={'pnGvD':_0x1c7982(0x180)+_0x1c7982(0x1cd)+_0x1c7982(0x1ad)+'n','aGMqh':_0x1c7982(0x180)+_0x1c7982(0x1dc)+_0x1c7982(0x1ba),'jxptg':_0x1c7982(0x180)+_0x1c7982(0x1a9)+_0x1c7982(0x1cc)+_0x1c7982(0x17e),'vjYTp':_0x1c7982(0x180)+_0x1c7982(0x19e)+_0x1c7982(0x1b1),'joCtj':_0x1c7982(0x180)+_0x1c7982(0x1ac)+_0x1c7982(0x1b1),'xcnCg':_0x1c7982(0x180)+_0x1c7982(0x1da)+_0x1c7982(0x183),'SNMFL':_0x1c7982(0x180)+_0x1c7982(0x185)+_0x1c7982(0x178),'vDZpu':_0x1c7982(0x180)+_0x1c7982(0x15d)+_0x1c7982(0x17d),'liHwQ':function(_0x199c72,_0x32b5f7){return _0x199c72<_0x32b5f7;},'UnNaH':function(_0xdaefa2,_0x47730f){return _0xdaefa2(_0x47730f);},'QNfxP':function(_0x1a4dee,_0x112fdc){return _0x1a4dee(_0x112fdc);},'uEJtZ':_0x1c7982(0x166)+'S','rpsdV':function(_0x4c608e,_0xf3d142){return _0x4c608e+_0xf3d142;}},_0x313b33=[_0x2b967d[_0x1c7982(0x1c4)],_0x2b967d[_0x1c7982(0x1df)],_0x2b967d[_0x1c7982(0x1b6)],_0x2b967d[_0x1c7982(0x1bc)],_0x2b967d[_0x1c7982(0x171)],_0x2b967d[_0x1c7982(0x1d1)],_0x2b967d[_0x1c7982(0x179)],_0x2b967d[_0x1c7982(0x19b)]];let _0x6ee649=0x6*0xef+0xcf+-0x669;for(let _0x389f6d=-0x19d0+0x1*0xe13+0xbbd;_0x2b967d[_0x1c7982(0x160)](_0x389f6d,_0x313b33[_0x1c7982(0x1c8)]);_0x389f6d++){const _0x85da93=document[_0x1c7982(0x172)+_0x1c7982(0x170)](_0x313b33[_0x389f6d])[_0x1c7982(0x16f)];console[_0x1c7982(0x15e)](_0x1c7982(0x1c1)+_0x1c7982(0x1ab)+_0x313b33[_0x389f6d]+':\x20'+_0x85da93);const _0x52af2b=_0x2b967d[_0x1c7982(0x1d0)](parseFloat,_0x85da93);!_0x2b967d[_0x1c7982(0x182)](isNaN,_0x52af2b)?_0x6ee649+=_0x52af2b:console[_0x1c7982(0x18f)](_0x1c7982(0x1ae)+_0x1c7982(0x16d)+_0x6ee649[_0x389f6d]+':\x20'+_0x85da93);}LIABILITIES=_0x6ee649,document[_0x1c7982(0x172)+_0x1c7982(0x170)](_0x2b967d[_0x1c7982(0x194)])[_0x1c7982(0x1af)+'t']=_0x2b967d[_0x1c7982(0x16b)]('$',LIABILITIES[_0x1c7982(0x1a4)](0x115f+-0xb*0x1dd+0x322));}function setCookie(_0x148aa9,_0xc2c88f,_0x346f76){const _0x2f92de=_0x2b3f,_0x2b7dba={'CpncB':function(_0x292c23,_0x349107){return _0x292c23===_0x349107;},'IzIwI':function(_0x1028b5,_0x208cd5){return _0x1028b5+_0x208cd5;},'JJNIB':function(_0x4ab44c,_0x1dd067){return _0x4ab44c*_0x1dd067;},'zujwK':function(_0x17daa5,_0x142b99){return _0x17daa5*_0x142b99;},'UeuyJ':function(_0x4d4628,_0x4c8877){return _0x4d4628*_0x4c8877;},'yuByH':function(_0x53ff9b,_0x5d7f23){return _0x53ff9b+_0x5d7f23;},'jZjeu':_0x2f92de(0x195),'gwbgq':function(_0x3c2de5,_0x45f596){return _0x3c2de5+_0x45f596;},'klzQT':function(_0x29610b,_0x566df0){return _0x29610b+_0x566df0;},'XRtcI':function(_0xb02a3f,_0x31c843){return _0xb02a3f(_0x31c843);},'doQRP':_0x2f92de(0x17f)};var _0x57c5b9='';(_0x2b7dba[_0x2f92de(0x174)](_0xc2c88f,undefined)||_0x2b7dba[_0x2f92de(0x174)](_0xc2c88f,null)||_0x2b7dba[_0x2f92de(0x174)](_0xc2c88f,''))&&(_0xc2c88f='0');if(_0x346f76){var _0x32895b=new Date();_0x32895b[_0x2f92de(0x186)](_0x2b7dba[_0x2f92de(0x18a)](_0x32895b[_0x2f92de(0x16c)](),_0x2b7dba[_0x2f92de(0x1be)](_0x2b7dba[_0x2f92de(0x1a2)](_0x2b7dba[_0x2f92de(0x1a2)](_0x2b7dba[_0x2f92de(0x199)](_0x346f76,0x193a+-0x1*0x16ae+0x9d*-0x4),0x15ed+-0x200+-0x13b1),0x11e4+-0xe9b+-0x30d),0x3*-0x93e+0x56d+0x1a35*0x1))),_0x57c5b9=_0x2b7dba[_0x2f92de(0x192)](_0x2b7dba[_0x2f92de(0x1b5)],_0x32895b[_0x2f92de(0x1d8)+'g']());}document[_0x2f92de(0x198)]=_0x2b7dba[_0x2f92de(0x191)](_0x2b7dba[_0x2f92de(0x191)](_0x2b7dba[_0x2f92de(0x192)](_0x2b7dba[_0x2f92de(0x169)](_0x148aa9,'='),_0x2b7dba[_0x2f92de(0x15b)](encodeURIComponent,_0xc2c88f)),_0x57c5b9),_0x2b7dba[_0x2f92de(0x1bb)]);}function setIncomeData(){const _0x44e152=_0x2b3f,_0x5a3777={'NRwnI':_0x44e152(0x180)+_0x44e152(0x1cd)+_0x44e152(0x1ad)+'n','lvPti':_0x44e152(0x180)+_0x44e152(0x1dc)+_0x44e152(0x1ba),'FGQdO':_0x44e152(0x180)+_0x44e152(0x1a9)+_0x44e152(0x1cc)+_0x44e152(0x17e),'agWHt':_0x44e152(0x180)+_0x44e152(0x19e)+_0x44e152(0x1b1),'eVDki':_0x44e152(0x180)+_0x44e152(0x1ac)+_0x44e152(0x1b1),'oHBEn':_0x44e152(0x180)+_0x44e152(0x1da)+_0x44e152(0x183),'mUxcC':_0x44e152(0x180)+_0x44e152(0x185)+_0x44e152(0x178),'ehJtf':_0x44e152(0x180)+_0x44e152(0x15d)+_0x44e152(0x17d),'bqjJN':function(_0x8b9c41,_0x20a398){return _0x8b9c41<_0x20a398;},'nQTjR':function(_0x5c6701,_0x12ea50){return _0x5c6701!==_0x12ea50;},'TluwF':function(_0x5dc5e1,_0x96f7b2){return _0x5dc5e1+_0x96f7b2;}},_0x229ece=[_0x5a3777[_0x44e152(0x177)],_0x5a3777[_0x44e152(0x1ca)],_0x5a3777[_0x44e152(0x197)],_0x5a3777[_0x44e152(0x190)],_0x5a3777[_0x44e152(0x1d6)],_0x5a3777[_0x44e152(0x19d)],_0x5a3777[_0x44e152(0x17b)],_0x5a3777[_0x44e152(0x176)]];for(let _0xd30233=-0xe4*-0x10+0x13fc+0x4e4*-0x7;_0x5a3777[_0x44e152(0x181)](_0xd30233,_0x229ece[_0x44e152(0x1c8)]);_0xd30233++){const _0x184124=document[_0x44e152(0x172)+_0x44e152(0x170)](_0x229ece[_0xd30233]);if(_0x5a3777[_0x44e152(0x1a8)](_0x184124[_0x44e152(0x16f)][_0x44e152(0x1d5)](),'')){const _0x412be5=_0x184124[_0x44e152(0x16f)],_0x140525=new Date();_0x140525[_0x44e152(0x1b3)](_0x5a3777[_0x44e152(0x1d9)](_0x140525[_0x44e152(0x16e)](),-0x9d*-0x3+0x1ea8+0x29*-0xc2)),document[_0x44e152(0x198)]=_0x229ece[_0xd30233]+'='+_0x412be5+_0x44e152(0x195)+_0x140525[_0x44e152(0x1d8)+'g']()+(_0x44e152(0x17c)+_0x44e152(0x15f)+_0x44e152(0x15c));}else{const _0x52ba12='0',_0x5c0e33=new Date();_0x5c0e33[_0x44e152(0x1b3)](_0x5a3777[_0x44e152(0x1d9)](_0x5c0e33[_0x44e152(0x16e)](),0x1*0x1fff+0x1252+-0x12a*0x2a)),document[_0x44e152(0x198)]=_0x229ece[_0xd30233]+'='+_0x52ba12+_0x44e152(0x195)+_0x5c0e33[_0x44e152(0x1d8)+'g']()+(_0x44e152(0x17c)+_0x44e152(0x15f)+_0x44e152(0x15c));}}}let LIABILITIESNA;function setDebtData2(){const _0x33559b=_0x2b3f,_0x5f2803={'aCrvB':function(_0xdf55c0,_0x561cdc){return _0xdf55c0(_0x561cdc);},'ARcNs':_0x33559b(0x180)+_0x33559b(0x19e)+_0x33559b(0x1b1),'qVFYf':_0x33559b(0x180)+_0x33559b(0x1ac)+_0x33559b(0x1b1),'SsLqF':_0x33559b(0x180)+_0x33559b(0x1da)+_0x33559b(0x183),'rqgRf':_0x33559b(0x180)+_0x33559b(0x185)+_0x33559b(0x178),'eyWNu':_0x33559b(0x180)+_0x33559b(0x15d)+_0x33559b(0x17d)},_0x4d80bb=[_0x5f2803[_0x33559b(0x1e1)],_0x5f2803[_0x33559b(0x164)],_0x5f2803[_0x33559b(0x1c2)],_0x5f2803[_0x33559b(0x16a)],_0x5f2803[_0x33559b(0x18d)]];let _0x3d0912=-0xe10+-0x3b*0x8b+0x1*0x2e19;_0x4d80bb[_0x33559b(0x1de)](_0x17b3b4=>{const _0xc6e973=_0x33559b,_0x53941a=_0x5f2803[_0xc6e973(0x165)](parseFloat,document[_0xc6e973(0x172)+_0xc6e973(0x170)](_0x17b3b4)[_0xc6e973(0x16f)])||0x1f*0x25+0x8c4+-0xd3f*0x1;_0x3d0912+=_0x53941a;}),LIABILITIESNA=_0x3d0912;}document[_0x4c4717(0x196)+_0x4c4717(0x19a)](_0x4c4717(0x17a)+_0x4c4717(0x1b2),function(){const _0x37811b=_0x4c4717,_0x5c200d={'azMfh':function(_0x25d030,_0x3ecb37){return _0x25d030===_0x3ecb37;},'eDUzD':function(_0x1fcac6,_0xd2b6a0){return _0x1fcac6(_0xd2b6a0);},'aNqyJ':_0x37811b(0x180)+_0x37811b(0x1cd)+_0x37811b(0x1ad)+'n','YnNGV':function(_0x2e1b23,_0x486acc){return _0x2e1b23(_0x486acc);},'oYCsV':_0x37811b(0x180)+_0x37811b(0x1dc)+_0x37811b(0x1ba),'iyWog':function(_0x28546a,_0x35b3ea){return _0x28546a(_0x35b3ea);},'oFqHo':_0x37811b(0x180)+_0x37811b(0x1a9)+_0x37811b(0x1cc)+_0x37811b(0x17e),'zgexx':function(_0x12734a,_0x5ed296){return _0x12734a(_0x5ed296);},'xlAdK':_0x37811b(0x180)+_0x37811b(0x19e)+_0x37811b(0x1b1),'HxBrA':_0x37811b(0x180)+_0x37811b(0x1ac)+_0x37811b(0x1b1),'gTEaE':function(_0x5eb0b0,_0xe5692f){return _0x5eb0b0(_0xe5692f);},'BRBrx':_0x37811b(0x180)+_0x37811b(0x1da)+_0x37811b(0x183),'xFlsi':function(_0x5ad3a2,_0x5f2f99){return _0x5ad3a2(_0x5f2f99);},'kTbCn':_0x37811b(0x180)+_0x37811b(0x185)+_0x37811b(0x178),'SpRQn':_0x37811b(0x180)+_0x37811b(0x15d)+_0x37811b(0x17d)};function _0x332faf(_0x37cae){const _0x2f7df5=_0x37811b,_0x12f463=';\x20'+document[_0x2f7df5(0x198)],_0x49964f=_0x12f463[_0x2f7df5(0x1cf)](';\x20'+_0x37cae+'=');return _0x5c200d[_0x2f7df5(0x1b7)](_0x49964f[_0x2f7df5(0x1c8)],0x1eb3+-0xe*0x229+-0x73)?_0x5c200d[_0x2f7df5(0x1dd)](decodeURIComponent,_0x49964f[_0x2f7df5(0x1db)]()[_0x2f7df5(0x1cf)](';')[_0x2f7df5(0x1a3)]()):'';}document[_0x37811b(0x172)+_0x37811b(0x170)](_0x5c200d[_0x37811b(0x1c0)])[_0x37811b(0x16f)]=_0x5c200d[_0x37811b(0x18e)](_0x332faf,_0x5c200d[_0x37811b(0x1c0)]),document[_0x37811b(0x172)+_0x37811b(0x170)](_0x5c200d[_0x37811b(0x19c)])[_0x37811b(0x16f)]=_0x5c200d[_0x37811b(0x189)](_0x332faf,_0x5c200d[_0x37811b(0x19c)]),document[_0x37811b(0x172)+_0x37811b(0x170)](_0x5c200d[_0x37811b(0x1b0)])[_0x37811b(0x16f)]=_0x5c200d[_0x37811b(0x1a6)](_0x332faf,_0x5c200d[_0x37811b(0x1b0)]),document[_0x37811b(0x172)+_0x37811b(0x170)](_0x5c200d[_0x37811b(0x193)])[_0x37811b(0x16f)]=_0x5c200d[_0x37811b(0x1a6)](_0x332faf,_0x5c200d[_0x37811b(0x193)]),document[_0x37811b(0x172)+_0x37811b(0x170)](_0x5c200d[_0x37811b(0x1a5)])[_0x37811b(0x16f)]=_0x5c200d[_0x37811b(0x1b9)](_0x332faf,_0x5c200d[_0x37811b(0x1a5)]),document[_0x37811b(0x172)+_0x37811b(0x170)](_0x5c200d[_0x37811b(0x1c5)])[_0x37811b(0x16f)]=_0x5c200d[_0x37811b(0x1d3)](_0x332faf,_0x5c200d[_0x37811b(0x1c5)]),document[_0x37811b(0x172)+_0x37811b(0x170)](_0x5c200d[_0x37811b(0x1d7)])[_0x37811b(0x16f)]=_0x5c200d[_0x37811b(0x18e)](_0x332faf,_0x5c200d[_0x37811b(0x1d7)]),document[_0x37811b(0x172)+_0x37811b(0x170)](_0x5c200d[_0x37811b(0x1bd)])[_0x37811b(0x16f)]=_0x5c200d[_0x37811b(0x189)](_0x332faf,_0x5c200d[_0x37811b(0x1bd)]);});function calculateNext(){const _0x372beb=_0x4c4717,_0x250344={'ZhIAk':function(_0x4384a4){return _0x4384a4();},'CuWoQ':_0x372beb(0x1c7)+'ml'};_0x250344[_0x372beb(0x173)](calculateAll),window[_0x372beb(0x1d2)][_0x372beb(0x1b4)]=_0x250344[_0x372beb(0x1cb)];}function calculateBack(){const _0x4cf863=_0x4c4717,_0x54fc25={'GUEMv':function(_0x4f7cf6){return _0x4f7cf6();},'EZSgX':_0x4cf863(0x162)};_0x54fc25[_0x4cf863(0x1a1)](calculateAll),window[_0x4cf863(0x1d2)][_0x4cf863(0x1b4)]=_0x54fc25[_0x4cf863(0x1c6)];}function calculateAll(){const _0x416dd7=_0x4c4717,_0x5dfae3={'wNjnR':_0x416dd7(0x167),'qcoWS':function(_0x106a1e,_0x5a5e2d,_0x5b8c14,_0x1921d6){return _0x106a1e(_0x5a5e2d,_0x5b8c14,_0x1921d6);},'CbYOA':_0x416dd7(0x166)+_0x416dd7(0x187),'urcih':function(_0x3bf36c,_0x164a80,_0x6f5f27,_0x33f3bb){return _0x3bf36c(_0x164a80,_0x6f5f27,_0x33f3bb);},'xsFJu':_0x416dd7(0x166)+'S','tOtvm':function(_0x4e9a74){return _0x4e9a74();},'dAfxQ':function(_0x3d265a){return _0x3d265a();},'SVNrE':function(_0x31c232){return _0x31c232();}},_0x5b2291=_0x5dfae3[_0x416dd7(0x163)][_0x416dd7(0x1cf)]('|');let _0x35f672=0x163c+-0x16c0+0x84;while(!![]){switch(_0x5b2291[_0x35f672++]){case'0':_0x5dfae3[_0x416dd7(0x1e0)](setCookie,_0x5dfae3[_0x416dd7(0x18c)],LIABILITIESNA,0x272+0x2f*-0xa3+0x32*0x94);continue;case'1':_0x5dfae3[_0x416dd7(0x1aa)](setCookie,_0x5dfae3[_0x416dd7(0x1c9)],LIABILITIES,-0xf59*-0x2+0x1*0x1f75+-0x3cba);continue;case'2':_0x5dfae3[_0x416dd7(0x19f)](calculateLiabilities);continue;case'3':_0x5dfae3[_0x416dd7(0x161)](setIncomeData);continue;case'4':_0x5dfae3[_0x416dd7(0x184)](setDebtData2);continue;}break;}}
+    var LIABILITIES;
+ 
+  
+  
+function calculateLiabilities() {
+    const liabilitiesFields = [
+    'liabilities_small_business_loan',
+    'liabilities_primary_residence',
+    'liabilities_investment_properties',
+    'liabilities_vehicle_loan',
+    'liabilities_student_loan',
+    'liabilities_line_of_credit',
+    'liabilities_credit_card',
+    'liabilities_tax_arrears'
+    ];
+
+    let liabilities = 0;
+
+    for (let i = 0; i < liabilitiesFields.length; i++) {
+        const fieldValue = document.getElementById(liabilitiesFields[i]).value;
+        console.log(`Field value for ${liabilitiesFields[i]}: ${fieldValue}`);
+        const parsedValue = parseFloat(fieldValue);
+        if (!isNaN(parsedValue)) {
+            liabilities += parsedValue;
+        } else {
+            console.error(`Invalid value for ${liabilities[i]}: ${fieldValue}`);
+        }
+    }
+
+    LIABILITIES = liabilities;
+    document.getElementById('LIABILITIES').textContent = '$' + LIABILITIES.toFixed(2);
+}
+
+
+function setCookie(name, value, days) {
+    var expires = "";
+    if (value === undefined || value === null || value === '') {
+        value = '0';
+    }
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
+}
+
+
+function setIncomeData(){ 
+	const liabilitiesFields = [
+    'liabilities_small_business_loan',
+    'liabilities_primary_residence',
+    'liabilities_investment_properties',
+    'liabilities_vehicle_loan',
+    'liabilities_student_loan',
+    'liabilities_line_of_credit',
+    'liabilities_credit_card',
+    'liabilities_tax_arrears'
+    ];
+
+
+//for (let i = 0; i < frequencyFields.length; i++) {
+  //const frequencyInput = document.getElementById(frequencyFields[i]);
+ // if (frequencyInput.value.trim() !== "") {
+ //   const frequency = frequencyInput.value;
+ //   const expirationDate = new Date();
+ //   expirationDate.setDate(expirationDate.getDate() + 365);
+ //   document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
+ // } else {
+//    const frequency = "0";
+ //   const expirationDate = new Date();
+  //  expirationDate.setDate(expirationDate.getDate() + 365);
+  //  document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
+ // }
+//}
+
+for (let i = 0; i < liabilitiesFields.length; i++) {
+  const liabilitiesInput = document.getElementById(liabilitiesFields[i]);
+  if (liabilitiesInput.value.trim() !== "") {
+    const liabilities = liabilitiesInput.value;
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 365);
+    document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+  } else {
+    const liabilities = "0";
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 365);
+    document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+  }
+}
+}
+
+let LIABILITIESNA;
+
+function setDebtData2() {
+    const liabilitiesFields = [
+        'liabilities_vehicle_loan',
+        'liabilities_student_loan',
+        'liabilities_line_of_credit',
+        'liabilities_credit_card',
+        'liabilities_tax_arrears'
+    ];
+
+    let totalDebt = 0;
+
+    // Iterate over the fields and sum their values
+    liabilitiesFields.forEach(field => {
+        const fieldValue = parseFloat(document.getElementById(field).value) || 0;
+        totalDebt += fieldValue;
+    });
+
+    
+    // Assign the total debt value to LIABILITIESNA
+    LIABILITIESNA = totalDebt; // Making it a global variable
+}
+
+
+
+	
+	document.addEventListener('DOMContentLoaded', function() {
+    // Function to retrieve cookie value by name
+		function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    return parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
+}
+   
+    
+document.getElementById('liabilities_small_business_loan').value = getCookie('liabilities_small_business_loan');
+document.getElementById('liabilities_primary_residence').value = getCookie('liabilities_primary_residence');
+document.getElementById('liabilities_investment_properties').value = getCookie('liabilities_investment_properties');
+document.getElementById('liabilities_vehicle_loan').value = getCookie('liabilities_vehicle_loan');
+document.getElementById('liabilities_student_loan').value = getCookie('liabilities_student_loan');
+document.getElementById('liabilities_line_of_credit').value = getCookie('liabilities_line_of_credit');
+document.getElementById('liabilities_credit_card').value = getCookie('liabilities_credit_card');
+document.getElementById('liabilities_tax_arrears').value = getCookie('liabilities_tax_arrears');
+  })	
+
+
+
+
+	
+function calculateNext() {
+  calculateAll();
+  window.location.href = 'summary.html';
+}
+
+	function calculateBack() {
+  calculateAll();
+  window.location.href = 'asset.html';
+}
+	
+    function calculateAll() {
+        
+    calculateLiabilities();
+
+setIncomeData();    
+    setCookie("LIABILITIES", LIABILITIES, 365);
+	    
+    	    setDebtData2();
+	    setCookie("LIABILITIESNA", LIABILITIESNA, 365);
+    }
+
 
 </script>
 
