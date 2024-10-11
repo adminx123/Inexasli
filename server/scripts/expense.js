@@ -1,5 +1,4 @@
-<script>
-	
+
    
     var ANNUALEXPENSESUM;
     var HOUSING;
@@ -375,4 +374,4 @@ setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
     }
     
 
-</script>
+
