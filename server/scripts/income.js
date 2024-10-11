@@ -1,4 +1,4 @@
-<script>
+
 
 
     
@@ -1161,4 +1161,4 @@ function deleteCookiesForDomain(domainToDelete) {
     console.log("Cookies with domain " + domainToDelete + " deleted.");
 }
 
-</script>
+
