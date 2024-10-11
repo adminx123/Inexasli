@@ -1,4 +1,4 @@
-<script>
+
 
 	
 var ASSETS;
@@ -171,4 +171,4 @@ function calculateNext() {
     }
 
 
-</script>
+
