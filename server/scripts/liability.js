@@ -1,5 +1,5 @@
 
-<script>
+
 	
     var LIABILITIES;
  
@@ -165,4 +165,4 @@ setIncomeData();
     }
 
 
-</script>
+
