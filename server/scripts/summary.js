@@ -1,4 +1,4 @@
-<script>
+
     
 function getCookie1(name) {
     const value1 = `; ${document.cookie}`;
@@ -271,4 +271,4 @@ document.addEventListener('change', function() {
 
 
      
-</script>
+
