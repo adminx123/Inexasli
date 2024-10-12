@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     
+     <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUMMARY</title>
+         <link rel="icon" type="image/x-icon" href="Logo.png">
+    
+   <style>
+    
+     /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+         cursor: pointer;
+    }
+
+    .modal-content {
+        background-color: #000000;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    /* Close button styles */
+    .close {
+        color: #FFFFFF;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+
+    
+    body {
+    background-color: #000;
+    color: #fff;
+    text-align: left;
+    margin: 20px;
+}
+
+.row {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    margin-bottom: 10px;
+}
+
+label,
+input[type="number"],
+select {
+    flex: 1; /* Equal width for all elements */
+    margin-right: 10px;
+}
+
+span {
+    /* Adjust as needed */
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.tab-container {
+    display: flex;
+    justify-content: center; /* Center-align tabs */
+}
+
+.tab {
+    flex: 1; /* Make each tab equally spaced */
+    padding: 0px; /* Adjust padding as needed */
+    cursor: pointer;
+    background-color: black;
+    border: 1px solid; /* Adjust border thickness as needed */
+    border-radius: 5px 5px 0 0;
+    margin: 0 1px; /* Adjust spacing between tabs */
+    color: white; /* Set the text color to white */
+    text-align: center; /* Center-align text within the tab */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* Style for the active tab */
+.active {
+    background-color: white;
+    color: black; /* Set the text color of the active tab to black */
+}
+
+/* Media Query for smaller screens (e.g., mobile) */
+@media (max-width: 768px) {
+    label,
+    input[type="number"],
+    select {
+        width: 100%; /* Set width to 100% for smaller screens */
+        margin-right: 0; /* Remove margin between elements */
+    }
+}
+
+.numeric-input {
+    /* Apply styling as needed */
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  display: none; /* Hide the tooltip */
+  visibility: hidden; /* Initially hidden */
+  width: 200px; /* Adjust width as needed */
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Adjust positioning as needed */
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+
+.container {
+    background-color: #fff; /* White background */
+    color: #000; /* Black text color for contrast */
+    max-width: 800px; /* Maximum width of the container */
+    margin: 10px auto; /* Center horizontally with auto margins */
+    padding: 10px; /* Padding inside the container */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
+    text-align: left; /* Text alignment inside the container */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Stretch items to fill container */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+
+
+       .debt-ratio {
+  /* Default color for the value */
+}
+
+.good {
+  color: green;
+}
+
+.warning {
+  color: yellow;
+}
+
+.critical {
+  color: red;
+}
+
+ 
+
+    
+    </style>
+</head>
+
+<body>
+
+     <img src="../images/Logo.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
+
+     <div class="container">
+
+           
+          
+<h3 style="text-align: center;"> Subscription</h3>
+
+
+<section>
+      <div class="product">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14px" height="16px" viewBox="0 0 14 16" version="1.1">
+            <defs/>
+            <g id="Flow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <g id="0-Default" transform="translate(-121.000000, -40.000000)" fill="#E184DF">
+                    <path d="M127,50 L126,50 C123.238576,50 121,47.7614237 121,45 C121,42.2385763 123.238576,40 126,40 L135,40 L135,56 L133,56 L133,42 L129,42 L129,56 L127,56 L127,50 Z M127,48 L127,42 L126,42 C124.343146,42 123,43.3431458 123,45 C123,46.6568542 124.343146,48 126,48 L127,48 Z" id="Pilcrow"/>
+                </g>
+            </g>
+        </svg>
+        <div class="description">
+          <h3>Subscribe</h3>
+          <h5>$5.00/ month</h5>
+        </div>
+      </div>
+      <form action="/create-checkout-session" method="POST">
+        <!-- Add a hidden field with the lookup_key of your Price -->
+        <input type="hidden" name="lookup_key" value="{{PRICE_LOOKUP_KEY}}" />
+        <button id="checkout-and-portal-button" type="submit">Checkout</button>
+      </form>
+    </section>
+  
+</div>
+   
+  
+</body>
+</html>
