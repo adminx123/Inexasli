@@ -20,15 +20,9 @@ No Storage: Data is not stored on our servers; temporary cookies on your device 
 
 Security: Take additional steps for data protection if needed.
 
-Interviews:
-
-Consent: By participating, you allow your content to be used indefinitely online.
-
-Control: You can request modifications before content is published or removal afterward (with a fee).
-
 Liability:
 
-No Guarantee: We're not liable for inaccuracies or losses from using IEAL™ or participating in interviews.
+No Guarantee: We're not liable for inaccuracies or losses from using IEAL™.
 
 Changes:
 
@@ -119,33 +113,8 @@ The Developer reserves the right to modify or discontinue IEAL™ at any time wi
 **IEAL™ Acceptance of Terms of Service:**
 By using IEAL™, you confirm you have read, understood, and agree to these terms. If you disagree, do not use IEAL™.
 
-**Interview Consent:**
-By voluntarily participating in the interview, you consent to the use of screen share, audio, text, and possible video recordings shared indefinitely online on platforms such as Twitter, YouTube, or similar.
-
-**Interview Privacy and Information Sharing:**
-It is your responsibility to decide what information to share during the interview. Certain information may be necessary for the interview and content creation. If unwilling to provide required information, the interview may not proceed. You are solely responsible for shared information used for creating online content. You can use an alias and request voice alteration if possible.
-
-**Interview Monetization Disclaimer:**
-Interviewees are not entitled to compensation or revenue share from content or IEAL™ created during the interview and its subsequent use indefinitely.
-
-**Interview Liability Disclaimer:**
-The Developer and interviewer are not liable for damages arising from content creation and display online. Your participation is voluntary, and associated risks are assumed by you.
-
-**Pre-Publication Review and Modification:**
-
-Opportunity for Review: Before the content derived from your interview is published or shared online, you have the right to review the content for any parts you would like to be left out or modified. 
-
-Request Procedure: You must contact us within 1 day after the interview to request this review. Contact can be made via interview@inexasli.com.
-
-Exclusions: Note that while we will make reasonable efforts to accommodate your requests, certain edits might not be feasible if they significantly alter the essence or value of the content.
-
-Final Decision: The final decision on what can be edited or removed will be at the discretion of the content creator, considering the integrity and purpose of the content. Please discuss any sensitive information during the interview with this understanding.
-
-**Interview Content Removal Policy:**
-By participating in an interview, you consent to the content being shared indefinitely on platforms like Twitter, YouTube, or similar. Should you later request the removal of this content from these platforms, a $25 content removal fee will apply to cover the time and resources spent on content creation. The fee amount and payment terms will be communicated at the time of the request. Note that this fee does not guarantee the removal from all platforms due to the nature of internet sharing but represents our effort to comply with your request. If you wish to avoid this fee, please consider your content's long-term visibility before agreeing to participate.
-
 **Indemnification:**
-You agree to defend, indemnify, and hold harmless the Developer, its officers, directors, representatives, employees, and agents from any actions, claims, damages, losses, liabilities, costs, and expenses arising from your access to or use of IEAL™ or Interviews, or your violation of these Terms of Service.
+You agree to defend, indemnify, and hold harmless the Developer, its officers, directors, representatives, employees, and agents from any actions, claims, damages, losses, liabilities, costs, and expenses arising from your access to or use of IEAL™, or your violation of these Terms of Service.
 
 **Dispute Resolution:**
 Any dispute shall be resolved through negotiation, consultation, mediation, and/or arbitration, with the place and language specified. Costs associated with dispute resolution are your responsibility.
