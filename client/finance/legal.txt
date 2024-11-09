@@ -1,123 +1,219 @@
-------------------------------------------------------------------------------------------------------------------------
-                                    Summary of Terms of Service for IEAL™
-Introduction:
+----------------------------------------------------------------------------------------------------
 
-Purpose: IEAL™ is an educational tool for personal financial understanding. 
-Not Professional Advice: Use it for learning, not for making real financial decisions.
+Terms_of_Service_Summary:
+  Introduction:
+    Purpose: 
+      - "The 'Worksheet™' serves as an educational tool to enhance understanding of personal finance through interactive learning."
+      - "It offers visual insights and allows tracking of financial metrics."
+    Not_Professional_Advice: 
+      "Use for educational purposes only, not for making real financial decisions. Results are for learning, not professional advice."
 
-Using IEAL™:
+  Using_Worksheet:
+    Accuracy:
+      "Results provide educational estimates. For real financial advice, consult professionals."
+    Responsibilities:
+      - "Ensure the accuracy and completeness of the data you enter."
+      - "Utilize the Worksheet for educational purposes."
+      - "Regularly update your financial information."
+      - "Secure your data; we use temporary cookies that do not store data on our servers."
 
-Accuracy: Results are educational estimates. Consult professionals for financial advice.
+  Intellectual_Property:
+    Ownership:
+      "All rights, title, and interest in the Worksheet and related IP assets belong exclusively to the Developer."
+    User_Content_License:
+      "By submitting content, you grant the Developer a non-exclusive, royalty-free, worldwide license to use, modify, and distribute your content for providing the service."
 
-Responsibilities: Provide accurate data.
-                  Use for educational purposes only.
-                  Keep your financial data updated.
-                  Secure your data; we use temporary cookies but don't store your data on our servers.
+  Data_Privacy:
+    No_Storage: 
+      "Data is not stored on our servers; temporary cookies on your device hold data for up to 365 days."
+    Security:
+      "While we take measures for data security, additional steps by the user are recommended for full protection."
 
-Data Privacy:
+  User_Content_Ownership:
+    Retention: 
+      "You retain full ownership of any content you upload or submit."
+    Developer_License:
+      "You grant the Developer a non-exclusive, royalty-free, worldwide license to use your content for service purposes."
+    Public_Sharing:
+      "Publicly shared content may be viewed and used by others."
 
-No Storage: Data is not stored on our servers; temporary cookies on your device are used.
+  Interviews:
+    Consent: 
+      "By participating, you consent to your content being used online indefinitely."
+    Review:
+      "You have the right to review content before publication, with one day to request modifications."
+    Content_Removal:
+      "Complete removal of interview content from online platforms is not guaranteed."
 
-Security: Take additional steps for data protection if needed.
+  Liability:
+    No_Guarantee:
+      - "No liability for inaccuracies or losses from using the Worksheet."
+      - "The Developer's liability is limited to the amount paid by the user in the 6 months prior to the event causing the claim."
+      - "Excludes indirect damages like loss of profits."
 
-Liability:
+  Changes:
+    Right_to_Modify: 
+      "The Developer can change or discontinue the Worksheet at any time."
 
-No Guarantee: We're not liable for inaccuracies or losses from using IEAL™.
+  Legal:
+    Indemnification:
+      "Users agree to indemnify the Developer from claims related to their use of the service."
+    Dispute_Resolution:
+      - "Disputes resolved through mediation or arbitration in British Columbia, Canada."
+      - "English is the language for dispute resolution."
+    Governing_Law:
+      "These terms are governed by the laws of British Columbia, Canada."
 
-Changes:
+  Acceptance:
+    Agreement:
+      "By using the Worksheet or participating in interviews, you agree to these terms."
 
-Right to Modify: We can change or stop offering IEAL™ at any time.
+----------------------------------------------------------------------------------------------------
+  
 
-Legal:
+Terms_of_Service:
+    Introduction:
+      Description: 
+        "This document outlines the terms of service for the use of the Worksheet (referred to collectively as the 'Worksheet') provided by INEXASLI (hereinafter referred to as the 'Developer'). By using the Worksheet, you agree to be bound by these terms of service. The term 'user' refers to you, the reader, when accessing the Worksheet. If you do not agree with these terms, you must not use the Worksheet."
 
-Indemnification: You agree to protect us from claims related to your use.
+    Intellectual_Property_Rights:
+      Ownership:
+        - "All rights, title, and interest in and to the Worksheet, including but not limited to the website, its software, source code, databases, functionalities, graphics, designs, trademarks, service marks, and all related content (collectively, the 'IP Assets'), are and will remain the exclusive property of INEXASLI."
+        - "Users are granted a limited, non-exclusive, non-transferable, revocable license to access and use the Worksheet for their personal, non-commercial, educational purposes."
+      User_Generated_Content:
+        - "Any content, data, text, or information you submit or upload to the Worksheet ('User Content') may be used by you solely for your personal, non-commercial use in connection with the educational objectives of the Worksheet."
+        - "By submitting User Content, you grant the Developer a non-exclusive, royalty-free, worldwide license to use, store, display, reproduce, modify, create derivative works, and distribute such User Content as necessary to provide the service."
+        - "If you share any User Content publicly or in a manner that allows others to view or use it, you agree that such content may be viewed, used, or shared by others in accordance with these Terms of Service."
+      Restrictions:
+        - "You may not reproduce, duplicate, copy, sell, trade, or exploit for any commercial purposes any portion of the Worksheet or its IP Assets without express written permission by the Developer."
+        - "This includes reverse engineering or attempting to extract the source code of the Worksheet or any part thereof, except as permitted by applicable law."
+      Feedback:
+        - "If you provide feedback or suggestions about the Worksheet, you grant the Developer a perpetual, non-exclusive, and royalty-free license to use, modify, and incorporate your feedback into the Worksheet without further compensation to you."
+        - "However, you will still maintain any ownership rights you have in your pre-existing intellectual property."
 
-Dispute Resolution: We aim for mediation/arbitration for conflicts.
+    IEAL_Purpose:
+      Educational_Tool_for_Financial_Literacy:
+        - "the Worksheet is primarily intended to serve as an educational platform designed to enhance your understanding of personal finance."
+        - "Interactive Learning: Users engage with financial concepts by inputting real-life data, gaining a practical understanding of how income, expenses, assets, and liabilities impact financial health."
+        - "Visual and Analytical Insights: The tool provides visual representations and analyses of your financial data, serving as educational aids to demonstrate financial principles in action."
+      Personal_Record_Keeping:
+        - "Track Financial Metrics: the Worksheet allows users to keep a personal record of their financial transactions."
+        - "Helps monitor income and expenses."
+        - "Catalogs assets and liabilities."
+        - "Observes changes in financial status over time."
+      No_Professional_Advice:
+        - "While the Worksheet calculates various financial metrics based on user input, these calculations are for educational purposes only."
+        - "Estimates, Not Advice: All figures generated by the Worksheet are estimates and should be viewed as educational examples rather than personalized financial advice."
+        - "For Learning, Not Decision-Making: Use these results to understand how financial calculations work and to experiment with 'what if' scenarios. Seek independent advice from qualified professionals for specific financial matters."
 
-Governing Law: BC, Canada laws apply.
+    IEAL_Accuracy_of_Results:
+      - "The calculations provided by the Worksheet are educational estimates and are meant to offer a general understanding of financial concepts."
+      - "While the Developer endeavors for accuracy, they cannot guarantee precise results."
+      - "Users should consult with a professional financial advisor, accountant, and/or tax authority for specific financial matters."
+      - "Please note that the frequency selector dropdown for expenses and income operates on a weekly basis, with 52 weeks constituting a year."
 
-Acceptance:
+    IEAL_User_Responsibility:
+      Accuracy_of_Information:
+        - "You are responsible for providing accurate and complete information when using the Worksheet."
+        - "Inaccuracies or omissions may impact the calculations and results."
+        - "Examples of errors include:"
+          - "Duplicate Entries: Entering the same financial data in multiple places on the Worksheet."
+          - "Typographical Errors: Unintentional mistakes from hitting the wrong button."
+          - "Unit Errors: Attributing an amount to the incorrect field within the specified time frame."
+          - "Transposition Errors: Unintentional errors where numbers or letters are swapped or reversed."
+      Appropriate_Use:
+        - "You agree to use the Worksheet for educational purposes only and in compliance with all applicable laws."
+        - "The Worksheet must not be used in a manner that violates laws, infringes on anyone’s rights, or is offensive or harmful."
+        - "Prohibited actions include, but are not limited to:"
+          - "Attempting to reverse engineer or reproduce any part of the Worksheet without consent."
+          - "Transmitting or uploading any virus or malicious code."
+          - "Sending spam or unsolicited promotional materials."
+          - "Collecting or storing personal data about other users inappropriately."
+        - "In the event of unauthorized use or any violation of these terms, please notify support@inexasli.com immediately."
+      Confidentiality:
+        - "If you receive any confidential or proprietary information from the Developer or through the Worksheet, you agree to maintain confidentiality and not disclose it to any third party."
+      Changes_in_Financial_Situation:
+        - "As a user, you acknowledge that your financial situation may change over time."
+        - "It is your responsibility to update your information in the Worksheet for accurate results."
+        - "Failure to update may result in inaccurate calculations."
 
-Agreement: By using IEAL™, you agree to these terms.
+    Data_Security:
+      Introduction:
+        - "By utilizing our IEAL worksheet, you consent to the following practices."
+        - "The Developer utilizes data solely for the purpose of providing estimations and facilitating your use of IEAL."
+        - "We do not store user data; instead, it is temporarily stored in secure cookies on the user's computer and accessed as you progress through IEAL."
+        - "Financial information entered by you is held temporarily for the duration of your session and may be retained for a maximum of 365 days on your computer unless you clear your cookies."
+        - "While we utilize secure temporary cookies as a data protection measure, we are committed to taking further reasonable steps to ensure the confidentiality and integrity of your information."
+      User_Responsibilities:
+        - "Users should be cautious about shared information, as even with secure temporary cookies, additional data protection measures may be necessary."
+        - "Being mindful of data sensitivity contributes to a secure experience."
+        - "We recommend that you use private browsing modes and avoid entering sensitive personal information (such as credit card numbers or passwords) while using the Worksheet"
+      Reporting_Concerns:
+        - "If individuals have concerns regarding data security during consultations, we welcome and value their feedback."
+      Limitation_of_Liability:
+        - "While we strive for accurate estimations, no system is entirely free from vulnerabilities."
+        - "Our liability is limited as described in the terms and conditions."
+        - "The security of information during internet transmission cannot be guaranteed."
+        - "The Developer's liability for any claim arising out of these Terms of Service, whether in contract, tort, or otherwise, shall be limited to the amount paid by the user for the use of the Worksheet during the 6-month period immediately preceding the event giving rise to the claim."
+        - "The Developer's liability for any claim arising out of these Terms of Service, whether in contract, tort, or otherwise, shall be limited to the amount paid by the user for the Worksheet in the 6 months preceding the event giving rise to the claim. To the fullest extent permitted by law, the Developer shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including, but not limited to, loss of profits, business interruption, or loss of data." 
+      IEAL_Consent:
+        - "By using the Worksheet, you consent to the collection, use, and disposal of your financial information as described in these terms of service."
+      IEAL_Liability_Disclaimer:
+        - "The Developer is not liable for any harm or loss you may experience from using the Worksheet or partaking in an interview, including loss of profits, business interruption, or loss of data."
+        - "The Worksheet results should not be solely relied upon for financial decisions. By using the Worksheet, you acknowledge and agree to do so at your own risk."
 
-------------------------------------------------------------------------------------------------------------------------
-                                                 **Terms of Service**
+    Interview_Consent:
+      - "By voluntarily participating in the interview, you consent to the use of screen share, audio, text, and possible video recordings shared indefinitely online on platforms such as Twitter, YouTube, or similar."
 
-**Introduction:**
-This document outlines the terms of service for the use of the IEAL™ report (referred to collectively as the “IEAL™”) provided by INEXASLI (hereinafter referred to as the “Developer”). By using IEAL™, you agree to be bound by these terms of service. The term ‘user’ refers to you, the reader, when accessing IEAL™. If you do not agree with these terms, you must not use IEAL™.
+    Interview_Privacy_and_Information_Sharing:
+      - "It is your responsibility to decide what information to share during the interview."
+      - "Certain information may be necessary for the interview and content creation."
+      - "If unwilling to provide required information, the interview may not proceed."
+      - "You are solely responsible for shared information used for creating online content."
+      - "You can use an alias and request voice alteration if possible."
 
-**IEAL™ Purpose:**
-Educational Tool for Financial Literacy:
+    Interview_Monetization_Disclaimer:
+      - "Interviewees are not entitled to compensation or revenue share from content or the Worksheet created during the interview and its subsequent use indefinitely."
 
-IEAL™ is primarily intended to serve as an educational platform designed to enhance your understanding of personal finance. Through:
+    Interview_Liability_Disclaimer:
+      - "The Developer and interviewer are not liable for damages arising from content creation and display online."
+      - "Your participation is voluntary, and associated risks are assumed by you."
 
-Interactive Learning: Users engage with financial concepts by inputting real-life data, thereby gaining a practical understanding of how income, expenses, assets, and liabilities impact financial health.
+    Pre_Publication_Review_and_Modification:
+      Opportunity_for_Review:
+        - "Before the content derived from your interview is published or shared online, you have the right to review the content for any parts you would like to be left out or modified."
+      Request_Procedure:
+        - "You must contact us within 1 day after the interview to request this review."
+        - "Contact can be made via support@inexasli.com."
+      Exclusions:
+        - "Certain edits might not be feasible if they significantly alter the essence or value of the content."
+      Final_Decision:
+        - "The final decision on what can be edited or removed will be at the discretion of the content creator, considering the integrity and purpose of the content."
+        - "Please discuss any sensitive information during the interview with this understanding."
 
-Visual and Analytical Insights: The tool provides visual representations and analyses of your financial data, which serve as educational aids to demonstrate financial principles in action.
+    Interview_Content_Removal_Policy:
+      - "By participating in an interview, you consent to the content being shared indefinitely on platforms like Twitter, YouTube, or similar."
+      - "Request for the removal of this content from platforms is not guaranteed"
+      - "Complete removal from all platforms is not guaranteed due to the nature of internet sharing."
+      - "Please consider your content's long-term visibility before agreeing to participate."
 
-Personal Record Keeping:
+    Indemnification:
+      - "You agree to defend, indemnify, and hold harmless the Developer, its officers, directors, representatives, employees, and agents from any actions, claims, damages, losses, liabilities, costs, and expenses arising from your access to or use of the Worksheet or Interviews, or your violation of these Terms of Service."
 
-Track Financial Metrics: IEAL™ allows users to keep a personal record of their financial transactions, which aids in:
--Monitoring income and expenses.
--Cataloging assets and liabilities.
--Observing changes in financial status over time.
+    Dispute_Resolution:
+      - "Any dispute shall be resolved through negotiation, consultation, mediation, and/or arbitration, with the place and language specified."
+      - "Costs associated with dispute resolution are your responsibility."
+      - "The place of dispute resolution shall be British Columbia, Canada, and the language used shall be English. All parties agree to submit to the jurisdiction of the courts of British Columbia for any disputes that cannot be resolved through mediation or arbitration."
 
-No Professional Advice: While IEAL™ calculates various financial metrics based on user input, these calculations are for educational purposes only. They are not intended to be relied upon for making financial decisions. Here's how to interpret the results: Estimates, Not Advice: All figures generated by IEAL™ are estimates and should be viewed as educational examples rather than personalized financial advice.
+    Governing_Law:
+      - "These terms will be governed by and construed in accordance with the laws of British Columbia, Canada."
+      - "Disputes will be resolved in the courts of British Columbia."
 
-For Learning, Not Decision-Making: Use these results to understand how financial calculations work and to experiment with 'what if' scenarios. Users should seek independent advice from qualified professionals for specific financial matters.
+By signing below, you acknowledge that you have read, understood, and agree to the Terms and Conditions.
 
-**IEAL™ Accuracy of Results:**
-The calculations provided by IEAL™ are educational estimates and are meant to offer a general understanding of financial concepts. While the developer endeavors for accuracy, they cannot guarantee precise results. Users should not rely on the results generated by IEAL™ for making financial decisions and should consult with a professional financial advisor, accountant, and/or tax authority. Please note that our frequency selector dropdown for expenses and income operates on a weekly basis, with 52 weeks constituting a year.
+Signature: _________________________    Email: _________________________ 
+Date: _________________________
 
-**IEAL™ User Responsibility:**
 
-**Accuracy of Information:**
-You are responsible for providing accurate and complete information when using IEAL™. Any inaccuracies or omissions may impact the calculations and results. Results may be affected by incorrect user input, including but not limited to:
-- Duplicate Entries: Entering the same financial data in multiple places on IEAL™.
-- Typographical Errors: Unintentional mistakes from hitting the wrong button.
-- Unit Errors: Attributing an amount to the incorrect field within the specified time frame.
-- Transposition Errors: Unintentional errors where numbers or letters are swapped or reversed.
 
-**Appropriate Use:**
-You agree to use IEAL™ for educational purposes only and in compliance with all applicable laws. IEAL™ must not be used in a manner that violates any laws, infringes on anyone’s rights, is offensive, or disrupts IEAL™ or any features on IEAL™. In the event of unauthorized use, notify admin@inexasli.com immediately.
 
-**Confidentiality:**
-If you receive any confidential or proprietary information from the Developer or IEAL™, you agree to maintain confidentiality and not disclose it to any third party.
-
-**Changes in Financial Situation:**
-As a user, you acknowledge that your financial situation may change over time. IEAL™'s accuracy depends on current information. It is your responsibility to update your information in IEAL™ for accurate results. Failure to update may result in inaccurate calculations.
-
-**Data Security:**
-
-**Introduction:**
-By utilizing our IEAL worksheet, you consent to the following practices. The developer utilizes data solely for the purpose of providing estimations and facilitating your use of IEAL. We do not store user data; instead, it is temporarily stored in secure cookies on the user's computer and accessed as you progress through IEAL. Financial information entered by you is held temporarily for the duration of your session and may be retained for a maximum of 365 days on your computer unless you clear your cookies. While we utilize secure cookies as a data protection measure, we are committed to taking further reasonable steps to ensure the confidentiality and integrity of your information.
-
-**User Responsibilities:**
-During financial consultations, individuals play a crucial role in data security. Users should be cautious about shared information, as even with secure cookies, additional data protection measures may be necessary. Being mindful of data sensitivity contributes to a secure experience.
-
-**Reporting Concerns:**
-If individuals have concerns regarding data security during consultations, we welcome and value their feedback. Given our current practices, which include the use of secure cookies, we are dedicated to addressing concerns promptly.
-
-**Limitation of Liability:**
-Transparent about our practices, while we utilize secure cookies, we recognize that additional measures may be required for comprehensive data protection. While we strive for accurate estimations, no system is entirely free from vulnerabilities. Our liability is limited, as described in the terms and conditions. The security of information during internet transmission cannot be guaranteed.
-
-**IEAL™ Consent:**
-By using IEAL™, you consent to the collection, use, and disposal of your financial information as described in these terms of service.
-
-**IEAL™ Liability Disclaimer:**
-The Developer is not liable for any harm or loss you may experience from using IEAL™ or partaking in an interview, including but not limited to loss of profits, business interruption, or loss of data. No one involved is personally liable for outcomes or consequences. IEAL™ results should not be solely relied upon for financial decisions. By using IEAL™, you acknowledge and agree to do so at your own risk.
-
-**IEAL™ Changes:**
-The Developer reserves the right to modify or discontinue IEAL™ at any time without notice. Not liable for any modification or discontinuation.
-
-**IEAL™ Acceptance of Terms of Service:**
-By using IEAL™, you confirm you have read, understood, and agree to these terms. If you disagree, do not use IEAL™.
-
-**Indemnification:**
-You agree to defend, indemnify, and hold harmless the Developer, its officers, directors, representatives, employees, and agents from any actions, claims, damages, losses, liabilities, costs, and expenses arising from your access to or use of IEAL™, or your violation of these Terms of Service.
-
-**Dispute Resolution:**
-Any dispute shall be resolved through negotiation, consultation, mediation, and/or arbitration, with the place and language specified. Costs associated with dispute resolution are your responsibility.
-
-**Governing Law:**
-These terms will be governed by and construed in accordance with the laws of British Columbia, Canada. Disputes will be resolved in the courts of British Columbia.
