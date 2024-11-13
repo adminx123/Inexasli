@@ -19,6 +19,7 @@
         <div class="form-row">
             <label for="revenueType">Type of Revenue </label>
             <select id="revenueType" onchange="toggleRevenueType()">
+                <option value="blank"></option>
                 <option value="rental">Rental</option>
                 <option value="service">Service</option>
                 <option value="product">Product</option>
@@ -29,18 +30,19 @@
             <input type="number" id="price">
         </div>
 
-
-                    <div class="form-row">
-
+<div class="form-row">
             <label for="sales"></label>
             
-                <input type="number" id="sales">
+               
                 <select id="salesFrequency" class="frequency-dropdown" onchange="updateFrequency('sales')">
+                    <option value="blank"></option>
                     <option value="annually">Annually</option>
                     <option value="quarterly">Quarterly</option>
                     <option value="monthly">Monthly</option>
                     <option value="weekly">Weekly</option>
                 </select>
+
+     <input type="number" id="sales">
 </div>
         
 
