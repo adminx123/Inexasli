@@ -16,17 +16,17 @@
     <div class = "container">
         <h1>Business Metrics Calculator</h1>
 
-        
-            <label for="revenueType">Type of Revenue</label>
+        <div class="form-row">
+            <label for="revenueType">Type of Revenue </label>
             <select id="revenueType" onchange="toggleRevenueType()">
                 <option value="rental">Rental</option>
                 <option value="service">Service</option>
                 <option value="product">Product</option>
             </select>
             <span id="revenueTypeFrequency"></span>
-        
+        </div>
 
-
+<div class="form-row">
          <label for="price"></label>
             <input type="number" id="price">
             <label for="sales"></label>
@@ -38,7 +38,7 @@
                     <option value="monthly">Monthly</option>
                     <option value="weekly">Weekly</option>
                 </select>
-       
+</div>
         
 
 
