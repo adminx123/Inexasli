@@ -42,6 +42,13 @@ body {
     margin: 20px;
 }
 
+.form-row {
+    display: flex;           /* Make the container a flex container */
+    align-items: center;     /* Vertically center the label and select */
+    gap: 10px;               /* Optional: Adds space between the label and select */
+}
+
+
 .row {
     display: flex;
     align-items: center; /* Align items vertically */
