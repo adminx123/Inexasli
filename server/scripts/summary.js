@@ -1,4 +1,9 @@
 const price = 30000; // price of the subscription in cents
+const lambda =
+  "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
+const publicKey =
+  "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
+
 
 function getCookie1(name) {
   const value1 = `; ${document.cookie}`;
@@ -330,12 +335,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const paid = getCookie("authenticated");
   const container = document.querySelector(".summary-content");
 
+
   if (paid == "paid") {
     container.innerHTML = fullCals;
     runFullCalculations();
   } else {
     container.innerHTML = limitedCals;
     runLimitedCalculations();
+    const stripe = Stripe(publicKey)
 
     const payForm = document.querySelector("#payment-form");
 
@@ -387,7 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
             client_name: name,
           }),
         };
-        // console.log(options)
+        console.log(options)
         try {
           const res = await fetch(lambda, options);
 
@@ -612,12 +619,8 @@ Analyzing Expenses: Discover what expenses are and how they affect your financia
     <a href="mailto:support@inexasli.com" class=" contact-support" style="color:black;">i have paid</a>
 `;
 
-// payment scripts
 
-const lambda =
-  "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
-const publicKey =
-  "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
+
 
 function getCookie(name) {
   const cookieArray = document.cookie.split(";");
