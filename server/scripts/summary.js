@@ -375,21 +375,21 @@ payForm.addEventListener("submit", (e) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          task: 'pay',
+          task: "pay",
           line_items: [
             {
               price_data: {
-                currency: "usd",
+                currency: usd,
                 product_data: {
-                  name: "T-shirt",
+                  name: "Inexasli pro plan"
                 },
-                unit_amount: price,
+                unit_amount: price
               },
-              quantity: 1,
-            },
+              quantity: 1
+            }
           ],
-          name: name,
-          email:email
+          client_email: name,
+          client_name: email
         }),
       });
 
@@ -669,4 +669,23 @@ function getCookie(name) {
 //     task: 'checkpayment',
 //     sessionId: 'cs_test_b1rSdkOphnEXtE91Qs2nEagBOwwwmt39TcCQYNsLjpiyivpATvRtqhe6OK'
 //   }
+// }
+
+
+// const p = {
+//   task: "pay",
+//   line_items: [
+//     {
+//       price_data: {
+//         currency: usd,
+//         product_data: {
+//           name: "Inexasli pro plan"
+//         },
+//         unit_amount: price
+//       },
+//       quantity: 1
+//     }
+//   ],
+//   client_email: "testclient@example.com",
+//   client_name: "testclient"
 // }
