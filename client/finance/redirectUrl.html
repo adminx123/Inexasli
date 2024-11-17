@@ -96,7 +96,7 @@
 
               if (data.paymentStatus) {
                 if (data.paymentStatus == "paid" || data.paymentStatus == 'no_payment_required')
-                  setCookie(authenticated, "paid", 365);
+                  setCookie('authenticated', "paid", 365);
                 container.innerHTML = "payment successfull redirecting ......";
                 window.location.href = "/client/finance/summary.html";
               } else if (data.error) {
