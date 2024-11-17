@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>INEXASLI</title>
-    <link rel="icon" type="image/x-icon" href="Logo.png">
+    <!-- this is an extended list of places icon could be needed -->
+    <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="/images/Logo.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/images/apple-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png" />
+    <link rel="icon" sizes="192x192" href="/images/android-icon-192x192.png" />
+    <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
+    <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
+    <link rel="manifest" href="manifest.json" />
 
     <style>
       body {
@@ -145,36 +157,38 @@
 
     <!-- Dropdown Menu -->
     <div class="dropdown" id="dropdownMenu">
-  <!--    <a href="ai/form.html">AI Integration Solutions</a> -->
-      <a href="xxxx.html" id='FHE'>FHE</a>
-            <a href="ai/form.html" id='ai'>AI Integration</a>
+      <!--    <a href="ai/form.html">AI Integration Solutions</a> -->
+      <a href="xxxx.html" id="FHE">FHE</a>
+      <a href="ai/form.html" id="ai">AI Integration</a>
 
       <a href="mailto:admin@inexasli.com">Contact</a>
     </div>
 
-    <img src="images/Logo.png" alt="Your Logo">
+    <img src="images/Logo.png" alt="Your Logo" />
     <h1>Empowering Thee</h1>
-
-    
 
     <script>
       // Hamburger menu toggle
-      const menuToggle = document.getElementById('menuToggle');
-      const dropdownMenu = document.getElementById('dropdownMenu');
+      const menuToggle = document.getElementById("menuToggle");
+      const dropdownMenu = document.getElementById("dropdownMenu");
 
-      menuToggle.addEventListener('click', () => {
-        menuToggle.classList.toggle('active');
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+      menuToggle.addEventListener("click", () => {
+        menuToggle.classList.toggle("active");
+        dropdownMenu.style.display =
+          dropdownMenu.style.display === "block" ? "none" : "block";
       });
 
-      document.addEventListener('click', (event) => {
-        if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
-          dropdownMenu.style.display = 'none';
-          menuToggle.classList.remove('active');
+      document.addEventListener("click", (event) => {
+        if (
+          !menuToggle.contains(event.target) &&
+          !dropdownMenu.contains(event.target)
+        ) {
+          dropdownMenu.style.display = "none";
+          menuToggle.classList.remove("active");
         }
       });
 
-    /*  function addToHomeScreen() {
+      /*  function addToHomeScreen() {
         if ('addEventListener' in window) {
           window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault();
@@ -191,30 +205,28 @@
       const addToHomeScreenButton = document.getElementById("addToHomeScreenBanner").querySelector("button");
       addToHomeScreenButton.addEventListener("click", addToHomeScreen); */
 
-     // Function to handle password protection
-function handlePasswordProtection(url) {
-  const password = prompt('Please enter the password for access:');
-  if (password === 'incomeiq') {
-    window.location.href = url;
-  } else {
-    alert('Incorrect password. Access denied.');
-  }
-}
+      // Function to handle password protection
+      function handlePasswordProtection(url) {
+        const password = prompt("Please enter the password for access:");
+        if (password === "incomeiq") {
+          window.location.href = url;
+        } else {
+          alert("Incorrect password. Access denied.");
+        }
+      }
 
-// Event listener for the FHE element
-const FHE = document.getElementById('FHE');
-FHE.addEventListener('click', function(event) {
-  event.preventDefault();
-  handlePasswordProtection('xxxx.html');
-});
+      // Event listener for the FHE element
+      const FHE = document.getElementById("FHE");
+      FHE.addEventListener("click", function (event) {
+        event.preventDefault();
+        handlePasswordProtection("xxxx.html");
+      });
 
-
-const newElement = document.getElementById('ai');
-newElement.addEventListener('click', function(event) {
-  event.preventDefault();
-  handlePasswordProtection('ai/form.html'); // Replace with the actual URL you want to redirect to
-});
-
+      const newElement = document.getElementById("ai");
+      newElement.addEventListener("click", function (event) {
+        event.preventDefault();
+        handlePasswordProtection("ai/form.html"); // Replace with the actual URL you want to redirect to
+      });
     </script>
   </body>
 </html>
