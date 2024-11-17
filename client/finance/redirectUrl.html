@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="manifest" href="/manifest.json" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>please wait</title>
+    <link rel="icon" type="image/x-icon" href="Logo.png" />
+
+    <style>
+      .contact-support:hover {
+        color: #c01919;
+      }
+      body {
+        background-color: #000;
+        color: #fff;
+        text-align: left;
+        margin: 20px;
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        background-color: #fff; /* White background */
+        color: #000; /* Black text color for contrast */
+        max-width: 800px; /* Maximum width of the container */
+        margin: 10px auto; /* Center horizontally with auto margins */
+        padding: 10px; /* Padding inside the container */
+        border-radius: 5px; /* Rounded corners */
+        box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
+        text-align: left; /* Text alignment inside the container */
+        display: flex;
+        flex-direction: column;
+        align-items: stretch; /* Stretch items to fill container */
+        box-sizing: border-box; /* Include padding and border in element's total width and height */
+      }
+    </style>
+  </head>
+
+  <body>
+    <img
+      src="../../images/Logo.png"
+      alt="Logo"
+      style="width: 50px; height: auto; display: block; margin: 0 auto"
+    />
+
+    <div class="container" style="min-height: 50vh">Loading.....</div>
+    
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get("session_id");
+      const container = document.querySelector(".container");
+
+      // console.log(sessionId)
+      const lambda =
+        "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
+      function getCookie(name) {
+        const cookieArray = document.cookie.split(";");
+        for (let cookie of cookieArray) {
+          cookie = cookie.trim(); // Remove extra spaces
+          if (cookie.startsWith(`${name}=`)) {
+            return cookie.substring(name.length + 1);
+          }
+        }
+        return null; // Return null if my cookie doesn't exist
+      }
+      function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+          const date = new Date();
+          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Convert days to milliseconds
+          expires = `; expires=${date.toUTCString()}`;
+        }
+        document.cookie = `${name}=${value || ""}${expires}; path=/`;
+      }
+      document.addEventListener("DOMContentLoaded", async () => {
+        const paid = getCookie("authenticated");
+
+        if (paid == "paid") {
+          // change page to summary page
+          window.location.href = "/client/finance/summary.html";
+        } else {
+          if (sessionId) {
+            try {
+              const res = await fetch(lambda, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  task: "checkPayment",
+                  sessionId: sessionId,
+                }),
+              });
+
+              const data = await res.json();
+
+              if (data.paymentStatus) {
+                if (data.paymentStatus == "paid" || data.paymentStatus == 'no_payment_required')
+                  setCookie(authenticated, "paid", 365);
+                container.innerHTML = "payment successfull redirecting ......";
+                window.location.href = "/client/finance/summary.html";
+              } else if (data.error) {
+                container.innerHTML = `
+                     <h1 style="text-transform: capitalize;">payment failed</h1>
+      <p>sorry your payment attempt failed</p>
+      <p>${data.error ? data.error : ""}</p>
+      <a href="mailto:support@inexasli.com" class=" contact-support">somethings wrong? contact support</a>
+               `;
+              } else {
+                container.innerHTML = `
+                     <h1 style="text-transform: capitalize;">payment failed</h1>
+      <p>sorry your payment attempt failed</p>
+      <a href="mailto:support@inexasli.com" class=" contact-support">somethings wrong? contact support</a>
+               `;
+              }
+            } catch (error) {
+              console.error(error.message);
+              container.innerHTML = `
+            <h1 style="text-transform: capitalize;">something went wrong</h1>
+      <p>${error.message}</p>
+      <p>try again later</p>`;
+            }
+          } else {
+            container.innerHTML = "no or invalid session id";
+            window.location.href = "/client/finance/summary.html";
+          }
+        }
+      });
+      //  2 markups
+      // 1- payment failed
+      // payment not found
+    </script>
+  </body>
+</html>
