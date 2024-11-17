@@ -41,7 +41,7 @@ function getCookie(name) {
 }
 
 function runFullCalculations() {
-  document.addEventListener("DOMContentLoaded", function () {
+  // document.addEventListener("DOMContentLoaded", function () {
     // Function to retrieve cookie value by name
 
     function updateOnChange() {
@@ -291,7 +291,8 @@ function runFullCalculations() {
       // Call the update function when the frequency dropdown value changes
       updateOnChange();
     });
-  });
+//   }
+// );
 
   document.addEventListener("change", function () {
     var usaDiv = document.querySelector(".usa");
