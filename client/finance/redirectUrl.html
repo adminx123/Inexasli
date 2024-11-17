@@ -43,7 +43,9 @@
       style="width: 50px; height: auto; display: block; margin: 0 auto"
     />
 
-    <div class="container" style="min-height: 50vh">Loading.....</div>
+    <div class="container" style="min-height: 50vh">
+      <h1 style="margin: 0 auto; text-transform: capitalize;">loading payment information .......</h1>
+    </div>
     
     <script>
       const urlParams = new URLSearchParams(window.location.search);
@@ -70,8 +72,10 @@
           date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Convert days to milliseconds
           expires = `; expires=${date.toUTCString()}`;
         }
-        document.cookie = `${name}=${value || ""}${expires}; path=/`;
+        document.cookie = `${name}=${value || ""}${expires}; path=/;SameSite=Lax`;
       }
+
+
       document.addEventListener("DOMContentLoaded", async () => {
         const paid = getCookie("authenticated");
 
