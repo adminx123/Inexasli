@@ -459,8 +459,18 @@ function calculate() {
     const totalLiabilities = accountsPayableValue + loansValue + mortgagesValue + taxesPayableValue + otherLiabilitiesValue;
 
     // Calculate Net Income
-    const totalCosts = totalCOGS + totalOperationalCosts + totalBuildingCosts + totalVehicleCosts;
-    const netIncome = totalRevenue - totalCosts;
+const totalCosts = totalCOGS + totalOperationalCosts + totalBuildingCosts + totalVehicleCosts;
+const netIncome = totalRevenue - totalCosts;
+
+// Convert results based on selected frequency
+const selectedValue = parseFloat(document.getElementById('resultChange').value);
+const totalOperationalCostsDivided = totalOperationalCosts / selectedValue;
+const totalBuildingCostsDivided = totalBuildingCosts / selectedValue;
+const totalVehicleCostsDivided = totalVehicleCosts / selectedValue;
+const totalCOGSDivided = totalCOGS / selectedValue;
+
+// Adjust net income based on frequency
+const netIncomeAdjusted = netIncome / selectedValue;
 
     // Convert results based on selected frequency
     const selectedValue = parseFloat(document.getElementById('resultChange').value);
@@ -477,7 +487,7 @@ function calculate() {
     result += `<h3>Vehicle Costs Total: ${totalVehicleCostsDivided.toFixed(2)}</h3>`;
     result += `<h3>Assets Total: ${totalAssets.toFixed(2)}</h3>`;
     result += `<h3>Liabilities Total: ${totalLiabilities.toFixed(2)}</h3>`;
-    result += `<h3><strong>Net Income: ${netIncome.toFixed(2)}</strong></h3>`;  // Displaying Net Income
+    result += `<h3><strong>Net Income: ${netIncomeAdjusted.toFixed(2)}</strong></h3>`;
 
     resultDiv.innerHTML = result;
 }
