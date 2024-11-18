@@ -216,6 +216,33 @@
 </div>
 
     <h2>Vehicle Costs</h2>
+
+<div class="input-group">
+  <label for="vehicleRental">Rental Car Cost</label>
+  <div class="input-container">
+    <input type="number" id="vehicleRental">
+    <select id="vehicleRentalFrequency">
+      <option value="annually">Annually</option>
+      <option value="quarterly">Quarterly</option>
+      <option value="monthly">Monthly</option>
+      <option value="weekly">Weekly</option>
+    </select>
+  </div>
+</div>
+
+<div class="input-group">
+  <label for="vehicleLease">Vehicle Lease Payment</label>
+  <div class="input-container">
+    <input type="number" id="vehicleLease">
+    <select id="vehicleLeaseFrequency">
+      <option value="annually">Annually</option>
+      <option value="quarterly">Quarterly</option>
+      <option value="monthly">Monthly</option>
+      <option value="weekly">Weekly</option>
+    </select>
+  </div>
+</div>
+        
 <div class="input-group">
   <label for="vehicleGas">Gas</label>
   <div class="input-container">
@@ -409,10 +436,11 @@ function calculate() {
         calculateAnnual('buildingMaintenance', 'buildingMaintenanceFrequency') +
         calculateAnnual('buildingUtilities', 'buildingUtilitiesFrequency');
 
-    // Calculate sum for Vehicle Costs
     const totalVehicleCosts = calculateAnnual('vehicleGas', 'vehicleGasFrequency') +
-        calculateAnnual('vehicleMaintenance', 'vehicleMaintenanceFrequency') +
-        calculateAnnual('vehicleInsurance', 'vehicleInsuranceFrequency');
+    calculateAnnual('vehicleMaintenance', 'vehicleMaintenanceFrequency') +
+    calculateAnnual('vehicleInsurance', 'vehicleInsuranceFrequency') +
+    calculateAnnual('vehicleRental', 'vehicleRentalFrequency') +  // Add rental cost
+    calculateAnnual('vehicleLease', 'vehicleLeaseFrequency');   // Add lease cost
 
     // Calculate total assets
     const cashValue = parseFloat(document.getElementById('cash').value) || 0;
