@@ -1,32 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
-    <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Metrics Calculator</title>
-         <link rel="icon" type="image/x-icon" href="Logo.png">
+    <title>Business Calculator</title>
+    <link rel="icon" type="image/x-icon" href="Logo.png">
     <link rel="stylesheet" href="../../../style/template.css"> 
-        <!-- this is an extended list of places icon could be needed -->
-        <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
-        <link rel="shortcut icon" type="image/x-icon" href="/images/Logo.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
-        <link rel="apple-touch-icon" href="/images/apple-icon-180x180.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png" />
-        <link rel="icon" sizes="192x192" href="/images/android-icon-192x192.png" />
-        <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
-        <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
-        <link rel="manifest" href="/manifest.json" />
-    
-    </head>    
+    <!-- this is an extended list of places icon could be needed -->
+    <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="/images/Logo.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/images/apple-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png" />
+    <link rel="icon" sizes="192x192" href="/images/android-icon-192x192.png" />
+    <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
+    <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
+    <link rel="manifest" href="/manifest.json" />
+</head>
 <body>
 
-    <div class = "container">
+    <div class="container">
         <h1>Business Metrics Calculator</h1>
 
         <div class="form-row">
@@ -37,40 +34,26 @@
                 <option value="service">Service</option>
                 <option value="product">Product</option>
             </select>
-            <span id="revenueTypeFrequency"></span>
-        
-<label for="price"></label>
             <input type="number" id="price">
         </div>
 
-<div class="form-row">
+        <div class="form-row">
             <label for="sales"></label>
-            
-               
-                <select id="salesFrequency" class="frequency-dropdown" onchange="updateFrequency('sales')">
-                    <option value="blank"></option>
-                    <option value="annually">Annually</option>
-                    <option value="quarterly">Quarterly</option>
-                    <option value="monthly">Monthly</option>
-                    <option value="weekly">Weekly</option>
-                </select>
-
-     <input type="number" id="sales">
-</div>
-        
-
-
-    
-        <h1>Business Metrics Calculator</h1>
-
-        
-            <label for="cogs">Cost of goods sold applicable?</label>
-            <select id="cogs" onchange="toggleCogs()">
-                <option value="no">No</option>
-                <option value="yes">Yes</option>
-                
+            <select id="salesFrequency" class="frequency-dropdown" onchange="updateFrequency('sales')">
+                <option value="blank"></option>
+                <option value="annually">Annually</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="monthly">Monthly</option>
+                <option value="weekly">Weekly</option>
             </select>
-       
+            <input type="number" id="sales">
+        </div>
+
+        <label for="cogs">Cost of goods sold applicable?</label>
+        <select id="cogs" onchange="toggleCogs()">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select>
 
         <div id="cogsSection">
             <h2>Cost of Goods Sold</h2>
@@ -81,8 +64,6 @@
                     <span id="cogsMaterialsFrequency"></span>
                 </div>
             </div>
-            
-            
             <div class="input-group">
                 <label for="cogsLabor">Labor Cost Per Unit</label>
                 <div class="input-container">
@@ -90,7 +71,6 @@
                     <span id="cogsLaborFrequency"></span>
                 </div>
             </div>
-            
             <div class="input-group">
                 <label for="cogsOverhead">Overhead Cost Per Unit</label>
                 <div class="input-container">
@@ -98,7 +78,6 @@
                     <span id="cogsOverheadFrequency"></span>
                 </div>
             </div>
-            
             <div class="input-group">
                 <label for="cogsShipping">Shipping Cost Per Unit</label>
                 <div class="input-container">
@@ -107,175 +86,186 @@
                 </div>
             </div>
         </div>
-        
 
         <h2>Operational Costs</h2>
-<div class="input-group">
-  <label for="rent">Rent</label>
-  <div class="input-container">
-    <input type="number" id="rent">
-    <select id="rentFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
+        <div class="input-group">
+            <label for="rent">Rent</label>
+            <div class="input-container">
+                <input type="number" id="rent">
+                <select id="rentFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="utilities">Utilities</label>
+            <div class="input-container">
+                <input type="number" id="utilities">
+                <select id="utilitiesFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="salaries">Salaries</label>
+            <div class="input-container">
+                <input type="number" id="salaries">
+                <select id="salariesFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="marketing">Marketing</label>
+            <div class="input-container">
+                <input type="number" id="marketing">
+                <select id="marketingFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="insurance">Insurance</label>
+            <div class="input-container">
+                <input type="number" id="insurance">
+                <select id="insuranceFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
 
-<div class="input-group">
-  <label for="utilities">Utilities</label>
-  <div class="input-container">
-    <input type="number" id="utilities">
-    <select id="utilitiesFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
+        <h2>Building Costs</h2>
+        <div class="input-group">
+            <label for="buildingRent">Rent</label>
+            <div class="input-container">
+                <input type="number" id="buildingRent">
+                <select id="buildingRentFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="buildingMaintenance">Maintenance</label>
+            <div class="input-container">
+                <input type="number" id="buildingMaintenance">
+                <select id="buildingMaintenanceFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="buildingUtilities">Utilities</label>
+            <div class="input-container">
+                <input type="number" id="buildingUtilities">
+                <select id="buildingUtilitiesFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
 
-<div class="input-group">
-  <label for="salaries">Salaries</label>
-  <div class="input-container">
-    <input type="number" id="salaries">
-    <select id="salariesFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
+        <h2>Vehicle Costs</h2>
+        <div class="input-group">
+            <label for="vehicleRental">Rental Car Cost</label>
+            <div class="input-container">
+                <input type="number" id="vehicleRental">
+                <select id="vehicleRentalFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="vehicleLease">Vehicle Lease Payment</label>
+            <div class="input-container">
+                <input type="number" id="vehicleLease">
+                <select id="vehicleLeaseFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="vehicleGas">Gas</label>
+            <div class="input-container">
+                <input type="number" id="vehicleGas">
+                <select id="vehicleGasFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="vehicleMaintenance">Maintenance</label>
+            <div class="input-container">
+                <input type="number" id="vehicleMaintenance">
+                <select id="vehicleMaintenanceFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="vehicleInsurance">Insurance</label>
+            <div class="input-container">
+                <input type="number" id="vehicleInsurance">
+                <select id="vehicleInsuranceFrequency">
+                    <option value="annually">Annually</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+            </div>
+        </div>
 
-<div class="input-group">
-  <label for="marketing">Marketing</label>
-  <div class="input-container">
-    <input type="number" id="marketing">
-    <select id="marketingFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
-
-<div class="input-group">
-  <label for="insurance">Insurance</label>
-  <div class="input-container">
-    <input type="number" id="insurance">
-    <select id="insuranceFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
-
-<h2>Building Costs</h2>
-<div class="input-group">
-  <label for="buildingRent">Rent</label>
-  <div class="input-container">
-    <input type="number" id="buildingRent">
-    <select id="buildingRentFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
-
-<div class="input-group">
-  <label for="buildingMaintenance">Maintenance</label>
-  <div class="input-container">
-    <input type="number" id="buildingMaintenance">
-    <select id="buildingMaintenanceFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
-
-<div class="input-group">
-  <label for="buildingUtilities">Utilities</label>
-  <div class="input-container">
-    <input type="number" id="buildingUtilities">
-    <select id="buildingUtilitiesFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
-
-    <h2>Vehicle Costs</h2>
-<div class="input-group">
-  <label for="vehicleGas">Gas</label>
-  <div class="input-container">
-    <input type="number" id="vehicleGas">
-    <select id="vehicleGasFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
-
-<div class="input-group">
-  <label for="vehicleMaintenance">Maintenance</label>
-  <div class="input-container">
-    <input type="number" id="vehicleMaintenance">
-    <select id="vehicleMaintenanceFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
-
-<div class="input-group">
-  <label for="vehicleInsurance">Insurance</label>
-  <div class="input-container">
-    <input type="number" id="vehicleInsurance">
-    <select id="vehicleInsuranceFrequency">
-      <option value="annually">Annually</option>
-      <option value="quarterly">Quarterly</option>
-      <option value="monthly">Monthly</option>
-      <option value="weekly">Weekly</option>
-    </select>
-  </div>
-</div>
-
-<h2>Assets</h2>
+        <h2>Assets</h2>
         <div class="input-group">
             <label for="cash">Cash</label>
             <input type="number" id="cash">
         </div>
-        
         <div class="input-group">
             <label for="accountsReceivable">Accounts Receivable</label>
             <input type="number" id="accountsReceivable">
         </div>
-        
         <div class="input-group">
             <label for="inventory">Inventory</label>
             <input type="number" id="inventory">
         </div>
-        
         <div class="input-group">
             <label for="property">Property</label>
             <input type="number" id="property">
         </div>
-        
         <div class="input-group">
             <label for="equipment">Equipment</label>
             <input type="number" id="equipment">
@@ -286,52 +276,38 @@
             <label for="accountsPayable">Accounts Payable</label>
             <input type="number" id="accountsPayable">
         </div>
-        
         <div class="input-group">
             <label for="loans">Loans</label>
             <input type="number" id="loans">
         </div>
-        
         <div class="input-group">
             <label for="mortgages">Mortgages</label>
             <input type="number" id="mortgages">
         </div>
-        
         <div class="input-group">
             <label for="taxesPayable">Taxes Payable</label>
             <input type="number" id="taxesPayable">
         </div>
-        
         <div class="input-group">
             <label for="otherLiabilities">Other Liabilities</label>
             <input type="number" id="otherLiabilities">
         </div>
-        
-
 
         <h2>Results</h2>
-<div class="input-group">
-    <label for="resultChange">Display results as:</label>
-    <select id="resultChange" onchange="updateResults()">
-        <option value="1">Annual</option>
-        <option value="12">Monthly</option>
-        <option value="52">Weekly</option>
-        <option value="365">Daily</option>
-    </select>
-</div>
-
-        
+        <div class="input-group">
+            <label for="resultChange">Display results as:</label>
+            <select id="resultChange" onchange="calculate()">
+                <option value="1">Annual</option>
+                <option value="12">Monthly</option>
+                <option value="52">Weekly</option>
+                <option value="365">Daily</option>
+            </select>
+        </div>
         <div id="results"></div>
-    
-    
-<button onclick="calculate()" style="background-color: white; color: black; border: 2px solid black; padding: 10px 20px; font-size: 16px; cursor: pointer; transition: background-color 0.3s, color 0.3s;">Calculate</button>
-
+        <button onclick="calculate()" style="background-color: white; color: black; border: 2px solid black; padding: 10px 20px; font-size: 16px; cursor: pointer; transition: background-color 0.3s, color 0.3s;">Calculate</button>
     </div>
 
-        
     <script>
-        // Define your JavaScript functions here
-        
         function toggleCogs() {
             const cogs = document.getElementById('cogs').value;
             const cogsSection = document.getElementById('cogsSection');
@@ -341,7 +317,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             toggleCogs();
         });
-        
+
         function toggleRevenueType() {
             const revenueType = document.getElementById('revenueType').value;
             const salesLabel = document.querySelector('label[for="sales"]');
@@ -352,12 +328,10 @@
                 priceLabel.textContent = 'Price Per Rental';
             } else if (revenueType === 'service') {
                 salesLabel.textContent = 'Hours Billed';
-                                priceLabel.textContent = 'Price Per Hour';
-
+                priceLabel.textContent = 'Price Per Hour';
             } else {
                 salesLabel.textContent = 'Units Sold';
-                                priceLabel.textContent = 'Price Per Unit';
-
+                priceLabel.textContent = 'Price Per Unit';
             }
         }
 
@@ -366,100 +340,83 @@
             const frequency = document.getElementById(frequencyId).value;
 
             switch (frequency) {
-                case 'annually':
-                    return input;
-                case 'quarterly':
-                    return input * 4;
-                case 'monthly':
-                    return input * 12;
-                case 'weekly':
-                    return input * 52;
-                default:
-                    return 0;
+                case 'annually': return input * 1;
+                case 'quarterly': return input * 4;
+                case 'monthly': return input * 12;
+                case 'weekly': return input * 52;
+                default: return 0;
             }
         }
-function calculate() {
-    const resultDiv = document.getElementById('results');
-    let result = '';
 
-    // Get values for price, sales, and frequency
-    const price = parseFloat(document.getElementById('price').value) || 0;
-    const sales = parseFloat(document.getElementById('sales').value) || 0;
-    const frequency = document.getElementById('salesFrequency').value;
+        function calculate() {
+            const resultDiv = document.getElementById('results');
+            let result = '';
 
-    // Calculate total revenue annually
-    const totalRevenue = calculateAnnual('sales', 'salesFrequency') * price;
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const sales = parseFloat(document.getElementById('sales').value) || 0;
+            const salesFrequency = document.getElementById('salesFrequency').value;
 
-    // Calculate COGS per unit
-    const cogsMaterialsValue = parseFloat(document.getElementById('cogsMaterials').value) || 0;
-    const cogsLaborValue = parseFloat(document.getElementById('cogsLabor').value) || 0;
-    const cogsOverheadValue = parseFloat(document.getElementById('cogsOverhead').value) || 0;
-    const cogsShippingValue = parseFloat(document.getElementById('cogsShipping').value) || 0;
-    const totalCOGS = cogsMaterialsValue + cogsLaborValue + cogsOverheadValue + cogsShippingValue;
+            const totalRevenue = calculateAnnual('sales', 'salesFrequency') * price;
 
-    // Calculate sum for Operational Costs
-    const totalOperationalCosts = calculateAnnual('rent', 'rentFrequency') +
-        calculateAnnual('utilities', 'utilitiesFrequency') +
-        calculateAnnual('salaries', 'salariesFrequency') +
-        calculateAnnual('marketing', 'marketingFrequency') +
-        calculateAnnual('insurance', 'insuranceFrequency');
+            const cogsMaterialsValue = parseFloat(document.getElementById('cogsMaterials').value) || 0;
+            const cogsLaborValue = parseFloat(document.getElementById('cogsLabor').value) || 0;
+            const cogsOverheadValue = parseFloat(document.getElementById('cogsOverhead').value) || 0;
+            const cogsShippingValue = parseFloat(document.getElementById('cogsShipping').value) || 0;
+            const totalCOGS = cogsMaterialsValue + cogsLaborValue + cogsOverheadValue + cogsShippingValue;
 
-    // Calculate sum for Building Costs
-    const totalBuildingCosts = calculateAnnual('buildingRent', 'buildingRentFrequency') +
-        calculateAnnual('buildingMaintenance', 'buildingMaintenanceFrequency') +
-        calculateAnnual('buildingUtilities', 'buildingUtilitiesFrequency');
+            const totalOperationalCosts = calculateAnnual('rent', 'rentFrequency') +
+                calculateAnnual('utilities', 'utilitiesFrequency') +
+                calculateAnnual('salaries', 'salariesFrequency') +
+                calculateAnnual('marketing', 'marketingFrequency') +
+                calculateAnnual('insurance', 'insuranceFrequency');
 
-    // Calculate sum for Vehicle Costs
-    const totalVehicleCosts = calculateAnnual('vehicleGas', 'vehicleGasFrequency') +
-        calculateAnnual('vehicleMaintenance', 'vehicleMaintenanceFrequency') +
-        calculateAnnual('vehicleInsurance', 'vehicleInsuranceFrequency');
+            const totalBuildingCosts = calculateAnnual('buildingRent', 'buildingRentFrequency') +
+                calculateAnnual('buildingMaintenance', 'buildingMaintenanceFrequency') +
+                calculateAnnual('buildingUtilities', 'buildingUtilitiesFrequency');
 
-    // Calculate total assets
-    const cashValue = parseFloat(document.getElementById('cash').value) || 0;
-    const accountsReceivableValue = parseFloat(document.getElementById('accountsReceivable').value) || 0;
-    const inventoryValue = parseFloat(document.getElementById('inventory').value) || 0;
-    const propertyValue = parseFloat(document.getElementById('property').value) || 0;
-    const equipmentValue = parseFloat(document.getElementById('equipment').value) || 0;
-    const totalAssets = cashValue + accountsReceivableValue + inventoryValue + propertyValue + equipmentValue;
+            const totalVehicleCosts = calculateAnnual('vehicleGas', 'vehicleGasFrequency') +
+                calculateAnnual('vehicleMaintenance', 'vehicleMaintenanceFrequency') +
+                calculateAnnual('vehicleInsurance', 'vehicleInsuranceFrequency') +
+                calculateAnnual('vehicleRental', 'vehicleRentalFrequency') +
+                calculateAnnual('vehicleLease', 'vehicleLeaseFrequency');
 
-    // Calculate total liabilities
-    const accountsPayableValue = parseFloat(document.getElementById('accountsPayable').value) || 0;
-    const loansValue = parseFloat(document.getElementById('loans').value) || 0;
-    const mortgagesValue = parseFloat(document.getElementById('mortgages').value) || 0;
-    const taxesPayableValue = parseFloat(document.getElementById('taxesPayable').value) || 0;
-    const otherLiabilitiesValue = parseFloat(document.getElementById('otherLiabilities').value) || 0;
-    const totalLiabilities = accountsPayableValue + loansValue + mortgagesValue + taxesPayableValue + otherLiabilitiesValue;
+            const cashValue = parseFloat(document.getElementById('cash').value) || 0;
+            const accountsReceivableValue = parseFloat(document.getElementById('accountsReceivable').value) || 0;
+            const inventoryValue = parseFloat(document.getElementById('inventory').value) || 0;
+            const propertyValue = parseFloat(document.getElementById('property').value) || 0;
+            const equipmentValue = parseFloat(document.getElementById('equipment').value) || 0;
+            const totalAssets = cashValue + accountsReceivableValue + inventoryValue + propertyValue + equipmentValue;
 
-    // Calculate Net Income
-    const totalCosts = totalCOGS + totalOperationalCosts + totalBuildingCosts + totalVehicleCosts;
-    const netIncome = totalRevenue - totalCosts;
+            const accountsPayableValue = parseFloat(document.getElementById('accountsPayable').value) || 0;
+            const loansValue = parseFloat(document.getElementById('loans').value) || 0;
+            const mortgagesValue = parseFloat(document.getElementById('mortgages').value) || 0;
+            const taxesPayableValue = parseFloat(document.getElementById('taxesPayable').value) || 0;
+            const otherLiabilitiesValue = parseFloat(document.getElementById('otherLiabilities').value) || 0;
+            const totalLiabilities = accountsPayableValue + loansValue + mortgagesValue + taxesPayableValue + otherLiabilitiesValue;
 
-    // Convert results based on selected frequency
-    const selectedValue = parseFloat(document.getElementById('resultChange').value);
-    const totalOperationalCostsDivided = totalOperationalCosts / selectedValue;
-    const totalBuildingCostsDivided = totalBuildingCosts / selectedValue;
-    const totalVehicleCostsDivided = totalVehicleCosts / selectedValue;
-    const totalCOGSDivided = totalCOGS / selectedValue;
+            const totalCosts = totalCOGS + totalOperationalCosts + totalBuildingCosts + totalVehicleCosts;
+            const netIncome = totalRevenue - totalCosts;
 
-    // Display results
-    result += `<h3>Total Revenue: ${totalRevenue.toFixed(2)}</h3>`;
-    result += `<h3>Cost of Goods Sold (COGS) Per Unit: ${totalCOGSDivided.toFixed(2)}</h3>`;
-    result += `<h3>Operational Costs Total: ${totalOperationalCostsDivided.toFixed(2)}</h3>`;
-    result += `<h3>Building Costs Total: ${totalBuildingCostsDivided.toFixed(2)}</h3>`;
-    result += `<h3>Vehicle Costs Total: ${totalVehicleCostsDivided.toFixed(2)}</h3>`;
-    result += `<h3>Assets Total: ${totalAssets.toFixed(2)}</h3>`;
-    result += `<h3>Liabilities Total: ${totalLiabilities.toFixed(2)}</h3>`;
-    result += `<h3><strong>Net Income: ${netIncome.toFixed(2)}</strong></h3>`;  // Displaying Net Income
+            const selectedValue = parseFloat(document.getElementById('resultChange').value);
+            const totalOperationalCostsDivided = totalOperationalCosts / selectedValue;
+            const totalBuildingCostsDivided = totalBuildingCosts / selectedValue;
+            const totalVehicleCostsDivided = totalVehicleCosts / selectedValue;
+            const totalCOGSDivided = totalCOGS / selectedValue;
 
-    resultDiv.innerHTML = result;
-}
+            const netIncomeAdjusted = netIncome / selectedValue;
 
-// Attach calculate function directly as the event listener to resultChange dropdown
-document.getElementById('resultChange').addEventListener('change', calculate);
+            result += `<h3>Total Revenue: ${totalRevenue.toFixed(2)}</h3>`;
+            result += `<h3>Cost of Goods Sold (COGS) Per Unit: ${totalCOGSDivided.toFixed(2)}</h3>`;
+            result += `<h3>Operational Costs Total: ${totalOperationalCostsDivided.toFixed(2)}</h3>`;
+            result += `<h3>Building Costs Total: ${totalBuildingCostsDivided.toFixed(2)}</h3>`;
+            result += `<h3>Vehicle Costs Total: ${totalVehicleCostsDivided.toFixed(2)}</h3>`;
+            result += `<h3>Assets Total: ${totalAssets.toFixed(2)}</h3>`;
+            result += `<h3>Liabilities Total: ${totalLiabilities.toFixed(2)}</h3>`;
+            result += `<h3><strong>Net Income: ${netIncomeAdjusted.toFixed(2)}</strong></h3>`;
 
+            resultDiv.innerHTML = result;
+        }
 
     </script>
-    
-    
 </body>
 </html>
