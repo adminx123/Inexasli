@@ -43,13 +43,3 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// invoice_creation: {
-//   enabled: true,
-//   invoice_data: {
-//     description: "Payment invoice for Inexasli.com pro plan",
-//     metadata: {
-//       order: "pro plan payment",
-//     },
-//     footer: "footer: 'inexasli.com | Terms and Conditions: https://inexasli.com/client/finance/legalinterview.html'",
-//   },
-// },
