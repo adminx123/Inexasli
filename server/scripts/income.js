@@ -70,26 +70,35 @@ document.addEventListener('DOMContentLoaded', function() {
   fetch('../../client/finance/legal.txt') // Corrected file extension to '.txt'
     .then(response => response.text())
     .then(data => {
-      document.getElementById('modalContent').innerText = data;
+      document.getElementById('modalContent').insertAdjacentHTML('beforeend', data)
       // Set modal display to block after content is retrieved
-      document.getElementById('termsModal').style.display = 'block';
+      document.getElementById('termsModal').style.display = 'flex';
     })
     .catch(error => console.error('Error fetching legal content:', error));
 }
-
-    function closeModal(event) {
+document.body.addEventListener('click',     function closeModal(event) {
     const modal = document.getElementById('termsModal');
     const modalContent = document.getElementById('modalContent');
+    const closeBtn = document.getElementById('modal-close')
 
-    if (event.target === modal && event.target !== modalContent) {
+    if (event.target === modal && event.target !== modalContent ) {
         modal.style.display = 'none';
     }
+} )
+
+
+function closeModal(event) {
+    const modal = document.querySelector('.modal');
+
+    modal.style.display = 'none'
+    
 }
+
     
 document.addEventListener('click', closeModal);
     
     document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
+    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'flex') {
         closeModal();
     }
 });    
