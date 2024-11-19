@@ -9,7 +9,7 @@
     <title>EXPENSE</title>
 
 		 <link rel="stylesheet" href="../../style/template.css"> 
-
+     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <!-- this is an extended list of places icon could be needed -->
     <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
@@ -25,6 +25,8 @@
     <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
     <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
     <link rel="manifest" href="/manifest.json">
+   <link rel="stylesheet" href="/style/styles.css">
+
 
   
 </head>
@@ -43,12 +45,12 @@
 	  <div class="container">
 <div style="display: flex; justify-content: space-between; padding-top: 10px;" >
     <div style="text-align: left;">
-        <button onclick="calculateBack()" style="border: none; background-color: transparent; font-size: 24px; color: black;">&lt;</button>
+        <button onclick="calculateBack()" class="nav-btn"><i class='bx bx-left-arrow-alt'></i></button>
     </div>
     
    
     <div style="text-align: right;">
-        <button onclick="calculateNext()" style="border: none; background-color: transparent; font-size: 24px; color: black;">&gt;</button>
+        <button onclick="calculateNext()" class="nav-btn"><i class='bx bx-right-arrow-alt' ></i></button>
     </div>
 </div>
  <h2 style="text-align: center; font-size: 24px;"><u>EXPENSES</u></h2>
@@ -558,11 +560,11 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 	  
 <div style="display: flex; justify-content: space-between; padding-top: 10px;">
     <div style="text-align: left;">
-        <button onclick="calculateBack()" style="border: none; background-color: transparent; font-size: 24px; color: black;">&lt;</button>
+        <button onclick="calculateBack()" class="nav-btn"><i class='bx bx-left-arrow-alt'></i></button>
     </div>
         
     <div style="text-align: right;">
-        <button onclick="calculateNext()" style="border: none; background-color: transparent; font-size: 24px; color: black;">&gt;</button>
+        <button onclick="calculateNext()" class="nav-btn"><i class='bx bx-right-arrow-alt' ></i></button>
     </div>
 </div>
 	  </div>
@@ -588,6 +590,8 @@ Step 3: Enter expense amounts & select the corresponding frequency.
     </div>
 
     <script src="../../server/scripts/expense.js"></script>
+    <script src="/server/scripts/cookieConsent.js"></script>
+
 </body>
 
 </html>

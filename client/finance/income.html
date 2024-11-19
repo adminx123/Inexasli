@@ -9,6 +9,7 @@
     <title>INCOME</title>
          <link rel="icon" type="image/x-icon" href="../images/Logo.png">
 	 <link rel="stylesheet" href="../../style/template.css"> 
+     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <!-- this is an extended list of places icon could be needed -->
     <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
@@ -24,6 +25,8 @@
     <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
     <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
     <link rel="manifest" href="/manifest.json">
+   <link rel="stylesheet" href="/style/styles.css">
+
 
 </head>
 
@@ -58,11 +61,13 @@
         <option value="NONE">Select Tax Region</option> 
         <option value="CAN">Canada</option>
         <option value="USA">USA</option>
-    </select></div>
+    </select>
     
-    <div style=" padding-bottom: 10px;">
-    <select id="SubregionDropdown">
-        <option value="">Select Tax Subregion</option> </select></div>
+    <!-- <div style=" padding-bottom: 10px;"> -->
+        <select id="SubregionDropdown">
+            <option value="">Select Tax Subregion</option> </select>
+        <!-- </div> -->
+        </div>
     
 
 
@@ -356,8 +361,13 @@
 
    <div>
        
-  <div style="padding-top:10px;">
-      <input type="checkbox" id="termscheckbox">
+  <div style="padding-top:10px; display: flex; gap: 15px; padding-top: 50px; align-items: center;">
+      <!-- <input type="checkbox" id="termscheckbox"> -->
+      <div class="checkbox-wrapper-2">
+        <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
+      </div>
+      
+     
 <label for="termscheckbox">I have read, understand, and agree to the <a href="#" onclick="openTermsModal()" >terms of service</a> and consent to the creation and use of cookies for calculations and functionality.</label><br>
 
 <div id="termsModal" class="modal">
@@ -367,11 +377,18 @@
     </div>
     </div>
     
-    <input type="checkbox" id="notintended">
-<label for="notintended"> Enter pre-tax & pre-contributions income amounts & select the corresponding frequency. </label><br>
+    <!-- <input type="checkbox" id="notintended"> -->
+
+     <div style="padding-top:10px; display: flex; gap: 15px; padding-top: 10px; align-items: center;">
+
+         <div class="checkbox-wrapper-2" >
+             <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
+            </div>
+            <label for="notintended"> Enter pre-tax & pre-contributions income amounts & select the corresponding frequency. </label><br>
+        </div>
     
 <div style="text-align: right;">
-    <button onclick="validatecheckbox()" style="border: none; background-color: transparent; font-size: 24px; color: black;">&gt;</button>
+    <button onclick="validatecheckbox()" class="nav-btn"><i class='bx bx-right-arrow-alt' ></i></button>
 </div>
 
       
@@ -422,6 +439,8 @@ Medicare taxes fund the Medicare program, covering hospital stays, skilled nursi
     
 
 <script src="../../server/scripts/income.js"></script>
+<script src="/server/scripts/cookieConsent.js"></script>
+
 </body>
 
 
