@@ -76,48 +76,48 @@ function runFullCalculations() {
   function updateOnChange() {
     // Update HTML elements with cookie values
     document.getElementById("RegionDropdown").textContent =
-      "Region: " + getCookie("RegionDropdown");
+      "Region: " + (getCookie("RegionDropdown")|| 0);
     document.getElementById("SubregionDropdown").textContent =
-      "Subregion: " + getCookie("SubregionDropdown");
+      "Subregion: " + (getCookie("SubregionDropdown")|| 0);
 
     document.getElementById("taxable_sum").textContent =
-      " $" + getCookie("ANNUALTAXABLEINCOME");
+      " $" + (getCookie("ANNUALTAXABLEINCOME")|| 0);
     document.getElementById("region_tax_sum").textContent =
-      " $" + getCookie("ANNUALREGIONALTAX");
+      " $" + (getCookie("ANNUALREGIONALTAX")|| 0);
     document.getElementById("subregion_tax_sum").textContent =
-      " $" + getCookie("ANNUALSUBREGIONALTAX");
+      " $" + (getCookie("ANNUALSUBREGIONALTAX")|| 0);
     document.getElementById("tax_sum").textContent =
-      " $" + getCookie("ANNUALTAX");
+      " $" + (getCookie("ANNUALTAX")|| 0);
 
     document.getElementById("annual_income_sum").textContent =
-      " $" + getCookie("ANNUALINCOME");
+      " $" + (getCookie("ANNUALINCOME")|| 0);
     document.getElementById("annual_expense_sum").textContent =
-      " $" + getCookie("ANNUALEXPENSESUM");
+      " $" + (getCookie("ANNUALEXPENSESUM")|| 0);
     document.getElementById("cpp_sum").textContent =
-      " $" + getCookie("ANNUALCPP");
+      " $" + (getCookie("ANNUALCPP")|| 0);
     document.getElementById("ANNUALEI").textContent =
-      " $" + getCookie("ANNUALEI");
+      " $" + (getCookie("ANNUALEI")|| 0);
 
     document.getElementById("annual_cpp_seresult").textContent =
-      " $" + getCookie("CPPPAYABLESELFEMPLOYED");
+      " $" + (getCookie("CPPPAYABLESELFEMPLOYED")|| 0);
     document.getElementById("annual_cpp_eresult").textContent =
-      " $" + getCookie("CPPPAYABLEEMPLOYED");
+      " $" + (getCookie("CPPPAYABLEEMPLOYED")|| 0);
 
     document.getElementById("TOTALMEDICARE").textContent =
-      " $" + getCookie("TOTALMEDICARE");
+      " $" + (getCookie("TOTALMEDICARE")|| 0);
     document.getElementById("TOTALSOCIALSECURITY").textContent =
-      " $" + getCookie("TOTALSOCIALSECURITY");
+      " $" + (getCookie("TOTALSOCIALSECURITY")|| 0);
     document.getElementById("TOTALSOCIALSECURITYE").textContent =
-      " $" + getCookie("TOTALSOCIALSECURITYE");
+      " $" + (getCookie("TOTALSOCIALSECURITYE")|| 0);
     document.getElementById("TOTALSOCIALSECURITYSE").textContent =
-      " $" + getCookie("TOTALSOCIALSECURITYSE");
+      " $" + (getCookie("TOTALSOCIALSECURITYSE")|| 0);
 
     document.getElementById("TOTALTAXCG").textContent =
-      " $" + getCookie("TOTALTAXCG");
+      " $" + (getCookie("TOTALTAXCG")|| 0);
 
-    document.getElementById("ASSETS").textContent = " $" + getCookie1("ASSETS");
+    document.getElementById("ASSETS").textContent = " $" + (getCookie1("ASSETS")|| 0);
     document.getElementById("LIABILITIES").textContent =
-      " $" + getCookie1("LIABILITIES");
+      " $" + (getCookie1("LIABILITIES")|| 0);
 
     let ANNUALDISPOSABLEINCOME;
 
@@ -140,7 +140,7 @@ function runFullCalculations() {
 
     // Update HTML element with the calculated value
     document.getElementById("ANNUALDISPOSABLEINCOME").textContent =
-      " $" + ANNUALDISPOSABLEINCOME.toFixed(2);
+      " $" + (ANNUALDISPOSABLEINCOME.toFixed(2)|| 0);
 
     const frequencyDropdown = document.getElementById("frequency");
 
@@ -166,7 +166,7 @@ function runFullCalculations() {
     }
 
     document.getElementById("TIMETOPAYDEBT").textContent =
-      TIMETOPAYDEBT.toFixed(2) + " " + frequencyText;
+      (TIMETOPAYDEBT.toFixed(2)|| 0) + " " + frequencyText;
 
     let ANNUALGOVERNMENTOBLIGATIONS;
 
@@ -181,11 +181,11 @@ function runFullCalculations() {
 
     // Update HTML element with the calculated value
     document.getElementById("ANNUALGOVERNMENTOBLIGATIONS").textContent =
-      " $" + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
+      " $" + (ANNUALGOVERNMENTOBLIGATIONS.toFixed(2)|| 0);
 
     NETWORTH =
       parseFloat(getCookie1("ASSETS")) - parseFloat(getCookie1("LIABILITIES"));
-    document.getElementById("NETWORTH").textContent = "$" + NETWORTH.toFixed(2);
+    document.getElementById("NETWORTH").textContent = "$" + (NETWORTH.toFixed(2)|| 0);
 
     DEBTTOINCOME =
       parseFloat(getCookie("LIABILITIES")) /
@@ -211,7 +211,7 @@ function runFullCalculations() {
       }
     }
     document.getElementById("DEBTTOINCOME").textContent =
-      DEBTTOINCOME.toFixed(3);
+      (DEBTTOINCOME.toFixed(3)|| 0);
     colorChangeDTI();
 
     HOUSINGTOINCOME =
@@ -239,7 +239,7 @@ function runFullCalculations() {
 
     // Assuming HOUSINGTOINCOME is the ID of the element displaying HTI ratio
     document.getElementById("HOUSINGTOINCOME").textContent =
-      HOUSINGTOINCOME.toFixed(3);
+      (HOUSINGTOINCOME.toFixed(3)|| 0);
     colorChangeHTI();
 
     SAVINGSTODEBT =
@@ -249,7 +249,7 @@ function runFullCalculations() {
     function colorChangeSavingsToDebt() {
       // Get the savings-to-debt ratio value
       var savingsToDebtText =
-        document.getElementById("SAVINGSTODEBT").textContent;
+        (document.getElementById("SAVINGSTODEBT").textContent|| 0);
       var savingsToDebt = parseFloat(savingsToDebtText);
 
       // Define the ranges
@@ -272,7 +272,7 @@ function runFullCalculations() {
 
     // Assuming "SAVINGSTODEBT" is the ID of the element displaying the savings-to-debt ratio
     document.getElementById("SAVINGSTODEBT").textContent =
-      SAVINGSTODEBT.toFixed(3);
+      (SAVINGSTODEBT.toFixed(3)|| 0);
     colorChangeSavingsToDebt();
 
     FIRERATIO =
@@ -300,7 +300,7 @@ function runFullCalculations() {
     }
 
     // Assuming FIRERATIO is the ID of the element displaying the FIRE ratio
-    document.getElementById("FIRERATIO").textContent = FIRERATIO.toFixed(3);
+    document.getElementById("FIRERATIO").textContent = (FIRERATIO.toFixed(3)|| 0);
     colorChangeFIRE();
   }
 
@@ -328,9 +328,9 @@ function runFullCalculations() {
       usaDiv.style.display = "hidden";
       canDiv.style.display = "block";
     }
-    document.getElementById("ASSETS").textContent = " $" + getCookie1("ASSETS");
+    document.getElementById("ASSETS").textContent = " $" + (getCookie1("ASSETS")|| 0);
     document.getElementById("LIABILITIES").textContent =
-      " $" + getCookie1("LIABILITIES");
+      " $" + (getCookie1("LIABILITIES")|| 0);
   });
 }
 
@@ -341,15 +341,17 @@ function runLimitedCalculations() {
 
   if (netWorthElement && assetsElement && liabilitiesElement) {
     // Fetch values for my assets and liabilities from cookies
-    const assets = parseFloat(getCookie("ASSETS"));
-    const liabilities = parseFloat(getCookie("LIABILITIES"));
+    const assets = parseFloat(getCookie1("ASSETS"))
+    const liabilities = parseFloat(getCookie1("LIABILITIES"));
 
     // calculate networth
-    const netWorth = assets - liabilities;
+    NETWORTH =
+      parseFloat(getCookie1("ASSETS")) - parseFloat(getCookie1("LIABILITIES"));
+    document.getElementById("NETWORTH").textContent = "$" + NETWORTH.toFixed(2) ;
 
-    assetsElement.textContent = `$${assets.toFixed(2)}`;
+    assetsElement.textContent = `$${assets.toFixed(2) }`;
     liabilitiesElement.textContent = `$${liabilities.toFixed(2)}`;
-    netWorthElement.textContent = `$${netWorth.toFixed(2)}`;
+    netWorthElement.textContent = `$${NETWORTH.toFixed(2)}`;
   }
 }
 
