@@ -3,16 +3,42 @@ const lambda =
 const publicKey =
   "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
 
-function getCookie1(name) {
-  const value1 = `; ${document.cookie}`;
-  const parts1 = value1.split(`; ${name}=`);
-  let cookieValue1 =
-    parts1.length === 2
-      ? decodeURIComponent(parts1.pop().split(";").shift())
-      : "";
+// function getCookie1(name) {
+//   const value1 = `; ${document.cookie}`;
+//   const parts1 = value1.split(`; ${name}=`);
+//   let cookieValue1 =
+//     parts1.length === 2
+//       ? decodeURIComponent(parts1.pop().split(";").shift())
+//       : "";
 
-  return cookieValue1 === "" ? "0" : cookieValue1;
-}
+//   return cookieValue1 === "" ? "0" : cookieValue1;
+// }
+
+// function getCookie(name) {
+//   const value = `; ${document.cookie}`;
+//   const parts = value.split(`; ${name}=`);
+//   let cookieValue =
+//     parts.length === 2
+//       ? decodeURIComponent(parts.pop().split(";").shift())
+//       : "";
+
+//   // Get the selected frequency from the dropdown
+//   const frequencyDropdown = document.getElementById("frequency");
+//   const selectedFrequency = frequencyDropdown.value;
+
+//   // Convert the annual amount based on the selected frequency, if applicable
+//   if (selectedFrequency !== "annually" && !isNaN(cookieValue)) {
+//     if (selectedFrequency === "monthly") {
+//       cookieValue /= 12;
+//     } else if (selectedFrequency === "weekly") {
+//       cookieValue /= 52;
+//     }
+//   }
+
+//   return cookieValue === "" ? "0" : cookieValue;
+// }
+
+
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -22,21 +48,26 @@ function getCookie(name) {
       ? decodeURIComponent(parts.pop().split(";").shift())
       : "";
 
-  // Get the selected frequency from the dropdown
-  const frequencyDropdown = document.getElementById("frequency");
-  const selectedFrequency = frequencyDropdown.value;
+  // Ensure a valid numeric value
+  cookieValue = cookieValue === "" ? "0" : cookieValue;
 
-  // Convert the annual amount based on the selected frequency, if applicable
-  if (selectedFrequency !== "annually" && !isNaN(cookieValue)) {
-    if (selectedFrequency === "monthly") {
-      cookieValue /= 12;
-    } else if (selectedFrequency === "weekly") {
-      cookieValue /= 52;
-    }
-  }
-
-  return cookieValue === "" ? "0" : cookieValue;
+  return isNaN(cookieValue) ? 0 : parseFloat(cookieValue);
 }
+
+function getCookie1(name) {
+  const value1 = `; ${document.cookie}`;
+  const parts1 = value1.split(`; ${name}=`);
+  let cookieValue1 =
+    parts1.length === 2
+      ? decodeURIComponent(parts1.pop().split(";").shift())
+      : "";
+
+  // Ensure a valid numeric value
+  cookieValue1 = cookieValue1 === "" ? "0" : cookieValue1;
+
+  return isNaN(cookieValue1) ? 0 : parseFloat(cookieValue1);
+}
+
 
 function runFullCalculations() {
   // document.addEventListener("DOMContentLoaded", function () {
@@ -598,26 +629,14 @@ Analyzing Expenses: Discover what expenses are and how they affect your financia
     
 `;
 
-function getCookie(name) {
-  const cookieArray = document.cookie.split(";");
-  for (let cookie of cookieArray) {
-    cookie = cookie.trim(); // Remove extra spaces
-    if (cookie.startsWith(`${name}=`)) {
-      return cookie.substring(name.length + 1);
-    }
-  }
-  return null; // Return null if my cookie doesn't exist
-}
-
-// payment-form
-// payment-input
-// pay-button
-
-// tasks
-// checkPayment
-// pay
-
-//   body: {
-//     task: 'checkpayment',
-//     sessionId: 'cs_test_b1rSdkOphnEXtE91Qs2nEagBOwwwmt39TcCQYNsLjpiyivpATvRtqhe6OK'
+// function getCookie(name) {
+//   const cookieArray = document.cookie.split(";");
+//   for (let cookie of cookieArray) {
+//     cookie = cookie.trim(); // Remove extra spaces
+//     if (cookie.startsWith(`${name}=`)) {
+//       return cookie.substring(name.length + 1);
+//     }
 //   }
+//   return null; 
+// }
+
