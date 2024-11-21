@@ -1028,7 +1028,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    document.getElementById('RegionDropdown').value = getCookie('RegionDropdown');
+    document.getElementById('RegionDropdown').value = (getCookie('RegionDropdown') == 'annually'? "NONE": getCookie('RegionDropdown'))  ;
     document.getElementById('RegionDropdown').dispatchEvent(new Event('change')); // Manually trigger change event
 document.getElementById('SubregionDropdown').value = getCookie('SubregionDropdown');
     
