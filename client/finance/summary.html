@@ -6,24 +6,187 @@
      <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>SUMMARY</title>
-         
-    <!-- this is an extended list of places icon could be needed -->
-    <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
-    <link rel="shortcut icon" type="image/x-icon" href="/images/Logo.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
-    <link rel="apple-touch-icon" href="/images/apple-icon-180x180.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png" />
-    <link rel="icon" sizes="192x192" href="/images/android-icon-192x192.png" />
-    <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
-    <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
-    <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/style/styles.css">
+         <link rel="icon" type="image/x-icon" href="Logo.png">
+    
+   <style>
+    
+     /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+         cursor: pointer;
+    }
+
+    .modal-content {
+        background-color: #000000;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    /* Close button styles */
+    .close {
+        color: #FFFFFF;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+
+    
+    body {
+    background-color: #000;
+    color: #fff;
+    text-align: left;
+    margin: 20px;
+}
+
+.row {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    margin-bottom: 10px;
+}
+
+label,
+input[type="number"],
+select {
+    flex: 1; /* Equal width for all elements */
+    margin-right: 10px;
+}
+
+span {
+    /* Adjust as needed */
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.tab-container {
+    display: flex;
+    justify-content: center; /* Center-align tabs */
+}
+
+.tab {
+    flex: 1; /* Make each tab equally spaced */
+    padding: 0px; /* Adjust padding as needed */
+    cursor: pointer;
+    background-color: black;
+    border: 1px solid; /* Adjust border thickness as needed */
+    border-radius: 5px 5px 0 0;
+    margin: 0 1px; /* Adjust spacing between tabs */
+    color: white; /* Set the text color to white */
+    text-align: center; /* Center-align text within the tab */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* Style for the active tab */
+.active {
+    background-color: white;
+    color: black; /* Set the text color of the active tab to black */
+}
+
+/* Media Query for smaller screens (e.g., mobile) */
+@media (max-width: 768px) {
+    label,
+    input[type="number"],
+    select {
+        width: 100%; /* Set width to 100% for smaller screens */
+        margin-right: 0; /* Remove margin between elements */
+    }
+}
+
+.numeric-input {
+    /* Apply styling as needed */
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  display: none; /* Hide the tooltip */
+  visibility: hidden; /* Initially hidden */
+  width: 200px; /* Adjust width as needed */
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Adjust positioning as needed */
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+
+.container {
+    background-color: #fff; /* White background */
+    color: #000; /* Black text color for contrast */
+    max-width: 800px; /* Maximum width of the container */
+    margin: 10px auto; /* Center horizontally with auto margins */
+    padding: 10px; /* Padding inside the container */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
+    text-align: left; /* Text alignment inside the container */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Stretch items to fill container */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+
+
+       .debt-ratio {
+  /* Default color for the value */
+}
+
+.good {
+  color: green;
+}
+
+.warning {
+  color: yellow;
+}
+
+.critical {
+  color: red;
+}
+
+ 
+
+    
+    </style>
 </head>
 
 <body>
@@ -33,10 +196,10 @@
      <div class="container">
 
            <div class="tab-container" style="margin-bottom: 20px;">
-            <a href="/client/finance/income.html" class="tab">Income</a>
-            <a href="/client/finance/expense.html" class="tab">Expense</a>
-            <a href="/client/finance/asset.html" class="tab">Asset</a>
-            <a href="/client/finance/liability.html" class="tab">Liability</a>
+        <a href="http://inexasli.com/client/finance/income.html" class="tab">Income</a>
+        <a href="http://inexasli.com/client/finance/expense.html" class="tab">Expense</a>
+        <a href="http://inexasli.com/client/finance/asset.html" class="tab">Asset</a>
+        <a href="http://inexasli.com/client/finance/liability.html" class="tab">Liability</a>
             </div>
           
 <h3 style="text-align: center;"> 2024 Personal Financial Overview for Educational Purposes</h3>
@@ -50,15 +213,127 @@
         <option value="weekly">Weekly Frequency</option>
     </select></div>
     
-   <div class="summary-content">
-    
+   
+    <summary>
+    <h2>Disposable Income<span id="ANNUALDISPOSABLEINCOME"></span></h2>
+    <i>Income left after expenses, taxes & other obligations. Use: Debt repayment, savings, investments & discretionary spending.</i>
+</summary>
 
+<details style="margin-top:10px;">
+    <p style="margin-left:20px;"><span id="RegionDropdown"></span>
+        <span id="SubregionDropdown"></span></p>
+    <i style="margin-left:20px;">Residence for tax and obligatory purposes</i>
+
+    <p style="margin-left:20px;"><u>Income:</u> <span id="annual_income_sum"></span></p>
+    <i style="margin-left:20px;">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</i>
+
+    <p style="margin-left:20px;"><u>Expense:</u> <span id="annual_expense_sum"></span></p>
+    <i style="margin-left:20px;">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</i>
+
+    <p style="margin-left:20px;"><u>Total Tax Payable:</u><span id="tax_sum"></span></p>
+    <i style="margin-left:20px;">Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</i>
+    
+    <details>
+        <p style="margin-left:60px;"><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
+        <i style="margin-left:60px;">Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</i>
+
+        <p style="margin-left:60px;"><u>Regional Tax Payable:</u> <span id="region_tax_sum"></span></p>
+        <i style="margin-left:60px;">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</i>
+
+        <p style="margin-left:60px;"><u>Subregional Tax Payable:</u><span id="subregion_tax_sum"></span></p> 
+        <i style="margin-left:60px;">Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.</i>
+        
+        <div class="usa">
+            <p style="margin-left:60px;"><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
+            <i style="margin-left:60px;">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</i>
         </div>
+    </details>
+    
+    <p style="margin-left:20px;"><u>Other Obligations:</u><span id="ANNUALGOVERNMENTOBLIGATIONS"></span></p>
+
+    <details style="margin-top:10px;">
+        <!-- CAN -->
+        <div class="can">
+            <p style="margin-left:60px;"><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
+            <i style="margin-left:60px;">Canada Pension Plan contributions for self-employed individuals. Use: Retirement planning for self-employed.</i>
+
+            <p style="margin-left:60px;"><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
+            <i style="margin-left:60px;">Specific CPP contributions for employed individuals. Use: Retirement savings adjustment.</i>
+
+            <p style="margin-left:60px;"><u>Total CPP Payable:</u> <span id="cpp_sum"></span></p>
+            <i style="margin-left:60px;">General contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the government on your behalf.</i>
+
+            <p style="margin-left:60px;"><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
+            <i style="margin-left:60px;">Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</i>
+        </div>
+
+        <!-- USA -->
+        <div class="usa">
+            <p style="margin-left:60px;"><u>Social Security Total US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
+            <i style="margin-left:60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</i>
+
+            <p style="margin-left:60px;"><u>Social Security Employed US:</u> <span id="TOTALSOCIALSECURITYE"></span></p>
+            <i style="margin-left:60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</i>
+
+            <p style="margin-left:60px;"><u>Social Security Self Employed US:</u> <span id="TOTALSOCIALSECURITYSE"></span></p>
+            <i style="margin-left:60px;">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</i>
+
+            <p style="margin-left:60px;"><u>Medicare:</u> <span id="TOTALMEDICARE"></span></p>
+            <i style="margin-left:60px;">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use: Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals.</i>
+        </div>
+    </details>
+</details>
+
+    
+<summary>
+    <h2>Net Worth <span id="NETWORTH"></span></h2>
+    <i>Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</i>
+</summary>
+
+<details style="margin-top:10px;">
+    <p style="margin-left:40px;"><u>Assets:</u><span id="ASSETS"></span></p>
+    <i style="margin-left:40px;">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</i>
+   
+    <p style="margin-left:40px;"><u>Liabilities:</u><span id="LIABILITIES"></span></p>
+    <i style="margin-left:40px;">Financial debts or obligations. Use: Debt management, financial strategy formulation.</i>
+</details>
+
+<summary>
+    <h2>Ratios</h2>
+</summary>
+
+<i>    Ratios serve to provide a quantitative comparison between two relevant financial metrics. They offer insights into various aspects of financial health, such as debt management, savings efficiency, affordability, and progress towards financial goals.</i>
+
+
+
+<details style = "margin-top:10px;">
+    <p><u>Debt to Income:</u> <span id="DEBTTOINCOME"></span></p>
+    <i>Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health.</i>
+
+    <p><u>Savings to Debt:</u> <span id="SAVINGSTODEBT"></span></p>
+    <i>Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.</i>
+
+    <p><u>Housing to Income:</u> <span id="HOUSINGTOINCOME"></span></p>
+    <i>Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.</i>
+
+    <p><u>FIRE:</u> <span id="FIRERATIO"></span></p>
+    <i>Financial Independence, Retire Early ratio; expenses covered by passive income. Use: Gauge progress towards financial independence, retirement planning.</i>
+
+
+</details>
+     
+   <h2>Financial Projections</h2>
+   
+   <p><u>Revolving Debt - Time to Pay:</u> <span id="TIMETOPAYDEBT"></span></p>
+<p>Revolving debt, such as student loans, lines of credit, credit cards, and tax arrears, allows for lump sum payments but usually incurs higher interest rates. This calculation estimates the time it will take to pay off the debt using disposable income if no savings are available.</p>
+
+           <div style="padding: 20px;text-align:center;">
+
+           </div>
   
 
 
-     <script src="../../server/scripts/summary.js"></script>
-    
 
+     <script src="../../server/scripts/summary.js"></script>
 </body>
 </html>
