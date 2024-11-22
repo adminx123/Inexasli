@@ -1004,7 +1004,8 @@ for (let i = 0; i < frequencyFields.length; i++) {
 for (let i = 0; i < incomeFields.length; i++) {
   const incomeInput = document.getElementById(incomeFields[i]);
   if (incomeInput.value.trim() !== "") {
-    const income = parseFloat(incomeInput.value);
+    const income = incomeInput.value;
+
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
     document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`; 
