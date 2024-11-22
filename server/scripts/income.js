@@ -130,7 +130,10 @@ function updateSubregionDropdown() {
 regionDropdown.addEventListener("change", updateSubregionDropdown);
     
 function calculateAnnual(inputId, frequencyId) {
-        const input = parseFloat(document.getElementById(inputId).value) || 0;
+        const input = (parseFloat(document.getElementById(inputId).value) || 0);
+        if (typeof input !== 'number') {
+            console.log('calc not a number', inputId, frequencyId)
+        }
         const frequency = document.getElementById(frequencyId).value;
 
         switch (frequency) {
@@ -225,6 +228,7 @@ taxableincomeFields.forEach(field => {
     }
 
     annualTaxableSum += taxableincome;
+
 });
 
 // Apply standard deduction for USA
@@ -259,8 +263,9 @@ ANNUALEMPLOYMENTINCOME = annualEmploymentIncome;
  }
     
 function getCppPayable() {
-    var annualSoleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
-    var SolePropFrequency = parseFloat(document.getElementById('income_sole_prop_frequency').value) || 0;
+    var annualSoleProp = (parseFloat(document.getElementById('income_sole_prop').value) || 0);
+
+    var SolePropFrequency = (parseFloat(document.getElementById('income_sole_prop_frequency').value) || 0);
     var annualIncomeSelfEmployed = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
 
     // Define CPP rates and maximums
@@ -272,6 +277,7 @@ function getCppPayable() {
 
     // Calculate left over contribution room employed
     var LCR;
+
     if (ANNUALEMPLOYMENTINCOME <= cppExemptionAmount) {
         LCR = cppMaxEmployed; 
     } else {
@@ -862,6 +868,7 @@ function calculateCapitalGainsTax() {
   // Get user inputs
   const capitalGain = calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency');
   const stateRateInput = document.getElementById('income_capital_gain_state_rate').value;
+
   let stateRate = 0;
   
   // Check if state rate input is empty or 0, then set state rate to 0
@@ -997,7 +1004,7 @@ for (let i = 0; i < frequencyFields.length; i++) {
 for (let i = 0; i < incomeFields.length; i++) {
   const incomeInput = document.getElementById(incomeFields[i]);
   if (incomeInput.value.trim() !== "") {
-    const income = incomeInput.value;
+    const income = parseFloat(incomeInput.value);
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
     document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`; 
