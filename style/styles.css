@@ -1,5 +1,12 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'); */
 
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .checkbox-wrapper-2 .ikxBAC {
   appearance: none;
   background-color: #dfe1e4;
@@ -100,7 +107,7 @@
 input[type="number"],
 input,
 select {
-  padding: 5px;
+  padding: 4px ;
   outline: none;
   border: solid 1px #7c7c7c;
   background-color: transparent;
@@ -129,27 +136,35 @@ input[type="number"]::-webkit-outer-spin-button {
   justify-content: space-between;
   align-items: center;
   padding: 0;
+  /* position: relative;
+  left: -5px; */
   /* border: solid 1px; */
+  width: 100%;
+
   margin: 20px 0;
   
 }
 
+h2 {
+  margin-top: 20px;
+}
+
 .nav-left {
-  text-align: left;
+  /* text-align: left; */
   padding: 0;
-  padding-top: 10px;
+  /* padding-top: 10px; */
   /* border: solid; */
   justify-content: flex-start;
-  /* transform: translateX(-10px); */
+  transform: translateX(-6px);
 }
 
 .nav-right {
-  text-align: right;
+  /* text-align: right; */
   padding: 0;
   /* border: solid; */
-  padding-top: 10px;
+  /* padding-top: 10px; */
   justify-content: flex-end;
-  /* transform: translateX(10px); */
+  transform: translateX(6px);
 
 
 }
@@ -247,7 +262,7 @@ transform: scale(1.4);
     flex-wrap: wrap;
     align-items: stretch;
     gap: 10px;
-    padding: 5px;
+    /* padding: 5px; */
     /* border: solid; */
   }
 
@@ -274,6 +289,18 @@ transform: scale(1.4);
     padding-left: 8px;
     padding-right: 8px;
   } */
+
+
+  .nav-left {
+    transform: translateX(-6px);
+  }
+  
+  .nav-right {
+
+    transform: translateX(-5px);
+  
+  
+  }
 }
 
 input,
@@ -331,16 +358,19 @@ button {
 .tab-container {
   display: flex;
   justify-content: center; /* Center-align tabs */
+  gap: 5px;
 }
 
 .tab {
   flex: 1; /* Make each tab equally spaced */
-  padding: 10px; /* Adjust padding as needed */
+  padding: 5px;
+   /* Adjust padding as needed */
   cursor: pointer;
   background-color: black;
   border: 1px solid; /* Adjust border thickness as needed */
   border-radius: 5px 5px 0 0;
-  margin: 0 5px; /* Adjust spacing between tabs */
+  /* margin: 0 5px;  */
+  /* Adjust spacing between tabs */
   color: white; /* Set the text color to white */
   text-align: center; /* Center-align text within the tab */
   box-sizing: border-box; /* Include padding and border in the width */
@@ -437,8 +467,33 @@ button {
   margin-top: 0;
   background-color: #000;
   border-radius: 0;
+  padding: 12px;
 }
 
 .pay-button:disabled {
   background-color: #333;
 }
+
+#SubregionDropdown {
+  min-width: 50px;
+}
+/* 
+function getRegionCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+      // Decode the cookie value
+      const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
+      // If the value is empty and it's a frequency field, set it to 'annually'
+      if (decodedValue === '') {
+          return 'NONE';
+      }
+      return decodedValue;
+  } else {
+      return 'NONE';
+  }
+} */
+
+/* <div class="checkbox-wrapper-2" >
+        <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
+       </div> */

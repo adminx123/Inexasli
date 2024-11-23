@@ -1,4 +1,4 @@
-function getCookie(name) {
+function getVisitCookie(name) {
   const cookieArray = document.cookie.split(";");
   for (let cookie of cookieArray) {
     cookie = cookie.trim(); // Remove extra spaces
@@ -8,7 +8,7 @@ function getCookie(name) {
   }
   return null; // Return null if my cookie doesn't exist
 }
-function setCookie(name, value, days) {
+function setVisitCookie(name, value, days) {
   let expires = "";
   if (days) {
     const date = new Date();
@@ -27,7 +27,7 @@ const cookeConsent = `
 </div>`;
 
 document.addEventListener("DOMContentLoaded", () => {
-  const visited = getCookie("visited");
+  const visited = getVisitCookie("visited");
 
   if (!visited) {
     setTimeout(() => {
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
       element.classList.add("visible");
       const button = document.querySelector(".cookieX");
       button.addEventListener("click", () => {
-        setCookie("visited", true, 365);
+        setVisitCookie("visited", true, 365);
         element.remove();
       });
     }, 2000);

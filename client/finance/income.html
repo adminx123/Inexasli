@@ -3,16 +3,15 @@
 
 
     <head>
-        
+        <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INCOME</title>
          <link rel="icon" type="image/x-icon" href="../images/Logo.png">
-
+	 <link rel="stylesheet" href="/style/styles.css"> 
      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <!-- this is an extended list of places icon could be needed -->
-    <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
+     <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
     <link rel="shortcut icon" type="image/x-icon" href="/images/Logo.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
@@ -25,8 +24,6 @@
     <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
     <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
     <link rel="manifest" href="/manifest.json">
-   <link rel="stylesheet" href="/style/styles.css">
-
 
 </head>
 
@@ -51,28 +48,26 @@
 
     
     <div class="container">
-   <h2 style="text-align: center;font-size: 24px;"><u>INCOME</u></h2>
+   <h2 style="text-align: center;font-size: 24px; margin-bottom: 20px;"><u>INCOME</u></h2>
 <p style='text-align:center;'><i>Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket.</i></p>
     
    <h2 style="text-align: center;font-size: 18px;">Tax Residency</h2>
 
-<p> Step 1: Select Region & Subregion:</p>
-<div style=" padding-bottom: 10px;"><select style="max-width: 200px; margin-bottom: 10px; "  id="RegionDropdown">
-        <option selected value="NONE">Select Tax Region</option> 
+<p style="margin-bottom: 20px;"> Step 1: Select Region & Subregion:</p>
+<div style=" padding-bottom: 10px;"><select id="RegionDropdown">
+        <option value="NONE">Select Tax Region</option> 
         <option value="CAN">Canada</option>
         <option value="USA">USA</option>
-    </select>
+    </select></div>
     
-    <!-- <div style=" padding-bottom: 10px;"> -->
-        <select id="SubregionDropdown" style="max-width: 200px;">
-            <option value="">Select Tax Subregion</option> </select>
-        <!-- </div> -->
-        </div>
+    <div style=" padding-bottom: 10px;">
+    <select id="SubregionDropdown">
+        <option value="">Select Tax Subregion</option> </select></div>
     
 
 
 
-<p>Step 2: Enter gross income amounts (before tax & contributions) and select the corresponding frequency that you receive the amount.</p>
+<p style="margin-bottom: 20px;">Step 2: Enter gross income amounts (before tax & contributions) and select the corresponding frequency that you receive the amount.</p>
 
 <h2 style="text-align: center;font-size: 18px;">Employment - Self Employment - Investment</h2>
 
@@ -117,10 +112,8 @@
 
 
 <div class ="row">
-<label for="income_sole_prop">
-    Self-Employment Net Income 
-    <a href="inexasli.com/client/finance/business/ROI.html" target="_blank" rel="noopener noreferrer">Need Help?</a>
-</label><input type="number" id="income_sole_prop">
+<label for="income_sole_prop">Self Employment:</label>
+<input type="number" id="income_sole_prop">
 <select id="income_sole_prop_frequency" onchange="calculateAnnual('income_sole_prop', 'income_sole_prop_frequency')">
     <option value="annually">Annually</option>
     <option value="quarterly">Quarterly</option>
@@ -361,30 +354,31 @@
 
    <div>
        
-  <div style=" display: flex; gap: 15px; padding-top: 50px; align-items: center;">
+  <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
       <!-- <input type="checkbox" id="termscheckbox"> -->
-      <div class="checkbox-wrapper-2">
+      <div class="checkbox-wrapper-2" >
         <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
-      </div>
-      
-     
+       </div>
 <label for="termscheckbox">I have read, understand, and agree to the <a href="#" onclick="openTermsModal()" >terms of service</a> and consent to the creation and use of cookies for calculations and functionality.</label><br>
 
+<div id="termsModal" class="modal">
+        <div class="modal-content" id="modalContent">
+             <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+    </div>
 
+    <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+
+        
+        <div class="checkbox-wrapper-2" >
+            <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
+        </div>
+        <label for="notintended"> Enter pre-tax & pre-contributions income amounts & select the corresponding frequency. </label>
     </div>
     
-    <!-- <input type="checkbox" id="notintended"> -->
-
-     <div style="padding-top:10px; display: flex; gap: 15px; align-items: center;">
-
-         <div class="checkbox-wrapper-2" >
-             <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
-            </div>
-            <label for="notintended"> Enter pre-tax & pre-contributions income amounts & select the corresponding frequency. </label><br>
-        </div>
-    
-<div style="text-align: right;" class="nav-div">
-    <div></div>
+    <div class="nav-div">
+        <div></div>
     <button onclick="validatecheckbox()" class="nav-btn"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
 </div>
 
@@ -433,21 +427,12 @@ Use: Social Security taxes are utilized to provide financial assistance to retir
 Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals. </span>
 
 </div>
-
-<div id="termsModal" class="modal">
-    <div class="modal-content" id="modalContent">
-        <button onclick="closeModal()">Close</button>
-       
-         
-    </div>
-</div>
     
 
 <script src="../../server/scripts/income.js"></script>
-<script src="/server/scripts/cookieConsent.js"></script>
-
 </body>
 
 
 </html>
 
+ 

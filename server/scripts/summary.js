@@ -1,4 +1,12 @@
+const paid = getCookie("authenticated");
 
+
+if (paid == "paid") {
+    
+    document.body.style.display = 'initial'
+} else {
+    window.location.href = "/client/finance/sumary.html";
+}
     
 function getCookie1(name) {
     const value1 = `; ${document.cookie}`;
@@ -41,7 +49,7 @@ function updateOnChange(){    // Update HTML elements with cookie values
     document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME');
     document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX');
     document.getElementById('subregion_tax_sum').textContent = " $" + getCookie('ANNUALSUBREGIONALTAX');
-    document.getElementById('tax_sum').textContent = " $" + getCookie('ANNUALTAX');
+    document.getElementById('tax_sum').textContent = " $" + (getCookie('ANNUALTAX'));
         
     document.getElementById('annual_income_sum').textContent = " $" + getCookie('ANNUALINCOME');
     document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM');
@@ -126,7 +134,7 @@ document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNU
 
      
 DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
-        
+        
  function colorChangeDTI() {
     // Get the debt-to-income ratio value
     var debtToIncomeText = document.getElementById("DEBTTOINCOME").textContent;
@@ -271,3 +279,4 @@ document.addEventListener('change', function() {
 
 
      
+

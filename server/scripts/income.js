@@ -70,35 +70,26 @@ document.addEventListener('DOMContentLoaded', function() {
   fetch('../../client/finance/legal.txt') // Corrected file extension to '.txt'
     .then(response => response.text())
     .then(data => {
-      document.getElementById('modalContent').insertAdjacentHTML('beforeend', data)
+      document.getElementById('modalContent').innerText = data;
       // Set modal display to block after content is retrieved
-      document.getElementById('termsModal').style.display = 'flex';
+      document.getElementById('termsModal').style.display = 'block';
     })
     .catch(error => console.error('Error fetching legal content:', error));
 }
-document.body.addEventListener('click',     function closeModal(event) {
+
+    function closeModal(event) {
     const modal = document.getElementById('termsModal');
     const modalContent = document.getElementById('modalContent');
-    const closeBtn = document.getElementById('modal-close')
 
-    if (event.target === modal && event.target !== modalContent ) {
+    if (event.target === modal && event.target !== modalContent) {
         modal.style.display = 'none';
     }
-} )
-
-
-function closeModal(event) {
-    const modal = document.querySelector('.modal');
-
-    modal.style.display = 'none'
-    
 }
-
     
 document.addEventListener('click', closeModal);
     
     document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'flex') {
+    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
         closeModal();
     }
 });    
@@ -130,10 +121,7 @@ function updateSubregionDropdown() {
 regionDropdown.addEventListener("change", updateSubregionDropdown);
     
 function calculateAnnual(inputId, frequencyId) {
-        const input = (parseFloat(document.getElementById(inputId).value) || 0);
-        if (typeof input !== 'number') {
-            console.log('calc not a number', inputId, frequencyId)
-        }
+        const input = parseFloat(document.getElementById(inputId).value) || 0;
         const frequency = document.getElementById(frequencyId).value;
 
         switch (frequency) {
@@ -228,7 +216,6 @@ taxableincomeFields.forEach(field => {
     }
 
     annualTaxableSum += taxableincome;
-
 });
 
 // Apply standard deduction for USA
@@ -263,9 +250,8 @@ ANNUALEMPLOYMENTINCOME = annualEmploymentIncome;
  }
     
 function getCppPayable() {
-    var annualSoleProp = (parseFloat(document.getElementById('income_sole_prop').value) || 0);
-
-    var SolePropFrequency = (parseFloat(document.getElementById('income_sole_prop_frequency').value) || 0);
+    var annualSoleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
+    var SolePropFrequency = parseFloat(document.getElementById('income_sole_prop_frequency').value) || 0;
     var annualIncomeSelfEmployed = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
 
     // Define CPP rates and maximums
@@ -277,7 +263,6 @@ function getCppPayable() {
 
     // Calculate left over contribution room employed
     var LCR;
-
     if (ANNUALEMPLOYMENTINCOME <= cppExemptionAmount) {
         LCR = cppMaxEmployed; 
     } else {
@@ -868,7 +853,6 @@ function calculateCapitalGainsTax() {
   // Get user inputs
   const capitalGain = calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency');
   const stateRateInput = document.getElementById('income_capital_gain_state_rate').value;
-
   let stateRate = 0;
   
   // Check if state rate input is empty or 0, then set state rate to 0
@@ -1005,7 +989,6 @@ for (let i = 0; i < incomeFields.length; i++) {
   const incomeInput = document.getElementById(incomeFields[i]);
   if (incomeInput.value.trim() !== "") {
     const income = incomeInput.value;
-
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
     document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`; 
@@ -1036,7 +1019,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    document.getElementById('RegionDropdown').value = (getCookie('RegionDropdown') == 'annually'? "NONE": getCookie('RegionDropdown'))  ;
+    document.getElementById('RegionDropdown').value = getCookie('RegionDropdown') == 'annually'? "NONE": getCookie('RegionDropdown');
     document.getElementById('RegionDropdown').dispatchEvent(new Event('change')); // Manually trigger change event
 document.getElementById('SubregionDropdown').value = getCookie('SubregionDropdown');
     

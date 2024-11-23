@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     
+     <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUMMARY</title>
+         <link rel="icon" type="image/x-icon" href="Logo.png">
+         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+                      <!-- this is an extended list of places icon could be needed -->
+    <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="/images/Logo.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/images/apple-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png" />
+    <link rel="icon" sizes="192x192" href="/images/android-icon-192x192.png" />
+    <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
+    <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style/styles.css">
+
+
+</head>
+
+<body style="display: none;">
+
+     <img src="../../images/Logo.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
+
+     <div class="container">
+
+           <div class="tab-container" style="margin-bottom: 20px;">
+        <a href="/client/finance/income.html" class="tab">Income</a>
+        <a href="/client/finance/expense.html" class="tab">Expense</a>
+        <a href="/client/finance/asset.html" class="tab">Asset</a>
+        <a href="/client/finance/liability.html" class="tab">Liability</a>
+            </div>
+          
+<h3 style="text-align: center;"> 2024 Personal Financial Overview for Educational Purposes</h3>
+
+  
+
+   
+   <div style="text-align:center;"><select id="frequency">
+        <option value="annual">Annual Frequency</option>
+        <option value="monthly">Monthly Frequency</option>
+        <option value="weekly">Weekly Frequency</option>
+    </select></div>
+    
+<summary>
+    <h2>Net Worth <span id="NETWORTH"></span></h2>
+    <i>Assets minus liabilities. Use: Overall financial position, wealth tracking over time.</i>
+</summary>
+
+<details style="margin-top:10px;">
+    <p style="margin-left:40px;"><u>Assets:</u><span id="ASSETS"></span></p>
+    <i style="margin-left:40px;">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</i>
+   
+    <p style="margin-left:40px;"><u>Liabilities:</u><span id="LIABILITIES"></span></p>
+    <i style="margin-left:40px;">Financial debts or obligations. Use: Debt management, financial strategy formulation.</i>
+</details>
+
+
+<form class="payment-form" id="payment-form" style="margin-top: 30px;">
+    <input type="text" class="payment-input" id="username" placeholder="input name" required >
+    <input type="email" class="payment-input" id="useremail" placeholder="input email" required >
+    <div id="status"></div>
+    <button    class="pay-button" id="pay-button">subscribe</button>
+   
+   </form>
+   <a href="mailto:support@inexasli.com" class=" contact-support" style="color:black;">i have paid</a>
+   <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class=" contact-support" style="color:black;display:block;width:200px">Customer portal</a>
+<!-- 
+   const paid = getCookie("authenticated");
+
+
+   if (paid == "paid") {
+       
+       document.body.style.display = 'initial'
+   } else {
+       window.location.href = "/client/finance/sumary.html";
+   } -->
+
+
+<!-- networth - line 201 -->
+<script src="https://js.stripe.com/v3/" async ></script>
+
+<script >
+    const paid = getCookie("authenticated");
+
+
+    if (paid == "paid") {
+        window.location.href = "/client/finance/summary.html";
+
+  } else {
+    document.body.style.display = 'initial'
+  }
+
+
+
+    
+function getCookie1(name) {
+    const value1 = `; ${document.cookie}`;
+    const parts1 = value1.split(`; ${name}=`);
+    let cookieValue1 = parts1.length === 2 ? decodeURIComponent(parts1.pop().split(';').shift()) : '';
+    
+    return cookieValue1 === '' ? '0' : cookieValue1;
+}
+
+    
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    let cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
+    
+    // Get the selected frequency from the dropdown
+    const frequencyDropdown = document.getElementById('frequency');
+    const selectedFrequency = frequencyDropdown.value;
+
+    // Convert the annual amount based on the selected frequency, if applicable
+    if (selectedFrequency !== 'annually' && !isNaN(cookieValue)) {
+        if (selectedFrequency === 'monthly') {
+            cookieValue /= 12;
+        } else if (selectedFrequency === 'weekly') {
+            cookieValue /= 52;
+        }
+    }
+    
+    return cookieValue === '' ? '0' : cookieValue;
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+function updateOnChange(){    
+
+     document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
+     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
+
+    NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
+    document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
+
+
+  } 
+  
+  updateOnChange();
+  
+
+
+     
+});
+
+// usefull
+
+
+document.addEventListener('change', function() {
+    document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
+    document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
+});
+
+
+// payment scripts
+const lambda =
+  "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
+const publicKey =
+  "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
+
+  const payForm = document.querySelector("#payment-form");
+  
+  
+  payForm.addEventListener("submit", (e) => {
+    const stripe = Stripe(publicKey);
+    console.log('function hit ', e)
+      e.preventDefault();
+      const payButton = document.querySelector("#pay-button");
+      const nameInput = document.querySelector("#username");
+      const emailInput = document.querySelector("#useremail");
+      let payStatus = document.querySelector("#status");
+      payStatus.innerHTML = "Please wait ......";
+      const name = document.querySelector("#username").value;
+      const email = document.querySelector("#useremail").value;
+
+      if (!name || !email) {
+        payStatus.innerHTML = "Please enter your name and email to proceed.";
+        nameInput.disabled = false;
+        emailInput.disabled = false;
+        payButton.disabled = false;
+        return;
+      }
+
+      nameInput.disabled = true;
+      emailInput.disabled = true;
+      payButton.disabled = true;
+
+      //   alert(`${name} ${email}`);
+
+      async function attemptPay() {
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            task: "pay",
+            client_email: email,
+            client_name: name,
+          }),
+        };
+        try {
+          const res = await fetch(lambda, options);
+
+          const data = await res.json();
+
+          if (data.id) {
+            payStatus.innerHTML =
+              "payment proccessing, reload page after payment";
+            await stripe.redirectToCheckout({ sessionId: data.id });
+          } else {
+            nameInput.disabled = false;
+            emailInput.disabled = false;
+            payButton.disabled = false;
+            console.log("session data not returned: kindly retry", data);
+
+            if (data.error) {
+              payStatus.innerHTML = data.error;
+            } else {
+              payStatus.innerHTML = "Payment failed. Please try again";
+            }
+          }
+        } catch (error) {
+          console.error(error.message);
+          payStatus.innerHTML =
+            "Unable to connect. Check your internet and try again.";
+
+          nameInput.disabled = false;
+          emailInput.disabled = false;
+          payButton.disabled = false;
+        }
+      }
+
+      attemptPay();
+    });
+
+
+
+
+
+     
+
+
+
+</script>
+
+
+
+
+
+     <!-- <script src="../../server/scripts/summary.js"></script> -->
+     <script src="/server/scripts/cookieConsent.js"></script>
+</body>
+</html>
