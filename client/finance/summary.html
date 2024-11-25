@@ -73,6 +73,9 @@
     <p style="margin-left:20px;"><u>Total Tax Payable:</u><span id="tax_sum"></span></p>
     <i style="margin-left:20px;">Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</i>
     
+     <p style="margin-left:20px;"><u>Other Obligations:</u><span id="ANNUALGOVERNMENTOBLIGATIONS"></span></p>
+     <i style="margin-left:20px;">Sum of all other goverment obligations owed. Use: Financial planning, avoid underpayment penalties.</i>
+    
     <details>
         <p style="margin-left:60px;"><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
         <i style="margin-left:60px;">Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</i>
@@ -87,11 +90,8 @@
             <p style="margin-left:60px;"><u>Capital Gains Tax:</u> <span id="TOTALTAXCG"></span></p>
             <i style="margin-left:60px;">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</i>
         </div>
-    </details>
     
-    <p style="margin-left:20px;"><u>Other Obligations:</u><span id="ANNUALGOVERNMENTOBLIGATIONS"></span></p>
-
-    <details style="margin-top:10px;">
+    
         <!-- CAN -->
         <div class="can" id="can-hide">
             <p style="margin-left:60px;"><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
@@ -176,5 +176,6 @@
 
      <script src="../../server/scripts/summary.js"></script>
      <script src="/server/scripts/cookieConsent.js"></script>
+     </div>
 </body>
 </html>
