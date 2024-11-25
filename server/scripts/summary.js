@@ -272,10 +272,17 @@ document.addEventListener('change', function() {
     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
 });
 
+// console.log(getCookie('RegionDropdown'))
 
+const canHide = document.getElementById("can-hide")
+const usaHide = document.getElementById("usa-hide")
 
+if ((getCookie('RegionDropdown')) == 'CAN') {
+    usaHide.style.display = 'none'
 
-
+} else if ((getCookie('RegionDropdown')) == 'USA') {
+    canHide.style.display = 'none'
+}
 
 
      
