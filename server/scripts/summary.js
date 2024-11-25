@@ -1,7 +1,7 @@
 const paid = getCookie("authenticated");
 
 
-if (paid !== "paid") {
+if (paid == "paid") {
     
     document.body.style.display = 'initial'
 } else {
