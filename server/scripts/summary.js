@@ -1,3 +1,4 @@
+//
 const paid = getCookie("authenticated");
 
 
