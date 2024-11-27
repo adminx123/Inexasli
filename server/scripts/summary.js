@@ -92,7 +92,7 @@ if (getCookie('RegionDropdown') === 'USA') {
 // Update HTML element with the calculated value
 document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOME.toFixed(2);
 
-    document.addEventListener('DOMContentLoaded', function() {
+    
     const frequencyDropdown = document.getElementById('frequency');
     const timeToPayDebtElement = document.getElementById('TIMETOPAYDEBT'); // Assuming this is where you show debt payment time
 
@@ -135,7 +135,7 @@ document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOM
 
     // Initial call to set up the state
     updateFrequencyText();
-});
+
  
      
 let ANNUALGOVERNMENTOBLIGATIONS;
