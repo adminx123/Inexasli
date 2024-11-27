@@ -72,17 +72,17 @@ function updateOnChange(){    // Update HTML elements with cookie values
      document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
      
 
-let ANNUALDISPOSABLEINCOME;
+let DISPOSABLEINCOME;
 
 if (getCookie('RegionDropdown') === 'USA') {
-    ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
+    DISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
         parseFloat(getCookie('ANNUALEXPENSESUM')) -
         parseFloat(getCookie('TOTALMEDICARE')) -
         parseFloat(getCookie('TOTALSOCIALSECURITY')) -
         parseFloat(getCookie('TOTALTAXCG')) -
         parseFloat(getCookie('ANNUALTAX'));
 } else if (getCookie('RegionDropdown') === 'CAN') {
-    ANNUALDISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
+    DISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
         parseFloat(getCookie('ANNUALEXPENSESUM')) -
         parseFloat(getCookie('ANNUALEI')) -
         parseFloat(getCookie('ANNUALCPP')) -
@@ -90,7 +90,7 @@ if (getCookie('RegionDropdown') === 'USA') {
 }
 
 // Update HTML element with the calculated value
-document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
+document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOME.toFixed(2);
 
     const frequencyDropdown = document.getElementById('frequency');
 
@@ -99,7 +99,7 @@ let TIMETOPAYDEBT;
 // Get the revolving debt, checking if the cookie exists and has a value other than '0' or non-numeric
 let revolvingDebtValue = getCookie1('LIABILITIESNA');
 if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
-    TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / ANNUALDISPOSABLEINCOME;
+    TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / DISPOSABLEINCOME;
 
     let frequencyText = '';
     let insolvencyWarning = '';
@@ -120,7 +120,7 @@ if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolv
             frequencyText = 'Unknown';
     }
 
-    if (ANNUALDISPOSABLEINCOME <= 0) {
+    if (DISPOSABLEINCOME <= 0) {
         document.getElementById('TIMETOPAYDEBT').textContent = "RISK OF INSOLVENCY";
     } else {
         document.getElementById('TIMETOPAYDEBT').textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
