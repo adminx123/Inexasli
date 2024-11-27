@@ -92,49 +92,53 @@ if (getCookie('RegionDropdown') === 'USA') {
 // Update HTML element with the calculated value
 document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOME.toFixed(2);
 
+    document.addEventListener('DOMContentLoaded', function() {
     const frequencyDropdown = document.getElementById('frequency');
-const frequencyTextElement = document.getElementById('frequencyText');  // Assume this element exists on your page
+    const frequencyTextElement = document.getElementById('frequencyText');
 
-let frequencyText = '';
-
-switch (frequencyDropdown.value) {
-    case 'annual':
-        frequencyText = 'Years';
-        break;
-    case 'monthly':
-        frequencyText = 'Months';
-        break;
-    case 'weekly':
-        frequencyText = 'Weeks';
-        break;
-    default:
-        frequencyText = 'Unknown';
-}
-
-// Now update the DOM to show the updated frequency text
-if (frequencyTextElement) {
-    frequencyTextElement.textContent = frequencyText;
-}
-
-    
-let TIMETOPAYDEBT;
-
-// Get the revolving debt, checking if the cookie exists and has a value other than '0' or non-numeric
-let revolvingDebtValue = getCookie1('LIABILITIESNA');
-if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
-    TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / DISPOSABLEINCOME;
-
-    let frequencyText = 'Years'; // Now it's always in years
-    let insolvencyWarning = '';
-
-    if (DISPOSABLEINCOME <= 0) {
-        document.getElementById('TIMETOPAYDEBT').textContent = "RISK OF INSOLVENCY";
-    } else {
-        document.getElementById('TIMETOPAYDEBT').textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
+    // Function to update frequency text based on dropdown selection
+    function updateFrequencyText() {
+        let frequencyText = '';
+        switch (frequencyDropdown.value) {
+            case 'annual':
+                frequencyText = 'Years';
+                break;
+            case 'monthly':
+                frequencyText = 'Months';
+                break;
+            case 'weekly':
+                frequencyText = 'Weeks';
+                break;
+            default:
+                frequencyText = 'Unknown';
+        }
+        if (frequencyTextElement) {
+            frequencyTextElement.textContent = frequencyText;
+        }
     }
-} else {
-    document.getElementById('TIMETOPAYDEBT').textContent = "Not Applicable";
-}
+
+    // Listen for changes in the dropdown
+    frequencyDropdown.addEventListener('change', updateFrequencyText);
+
+    // Initial call to set up the state
+    updateFrequencyText();
+
+    // The rest of your existing code for TIMETOPAYDEBT should remain unchanged
+    let TIMETOPAYDEBT;
+
+    let revolvingDebtValue = getCookie1('LIABILITIESNA');
+    if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
+        TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / DISPOSABLEINCOME;
+
+        if (DISPOSABLEINCOME <= 0) {
+            document.getElementById('TIMETOPAYDEBT').textContent = "RISK OF INSOLVENCY";
+        } else {
+            document.getElementById('TIMETOPAYDEBT').textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + document.getElementById('frequencyText').textContent;
+        }
+    } else {
+        document.getElementById('TIMETOPAYDEBT').textContent = "Not Applicable";
+    }
+});
  
      
 let ANNUALGOVERNMENTOBLIGATIONS;
