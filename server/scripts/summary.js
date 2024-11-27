@@ -90,8 +90,8 @@ if (getCookie('RegionDropdown') === 'USA') {
 
 // Update HTML element with the calculated value
 document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
-
-    const frequencyDropdown = document.getElementById('frequency');
+    
+   
 
 let TIMETOPAYDEBT;
 
@@ -109,11 +109,11 @@ if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolv
             break;
         case 'monthly':
             frequencyText = 'Months';
-            TIMETOPAYDEBT *= 12;
+            TIMETOPAYDEBT *= 12; // Convert years to months
             break;
         case 'weekly':
             frequencyText = 'Weeks';
-            TIMETOPAYDEBT *= 52;
+            TIMETOPAYDEBT *= 52; // Convert years to weeks
             break;
         default:
             frequencyText = 'Unknown';
@@ -127,7 +127,7 @@ if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolv
 } else {
     document.getElementById('TIMETOPAYDEBT').textContent = "Not Applicable";
 }
- 
+ //
      
 let ANNUALGOVERNMENTOBLIGATIONS;
 
