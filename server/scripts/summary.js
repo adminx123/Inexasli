@@ -94,17 +94,19 @@ document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOM
 
     const frequencyDropdown = document.getElementById('frequency');
 
+let frequencyText = '';
+
 switch (frequencyDropdown.value) {
     case 'annual':
         frequencyText = 'Years';
         break;
     case 'monthly':
         frequencyText = 'Months';
-        TIMETOPAYDEBT *= 1; // Convert years to months
+        // No conversion here, just change the text
         break;
     case 'weekly':
         frequencyText = 'Weeks';
-        TIMETOPAYDEBT *= 1; // Convert years to weeks
+        // No conversion here, just change the text
         break;
     default:
         frequencyText = 'Unknown';
