@@ -156,7 +156,6 @@ function colorChangeDTI() {
     document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
 colorChangeDTI(); // After setting the text content, call the function to update the color
 
-    console.log("DTI Value:", debtToIncome);
     
 HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
 
