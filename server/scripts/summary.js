@@ -134,16 +134,15 @@ document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNU
 
      
 DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
-        
+
 function colorChangeDTI() {
     // Get the debt-to-income ratio value
-    var debtToIncomeText = document.getElementById("DEBTTOINCOME").textContent;
-    var debtToIncome = parseFloat(debtToIncomeText);
+    var debtToIncome = parseFloat(document.getElementById("DEBTTOINCOME").textContent);
 
-    // Define the ranges
-    var greatRange = 0.36;
-    var okayMinRange = 0.36;
-    var okayMaxRange = 0.43;
+    // Define the ranges based on your description
+    var greatRange = 0.20; // Below 0.20 is great
+    var okayMinRange = 0.20; // Okay starts at 0.20
+    var okayMaxRange = 0.36; // Okay goes up to 0.36
     
     // Apply color based on the value
     if (debtToIncome < greatRange) {
@@ -154,10 +153,8 @@ function colorChangeDTI() {
         document.getElementById("DEBTTOINCOME").style.color = "red";
     }
 }
-
-// Display DEBTTOINCOME as a decimal
-document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
-colorChangeDTI();
+    document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
+colorChangeDTI(); // After setting the text content, call the function to update the color
     
 HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
 
