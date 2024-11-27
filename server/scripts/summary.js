@@ -94,9 +94,8 @@ document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOM
 
     document.addEventListener('DOMContentLoaded', function() {
     const frequencyDropdown = document.getElementById('frequency');
-    const frequencyTextElement = document.getElementById('frequencyText');
+    const timeToPayDebtElement = document.getElementById('TIMETOPAYDEBT'); // Assuming this is where you show debt payment time
 
-    // Function to update frequency text based on dropdown selection
     function updateFrequencyText() {
         let frequencyText = '';
         switch (frequencyDropdown.value) {
@@ -112,32 +111,30 @@ document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOM
             default:
                 frequencyText = 'Unknown';
         }
-        if (frequencyTextElement) {
-            frequencyTextElement.textContent = frequencyText;
+        
+        // Update the text directly in the TIMETOPAYDEBT element
+        if (timeToPayDebtElement) {
+            let revolvingDebtValue = getCookie1('LIABILITIESNA');
+            if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
+                let TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / DISPOSABLEINCOME;
+                if (DISPOSABLEINCOME <= 0) {
+                    timeToPayDebtElement.textContent = "RISK OF INSOLVENCY";
+                } else {
+                    // Here you can decide if you want to convert TIMETOPAYDEBT based on frequency
+                    // For now, let's just display the text without conversion
+                    timeToPayDebtElement.textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
+                }
+            } else {
+                timeToPayDebtElement.textContent = "Not Applicable";
+            }
         }
     }
 
-    // Listen for changes in the dropdown
+    // Attach the change event listener to the dropdown
     frequencyDropdown.addEventListener('change', updateFrequencyText);
 
     // Initial call to set up the state
     updateFrequencyText();
-
-    // The rest of your existing code for TIMETOPAYDEBT should remain unchanged
-    let TIMETOPAYDEBT;
-
-    let revolvingDebtValue = getCookie1('LIABILITIESNA');
-    if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
-        TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / DISPOSABLEINCOME;
-
-        if (DISPOSABLEINCOME <= 0) {
-            document.getElementById('TIMETOPAYDEBT').textContent = "RISK OF INSOLVENCY";
-        } else {
-            document.getElementById('TIMETOPAYDEBT').textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + document.getElementById('frequencyText').textContent;
-        }
-    } else {
-        document.getElementById('TIMETOPAYDEBT').textContent = "Not Applicable";
-    }
 });
  
      
