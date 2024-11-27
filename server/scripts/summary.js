@@ -90,8 +90,8 @@ if (getCookie('RegionDropdown') === 'USA') {
 
 // Update HTML element with the calculated value
 document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDISPOSABLEINCOME.toFixed(2);
-    
-   
+
+    const frequencyDropdown = document.getElementById('frequency');
 
 let TIMETOPAYDEBT;
 
@@ -127,7 +127,7 @@ if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolv
 } else {
     document.getElementById('TIMETOPAYDEBT').textContent = "Not Applicable";
 }
- //
+ 
      
 let ANNUALGOVERNMENTOBLIGATIONS;
 
@@ -299,4 +299,3 @@ if ((getCookie('RegionDropdown')) == 'CAN') {
 
 
      
-
