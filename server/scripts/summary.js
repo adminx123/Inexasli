@@ -94,6 +94,23 @@ document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOM
 
     const frequencyDropdown = document.getElementById('frequency');
 
+switch (frequencyDropdown.value) {
+    case 'annual':
+        frequencyText = 'Years';
+        break;
+    case 'monthly':
+        frequencyText = 'Months';
+        TIMETOPAYDEBT *= 1; // Convert years to months
+        break;
+    case 'weekly':
+        frequencyText = 'Weeks';
+        TIMETOPAYDEBT *= 1; // Convert years to weeks
+        break;
+    default:
+        frequencyText = 'Unknown';
+}
+
+    
 let TIMETOPAYDEBT;
 
 // Get the revolving debt, checking if the cookie exists and has a value other than '0' or non-numeric
