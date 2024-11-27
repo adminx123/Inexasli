@@ -135,27 +135,29 @@ document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNU
      
 DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
         
- function colorChangeDTI() {
+function colorChangeDTI() {
     // Get the debt-to-income ratio value
     var debtToIncomeText = document.getElementById("DEBTTOINCOME").textContent;
     var debtToIncome = parseFloat(debtToIncomeText);
 
     // Define the ranges
-    var greatRange = 20;
-    var goodMinRange = 20;
-    var goodMaxRange = 36;
+    var greatRange = 0.36;
+    var okayMinRange = 0.36;
+    var okayMaxRange = 0.43;
     
     // Apply color based on the value
     if (debtToIncome < greatRange) {
         document.getElementById("DEBTTOINCOME").style.color = "green";
-    } else if (debtToIncome >= goodMinRange && debtToIncome <= goodMaxRange) {
+    } else if (debtToIncome >= okayMinRange && debtToIncome <= okayMaxRange) {
         document.getElementById("DEBTTOINCOME").style.color = "yellow";
     } else {
         document.getElementById("DEBTTOINCOME").style.color = "red";
     }
 }
-    document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3); 
-    colorChangeDTI();
+
+// Display DEBTTOINCOME as a decimal
+document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
+colorChangeDTI();
     
 HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
 
