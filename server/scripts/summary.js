@@ -101,24 +101,8 @@ let revolvingDebtValue = getCookie1('LIABILITIESNA');
 if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
     TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / DISPOSABLEINCOME;
 
-    let frequencyText = '';
+    let frequencyText = 'Years'; // Now it's always in years
     let insolvencyWarning = '';
-
-    switch (frequencyDropdown.value) {
-        case 'annual':
-            frequencyText = 'Years';
-            break;
-        case 'monthly':
-            frequencyText = 'Months';
-            TIMETOPAYDEBT *= 12; // Convert years to months
-            break;
-        case 'weekly':
-            frequencyText = 'Weeks';
-            TIMETOPAYDEBT *= 52; // Convert years to weeks
-            break;
-        default:
-            frequencyText = 'Unknown';
-    }
 
     if (DISPOSABLEINCOME <= 0) {
         document.getElementById('TIMETOPAYDEBT').textContent = "RISK OF INSOLVENCY";
