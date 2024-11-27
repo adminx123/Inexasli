@@ -95,37 +95,37 @@ document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDIS
 
 let TIMETOPAYDEBT;
 
-// Assuming LIABILITIESNA is the total debt and ANNUALDISPOSABLEINCOME is the annual disposable income after necessary expenses.
-TIMETOPAYDEBT = parseFloat(getCookie1('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
+// Get the revolving debt, checking if the cookie exists and has a value other than '0' or non-numeric
+let revolvingDebtValue = getCookie1('LIABILITIESNA');
+if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
+    TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / ANNUALDISPOSABLEINCOME;
 
-// Determine the text based on the selected frequency
-let frequencyText = '';
-let insolvencyWarning = '';
+    let frequencyText = '';
+    let insolvencyWarning = '';
 
-switch (frequencyDropdown.value) {
-    case 'annual':
-        frequencyText = 'Years';
-        break;
-    case 'monthly':
-        frequencyText = 'Months';
-        // Convert years to months
-        TIMETOPAYDEBT *= 12;
-        break;
-    case 'weekly':
-        frequencyText = 'Weeks';
-        // Convert years to weeks, assuming 52 weeks per year
-        TIMETOPAYDEBT *= 52;
-        break;
-    default:
-        frequencyText = 'Unknown';
-}
+    switch (frequencyDropdown.value) {
+        case 'annual':
+            frequencyText = 'Years';
+            break;
+        case 'monthly':
+            frequencyText = 'Months';
+            TIMETOPAYDEBT *= 12;
+            break;
+        case 'weekly':
+            frequencyText = 'Weeks';
+            TIMETOPAYDEBT *= 52;
+            break;
+        default:
+            frequencyText = 'Unknown';
+    }
 
-// Check if the disposable income is negative or zero which would indicate insolvency risk
-if (ANNUALDISPOSABLEINCOME <= 0) {
-    insolvencyWarning = "RISK OF INSOLVENCY";
-    document.getElementById('TIMETOPAYDEBT').textContent = insolvencyWarning;
+    if (ANNUALDISPOSABLEINCOME <= 0) {
+        document.getElementById('TIMETOPAYDEBT').textContent = "RISK OF INSOLVENCY";
+    } else {
+        document.getElementById('TIMETOPAYDEBT').textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
+    }
 } else {
-    document.getElementById('TIMETOPAYDEBT').textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
+    document.getElementById('TIMETOPAYDEBT').textContent = "Not Applicable";
 }
  
      
