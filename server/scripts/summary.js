@@ -95,25 +95,38 @@ document.getElementById('ANNUALDISPOSABLEINCOME').textContent = ' $' + ANNUALDIS
 
 let TIMETOPAYDEBT;
 
+// Assuming LIABILITIESNA is the total debt and ANNUALDISPOSABLEINCOME is the annual disposable income after necessary expenses.
 TIMETOPAYDEBT = parseFloat(getCookie1('LIABILITIESNA')) / ANNUALDISPOSABLEINCOME;
 
 // Determine the text based on the selected frequency
 let frequencyText = '';
+let insolvencyWarning = '';
+
 switch (frequencyDropdown.value) {
     case 'annual':
         frequencyText = 'Years';
         break;
     case 'monthly':
         frequencyText = 'Months';
+        // Convert years to months
+        TIMETOPAYDEBT *= 12;
         break;
     case 'weekly':
         frequencyText = 'Weeks';
+        // Convert years to weeks, assuming 52 weeks per year
+        TIMETOPAYDEBT *= 52;
         break;
     default:
         frequencyText = 'Unknown';
 }
 
-document.getElementById('TIMETOPAYDEBT').textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
+// Check if the disposable income is negative or zero which would indicate insolvency risk
+if (ANNUALDISPOSABLEINCOME <= 0) {
+    insolvencyWarning = "RISK OF INSOLVENCY";
+    document.getElementById('TIMETOPAYDEBT').textContent = insolvencyWarning;
+} else {
+    document.getElementById('TIMETOPAYDEBT').textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
+}
  
      
 let ANNUALGOVERNMENTOBLIGATIONS;
