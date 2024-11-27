@@ -93,6 +93,7 @@ if (getCookie('RegionDropdown') === 'USA') {
 document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOME.toFixed(2);
 
     const frequencyDropdown = document.getElementById('frequency');
+const frequencyTextElement = document.getElementById('frequencyText');  // Assume this element exists on your page
 
 let frequencyText = '';
 
@@ -102,14 +103,17 @@ switch (frequencyDropdown.value) {
         break;
     case 'monthly':
         frequencyText = 'Months';
-        // No conversion here, just change the text
         break;
     case 'weekly':
         frequencyText = 'Weeks';
-        // No conversion here, just change the text
         break;
     default:
         frequencyText = 'Unknown';
+}
+
+// Now update the DOM to show the updated frequency text
+if (frequencyTextElement) {
+    frequencyTextElement.textContent = frequencyText;
 }
 
     
