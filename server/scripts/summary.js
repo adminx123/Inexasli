@@ -165,9 +165,9 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
     var hti = parseFloat(htiText);
 
     // Define the ranges
-    var greatRange = 25;
-    var okayMinRange = 25;
-    var okayMaxRange = 35;
+    var greatRange = .25;
+    var okayMinRange = .25;
+    var okayMaxRange = .35;
 
     // Apply color based on the value
     if (hti < greatRange) {
