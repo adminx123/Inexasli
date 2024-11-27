@@ -8,7 +8,8 @@ var LIQUIDASSETS;
     const assetFields = [
         'assets_checking_accounts', 
         'assets_savings_accounts', 
-        'assets_other_liquid_accounts', 
+        'assets_other_liquid_accounts',
+	    'assets_money_lent_out',
         'assets_long_term_investment_accounts', 
         'assets_primary_residence', 
         'assets_investment_properties', 
@@ -42,7 +43,8 @@ ASSETS = assets;
     const liquidAssetFields = [
         'assets_checking_accounts', 
         'assets_savings_accounts', 
-        'assets_other_liquid_accounts'
+        'assets_other_liquid_accounts',
+	    'assets_money_lent_out'
     ];
 
     let liquidAssets = 0;
@@ -83,7 +85,8 @@ function setIncomeData(){
 	const assetsFields = [
         'assets_checking_accounts', 
         'assets_savings_accounts', 
-        'assets_other_liquid_accounts', 
+        'assets_other_liquid_accounts',
+		'assets_money_lent_out',
         'assets_long_term_investment_accounts', 
         'assets_primary_residence', 
         'assets_investment_properties', 
@@ -93,20 +96,7 @@ function setIncomeData(){
     ];
 
 
-//for (let i = 0; i < frequencyFields.length; i++) {
-  //const frequencyInput = document.getElementById(frequencyFields[i]);
- // if (frequencyInput.value.trim() !== "") {
- //   const frequency = frequencyInput.value;
- //   const expirationDate = new Date();
- //   expirationDate.setDate(expirationDate.getDate() + 365);
- //   document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
- // } else {
-//    const frequency = "0";
- //   const expirationDate = new Date();
-  //  expirationDate.setDate(expirationDate.getDate() + 365);
-  //  document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
- // }
-//}
+
 
 for (let i = 0; i < assetsFields.length; i++) {
   const assetsInput = document.getElementById(assetsFields[i]);
@@ -137,6 +127,7 @@ for (let i = 0; i < assetsFields.length; i++) {
 document.getElementById('assets_checking_accounts').value = getCookie('assets_checking_accounts');
 document.getElementById('assets_savings_accounts').value = getCookie('assets_savings_accounts');
 document.getElementById('assets_other_liquid_accounts').value = getCookie('assets_other_liquid_accounts');
+document.getElementById('assets_money_lent_out').value = getCookie('assets_money_lent_out');
 document.getElementById('assets_long_term_investment_accounts').value = getCookie('assets_long_term_investment_accounts');
 document.getElementById('assets_primary_residence').value = getCookie('assets_primary_residence');
 document.getElementById('assets_investment_properties').value = getCookie('assets_investment_properties');
