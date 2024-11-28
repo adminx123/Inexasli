@@ -24,15 +24,6 @@ div {
   align-items: center; /* Vertically align items in the center */
 }
 
-div > *:first-child {
-  margin-right: auto; /* This pushes the first child to the left */
-}
-
-div > *:not(:first-child) {
-  text-align: center; /* Center align the text for non-first children */
-  margin-left: auto;  /* This centers the next elements if there's more than one */
-}
-
 .modal {
   display: none;
   position: fixed;
