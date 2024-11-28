@@ -149,6 +149,29 @@ html: |
                       <option value="weekly">Weekly</option>
                   </select>
               </div>
+            <div class="input-group">
+      <label for="travel">Travel</label>
+      <div class="input-container">
+          <input type="number" id="travel">
+          <select id="travelFrequency">
+              <option value="annually">Annually</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="monthly">Monthly</option>
+              <option value="weekly">Weekly</option>
+          </select>
+      </div>
+  </div>
+  <div class="input-group">
+      <label for="hotel">Hotel</label>
+      <div class="input-container">
+          <input type="number" id="hotel">
+          <select id="hotelFrequency">
+              <option value="annually">Annually</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="monthly">Monthly</option>
+              <option value="weekly">Weekly</option>
+          </select>
+      </div>
           </div>
 
           <h2>Building Costs</h2>
@@ -366,11 +389,13 @@ html: |
               const cogsShippingValue = parseFloat(document.getElementById('cogsShipping').value) || 0;
               const totalCOGS = (cogsMaterialsValue + cogsLaborValue + cogsOverheadValue + cogsShippingValue) * sales;
 
-              const totalOperationalCosts = calculateAnnual('rent', 'rentFrequency') +
-                  calculateAnnual('utilities', 'utilitiesFrequency') +
-                  calculateAnnual('salaries', 'salariesFrequency') +
-                  calculateAnnual('marketing', 'marketingFrequency') +
-                  calculateAnnual('insurance', 'insuranceFrequency');
+               const totalOperationalCosts = calculateAnnual('rent', 'rentFrequency') +
+        calculateAnnual('utilities', 'utilitiesFrequency') +
+        calculateAnnual('salaries', 'salariesFrequency') +
+        calculateAnnual('marketing', 'marketingFrequency') +
+        calculateAnnual('insurance', 'insuranceFrequency') +
+        calculateAnnual('travel', 'travelFrequency') +
+        calculateAnnual('hotel', 'hotelFrequency');
 
               const totalBuildingCosts = calculateAnnual('buildingRent', 'buildingRentFrequency') +
                   calculateAnnual('buildingMaintenance', 'buildingMaintenanceFrequency') +
