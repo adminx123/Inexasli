@@ -351,7 +351,7 @@ button:not(.nav-btn):hover {
 }
 
 button:not(.nav-btn):active {
-  background-color: #000; /* Darker on click */
+  background-color: #fff; /* Darker on click */
 }
 
 .tab-container {
