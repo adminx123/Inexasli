@@ -469,7 +469,8 @@
               const otherLiabilitiesValue = parseFloat(document.getElementById('otherLiabilities').value) || 0;
               const totalLiabilities = accountsPayableValue + loansValue + mortgagesValue + taxesPayableValue + otherLiabilitiesValue;
 
-              const totalCosts = totalCOGS + totalOperationalCosts + totalBuildingCosts + totalVehicleCosts;
+            const bookValue = totalAssets - totalLiabilities;  
+            const totalCosts = totalCOGS + totalOperationalCosts + totalBuildingCosts + totalVehicleCosts;
               const netIncome = totalRevenue - totalCosts;
 
               const selectedValue = parseFloat(document.getElementById('resultChange').value);
@@ -487,6 +488,7 @@
               result += `<h3>Vehicle Costs Total: ${totalVehicleCostsDivided.toFixed(2)}</h3>`;
               result += `<h3>Assets Total: ${totalAssets.toFixed(2)}</h3>`;
               result += `<h3>Liabilities Total: ${totalLiabilities.toFixed(2)}</h3>`;
+            result += `<h3><strong>Book Value: ${bookValue.toFixed(2)}</strong></h3>`;
               result += `<h3><strong>Net Income: ${netIncomeAdjusted.toFixed(2)}</strong></h3>`;
 
               resultDiv.innerHTML = result;
