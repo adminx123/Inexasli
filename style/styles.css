@@ -336,6 +336,8 @@ button:not(.nav-btn) {
   cursor: pointer; /* Pointer on hover */
   text-align: center; /* Center text */
   display: inline-block; /* Prevent stretching */
+  margin-top: 1px;
+  margin-bottom: 1px;
 }
 .tab-container {
   display: flex;
