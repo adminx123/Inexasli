@@ -145,14 +145,6 @@ h2 {
   margin-top: 20px;
 }
 
-/* .nav-left {
-
-} */
-
-/* .nav-right {
-} */
-
-
 
 .nav-inner {
   transform: scale(1.5);
@@ -160,7 +152,7 @@ h2 {
 
 .nav-btn {
   font-size: 45px;
-  background-color: black;
+  background-color: white;
   margin: -5px 0;
   overflow: hidden;
 
@@ -174,9 +166,7 @@ h2 {
 
   /* text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2); */
 
-.nav-btn:hover {
-  color: #f8f8f8;
-}
+
 
 .cookie-container {
   position: sticky;
