@@ -337,7 +337,39 @@
           <div id="results"></div>
           <button onclick="calculate()">Calculate</button>
       </div>
-</div>
+
+<div>
+       
+  <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+      <!-- <input type="checkbox" id="termscheckbox"> -->
+      <div class="checkbox-wrapper-2" >
+        <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
+       </div>
+<label for="termscheckbox">I have read, understand, and agree to the <a href="#" onclick="openTermsModal()" >terms of service</a> and consent to the creation and use of cookies for calculations and functionality.</label><br>
+
+<div id="termsModal" class="modal">
+        <div class="modal-content" id="modalContent">
+             <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+
+        
+        <div class="checkbox-wrapper-2" >
+            <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
+        </div>
+        <label for="notintended"> Enter pre-tax & pre-contributions income amounts & select the corresponding frequency. </label>
+    </div>
+    
+    <div class="nav-div">
+        <div></div>
+    <button onclick="validatecheckbox()" class="nav-btn"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
+      </div>
+
+        
+      </div>
       <script>
           function toggleCogs() {
               const cogs = document.getElementById('cogs').value;
