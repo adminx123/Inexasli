@@ -223,12 +223,12 @@ for (let i = 0; i < frequencyFields.length; i++) {
     const frequency = frequencyInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`; SameSite=None; Secure`;
   } else {
     const frequency = "";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;SameSite=None; Secure`;
   }
 }
 
