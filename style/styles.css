@@ -334,7 +334,15 @@ details div *, details * {
   margin-bottom: 10px;
 }
 
-
+button {
+  background-color: #4caf50;
+  color: white;
+  /* padding: 10px 20px; */
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
 .tab-container {
   display: flex;
@@ -444,14 +452,14 @@ details div *, details * {
   padding: 10px 5px 10px 5px;
 }
 
-.button {
+.pay-button {
   margin-top: 0;
   background-color: #000;
   border-radius: 0;
   padding: 12px;
 }
 
-.button:disabled {
+.pay-button:disabled {
   background-color: #333;
 }
 
