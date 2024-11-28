@@ -334,14 +334,26 @@ details div *, details * {
   margin-bottom: 10px;
 }
 
-button {
-  background-color: #4caf50;
-  color: white;
-  /* padding: 10px 20px; */
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+/* General Button Styling (Excludes nav-btn) */
+button:not(.nav-btn) {
+  background-color: #000; /* Black background */
+  color: white; /* White text */
+  font-size: 16px; /* Text size */
+  padding: 12px 20px; /* Padding for rectangular look */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer on hover */
+  text-align: center; /* Center text */
+  display: inline-block; /* Prevent stretching */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transition */
+}
+
+button:not(.nav-btn):hover {
+  background-color: #fff; /* Darker on hover */
+}
+
+button:not(.nav-btn):active {
+  background-color: #000; /* Darker on click */
 }
 
 .tab-container {
