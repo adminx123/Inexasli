@@ -335,13 +335,26 @@ details div *, details * {
 }
 
 button {
-  background-color: #4caf50;
-  color: white;
-  /* padding: 10px 20px; */
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: black;  /* Black background */
+  color: white;  /* White text */
+  font-size: 16px;  /* Font size */
+  padding: 10px 20px;  /* Padding to give it a rectangular shape */
+  border: none;  /* Remove the border */
+  border-radius: 0;  /* Keep the corners square (rectangular button) */
+  cursor: pointer;  /* Pointer cursor on hover */
+  transition: background-color 0.3s, color 0.3s;  /* Smooth transition for hover effects */
+}
+
+/* Hover effect for the button */
+button:hover {
+  background-color: white;  /* White background on hover */
+  color: black;  /* Black text on hover */
+}
+
+/* Optional: Active effect when the button is pressed */
+button:active {
+  background-color: #333;  /* Darker background when clicked */
+  color: white;  /* White text when clicked */
 }
 
 .tab-container {
