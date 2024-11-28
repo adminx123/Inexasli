@@ -487,18 +487,14 @@
   var notintended = document.getElementById("notintended");
   var regionDropdown = document.getElementById("RegionDropdown");
 
-  // Check if a valid region is selected
-  if (regionDropdown.value === "" || regionDropdown.value === "NONE") {
-    alert("Please select a region from the dropdown.");
-    return;
-  }
+ 
 
   // Check if checkboxes are checked
   if (termscheckbox.checked && notintended.checked) {
     // Perform calculations
-    calculateNext();
+    calculate();
   } else {
-    alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contribtuions");
+    alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax");
   }
 }
 
