@@ -1,454 +1,488 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'); */
 
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Business Calculator</title>
-      <link rel="icon" type="image/x-icon" href="Logo.png">
-      <link rel="stylesheet" href="/style/styles.css"> 
-      <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
-      <link rel="shortcut icon" type="image/x-icon" href="/images/Logo.png" />
-      <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
-      <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
-      <link rel="apple-touch-icon" href="/images/apple-icon-180x180.png" />
-      <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png" />
-      <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png" />
-      <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png" />
-      <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png" />
-      <link rel="icon" sizes="192x192" href="/images/android-icon-192x192.png" />
-      <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
-      <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
-      <link rel="manifest" href="/manifest.json" />
-  </head>
-  <body>
 
-      <div class="container">
-          <h1>Business Metrics Calculator</h1>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-         <div>
-              <label for="revenueType">Income Source </label>
-                  <select id="revenueType" onchange="toggleRevenueType()">
-                  <option value="blank"></option>
-                  <option value="rental">Rental</option>
-                  <option value="service">Service</option>
-                  <option value="product">Product</option>
-              </select>
-             </div>
-              
-              <div>
-              <label> Revenue Per Rental, Hour, Unit</label>
-              <input type="number" id="price">
-          </div>
+.checkbox-wrapper-2 .ikxBAC {
+  appearance: none;
+  background-color: #dfe1e4;
+  border-radius: 72px;
+  border-style: none;
+  flex-shrink: 0;
+  height: 20px;
+  margin: 0;
+  position: relative;
+  width: 30px;
+}
 
-          <div>
-              <label>Number of Rentals, Hours, Units</label>
-              <input type="number" id="sales">
-              </div>
-              
-            <div>
-              <label>Per</label>
-              <select id="salesFrequency" class="frequency-dropdown" onchange="updateFrequency('sales')">
-                  <option value="blank"></option>
-                  <option value="annually">Annually</option>
-                  <option value="quarterly">Quarterly</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="weekly">Weekly</option>
-              </select>
-          </div>
+.modal {
+  display: none;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: stretch;
+  align-items: stretch;
+  padding: 30px;
+}
 
-          <label for="cogs">Cost of goods sold applicable?</label>
-          <select id="cogs" onchange="toggleCogs()">
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-          </select>
+.modal-content {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 10px;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.modal-content button {
+  align-self: flex-end;
+}
 
-          <div id="cogsSection">
-              <h2>Cost of Goods Sold</h2>
-              <div class="input-group">
-                  <label for="cogsMaterials">Material Cost Per Unit</label>
-                  <div class="input-container">
-                      <input type="number" id="cogsMaterials">
-                      <span id="cogsMaterialsFrequency"></span>
-                  </div>
-              </div>
-              <div class="input-group">
-                  <label for="cogsLabor">Labor Cost Per Unit</label>
-                  <div class="input-container">
-                      <input type="number" id="cogsLabor">
-                      <span id="cogsLaborFrequency"></span>
-                  </div>
-              </div>
-              <div class="input-group">
-                  <label for="cogsOverhead">Overhead Cost Per Unit</label>
-                  <div class="input-container">
-                      <input type="number" id="cogsOverhead">
-                      <span id="cogsOverheadFrequency"></span>
-                  </div>
-              </div>
-              <div class="input-group">
-                  <label for="cogsShipping">Shipping Cost Per Unit</label>
-                  <div class="input-container">
-                      <input type="number" id="cogsShipping">
-                      <span id="cogsShippingFrequency"></span>
-                  </div>
-              </div>
-          </div>
+@media (min-width: 800px) {
+  .modal {
+    padding: 50px;
+  }
+}
 
-          <h2>Operational Costs</h2>
-          <div class="input-group">
-              <label for="rent">Rent</label>
-              <div class="input-container">
-                  <input type="number" id="rent">
-                  <select id="rentFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
-          <div class="input-group">
-              <label for="utilities">Utilities</label>
-              <div class="input-container">
-                  <input type="number" id="utilities">
-                  <select id="utilitiesFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
-          <div class="input-group">
-              <label for="salaries">Salaries</label>
-              <div class="input-container">
-                  <input type="number" id="salaries">
-                  <select id="salariesFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
-          <div class="input-group">
-              <label for="marketing">Marketing</label>
-              <div class="input-container">
-                  <input type="number" id="marketing">
-                  <select id="marketingFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
-          <div class="input-group">
-              <label for="insurance">Insurance</label>
-              <div class="input-container">
-                  <input type="number" id="insurance">
-                  <select id="insuranceFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-            <div class="input-group">
-      <label for="travel">Travel</label>
-      <div class="input-container">
-          <input type="number" id="travel">
-          <select id="travelFrequency">
-              <option value="annually">Annually</option>
-              <option value="quarterly">Quarterly</option>
-              <option value="monthly">Monthly</option>
-              <option value="weekly">Weekly</option>
-          </select>
-      </div>
-  </div>
-  <div class="input-group">
-      <label for="hotel">Hotel</label>
-      <div class="input-container">
-          <input type="number" id="hotel">
-          <select id="hotelFrequency">
-              <option value="annually">Annually</option>
-              <option value="quarterly">Quarterly</option>
-              <option value="monthly">Monthly</option>
-              <option value="weekly">Weekly</option>
-          </select>
-      </div>
-          </div>
+.checkbox-wrapper-2 .ikxBAC::before {
+  bottom: -6px;
+  content: "";
+  left: -6px;
+  position: absolute;
+  right: -6px;
+  top: -6px;
+}
 
-          <h2>Building Costs</h2>
-          <div class="input-group">
-              <label for="buildingRent">Building Rent</label>
-              <div class="input-container">
-                  <input type="number" id="buildingRent">
-                  <select id="buildingRentFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
-          <div class="input-group">
-              <label for="buildingMaintenance">Building Maintenance</label>
-              <div class="input-container">
-                  <input type="number" id="buildingMaintenance">
-                  <select id="buildingMaintenanceFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
-          <div class="input-group">
-              <label for="buildingUtilities">Building Utilities</label>
-              <div class="input-container">
-                  <input type="number" id="buildingUtilities">
-                  <select id="buildingUtilitiesFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
+.checkbox-wrapper-2 .ikxBAC,
+.checkbox-wrapper-2 .ikxBAC::after {
+  transition: all 100ms ease-out;
+}
 
-          <h2>Vehicle Costs</h2>
-          <div class="input-group">
-              <label for="vehicleRental">Vehicle Rental</label>
-              <div class="input-container">
-                  <input type="number" id="vehicleRental">
-                  <select id="vehicleRentalFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
-          <div class="input-group">
-              <label for="vehicleLease">Vehicle Lease</label>
-              <div class="input-container">
-                  <input type="number" id="vehicleLease">
-                  <select id="vehicleLeaseFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
-          <div class="input-group">
-              <label for="vehicleGas">Vehicle Gas</label>
-              <div class="input-container">
-                  <input type="number" id="vehicleGas">
-                  <select id="vehicleGasFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
-          <div class="input-group">
-              <label for="vehicleMaintenance">Vehicle Maintenance</label>
-              <div class="input-container">
-                  <input type="number" id="vehicleMaintenance">
-                  <select id="vehicleMaintenanceFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
-          <div class="input-group">
-              <label for="vehicleInsurance">Vehicle Insurance</label>
-              <div class="input-container">
-                  <input type="number" id="vehicleInsurance">
-                  <select id="vehicleInsuranceFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          </div>
+.checkbox-wrapper-2 .ikxBAC::after {
+  background-color: #fff;
+  border-radius: 50%;
+  content: "";
+  height: 14px;
+  left: 3px;
+  position: absolute;
+  top: 3px;
+  width: 14px;
+}
 
-          <h2>Assets</h2>
-          <div class="input-group">
-              <label for="cash">Cash</label>
-              <input type="number" id="cash">
-          </div>
-          <div class="input-group">
-              <label for="accountsReceivable">Accounts Receivable</label>
-              <input type="number" id="accountsReceivable">
-          </div>
-          <div class="input-group">
-              <label for="inventory">Inventory</label>
-              <input type="number" id="inventory">
-          </div>
-          <div class="input-group">
-              <label for="property">Property</label>
-              <input type="number" id="property">
-          </div>
-          <div class="input-group">
-              <label for="equipment">Equipment</label>
-              <input type="number" id="equipment">
-          </div>
+.checkbox-wrapper-2 input[type="checkbox"] {
+  cursor: default;
+}
 
-          <h2>Liabilities</h2>
-          <div class="input-group">
-              <label for="accountsPayable">Accounts Payable</label>
-              <input type="number" id="accountsPayable">
-          </div>
-          <div class="input-group">
-              <label for="loans">Loans</label>
-              <input type="number" id="loans">
-          </div>
-          <div class="input-group">
-              <label for="mortgages">Mortgages</label>
-              <input type="number" id="mortgages">
-          </div>
-          <div class="input-group">
-              <label for="taxesPayable">Taxes Payable</label>
-              <input type="number" id="taxesPayable">
-          </div>
-          <div class="input-group">
-              <label for="otherLiabilities">Other Liabilities</label>
-              <input type="number" id="otherLiabilities">
-          </div>
+.checkbox-wrapper-2 .ikxBAC:hover {
+  background-color: #c9cbcd;
+  transition-duration: 0s;
+}
 
-          <h2>Results</h2>
-          <div class="input-group">
-              <label for="resultChange">Display results as:</label>
-              <select id="resultChange" onchange="calculate()">
-                  <option value="1">Annual</option>
-                  <option value="12">Monthly</option>
-                  <option value="52">Weekly</option>
-                  <option value="365">Daily</option>
-              </select>
-          </div>
-          <div id="results"></div>
-          <button onclick="calculate()">Calculate</button>
-      </div>
-</div>
-      <script>
-          function toggleCogs() {
-              const cogs = document.getElementById('cogs').value;
-              const cogsSection = document.getElementById('cogsSection');
-              cogsSection.style.display = cogs === 'yes' ? 'block' : 'none';
-          }
+.checkbox-wrapper-2 .ikxBAC:checked {
+  background-color: #000000;
+}
 
-          document.addEventListener('DOMContentLoaded', function() {
-              toggleCogs();
-          });
+.checkbox-wrapper-2 .ikxBAC:checked::after {
+  background-color: #fff;
+  left: 13px;
+}
 
-          function toggleRevenueType() {
-              const revenueType = document.getElementById('revenueType').value;
-              const salesLabel = document.querySelector('label[for="sales"]');
-              const priceLabel = document.querySelector('label[for="price"]');
+.checkbox-wrapper-2 :focus:not(.focus-visible) {
+  outline: 0;
+}
 
-              if (revenueType === 'rental') {
-                  salesLabel.textContent = 'Rentals Contracted';
-                  priceLabel.textContent = 'Price Per Rental';
-              } else if (revenueType === 'service') {
-                  salesLabel.textContent = 'Hours Billed';
-                  priceLabel.textContent = 'Price Per Hour';
-              } else {
-                  salesLabel.textContent = 'Units Sold';
-                  priceLabel.textContent = 'Price Per Unit';
-              }
-          }
+.checkbox-wrapper-2 .ikxBAC:checked:hover {
+  background-color: #000000;
+}
 
-          function calculateAnnual(inputId, frequencyId) {
-              const input = parseFloat(document.getElementById(inputId).value) || 0;
-              const frequency = document.getElementById(frequencyId).value;
+input[type="number"],
+input,
+select {
+  padding: 4px ;
+  outline: none;
+  border: solid 1px #7c7c7c;
+  background-color: transparent;
+}
 
-              switch (frequency) {
-                  case 'annually': return input * 1;
-                  case 'quarterly': return input * 4;
-                  case 'monthly': return input * 12;
-                  case 'weekly': return input * 52;
-                  default: return 0;
-              }
-          }
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Montserrat", sans-serif;
+}
+input[type="number"]:focus,
+input:focus {
+  border-color: #242323;
+}
 
-          function calculate() {
-              const resultDiv = document.getElementById('results');
-              let result = '';
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
 
-              const price = parseFloat(document.getElementById('price').value) || 0;
-              const sales = parseFloat(document.getElementById('sales').value) || 0;
-              const salesFrequency = document.getElementById('salesFrequency').value;
+.nav-div {
+  width: 100%;
+  padding: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-              const totalRevenue = calculateAnnual('sales', 'salesFrequency') * price;
+  
+}
 
-              const cogsMaterialsValue = parseFloat(document.getElementById('cogsMaterials').value) || 0;
-              const cogsLaborValue = parseFloat(document.getElementById('cogsLabor').value) || 0;
-              const cogsOverheadValue = parseFloat(document.getElementById('cogsOverhead').value) || 0;
-              const cogsShippingValue = parseFloat(document.getElementById('cogsShipping').value) || 0;
-              const totalCOGS = (cogsMaterialsValue + cogsLaborValue + cogsOverheadValue + cogsShippingValue) * sales;
+h2 {
+  margin-top: 20px;
+}
 
-               const totalOperationalCosts = calculateAnnual('rent', 'rentFrequency') +
-        calculateAnnual('utilities', 'utilitiesFrequency') +
-        calculateAnnual('salaries', 'salariesFrequency') +
-        calculateAnnual('marketing', 'marketingFrequency') +
-        calculateAnnual('insurance', 'insuranceFrequency') +
-        calculateAnnual('travel', 'travelFrequency') +
-        calculateAnnual('hotel', 'hotelFrequency');
+/* .nav-left {
 
-              const totalBuildingCosts = calculateAnnual('buildingRent', 'buildingRentFrequency') +
-                  calculateAnnual('buildingMaintenance', 'buildingMaintenanceFrequency') +
-                  calculateAnnual('buildingUtilities', 'buildingUtilitiesFrequency');
+} */
 
-              const totalVehicleCosts = calculateAnnual('vehicleGas', 'vehicleGasFrequency') +
-                  calculateAnnual('vehicleMaintenance', 'vehicleMaintenanceFrequency') +
-                  calculateAnnual('vehicleInsurance', 'vehicleInsuranceFrequency') +
-                  calculateAnnual('vehicleRental', 'vehicleRentalFrequency') +
-                  calculateAnnual('vehicleLease', 'vehicleLeaseFrequency');
+/* .nav-right {
+} */
 
-              const cashValue = parseFloat(document.getElementById('cash').value) || 0;
-              const accountsReceivableValue = parseFloat(document.getElementById('accountsReceivable').value) || 0;
-              const inventoryValue = parseFloat(document.getElementById('inventory').value) || 0;
-              const propertyValue = parseFloat(document.getElementById('property').value) || 0;
-              const equipmentValue = parseFloat(document.getElementById('equipment').value) || 0;
-              const totalAssets = cashValue + accountsReceivableValue + inventoryValue + propertyValue + equipmentValue;
 
-              const accountsPayableValue = parseFloat(document.getElementById('accountsPayable').value) || 0;
-              const loansValue = parseFloat(document.getElementById('loans').value) || 0;
-              const mortgagesValue = parseFloat(document.getElementById('mortgages').value) || 0;
-              const taxesPayableValue = parseFloat(document.getElementById('taxesPayable').value) || 0;
-              const otherLiabilitiesValue = parseFloat(document.getElementById('otherLiabilities').value) || 0;
-              const totalLiabilities = accountsPayableValue + loansValue + mortgagesValue + taxesPayableValue + otherLiabilitiesValue;
 
-              const totalCosts = totalCOGS + totalOperationalCosts + totalBuildingCosts + totalVehicleCosts;
-              const netIncome = totalRevenue - totalCosts;
+.nav-inner {
+  transform: scale(1.5);
+}
 
-              const selectedValue = parseFloat(document.getElementById('resultChange').value);
-              const totalOperationalCostsDivided = totalOperationalCosts / selectedValue;
-              const totalBuildingCostsDivided = totalBuildingCosts / selectedValue;
-              const totalVehicleCostsDivided = totalVehicleCosts / selectedValue;
-              const totalCOGSDivided = totalCOGS / selectedValue;
+.nav-btn {
+  font-size: 45px;
+  background-color: transparent;
+  margin: -5px 0;
+  overflow: hidden;
 
-              const netIncomeAdjusted = netIncome / selectedValue;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
 
-              result += `<h3>Total Revenue: ${totalRevenue.toFixed(2)}</h3>`;
-              result += `<h3>Total COGS: ${totalCOGS.toFixed(2)}</h3>`;
-              result += `<h3>Operational Costs Total: ${totalOperationalCostsDivided.toFixed(2)}</h3>`;
-              result += `<h3>Building Costs Total: ${totalBuildingCostsDivided.toFixed(2)}</h3>`;
-              result += `<h3>Vehicle Costs Total: ${totalVehicleCostsDivided.toFixed(2)}</h3>`;
-              result += `<h3>Assets Total: ${totalAssets.toFixed(2)}</h3>`;
-              result += `<h3>Liabilities Total: ${totalLiabilities.toFixed(2)}</h3>`;
-              result += `<h3><strong>Net Income: ${netIncomeAdjusted.toFixed(2)}</strong></h3>`;
+.nav-btn span {
 
-              resultDiv.innerHTML = result;
-          }
-      </script>
-  </body>
-  </html>
+  font-size: 40px;
+}
+
+  /* text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2); */
+
+.nav-btn:hover {
+  color: #f8f8f8;
+}
+
+.cookie-container {
+  position: sticky;
+  position: -webkit-sticky;
+  z-index: 99;
+  bottom: 25px;
+  left: 25px;
+  right: 25px;
+  max-width: 600px;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  padding:  15px;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.cookie-container h2 {
+  text-transform: capitalize;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  color: black;
+}
+
+.cookie-container p {
+  color: black;
+  text-align: left;
+}
+
+.cookie-container div {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.cookie-container button {
+  background-color: #1863dc;
+  padding: 7px 10px;
+  border: solid 2px #3078ec;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.row input[type = 'number'] {
+  margin-right: 15px;
+}
+
+.cookie-container button:hover {
+  /* background-color: #3078ec;
+  */
+  box-shadow: none;
+  background-color: transparent;
+  border: solid 2px #3078ec;
+  color: #3078ec;
+}
+
+.cookie-container button:active {
+  background-color: #1863dc;
+  color: white;
+}
+
+@media (max-width: 700px) {
+  .row {
+    flex-direction: row;
+    /* display: flex; */
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 10px;
+    /* padding: 5px; */
+    /* border: solid; */
+  }
+
+  /*
+  .nav-inner {
+     transform: scale(1.2); 
+  }
+  */
+
+    
+
+  .row label {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 100%;
+  }
+
+  .row > input,
+  .row select {
+    /* color: #1863dc; */
+    /* max-width: 100%; */
+    box-sizing: border-box;
+    margin: 0;
+    width: 100%;
+  }
+}
+
+input,
+textarea,
+select {
+  font-size: 17px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.contact-support {
+  text-decoration: none;
+  color: white;
+  text-align: center;
+  text-transform: capitalize;
+  background-color: #000;
+  width: 100%;
+  max-width: 450px;
+  padding: 12px;
+  margin-top: 20px;
+}
+
+/* Modal styles */
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #000;
+  color: #000;
+  text-align: left;
+  margin: 20px;
+}
+
+.form-row {
+  display: flex; /* Make the container a flex container */
+  align-items: center; /* Vertically center the label and select */
+  gap: 10px; /* Optional: Adds space between the label and select */
+}
+
+.row {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  margin-top: 10px;
+  /* gapx: 50px; */
+  row-gap: 10px;
+}
+
+label,
+input[type="number"],
+select {
+  flex: 1; /* Equal width for all elements */
+  /* margin-right: 10px; */
+}
+
+details div *, details * {
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  /* padding: 10px 20px; */
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tab-container {
+  display: flex;
+  justify-content: center; /* Center-align tabs */
+  gap: 5px;
+}
+
+.tab {
+  flex: 1; /* Make each tab equally spaced */
+  padding: 5px;
+   /* Adjust padding as needed */
+  cursor: pointer;
+  background-color: black;
+  border: 1px solid; /* Adjust border thickness as needed */
+  border-radius: 5px 5px 0 0;
+  /* margin: 0 5px;  */
+  /* Adjust spacing between tabs */
+  color: white; /* Set the text color to white */
+  text-align: center; /* Center-align text within the tab */
+  box-sizing: border-box; /* Include padding and border in the width */
+}
+/* Style for the active tab */
+.active {
+  background-color: white;
+  color: black; /* Set the text color of the active tab to black */
+}
+
+/* Media Query for smaller screens (e.g., mobile) */
+@media (max-width: 768px) {
+  label,
+  input[type="number"],
+  select {
+    width: 100%; /* Set width to 100% for smaller screens */
+    margin-right: 0; /* Remove margin between elements */
+  }
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  display: none; /* Hide the tooltip */
+  visibility: hidden; /* Initially hidden */
+  width: 200px; /* Adjust width as needed */
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Adjust positioning as needed */
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.numeric-input {
+  width: 200px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.container {
+  background-color: #fff; /* White background */
+  color: #000; /* Black text color for contrast */
+  max-width: 800px; /* Maximum width of the container */
+  margin: 10px auto; /* Center horizontally with auto margins */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
+  text-align: left; /* Text alignment inside the container */
+  display: flex;
+  padding: 0 15px;
+  flex-direction: column;
+  align-items: stretch; /* Stretch items to fill container */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.hidden {
+  display: none;
+}
+
+.good {
+  color: green;
+}
+
+.warning {
+  color: yellow;
+}
+
+.critical {
+  color: red;
+}
+
+.payment-form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 450px;
+  gap: 10px;
+  /* align-items: flex-start; */
+}
+
+.payment-input {
+  padding: 10px 5px 10px 5px;
+}
+
+.pay-button {
+  margin-top: 0;
+  background-color: #000;
+  border-radius: 0;
+  padding: 12px;
+}
+
+.pay-button:disabled {
+  background-color: #333;
+}
+
+#SubregionDropdown {
+  min-width: 50px;
+}
+/* 
+function getRegionCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+      // Decode the cookie value
+      const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
+      // If the value is empty and it's a frequency field, set it to 'annually'
+      if (decodedValue === '') {
+          return 'NONE';
+      }
+      return decodedValue;
+  } else {
+      return 'NONE';
+  }
+} */
+
+/* <div class="checkbox-wrapper-2" >
+        <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
+       </div> */
