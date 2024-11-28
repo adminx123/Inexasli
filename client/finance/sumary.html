@@ -124,8 +124,7 @@ function getCookie(name) {
 document.addEventListener('DOMContentLoaded', function() {
 function updateOnChange(){    
 
-     document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
-     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
+  
 
     NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
