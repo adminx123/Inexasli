@@ -1,4 +1,4 @@
-html: |
+
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -26,21 +26,27 @@ html: |
       <div class="container">
           <h1>Business Metrics Calculator</h1>
 
-          <div class="form-row">
+         <div>
               <label for="revenueType">Income Source </label>
-              <select id="revenueType" onchange="toggleRevenueType()">
+                  <select id="revenueType" onchange="toggleRevenueType()">
                   <option value="blank"></option>
                   <option value="rental">Rental</option>
                   <option value="service">Service</option>
                   <option value="product">Product</option>
               </select>
+             </div>
+              
+              <div>
               <label> Revenue Per Rental, Hour, Unit</label>
               <input type="number" id="price">
           </div>
 
-          <div class="form-row">
+          <div>
               <label>Number of Rentals, Hours, Units</label>
               <input type="number" id="sales">
+              </div>
+              
+            <div>
               <label>Per</label>
               <select id="salesFrequency" class="frequency-dropdown" onchange="updateFrequency('sales')">
                   <option value="blank"></option>
@@ -331,7 +337,7 @@ html: |
           <div id="results"></div>
           <button onclick="calculate()">Calculate</button>
       </div>
-
+</div>
       <script>
           function toggleCogs() {
               const cogs = document.getElementById('cogs').value;
