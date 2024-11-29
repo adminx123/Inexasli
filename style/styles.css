@@ -326,7 +326,7 @@ details div *, details * {
   margin-bottom: 10px;
 }
 
-.button:not(.nav-btn) {
+/* .button:not(.nav-btn) {
   background-color: #000000; /* Black background */
   color: white; /* White text */
   padding: 10px 20px; /* Adjust padding for size */
@@ -339,6 +339,8 @@ details div *, details * {
   margin-top: 1px;
   margin-bottom: 1px;
 }
+*/
+
 .tab-container {
   display: flex;
   justify-content: center; /* Center-align tabs */
