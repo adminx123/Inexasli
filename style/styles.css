@@ -1,4 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 
 * {
@@ -335,7 +335,7 @@ details div *, details * {
 }
 
 button {
-  background-color: #00000;
+  background-color: #000000;
   color: white;
   /* padding: 10px 20px; */
   font-size: 16px;
@@ -465,4 +465,35 @@ button {
 
 #SubregionDropdown {
   min-width: 50px;
+}
+
+.tooltip {
+  font-style: normal;
+  cursor: pointer;
+  font-size: 2rem;
+  position: relative;
+  display: inline-block;
+
+}
+
+.tooltip-content {
+  display: none;
+  position: absolute;
+  bottom: 95%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  width:max-content;
+  max-width: 300px;
+  color: #fff;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  z-index: 1000;
+  opacity: 0;
+}
+
+.tooltip.show .tooltip-content {
+  display: block;
+  opacity: 1;
 }
