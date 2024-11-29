@@ -217,9 +217,9 @@ h2 {
 }
 
 .cookie-container button {
-  background-color: #1863dc;
+  background-color: #000000;
   padding: 7px 10px;
-  border: solid 2px #3078ec;
+  border: solid 2px #000000;
   color: white;
   font-weight: bold;
   cursor: pointer;
