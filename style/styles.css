@@ -145,6 +145,14 @@ h2 {
   margin-top: 20px;
 }
 
+/* .nav-left {
+
+} */
+
+/* .nav-right {
+} */
+
+
 
 .nav-inner {
   transform: scale(1.5);
@@ -164,7 +172,7 @@ h2 {
   font-size: 40px;
 }
 
-  
+  /* text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2); */
 
 .nav-btn:hover {
   color: #f8f8f8;
@@ -326,20 +334,15 @@ details div *, details * {
   margin-bottom: 10px;
 }
 
-/* .button:not(.nav-btn) {
-  background-color: #000000; /* Black background */
-  color: white; /* White text */
-  padding: 10px 20px; /* Adjust padding for size */
-  border: none; /* No border */
-  border-radius: 0; /* No rounded corners for a rectangle shape */
-  font-size: 16px; /* Text size */
-  cursor: pointer; /* Pointer on hover */
-  text-align: center; /* Center text */
-  display: inline-block; /* Prevent stretching */
-  margin-top: 1px;
-  margin-bottom: 1px;
+button {
+  background-color: #4caf50;
+  color: white;
+  /* padding: 10px 20px; */
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
-*/
 
 .tab-container {
   display: flex;
