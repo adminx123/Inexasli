@@ -152,7 +152,7 @@ h2 {
 
 .nav-btn {
   font-size: 45px;
-  background-color: transparent;
+  background-color: white;
   margin: -5px 0;
   overflow: hidden;
 
@@ -164,7 +164,7 @@ h2 {
   font-size: 40px;
 }
 
-  /* text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2); */
+  
 
 .nav-btn:hover {
   color: #f8f8f8;
@@ -461,23 +461,3 @@ details div *, details * {
 #SubregionDropdown {
   min-width: 50px;
 }
-/* 
-function getRegionCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-      // Decode the cookie value
-      const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
-      // If the value is empty and it's a frequency field, set it to 'annually'
-      if (decodedValue === '') {
-          return 'NONE';
-      }
-      return decodedValue;
-  } else {
-      return 'NONE';
-  }
-} */
-
-/* <div class="checkbox-wrapper-2" >
-        <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
-       </div> */
