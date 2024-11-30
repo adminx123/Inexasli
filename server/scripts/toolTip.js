@@ -28,16 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       
       if (contentRect.left < 0) {
-        console.log('too left')
           content.style.left = '0'; 
           content.style.transform = 'translateX(0)';
         } else if (contentRect.right > viewportWidth) {
-        console.log('too right')
 
           content.style.left = '100%';
           content.style.transform = 'translateX(-100%)';
         } else {
-        console.log('normal')
             
           content.style.left = '50%';
           content.style.transform = 'translateX(-50%)';
