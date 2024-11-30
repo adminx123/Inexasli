@@ -348,7 +348,7 @@ button {
   display: flex; /* Use flexbox for layout */
   justify-content: center; /* Center-align tabs horizontally */
   gap: 5px; /* Add space between tabs */
-   max-width: 800px;
+  max-width: 800px;
 }
 
 .tab {
@@ -419,7 +419,7 @@ button {
   box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
   text-align: left; /* Text alignment inside the container */
   display: flex;
-  padding: 0 15px;
+  padding: 0 0px;
   flex-direction: column;
   align-items: stretch; /* Stretch items to fill container */
   box-sizing: border-box; /* Include padding and border in element's total width and height */
