@@ -345,29 +345,31 @@ button {
 }
 
 .tab-container {
-  display: flex;
-  justify-content: center; /* Center-align tabs */
-  gap: 5px;
+  display: flex; /* Use flexbox for layout */
+  justify-content: center; /* Center-align tabs horizontally */
+  gap: 5px; /* Add space between tabs */
 }
 
 .tab {
-  flex: 1; /* Make each tab equally spaced */
-  padding: 5px;
-   /* Adjust padding as needed */
-  cursor: pointer;
-  background-color: black;
-  border: 1px solid; /* Adjust border thickness as needed */
-  border-radius: 5px 5px 0 0;
-  /* margin: 0 5px;  */
+  flex: 1; /* Allow tabs to grow and shrink equally */
+  padding: 5px; /* Internal spacing around tab content */
+  /* Adjust padding as needed */
+  cursor: pointer; /* Change cursor to indicate clickable area */
+  background-color: black; /* Set tab background color */
+  border: 1px solid; /* Add border around tab */
+  /* Adjust border thickness as needed */
+  border-radius: 5px 5px 0 0; /* Round top corners for tab appearance */
+  /* margin: 0 5px; */ /* Commented out: would add horizontal spacing */
   /* Adjust spacing between tabs */
-  color: white; /* Set the text color to white */
-  text-align: center; /* Center-align text within the tab */
-  box-sizing: border-box; /* Include padding and border in the width */
+  color: white; /* Text color for tabs */
+  text-align: center; /* Center-align text within each tab */
+  box-sizing: border-box; /* Include padding and border in tab width */
 }
+
 /* Style for the active tab */
 .active {
-  background-color: white;
-  color: black; /* Set the text color of the active tab to black */
+  background-color: white; /* Change background for active tab */
+  color: black; /* Change text color for active tab */
 }
 
 /* Media Query for smaller screens (e.g., mobile) */
