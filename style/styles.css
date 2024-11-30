@@ -344,33 +344,50 @@ button {
   cursor: pointer;
 }
 
+.container,
 .tab-container {
-  display: flex; /* Use flexbox for layout */
-  justify-content: center; /* Center-align tabs horizontally */
-  gap: 5px; /* Add space between tabs */
-  max-width: 800px;
+  /* Common styles */
+  max-width: 800px; /* Maximum width */
+  margin: 10px auto; /* Center horizontally with auto margins */
+  padding: 0 15px; /* Match padding from sides, adjust as needed */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Specific to container */
+.container {
+  background-color: #fff; 
+  color: #000; 
+  border-radius: 5px; 
+  box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2); 
+  text-align: left; 
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; 
+}
+
+/* Specific to tab-container */
+.tab-container {
+  display: flex;
+  justify-content: center; /* Center tabs within the container */
+  gap: 5px; /* Space between tabs */
+  margin-bottom: -1px; /* To overlap with the container below if needed */
+  z-index: 1; /* Ensure tabs are above other content */
 }
 
 .tab {
-  flex: 1; /* Allow tabs to grow and shrink equally */
-  padding: 5px; /* Internal spacing around tab content */
-  /* Adjust padding as needed */
-  cursor: pointer; /* Change cursor to indicate clickable area */
-  background-color: black; /* Set tab background color */
-  border: 1px solid; /* Add border around tab */
-  /* Adjust border thickness as needed */
-  border-radius: 5px 5px 0 0; /* Round top corners for tab appearance */
-  /* margin: 0 5px; */ /* Commented out: would add horizontal spacing */
-  /* Adjust spacing between tabs */
-  color: white; /* Text color for tabs */
-  text-align: center; /* Center-align text within each tab */
-  box-sizing: border-box; /* Include padding and border in tab width */
+  flex: 1;
+  padding: 5px;
+  cursor: pointer;
+  background-color: black;
+  border: 1px solid;
+  border-radius: 5px 5px 0 0;
+  color: white;
+  text-align: center;
 }
 
-/* Style for the active tab */
 .active {
-  background-color: white; /* Change background for active tab */
-  color: black; /* Change text color for active tab */
+  background-color: white;
+  color: black;
 }
 
 /* Media Query for smaller screens (e.g., mobile) */
@@ -410,20 +427,7 @@ button {
   font-size: 14px;
 }
 
-.container {
-  background-color: #fff; /* White background */
-  color: #000; /* Black text color for contrast */
-  max-width: 800px; /* Maximum width of the container */
-  margin: 10px auto; /* Center horizontally with auto margins */
-  border-radius: 5px; /* Rounded corners */
-  box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
-  text-align: left; /* Text alignment inside the container */
-  display: flex;
-  padding: 0 0px;
-  flex-direction: column;
-  align-items: stretch; /* Stretch items to fill container */
-  box-sizing: border-box; /* Include padding and border in element's total width and height */
-}
+
 
 .hidden {
   display: none;
