@@ -369,15 +369,6 @@ button {
   align-items: stretch; 
 }
 
-/* Specific to tab-container */
-.tab-container {
-  display: flex;
-  justify-content: center; /* Center tabs within the container */
-  gap: 5px; /* Space between tabs */
-  margin-bottom: -1px; /* To overlap with the container below if needed */
-  z-index: 1; /* Ensure tabs are above other content */
-}
-
 .tab {
   flex: 1;
   padding: 5px;
