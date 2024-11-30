@@ -368,7 +368,7 @@ button {
 }
 
 .tab {
-  padding: 10px 15px; /* Adjust for better touch targets */
+  padding: 1px 1px; /* Adjust for better touch targets */
   cursor: pointer;
   background-color: black;
   color: white;
