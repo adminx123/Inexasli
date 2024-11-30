@@ -2,7 +2,7 @@
 
 
 * {
-  margin: 5px 0 0 0;
+  /* margin: 0; */
   padding: 0;
   box-sizing: border-box;
 }
@@ -467,17 +467,26 @@ button {
   min-width: 50px;
 }
 
+/* <span class=" tooltip" data-tooltip="This is my tooltip 2">ⓘ
+<span class="tooltip-content"></span>
+</span> */
+
+/* <script src="/server/scripts/toolTip.js"></script> */
+
+
 .tooltip {
   font-style: normal;
   cursor: pointer;
-  font-weight: bold;
+  /* font-weight: bold; */
   /* font-size: 2rem; */
   position: relative;
   display: inline-block;
+  
 
 }
 
 .tooltip-content {
+  font-weight: normal;
   display: none;
   position: absolute;
   bottom: 95%;

@@ -54,20 +54,24 @@
     
         
 
-        <h2 style="text-align: center;font-size: 24px;"><u>LIABILITY</u></h2>
+        <h2 style="text-align: center;font-size: 24px;"><u>LIABILITY</u> <span class=" tooltip" data-tooltip="Money you owe to others, which you need to pay back. Examples include loans, mortgages, or credit card debts. It's like a promise you've made to pay someone in the future.">ⓘ
+            <span class="tooltip-content"></span>
+            </span> </h2>
        
         
     
             <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
     
     </div>
-<p style='text-align:center; margin-bottom: 10px;'><i>Money you owe to others, which you need to pay back. Examples include loans, mortgages, or credit card debts. It's like a promise you've made to pay someone in the future.</i></p>
+<!-- <p style='text-align:center; margin-bottom: 10px;'><i>Money you owe to others, which you need to pay back. Examples include loans, mortgages, or credit card debts. It's like a promise you've made to pay someone in the future.</i></p> -->
     
 
 	<p>Step 5: Enter any debts that you have in the feilds below.</p>
 
 		
- <h2 style="text-align: center;font-size: 18px;"> Non Revolving Liabilities</h2>
+ <h2 style="text-align: center;font-size: 18px;"> Non Revolving Liabilities <span class=" tooltip" data-tooltip="This is my tooltip 2">ⓘ
+    <span class="tooltip-content"></span>
+    </span></h2>
 
 
 	
@@ -91,7 +95,9 @@
     <input type="text" id="liabilities_vehicle_loan">
 </div>
 
-<h2 style="text-align: center;font-size: 18px;">Revolving Liabilities</h2>
+<h2 style="text-align: center;font-size: 18px;">Revolving Liabilities <span class=" tooltip" data-tooltip="This is my tooltip 2">ⓘ
+    <span class="tooltip-content"></span>
+    </span></h2>
 	
 <div class ="row">
     <label for="liabilities_student_loan">Student Loan:</label>
@@ -138,6 +144,7 @@
 
 	<script src="../../server/scripts/liability.js"></script>
     <script src="/server/scripts/cookieConsent.js"></script>
+    <script src="/server/scripts/toolTip.js"></script>
 
 </body>
 
