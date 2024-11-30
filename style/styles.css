@@ -339,34 +339,93 @@ button {
   cursor: pointer;
 }
 
-/* Container for content, not including tabs */
+/* Container for content */
 .container {
-  background-color: #fff; /* White background */
-  color: #000; /* Black text color for contrast */
-  max-width: 800px; /* Maximum width of the container */
-  margin: 10px auto; /* Center horizontally with auto margins */
-  border-radius: 0 0 5px 5px; /* Only bottom corners rounded */
-  box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
-  text-align: left; /* Text alignment inside the container */
+  background-color: #fff;
+  color: #000;
+  max-width: 800px;
+  margin: 10px auto;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2);
+  text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: stretch; /* Stretch items to fill container */
-  box-sizing: border-box; /* Include padding and border in element's total width and height */
-  padding: 15px; /* Padding for content */
+  align-items: stretch;
+  box-sizing: border-box;
+  padding: 15px;
   position: relative;
 }
 
-/* Tabs container outside of main content */
+/* Tabs container */
 .tab-container {
   display: flex;
   justify-content: center; /* Center-align tabs */
-  gap: 1px;
   max-width: 800px; /* Match container's max-width */
   margin: 0 auto; /* Center tabs */
   position: relative;
-  z-index: 1; /* Ensure tabs are above content */
+  z-index: 1;
+  width: 100%; /* Full width of the container */
+  padding: 0 16px; /* This padding should match container's padding to make tabs flush */
 }
 
+.tab {
+  padding: 10px 15px;
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  border-radius: 5px 5px 0 0;
+  transition: background-color 0.3s, color 0.3s;
+  flex-grow: 1; /* Allow each tab to grow equally within the container */
+  text-align: center; /* Center text within each tab */
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflow if text is too long */
+  text-overflow: ellipsis; /* Show ellipsis if text is too long */
+}
+
+.tab.active {
+  background-color: white;
+  color: black;
+}
+
+/* Pseudo-element to create a visual connection */
+.container::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #fff;
+}
+
+/* Ensure tabs are flush with the container */
+.tab-container::before,
+.tab-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 16px; /* Match the padding on the tab-container */
+  background-color: #fff; /* Match the container background */
+  z-index: 0;
+}
+.tab-container::before {
+  left: 0;
+  border-radius: 5px 0 0 0;
+}
+.tab-container::after {
+  right: 0;
+  border-radius: 0 5px 0 0;
+}
+
+/* Style the first and last tabs for better visual continuity */
+.tab:first-child {
+  border-radius: 5px 0 0 0;
+}
+.tab:last-child {
+  border-radius: 0 5px 0 0;
+}
 .tab {
   padding: 1px 1px; /* Adjust for better touch targets */
   cursor: pointer;
