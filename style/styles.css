@@ -347,25 +347,25 @@ button {
 .tab-container {
   display: flex;
   justify-content: center; /* Center-align tabs */
-  gap: 5px;
+  gap: 1px;
 }
 
 .tab {
   flex: 1; /* Make each tab equally spaced */
-  padding: 5px;
-   /* Adjust padding as needed */
+  padding: 10px; /* Increased padding for better touch targets */
   cursor: pointer;
   background-color: black;
-  border: 1px solid; /* Adjust border thickness as needed */
+  border: 1px solid white; /* Explicitly set the border color to white for consistency */
   border-radius: 5px 5px 0 0;
-  /* margin: 0 5px;  */
-  /* Adjust spacing between tabs */
+  /* margin: 0; /* Removed for a cleaner look and to allow the gap property to work */
   color: white; /* Set the text color to white */
   text-align: center; /* Center-align text within the tab */
   box-sizing: border-box; /* Include padding and border in the width */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for color changes */
 }
+
 /* Style for the active tab */
-.active {
+.tab.active {
   background-color: white;
   color: black; /* Set the text color of the active tab to black */
 }
