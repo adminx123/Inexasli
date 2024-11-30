@@ -348,6 +348,7 @@ button {
   display: flex; /* Use flexbox for layout */
   justify-content: center; /* Center-align tabs horizontally */
   gap: 5px; /* Add space between tabs */
+   max-width: 800px;
 }
 
 .tab {
