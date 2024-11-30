@@ -351,7 +351,7 @@ button {
   gap: 5px; /* Optional, for spacing between tabs */
   width: 100%; /* Ensure it takes full width */
   max-width: 800px; /* Match container's max-width */
-  margin: 10px auto; /* Center the container itself */
+  margin: 0px auto; /* Center the container itself */
   padding: 0 15px; /* Padding from sides */
   box-sizing: border-box; /* Include padding in width calculation */
   position: relative; /* If you're using positioning */
