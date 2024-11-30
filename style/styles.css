@@ -345,7 +345,7 @@ button {
   color: #000;
   max-width: 800px;
   margin: 10px auto;
-  border-radius: 0 0 5px 5px;
+  border-radius: 5px 5px 0 0; /* Now we round the top corners */
   box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2);
   text-align: left;
   display: flex;
@@ -359,28 +359,29 @@ button {
 /* Tabs container */
 .tab-container {
   display: flex;
-  justify-content: center; /* Center-align tabs */
+  justify-content: center;
   max-width: 800px; /* Match container's max-width */
-  margin: 0 auto; /* Center tabs */
-  position: relative;
+  margin: 0 auto;
+  position: absolute; /* Position the tab container absolutely */
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 1;
-  width: 100%; /* Full width of the container */
-  padding: 0 16px; /* This padding should match container's padding to make tabs flush */
+  background-color: black; /* Match the tab background to hide any potential gap */
 }
 
 .tab {
   padding: 10px 15px;
   cursor: pointer;
-  background-color: black;
+  background-color: black; /* This should be the same as the tab-container background */
   color: white;
   border: 1px solid white;
   border-radius: 5px 5px 0 0;
   transition: background-color 0.3s, color 0.3s;
-  flex-grow: 1; /* Allow each tab to grow equally within the container */
-  text-align: center; /* Center text within each tab */
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide overflow if text is too long */
-  text-overflow: ellipsis; /* Show ellipsis if text is too long */
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tab.active {
@@ -392,7 +393,7 @@ button {
 .container::before {
   content: '';
   position: absolute;
-  top: -1px;
+  top: -1px; /* Adjust this to cover any potential gap */
   left: 0;
   right: 0;
   height: 1px;
@@ -406,7 +407,7 @@ button {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 16px; /* Match the padding on the tab-container */
+  width: 15px; /* Match the padding on the container */
   background-color: #fff; /* Match the container background */
   z-index: 0;
 }
@@ -419,37 +420,12 @@ button {
   border-radius: 0 5px 0 0;
 }
 
-/* Style the first and last tabs for better visual continuity */
+/* Adjust for the first and last tabs */
 .tab:first-child {
   border-radius: 5px 0 0 0;
 }
 .tab:last-child {
   border-radius: 0 5px 0 0;
-}
-.tab {
-  padding: 1px 1px; /* Adjust for better touch targets */
-  cursor: pointer;
-  background-color: black;
-  color: white;
-  border: 1px solid white;
-  border-radius: 5px 5px 0 0; /* Only top corners rounded */
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.tab.active {
-  background-color: white;
-  color: black;
-}
-
-/* Pseudo-element to create a visual connection between tabs and container */
-.container::before {
-  content: '';
-  position: absolute;
-  top: -1px; /* Slightly overlap the tabs */
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: #fff;
 }
 
 /* Media Query for smaller screens (e.g., mobile) */
