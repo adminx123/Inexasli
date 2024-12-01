@@ -472,7 +472,7 @@ button {
 
 /* <script src="/server/scripts/toolTip.js"></script> */
 
-/* other tooltips effects iii lgo */
+/* other tooltips effects iii logo and everything except heading icons */
 .tooltip {
   font-style: normal;
   cursor: pointer;
@@ -484,9 +484,9 @@ button {
   
 
 }
-/* tooltip icon on headings */
+/* tooltip icon on headings Only */
 h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
-  font-size: 25px;
+  font-size: 10px;
 }
 
 .tooltip-content {
