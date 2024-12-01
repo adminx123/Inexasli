@@ -472,7 +472,7 @@ button {
 
 /* <script src="/server/scripts/toolTip.js"></script> */
 
-/* other tooltips */
+/* other tooltips effects iii lgo */
 .tooltip {
   font-style: normal;
   cursor: pointer;
@@ -480,7 +480,7 @@ button {
   /* font-size: 2rem; */
   position: relative;
   display: inline-block;
-  font-size: 20px;
+  font-size: 10px;
   
 
 }
