@@ -352,7 +352,7 @@ button {
 
 .tab {
   flex: 1; /* Make each tab equally spaced */
-  padding: 5px;
+  padding: 1px;
    /* Adjust padding as needed */
   cursor: pointer;
   background-color: black;
