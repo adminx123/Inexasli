@@ -344,45 +344,30 @@ button {
   cursor: pointer;
 }
 
-
 .tab-container {
   display: flex;
-  justify-content: center; /* This should center the tabs within tab-container */
-  gap: 5px; /* Optional, for spacing between tabs */
-  width: 100%; /* Ensure it takes full width */
-  max-width: 800px; /* Match container's max-width */
-  margin: 0px auto; /* Center the container itself */
-  padding: 0 15px; /* Padding from sides */
-  box-sizing: border-box; /* Include padding in width calculation */
-  position: relative; /* If you're using positioning */
-}
-
-/* Specific to container */
-.container {
-  background-color: #fff; 
-  color: #000; 
-  border-radius: 5px; 
-  box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2); 
-  text-align: left; 
-  display: flex;
-  flex-direction: column;
-  align-items: center; 
+  justify-content: center; /* Center-align tabs */
+  gap: 5px;
 }
 
 .tab {
-  flex: 1;
+  flex: 1; /* Make each tab equally spaced */
   padding: 5px;
+   /* Adjust padding as needed */
   cursor: pointer;
   background-color: black;
-  border: 1px solid;
+  border: 1px solid; /* Adjust border thickness as needed */
   border-radius: 5px 5px 0 0;
-  color: white;
-  text-align: center;
+  /* margin: 0 5px;  */
+  /* Adjust spacing between tabs */
+  color: white; /* Set the text color to white */
+  text-align: center; /* Center-align text within the tab */
+  box-sizing: border-box; /* Include padding and border in the width */
 }
-
+/* Style for the active tab */
 .active {
   background-color: white;
-  color: black;
+  color: black; /* Set the text color of the active tab to black */
 }
 
 /* Media Query for smaller screens (e.g., mobile) */
@@ -422,7 +407,20 @@ button {
   font-size: 14px;
 }
 
-
+.container {
+  background-color: #fff; /* White background */
+  color: #000; /* Black text color for contrast */
+  max-width: 800px; /* Maximum width of the container */
+  margin: 10px auto; /* Center horizontally with auto margins */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
+  text-align: left; /* Text alignment inside the container */
+  display: flex;
+  padding: 0 15px;
+  flex-direction: column;
+  align-items: stretch; /* Stretch items to fill container */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
 
 .hidden {
   display: none;
