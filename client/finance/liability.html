@@ -51,7 +51,7 @@
             </span> </h2>
 	
 	<div class="container">
-        <div class="nav-div">
+      <!--  <div class="nav-div">
 
             <button onclick="calculateBack()" class="nav-btn nav-left"><i class='bx nav-inner bx-left-arrow-alt' ></i></button>
     
@@ -63,8 +63,8 @@
     
             <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
     
-    </div>
-<!-- <p style='text-align:center; margin-bottom: 10px;'><i>Money you owe to others, which you need to pay back. Examples include loans, mortgages, or credit card debts. It's like a promise you've made to pay someone in the future.</i></p> -->
+    </div> -->
+
     
 
 	<p>Step 5: Enter any debts that you have in the feilds below.</p>
@@ -120,7 +120,18 @@
     <input type="text" id="liabilities_tax_arrears">
 </div>
 
-<div class="nav-div">
+
+	</div>
+
+
+    <div class = "hidden">
+
+         <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
+<span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy formulation.</span>
+
+    </div>
+
+	<div class="nav-div">
 
     <button onclick="calculateBack()" class="nav-btn nav-left"><i class='bx nav-inner bx-left-arrow-alt' ></i></button>
 
@@ -132,16 +143,6 @@
     <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
 
 </div>
-	</div>
-
-
-    <div class = "hidden">
-
-         <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
-<span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy formulation.</span>
-
-    </div>
-
 
 	<script src="../../server/scripts/liability.js"></script>
     <script src="/server/scripts/cookieConsent.js"></script>
