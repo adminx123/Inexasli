@@ -7,6 +7,9 @@
   box-sizing: border-box;
 }
 
+#frequency {
+  margin-top: 10px;
+}
 .checkbox-wrapper-2 .ikxBAC {
   appearance: none;
   background-color: #dfe1e4;
@@ -346,7 +349,7 @@ button {
 
 .tab {
   flex: 1; /* Make each tab equally spaced */
-  padding: 1px;
+  padding: 5px 1px;
    /* Adjust padding as needed */
   cursor: pointer;
   background-color: black;
@@ -469,7 +472,7 @@ button {
 
 /* <script src="/server/scripts/toolTip.js"></script> */
 
-
+/* other tooltips */
 .tooltip {
   font-style: normal;
   cursor: pointer;
@@ -477,8 +480,13 @@ button {
   /* font-size: 2rem; */
   position: relative;
   display: inline-block;
+  font-size: 20px;
   
 
+}
+/* tooltip icon on headings */
+h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
+  font-size: 25px;
 }
 
 .tooltip-content {
@@ -504,7 +512,7 @@ button {
   opacity: 1;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 400px) {
   .tooltip-content {
   bottom: 80%;
     max-width: 50vw;

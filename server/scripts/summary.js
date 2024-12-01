@@ -47,29 +47,29 @@ function updateOnChange(){    // Update HTML elements with cookie values
         document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
         document.getElementById('SubregionDropdown').textContent =  "Subregion: " + getCookie('SubregionDropdown');
     
-    document.getElementById('taxable_sum').textContent = " $" + getCookie('ANNUALTAXABLEINCOME');
-    document.getElementById('region_tax_sum').textContent = " $" + getCookie('ANNUALREGIONALTAX');
-    document.getElementById('subregion_tax_sum').textContent = " $" + getCookie('ANNUALSUBREGIONALTAX');
+    document.getElementById('taxable_sum').textContent = " $" + parseFloat(getCookie('ANNUALTAXABLEINCOME')).toFixed(2);
+    document.getElementById('region_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALREGIONALTAX')).toFixed(2);
+    document.getElementById('subregion_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALSUBREGIONALTAX')).toFixed(2);
     document.getElementById('tax_sum').textContent = " $" + parseFloat((getCookie('ANNUALTAX'))).toFixed(2);
         
-    document.getElementById('annual_income_sum').textContent = " $" + getCookie('ANNUALINCOME');
-    document.getElementById('annual_expense_sum').textContent = " $" + getCookie('ANNUALEXPENSESUM');
-    document.getElementById('cpp_sum').textContent = " $" + getCookie('ANNUALCPP');
-    document.getElementById('ANNUALEI').textContent = " $" + getCookie('ANNUALEI');
+    document.getElementById('annual_income_sum').textContent = " $" + parseFloat(getCookie('ANNUALINCOME')).toFixed(2);
+    document.getElementById('annual_expense_sum').textContent = " $" + parseFloat(getCookie('ANNUALEXPENSESUM')).toFixed(2);
+    document.getElementById('cpp_sum').textContent = " $" + parseFloat(getCookie('ANNUALCPP')).toFixed(2);
+    document.getElementById('ANNUALEI').textContent = " $" + parseFloat(getCookie('ANNUALEI')).toFixed(2);
     
 
-    document.getElementById('annual_cpp_seresult').textContent = " $" + getCookie('CPPPAYABLESELFEMPLOYED');
-    document.getElementById('annual_cpp_eresult').textContent = " $" + getCookie('CPPPAYABLEEMPLOYED');
+    document.getElementById('annual_cpp_seresult').textContent = " $" + parseFloat(getCookie('CPPPAYABLESELFEMPLOYED')).toFixed(2);
+    document.getElementById('annual_cpp_eresult').textContent = " $" + parseFloat(getCookie('CPPPAYABLEEMPLOYED')).toFixed(2);
 
-        document.getElementById('TOTALMEDICARE').textContent = " $" + getCookie('TOTALMEDICARE');
-    document.getElementById('TOTALSOCIALSECURITY').textContent = " $" + getCookie('TOTALSOCIALSECURITY');
-        document.getElementById('TOTALSOCIALSECURITYE').textContent = " $" + getCookie('TOTALSOCIALSECURITYE');
-    document.getElementById('TOTALSOCIALSECURITYSE').textContent = " $" + getCookie('TOTALSOCIALSECURITYSE');
+        document.getElementById('TOTALMEDICARE').textContent = " $" + parseFloat(getCookie('TOTALMEDICARE')).toFixed(2);
+    document.getElementById('TOTALSOCIALSECURITY').textContent = " $" + parseFloat(getCookie('TOTALSOCIALSECURITY')).toFixed(2);
+        document.getElementById('TOTALSOCIALSECURITYE').textContent = " $" + parseFloat(getCookie('TOTALSOCIALSECURITYE')).toFixed(2);
+    document.getElementById('TOTALSOCIALSECURITYSE').textContent = " $" + parseFloat(getCookie('TOTALSOCIALSECURITYSE')).toFixed(2);
 
-    document.getElementById('TOTALTAXCG').textContent = " $" + getCookie('TOTALTAXCG');
+    document.getElementById('TOTALTAXCG').textContent = " $" + parseFloat(getCookie('TOTALTAXCG')).toFixed(2);
 
-     document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
-     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
+     document.getElementById('ASSETS').textContent = " $" + parseFloat(getCookie1('ASSETS')).toFixed(2);
+     document.getElementById('LIABILITIES').textContent = " $" + parseFloat(getCookie1('LIABILITIES')).toFixed(2);
      
 
 let DISPOSABLEINCOME;
