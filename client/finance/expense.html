@@ -91,17 +91,7 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 <span id="expenses_grocery_annual"></span>
 </div>
 
-<div class ="row">
-<label for="expenses_dining">Dining:</label>
-<input type="number" id="expenses_dining">
-<select id="expenses_dining_frequency" onchange="calculateAnnual('expenses_dining', 'expenses_dining_frequency')">
-  <option value="annually">Annually</option>
-	<option value="quarterly">Quarterly</option>
-	<option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="expenses_dining_annual"></span>
-</div>
+
 
 <div class ="row">
 <label for="expenses_fitness">Fitness:</label>
@@ -128,15 +118,15 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 </div>
 
 <div class ="row">
-<label for="expenses_subscriptions">Subscriptions:</label>
-<input type="number" id="expenses_subscriptions">
-<select id="expenses_subscriptions_frequency" onchange="calculateAnnual('expenses_subscriptions', 'expenses_subscriptions_frequency')">
+<label for="expenses_medical_dental">Medical & Dental:</label>
+<input type="number" id="expenses_medical_dental">
+<select id="expenses_medical_dental_frequency" onchange="calculateAnnual('expenses_medical_dental', 'expenses_medical_dental_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
-	<option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
 </select>
-<span id="expenses_subscriptions_annual"></span>
+<span id="expenses_medical_dental_annual"></span>
 </div>
 
 <div class ="row">
@@ -163,10 +153,33 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 <span id="expenses_clothing_annual"></span>
 </div>
 
+		  <div class ="row">
+<label for="expenses_cellphone_service">Cellphone:</label>
+<input type="number" id="expenses_cellphone_service">
+<select id="expenses_cellphone_service_frequency" onchange="calculateAnnual('expenses_cellphone_service', 'expenses_cellphone_service_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+	<option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="expenses_cellphone_service_annual"></span>
+</div>
 
 	  <h2 style="text-align: center;font-size: 18px;">Discretionary<span class=" tooltip" data-tooltip="Expenses that are not essential for survival or basic functioning but are related to lifestyle choices, comfort, entertainment, or luxury. These are costs you have control over and can adjust or eliminate without affecting your basic needs, such as dining out, vacations, subscriptions for entertainment, and non-essentials.">ⓘ
       <span class="tooltip-content"></span>
       </span></h2>
+
+<div class ="row">
+<label for="expenses_dining">Dining:</label>
+<input type="number" id="expenses_dining">
+<select id="expenses_dining_frequency" onchange="calculateAnnual('expenses_dining', 'expenses_dining_frequency')">
+  <option value="annually">Annually</option>
+	<option value="quarterly">Quarterly</option>
+	<option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="expenses_dining_annual"></span>
+</div>
 		  
 <div class ="row">
 <label for="expenses_vacation">Vacation:</label>
@@ -193,28 +206,18 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 </div>
 
 <div class ="row">
-<label for="expenses_cellphone_service">Cellphone:</label>
-<input type="number" id="expenses_cellphone_service">
-<select id="expenses_cellphone_service_frequency" onchange="calculateAnnual('expenses_cellphone_service', 'expenses_cellphone_service_frequency')">
+<label for="expenses_subscriptions">Subscriptions:</label>
+<input type="number" id="expenses_subscriptions">
+<select id="expenses_subscriptions_frequency" onchange="calculateAnnual('expenses_subscriptions', 'expenses_subscriptions_frequency')">
   <option value="annually">Annually</option>
   <option value="quarterly">Quarterly</option>
 	<option value="monthly">Monthly</option>
 	<option value="weekly">Weekly</option>
 </select>
-<span id="expenses_cellphone_service_annual"></span>
+<span id="expenses_subscriptions_annual"></span>
 </div>
 
-<div class ="row">
-<label for="expenses_medical_dental">Medical & Dental:</label>
-<input type="number" id="expenses_medical_dental">
-<select id="expenses_medical_dental_frequency" onchange="calculateAnnual('expenses_medical_dental', 'expenses_medical_dental_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
-<span id="expenses_medical_dental_annual"></span>
-</div>
+
 
 
 <h2 style="text-align: center;font-size: 18px;">Debt Payments <span class=" tooltip" data-tooltip="Use this catch-all category for expenses that don't match any of our predefined categories. It's for those unexpected or unique costs, like an impromptu purchase or a service not typically accounted for. Keep an eye on this section to maintain a clear overview of your spending.">ⓘ
