@@ -129,17 +129,7 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 <span id="expenses_medical_dental_annual"></span>
 </div>
 
-<div class ="row">
-<label for="expenses_pet">Pet:</label>
-<input type="number" id="expenses_pet">
-<select id="expenses_pet_frequency" onchange="calculateAnnual('expenses_pet', 'expenses_pet_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-	<option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="expenses_pet_annual"></span>
-</div>
+
 
 <div class ="row">
 <label for="expenses_clothing">Clothing:</label>
@@ -179,6 +169,18 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 	<option value="weekly">Weekly</option>
 </select>
 <span id="expenses_dining_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_entertainment">Entertainment:</label>
+<input type="number" id="expenses_entertainment">
+<select id="expenses_entertainment_frequency" onchange="calculateAnnual('expenses_entertainment', 'expenses_pet_entertainment')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+	<option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="expenses_entertainment_annual"></span>
 </div>
 		  
 <div class ="row">
