@@ -33,7 +33,7 @@
             ['expenses_fitness', 'expenses_fitness_frequency'],
 	        ['expenses_hygiene', 'expenses_hygiene_frequency'],	
             ['expenses_subscriptions', 'expenses_subscriptions_frequency'],
-            ['expenses_pet', 'expenses_pet_frequency'],
+            ['expenses_entertainment', 'expenses_entertainment_frequency'],
             ['expenses_clothing', 'expenses_clothing_frequency'],
             ['expenses_vacation', 'expenses_vacation_frequency'],
             ['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
@@ -137,7 +137,7 @@ function setIncomeData(){
         'expenses_fitness',
         'expenses_hygiene',
         'expenses_subscriptions',
-        'expenses_pet',
+        'expenses_entertainment',
         'expenses_clothing',
         'expenses_vacation',
         'expenses_travel_life_insurance',
@@ -180,7 +180,7 @@ function setIncomeData(){
         'expenses_fitness_frequency',
         'expenses_hygiene_frequency',
         'expenses_subscriptions_frequency',
-        'expenses_pet_frequency',
+        'expenses_entertainment_frequency',
         'expenses_clothing_frequency',
         'expenses_vacation_frequency',
         'expenses_travel_life_insurance_frequency',
@@ -273,7 +273,7 @@ document.getElementById('expenses_dining').value = getCookie('expenses_dining');
 document.getElementById('expenses_fitness').value = getCookie('expenses_fitness');
 document.getElementById('expenses_hygiene').value = getCookie('expenses_hygiene');
 document.getElementById('expenses_subscriptions').value = getCookie('expenses_subscriptions');
-document.getElementById('expenses_pet').value = getCookie('expenses_pet');
+document.getElementById('expenses_entertainment').value = getCookie('expenses_entertainment');
 document.getElementById('expenses_clothing').value = getCookie('expenses_clothing');
 document.getElementById('expenses_vacation').value = getCookie('expenses_vacation');
 document.getElementById('expenses_travel_life_insurance').value = getCookie('expenses_travel_life_insurance');
@@ -314,7 +314,7 @@ document.getElementById('expenses_dining_frequency').value = getCookie('expenses
 document.getElementById('expenses_fitness_frequency').value = getCookie('expenses_fitness_frequency');
 document.getElementById('expenses_hygiene_frequency').value = getCookie('expenses_hygiene_frequency');
 document.getElementById('expenses_subscriptions_frequency').value = getCookie('expenses_subscriptions_frequency');
-document.getElementById('expenses_pet_frequency').value = getCookie('expenses_pet_frequency');
+document.getElementById('expenses_entertainment_frequency').value = getCookie('expenses_entertainment_frequency');
 document.getElementById('expenses_clothing_frequency').value = getCookie('expenses_clothing_frequency');
 document.getElementById('expenses_vacation_frequency').value = getCookie('expenses_vacation_frequency');
 document.getElementById('expenses_travel_life_insurance_frequency').value = getCookie('expenses_travel_life_insurance_frequency');
