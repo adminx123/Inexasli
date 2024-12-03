@@ -161,6 +161,14 @@ Terms_of_Service:
 
   Interview_Consent:
     - "By voluntarily participating in the interview, you consent to the use of screen share, audio, text, and possible video recordings shared indefinitely online on platforms such as Twitter, YouTube, or similar."
+    - "You acknowledge that the interview's content is not to be considered as financial advice, and any decisions made based on this content are done at your own risk."
+
+Interview_Content_Disclaimer:
+  - "The information, discussions, and any insights shared during interviews are provided for educational and illustrative purposes only. By participating in an interview, you acknowledge and agree that:"
+    - "No content from the interview, including but not limited to financial strategies, personal experiences, or theoretical scenarios discussed, constitutes professional financial advice."
+    - "You are encouraged to consult with a licensed financial advisor for personalized financial advice."
+    - "Any use or reliance on the information for making financial decisions is at your own risk."
+  - "By agreeing to these terms, you confirm that you understand and accept that the Developer, its representatives, or any content derived from interviews are not offering financial advice."
 
   Interview_Privacy_and_Information_Sharing:
     - "It is your responsibility to decide what information to share during the interview."
