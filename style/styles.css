@@ -414,8 +414,8 @@ button {
   text-align: left; /* Text alignment inside the container */
   display: flex;
   padding: 0 15px;
-  padding-top: 5px;   /* Adds space at the top inside the container */
-  padding-bottom: 5px; /* Adds space at the bottom inside the container */
+  padding-top: 10px;   /* Adds space at the top inside the container */
+  padding-bottom: 10px; /* Adds space at the bottom inside the container */
   flex-direction: column;
   align-items: stretch; /* Stretch items to fill container */
   box-sizing: border-box; /* Include padding and border in element's total width and height */
