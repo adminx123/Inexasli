@@ -44,7 +44,7 @@
           
 
          <div class="row" >
-              <label for="revenueType">Income Source</label>
+              <label for="revenueType">Income Source:</label>
                   <select id="revenueType" onchange="toggleRevenueType()">
                   <option value="blank">Select</option>
                   <option value="rental">Rental</option>
@@ -56,14 +56,16 @@
       
 
   <div class="row">
-              <label> Revenue Per Rental, Hour, Unit</label>
+              <label> Revenue Per Rental, Hour, Unit:</label>
               <input type="number" id="price">
           </div>
 
 
 <div class="row">
-             
-              <label>Number of Rentals, Hours, Units</label>
+                           <label>Number of Rentals, Hours, Units:</label>
+</div>
+
+     <div>
               <input type="number" id="sales">
   <select id="salesFrequency" class="frequency-dropdown" onchange="updateFrequency('sales')">
                   <option value="blank">Select</option>
