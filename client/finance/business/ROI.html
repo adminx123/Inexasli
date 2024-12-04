@@ -51,9 +51,9 @@
                   <option value="service">Service</option>
                   <option value="product">Product</option>
               </select>
-             </div>
+          
               
-              <div class ="row">
+             
               <label> Revenue Per Rental, Hour, Unit</label>
               <input type="number" id="price">
           </div>
@@ -61,9 +61,9 @@
           <div class ="row">
               <label>Number of Rentals, Hours, Units</label>
               <input type="number" id="sales">
-              </div>
+        
               
-            <div class ="row">
+            
               <label>Per</label>
               <select id="salesFrequency" class="frequency-dropdown" onchange="updateFrequency('sales')">
                   <option value="blank">Select</option>
@@ -74,6 +74,7 @@
               </select>
           </div>
 
+  <div>
           <label for="cogs">Cost of goods sold applicable?</label>
           <select id="cogs" onchange="toggleCogs()">
               <option value="no">No</option>
@@ -84,11 +85,13 @@
               <h2>Cost of Goods Sold</h2>
               <div class ="row">
                   <label for="cogsMaterials">Material Cost Per Unit</label>
-                  <div class="input-container">
+                  
                       <input type="number" id="cogsMaterials">
                       <span id="cogsMaterialsFrequency"></span>
                   </div>
               </div>
+
+            
               <div class ="row">
                   <label for="cogsLabor">Labor Cost Per Unit</label>
                   <div class="input-container">
