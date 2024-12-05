@@ -959,12 +959,12 @@ for (let i = 0; i < frequencyFields.length; i++) {
     const frequency = frequencyInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()};SameSite=None; Secure`;
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()};SameSite=Strict; Secure`;
   } else {
     const frequency = "0";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()};SameSite=None; Secure`;
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()};SameSite=Strict; Secure`;
   }
 }
 
@@ -974,12 +974,12 @@ for (let i = 0; i < incomeFields.length; i++) {
     const income = incomeInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`; 
+    document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`; 
   } else {
     const income = "0";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+    document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
   }
 }
 }
@@ -1072,7 +1072,7 @@ function handleUSAResident() {
     expires = "; expires=" + date.toUTCString();
   }
   // Add SameSite and Secure attributes
-  document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=None; Secure";
+  document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
 }
     
 function calculateNext() {
