@@ -1,6 +1,4 @@
-
-   
-    var ANNUALEXPENSESUM;
+var ANNUALEXPENSESUM;
     var HOUSING;
     
 ;
