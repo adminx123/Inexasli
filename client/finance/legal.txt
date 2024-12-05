@@ -85,13 +85,13 @@ Terms_of_Service:
     Introduction:
       - "By utilizing our worksheet, you consent to the following practices."
       - "The Developer utilizes data solely for the purpose of providing estimations and facilitating your use of the Worksheet."
-      - "Data Storage: We do not permanently store user data; instead, it is temporarily stored in secure cookies on the user's computer and accessed as you progress through the Worksheet."
+      - "Data Storage: We do not store user data on our servers. Instead, it is temporarily kept in secure cookies on your device, which are accessed only as you navigate through our Worksheet. These cookies are set with security attributes like Secure, and SameSite=None when necessary to ensure data integrity and confidentiality."
 
-      - "Data Retention: Financial information entered by you is held temporarily for the duration of your session and may be retained for a maximum of 365 days on your computer unless you clear your cookies."
+      - "Data Retention:  Your financial information is held in these cookies for the duration of your session and may persist on your device for a maximum of 365 days unless you choose to clear your cookies. This temporary retention allows for continuity of your learning experience. You can manage these cookies through your browser settings or by using the cookie management options provided on our site."
 
       - "Security Measures: While we utilize secure temporary cookies as a data protection measure, we are committed to taking further reasonable steps to ensure the confidentiality and integrity of your information."
 
-      - "International Users: For users outside of Canada, we ensure compliance with local data protection laws where applicable."
+      - "International Users: For users accessing our service from outside Canada, we align with local data protection laws to the extent applicable. For European users, we ensure GDPR compliance by providing clear consent mechanisms, rights to access, correct, or erase personal data, and by processing data in a transparent manner."
 
     User_Responsibilities:
       - "Users should be cautious about shared information, as even with secure temporary cookies, additional data protection measures may be necessary."
