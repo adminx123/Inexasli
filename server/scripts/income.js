@@ -230,7 +230,7 @@ function calculateAnnual(inputId, frequencyId) {
       annualEmploymentIncome += calculateAnnual(inputId, frequencyId);
     });
 ANNUALEMPLOYMENTINCOME = annualEmploymentIncome;
- }
+ 
     
 function getCppPayable() {
     var annualSoleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
