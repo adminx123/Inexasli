@@ -97,7 +97,7 @@ document.getElementById('ANNUALEXPENSESUM').textContent = `$${ANNUALEXPENSESUM.t
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
     }
-    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=None; Secure";
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
 }
 
   function housingExpenses() {
@@ -223,12 +223,12 @@ for (let i = 0; i < frequencyFields.length; i++) {
     const frequency = frequencyInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
   } else {
     const frequency = "";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
   }
 }
 
@@ -238,12 +238,12 @@ for (let i = 0; i < expensesFields.length; i++) {
     const expenses = expensesInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${expensesFields[i]}=${expenses}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+    document.cookie = `${expensesFields[i]}=${expenses}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
   } else {
     const expenses = "0";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${expensesFields[i]}=${expenses}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+    document.cookie = `${expensesFields[i]}=${expenses}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
   }
 }
 }
