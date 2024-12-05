@@ -139,105 +139,88 @@ function calculateAnnual(inputId, frequencyId) {
     }
 
 
-    function calculateNormalizedSum() {
-        // Define all income fields with their corresponding frequency fields
-        const incomeFields = [
-            ['income_salary_wages', 'income_salary_wages_frequency'],
-            ['income_tips', 'income_tips_frequency'],
-            ['income_bonuses', 'income_bonuses_frequency'],
-            ['income_sole_prop', 'income_sole_prop_frequency'],
-            ['income_investment_property', 'income_investment_property_frequency'],
-            ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
-            ['income_interest', 'income_interest_frequency'],
-            ['income_owner_dividend', 'income_owner_dividend_frequency'],
-            ['income_public_dividend', 'income_public_dividend_frequency'],
-            ['income_trust', 'income_trust_frequency'],
-            ['income_federal_pension', 'income_federal_pension_frequency'],
-            ['income_work_pension', 'income_work_pension_frequency'],
-            ['income_social_security', 'income_social_security_frequency'],
-            ['income_employment_insurance', 'income_employment_insurance_frequency'],
-            ['income_alimony', 'income_alimony_frequency'],
-            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
-            ['income_royalties', 'income_royalties_frequency'],
-            ['income_gambling_winnings', 'income_gambling_winnings_frequency'],
-            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
-            ['income_venture_capital', 'income_venture_capital_frequency'],
-            ['income_tax_free_income', 'income_tax_free_income_frequency']
-            // Add more income fields here
-        ];
-let annualIncomeSum = 0;
-  // Calculate annual income sum
-        incomeFields.forEach(field => {
-            const [inputId, frequencyId] = field;
-            annualIncomeSum += calculateAnnual(inputId, frequencyId);
-        });
-ANNUALINCOME = annualIncomeSum
- // Display the results
-        document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
+   function calculateNormalizedSum() {
+    // Define all income fields with their corresponding frequency fields
+    const incomeFields = [
+        ['income_salary_wages', 'income_salary_wages_frequency'],
+        ['income_tips', 'income_tips_frequency'],
+        ['income_bonuses', 'income_bonuses_frequency'],
+        ['income_sole_prop', 'income_sole_prop_frequency'],
+        ['income_investment_property', 'income_investment_property_frequency'],
+        ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
+        ['income_interest', 'income_interest_frequency'],
+        ['income_owner_dividend', 'income_owner_dividend_frequency'],
+        ['income_public_dividend', 'income_public_dividend_frequency'],
+        ['income_trust', 'income_trust_frequency'],
+        ['income_federal_pension', 'income_federal_pension_frequency'],
+        ['income_work_pension', 'income_work_pension_frequency'],
+        ['income_social_security', 'income_social_security_frequency'],
+        ['income_employment_insurance', 'income_employment_insurance_frequency'],
+        ['income_alimony', 'income_alimony_frequency'],
+        ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
+        ['income_royalties', 'income_royalties_frequency'],
+        ['income_gambling_winnings', 'income_gambling_winnings_frequency'], // This is included here
+        ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+        ['income_venture_capital', 'income_venture_capital_frequency'],
+        ['income_tax_free_income', 'income_tax_free_income_frequency']
+    ];
 
-// Define all  taxable income fields with their corresponding frequency fields
-        const taxableincomeFields = [
-            ['income_salary_wages', 'income_salary_wages_frequency'],
-            ['income_tips', 'income_tips_frequency'],
-            ['income_bonuses', 'income_bonuses_frequency'],
-            ['income_sole_prop', 'income_sole_prop_frequency'],
-            ['income_investment_property', 'income_investment_property_frequency'],
-            ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
-            ['income_interest', 'income_interest_frequency'],
-            ['income_owner_dividend', 'income_owner_dividend_frequency'],
-            ['income_public_dividend', 'income_public_dividend_frequency'],
-            ['income_trust', 'income_trust_frequency'],
-            ['income_federal_pension', 'income_federal_pension_frequency'],
-            ['income_work_pension', 'income_work_pension_frequency'],
-            ['income_social_security', 'income_social_security_frequency'],
-            ['income_employment_insurance', 'income_employment_insurance_frequency'],
-            ['income_alimony', 'income_alimony_frequency'],
-            ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
-            ['income_royalties', 'income_royalties_frequency'],
-            ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
-            ['income_venture_capital', 'income_venture_capital_frequency'],
-                        // Add more income fields here
-        ];
-      
-let annualTaxableSum = 0;
+    let annualIncomeSum = 0;
+    let annualTaxableSum = 0;
 
-taxableincomeFields.forEach(field => {
-    const [inputId, frequencyId] = field;
-    let taxableincome = calculateAnnual(inputId, frequencyId);
+    // Calculate annual income sum
+    incomeFields.forEach(field => {
+        const [inputId, frequencyId] = field;
+        annualIncomeSum += calculateAnnual(inputId, frequencyId);
+    });
 
-    // Exclude capital gains completely for USA
-    if (document.getElementById('RegionDropdown').value === 'USA' && inputId === 'income_capital_gains_losses') {
-        return; // Skip this iteration
+    ANNUALINCOME = annualIncomeSum;
+
+    // Calculate annual taxable sum with conditions for gambling winnings
+    incomeFields.forEach(field => {
+        const [inputId, frequencyId] = field;
+        let income = calculateAnnual(inputId, frequencyId);
+
+        // Exclude gambling winnings for Canada
+        if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_gambling_winnings') {
+            return; // Skip this iteration for Canada
+        }
+
+        // For USA or other regions, include gambling winnings
+        if (inputId === 'income_capital_gains_losses') {
+            // Adjust for Canada
+            if (document.getElementById('RegionDropdown').value === 'CAN') {
+                income *= 0.5;
+            } else {
+                // For USA or other regions, we include it fully
+                annualTaxableSum += income;
+            }
+        } else {
+            annualTaxableSum += income; // Include all other income types
+        }
+    });
+
+    // Apply standard deduction for USA
+    if (document.getElementById('RegionDropdown').value === 'USA') {
+        annualTaxableSum -= SD;
+    } else {
+        // Apply BPA for other regions
+        annualTaxableSum -= BPA;
     }
 
-    // Apply Canada-specific adjustments for capital gains
-    if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_capital_gains_losses') {
-        taxableincome *= 0.5; // Adjust for Canada
-    }
+    // Ensure result is not less than 0
+    annualTaxableSum = Math.max(annualTaxableSum, 0);
 
-    annualTaxableSum += taxableincome;
-});
+    ANNUALTAXABLEINCOME = annualTaxableSum;
 
-// Apply standard deduction for USA
-if (document.getElementById('RegionDropdown').value === 'USA') {
-    annualTaxableSum -= SD;
-} else {
-    // Apply BPA for other regions
-    annualTaxableSum -= BPA;
+    // Display the results
+    document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
+    document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
+
+    // ... (rest of your function)
 }
 
-// Ensure result is not less than 0
-annualTaxableSum = Math.max(annualTaxableSum, 0);
-
-ANNUALTAXABLEINCOME = annualTaxableSum;
-
-// Display the results
-document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
-
-     
-        
-       
-      const employmentincomeFields = 
+     const employmentincomeFields = 
       [[ 'income_salary_wages', 'income_salary_wages_frequency'],
       ['income_tips', 'income_tips_frequency'],
       ['income_bonuses', 'income_bonuses_frequency']];
