@@ -45,7 +45,7 @@
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
             expires = "; expires=" + date.toUTCString();
         }
-        document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=None; Secure";
+        document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
     }
     
     
@@ -83,12 +83,12 @@
         const liabilities = liabilitiesInput.value;
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 365);
-        document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+        document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
       } else {
         const liabilities = "0";
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 365);
-        document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+        document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
       }
     }
     }
