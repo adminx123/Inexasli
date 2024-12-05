@@ -70,7 +70,7 @@
 
 <p style="margin-bottom: 20px;">Step 2: Enter gross income amounts (before tax & contributions) and select the corresponding frequency that you receive the amount.</p>
 
-<h2 style="text-align: center;font-size: 18px;">Employment - Self Employment - Investment <span class=" tooltip" data-tooltip="Employment involves working under a contract for an employer, receiving a regular salary or wage, and generally includes benefits like health insurance. Self-employment means working for oneself, where income might fluctuate based on work volume, with the individual handling their own taxes, benefits, and business expenses. Investment income refers to earnings from investments, which can include interest from savings or bonds, dividends from stocks, capital gains from selling assets at a profit, and rental or royalty income from property or intellectual property use.">ⓘ
+<h2 style="text-align: center;font-size: 18px;">Employment - Self Employment<span class=" tooltip" data-tooltip="Employment involves working under a contract for an employer, receiving a regular salary or wage, and generally includes benefits like health insurance. Self-employment means working for oneself, where income might fluctuate based on work volume, with the individual handling their own taxes, benefits, and business expenses.">ⓘ
     <span class="tooltip-content"></span>
     </span></h2>
 
@@ -124,52 +124,6 @@
     <option value="weekly">Weekly</option>
 </select>
 <span id="income_sole_prop_annual"></span>
-</div>
-
-
-
-<div class ="row">
-<label for="income_capital_gains_losses">Capital Gains/Losses:</label>
-<input type="number" id="income_capital_gains_losses">
-<select id="income_capital_gains_losses_frequency" onchange="calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_capital_gains_losses_annual"></span>
-</div>
-
- <div class = "USAHIDE">
- <div class = "row">
-    <label for = "capital_gain_state_rate">Capital Gain State Tax Rate</label>
-    <input type="number" id="income_capital_gain_state_rate">
-    <label>%</label>
- </div>
-</div>
-    
-<div class ="row">
-<label for="income_owner_dividend">Dividend, Owner:</label>
-<input type="number" id="income_owner_dividend">
-<select id="income_owner_dividend_frequency" onchange="calculateAnnual('income_owner_dividend', 'income_owner_dividend_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_owner_dividend_annual"></span>
-</div>
-
-    <div class ="row">
-<label for="income_venture_capital">Venture:</label>
-<input type="number" id="income_venture_capital">
-<select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_venture_capital_annual"></span>
 </div>
 
 
@@ -242,7 +196,43 @@
 </select>
 <span id="income_investment_property_annual"></span>
 </div>
+
+
+<div class ="row">
+<label for="income_capital_gains_losses">Capital Gains/Losses:</label>
+<input type="number" id="income_capital_gains_losses">
+<select id="income_capital_gains_losses_frequency" onchange="calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
+</select>
+<span id="income_capital_gains_losses_annual"></span>
+</div>
+
+ <div class = "USAHIDE">
+ <div class = "row">
+    <label for = "capital_gain_state_rate">Capital Gain State Tax Rate</label>
+    <input type="number" id="income_capital_gain_state_rate">
+    <label>%</label>
+ </div>
+</div>
     
+
+
+    <div class ="row">
+<label for="income_venture_capital">Venture:</label>
+<input type="number" id="income_venture_capital">
+<select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
+</select>
+<span id="income_venture_capital_annual"></span>
+</div>
+
+		       
     <div class ="row">
 <label for="income_public_dividend">Dividend, Public:</label>
 <input type="number" id="income_public_dividend">
@@ -255,6 +245,17 @@
 <span id="income_public_dividend_annual"></span>
 </div>
 
+		       <div class ="row">
+<label for="income_owner_dividend">Dividend, Owner:</label>
+<input type="number" id="income_owner_dividend">
+<select id="income_owner_dividend_frequency" onchange="calculateAnnual('income_owner_dividend', 'income_owner_dividend_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
+</select>
+<span id="income_owner_dividend_annual"></span>
+</div>
     
 <div class ="row">
 <label for="income_interest">Interest:</label>
