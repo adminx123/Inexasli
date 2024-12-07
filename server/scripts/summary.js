@@ -87,6 +87,8 @@ if (getCookie('RegionDropdown') === 'USA') {
         parseFloat(getCookie('ANNUALEI')) -
         parseFloat(getCookie('ANNUALCPP')) -
         parseFloat(getCookie('ANNUALTAX'));
+} else {
+    DISPOSABLEINCOME = 0
 }
 
 // Update HTML element with the calculated value
@@ -146,6 +148,8 @@ let ANNUALGOVERNMENTOBLIGATIONS;
 } else if (getCookie('RegionDropdown') === 'CAN') {
     ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('ANNUALCPP')) +
         parseFloat(getCookie('ANNUALEI'))  ;
+} else {
+    ANNUALGOVERNMENTOBLIGATIONS = 0
 }
 
 // Update HTML element with the calculated value
@@ -175,8 +179,13 @@ function colorChangeDTI() {
         document.getElementById("DEBTTOINCOME").style.color = "red";
     }
 }
+if (isNaN(DEBTTOINCOME)) {
+    document.getElementById('DEBTTOINCOME').textContent = ' Not Applicable'
+} else {
+
     document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
 colorChangeDTI(); // After setting the text content, call the function to update the color
+}
 
     
 HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
@@ -201,9 +210,16 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
     }
 }
 
-// Assuming HOUSINGTOINCOME is the ID of the element displaying HTI ratio
-document.getElementById('HOUSINGTOINCOME').textContent = HOUSINGTOINCOME.toFixed(3); 
-colorChangeHTI(); 
+
+if (isNaN(HOUSINGTOINCOME) ) {
+    document.getElementById('HOUSINGTOINCOME').textContent = ' Not Applicable'; 
+    
+} else {
+    
+    // Assuming HOUSINGTOINCOME is the ID of the element displaying HTI ratio
+    document.getElementById('HOUSINGTOINCOME').textContent = HOUSINGTOINCOME.toFixed(3); 
+    colorChangeHTI(); 
+}
 
    SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
 
@@ -227,9 +243,16 @@ function colorChangeSavingsToDebt() {
     }
 }
 
-// Assuming "SAVINGSTODEBT" is the ID of the element displaying the savings-to-debt ratio
-document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
-colorChangeSavingsToDebt();
+
+if (isNaN(SAVINGSTODEBT) ) {
+    
+    document.getElementById('SAVINGSTODEBT').textContent = 'Not Applicable';
+} else {
+    
+    // Assuming "SAVINGSTODEBT" is the ID of the element displaying the savings-to-debt ratio
+    document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
+    colorChangeSavingsToDebt();
+}
 
 
 
@@ -256,9 +279,45 @@ function colorChangeFIRE() {
     }
 }
 
-// Assuming FIRERATIO is the ID of the element displaying the FIRE ratio
-document.getElementById('FIRERATIO').textContent = FIRERATIO.toFixed(3);
-colorChangeFIRE();
+if (isNaN(FIRERATIO)) {
+
+document.getElementById('FIRERATIO').textContent = 'Not Applicable';
+} else {
+
+    // Assuming FIRERATIO is the ID of the element displaying the FIRE ratio
+    document.getElementById('FIRERATIO').textContent = FIRERATIO.toFixed(3);
+    colorChangeFIRE();
+}
+
+document.querySelector('#cookie-delete').addEventListener('click', () => {
+    deleteCookies()
+})
+
+function deleteCookies() {
+    const cookies = document.cookie.split(";");
+
+    const paths = ["/", "/client/finance"];
+    const domains = [window.location.hostname]; 
+
+    cookies.forEach(cookie => {
+        const cookieName = cookie.split("=")[0].trim();
+        
+
+        if (cookieName === "authenticated") return;
+
+        paths.forEach(path => {
+            domains.forEach(domain => {
+                document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain}`;
+            });
+        });
+    });
+
+    document.location.reload();
+}
+
+
+
+
 
   } 
   

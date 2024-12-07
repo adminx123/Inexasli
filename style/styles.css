@@ -239,12 +239,13 @@ h2 {
   */
   box-shadow: none;
   background-color: transparent;
-  border: solid 2px #3078ec;
-  color: #3078ec;
+  border: solid 2px #000000;
+  color: #000000;
 }
 
 .cookie-container button:active {
-  background-color: #1863dc;
+  background-color: #363636;
+  border: #363636;
   color: white;
 }
 
@@ -345,9 +346,12 @@ button {
   display: flex;
   justify-content: center; /* Center-align tabs */
   gap: 5px;
+  max-width: 800px;
+  margin: 20px auto 0;
 }
 
 .tab {
+  text-decoration: none;
   flex: 1; /* Make each tab equally spaced */
   padding: 5px 1px;
    /* Adjust padding as needed */
@@ -446,6 +450,33 @@ button {
   gap: 10px;
   /* align-items: flex-start; */
 }
+
+
+.delete-div {
+  width: 100%;
+  margin: 0;
+  padding: 5px 2px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.delete-div button {
+  background-color: #000;
+  padding: 10px ;
+  border-radius: 0;
+  
+}
+
+.delete-div button:hover {
+  background-color: #222222;
+  
+}
+
+.delete-div button:active {
+  background-color: #000000;
+  
+}
+
 
 .payment-input {
   padding: 10px 5px 10px 5px;
