@@ -1,3 +1,26 @@
+const tabs = document.querySelectorAll('.tab')
+
+tabs.forEach(tab => {
+    const dataL = tab.getAttribute('data-location')
+    const location = document.location.pathname
+
+    tab.addEventListener('click', (e) => {
+        const checkbox1 = document.querySelector('#termscheckbox')
+        const checkbox2 = document.querySelector('#notintended')
+
+        if (!checkbox1.checked || !checkbox2.checked) {
+            e.preventDefault()
+        }
+    })
+    
+
+    if (location.includes(dataL)) {
+        tab.removeAttribute('href')
+
+        tab.classList.add('active')
+    }
+})
+
 
 var ANNUALTAXABLEINCOME;
     var ANNUALREGIONALTAX;

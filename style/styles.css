@@ -368,6 +368,7 @@ button {
 /* Style for the active tab */
 .active {
   border: solid 1px white;
+  cursor:default;
   background-color: white;
   color: black; /* Set the text color of the active tab to black */
 }

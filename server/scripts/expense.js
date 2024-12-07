@@ -3,10 +3,10 @@ const tabs = document.querySelectorAll('.tab')
 tabs.forEach(tab => {
     const dataL = tab.getAttribute('data-location')
     const location = document.location.pathname
-    console.log(location)
-    console.log(dataL)
+    
 
     if (location.includes(dataL)) {
+      tab.removeAttribute('href')
 
         tab.classList.add('active')
     }
