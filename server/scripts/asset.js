@@ -1,3 +1,18 @@
+const tabs = document.querySelectorAll('.tab')
+
+tabs.forEach(tab => {
+    const dataL = tab.getAttribute('data-location')
+    const location = document.location.pathname
+    console.log(location)
+    console.log(dataL)
+
+    if (location.includes(dataL)) {
+
+        tab.classList.add('active')
+    }
+})
+
+
 var ASSETS;
 var LIQUIDASSETS;
 

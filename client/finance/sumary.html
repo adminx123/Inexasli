@@ -39,12 +39,12 @@
 
 
      
-        <div class="tab-container" style="margin-bottom: 20px;">
-              <a href="/client/finance/income.html" class="tab">Income</a>
-              <a href="/client/finance/expense.html" class="tab">Expense</a>
-              <a href="/client/finance/asset.html" class="tab">Asset</a>
-              <a href="/client/finance/liability.html" class="tab">Liability</a>
-                  </div>
+        <div class="tab-container">
+          <a href="/client/finance/income.html" class="tab" data-location="income">Income</a>
+          <a href="/client/finance/expense.html" class="tab" data-location="expense">Expense</a>
+          <a href="/client/finance/asset.html" class="tab" data-location="asset">Asset</a>
+          <a href="/client/finance/liability.html" class="tab" data-location="liability">Liability</a>
+              </div>
      <div class="container">
      
    <div style="text-align:center;"><select id="frequency">
@@ -252,6 +252,20 @@
 <script src="https://js.stripe.com/v3/" async ></script>
 
 <script >
+  const tabs = document.querySelectorAll('.tab')
+
+tabs.forEach(tab => {
+    const dataL = tab.getAttribute('data-location')
+    const location = document.location.pathname
+    console.log(location)
+    console.log(dataL)
+
+    if (location.includes(dataL)) {
+
+        tab.classList.add('active')
+    }
+})
+
 
 function deleteCookies() {
     const cookies = document.cookie.split(";");
