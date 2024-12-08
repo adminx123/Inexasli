@@ -315,6 +315,10 @@ function deleteCookies() {
 
     cookies.forEach(cookie => {
         const cookieName = cookie.split("=")[0].trim();
+
+        if (cookies.length == 1 && cookie.includes('authenticated')) {
+            return
+        }
         
 
         if (cookieName === "authenticated") {
@@ -337,6 +341,7 @@ function deleteCookies() {
     });
 
     document.location.reload();
+    return
 }
 
 

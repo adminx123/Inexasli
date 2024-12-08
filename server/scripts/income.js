@@ -1151,17 +1151,6 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
     }
 
 
-function deleteCookiesForDomain(domainToDelete) {
-    var cookies = document.cookie.split("; ");
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i];
-        var eqPos = cookie.indexOf("=");
-        var cookieName = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        if (cookieName.includes(domainToDelete)) {
-            document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=" + domainToDelete + "; path=/";
-        }
-    }
-    console.log("Cookies with domain " + domainToDelete + " deleted.");
-}
+
 
 
