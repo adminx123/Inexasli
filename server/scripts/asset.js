@@ -116,12 +116,12 @@ for (let i = 0; i < assetsFields.length; i++) {
     const assets = assetsInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${assetsFields[i]}=${assets}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
+    document.cookie = `${assetsFields[i]}=${assets}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
   } else {
     const assets = "0";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${assetsFields[i]}=${assets}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
+    document.cookie = `${assetsFields[i]}=${assets}; expires=${expirationDate.toUTCString()};  path=/;SameSite=Strict; Secure`;
   }
 }
 }

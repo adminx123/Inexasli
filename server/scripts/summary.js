@@ -193,7 +193,7 @@ function colorChangeDTI() {
         document.getElementById("DEBTTOINCOME").style.color = "red";
     }
 }
-if (isNaN(DEBTTOINCOME)) {
+if (isNaN(DEBTTOINCOME) || !isFinite(DEBTTOINCOME)) {
     document.getElementById('DEBTTOINCOME').textContent = ' Not Applicable'
 } else {
 
@@ -317,13 +317,23 @@ function deleteCookies() {
         const cookieName = cookie.split("=")[0].trim();
         
 
-        if (cookieName === "authenticated") return;
+        if (cookieName === "authenticated") {
+            return
+        } else {
+            var expires = "";
 
-        paths.forEach(path => {
-            domains.forEach(domain => {
-                document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain}`;
+        
+            var date = new Date();
+            date.setTime(date.getTime());
+            expires = "; expires=" + date.toUTCString();
+
+            paths.forEach(path => {
+                domains.forEach(domain => {
+                    document.cookie = cookieName + "=" + encodeURIComponent( 0) + expires + "; path=/; SameSite=Strict; Secure";
+                });
             });
-        });
+        }  ;
+
     });
 
     document.location.reload();

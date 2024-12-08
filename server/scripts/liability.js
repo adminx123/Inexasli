@@ -93,12 +93,12 @@ var LIABILITIES;
         const liabilities = liabilitiesInput.value;
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 365);
-        document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
+        document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
       } else {
         const liabilities = "0";
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 365);
-        document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
+        document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
       }
     }
     }

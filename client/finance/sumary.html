@@ -269,21 +269,33 @@ tabs.forEach(tab => {
 function deleteCookies() {
     const cookies = document.cookie.split(";");
 
-    const paths = ["/", '/client/finance'];
+    const paths = ["/", "/client/finance"];
     const domains = [window.location.hostname]; 
 
     cookies.forEach(cookie => {
         const cookieName = cookie.split("=")[0].trim();
-        if (cookieName === "authenticated") return;
         
-        paths.forEach(path => {
-            domains.forEach(domain => {
-                document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain}`;
+
+        if (cookieName === "authenticated") {
+            return
+        } else {
+            var expires = "";
+
+        
+            var date = new Date();
+            date.setTime(date.getTime());
+            expires = "; expires=" + date.toUTCString();
+
+            paths.forEach(path => {
+                domains.forEach(domain => {
+                    document.cookie = cookieName + "=" + encodeURIComponent( 0) + expires + "; path=/; SameSite=Strict; Secure";
+                });
             });
-        });
+        }  ;
+
     });
 
-    document.location.reload()
+    document.location.reload();
 }
 
     const paid = getCookie("authenticated");

@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
       button.addEventListener("click", () => {
         setVisitCookie("visited", true, 365);
         element.remove();
+        element.remove();
       });
     }, 2000);
   }

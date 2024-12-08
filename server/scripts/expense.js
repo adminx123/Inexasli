@@ -236,12 +236,12 @@ for (let i = 0; i < frequencyFields.length; i++) {
     const frequency = frequencyInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; path=/;  SameSite=Strict; Secure`;
   } else {
     const frequency = "";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
+    document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; path=/;  SameSite=Strict; Secure`;
   }
 }
 
@@ -251,12 +251,12 @@ for (let i = 0; i < expensesFields.length; i++) {
     const expenses = expensesInput.value;
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${expensesFields[i]}=${expenses}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
+    document.cookie = `${expensesFields[i]}=${expenses}; expires=${expirationDate.toUTCString()}; path=/;  SameSite=Strict; Secure`;
   } else {
     const expenses = "0";
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${expensesFields[i]}=${expenses}; expires=${expirationDate.toUTCString()}; SameSite=Strict; Secure`;
+    document.cookie = `${expensesFields[i]}=${expenses}; expires=${expirationDate.toUTCString()}; path=/;  SameSite=Strict; Secure`;
   }
 }
 }
