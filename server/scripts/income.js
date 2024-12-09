@@ -1,3 +1,23 @@
+function getTermsCookie(name) {
+    const cookieArray = document.cookie.split(";");
+    for (let cookie of cookieArray) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(`${name}=`)) {
+        return cookie.substring(name.length + 1);
+      }
+    }
+    return false; 
+  }
+  function setTermsCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+      const date = new Date();
+      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); 
+      expires = `; expires=${date.toUTCString()}`;
+    }
+    document.cookie = `${name}=${value || ""}${expires}; path=/;SameSite=Lax`;
+  }
+
 const tabs = document.querySelectorAll('.tab')
 
 tabs.forEach(tab => {
@@ -8,7 +28,10 @@ tabs.forEach(tab => {
         const checkbox1 = document.querySelector('#termscheckbox')
         const checkbox2 = document.querySelector('#notintended')
 
-        if (!checkbox1.checked || !checkbox2.checked) {
+        const isChecked1 = getTermsCookie('term1')
+        const isChecked2 = getTermsCookie('term2')
+
+        if (!isChecked1 && !isChecked2) {
             e.preventDefault()
         }
     })
@@ -19,6 +42,51 @@ tabs.forEach(tab => {
 
         tab.classList.add('active')
     }
+})
+
+
+const checkbox1 = document.querySelector('#termscheckbox')
+        const checkbox2 = document.querySelector('#notintended')
+
+checkbox1.addEventListener('click', ()=> {
+    if (checkbox1.checked) {
+        setTermsCookie('term1', true, 365)
+    } else {
+        setTermsCookie('term1', false, 365)
+        
+    }
+})
+
+
+checkbox2.addEventListener('click', ()=> {
+    if (checkbox2.checked) {
+        setTermsCookie('term2', true, 365)
+    } else {
+        setTermsCookie('term2', false, 365)
+    }
+})
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    const checkbox1 = document.querySelector('#termscheckbox')
+        const checkbox2 = document.querySelector('#notintended')
+
+
+        const isChecked1 = getTermsCookie('term1') 
+        const isChecked2 = getTermsCookie('term2')
+
+        console.log(typeof isChecked1)
+        console.log(typeof isChecked2)
+
+        if (isChecked1 == 'true') {
+            checkbox1.checked = true
+        }
+
+        if (isChecked2 == 'true') {
+            checkbox2.checked = true
+        }
+
+
 })
 
 
