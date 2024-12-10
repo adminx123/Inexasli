@@ -596,23 +596,35 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
       }
 
       /* Hamburger menu styles */
-      .menu {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
-        z-index: 2;
-      }
+     .menu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  z-index: 2;
+}
 
-      .menu div {
-        width: 25px;
-        height: 3px;
-        background-color: #fff;
-        margin: 4px 0;
-        transition: 0.3s;
-      }
+.menu div {
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  margin: 4px 0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.menu.active div:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.menu.active div:nth-child(2) {
+  opacity: 0;
+}
+
+.menu.active div:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
 
       .dropdown {
         display: none;
@@ -637,14 +649,4 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
         background-color: #575757;
       }
 
-      .menu.active div:nth-child(1) {
-        transform: rotate(-45deg) translate(-5px, 6px);
-      }
-
-      .menu.active div:nth-child(2) {
-        opacity: 0;
-      }
-
-      .menu.active div:nth-child(3) {
-        transform: rotate(45deg) translate(-5px, -6px);
-      }
+     
