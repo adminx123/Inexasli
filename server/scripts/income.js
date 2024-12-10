@@ -1,22 +1,30 @@
 function getTermsCookie(name) {
-    const cookieArray = document.cookie.split(";");
-    for (let cookie of cookieArray) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(`${name}=`)) {
-        return cookie.substring(name.length + 1);
-      }
+    const now = Date.now()
+    const status = JSON.parse(window.localStorage.getItem(name))
+
+    if (status && now >  status.time ) {
+        localStorage.removeItem(name)
+        return false
+       
+    } 
+
+    if (status && status.accepted) {
+        return true
+    } else if (status && !status.accepted) {
+        return false
     }
-    return false; 
+
+    return false
+
+
+    
   }
   function setTermsCookie(name, value) {
-    let expires = "";
-
-      const date = new Date();
-      const mins = 30
-      date.setTime(date.getTime() + mins * 60 * 1000); 
-      expires = `; expires=${date.toUTCString()}`;
-    
-    document.cookie = `${name}=${value || ""}${expires}; path=/;SameSite=Lax`;
+    const date = new Date()
+    window.localStorage.setItem(name, JSON.stringify({
+        accepted: value,
+        time: date.setTime(date.getTime() + 30 * 60 * 1000)
+    }))
   }
 
 const tabs = document.querySelectorAll('.tab')
@@ -80,11 +88,11 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log(typeof isChecked1)
         console.log(typeof isChecked2)
 
-        if (isChecked1 == 'true') {
+        if (isChecked1 == true) {
             checkbox1.checked = true
         }
 
-        if (isChecked2 == 'true') {
+        if (isChecked2 == true) {
             checkbox2.checked = true
         }
 
