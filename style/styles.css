@@ -343,36 +343,7 @@ button {
   cursor: pointer;
 }
 
-.tab-container {
-  display: flex;
-  justify-content: center; /* Center-align tabs */
-  gap: 5px;
-  max-width: 800px;
-  margin: 20px auto 0;
-}
 
-.tab {
-  text-decoration: none;
-  flex: 1; /* Make each tab equally spaced */
-  padding: 5px 1px;
-   /* Adjust padding as needed */
-  cursor: pointer;
-  background-color: black;
-  border: 1px solid; /* Adjust border thickness as needed */
-  border-radius: 5px 5px 0 0;
-  /* margin: 0 5px;  */
-  /* Adjust spacing between tabs */
-  color: white; /* Set the text color to white */
-  text-align: center; /* Center-align text within the tab */
-  box-sizing: border-box; /* Include padding and border in the width */
-}
-/* Style for the active tab */
-.active {
-  border: solid 1px white;
-  cursor:default;
-  background-color: white;
-  color: black; /* Set the text color of the active tab to black */
-}
 
 /* Media Query for smaller screens (e.g., mobile) */
 @media (max-width: 768px) {
@@ -547,9 +518,47 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
 }
 
 @media (max-width: 400px) {
-  .tooltip-content {
+  .tooltip.show .tooltip-content {
   bottom: 80%;
     max-width: 50vw;
     font-size: 10px;
   }
+}
+
+
+.tab-container {
+  display: flex;
+  justify-content: center; /* Center-align tabs */
+  gap: 5px;
+  max-width: 800px;
+  margin: 20px auto 0;
+}
+
+.tab {
+  text-decoration: none;
+  flex: 1; /* Make each tab equally spaced */
+  padding: 5px 1px;
+   /* Adjust padding as needed */
+  cursor: pointer;
+  background-color: black;
+  border: 1px solid; /* Adjust border thickness as needed */
+  border-radius: 5px 5px 0 0;
+  /* margin: 0 5px;  */
+  /* Adjust spacing between tabs */
+  color: white; /* Set the text color to white */
+  /*text-align: center; /* Center-align text within the tab */
+  box-sizing: border-box; /* Include padding and border in the width */
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: normal;
+}
+/* Style for the active tab */
+.active {
+  border: solid 1px white;
+  /* cursor:default; */
+  background-color: white;
+  color: black; /* Set the text color of the active tab to black */
 }

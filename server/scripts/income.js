@@ -8,13 +8,14 @@ function getTermsCookie(name) {
     }
     return false; 
   }
-  function setTermsCookie(name, value, days) {
+  function setTermsCookie(name, value) {
     let expires = "";
-    if (days) {
+
       const date = new Date();
-      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); 
+      const mins = 30
+      date.setTime(date.getTime() + mins * 60 * 1000); 
       expires = `; expires=${date.toUTCString()}`;
-    }
+    
     document.cookie = `${name}=${value || ""}${expires}; path=/;SameSite=Lax`;
   }
 
@@ -33,6 +34,7 @@ tabs.forEach(tab => {
 
         if (!isChecked1 && !isChecked2) {
             e.preventDefault()
+            alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contribtuions");
         }
     })
     
@@ -50,9 +52,9 @@ const checkbox1 = document.querySelector('#termscheckbox')
 
 checkbox1.addEventListener('click', ()=> {
     if (checkbox1.checked) {
-        setTermsCookie('term1', true, 365)
+        setTermsCookie('term1', true)
     } else {
-        setTermsCookie('term1', false, 365)
+        setTermsCookie('term1', false)
         
     }
 })
@@ -60,9 +62,9 @@ checkbox1.addEventListener('click', ()=> {
 
 checkbox2.addEventListener('click', ()=> {
     if (checkbox2.checked) {
-        setTermsCookie('term2', true, 365)
+        setTermsCookie('term2', true)
     } else {
-        setTermsCookie('term2', false, 365)
+        setTermsCookie('term2', false)
     }
 })
 
