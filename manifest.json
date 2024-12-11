@@ -1,6 +1,6 @@
 {
   "name": "INEXASLI",
-  "short_name": "IEAL",
+  "short_name": "INEXASLI",
   "start_url": "https://inexasli.com/client/finance/income.html", 
   "display": "standalone",
   "theme_color": "#000000",
