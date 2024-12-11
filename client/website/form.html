@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="/manifest.json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INEXASLI - Website Design</title>
+  <link rel="icon" type="image/x-icon" href="../images/Logo.png">
+ <link rel="stylesheet" href="/style/styles.css"> 
+  
+</head>
+<body>
+  <!-- Hamburger Menu -->
+  <div class="menu" id="menuToggle">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <!-- Dropdown Menu -->
+  <div class="dropdown" id="dropdownMenu">
+    <a href="../index.html">Home</a>
+    <a href="../ai/l&C.html">Logo & Content</a>
+  </div>
+
+  <!-- Logo -->
+  <a href="../index.html">
+    <img src="../images/Logo.png" alt="Your Logo">
+  </a>
+
+  <!-- Website Design Content -->
+  <div class="container">
+    <div class="highlight">
+      <h2>Transform Your Online Presence with Custom Web Design</h2>
+      <p>Get a tailored website that reflects your brand's identity and meets your business needs.</p>
+    </div>
+
+    <h2>Why Choose Us for Your Website Design?</h2>
+    <div class="benefits">
+      <div class="benefit-card">
+        <h3>Custom Design</h3>
+        <p>Unique designs tailored to your business vision</p>
+      </div>
+      <div class="benefit-card">
+        <h3>Responsive Layouts</h3>
+        <p>Ensure your site looks great on all devices</p>
+      </div>
+      <div class="benefit-card">
+        <h3>SEO Optimized</h3>
+        <p>Boost your visibility with search engine optimization</p>
+      </div>
+      <div class="benefit-card">
+        <h3>User Experience</h3>
+        <p>Focused on user-friendly navigation and engagement</p>
+      </div>
+      <div class="benefit-card">
+        <h3>Fast Load Times</h3>
+        <p>Optimized for speed to keep visitors engaged</p>
+      </div>
+      <div class="benefit-card">
+        <h3>Ongoing Support</h3>
+        <p>Maintenance and updates to keep your site current</p>
+      </div>
+    </div>
+
+    <form id="websiteDesignForm">
+      <h2>Get Your Custom Website Design Quote</h2>
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <input type="text" id="company" placeholder="Company Name" required>
+      <select id="industry" required>
+        <option value="">Select Your Industry</option>
+        <option value="Retail">Retail</option>
+        <option value="Healthcare">Healthcare</option>
+        <option value="Finance">Finance</option>
+        <option value="Technology">Technology</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <!-- Website Type -->
+      <div class="section">
+        <h3>Select Your Website Type</h3>
+        <div class="grid-container" id="websiteType">
+          <div class="grid-item" data-value="Business">Business</div>
+          <div class="grid-item" data-value="E-commerce">E-commerce</div>
+          <div class="grid-item" data-value="Portfolio">Portfolio</div>
+          <div class="grid-item" data-value="Blog">Blog</div>
+          <div class="grid-item" data-value="Landing Page">Landing Page</div>
+        </div>
+      </div>
+
+      <!-- Features Section -->
+      <div class="section">
+        <h3>Choose Desired Features</h3>
+        <div class="grid-container" id="features">
+          <div class="grid-item" data-value="Contact Form">Contact Form</div>
+          <div class="grid-item" data-value="Gallery">Gallery</div>
+          <div class="grid-item" data-value="Blog Integration">Blog Integration</div>
+          <div class="grid-item" data-value="E-commerce Platform">E-commerce Platform</div>
+          <div class="grid-item" data-value="SEO Services">SEO Services</div>
+          <div class="grid-item" data-value="Custom Graphics">Custom Graphics</div>
+          <div class="grid-item" data-value="Social Media Integration">Social Media Integration</div>
+          <div class="grid-item" data-value="Payment Gateway">Payment Gateway</div>
+        </div>
+      </div>
+
+      <input type="number" id="pages" placeholder="Number of Pages" required>
+      <textarea id="objectives" placeholder="Describe your objectives or special requirements" rows="4" required></textarea>
+      <button type="submit">Get Your Website Design Quote</button>
+    </form>
+  </div>
+
+  <script>
+    // Hamburger menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('active');
+      dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', (event) => {
+      if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.style.display = 'none';
+        menuToggle.classList.remove('active');
+      }
+    });
+
+    // Handle grid item clicks
+    function toggleSelection(event) {
+      const item = event.target;
+      item.classList.toggle('selected');
+    }
+
+    document.querySelectorAll('.grid-item').forEach(item => {
+      item.addEventListener('click', toggleSelection);
+    });
+
+    // Form submission
+    document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const company = document.getElementById('company').value;
+      const industry = document.getElementById('industry').value;
+      const pages = document.getElementById('pages').value;
+      const objectives = document.getElementById('objectives').value;
+
+      const websiteType = Array.from(document.querySelectorAll('#websiteType .grid-item.selected')).map(el => el.dataset.value).join(', ');
+      const features = Array.from(document.querySelectorAll('#features .grid-item.selected')).map(el => el.dataset.value).join(', ');
+
+      const subject = 'Website Design Quote Request from ' + company;
+      const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nWebsite Type: ${websiteType}\nFeatures: ${features}\nNumber of Pages: ${pages}\nObjectives: ${objectives}`;
+      
+      // Use encodeURIComponent for the subject and body
+      window.location.href = `mailto:admin@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  </script>
+</body>
+</html>
