@@ -21,6 +21,7 @@ var LIABILITIES;
         'liabilities_primary_residence',
         'liabilities_investment_properties',
         'liabilities_vehicle_loan',
+            'liabilities_personal_debt',
         'liabilities_student_loan',
         'liabilities_line_of_credit',
         'liabilities_credit_card',
@@ -65,6 +66,7 @@ var LIABILITIES;
         'liabilities_primary_residence',
         'liabilities_investment_properties',
         'liabilities_vehicle_loan',
+          'liabilities_personal_debt',
         'liabilities_student_loan',
         'liabilities_line_of_credit',
         'liabilities_credit_card',
@@ -107,7 +109,7 @@ var LIABILITIES;
     
     function setDebtData2() {
         const liabilitiesFields = [
-            'liabilities_vehicle_loan',
+            'liabilities_personal_debt',
             'liabilities_student_loan',
             'liabilities_line_of_credit',
             'liabilities_credit_card',
@@ -143,6 +145,7 @@ var LIABILITIES;
     document.getElementById('liabilities_primary_residence').value = getCookie('liabilities_primary_residence');
     document.getElementById('liabilities_investment_properties').value = getCookie('liabilities_investment_properties');
     document.getElementById('liabilities_vehicle_loan').value = getCookie('liabilities_vehicle_loan');
+          document.getElementById('liabilities_personal_debt').value = getCookie('liabilities_personal_debt');
     document.getElementById('liabilities_student_loan').value = getCookie('liabilities_student_loan');
     document.getElementById('liabilities_line_of_credit').value = getCookie('liabilities_line_of_credit');
     document.getElementById('liabilities_credit_card').value = getCookie('liabilities_credit_card');
