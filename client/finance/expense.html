@@ -212,73 +212,6 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 </div>
 
 
-
-
-<h2 style="text-align: center;font-size: 18px;">Debt Payments <span class=" tooltip" data-tooltip="Debt payments refer to the regular amounts paid towards loans, credit cards, or any borrowed money. This includes principal and interest, reducing what you owe over time.">ⓘ
-      <span class="tooltip-content"></span>
-      </span></h2>
-		  
-<div class ="row">
-<label for="expenses_line_of_credit_payment">Line of Credit Payment:</label>
-<input type='number' inputmode="numeric"  id="expenses_line_of_credit_payment">
-<select id="expenses_line_of_credit_payment_frequency" onchange="calculateAnnual('expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-	<option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="expenses_line_of_credit_payment_annual"></span>
-</div>
-
-<div class ="row">
-<label for="expenses_student_loan_payment">Student Loan Payment:</label>
-<input type='number' inputmode="numeric"  id="expenses_student_loan_payment">
-<select id="expenses_student_loan_payment_frequency" onchange="calculateAnnual('expenses_student_loan_payment', 'expenses_student_loan_payment_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-	<option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="expenses_student_loan_payment_annual"></span>
-</div>
-
-<div class ="row">
-<label for="expenses_credit_card_payment">Carried Credit Card Debt Payment:</label>
-<input type='number' inputmode="numeric"  id="expenses_credit_card_payment">
-<select id="expenses_credit_card_payment_frequency" onchange="calculateAnnual('expenses_credit_card_payment', 'expenses_credit_card_payment_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-	<option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="expenses_credit_card_payment_annual"></span>
-</div>
-
-<div class ="row">
-<label for="expenses_tax_arrears_payment">Tax Arrears Payment:</label>
-<input type='number' inputmode="numeric"  id="expenses_tax_arrears_payment">
-<select id="expenses_tax_arrears_payment_frequency" onchange="calculateAnnual('expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency')">
-  <option value="annually">Annually</option>
-	<option value="quarterly">Quarterly</option>
-	<option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="expenses_tax_arrears_payment_annual"></span>
-</div>
-
-<div class ="row">
-<label for="expenses_small_business_loan_payment">Small Business Loan Payment:</label>
-<input type='number' inputmode="numeric"  id="expenses_small_business_loan_payment">
-<select id="expenses_small_business_loan_payment_frequency" onchange="calculateAnnual('expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency')">
-  <option value="annually">Annually</option>
-	<option value="quarterly">Quarterly</option>
- 	<option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="expenses_small_business_loan_payment_annual"></span>
-</div>
-
-
 <h2 style="text-align: center;font-size: 18px;"> Housing <span class=" tooltip" data-tooltip="This heading covers all costs related to your living space, including rent or mortgage, utilities, property taxes, insurance, and home maintenance or improvements. It's the foundation of your expense tracking, ensuring your home sweet home remains a sanctuary, not a financial burden.">ⓘ
   <span class="tooltip-content"></span>
   </span></h2>
@@ -480,6 +413,71 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 <span id="transportation_ride_hailing_annual"></span>
 </div>
 
+<h2 style="text-align: center;font-size: 18px;">Debt Payments <span class=" tooltip" data-tooltip="Debt payments refer to the regular amounts paid towards loans, credit cards, or any borrowed money. This includes principal and interest, reducing what you owe over time.">ⓘ
+      <span class="tooltip-content"></span>
+      </span></h2>
+		  
+<div class ="row">
+<label for="expenses_line_of_credit_payment">Line of Credit Payment:</label>
+<input type='number' inputmode="numeric"  id="expenses_line_of_credit_payment">
+<select id="expenses_line_of_credit_payment_frequency" onchange="calculateAnnual('expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+	<option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="expenses_line_of_credit_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_student_loan_payment">Student Loan Payment:</label>
+<input type='number' inputmode="numeric"  id="expenses_student_loan_payment">
+<select id="expenses_student_loan_payment_frequency" onchange="calculateAnnual('expenses_student_loan_payment', 'expenses_student_loan_payment_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+	<option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="expenses_student_loan_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_credit_card_payment">Carried Credit Card Debt Payment:</label>
+<input type='number' inputmode="numeric"  id="expenses_credit_card_payment">
+<select id="expenses_credit_card_payment_frequency" onchange="calculateAnnual('expenses_credit_card_payment', 'expenses_credit_card_payment_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+	<option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="expenses_credit_card_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_tax_arrears_payment">Tax Arrears Payment:</label>
+<input type='number' inputmode="numeric"  id="expenses_tax_arrears_payment">
+<select id="expenses_tax_arrears_payment_frequency" onchange="calculateAnnual('expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency')">
+  <option value="annually">Annually</option>
+	<option value="quarterly">Quarterly</option>
+	<option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="expenses_tax_arrears_payment_annual"></span>
+</div>
+
+<div class ="row">
+<label for="expenses_small_business_loan_payment">Small Business Loan Payment:</label>
+<input type='number' inputmode="numeric"  id="expenses_small_business_loan_payment">
+<select id="expenses_small_business_loan_payment_frequency" onchange="calculateAnnual('expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency')">
+  <option value="annually">Annually</option>
+	<option value="quarterly">Quarterly</option>
+ 	<option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="expenses_small_business_loan_payment_annual"></span>
+</div>
+
+		  
 <h2 style="text-align: center;font-size: 18px;">Dependant(s) <span class=" tooltip" data-tooltip="Costs associated with supporting family members or others who rely on you financially, plus expenses for pets like food, veterinary care, and pet supplies.">ⓘ
   <span class="tooltip-content"></span>
   </span></h2>
