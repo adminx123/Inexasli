@@ -137,7 +137,9 @@ var LIABILITIES;
         function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
-        return parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
+        const val = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
+        return val == 0 || val == '0'? '': val
+
     }
        
         

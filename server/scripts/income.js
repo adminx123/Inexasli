@@ -40,7 +40,7 @@ tabs.forEach(tab => {
         const isChecked1 = getTermsCookie('term1')
         const isChecked2 = getTermsCookie('term2')
 
-        if (!isChecked1 && !isChecked2) {
+        if (!isChecked1 || !isChecked2) {
             e.preventDefault()
             alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contribtuions");
         }
@@ -1097,7 +1097,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (decodedValue === '' && name.includes('_frequency')) {
                 return 'annually';
             }
-            return decodedValue;
+            return decodedValue == 0 || decodedValue == '0'? '': decodedValue;
         } else {
             return 'annually';
         }

@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (decodedValue === '' && name.includes('_frequency')) {
                 return 'annually';
             }
-            return decodedValue;
+            return decodedValue == 0 || decodedValue == '0'? '' : decodedValue;
         } else {
             return 'annually';
         }
