@@ -606,6 +606,8 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
   flex-direction: column;
   cursor: pointer;
   z-index: 2;
+  background-color: unset;
+  border: none;
 }
 
 .menu div {
