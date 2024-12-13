@@ -42,16 +42,17 @@ var ANNUALEXPENSESUM;
             // Define all expense fields with their corresponding frequency fields
         const expenseFields = [
             ['expenses_grocery', 'expenses_grocery_frequency'],
-            ['expenses_dining', 'expenses_dining_frequency'],
-            ['expenses_fitness', 'expenses_fitness_frequency'],
+           ['expenses_fitness', 'expenses_fitness_frequency'],
 	        ['expenses_hygiene', 'expenses_hygiene_frequency'],	
-            ['expenses_subscriptions', 'expenses_subscriptions_frequency'],
-            ['expenses_entertainment', 'expenses_entertainment_frequency'],
-            ['expenses_clothing', 'expenses_clothing_frequency'],
-            ['expenses_vacation', 'expenses_vacation_frequency'],
-            ['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
+             ['expenses_clothing', 'expenses_clothing_frequency'],
             ['expenses_cellphone_service', 'expenses_cellphone_service_frequency'],
-            ['expenses_medical_dental', 'expenses_medical_dental_frequency'],
+		 ['expenses_medical_dental', 'expenses_medical_dental_frequency'],
+		
+		 ['expenses_dining', 'expenses_dining_frequency'],
+		['expenses_subscriptions', 'expenses_subscriptions_frequency'],
+		['expenses_vacation', 'expenses_vacation_frequency'],
+		['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
+		['expenses_entertainment', 'expenses_entertainment_frequency'],
             ['expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency'],
             ['expenses_student_loan_payment', 'expenses_student_loan_payment_frequency'],
             ['expenses_credit_card_payment', 'expenses_credit_card_payment_frequency'],
@@ -113,7 +114,61 @@ document.getElementById('ANNUALEXPENSESUM').textContent = `$${ANNUALEXPENSESUM.t
     document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
 }
 
-  function housingExpenses() {
+ 
+function essentialExpenses() {
+  const essentialFields = [
+      ['expenses_grocery', 'expenses_grocery_frequency'],
+           ['expenses_fitness', 'expenses_fitness_frequency'],
+	        ['expenses_hygiene', 'expenses_hygiene_frequency'],	
+             ['expenses_clothing', 'expenses_clothing_frequency'],
+            ['expenses_cellphone_service', 'expenses_cellphone_service_frequency'],
+		 ['expenses_medical_dental', 'expenses_medical_dental_frequency']
+  ];
+
+  let essential = 0;
+
+  for (const [expenseField, frequencyField] of essentialFields) {
+    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
+    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
+    essential += expense * frequency;
+
+	}
+	  
+ESSENTIAL = essential;
+
+	  document.getElementById('ESSENTIAL').textContent = `$${ESSENTIAL.toFixed(2)}`;
+	  
+	
+  }	
+
+function discretionaryExpenses() {
+  const discretionaryFields = [
+      ['expenses_grocery', 'expenses_grocery_frequency'],
+           ['expenses_fitness', 'expenses_fitness_frequency'],
+	        ['expenses_hygiene', 'expenses_hygiene_frequency'],	
+             ['expenses_clothing', 'expenses_clothing_frequency'],
+            ['expenses_cellphone_service', 'expenses_cellphone_service_frequency'],
+		 ['expenses_medical_dental', 'expenses_medical_dental_frequency']
+  ];
+
+  let discretionary = 0;
+
+  for (const [expenseField, frequencyField] of discretionaryFields) {
+    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
+    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
+    essential += expense * frequency;
+
+	}
+	  
+DISCRETIONARY = discretionary;
+
+	  document.getElementById('DISCRETIONARY').textContent = `$${DISCRETIONARY.toFixed(2)}`;
+	  
+	
+  }	
+
+
+function housingExpenses() {
   const housingFields = [
     ['housing_mortgage_payment', 'housing_mortgage_payment_frequency'],
     ['housing_rent_payment', 'housing_rent_payment_frequency'],
@@ -464,12 +519,16 @@ function calculateBack() {
  transportationExpenses();
 dependantExpenses();
 	    debtExpenses();
+	    essentialExpenses();
+	    discretionaryExpenses();
     
 setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
  setCookie("HOUSING", HOUSING, 365);
 	    setCookie("TRANSPORTATION", TRANSPORTATION, 365);
 	    setCookie("DEPENDANT", DEPENDANT, 365);
 	     setCookie("DEBT", DEBT, 365);
+	     setCookie("ESSENTIAL", ESSENTIAL, 365);
+	    setCookie("DISCRETIONARY", DISCRETIONARY, 365);
   setIncomeData();
     }
     
