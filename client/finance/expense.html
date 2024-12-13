@@ -162,7 +162,9 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 </div>
 
 <div class ="row">
-<label for="expenses_entertainment">Entertainment:</label>
+<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Concert tickets, movies, sporting events, nightlife, video games.">
+  <span class="tooltip-content"></span>
+    Entertainment:</label>
 <input type='number' inputmode="numeric"  id="expenses_entertainment">
 <select id="expenses_entertainment_frequency" onchange="calculateAnnual('expenses_entertainment', 'expenses_pet_entertainment')">
   <option value="annually">Annually</option>
@@ -287,7 +289,7 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 </div>
 
 		  <div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Natural Gas, Propane, Wood, Oil.">
+<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Natural gas, propane, wood, oil.">
   <span class="tooltip-content"></span>
     Heating:</label>
 <input type='number' inputmode="numeric"  id="housing_gas">
