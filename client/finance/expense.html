@@ -289,7 +289,11 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 <span id="housing_water_annual"></span>
 </div>
 
-<div class ="row">
+		  <div class ="row">
+<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Natural Gas, Propane, Wood, Oil.">
+  <span class="tooltip-content"></span>
+    Home Heating:</label>
+		  
 <label for="housing_gas">Home Heating Gas (Natural Gas, Propane, Wood, Oil.):</label>
 <input type='number' inputmode="numeric"  id="housing_gas">
 <select id="housing_gas_frequency" onchange="calculateAnnual('housing_gas', 'housing_gas_frequency')">
