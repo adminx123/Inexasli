@@ -143,6 +143,34 @@ HOUSING = housing;
 	
   }	
 
+ function transportationExpenses() {
+  const transportationFields = [
+     ['transportation_car_loan_payment', 'transportation_car_loan_payment_frequency'],
+            ['transportation_insurance', 'transportation_insurance_frequency'],
+            ['transportation_fuel', 'transportation_fuel_frequency'],
+            ['transportation_maintenance', 'transportation_maintenance_frequency'],
+            ['transportation_public_transit', 'transportation_public_transit_frequency'],
+            ['transportation_ride_hailing', 'transportation_ride_hailing_frequency']
+    
+  ];
+
+  let transportation = 0;
+
+  for (const [expenseField, frequencyField] of transportationFields) {
+    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
+    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
+    transportation += expense * frequency;
+
+	}
+	  
+TRANSPORTATION = transportation;
+
+	  document.getElementById('TRANSPORTATION').textContent = `$${TRANSPORTATION.toFixed(2)}`;
+	  
+	
+  }	
+
+
 function setIncomeData(){ 
 	const expensesFields = [
         'expenses_grocery',
@@ -379,7 +407,7 @@ function calculateBack() {
     calculateNormalizedSum();
 
     housingExpenses();
- 
+ transportationExpenses();
     
 setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
  setCookie("HOUSING", HOUSING, 365);
