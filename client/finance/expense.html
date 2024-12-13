@@ -464,7 +464,9 @@ Step 3: Enter expense amounts & select the corresponding frequency.
 </div>
 
 <div class ="row">
-<label for="expenses_tax_arrears_payment">Tax Arrears Payment:</label>
+<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Unpaid tax from prior years.">
+  <span class="tooltip-content"></span>
+    Tax Arrears Payment:</label>
 <input type='number' inputmode="numeric"  id="expenses_tax_arrears_payment">
 <select id="expenses_tax_arrears_payment_frequency" onchange="calculateAnnual('expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency')">
   <option value="annually">Annually</option>
