@@ -440,7 +440,7 @@ function calculateBack() {
 setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
  setCookie("HOUSING", HOUSING, 365);
 	    setCookie("TRANSPORTATION", TRANSPORTATION, 365);
-	    setCookie("DEPENDANT", TRANSPORTATION, 365);
+	    setCookie("DEPENDANT", DEPENDANT, 365);
   setIncomeData();
     }
     
