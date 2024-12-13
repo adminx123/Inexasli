@@ -70,6 +70,7 @@ function updateOnChange(){    // Update HTML elements with cookie values
     document.getElementById('annual_expense_sum').textContent = " $" + parseFloat(getCookie('ANNUALEXPENSESUM')).toFixed(2);
     document.getElementById('cpp_sum').textContent = " $" + parseFloat(getCookie('ANNUALCPP')).toFixed(2);
     document.getElementById('ANNUALEI').textContent = " $" + parseFloat(getCookie('ANNUALEI')).toFixed(2);
+     document.getElementById('HOUSING').textContent = " $" + parseFloat(getCookie('HOUSING')).toFixed(2);
     
 
     document.getElementById('annual_cpp_seresult').textContent = " $" + parseFloat(getCookie('CPPPAYABLESELFEMPLOYED')).toFixed(2);
