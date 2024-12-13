@@ -436,7 +436,7 @@ function calculateBack() {
 
     housingExpenses();
  transportationExpenses();
-	     function dependantExpenses();
+dependantExpenses();
     
 setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
  setCookie("HOUSING", HOUSING, 365);
