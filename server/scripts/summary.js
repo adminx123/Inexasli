@@ -72,6 +72,7 @@ function updateOnChange(){    // Update HTML elements with cookie values
     document.getElementById('ANNUALEI').textContent = " $" + parseFloat(getCookie('ANNUALEI')).toFixed(2);
      document.getElementById('HOUSING').textContent = " $" + parseFloat(getCookie('HOUSING')).toFixed(2);
     document.getElementById('TRANSPORTATION').textContent = " $" + parseFloat(getCookie('TRANSPORTATION')).toFixed(2);
+    document.getElementById('DEPENDANT').textContent = " $" + parseFloat(getCookie('DEPENDANT')).toFixed(2);
 
     document.getElementById('annual_cpp_seresult').textContent = " $" + parseFloat(getCookie('CPPPAYABLESELFEMPLOYED')).toFixed(2);
     document.getElementById('annual_cpp_eresult').textContent = " $" + parseFloat(getCookie('CPPPAYABLEEMPLOYED')).toFixed(2);
