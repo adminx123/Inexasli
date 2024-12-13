@@ -170,6 +170,34 @@ TRANSPORTATION = transportation;
 	
   }	
 
+ function dependantExpenses() {
+  const dependantFields = [
+     ['dependant_day_care', 'dependant_day_care_frequency'],
+            ['dependant_medical_dental', 'dependant_medical_dental_frequency'],
+            ['dependant_clothing', 'dependant_clothing_frequency'],
+            ['dependant_sports_recreation', 'dependant_sports_recreation_frequency'],
+            ['dependant_transportation', 'dependant_transportation_frequency'],
+            ['dependant_tuition', 'dependant_tuition_frequency'],
+            ['dependant_housing', 'dependant_housing_frequency'],
+            ['dependant_cellular_service', 'dependant_cellular_service_frequency']
+    
+  ];
+
+  let dependant = 0;
+
+  for (const [expenseField, frequencyField] of dependantFields) {
+    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
+    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
+    dependant += expense * frequency;
+
+	}
+	  
+DEPENDANT = dependant;
+
+	  document.getElementById('DEPENDANT').textContent = `$${DEPENDANT.toFixed(2)}`;
+	  
+	
+  }	
 
 function setIncomeData(){ 
 	const expensesFields = [
@@ -412,6 +440,7 @@ function calculateBack() {
 setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
  setCookie("HOUSING", HOUSING, 365);
 	    setCookie("TRANSPORTATION", HOUSING, 365);
+	    setCookie("DEPENDANT", HOUSING, 365);
   setIncomeData();
     }
     
