@@ -143,12 +143,11 @@ ESSENTIAL = essential;
 
 function discretionaryExpenses() {
   const discretionaryFields = [
-      ['expenses_grocery', 'expenses_grocery_frequency'],
-           ['expenses_fitness', 'expenses_fitness_frequency'],
-	        ['expenses_hygiene', 'expenses_hygiene_frequency'],	
-             ['expenses_clothing', 'expenses_clothing_frequency'],
-            ['expenses_cellphone_service', 'expenses_cellphone_service_frequency'],
-		 ['expenses_medical_dental', 'expenses_medical_dental_frequency']
+      ['expenses_dining', 'expenses_dining_frequency'],
+		['expenses_subscriptions', 'expenses_subscriptions_frequency'],
+		['expenses_vacation', 'expenses_vacation_frequency'],
+		['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
+		['expenses_entertainment', 'expenses_entertainment_frequency']
   ];
 
   let discretionary = 0;
@@ -156,7 +155,7 @@ function discretionaryExpenses() {
   for (const [expenseField, frequencyField] of discretionaryFields) {
     const expense = parseFloat(document.getElementById(expenseField).value) || 0;
     const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
-    essential += expense * frequency;
+    discretionary += expense * frequency;
 
 	}
 	  
