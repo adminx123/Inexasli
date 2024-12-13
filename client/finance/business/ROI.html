@@ -446,6 +446,7 @@
 
 
             
+<script src="https://js.stripe.com/v3/" async ></script>
     
       <script>
           function toggleCogs() {
@@ -571,7 +572,117 @@
   // Check if checkboxes are checked
   if (termscheckbox.checked && notintended.checked) {
     // Perform calculations
+
+    const paid = getCookie("authenticated");
+    console.log(paid)
+
+
+if (paid == "paid") {
+    
     calculate();
+} else {
+    // window.location.href = "/client/finance/sumary.html";
+    // alert('unpaid')
+const paymentForm = `
+<form class="payment-form" id="payment-form" style="margin-top: 30px;">
+    <input type="text" class="payment-input" id="username" placeholder="input name" required >
+    <input type="email" class="payment-input" id="useremail" placeholder="input email" required >
+    <div id="status"></div>
+    <button    class="pay-button" id="pay-button">Subscribe for Premium Educational Insights!</button>
+    </form>
+    `
+
+    document.querySelector('#results').insertAdjacentHTML('beforeend', paymentForm)
+
+
+// payment script
+
+
+const lambda =
+  "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
+const publicKey =
+  "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
+
+  const payForm = document.querySelector("#payment-form");
+  
+  
+  payForm.addEventListener("submit", (e) => {
+    const stripe = Stripe(publicKey);
+    console.log('function hit ', e)
+      e.preventDefault();
+      const payButton = document.querySelector("#pay-button");
+      const nameInput = document.querySelector("#username");
+      const emailInput = document.querySelector("#useremail");
+      let payStatus = document.querySelector("#status");
+      payStatus.innerHTML = "Please wait ......";
+      const name = document.querySelector("#username").value;
+      const email = document.querySelector("#useremail").value;
+
+      if (!name || !email) {
+        payStatus.innerHTML = "Please enter your name and email to proceed.";
+        nameInput.disabled = false;
+        emailInput.disabled = false;
+        payButton.disabled = false;
+        return;
+      }
+
+      nameInput.disabled = true;
+      emailInput.disabled = true;
+      payButton.disabled = true;
+
+      //   alert(`${name} ${email}`);
+
+      async function attemptPay() {
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            task: "pay",
+            client_email: email,
+            client_name: name,
+          }),
+        };
+        try {
+          const res = await fetch(lambda, options);
+
+          const data = await res.json();
+
+          if (data.id) {
+            payStatus.innerHTML =
+              "payment proccessing, reload page after payment";
+            await stripe.redirectToCheckout({ sessionId: data.id });
+          } else {
+            nameInput.disabled = false;
+            emailInput.disabled = false;
+            payButton.disabled = false;
+            console.log("session data not returned: kindly retry", data);
+
+            if (data.error) {
+              payStatus.innerHTML = data.error;
+            } else {
+              payStatus.innerHTML = "Payment failed. Please try again";
+            }
+          }
+        } catch (error) {
+          console.error(error.message);
+          payStatus.innerHTML =
+            "Unable to connect. Check your internet and try again.";
+
+          nameInput.disabled = false;
+          emailInput.disabled = false;
+          payButton.disabled = false;
+        }
+      }
+
+      attemptPay();
+    });
+}
+
+
+
+
   } else {
     alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax");
   }
@@ -606,6 +717,14 @@ document.addEventListener('click', closeModal);
         closeModal();
     }
 });    
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    let cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
+    return cookieValue === '' ? '0' : cookieValue;
+}
+
       </script>
   </body>
   </html>
