@@ -199,6 +199,32 @@ DEPENDANT = dependant;
 	
   }	
 
+function debtExpenses() {
+  const debtFields = [
+     ['expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency'],
+            ['expenses_student_loan_payment', 'expenses_student_loan_payment_frequency'],
+            ['expenses_credit_card_payment', 'expenses_credit_card_payment_frequency'],
+            ['expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency'],
+            ['expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency']
+  ];
+
+  let debt = 0;
+
+  for (const [expenseField, frequencyField] of debtFields) {
+    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
+    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
+    debt += expense * frequency;
+
+	}
+	  
+DEBT = debt;
+
+	  document.getElementById('DEBT').textContent = `$${DEBT.toFixed(2)}`;
+	  
+	
+  }	
+
+
 function setIncomeData(){ 
 	const expensesFields = [
         'expenses_grocery',
@@ -437,11 +463,13 @@ function calculateBack() {
     housingExpenses();
  transportationExpenses();
 dependantExpenses();
+	    debtExpenses();
     
 setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
  setCookie("HOUSING", HOUSING, 365);
 	    setCookie("TRANSPORTATION", TRANSPORTATION, 365);
 	    setCookie("DEPENDANT", DEPENDANT, 365);
+	     setCookie("DEBT", DEBT, 365);
   setIncomeData();
     }
     
