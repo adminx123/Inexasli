@@ -74,11 +74,12 @@
     <span class="tooltip-content"></span>
     </span></h2>
 
-
-    
+		       
 <div class ="row">
-<label for="income_salary_wages">Salary/Wages:</label>
-<input type='number' inputmode="numeric"  id="income_salary_wages">
+<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+  <span class="tooltip-content"></span>
+    Salary/Wages:</label>
+	<input type='number' inputmode="numeric"  id="income_salary_wages">
 <select id="income_salary_wages_frequency" onchange="calculateAnnual('income_salary_wages', 'income_salary_wages_frequency')">
     <option value="annually">Annually</option>
     <option value="quarterly">Quarterly</option>
@@ -89,7 +90,9 @@
 </div>
 
 <div class ="row">
-<label for="income_tips">Tips:</label>
+<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+  <span class="tooltip-content"></span>
+    Tips:</label>
 <input type='number' inputmode="numeric"  id="income_tips">
 <select id="income_tips_frequency" onchange="calculateAnnual('income_tips', 'income_tips_frequency')">
     <option value="annually">Annually</option>
@@ -101,7 +104,9 @@
 </div>
 
 <div class ="row">
-<label for="income_bonuses">Bonuses:</label>
+<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+  <span class="tooltip-content"></span>
+    Bonus:</label>
 <input type='number' inputmode="numeric"  id="income_bonuses">
 <select id="income_bonuses_frequency" onchange="calculateAnnual('income_bonuses', 'income_bonuses_frequency')">
     <option value="annually">Annually</option>
@@ -115,8 +120,10 @@
 
 
 <div class ="row">
-<label for="income_sole_prop">Self Employment<a href="/client/finance/business/ROI.html" title="Calculate self-employment income for educational purposes">(Worksheet)</a></label>
-<input type='number' inputmode="numeric"  id="income_sole_prop">
+<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter net amount after expenses and before tax and contributions.">
+  <span class="tooltip-content"></span>
+    Self Employment:<a href="/client/finance/business/ROI.html" title="Calculate self-employment income for educational purposes">(Worksheet)</a></label>
+	<input type='number' inputmode="numeric"  id="income_sole_prop">
 <select id="income_sole_prop_frequency" onchange="calculateAnnual('income_sole_prop', 'income_sole_prop_frequency')">
     <option value="annually">Annually</option>
     <option value="quarterly">Quarterly</option>
