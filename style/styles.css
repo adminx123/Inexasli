@@ -278,6 +278,10 @@ h2 {
   color: white;
 }
 
+.result-parent {
+  padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;
+}
+
 @media (max-width: 700px) {
   .row {
     flex-direction: row;
@@ -288,9 +292,15 @@ h2 {
     
   }
 
+  .result-parent {
+    flex-direction: column;
+    align-items: start;
+    gap: 0;
+    padding-top: 0;
+  }
  
 
-  .row label {
+  .row label, .row div {
     flex-grow: 1;
     flex-shrink: 0;
     flex-basis: 100%;
@@ -556,6 +566,9 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
   bottom: 80%;
     max-width: 50vw;
     font-size: 10px;
+  }
+  #results {
+    display: block;
   }
 }
 
