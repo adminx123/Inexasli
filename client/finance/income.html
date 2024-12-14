@@ -7,22 +7,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INCOME</title>
-         <link rel="icon" type="image/x-icon" href="../images/Logo.png">
+         <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
 	 <link rel="stylesheet" href="/style/styles.css"> 
      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-     <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
-    <link rel="shortcut icon" type="image/x-icon" href="/images/Logo.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
-    <link rel="apple-touch-icon" href="/images/apple-icon-180x180.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png" />
-    <link rel="icon" sizes="192x192" href="/images/android-icon-192x192.png" />
-    <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
-    <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
+     <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
+    <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg />
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
+    <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
+    <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
+    <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
     <link rel="manifest" href="/manifest.json">
 
 </head>
@@ -31,7 +31,7 @@
 
     
         
-<img src="../../images/Logo.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
+<img src="../../images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
 
     
  <h2 style="text-align: center;font-size: 18px; color: white;">The Four Pillars of Finance</h2>
@@ -120,9 +120,13 @@
 
 
 <div class ="row">
+    <div>
 <label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter net amount after expenses and before tax and contributions.">
   <span class="tooltip-content"></span>
-    Self Employment:<a href="/client/finance/business/ROI.html" title="Calculate self-employment income for educational purposes">(Worksheet)</a></label>
+    Self Employment:</label>
+    <span id="ROI_MODAL_OPEN" title="Calculate self-employment income for educational purposes">(Worksheet)</span>
+
+    </div>
 	<input type='number' inputmode="numeric"  id="income_sole_prop">
 <select id="income_sole_prop_frequency" onchange="calculateAnnual('income_sole_prop', 'income_sole_prop_frequency')">
     <option value="annually">Annually</option>
@@ -419,6 +423,8 @@
     </div>
     </div>
 
+   
+
 	   
 <div class="delete-div" style="display: flex; justify-content: center; align-items: center;">
             <button id="cookie-delete">Clear worksheet & cookies</button>
@@ -484,6 +490,12 @@ Medicare taxes fund the Medicare program, covering hospital stays, skilled nursi
         <div></div>
         
     <button onclick="validatecheckbox()" class="nav-btn"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
+</div>
+
+<div id="ROI-modal" class="roi-modal">
+    <div class="modal-content" id="ROI-modal-content">
+        <iframe src="/client/finance/business/ROI.html" height="100%" width="100%" frameborder="0"></iframe>
+    </div>
 </div>
 
 <script src="../../server/scripts/income.js"></script>

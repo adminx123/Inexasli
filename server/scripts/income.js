@@ -1085,6 +1085,11 @@ for (let i = 0; i < incomeFields.length; i++) {
 }
 }
 
+
+document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', ()=> {
+    document.querySelector('#ROI-modal').style.display = 'block'
+})
+
 document.addEventListener('DOMContentLoaded', function() {
     // Function to retrieve cookie value by name
     function getCookie(name) {
@@ -1203,6 +1208,16 @@ function deleteCookies() {
     document.location.reload();
     return
 }
+
+
+window.addEventListener('message', (event) => {
+    // Check the message content (optional: verify event.origin for security)
+    if (event.data === 'close-modal') {
+        // Hide the modal
+        document.querySelector('#ROI-modal').style.display = 'none';
+    }
+});
+
 
     function setCookie(name, value, days) {
   var expires = "";

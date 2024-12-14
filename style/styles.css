@@ -34,7 +34,31 @@
   align-items: stretch;
   padding: 30px;
 }
+.roi-btn {
+  padding: 8px 12px ;
+  border-radius: 0;
+  margin-right: 10px;
+}
 
+#ROI_MODAL_OPEN {
+  color: rgb(14, 72, 92);
+  cursor: pointer;
+}
+
+#ROI-modal {
+  display: none;
+  overflow-y: scroll;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: stretch;
+  align-items: stretch;
+  padding: 30px;
+  
+}
 .modal-content {
   background-color: white;
   display: flex;
@@ -158,6 +182,10 @@ h2 {
 } */
 
 
+.alert {
+  display: block; width: 100%; margin: 10px 0 ;
+}
+
 
 .nav-inner {
   transform: scale(1.5);
@@ -184,7 +212,7 @@ h2 {
 }
 
 .cookie-container {
-  position: sticky;
+  position: fixed;
   position: -webkit-sticky;
   z-index: 99;
   bottom: 25px;

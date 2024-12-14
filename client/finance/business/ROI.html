@@ -8,10 +8,10 @@
 
      <link rel="stylesheet" href="/style/styles.css">
     
-      <link rel="icon" type="image/x-icon" href="Logo.png">
+      <link rel="icon" type="image/x-icon" href="newLogo.jpg">
       <link rel="stylesheet" href="/style/styles.css"> 
-      <link rel="icon" type="image/x-icon" href="/images/Logo.png" />
-      <link rel="shortcut icon" type="image/x-icon" href="/images/Logo.png" />
+      <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
+      <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
       <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
       <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
       <link rel="apple-touch-icon" href="/images/apple-icon-180x180.png" />
@@ -21,18 +21,18 @@
       <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png" />
       <link rel="icon" sizes="192x192" href="/images/android-icon-192x192.png" />
       <link rel="icon" sizes="512x512" href="/images/android-icon-192x192.png" />
-      <link rel="mask-icon" href="/images/Logo.png" color="#5bbad5" />
+      <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
       <link rel="manifest" href="/manifest.json" />
   </head>
-  <body>
+  <body style=" background-color: white">
 
 
-      <div class="tab-container" >
+      <!-- <div class="tab-container" >
        <a href="/client/finance/income.html" class="tab">Income</a>
        <a href="/client/finance/expense.html" class="tab">Expense</a>
        <a href="/client/finance/asset.html" class="tab">Asset</a>
        <a href="/client/finance/liability.html" class="tab">Liability</a>
-           </div>
+           </div> -->
    <div class="container">
 
           
@@ -57,7 +57,7 @@
 
   <div class="row">
               <label> Revenue Per Rental, Hour, Unit:</label>
-              <input type="number" id="price">
+              <input type="number" id="price" style="margin-right: 0;">
           </div>
 
 
@@ -392,7 +392,7 @@
        
   <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
     
-      <div class="checkbox-wrapper-2" >
+      <!-- <div class="checkbox-wrapper-2" >
         <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
        </div>
 <label for="termscheckbox">I have read, understand, and agree to the <a href="#" onclick="openTermsModal()" >terms of service</a> and consent to the creation and use of cookies for calculations and functionality.</label><br>
@@ -411,13 +411,15 @@
             <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
         </div>
         <label for="notintended"> Enter pre-tax & pre-contributions income amounts & select the corresponding frequency. </label>
-    </div>
+    </div> -->
     
 
 <div id="results">
-          <button onclick="validatecheckbox()">Calculate</button>
+          <button  class="roi-btn" onclick="validatecheckbox()">Calculate</button>
      
 </div>
+
+
 
 
     <section id="NIBT">
@@ -435,14 +437,16 @@
         <p id="totalLiabilities"></p>
         <h3 id="bookValue"></h3>
     </section>
+
             
 
 
-<button onclick="window.location.href='https://inexasli.com/client/finance/income.html';">
+<button class="roi-btn" onclick="window.parent.postMessage('close-modal', '*')">
     Return to Income
 </button>
     
 </div>
+<div id="alert" class="alert"></div>
 
 
             
@@ -549,16 +553,51 @@
 
               const netIncomeAdjusted = netIncome / selectedValue;
 
-            document.getElementById('totalRevenue').textContent = `Total Revenue: ${totalRevenue.toFixed(2)}`;
-    document.getElementById('totalCOGS').textContent = `Total COGS: ${totalCOGS.toFixed(2)}`;
-    document.getElementById('operationalCosts').textContent = `Operational Costs Total: ${totalOperationalCostsDivided.toFixed(2)}`;
-    document.getElementById('buildingCosts').textContent = `Building Costs Total: ${totalBuildingCostsDivided.toFixed(2)}`;
-    document.getElementById('vehicleCosts').textContent = `Vehicle Costs Total: ${totalVehicleCostsDivided.toFixed(2)}`;
-    document.getElementById('netIncome').textContent = `Net Income: ${netIncomeAdjusted.toFixed(2)}`;
+              setCookie('totalRevenue', totalRevenue.toFixed(2), 365)
+              setCookie('totalCOGS', totalCOGS.toFixed(2), 365)
+              setCookie('totalOperationalCostsDivided', totalOperationalCostsDivided.toFixed(2), 365)
+              setCookie('totalBuildingCostsDivided', totalBuildingCostsDivided.toFixed(2), 365)
+              setCookie('totalVehicleCostsDivided', totalVehicleCostsDivided.toFixed(2), 365)
+              setCookie('netIncomeAdjusted', netIncomeAdjusted.toFixed(2), 365)
+              setCookie('totalAssets', totalAssets.toFixed(2), 365)
+              setCookie('totalLiabilities', totalLiabilities.toFixed(2), 365)
+              setCookie('bookValue', bookValue.toFixed(2), 365)
+              setCookie('revenueType', document.getElementById('revenueType').value, 365)
 
-    document.getElementById('totalAssets').textContent = `Assets Total: ${totalAssets.toFixed(2)}`;
-    document.getElementById('totalLiabilities').textContent = `Liabilities Total: ${totalLiabilities.toFixed(2)}`;
-    document.getElementById('bookValue').textContent = `Book Value: ${bookValue.toFixed(2)}`;
+
+              document.querySelector('#alert').textContent = 'business data captured go back now....... suggest'
+
+
+            // document.getElementById('totalRevenue').textContent = `Total Revenue: ${totalRevenue.toFixed(2)}`;
+    // document.getElementById('totalCOGS').textContent = `Total COGS: ${totalCOGS.toFixed(2)}`;
+    // document.getElementById('operationalCosts').textContent = `Operational Costs Total: ${totalOperationalCostsDivided.toFixed(2)}`;
+    // document.getElementById('buildingCosts').textContent = `Building Costs Total: ${totalBuildingCostsDivided.toFixed(2)}`;
+    // document.getElementById('vehicleCosts').textContent = `Vehicle Costs Total: ${totalVehicleCostsDivided.toFixed(2)}`;
+    // document.getElementById('netIncome').textContent = `Net Income: ${netIncomeAdjusted.toFixed(2)}`;
+    // document.getElementById('totalAssets').textContent = `Assets Total: ${totalAssets.toFixed(2)}`;
+    // document.getElementById('totalLiabilities').textContent = `Liabilities Total: ${totalLiabilities.toFixed(2)}`;
+    // document.getElementById('bookValue').textContent = `Book Value: ${bookValue.toFixed(2)}`;
+
+
+
+
+
+
+    function setCookie(name, value, days) {
+  var expires = "";
+  if (value === undefined || value === null || value === '') {
+    value = '0';
+  }
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  // Add SameSite and Secure attributes
+  document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
+}
+
+
 }
           
 
@@ -570,122 +609,20 @@
  
 
   // Check if checkboxes are checked
-  if (termscheckbox.checked && notintended.checked) {
+//   if (termscheckbox.checked && notintended.checked) {
     // Perform calculations
 
-    const paid = getCookie("authenticated");
-    console.log(paid)
+    // const paid = getCookie("authenticated");
+    // console.log(paid)
 
-
-if (paid == "paid") {
-    
     calculate();
-} else {
-    // window.location.href = "/client/finance/sumary.html";
-    // alert('unpaid')
-const paymentForm = `
-<form class="payment-form" id="payment-form" style="margin-top: 30px;">
-    <input type="text" class="payment-input" id="username" placeholder="input name" required >
-    <input type="email" class="payment-input" id="useremail" placeholder="input email" required >
-    <div id="status"></div>
-    <button    class="pay-button" id="pay-button">Subscribe for Premium Educational Insights!</button>
-    </form>
-    `
-
-    document.querySelector('#results').insertAdjacentHTML('beforeend', paymentForm)
-
-
-// payment script
-
-
-const lambda =
-  "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
-const publicKey =
-  "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
-
-  const payForm = document.querySelector("#payment-form");
-  
-  
-  payForm.addEventListener("submit", (e) => {
-    const stripe = Stripe(publicKey);
-    console.log('function hit ', e)
-      e.preventDefault();
-      const payButton = document.querySelector("#pay-button");
-      const nameInput = document.querySelector("#username");
-      const emailInput = document.querySelector("#useremail");
-      let payStatus = document.querySelector("#status");
-      payStatus.innerHTML = "Please wait ......";
-      const name = document.querySelector("#username").value;
-      const email = document.querySelector("#useremail").value;
-
-      if (!name || !email) {
-        payStatus.innerHTML = "Please enter your name and email to proceed.";
-        nameInput.disabled = false;
-        emailInput.disabled = false;
-        payButton.disabled = false;
-        return;
-      }
-
-      nameInput.disabled = true;
-      emailInput.disabled = true;
-      payButton.disabled = true;
-
-      //   alert(`${name} ${email}`);
-
-      async function attemptPay() {
-        const options = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            task: "pay",
-            client_email: email,
-            client_name: name,
-          }),
-        };
-        try {
-          const res = await fetch(lambda, options);
-
-          const data = await res.json();
-
-          if (data.id) {
-            payStatus.innerHTML =
-              "payment proccessing, reload page after payment";
-            await stripe.redirectToCheckout({ sessionId: data.id });
-          } else {
-            nameInput.disabled = false;
-            emailInput.disabled = false;
-            payButton.disabled = false;
-            console.log("session data not returned: kindly retry", data);
-
-            if (data.error) {
-              payStatus.innerHTML = data.error;
-            } else {
-              payStatus.innerHTML = "Payment failed. Please try again";
-            }
-          }
-        } catch (error) {
-          console.error(error.message);
-          payStatus.innerHTML =
-            "Unable to connect. Check your internet and try again.";
-
-          nameInput.disabled = false;
-          emailInput.disabled = false;
-          payButton.disabled = false;
-        }
-      }
-
-      attemptPay();
-    });
-}
 
 
 
 
-  } else {
-    alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax");
-  }
+//   } else {
+//     alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax");
+//   }
 }
 
     function openTermsModal() {
