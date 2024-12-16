@@ -7,9 +7,9 @@
       <title>Business Calculator</title>
 
      <link rel="stylesheet" href="/style/styles.css">
+      
     
       <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-      <link rel="stylesheet" href="/style/styles.css"> 
       <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
       <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
       <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
@@ -553,6 +553,8 @@
 
               const netIncomeAdjusted = netIncome / selectedValue;
 
+              
+
               setCookie('totalRevenue', totalRevenue.toFixed(2), 365)
               setCookie('totalCOGS', totalCOGS.toFixed(2), 365)
               setCookie('totalOperationalCostsDivided', totalOperationalCostsDivided.toFixed(2), 365)
@@ -562,7 +564,66 @@
               setCookie('totalAssets', totalAssets.toFixed(2), 365)
               setCookie('totalLiabilities', totalLiabilities.toFixed(2), 365)
               setCookie('bookValue', bookValue.toFixed(2), 365)
-              setCookie('revenueType', document.getElementById('revenueType').value, 365)
+            //   setCookie('revenueType', document.getElementById('revenueType').value, 365)
+
+
+
+
+    setCookie('price', document.querySelector('#price').value, 365);
+    setCookie('sales', document.querySelector('#sales').value, 365);
+    
+    setCookie('cogsMaterials', document.querySelector('#cogsMaterials').value, 365);
+    setCookie('cogsLabor', document.querySelector('#cogsLabor').value, 365);
+    setCookie('cogsOverhead', document.querySelector('#cogsOverhead').value, 365);
+    setCookie('cogsShipping', document.querySelector('#cogsShipping').value, 365);
+    setCookie('rent', document.querySelector('#rent').value, 365);
+    setCookie('utilities', document.querySelector('#utilities').value, 365);
+    setCookie('salaries', document.querySelector('#salaries').value, 365);
+    setCookie('marketing', document.querySelector('#marketing').value, 365);
+    setCookie('insurance', document.querySelector('#insurance').value, 365);
+    setCookie('travel', document.querySelector('#travel').value, 365);
+    setCookie('hotel', document.querySelector('#hotel').value, 365);
+    setCookie('buildingRent', document.querySelector('#buildingRent').value, 365);
+    setCookie('buildingMaintenance', document.querySelector('#buildingMaintenance').value, 365);
+    setCookie('buildingUtilities', document.querySelector('#buildingUtilities').value, 365);
+    setCookie('vehicleRental', document.querySelector('#vehicleRental').value, 365);
+    setCookie('vehicleLease', document.querySelector('#vehicleLease').value, 365);
+    setCookie('vehicleGas', document.querySelector('#vehicleGas').value, 365);
+    setCookie('vehicleMaintenance', document.querySelector('#vehicleMaintenance').value, 365);
+    setCookie('vehicleInsurance', document.querySelector('#vehicleInsurance').value, 365);
+    setCookie('cash', document.querySelector('#cash').value, 365);
+    setCookie('accountsReceivable', document.querySelector('#accountsReceivable').value, 365);
+    setCookie('inventory', document.querySelector('#inventory').value, 365);
+    setCookie('property', document.querySelector('#property').value, 365);
+    setCookie('equipment', document.querySelector('#equipment').value, 365);
+    setCookie('accountsPayable', document.querySelector('#accountsPayable').value, 365);
+    setCookie('loans', document.querySelector('#loans').value, 365);
+    setCookie('mortgages', document.querySelector('#mortgages').value, 365);
+    setCookie('taxesPayable', document.querySelector('#taxesPayable').value, 365);
+    setCookie('otherLiabilities', document.querySelector('#otherLiabilities').value, 365);
+
+
+
+    setCookie('revenueType', document.querySelector('#revenueType').value, 365);
+setCookie('salesFrequency', document.querySelector('#salesFrequency').value, 365);
+setCookie('cogs', document.querySelector('#cogs').value, 365);
+setCookie('rentFrequency', document.querySelector('#rentFrequency').value, 365);
+setCookie('utilitiesFrequency', document.querySelector('#utilitiesFrequency').value, 365);
+setCookie('salariesFrequency', document.querySelector('#salariesFrequency').value, 365);
+setCookie('marketingFrequency', document.querySelector('#marketingFrequency').value, 365);
+setCookie('insuranceFrequency', document.querySelector('#insuranceFrequency').value, 365);
+setCookie('travelFrequency', document.querySelector('#travelFrequency').value, 365);
+setCookie('hotelFrequency', document.querySelector('#hotelFrequency').value, 365);
+setCookie('buildingRentFrequency', document.querySelector('#buildingRentFrequency').value, 365);
+setCookie('buildingMaintenanceFrequency', document.querySelector('#buildingMaintenanceFrequency').value, 365);
+setCookie('buildingUtilitiesFrequency', document.querySelector('#buildingUtilitiesFrequency').value, 365);
+setCookie('vehicleRentalFrequency', document.querySelector('#vehicleRentalFrequency').value, 365);
+setCookie('vehicleLeaseFrequency', document.querySelector('#vehicleLeaseFrequency').value, 365);
+setCookie('vehicleGasFrequency', document.querySelector('#vehicleGasFrequency').value, 365);
+setCookie('vehicleMaintenanceFrequency', document.querySelector('#vehicleMaintenanceFrequency').value, 365);
+setCookie('vehicleInsuranceFrequency', document.querySelector('#vehicleInsuranceFrequency').value, 365);
+setCookie('resultChange', document.querySelector('#resultChange').value, 365);
+
 
 
               document.querySelector('#alert').textContent = 'business data captured go back now....... suggest text to be displayed'
@@ -602,8 +663,8 @@
           
 
            function validatecheckbox() {
-  var termscheckbox = document.getElementById("termscheckbox");
-  var notintended = document.getElementById("notintended");
+//   var termscheckbox = document.getElementById("termscheckbox");
+//   var notintended = document.getElementById("notintended");
   var regionDropdown = document.getElementById("RegionDropdown");
 
  
@@ -655,12 +716,186 @@ document.addEventListener('click', closeModal);
     }
 });    
 
+// function getCookie(name) {
+//     const value = `; ${document.cookie}`;
+//     const parts = value.split(`; ${name}=`);
+//     let cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
+//     return cookieValue === '' ? '0' : cookieValue;
+// }
+
+
 function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    let cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
-    return cookieValue === '' ? '0' : cookieValue;
-}
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+            // Decode the cookie value
+            const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
+            // If the value is empty and it's a frequency field, set it to 'annually'
+            if (decodedValue === '' && name.includes('_frequency')) {
+                return 'annually';
+            }
+            return decodedValue == 0 || decodedValue == '0'? '': decodedValue;
+        } else {
+            return 'annually';
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const priceValue = parseInt(getCookie('price')) || '';
+    document.querySelector('#price').value = priceValue === 0 ? '' : priceValue;
+
+    const salesValue = parseInt(getCookie('sales')) || '';
+    document.querySelector('#sales').value = salesValue === 0 ? '' : salesValue;
+
+    const cogsMaterialsValue = parseInt(getCookie('cogsMaterials')) || '';
+    document.querySelector('#cogsMaterials').value = cogsMaterialsValue === 0 ? '' : cogsMaterialsValue;
+
+    const cogsLaborValue = parseInt(getCookie('cogsLabor')) || '';
+    document.querySelector('#cogsLabor').value = cogsLaborValue === 0 ? '' : cogsLaborValue;
+
+    const cogsOverheadValue = parseInt(getCookie('cogsOverhead')) || '';
+    document.querySelector('#cogsOverhead').value = cogsOverheadValue === 0 ? '' : cogsOverheadValue;
+
+    const cogsShippingValue = parseInt(getCookie('cogsShipping')) || '';
+    document.querySelector('#cogsShipping').value = cogsShippingValue === 0 ? '' : cogsShippingValue;
+
+    const rentValue = parseInt(getCookie('rent')) || '';
+    document.querySelector('#rent').value = rentValue === 0 ? '' : rentValue;
+
+    const utilitiesValue = parseInt(getCookie('utilities')) || '';
+    document.querySelector('#utilities').value = utilitiesValue === 0 ? '' : utilitiesValue;
+
+    const salariesValue = parseInt(getCookie('salaries')) || '';
+    document.querySelector('#salaries').value = salariesValue === 0 ? '' : salariesValue;
+
+    const marketingValue = parseInt(getCookie('marketing')) || '';
+    document.querySelector('#marketing').value = marketingValue === 0 ? '' : marketingValue;
+
+    const insuranceValue = parseInt(getCookie('insurance')) || '';
+    document.querySelector('#insurance').value = insuranceValue === 0 ? '' : insuranceValue;
+
+    const travelValue = parseInt(getCookie('travel')) || '';
+    document.querySelector('#travel').value = travelValue === 0 ? '' : travelValue;
+
+    const hotelValue = parseInt(getCookie('hotel')) || '';
+    document.querySelector('#hotel').value = hotelValue === 0 ? '' : hotelValue;
+
+    const buildingRentValue = parseInt(getCookie('buildingRent')) || '';
+    document.querySelector('#buildingRent').value = buildingRentValue === 0 ? '' : buildingRentValue;
+
+    const buildingMaintenanceValue = parseInt(getCookie('buildingMaintenance')) || '';
+    document.querySelector('#buildingMaintenance').value = buildingMaintenanceValue === 0 ? '' : buildingMaintenanceValue;
+
+    const buildingUtilitiesValue = parseInt(getCookie('buildingUtilities')) || '';
+    document.querySelector('#buildingUtilities').value = buildingUtilitiesValue === 0 ? '' : buildingUtilitiesValue;
+
+    const vehicleRentalValue = parseInt(getCookie('vehicleRental')) || '';
+    document.querySelector('#vehicleRental').value = vehicleRentalValue === 0 ? '' : vehicleRentalValue;
+
+    const vehicleLeaseValue = parseInt(getCookie('vehicleLease')) || '';
+    document.querySelector('#vehicleLease').value = vehicleLeaseValue === 0 ? '' : vehicleLeaseValue;
+
+    const vehicleGasValue = parseInt(getCookie('vehicleGas')) || '';
+    document.querySelector('#vehicleGas').value = vehicleGasValue === 0 ? '' : vehicleGasValue;
+
+    const vehicleMaintenanceValue = parseInt(getCookie('vehicleMaintenance')) || '';
+    document.querySelector('#vehicleMaintenance').value = vehicleMaintenanceValue === 0 ? '' : vehicleMaintenanceValue;
+
+    const vehicleInsuranceValue = parseInt(getCookie('vehicleInsurance')) || '';
+    document.querySelector('#vehicleInsurance').value = vehicleInsuranceValue === 0 ? '' : vehicleInsuranceValue;
+
+    const cashValue = parseInt(getCookie('cash')) || '';
+    document.querySelector('#cash').value = cashValue === 0 ? '' : cashValue;
+
+    const accountsReceivableValue = parseInt(getCookie('accountsReceivable')) || '';
+    document.querySelector('#accountsReceivable').value = accountsReceivableValue === 0 ? '' : accountsReceivableValue;
+
+    const inventoryValue = parseInt(getCookie('inventory')) || '';
+    document.querySelector('#inventory').value = inventoryValue === 0 ? '' : inventoryValue;
+
+    const propertyValue = parseInt(getCookie('property')) || '';
+    document.querySelector('#property').value = propertyValue === 0 ? '' : propertyValue;
+
+    const equipmentValue = parseInt(getCookie('equipment')) || '';
+    document.querySelector('#equipment').value = equipmentValue === 0 ? '' : equipmentValue;
+
+    const accountsPayableValue = parseInt(getCookie('accountsPayable')) || '';
+    document.querySelector('#accountsPayable').value = accountsPayableValue === 0 ? '' : accountsPayableValue;
+
+    const loansValue = parseInt(getCookie('loans')) || '';
+    document.querySelector('#loans').value = loansValue === 0 ? '' : loansValue;
+
+    const mortgagesValue = parseInt(getCookie('mortgages')) || '';
+    document.querySelector('#mortgages').value = mortgagesValue === 0 ? '' : mortgagesValue;
+
+    const taxesPayableValue = parseInt(getCookie('taxesPayable')) || '';
+    document.querySelector('#taxesPayable').value = taxesPayableValue === 0 ? '' : taxesPayableValue;
+
+    const otherLiabilitiesValue = parseInt(getCookie('otherLiabilities')) || '';
+    document.querySelector('#otherLiabilities').value = otherLiabilitiesValue === 0 ? '' : otherLiabilitiesValue;
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const revenueTypeValue = getCookie('revenueType') || '';
+    document.querySelector('#revenueType').value = revenueTypeValue;
+
+    const salesFrequencyValue = getCookie('salesFrequency') || '';
+    document.querySelector('#salesFrequency').value = salesFrequencyValue;
+
+    const cogsValue = getCookie('cogs') || '';
+    document.querySelector('#cogs').value = cogsValue;
+
+    const rentFrequencyValue = getCookie('rentFrequency') || '';
+    document.querySelector('#rentFrequency').value = rentFrequencyValue;
+
+    const utilitiesFrequencyValue = getCookie('utilitiesFrequency') || '';
+    document.querySelector('#utilitiesFrequency').value = utilitiesFrequencyValue;
+
+    const salariesFrequencyValue = getCookie('salariesFrequency') || '';
+    document.querySelector('#salariesFrequency').value = salariesFrequencyValue;
+
+    const marketingFrequencyValue = getCookie('marketingFrequency') || '';
+    document.querySelector('#marketingFrequency').value = marketingFrequencyValue;
+
+    const insuranceFrequencyValue = getCookie('insuranceFrequency') || '';
+    document.querySelector('#insuranceFrequency').value = insuranceFrequencyValue;
+
+    const travelFrequencyValue = getCookie('travelFrequency') || '';
+    document.querySelector('#travelFrequency').value = travelFrequencyValue;
+
+    const hotelFrequencyValue = getCookie('hotelFrequency') || '';
+    document.querySelector('#hotelFrequency').value = hotelFrequencyValue;
+
+    const buildingRentFrequencyValue = getCookie('buildingRentFrequency') || '';
+    document.querySelector('#buildingRentFrequency').value = buildingRentFrequencyValue;
+
+    const buildingMaintenanceFrequencyValue = getCookie('buildingMaintenanceFrequency') || '';
+    document.querySelector('#buildingMaintenanceFrequency').value = buildingMaintenanceFrequencyValue;
+
+    const buildingUtilitiesFrequencyValue = getCookie('buildingUtilitiesFrequency') || '';
+    document.querySelector('#buildingUtilitiesFrequency').value = buildingUtilitiesFrequencyValue;
+
+    const vehicleRentalFrequencyValue = getCookie('vehicleRentalFrequency') || '';
+    document.querySelector('#vehicleRentalFrequency').value = vehicleRentalFrequencyValue;
+
+    const vehicleLeaseFrequencyValue = getCookie('vehicleLeaseFrequency') || '';
+    document.querySelector('#vehicleLeaseFrequency').value = vehicleLeaseFrequencyValue;
+
+    const vehicleGasFrequencyValue = getCookie('vehicleGasFrequency') || '';
+    document.querySelector('#vehicleGasFrequency').value = vehicleGasFrequencyValue;
+
+    const vehicleMaintenanceFrequencyValue = getCookie('vehicleMaintenanceFrequency') || '';
+    document.querySelector('#vehicleMaintenanceFrequency').value = vehicleMaintenanceFrequencyValue;
+
+    const vehicleInsuranceFrequencyValue = getCookie('vehicleInsuranceFrequency') || '';
+    document.querySelector('#vehicleInsuranceFrequency').value = vehicleInsuranceFrequencyValue;
+
+    const resultChangeValue = getCookie('resultChange') || '';
+    document.querySelector('#resultChange').value = resultChangeValue;
+});
 
       </script>
   </body>
