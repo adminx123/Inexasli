@@ -1211,9 +1211,8 @@ function deleteCookies() {
 
 
 window.addEventListener('message', (event) => {
-    // Check the message content (optional: verify event.origin for security)
     if (event.data === 'close-modal') {
-        // Hide the modal
+        
         document.querySelector('#ROI-modal').style.display = 'none';
     }
 });
@@ -1229,7 +1228,7 @@ window.addEventListener('message', (event) => {
     date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
     expires = "; expires=" + date.toUTCString();
   }
-  // Add SameSite and Secure attributes
+
   document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
 }
     
