@@ -79,7 +79,9 @@
             
 
   <div class="row">
-          <label for="cogs">Cost of goods sold applicable?</label>
+    <label for="" style="font-size: unset;" class="tooltip" data-tooltip="(COGS) Represents the direct costs associated with producing or purchasing the goods sold by a company. Includes materials, labor, and overhead directly tied to production.">
+  <span class="tooltip-content"></span>
+          Cost of goods sold applicable?</label>
           <select id="cogs" onchange="toggleCogs()">
               <option value="no">No</option>
               <option value="yes">Yes</option>
@@ -91,11 +93,18 @@
         
             <h2>Cost of Goods Sold</h2>
 
-                
+               <div class  ="row"> 
                   <label for="cogsMaterials">Material Cost Per Unit</label>
                   
                       <input type="number" id="cogsMaterials">
-                      <span id="cogsMaterialsFrequency"></span>
+                  <select>
+                    <option value="blank">Select</option>
+                  <option value="annually">Annually</option>
+                  <option value="quarterly">Quarterly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="weekly">Weekly</option>
+              </select>
+                      
               
            
 
@@ -104,7 +113,13 @@
                   <label for="cogsLabor">Labor Cost Per Unit</label>
                   
                       <input type="number" id="cogsLabor">
-                      <span id="cogsLaborFrequency"></span>
+                       <select>
+                    <option value="blank">Select</option>
+                  <option value="annually">Annually</option>
+                  <option value="quarterly">Quarterly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="weekly">Weekly</option>
+              </select>
                 
               </div>
   
@@ -112,7 +127,13 @@
                   <label for="cogsOverhead">Overhead Cost Per Unit</label>
                   
                       <input type="number" id="cogsOverhead">
-                      <span id="cogsOverheadFrequency"></span>
+                       <select>
+                    <option value="blank">Select</option>
+                  <option value="annually">Annually</option>
+                  <option value="quarterly">Quarterly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="weekly">Weekly</option>
+              </select>
                           
               </div>
   
@@ -120,14 +141,22 @@
                   <label for="cogsShipping">Shipping Cost Per Unit</label>
                   
                       <input type="number" id="cogsShipping">
-                      <span id="cogsShippingFrequency"></span>
+                       <select>
+                    <option value="blank">Select</option>
+                  <option value="annually">Annually</option>
+                  <option value="quarterly">Quarterly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="weekly">Weekly</option>
+              </select>
                   
              
           </div>
    </div>
+          </div>
 
-            
-          <h2>Operational Costs</h2>
+            <label for="" style="font-size: unset;" class="tooltip" data-tooltip="(COGS) Represents the direct costs associated with producing or purchasing the goods sold by a company. Includes materials, labor, and overhead directly tied to production.">
+  <span class="tooltip-content"></span>
+          <h2>Operational Costs</h2></label>
          <div class="row">
               <label for="rent">Rent</label>
             
@@ -448,7 +477,7 @@
 </div>
 <div id="alert" class="alert"></div>
 
-
+<script src="/server/scripts/toolTip.js"></script>
             
 <!-- <script src="https://js.stripe.com/v3/" async ></script> -->
     
