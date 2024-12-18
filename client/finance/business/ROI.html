@@ -470,7 +470,7 @@
             
 
 
-<button class="roi-btn" onclick="window.parent.postMessage('close-modal', '*')">
+<button class="roi-btn" onclick="sendMessage()">
     Return to Income
 </button>
     
@@ -925,6 +925,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultChangeValue = getCookie('resultChange') || '';
     document.querySelector('#resultChange').value = resultChangeValue;
 });
+
+
+function sendMessage() {
+    window.parent.postMessage('close-modal', '*')
+    return
+}
 
       </script>
   </body>

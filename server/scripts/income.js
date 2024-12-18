@@ -85,8 +85,8 @@ window.addEventListener('DOMContentLoaded', () => {
         const isChecked1 = getTermsCookie('term1') 
         const isChecked2 = getTermsCookie('term2')
 
-        console.log(typeof isChecked1)
-        console.log(typeof isChecked2)
+        // console.log(typeof isChecked1)
+        // console.log(typeof isChecked2)
 
         if (isChecked1 == true) {
             checkbox1.checked = true
@@ -1088,25 +1088,35 @@ for (let i = 0; i < incomeFields.length; i++) {
 
 document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', ()=> {
     document.querySelector('#ROI-modal').style.display = 'block'
+    // 
+
+    const tooltips = document.querySelectorAll(".tooltip");
+
+    tooltips.forEach(tooltip => {
+        tooltip.classList.remove("show");
+        console.log(tooltip)
+    })
 })
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+        // Decode the cookie value
+        const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
+        // If the value is empty and it's a frequency field, set it to 'annually'
+        if (decodedValue === '' && name.includes('_frequency')) {
+            return 'annually';
+        }
+        return decodedValue == 0 || decodedValue == '0'? '': decodedValue;
+    } else {
+        return 'annually';
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     // Function to retrieve cookie value by name
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) {
-            // Decode the cookie value
-            const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
-            // If the value is empty and it's a frequency field, set it to 'annually'
-            if (decodedValue === '' && name.includes('_frequency')) {
-                return 'annually';
-            }
-            return decodedValue == 0 || decodedValue == '0'? '': decodedValue;
-        } else {
-            return 'annually';
-        }
-    }
+
 
     document.getElementById('RegionDropdown').value = getCookie('RegionDropdown') == 'annually'? "NONE": getCookie('RegionDropdown');
     document.getElementById('RegionDropdown').dispatchEvent(new Event('change')); // Manually trigger change event
@@ -1210,12 +1220,7 @@ function deleteCookies() {
 }
 
 
-window.addEventListener('message', (event) => {
-    if (event.data === 'close-modal') {
-        
-        document.querySelector('#ROI-modal').style.display = 'none';
-    }
-});
+
 
 
     function setCookie(name, value, days) {
@@ -1288,3 +1293,32 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
 
 
 
+    window.addEventListener('message', (event) => {
+        if (event.data === 'close-modal') {
+            
+            document.querySelector('#ROI-modal').style.display = 'none';
+
+            const selfEmploymentIncomeField = document.querySelector('#income_sole_prop')
+            const totalRevenue = getCookie('totalRevenue')
+            const paid = getCookie('authenticated') == 'paid'
+    
+            console.log(selfEmploymentIncomeField)
+            console.log(totalRevenue)
+            console.log(paid)
+
+            if (totalRevenue && totalRevenue != 'annually' && totalRevenue != '') {
+                selfEmploymentIncomeField.value = totalRevenue
+
+
+            }
+        
+        
+        
+            
+            
+        
+            return
+            
+            
+        }
+    });
