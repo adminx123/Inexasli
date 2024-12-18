@@ -1093,7 +1093,7 @@ document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', ()=> {
     const tooltips = document.querySelectorAll(".tooltip");
 
     tooltips.forEach(tooltip => {
-        tooltip.classList.remove("show");
+        tooltip.classList.add("show");
         console.log(tooltip)
     })
 })
