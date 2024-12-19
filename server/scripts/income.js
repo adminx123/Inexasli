@@ -1094,7 +1094,6 @@ document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', ()=> {
 
     tooltips.forEach(tooltip => {
         tooltip.classList.add("show");
-        console.log(tooltip)
     })
 })
 
@@ -1307,7 +1306,15 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
             console.log(paid)
 
             if (totalRevenue && totalRevenue != 'annually' && totalRevenue != '') {
-                selfEmploymentIncomeField.value = totalRevenue
+                if (paid) {
+
+                    selfEmploymentIncomeField.value = totalRevenue
+                    setCookie('income_sole_prop', totalRevenue, 365)
+
+                } else {
+                    selfEmploymentIncomeField.value = ''
+                    selfEmploymentIncomeField.placeholder = 'payment required'
+                }
 
 
             }
