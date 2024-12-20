@@ -694,4 +694,19 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
         background-color: #575757;
       }
 
-     
+     .special-label {
+      margin-right: -10px;
+     }
+
+
+      .special {
+        /* border: 1px solid; */
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      
+      .special * {
+        width: 100%;
+      }
