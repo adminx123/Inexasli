@@ -128,11 +128,8 @@ function essentialExpenses() {
   let essential = 0;
 
   for (const [expenseField, frequencyField] of essentialFields) {
-    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
-    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
-    essential += expense * frequency;
-
-	}
+    essential += calculateAnnual(expenseField, frequencyField);
+  }
 	  
 ESSENTIAL = essential;
 
@@ -152,12 +149,9 @@ function discretionaryExpenses() {
 
   let discretionary = 0;
 
-  for (const [expenseField, frequencyField] of discretionaryFields) {
-    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
-    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
-    discretionary += expense * frequency;
-
-	}
+   for (const [expenseField, frequencyField] of discretionaryFields) {
+    essential += calculateAnnual(expenseField, frequencyField);
+  }
 	  
 DISCRETIONARY = discretionary;
 
@@ -183,12 +177,9 @@ function housingExpenses() {
 
   let housing = 0;
 
-  for (const [expenseField, frequencyField] of housingFields) {
-    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
-    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
-    housing += expense * frequency;
-
-	}
+   for (const [expenseField, frequencyField] of housingFields) {
+    essential += calculateAnnual(expenseField, frequencyField);
+  }
 	  
 HOUSING = housing;
 
@@ -210,12 +201,9 @@ HOUSING = housing;
 
   let transportation = 0;
 
-  for (const [expenseField, frequencyField] of transportationFields) {
-    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
-    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
-    transportation += expense * frequency;
-
-	}
+   for (const [expenseField, frequencyField] of transportationFields) {
+    essential += calculateAnnual(expenseField, frequencyField);
+  }
 	  
 TRANSPORTATION = transportation;
 
@@ -239,12 +227,9 @@ TRANSPORTATION = transportation;
 
   let dependant = 0;
 
-  for (const [expenseField, frequencyField] of dependantFields) {
-    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
-    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
-    dependant += expense * frequency;
-
-	}
+   for (const [expenseField, frequencyField] of dependantFields) {
+    essential += calculateAnnual(expenseField, frequencyField);
+  }
 	  
 DEPENDANT = dependant;
 
@@ -264,12 +249,9 @@ function debtExpenses() {
 
   let debt = 0;
 
-  for (const [expenseField, frequencyField] of debtFields) {
-    const expense = parseFloat(document.getElementById(expenseField).value) || 0;
-    const frequency = parseFloat(document.getElementById(frequencyField).value) || 1;
-    debt += expense * frequency;
-
-	}
+   for (const [expenseField, frequencyField] of debtFields) {
+    essential += calculateAnnual(expenseField, frequencyField);
+  }
 	  
 DEBT = debt;
 
