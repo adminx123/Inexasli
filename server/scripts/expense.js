@@ -150,7 +150,7 @@ function discretionaryExpenses() {
   let discretionary = 0;
 
    for (const [expenseField, frequencyField] of discretionaryFields) {
-    essential += calculateAnnual(expenseField, frequencyField);
+    discretionary += calculateAnnual(expenseField, frequencyField);
   }
 	  
 DISCRETIONARY = discretionary;
@@ -178,7 +178,7 @@ function housingExpenses() {
   let housing = 0;
 
    for (const [expenseField, frequencyField] of housingFields) {
-    essential += calculateAnnual(expenseField, frequencyField);
+    housing += calculateAnnual(expenseField, frequencyField);
   }
 	  
 HOUSING = housing;
@@ -202,7 +202,7 @@ HOUSING = housing;
   let transportation = 0;
 
    for (const [expenseField, frequencyField] of transportationFields) {
-    essential += calculateAnnual(expenseField, frequencyField);
+    transportation += calculateAnnual(expenseField, frequencyField);
   }
 	  
 TRANSPORTATION = transportation;
@@ -228,7 +228,7 @@ TRANSPORTATION = transportation;
   let dependant = 0;
 
    for (const [expenseField, frequencyField] of dependantFields) {
-    essential += calculateAnnual(expenseField, frequencyField);
+    dependant += calculateAnnual(expenseField, frequencyField);
   }
 	  
 DEPENDANT = dependant;
@@ -250,7 +250,7 @@ function debtExpenses() {
   let debt = 0;
 
    for (const [expenseField, frequencyField] of debtFields) {
-    essential += calculateAnnual(expenseField, frequencyField);
+    debt += calculateAnnual(expenseField, frequencyField);
   }
 	  
 DEBT = debt;
