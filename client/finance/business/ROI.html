@@ -673,7 +673,12 @@ setCookie('resultChange', document.querySelector('#resultChange').value, 365);
 
 
 
-    function setCookie(name, value, days) {
+   
+
+
+}
+
+function setCookie(name, value, days) {
   var expires = "";
   if (value === undefined || value === null || value === '') {
     value = '0';
@@ -685,9 +690,6 @@ setCookie('resultChange', document.querySelector('#resultChange').value, 365);
   }
   // Add SameSite and Secure attributes
   document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
-}
-
-
 }
           
 
