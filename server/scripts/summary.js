@@ -193,7 +193,7 @@ function colorChangeDTI() {
     if (debtToIncome < greatRange) {
         document.getElementById("DEBTTOINCOME").style.color = "green";
     } else if (debtToIncome >= okayMinRange && debtToIncome <= okayMaxRange) {
-        document.getElementById("DEBTTOINCOME").style.color = "yellow";
+        document.getElementById("DEBTTOINCOME").style.color = "orange";
     } else {
         document.getElementById("DEBTTOINCOME").style.color = "red";
     }
@@ -223,7 +223,7 @@ HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUA
     if (hti < greatRange) {
         document.getElementById("HOUSINGTOINCOME").style.color = "green";
     } else if (hti >= okayMinRange && hti <= okayMaxRange) {
-        document.getElementById("HOUSINGTOINCOME").style.color = "yellow";
+        document.getElementById("HOUSINGTOINCOME").style.color = "orange";
     } else {
         document.getElementById("HOUSINGTOINCOME").style.color = "red";
     }
@@ -256,7 +256,7 @@ function colorChangeSavingsToDebt() {
     if (savingsToDebt >= greatRange) {
         document.getElementById("SAVINGSTODEBT").style.color = "green";
     } else if (savingsToDebt >= goodMinRange && savingsToDebt <= goodMaxRange) {
-        document.getElementById("SAVINGSTODEBT").style.color = "yellow";
+        document.getElementById("SAVINGSTODEBT").style.color = "orange";
     } else {
         document.getElementById("SAVINGSTODEBT").style.color = "red";
     }
@@ -292,7 +292,7 @@ function colorChangeFIRE() {
     if (FIRE >= greatRange) {
         document.getElementById("FIRERATIO").style.color = "green";
     } else if (FIRE >= okayMinRange && FIRE <= okayMaxRange) {
-        document.getElementById("FIRERATIO").style.color = "yellow";
+        document.getElementById("FIRERATIO").style.color = "orange";
     } else {
         document.getElementById("FIRERATIO").style.color = "red";
     }
