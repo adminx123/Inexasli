@@ -175,7 +175,7 @@ let ANNUALGOVERNMENTOBLIGATIONS;
 document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
     
     NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
-    document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
+    document.getElementById('NETWORTH').textContent = ' $' + NETWORTH.toFixed(2);
 
      
 DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
