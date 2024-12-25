@@ -53,27 +53,32 @@
         <option value="weekly">Weekly Frequency</option>
     </select></div>
     
-<summary>
-    <h2>Disposable Income:</h2>
-    <i>Subscribe for insights</i>
-</summary>
+    <summary>
+      <span class=" tooltip" data-tooltip="Income left after expenses, taxes & other obligations. Use: Debt repayment, savings, investments & discretionary spending."><h2>Disposable Income:<span class="tooltip-content"></span><span id="DISPOSABLEINCOME"></span>
+         </span>  </h2>
+     
+ </summary>
 
 <details style="margin-top:10px;">
     <p style="margin-left:20px;"><span id="RegionDropdown"></span>
         <span id="SubregionDropdown"></span></p>
     <i style="margin-left:20px;">Residence for tax and obligatory purposes</i>
 
-    <p style="margin-left:20px;"><u>Income:</u> </p>
-    <i style="margin-left:20px;">Subscribe for insights</i>
+    <p style="margin-left:20px;"><u>Income:</u><span id="annual_income_sum"></span><span class=" tooltip" data-tooltip="Total earnings from all sources. Use: Budgeting, financial planning, loan applications.">ⓘ
+      <span class="tooltip-content"></span>
+      </span>  </p>
 
-    <p style="margin-left:20px;"><u>Expense:</u> </p>
-    <i style="margin-left:20px;">Subscribe for insights</i>
+      <p style="margin-left:20px;"><u>Expense:</u><span id="annual_expense_sum"></span> <span class=" tooltip" data-tooltip="Total expenditures. Use: Identify spending patterns, budget adjustments.">ⓘ
+        <span class="tooltip-content"></span>
+        </span> </p>
 
-    <p style="margin-left:20px;"><u>Total Tax Payable:</u><span id="tax_sum"></span></p>
-    <i style="margin-left:20px;">Subscribe for insights</i>
+        <p style="margin-left:20px;"><u>Total Tax Payable:</u>  <span id="tax_sum"></span><span class=" tooltip" data-tooltip="Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.">ⓘ
+          <span class="tooltip-content"></span>
+          </span></p>
     
-     <p style="margin-left:20px;"><u>Other Obligations:</u><span id="ANNUALGOVERNMENTOBLIGATIONS"></span></p>
-     <i style="margin-left:20px;">Subscribe for insights</i>
+          <p style="margin-left:20px;"><u>Other Obligations:</u><span id="ANNUALGOVERNMENTOBLIGATIONS"> <span class=" tooltip" data-tooltip="Sum of all other goverment obligations owed. Use: Financial planning, avoid underpayment penalties.">ⓘ
+            <span class="tooltip-content"></span>
+            </span> </span></p>
     
     <details>
         <p style="margin-left:60px;"><u>Taxable Income:</u> </p>
@@ -344,6 +349,58 @@ function getCookie(name) {
 
 document.addEventListener('DOMContentLoaded', function() {
 function updateOnChange(){    
+
+
+
+
+let DISPOSABLEINCOME;
+
+if (getCookie('RegionDropdown') === 'USA') {
+    DISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
+        parseFloat(getCookie('ANNUALEXPENSESUM')) -
+        parseFloat(getCookie('TOTALMEDICARE')) -
+        parseFloat(getCookie('TOTALSOCIALSECURITY')) -
+        parseFloat(getCookie('TOTALTAXCG')) -
+        parseFloat(getCookie('ANNUALTAX'));
+} else if (getCookie('RegionDropdown') === 'CAN') {
+    DISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
+        parseFloat(getCookie('ANNUALEXPENSESUM')) -
+        parseFloat(getCookie('ANNUALEI')) -
+        parseFloat(getCookie('ANNUALCPP')) -
+        parseFloat(getCookie('ANNUALTAX'));
+} else {
+    DISPOSABLEINCOME = 0
+}
+
+// Update HTML element with the calculated value
+document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOME.toFixed(2);
+
+
+document.getElementById('annual_income_sum').textContent = " $" + parseFloat(getCookie('ANNUALINCOME')).toFixed(2);
+
+
+document.getElementById('annual_expense_sum').textContent = " $" + parseFloat(getCookie('ANNUALEXPENSESUM')).toFixed(2);
+
+
+document.getElementById('tax_sum').textContent = " $" + parseFloat((getCookie('ANNUALTAX'))).toFixed(2);
+
+
+ 
+     
+let ANNUALGOVERNMENTOBLIGATIONS;
+
+    if (getCookie('RegionDropdown') === 'USA') {
+    ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('TOTALSOCIALSECURITY')) +
+        parseFloat(getCookie('TOTALMEDICARE'));
+} else if (getCookie('RegionDropdown') === 'CAN') {
+    ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('ANNUALCPP')) +
+        parseFloat(getCookie('ANNUALEI'))  ;
+} else {
+    ANNUALGOVERNMENTOBLIGATIONS = 0
+}
+
+// Update HTML element with the calculated value
+document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
 
   
 
