@@ -56,230 +56,294 @@
     </select></div>
    
     <summary>
-     <span class=" tooltip" data-tooltip="Income left after expenses, taxes & other obligations. Use: Debt repayment, savings, investments & discretionary spending."><h2>Disposable Income:<span class="tooltip-content"></span><span id="DISPOSABLEINCOME"></span>
-        </span>  </h2>
-    
+     <summary>
+    <span class="tooltip" data-tooltip="Income left after expenses, taxes & other obligations. Use: Debt repayment, savings, investments & discretionary spending.">
+        <h2>Disposable Income:<span class="tooltip-content"></span><span id="DISPOSABLEINCOME"></span></h2>
+    </span>
 </summary>
 
 <details style="margin-top:10px;">
-    <p style="margin-left:20px;"><span id="RegionDropdown"></span>
-        <span id="SubregionDropdown"></span></p>
+    <p style="margin-left:20px;">
+        <span id="RegionDropdown"></span>
+        <span id="SubregionDropdown"></span>
+    </p>
     <i style="margin-left:20px;">Residence for tax and obligatory purposes</i>
 
-    <span class=" tooltip" data-tooltip="Total earnings from all sources. Use: Budgeting, financial planning, loan applications."><p style="margin-left:20px;"><u>Income:</u><span id="annual_income_sum"></span>
-        <span class="tooltip-content"></span>
-        </span>  </p>
+    <p style="margin-left:20px;">
+        <span class="tooltip" data-tooltip="Total earnings from all sources. Use: Budgeting, financial planning, loan applications.">
+            <u>Income:</u><span class="tooltip-content"></span><span id="annual_income_sum"></span>
+        </span>
+    </p>
     
-  <p style="margin-left:20px;"><u>Expense:</u><span id="annual_expense_sum"></span> <span class=" tooltip" data-tooltip="Total expenditures. Use: Identify spending patterns, budget adjustments.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </p>
- 
+    <p style="margin-left:20px;">
+        <span class="tooltip" data-tooltip="Total expenditures. Use: Identify spending patterns, budget adjustments.">
+            <u>Expense:</u><span class="tooltip-content"></span><span id="annual_expense_sum"></span>
+        </span>
+    </p>
 
-<p style="margin-left:20px;"><u>Discretionary Expense:</u><span id="DISCRETIONARY"></span> <span class=" tooltip" data-tooltip="Discretionary expenditures. Use: Identify spending patterns, budget adjustments.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </p>
+    <p style="margin-left:20px;">
+        <span class="tooltip" data-tooltip="Discretionary expenditures. Use: Identify spending patterns, budget adjustments.">
+            <u>Discretionary Expense:</u><span class="tooltip-content"></span><span id="DISCRETIONARY"></span>
+        </span>
+    </p>
      
-     <p style="margin-left:20px;"><u>Essential Expense:</u><span id="ESSENTIAL"></span> <span class=" tooltip" data-tooltip="Essential expenditures. Use: Identify spending patterns, budget adjustments.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </p>
+    <p style="margin-left:20px;">
+        <span class="tooltip" data-tooltip="Essential expenditures. Use: Identify spending patterns, budget adjustments.">
+            <u>Essential Expense:</u><span class="tooltip-content"></span><span id="ESSENTIAL"></span>
+        </span>
+    </p>
      
-      <p style="margin-left:20px;"><u>Housing Expense:</u><span id="HOUSING"></span> <span class=" tooltip" data-tooltip="Housing expenditures. Use: Identify spending patterns, budget adjustments.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </p>
+    <p style="margin-left:20px;">
+        <span class="tooltip" data-tooltip="Housing expenditures. Use: Identify spending patterns, budget adjustments.">
+            <u>Housing Expense:</u><span class="tooltip-content"></span><span id="HOUSING"></span>
+        </span>
+    </p>
 
-     <p style="margin-left:20px;"><u>Transportation Expense:</u><span id="TRANSPORTATION"></span> <span class=" tooltip" data-tooltip="Total transportation expenditures. Use: Identify spending patterns, budget adjustments.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </p>
+    <p style="margin-left:20px;">
+        <span class="tooltip" data-tooltip="Total transportation expenditures. Use: Identify spending patterns, budget adjustments.">
+            <u>Transportation Expense:</u><span class="tooltip-content"></span><span id="TRANSPORTATION"></span>
+        </span>
+    </p>
 
-     <p style="margin-left:20px;"><u>Dependant Expense:</u><span id="DEPENDANT"></span> <span class=" tooltip" data-tooltip="Total dependant expenditures. Use: Identify spending patterns, budget adjustments.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </p>
+    <p style="margin-left:20px;">
+        <span class="tooltip" data-tooltip="Total dependant expenditures. Use: Identify spending patterns, budget adjustments.">
+            <u>Dependant Expense:</u><span class="tooltip-content"></span><span id="DEPENDANT"></span>
+        </span>
+    </p>
 
-     <p style="margin-left:20px;"><u>Debt Expense:</u><span id="DEBT"></span> <span class=" tooltip" data-tooltip="Total debt expenditures. Use: Identify spending patterns, budget adjustments.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </p>
+    <p style="margin-left:20px;">
+        <span class="tooltip" data-tooltip="Total debt expenditures. Use: Identify spending patterns, budget adjustments.">
+            <u>Debt Expense:</u><span class="tooltip-content"></span><span id="DEBT"></span>
+        </span>
+    </p>
     
-    <p style="margin-left:20px;"><u>Total Tax Payable:</u>  <span id="tax_sum"></span><span class=" tooltip" data-tooltip="Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.">ⓘ
-        <span class="tooltip-content"></span>
-        </span></p>
+    <p style="margin-left:20px;">
+        <span class="tooltip" data-tooltip="Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.">
+            <u>Total Tax Payable:</u><span class="tooltip-content"></span><span id="tax_sum"></span>
+        </span>
+    </p>
     
-     <p style="margin-left:20px;"><u>Other Obligations:</u><span id="ANNUALGOVERNMENTOBLIGATIONS"> <span class=" tooltip" data-tooltip="Sum of all other goverment obligations owed. Use: Financial planning, avoid underpayment penalties.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </span></p>
+    <p style="margin-left:20px;">
+        <span class="tooltip" data-tooltip="Sum of all other government obligations owed. Use: Financial planning, avoid underpayment penalties.">
+            <u>Other Obligations:</u><span class="tooltip-content"></span><span id="ANNUALGOVERNMENTOBLIGATIONS"></span>
+        </span>
+    </p>
      
     <details>
-        <p style="margin-left:60px;"><u>Taxable Income:</u>  <span id="taxable_sum"></span><span class=" tooltip" data-tooltip="Gross income subject to taxes. Use: Tax planning, understand tax liabilities.">ⓘ
-            <span class="tooltip-content"></span>
-            </span></p>
+        <p style="margin-left:60px;">
+            <span class="tooltip" data-tooltip="Gross income subject to taxes. Use: Tax planning, understand tax liabilities.">
+                <u>Taxable Income:</u><span class="tooltip-content"></span><span id="taxable_sum"></span>
+            </span>
+        </p>
         
-        <p style="margin-left:60px;"><u>Regional Tax Payable:</u>  <span id="region_tax_sum"></span><span class=" tooltip" data-tooltip="Tax owed to the regional government. Use: Budget for tax obligations, financial planning.">ⓘ
-            <span class="tooltip-content"></span>
-            </span> </p>
+        <p style="margin-left:60px;">
+            <span class="tooltip" data-tooltip="Tax owed to the regional government. Use: Budget for tax obligations, financial planning.">
+                <u>Regional Tax Payable:</u><span class="tooltip-content"></span><span id="region_tax_sum"></span>
+            </span>
+        </p>
         
-        <p style="margin-left:60px;"><u>Subregional Tax Payable:</u> <span id="subregion_tax_sum"></span><span class=" tooltip" data-tooltip="Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.">ⓘ
-            <span class="tooltip-content"></span>
-            </span> </p> 
+        <p style="margin-left:60px;">
+            <span class="tooltip" data-tooltip="Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.">
+                <u>Subregional Tax Payable:</u><span class="tooltip-content"></span><span id="subregion_tax_sum"></span>
+            </span>
+        </p>
              
-               
         <!-- CAN -->
         <div class="can" id="can-hide">
-            <p style="margin-left:60px;"><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span> <span class=" tooltip" data-tooltip="Contributions for self-employed individuals. Use: Retirement planning for self-employed.">ⓘ
-                <span class="tooltip-content"></span>
-                </span> </p>
+            <p style="margin-left:60px;">
+                <span class="tooltip" data-tooltip="Contributions for self-employed individuals. Use: Retirement planning for self-employed.">
+                    <u>Self Employed CPP Payable:</u><span class="tooltip-content"></span><span id="annual_cpp_seresult"></span>
+                </span>
+            </p>
             
-            <p style="margin-left:60px;"><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span><span class=" tooltip" data-tooltip="Contributions for employed individuals. Use: Retirement savings adjustment.">ⓘ
-                <span class="tooltip-content"></span>
-                </span> </p>
+            <p style="margin-left:60px;">
+                <span class="tooltip" data-tooltip="Contributions for employed individuals. Use: Retirement savings adjustment.">
+                    <u>Employed CPP Payable:</u><span class="tooltip-content"></span><span id="annual_cpp_eresult"></span>
+                </span>
+            </p>
             
-            <p style="margin-left:60px;"><u>Total CPP Payable:</u><span id="cpp_sum"></span>  <span class=" tooltip" data-tooltip="Contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the government on your behalf.">ⓘ
-                <span class="tooltip-content"></span>
-                </span>   </p>
+            <p style="margin-left:60px;">
+                <span class="tooltip" data-tooltip="Contributions to Canada Pension Plan. Use: Retirement planning. NOTE: your employer may have already deducted a portion of this total off your pay and remits it to the government on your behalf.">
+                    <u>Total CPP Payable:</u><span class="tooltip-content"></span><span id="cpp_sum"></span>
+                </span>
+            </p>
             
-            <p style="margin-left:60px;"><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span> <span class=" tooltip" data-tooltip="Contributions towards Employment Insurance. Use: Ensure coverage for job loss.">ⓘ
-                <span class="tooltip-content"></span>
-                </span> </p>
-           
+            <p style="margin-left:60px;">
+                <span class="tooltip" data-tooltip="Contributions towards Employment Insurance. Use: Ensure coverage for job loss.">
+                    <u>Total Employment Insurance Payable:</u><span class="tooltip-content"></span><span id="ANNUALEI"></span>
+                </span>
+            </p>
         </div>
 
         <!-- USA -->
         <div class="usa" id="usa-hide">
-
-              <p style="margin-left:60px;"><u>Capital Gains Tax:</u> <span class=" tooltip" data-tooltip="Capital gains tax is imposed on profit realized from the sale of an asset, such as stocks or real estate. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.">ⓘ
-                <span class="tooltip-content"></span>
-                </span> <span id="TOTALTAXCG"></span></p>
+            <p style="margin-left:60px;">
+                <span class="tooltip" data-tooltip="Capital gains tax is imposed on profit realized from the sale of an asset, such as stocks or real estate. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.">
+                    <u>Capital Gains Tax:</u><span class="tooltip-content"></span><span id="TOTALTAXCG"></span>
+                </span>
+            </p>
             
-                   
-            <p style="margin-left:60px;"><u>Social Security Total US:</u> <span class=" tooltip" data-tooltip="Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.">ⓘ
-                <span class="tooltip-content"></span>
-                </span>  <span id="TOTALSOCIALSECURITY"></span></p>
-           
-
-            <p style="margin-left:60px;"><u>Social Security Employed US:</u> <span class=" tooltip" data-tooltip="Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.">ⓘ
-                <span class="tooltip-content"></span>
-                </span>  <span id="TOTALSOCIALSECURITYE"></span></p>
+            <p style="margin-left:60px;">
+                <span class="tooltip" data-tooltip="Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.">
+                    <u>Social Security Total US:</u><span class="tooltip-content"></span><span id="TOTALSOCIALSECURITY"></span>
+                </span>
+            </p>
             
-
-            <p style="margin-left:60px;"><u>Social Security Self Employed US:</u> <span class=" tooltip" data-tooltip="Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.">ⓘ
-                <span class="tooltip-content"></span>
-                </span> <span id="TOTALSOCIALSECURITYSE"></span></p>
+            <p style="margin-left:60px;">
+                <span class="tooltip" data-tooltip="Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.">
+                    <u>Social Security Employed US:</u><span class="tooltip-content"></span><span id="TOTALSOCIALSECURITYE"></span>
+                </span>
+            </p>
             
-
-            <p style="margin-left:60px;"><u>Medicare:</u> <span class=" tooltip" data-tooltip="Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use: Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals.">ⓘ
-                <span class="tooltip-content"></span>
-                </span>  <span id="TOTALMEDICARE"></span></p>
+            <p style="margin-left:60px;">
+                <span class="tooltip" data-tooltip="Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.">
+                    <u>Social Security Self Employed US:</u><span class="tooltip-content"></span><span id="TOTALSOCIALSECURITYSE"></span>
+                </span>
+            </p>
             
+            <p style="margin-left:60px;">
+                <span class="tooltip" data-tooltip="Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use: Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals.">
+                    <u>Medicare:</u><span class="tooltip-content"></span><span id="TOTALMEDICARE"></span>
+                </span>
+            </p>
         </div>
     </details>
 </details>
 
-    
 <summary>
-    <h2>Net Worth:<span id="NETWORTH"></span> <span class=" tooltip" data-tooltip="Assets minus liabilities. Use: Overall financial position, wealth tracking over time.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </h2>
+    <h2>Net Worth:<span id="NETWORTH"></span>
+        <span class="tooltip" data-tooltip="Assets minus liabilities. Use: Overall financial position, wealth tracking over time.">
+            <span class="tooltip-content"></span>
+        </span>
+    </h2>
 </summary>
 
 <details style="margin-top:10px;">
-    <p style="margin-left:40px;"><u>Assets:</u>  <span id="ASSETS"></span><span class=" tooltip" data-tooltip="Resources with economic value owned. Use: Wealth assessment, collateral for loans.">ⓘ
-        <span class="tooltip-content"></span>
-        </span></p>
+    <p style="margin-left:40px;">
+        <span class="tooltip" data-tooltip="Resources with economic value owned. Use: Wealth assessment, collateral for loans.">
+            <u>Assets:</u><span class="tooltip-content"></span><span id="ASSETS"></span>
+        </span>
+    </p>
    
-    <p style="margin-left:40px;"><u>Liabilities:</u>  <span id="LIABILITIES"></span><span class=" tooltip" data-tooltip="Financial debts or obligations. Use: Debt management, financial strategy formulation.">ⓘ
-        <span class="tooltip-content"></span>
-        </span></p>
+    <p style="margin-left:40px;">
+        <span class="tooltip" data-tooltip="Financial debts or obligations. Use: Debt management, financial strategy formulation.">
+            <u>Liabilities:</u><span class="tooltip-content"></span><span id="LIABILITIES"></span>
+        </span>
+    </p>
 </details>
 
 <summary>
-    <h2>Ratios </h2>
+    <h2>Ratios</h2>
 </summary>
 
 <details style="margin-top:10px;">
     <p>
-        <u>Debt to Income:</u><span id="DEBTTOINCOME"></span><span class=" tooltip" data-tooltip="Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health.">ⓘ
-            <span class="tooltip-content"></span> 
-            </span><br>
+        <span class="tooltip" data-tooltip="Total debt as a percentage of income. Use: Evaluate borrowing capacity, financial health.">
+            <u>Debt to Income:</u><span class="tooltip-content"></span><span id="DEBTTOINCOME"></span>
+        </span><br>
     </p>
     <ul>
-        <li><strong>High:</strong>Above 0.36 <span class=" tooltip" data-tooltip="Indicates a high level of debt relative to income, potentially leading to financial strain.">ⓘ
-            <span class="tooltip-content"></span>
-            </span> </li>
-        <li><strong>Moderate:</strong> 0.20 to 0.36 <span class=" tooltip" data-tooltip="This range shows a manageable debt load but might limit borrowing capacity or financial flexibility.">ⓘ
-            <span class="tooltip-content"></span>
-            </span> </li>
-        <li><strong>Low:</strong>Below 0.20 <span class=" tooltip" data-tooltip="Suggests good control over debt, more income available for savings or investments, and generally better financial health.">ⓘ
-            <span class="tooltip-content"></span>
-            </span> </li>
+        <li><strong>High:</strong> Above 0.36 
+            <span class="tooltip" data-tooltip="Indicates a high level of debt relative to income, potentially leading to financial strain.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
+        <li><strong>Moderate:</strong> 0.20 to 0.36 
+            <span class="tooltip" data-tooltip="This range shows a manageable debt load but might limit borrowing capacity or financial flexibility.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
+        <li><strong>Low:</strong> Below 0.20 
+            <span class="tooltip" data-tooltip="Suggests good control over debt, more income available for savings or investments, and generally better financial health.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
     </ul>
 
-<p>
-        <u>Housing to Income:</u> <span id="HOUSINGTOINCOME"></span><span class=" tooltip" data-tooltip="Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.">ⓘ
-            <span class="tooltip-content"></span>
-            </span><br>
-        
+    <p>
+        <span class="tooltip" data-tooltip="Housing costs as a percentage of income. Use: Assess housing affordability, financial stress.">
+            <u>Housing to Income:</u><span class="tooltip-content"></span><span id="HOUSINGTOINCOME"></span>
+        </span><br>
     </p>
     <ul>
-        <li><strong>High:</strong> .35 or higher <span class=" tooltip" data-tooltip="Considered unsustainable, potentially indicating financial strain.">ⓘ
-            <span class="tooltip-content"></span>
-            </span> </li>
-        <li><strong>Moderate:</strong> .25 - .35 <span class=" tooltip" data-tooltip="Within traditional affordability limits but might leave less room for savings or discretionary spending.">ⓘ
-            <span class="tooltip-content"></span>
-            </span> </li>
-        <li><strong>Low:</strong> Less than .25 <span class=" tooltip" data-tooltip="Allows for better management of expenses, savings, and investments.">ⓘ
-            <span class="tooltip-content"></span>
-            </span> </li>
+        <li><strong>High:</strong> .35 or higher 
+            <span class="tooltip" data-tooltip="Considered unsustainable, potentially indicating financial strain.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
+        <li><strong>Moderate:</strong> .25 - .35 
+            <span class="tooltip" data-tooltip="Within traditional affordability limits but might leave less room for savings or discretionary spending.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
+        <li><strong>Low:</strong> Less than .25 
+            <span class="tooltip" data-tooltip="Allows for better management of expenses, savings, and investments.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
     </ul>
      
     <p>
-        <u>Savings to Debt:</u> <span id="SAVINGSTODEBT"></span><span class=" tooltip" data-tooltip="Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.">ⓘ
-            <span class="tooltip-content">
-            </span> </span><br>
-        
+        <span class="tooltip" data-tooltip="Savings as a percentage of debt. Use: Assess financial security, emergency fund sufficiency.">
+            <u>Savings to Debt:</u><span class="tooltip-content"></span><span id="SAVINGSTODEBT"></span>
+        </span><br>
     </p>
     <ul>
-        <li><strong>Low:</strong> Less than 1  <span class=" tooltip" data-tooltip="Indicates a very low capacity to handle unexpected expenses or debt repayment without potentially incurring more debt.">ⓘ
-            <span class="tooltip-content"></span>
-            </span> </li>
-        <li><strong>Moderate:</strong> 1 to 2 <span class=" tooltip" data-tooltip="Suggests some level of financial buffer, but still on the lower side. Might manage small emergencies but would struggle with significant financial shocks.">ⓘ
-            <span class="tooltip-content"></span>
-            </span> </li>
-        <li><strong>High:</strong> 2 or higher  <span class=" tooltip" data-tooltip=" Indicates you're well-prepared for emergencies, debt management, or financial planning for the future.">ⓘ
-            <span class="tooltip-content"></span>
-            </span></li>
+        <li><strong>Low:</strong> Less than 1  
+            <span class="tooltip" data-tooltip="Indicates a very low capacity to handle unexpected expenses or debt repayment without potentially incurring more debt.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
+        <li><strong>Moderate:</strong> 1 to 2 
+            <span class="tooltip" data-tooltip="Suggests some level of financial buffer, but still on the lower side. Might manage small emergencies but would struggle with significant financial shocks.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
+        <li><strong>High:</strong> 2 or higher  
+            <span class="tooltip" data-tooltip="Indicates you're well-prepared for emergencies, debt management, or financial planning for the future.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
     </ul>
-        
-    <p>
-        <u>FIRE:</u><span id="FIRERATIO"></span> <span class=" tooltip" data-tooltip="Financial Independence, Retire Early ratio; the percentage of annual expenses covered by passive income. Use: To directly assess how close one is to financial independence, where passive income sustains lifestyle without work income.">ⓘ
-            <span class="tooltip-content"></span>
-            </span><br>
     
+    <p>
+        <span class="tooltip" data-tooltip="Financial Independence, Retire Early ratio; the percentage of annual expenses covered by passive income. Use: To directly assess how close one is to financial independence, where passive income sustains lifestyle without work income.">
+            <u>FIRE:</u><span class="tooltip-content"></span><span id="FIRERATIO"></span>
+        </span><br>
     </p>
-
-     <ul>
-    <li><strong>Low:</strong> Less than .10 <span class=" tooltip" data-tooltip="Indicates you are far from financial independence; significant work is needed to achieve FIRE goals.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </li>
-    <li><strong>Moderate:</strong> Between .10 and .24 <span class=" tooltip" data-tooltip="You're making progress towards financial independence but are not yet at a point where passive income can sustain your lifestyle fully.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </li>
-    <li><strong>High:</strong> .25 or higher <span class=" tooltip" data-tooltip="You've reached a level of financial independence where your passive income covers at least 25% of your annual living expenses, aligning with the FIRE movement's objectives.">ⓘ
-        <span class="tooltip-content"></span>
-        </span> </li>
-</ul>
-     
+    
+    <ul>
+        <li><strong>Low:</strong> Less than .10 
+            <span class="tooltip" data-tooltip="Indicates you are far from financial independence; significant work is needed to achieve FIRE goals.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
+        <li><strong>Moderate:</strong> Between .10 and .24 
+            <span class="tooltip" data-tooltip="You're making progress towards financial independence but are not yet at a point where passive income can sustain your lifestyle fully.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
+        <li><strong>High:</strong> .25 or higher 
+            <span class="tooltip" data-tooltip="You've reached a level of financial independence where your passive income covers at least 25% of your annual living expenses, aligning with the FIRE movement's objectives.">
+                <span class="tooltip-content"></span>
+            </span>
+        </li>
+    </ul>
 </details>
 
+<summary>
+    <h2>Financial Projections</h2>
+</summary>
 
-          <summary>
-   <h2>Financial Projections</h2>
-          </summary>
+<details>   
+    <p>
+        <span class="tooltip" data-tooltip="Revolving debt, such as student loans, lines of credit, credit cards, and tax arrears, allows for lump sum payments but usually incurs higher interest rates. This calculation estimates the time it will take to pay off the debt using disposable income if no savings are available.">
+            <u>Revolving Debt - Time to Pay:</u><span class="tooltip-content"></span><span id="TIMETOPAYDEBT"></span>
+        </span>
+    </p>
+</details>
 
-       <details>   
-   <p><u>Revolving Debt - Time to Pay:</u><span id="TIMETOPAYDEBT"></span> <span class=" tooltip" data-tooltip="Revolving debt, such as student loans, lines of credit, credit cards, and tax arrears, allows for lump sum payments but usually incurs higher interest rates. This calculation estimates the time it will take to pay off the debt using disposable income if no savings are available.">ⓘ
-    <span class="tooltip-content"></span>
-    </span></p>
-       </details>
-            
-           <div style="padding: 20px;text-align:center;">
+<div style="padding: 20px;text-align:center;"></div>
 
 
             
