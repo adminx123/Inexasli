@@ -50,27 +50,28 @@
 	       <div class="container">
 		       
     
-   <h2 style="text-align: center;font-size: 18px;">Tax Residency <span class=" tooltip" data-tooltip="Where you're legally considered to live for tax purposes.">ⓘ
+   <h2 style="text-align: center;font-size: 18px;">Tax Residency & Other Financial Considerations<span class=" tooltip" data-tooltip="Where you're legally considered to live for tax purposes.">ⓘ
     <span class="tooltip-content"></span>
-    </span></h2>
+    </span></h2>       
 
-<p style="margin-bottom: 20px;"> Step 1: Select Region & Subregion:</p>
-<div style="padding-bottom: 10px;"><select id="RegionDropdown">
+<p>Step 1: Select Region, Subregion And All That Apply:</p>
+
+		        <div class="row">
+<label>Region:</label>
+<select id="RegionDropdown">
         <option value="NONE">Select Tax Region</option> 
         <option value="CAN">Canada</option>
         <option value="USA">USA</option>
-    </select></div>
-    
-    <div style=" padding-bottom: 10px;">
-    <select id="SubregionDropdown">
-        <option value="">Select Tax Subregion</option> </select></div>
-    
+    </select>
+		       </div>
 
-<p> Step 2: Select All That Apply:</p>
-       
-  
-      
-      <div class="row">
+		       <div class="row">
+			       <label>Subregion:</label>
+    <select id="SubregionDropdown">
+        <option value="">Select Tax Subregion</option> </select>
+		       </div>
+
+<div class="row">
 	  <div class="checkbox-wrapper-2" >
         <input type="checkbox" id="spousecheckbox" class="sc-gJwTLC ikxBAC">
        </div>
