@@ -432,7 +432,7 @@ button {
   max-width: 800px; /* Maximum width of the container */
   margin: 0 auto; /* Center horizontally with auto margins */
   border-radius: 0 0 5px 5px; /* Rounded corners */
-  box-shadow: 10 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
+  box-shadow: 10px 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
   text-align: left; /* Text alignment inside the container */
   display: flex;
   padding: 0 15px;

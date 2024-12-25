@@ -1292,40 +1292,58 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
 
 
 
-    window.addEventListener('message', (event) => {
-        if (event.data === 'close-modal') {
-            
-            document.querySelector('#ROI-modal').style.display = 'none';
-
-            const selfEmploymentIncomeField = document.querySelector('#income_sole_prop')
-            const totalRevenue = getCookie('totalRevenue')
-            const paid = getCookie('authenticated') == 'paid'
-    
-            console.log(selfEmploymentIncomeField)
-            console.log(totalRevenue)
-            console.log(paid)
-
-            if (totalRevenue && totalRevenue != 'annually' && totalRevenue != '') {
-                if (paid) {
-
-                    selfEmploymentIncomeField.value = totalRevenue
-                    setCookie('income_sole_prop', totalRevenue, 365)
-
-                } else {
-                    selfEmploymentIncomeField.value = ''
-                    selfEmploymentIncomeField.placeholder = 'payment required'
-                }
-
-
+    window.addEventListener("message", (event) => {
+        if (event.data === "close-modal") {
+            console.log('message recieved')
+          document.querySelector("#ROI-modal").style.display = "none";
+      
+          const selfEmploymentIncomeField =
+            document.querySelector("#income_sole_prop");
+          const totalRevenue = getCookie("totalRevenue");
+          const paid = getCookie("authenticated") == "paid";
+      
+          console.log(selfEmploymentIncomeField);
+          console.log(totalRevenue);
+          console.log(paid);
+      
+          if (totalRevenue && totalRevenue != "annually" && totalRevenue != "") {
+            if (paid) {
+              selfEmploymentIncomeField.value = totalRevenue;
+              setCookie("income_sole_prop", totalRevenue, 365);
+              selfEmploymentIncomeField.placeholder = "";
+              console.log('everything done since user paid')
+            } else {
+              selfEmploymentIncomeField.value = "";
+              setCookie("calculated_from_worksheet", true, 365);
+              selfEmploymentIncomeField.placeholder = "payment required";
+              console.log('everything postponsed since user not paid')
             }
-        
-        
-        
-            
-            
-        
-            return
-            
-            
+          }
+      
+          return;
         }
-    });
+      });
+      
+      document.addEventListener("DOMContentLoaded", () => {
+          const paid = getCookie("authenticated") == "paid";
+        const calculatedFromWorksheet = getCookie("calculated_from_worksheet");
+      
+         if (calculatedFromWorksheet == 'true' && paid ) {
+          const totalRevenue = getCookie("totalRevenue");
+          const selfEmploymentIncomeField =
+          document.querySelector("#income_sole_prop");
+          
+          selfEmploymentIncomeField.value = totalRevenue;
+          setCookie("income_sole_prop", totalRevenue, 365);
+          setCookie('calculated_from_worksheet', 'resolved', 365)
+          selfEmploymentIncomeField.placeholder = "";
+          console.log('now user has paid and everything is finally resulved')
+         } else if (calculatedFromWorksheet == 'true' && !paid) {
+          const selfEmploymentIncomeField =
+          document.querySelector("#income_sole_prop");
+      
+          selfEmploymentIncomeField.placeholder = "payment required";
+          console.log('user has still not paid so everything is still postponsed')
+         }
+      });
+      
