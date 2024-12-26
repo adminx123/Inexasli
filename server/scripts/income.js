@@ -1,3 +1,5 @@
+import { displayWarning } from "./utils.js"
+
 function getTermsCookie(name) {
     const now = Date.now()
     const status = JSON.parse(window.localStorage.getItem(name))
@@ -1346,4 +1348,19 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
           console.log('user has still not paid so everything is still postponsed')
          }
       });
+
+
+      const spousecheckbox = document.querySelector('#spousecheckbox')
+
+      spousecheckbox.addEventListener('change', function() {
+        if (spousecheckbox.checked) {
+            setCookie('spousecheckbox', 'checked', 365)
+
+            displayWarning("You have indicated that you have a financial partner, this worksheet is designed to be completed from a personal standpoint. Only include the portion of income that you receive.")
+        } else {
+            setCookie('spousecheckbox', 'unChecked', 365)
+
+        }
+ 
+      })
       
