@@ -381,6 +381,23 @@ for (let i = 0; i < expensesFields.length; i++) {
 }
 }
 
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+      // Decode the cookie value
+      const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
+      // If the value is empty and it's a frequency field, set it to 'annually'
+      if (decodedValue === '' && name.includes('_frequency')) {
+          return 'annually';
+      }
+      return decodedValue == 0 || decodedValue == '0'? '' : decodedValue;
+  } else {
+      return 'annually';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Function to retrieve cookie value by name
     function getCookie(name) {
@@ -584,3 +601,20 @@ if (dependantCheckBox.checked) {
           })
 
 
+          document.addEventListener('DOMContentLoaded', () => {
+            const expensespousecheckbox = getCookie('expensespousecheckbox')
+        
+            if (expensespousecheckbox == 'checked') {
+                spousecheckbox.checked = true
+            }
+
+            if (getCookie('dependantcheckbox') == 'checked') {
+              dependantCheckBox.checked = true
+              hideShow('depandant-parent','show')
+            }
+
+            if (getCookie('debtCheckBox') == 'checked') {
+              debtCheckBox.checked = true
+              hideShow('debt-parent','show')
+            }
+        })

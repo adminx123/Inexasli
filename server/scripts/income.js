@@ -1365,3 +1365,10 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
       })
       
 
+document.addEventListener('DOMContentLoaded', () => {
+    const incomespousecheckbox = getCookie('incomespousecheckbox')
+
+    if (incomespousecheckbox == 'checked') {
+        spousecheckbox.checked = true
+    }
+})
