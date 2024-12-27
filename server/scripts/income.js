@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-    function validatecheckbox() {
+    window.validatecheckbox = function () {
   var termscheckbox = document.getElementById("termscheckbox");
   var notintended = document.getElementById("notintended");
   var regionDropdown = document.getElementById("RegionDropdown");
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 }
 
-    function openTermsModal() {
+   window.openTermsModal = function () {
   console.log('openTermsModal() function called');
   // **Change:** Move setting modal display to within the then block after content is retrieved
   fetch('../../client/finance/legal.txt') // Corrected file extension to '.txt'
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(error => console.error('Error fetching legal content:', error));
 }
 
-    function closeModal(event) {
+    window.closeModal = function (event) {
     const modal = document.getElementById('termsModal');
     const modalContent = document.getElementById('modalContent');
 
@@ -1238,12 +1238,12 @@ function deleteCookies() {
   document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
 }
     
-function calculateNext() {
+window.calculateNext = function () {
     calculateAll();
 window.location.href = '../finance/expense.html';
 }   
 
-    function calculateAll() {
+   window.calculateAll = function () {
         
     calculateNormalizedSum();
         
@@ -1296,7 +1296,7 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
 
     window.addEventListener("message", (event) => {
         if (event.data === "close-modal") {
-            console.log('message recieved')
+            // console.log('message recieved')
           document.querySelector("#ROI-modal").style.display = "none";
       
           const selfEmploymentIncomeField =
@@ -1304,21 +1304,21 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
           const totalRevenue = getCookie("totalRevenue");
           const paid = getCookie("authenticated") == "paid";
       
-          console.log(selfEmploymentIncomeField);
-          console.log(totalRevenue);
-          console.log(paid);
+        //   console.log(selfEmploymentIncomeField);
+        //   console.log(totalRevenue);
+        //   console.log(paid);
       
           if (totalRevenue && totalRevenue != "annually" && totalRevenue != "") {
             if (paid) {
               selfEmploymentIncomeField.value = totalRevenue;
               setCookie("income_sole_prop", totalRevenue, 365);
               selfEmploymentIncomeField.placeholder = "";
-              console.log('everything done since user paid')
+            //   console.log('everything done since user paid')
             } else {
               selfEmploymentIncomeField.value = "";
               setCookie("calculated_from_worksheet", true, 365);
               selfEmploymentIncomeField.placeholder = "payment required";
-              console.log('everything postponsed since user not paid')
+            //   console.log('everything postponsed since user not paid')
             }
           }
       
@@ -1339,13 +1339,13 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
           setCookie("income_sole_prop", totalRevenue, 365);
           setCookie('calculated_from_worksheet', 'resolved', 365)
           selfEmploymentIncomeField.placeholder = "";
-          console.log('now user has paid and everything is finally resulved')
+        //   console.log('now user has paid and everything is finally resolved')
          } else if (calculatedFromWorksheet == 'true' && !paid) {
           const selfEmploymentIncomeField =
           document.querySelector("#income_sole_prop");
       
           selfEmploymentIncomeField.placeholder = "payment required";
-          console.log('user has still not paid so everything is still postponsed')
+        //   console.log('user has still not paid so everything is still postponsed')
          }
       });
 
@@ -1354,13 +1354,14 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
 
       spousecheckbox.addEventListener('change', function() {
         if (spousecheckbox.checked) {
-            setCookie('spousecheckbox', 'checked', 365)
+            setCookie('incomespousecheckbox', 'checked', 365)
 
             displayWarning("You have indicated that you have a financial partner, this worksheet is designed to be completed from a personal standpoint. Only include the portion of income that you receive.")
         } else {
-            setCookie('spousecheckbox', 'unChecked', 365)
+            setCookie('incomespousecheckbox', 'unChecked', 365)
 
         }
  
       })
       
+

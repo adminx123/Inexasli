@@ -1,3 +1,5 @@
+import { displayWarning } from "./utils.js"
+
 const tabs = document.querySelectorAll('.tab')
 
 tabs.forEach(tab => {
@@ -36,8 +38,17 @@ var LIQUIDASSETS;
         const fieldValue = document.getElementById(assetFields[i]).value;
         console.log(`Field value for ${assetFields[i]}: ${fieldValue}`);
         const parsedValue = parseFloat(fieldValue);
+
+        const isPartner = getCookie('assetspousecheckbox') == 'checked'
         if (!isNaN(parsedValue)) {
-            assets += parsedValue;
+            let fieldPercentage = parseFloat(document.querySelector(`#${assetFields[i]}_percent`).value)
+
+            if (!fieldPercentage || isNaN(fieldPercentage) || !isPartner) {
+                fieldPercentage = 100
+            }
+            // console.log(fieldPercentage)
+            assets += (parsedValue * fieldPercentage / 100);
+            // console.log(`${parsedValue}, ${fieldPercentage}, ${parsedValue * fieldPercentage / 100}`)
         } else {
             console.error(`Invalid value for ${assetFields[i]}: ${fieldValue}`);
         }
@@ -65,8 +76,20 @@ ASSETS = assets;
         const fieldValue = document.getElementById(liquidAssetFields[i]).value;
         console.log(`Field value for ${liquidAssetFields[i]}: ${fieldValue}`);
         const parsedValue = parseFloat(fieldValue);
+        const isPartner = getCookie('assetspousecheckbox') == 'checked'
+
         if (!isNaN(parsedValue)) {
-            liquidAssets += parsedValue;
+            let fieldPercentage = parseFloat(document.querySelector(`#${liquidAssetFields[i]}_percent`).value)
+
+            if (!fieldPercentage || isNaN(fieldPercentage) || !isPartner) {
+                fieldPercentage = 100
+            }
+
+            // console.log(fieldPercentage)
+
+
+            liquidAssets += (parsedValue * fieldPercentage / 100);
+            // console.log(`${parsedValue}, ${fieldPercentage}, ${parsedValue * fieldPercentage / 100}`)
         } else {
             console.error(`Invalid value for ${liquidAssetFields[i]}: ${fieldValue}`);
         }
@@ -117,6 +140,16 @@ for (let i = 0; i < assetsFields.length; i++) {
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 365);
     document.cookie = `${assetsFields[i]}=${assets}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
+// set percentage cookie
+
+let fieldPercentage = parseFloat(document.querySelector(`#${assetsFields[i]}_percent`).value)
+
+if (!fieldPercentage || isNaN(fieldPercentage)) {
+    // fieldPercentage = 100
+    continue
+}
+
+    document.cookie = `${assetsFields[i]}_percent=${fieldPercentage}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
   } else {
     const assets = "0";
     const expirationDate = new Date();
@@ -125,6 +158,17 @@ for (let i = 0; i < assetsFields.length; i++) {
   }
 }
 }
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    const val = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
+    return val == 0 || val == '0'? '': val
+}
+
+
+
+
 
 
 	document.addEventListener('DOMContentLoaded', function() {
@@ -149,15 +193,31 @@ document.getElementById('assets_vehicles').value = getCookie('assets_vehicles');
 document.getElementById('assets_art_jewelry').value = getCookie('assets_art_jewelry');
 
 
+
+document.getElementById('assets_checking_accounts_percent').value = getCookie('assets_checking_accounts_percent');
+document.getElementById('assets_savings_accounts_percent').value = getCookie('assets_savings_accounts_percent');
+document.getElementById('assets_other_liquid_accounts_percent').value = getCookie('assets_other_liquid_accounts_percent');
+document.getElementById('assets_money_lent_out_percent').value = getCookie('assets_money_lent_out_percent');
+document.getElementById('assets_long_term_investment_accounts_percent').value = getCookie('assets_long_term_investment_accounts_percent');
+document.getElementById('assets_primary_residence_percent').value = getCookie('assets_primary_residence_percent');
+document.getElementById('assets_investment_properties_percent').value = getCookie('assets_investment_properties_percent');
+document.getElementById('assets_small_business_percent').value = getCookie('assets_small_business_percent');
+document.getElementById('assets_vehicles_percent').value = getCookie('assets_vehicles_percent');
+document.getElementById('assets_art_jewelry_percent').value = getCookie('assets_art_jewelry_percent');
+
+
+
+
+
 	})	
 
     
-function calculateNext() {
+window.calculateNext = function () {
   calculateAll();
   window.location.href = 'liability.html';
 }    
 
-	function calculateBack() {
+	window.calculateBack = function () {
   calculateAll();
   window.location.href = 'expense.html';
 }    
@@ -176,3 +236,41 @@ function calculateNext() {
 
 
 
+    const spousecheckbox = document.querySelector('#spousecheckbox')
+
+    spousecheckbox.addEventListener('change', function() {
+      const percentInputs = document.querySelectorAll('.percent-input')
+      if (spousecheckbox.checked) {
+          setCookie('assetspousecheckbox', 'checked', 365)
+
+          displayWarning("this is the text for the asset page, can simply change it from somewhere arround line 187 of asset script this is the text for the asset page, can simply change it from somewhere arround line 187 of asset script ")
+
+          percentInputs.forEach( input => {
+            input.style.display = 'block'
+          })
+
+
+      } else {
+          setCookie('assetspousecheckbox', 'unChecked', 365)
+          percentInputs.forEach(input => {
+            input.style.display = 'none'
+          })
+
+      }
+
+    })
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const isPartner = getCookie('assetspousecheckbox') == 'checked'
+      const percentInputs = document.querySelectorAll('.percent-input')
+
+
+        if (isPartner) {
+            spousecheckbox.checked = true
+            percentInputs.forEach(input => {
+                input.style.display = 'block'
+            })
+        }
+
+    })

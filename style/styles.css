@@ -101,6 +101,10 @@
 
 }
 
+#debt-parent h2, #depandant-parent h2{
+  width: 100%;
+}
+
 .warning-content h2 {
   font-size: 2rem;
 }
@@ -328,6 +332,26 @@ h2 {
 
 .result-parent {
   padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;
+}
+
+
+
+
+.percent-input {
+  max-width: 75px;
+  display: none;
+
+
+}
+
+.percent-input:invalid {
+  border: 1px solid red;
+
+}
+
+.percent-input:focus:invalid {
+  border: 1px solid red;
+
 }
 
 @media (max-width: 700px) {

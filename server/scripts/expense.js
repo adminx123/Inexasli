@@ -1,3 +1,5 @@
+import { displayWarning, hideShow } from "./utils.js"
+
 const tabs = document.querySelectorAll('.tab')
 
 tabs.forEach(tab => {
@@ -482,17 +484,17 @@ document.getElementById('dependant_housing_frequency').value = getCookie('depend
 document.getElementById('dependant_cellular_service_frequency').value = getCookie('dependant_cellular_service_frequency');
 	 });	
 	
-function calculateNext() {
+window.calculateNext = function () {
   calculateAll();
   window.location.href = 'asset.html';
 }   
 
-function calculateBack() {
+window.calculateBack = function () {
   calculateAll();
   window.location.href = 'income.html';
 }   
 
-    function calculateAll() {
+window.calculateAll = function () {
         
     calculateNormalizedSum();
 
@@ -513,5 +515,72 @@ setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
   setIncomeData();
     }
     
+
+
+    const spousecheckbox = document.querySelector('#spousecheckbox')
+
+    spousecheckbox.addEventListener('change', function() {
+      const percentInputs = document.querySelectorAll('.percent-input')
+      if (spousecheckbox.checked) {
+          setCookie('expensespousecheckbox', 'checked', 365)
+
+          displayWarning("this is the text for the expense page, can simply change it from somewhere arround line 526 of expense script this is the text for the expense page, can simply change it from somewhere arround line 526 of expense script ")
+
+
+          percentInputs.forEach( input => {
+            input.style.display = 'block'
+          })
+        } else {
+          setCookie('expensespousecheckbox', 'unChecked', 365)
+          percentInputs.forEach(input => {
+            input.style.display = 'none'
+            input.value = ''
+          })
+
+      }
+
+    })
+
+    const dependantCheckBox = document.querySelector('#dependantcheckbox')
+    const debtCheckBox = document.querySelector('#debtcheckbox')
+
+    const debtParent = document.querySelector('#debt-parent')
+    const depandentParent = document.querySelector("#depandant-parent")
+
+    hideShow('depandant-parent', 'hide')
+
+
+    hideShow('debt-parent', 'hide')
+
+
+    dependantCheckBox.addEventListener('change', function() {
+if (dependantCheckBox.checked) {
+  setCookie('dependantcheckbox', 'checked', 365)
+  hideShow('depandant-parent', 'show')
+  
+} else {
+  setCookie('dependantcheckbox', 'unChecked', 365)
+  hideShow('depandant-parent', 'hide')
+  const inputs = depandentParent.querySelectorAll('input[type="number"]')
+
+  inputs.forEach(input => input.value = '')
+}
+
+    })
+
+    debtCheckBox.addEventListener('change', function() {
+      if (debtCheckBox.checked) {
+        setCookie('debtCheckBox', 'checked', 365)
+        hideShow('debt-parent', 'show')
+      } else {
+        setCookie('debtCheckBox', 'unChecked', 365)
+        hideShow('debt-parent', 'hide')
+        const inputs = debtParent.querySelectorAll('input[type="number"]')
+
+        inputs.forEach(input => input.value = '')
+
+      }
+      
+          })
 
 
