@@ -1356,7 +1356,7 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
         if (spousecheckbox.checked) {
             setCookie('incomespousecheckbox', 'checked', 365)
 
-            displayWarning("You have indicated that you have a financial partner, this worksheet is designed to be completed from a personal standpoint. Only include the portion of income that you receive.")
+            displayWarning("You have indicated that you share one or more sources of income. Include only your portion of personal income here.")
         } else {
             setCookie('incomespousecheckbox', 'unChecked', 365)
 
