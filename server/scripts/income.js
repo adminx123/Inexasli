@@ -1184,6 +1184,12 @@ function handleUSAResident() {
 
 
 
+
+
+document.querySelector('#cookie-delete').addEventListener('click', () => {
+    deleteCookies()
+})
+
 function deleteCookies() {
     // First, display the warning using displayWarning from utils.js
     displayWarning();
@@ -1195,51 +1201,6 @@ function deleteCookies() {
         console.log("Cookie deletion canceled.");
         return; // If the user cancels, stop the function
     }
-
-    const cookies = document.cookie.split(";");
-    const paths = ["/", "/client/finance"];
-    const domains = [window.location.hostname]; 
-
-    cookies.forEach(cookie => {
-        const cookieName = cookie.split("=")[0].trim();
-
-        if (cookies.length === 1 && cookie.includes('authenticated')) {
-            return;
-        }
-
-        if (cookieName === "authenticated") {
-            return;
-        } else {
-            let expires = "";
-
-            let date = new Date();
-            date.setTime(date.getTime());
-            expires = "; expires=" + date.toUTCString();
-
-            paths.forEach(path => {
-                domains.forEach(domain => {
-                    document.cookie = cookieName + "=" + encodeURIComponent(0) + expires + "; path=/; SameSite=Strict; Secure";
-                });
-            });
-        }
-    });
-
-    document.location.reload();  // Reload to reflect changes
-    return;
-}
-
-
-
-
-
-
-
-/*
-document.querySelector('#cookie-delete').addEventListener('click', () => {
-    deleteCookies()
-})
-
-function deleteCookies() {
     const cookies = document.cookie.split(";");
 
     const paths = ["/", "/client/finance"];
@@ -1276,7 +1237,7 @@ function deleteCookies() {
     return
 }
 
-*/
+
 
 
 
