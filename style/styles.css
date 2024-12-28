@@ -785,7 +785,7 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
 
       .box-checkbox {
         width: 100%;
-        height: 100px;
+        height: 50px;
         text-wrap: wrap;
         background-color: #f0f0f0;
         display: inline-flex;
@@ -798,7 +798,6 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
         box-shadow: 1px px 10px rgba(0, 0, 0, 0.2);
         cursor: pointer;
         margin: 0 !important;
-        max-width: 500px;
       }
 
 #spousecheckbox:checked ~   .box-checkbox, #dependantcheckbox:checked ~   .box-checkbox, 
