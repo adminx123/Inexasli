@@ -798,6 +798,7 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
         box-shadow: 1px px 10px rgba(0, 0, 0, 0.2);
         cursor: pointer;
         margin: 0 !important;
+        max-width: 500px;
       }
 
 #spousecheckbox:checked ~   .box-checkbox, #dependantcheckbox:checked ~   .box-checkbox, 
