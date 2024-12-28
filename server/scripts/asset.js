@@ -243,7 +243,7 @@ window.calculateNext = function () {
       if (spousecheckbox.checked) {
           setCookie('assetspousecheckbox', 'checked', 365)
 
-          displayWarning("this is the text for the asset page, can simply change it from somewhere arround line 187 of asset script this is the text for the asset page, can simply change it from somewhere arround line 187 of asset script ")
+          displayWarning("You have indicated that you own one or more assets jointly with your romantic partner. Please enter the market value of the assets and your corresponding percentage of ownership.")
 
           percentInputs.forEach( input => {
             input.style.display = 'block'
