@@ -811,7 +811,7 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
         justify-content: stretch;
         flex-direction: column;
         row-gap: 20px;
-        padding: 5px 0;
+        padding: 0px 0;
       }
 
       .checkboxes-parent > div {
