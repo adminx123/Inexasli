@@ -102,21 +102,6 @@ var LIABILITIES;
         ];
     
     
-    //for (let i = 0; i < frequencyFields.length; i++) {
-      //const frequencyInput = document.getElementById(frequencyFields[i]);
-     // if (frequencyInput.value.trim() !== "") {
-     //   const frequency = frequencyInput.value;
-     //   const expirationDate = new Date();
-     //   expirationDate.setDate(expirationDate.getDate() + 365);
-     //   document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
-     // } else {
-    //    const frequency = "0";
-     //   const expirationDate = new Date();
-      //  expirationDate.setDate(expirationDate.getDate() + 365);
-      //  document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}`;
-     // }
-    //}
-    
     for (let i = 0; i < liabilitiesFields.length; i++) {
       // console.log('working')
       const liabilitiesInput = document.getElementById(liabilitiesFields[i]);
@@ -257,7 +242,7 @@ const isPartner = getCookie('liabilityspousecheckbox') == 'checked'
           if (spousecheckbox.checked) {
               setCookie('liabilityspousecheckbox', 'checked', 365)
     
-              displayWarning("this is the text for the liability page, can simply change it from somewhere arround line 191 of liability script this is the text for the liability page, can simply change it from somewhere arround line 191 of liability script ")
+              displayWarning("You've indicated that you have joint liabilities with your romantic partner. Please enter the current value of the liabilities and your corresponding percentage of responsibility.")
 
               percentInputs.forEach( input => {
                 input.style.display = 'block'
