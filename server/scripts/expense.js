@@ -541,7 +541,7 @@ setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
       if (spousecheckbox.checked) {
           setCookie('expensespousecheckbox', 'checked', 365)
 
-          displayWarning("this is the text for the expense page, can simply change it from somewhere arround line 526 of expense script this is the text for the expense page, can simply change it from somewhere arround line 526 of expense script ")
+          displayWarning("You've indicated that you share expenses with your romantic partner. Include only your portion of the expenditures here.")
 
 
           percentInputs.forEach( input => {
