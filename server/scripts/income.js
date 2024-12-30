@@ -1367,22 +1367,7 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
       });
 
 
-      const spousecheckbox = document.querySelector('#spousecheckbox')
-
-      spousecheckbox.addEventListener('change', function() {
-        if (spousecheckbox.checked) {
-            setCookie('incomespousecheckbox', 'checked', 365)
-
-            displayWarning("You have indicated that you share one or more sources of income. Include only your portion of personal income here.")
-        } else {
-            setCookie('incomespousecheckbox', 'unChecked', 365)
-
-        }
- 
-      })
-      
-
-document.addEventListener('DOMContentLoaded', () => {
+     document.addEventListener('DOMContentLoaded', () => {
     const incomespousecheckbox = getCookie('incomespousecheckbox')
 
     if (incomespousecheckbox == 'checked') {
