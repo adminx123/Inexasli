@@ -1368,9 +1368,11 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
 
 
      document.addEventListener('DOMContentLoaded', () => {
-    const incomespousecheckbox = getCookie('incomespousecheckbox')
+    const romanticincome = getCookie('romanticincome')
 
-    if (incomespousecheckbox == 'checked') {
-        spousecheckbox.checked = true
+    if (romanticincome == 'checked') {
+        romanticincome.checked = true
+                  displayWarning("You have indicated that you share one or more sources of income. Include only your portion of personal income here.")
+
     }
 })
