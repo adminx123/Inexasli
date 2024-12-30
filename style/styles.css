@@ -800,8 +800,7 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
         margin: 0 !important;
       }
 
-#spousecheckbox:checked ~   .box-checkbox, #dependantcheckbox:checked ~   .box-checkbox, 
-#debtcheckbox:checked ~   .box-checkbox {
+input[type="checkbox"]:checked ~   .box-checkbox {
         background-color: #000;
         color: #f0f0f0;
       }
