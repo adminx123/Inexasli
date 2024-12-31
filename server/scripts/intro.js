@@ -15,7 +15,7 @@ function setCookie(name, value, days) {
 
 
 
-function nextPage {
+function nextPage() {
 
 const romanticincome = document.querySelector('#romanticincome')
 
