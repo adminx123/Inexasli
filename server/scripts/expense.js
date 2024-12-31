@@ -581,23 +581,26 @@ if (dependantCheckBox.checked) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const romanticexpenseCookie = getCookie('romanticexpense');
-   const debtcheckboxCookie = getCookie('debtcheckbox');
-	const dependantcheckboxCookie = getCookie('dependantcheckbox');
+    const debtcheckboxCookie = getCookie('debtcheckbox');
+    const dependantcheckboxCookie = getCookie('dependantcheckbox');
 
+    // Check for romantic expense sharing
     if (romanticexpenseCookie === 'checked') {
-        
- displayWarning("You've indicated that you share expenses with your romantic partner. Include only your portion of the expenditures here.")    }
+        displayWarning("You've indicated that you share expenses with your romantic partner. Include only your portion of the expenditures here.");
+        // Assuming there's no specific action for showing elements related to this checkbox
+    } 
 
+    // Check for dependants/pets
+    if (dependantcheckboxCookie === 'checked') {
+        hideShow('depandant-parent', 'show');
+    } else if (dependantcheckboxCookie === 'unChecked') {
+        hideShow('depandant-parent', 'hide');
+    }
 
-
-            if (getCookie('dependantcheckbox') == 'checked') {
-              
-              hideShow('depandant-parent','show')
-            }
-
-            if (getCookie('debtcheckboxCookie') == 'checked') {
-              
-              hideShow('debt-parent','show')
-            }
-
+    // Check for debt payments
+    if (debtcheckboxCookie === 'checked') {
+        hideShow('debt-parent', 'show');
+    } else if (debtcheckboxCookie === 'unChecked') {
+        hideShow('debt-parent', 'hide');
+    }
 });
