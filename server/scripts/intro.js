@@ -16,88 +16,26 @@ function setCookie(name, value, days) {
 
 
 function nextPage() {
+  // Function to check if a checkbox is checked and set the appropriate cookie
+  const setCheckboxCookie = (id, name) => {
+    const checkbox = document.querySelector('#' + id);
+    if (checkbox && checkbox.checked) {
+      setCookie(name, 'checked', 365);
+    } else {
+      setCookie(name, 'unChecked', 365);
+    }
+  };
 
-const romanticincome = document.querySelector('#romanticincome')
+  // Check each checkbox and set the corresponding cookie
+  setCheckboxCookie('romanticincome', 'romanticincome');
+  setCheckboxCookie('romanticexpense', 'romanticexpense');
+  setCheckboxCookie('dependantcheckbox', 'dependantcheckbox');
+  setCheckboxCookie('debtcheckbox', 'debtcheckbox');
+  setCheckboxCookie('romanticasset', 'romanticasset');
+  setCheckboxCookie('romanticliability', 'romanticliability');
 
-      romanticincome.addEventListener('change', function() {
-        if (romanticincome.checked) {
-            setCookie('romanticincome', 'checked', 365)
-
-        } else {
-            setCookie('romanticincome', 'unChecked', 365)
-
-        }
- 
-      })
-      
-
-
-const romanticexpense = document.querySelector('#romanticexpense')
-
-      romanticexpense.addEventListener('change', function() {
-        if (romanticexpense.checked) {
-            setCookie('romanticexpense', 'checked', 365)
-
-        } else {
-            setCookie('romanticexpense', 'unChecked', 365)
-
-        }
- 
-      })
-
-const dependantcheckbox = document.querySelector('#dependantcheckbox')
-
-      dependantcheckbox.addEventListener('change', function() {
-        if (dependantcheckbox.checked) {
-            setCookie('dependantcheckbox', 'checked', 365)
-
-        } else {
-            setCookie('dependantcheckbox', 'unChecked', 365)
-
-        }
- 
-      })
-
-const debtcheckbox = document.querySelector('#debtcheckbox')
-
-      debtcheckbox.addEventListener('change', function() {
-        if (debtcheckbox.checked) {
-            setCookie('debtcheckbox', 'checked', 365)
-
-        } else {
-            setCookie('debtcheckbox', 'unChecked', 365)
-
-        }
- 
-      })
-
-const romanticasset = document.querySelector('#romanticasset')
-
-      romanticasset.addEventListener('change', function() {
-        if (romanticasset.checked) {
-            setCookie('romanticasset', 'checked', 365)
-
-        } else {
-            setCookie('romanticasset', 'unChecked', 365)
-
-        }
- 
-      })
-
-const romanticliability = document.querySelector('#romanticliability')
-
-      romanticliability.addEventListener('change', function() {
-        if (romanticliability.checked) {
-            setCookie('romanticliability', 'checked', 365)
-
-        } else {
-            setCookie('romanticliability', 'unChecked', 365)
-
-        }
- 
-      })
-
-window.location.href = '/client/finance/income.html';
+  // Navigate to the new page after setting cookies
+  window.location.href = '/client/finance/income.html';
 }
 
   
