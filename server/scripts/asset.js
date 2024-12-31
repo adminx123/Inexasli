@@ -235,7 +235,7 @@ window.calculateNext = function () {
     }
 
 
-
+/*
     const spousecheckbox = document.querySelector('#spousecheckbox')
 
     spousecheckbox.addEventListener('change', function() {
@@ -270,9 +270,29 @@ window.calculateNext = function () {
             spousecheckbox.checked = true
             percentInputs.forEach(input => {
                 input.style.display = 'block'
-		              displayWarning("You have indicated that you own one or more assets jointly with your romantic partner. Please enter the market value of the assets and your corresponding percentage of ownership.")
 
             })
         }
 
     })
+*/
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const romanticassetCookie = getCookie('romanticasset');
+    const percentInputs = document.querySelectorAll('.percent-input');
+
+    // Check for romantic liability sharing based on cookie value
+    if (romanticassetCookie === 'checked') {
+		              displayWarning("You have indicated that you own one or more assets jointly with your romantic partner. Please enter the market value of the assets and your corresponding percentage of ownership.")
+
+        percentInputs.forEach(input => {
+            input.style.display = 'block';
+        });
+    } else {
+        percentInputs.forEach(input => {
+            input.style.display = 'none';
+        });
+    }
+});
