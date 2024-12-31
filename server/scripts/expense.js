@@ -602,10 +602,10 @@ if (dependantCheckBox.checked) {
 
 
           document.addEventListener('DOMContentLoaded', () => {
-            const expensespousecheckbox = getCookie('expensespousecheckbox')
+            const romanticexpense = getCookie('romanticexpense')
         
-            if (expensespousecheckbox == 'checked') {
-                spousecheckbox.checked = true
+            if (romanticexpense == 'checked') {
+                romanticexpense.checked = true
             }
 
             if (getCookie('dependantcheckbox') == 'checked') {
