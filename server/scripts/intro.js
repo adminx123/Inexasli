@@ -97,7 +97,7 @@ const romanticliability = document.querySelector('#romanticliability')
  
       })
 
-window.location.href = 'client/finance/income.html';
+window.location.href = '/client/finance/income.html';
 }
 
   
