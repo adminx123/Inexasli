@@ -533,31 +533,7 @@ setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
     }
     
 
-
-    const spousecheckbox = document.querySelector('#spousecheckbox')
-
-    spousecheckbox.addEventListener('change', function() {
-      const percentInputs = document.querySelectorAll('.percent-input')
-      if (spousecheckbox.checked) {
-          setCookie('expensespousecheckbox', 'checked', 365)
-
-          displayWarning("You've indicated that you share expenses with your romantic partner. Include only your portion of the expenditures here.")
-
-
-          percentInputs.forEach( input => {
-            input.style.display = 'block'
-          })
-        } else {
-          setCookie('expensespousecheckbox', 'unChecked', 365)
-          percentInputs.forEach(input => {
-            input.style.display = 'none'
-            input.value = ''
-          })
-
-      }
-
-    })
-
+/*
     const dependantCheckBox = document.querySelector('#dependantcheckbox')
     const debtCheckBox = document.querySelector('#debtcheckbox')
 
@@ -598,23 +574,30 @@ if (dependantCheckBox.checked) {
 
       }
       
-          })
+          }) */
 
 
-          document.addEventListener('DOMContentLoaded', () => {
-            const romanticexpense = getCookie('romanticexpense')
+          
+
+document.addEventListener('DOMContentLoaded', () => {
+    const romanticexpenseCookie = getCookie('romanticexpense');
+   const debtcheckboxCookie = getCookie('debtcheckbox');
+	const dependantcheckboxCookie = getCookie('dependantcheckbox');
+
+    if (romanticexpenseCookie === 'checked') {
         
-            if (romanticexpense == 'checked') {
-                romanticexpense.checked = true
-            }
+ displayWarning("You've indicated that you share expenses with your romantic partner. Include only your portion of the expenditures here.")    }
+
+
 
             if (getCookie('dependantcheckbox') == 'checked') {
-              dependantCheckBox.checked = true
+              
               hideShow('depandant-parent','show')
             }
 
-            if (getCookie('debtCheckBox') == 'checked') {
-              debtCheckBox.checked = true
+            if (getCookie('debtcheckboxCookie') == 'checked') {
+              
               hideShow('debt-parent','show')
             }
-        })
+
+});
