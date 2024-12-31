@@ -235,47 +235,7 @@ window.calculateNext = function () {
     }
 
 
-/*
-    const spousecheckbox = document.querySelector('#spousecheckbox')
 
-    spousecheckbox.addEventListener('change', function() {
-      const percentInputs = document.querySelectorAll('.percent-input')
-      if (spousecheckbox.checked) {
-          setCookie('assetspousecheckbox', 'checked', 365)
-
-          displayWarning("You have indicated that you own one or more assets jointly with your romantic partner. Please enter the market value of the assets and your corresponding percentage of ownership.")
-
-          percentInputs.forEach( input => {
-            input.style.display = 'block'
-          })
-
-
-      } else {
-          setCookie('assetspousecheckbox', 'unChecked', 365)
-          percentInputs.forEach(input => {
-            input.style.display = 'none'
-          })
-
-      }
-
-    })
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const isPartner = getCookie('assetspousecheckbox') == 'checked'
-      const percentInputs = document.querySelectorAll('.percent-input')
-
-
-        if (isPartner) {
-            spousecheckbox.checked = true
-            percentInputs.forEach(input => {
-                input.style.display = 'block'
-
-            })
-        }
-
-    })
-*/
 
 
 
