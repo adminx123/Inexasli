@@ -1367,12 +1367,13 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
       });
 
 
-     document.addEventListener('DOMContentLoaded', () => {
-    const romanticincome = getCookie('romanticincome')
+    document.addEventListener('DOMContentLoaded', () => {
+    const romanticincomeCookie = getCookie('romanticincome');
+   
 
-    if (romanticincome == 'checked') {
-        romanticincome.checked = true
-                  displayWarning("You have indicated that you share one or more sources of income. Include only your portion of personal income here.")
-
+    if (romanticincomeCookie === 'checked') {
+        
+        displayWarning("You have indicated that you share one or more sources of income. Include only your portion of personal income here.");
     }
+});
 })
