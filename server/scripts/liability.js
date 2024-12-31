@@ -234,40 +234,24 @@ const isPartner = getCookie('liabilityspousecheckbox') == 'checked'
     
     
     
-        const spousecheckbox = document.querySelector('#spousecheckbox')
+       
 
-        spousecheckbox.addEventListener('change', function() {
-      const percentInputs = document.querySelectorAll('.percent-input')
+document.addEventListener('DOMContentLoaded', () => {
+    const romanticliabilityCookie = getCookie('romanticliability');
+    const percentInputs = document.querySelectorAll('.percent-input');
 
-          if (spousecheckbox.checked) {
-              setCookie('liabilityspousecheckbox', 'checked', 365)
-    
-              displayWarning("You've indicated that you have joint liabilities with your romantic partner. Please enter the current value of the liabilities and your corresponding percentage of responsibility.")
+    // Check for romantic liability sharing based on cookie value
+    if (romanticliabilityCookie === 'checked') {
+        displayWarning("You've indicated that you have joint liabilities with your romantic partner. Please enter the current value of the liabilities and your corresponding percentage of responsibility.");
 
-              percentInputs.forEach( input => {
-                input.style.display = 'block'
-              })
-
-          } else {
-              setCookie('liabilityspousecheckbox', 'unChecked', 365)
-              percentInputs.forEach(input => {
-                input.style.display = 'none'
-              })
-    
-          }
-    
-        })
-
-        document.addEventListener('DOMContentLoaded', () => {
-          const isPartner = getCookie('liabilityspousecheckbox') == 'checked'
-        const percentInputs = document.querySelectorAll('.percent-input')
-  
-  
-          if (isPartner) {
-              spousecheckbox.checked = true
-              percentInputs.forEach(input => {
-                  input.style.display = 'block'
-              })
-          }
-  
-      })
+        percentInputs.forEach(input => {
+            input.style.display = 'block';
+        });
+    } else {
+        percentInputs.forEach(input => {
+            input.style.display = 'none';
+        });
+    }
+});
+            
+     
