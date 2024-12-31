@@ -1,3 +1,41 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+document.addEventListener('DOMContentLoaded', () => {
+  // Function to check cookie and set checkbox state
+  const setCheckboxFromCookie = (id, name) => {
+    const checkbox = document.querySelector('#' + id);
+    const cookieValue = getCookie(name);
+
+    if (checkbox) {
+      if (cookieValue === 'checked') {
+        checkbox.checked = true;
+      } else {
+        checkbox.checked = false;
+      }
+    }
+  };
+
+  // Apply cookie values to checkboxes
+  setCheckboxFromCookie('romanticincome', 'romanticincome');
+  setCheckboxFromCookie('romanticexpense', 'romanticexpense');
+  setCheckboxFromCookie('dependantcheckbox', 'dependantcheckbox');
+  setCheckboxFromCookie('debtcheckbox', 'debtcheckbox');
+  setCheckboxFromCookie('romanticasset', 'romanticasset');
+  setCheckboxFromCookie('romanticliability', 'romanticliability');
+});
+
 function setCookie(name, value, days) {
   var expires = "";
   if (value === undefined || value === null || value === '') {
