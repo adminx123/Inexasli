@@ -533,49 +533,6 @@ setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
     }
     
 
-/*
-    const dependantCheckBox = document.querySelector('#dependantcheckbox')
-    const debtCheckBox = document.querySelector('#debtcheckbox')
-
-    const debtParent = document.querySelector('#debt-parent')
-    const depandentParent = document.querySelector("#depandant-parent")
-
-    hideShow('depandant-parent', 'hide')
-
-
-    hideShow('debt-parent', 'hide')
-
-
-    dependantCheckBox.addEventListener('change', function() {
-if (dependantCheckBox.checked) {
-  setCookie('dependantcheckbox', 'checked', 365)
-  hideShow('depandant-parent', 'show')
-  
-} else {
-  setCookie('dependantcheckbox', 'unChecked', 365)
-  hideShow('depandant-parent', 'hide')
-  const inputs = depandentParent.querySelectorAll('input[type="number"]')
-
-  inputs.forEach(input => input.value = '')
-}
-
-    })
-
-    debtCheckBox.addEventListener('change', function() {
-      if (debtCheckBox.checked) {
-        setCookie('debtCheckBox', 'checked', 365)
-        hideShow('debt-parent', 'show')
-      } else {
-        setCookie('debtCheckBox', 'unChecked', 365)
-        hideShow('debt-parent', 'hide')
-        const inputs = debtParent.querySelectorAll('input[type="number"]')
-
-        inputs.forEach(input => input.value = '')
-
-      }
-      
-          }) */
-
 
           
 
