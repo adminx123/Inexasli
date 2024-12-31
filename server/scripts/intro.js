@@ -15,6 +15,8 @@ function setCookie(name, value, days) {
 
 
 
+function nextPage {
+
 const romanticincome = document.querySelector('#romanticincome')
 
       romanticincome.addEventListener('change', function() {
@@ -94,3 +96,8 @@ const romanticliability = document.querySelector('#romanticliability')
         }
  
       })
+
+
+}
+
+  
