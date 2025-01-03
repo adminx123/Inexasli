@@ -90,24 +90,12 @@ function updateOnChange(){    // Update HTML elements with cookie values
      document.getElementById('ASSETS').textContent = " $" + parseFloat(getCookie1('ASSETS')).toFixed(2);
      document.getElementById('LIABILITIES').textContent = " $" + parseFloat(getCookie1('LIABILITIES')).toFixed(2);
 
-         let debtValue = getCookie('debtcheckbox') === 'checked' ? 'Yes' : 'No';
-        document.getElementById('debtcheckbox').textContent = debtValue;
-
-        let dependantValue = getCookie('dependantcheckbox') === 'checked' ? 'Yes' : 'No';
-        document.getElementById('dependantcheckbox').textContent = dependantValue;
-
-        // For the romantic series, check if they should display a value or a placeholder
-        let romanticAsset = getCookie('romanticasset') === 'checked' ? '$' + getCookie('romanticAssetValue') : '-';
-        document.getElementById('romanticasset').textContent = romanticAsset;
-
-        let romanticExpense = getCookie('romanticexpense') === 'checked' ? '$' + getCookie('romanticExpenseValue') : '-';
-        document.getElementById('romanticexpense').textContent = romanticExpense;
-
-        let romanticIncome = getCookie('romanticincome') === 'checked' ? '$' + getCookie('romanticIncomeValue') : '-';
-        document.getElementById('romanticincome').textContent = romanticIncome;
-
-        let romanticLiability = getCookie('romanticliability') === 'checked' ? '$' + getCookie('romanticLiabilityValue') : '-';
-        document.getElementById('romanticliability').textContent = romanticLiability;
+         document.getElementById('debtcheckbox').textContent = getCookie('debtcheckbox');
+        document.getElementById('dependantcheckbox').textContent = getCookie('dependantcheckbox');
+        document.getElementById('romanticasset').textContent = getCookie('romanticasset');
+        document.getElementById('romanticexpense').textContent = getCookie('romanticexpense');
+        document.getElementById('romanticincome').textContent = getCookie('romanticincome');
+        document.getElementById('romanticliability').textContent = getCookie('romanticliability');
 
      
 
