@@ -89,6 +89,15 @@ function updateOnChange(){    // Update HTML elements with cookie values
 
      document.getElementById('ASSETS').textContent = " $" + parseFloat(getCookie1('ASSETS')).toFixed(2);
      document.getElementById('LIABILITIES').textContent = " $" + parseFloat(getCookie1('LIABILITIES')).toFixed(2);
+
+         document.getElementById('debtcheckbox').textContent = " $" + parseFloat(getCookie1('debtcheckbox')).toFixed(2);
+             document.getElementById('dependantcheckbox').textContent = " $" + parseFloat(getCookie1('dependantcheckbox')).toFixed(2);
+         document.getElementById('romanticasset').textContent = " $" + parseFloat(getCookie1('romanticasset')).toFixed(2);
+             document.getElementById('romanticexpense').textContent = " $" + parseFloat(getCookie1('romanticexpense')).toFixed(2);
+         document.getElementById('romanticincome').textContent = " $" + parseFloat(getCookie1('romanticincome')).toFixed(2);
+         document.getElementById('romanticliability').textContent = " $" + parseFloat(getCookie1('romanticliability')).toFixed(2);
+
+
      
 
 let DISPOSABLEINCOME;
