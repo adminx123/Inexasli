@@ -124,11 +124,13 @@
 
          <details style="margin-top:10px;">
     <p style="margin-left:20px;">
+         <summary>
         <span class="tooltip" data-tooltip="Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.">
             <u>Total Tax Payable:</u><span class="tooltip-content"></span><span id="tax_sum"></span>
         </span>
     </p>
-
+         </summary>
+              
 <p style="margin-left:60px;">
             <span class="tooltip" data-tooltip="Gross income subject to taxes. Use: Tax planning, understand tax liabilities.">
                 <u>Taxable Income:</u><span class="tooltip-content"></span><span id="taxable_sum"></span>
@@ -147,16 +149,26 @@
             </span>
         </p>
 
+              <div class="usa" id="usa-hide">
+            <p style="margin-left:60px;">
+                <span class="tooltip" data-tooltip="Capital gains tax is imposed on profit realized from the sale of an asset, such as stocks or real estate. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.">
+                    <u>Capital Gains Tax:</u><span class="tooltip-content"></span><span id="TOTALTAXCG"></span>
+                </span>
+            </p>
+              </div>
+
          </details>
 
 
           <details style="margin-top:10px;">   
     <p style="margin-left:20px;">
+         <summary>
         <span class="tooltip" data-tooltip="Sum of all other government obligations owed. Use: Financial planning, avoid underpayment penalties.">
             <u>Other Obligations:</u><span class="tooltip-content"></span><span id="ANNUALGOVERNMENTOBLIGATIONS"></span>
         </span>
     </p>      
-             
+          </summary>
+               
         <!-- CAN -->
         <div class="can" id="can-hide">
             <p style="margin-left:60px;">
@@ -186,12 +198,7 @@
 
         <!-- USA -->
         <div class="usa" id="usa-hide">
-            <p style="margin-left:60px;">
-                <span class="tooltip" data-tooltip="Capital gains tax is imposed on profit realized from the sale of an asset, such as stocks or real estate. Use: Capital gains tax generates revenue for governments from the profits made on asset sales.">
-                    <u>Capital Gains Tax:</u><span class="tooltip-content"></span><span id="TOTALTAXCG"></span>
-                </span>
-            </p>
-            
+                        
             <p style="margin-left:60px;">
                 <span class="tooltip" data-tooltip="Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors. Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.">
                     <u>Social Security Total US:</u><span class="tooltip-content"></span><span id="TOTALSOCIALSECURITY"></span>
