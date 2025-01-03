@@ -515,6 +515,23 @@ button {
   box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
+.containerround {
+  background-color: #fff; /* White background */
+  color: #000; /* Black text color for contrast */
+  max-width: 800px; /* Maximum width of the container */
+  margin: 10px auto; /* Center horizontally with auto margins */
+  border-radius: 0 0 5px 5px; /* Rounded corners */
+  box-shadow: 10px 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
+  text-align: left; /* Text alignment inside the container */
+  display: flex;
+  padding: 0 15px;
+  padding-top: 10px;   /* Adds space at the top inside the container */
+  padding-bottom: 10px; /* Adds space at the bottom inside the container */
+  flex-direction: column;
+  align-items: stretch; /* Stretch items to fill container */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
 .hidden {
   display: none;
 }
