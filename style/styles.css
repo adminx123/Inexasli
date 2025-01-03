@@ -502,7 +502,7 @@ button {
   background-color: #fff; /* White background */
   color: #000; /* Black text color for contrast */
   max-width: 800px; /* Maximum width of the container */
-  margin: 0 auto; /* Center horizontally with auto margins */
+  margin: 10px auto; /* Center horizontally with auto margins */
   border-radius: 0 0 5px 5px; /* Rounded corners */
   box-shadow: 10px 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
   text-align: left; /* Text alignment inside the container */
