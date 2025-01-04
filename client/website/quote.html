@@ -7,8 +7,9 @@
   <title>INEXASLI - Website Design</title>
   <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
  <link rel="stylesheet" href="/style/styles.css"> 
-
-<style><style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+  
+<style>
     body {
       background-color: #000;
       color: #fff;
@@ -275,8 +276,18 @@
           <div class="grid-item" data-value="Web Application">Web Application</div>
           
         </div>
+
+        
       </div>
 
+<div class="section">
+  <h3>Select Project Deadline</h3>
+  <input type="text" id="deadline" placeholder="Select Deadline" required>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+
+      
       <input type="number" id="pages" placeholder="Number of Pages" required>
       <textarea id="objectives" placeholder="Describe your objectives or special requirements" rows="4" required></textarea>
       <button type="submit">Get Your Website Design Quote</button>
@@ -308,6 +319,35 @@
       item.addEventListener('click', toggleSelection);
     });
 
+
+// Initialize Flatpickr for the deadline input
+flatpickr("#deadline", {
+  enableTime: false,
+  dateFormat: "Y-m-d",
+  minDate: "today",
+  allowInput: true,
+  onClose: function(selectedDates, dateStr, instance) {
+    if (selectedDates.length > 0) {
+      document.getElementById('deadline').value = dateStr;
+    }
+  }
+});
+
+// Modify form submission to include deadline
+document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  // ... existing code to collect form data ...
+  const deadline = document.getElementById('deadline').value; // New field
+
+  // ... existing code for subject ...
+
+  const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nWebsite Type: ${websiteType}\nFeatures: ${features}\nNumber of Pages: ${pages}\nDeadline: ${deadline}\nObjectives: ${objectives}`;
+
+  // ... existing code for email composition ...
+});
+
+    
     // Form submission
     document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -318,7 +358,9 @@
       const industry = document.getElementById('industry').value;
       const pages = document.getElementById('pages').value;
       const objectives = document.getElementById('objectives').value;
+      const deadline = document.getElementById('deadline').value; // New field
 
+      
       const websiteType = Array.from(document.querySelectorAll('#websiteType .grid-item.selected')).map(el => el.dataset.value).join(', ');
       const features = Array.from(document.querySelectorAll('#features .grid-item.selected')).map(el => el.dataset.value).join(', ');
 
