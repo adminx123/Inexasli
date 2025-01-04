@@ -285,7 +285,6 @@
   <input type="text" id="deadline" placeholder="Select Deadline" required>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
 
       
       <input type="number" id="pages" placeholder="Number of Pages" required>
@@ -293,6 +292,8 @@
       <button type="submit">Get Your Website Design Quote</button>
     </form>
   </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
 
   <script>
     // Hamburger menu toggle
@@ -348,28 +349,27 @@ document.getElementById('websiteDesignForm').addEventListener('submit', function
 });
 
     
-    // Form submission
     document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const company = document.getElementById('company').value;
-      const industry = document.getElementById('industry').value;
-      const pages = document.getElementById('pages').value;
-      const objectives = document.getElementById('objectives').value;
-      const deadline = document.getElementById('deadline').value; // New field
+  e.preventDefault();
+  
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const company = document.getElementById('company').value;
+  const industry = document.getElementById('industry').value;
+  const pages = document.getElementById('pages').value;
+  const objectives = document.getElementById('objectives').value;
+  const deadline = document.getElementById('deadline').value; // Make sure this line is included
 
-      
-      const websiteType = Array.from(document.querySelectorAll('#websiteType .grid-item.selected')).map(el => el.dataset.value).join(', ');
-      const features = Array.from(document.querySelectorAll('#features .grid-item.selected')).map(el => el.dataset.value).join(', ');
+  const websiteType = Array.from(document.querySelectorAll('#websiteType .grid-item.selected')).map(el => el.dataset.value).join(', ');
+  const features = Array.from(document.querySelectorAll('#features .grid-item.selected')).map(el => el.dataset.value).join(', ');
 
-      const subject = 'Website Design Quote Request from ' + company;
-      const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nWebsite Type: ${websiteType}\nFeatures: ${features}\nNumber of Pages: ${pages}\nObjectives: ${objectives}`;
-      
-      // Use encodeURIComponent for the subject and body
-      window.location.href = `mailto:admin@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    });
+  const subject = 'Website Design Quote Request from ' + company;
+  // Ensure 'deadline' is added to the email body
+  const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nWebsite Type: ${websiteType}\nFeatures: ${features}\nNumber of Pages: ${pages}\nDeadline: ${deadline}\nObjectives: ${objectives}`;
+  
+  window.location.href = `mailto:admin@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+});
+    
   </script>
 </body>
 </html>
