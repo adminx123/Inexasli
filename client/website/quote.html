@@ -8,7 +8,80 @@
   <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
  <link rel="stylesheet" href="/style/styles.css"> 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
-    
+
+  <style>/* Styling for elements with class 3button */
+.3button {
+  margin: 20px auto;
+  max-width: 600px;
+  text-align: center;
+  background-color: #f0f0f0; /* Light gray background */
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.3button h3 {
+  color: #333;
+  font-size: 1.2em;
+  margin-bottom: 15px;
+}
+
+/* Flexbox for 3 items per row inside 3button */
+.3button > div:not(h3) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.3button .checkbox-item {
+  flex: 0 0 calc(33.333% - 10px); /* 33.333% width for three items, minus some margin for spacing */
+  margin: 5px;
+  text-align: center;
+}
+
+/* Specific styling for checkboxes inside 3button */
+.3button .box-checkbox {
+  display: block; /* Ensure the label takes up the full width of the container */
+  padding-left: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+}
+
+.3button .box-checkbox::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #555;
+  background-color: #fff;
+  border-radius: 3px;
+}
+
+/* When checked, show a checkmark */
+.3button .box-checkbox::after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #000;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Show checkmark when checkbox is checked */
+.3button input[type="checkbox"]:checked + .box-checkbox::after {
+  display: block;
+}
+</style>
 </head>
   
 <body>
