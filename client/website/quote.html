@@ -69,12 +69,15 @@
       </div>
     </div>
 
-    <form id="websiteDesignForm">
+  <div class="row">
       <h2 style="text-align: center; display: block; margin: 0 auto; max-width: 600px;">Get Your Custom Website Design Quote</h2>
       <input type="text" id="name" placeholder="Your Name" required>
       <input type="email" id="email" placeholder="Your Email" required>
       <input type="text" id="company" placeholder="Company Name" required>
-      <select id="industry" required>
+  </div>
+    
+      <select id="industry" required style="display: inline-block; margin: 0 auto; text-align-last: center;">
+
         <option value="">Select Your Industry</option>
         <option value="Retail">Retail</option>
         <option value="Healthcare">Healthcare</option>
@@ -220,9 +223,11 @@
   <input type="text" id="deadline" placeholder="Select Deadline" required>
 
 <input type="number" id="pages" placeholder="Number of Pages" required>
+  </div>
+    
       <textarea id="objectives" placeholder="Describe your objectives or special requirements" rows="4" required></textarea>
       <button type="submit">Get Your Website Design Quote</button>
-    </div>
+    
     </form>
   </div>
 </body>
