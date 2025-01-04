@@ -910,3 +910,40 @@ input[type="checkbox"]:checked ~   .box-checkbox {
 .3button input[type="checkbox"]:checked + .box-checkbox::after {
   display: block;
 }
+
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 20px auto;
+  max-width: 1000px;
+  padding: 0 20px;
+}
+
+.benefit-card {
+  background-color: #f8f8f8; /* Slightly off-white for a subtle highlight */
+  border: 1px solid #e0e0e0; /* Light border for enclosure */
+  border-radius: 5px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Very light shadow for depth */
+  transition: all 0.3s ease;
+}
+
+.benefit-card h3 {
+  color: #333;
+  margin-top: 0;
+}
+
+.benefit-card p {
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 0;
+}
+
+/* Optional: Hover effect for interactivity */
+.benefit-card:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
