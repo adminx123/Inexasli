@@ -847,35 +847,33 @@ input[type="checkbox"]:checked ~   .box-checkbox {
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .3button h3 {
   color: #333;
   font-size: 1.2em;
   margin-bottom: 15px;
+  width: 100%; /* Ensures h3 stretches full width */
 }
 
 /* Flexbox for 3 items per row inside 3button */
 .3button > div:not(h3) {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.3button .checkbox-item {
-  flex: 0 0 calc(33.333% - 10px); /* 33.333% width for three items, minus some margin for spacing */
+  flex: 0 0 calc(33.333% - 10px); /* Three items per row, with some space for margins */
+  max-width: calc(33.333% - 10px); /* Ensures items don't exceed this width */
   margin: 5px;
-  text-align: center;
 }
 
-/* Specific styling for checkboxes inside 3button */
 .3button .box-checkbox {
   display: block; /* Ensure the label takes up the full width of the container */
   padding-left: 30px;
   cursor: pointer;
   font-size: 16px;
   position: relative;
+  width: 100%; /* Makes sure checkbox label fills its container */
 }
 
 .3button .box-checkbox::before {
