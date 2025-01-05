@@ -388,7 +388,7 @@ h2 {
   }
 }
 
-input,
+input:not([type="date"]),
 textarea,
 select {
   font-size: 17px;
