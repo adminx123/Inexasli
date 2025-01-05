@@ -7,7 +7,7 @@
   <title>INEXASLI - Website Design</title>
   <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
  <link rel="stylesheet" href="/style/styles.css"> 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css"> -->
 
   
 </head>
@@ -147,7 +147,7 @@
 <br>
         <div class="last" style="text-align: center;">
 <input type="number" id="pages" placeholder="Number of Pages">
-<input type="text" style="width: 100%;" id="deadline" placeholder="Select Deadline">
+<input type="date" required style="width: 100%;" id="deadline" placeholder="Select Deadline">
    
  </div>
 
@@ -166,7 +166,7 @@
   </div>
 </div>
 </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script> -->
 
   <script>
     // Hamburger menu toggle
@@ -194,18 +194,18 @@
     });
 
 
-// Initialize Flatpickr for the deadline input
-flatpickr("#deadline", {
-  enableTime: false,
-  dateFormat: "Y-m-d",
-  minDate: "today",
-  allowInput: true,
-  onClose: function(selectedDates, dateStr, instance) {
-    if (selectedDates.length > 0) {
-      document.getElementById('deadline').value = dateStr;
-    }
-  }
-});
+// // Initialize Flatpickr for the deadline input
+// flatpickr("#deadline", {
+//   enableTime: false,
+//   dateFormat: "Y-m-d",
+//   minDate: "today",
+//   allowInput: true,
+//   onClose: function(selectedDates, dateStr, instance) {
+//     if (selectedDates.length > 0) {
+//       document.getElementById('deadline').value = dateStr;
+//     }
+//   }
+// });
 
 // Modify form submission to include deadline
 document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
