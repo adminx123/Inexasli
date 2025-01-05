@@ -822,6 +822,7 @@ input[type="checkbox"]:checked ~   .box-checkbox {
         color: #f0f0f0;
       }
 
+
       .checkboxes-parent {
         display: flex;
         justify-content: stretch;
@@ -837,6 +838,25 @@ input[type="checkbox"]:checked ~   .box-checkbox {
         justify-content: stretch;
         align-items: stretch;
       }
+
+ .box-checkbox1 {
+        width: 100%;
+        height: 50px;
+        text-wrap: wrap;
+        background-color: #f0f0f0;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        font-size: 15px;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 1px px 10px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        margin: 0 !important;
+      }
+
+
 
 /* Styling for elements with class 3button */
 .3button {
