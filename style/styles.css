@@ -867,7 +867,7 @@ input[type="checkbox"]:checked ~   .box-checkbox {
   margin: 5px;
 }
 
-.3button .box-checkbox {
+.3button .box-checkbox1 {
   display: block; /* Ensure the label takes up the full width of the container */
   padding-left: 30px;
   cursor: pointer;
@@ -876,7 +876,7 @@ input[type="checkbox"]:checked ~   .box-checkbox {
   width: 100%; /* Makes sure checkbox label fills its container */
 }
 
-.3button .box-checkbox::before {
+.3button .box-checkbox1::before {
   content: '';
   position: absolute;
   left: 0;
@@ -889,7 +889,7 @@ input[type="checkbox"]:checked ~   .box-checkbox {
 }
 
 /* When checked, show a checkmark */
-.3button .box-checkbox::after {
+.3button .box-checkbox1::after {
   content: '';
   position: absolute;
   display: none;
@@ -905,7 +905,7 @@ input[type="checkbox"]:checked ~   .box-checkbox {
 }
 
 /* Show checkmark when checkbox is checked */
-.3button input[type="checkbox"]:checked + .box-checkbox::after {
+.3button input[type="checkbox"]:checked + .box-checkbox1::after {
   display: block;
 }
 
