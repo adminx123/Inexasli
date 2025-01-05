@@ -841,78 +841,24 @@ input[type="checkbox"]:checked ~   .box-checkbox {
 
 
 
-
-
-/* Styling for elements with class 3button */
-.3button {
-  margin: 20px auto;
-  max-width: 600px;
-  text-align: center;
-  background-color: #f0f0f0; /* Light gray background */
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.3button h3 {
-  color: #333;
-  font-size: 1.2em;
-  margin-bottom: 15px;
-  width: 100%; /* Ensures h3 stretches full width */
-}
-
-/* Flexbox for 3 items per row inside 3button */
-.3button > div:not(h3) {
-  flex: 0 0 calc(33.333% - 10px); /* Three items per row, with some space for margins */
-  max-width: calc(33.333% - 10px); /* Ensures items don't exceed this width */
-  margin: 5px;
-}
-
-.3button .box-checkbox1 {
-  display: block; /* Ensure the label takes up the full width of the container */
-  padding-left: 30px;
-  cursor: pointer;
-  font-size: 16px;
-  position: relative;
-  width: 100%; /* Makes sure checkbox label fills its container */
-}
-
-.3button .box-checkbox1::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #555;
-  background-color: #fff;
-  border-radius: 3px;
-}
-
-/* When checked, show a checkmark */
-.3button .box-checkbox1::after {
-  content: '';
-  position: absolute;
-  display: none;
-  left: 6px;
-  top: 2px;
-  width: 5px;
-  height: 10px;
-  border: solid #000;
-  border-width: 0 2px 2px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-
-/* Show checkmark when checkbox is checked */
-.3button input[type="checkbox"]:checked + .box-checkbox1::after {
-  display: block;
-}
+.grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.5rem;
+    }
+    .grid-item {
+      background-color: #f0f0f0;
+      color: #000;
+      padding: 1rem;
+      border-radius: 5px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .grid-item.selected {
+      background-color: #000;
+      color: #fff;
+    }
 
 .benefits {
   display: grid;
