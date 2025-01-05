@@ -910,7 +910,7 @@ input[type="checkbox"]:checked ~   .box-checkbox {
 }
 
 .benefits {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin: 20px auto;
