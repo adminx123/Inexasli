@@ -76,4 +76,14 @@ function nextPage() {
   window.location.href = '/client/finance/income.html';
 }
 
+// Handle grid item clicks
+    function toggleSelection(event) {
+      const item = event.target;
+      item.classList.toggle('selected');
+    }
+
+    document.querySelectorAll('.grid-item').forEach(item => {
+      item.addEventListener('click', toggleSelection);
+    });
+
   
