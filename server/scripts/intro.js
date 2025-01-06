@@ -12,28 +12,37 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Function to check cookie and set checkbox state
-  const setCheckboxFromCookie = (id, name) => {
-    const checkbox = document.querySelector('#' + id);
+  // Function to check cookie and set grid item state
+  const setGridItemFromCookie = (id, name) => {
+    const item = document.querySelector('#' + id);
     const cookieValue = getCookie(name);
 
-    if (checkbox) {
-      if (cookieValue === 'checked') {
-        checkbox.checked = true;
-      } else {
-        checkbox.checked = false;
-      }
+    if (item) {
+      item.classList.toggle('selected', cookieValue === 'checked');
     }
   };
 
-  // Apply cookie values to checkboxes
-  setCheckboxFromCookie('romanticincome', 'romanticincome');
-  setCheckboxFromCookie('romanticexpense', 'romanticexpense');
-  setCheckboxFromCookie('dependantcheckbox', 'dependantcheckbox');
-  setCheckboxFromCookie('debtcheckbox', 'debtcheckbox');
-  setCheckboxFromCookie('romanticasset', 'romanticasset');
-  setCheckboxFromCookie('romanticliability', 'romanticliability');
+  // Apply cookie values to grid items
+  ['romanticincome', 'romanticexpense', 'dependantcheckbox', 'debtcheckbox', 'romanticasset', 'romanticliability'].forEach(id => {
+    setGridItemFromCookie(id, id);
+  });
+
+  // Handle grid item clicks
+  function toggleSelection(event) {
+    const item = event.target;
+    item.classList.toggle('selected');
+    
+    // Set cookie based on item's selection state
+    setCookie(item.id, item.classList.contains('selected') ? 'checked' : 'unChecked', 365);
+  }
+
+  document.querySelectorAll('.grid-item').forEach(item => {
+    item.addEventListener('click', toggleSelection);
+    // Set unique IDs for each item to match with cookies
+    item.id = item.getAttribute('data-value');
+  });
 });
 
 function setCookie(name, value, days) {
@@ -49,41 +58,8 @@ function setCookie(name, value, days) {
 
   document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
 }
-    
-
-
 
 function nextPage() {
-  // Function to check if a checkbox is checked and set the appropriate cookie
-  const setCheckboxCookie = (id, name) => {
-    const checkbox = document.querySelector('#' + id);
-    if (checkbox && checkbox.checked) {
-      setCookie(name, 'checked', 365);
-    } else {
-      setCookie(name, 'unChecked', 365);
-    }
-  };
-
-  // Check each checkbox and set the corresponding cookie
-  setCheckboxCookie('romanticincome', 'romanticincome');
-  setCheckboxCookie('romanticexpense', 'romanticexpense');
-  setCheckboxCookie('dependantcheckbox', 'dependantcheckbox');
-  setCheckboxCookie('debtcheckbox', 'debtcheckbox');
-  setCheckboxCookie('romanticasset', 'romanticasset');
-  setCheckboxCookie('romanticliability', 'romanticliability');
-
   // Navigate to the new page after setting cookies
   window.location.href = '/client/finance/income.html';
 }
-
-// Handle grid item clicks
-    function toggleSelection(event) {
-      const item = event.target;
-      item.classList.toggle('selected');
-    }
-
-    document.querySelectorAll('.grid-item').forEach(item => {
-      item.addEventListener('click', toggleSelection);
-    });
-
-  
