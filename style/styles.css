@@ -927,7 +927,7 @@ input[type="checkbox"]:checked ~   .box-checkbox {
   }
 }
 
-.last {
+.galleryDetails {
   width: 100%;
   max-width: 550px;
   margin-left: auto;
@@ -938,11 +938,26 @@ input[type="checkbox"]:checked ~   .box-checkbox {
   gap: 15px;
 }
 
-.last input {
+.galleryDetails input {
   padding-top: 10px;
   padding-bottom: 10px;
 }
 
+.lastgallery {
+  width: 100%;
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  gap: 15px;
+}
+
+.lastgallery input {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 
 .hoead-1  {
   animation:  fade 2s ;
