@@ -94,11 +94,11 @@
                 <h3 style="text-align: center; display: block; margin: 0 auto; max-width: 600px;">Select Your Website Type</h3>
 <br>
         <div class="grid-container" id="websiteType">
-          <div class="grid-item" data-value="Business">Business & Landing Page</div>
+          <div class="grid-item" data-value="Business">Business</div>
           <div class="grid-item" data-value="E-commerce">E-commerce</div>
           <div class="grid-item" data-value="Portfolio">Portfolio</div>
           <div class="grid-item" data-value="Blog">Blog</div>
-        
+          <div class="grid-item" data-value="Landing Page">Landing Page</div>
         </div>
       
       </div>
@@ -113,29 +113,28 @@
   <h3 style="text-align: center; display: block; margin: 0 auto; max-width: 600px;">Choose Desired Features</h3>
           <br>
         <div class="grid-container" id="features">
-          <div class="grid-item" data-value="Domain Setup">Domain Setup</div>
-          <div class="grid-item" data-value="Website Hosting Setup">Website Hosting Setup</div>
        <div class="grid-item" data-value="Contact Form">Contact Form</div>
-          <div class="grid-item" data-value="About Us">About Us</div>
-          <div class="grid-item" data-value="Testimonials">Testimonials</div>
-          <div class="grid-item" data-value="Gallery">Product/Service Gallery</div>
-          <div class="grid-item" data-value="Event Calendar">FAQ Section</div>
-          <div class="grid-item" data-value="Calculation Functionality">Calculation Functionality</div>
-          
+<div class="grid-item" data-value="Mobile Responsiveness">Mobile Responsiveness</div>
+<div class="grid-item" data-value="About Us">About Us</div>
 <div class="grid-item" data-value="SEO Services">SEO Services</div>
 
 <div class="grid-item" data-value="E-commerce Platform">E-commerce Platform</div>
 <div class="grid-item" data-value="Payment Gateway">Payment Gateway</div>
-
+<div class="grid-item" data-value="Gallery">Product/Service Gallery</div>
 
 <div class="grid-item" data-value="Social Media Integration">Social Media Integration</div>
+<div class="grid-item" data-value="Testimonials">Testimonials</div>
+<div class="grid-item" data-value="Event Calendar">FAQ Section</div>
 
 <div class="grid-item" data-value="Blog Integration">Blog Integration</div>
 <div class="grid-item" data-value="Custom Graphics">Custom Graphics</div>
+<div class="grid-item" data-value="Calculation Functionality">Calculation Functionality</div>
 
+<div class="grid-item" data-value="Website Hosting Setup">Website Hosting Setup</div>
+<div class="grid-item" data-value="Domain Setup">Domain Setup</div>
+
+<div class="grid-item" data-value="Web App">Web App</div>
 <div class="grid-item" data-value="Event Calendar">Event Calendar</div>
-          <div class="grid-item" data-value="Mobile Responsiveness">Mobile Compatibility</div>
-          <div class="grid-item" data-value="Web App">Web App</div>
 
           
         </div>
@@ -150,20 +149,15 @@
     </div>
 <br>
         <div class="last" style="text-align: center;">
-         
-<input type="number" id="pages" placeholder="# of Webpages">
+<input type="number" id="pages" placeholder="Number of Pages">
   <h3 style="text-align: center; display: block; margin: 0 auto; max-width: 600px;">Desired Project Deadline</h3>
 <input type="date" required style="width: 100%;" value="2025-01-01" id="deadline" placeholder="Select Deadline">
    
  </div>
 
-       <div id="galleryDetails" style="display: none; text-align: center;">
-  <input type="number" id="numberOfProducts" placeholder="# of Products/Services" min="1">
-</div>
-
    <br>
-   
- <div class="last" style="text-align: center;">
+   <div class="last">
+
      <textarea  id="objectives" placeholder="Describe your objectives or special requirements" rows="4" required style="padding: 10px; resize: none; border: 1px solid #858585; outline: none;"></textarea>
      
     </div>
@@ -204,7 +198,18 @@
     });
 
 
-
+// // Initialize Flatpickr for the deadline input
+// flatpickr("#deadline", {
+//   enableTime: false,
+//   dateFormat: "Y-m-d",
+//   minDate: "today",
+//   allowInput: true,
+//   onClose: function(selectedDates, dateStr, instance) {
+//     if (selectedDates.length > 0) {
+//       document.getElementById('deadline').value = dateStr;
+//     }
+//   }
+// });
 
 // Modify form submission to include deadline
 document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
@@ -221,43 +226,25 @@ document.getElementById('websiteDesignForm').addEventListener('submit', function
 });
 
     
-    document.addEventListener('DOMContentLoaded', (event) => {
-  const galleryItem = document.querySelector('.grid-item[data-value="Gallery"]');
-  const galleryDetails = document.getElementById('galleryDetails');
-
-  // Toggle visibility of the extra input field when the gallery feature is selected
-  galleryItem.addEventListener('click', function() {
-    if (this.classList.contains('selected')) {
-      galleryDetails.style.display = 'block';
-    } else {
-      galleryDetails.style.display = 'none';
-      // Clear the input when the gallery feature is deselected
-      document.getElementById('numberOfProducts').value = '';
-    }
-  });
-
-  // Handle form submission to include the number of products/services in the email
-  document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const company = document.getElementById('company').value;
-    const industry = document.getElementById('industry').value;
-    const pages = document.getElementById('pages').value;
-    const objectives = document.getElementById('objectives').value;
-    const deadline = document.getElementById('deadline').value;
-
-    const websiteType = Array.from(document.querySelectorAll('#websiteType .grid-item.selected')).map(el => el.dataset.value).join(', ');
-    const features = Array.from(document.querySelectorAll('#features .grid-item.selected')).map(el => el.dataset.value).join(', ');
-    // Add this line to get the number of products if the gallery feature is selected
-    const numberOfProducts = document.getElementById('numberOfProducts').value || 'Not specified';
-
-    const subject = 'Website Design Quote Request from ' + company;
-    const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nWebsite Type: ${websiteType}\nFeatures: ${features}\nNumber of Products/Services: ${numberOfProducts}\nNumber of Pages: ${pages}\nDeadline: ${deadline}\nObjectives: ${objectives}`;
+    document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
+  e.preventDefault();
   
-    window.location.href = `mailto:quote@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  });
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const company = document.getElementById('company').value;
+  const industry = document.getElementById('industry').value;
+  const pages = document.getElementById('pages').value;
+  const objectives = document.getElementById('objectives').value;
+  const deadline = document.getElementById('deadline').value; // Make sure this line is included
+
+  const websiteType = Array.from(document.querySelectorAll('#websiteType .grid-item.selected')).map(el => el.dataset.value).join(', ');
+  const features = Array.from(document.querySelectorAll('#features .grid-item.selected')).map(el => el.dataset.value).join(', ');
+
+  const subject = 'Website Design Quote Request from ' + company;
+  // Ensure 'deadline' is added to the email body
+  const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nWebsite Type: ${websiteType}\nFeatures: ${features}\nNumber of Pages: ${pages}\nDeadline: ${deadline}\nObjectives: ${objectives}`;
+  
+  window.location.href = `mailto:quote@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 });
     
   </script>
