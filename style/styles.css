@@ -604,7 +604,7 @@ button {
   min-width: 50px;
 }
 
-/* <span class=" tooltip" data-tooltip="This is my tooltip 2">â“˜
+/* <span class=" tooltip" data-tooltip="This is my tooltip 2">Ã¢â€œËœ
 <span class="tooltip-content"></span>
 </span> */
 
@@ -927,7 +927,7 @@ input[type="checkbox"]:checked ~   .box-checkbox {
   }
 }
 
-.galleryDetails {
+.last {
   width: 100%;
   max-width: 550px;
   margin-left: auto;
@@ -938,11 +938,10 @@ input[type="checkbox"]:checked ~   .box-checkbox {
   gap: 15px;
 }
 
-.galleryDetails input {
+.last input {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-
 
 
 .hoead-1  {
