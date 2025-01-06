@@ -150,6 +150,9 @@
     </div>
 <br>
         <div class="last" style="text-align: center;">
+          <div id="galleryDetails" style="display: none; text-align: center;">
+  <input type="number" id="numberOfProducts" placeholder="Number of Products/Services" min="1">
+</div>
 <input type="number" id="pages" placeholder="Number of Webpages">
   <h3 style="text-align: center; display: block; margin: 0 auto; max-width: 600px;">Desired Project Deadline</h3>
 <input type="date" required style="width: 100%;" value="2025-01-01" id="deadline" placeholder="Select Deadline">
@@ -216,25 +219,43 @@ document.getElementById('websiteDesignForm').addEventListener('submit', function
 });
 
     
-    document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const company = document.getElementById('company').value;
-  const industry = document.getElementById('industry').value;
-  const pages = document.getElementById('pages').value;
-  const objectives = document.getElementById('objectives').value;
-  const deadline = document.getElementById('deadline').value; // Make sure this line is included
+    document.addEventListener('DOMContentLoaded', (event) => {
+  const galleryItem = document.querySelector('.grid-item[data-value="Gallery"]');
+  const galleryDetails = document.getElementById('galleryDetails');
 
-  const websiteType = Array.from(document.querySelectorAll('#websiteType .grid-item.selected')).map(el => el.dataset.value).join(', ');
-  const features = Array.from(document.querySelectorAll('#features .grid-item.selected')).map(el => el.dataset.value).join(', ');
+  // Toggle visibility of the extra input field when the gallery feature is selected
+  galleryItem.addEventListener('click', function() {
+    if (this.classList.contains('selected')) {
+      galleryDetails.style.display = 'block';
+    } else {
+      galleryDetails.style.display = 'none';
+      // Clear the input when the gallery feature is deselected
+      document.getElementById('numberOfProducts').value = '';
+    }
+  });
 
-  const subject = 'Website Design Quote Request from ' + company;
-  // Ensure 'deadline' is added to the email body
-  const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nWebsite Type: ${websiteType}\nFeatures: ${features}\nNumber of Pages: ${pages}\nDeadline: ${deadline}\nObjectives: ${objectives}`;
+  // Handle form submission to include the number of products/services in the email
+  document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const company = document.getElementById('company').value;
+    const industry = document.getElementById('industry').value;
+    const pages = document.getElementById('pages').value;
+    const objectives = document.getElementById('objectives').value;
+    const deadline = document.getElementById('deadline').value;
+
+    const websiteType = Array.from(document.querySelectorAll('#websiteType .grid-item.selected')).map(el => el.dataset.value).join(', ');
+    const features = Array.from(document.querySelectorAll('#features .grid-item.selected')).map(el => el.dataset.value).join(', ');
+    // Add this line to get the number of products if the gallery feature is selected
+    const numberOfProducts = document.getElementById('numberOfProducts').value || 'Not specified';
+
+    const subject = 'Website Design Quote Request from ' + company;
+    const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nWebsite Type: ${websiteType}\nFeatures: ${features}\nNumber of Products/Services: ${numberOfProducts}\nNumber of Pages: ${pages}\nDeadline: ${deadline}\nObjectives: ${objectives}`;
   
-  window.location.href = `mailto:quote@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:quote@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
 });
     
   </script>
