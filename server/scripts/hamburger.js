@@ -20,7 +20,7 @@
       });
 
       
-
+/*
       // Function to handle password protection
       function handlePasswordProtection(url) {
         const password = prompt("Please enter the password for access:");
@@ -43,3 +43,4 @@
         event.preventDefault();
         handlePasswordProtection("ai/form.html"); // Replace with the actual URL you want to redirect to
       });
+*/
