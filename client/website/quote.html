@@ -158,10 +158,11 @@
 
    <br>
    <div class="last">
-
      <textarea  id="objectives" placeholder="Describe objectives, number of products/services, etc." rows="4" required style="padding: 10px; resize: none; border: 1px solid #858585; outline: none;"></textarea>
-     
-    </div>
+         </div>
+
+       <div class="last" style="text-align: center;">
+<input type="number" id="budget" placeholder="Budget">
      <br>
      <div class="last" style="text-align: center;"> 
       <button class="form-sumbit-btn" type="submit">Get Your Website Design Quote</button>
@@ -199,18 +200,7 @@
     });
 
 
-// // Initialize Flatpickr for the deadline input
-// flatpickr("#deadline", {
-//   enableTime: false,
-//   dateFormat: "Y-m-d",
-//   minDate: "today",
-//   allowInput: true,
-//   onClose: function(selectedDates, dateStr, instance) {
-//     if (selectedDates.length > 0) {
-//       document.getElementById('deadline').value = dateStr;
-//     }
-//   }
-// });
+
 
 // Modify form submission to include deadline
 document.getElementById('websiteDesignForm').addEventListener('submit', function(e) {
@@ -237,6 +227,8 @@ document.getElementById('websiteDesignForm').addEventListener('submit', function
   const pages = document.getElementById('pages').value;
   const objectives = document.getElementById('objectives').value;
   const deadline = document.getElementById('deadline').value; // Make sure this line is included
+        const budget = document.getElementById('budget').value; // Make sure this line is included
+
 
   const websiteType = Array.from(document.querySelectorAll('#websiteType .grid-item.selected')).map(el => el.dataset.value).join(', ');
   const features = Array.from(document.querySelectorAll('#features .grid-item.selected')).map(el => el.dataset.value).join(', ');
