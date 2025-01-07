@@ -235,7 +235,7 @@ document.getElementById('websiteDesignForm').addEventListener('submit', function
 
   const subject = 'Website Design Quote Request from ' + company;
   // Ensure 'deadline' is added to the email body
-  const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nWebsite Type: ${websiteType}\nFeatures: ${features}\nNumber of Pages: ${pages}\nDeadline: ${deadline}\nObjectives: ${objectives}\nBudget: ${budget}`;
+  const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nIndustry: ${industry}\nWebsite Type: ${websiteType}\nFeatures: ${features}\nNumber of Pages: ${pages}\nDeadline: ${deadline}\nObjectives: ${objectives}\nBudget:$ ${budget}`;
   
   window.location.href = `mailto:quote@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 });
