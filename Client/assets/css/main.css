@@ -205,51 +205,43 @@ input, select, textarea {
 
 /* Container */
 
-.container {
-    margin: 0 auto;
-    max-width: 100%;
-    width: 70em;
-    /* Setting a very low height */
-    height: 1px; /* or any other very low value, like 5px, 0.1em, etc. */
-}
+	.container {
+		margin: 0 auto;
+		max-width: 100%;
+		width: 70em;
+	}
 
-    @media screen and (max-width: 1680px) {
+		@media screen and (max-width: 1680px) {
 
-        .container {
-            width: 68em;
-            /* Optionally set a different low height for larger screens */
-            /* height: 2px; */
-        }
+			.container {
+				width: 68em;
+			}
 
-    }
+		}
 
-    @media screen and (max-width: 1280px) {
+		@media screen and (max-width: 1280px) {
 
-        .container {
-            width: calc(100% - 80px);
-            /* Keep the height consistent or adjust as needed */
-            height: 1px;
-        }
+			.container {
+				width: calc(100% - 80px);
+			}
 
-    }
+		}
 
-    @media screen and (max-width: 980px) {
+		@media screen and (max-width: 980px) {
 
-        .container {
-            width: calc(100% - 100px);
-            height: 1px;
-        }
+			.container {
+				width: calc(100% - 100px);
+			}
 
-    }
+		}
 
-    @media screen and (max-width: 736px) {
+		@media screen and (max-width: 736px) {
 
-        .container {
-            width: calc(100% - 40px);
-            height: 1px;
-        }
+			.container {
+				width: calc(100% - 40px);
+			}
 
-    }
+		}
 
 /* Row */
 
@@ -2243,8 +2235,8 @@ input, select, textarea {
 	#copyright {
 		border-top: solid 2px #e5e5e5;
 		text-align: center;
-		margin-top: 6em;
-		padding-top: 4em;
+		margin-top: 0px;
+		padding-top: 0px;
 	}
 
 /* XLarge */
@@ -2334,8 +2326,8 @@ input, select, textarea {
 		/* Copyright */
 
 			#copyright {
-				margin-top: 2em;
-				padding-top: 2em;
+				margin-top: 0px;
+				padding-top: 0px;
 			}
 
 	}
