@@ -617,19 +617,8 @@
     setCookie('vehicleMaintenance', document.querySelector('#vehicleMaintenance').value, 365);
     setCookie('vehicleInsurance', document.querySelector('#vehicleInsurance').value, 365);
     setCookie('cash', document.querySelector('#cash').value, 365);
-    setCookie('accountsReceivable', document.querySelector('#accountsReceivable').value, 365);
-    setCookie('inventory', document.querySelector('#inventory').value, 365);
-    setCookie('property', document.querySelector('#property').value, 365);
-    setCookie('equipment', document.querySelector('#equipment').value, 365);
-    setCookie('accountsPayable', document.querySelector('#accountsPayable').value, 365);
-    setCookie('loans', document.querySelector('#loans').value, 365);
-    setCookie('mortgages', document.querySelector('#mortgages').value, 365);
-    setCookie('taxesPayable', document.querySelector('#taxesPayable').value, 365);
-    setCookie('otherLiabilities', document.querySelector('#otherLiabilities').value, 365);
 
-
-
-    setCookie('revenueType', document.querySelector('#revenueType').value, 365);
+  setCookie('revenueType', document.querySelector('#revenueType').value, 365);
 setCookie('salesFrequency', document.querySelector('#salesFrequency').value, 365);
 setCookie('cogs', document.querySelector('#cogs').value, 365);
 setCookie('rentFrequency', document.querySelector('#rentFrequency').value, 365);
@@ -649,6 +638,20 @@ setCookie('vehicleMaintenanceFrequency', document.querySelector('#vehicleMainten
 setCookie('vehicleInsuranceFrequency', document.querySelector('#vehicleInsuranceFrequency').value, 365);
 setCookie('resultChange', document.querySelector('#resultChange').value, 365);
 
+      /*      
+    setCookie('accountsReceivable', document.querySelector('#accountsReceivable').value, 365);
+    setCookie('inventory', document.querySelector('#inventory').value, 365);
+    setCookie('property', document.querySelector('#property').value, 365);
+    setCookie('equipment', document.querySelector('#equipment').value, 365);
+    setCookie('accountsPayable', document.querySelector('#accountsPayable').value, 365);
+    setCookie('loans', document.querySelector('#loans').value, 365);
+    setCookie('mortgages', document.querySelector('#mortgages').value, 365);
+    setCookie('taxesPayable', document.querySelector('#taxesPayable').value, 365);
+    setCookie('otherLiabilities', document.querySelector('#otherLiabilities').value, 365);
+
+*/
+
+  
 
 
               document.querySelector('#alert').textContent = 'business data captured go back now....... suggest text to be displayed'
@@ -680,24 +683,10 @@ function setCookie(name, value, days) {
 //   var notintended = document.getElementById("notintended");
   var regionDropdown = document.getElementById("RegionDropdown");
 
- 
 
-  // Check if checkboxes are checked
-//   if (termscheckbox.checked && notintended.checked) {
-    // Perform calculations
-
-    // const paid = getCookie("authenticated");
-    // console.log(paid)
 
     calculate();
 
-
-
-
-//   } else {
-//     alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax");
-//   }
-}
 
     function openTermsModal() {
   console.log('openTermsModal() function called');
@@ -812,6 +801,7 @@ function getCookie(name) {
     const vehicleInsuranceValue = parseInt(getCookie('vehicleInsurance')) || '';
     document.querySelector('#vehicleInsurance').value = vehicleInsuranceValue === 0 ? '' : vehicleInsuranceValue;
 
+      /*
     const cashValue = parseInt(getCookie('cash')) || '';
     document.querySelector('#cash').value = cashValue === 0 ? '' : cashValue;
 
@@ -841,6 +831,8 @@ function getCookie(name) {
 
     const otherLiabilitiesValue = parseInt(getCookie('otherLiabilities')) || '';
     document.querySelector('#otherLiabilities').value = otherLiabilitiesValue === 0 ? '' : otherLiabilitiesValue;
+*/
+      
 });
 
 
