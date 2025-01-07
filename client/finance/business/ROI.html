@@ -553,6 +553,7 @@
                   calculateAnnual('vehicleRental', 'vehicleRentalFrequency') +
                   calculateAnnual('vehicleLease', 'vehicleLeaseFrequency');
 
+            /*
               const cashValue = parseFloat(document.getElementById('cash').value) || 0;
               const accountsReceivableValue = parseFloat(document.getElementById('accountsReceivable').value) || 0;
               const inventoryValue = parseFloat(document.getElementById('inventory').value) || 0;
@@ -566,6 +567,8 @@
               const taxesPayableValue = parseFloat(document.getElementById('taxesPayable').value) || 0;
               const otherLiabilitiesValue = parseFloat(document.getElementById('otherLiabilities').value) || 0;
               const totalLiabilities = accountsPayableValue + loansValue + mortgagesValue + taxesPayableValue + otherLiabilitiesValue;
+*/
+
 
             const bookValue = totalAssets - totalLiabilities;  
             const totalCosts = totalCOGS + totalOperationalCosts + totalBuildingCosts + totalVehicleCosts;
@@ -587,10 +590,14 @@
               setCookie('totalBuildingCostsDivided', totalBuildingCostsDivided.toFixed(2), 365)
               setCookie('totalVehicleCostsDivided', totalVehicleCostsDivided.toFixed(2), 365)
               setCookie('netIncomeAdjusted', netIncomeAdjusted.toFixed(2), 365)
-              setCookie('totalAssets', totalAssets.toFixed(2), 365)
+           
+            /*
+            setCookie('totalAssets', totalAssets.toFixed(2), 365)
               setCookie('totalLiabilities', totalLiabilities.toFixed(2), 365)
               setCookie('bookValue', bookValue.toFixed(2), 365)
-            //   setCookie('revenueType', document.getElementById('revenueType').value, 365)
+            */
+                
+                setCookie('revenueType', document.getElementById('revenueType').value, 365)
 
 
 
