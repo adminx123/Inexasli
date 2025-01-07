@@ -205,43 +205,51 @@ input, select, textarea {
 
 /* Container */
 
-	.container {
-		margin: 0 auto;
-		max-width: 100%;
-		width: 70em;
-	}
+.container {
+    margin: 0 auto;
+    max-width: 100%;
+    width: 70em;
+    /* Setting a very low height */
+    height: 1px; /* or any other very low value, like 5px, 0.1em, etc. */
+}
 
-		@media screen and (max-width: 1680px) {
+    @media screen and (max-width: 1680px) {
 
-			.container {
-				width: 68em;
-			}
+        .container {
+            width: 68em;
+            /* Optionally set a different low height for larger screens */
+            /* height: 2px; */
+        }
 
-		}
+    }
 
-		@media screen and (max-width: 1280px) {
+    @media screen and (max-width: 1280px) {
 
-			.container {
-				width: calc(100% - 80px);
-			}
+        .container {
+            width: calc(100% - 80px);
+            /* Keep the height consistent or adjust as needed */
+            height: 1px;
+        }
 
-		}
+    }
 
-		@media screen and (max-width: 980px) {
+    @media screen and (max-width: 980px) {
 
-			.container {
-				width: calc(100% - 100px);
-			}
+        .container {
+            width: calc(100% - 100px);
+            height: 1px;
+        }
 
-		}
+    }
 
-		@media screen and (max-width: 736px) {
+    @media screen and (max-width: 736px) {
 
-			.container {
-				width: calc(100% - 40px);
-			}
+        .container {
+            width: calc(100% - 40px);
+            height: 1px;
+        }
 
-		}
+    }
 
 /* Row */
 
