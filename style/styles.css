@@ -852,7 +852,7 @@ input[type="checkbox"]:checked ~   .box-checkbox {
 
 .grid-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
       gap: 0.5rem;
     }
     .grid-item {
@@ -871,7 +871,7 @@ input[type="checkbox"]:checked ~   .box-checkbox {
 
 .benefits {
   display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
   margin: 20px auto;
   max-width: 1000px;
