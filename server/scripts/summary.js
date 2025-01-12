@@ -342,26 +342,18 @@ document.getElementById('FIRERATIO').textContent = 'Not Applicable';
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    var usaDiv = document.querySelector('.usa');
-    var canDiv = document.querySelector('.can');
+    // Changed to getElementsByClassName since you've got class names
+    var usaDiv = document.getElementsByClassName('usa-hide')[0];
+    var canDiv = document.getElementsByClassName('can-hide')[0];
 
     var regionDropdownValue = getCookie('RegionDropdown');
 
     if (regionDropdownValue === 'USA') {
-        usaDiv.style.display = 'block';
-        canDiv.style.display = 'none'; // Correct use of 'none' for hiding
+        if (usaDiv) usaDiv.style.display = 'block';
+        if (canDiv) canDiv.style.display = 'none';
     } else if (regionDropdownValue === 'CAN') {
-        usaDiv.style.display = 'none'; // Correct use of 'none' for hiding
-        canDiv.style.display = 'block';
-    }
-
-    const canHide = document.getElementById("can-hide");
-    const usaHide = document.getElementById("usa-hide");
-
-    if (regionDropdownValue === 'CAN') {
-        usaHide.style.display = 'none'; // Hide usa-hide if region is CAN
-    } else if (regionDropdownValue === 'USA') {
-        canHide.style.display = 'none'; // Hide can-hide if region is USA
+        if (usaDiv) usaDiv.style.display = 'none';
+        if (canDiv) canDiv.style.display = 'block';
     }
 });
 
