@@ -339,7 +339,7 @@ document.getElementById('FIRERATIO').textContent = 'Not Applicable';
 });
 
 
-document.addEventListener('change', function() {
+document.addEventListener('DOMContentLoaded', function() {
     var usaDiv = document.querySelector('.usa');
     var canDiv = document.querySelector('.can');
 
@@ -347,26 +347,24 @@ document.addEventListener('change', function() {
 
     if (regionDropdownValue === 'USA') {
         usaDiv.style.display = 'block';
-        canDiv.style.display = 'hidden';
+        canDiv.style.display = 'none'; // Changed from 'hidden' to 'none'
     } else if (regionDropdownValue === 'CAN') {
-        usaDiv.style.display = 'hidden';
+        usaDiv.style.display = 'none'; // Changed from 'hidden' to 'none'
         canDiv.style.display = 'block';
     }
+
     document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
+
+    const canHide = document.getElementById("can-hide");
+    const usaHide = document.getElementById("usa-hide");
+
+    if (regionDropdownValue === 'CAN') {
+        usaHide.style.display = 'none';
+    } else if (regionDropdownValue === 'USA') {
+        canHide.style.display = 'none';
+    }
 });
-
-// console.log(getCookie('RegionDropdown'))
-
-const canHide = document.getElementById("can-hide")
-const usaHide = document.getElementById("usa-hide")
-
-if ((getCookie('RegionDropdown')) == 'CAN') {
-    usaHide.style.display = 'none'
-
-} else if ((getCookie('RegionDropdown')) == 'USA') {
-    canHide.style.display = 'none'
-}
 
 
      
