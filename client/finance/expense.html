@@ -344,85 +344,7 @@
 
 	  </div>
 
-	  <div class="containerround">
-		  
-<h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Expenses related to travel or moving people or goods, including fuel, public transit fares, vehicle maintenance, insurance, and any car rental or taxi services.">
-    Transportation<span class="tooltip-content"></span>
-</h2>
 
-<div class ="row">
-<label for="transportation_car_loan_payment">Car Loan Payment:</label>
-<input type='number' inputmode="numeric"  id="transportation_car_loan_payment">
-<select id="transportation_car_loan_payment_frequency" onchange="calculateAnnual('transportation_car_loan_payment', 'transportation_car_loan_payment_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="transportation_car_loan_payment_annual"></span>
-</div>
-
-<div class ="row">
-<label for="transportation_insurance">Insurance:</label>
-<input type='number' inputmode="numeric"  id="transportation_insurance">
-<select id="transportation_insurance_frequency" onchange="calculateAnnual('transportation_insurance', 'transportation_insurance_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
-<span id="transportation_insurance_annual"></span>
-</div>
-
-<div class ="row">
-<label for="transportation_fuel">Fuel:</label>
-<input type='number' inputmode="numeric"  id="transportation_fuel">
-<select id="transportation_fuel_frequency" onchange="calculateAnnual('transportation_fuel', 'transportation_fuel_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="transportation_fuel_annual"></span>
-</div>
-
-<div class ="row">
-<label for="transportation_maintenance">Maintenance:</label>
-<input type='number' inputmode="numeric"  id="transportation_maintenance">
-<select id="transportation_maintenance_frequency" onchange="calculateAnnual('transportation_maintenance', 'transportation_maintenance_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-  <option value="weekly">Weekly</option>
-</select>
-<span id="transportation_maintenance_annual"></span>
-</div>
-
-<div class ="row">
-<label for="transportation_public_transit">Public Transit:</label>
-<input type='number' inputmode="numeric"  id="transportation_public_transit">
-<select id="transportation_public_transit_frequency" onchange="calculateAnnual('transportation_public_transit', 'transportation_public_transit_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="transportation_public_transit_annual"></span>
-</div>
-
-<div class ="row">
-<label for="transportation_ride_hailing">Ride Hailing:</label>
-<input type='number' inputmode="numeric"  id="transportation_ride_hailing">
-<select id="transportation_ride_hailing_frequency" onchange="calculateAnnual('transportation_ride_hailing', 'transportation_ride_hailing_frequency')">
-  <option value="annually">Annually</option>
-  <option value="quarterly">Quarterly</option>
-  <option value="monthly">Monthly</option>
-	<option value="weekly">Weekly</option>
-</select>
-<span id="transportation_ride_hailing_annual"></span>
-</div>
-
-	  </div>
 
 
 	  
@@ -505,10 +427,11 @@
 </div>
 </div>
 
-<div id="depandant-parent">
 
+	  
+	  <div id="depandant-parent">
 <div class="containerround">
-		  
+ 
 <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Costs associated with supporting family members or others who rely on you financially, plus expenses for pets like food, veterinary care, and pet supplies.">
     Dependants/Pets<span class="tooltip-content"></span>
 </h2>
@@ -611,21 +534,97 @@
 
 
 </div>
+		  </div>
 
-<div class="nav-div">
+	  	  <div class="containerround">
+		  
+<h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Expenses related to travel or moving people or goods, including fuel, public transit fares, vehicle maintenance, insurance, and any car rental or taxi services.">
+    Transportation<span class="tooltip-content"></span>
+</h2>
 
-  <button onclick="calculateBack()" class="nav-btn nav-left"><i class='bx nav-inner bx-left-arrow-alt' ></i></button>
-
-
-
-
-
-  <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
-
+<div class ="row">
+<label for="transportation_car_loan_payment">Car Loan Payment:</label>
+<input type='number' inputmode="numeric"  id="transportation_car_loan_payment">
+<select id="transportation_car_loan_payment_frequency" onchange="calculateAnnual('transportation_car_loan_payment', 'transportation_car_loan_payment_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="transportation_car_loan_payment_annual"></span>
 </div>
 
-
+<div class ="row">
+<label for="transportation_insurance">Insurance:</label>
+<input type='number' inputmode="numeric"  id="transportation_insurance">
+<select id="transportation_insurance_frequency" onchange="calculateAnnual('transportation_insurance', 'transportation_insurance_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="transportation_insurance_annual"></span>
 </div>
+
+<div class ="row">
+<label for="transportation_fuel">Fuel:</label>
+<input type='number' inputmode="numeric"  id="transportation_fuel">
+<select id="transportation_fuel_frequency" onchange="calculateAnnual('transportation_fuel', 'transportation_fuel_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="transportation_fuel_annual"></span>
+</div>
+
+<div class ="row">
+<label for="transportation_maintenance">Maintenance:</label>
+<input type='number' inputmode="numeric"  id="transportation_maintenance">
+<select id="transportation_maintenance_frequency" onchange="calculateAnnual('transportation_maintenance', 'transportation_maintenance_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+  <option value="weekly">Weekly</option>
+</select>
+<span id="transportation_maintenance_annual"></span>
+</div>
+
+<div class ="row">
+<label for="transportation_public_transit">Public Transit:</label>
+<input type='number' inputmode="numeric"  id="transportation_public_transit">
+<select id="transportation_public_transit_frequency" onchange="calculateAnnual('transportation_public_transit', 'transportation_public_transit_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="transportation_public_transit_annual"></span>
+</div>
+
+<div class ="row">
+<label for="transportation_ride_hailing">Ride Hailing:</label>
+<input type='number' inputmode="numeric"  id="transportation_ride_hailing">
+<select id="transportation_ride_hailing_frequency" onchange="calculateAnnual('transportation_ride_hailing', 'transportation_ride_hailing_frequency')">
+  <option value="annually">Annually</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="monthly">Monthly</option>
+	<option value="weekly">Weekly</option>
+</select>
+<span id="transportation_ride_hailing_annual"></span>
+</div>
+
+			  <div class="nav-div">
+<button onclick="calculateBack()" class="nav-btn nav-left"><i class='bx nav-inner bx-left-arrow-alt' ></i></button>
+ <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
+</div>
+	  </div>
+
+
+
+	  
+		  
+
 	  
 
 
