@@ -39,7 +39,7 @@ var LIQUIDASSETS;
         console.log(`Field value for ${assetFields[i]}: ${fieldValue}`);
         const parsedValue = parseFloat(fieldValue);
 
-        const isPartner = getCookie('assetspousecheckbox') == 'checked'
+        const isPartner = getCookie('romanticasset') == 'checked'
         if (!isNaN(parsedValue)) {
             let fieldPercentage = parseFloat(document.querySelector(`#${assetFields[i]}_percent`).value)
 
