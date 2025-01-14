@@ -357,5 +357,34 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
+function calculateGoal() {
+    // Retrieve the goal amount from the input field
+    const goalAmount = document.getElementById('goalAmount').value;
+    const parsedGoalAmount = parseFloat(goalAmount);
+
+    // Assuming DISPOSABLEINCOME is globally accessible or defined elsewhere
+    if (typeof DISPOSABLEINCOME === 'undefined' || isNaN(DISPOSABLEINCOME)) {
+        console.error("DISPOSABLEINCOME is not properly defined or is not a number.");
+        return; // Exit the function if DISPOSABLEINCOME is not set or not a number
+    }
+
+    // Check if the goal amount is a valid number
+    if (!isNaN(parsedGoalAmount) && parsedGoalAmount > 0) {
+        // Calculate months needed based on disposable income
+        const monthsNeeded = parsedGoalAmount / DISPOSABLEINCOME;
+        
+        // Update the result span, rounding up to the nearest whole number
+        const resultElement = document.getElementById('goalResult');
+        if (resultElement) {
+            resultElement.textContent = `Months needed: ${Math.ceil(monthsNeeded)}`;
+        } else {
+            console.error("Element with id 'goalResult' not found to display result.");
+        }
+    } else {
+        // Clear the result if the input is invalid
+        document.getElementById('goalResult').textContent = '';
+    }
+}
      
