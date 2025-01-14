@@ -28,50 +28,48 @@ var LIABILITIES;
   
   
     function calculateLiabilities() {
-      // console.log('calculate liabilities called')
-        const liabilitiesFields = [
+    const liabilitiesFields = [
         'liabilities_small_business_loan',
         'liabilities_primary_residence',
         'liabilities_investment_properties',
         'liabilities_vehicle_loan',
-            'liabilities_personal_debt',
+        'liabilities_personal_debt',
         'liabilities_student_loan',
         'liabilities_line_of_credit',
         'liabilities_credit_card',
         'liabilities_tax_arrears'
-        ];
-    
-        let liabilities = 0;
-    
-        for (let i = 0; i < liabilitiesFields.length; i++) {
-            const fieldValue = document.getElementById(liabilitiesFields[i]).value;
-            console.log(`Field value for ${liabilitiesFields[i]}: ${fieldValue}`);
-            const parsedValue = parseFloat(fieldValue);
+    ];
 
+    let liabilities = 0;
 
-            const isPartner = getCookie('romanticliability') == 'checked'
+    for (let i = 0; i < liabilitiesFields.length; i++) {
+        const fieldValue = document.getElementById(liabilitiesFields[i]).value;
+        console.log(`Field value for ${liabilitiesFields[i]}: ${fieldValue}`);
+        const parsedValue = parseFloat(fieldValue);
 
+        const isPartner = getCookie('romanticliability') === 'checked';
 
-            if (!isNaN(parsedValue)) {
-               let fieldPercentage = parseFloat(document.querySelector(`#${liabilitiesFields[i]}_percent`).value)
+        if (!isNaN(parsedValue)) {
+            let fieldPercentage = parseFloat(document.querySelector(`#${liabilitiesFields[i]}_percent`).value);
 
-                if (!fieldPercentage || isNaN(fieldPercentage) ||!isPartner) {
-                    fieldPercentage = 100
-                }
-                // console.log(fieldPercentage)
-
-
-
-                liabilities += (parsedValue * fieldPercentage / 100);
-                // console.log(`${parsedValue}, ${fieldPercentage}, ${parsedValue * fieldPercentage / 100}`)
-            } else {
-                console.error(`Invalid value for ${liabilities[i]}: ${fieldValue}`);
+            // Reset to 100% if not partner or if percentage is invalid
+            if (!fieldPercentage || isNaN(fieldPercentage) || !isPartner) {
+                fieldPercentage = 100;
+            } else if (!isPartner && fieldPercentage !== 100) {
+                // If the cookie is unchecked, reset the input value to 100%
+                document.querySelector(`#${liabilitiesFields[i]}_percent`).value = '100';
+                fieldPercentage = 100;
             }
+
+            liabilities += (parsedValue * fieldPercentage / 100);
+        } else {
+            console.error(`Invalid value for ${liabilitiesFields[i]}: ${fieldValue}`);
         }
-    
-        LIABILITIES = liabilities;
-        document.getElementById('LIABILITIES').textContent = '$' + LIABILITIES.toFixed(2);
     }
+
+    LIABILITIES = liabilities;
+    document.getElementById('LIABILITIES').textContent = '$' + LIABILITIES.toFixed(2);
+}
     
     
     function setCookie(name, value, days) {
