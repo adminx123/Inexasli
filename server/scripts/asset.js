@@ -19,12 +19,12 @@ tabs.forEach(tab => {
 var ASSETS;
 var LIQUIDASSETS;
 
-     function calculateAssets() {
+    function calculateAssets() {
     const assetFields = [
         'assets_checking_accounts', 
         'assets_savings_accounts', 
         'assets_other_liquid_accounts',
-	    'assets_money_lent_out',
+        'assets_money_lent_out',
         'assets_long_term_investment_accounts', 
         'assets_primary_residence', 
         'assets_investment_properties', 
@@ -40,27 +40,28 @@ var LIQUIDASSETS;
         console.log(`Field value for ${assetFields[i]}: ${fieldValue}`);
         const parsedValue = parseFloat(fieldValue);
 
-        const isPartner = getCookie('romanticasset') == 'checked'
+        const isPartner = getCookie('romanticasset') === 'checked';
+        
         if (!isNaN(parsedValue)) {
-            let fieldPercentage = parseFloat(document.querySelector(`#${assetFields[i]}_percent`).value)
+            let fieldPercentage = parseFloat(document.querySelector(`#${assetFields[i]}_percent`).value);
 
+            // Reset to 100% if not partner or if percentage is invalid
             if (!fieldPercentage || isNaN(fieldPercentage) || !isPartner) {
-                fieldPercentage = 100
+                fieldPercentage = 100;
+            } else if (!isPartner && fieldPercentage !== 100) {
+                // If the cookie is unchecked, reset the input value to 100%
+                document.querySelector(`#${assetFields[i]}_percent`).value = '100';
+                fieldPercentage = 100;
             }
-            // console.log(fieldPercentage)
+            
             assets += (parsedValue * fieldPercentage / 100);
-            // console.log(`${parsedValue}, ${fieldPercentage}, ${parsedValue * fieldPercentage / 100}`)
         } else {
             console.error(`Invalid value for ${assetFields[i]}: ${fieldValue}`);
         }
     }
 
-ASSETS = assets;
-
+    ASSETS = assets;
     document.getElementById('ASSETS').textContent = '$' + ASSETS.toFixed(2);
-
-
-
 }
  
  function calculateLiquidAssets() {
