@@ -49,7 +49,7 @@ var LIABILITIES;
             const parsedValue = parseFloat(fieldValue);
 
 
-            const isPartner = getCookie('liabilityspousecheckbox') == 'checked'
+            const isPartner = getCookie('romanticliability') == 'checked'
 
 
             if (!isNaN(parsedValue)) {
