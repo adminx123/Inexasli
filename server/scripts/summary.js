@@ -12,7 +12,6 @@ tabs.forEach(tab => {
     }
 })
 
-
 const paid = getCookie("authenticated");
 
 
