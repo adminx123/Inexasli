@@ -359,6 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
 function calculateGoal() {
+    const DISPOSABLEINCOME = document.getElementById('DISPOSABLEINCOME').value;
     // Retrieve the goal amount from the input field
     const goalAmount = document.getElementById('goalAmount').value;
     const parsedGoalAmount = parseFloat(goalAmount);
