@@ -359,15 +359,16 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
 function calculateGoal() {
-    const DISPOSABLEINCOME = document.getElementById('DISPOSABLEINCOME');
+    const disposableIncomeElement = document.getElementById('DISPOSABLEINCOME');
+        const DISPOSABLEINCOME = parseFloat(disposableIncomeElement.textContent.replace('$', '').trim());
+
     // Retrieve the goal amount from the input field
     const goalAmount = document.getElementById('goalAmount').value;
     const parsedGoalAmount = parseFloat(goalAmount);
 
-    // Assuming DISPOSABLEINCOME is globally accessible or defined elsewhere
-    if (typeof DISPOSABLEINCOME === 'undefined' || isNaN(DISPOSABLEINCOME)) {
-        console.error("DISPOSABLEINCOME is not properly defined or is not a number.");
-        return; // Exit the function if DISPOSABLEINCOME is not set or not a number
+   if (isNaN(DISPOSABLEINCOME) || DISPOSABLEINCOME <= 0) {
+        console.error("DISPOSABLEINCOME is not a valid number or is not positive.");
+        return;
     }
 
     // Check if the goal amount is a valid number
