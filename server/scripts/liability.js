@@ -47,20 +47,29 @@ var LIABILITIES;
         console.log(`Field value for ${liabilitiesFields[i]}: ${fieldValue}`);
         const parsedValue = parseFloat(fieldValue);
 
-        const isPartner = getCookie('romanticliability') === 'checked';
-
+        const cookieValue = getCookie('romanticliability');
+        
         if (!isNaN(parsedValue)) {
             let fieldPercentage = parseFloat(document.querySelector(`#${liabilitiesFields[i]}_percent`).value);
 
-            // Reset to 100% if not partner or if percentage is invalid
-            if (!fieldPercentage || isNaN(fieldPercentage) || !isPartner) {
+            // Check if the cookie is set to "Checked" or "unChecked"
+            if (cookieValue === 'Checked') {
+                // Use the user's input percentage
+                if (!fieldPercentage || isNaN(fieldPercentage)) {
+                    fieldPercentage = 100; // Default to 100% if input is invalid
+                }
+            } else if (cookieValue === 'unChecked') {
+                // Force to 100% regardless of user input
                 fieldPercentage = 100;
-            } else if (!isPartner && fieldPercentage !== 100) {
-                // If the cookie is unchecked, reset the input value to 100%
+                // Update the input field to reflect this
                 document.querySelector(`#${liabilitiesFields[i]}_percent`).value = '100';
-                fieldPercentage = 100;
+            } else {
+                // If neither "Checked" nor "unChecked", default behavior
+                if (!fieldPercentage || isNaN(fieldPercentage)) {
+                    fieldPercentage = 100;
+                }
             }
-
+            
             liabilities += (parsedValue * fieldPercentage / 100);
         } else {
             console.error(`Invalid value for ${liabilitiesFields[i]}: ${fieldValue}`);
