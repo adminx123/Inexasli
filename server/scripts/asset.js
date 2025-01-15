@@ -51,19 +51,17 @@ var LIQUIDASSETS;
                 if (!fieldPercentage || isNaN(fieldPercentage)) {
                     fieldPercentage = 100; // Default to 100% if input is invalid
                 }
+                assets += (parsedValue * fieldPercentage / 100);
             } else if (cookieValue === 'unChecked') {
-                // Force to 100% regardless of user input
-                fieldPercentage = 100;
-                // Update the input field to reflect this
-                document.querySelector(`#${assetFields[i]}_percent`).value = '100';
+                // Use the number directly from the field
+                assets += parsedValue;
             } else {
-                // If neither "Checked" nor "unChecked", default behavior
+                // Default behavior (if cookie not set or invalid value)
                 if (!fieldPercentage || isNaN(fieldPercentage)) {
                     fieldPercentage = 100;
                 }
+                assets += (parsedValue * fieldPercentage / 100);
             }
-            
-            assets += (parsedValue * fieldPercentage / 100);
         } else {
             console.error(`Invalid value for ${assetFields[i]}: ${fieldValue}`);
         }
