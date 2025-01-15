@@ -58,19 +58,17 @@ var LIABILITIES;
                 if (!fieldPercentage || isNaN(fieldPercentage)) {
                     fieldPercentage = 100; // Default to 100% if input is invalid
                 }
+                liabilities += (parsedValue * fieldPercentage / 100);
             } else if (cookieValue === 'unChecked') {
-                // Force to 100% regardless of user input
-                fieldPercentage = 100;
-                // Update the input field to reflect this
-                document.querySelector(`#${liabilitiesFields[i]}_percent`).value = '100';
+                // Use the number directly from the field
+                liabilities += parsedValue;
             } else {
-                // If neither "Checked" nor "unChecked", default behavior
+                // Default behavior (if cookie not set or invalid value)
                 if (!fieldPercentage || isNaN(fieldPercentage)) {
                     fieldPercentage = 100;
                 }
+                liabilities += (parsedValue * fieldPercentage / 100);
             }
-            
-            liabilities += (parsedValue * fieldPercentage / 100);
         } else {
             console.error(`Invalid value for ${liabilitiesFields[i]}: ${fieldValue}`);
         }
