@@ -362,7 +362,7 @@ document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
 function calculateGoal() {
     const disposableIncomeElement = document.getElementById('DISPOSABLEINCOME');
-    const DISPOSABLEINCOME = parseFloat(disposableIncomeElement.textContent.replace('$', '').trim());
+    let DISPOSABLEINCOME = parseFloat(disposableIncomeElement.textContent.replace('$', '').trim());
 
     if (isNaN(DISPOSABLEINCOME) || DISPOSABLEINCOME <= 0) {
         console.error("DISPOSABLEINCOME is not a valid number or is not positive.");
@@ -377,18 +377,20 @@ function calculateGoal() {
         const selectedFrequency = frequencyDropdown.value;
         let timeNeeded, timeUnit;
 
-        // Calculate based on frequency
+        // Convert annual disposable income to the selected frequency for calculation
         switch (selectedFrequency) {
             case 'annual':
                 timeNeeded = parsedGoalAmount / DISPOSABLEINCOME;
                 timeUnit = "Years";
                 break;
             case 'monthly':
-                timeNeeded = (parsedGoalAmount / (DISPOSABLEINCOME / 12));
+                // Monthly disposable income is annual income divided by 12
+                timeNeeded = parsedGoalAmount / (DISPOSABLEINCOME / 12);
                 timeUnit = "Months";
                 break;
             case 'weekly':
-                timeNeeded = (parsedGoalAmount / (DISPOSABLEINCOME / 52));
+                // Weekly disposable income is annual income divided by 52
+                timeNeeded = parsedGoalAmount / (DISPOSABLEINCOME / 52);
                 timeUnit = "Weeks";
                 break;
             default:
