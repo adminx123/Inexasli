@@ -379,28 +379,29 @@ function calculateGoal() {
         const frequencyDropdown = document.getElementById('frequency');
         const selectedFrequency = frequencyDropdown.value;
 
-        let timeUnit = 'Months'; // Default to months
-        let conversionFactor = 1; // Default conversion factor for months
+        let timeUnit = 'Months'; 
+        let conversionFactor = 1; // Default is months
 
         switch(selectedFrequency) {
             case 'annual':
                 timeUnit = 'Years';
-                conversionFactor = 1/12; // Convert from months to years
+                // We want to turn annual into years directly, so no conversion needed here
+                conversionFactor = 1; 
                 break;
             case 'monthly':
                 timeUnit = 'Months';
-                conversionFactor = 1; // Already in months
+                conversionFactor = 12; // Since DISPOSABLEINCOME is annual, we need 12 to convert to months
                 break;
             case 'weekly':
                 timeUnit = 'Weeks';
-                conversionFactor = 52/12; // Convert from months to weeks
+                conversionFactor = 52; // Convert annual to weeks
                 break;
             default:
                 console.warn('Unknown frequency selected:', selectedFrequency);
         }
 
         // Calculate time needed based on disposable income and conversion factor
-        const timeNeeded = (parsedGoalAmount / DISPOSABLEINCOME) * conversionFactor;
+        const timeNeeded = parsedGoalAmount / (DISPOSABLEINCOME / conversionFactor);
         
         // Update the result span, rounding up to the nearest whole number
         const resultElement = document.getElementById('goalResult');
