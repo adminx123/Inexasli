@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.getElementById('goalAmount').addEventListener('input', calculateGoal);
+
 
 function calculateGoal() {
     const disposableIncomeElement = document.getElementById('DISPOSABLEINCOME');
