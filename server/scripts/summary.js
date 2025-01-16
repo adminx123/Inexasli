@@ -364,56 +364,38 @@ function calculateGoal() {
     const disposableIncomeElement = document.getElementById('DISPOSABLEINCOME');
     const DISPOSABLEINCOME = parseFloat(disposableIncomeElement.textContent.replace('$', '').trim());
 
-    // Retrieve the goal amount from the input field
-    const goalAmount = document.getElementById('goalAmount').value;
-    const parsedGoalAmount = parseFloat(goalAmount);
-
     if (isNaN(DISPOSABLEINCOME) || DISPOSABLEINCOME <= 0) {
         console.error("DISPOSABLEINCOME is not a valid number or is not positive.");
         return;
     }
 
-    // Check if the goal amount is a valid number
+    const goalAmount = document.getElementById('goalAmount').value;
+    const parsedGoalAmount = parseFloat(goalAmount);
+
     if (!isNaN(parsedGoalAmount) && parsedGoalAmount > 0) {
-        // Get the selected frequency from the dropdown
         const frequencyDropdown = document.getElementById('frequency');
         const selectedFrequency = frequencyDropdown.value;
+        let timeNeeded;
 
-        let timeUnit = 'Months'; // Default to months
-        let conversionFactor = 1; // Default conversion factor for months
-
-        switch(selectedFrequency) {
+        switch (selectedFrequency) {
             case 'annual':
-                timeUnit = 'Years';
-                conversionFactor = 1/12; // Convert from months to years
+                timeNeeded = parsedGoalAmount / DISPOSABLEINCOME; // Years
                 break;
             case 'monthly':
-                timeUnit = 'Months';
-                conversionFactor = 1; // Already in months
+                timeNeeded = (parsedGoalAmount / (DISPOSABLEINCOME / 12)); // Months
                 break;
             case 'weekly':
-                timeUnit = 'Weeks';
-                conversionFactor = 52/12; // Convert from months to weeks
+                timeNeeded = (parsedGoalAmount / (DISPOSABLEINCOME / 52)); // Weeks
                 break;
             default:
-                console.warn('Unknown frequency selected:', selectedFrequency);
+                timeNeeded = 0;
         }
 
-        // Calculate time needed based on disposable income and conversion factor
-        const timeNeeded = (parsedGoalAmount / DISPOSABLEINCOME) * conversionFactor;
-        
-        // Update the result span, rounding up to the nearest whole number
         const resultElement = document.getElementById('goalResult');
         if (resultElement) {
-            resultElement.textContent = `Time needed: ${Math.ceil(timeNeeded)} ${timeUnit}`;
-        } else {
-            console.error("Element with id 'goalResult' not found to display result.");
+            resultElement.textContent = `${selectedFrequency === 'annual' ? 'Years' : selectedFrequency === 'monthly' ? 'Months' : 'Weeks'} needed: ${timeNeeded.toFixed(2)}`;
         }
     } else {
-        // Clear the result if the input is invalid
         document.getElementById('goalResult').textContent = '';
     }
 }
-
-// Ensure the function recalculates when frequency changes
-document.getElementById('frequency').addEventListener('change', calculateGoal);
