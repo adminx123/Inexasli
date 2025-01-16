@@ -318,46 +318,6 @@ document.getElementById('FIRERATIO').textContent = 'Not Applicable';
 
 
 
-
-
-
-
-  } 
-  
-  updateOnChange();
-  
-   // Add an event listener to the frequency dropdown
-    const frequencyDropdown = document.getElementById('frequency');
-    frequencyDropdown.addEventListener('change', function() {
-        // Call the update function when the frequency dropdown value changes
-        updateOnChange();
-    
-});
-
- document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
-    document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
-     
-});
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Changed to getElementsByClassName since you've got class names
-    var usaDiv = document.getElementsByClassName('usa-hide')[0];
-    var canDiv = document.getElementsByClassName('can-hide')[0];
-
-    var regionDropdownValue = getCookie('RegionDropdown');
-
-    if (regionDropdownValue === 'USA') {
-        if (usaDiv) usaDiv.style.display = 'block';
-        if (canDiv) canDiv.style.display = 'none';
-    } else if (regionDropdownValue === 'CAN') {
-        if (usaDiv) usaDiv.style.display = 'none';
-        if (canDiv) canDiv.style.display = 'block';
-    }
-});
-
-
-
 document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
 function calculateGoal() {
@@ -406,3 +366,43 @@ function calculateGoal() {
         document.getElementById('goalResult').textContent = '';
     }
 }
+
+
+
+
+  } 
+  
+  updateOnChange();
+  
+   // Add an event listener to the frequency dropdown
+    const frequencyDropdown = document.getElementById('frequency');
+    frequencyDropdown.addEventListener('change', function() {
+        // Call the update function when the frequency dropdown value changes
+        updateOnChange();
+    
+});
+
+ document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
+    document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
+     
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Changed to getElementsByClassName since you've got class names
+    var usaDiv = document.getElementsByClassName('usa-hide')[0];
+    var canDiv = document.getElementsByClassName('can-hide')[0];
+
+    var regionDropdownValue = getCookie('RegionDropdown');
+
+    if (regionDropdownValue === 'USA') {
+        if (usaDiv) usaDiv.style.display = 'block';
+        if (canDiv) canDiv.style.display = 'none';
+    } else if (regionDropdownValue === 'CAN') {
+        if (usaDiv) usaDiv.style.display = 'none';
+        if (canDiv) canDiv.style.display = 'block';
+    }
+});
+
+
+
