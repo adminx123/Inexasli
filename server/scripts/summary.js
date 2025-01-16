@@ -375,25 +375,30 @@ function calculateGoal() {
     if (!isNaN(parsedGoalAmount) && parsedGoalAmount > 0) {
         const frequencyDropdown = document.getElementById('frequency');
         const selectedFrequency = frequencyDropdown.value;
-        let timeNeeded;
+        let timeNeeded, timeUnit;
 
+        // Calculate based on frequency
         switch (selectedFrequency) {
             case 'annual':
-                timeNeeded = parsedGoalAmount / DISPOSABLEINCOME; // Years
+                timeNeeded = parsedGoalAmount / DISPOSABLEINCOME;
+                timeUnit = "Years";
                 break;
             case 'monthly':
-                timeNeeded = (parsedGoalAmount / (DISPOSABLEINCOME / 12)); // Months
+                timeNeeded = (parsedGoalAmount / (DISPOSABLEINCOME / 12));
+                timeUnit = "Months";
                 break;
             case 'weekly':
-                timeNeeded = (parsedGoalAmount / (DISPOSABLEINCOME / 52)); // Weeks
+                timeNeeded = (parsedGoalAmount / (DISPOSABLEINCOME / 52));
+                timeUnit = "Weeks";
                 break;
             default:
                 timeNeeded = 0;
+                timeUnit = "Unknown";
         }
 
         const resultElement = document.getElementById('goalResult');
         if (resultElement) {
-            resultElement.textContent = `${selectedFrequency === 'annual' ? 'Years' : selectedFrequency === 'monthly' ? 'Months' : 'Weeks'} needed: ${timeNeeded.toFixed(2)}`;
+            resultElement.textContent = `${timeUnit} needed: ${timeNeeded.toFixed(2)}`;
         }
     } else {
         document.getElementById('goalResult').textContent = '';
