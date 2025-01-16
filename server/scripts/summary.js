@@ -368,8 +368,7 @@ function calculateGoal() {
 }
 
 
-
-
+    
   } 
   
   updateOnChange();
