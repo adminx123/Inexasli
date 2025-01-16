@@ -320,6 +320,10 @@ document.getElementById('FIRERATIO').textContent = 'Not Applicable';
 
 document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
+document.getElementById('frequency').addEventListener('change', function() {
+    calculateGoal(); // Recalculate the goal time when the frequency changes
+});
+
 function calculateGoal() {
     const disposableIncomeElement = document.getElementById('DISPOSABLEINCOME');
     let DISPOSABLEINCOME = parseFloat(disposableIncomeElement.textContent.replace('$', '').trim());
