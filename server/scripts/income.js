@@ -1,4 +1,4 @@
-import { displayWarning } from "./utils.js"
+import { displayWarning, hideShowClass } from "./utils.js"
 
 function getTermsCookie(name) {
     const now = Date.now()
@@ -127,14 +127,35 @@ document.addEventListener('DOMContentLoaded', function() {
     var USAHIDE = document.querySelector('.USAHIDE');
     
     // Initially hide the field
-    USAHIDE.style.display = 'none';
+    // USAHIDE.style.display = 'none';
+    hideShowClass('USAHIDE', 'hide')
+    // USAHIDE.style.backgroundColor = 'red';
+
 
     // Function to handle the change in dropdown value
     function handleRegionChange() {
-        if (this.value === 'USA' || this.value === '') { // Check for USA or empty value
-            USAHIDE.style.display = 'block';
+
+        if (this.value === 'USA') {
+            
+            setCookie("RegionDropdown", this.value, 365)
+            setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
+        } else if (this.value === 'CAN') {
+            setCookie("RegionDropdown", this.value, 365)
+            setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
+
+
+        }
+
+        const isIncomeUsa = getCookie('RegionDropdown') == 'USA'
+
+
+        if (this.value === 'USA' || this.value === '' || this.value === "NONE" || isIncomeUsa ) { // Check for USA or empty value
+    hideShowClass('USAHIDE', 'show')
+
+            // console.log('is block')
         } else {
-            USAHIDE.style.display = 'none';
+            hideShowClass('USAHIDE', 'hide')
+            // console.log('is none')
         }
     }
 
