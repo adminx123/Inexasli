@@ -224,6 +224,8 @@ Interview_Content_Disclaimer:
     - "You agree that your use of the Worksheet and/or participation in interviews are at your own risk, understanding the educational nature and limitations of liability as described herein."
      - "Electronic Acceptance: If you're unable to provide a physical signature, electronic methods of acceptance are also considered binding."
 
-  Signature: _________________________    
+  Signature: _________________________ 
+
   Email: _________________________ 
+
   Date: _________________________
