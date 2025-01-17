@@ -46,7 +46,7 @@ var LIQUIDASSETS;
             let fieldPercentage = parseFloat(document.querySelector(`#${assetFields[i]}_percent`).value);
 
             // Check if the cookie is set to "Checked" or "unChecked"
-            if (cookieValue === 'Checked') {
+            if (cookieValue === 'checked') {
                 // Use the user's input percentage
                 if (!fieldPercentage || isNaN(fieldPercentage)) {
                     fieldPercentage = 100; // Default to 100% if input is invalid
