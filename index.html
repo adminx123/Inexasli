@@ -59,20 +59,28 @@
       <div></div>
       <div></div>
     </div>
-
-
-
-
-
-
-    <!-- Dropdown Menu -->
+  <!-- Dropdown Menu -->
     <div class="dropdown" id="dropdownMenu">
-   
-
-   <a href="mailto:support@inexasli.com">Contact</a>
+      <a href="mailto:support@inexasli.com">Contact</a>
     </div>
 
 
+   <div id="animationContainer">
+        <div id="initialText">
+            <span class="letter">INEXASLI</span>
+        </div>
+        <div id="fullWords" class="hidden">
+            <span class="word">INcome</span>
+            <span class="word">EXpense</span>
+            <span class="word">ASset</span>
+            <span class="word">LIability</span>
+        </div>
+    </div>
+    
+    
+    
+    
+    
     <div class ="impact">
 <img src="images/newLogo.jpg" alt="Your Logo" style="display: inline-block; width: 50%;" />
 
@@ -129,6 +137,36 @@
         event.preventDefault();
         handlePasswordProtection("xxxx.html"); // Replace with the actual URL you want to redirect to
       });
+
+
+              document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const letters = document.querySelectorAll('.letter');
+                const words = document.querySelectorAll('.word');
+                const initialText = document.getElementById('initialText');
+                const fullWords = document.getElementById('fullWords');
+
+                // Slide apart letters
+                letters.forEach((letter, index) => {
+                    setTimeout(() => {
+                        letter.classList.add('slide-out');
+                    }, index * 100);
+                });
+
+                // After sliding letters, show words
+                setTimeout(() => {
+                    initialText.style.display = 'none'; // Hide initial text
+                    fullWords.classList.remove('hidden'); // Show full words
+                    
+                    words.forEach((word, index) => {
+                        setTimeout(() => {
+                            word.style.opacity = '1';
+                            word.style.transform = 'translateY(0)'; // Slide up to original position
+                        }, index * 500); // Delay for each word's reveal
+                    });
+                }, letters.length * 100); // Wait for all letters to slide out
+            }, 2000); // Wait 2 seconds before starting animation
+        });
     </script>
   </body>
 </html>
