@@ -90,6 +90,23 @@
                 if (data.paymentStatus == "paid" || data.paymentStatus == 'no_payment_required')
                   setCookie('authenticated', "paid", 365);
                 container.innerHTML = "payment successfull redirecting ......";
+                const calculatedFromWorksheet = getCookie("calculated_from_worksheet");
+
+                if ( calculatedFromWorksheet && calculatedFromWorksheet == 'true') {
+          const totalRevenue = getCookie("totalRevenue");
+          
+
+
+          if (totalRevenue) {
+            setCookie("income_sole_prop", totalRevenue, 365);
+            setCookie("calculated_from_worksheet", "resolved", 365);
+          }
+
+
+
+                }
+
+
                 window.location.href = "/client/finance/summary.html";
               } else if (data.error) {
                 container.innerHTML = `
