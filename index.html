@@ -110,63 +110,60 @@
     <h1 style="max-width: 100%; color: white; font-family: 'Montserrat', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size:20px;">Empowering Thee</h1>
 
     <script>
-    const menuToggle = document.getElementById("menuToggle");
-    const dropdownMenu = document.getElementById("dropdownMenu");
+        const menuToggle = document.getElementById("menuToggle");
+        const dropdownMenu = document.getElementById("dropdownMenu");
 
-    menuToggle.addEventListener("click", () => {
-        menuToggle.classList.toggle("active");
-        dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
-    });
+        menuToggle.addEventListener("click", () => {
+            menuToggle.classList.toggle("active");
+            dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+        });
 
-    document.addEventListener("click", (event) => {
-        if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
-            dropdownMenu.style.display = "none";
-            menuToggle.classList.remove("active");
-        }
-    });
+        document.addEventListener("click", (event) => {
+            if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = "none";
+                menuToggle.classList.remove("active");
+            }
+        });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-            const words = document.querySelectorAll('.word');
-            const letterGroups = document.querySelectorAll('.letter-group');
-            const initialText = document.getElementById('initialText');
-            const fullWords = document.getElementById('fullWords');
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const letterGroups = document.querySelectorAll('.letter-group');
+                const words = document.querySelectorAll('.word');
+                const initialText = document.getElementById('initialText');
+                const fullWords = document.getElementById('fullWords');
 
-            // Initially show words
-            fullWords.classList.remove('hidden'); 
-            words.forEach(word => {
-                word.style.opacity = '1';
-                word.style.transform = 'translateY(0)'; 
-            });
-
-            // After a delay, start sliding letters to form INEXASLI
-            setTimeout(() => {
-                fullWords.style.display = 'none';  // Hide the full words
-                initialText.style.display = 'flex'; // Show initial text
-
-                // Slide letters from words to form INEXASLI
+                // Slide apart letter groups
                 letterGroups.forEach((group, index) => {
-                    const word = words[index];
-                    const firstLetters = word.textContent.slice(0, 2);
-
-                    group.textContent = firstLetters; // Set the text content of the group to the first two letters
-                    group.style.left = word.offsetLeft + 'px'; // Position group where the word was
-                    group.style.top = word.offsetTop + 'px';  // Match the vertical position
-                    group.style.position = 'absolute'; // Allow absolute positioning
-                    group.style.opacity = '0'; // Start invisible
-                    group.style.transform = 'translateY(0)'; // Ensure no initial translation
-
                     setTimeout(() => {
-                        // Animate the movement of the first two letters to their final position in INEXASLI
-                        group.style.transition = 'all 0.5s ease'; 
-                        group.style.opacity = '1';
-                        group.style.left = initialText.children[index].offsetLeft + 'px'; // Move to new position
-                        group.style.top = initialText.offsetTop + 'px';  // Align vertically with initial text
-                    }, index * 100); // Delay slightly for each group
-                });
-            }, 2000); // Wait 2 seconds before starting the slide animation
-        }, 1500); // Wait 1.5 seconds before showing the words (if needed for other animations)
-    });
-</script>
+                        group.classList.add('slide-out');
+                    }, index * 500);
+                }); 
+
+                // After sliding groups, show words
+                setTimeout(() => {
+                    initialText.style.display = 'none'; 
+                    fullWords.classList.remove('hidden'); 
+                    
+                    words.forEach((word, index) => {
+                        setTimeout(() => {
+                            word.style.opacity = '1';
+                            word.style.transform = 'translateY(0)'; 
+                        }, index * 100); 
+                    });
+                }, letterGroups.length * 500); // Wait for all groups to slide out
+
+                // After showing words, collapse back to INEXASLI
+                setTimeout(() => {
+                    fullWords.style.display = 'none';
+                    initialText.style.display = 'flex';
+                    letterGroups.forEach((group, index) => {
+                        setTimeout(() => {
+                            group.classList.remove('slide-out');
+                        }, index * 500);
+                    });
+                }, letterGroups.length * 500 + words.length * 100 + 1000); // Additional delay for the collapse animation
+            }, 1500); // Wait 1.5 seconds before starting animation
+        });
+    </script>
 </body>
 </html>
