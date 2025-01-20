@@ -109,7 +109,7 @@
 
     <h1 style="max-width: 100%; color: white; font-family: 'Montserrat', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size:20px;">Empowering Thee</h1>
 
-   <script>
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
             const letterGroups = document.querySelectorAll('.letter-group');
@@ -117,7 +117,7 @@
             const initialText = document.getElementById('initialText');
             const fullWords = document.getElementById('fullWords');
 
-            // Hide initial text and show full words
+            // Show full words first
             initialText.style.display = 'none';
             fullWords.style.display = 'block';
             
@@ -129,24 +129,28 @@
                 }, index * 100); // Stagger animation for each word
             });
 
-            // After showing words, collapse back to INEXASLI
+            // Transform into INEXASLI
             setTimeout(() => {
                 fullWords.style.display = 'none';
                 initialText.style.display = 'flex';
                 
-                // Animate back to grouped letters
-                letterGroups.forEach((group, index) => {
-                    setTimeout(() => {
-                        group.classList.remove('slide-out');
-                    }, index * 500);
+                // Here we assume you have 'letter-group' elements for each letter of INEXASLI
+                const letters = ['I', 'N', 'E', 'X', 'A', 'S', 'L', 'I'];
+                letters.forEach((letter, index) => {
+                    const group = letterGroups[index];
+                    if (group) {
+                        setTimeout(() => {
+                            group.style.opacity = '1';
+                            group.style.transform = 'translate(0, 0)'; // Adjust based on your CSS
+                        }, index * 200); // Stagger animation for each letter
+                    }
                 });
             }, words.length * 100 + 1000); // Wait for words to appear and then some extra time
 
         }, 1500); // Wait 1.5 seconds before starting animation
     });
 
-    // Assuming you still want the menu functionality, keep the following:
-
+    // Menu functionality remains unchanged
     const menuToggle = document.getElementById("menuToggle");
     const dropdownMenu = document.getElementById("dropdownMenu");
 
