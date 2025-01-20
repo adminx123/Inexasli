@@ -109,45 +109,58 @@
 
     <h1 style="max-width: 100%; color: white; font-family: 'Montserrat', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size:20px;">Empowering Thee</h1>
 
-  <script>
+ <script>
     document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
             const letterGroups = document.querySelectorAll('.letter-group');
-            const words = document.querySelectorAll('.word');
+            const words = ['INCOME', 'EXPENSE', 'ASSET', 'LIABILITY'];
             const initialText = document.getElementById('initialText');
             const fullWords = document.getElementById('fullWords');
+            const wordElements = fullWords.querySelectorAll('.word'); // Assuming each word has this class
 
-            // Show full words first
+            // Start with initialText hidden
             initialText.style.display = 'none';
             fullWords.style.display = 'block';
-            
-            // Animate in the words
-            words.forEach((word, index) => {
+
+            // Function to animate a single letter and its associated word
+            function animateLetterAndWord(index) {
+                if (index >= letterGroups.length) {
+                    // Animation complete, hide fullWords and show initialText
+                    fullWords.style.display = 'none';
+                    initialText.style.display = 'flex';
+                    return;
+                }
+
+                // Animate letter
+                const letterGroup = letterGroups[index];
+                letterGroup.style.opacity = '0';
+                letterGroup.style.transform = 'translateX(-50px)'; // Start off-screen
+                setTimeout(() => {
+                    letterGroup.style.transition = 'all 0.5s ease-in-out'; // Transition to make it smooth
+                    letterGroup.style.opacity = '1';
+                    letterGroup.style.transform = 'translateX(0)';
+                }, 0);
+
+                // Show associated word
+                const word = wordElements[index];
+                word.style.opacity = '0';
+                word.style.transform = 'translateY(20px)';
                 setTimeout(() => {
                     word.style.opacity = '1';
                     word.style.transform = 'translateY(0)';
-                }, index * 100); // Stagger animation for each word
-            });
+                    
+                    // Wait a bit, then hide word and move to next letter
+                    setTimeout(() => {
+                        word.style.opacity = '0';
+                        animateLetterAndWord(index + 1);
+                    }, 1000); // Show word for 1 second
+                }, 500); // Wait for letter to move into place
+            }
 
-            // Transform into INEXASLI
-            setTimeout(() => {
-                fullWords.style.display = 'none';
-                initialText.style.display = 'flex';
-                
-                // Here we assume you have 'letter-group' elements for each letter of INEXASLI
-                const letters = ['I', 'N', 'E', 'X', 'A', 'S', 'L', 'I'];
-                letters.forEach((letter, index) => {
-                    const group = letterGroups[index];
-                    if (group) {
-                        setTimeout(() => {
-                            group.style.opacity = '1';
-                            group.style.transform = 'translate(0, 0)'; // Adjust based on your CSS
-                        }, index * 200); // Stagger animation for each letter
-                    }
-                });
-            }, words.length * 100 + 1000); // Wait for words to appear and then some extra time
+            animateLetterAndWord(0);
 
         }, 1500); // Wait 1.5 seconds before starting animation
+
     });
 
     // Menu functionality remains unchanged
