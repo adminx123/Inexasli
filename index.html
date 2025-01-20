@@ -179,14 +179,8 @@
                 const initialText = document.getElementById('initialText');
                 const fullWords = document.getElementById('fullWords');
 
-                // Slide apart letters
-                letters.forEach((letter, index) => {
-                    setTimeout(() => {
-                        letter.classList.add('slide-out');
-                    }, index * 100);
-                });
-
-                // After sliding letters, show words
+                
+               // After sliding letters, show words
                 setTimeout(() => {
                     initialText.style.display = 'none'; // Hide initial text
                     fullWords.classList.remove('hidden'); // Show full words
@@ -198,7 +192,17 @@
                         }, index * 500); // Delay for each word's reveal
                     });
                 }, letters.length * 100); // Wait for all letters to slide out
-            }, 1500); // Wait 2 seconds before starting animation
+              
+              
+              // Slide apart letters
+                letters.forEach((letter, index) => {
+                    setTimeout(() => {
+                        letter.classList.add('slide-out');
+                    }, index * 100);
+                });
+
+               
+            }, 1500); // Wait 1.5 seconds before starting animation
         });
     </script>
   </body>
