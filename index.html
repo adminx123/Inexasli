@@ -109,61 +109,58 @@
 
     <h1 style="max-width: 100%; color: white; font-family: 'Montserrat', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size:20px;">Empowering Thee</h1>
 
-    <script>
-        const menuToggle = document.getElementById("menuToggle");
-        const dropdownMenu = document.getElementById("dropdownMenu");
+   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const letterGroups = document.querySelectorAll('.letter-group');
+            const words = document.querySelectorAll('.word');
+            const initialText = document.getElementById('initialText');
+            const fullWords = document.getElementById('fullWords');
 
-        menuToggle.addEventListener("click", () => {
-            menuToggle.classList.toggle("active");
-            dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
-        });
+            // Hide initial text and show full words
+            initialText.style.display = 'none';
+            fullWords.style.display = 'block';
+            
+            // Animate in the words
+            words.forEach((word, index) => {
+                setTimeout(() => {
+                    word.style.opacity = '1';
+                    word.style.transform = 'translateY(0)';
+                }, index * 100); // Stagger animation for each word
+            });
 
-        document.addEventListener("click", (event) => {
-            if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.style.display = "none";
-                menuToggle.classList.remove("active");
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                const letterGroups = document.querySelectorAll('.letter-group');
-                const words = document.querySelectorAll('.word');
-                const initialText = document.getElementById('initialText');
-                const fullWords = document.getElementById('fullWords');
-
-                // Slide apart letter groups
+            // After showing words, collapse back to INEXASLI
+            setTimeout(() => {
+                fullWords.style.display = 'none';
+                initialText.style.display = 'flex';
+                
+                // Animate back to grouped letters
                 letterGroups.forEach((group, index) => {
                     setTimeout(() => {
-                        group.classList.add('slide-out');
+                        group.classList.remove('slide-out');
                     }, index * 500);
-                }); 
+                });
+            }, words.length * 100 + 1000); // Wait for words to appear and then some extra time
 
-                // After sliding groups, show words
-                setTimeout(() => {
-                    initialText.style.display = 'none'; 
-                    fullWords.classList.remove('hidden'); 
-                    
-                    words.forEach((word, index) => {
-                        setTimeout(() => {
-                            word.style.opacity = '1';
-                            word.style.transform = 'translateY(0)'; 
-                        }, index * 100); 
-                    });
-                }, letterGroups.length * 500); // Wait for all groups to slide out
+        }, 1500); // Wait 1.5 seconds before starting animation
+    });
 
-                // After showing words, collapse back to INEXASLI
-                setTimeout(() => {
-                    fullWords.style.display = 'none';
-                    initialText.style.display = 'flex';
-                    letterGroups.forEach((group, index) => {
-                        setTimeout(() => {
-                            group.classList.remove('slide-out');
-                        }, index * 500);
-                    });
-                }, letterGroups.length * 500 + words.length * 100 + 1000); // Additional delay for the collapse animation
-            }, 1500); // Wait 1.5 seconds before starting animation
-        });
-    </script>
+    // Assuming you still want the menu functionality, keep the following:
+
+    const menuToggle = document.getElementById("menuToggle");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    menuToggle.addEventListener("click", () => {
+        menuToggle.classList.toggle("active");
+        dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.style.display = "none";
+            menuToggle.classList.remove("active");
+        }
+    });
+</script>
 </body>
 </html>
