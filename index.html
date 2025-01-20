@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>INEXASLI</title>
@@ -20,16 +20,16 @@
     <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
     <link rel="manifest" href="manifest.json" />
 
-  <style> 
-    body, html {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-    
-    .impact {
+    <style> 
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .impact {
             text-align: center;
         }
 
@@ -39,7 +39,7 @@
 
         .impact h1, .impact h2 {
             max-width: 90%;
-            margin: 0 auto; /* Center the h1 and h2 within the flex container */
+            margin: 0 auto; 
         }
 
         .impact h1 {
@@ -52,7 +52,7 @@
             color: #333;
         }
   
-   #animationContainer {
+        #animationContainer {
             font-family: Arial, sans-serif;
             font-size: 2em;
             display: flex;
@@ -61,7 +61,7 @@
             height: 100vh;
             color: #333;
             position: relative;
-            gap: 20px; /* Space between words */
+            gap: 20px;
         }
         .letter {
             transition: all 0.5s ease;
@@ -69,7 +69,7 @@
         .word {
             opacity: 0;
             transition: opacity 0.5s ease, transform 0.5s ease;
-            transform: translateY(20px); /* Start slightly below */
+            transform: translateY(20px);
         }
         .hidden {
             opacity: 0;
@@ -78,32 +78,24 @@
             transform: translateX(50px);
             opacity: 0;
         }
-  
-  
-  
-  
-  </style>
-  </head>
-  <body>
-    <!-- Hamburger Menu -->
+    </style>
+</head>
+<body>
     <div class="menu" id="menuToggle">
-      <div></div>
-      <div></div>
-      <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
-  <!-- Dropdown Menu -->
     <div class="dropdown" id="dropdownMenu">
-      <a href="mailto:support@inexasli.com">Contact</a>
+        <a href="mailto:support@inexasli.com">Contact</a>
     </div>
 
-
-   <div id="animationContainer">
+    <div id="animationContainer">
         <div id="initialText">
-  <span class="letter">I</span><span class="letter">N</span>
-  <span class="letter">E</span><span class="letter">X</span>
-  <span class="letter">A</span><span class="letter">S</span>
-  <span class="letter">L</span><span class="letter">I</span>
-
+            <span class="letter">I</span><span class="letter">N</span>
+            <span class="letter">E</span><span class="letter">X</span>
+            <span class="letter">A</span><span class="letter">S</span>
+            <span class="letter">L</span><span class="letter">I</span>
         </div>
      
         <div id="fullWords" class="hidden">
@@ -113,97 +105,64 @@
             <span class="word">LIability</span>
         </div>
     </div>
-    
-    <!-- <div class ="impact">
-<img src="images/newLogo.jpg" alt="Your Logo" style="display: inline-block; width: 50%;" /> -->
 
-    <br>
-      <br>
     <h1 style="max-width: 100%; color: white; font-family: 'Montserrat', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size:20px;">Empowering Thee</h1>
 
-
-    </div>
-
-    
     <script>
-      // Hamburger menu toggle
-      const menuToggle = document.getElementById("menuToggle");
-      const dropdownMenu = document.getElementById("dropdownMenu");
+        const menuToggle = document.getElementById("menuToggle");
+        const dropdownMenu = document.getElementById("dropdownMenu");
 
-      menuToggle.addEventListener("click", () => {
-        menuToggle.classList.toggle("active");
-        dropdownMenu.style.display =
-          dropdownMenu.style.display === "block" ? "none" : "block";
-      });
+        menuToggle.addEventListener("click", () => {
+            menuToggle.classList.toggle("active");
+            dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+        });
 
-      document.addEventListener("click", (event) => {
-        if (
-          !menuToggle.contains(event.target) &&
-          !dropdownMenu.contains(event.target)
-        ) {
-          dropdownMenu.style.display = "none";
-          menuToggle.classList.remove("active");
-        }
-      });
+        document.addEventListener("click", (event) => {
+            if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = "none";
+                menuToggle.classList.remove("active");
+            }
+        });
 
-      
-
-      // Function to handle password protection
-      function handlePasswordProtection(url) {
-        const password = prompt("Please enter the password for access:");
-        if (password === "xxxx") {
-          window.location.href = url;
-        } else {
-          alert("Incorrect password. Access denied.");
-        }
-      }
-
-   /*   // Event listener for the FHE element
-      const FHE = document.getElementById("FHE");
-      FHE.addEventListener("click", function (event) {
-        event.preventDefault();
-        handlePasswordProtection("xxxx.html");
-      });
-
-      const newElement = document.getElementById("ai");
-      newElement.addEventListener("click", function (event) {
-        event.preventDefault();
-        handlePasswordProtection("xxxx.html"); // Replace with the actual URL you want to redirect to
-      });
-*/
-
-              document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 const letters = document.querySelectorAll('.letter');
                 const words = document.querySelectorAll('.word');
                 const initialText = document.getElementById('initialText');
                 const fullWords = document.getElementById('fullWords');
 
-                
-               // After sliding letters, show words
-                setTimeout(() => {
-                    initialText.style.display = 'none'; // Hide initial text
-                    fullWords.classList.remove('hidden'); // Show full words
-                    
-                    words.forEach((word, index) => {
-                        setTimeout(() => {
-                            word.style.opacity = '1';
-                            word.style.transform = 'translateY(0)'; // Slide up to original position
-                        }, index * 100); // Delay for each word's reveal
-                    });
-                }, letters.length * 100); // Wait for all letters to slide out
-              
-              
-              // Slide apart letters
+                // Slide apart letters
                 letters.forEach((letter, index) => {
                     setTimeout(() => {
                         letter.classList.add('slide-out');
                     }, index * 500);
                 });
 
-               
+                // After sliding letters, show words
+                setTimeout(() => {
+                    initialText.style.display = 'none'; 
+                    fullWords.classList.remove('hidden'); 
+                    
+                    words.forEach((word, index) => {
+                        setTimeout(() => {
+                            word.style.opacity = '1';
+                            word.style.transform = 'translateY(0)'; 
+                        }, index * 100); 
+                    });
+                }, letters.length * 500); // Wait for all letters to slide out
+
+                // After showing words, collapse back to INEXASLI (this part is not in original code but added for completeness)
+                setTimeout(() => {
+                    fullWords.style.display = 'none';
+                    initialText.style.display = 'flex';
+                    letters.forEach((letter, index) => {
+                        setTimeout(() => {
+                            letter.classList.remove('slide-out');
+                        }, index * 500);
+                    });
+                }, letters.length * 500 + words.length * 100 + 1000); // An additional delay for the collapse animation
             }, 1500); // Wait 1.5 seconds before starting animation
         });
     </script>
-  </body>
+</body>
 </html>
