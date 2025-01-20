@@ -63,7 +63,8 @@
             position: relative;
             gap: 20px;
         }
-        .letter {
+        .letter-group {
+            display: inline-block;
             transition: all 0.5s ease;
         }
         .word {
@@ -92,10 +93,10 @@
 
     <div id="animationContainer">
         <div id="initialText">
-            <span class="letter">I</span><span class="letter">N</span>
-            <span class="letter">E</span><span class="letter">X</span>
-            <span class="letter">A</span><span class="letter">S</span>
-            <span class="letter">L</span><span class="letter">I</span>
+            <span class="letter-group">IN</span>
+            <span class="letter-group">EX</span>
+            <span class="letter-group">AS</span>
+            <span class="letter-group">LI</span>
         </div>
      
         <div id="fullWords" class="hidden">
@@ -126,19 +127,19 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
-                const letters = document.querySelectorAll('.letter');
+                const letterGroups = document.querySelectorAll('.letter-group');
                 const words = document.querySelectorAll('.word');
                 const initialText = document.getElementById('initialText');
                 const fullWords = document.getElementById('fullWords');
 
-                // Slide apart letters
-                letters.forEach((letter, index) => {
+                // Slide apart letter groups
+                letterGroups.forEach((group, index) => {
                     setTimeout(() => {
-                        letter.classList.add('slide-out');
+                        group.classList.add('slide-out');
                     }, index * 500);
                 });
 
-                // After sliding letters, show words
+                // After sliding groups, show words
                 setTimeout(() => {
                     initialText.style.display = 'none'; 
                     fullWords.classList.remove('hidden'); 
@@ -149,18 +150,18 @@
                             word.style.transform = 'translateY(0)'; 
                         }, index * 100); 
                     });
-                }, letters.length * 500); // Wait for all letters to slide out
+                }, letterGroups.length * 500); // Wait for all groups to slide out
 
-                // After showing words, collapse back to INEXASLI (this part is not in original code but added for completeness)
+                // After showing words, collapse back to INEXASLI
                 setTimeout(() => {
                     fullWords.style.display = 'none';
                     initialText.style.display = 'flex';
-                    letters.forEach((letter, index) => {
+                    letterGroups.forEach((group, index) => {
                         setTimeout(() => {
-                            letter.classList.remove('slide-out');
+                            group.classList.remove('slide-out');
                         }, index * 500);
                     });
-                }, letters.length * 500 + words.length * 100 + 1000); // An additional delay for the collapse animation
+                }, letterGroups.length * 500 + words.length * 100 + 1000); // Additional delay for the collapse animation
             }, 1500); // Wait 1.5 seconds before starting animation
         });
     </script>
