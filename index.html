@@ -110,74 +110,70 @@
     <h1 style="max-width: 100%; color: white; font-family: 'Montserrat', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size:20px;">Empowering Thee</h1>
 
  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-            const letterGroups = document.querySelectorAll('.letter-group');
-            const words = ['INCOME', 'EXPENSE', 'ASSET', 'LIABILITY'];
-            const initialText = document.getElementById('initialText');
-            const fullWords = document.getElementById('fullWords');
-            const wordElements = fullWords.querySelectorAll('.word'); // Assuming each word has this class
+ document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const words = ['INCOME', 'EXPENSE', 'ASSET', 'LIABILITY'];
+        const container = document.getElementById('animationContainer');
+        const finalWord = 'INEXASLI';
 
-            // Start with initialText hidden
-            initialText.style.display = 'none';
-            fullWords.style.display = 'block';
-
-            // Function to animate a single letter and its associated word
-            function animateLetterAndWord(index) {
-                if (index >= letterGroups.length) {
-                    // Animation complete, hide fullWords and show initialText
-                    fullWords.style.display = 'none';
-                    initialText.style.display = 'flex';
-                    return;
-                }
-
-                // Animate letter
-                const letterGroup = letterGroups[index];
-                letterGroup.style.opacity = '0';
-                letterGroup.style.transform = 'translateX(-50px)'; // Start off-screen
+        // Function to show a word
+        function showWord(word) {
+            const wordElement = document.createElement('div');
+            wordElement.textContent = word;
+            wordElement.style.opacity = '0';
+            wordElement.style.transition = 'opacity 0.5s';
+            container.appendChild(wordElement);
+            
+            setTimeout(() => {
+                wordElement.style.opacity = '1';
                 setTimeout(() => {
-                    letterGroup.style.transition = 'all 0.5s ease-in-out'; // Transition to make it smooth
-                    letterGroup.style.opacity = '1';
-                    letterGroup.style.transform = 'translateX(0)';
-                }, 0);
-
-                // Show associated word
-                const word = wordElements[index];
-                word.style.opacity = '0';
-                word.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    word.style.opacity = '1';
-                    word.style.transform = 'translateY(0)';
-                    
-                    // Wait a bit, then hide word and move to next letter
+                    wordElement.style.opacity = '0';
                     setTimeout(() => {
-                        word.style.opacity = '0';
-                        animateLetterAndWord(index + 1);
-                    }, 1000); // Show word for 1 second
-                }, 500); // Wait for letter to move into place
-            }
-
-            animateLetterAndWord(0);
-
-        }, 1500); // Wait 1.5 seconds before starting animation
-
-    });
-
-    // Menu functionality remains unchanged
-    const menuToggle = document.getElementById("menuToggle");
-    const dropdownMenu = document.getElementById("dropdownMenu");
-
-    menuToggle.addEventListener("click", () => {
-        menuToggle.classList.toggle("active");
-        dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
-    });
-
-    document.addEventListener("click", (event) => {
-        if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
-            dropdownMenu.style.display = "none";
-            menuToggle.classList.remove("active");
+                        container.removeChild(wordElement);
+                        if (word !== words[words.length - 1]) {
+                            showWord(words[words.indexOf(word) + 1]);
+                        } else {
+                            showFinalWord();
+                        }
+                    }, 1000); // Word visible for 1 second
+                }, 1000); // Word visible for 1 second
+            }, 100); // Small delay before showing
         }
-    });
+
+        // Function to show the final word
+        function showFinalWord() {
+            const finalWordElement = document.createElement('div');
+            finalWordElement.textContent = finalWord;
+            finalWordElement.style.opacity = '0';
+            finalWordElement.style.transition = 'opacity 0.5s';
+            container.appendChild(finalWordElement);
+            
+            setTimeout(() => {
+                finalWordElement.style.opacity = '1';
+            }, 100); // Small delay before showing
+        }
+
+        // Start animation
+        showWord(words[0]);
+
+    }, 1500); // Wait 1.5 seconds before starting animation
+});
+
+// Menu functionality (unchanged)
+const menuToggle = document.getElementById("menuToggle");
+const dropdownMenu = document.getElementById("dropdownMenu");
+
+menuToggle.addEventListener("click", () => {
+    menuToggle.classList.toggle("active");
+    dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+});
+
+document.addEventListener("click", (event) => {
+    if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.style.display = "none";
+        menuToggle.classList.remove("active");
+    }
+});
 </script>
 </body>
 </html>
