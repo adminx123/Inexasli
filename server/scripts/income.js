@@ -245,7 +245,35 @@ function updateSubregionDropdown() {
 regionDropdown.addEventListener("change", updateSubregionDropdown);
     
 function calculateAnnual(inputId, frequencyId) {
-        const input = parseFloat(document.getElementById(inputId).value) || 0;
+    const input = parseFloat(document.getElementById(inputId).value) || 0;
+
+    
+    if (inputId == 'income_sole_prop') {
+        console.log('we are here')
+        const calculatedFromWorksheet = getCookie("calculated_from_worksheet");
+
+        if (calculatedFromWorksheet == true) {
+            const totalRevenue = getCookie("totalRevenue"); 
+            console.log(totalRevenue)
+            console.log('calculatedFromWorksheet')
+
+            // const incomesole = getCookie('income_sole_prop')
+            if (totalRevenue && totalRevenue != 'annually' && !isNaN(parseFloat(totalRevenue))) {
+                if ( input != totalRevenue) {
+                    console.log(input)
+                    input = parseFloat(totalRevenue)
+                    console.log('changed to', input)
+        
+                }
+    
+            }
+        }
+
+        // console.log(totalRevenue)
+        // console.log(incomesole)
+       
+    }
+        
         const frequency = document.getElementById(frequencyId).value;
 
         switch (frequency) {
@@ -1354,6 +1382,8 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
             //   console.log('everything done since user paid')
             } else {
               selfEmploymentIncomeField.value = "";
+            //   setCookie("income_sole_prop", totalRevenue, 365);
+
               setCookie("calculated_from_worksheet", true, 365);
               selfEmploymentIncomeField.placeholder = "payment required";
             //   console.log('everything postponsed since user not paid')
@@ -1383,6 +1413,7 @@ setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
           document.querySelector("#income_sole_prop");
       
           selfEmploymentIncomeField.placeholder = "payment required";
+        //   selfEmploymentIncomeField.value = ''
         //   console.log('user has still not paid so everything is still postponsed')
          }
       });
