@@ -231,7 +231,7 @@ window.calculateNext = function () {
   window.location.href = 'expense.html';
 }    
 
-    function calculateAll() {
+    window.calculateAll = function () {
         
  calculateAssets();
  
