@@ -1,3 +1,5 @@
+import { hideShow, hideShowClass } from "./utils.js"
+
 const tabs = document.querySelectorAll('.tab')
 
 tabs.forEach(tab => {
@@ -393,17 +395,17 @@ function calculateGoal() {
 
 document.addEventListener('DOMContentLoaded', function() {
     // Changed to getElementsByClassName since you've got class names
-    var usaDiv = document.getElementsByClassName('usa-hide')[0];
-    var canDiv = document.getElementsByClassName('can-hide')[0];
+    // var usaDiv = document.getElementsByClassName('usa-hide')[0];
+    // var canDiv = document.getElementsByClassName('can-hide')[0];
 
     var regionDropdownValue = getCookie('RegionDropdown');
 
     if (regionDropdownValue === 'USA') {
-        if (usaDiv) usaDiv.style.display = 'block';
-        if (canDiv) canDiv.style.display = 'none';
+        hideShowClass('can', 'hide')
+        hideShow('usa-hide','show');
     } else if (regionDropdownValue === 'CAN') {
-        if (usaDiv) usaDiv.style.display = 'none';
-        if (canDiv) canDiv.style.display = 'block';
+        hideShow('usa-hide', 'hide');
+        hideShowClass('can','show');
     }
 });
 
