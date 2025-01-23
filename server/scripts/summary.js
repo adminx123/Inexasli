@@ -403,9 +403,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (regionDropdownValue === 'USA') {
         hideShowClass('can', 'hide')
         hideShow('usa-hide','show');
+        hideShowClass('usa','show');
     } else if (regionDropdownValue === 'CAN') {
         hideShow('usa-hide', 'hide');
         hideShowClass('can','show');
+        hideShowClass('usa','hide');
     }
 });
 
