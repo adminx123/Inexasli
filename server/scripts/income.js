@@ -138,10 +138,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (this.value === 'USA') {
             
             setCookie("RegionDropdown", this.value, 365)
-            setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
+            // setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
         } else if (this.value === 'CAN') {
             setCookie("RegionDropdown", this.value, 365)
-            setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
+            // setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
 
 
         }
@@ -159,11 +159,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function handleSubRegionChange() {
+        setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
+    }
     // Call handleRegionChange function to handle initial state
     handleRegionChange.call(document.getElementById('RegionDropdown'));
 
     // Add event listener to the dropdown for change in value
     document.getElementById('RegionDropdown').addEventListener('change', handleRegionChange);
+    document.getElementById('SubregionDropdown').addEventListener('change', handleSubRegionChange);
 });
 
 
@@ -1171,6 +1175,15 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('RegionDropdown').value = getCookie('RegionDropdown') == 'annually'? "NONE": getCookie('RegionDropdown');
     document.getElementById('RegionDropdown').dispatchEvent(new Event('change')); // Manually trigger change event
 document.getElementById('SubregionDropdown').value = getCookie('SubregionDropdown');
+    
+    if (getCookie('RegionDropdown') == 'USA' && !subregionMap.USA.includes(getCookie('SubregionDropdown'))) {
+        document.getElementById('SubregionDropdown').value = subregionMap.USA[0]
+
+
+    } else if (getCookie('RegionDropdown') == 'CAN' && !subregionMap.CAN.includes(getCookie('SubregionDropdown'))) {
+        document.getElementById('SubregionDropdown').value = subregionMap.CAN[0]
+    }
+
     
 document.getElementById('income_salary_wages').value = getCookie('income_salary_wages');
 document.getElementById('income_tips').value = getCookie('income_tips');
