@@ -1,22 +1,29 @@
-function calculateAnnual(id, frequency) {
-    const amount = parseFloat(document.getElementById(id).value) || 0;
-    const freq = document.getElementById(frequency).value;
-    let annualAmount = amount;
+function updateFrequency(expense) {
+    const daysInput = document.getElementById(`${expense}_days`);
+    const select = document.getElementById(`expenses_${expense}_frequency`);
     
-    if (freq === 'daily') {
-        let duration = parseInt(prompt("Enter the number of days for the trip:"), 10);
-        annualAmount *= duration;
+    if (select.value === "days") {
+        daysInput.style.display = "inline-block";
+    } else {
+        daysInput.style.display = "none";
     }
-    
-    document.getElementById(id + '_annual').innerText = `$${annualAmount.toFixed(2)}`;
 }
 
 function calculateTotal() {
     let total = 0;
-    const expenseFields = ['flights', 'car_rental', 'uber', 'transit', 'hotels', 'camping_fees', 'dining', 'grocery', 'entertainment_tickets', 'entertainment_alcohol'];
-    
-    expenseFields.forEach(field => {
-        total += parseFloat(document.getElementById(`expenses_${field}_annual`).innerText.replace('$', '')) || 0;
+    const expenseTypes = ['flights', 'car_rental', 'uber', 'transit', 'hotels', 'camping_fees', 'dining', 'grocery', 'entertainment_tickets', 'entertainment_alcohol'];
+
+    expenseTypes.forEach(type => {
+        const amount = parseFloat(document.getElementById(`expenses_${type}`).value) || 0;
+        const frequencySelect = document.getElementById(`expenses_${type}_frequency`);
+        let days = 1; // Default to one-time for simplicity
+
+        if (frequencySelect.value === "days") {
+            days = parseInt(document.getElementById(`${type}_days`).value) || 1;
+        }
+
+        total += amount * days;
+        document.getElementById(`expenses_${type}_total`).innerText = `$${amount * days}`;
     });
 
     document.getElementById('total_cost_display').innerText = `$${total.toFixed(2)}`;
