@@ -1,12 +1,13 @@
 function updateFrequency(expense) {
-    const daysInput = document.getElementById(`${expense}_days`);
-    const select = document.getElementById(`expenses_${expense}_frequency`);
-    
-    if (select.value === "days") {
-        daysInput.style.display = "inline-block";
-    } else {
-        daysInput.style.display = "none";
+    const amount = parseFloat(document.getElementById(`expenses_${expense}`).value) || 0;
+    const frequency = document.getElementById(`expenses_${expense}_frequency`).value;
+    let days = 1;
+
+    if (frequency !== "one-time") {
+        days = parseInt(frequency);
     }
+
+    document.getElementById(`expenses_${expense}_total`).innerText = `$${(amount * days).toFixed(2)}`;
 }
 
 function calculateTotal() {
@@ -15,15 +16,10 @@ function calculateTotal() {
 
     expenseTypes.forEach(type => {
         const amount = parseFloat(document.getElementById(`expenses_${type}`).value) || 0;
-        const frequencySelect = document.getElementById(`expenses_${type}_frequency`);
-        let days = 1; // Default to one-time for simplicity
-
-        if (frequencySelect.value === "days") {
-            days = parseInt(document.getElementById(`${type}_days`).value) || 1;
-        }
+        const frequency = document.getElementById(`expenses_${type}_frequency`).value;
+        let days = frequency === "one-time" ? 1 : parseInt(frequency);
 
         total += amount * days;
-        document.getElementById(`expenses_${type}_total`).innerText = `$${amount * days}`;
     });
 
     document.getElementById('total_cost_display').innerText = `$${total.toFixed(2)}`;
