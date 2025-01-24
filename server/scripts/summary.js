@@ -393,23 +393,23 @@ function calculateGoal() {
 });
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Changed to getElementsByClassName since you've got class names
-    // var usaDiv = document.getElementsByClassName('usa-hide')[0];
-    // var canDiv = document.getElementsByClassName('can-hide')[0];
+// document.addEventListener('DOMContentLoaded', function() {
+//     // Changed to getElementsByClassName since you've got class names
+//     // var usaDiv = document.getElementsByClassName('usa-hide')[0];
+//     // var canDiv = document.getElementsByClassName('can-hide')[0];
 
-    var regionDropdownValue = getCookie('RegionDropdown');
+//     var regionDropdownValue = getCookie('RegionDropdown');
 
-    if (regionDropdownValue === 'USA') {
-        hideShowClass('can', 'hide')
-        hideShow('usa-hide','show');
-        hideShowClass('usa','show');
-    } else if (regionDropdownValue === 'CAN') {
-        hideShow('usa-hide', 'hide');
-        hideShowClass('can','show');
-        hideShowClass('usa','hide');
-    }
-});
+//     if (regionDropdownValue === 'USA') {
+//         hideShowClass('can', 'hide')
+//         hideShow('usa-hide','show');
+//         hideShowClass('usa','show');
+//     } else if (regionDropdownValue === 'CAN') {
+//         hideShow('usa-hide', 'hide');
+//         hideShowClass('can','show');
+//         hideShowClass('usa','hide');
+//     }
+// });
 
 
 
