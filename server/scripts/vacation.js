@@ -17,40 +17,66 @@ function updateFrequency(expense) {
 
 function calculateTotal() {
     let total = 0;
+    let breakdown = '';  // This will hold the breakdown HTML
     const expenseTypes = [
         'flights', 'car', 'uber', 'transit', 'bike', 
         'hotels', 'camping', 
         'dining', 'grocery', 
         'tickets', 'alcohol', 'gambling', 'rental',
-        'insurance', 'sim', 'luggage'
+        'insurance', 'sim', 'luggage_fees'  // Updated from luggage to luggage_fees
     ];
 
-    // Loop through each expense type and calculate the total
     expenseTypes.forEach(type => {
-        const amount = parseFloat(document.getElementById(`expenses_${type}`).value) || 0;
-        const frequencySelect = document.getElementById(`expenses_${type}_frequency`);
-        let days = 1;
+        // Get the input element for the expense
+        const inputElement = document.getElementById(`expenses_${type}`);
+        
+        if (inputElement) {
+            let amount = parseFloat(inputElement.value) || 0;
+            
+            // Get the frequency select element
+            const frequencySelect = document.getElementById(`expenses_${type}_frequency`);
+            let days = 1;  // Default to 1 day if no frequency
 
-        // Check if a frequency select element exists
-        if (frequencySelect) {
-            const frequency = frequencySelect.value;
-            // If frequency is "one-time", set days to 1, else parse the frequency
-            if (frequency === "one-time") {
-                days = 1; // Don't multiply for one-time
-            } else {
-                days = parseInt(frequency); // Multiply by the selected frequency
+            if (frequencySelect) {
+                const frequency = frequencySelect.value;
+                days = frequency === "one-time" ? 1 : parseInt(frequency);
             }
-        }
 
-        // Accumulate the total amount based on frequency
-        if (days === 1) {
-            total += amount;  // For "one-time", add the entered amount
+            // Calculate total for the current expense
+            const expenseTotal = amount * days;
+            total += expenseTotal;
+
+            // Create the breakdown item
+            breakdown += `<li>${type.charAt(0).toUpperCase() + type.slice(1).replace('_', ' ')}: $${expenseTotal.toFixed(2)} (${days} day${days > 1 ? 's' : ''})</li>`;
         } else {
-            total += amount * days;  // For other frequencies, multiply by days
+            console.warn(`Input element with id 'expenses_${type}' is missing.`);
         }
     });
 
+    // Log the total to verify the calculation
+    console.log("Total calculated: ", total);
+
     // Update the total cost display
-    document.getElementById('total_cost_display').innerText = `$${total.toFixed(2)}`;
-    document.getElementById('totalCost').classList.remove('hidden');
+    const totalCostDisplay = document.getElementById('total_cost_display');
+    if (totalCostDisplay) {
+        totalCostDisplay.innerText = `$${total.toFixed(2)}`;
+    }
+
+    // Make sure total cost div is visible
+    const totalCostDiv = document.getElementById('totalCost');
+    if (totalCostDiv) {
+        totalCostDiv.classList.remove('hidden');
+    }
+
+    // Show the breakdown
+    const expenseBreakdownDiv = document.getElementById('expenseBreakdown');
+    if (expenseBreakdownDiv) {
+        expenseBreakdownDiv.classList.remove('hidden');
+    }
+
+    // Update the breakdown list
+    const expenseList = document.getElementById('expense_list');
+    if (expenseList) {
+        expenseList.innerHTML = breakdown;  // Add the breakdown HTML
+    }
 }
