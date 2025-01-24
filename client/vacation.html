@@ -21,14 +21,14 @@
     <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
     <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
     <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
-    <link rel="manifest" href="/manifest.json">
+   
     
     <link rel="stylesheet" href="/style/styles.css">
 </head>
 
 <body>
     <a href="https://inexasli.com/client/finance/intro.html">
-        <img src="../../images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
+        <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
     </a>
     <h2 style="text-align: center;font-size: 16px; color: white;">Vacation Expense Calculator</h2>
 
@@ -38,141 +38,414 @@
 
     <p>Step 1: Enter expense amounts for your trip:</p>
 
-    <!-- Transportation -->
-    <div class="containerround">
-        <h3>Transportation</h3>
-        <div class="row">
-            <label for="expenses_flights">Flights:</label>
-            <input type='number' inputmode="numeric" id="expenses_flights">
-            <select id="expenses_flights_frequency" onchange="updateFrequency('flights')">
-                <option value="one-time">One-time</option>
-                <option value="days">Days</option>
-            </select>
-            <input type='number' id="flights_days" style="display:none;" min="1" placeholder="Number of Days">
-            <span id="expenses_flights_total"></span>
-        </div>
-
-        <div class="row">
-            <label for="expenses_car_rental">Car Rental:</label>
-            <input type='number' inputmode="numeric" id="expenses_car_rental">
-            <select id="expenses_car_rental_frequency" onchange="updateFrequency('car_rental')">
-                <option value="one-time">One-time</option>
-                <option value="days">Days</option>
-            </select>
-            <input type='number' id="car_rental_days" style="display:none;" min="1" placeholder="Number of Days">
-            <span id="expenses_car_rental_total"></span>
-        </div>
-
-        <div class="row">
-            <label for="expenses_uber">Uber:</label>
-            <input type='number' inputmode="numeric" id="expenses_uber">
-            <select id="expenses_uber_frequency" onchange="updateFrequency('uber')">
-                <option value="one-time">One-time</option>
-                <option value="days">Days</option>
-            </select>
-            <input type='number' id="uber_days" style="display:none;" min="1" placeholder="Number of Days">
-            <span id="expenses_uber_total"></span>
-        </div>
-
-        <div class="row">
-            <label for="expenses_transit">Public Transit:</label>
-            <input type='number' inputmode="numeric" id="expenses_transit">
-            <select id="expenses_transit_frequency" onchange="updateFrequency('transit')">
-                <option value="one-time">One-time</option>
-                <option value="days">Days</option>
-            </select>
-            <input type='number' id="transit_days" style="display:none;" min="1" placeholder="Number of Days">
-            <span id="expenses_transit_total"></span>
-        </div>
+   <!-- Transportation -->
+   <div class="containerround">
+    <h3>Transportation</h3>
+    <div class="row">
+        <label for="expenses_flights">Flights:</label>
+        <input type='number' inputmode="numeric" id="expenses_flights">
+        <select id="expenses_flights_frequency" onchange="updateFrequency('flights')">
+            <option value="one-time">One-time</option>
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_flights_total"></span>
     </div>
 
-    <!-- Accommodation -->
-    <div class="containerround">
-        <h3>Accommodation</h3>
-        <div class="row">
-            <label for="expenses_hotels">Hotels:</label>
-            <input type='number' inputmode="numeric" id="expenses_hotels">
-            <select id="expenses_hotels_frequency" onchange="updateFrequency('hotels')">
-                <option value="one-time">One-time</option>
-                <option value="days">Days</option>
-            </select>
-            <input type='number' id="hotels_days" style="display:none;" min="1" placeholder="Number of Days">
-            <span id="expenses_hotels_total"></span>
-        </div>
-
-        <div class="row">
-            <label for="expenses_camping_fees">Camping Fees:</label>
-            <input type='number' inputmode="numeric" id="expenses_camping_fees">
-            <select id="expenses_camping_fees_frequency" onchange="updateFrequency('camping_fees')">
-                <option value="one-time">One-time</option>
-                <option value="days">Days</option>
-            </select>
-            <input type='number' id="camping_fees_days" style="display:none;" min="1" placeholder="Number of Days">
-            <span id="expenses_camping_fees_total"></span>
-        </div>
+    <div class="row">
+        <label for="expenses_car">Car Rental:</label>
+        <input type='number' inputmode="numeric" id="expenses_car">
+        <select id="expenses_car_frequency" onchange="updateFrequency('car')">
+            <option value="one-time">One-time</option>
+            
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_car_total"></span>
     </div>
 
-    <!-- Dining & Groceries -->
-    <div class="containerround">
-        <h3>Dining & Groceries</h3>
-        <div class="row">
-            <label for="expenses_dining">Dining Out:</label>
-            <input type='number' inputmode="numeric" id="expenses_dining">
-            <select id="expenses_dining_frequency" onchange="updateFrequency('dining')">
-                <option value="one-time">One-time</option>
-                <option value="days">Days</option>
-            </select>
-            <input type='number' id="dining_days" style="display:none;" min="1" placeholder="Number of Days">
-            <span id="expenses_dining_total"></span>
-        </div>
-
-        <div class="row">
-            <label for="expenses_grocery">Grocery (Additional for trip):</label>
-            <input type='number' inputmode="numeric" id="expenses_grocery">
-            <select id="expenses_grocery_frequency" onchange="updateFrequency('grocery')">
-                <option value="one-time">One-time</option>
-                <option value="days">Days</option>
-            </select>
-            <input type='number' id="grocery_days" style="display:none;" min="1" placeholder="Number of Days">
-            <span id="expenses_grocery_total"></span>
-        </div>
+    <div class="row">
+        <label for="expenses_uber">Uber:</label>
+        <input type='number' inputmode="numeric" id="expenses_uber">
+        <select id="expenses_uber_frequency" onchange="updateFrequency('uber')">
+            <option value="one-time">One-time</option>
+            
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_uber_total"></span>
     </div>
 
-    <!-- Entertainment -->
-    <div class="containerround">
-        <h3>Entertainment</h3>
-        <div class="row">
-            <label for="expenses_entertainment_tickets">Entertainment Tickets:</label>
-            <input type='number' inputmode="numeric" id="expenses_entertainment_tickets">
-            <select id="expenses_entertainment_tickets_frequency" onchange="updateFrequency('entertainment_tickets')">
-                <option value="one-time">One-time</option>
-                <option value="days">Days</option>
-            </select>
-            <input type='number' id="entertainment_tickets_days" style="display:none;" min="1" placeholder="Number of Days">
-            <span id="expenses_entertainment_tickets_total"></span>
-        </div>
-
-        <div class="row">
-            <label for="expenses_entertainment_alcohol">Entertainment Alcohol:</label>
-            <input type='number' inputmode="numeric" id="expenses_entertainment_alcohol">
-            <select id="expenses_entertainment_alcohol_frequency" onchange="updateFrequency('entertainment_alcohol')">
-                <option value="one-time">One-time</option>
-                <option value="days">Days</option>
-            </select>
-            <input type='number' id="entertainment_alcohol_days" style="display:none;" min="1" placeholder="Number of Days">
-            <span id="expenses_entertainment_alcohol_total"></span>
-        </div>
+    <div class="row">
+        <label for="expenses_transit">Public Transit:</label>
+        <input type='number' inputmode="numeric" id="expenses_transit">
+        <select id="expenses_transit_frequency" onchange="updateFrequency('transit')">
+            <option value="one-time">One-time</option>
+           
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_transit_total"></span>
     </div>
+
+    <div class="row">
+        <label for="expenses_bike">Bike Rental:</label>
+        <input type='number' inputmode="numeric" id="expenses_bike">
+        <select id="expenses_bike_frequency" onchange="updateFrequency('bike')">
+            <option value="one-time">One-time</option>
+            
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_bike_total"></span>
+    </div>
+</div>
+
+<!-- Accommodation -->
+<div class="containerround">
+    <h3>Accommodation</h3>
+    <div class="row">
+        <label for="expenses_hotels">Hotels:</label>
+        <input type='number' inputmode="numeric" id="expenses_hotels">
+        <select id="expenses_hotels_frequency" onchange="updateFrequency('hotels')">
+            <option value="one-time">One-time</option>
+            
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_hotels_total"></span>
+    </div>
+
+    <div class="row">
+        <label for="expenses_camping_fees">Camping Fees:</label>
+        <input type='number' inputmode="numeric" id="expenses_camping">
+        <select id="expenses_camping_fees_frequency" onchange="updateFrequency('camping')">
+            <option value="one-time">One-time</option>
+            
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_camping_fees_total"></span>
+    </div>
+</div>
+
+<!-- Dining & Groceries -->
+<div class="containerround">
+    <h3>Dining & Groceries</h3>
+    <div class="row">
+        <label for="expenses_dining">Dining Out:</label>
+        <input type='number' inputmode="numeric" id="expenses_dining">
+        <select id="expenses_dining_frequency" onchange="updateFrequency('dining')">
+            <option value="one-time">One-time</option>
+            
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_dining_total"></span>
+    </div>
+
+    <div class="row">
+        <label for="expenses_grocery">Grocery (Additional for trip):</label>
+        <input type='number' inputmode="numeric" id="expenses_grocery">
+        <select id="expenses_grocery_frequency" onchange="updateFrequency('grocery')">
+            <option value="one-time">One-time</option>
+            
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_grocery_total"></span>
+    </div>
+</div>
+
+<!-- Entertainment -->
+<div class="containerround">
+    <h3>Entertainment</h3>
+    <div class="row">
+        <label for="expenses_entertainment_tickets">Tickets:</label>
+        <input type='number' inputmode="numeric" id="expenses_tickets">
+        <select id="expenses_entertainment_tickets_frequency" onchange="updateFrequency('tickets')">
+            <option value="one-time">One-time</option>
+            
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_entertainment_tickets_total"></span>
+    </div>
+
+    <div class="row">
+        <label for="expenses_entertainment_alcohol">Alcohol:</label>
+        <input type='number' inputmode="numeric" id="expenses_alcohol">
+        <select id="expenses_entertainment_alcohol_frequency" onchange="updateFrequency('alcohol')">
+            <option value="one-time">One-time</option>
+            
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_entertainment_alcohol_total"></span>
+    </div>
+
+    <div class="row">
+        <label for="expenses_entertainment_gambling">Gambling:</label>
+        <input type='number' inputmode="numeric" id="expenses_gambling">
+        <select id="expenses_entertainment_gambling_frequency" onchange="updateFrequency('gambling')">
+            <option value="one-time">One-time</option>
+         
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_entertainment_gambling_total"></span>
+    </div>
+
+    <div class="row">
+        <label for="expenses_entertainment_rental">Rental:</label>
+        <input type='number' inputmode="numeric" id="expenses_rental">
+        <select id="expenses_entertainment_rental_frequency" onchange="updateFrequency('rental')">
+            <option value="one-time">One-time</option>
+            
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_entertainment_rental_total"></span>
+    </div>
+</div>
+
+<div class="containerround">
+    <h3>Essentials</h3>
+    <div class="row">
+        <label for="expenses_essential_insurance">Travel Insurance:</label>
+        <input type='number' inputmode="numeric" id="expenses_insurance">
+        <select id="expenses_essential_insurance_frequency" onchange="updateFrequency('insurance')">
+            <option value="one-time">One-time</option>
+          
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_essential_insurance_total"></span>
+    </div>
+
+    <div class="row">
+        <label for="expenses_essential_sim">New SIM/Data Plan:</label>
+        <input type='number' inputmode="numeric" id="expenses_essential_sim">
+        <select id="expenses_essential_sim_frequency" onchange="updateFrequency('sim')">
+            <option value="one-time">One-time</option>
+           
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_essential_sim_total"></span>
+    </div>
+
+    <div class="row">
+        <label for="expenses_luggage">Excessive Luggage Fees:</label>
+        <input type='number' inputmode="numeric" id="expenses_luggage_fees">
+        <select id="expenses_luggage_fees_frequency" onchange="updateFrequency('luggage_fees')">
+            <option value="one-time">One-time</option>
+         
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <option value="6">6 Days</option>
+            <option value="7">7 Days</option>
+            <option value="8">8 Days</option>
+            <option value="9">9 Days</option>
+            <option value="10">10 Days</option>
+            <option value="11">11 Days</option>
+            <option value="12">12 Days</option>
+            <option value="13">13 Days</option>
+            <option value="14">14 Days</option>
+        </select>
+        <span id="expenses_luggage_fees_total"></span>
+    </div>
+</div>
 
     <div class="containerround">
         <button onclick="calculateTotal()" class="nav-btn"><i class='bx nav-inner bx-right-arrow-alt'></i> Calculate Total</button>
+   
+        <div id="totalCost" class="hidden">
+            <h4 style="text-align: center;">Total Estimated Vacation Cost: <span id="total_cost_display"></span></h4>
+        </div>
+
+        <!-- Expense Breakdown Section -->
+<div class="containerround hidden" id="expenseBreakdown">
+    <h3>Expense Breakdown</h3>
+    <ul id="expense_list"></ul>
+</div>
+
+   
     </div>
 
-    <div id="totalCost" class="hidden">
-        <h4 style="text-align: center;">Total Estimated Vacation Cost: <span id="total_cost_display"></span></h4>
-    </div>
 
-    <script type="module" src="../../server/scripts/vacation.js"></script>
-    <script src="/server/scripts/toolTip.js"></script>
+        
+
+   
+ <script  src="/server/scripts/vacation.js"></script>
+    <script src="/server/scripts/toolTip.js"></script> 
+    
 </body>
 </html>
