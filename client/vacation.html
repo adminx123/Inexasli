@@ -1,7 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ... (all head content remains unchanged) ... -->
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacation Expenses</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- Extended list for icon placements -->
+    <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
+    <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
+    <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
+    <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
+    <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
+    <link rel="manifest" href="/manifest.json">
+    
+    <link rel="stylesheet" href="/style/styles.css">
 </head>
 
 <body>
@@ -30,11 +52,117 @@
             <span id="expenses_flights_total"></span>
         </div>
 
-        <!-- ... (other transportation items follow similar pattern) ... -->
+        <div class="row">
+            <label for="expenses_car_rental">Car Rental:</label>
+            <input type='number' inputmode="numeric" id="expenses_car_rental">
+            <select id="expenses_car_rental_frequency" onchange="updateFrequency('car_rental')">
+                <option value="one-time">One-time</option>
+                <option value="days">Days</option>
+            </select>
+            <input type='number' id="car_rental_days" style="display:none;" min="1" placeholder="Number of Days">
+            <span id="expenses_car_rental_total"></span>
+        </div>
+
+        <div class="row">
+            <label for="expenses_uber">Uber:</label>
+            <input type='number' inputmode="numeric" id="expenses_uber">
+            <select id="expenses_uber_frequency" onchange="updateFrequency('uber')">
+                <option value="one-time">One-time</option>
+                <option value="days">Days</option>
+            </select>
+            <input type='number' id="uber_days" style="display:none;" min="1" placeholder="Number of Days">
+            <span id="expenses_uber_total"></span>
+        </div>
+
+        <div class="row">
+            <label for="expenses_transit">Public Transit:</label>
+            <input type='number' inputmode="numeric" id="expenses_transit">
+            <select id="expenses_transit_frequency" onchange="updateFrequency('transit')">
+                <option value="one-time">One-time</option>
+                <option value="days">Days</option>
+            </select>
+            <input type='number' id="transit_days" style="display:none;" min="1" placeholder="Number of Days">
+            <span id="expenses_transit_total"></span>
+        </div>
     </div>
 
-    <!-- Accommodation, Dining & Groceries, Entertainment -->
-    <!-- ... (each category follows the same pattern as Transportation) ... -->
+    <!-- Accommodation -->
+    <div class="containerround">
+        <h3>Accommodation</h3>
+        <div class="row">
+            <label for="expenses_hotels">Hotels:</label>
+            <input type='number' inputmode="numeric" id="expenses_hotels">
+            <select id="expenses_hotels_frequency" onchange="updateFrequency('hotels')">
+                <option value="one-time">One-time</option>
+                <option value="days">Days</option>
+            </select>
+            <input type='number' id="hotels_days" style="display:none;" min="1" placeholder="Number of Days">
+            <span id="expenses_hotels_total"></span>
+        </div>
+
+        <div class="row">
+            <label for="expenses_camping_fees">Camping Fees:</label>
+            <input type='number' inputmode="numeric" id="expenses_camping_fees">
+            <select id="expenses_camping_fees_frequency" onchange="updateFrequency('camping_fees')">
+                <option value="one-time">One-time</option>
+                <option value="days">Days</option>
+            </select>
+            <input type='number' id="camping_fees_days" style="display:none;" min="1" placeholder="Number of Days">
+            <span id="expenses_camping_fees_total"></span>
+        </div>
+    </div>
+
+    <!-- Dining & Groceries -->
+    <div class="containerround">
+        <h3>Dining & Groceries</h3>
+        <div class="row">
+            <label for="expenses_dining">Dining Out:</label>
+            <input type='number' inputmode="numeric" id="expenses_dining">
+            <select id="expenses_dining_frequency" onchange="updateFrequency('dining')">
+                <option value="one-time">One-time</option>
+                <option value="days">Days</option>
+            </select>
+            <input type='number' id="dining_days" style="display:none;" min="1" placeholder="Number of Days">
+            <span id="expenses_dining_total"></span>
+        </div>
+
+        <div class="row">
+            <label for="expenses_grocery">Grocery (Additional for trip):</label>
+            <input type='number' inputmode="numeric" id="expenses_grocery">
+            <select id="expenses_grocery_frequency" onchange="updateFrequency('grocery')">
+                <option value="one-time">One-time</option>
+                <option value="days">Days</option>
+            </select>
+            <input type='number' id="grocery_days" style="display:none;" min="1" placeholder="Number of Days">
+            <span id="expenses_grocery_total"></span>
+        </div>
+    </div>
+
+    <!-- Entertainment -->
+    <div class="containerround">
+        <h3>Entertainment</h3>
+        <div class="row">
+            <label for="expenses_entertainment_tickets">Entertainment Tickets:</label>
+            <input type='number' inputmode="numeric" id="expenses_entertainment_tickets">
+            <select id="expenses_entertainment_tickets_frequency" onchange="updateFrequency('entertainment_tickets')">
+                <option value="one-time">One-time</option>
+                <option value="days">Days</option>
+            </select>
+            <input type='number' id="entertainment_tickets_days" style="display:none;" min="1" placeholder="Number of Days">
+            <span id="expenses_entertainment_tickets_total"></span>
+        </div>
+
+        <div class="row">
+            <label for="expenses_entertainment_alcohol">Entertainment Alcohol:</label>
+            <input type='number' inputmode="numeric" id="expenses_entertainment_alcohol">
+            <select id="expenses_entertainment_alcohol_frequency" onchange="updateFrequency('entertainment_alcohol')">
+                <option value="one-time">One-time</option>
+                <option value="days">Days</option>
+            </select>
+            <input type='number' id="entertainment_alcohol_days" style="display:none;" min="1" placeholder="Number of Days">
+            <span id="expenses_entertainment_alcohol_total"></span>
+        </div>
+    </div>
 
     <div class="containerround">
         <button onclick="calculateTotal()" class="nav-btn"><i class='bx nav-inner bx-right-arrow-alt'></i> Calculate Total</button>
