@@ -124,11 +124,11 @@ var ANNUALTAXABLEINCOME;
 
     
 document.addEventListener('DOMContentLoaded', function() {
-    var USAHIDE = document.querySelector('.USAHIDE');
-    
+    // var USAHIDE = document.querySelector('.usa-hide');
+    // console.log(USAHIDE)
     // Initially hide the field
     // USAHIDE.style.display = 'none';
-    hideShowClass('USAHIDE', 'hide')
+    // hideShowClass('usa-hide', 'hide')
     // USAHIDE.style.backgroundColor = 'red';
 
 
@@ -138,9 +138,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (this.value === 'USA') {
             
             setCookie("RegionDropdown", this.value, 365)
+            hideShowClass('usa-hide', 'show')
             // setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
         } else if (this.value === 'CAN') {
             setCookie("RegionDropdown", this.value, 365)
+            hideShowClass('usa-hide', 'hide')
+
             // setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
 
 
