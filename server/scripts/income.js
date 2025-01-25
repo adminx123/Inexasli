@@ -333,28 +333,33 @@ function calculateAnnual(inputId, frequencyId) {
     ANNUALINCOME = annualIncomeSum;
 
     // Calculate annual taxable sum with conditions for gambling winnings
-    incomeFields.forEach(field => {
-        const [inputId, frequencyId] = field;
-        let income = calculateAnnual(inputId, frequencyId);
+incomeFields.forEach(field => {
+    const [inputId, frequencyId] = field;
+    let income = calculateAnnual(inputId, frequencyId);
 
-        // Exclude gambling winnings for Canada
-        if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_gambling_winnings') {
-            return; // Skip this iteration for Canada
-        }
+    // Exclude gambling winnings for Canada
+    if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_gambling_winnings') {
+        return; // Skip this iteration for Canada
+    }
 
-        // For USA or other regions, include gambling winnings
-        if (inputId === 'income_capital_gains_losses') {
-            // Adjust for Canada
-            if (document.getElementById('RegionDropdown').value === 'CAN') {
-                income *= 0.5;
-            } else {
-                // For USA or other regions, we include it fully
-                annualTaxableSum += income;
-            }
+    // Exclude tax-free income
+    if (inputId === 'income_tax_free_income') {
+        return; // Skip this iteration for tax-free income
+    }
+
+    // For USA or other regions, include gambling winnings
+    if (inputId === 'income_capital_gains_losses') {
+        // Adjust for Canada
+        if (document.getElementById('RegionDropdown').value === 'CAN') {
+            income *= 0.5;
         } else {
-            annualTaxableSum += income; // Include all other income types
+            // For USA or other regions, we include it fully
+            annualTaxableSum += income;
         }
-    });
+    } else {
+        annualTaxableSum += income; // Include all other income types
+    }
+});
 
     // Apply standard deduction for USA
     if (document.getElementById('RegionDropdown').value === 'USA') {
