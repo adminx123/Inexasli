@@ -17,8 +17,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
     <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
     <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg />
-    <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg"/>
     <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
     <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
     <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
@@ -31,23 +31,35 @@
 <body>
 
 
-<a href="https://inexasli.com/client/finance/intro.html">
-    <img src="../../images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
+<a href="/calculator/budget/intro.html">
+    <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
 </a>
 
 	<h2 style="text-align: center;font-size: 16px; color: white;">The Four Pillars of Finance</h2>
 	
-            <div class="tab-container">
-                <a href="/client/finance/income.html" class="tab" data-location="income" onclick="calculateAll();">Income</a>
-                <a href="/client/finance/expense.html" class="tab" data-location="expense" onclick="calculateAll();">Expense</a>
-                <a href="/client/finance/asset.html" class="tab" data-location="asset" onclick="calculateAll();">Asset</a>
-		    
-              <a href="/client/finance/liability" class="tooltip tab " data-location="liability" data-tooltip="Money you owe to others, which you need to pay back. Examples include loans, mortgages, or credit card debts. It's like a promise you've made to pay someone in the future.">
-  Liability
-  <span class="tooltip-content"></span>
-</a> 
-                    </div>
-	<div class="container">
+            
+     <div class="tab-container">
+		
+        <a href="/calculator/budget/income.html" class="tooltip tab " data-location="income" data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket.">
+            Income
+            <span class="tooltip-content"></span>  
+        <a href="/calculator/budget/expense.html" class="tooltip tab " data-location="expense" data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn.">
+          Expense
+          <span class="tooltip-content"></span>
+      
+       <a href="/calculator/budget/asset.html" class="tooltip tab " data-location="asset" data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection.">
+      Asset
+      <span class="tooltip-content"></span>
+      </a>
+      
+      <a href="/calculator/budget/liability.html" class="tooltip tab " data-location="liability" data-tooltip="Money you owe to others, which you need to pay back. Examples include loans, mortgages, or credit card debts. It's like a promise you've made to pay someone in the future.">
+        Liability
+        <span class="tooltip-content"></span>
+
+            </div>
+    
+    
+    <div class="container">
 		
  <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="A type of debt where the borrower receives a fixed amount of money upfront, which they repay over time through regular payments until the loan is fully paid off. Once the loan is settled, the account is closed, and the borrower must apply for a new loan if they need more funds.">
     Non-Revolving Liabilities<span class="tooltip-content"></span>
@@ -87,8 +99,8 @@
     <input type='number' inputmode="numeric"  id="liabilities_personal_debt">
     <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities_personal_debt_percent" inputmode="numeric">
 </div>
-
-	</div>
+</div>
+	
 
 	<div class="containerround">
 
@@ -139,6 +151,8 @@
 	</div>
 
 
+
+
     <div class = "hidden">
 
          <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
@@ -148,12 +162,9 @@
 
 	
 
-	<script src="../../server/scripts/liability.js" type="module"></script>
+	<script src="/server/scripts/liability.js" type="module"></script>
     
     <script src="/server/scripts/toolTip.js"></script>
 
 </body>
-
-    
-
 </html>

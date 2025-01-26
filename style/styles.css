@@ -508,7 +508,7 @@ button {
   max-width: 800px; /* Maximum width of the container */
   margin: 0px auto; /* Center horizontally with auto margins */
   border-radius: 0 0 5px 5px; /* Rounded corners */
-  box-shadow: 10px 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
+  box-shadow: 10px 10px 10px rgba(80, 80, 80, 0.454); /* Shadow effect */
   text-align: left; /* Text alignment inside the container */
   display: flex;
   padding: 0 15px;
@@ -525,7 +525,7 @@ button {
   max-width: 800px; /* Maximum width of the container */
   margin: 10px auto; /* Center horizontally with auto margins */
   border-radius: 5px;  /* Rounded corners */
-  box-shadow: 10px 10px 10px rgba(0.2, 0.2, 0.2, 0.2); /* Shadow effect */
+  box-shadow: 10px 10px 10px rgba(174, 173, 173, 0.2); /* Shadow effect */
   text-align: left; /* Text alignment inside the container */
   display: flex;
   padding: 0 15px;
