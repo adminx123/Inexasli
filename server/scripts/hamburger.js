@@ -20,27 +20,26 @@
       });
 
       
-/*
-      // Function to handle password protection
-      function handlePasswordProtection(url) {
+
+       // Function to handle password protection
+       function handlePasswordProtection(url) {
         const password = prompt("Please enter the password for access:");
-        if (password === "incomeiq") {
-          window.location.href = url;
+        if (password === "iq") {
+            window.location.href = url; // Redirect to the protected page
         } else {
-          alert("Incorrect password. Access denied.");
+            alert("Incorrect password. Access denied.");
         }
-      }
+    }
 
-      // Event listener for the FHE element
-      const FHE = document.getElementById("FHE");
-      FHE.addEventListener("click", function (event) {
-        event.preventDefault();
-        handlePasswordProtection("xxxx.html");
-      });
+    // Add event listeners to password-protected links
+    const budgetWorksheetLink = document.getElementById("budgetworksheet");
+    budgetWorksheetLink.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default link behavior
+        handlePasswordProtection(budgetWorksheetLink.href); // Pass the link's URL
+    });
 
-      const newElement = document.getElementById("ai");
-      newElement.addEventListener("click", function (event) {
-        event.preventDefault();
-        handlePasswordProtection("ai/form.html"); // Replace with the actual URL you want to redirect to
-      });
-*/
+    const vacationEstimateLink = document.getElementById("vacationestimate");
+    vacationEstimateLink.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default link behavior
+        handlePasswordProtection(vacationEstimateLink.href); // Pass the link's URL
+    });

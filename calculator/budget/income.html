@@ -36,21 +36,36 @@
 </a>
     
  <h2 style="text-align: center;font-size: 16px; color: white;">The Four Pillars of Finance</h2>
-      <div class="tab-container">
-	      
-         <a href="/client/finance/income.html" class="tooltip tab " data-location="income" data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket.">
-  Income
+     
+
+
+
+ <div class="tab-container">
+		
+    <a href="/calculator/budget/income.html" class="tooltip tab " data-location="income" data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket.">
+        Income
+        <span class="tooltip-content"></span>  
+    <a href="/calculator/budget/expense.html" class="tooltip tab " data-location="expense" data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn.">
+      Expense
+      <span class="tooltip-content"></span>
+  
+   <a href="/calculator/budget/asset.html" class="tooltip tab " data-location="asset" data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection.">
+  Asset
   <span class="tooltip-content"></span>
-</a>
-	      
-        <a href="/client/finance/expense.html" class="tab" data-location="expense" onclick="calculateAll();">Expense</a>
-       <a href="/client/finance/asset.html" class="tab" data-location="asset" onclick="calculateAll();">Asset</a>
-        <a href="/client/finance/liability.html" class="tab" data-location="liability" onclick="calculateAll();">Liability</a>
-            </div>
+  </a>
+  
+    <a href="/calculator/budget/liability.html" class="tab" data-location="liability" onclick="calculateAll();">Liability</a>
+  
+        </div>
+
+
+ 
+ 
        
+
+
 	       <div class="container">
 		       
-    
    <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Where you're legally considered to live for tax purposes.">
     Tax Residency<span class="tooltip-content"></span>
 </h2>   
@@ -521,14 +536,14 @@ Medicare taxes fund the Medicare program, covering hospital stays, skilled nursi
 
 <div id="ROI-modal" class="roi-modal">
     <div class="modal-content" id="ROI-modal-content">
-        <iframe src="/client/finance/business/ROI.html" height="100%" width="100%" frameborder="0"></iframe>
+        <iframe src="/calculator/budget/ROI.html" height="100%" width="100%" frameborder="0"></iframe>
     </div>
 </div>
 
 
 
 
-<script src="../../server/scripts/income.js" type="module"></script>
+<script src="/server/scripts/income.js" type="module"></script>
 <script src="/server/scripts/toolTip.js"></script>
 <script src="/server/scripts/hideShow.js"></script>
 </body>

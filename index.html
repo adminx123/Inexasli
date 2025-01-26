@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>INEXASLI</title>
     <link rel="stylesheet" href="/style/styles.css">
-    <!-- this is an extended list of places icon could be needed -->
+    <!-- Icon links -->
     <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
     <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
@@ -20,170 +20,78 @@
     <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
     <link rel="manifest" href="manifest.json" />
 
-
-
-    <style> 
+    <style>
         body, html {
             height: 100%;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-        
-        .impact {
-            text-align: center;
+            background-color: #000; /* Black background */
         }
 
-        .impact img {
-            display: inline-block;
+        /* Inline flex container to align elements */
+        .inline-container {
+            display: inline-flex;
+            align-items: baseline; /* Align text to the baseline */
+            gap: 0; /* No gap between elements */
         }
 
-        .impact h1, .impact h2 {
-            max-width: 90%;
-            margin: 0 auto; 
-        }
-
-        .impact h1 {
-            color: white;
-        }
-
-        .impact h2 {
-            font-size: 11px;
-            font-family: 'Helvetica', sans-serif;
-            color: #333;
-        }
-  
-        #animationContainer {
+        #fadeInText {
             font-family: Arial, sans-serif;
-            font-size: 2em;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-            position: relative;
-            gap: 20px;
+            font-size: 40px; /* Larger font size */
+            font-weight: bold;
+            color: white; /* White text color */
+            text-transform: uppercase;
         }
-        .letter-group {
-            display: inline-block;
-            transition: all 0.5s ease;
-        }
-        .word {
-            opacity: 0;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            transform: translateY(20px);
-        }
-        .hidden {
-            opacity: 0;
-        }
-        .slide-out {
-            transform: translateX(50px);
-            opacity: 0;
+
+        h1 {
+            color: rgb(49, 49, 49);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 20px;
+            margin: 0; /* Remove default margin */
+            opacity: 0; /* Start hidden */
+            transition: opacity 2s ease; /* Smooth fade-in transition */
         }
     </style>
 </head>
 <body>
-
-   
-
     <div class="menu" id="menuToggle">
         <div></div>
         <div></div>
         <div></div>
     </div>
     <div class="dropdown" id="dropdownMenu">
+        <a href="/client/finance/intro.html" id="budgetworksheet">Budget Worksheet</a>
+   
+    
+        <a href="/client/finance/vacation.html" id="vacationestimate">Vacation Estimate</a>
+    
+
         <a href="mailto:support@inexasli.com">Contact</a>
     </div>
 
-    <div id="animationContainer" class="hidden">
-        <div id="initialText">
-            <span class="letter-group">IN</span>
-            <span class="letter-group">EX</span>
-            <span class="letter-group">AS</span>
-            <span class="letter-group">LI</span>
-        </div>
-     
-        <div id="fullWords" class="hidden">
-            <span class="word">IN</span>
-            <span class="word">EX</span>
-            <span class="word">AS</span>
-            <span class="word">LI</span>
-        </div>
-       
+
+
+    
+    <!-- Inline container to hold both elements -->
+    <div class="inline-container">
+        <div id="fadeInText">INEXASLI</div>
+        <h1 id="empoweringThee">Empowering Thee</h1>
     </div>
 
-    <h1 style="max-width: 100%; color: white; font-family: 'Montserrat', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; font-size:20px;">Empowering Thee</h1>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const empoweringThee = document.getElementById('empoweringThee');
+                empoweringThee.style.opacity = '1'; // Fade in the text
+            }, 500); // Start the fade-in after 0.5 seconds
+        });
+    </script>
 
-
-
- <script>
- document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        const words = ['INCOME', 'EXPENSE', 'ASSET', 'LIABILITY'];
-        const container = document.getElementById('animationContainer');
-        const finalWord = 'INEXASLI';
-
-        // Function to show a word
-        function showWord(word) {
-            const wordElement = document.createElement('div');
-            wordElement.textContent = word;
-            wordElement.style.opacity = '0';
-            wordElement.style.transition = 'opacity 0.5s';
-            container.appendChild(wordElement);
-            
-            setTimeout(() => {
-                wordElement.style.opacity = '1';
-                setTimeout(() => {
-                    wordElement.style.opacity = '0';
-                    setTimeout(() => {
-                        container.removeChild(wordElement);
-                        if (word !== words[words.length - 1]) {
-                            showWord(words[words.indexOf(word) + 1]);
-                        } else {
-                            showFinalWord();
-                        }
-                    }, 1000); // Word visible for 1 second
-                }, 1000); // Word visible for 1 second
-            }, 100); // Small delay before showing
-        }
-
-        // Function to show the final word
-        function showFinalWord() {
-            const finalWordElement = document.createElement('div');
-            finalWordElement.textContent = finalWord;
-            finalWordElement.style.opacity = '0';
-            finalWordElement.style.transition = 'opacity 0.5s';
-            container.appendChild(finalWordElement);
-            
-            setTimeout(() => {
-                finalWordElement.style.opacity = '1';
-            }, 100); // Small delay before showing
-        }
-
-        // Start animation
-        showWord(words[0]);
-
-    }, 1500); // Wait 1.5 seconds before starting animation
-});
-
-// Menu functionality (unchanged)
-const menuToggle = document.getElementById("menuToggle");
-const dropdownMenu = document.getElementById("dropdownMenu");
-
-menuToggle.addEventListener("click", () => {
-    menuToggle.classList.toggle("active");
-    dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
-});
-
-document.addEventListener("click", (event) => {
-    if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
-        dropdownMenu.style.display = "none";
-        menuToggle.classList.remove("active");
-    }
-});
-
-
-</script>
+<script src="/server/scripts/hamburger.js"></script>
 </body>
 </html>
