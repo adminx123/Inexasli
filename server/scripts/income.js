@@ -1327,7 +1327,7 @@ function deleteCookies() {
     
 window.calculateNext = function () {
     calculateAll();
-window.location.href = '../finance/expense.html';
+window.location.href = '/calculator/budget/expense.html';
 }   
 
    window.calculateAll = function () {
