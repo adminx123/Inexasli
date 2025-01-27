@@ -1,7 +1,7 @@
 {
   "name": "INEXASLI",
   "short_name": "INEXASLI",
-  "start_url": "https://inexasli.com/client/finance/intro.html", 
+  "start_url": "https://inexasli.com/calculator/budget/intro.html", 
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#000000",
