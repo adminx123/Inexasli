@@ -217,7 +217,7 @@ const isPartner = getCookie('liabilityspousecheckbox') == 'checked'
       
       window.calculateNext = function () {
       calculateAll();
-      window.location.href = '/calculator/budget/summary.html';
+      window.location.href = '/calculator/budget/sumary.html';
     }
     
       window.calculateBack = function () {
