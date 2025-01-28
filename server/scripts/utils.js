@@ -6,7 +6,7 @@ window.closeWarning = function () {
 };
 
 
-export function displayWarning(content = 'kindly add text needed in function call') {
+export function displayWarning(content = 'No changes made.') {
     
 
     const warning = `
