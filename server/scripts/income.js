@@ -1256,12 +1256,13 @@ function handleUSAResident() {
 
 
 
-document.querySelector('#cookie-delete').addEventListener('click', () => {
-    deleteCookies()
-})
+document.querySelector('#cookie-delete-link').addEventListener('click', (event) => {
+    event.preventDefault();  // Prevent the link's default behavior
+    deleteCookies();         // Trigger the cookie deletion function
+});
 
 function deleteCookies() {
-    // First, display the warning using displayWarning from utils.js
+    // First, display the warning using displayWarning from utils.js (assuming this function exists)
     displayWarning();
 
     // Ask the user for confirmation before proceeding
@@ -1271,41 +1272,38 @@ function deleteCookies() {
         console.log("Cookie deletion canceled.");
         return; // If the user cancels, stop the function
     }
-    const cookies = document.cookie.split(";");
 
+    // Retrieve cookies and delete them
+    const cookies = document.cookie.split(";");
     const paths = ["/", "/client/finance"];
-    const domains = [window.location.hostname]; 
+    const domains = [window.location.hostname];
 
     cookies.forEach(cookie => {
         const cookieName = cookie.split("=")[0].trim();
 
-        if (cookies.length == 1 && cookie.includes('authenticated')) {
-            return
-        }
-        
-
+        // Skip the 'authenticated' cookie
         if (cookieName === "authenticated") {
-            return
-        } else {
-            var expires = "";
+            return;
+        }
 
-        
-            var date = new Date();
-            date.setTime(date.getTime());
-            expires = "; expires=" + date.toUTCString();
+        // Delete the cookie by setting its expiration date to the past
+        let expires = "";
+        const date = new Date();
+        date.setTime(date.getTime() - 1); // Set the cookie's expiration to the past
+        expires = "; expires=" + date.toUTCString();
 
-            paths.forEach(path => {
-                domains.forEach(domain => {
-                    document.cookie = cookieName + "=" + encodeURIComponent( 0) + expires + "; path=/; SameSite=Strict; Secure";
-                });
+        paths.forEach(path => {
+            domains.forEach(domain => {
+                document.cookie = cookieName + "=; " + expires + "; path=" + path + "; domain=" + domain + "; SameSite=Strict; Secure";
             });
-        }  ;
-
+        });
     });
 
+    // Reload the page to apply changes
     document.location.reload();
-    return
 }
+
+
 
 
 
