@@ -35,7 +35,7 @@ document.querySelectorAll('.dropdown a').forEach(link => {
     }
     
     // Password protection logic for certain links (e.g., Vacation, Personal)
-    const protectedLinks = ["vacation", "personal"]; // IDs of links to protect
+    const protectedLinks = ["vacation", "personal", "home"]; // IDs of links to protect
     if (protectedLinks.includes(link.id)) {
       event.preventDefault(); // Prevent link navigation
       const password = prompt("Enter the password to access this page:");
