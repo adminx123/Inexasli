@@ -40,7 +40,7 @@ document.querySelectorAll('.dropdown a').forEach(link => {
       event.preventDefault(); // Prevent link navigation
       const password = prompt("Enter the password to access this page:");
       
-      if (password === "yourPasswordHere") {  // Replace with your password
+      if (password === "iq") {  // Replace with your password
         window.location.href = link.href;  // Navigate to the link if password is correct
       } else {
         alert("Incorrect password! Access denied.");
@@ -48,3 +48,24 @@ document.querySelectorAll('.dropdown a').forEach(link => {
     }
   });
 });
+
+
+/* <div class="menu" id="menuToggle">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    
+    <div class="dropdown" id="dropdownMenu">
+       
+       <!-- Main Category: Contact -->
+       <a href="mailto:support@inexasli.com" id="contact" class="menu-item">CONTACT</a> 
+
+        <!-- Main Category: Calculations -->
+        <a href="#" id="calculations" class="menu-item">CALCULATE</a>
+        
+        <!-- Sub-Menu under Calculations -->
+        <div class="submenu" id="calculationsMenu" >
+            <a href="/calculator/vacation/vacation.html" id="vacation">Vacation</a>
+            <a href="/calculator/budget/intro.html" id="personal">Personal</a>
+        </div> */
