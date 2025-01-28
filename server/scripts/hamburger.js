@@ -1,45 +1,41 @@
+// Hamburger menu toggle
+const menuToggle = document.getElementById("menuToggle");
+const dropdownMenu = document.getElementById("dropdownMenu");
+const calculations = document.getElementById("calculations");
+const calculationsMenu = document.getElementById("calculationsMenu");
 
- // Hamburger menu toggle
-      const menuToggle = document.getElementById("menuToggle");
-      const dropdownMenu = document.getElementById("dropdownMenu");
+menuToggle.addEventListener("click", () => {
+  menuToggle.classList.toggle("active");
+  dropdownMenu.classList.toggle("show");
+});
 
-      menuToggle.addEventListener("click", () => {
-        menuToggle.classList.toggle("active");
-        dropdownMenu.style.display =
-          dropdownMenu.style.display === "block" ? "none" : "block";
-      });
+// Toggle active class for CALCULATE to show submenu
+calculations.addEventListener("click", (event) => {
+  event.preventDefault(); // Prevent default behavior
+  calculations.classList.toggle("active"); // Toggle the active class
+});
 
-      document.addEventListener("click", (event) => {
-        if (
-          !menuToggle.contains(event.target) &&
-          !dropdownMenu.contains(event.target)
-        ) {
-          dropdownMenu.style.display = "none";
-          menuToggle.classList.remove("active");
-        }
-      });
+// Close dropdown when clicking outside
+document.addEventListener("click", (event) => {
+  if (
+    !menuToggle.contains(event.target) &&
+    !dropdownMenu.contains(event.target)
+  ) {
+    dropdownMenu.classList.remove("show");
+    menuToggle.classList.remove("active");
+  }
+});
 
-      
-
-       // Function to handle password protection
-       function handlePasswordProtection(url) {
-        const password = prompt("Please enter the password for access:");
-        if (password === "iq") {
-            window.location.href = url; // Redirect to the protected page
-        } else {
-            alert("Incorrect password. Access denied.");
-        }
+// Prevent default behavior for other links but allow mailto
+document.querySelectorAll('.dropdown a').forEach(link => {
+  link.addEventListener("click", (event) => {
+    // If the link is a mailto, allow it to open
+    if (link.href.includes("mailto:")) {
+      return; // Do not prevent mailto links
     }
-
-    // Add event listeners to password-protected links
-    const budgetWorksheetLink = document.getElementById("budgetworksheet");
-    budgetWorksheetLink.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent default link behavior
-        handlePasswordProtection(budgetWorksheetLink.href); // Pass the link's URL
-    });
-
-    const vacationEstimateLink = document.getElementById("vacationestimate");
-    vacationEstimateLink.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent default link behavior
-        handlePasswordProtection(vacationEstimateLink.href); // Pass the link's URL
-    });
+    
+    // Prevent default behavior for other links (like vacation or personal)
+    event.preventDefault();
+    // You can implement your logic here for other links like password protection or toggling submenu
+  });
+});
