@@ -34,8 +34,17 @@ document.querySelectorAll('.dropdown a').forEach(link => {
       return; // Do not prevent mailto links
     }
     
-    // Prevent default behavior for other links (like vacation or personal)
-    event.preventDefault();
-    // You can implement your logic here for other links like password protection or toggling submenu
+    // Password protection logic for certain links (e.g., Vacation, Personal)
+    const protectedLinks = ["vacation", "personal"]; // IDs of links to protect
+    if (protectedLinks.includes(link.id)) {
+      event.preventDefault(); // Prevent link navigation
+      const password = prompt("Enter the password to access this page:");
+      
+      if (password === "yourPasswordHere") {  // Replace with your password
+        window.location.href = link.href;  // Navigate to the link if password is correct
+      } else {
+        alert("Incorrect password! Access denied.");
+      }
+    }
   });
 });
