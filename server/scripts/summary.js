@@ -1,4 +1,4 @@
-import { hideShow, hideShowClass } from "./utils.js"
+import { hideShow, hideShowClass } from "./utils.js";
 
 const tabs = document.querySelectorAll('.tab')
 
