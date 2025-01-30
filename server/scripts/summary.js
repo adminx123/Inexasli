@@ -393,23 +393,70 @@ function calculateGoal() {
 });
 
 
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Changed to getElementsByClassName since you've got class names
-//     // var usaDiv = document.getElementsByClassName('usa-hide')[0];
-//     // var canDiv = document.getElementsByClassName('can-hide')[0];
+ // Function to get the value from a span by its ID
+ function getValueById(id) {
+    return parseFloat(document.getElementById(id).textContent);
+}
 
-//     var regionDropdownValue = getCookie('RegionDropdown');
+// Define black and white patterns
+const patterns = [
+    { pattern: 'horizontal-line', foreground: 'black', background: 'white' },
+    { pattern: 'vertical-line', foreground: 'black', background: 'white' },
+    { pattern: 'diagonal-line', foreground: 'black', background: 'white' },
+    { pattern: 'grid', foreground: 'black', background: 'white' },
+    { pattern: 'zigzag', foreground: 'black', background: 'white' },
+    { pattern: 'dot', foreground: 'black', background: 'white' },
+    { pattern: 'checkerboard', foreground: 'black', background: 'white' },
+    { pattern: 'brick', foreground: 'black', background: 'white' }
+];
 
-//     if (regionDropdownValue === 'USA') {
-//         hideShowClass('can', 'hide')
-//         hideShow('usa-hide','show');
-//         hideShowClass('usa','show');
-//     } else if (regionDropdownValue === 'CAN') {
-//         hideShow('usa-hide', 'hide');
-//         hideShowClass('can','show');
-//         hideShowClass('usa','hide');
-//     }
-// });
+// Data for the pie chart
+const data = {
+    labels: ['ESSENTIAL', 'DISCRETIONARY', 'HOUSING', 'TRANSPORTATION', 'DEPENDANT', 'DEBT', 'tax_sum', 'ANNUALGOVERNMENTOBLIGATIONS'],
+    datasets: [{
+        label: 'Expenses',
+        data: [
+            getValueById('ESSENTIAL'),
+            getValueById('DISCRETIONARY'),
+            getValueById('HOUSING'),
+            getValueById('TRANSPORTATION'),
+            getValueById('DEPENDANT'),
+            getValueById('DEBT'),
+            getValueById('tax_sum'),
+            getValueById('ANNUALGOVERNMENTOBLIGATIONS')
+        ],
+        backgroundColor: patterns.map(p => p), // Apply patterns
+        borderColor: 'black', // Border color for slices
+        borderWidth: 1
+    }]
+};
+
+// Configuration for the pie chart
+const config = {
+    type: 'pie',
+    data: data,
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Expense Distribution'
+            },
+            pattern: {
+                enabled: true // Enable the pattern plugin
+            }
+        }
+    },
+};
+
+// Create the pie chart
+const myPieChart = new Chart(
+    document.getElementById('myPieChart'),
+    config
+);
 
 
 
