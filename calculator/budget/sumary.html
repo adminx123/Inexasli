@@ -495,37 +495,7 @@ tabs.forEach(tab => {
 })
 
 
-function deleteCookies() {
-    const cookies = document.cookie.split(";");
 
-    const paths = ["/", "/client/finance"];
-    const domains = [window.location.hostname]; 
-
-    cookies.forEach(cookie => {
-        const cookieName = cookie.split("=")[0].trim();
-        
-
-        if (cookieName === "authenticated") {
-            return
-        } else {
-            var expires = "";
-
-        
-            var date = new Date();
-            date.setTime(date.getTime());
-            expires = "; expires=" + date.toUTCString();
-
-            paths.forEach(path => {
-                domains.forEach(domain => {
-                    document.cookie = cookieName + "=" + encodeURIComponent( 0) + expires + "; path=/; SameSite=Strict; Secure";
-                });
-            });
-        }  ;
-
-    });
-
-    document.location.reload();
-}
 
     const paid = getCookie("authenticated");
 
@@ -569,84 +539,6 @@ function getCookie(name) {
     
     return cookieValue === '' ? '0' : cookieValue;
 }
-
-
-document.addEventListener('DOMContentLoaded', function() {
-function updateOnChange(){    
-
-
-
-
-let DISPOSABLEINCOME;
-
-if (getCookie('RegionDropdown') === 'USA') {
-    DISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
-        parseFloat(getCookie('ANNUALEXPENSESUM')) -
-        parseFloat(getCookie('TOTALMEDICARE')) -
-        parseFloat(getCookie('TOTALSOCIALSECURITY')) -
-        parseFloat(getCookie('TOTALTAXCG')) -
-        parseFloat(getCookie('ANNUALTAX'));
-} else if (getCookie('RegionDropdown') === 'CAN') {
-    DISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
-        parseFloat(getCookie('ANNUALEXPENSESUM')) -
-        parseFloat(getCookie('ANNUALEI')) -
-        parseFloat(getCookie('ANNUALCPP')) -
-        parseFloat(getCookie('ANNUALTAX'));
-} else {
-    DISPOSABLEINCOME = 0
-}
-
-// Update HTML element with the calculated value
-document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOME.toFixed(2);
-
-
-document.getElementById('annual_income_sum').textContent = " $" + parseFloat(getCookie('ANNUALINCOME')).toFixed(2);
-
-
-document.getElementById('annual_expense_sum').textContent = " $" + parseFloat(getCookie('ANNUALEXPENSESUM')).toFixed(2);
-
-
-document.getElementById('tax_sum').textContent = " $" + parseFloat((getCookie('ANNUALTAX'))).toFixed(2);
-
-
- 
-     
-let ANNUALGOVERNMENTOBLIGATIONS;
-
-    if (getCookie('RegionDropdown') === 'USA') {
-    ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('TOTALSOCIALSECURITY')) +
-        parseFloat(getCookie('TOTALMEDICARE'));
-} else if (getCookie('RegionDropdown') === 'CAN') {
-    ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('ANNUALCPP')) +
-        parseFloat(getCookie('ANNUALEI'))  ;
-} else {
-    ANNUALGOVERNMENTOBLIGATIONS = 0
-}
-
-// Update HTML element with the calculated value
-document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
-
-  
-
-    NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
-    document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
-
-     const annualIncomeSpan = document.getElementById('ANNUALINCOME');
-        if (annualIncomeSpan) {
-            let annualIncome = getCookie('ANNUALINCOME');
-            // Here we assume getCookie for ANNUALINCOME already handles frequency conversion
-            annualIncomeSpan.textContent = '$' + annualIncome;
-        }
-
-  } 
-  
-  updateOnChange();
-  
-
-
-     
-});
-
 
 
 
