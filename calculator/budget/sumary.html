@@ -475,165 +475,272 @@
 
 
 
+          <script src="https://js.stripe.com/v3/" async ></script>
 
-<script src="https://js.stripe.com/v3/" async ></script>
-
-<script >
-  const tabs = document.querySelectorAll('.tab')
-
-tabs.forEach(tab => {
-    const dataL = tab.getAttribute('data-location')
-    const location = document.location.pathname
-    
-
-    if (location.includes(dataL)) {
-
-        tab.classList.add('active')
-    }
-})
-
-
-
-
-    const paid = getCookie("authenticated");
-
-
-    if (paid == "paid") {
-        window.location.href = "/calculator/budget/summary.html";
-
-  } else {
-    document.body.style.display = 'initial'
-  }
-
-
-
-    
-function getCookie1(name) {
-    const value1 = `; ${document.cookie}`;
-    const parts1 = value1.split(`; ${name}=`);
-    let cookieValue1 = parts1.length === 2 ? decodeURIComponent(parts1.pop().split(';').shift()) : '';
-    
-    return cookieValue1 === '' ? '0' : cookieValue1;
-}
-
-    
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    let cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
-    
-    // Get the selected frequency from the dropdown
-    const frequencyDropdown = document.getElementById('frequency');
-    const selectedFrequency = frequencyDropdown.value;
-
-    // Convert the annual amount based on the selected frequency, if applicable
-    if (selectedFrequency !== 'annually' && !isNaN(cookieValue)) {
-        if (selectedFrequency === 'monthly') {
-            cookieValue /= 12;
-        } else if (selectedFrequency === 'weekly') {
-            cookieValue /= 52;
-        }
-    }
-    
-    return cookieValue === '' ? '0' : cookieValue;
-}
-
-
-
-// payment scripts
-const lambda =
-  "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
-const publicKey =
-  "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
-
-  const payForm = document.querySelector("#payment-form");
-  
-  
-  payForm.addEventListener("submit", (e) => {
-    const stripe = Stripe(publicKey);
-    console.log('function hit ', e)
-      e.preventDefault();
-      const payButton = document.querySelector("#pay-button");
-      const nameInput = document.querySelector("#username");
-      const emailInput = document.querySelector("#useremail");
-      let payStatus = document.querySelector("#status");
-      payStatus.innerHTML = "Please wait ......";
-      const name = document.querySelector("#username").value;
-      const email = document.querySelector("#useremail").value;
-
-      if (!name || !email) {
-        payStatus.innerHTML = "Please enter your name and email to proceed.";
-        nameInput.disabled = false;
-        emailInput.disabled = false;
-        payButton.disabled = false;
-        return;
-      }
-
-      nameInput.disabled = true;
-      emailInput.disabled = true;
-      payButton.disabled = true;
-
-      //   alert(`${name} ${email}`);
-
-      async function attemptPay() {
-        const options = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            task: "pay",
-            client_email: email,
-            client_name: name,
-          }),
-        };
-        try {
-          const res = await fetch(lambda, options);
-
-          const data = await res.json();
-
-          if (data.id) {
-            payStatus.innerHTML =
-              "payment proccessing, reload page after payment";
-            await stripe.redirectToCheckout({ sessionId: data.id });
-          } else {
-            nameInput.disabled = false;
-            emailInput.disabled = false;
-            payButton.disabled = false;
-            console.log("session data not returned: kindly retry", data);
-
-            if (data.error) {
-              payStatus.innerHTML = data.error;
-            } else {
-              payStatus.innerHTML = "Payment failed. Please try again";
-            }
+          <script >
+            const tabs = document.querySelectorAll('.tab')
+          
+          tabs.forEach(tab => {
+              const dataL = tab.getAttribute('data-location')
+              const location = document.location.pathname
+              
+          
+              if (location.includes(dataL)) {
+          
+                  tab.classList.add('active')
+              }
+          })
+          
+          
+          function deleteCookies() {
+              const cookies = document.cookie.split(";");
+          
+              const paths = ["/", "/calculator/budget"];
+              const domains = [window.location.hostname]; 
+          
+              cookies.forEach(cookie => {
+                  const cookieName = cookie.split("=")[0].trim();
+                  
+          
+                  if (cookieName === "authenticated") {
+                      return
+                  } else {
+                      var expires = "";
+          
+                  
+                      var date = new Date();
+                      date.setTime(date.getTime());
+                      expires = "; expires=" + date.toUTCString();
+          
+                      paths.forEach(path => {
+                          domains.forEach(domain => {
+                              document.cookie = cookieName + "=" + encodeURIComponent( 0) + expires + "; path=/; SameSite=Strict; Secure";
+                          });
+                      });
+                  }  ;
+          
+              });
+          
+              document.location.reload();
           }
-        } catch (error) {
-          console.error(error.message);
-          payStatus.innerHTML =
-            "Unable to connect. Check your internet and try again.";
-
-          nameInput.disabled = false;
-          emailInput.disabled = false;
-          payButton.disabled = false;
-        }
-      }
-
-      attemptPay();
-    });
-
-
-
-
-
-     
-
-
-
-</script>
+          
+              const paid = getCookie("authenticated");
+          
+          
+              if (paid == "paid") {
+                  window.location.href = "/calculator/budget/summary.html";
+          
+            } else {
+              document.body.style.display = 'initial'
+            }
+          
+          
+          
+              
+          function getCookie1(name) {
+              const value1 = `; ${document.cookie}`;
+              const parts1 = value1.split(`; ${name}=`);
+              let cookieValue1 = parts1.length === 2 ? decodeURIComponent(parts1.pop().split(';').shift()) : '';
+              
+              return cookieValue1 === '' ? '0' : cookieValue1;
+          }
+          
+              
+          function getCookie(name) {
+              const value = `; ${document.cookie}`;
+              const parts = value.split(`; ${name}=`);
+              let cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
+              
+              // Get the selected frequency from the dropdown
+              const frequencyDropdown = document.getElementById('frequency');
+              const selectedFrequency = frequencyDropdown.value;
+          
+              // Convert the annual amount based on the selected frequency, if applicable
+              if (selectedFrequency !== 'annually' && !isNaN(cookieValue)) {
+                  if (selectedFrequency === 'monthly') {
+                      cookieValue /= 12;
+                  } else if (selectedFrequency === 'weekly') {
+                      cookieValue /= 52;
+                  }
+              }
+              
+              return cookieValue === '' ? '0' : cookieValue;
+          }
+          
+          
+          document.addEventListener('DOMContentLoaded', function() {
+          function updateOnChange(){    
+          
+          
+          
+          
+          let DISPOSABLEINCOME;
+          
+          if (getCookie('RegionDropdown') === 'USA') {
+              DISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
+                  parseFloat(getCookie('ANNUALEXPENSESUM')) -
+                  parseFloat(getCookie('TOTALMEDICARE')) -
+                  parseFloat(getCookie('TOTALSOCIALSECURITY')) -
+                  parseFloat(getCookie('TOTALTAXCG')) -
+                  parseFloat(getCookie('ANNUALTAX'));
+          } else if (getCookie('RegionDropdown') === 'CAN') {
+              DISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
+                  parseFloat(getCookie('ANNUALEXPENSESUM')) -
+                  parseFloat(getCookie('ANNUALEI')) -
+                  parseFloat(getCookie('ANNUALCPP')) -
+                  parseFloat(getCookie('ANNUALTAX'));
+          } else {
+              DISPOSABLEINCOME = 0
+          }
+          
+          // Update HTML element with the calculated value
+          document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOME.toFixed(2);
+          
+          
+          document.getElementById('annual_income_sum').textContent = " $" + parseFloat(getCookie('ANNUALINCOME')).toFixed(2);
+          
+          
+          document.getElementById('annual_expense_sum').textContent = " $" + parseFloat(getCookie('ANNUALEXPENSESUM')).toFixed(2);
+          
+          
+          document.getElementById('tax_sum').textContent = " $" + parseFloat((getCookie('ANNUALTAX'))).toFixed(2);
+          
+          
+           
+               
+          let ANNUALGOVERNMENTOBLIGATIONS;
+          
+              if (getCookie('RegionDropdown') === 'USA') {
+              ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('TOTALSOCIALSECURITY')) +
+                  parseFloat(getCookie('TOTALMEDICARE'));
+          } else if (getCookie('RegionDropdown') === 'CAN') {
+              ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('ANNUALCPP')) +
+                  parseFloat(getCookie('ANNUALEI'))  ;
+          } else {
+              ANNUALGOVERNMENTOBLIGATIONS = 0
+          }
+          
+          // Update HTML element with the calculated value
+          document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
+          
+            
+          
+              NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
+              document.getElementById('NETWORTH').textContent = '$' + NETWORTH.toFixed(2);
+          
+               const annualIncomeSpan = document.getElementById('ANNUALINCOME');
+                  if (annualIncomeSpan) {
+                      let annualIncome = getCookie('ANNUALINCOME');
+                      // Here we assume getCookie for ANNUALINCOME already handles frequency conversion
+                      annualIncomeSpan.textContent = '$' + annualIncome;
+                  }
+          
+            } 
+            
+            updateOnChange();
+            
+          
+          
+               
+          });
+          
+          
+          
+          
+          // payment scripts
+          const lambda =
+            "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
+          const publicKey =
+            "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
+          
+            const payForm = document.querySelector("#payment-form");
+            
+            
+            payForm.addEventListener("submit", (e) => {
+              const stripe = Stripe(publicKey);
+              console.log('function hit ', e)
+                e.preventDefault();
+                const payButton = document.querySelector("#pay-button");
+                const nameInput = document.querySelector("#username");
+                const emailInput = document.querySelector("#useremail");
+                let payStatus = document.querySelector("#status");
+                payStatus.innerHTML = "Please wait ......";
+                const name = document.querySelector("#username").value;
+                const email = document.querySelector("#useremail").value;
+          
+                if (!name || !email) {
+                  payStatus.innerHTML = "Please enter your name and email to proceed.";
+                  nameInput.disabled = false;
+                  emailInput.disabled = false;
+                  payButton.disabled = false;
+                  return;
+                }
+          
+                nameInput.disabled = true;
+                emailInput.disabled = true;
+                payButton.disabled = true;
+          
+                //   alert(`${name} ${email}`);
+          
+                async function attemptPay() {
+                  const options = {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      task: "pay",
+                      client_email: email,
+                      client_name: name,
+                    }),
+                  };
+                  try {
+                    const res = await fetch(lambda, options);
+          
+                    const data = await res.json();
+          
+                    if (data.id) {
+                      payStatus.innerHTML =
+                        "payment proccessing, reload page after payment";
+                      await stripe.redirectToCheckout({ sessionId: data.id });
+                    } else {
+                      nameInput.disabled = false;
+                      emailInput.disabled = false;
+                      payButton.disabled = false;
+                      console.log("session data not returned: kindly retry", data);
+          
+                      if (data.error) {
+                        payStatus.innerHTML = data.error;
+                      } else {
+                        payStatus.innerHTML = "Payment failed. Please try again";
+                      }
+                    }
+                  } catch (error) {
+                    console.error(error.message);
+                    payStatus.innerHTML =
+                      "Unable to connect. Check your internet and try again.";
+          
+                    nameInput.disabled = false;
+                    emailInput.disabled = false;
+                    payButton.disabled = false;
+                  }
+                }
+          
+                attemptPay();
+              });
+          
+          
+          
+          
+          
+               
+          
+          
+          
+          </script>
 
      <script src="/server/scripts/toolTip.js"></script>
      <script src="/server/scripts/hideShow.js"></script>
-     <script src="/server/scripts/summary.js"></script>
+     
 </body>
 </html>

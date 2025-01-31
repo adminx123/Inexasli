@@ -17,6 +17,11 @@ tabs.forEach(tab => {
 
 var ANNUALEXPENSESUM;
     var HOUSING;
+    var TRANSPORTATION;
+    var ESSENTIAL;
+    var DISCRETIONARY;
+    var DEBT;
+    var DEPENDANT;
     
 ;
 
