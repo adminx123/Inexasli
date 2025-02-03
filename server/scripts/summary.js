@@ -21,7 +21,7 @@ if (paid == "paid") {
     
     document.body.style.display = 'initial'
 } else {
-    window.location.href = "/calculator/budget/summary.html";
+    window.location.href = "./summary.html";
 }
     
 function getCookie1(name) {
