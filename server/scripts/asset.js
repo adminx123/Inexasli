@@ -223,7 +223,7 @@ document.getElementById('assets_art_jewelry_percent').value = getCookie('assets_
     
 window.calculateNext = function () {
   calculateAll();
-  window.location.href = '/calculator/budget/liability.html';
+  window.location.href = '/budget/liability.html';
 }    
 
 	window.calculateBack = function () {
