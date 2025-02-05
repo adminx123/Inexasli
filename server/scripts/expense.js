@@ -508,7 +508,7 @@ document.getElementById('dependant_cellular_service_frequency').value = getCooki
 	
 window.calculateNext = function () {
   calculateAll();
-  window.location.href = '/calculator/budget/asset.html';
+  window.location.href = '/budget/asset.html';
 }   
 
 window.calculateBack = function () {
