@@ -61,5 +61,5 @@ function setCookie(name, value, days) {
 
 function nextPage() {
   // Navigate to the new page after setting cookies
-  window.location.href = '/calculator/budget/income.html';
+  window.location.href = './budget/income.html';
 }
