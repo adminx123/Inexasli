@@ -337,10 +337,7 @@ let DISPOSABLEINCOME;
 
     updateOnChange();
 
-    
 
-    document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
-    document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
 
 });
 
