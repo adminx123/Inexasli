@@ -1,3 +1,11 @@
+// Add an event listener to the frequency dropdown
+const frequencyDropdown = document.getElementById('frequency');
+frequencyDropdown.addEventListener('change', function () {
+    // Call the update function when the frequency dropdown value changes
+    updateOnChange();
+    timeToPay();
+});
+
 
 const tabs = document.querySelectorAll('.tab')
 
@@ -23,6 +31,8 @@ if (paid == "paid") {
     window.location.href = "./summary.html";
 }
 
+
+// net worth doesnt want the cookies to be effected by freuncy feild
 function getCookie1(name) {
     const value1 = `; ${document.cookie}`;
     const parts1 = value1.split(`; ${name}=`);
@@ -121,13 +131,7 @@ let DISPOSABLEINCOME;
         // Update HTML element with the calculated value
         document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOME.toFixed(2);
 
-
-        const frequencyDropdown = document.getElementById('frequency');
-        const timeToPayDebtElement = document.getElementById('TIMETOPAYDEBT'); // Assuming this is where you show debt payment time
-
-        
-
-        
+       
         let ANNUALGOVERNMENTOBLIGATIONS;
 
         if (getCookie('RegionDropdown') === 'USA') {
@@ -283,6 +287,7 @@ let DISPOSABLEINCOME;
 
         document.getElementById('frequency').addEventListener('change', function () {
             calculateGoal(); // Recalculate the goal time when the frequency changes
+       
         });
 
         function calculateGoal() {
@@ -338,13 +343,7 @@ let DISPOSABLEINCOME;
 
     updateOnChange();
 
-    // Add an event listener to the frequency dropdown
-    const frequencyDropdown = document.getElementById('frequency');
-    frequencyDropdown.addEventListener('change', function () {
-        // Call the update function when the frequency dropdown value changes
-        updateOnChange();
-
-    });
+    
 
     document.getElementById('ASSETS').textContent = " $" + getCookie1('ASSETS');
     document.getElementById('LIABILITIES').textContent = " $" + getCookie1('LIABILITIES');
@@ -423,3 +422,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+function timeToPay(){
+    const frequencyDropdown = document.getElementById('frequency');
+    const timeToPayDebtElement = document.getElementById('TIMETOPAYDEBT'); // Assuming this is where you show debt payment time
+
+    function updateFrequencyText() {
+        let frequencyText = '';
+        switch (frequencyDropdown.value) {
+            case 'annual':
+                frequencyText = 'Years';
+                break;
+            case 'monthly':
+                frequencyText = 'Months';
+                break;
+            case 'weekly':
+                frequencyText = 'Weeks';
+                break;
+            default:
+                frequencyText = 'Unknown';
+        }
+        
+        // Update the text directly in the TIMETOPAYDEBT element
+        if (timeToPayDebtElement) {
+            let revolvingDebtValue = getCookie1('LIABILITIESNA');
+            if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
+                let TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / DISPOSABLEINCOME;
+                if (DISPOSABLEINCOME <= 0) {
+                    timeToPayDebtElement.textContent = "RISK OF INSOLVENCY";
+                } else {
+                    // Here you can decide if you want to convert TIMETOPAYDEBT based on frequency
+                    // For now, let's just display the text without conversion
+                    timeToPayDebtElement.textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
+                }
+            } else {
+                timeToPayDebtElement.textContent = "Not Applicable";
+            }
+        }
+    }
+
+    // Attach the change event listener to the dropdown
+    frequencyDropdown.addEventListener('change', updateFrequencyText);
+
+    // Initial call to set up the state
+    updateFrequencyText();
+     }
