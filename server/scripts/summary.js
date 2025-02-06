@@ -335,9 +335,7 @@ let DISPOSABLEINCOME;
 
     }
 
-    updateOnChange();
-
-
+  
 
 });
 
