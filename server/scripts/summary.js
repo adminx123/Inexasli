@@ -46,11 +46,12 @@ function getCookie(name) {
     const selectedFrequency = frequencyDropdown.value;
 
     // Convert the annual amount based on the selected frequency, if applicable
-    if (selectedFrequency !== 'annually' && !isNaN(cookieValue)) {
+    if (selectedFrequency !== 'annual' && !isNaN(cookieValue)) {
+        const annualValue = parseFloat(cookieValue);
         if (selectedFrequency === 'monthly') {
-            cookieValue /= 12;
+            cookieValue = (annualValue / 12).toFixed(2);
         } else if (selectedFrequency === 'weekly') {
-            cookieValue /= 52;
+            cookieValue = (annualValue / 52).toFixed(2);
         }
     }
 
