@@ -147,25 +147,7 @@ let DISPOSABLEINCOME;
                     frequencyText = 'Unknown';
             }
         
-            // Update spans based on frequency
-            const spansToUpdate = [
-                'taxable_sum', 'region_tax_sum', 'subregion_tax_sum', 'tax_sum',
-                'annual_income_sum', 'annual_expense_sum', 'cpp_sum', 'ANNUALEI',
-                'HOUSING', 'TRANSPORTATION', 'DEPENDANT', 'DEBT', 'DISCRETIONARY', 'ESSENTIAL',
-                'annual_cpp_seresult', 'annual_cpp_eresult',
-                'TOTALMEDICARE', 'TOTALSOCIALSECURITY', 'TOTALSOCIALSECURITYE', 'TOTALSOCIALSECURITYSE',
-                'TOTALTAXCG'
-            ];
-        
-              spansToUpdate.forEach(id => {
-                let cookieName = id.replace(/[A-Z]/g, '_$&').toLowerCase(); // Convert to cookie naming style
-                let value = parseFloat(getCookie(cookieName));
-                if (!isNaN(value)) {
-                    const newValue = frequencyDropdown.value === 'annual' ? value : value / frequencyMultiplier;
-                    document.getElementById(id).textContent = ` $ ${newValue.toFixed(2)}`;
-                }
-            });
-        
+                
 
             updateFrequencyText();
 
