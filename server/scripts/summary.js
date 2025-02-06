@@ -157,10 +157,7 @@ let DISPOSABLEINCOME;
                 'TOTALTAXCG'
             ];
         
-            updateFrequencyText();
-
-
-            spansToUpdate.forEach(id => {
+              spansToUpdate.forEach(id => {
                 let cookieName = id.replace(/[A-Z]/g, '_$&').toLowerCase(); // Convert to cookie naming style
                 let value = parseFloat(getCookie(cookieName));
                 if (!isNaN(value)) {
@@ -169,6 +166,10 @@ let DISPOSABLEINCOME;
                 }
             });
         
+
+            updateFrequencyText();
+
+
             // Update TIMETOPAYDEBT as before or any other frequency-dependent calculations
             if (timeToPayDebtElement) {
                 let revolvingDebtValue = getCookie1('LIABILITIESNA');
@@ -185,10 +186,7 @@ let DISPOSABLEINCOME;
             }
         }
 
-          updateFrequencyText();
-
-
-
+        
         let ANNUALGOVERNMENTOBLIGATIONS;
 
         if (getCookie('RegionDropdown') === 'USA') {
