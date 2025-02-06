@@ -148,11 +148,7 @@ let DISPOSABLEINCOME;
             }
         
                 
-
-            updateFrequencyText();
-
-
-            // Update TIMETOPAYDEBT as before or any other frequency-dependent calculations
+    // Update TIMETOPAYDEBT as before or any other frequency-dependent calculations
             if (timeToPayDebtElement) {
                 let revolvingDebtValue = getCookie1('LIABILITIESNA');
                 if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
@@ -384,6 +380,7 @@ let DISPOSABLEINCOME;
     frequencyDropdown.addEventListener('change', function () {
         // Call the update function when the frequency dropdown value changes
         updateOnChange();
+        updateFrequencyText();
 
     });
 
