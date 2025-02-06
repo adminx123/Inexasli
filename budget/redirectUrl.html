@@ -69,7 +69,7 @@
 
         if (paid == "paid") {
           // change page to summary page
-          window.location.href = "/calculator/budget/summary.html";
+          window.location.href = "/budget/summary.html";
         } else {
           if (sessionId) {
             try {
@@ -107,7 +107,7 @@
                 }
 
 
-                window.location.href = "/calculator/budget/summary.html";
+                window.location.href = "/budget/summary.html";
               } else if (data.error) {
                 container.innerHTML = `
                      <h1 style="text-transform: capitalize;">payment failed</h1>
@@ -131,7 +131,7 @@
             }
           } else {
             container.innerHTML = "no or invalid session id";
-            window.location.href = "/calculator/budget/summary.html";
+            window.location.href = "/budget/summary.html";
           }
         }
       });
