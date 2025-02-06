@@ -895,15 +895,15 @@ grid-template-columns: repeat(2, 1fr);
 
 
 .hoead-1  {
-  animation:  fade 2s ;
+  animation:  fade 3s ;
   overflow: hidden;
   
 }
 .hoead-2 {
-  animation:  fades 2s ;
+  animation:  fades 3s ;
   overflow: hidden;
 background-color: none;
-  /* animation-delay: 5s; */
+  
   
 }
 
