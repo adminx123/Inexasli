@@ -1,4 +1,3 @@
-import { hideShow, hideShowClass } from "./utils.js";
 
 const tabs = document.querySelectorAll('.tab')
 
@@ -398,7 +397,7 @@ function calculateGoal() {
     return parseFloat(document.getElementById(id).textContent);
 }
 
-// Define black and white patterns
+/* Define black and white patterns for pie chart
 const patterns = [
     { pattern: 'horizontal-line', foreground: 'black', background: 'white' },
     { pattern: 'vertical-line', foreground: 'black', background: 'white' },
@@ -457,6 +456,8 @@ const myPieChart = new Chart(
     document.getElementById('myPieChart'),
     config
 );
+
+*/
 
 
 
