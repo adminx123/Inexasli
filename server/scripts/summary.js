@@ -1,10 +1,4 @@
-// Add an event listener to the frequency dropdown
-const frequencyDropdown = document.getElementById('frequency');
-frequencyDropdown.addEventListener('change', function () {
-    // Call the update function when the frequency dropdown value changes
-    updateOnChange();
-    timeToPay();
-});
+
 
 
 const tabs = document.querySelectorAll('.tab')
@@ -469,3 +463,12 @@ function timeToPay(){
     // Initial call to set up the state
     updateFrequencyText();
      }
+
+
+     // Add an event listener to the frequency dropdown
+const frequencyDropdown = document.getElementById('frequency');
+frequencyDropdown.addEventListener('change', function () {
+    // Call the update function when the frequency dropdown value changes
+    updateOnChange();
+    timeToPay();
+});
