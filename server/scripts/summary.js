@@ -397,67 +397,69 @@ function calculateGoal() {
     return parseFloat(document.getElementById(id).textContent);
 }
 
-/* Define black and white patterns for pie chart
-const patterns = [
-    { pattern: 'horizontal-line', foreground: 'black', background: 'white' },
-    { pattern: 'vertical-line', foreground: 'black', background: 'white' },
-    { pattern: 'diagonal-line', foreground: 'black', background: 'white' },
-    { pattern: 'grid', foreground: 'black', background: 'white' },
-    { pattern: 'zigzag', foreground: 'black', background: 'white' },
-    { pattern: 'dot', foreground: 'black', background: 'white' },
-    { pattern: 'checkerboard', foreground: 'black', background: 'white' },
-    { pattern: 'brick', foreground: 'black', background: 'white' }
-];
+// When the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    const cookieNames = ['ESSENTIAL', 'DISCRETIONARY', 'HOUSING', 'TRANSPORTATION', 'DEPENDANT', 'DEBT', 'tax_sum', 'ANNUALGOVERNMENTOBLIGATIONS'];
+    
+    // Get data from cookies
+    const data = cookieNames.map(name => {
+        const value = parseFloat(getCookie(name).replace('$', '').trim());
+        return isNaN(value) ? 0 : value; // Return 0 if not a number to avoid NaN in chart data
+    });
 
-// Data for the pie chart
-const data = {
-    labels: ['ESSENTIAL', 'DISCRETIONARY', 'HOUSING', 'TRANSPORTATION', 'DEPENDANT', 'DEBT', 'tax_sum', 'ANNUALGOVERNMENTOBLIGATIONS'],
-    datasets: [{
-        label: 'Expenses',
-        data: [
-            getValueById('ESSENTIAL'),
-            getValueById('DISCRETIONARY'),
-            getValueById('HOUSING'),
-            getValueById('TRANSPORTATION'),
-            getValueById('DEPENDANT'),
-            getValueById('DEBT'),
-            getValueById('tax_sum'),
-            getValueById('ANNUALGOVERNMENTOBLIGATIONS')
-        ],
-        backgroundColor: patterns.map(p => p), // Apply patterns
-        borderColor: 'black', // Border color for slices
-        borderWidth: 1
-    }]
-};
-
-// Configuration for the pie chart
-const config = {
-    type: 'pie',
-    data: data,
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'Expense Distribution'
-            },
-            pattern: {
-                enabled: true // Enable the pattern plugin
+    // Configuration for the pie chart
+    const config = {
+        type: 'pie',
+        data: {
+            labels: cookieNames, // Use the cookie names as labels
+            datasets: [{
+                label: 'Expense Distribution',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(201, 203, 207, 0.2)',
+                    'rgba(100, 100, 100, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(201, 203, 207, 1)',
+                    'rgba(100, 100, 100, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Expense Distribution'
+                }
             }
         }
-    },
-};
+    };
 
-// Create the pie chart
-const myPieChart = new Chart(
-    document.getElementById('myPieChart'),
-    config
-);
+    // Create the pie chart
+    const myPieChart = new Chart(
+        document.getElementById('myPieChart'),
+        config
+    );
+});
 
-*/
+
 
 
 
