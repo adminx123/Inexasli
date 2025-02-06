@@ -399,7 +399,7 @@ function calculateGoal() {
 
 // When the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    const cookieNames = ['ESSENTIAL', 'DISCRETIONARY', 'HOUSING', 'TRANSPORTATION', 'DEPENDANT', 'DEBT', 'tax_sum', 'ANNUALGOVERNMENTOBLIGATIONS'];
+    const cookieNames = ['ESSENTIAL', 'DEBT','DEPENDANT','DISCRETIONARY', 'HOUSING', 'TRANSPORTATION'];
     
     // Get data from cookies
     const data = cookieNames.map(name => {
@@ -426,14 +426,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     'rgba(100, 100, 100, 0.2)'
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(201, 203, 207, 1)',
-                    'rgba(100, 100, 100, 1)'
+                    'rgb(194, 194, 194)',
+                    'rgb(165, 165, 165)',
+                    'rgb(118, 118, 118)',
+                    'rgb(101, 101, 101)',
+                    'rgb(76, 76, 76)',
+                    'rgb(63, 63, 63)',
+                    'rgb(36, 36, 36)',
+                    'rgb(3, 3, 3)'
                 ],
                 borderWidth: 1
             }]
