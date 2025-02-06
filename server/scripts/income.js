@@ -110,12 +110,12 @@ var ANNUALTAXABLEINCOME;
     var ANNUALEMPLOYMENTINCOME;
     var ANNUALINCOME;
     var ANNUALCPP;
+    var CPPPAYABLESELFEMPLOYED;
+    var CPPPAYABLEEMPLOYED;
     var ANNUALEI; 
     var BPA = 15705;
     var SD = 14600;
     var PASSIVEINCOME;
-    var CPPPAYABLESELFEMPLOYED;
-    var CPPPAYABLEEMPLOYED;
     var TOTALMEDICARE;
      var TOTALSOCIALSECURITY;
     var TOTALSOCIALSECURITYSE;
@@ -123,28 +123,17 @@ var ANNUALTAXABLEINCOME;
 
     
 document.addEventListener('DOMContentLoaded', function() {
-    // var USAHIDE = document.querySelector('.usa-hide');
-    // console.log(USAHIDE)
-    // Initially hide the field
-    // USAHIDE.style.display = 'none';
-    // hideShowClass('usa-hide', 'hide')
-    // USAHIDE.style.backgroundColor = 'red';
-
-
-    // Function to handle the change in dropdown value
+   
     function handleRegionChange() {
 
         if (this.value === 'USA') {
             
             setCookie("RegionDropdown", this.value, 365)
             hideShowClass('usa-hide', 'show')
-            // setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
+
         } else if (this.value === 'CAN') {
             setCookie("RegionDropdown", this.value, 365)
             hideShowClass('usa-hide', 'hide')
-
-            // setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365 )
-
 
         }
 
@@ -1327,7 +1316,7 @@ function deleteCookies() {
     
 window.calculateNext = function () {
     calculateAll();
-// window.location.href = './expense.html';
+//  window.location.href = './expense.html';
 }   
 
    window.calculateAll = function () {
@@ -1356,27 +1345,31 @@ setIncomeData();
 
 const regionDropdown = document.getElementById("RegionDropdown");
 const subregionDropdown = document.getElementById("SubregionDropdown");
-setCookie("RegionDropdown", RegionDropdown.value, 365); 
-        setCookie("SubregionDropdown", SubregionDropdown.value, 365); 
-        
-// Save global variables as cookies with a longer expiration date
-setCookie("ANNUALINCOME", ANNUALINCOME, 365);
-setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
-setCookie("PASSIVEINCOME", PASSIVEINCOME, 365); 
-setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
-setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
-setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
-setCookie("ANNUALTAX", ANNUALTAX, 365);
-setCookie("ANNUALCPP", ANNUALCPP, 365);
-setCookie("ANNUALEI", ANNUALEI, 365); 
-setCookie("CPPPAYABLEEMPLOYED",CPPPAYABLEEMPLOYED , 365);
-setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
+       setCookie("RegionDropdown", RegionDropdown.value, 365);
+       setCookie("SubregionDropdown", SubregionDropdown.value, 365);
 
-        setCookie("TOTALTAXCG", TOTALTAXCG, 365);
-setCookie("TOTALMEDICARE", TOTALMEDICARE, 365);
-setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
-        setCookie("TOTALSOCIALSECURITYE", TOTALSOCIALSECURITYE, 365);
-        setCookie("TOTALSOCIALSECURITYSE", TOTALSOCIALSECURITYSE, 365);
+       // Save global variables as cookies with a longer expiration date
+       setCookie("ANNUALINCOME", ANNUALINCOME, 365);
+       setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
+       setCookie("PASSIVEINCOME", PASSIVEINCOME, 365);
+
+       setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
+       setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
+       setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
+       setCookie("ANNUALTAX", ANNUALTAX, 365);
+
+       setCookie("ANNUALCPP", ANNUALCPP, 365);
+       setCookie("CPPPAYABLEEMPLOYED", CPPPAYABLEEMPLOYED, 365);
+       setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
+
+       setCookie("ANNUALEI", ANNUALEI, 365);
+
+
+       setCookie("TOTALTAXCG", TOTALTAXCG, 365);
+       setCookie("TOTALMEDICARE", TOTALMEDICARE, 365);
+       setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
+       setCookie("TOTALSOCIALSECURITYE", TOTALSOCIALSECURITYE, 365);
+       setCookie("TOTALSOCIALSECURITYSE", TOTALSOCIALSECURITYSE, 365);
     }
 
 
