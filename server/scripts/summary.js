@@ -99,12 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('romanticincome').textContent = getCookie('romanticincome');
         document.getElementById('romanticliability').textContent = getCookie('romanticliability');
 
-
-
-
-
-
-        let DISPOSABLEINCOME;
+let DISPOSABLEINCOME;
 
         if (getCookie('RegionDropdown') === 'USA') {
             DISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
@@ -132,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function updateFrequencyText() {
             let frequencyText = '';
-            const frequencyDropdown = document.getElementById('frequency');
             const frequencyMultiplier = { 
                 'annual': 1, 
                 'monthly': 12, 
@@ -188,11 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Attach the change event listener to the dropdown
-        frequencyDropdown.addEventListener('change', updateFrequencyText);
-
-        // Initial call to set up the state
-        updateFrequencyText();
+          updateFrequencyText();
 
 
 
