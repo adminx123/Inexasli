@@ -125,44 +125,7 @@ let DISPOSABLEINCOME;
         const frequencyDropdown = document.getElementById('frequency');
         const timeToPayDebtElement = document.getElementById('TIMETOPAYDEBT'); // Assuming this is where you show debt payment time
 
-        function updateFrequencyText() {
-            let frequencyText = '';
-            const frequencyMultiplier = { 
-                'annual': 1, 
-                'monthly': 12, 
-                'weekly': 52 
-            }[frequencyDropdown.value] || 1;
         
-            switch (frequencyDropdown.value) {
-                case 'annual':
-                    frequencyText = 'Years';
-                    break;
-                case 'monthly':
-                    frequencyText = 'Months';
-                    break;
-                case 'weekly':
-                    frequencyText = 'Weeks';
-                    break;
-                default:
-                    frequencyText = 'Unknown';
-            }
-        
-                
-    // Update TIMETOPAYDEBT as before or any other frequency-dependent calculations
-            if (timeToPayDebtElement) {
-                let revolvingDebtValue = getCookie1('LIABILITIESNA');
-                if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
-                    let TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / (DISPOSABLEINCOME / frequencyMultiplier);
-                    if (DISPOSABLEINCOME <= 0) {
-                        timeToPayDebtElement.textContent = "RISK OF INSOLVENCY";
-                    } else {
-                        timeToPayDebtElement.textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
-                    }
-                } else {
-                    timeToPayDebtElement.textContent = "Not Applicable";
-                }
-            }
-        }
 
         
         let ANNUALGOVERNMENTOBLIGATIONS;
@@ -395,7 +358,7 @@ function getValueById(id) {
     return parseFloat(document.getElementById(id).textContent);
 }
 
-// When the DOM is fully loaded
+//  Start Pie
 document.addEventListener('DOMContentLoaded', function () {
     const cookieNames = ['ESSENTIAL', 'DEBT', 'DEPENDANT', 'DISCRETIONARY', 'HOUSING', 'TRANSPORTATION'];
 
@@ -457,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 });
 
-
+// End pie
 
 
 
