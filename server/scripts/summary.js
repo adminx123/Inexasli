@@ -460,6 +460,9 @@ function timeToPay(){
         }
     }
 
+    document.getElementById('TIMETOPAYDEBT').textContent = ' $' + TIMETOPAYDEBT.toFixed(2);
+
+
     // Attach the change event listener to the dropdown
     frequencyDropdown.addEventListener('change', updateFrequencyText);
 
