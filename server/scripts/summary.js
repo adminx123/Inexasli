@@ -101,28 +101,28 @@ function updateOnChange() {    // Update HTML elements with cookie values
     document.getElementById('romanticliability').textContent = getCookie('romanticliability');
 
 
-NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
+    NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = ' $' + NETWORTH.toFixed(2);
 
 
 
-   
-
-
-    
-
-    
 
 
 
-    
+
+
+
+
+
+
+
 
 
     document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
-   
 
-   
+
+
 
 
 
@@ -137,9 +137,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to retrieve cookie value by name
 
 
-  
 
-  
+
+
 
 });
 
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // End pie
 
-function governmentObligations(){
+function governmentObligations() {
     let ANNUALGOVERNMENTOBLIGATIONS;
 
     if (getCookie('RegionDropdown') === 'USA') {
@@ -224,9 +224,9 @@ function governmentObligations(){
 
     // Update HTML element with the calculated value
     document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
-   }
+}
 
-function disposableIncome(){
+function disposableIncome() {
 
     let DISPOSABLEINCOME;
 
@@ -255,109 +255,109 @@ function disposableIncome(){
 
 FIRERATIO = parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSESUM')); // Descriptive variable name
 
-    function colorChangeFIRE() {
-        // Get the FIRE ratio value
-        var FIREText = document.getElementById("FIRERATIO").textContent;
-        var FIRE = parseFloat(FIREText);
+function colorChangeFIRE() {
+    // Get the FIRE ratio value
+    var FIREText = document.getElementById("FIRERATIO").textContent;
+    var FIRE = parseFloat(FIREText);
 
-        // Define the ranges for FIRE ratio
-        var greatRange = .25; // Example threshold for "great" FIRE ratio
-        var okayMinRange = .10; // Example lower threshold for "okay" FIRE ratio
-        var okayMaxRange = .25; // Example upper threshold for "okay" FIRE ratio
+    // Define the ranges for FIRE ratio
+    var greatRange = .25; // Example threshold for "great" FIRE ratio
+    var okayMinRange = .10; // Example lower threshold for "okay" FIRE ratio
+    var okayMaxRange = .25; // Example upper threshold for "okay" FIRE ratio
 
-        // Apply color based on the value
-        if (FIRE >= greatRange) {
-            document.getElementById("FIRERATIO").style.color = "green";
-        } else if (FIRE >= okayMinRange && FIRE <= okayMaxRange) {
-            document.getElementById("FIRERATIO").style.color = "orange";
-        } else {
-            document.getElementById("FIRERATIO").style.color = "red";
-        }
-    }
-
-    if (isNaN(FIRERATIO)) {
-
-        document.getElementById('FIRERATIO').textContent = 'Not Applicable';
+    // Apply color based on the value
+    if (FIRE >= greatRange) {
+        document.getElementById("FIRERATIO").style.color = "green";
+    } else if (FIRE >= okayMinRange && FIRE <= okayMaxRange) {
+        document.getElementById("FIRERATIO").style.color = "orange";
     } else {
-
-        // Assuming FIRERATIO is the ID of the element displaying the FIRE ratio
-        document.getElementById('FIRERATIO').textContent = FIRERATIO.toFixed(3);
-        colorChangeFIRE();
+        document.getElementById("FIRERATIO").style.color = "red";
     }
+}
+
+if (isNaN(FIRERATIO)) {
+
+    document.getElementById('FIRERATIO').textContent = 'Not Applicable';
+} else {
+
+    // Assuming FIRERATIO is the ID of the element displaying the FIRE ratio
+    document.getElementById('FIRERATIO').textContent = FIRERATIO.toFixed(3);
+    colorChangeFIRE();
+}
 
 
 
 SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
 
-    function colorChangeSavingsToDebt() {
-        // Get the savings-to-debt ratio value
-        var savingsToDebtText = document.getElementById("SAVINGSTODEBT").textContent;
-        var savingsToDebt = parseFloat(savingsToDebtText);
+function colorChangeSavingsToDebt() {
+    // Get the savings-to-debt ratio value
+    var savingsToDebtText = document.getElementById("SAVINGSTODEBT").textContent;
+    var savingsToDebt = parseFloat(savingsToDebtText);
 
-        // Define the ranges
-        var greatRange = 2; // Example threshold for "great" savings-to-debt ratio
-        var goodMinRange = 1; // Example lower threshold for "good" savings-to-debt ratio
-        var goodMaxRange = 2; // Example upper threshold for "good" savings-to-debt ratio
+    // Define the ranges
+    var greatRange = 2; // Example threshold for "great" savings-to-debt ratio
+    var goodMinRange = 1; // Example lower threshold for "good" savings-to-debt ratio
+    var goodMaxRange = 2; // Example upper threshold for "good" savings-to-debt ratio
 
-        // Apply color based on the value
-        if (savingsToDebt >= greatRange) {
-            document.getElementById("SAVINGSTODEBT").style.color = "green";
-        } else if (savingsToDebt >= goodMinRange && savingsToDebt <= goodMaxRange) {
-            document.getElementById("SAVINGSTODEBT").style.color = "orange";
-        } else {
-            document.getElementById("SAVINGSTODEBT").style.color = "red";
-        }
-    }
-
-
-    if (isNaN(SAVINGSTODEBT)) {
-
-        document.getElementById('SAVINGSTODEBT').textContent = 'Not Applicable';
+    // Apply color based on the value
+    if (savingsToDebt >= greatRange) {
+        document.getElementById("SAVINGSTODEBT").style.color = "green";
+    } else if (savingsToDebt >= goodMinRange && savingsToDebt <= goodMaxRange) {
+        document.getElementById("SAVINGSTODEBT").style.color = "orange";
     } else {
-
-        // Assuming "SAVINGSTODEBT" is the ID of the element displaying the savings-to-debt ratio
-        document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
-        colorChangeSavingsToDebt();
+        document.getElementById("SAVINGSTODEBT").style.color = "red";
     }
+}
+
+
+if (isNaN(SAVINGSTODEBT)) {
+
+    document.getElementById('SAVINGSTODEBT').textContent = 'Not Applicable';
+} else {
+
+    // Assuming "SAVINGSTODEBT" is the ID of the element displaying the savings-to-debt ratio
+    document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
+    colorChangeSavingsToDebt();
+}
 
 
 
 HOUSINGTOINCOME = parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')); // Use a descriptive variable name
 
-    function colorChangeHTI() {
-        // Get the housing-to-income ratio value
-        var htiText = document.getElementById("HOUSINGTOINCOME").textContent;
-        var hti = parseFloat(htiText);
+function colorChangeHTI() {
+    // Get the housing-to-income ratio value
+    var htiText = document.getElementById("HOUSINGTOINCOME").textContent;
+    var hti = parseFloat(htiText);
 
-        // Define the ranges
-        var greatRange = .25;
-        var okayMinRange = .25;
-        var okayMaxRange = .35;
+    // Define the ranges
+    var greatRange = .25;
+    var okayMinRange = .25;
+    var okayMaxRange = .35;
 
-        // Apply color based on the value
-        if (hti < greatRange) {
-            document.getElementById("HOUSINGTOINCOME").style.color = "green";
-        } else if (hti >= okayMinRange && hti <= okayMaxRange) {
-            document.getElementById("HOUSINGTOINCOME").style.color = "orange";
-        } else {
-            document.getElementById("HOUSINGTOINCOME").style.color = "red";
-        }
-    }
-
-
-    if (isNaN(HOUSINGTOINCOME)) {
-        document.getElementById('HOUSINGTOINCOME').textContent = ' Not Applicable';
-
+    // Apply color based on the value
+    if (hti < greatRange) {
+        document.getElementById("HOUSINGTOINCOME").style.color = "green";
+    } else if (hti >= okayMinRange && hti <= okayMaxRange) {
+        document.getElementById("HOUSINGTOINCOME").style.color = "orange";
     } else {
-
-        // Assuming HOUSINGTOINCOME is the ID of the element displaying HTI ratio
-        document.getElementById('HOUSINGTOINCOME').textContent = HOUSINGTOINCOME.toFixed(3);
-        colorChangeHTI();
+        document.getElementById("HOUSINGTOINCOME").style.color = "red";
     }
+}
+
+
+if (isNaN(HOUSINGTOINCOME)) {
+    document.getElementById('HOUSINGTOINCOME').textContent = ' Not Applicable';
+
+} else {
+
+    // Assuming HOUSINGTOINCOME is the ID of the element displaying HTI ratio
+    document.getElementById('HOUSINGTOINCOME').textContent = HOUSINGTOINCOME.toFixed(3);
+    colorChangeHTI();
+}
 
 
 
-    DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
+DEBTTOINCOME = parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME'));
 
 
 function colorChangeDTI() {
@@ -435,7 +435,7 @@ function calculateGoal() {
 }
 
 
-function timeToPay(){
+function timeToPay() {
     const frequencyDropdown = document.getElementById('frequency');
     const timeToPayDebtElement = document.getElementById('TIMETOPAYDEBT'); // Assuming this is where you show debt payment time
 
@@ -454,7 +454,7 @@ function timeToPay(){
             default:
                 frequencyText = 'Unknown';
         }
-        
+
         // Update the text directly in the TIMETOPAYDEBT element
         if (timeToPayDebtElement) {
             let revolvingDebtValue = getCookie1('LIABILITIESNA');
@@ -481,14 +481,20 @@ function timeToPay(){
 
     // Initial call to set up the state
     updateFrequencyText();
-     }
+}
 
 
-     // Add an event listener to the frequency dropdown
+// Add an event listener to the frequency dropdown
 const frequencyDropdown = document.getElementById('frequency');
 frequencyDropdown.addEventListener('change', function () {
     // Call the update function when the frequency dropdown value changes
     updateOnChange();
+    governmentObligations();
+    disposableIncome();
+    colorChangeFIRE();
+    colorChangeSavingsToDebt();
+    colorChangeHTI();
+    colorChangeDTI();
     timeToPay();
     calculateGoal();
 });
