@@ -343,7 +343,6 @@ let DISPOSABLEINCOME;
     frequencyDropdown.addEventListener('change', function () {
         // Call the update function when the frequency dropdown value changes
         updateOnChange();
-        updateFrequencyText();
 
     });
 
