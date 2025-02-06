@@ -157,6 +157,9 @@ let DISPOSABLEINCOME;
                 'TOTALTAXCG'
             ];
         
+            updateFrequencyText();
+
+
             spansToUpdate.forEach(id => {
                 let cookieName = id.replace(/[A-Z]/g, '_$&').toLowerCase(); // Convert to cookie naming style
                 let value = parseFloat(getCookie(cookieName));
