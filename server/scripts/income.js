@@ -109,7 +109,6 @@ var ANNUALTAXABLEINCOME;
     var ANNUALTAX;
     var ANNUALEMPLOYMENTINCOME;
     var ANNUALINCOME;
-    //  WHY IS THIS HERE? var ANNUALEXPENSE;
     var ANNUALCPP;
     var ANNUALEI; 
     var BPA = 15705;
@@ -381,24 +380,27 @@ incomeFields.forEach(field => {
     document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
     document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
 
-    // ... (rest of your function)
 }
 
-     const employmentincomeFields = 
-      [[ 'income_salary_wages', 'income_salary_wages_frequency'],
+function calculateEmploymentIncome() {
+    const employmentIncomeFields = [
+      ['income_salary_wages', 'income_salary_wages_frequency'],
       ['income_tips', 'income_tips_frequency'],
-      ['income_bonuses', 'income_bonuses_frequency']];
-      let annualEmploymentIncome = 0;
-    employmentincomeFields.forEach(field => {
+      ['income_bonuses', 'income_bonuses_frequency']
+    ];
+    let annualEmploymentIncome = 0;
+  
+    employmentIncomeFields.forEach(field => {
       const [inputId, frequencyId] = field;
       annualEmploymentIncome += calculateAnnual(inputId, frequencyId);
     });
-ANNUALEMPLOYMENTINCOME = annualEmploymentIncome;
- 
+  
+    // Update global variable and DOM after loop completes
+    ANNUALEMPLOYMENTINCOME = annualEmploymentIncome;
+    document.getElementById('ANNUALEMPLOYMENTINCOME').textContent = `$${ANNUALEMPLOYMENTINCOME.toFixed(2)}`;
+  }
     
 function getCppPayable() {
-    var annualSoleProp = parseFloat(document.getElementById('income_sole_prop').value) || 0;
-    var SolePropFrequency = parseFloat(document.getElementById('income_sole_prop_frequency').value) || 0;
     var annualIncomeSelfEmployed = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
 
     // Define CPP rates and maximums
@@ -1325,7 +1327,7 @@ function deleteCookies() {
     
 window.calculateNext = function () {
     calculateAll();
-window.location.href = './expense.html';
+// window.location.href = './expense.html';
 }   
 
    window.calculateAll = function () {
@@ -1339,6 +1341,8 @@ calculateRegionalTax();
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
 
 calculateAnnualTax();
+
+calculateEmploymentIncome();
         
     getCppPayable();
     
