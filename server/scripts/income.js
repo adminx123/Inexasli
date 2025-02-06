@@ -1316,7 +1316,7 @@ function deleteCookies() {
     
 window.calculateNext = function () {
     calculateAll();
-//  window.location.href = './expense.html';
+  window.location.href = './expense.html';
 }   
 
    window.calculateAll = function () {
