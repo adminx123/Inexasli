@@ -104,26 +104,7 @@ function updateOnChange() {    // Update HTML elements with cookie values
     NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = ' $' + NETWORTH.toFixed(2);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     document.getElementById('goalAmount').addEventListener('input', calculateGoal);
-
-
-
-
-
 
 
 }
@@ -133,15 +114,6 @@ function updateOnChange() {    // Update HTML elements with cookie values
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Function to retrieve cookie value by name
-
-
-
-
-
-
-});
 
 
 
@@ -483,8 +455,24 @@ function timeToPay() {
     updateFrequencyText();
 }
 
+// DOM Event Listener
+document.addEventListener('DOMContentLoaded', function () {
+    // Function to retrieve cookie value by name
+    updateOnChange();
+    governmentObligations();
+    disposableIncome();
+    colorChangeFIRE();
+    colorChangeSavingsToDebt();
+    colorChangeHTI();
+    colorChangeDTI();
+    timeToPay();
+    calculateGoal();
 
-// Add an event listener to the frequency dropdown
+});
+
+
+
+// Change Event Listenter
 const frequencyDropdown = document.getElementById('frequency');
 frequencyDropdown.addEventListener('change', function () {
     // Call the update function when the frequency dropdown value changes
