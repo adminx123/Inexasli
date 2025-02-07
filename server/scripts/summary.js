@@ -465,6 +465,8 @@ function timeToPay() {
 document.addEventListener('DOMContentLoaded', function () {
     // Function to retrieve cookie value by name
     updateOnChange();
+    document.getElementById('goalAmount').addEventListener('input', calculateGoal);
+
     governmentObligations();
     disposableIncome();
     colorChangeFIRE();
@@ -495,4 +497,3 @@ frequencyDropdown.addEventListener('change', function () {
 });
 
 
-document.getElementById('goalAmount').addEventListener('input', calculateGoal);
