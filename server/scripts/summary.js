@@ -22,7 +22,7 @@ if (paid == "paid") {
 
     document.body.style.display = 'initial'
 } else {
-    window.location.href = "./summary.html";
+    window.location.href = "./sumary.html";
 }
 
 
