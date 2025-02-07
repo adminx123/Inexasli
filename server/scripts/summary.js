@@ -46,7 +46,7 @@ function getCookie(name) {
 
     const frequencyDropdown = document.getElementById('frequency');
     const selectedFrequency = frequencyDropdown.value;
-
+console.log(selectedFrequency)
     if (selectedFrequency !== 'annual' && !isNaN(displayValue)) {
         const annualValue = parseFloat(displayValue);
         if (selectedFrequency === 'monthly') {
