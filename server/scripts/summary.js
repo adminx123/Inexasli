@@ -216,11 +216,13 @@ function disposableIncome() {
             parseFloat(getCookie('ANNUALCPP')) -
             parseFloat(getCookie('ANNUALTAX'));
     } else {
-        DISPOSABLEINCOME = 0
+        DISPOSABLEINCOME = 0;
     }
 
     // Update HTML element with the calculated value
     document.getElementById('DISPOSABLEINCOME').textContent = ' $' + DISPOSABLEINCOME.toFixed(2);
+
+    return DISPOSABLEINCOME; // returns for use elsewhere
 }
 
 
@@ -409,7 +411,7 @@ function calculateGoal() {
 
 function timeToPay() {
     const frequencyDropdown = document.getElementById('frequency');
-    const timeToPayDebtElement = document.getElementById('TIMETOPAYDEBT'); // Assuming this is where you show debt payment time
+    const timeToPayDebtElement = document.getElementById('TIMETOPAYDEBT');
 
     function updateFrequencyText() {
         let frequencyText = '';
@@ -427,30 +429,36 @@ function timeToPay() {
                 frequencyText = 'Unknown';
         }
 
-        // Update the text directly in the TIMETOPAYDEBT element
-        if (timeToPayDebtElement) {
-            let revolvingDebtValue = getCookie1('LIABILITIESNA');
-            if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
-                let TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / DISPOSABLEINCOME;
-                if (DISPOSABLEINCOME <= 0) {
-                    timeToPayDebtElement.textContent = "RISK OF INSOLVENCY";
-                } else {
-                    // Here you can decide if you want to convert TIMETOPAYDEBT based on frequency
-                    // For now, let's just display the text without conversion
-                    timeToPayDebtElement.textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
-                }
+        // Retrieve disposable income from the DOM element
+        const disposableIncomeText = document.getElementById('DISPOSABLEINCOME').textContent;
+        const DISPOSABLEINCOME = parseFloat(disposableIncomeText.replace(/[^0-9.]/g, ''));
+
+        let revolvingDebtValue = getCookie1('LIABILITIESNA');
+        if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
+            let TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / DISPOSABLEINCOME;
+            if (DISPOSABLEINCOME <= 0) {
+                timeToPayDebtElement.textContent = "RISK OF INSOLVENCY";
             } else {
-                timeToPayDebtElement.textContent = "Not Applicable";
+                // Convert time based on frequency
+                switch (frequencyDropdown.value) {
+                    case 'annual':
+                        break; // No conversion needed
+                    case 'monthly':
+                        TIMETOPAYDEBT *= 12; // Convert years to months
+                        break;
+                    case 'weekly':
+                        TIMETOPAYDEBT *= 52; // Convert years to weeks
+                        break;
+                }
+                timeToPayDebtElement.textContent = TIMETOPAYDEBT.toFixed(2) + ' ' + frequencyText;
             }
+        } else {
+            timeToPayDebtElement.textContent = "Not Applicable";
         }
     }
 
-    
-    // Attach the change event listener to the dropdown
     frequencyDropdown.addEventListener('change', updateFrequencyText);
-
-    // Initial call to set up the state
-    updateFrequencyText();
+    updateFrequencyText(); // Initial call
 }
 
 // DOM Event Listener
@@ -481,6 +489,7 @@ frequencyDropdown.addEventListener('change', function () {
     colorChangeSavingsToDebt();
     colorChangeHTI();
     colorChangeDTI();
+    const disposableIncomeValue = disposableIncome(); // Now returns the value
     timeToPay();
     calculateGoal();
 });
