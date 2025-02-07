@@ -232,6 +232,18 @@ Asset
 <span id="expenses_subscriptions_annual"></span>
 </div>
 
+<div class ="row">
+  <label for="expenses_beauty">Beauty:</label>
+  <input type='number' inputmode="numeric"  id="expenses_beauty">
+  <select id="expenses_beauty_frequency" onchange="calculateAnnual('expenses_beauty', 'expenses_beauty_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
+  </select>
+  <span id="expenses_beauty_annual"></span>
+  </div>
+
 	  </div>
 
 	  <div class="containerround">
