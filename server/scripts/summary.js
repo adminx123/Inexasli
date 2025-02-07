@@ -61,8 +61,8 @@ function getCookie(name) {
 
 
 function updateOnChange() {    // Update HTML elements with cookie values
-    document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
-    document.getElementById('SubregionDropdown').textContent = "Subregion: " + getCookie('SubregionDropdown');
+    // document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
+    // document.getElementById('SubregionDropdown').textContent = "Subregion: " + getCookie('SubregionDropdown');
 
     document.getElementById('taxable_sum').textContent = " $" + parseFloat(getCookie('ANNUALTAXABLEINCOME')).toFixed(2);
     document.getElementById('region_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALREGIONALTAX')).toFixed(2);
@@ -105,7 +105,6 @@ function updateOnChange() {    // Update HTML elements with cookie values
     NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = ' $' + NETWORTH.toFixed(2);
 
-    document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
 
 }
@@ -485,3 +484,6 @@ frequencyDropdown.addEventListener('change', function () {
     timeToPay();
     calculateGoal();
 });
+
+
+document.getElementById('goalAmount').addEventListener('input', calculateGoal);
