@@ -233,7 +233,9 @@ Asset
 </div>
 
 <div class ="row">
-  <label for="expenses_beauty">Beauty:</label>
+  <label for="" style="font-size: unset;" class="tooltip" data-tooltip="Include all salon services such as hair, makeup, nails, waxing, eyebrows, teeth whitening, and more.">
+    <span class="tooltip-content"></span>
+      Beauty:</label>
   <input type='number' inputmode="numeric"  id="expenses_beauty">
   <select id="expenses_beauty_frequency" onchange="calculateAnnual('expenses_beauty', 'expenses_beauty_frequency')">
     <option value="annually">Annually</option>
@@ -243,6 +245,10 @@ Asset
   </select>
   <span id="expenses_beauty_annual"></span>
   </div>
+
+
+  
+
 
 	  </div>
 
