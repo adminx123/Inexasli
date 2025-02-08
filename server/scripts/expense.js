@@ -524,10 +524,7 @@ window.calculateNext = function () {
   window.location.href = '/budget/asset.html';
 }   
 
-window.calculateBack = function () {
-  calculateAll();
-  window.location.href = 'income.html';
-}   
+ 
 
 window.calculateAll = function () {
         
