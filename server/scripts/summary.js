@@ -15,7 +15,7 @@ tabs.forEach(tab => {
     }
 })
 
-const paid = getCookie("authenticated");
+/* const paid = getCookie("authenticated");
 
 
 if (paid == "paid") {
@@ -23,7 +23,7 @@ if (paid == "paid") {
     document.body.style.display = 'initial'
 } else {
     window.location.href = "./sumary.html";
-}
+} */
 
 
 // net worth doesnt want the cookies to be effected by freuncy feild
@@ -54,9 +54,9 @@ function getCookie(name) {
         }
     }
     
-    // return cookieValue === '' ? '0' : cookieValue;
+    //  return cookieValue === '' ? '0' : cookieValue;
 
-    return selectedFrequency
+   return frequencyDropdown
 }
 
 
@@ -118,7 +118,7 @@ function updateOnChange() {    // Update HTML elements with cookie values
 
 
 
-//  Start Pie
+/*  Start Pie
 document.addEventListener('DOMContentLoaded', function () {
     const cookieNames = ['ESSENTIAL', 'DEBT', 'DEPENDANT', 'DISCRETIONARY', 'HOUSING', 'TRANSPORTATION'];
 
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 });
 
-// End pie
+*/
 
 function governmentObligations() {
     let ANNUALGOVERNMENTOBLIGATIONS;
