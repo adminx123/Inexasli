@@ -54,7 +54,9 @@ function getCookie(name) {
         }
     }
     
-    return cookieValue === '' ? '0' : cookieValue;
+    // return cookieValue === '' ? '0' : cookieValue;
+
+    return value
 }
 
 
