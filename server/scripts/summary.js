@@ -41,19 +41,26 @@ function getCookie(name) {
     const parts = value.split(`; ${name}=`);
     let cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
 
-    // Create a copy for frequency adjustments
     let displayValue = cookieValue;
 
     const frequencyDropdown = document.getElementById('frequency');
     const selectedFrequency = frequencyDropdown.value;
-console.log(selectedFrequency)
-    if (selectedFrequency !== 'annual' && !isNaN(displayValue)) {
-        const annualValue = parseFloat(displayValue);
+
+    // Convert displayValue to a number, default to 0 if invalid
+    let annualValue = parseFloat(displayValue);
+    if (isNaN(annualValue)) {
+        annualValue = 0;
+    }
+
+    // Apply frequency adjustment based on valid annualValue
+    if (selectedFrequency !== 'annual') {
         if (selectedFrequency === 'monthly') {
             displayValue = (annualValue / 12).toFixed(2);
         } else if (selectedFrequency === 'weekly') {
             displayValue = (annualValue / 52).toFixed(2);
         }
+    } else {
+        displayValue = annualValue.toFixed(2);
     }
 
     return displayValue === '' ? '0' : displayValue;
