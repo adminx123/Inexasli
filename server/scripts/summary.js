@@ -15,7 +15,7 @@ tabs.forEach(tab => {
     }
 })
 
-/* const paid = getCookie("authenticated");
+const paid = getCookie("authenticated");
 
 
 if (paid == "paid") {
@@ -24,7 +24,7 @@ if (paid == "paid") {
 } else {
     window.location.href = "./sumary.html";
 }
-*/
+
 
 // net worth doesnt want the cookies to be effected by freuncy feild
 function getCookie1(name) {
@@ -40,30 +40,21 @@ function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     let cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
-
-    let displayValue = cookieValue;
-
+    
+    // Get the selected frequency from the dropdown
     const frequencyDropdown = document.getElementById('frequency');
     const selectedFrequency = frequencyDropdown.value;
 
-    // Convert displayValue to a number, default to 0 if invalid
-    let annualValue = parseFloat(displayValue);
-    if (isNaN(annualValue)) {
-        annualValue = 0;
-    }
-
-    // Apply frequency adjustment based on valid annualValue
-    if (selectedFrequency !== 'annual') {
+    // Convert the annual amount based on the selected frequency, if applicable
+    if (selectedFrequency !== 'annually' && !isNaN(cookieValue)) {
         if (selectedFrequency === 'monthly') {
-            displayValue = (annualValue / 12).toFixed(2);
+            cookieValue /= 12;
         } else if (selectedFrequency === 'weekly') {
-            displayValue = (annualValue / 52).toFixed(2);
+            cookieValue /= 52;
         }
-    } else {
-        displayValue = annualValue.toFixed(2);
     }
-
-    return displayValue === '' ? '0' : displayValue;
+    
+    return cookieValue === '' ? '0' : cookieValue;
 }
 
 
