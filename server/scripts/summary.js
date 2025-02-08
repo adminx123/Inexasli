@@ -27,37 +27,26 @@ if (paid == "paid") {
 
 
 // net worth doesnt want the cookies to be effected by freuncy feild
-function getCookie1(name) {
-    const value1 = `; ${document.cookie}`;
-    const parts1 = value1.split(`; ${name}=`);
-    let cookieValue1 = parts1.length === 2 ? decodeURIComponent(parts1.pop().split(';').shift()) : '';
-
-    return cookieValue1 === '' ? '0' : cookieValue1;
-}
-
-
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    let cookieValue = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
     
-    // Get the selected frequency from the dropdown
-    const frequencyDropdown = document.getElementById('frequency');
-    const selectedFrequency = frequencyDropdown.value;
-
-    // Convert the annual amount based on the selected frequency, if applicable
-    if (selectedFrequency !== 'annually' && !isNaN(cookieValue)) {
-        if (selectedFrequency === 'monthly') {
-            cookieValue /= 12;
-        } else if (selectedFrequency === 'weekly') {
-            cookieValue /= 52;
+    if (parts.length === 2) {
+        let cookieValue = decodeURIComponent(parts.pop().split(';').shift());
+        // Check if the cookie value is empty or null
+        if(cookieValue === '' || cookieValue == null) {
+            return '0'; // or return 0 if you want it as a number, not string
         }
+        return cookieValue;
     }
     
-    //  return cookieValue === '' ? '0' : cookieValue;
-
-   return frequencyDropdown;
+    // If the cookie doesn't exist or is empty, return '0'
+    return '0'; // or return 0 if you want it as a number
 }
+
+ 
+
+
 
 
 
@@ -92,8 +81,8 @@ function updateOnChange() {    // Update HTML elements with cookie values
 
     document.getElementById('TOTALTAXCG').textContent = " $" + parseFloat(getCookie('TOTALTAXCG')).toFixed(2);
 
-    document.getElementById('ASSETS').textContent = " $" + parseFloat(getCookie1('ASSETS')).toFixed(2);
-    document.getElementById('LIABILITIES').textContent = " $" + parseFloat(getCookie1('LIABILITIES')).toFixed(2);
+    document.getElementById('ASSETS').textContent = " $" + parseFloat(getCookie('ASSETS')).toFixed(2);
+    document.getElementById('LIABILITIES').textContent = " $" + parseFloat(getCookie('LIABILITIES')).toFixed(2);
 
     document.getElementById('debtcheckbox').textContent = getCookie('debtcheckbox');
     document.getElementById('dependantcheckbox').textContent = getCookie('dependantcheckbox');
