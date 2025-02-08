@@ -15,7 +15,7 @@ tabs.forEach(tab => {
     }
 })
 
-const paid = getCookie("authenticated");
+/* const paid = getCookie("authenticated");
 
 
 if (paid == "paid") {
@@ -24,7 +24,7 @@ if (paid == "paid") {
 } else {
     window.location.href = "./sumary.html";
 }
-
+*/
 
 // net worth doesnt want the cookies to be effected by freuncy feild
 function getCookie1(name) {
