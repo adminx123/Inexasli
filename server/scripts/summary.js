@@ -534,7 +534,7 @@ const frequencyDropdown = document.getElementById('frequency');
 frequencyDropdown.addEventListener('change', function () {
     // Call the update function when the frequency dropdown value changes
    updateOnChange(); 
-    handleFrequencyChange();
+    
     governmentObligations();
     disposableIncome();
     colorChangeFIRE();
