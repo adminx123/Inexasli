@@ -481,7 +481,7 @@ function timeToPay() {
         const disposableIncomeText = document.getElementById('DISPOSABLEINCOME').textContent;
         const DISPOSABLEINCOME = parseFloat(disposableIncomeText.replace(/[^0-9.]/g, ''));
 
-        let revolvingDebtValue = getCookie1('LIABILITIESNA');
+        let revolvingDebtValue = getCookie('LIABILITIESNA');
         if (revolvingDebtValue && revolvingDebtValue !== '0' && !isNaN(parseFloat(revolvingDebtValue))) {
             let TIMETOPAYDEBT = parseFloat(revolvingDebtValue) / DISPOSABLEINCOME;
             if (DISPOSABLEINCOME <= 0) {
