@@ -50,7 +50,11 @@ document.querySelectorAll('.dropdown a').forEach(link => {
 });
 
 
-/* <div class="menu" id="menuToggle">
+/* 
+
+This is for the HTML
+
+<div class="menu" id="menuToggle">
         <div></div>
         <div></div>
         <div></div>

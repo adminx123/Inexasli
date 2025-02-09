@@ -503,37 +503,74 @@ button {
 }
 
 .container {
-  background-color: #fff; /* White background */
-  color: #000; /* Black text color for contrast */
-  max-width: 800px; /* Maximum width of the container */
-  margin: 0px auto; /* Center horizontally with auto margins */
-  border-radius: 0 0 5px 5px; /* Rounded corners */
-  box-shadow: 10px 10px 10px rgba(80, 80, 80, 0.454); /* Shadow effect */
-  text-align: left; /* Text alignment inside the container */
+  background-color: #fff; /* White background for contrast */
+  color: #000; /* Black text for readability */
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 0 0 5px 5px; /* Rounded corners on bottom only to accommodate tabs */
+  
+  /* Initial shadow */
+  box-shadow: 3px 3px 5px rgba(80, 80, 80, 0.2);
+  
+  text-align: left;
   display: flex;
   padding: 0 15px;
-  padding-top: 10px;   /* Adds space at the top inside the container */
-  padding-bottom: 10px; /* Adds space at the bottom inside the container */
+  padding-top: 10px;
+  padding-bottom: 10px;
   flex-direction: column;
-  align-items: stretch; /* Stretch items to fill container */
-  box-sizing: border-box; /* Include padding and border in element's total width and height */
+  align-items: stretch;
+  box-sizing: border-box;
+  
+  /* Add transition for smooth effect */
+  transition: all 0.3s ease;
+}
+
+/* Hover effect for desktop */
+.container:hover {
+  transform: translateY(-3px); /* Slight lift */
+  box-shadow: 0 8px 15px rgba(80, 80, 80, 0.4); /* Bigger shadow for more depth */
+}
+
+/* Active effect for touch devices or when clicked */
+.container:active {
+  transform: translateY(1px); /* Press down effect */
+  box-shadow: 0 2px 5px rgba(80, 80, 80, 0.3); /* Smaller shadow to mimic being pressed */
 }
 
 .containerround {
-  background-color: #fff; /* White background */
-  color: #000; /* Black text color for contrast */
-  max-width: 800px; /* Maximum width of the container */
-  margin: 10px auto; /* Center horizontally with auto margins */
-  border-radius: 5px;  /* Rounded corners */
-  box-shadow: 10px 10px 10px rgba(174, 173, 173, 0.2); /* Shadow effect */
-  text-align: left; /* Text alignment inside the container */
+  background-color: #fff; /* White background for contrast */
+  color: #000; /* Black text for readability */
+  max-width: 800px;
+  margin: 10px auto;
+  border-radius: 5px;
+  
+  /* Initial shadow */
+  box-shadow: 3px 3px 5px rgba(174, 173, 173, 0.2);
+  
+  text-align: left;
   display: flex;
   padding: 0 15px;
-  padding-top: 10px;   /* Adds space at the top inside the container */
-  padding-bottom: 10px; /* Adds space at the bottom inside the container */
+  padding-top: 10px;
+  padding-bottom: 10px;
   flex-direction: column;
-  align-items: stretch; /* Stretch items to fill container */
-  box-sizing: border-box; /* Include padding and border in element's total width and height */
+  align-items: stretch;
+  box-sizing: border-box;
+  border: 1px solid #e0e0e0; /* Light border for edge definition */
+  
+  /* Add transition for smooth effect */
+  transition: all 0.3s ease;
+}
+
+/* Hover effect for desktop */
+.containerround:hover {
+  transform: translateY(-3px); /* Slight lift */
+  box-shadow: 0 8px 15px rgba(174, 173, 173, 0.4); /* Bigger shadow for more depth */
+}
+
+/* Active effect for touch devices or when clicked */
+.containerround:active {
+  transform: translateY(1px); /* Press down effect */
+  box-shadow: 0 2px 5px rgba(174, 173, 173, 0.3); /* Smaller shadow to mimic being pressed */
 }
 
 .hidden {

@@ -309,7 +309,8 @@ if (isNaN(FIRERATIO)) {
 
 
 
-SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
+// Calculate the savings-to-debt ratio
+var SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES'));
 
 function colorChangeSavingsToDebt() {
     // Get the savings-to-debt ratio value
@@ -331,12 +332,12 @@ function colorChangeSavingsToDebt() {
     }
 }
 
-
 if (isNaN(SAVINGSTODEBT)) {
-
     document.getElementById('SAVINGSTODEBT').textContent = 'Not Applicable';
+} else if (SAVINGSTODEBT === 0) {
+    document.getElementById('SAVINGSTODEBT').textContent = 'RISK OF INSOLVENCY';
+    document.getElementById('SAVINGSTODEBT').style.color = "red"; // Set color to red for insolvency risk
 } else {
-
     // Assuming "SAVINGSTODEBT" is the ID of the element displaying the savings-to-debt ratio
     document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
     colorChangeSavingsToDebt();
