@@ -21,10 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (item) {
       item.classList.toggle('selected', cookieValue === 'checked');
+      // If no cookie is set or it's not 'checked', set it to 'unChecked'
+      if (cookieValue !== 'checked') {
+        setCookie(name, 'unChecked', 365);
+      }
     }
   };
 
-  // Apply cookie values to grid items
+  // Apply cookie values to grid items or set to 'unChecked' if nothing is selected
   ['romanticincome', 'romanticexpense', 'dependantcheckbox', 'debtcheckbox', 'romanticasset', 'romanticliability'].forEach(id => {
     setGridItemFromCookie(id, id);
   });
