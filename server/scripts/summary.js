@@ -303,7 +303,7 @@ if (isNaN(FIRERATIO)) {
 } else {
 
     // Assuming FIRERATIO is the ID of the element displaying the FIRE ratio
-    document.getElementById('FIRERATIO').textContent = FIRERATIO.toFixed(3);
+    document.getElementById('FIRERATIO').textContent = FIRERATIO.toFixed(2);
     colorChangeFIRE();
 }
 
@@ -339,7 +339,7 @@ if (isNaN(SAVINGSTODEBT)) {
     document.getElementById('SAVINGSTODEBT').style.color = "red"; // Set color to red for insolvency risk
 } else {
     // Assuming "SAVINGSTODEBT" is the ID of the element displaying the savings-to-debt ratio
-    document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(3);
+    document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(2);
     colorChangeSavingsToDebt();
 }
 
@@ -374,7 +374,7 @@ if (isNaN(HOUSINGTOINCOME)) {
 } else {
 
     // Assuming HOUSINGTOINCOME is the ID of the element displaying HTI ratio
-    document.getElementById('HOUSINGTOINCOME').textContent = HOUSINGTOINCOME.toFixed(3);
+    document.getElementById('HOUSINGTOINCOME').textContent = HOUSINGTOINCOME.toFixed(2);
     colorChangeHTI();
 }
 
@@ -405,7 +405,7 @@ if (isNaN(DEBTTOINCOME) || !isFinite(DEBTTOINCOME)) {
     document.getElementById('DEBTTOINCOME').textContent = ' Not Applicable'
 } else {
 
-    document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(3);
+    document.getElementById('DEBTTOINCOME').textContent = DEBTTOINCOME.toFixed(2);
     colorChangeDTI(); // After setting the text content, call the function to update the color
 }
 
@@ -532,9 +532,7 @@ function calculateIncomeAfterTaxAndObligations() {
     // Calculate income after tax and obligations
     let incomeAfterTaxAndObligations = annualIncome - annualTax - annualGovernmentObligations - capitalGainsTax;
 
-    // Update the display with the calculated value
-    document.getElementById('INCOMEAFTERTAXOB').textContent = ' $' + incomeAfterTaxAndObligations.toFixed(2);
-
+    
     // Return the calculated value for use elsewhere if needed
     return incomeAfterTaxAndObligations;
 }
@@ -542,7 +540,7 @@ function calculateIncomeAfterTaxAndObligations() {
 
 // Start Pie Tax
 document.addEventListener('DOMContentLoaded', function () {
-    let cookieNames = ['INCOMEAFTERTAXOB', 'ANNUALTAX', 'TOTALSOCIALSECURITY', 'TOTALMEDICARE' ];
+    let cookieNames = ['incomeAfterTaxAndObligations', 'ANNUALTAX', 'TOTALSOCIALSECURITY', 'TOTALMEDICARE' ];
 
     // Check if the region is USA
     if (getCookie('RegionDropdown') === 'USA') {
@@ -594,7 +592,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 title: {
                     display: true,
-                    text: 'Income Distribution'
+                    text: 'Tax and Other Government Obligation Income Erosion Chart'
                 }
             }
         }
