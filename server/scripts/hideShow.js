@@ -14,7 +14,7 @@ function hideShowClass(className, task) {
     });
 }
 
-function getCookie(name) {
+ function getCook1(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) {
@@ -30,10 +30,12 @@ function getCookie(name) {
     }
 }
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
     
-    const region = getCookie('RegionDropdown')
+    const region = getCook1('RegionDropdown')
 
 if (region == 'CAN') {
     hideShowClass('usa-hide', 'hide')

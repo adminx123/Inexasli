@@ -44,15 +44,28 @@ function getCookie(name) {
     return '0'; // or return 0 if you want it as a number
 }
 
- 
+ function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    
+    if (parts.length === 2) {
+        let cookieValue = decodeURIComponent(parts.pop().split(';').shift());
+        // Check if the cookie value is empty or null
+        if(cookieValue === '' || cookieValue == null) {
+            return '0'; // or return 0 if you want it as a number, not string
+        }
+        return cookieValue;
+    }
+    
+    // If the cookie doesn't exist or is empty, return '0'
+    return '0'; // or return 0 if you want it as a number
+}
 
 
 
-
-
-function updateOnChange() {    // Update HTML elements with cookie values
-    // document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
-    // document.getElementById('SubregionDropdown').textContent = "Subregion: " + getCookie('SubregionDropdown');
+function updateOnLoad() {    // Update HTML elements with cookie values
+    document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
+    document.getElementById('SubregionDropdown').textContent = "Subregion: " + getCookie('SubregionDropdown');
 
     document.getElementById('taxable_sum').textContent = " $" + parseFloat(getCookie('ANNUALTAXABLEINCOME')).toFixed(2);
     document.getElementById('region_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALREGIONALTAX')).toFixed(2);
@@ -92,7 +105,7 @@ function updateOnChange() {    // Update HTML elements with cookie values
     document.getElementById('romanticliability').textContent = getCookie('romanticliability');
 
 
-    NETWORTH = parseFloat(getCookie1('ASSETS')) - parseFloat(getCookie1('LIABILITIES'));
+    NETWORTH = parseFloat(getCookie('ASSETS')) - parseFloat(getCookie('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = ' $' + NETWORTH.toFixed(2);
 
 
@@ -101,7 +114,52 @@ function updateOnChange() {    // Update HTML elements with cookie values
 
 
 
+function updateOnChange() {
+    const frequencySelect = document.getElementById('frequency');
+    let frequency = frequencySelect.value;
+    let multiplier = 1; // Default for annual
 
+    switch(frequency) {
+        case 'monthly':
+            multiplier = 1/12;
+            break;
+        case 'weekly':
+            multiplier = 1/52;
+            break;
+        // 'annual' is already the base case (multiplier = 1)
+    }
+
+    function updateElementText(elementId, cookieName) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            let value = parseFloat(getCookie(cookieName)) * multiplier;
+            element.textContent = " $" + value.toFixed(2);
+        }
+    }
+
+    // Update elements based on frequency
+    updateElementText('taxable_sum', 'ANNUALTAXABLEINCOME');
+    updateElementText('region_tax_sum', 'ANNUALREGIONALTAX');
+    updateElementText('subregion_tax_sum', 'ANNUALSUBREGIONALTAX');
+    updateElementText('tax_sum', 'ANNUALTAX');
+    updateElementText('annual_income_sum', 'ANNUALINCOME');
+    updateElementText('annual_expense_sum', 'ANNUALEXPENSESUM');
+    updateElementText('cpp_sum', 'ANNUALCPP');
+    updateElementText('ANNUALEI', 'ANNUALEI');
+    updateElementText('HOUSING', 'HOUSING');
+    updateElementText('TRANSPORTATION', 'TRANSPORTATION');
+    updateElementText('DEPENDANT', 'DEPENDANT');
+    updateElementText('DEBT', 'DEBT');
+    updateElementText('DISCRETIONARY', 'DISCRETIONARY');
+    updateElementText('ESSENTIAL', 'ESSENTIAL');
+    updateElementText('annual_cpp_seresult', 'CPPPAYABLESELFEMPLOYED');
+    updateElementText('annual_cpp_eresult', 'CPPPAYABLEEMPLOYED');
+    updateElementText('TOTALMEDICARE', 'TOTALMEDICARE');
+    updateElementText('TOTALSOCIALSECURITY', 'TOTALSOCIALSECURITY');
+    updateElementText('TOTALSOCIALSECURITYE', 'TOTALSOCIALSECURITYE');
+    updateElementText('TOTALSOCIALSECURITYSE', 'TOTALSOCIALSECURITYSE');
+    updateElementText('TOTALTAXCG', 'TOTALTAXCG');
+}
 
 
 
@@ -454,7 +512,8 @@ function timeToPay() {
 // DOM Event Listener
 document.addEventListener('DOMContentLoaded', function () {
     // Function to retrieve cookie value by name
-    updateOnChange();
+    updateOnLoad();
+   
     document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
     governmentObligations();
@@ -474,14 +533,15 @@ document.addEventListener('DOMContentLoaded', function () {
 const frequencyDropdown = document.getElementById('frequency');
 frequencyDropdown.addEventListener('change', function () {
     // Call the update function when the frequency dropdown value changes
-    updateOnChange();
+   updateOnChange(); 
+    handleFrequencyChange();
     governmentObligations();
     disposableIncome();
     colorChangeFIRE();
     colorChangeSavingsToDebt();
     colorChangeHTI();
     colorChangeDTI();
-    const disposableIncomeValue = disposableIncome(); // Now returns the value
+
     timeToPay();
     calculateGoal();
 });
