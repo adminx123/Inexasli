@@ -539,7 +539,7 @@ function calculateIncomeAfterTaxAndObligations() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    let cookieNames = ['INCOMEAFTERTAXOB', 'ANNUALTAX', 'ANNUALGOVERNMENTOBLIGATIONS'];
+    let cookieNames = ['INCOMEAFTERTAXOB', 'ANNUALTAX', 'TOTALSOCIALSECURITY', 'TOTALMEDICARE' ];
 
     // Check if the region is USA
     if (getCookie('RegionDropdown') === 'USA') {
