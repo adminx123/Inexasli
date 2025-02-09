@@ -509,6 +509,103 @@ function timeToPay() {
     updateFrequencyText(); // Initial call
 }
 
+
+
+
+function calculateIncomeAfterTaxAndObligations() {
+    // Retrieve annual income from cookie
+    let annualIncome = parseFloat(getCookie('ANNUALINCOME')) || 0;
+
+    // Retrieve annual tax from cookie
+    let annualTax = parseFloat(getCookie('ANNUALTAX')) || 0;
+
+    // Calculate annual government obligations from the function on the current page
+    let annualGovernmentObligations = parseFloat(getCookie('ANNUALGOVERNMENTOBLIGATIONS')) || 0;
+
+    // Additional tax for USA
+    let capitalGainsTax = 0;
+    if (getCookie('RegionDropdown') === 'USA') {
+        capitalGainsTax = parseFloat(getCookie('TOTALTAXCG')) || 0;
+    }
+
+    // Calculate income after tax and obligations
+    let incomeAfterTaxAndObligations = annualIncome - annualTax - annualGovernmentObligations - capitalGainsTax;
+
+    // Update the display with the calculated value
+    document.getElementById('INCOMEAFTERTAXOB').textContent = ' $' + incomeAfterTaxAndObligations.toFixed(2);
+
+    // Return the calculated value for use elsewhere if needed
+    return incomeAfterTaxAndObligations;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    let cookieNames = ['INCOMEAFTERTAXOB', 'ANNUALTAX', 'ANNUALGOVERNMENTOBLIGATIONS'];
+
+    // Check if the region is USA
+    if (getCookie('RegionDropdown') === 'USA') {
+        cookieNames.push('TOTALTAXCG');
+    }
+
+    // Get data from cookies
+    const data = cookieNames.map(name => {
+        const value = parseFloat(getCookie(name).replace('$', '').trim());
+        return isNaN(value) ? 0 : value; // Return 0 if not a number to avoid NaN in chart data
+    });
+
+    // Configuration for the pie chart
+    const config = {
+        type: 'pie',
+        data: {
+            labels: cookieNames, // Use the cookie names as labels
+            datasets: [{
+                label: 'Income Distribution',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(201, 203, 207, 0.2)',
+                    'rgba(100, 100, 100, 0.2)'
+                ],
+                borderColor: [
+                    'rgb(194, 194, 194)',
+                    'rgb(165, 165, 165)',
+                    'rgb(118, 118, 118)',
+                    'rgb(101, 101, 101)',
+                    'rgb(76, 76, 76)',
+                    'rgb(63, 63, 63)',
+                    'rgb(36, 36, 36)',
+                    'rgb(3, 3, 3)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Income Distribution'
+                }
+            }
+        }
+    };
+
+    // Create the pie chart
+    const myPieChart = new Chart(
+        document.getElementById('myPieChartTax'),
+        config
+    );
+});
+
+
+
 // DOM Event Listener
 document.addEventListener('DOMContentLoaded', function () {
     // Function to retrieve cookie value by name
@@ -524,7 +621,7 @@ document.addEventListener('DOMContentLoaded', function () {
     colorChangeDTI();
     timeToPay();
     calculateGoal();
-
+    calculateIncomeAfterTaxAndObligations();
 });
 
 
