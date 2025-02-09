@@ -165,7 +165,7 @@ function updateOnChange() {
 
 
 
-/*  Start Pie
+// Start Pie
 document.addEventListener('DOMContentLoaded', function () {
     const cookieNames = ['ESSENTIAL', 'DEBT', 'DEPENDANT', 'DISCRETIONARY', 'HOUSING', 'TRANSPORTATION'];
 
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 });
 
-*/
+
 
 function governmentObligations() {
     let ANNUALGOVERNMENTOBLIGATIONS;
