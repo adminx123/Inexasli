@@ -59,14 +59,14 @@
 
         /* Responsive design for small screens */
         @media screen and (max-width: 768px) {
-            #fadeInText {
-                font-size: 12vw; /* Increase font size for mobile screens */
-            }
-
-            h1 {
-                font-size: 8vw; /* Adjust h1 size for mobile screens */
-            }
-        }
+    .inline-container {
+        flex-direction: column;
+        align-items: center; /* Center align items vertically */
+    }
+    #fadeInText, h1 {
+        text-align: center; /* Center text for better visual balance */
+    }
+}
 
         @media screen and (max-width: 480px) {
             #fadeInText {
