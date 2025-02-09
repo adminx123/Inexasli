@@ -538,6 +538,8 @@ function calculateIncomeAfterTaxAndObligations() {
     return incomeAfterTaxAndObligations;
 }
 
+
+// Start Pie Tax
 document.addEventListener('DOMContentLoaded', function () {
     let cookieNames = ['INCOMEAFTERTAXOB', 'ANNUALTAX', 'TOTALSOCIALSECURITY', 'TOTALMEDICARE' ];
 
@@ -558,7 +560,7 @@ document.addEventListener('DOMContentLoaded', function () {
         data: {
             labels: cookieNames, // Use the cookie names as labels
             datasets: [{
-                label: 'Income Distribution',
+                label: 'Tax and Other Government Obligation Income Erosion Chart',
                 data: data,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
