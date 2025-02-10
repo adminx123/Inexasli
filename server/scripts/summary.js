@@ -61,16 +61,39 @@ function getCookie(name) {
     return '0'; // or return 0 if you want it as a number
 }
 
+function calculateAnnualTax() {
+    const regionValue = getCookie('RegionDropdown'); // Default to 'NONE' if cookie not found
+    
+    
+    let annualTax = 0;
+
+    // Fetch values from cookies
+    const annualRegionalTax = Number(getCookie('ANNUALREGIONALTAX')) || 0;
+    const annualSubregionalTax = Number(getCookie('ANNUALSUBREGIONALTAX')) || 0;
+    const capitalGainsTax = Number(getCookie('TOTALTAXCG')) || 0;
+
+    if (regionValue === 'USA') {
+        annualTax = annualRegionalTax + annualSubregionalTax + capitalGainsTax;
+    } else if (regionValue === 'CAN') {
+        annualTax = annualRegionalTax + annualSubregionalTax;
+    } else {
+        console.warn('Region not recognized for tax calculation');
+    }
+
+    return annualTax;
+}
 
 
 function updateOnLoad() {    // Update HTML elements with cookie values
     document.getElementById('RegionDropdown').textContent = "Region: " + getCookie('RegionDropdown');
     document.getElementById('SubregionDropdown').textContent = "Subregion: " + getCookie('SubregionDropdown');
 
+    calculateAnnualTax();
+
     document.getElementById('taxable_sum').textContent = " $" + parseFloat(getCookie('ANNUALTAXABLEINCOME')).toFixed(2);
     document.getElementById('region_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALREGIONALTAX')).toFixed(2);
     document.getElementById('subregion_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALSUBREGIONALTAX')).toFixed(2);
-    document.getElementById('ANNUALTAX').textContent = " $" + parseFloat((getCookie('ANNUALTAX'))).toFixed(2);
+    
 
     document.getElementById('annual_income_sum').textContent = " $" + parseFloat(getCookie('ANNUALINCOME')).toFixed(2);
     document.getElementById('annual_expense_sum').textContent = " $" + parseFloat(getCookie('ANNUALEXPENSESUM')).toFixed(2);
@@ -108,9 +131,13 @@ function updateOnLoad() {    // Update HTML elements with cookie values
     NETWORTH = parseFloat(getCookie('ASSETS')) - parseFloat(getCookie('LIABILITIES'));
     document.getElementById('NETWORTH').textContent = ' $' + NETWORTH.toFixed(2);
 
-
+    
 
 }
+
+
+
+
 
 
 

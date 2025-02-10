@@ -106,7 +106,7 @@ var ANNUALTAXABLEINCOME;
     var ANNUALREGIONALTAX;
     var ANNUALSUBREGIONALTAX;
     var TOTALTAXCG;
-    var ANNUALTAX;
+    
     var ANNUALEMPLOYMENTINCOME;
     var ANNUALINCOME;
     var ANNUALCPP;
@@ -1028,24 +1028,7 @@ function calculateCapitalGainsTax() {
   
 
 
-  function calculateAnnualTax() {
-    const regionDropdown = document.getElementById("RegionDropdown").value;
-    const regionValue = regionDropdown;
-    
-    
-    let annualTax = 0;
-
-    if (regionValue === 'USA') {
-        annualTax = (Number(ANNUALREGIONALTAX) || 0) + 
-                    (Number(ANNUALSUBREGIONALTAX) || 0) + 
-                    (Number(TOTALTAXCG) || 0);
-    } else if (regionValue === 'CAN') {
-        annualTax = (Number(ANNUALREGIONALTAX) || 0) + 
-                    (Number(ANNUALSUBREGIONALTAX) || 0);
-    } 
-
-     return annualTax;
-}
+  
 
 
 
@@ -1341,7 +1324,7 @@ calculateRegionalTax();
     const Subregion = SubregionDropdown.value;
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
 
-calculateAnnualTax();
+
 
         calculateEmploymentIncome();
 
@@ -1368,7 +1351,7 @@ const subregionDropdown = document.getElementById("SubregionDropdown");
        setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
        setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
        setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
-       setCookie("ANNUALTAX", ANNUALTAX, 365);
+       
 
        setCookie("ANNUALCPP", ANNUALCPP, 365);
        setCookie("CPPPAYABLEEMPLOYED", CPPPAYABLEEMPLOYED, 365);
