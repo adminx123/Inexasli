@@ -62,8 +62,7 @@ function getCookie(name) {
 }
 
 function calculateAnnualTax() {
-    const regionValue = getCookie('RegionDropdown'); // Default to 'NONE' if cookie not found
-    
+    const regionValue = getCookie('RegionDropdown') || 'NONE'; // Default to 'NONE' if cookie not found
     
     let annualTax = 0;
 
@@ -77,11 +76,16 @@ function calculateAnnualTax() {
     } else if (regionValue === 'CAN') {
         annualTax = annualRegionalTax + annualSubregionalTax;
     } else {
+        // Optionally log a warning or handle unrecognized regions here
         console.warn('Region not recognized for tax calculation');
     }
 
     return annualTax;
 }
+
+// Assuming you want to update the DOM with the calculated tax
+const annualTax = calculateAnnualTax();
+document.getElementById('annualTax').textContent = '$' + annualTax.toFixed(2);
 
 
 function updateOnLoad() {    // Update HTML elements with cookie values
