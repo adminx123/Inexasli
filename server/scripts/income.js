@@ -1035,13 +1035,15 @@ function calculateCapitalGainsTax() {
         return;
     }
 
-    let annualTax = 25;
+    let annualTax = 0;
 
     if (regionDropdown.value === 'USA') {
+        console.log(`ANNUALREGIONALTAX: ${ANNUALREGIONALTAX}, ANNUALSUBREGIONALTAX: ${ANNUALSUBREGIONALTAX}, TOTALTAXCG: ${TOTALTAXCG}`);
         annualTax = (ANNUALREGIONALTAX || 0) + 
                     (ANNUALSUBREGIONALTAX || 0) + 
                     (TOTALTAXCG || 0);
     } else if (regionDropdown.value === 'CAN') {
+        console.log(`ANNUALREGIONALTAX: ${ANNUALREGIONALTAX}, ANNUALSUBREGIONALTAX: ${ANNUALSUBREGIONALTAX}`);
         annualTax = (ANNUALREGIONALTAX || 0) + 
                     (ANNUALSUBREGIONALTAX || 0);
     } else {
@@ -1050,8 +1052,10 @@ function calculateCapitalGainsTax() {
 
     ANNUALTAX = annualTax;
     
-    if (document.getElementById('ANNUALTAX')) {
-        document.getElementById('ANNUALTAX').textContent = '$' + annualTax.toFixed(2);
+    const taxElement = document.getElementById('ANNUALTAX');
+    if (taxElement) {
+        taxElement.textContent = '$' + ANNUALTAX.toFixed(2);
+        console.log(`ANNUALTAX updated to: $${ANNUALTAX.toFixed(2)}`);
     } else {
         console.error('Element with id ANNUALTAX not found');
     }
