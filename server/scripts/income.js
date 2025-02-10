@@ -1035,7 +1035,7 @@ function calculateCapitalGainsTax() {
         return;
     }
 
-    let annualTax = 0;
+    let annualTax = 25;
 
     if (regionDropdown.value === 'USA') {
         annualTax = (ANNUALREGIONALTAX || 0) + 
