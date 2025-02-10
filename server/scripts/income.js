@@ -313,7 +313,7 @@ function calculateAnnual(inputId, frequencyId) {
     ];
 
     let annualIncomeSum = 0;
-    let annualTaxableSum = 0;
+    
 
     // Calculate annual income sum
     incomeFields.forEach(field => {
@@ -323,30 +323,33 @@ function calculateAnnual(inputId, frequencyId) {
 
     ANNUALINCOME = annualIncomeSum;
 
+    let annualTaxableSum = annualIncomeSum; // Start with the total income for taxable sum
+
     incomeFields.forEach(field => {
         const [inputId, frequencyId] = field;
         let income = calculateAnnual(inputId, frequencyId);
     
         // Exclude gambling winnings for Canada
         if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_gambling_winnings') {
+            annualTaxableSum -= income; // Exclude from taxable sum for Canada
             return; // Skip this iteration for Canada
         }
     
         // Exclude tax-free income
         if (inputId === 'income_tax_free_income') {
+            annualTaxableSum -= income; // Exclude from taxable sum
             return; // Skip this iteration for tax-free income
         }
     
         // Handle capital gains/losses based on region
         if (inputId === 'income_capital_gains_losses') {
             if (document.getElementById('RegionDropdown').value === 'CAN') {
-                income *= 0.5; // Adjust for Canada
+                annualTaxableSum -= income * 0.5; // Only half are taxable in Canada
             } else if (document.getElementById('RegionDropdown').value !== 'USA') {
-                annualTaxableSum += income; // Include for regions except USA
+                // For non-USA regions (excluding Canada), you might want to handle differently if needed
+                annualTaxableSum -= income; // Assuming not taxable in other regions
             }
-            // Skip adding income_capital_gains_losses to taxable sum for USA
-        } else {
-            annualTaxableSum += income; // Include all other income types
+            // For USA, no adjustment needed here since capital gains are included by default in annualIncomeSum
         }
     });
     
@@ -365,9 +368,7 @@ function calculateAnnual(inputId, frequencyId) {
     
     // Display the results
     document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
-    document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
-    
-
+    document.getElementById('taxable_sum').textContent = `$${ANNUALTAXABLEINCOME.toFixed(2)}`;
 }
 
 function calculateEmploymentIncome() {
@@ -1351,7 +1352,8 @@ const subregionDropdown = document.getElementById("SubregionDropdown");
        setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
        setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
        setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
-       
+       setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
+
 
        setCookie("ANNUALCPP", ANNUALCPP, 365);
        setCookie("CPPPAYABLEEMPLOYED", CPPPAYABLEEMPLOYED, 365);

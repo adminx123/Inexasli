@@ -69,10 +69,10 @@ function calculateAnnualTax() {
     // Fetch values from cookies
     const annualRegionalTax = Number(getCookie('ANNUALREGIONALTAX')) || 0;
     const annualSubregionalTax = Number(getCookie('ANNUALSUBREGIONALTAX')) || 0;
-    const capitalGainsTax = Number(getCookie('TOTALTAXCG')) || 0;
+    
 
     if (regionValue === 'USA') {
-        annualTax = annualRegionalTax + annualSubregionalTax + capitalGainsTax;
+        annualTax = annualRegionalTax + annualSubregionalTax;
     } else if (regionValue === 'CAN') {
         annualTax = annualRegionalTax + annualSubregionalTax;
     } else {
@@ -94,11 +94,13 @@ function updateOnLoad() {    // Update HTML elements with cookie values
 
     calculateAnnualTax();
 
-    document.getElementById('taxable_sum').textContent = " $" + parseFloat(getCookie('ANNUALTAXABLEINCOME')).toFixed(2);
+    document.getElementById('ANNUALTAXABLEINCOME').textContent = " $" + parseFloat(getCookie('ANNUALTAXABLEINCOME')).toFixed(2);
     document.getElementById('region_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALREGIONALTAX')).toFixed(2);
     document.getElementById('subregion_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALSUBREGIONALTAX')).toFixed(2);
     
 
+
+    
     document.getElementById('annual_income_sum').textContent = " $" + parseFloat(getCookie('ANNUALINCOME')).toFixed(2);
     document.getElementById('annual_expense_sum').textContent = " $" + parseFloat(getCookie('ANNUALEXPENSESUM')).toFixed(2);
     document.getElementById('cpp_sum').textContent = " $" + parseFloat(getCookie('ANNUALCPP')).toFixed(2);
@@ -172,7 +174,7 @@ function updateOnChange() {
     updateElementText('taxable_sum', 'ANNUALTAXABLEINCOME');
     updateElementText('region_tax_sum', 'ANNUALREGIONALTAX');
     updateElementText('subregion_tax_sum', 'ANNUALSUBREGIONALTAX');
-    updateElementText('ANNUALTAX', 'ANNUALTAX');
+
     updateElementText('annual_income_sum', 'ANNUALINCOME');
     updateElementText('annual_expense_sum', 'ANNUALEXPENSESUM');
     updateElementText('cpp_sum', 'ANNUALCPP');
@@ -287,13 +289,13 @@ function disposableIncome() {
             parseFloat(getCookie('TOTALMEDICARE')) -
             parseFloat(getCookie('TOTALSOCIALSECURITY')) -
             parseFloat(getCookie('TOTALTAXCG')) -
-            parseFloat(getCookie('ANNUALTAX'));
+            parseFloat(getCookie('annualTax'));
     } else if (getCookie('RegionDropdown') === 'CAN') {
         DISPOSABLEINCOME = parseFloat(getCookie('ANNUALINCOME')) -
             parseFloat(getCookie('ANNUALEXPENSESUM')) -
             parseFloat(getCookie('ANNUALEI')) -
             parseFloat(getCookie('ANNUALCPP')) -
-            parseFloat(getCookie('ANNUALTAX'));
+            parseFloat(getCookie('annualTax'));
     } else {
         DISPOSABLEINCOME = 0;
     }
@@ -549,7 +551,7 @@ function calculateIncomeAfterTaxAndObligations() {
     let annualIncome = parseFloat(getCookie('ANNUALINCOME')) || 0;
 
     // Retrieve annual tax from cookie
-    let annualTax = parseFloat(getCookie('ANNUALTAX')) || 0;
+    let annualTax = calculateAnnualTax();
 
     // Calculate annual government obligations from the function on the current page
     let annualGovernmentObligations = parseFloat(getCookie('ANNUALGOVERNMENTOBLIGATIONS')) || 0;
@@ -571,26 +573,32 @@ function calculateIncomeAfterTaxAndObligations() {
 
 // Start Pie Tax
 document.addEventListener('DOMContentLoaded', function () {
-    let cookieNames = ['incomeAfterTaxAndObligations', 'ANNUALTAX', 'TOTALSOCIALSECURITY', 'TOTALMEDICARE' ];
+    let cookieNames = [];
 
-    // Check if the region is USA
+    // Check if the region is USA or CAN
     if (getCookie('RegionDropdown') === 'USA') {
-        cookieNames.push('TOTALTAXCG');
+        cookieNames = ['TOTALSOCIALSECURITY', 'TOTALMEDICARE', 'TOTALTAXCG'];
+    } else if (getCookie('RegionDropdown') === 'CAN') {
+        cookieNames = ['ANNUALCPP', 'ANNUALEI'];
     }
 
-    // Get data from cookies
-    const data = cookieNames.map(name => {
+    // Calculate income after tax and obligations directly
+    let incomeAfterTaxAndObligations = calculateIncomeAfterTaxAndObligations();
+    let annualTax = calculateAnnualTax();
+
+    // Get data from cookies for other variables
+    const data = [incomeAfterTaxAndObligations, annualTax, ...cookieNames.map(name => {
         const value = parseFloat(getCookie(name).replace('$', '').trim());
         return isNaN(value) ? 0 : value; // Return 0 if not a number to avoid NaN in chart data
-    });
+    })];
 
     // Configuration for the pie chart
     const config = {
         type: 'pie',
         data: {
-            labels: cookieNames, // Use the cookie names as labels
+            labels: ['Income After Tax and Obligations', 'Annual Tax', ...cookieNames], // Use descriptive labels
             datasets: [{
-                label: 'Tax and Other Government Obligation Income Erosion Chart',
+                label: 'Income Erosion Chart',
                 data: data,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -598,9 +606,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
                     'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(201, 203, 207, 0.2)',
-                    'rgba(100, 100, 100, 0.2)'
+                    'rgba(255, 159, 64, 0.2)' // Add more colors if needed for more categories
                 ],
                 borderColor: [
                     'rgb(194, 194, 194)',
@@ -608,9 +614,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     'rgb(118, 118, 118)',
                     'rgb(101, 101, 101)',
                     'rgb(76, 76, 76)',
-                    'rgb(63, 63, 63)',
-                    'rgb(36, 36, 36)',
-                    'rgb(3, 3, 3)'
+                    'rgb(63, 63, 63)' // Add more colors if needed for more categories
                 ],
                 borderWidth: 1
             }]
@@ -623,7 +627,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 title: {
                     display: true,
-                    text: 'Tax and Other Government Obligation Income Erosion Chart'
+                    text: 'Income Erosion Chart'
                 }
             }
         }
