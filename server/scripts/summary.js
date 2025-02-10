@@ -144,61 +144,6 @@ function updateOnLoad() {    // Update HTML elements with cookie values
 
 
 
-
-
-
-
-function updateOnChange() {
-    const frequencySelect = document.getElementById('frequency');
-    let frequency = frequencySelect.value;
-    let multiplier = 1; // Default for annual
-
-    switch(frequency) {
-        case 'monthly':
-            multiplier = 1/12;
-            break;
-        case 'weekly':
-            multiplier = 1/52;
-            break;
-        // 'annual' is already the base case (multiplier = 1)
-    }
-
-    function updateElementText(elementId, cookieName) {
-        const element = document.getElementById(elementId);
-        if (element) {
-            let value = parseFloat(getCookie(cookieName)) * multiplier;
-            element.textContent = " $" + value.toFixed(2);
-        }
-    }
-
-    // Update elements based on frequency
-    updateElementText('taxable_sum', 'ANNUALTAXABLEINCOME');
-    updateElementText('region_tax_sum', 'ANNUALREGIONALTAX');
-    updateElementText('subregion_tax_sum', 'ANNUALSUBREGIONALTAX');
-
-    updateElementText('annual_income_sum', 'ANNUALINCOME');
-    updateElementText('annual_expense_sum', 'ANNUALEXPENSESUM');
-    updateElementText('cpp_sum', 'ANNUALCPP');
-    updateElementText('ANNUALEI', 'ANNUALEI');
-    updateElementText('HOUSING', 'HOUSING');
-    updateElementText('TRANSPORTATION', 'TRANSPORTATION');
-    updateElementText('DEPENDANT', 'DEPENDANT');
-    updateElementText('DEBT', 'DEBT');
-    updateElementText('DISCRETIONARY', 'DISCRETIONARY');
-    updateElementText('ESSENTIAL', 'ESSENTIAL');
-    updateElementText('annual_cpp_seresult', 'CPPPAYABLESELFEMPLOYED');
-    updateElementText('annual_cpp_eresult', 'CPPPAYABLEEMPLOYED');
-    updateElementText('TOTALMEDICARE', 'TOTALMEDICARE');
-    updateElementText('TOTALSOCIALSECURITY', 'TOTALSOCIALSECURITY');
-    updateElementText('TOTALSOCIALSECURITYE', 'TOTALSOCIALSECURITYE');
-    updateElementText('TOTALSOCIALSECURITYSE', 'TOTALSOCIALSECURITYSE');
-    updateElementText('TOTALTAXCG', 'TOTALTAXCG');
-}
-
-
-
-
-
 // Start Pie
 document.addEventListener('DOMContentLoaded', function () {
     const cookieNames = ['ESSENTIAL', 'DEBT', 'DEPENDANT', 'DISCRETIONARY', 'HOUSING', 'TRANSPORTATION'];
@@ -597,7 +542,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const config = {
         type: 'pie',
         data: {
-            labels: ['Income After Tax and Obligations', 'Annual Tax', ...cookieNames], // Use descriptive labels
+            labels: ['INCOME, AFTER TAX & OBLIGATIONS', 'Annual Tax', ...cookieNames], // Use descriptive labels
             datasets: [{
                 label: 'Income Erosion Chart',
                 data: data,
@@ -642,6 +587,54 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+function updateOnChange() {
+    const frequencySelect = document.getElementById('frequency');
+    let frequency = frequencySelect.value;
+    let multiplier = 1; // Default for annual
+
+    switch(frequency) {
+        case 'monthly':
+            multiplier = 1/12;
+            break;
+        case 'weekly':
+            multiplier = 1/52;
+            break;
+        // 'annual' is already the base case (multiplier = 1)
+    }
+
+    function updateElementText(elementId, cookieName) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            let value = parseFloat(getCookie(cookieName)) * multiplier;
+            element.textContent = " $" + value.toFixed(2);
+        }
+    }
+
+    // Update elements based on frequency
+    updateElementText('ANNUALTAXABLEINCOME', 'ANNUALTAXABLEINCOME');
+
+     updateElementText('annualTax', 'annualTax');
+    updateElementText('region_tax_sum', 'ANNUALREGIONALTAX');
+    updateElementText('subregion_tax_sum', 'ANNUALSUBREGIONALTAX');
+
+    updateElementText('annual_income_sum', 'ANNUALINCOME');
+    updateElementText('annual_expense_sum', 'ANNUALEXPENSESUM');
+    updateElementText('cpp_sum', 'ANNUALCPP');
+    updateElementText('ANNUALEI', 'ANNUALEI');
+    updateElementText('HOUSING', 'HOUSING');
+    updateElementText('TRANSPORTATION', 'TRANSPORTATION');
+    updateElementText('DEPENDANT', 'DEPENDANT');
+    updateElementText('DEBT', 'DEBT');
+    updateElementText('DISCRETIONARY', 'DISCRETIONARY');
+    updateElementText('ESSENTIAL', 'ESSENTIAL');
+    updateElementText('annual_cpp_seresult', 'CPPPAYABLESELFEMPLOYED');
+    updateElementText('annual_cpp_eresult', 'CPPPAYABLEEMPLOYED');
+    updateElementText('TOTALMEDICARE', 'TOTALMEDICARE');
+    updateElementText('TOTALSOCIALSECURITY', 'TOTALSOCIALSECURITY');
+    updateElementText('TOTALSOCIALSECURITYE', 'TOTALSOCIALSECURITYE');
+    updateElementText('TOTALSOCIALSECURITYSE', 'TOTALSOCIALSECURITYSE');
+    updateElementText('TOTALTAXCG', 'TOTALTAXCG');
+}
 
 // DOM Event Listener
 document.addEventListener('DOMContentLoaded', function () {
@@ -660,6 +653,8 @@ document.addEventListener('DOMContentLoaded', function () {
     calculateGoal();
     calculateIncomeAfterTaxAndObligations();
 });
+
+
 
 
 
