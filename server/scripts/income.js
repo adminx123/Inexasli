@@ -1349,6 +1349,11 @@ const subregionDropdown = document.getElementById("SubregionDropdown");
        setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
        setCookie("PASSIVEINCOME", PASSIVEINCOME, 365);
 
+
+       setCookie("BPA", BPA, 365);
+       setCookie("SD", SD, 365);
+     
+
        setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
        setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
        setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);

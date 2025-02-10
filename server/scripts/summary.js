@@ -98,7 +98,8 @@ function updateOnLoad() {    // Update HTML elements with cookie values
     document.getElementById('region_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALREGIONALTAX')).toFixed(2);
     document.getElementById('subregion_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALSUBREGIONALTAX')).toFixed(2);
     
-
+    document.getElementById('SD').textContent = " $" + parseFloat(getCookie('SD')).toFixed(2);
+    document.getElementById('BPA').textContent = " $" + parseFloat(getCookie('BPA')).toFixed(2);
 
     
     document.getElementById('annual_income_sum').textContent = " $" + parseFloat(getCookie('ANNUALINCOME')).toFixed(2);
