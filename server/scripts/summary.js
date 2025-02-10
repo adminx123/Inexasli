@@ -70,7 +70,7 @@ function updateOnLoad() {    // Update HTML elements with cookie values
     document.getElementById('taxable_sum').textContent = " $" + parseFloat(getCookie('ANNUALTAXABLEINCOME')).toFixed(2);
     document.getElementById('region_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALREGIONALTAX')).toFixed(2);
     document.getElementById('subregion_tax_sum').textContent = " $" + parseFloat(getCookie('ANNUALSUBREGIONALTAX')).toFixed(2);
-    document.getElementById('tax_sum').textContent = " $" + parseFloat((getCookie('ANNUALTAX'))).toFixed(2);
+    document.getElementById('ANNUALTAX').textContent = " $" + parseFloat((getCookie('ANNUALTAX'))).toFixed(2);
 
     document.getElementById('annual_income_sum').textContent = " $" + parseFloat(getCookie('ANNUALINCOME')).toFixed(2);
     document.getElementById('annual_expense_sum').textContent = " $" + parseFloat(getCookie('ANNUALEXPENSESUM')).toFixed(2);
@@ -141,7 +141,7 @@ function updateOnChange() {
     updateElementText('taxable_sum', 'ANNUALTAXABLEINCOME');
     updateElementText('region_tax_sum', 'ANNUALREGIONALTAX');
     updateElementText('subregion_tax_sum', 'ANNUALSUBREGIONALTAX');
-    updateElementText('tax_sum', 'ANNUALTAX');
+    updateElementText('ANNUALTAX', 'ANNUALTAX');
     updateElementText('annual_income_sum', 'ANNUALINCOME');
     updateElementText('annual_expense_sum', 'ANNUALEXPENSESUM');
     updateElementText('cpp_sum', 'ANNUALCPP');

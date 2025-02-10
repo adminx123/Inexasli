@@ -1028,20 +1028,33 @@ function calculateCapitalGainsTax() {
   }
 
 
-function calculateAnnualTax() {
-    var regionDropdown = document.getElementById("RegionDropdown");
-    let annualtaxx;
-    if (regionDropdown.value === 'USA') {
-        annualtaxx = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
-                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX) +
-                    (isNaN(TOTALTAXCG) ? 0 : TOTALTAXCG);
-    } else if (regionDropdown.value === 'CAN') {
-        annualtaxx = (isNaN(ANNUALREGIONALTAX) ? 0 : ANNUALREGIONALTAX) +
-                    (isNaN(ANNUALSUBREGIONALTAX) ? 0 : ANNUALSUBREGIONALTAX);
+  function calculateAnnualTax() {
+    const regionDropdown = document.getElementById("RegionDropdown");
+    if (!regionDropdown) {
+        console.error('RegionDropdown not found');
+        return;
     }
-ANNUALTAX = annualtaxx
+
+    let annualTax = 0;
+
+    if (regionDropdown.value === 'USA') {
+        annualTax = (ANNUALREGIONALTAX || 0) + 
+                    (ANNUALSUBREGIONALTAX || 0) + 
+                    (TOTALTAXCG || 0);
+    } else if (regionDropdown.value === 'CAN') {
+        annualTax = (ANNUALREGIONALTAX || 0) + 
+                    (ANNUALSUBREGIONALTAX || 0);
+    } else {
+        console.warn('Region not recognized for tax calculation');
+    }
+
+    ANNUALTAX = annualTax;
     
-    document.getElementById('ANNUALTAX').textContent = '$' + (ANNUALTAX).toFixed(2);
+    if (document.getElementById('ANNUALTAX')) {
+        document.getElementById('ANNUALTAX').textContent = '$' + annualTax.toFixed(2);
+    } else {
+        console.error('Element with id ANNUALTAX not found');
+    }
 }
 
 function passiveincome() {
