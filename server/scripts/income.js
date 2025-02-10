@@ -981,43 +981,51 @@ function calculateSubregionalTax(Subregion, taxBrackets) {
 
 
 function calculateCapitalGainsTax() {
-  // Check if region is USA
-  const region = document.getElementById('RegionDropdown').value;
-  if (region !== 'USA') {
-    alert('Capital gains tax calculation only available for USA');
-    return;
-  }
-  // Get user inputs
-  const capitalGain = calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency');
-  const stateRateInput = document.getElementById('income_capital_gain_state_rate').value;
-  let stateRate = 0;
+    // Check if region is USA
+    const region = document.getElementById('RegionDropdown').value;
+    if (region !== 'USA') {
+      alert('Capital gains tax calculation only available for USA');
+      return;
+    }
   
-  // Check if state rate input is empty or 0, then set state rate to 0
-  if (stateRateInput !== '' && parseFloat(stateRateInput) !== 0) {
-    stateRate = parseFloat(stateRateInput) / 100;
-  }
-
-  // Calculate federal capital gains tax
-  let federalTaxCG = 0;
-  if (capitalGain <= 47025) {
-    federalTaxCG = 0;
-  } else if (capitalGain <= 518000) {
-    federalTaxCG = (capitalGain - 47025) * 0.15;
-  } else {
-    federalTaxCG = (capitalGain - 518000) * 0.2 + (518000 - 47025) * 0.15;
-  }
-// Calculate state capital gains tax
-  const stateTaxCG = capitalGain * stateRate;
-
-  // Display the result
-  const totalTaxCG = federalTaxCG + stateTaxCG;
-  const resultDiv = document.getElementById('capital_gains_tax_result');
+    // Get user inputs
+    const capitalGain = calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency');
   
-   TOTALTAXCG = totalTaxCG
+    // Calculate annual income sum
+    let annualIncomeSum = 0;
+    calculateNormalizedSum(); // This function call updates ANNUALINCOME
+    annualIncomeSum = ANNUALINCOME; // Assuming ANNUALINCOME is globally accessible after being set by calculateNormalizedSum
   
-  document.getElementById('TOTALTAXCG').textContent = '$' + (TOTALTAXCG).toFixed(2);
-   
-}
+    const stateRateInput = document.getElementById('income_capital_gain_state_rate').value;
+    let stateRate = 0;
+    
+    // Check if state rate input is empty or 0, then set state rate to 0
+    if (stateRateInput !== '' && parseFloat(stateRateInput) !== 0) {
+      stateRate = parseFloat(stateRateInput) / 100;
+    }
+  
+    // Determine federal capital gains tax rate based on total income
+    let federalRate;
+    if (annualIncomeSum <= 48350) { // 2025 single filer threshold for 0% rate
+      federalRate = 0;
+    } else if (annualIncomeSum <= 533400) { // 2025 single filer threshold for 15% rate
+      federalRate = 0.15;
+    } else {
+      federalRate = 0.20;
+    }
+  
+    // Calculate federal capital gains tax
+    const federalTaxCG = capitalGain * federalRate;
+  
+    // Calculate state capital gains tax
+    const stateTaxCG = capitalGain * stateRate;
+  
+    // Display the result
+    const totalTaxCG = federalTaxCG + stateTaxCG;
+    TOTALTAXCG = totalTaxCG;
+    
+    document.getElementById('TOTALTAXCG').textContent = '$' + (TOTALTAXCG).toFixed(2);
+  }
 
 
 function calculateAnnualTax() {
