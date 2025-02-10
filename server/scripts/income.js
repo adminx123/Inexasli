@@ -323,35 +323,33 @@ function calculateAnnual(inputId, frequencyId) {
 
     ANNUALINCOME = annualIncomeSum;
 
-    // Calculate annual taxable sum with conditions for gambling winnings
-incomeFields.forEach(field => {
-    const [inputId, frequencyId] = field;
-    let income = calculateAnnual(inputId, frequencyId);
-
-    // Exclude gambling winnings for Canada
-    if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_gambling_winnings') {
-        return; // Skip this iteration for Canada
-    }
-
-    // Exclude tax-free income
-    if (inputId === 'income_tax_free_income') {
-        return; // Skip this iteration for tax-free income
-    }
-
-    // For USA or other regions, include gambling winnings
-    if (inputId === 'income_capital_gains_losses') {
-        // Adjust for Canada
-        if (document.getElementById('RegionDropdown').value === 'CAN') {
-            income *= 0.5;
-        } else {
-            // For USA or other regions, we include it fully
-            annualTaxableSum += income;
+    incomeFields.forEach(field => {
+        const [inputId, frequencyId] = field;
+        let income = calculateAnnual(inputId, frequencyId);
+    
+        // Exclude gambling winnings for Canada
+        if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_gambling_winnings') {
+            return; // Skip this iteration for Canada
         }
-    } else {
-        annualTaxableSum += income; // Include all other income types
-    }
-});
-
+    
+        // Exclude tax-free income
+        if (inputId === 'income_tax_free_income') {
+            return; // Skip this iteration for tax-free income
+        }
+    
+        // Handle capital gains/losses based on region
+        if (inputId === 'income_capital_gains_losses') {
+            if (document.getElementById('RegionDropdown').value === 'CAN') {
+                income *= 0.5; // Adjust for Canada
+            } else if (document.getElementById('RegionDropdown').value !== 'USA') {
+                annualTaxableSum += income; // Include for regions except USA
+            }
+            // Skip adding income_capital_gains_losses to taxable sum for USA
+        } else {
+            annualTaxableSum += income; // Include all other income types
+        }
+    });
+    
     // Apply standard deduction for USA
     if (document.getElementById('RegionDropdown').value === 'USA') {
         annualTaxableSum -= SD;
@@ -359,15 +357,16 @@ incomeFields.forEach(field => {
         // Apply BPA for other regions
         annualTaxableSum -= BPA;
     }
-
+    
     // Ensure result is not less than 0
     annualTaxableSum = Math.max(annualTaxableSum, 0);
-
+    
     ANNUALTAXABLEINCOME = annualTaxableSum;
-
+    
     // Display the results
     document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
     document.getElementById('taxable_sum').textContent = `$${annualTaxableSum.toFixed(2)}`;
+    
 
 }
 
