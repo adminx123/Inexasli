@@ -527,7 +527,7 @@ button {
 
 /* Hover effect for desktop */
 .container:hover {
-  transform: translateY(-3px); /* Slight lift */
+  transform: translateY(-5px); /* Slight lift */
   box-shadow: 0 8px 15px rgba(80, 80, 80, 0.4); /* Bigger shadow for more depth */
 }
 
@@ -563,7 +563,7 @@ button {
 
 /* Hover effect for desktop */
 .containerround:hover {
-  transform: translateY(-3px); /* Slight lift */
+  transform: translateY(-5px); /* Slight lift */
   box-shadow: 0 8px 15px rgba(174, 173, 173, 0.4); /* Bigger shadow for more depth */
 }
 
