@@ -980,13 +980,10 @@ function calculateSubregionalTax(Subregion, taxBrackets) {
 }
 
 
+
 function calculateCapitalGainsTax() {
-    // Check if region is USA
-    const region = document.getElementById('RegionDropdown').value;
-    if (region !== 'USA') {
-      alert('Capital gains tax calculation only available for USA');
-      return;
-    }
+   
+    
   
     // Get user inputs
     const capitalGain = calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency');
@@ -1028,38 +1025,29 @@ function calculateCapitalGainsTax() {
   }
 
 
+  
+
+
   function calculateAnnualTax() {
-    const regionDropdown = document.getElementById("RegionDropdown");
-    if (!regionDropdown) {
-        console.error('RegionDropdown not found');
-        return;
-    }
-
-    let annualTax = 0;
-
-    if (regionDropdown.value === 'USA') {
-        console.log(`ANNUALREGIONALTAX: ${ANNUALREGIONALTAX}, ANNUALSUBREGIONALTAX: ${ANNUALSUBREGIONALTAX}, TOTALTAXCG: ${TOTALTAXCG}`);
-        annualTax = (ANNUALREGIONALTAX || 0) + 
-                    (ANNUALSUBREGIONALTAX || 0) + 
-                    (TOTALTAXCG || 0);
-    } else if (regionDropdown.value === 'CAN') {
-        console.log(`ANNUALREGIONALTAX: ${ANNUALREGIONALTAX}, ANNUALSUBREGIONALTAX: ${ANNUALSUBREGIONALTAX}`);
-        annualTax = (ANNUALREGIONALTAX || 0) + 
-                    (ANNUALSUBREGIONALTAX || 0);
-    } else {
-        console.warn('Region not recognized for tax calculation');
-    }
-
-    ANNUALTAX = annualTax;
+    const regionDropdown = document.getElementById("RegionDropdown").value;
+    const regionValue = regionDropdown;
     
-    const taxElement = document.getElementById('ANNUALTAX');
-    if (taxElement) {
-        taxElement.textContent = '$' + ANNUALTAX.toFixed(2);
-        console.log(`ANNUALTAX updated to: $${ANNUALTAX.toFixed(2)}`);
-    } else {
-        console.error('Element with id ANNUALTAX not found');
-    }
+    
+    
+
+    if (regionValue === 'USA') {
+        annualTax = (Number(ANNUALREGIONALTAX) || 0) + 
+                    (Number(ANNUALSUBREGIONALTAX) || 0) + 
+                    (Number(TOTALTAXCG) || 0);
+    } else if (regionValue === 'CAN') {
+        annualTax = (Number(ANNUALREGIONALTAX) || 0) + 
+                    (Number(ANNUALSUBREGIONALTAX) || 0);
+    } 
+
+     return annualTax;
 }
+
+
 
 function passiveincome() {
   const fireFields = [
@@ -1355,8 +1343,8 @@ calculateRegionalTax();
 
 calculateAnnualTax();
 
-calculateEmploymentIncome();
-        
+        calculateEmploymentIncome();
+
     getCppPayable();
     
     getEIPayable();
