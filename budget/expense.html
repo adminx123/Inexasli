@@ -136,6 +136,18 @@ Asset
 <span id="expenses_medical_dental_annual"></span>
 </div>
 
+<div class ="row">
+  <label for="expenses_perscription">Perscription:</label>
+  <input type='number' inputmode="numeric"  id="expenses_perscription">
+  <select id="expenses_perscription_frequency" onchange="calculateAnnual('expenses_perscription', 'expenses_perscription_frequency')">
+    <option value="annually">Annually</option>
+    <option value="quarterly">Quarterly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
+  </select>
+  <span id="expenses_perscription_annual"></span>
+  </div>
+
 
 
 <div class ="row">
@@ -497,6 +509,8 @@ Asset
 </select>
 <span id="dependant_medical_dental_annual"></span>
 </div>
+
+
 
 <div class ="row">
 <label for="dependant_clothing">Clothing:</label>
