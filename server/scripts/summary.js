@@ -482,15 +482,15 @@ function calculateIncomeAfterTaxAndObligations() {
 }
 
 
-// Start Pie Tax
+/* Start Pie Tax
 document.addEventListener('DOMContentLoaded', function () {
     let cookieNames = [];
 
     // Check if the region is USA or CAN
     if (getCookie('RegionDropdown') === 'USA') {
-        cookieNames = ['TOTALSOCIALSECURITY', 'TOTALMEDICARE', 'TOTALTAXCG'];
+        cookieNames = ['TOTALSOCIALSECURITY', 'TOTALMEDICARE', 'TOTALTAXCG', 'ANNUALEXPENSESUM'];
     } else if (getCookie('RegionDropdown') === 'CAN') {
-        cookieNames = ['ANNUALCPP', 'ANNUALEI'];
+        cookieNames = ['ANNUALCPP', 'ANNUALEI', 'ANNUALEXPENSESUM'];
     }
 
     // Calculate income after tax and obligations directly
@@ -512,10 +512,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 label: 'Income Erosion Chart',
                 data: data,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(143, 18, 45, 0.2)',
+                    'rgba(14, 14, 14, 0.2)',
+                    'rgba(14, 14, 14, 0.2)',
+                    'rgba(14, 14, 14, 0.2)',
                     'rgba(153, 102, 255, 0.2)',
                     'rgba(255, 159, 64, 0.2)' // Add more colors if needed for more categories
                 ],
@@ -550,8 +550,187 @@ document.addEventListener('DOMContentLoaded', function () {
         config
     );
 });
+*/
 
+/*
+// Start Pie Tax
+document.addEventListener('DOMContentLoaded', function () {
+    let cookieNames = [];
 
+    // Check if the region is USA or CAN
+    if (getCookie('RegionDropdown') === 'USA') {
+        cookieNames = ['ANNUALEXPENSESUM','TOTALSOCIALSECURITY', 'TOTALMEDICARE', 'TOTALTAXCG'];
+    } else if (getCookie('RegionDropdown') === 'CAN') {
+        cookieNames = ['ANNUALEXPENSESUM', 'ANNUALCPP', 'ANNUALEI'];
+    }
+
+    // Calculate income after tax and obligations directly
+    let incomeAfterTaxAndObligations = calculateIncomeAfterTaxAndObligations();
+    let annualTax = calculateAnnualTax();
+
+    // Define new labels for each slice of the pie chart
+    const newLabels = {
+        'USA': ['Income After Deductions','Annual Expenses', 'Income Tax', 'Social Security', 'Medicare', 'Capital Gains Tax'],
+        'CAN': ['Income After Deductions','Annual Expenses', 'Income Tax', 'CPP', 'EI']
+    };
+
+    // Get data from cookies for other variables
+    const data = [incomeAfterTaxAndObligations, annualTax, ...cookieNames.map(name => {
+        const value = parseFloat(getCookie(name).replace('$', '').trim());
+        return isNaN(value) ? 0 : value; // Return 0 if not a number to avoid NaN in chart data
+    })];
+
+    // Choose the correct label set based on the region
+    const labels = getCookie('RegionDropdown') === 'USA' ? newLabels['USA'] : newLabels['CAN'];
+
+    // Configuration for the pie chart
+    const config = {
+        type: 'pie',
+        data: {
+            labels: labels, // Use the new labels here
+            datasets: [{
+                label: 'Income Erosion Chart',
+                data: data,
+                backgroundColor: [
+                    'rgba(143, 18, 45, 0.2)',
+                    'rgba(17, 47, 128, 0.2)',
+                    'rgba(14, 14, 14, 0.2)',
+                    'rgba(14, 14, 14, 0.2)',
+                    'rgba(14, 14, 14, 0.2)',
+                    'rgba(255, 159, 64, 0.2)' // Add more colors if needed for more categories
+                ],
+                borderColor: [
+                    'rgb(194, 194, 194)',
+                    'rgb(165, 165, 165)',
+                    'rgb(118, 118, 118)',
+                    'rgb(101, 101, 101)',
+                    'rgb(76, 76, 76)',
+                    'rgb(63, 63, 63)' // Add more colors if needed for more categories
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Income Erosion Chart'
+                }
+            }
+        }
+    };
+
+    // Create the pie chart
+    const myPieChart = new Chart(
+        document.getElementById('myPieChartTax'),
+        config
+    );
+});
+*/
+
+// Start Pie Tax
+document.addEventListener('DOMContentLoaded', function () {
+    let cookieNames = [];
+
+    // Check if the region is USA or CAN
+    if (getCookie('RegionDropdown') === 'USA') {
+        cookieNames = ['ANNUALEXPENSESUM', 'TOTALSOCIALSECURITY', 'TOTALMEDICARE', 'TOTALTAXCG'];
+    } else if (getCookie('RegionDropdown') === 'CAN') {
+        cookieNames = ['ANNUALEXPENSESUM', 'ANNUALCPP', 'ANNUALEI'];
+    }
+
+    // Calculate income after tax and obligations directly
+    let incomeAfterTaxAndObligations = calculateIncomeAfterTaxAndObligations();
+    let annualTax = calculateAnnualTax();
+
+    // Define new labels for each slice of the pie chart
+    const newLabels = {
+        'USA': ['Income After Deductions', 'Annual Expenses', 'Social Security', 'Medicare', 'Income Tax', 'Capital Gains Tax'],
+        'CAN': ['Income After Deductions', 'Annual Expenses', 'CPP', 'EI', 'Income Tax']
+    };
+
+    // Function to get cookie value with fallback to 0 if not found or invalid
+    function getValueFromCookie(cookieName) {
+        const value = parseFloat(getCookie(cookieName).replace('$', '').trim());
+        return isNaN(value) ? 0 : value;
+    }
+
+    // Construct data array where each data point corresponds to a label, with manual insertion of function results
+    let data = [];
+    let labels = [];
+
+    if (getCookie('RegionDropdown') === 'USA') {
+        data = [
+            incomeAfterTaxAndObligations, 
+            getValueFromCookie('ANNUALEXPENSESUM'), 
+            getValueFromCookie('TOTALSOCIALSECURITY'), 
+            getValueFromCookie('TOTALMEDICARE'), 
+            annualTax, // Inserted here
+            getValueFromCookie('TOTALTAXCG')
+        ];
+        labels = newLabels['USA'];
+    } else {
+        data = [
+            incomeAfterTaxAndObligations, 
+            getValueFromCookie('ANNUALEXPENSESUM'), 
+            getValueFromCookie('ANNUALCPP'), 
+            getValueFromCookie('ANNUALEI'), 
+            annualTax // Inserted at the end for CAN since there's no Capital Gains Tax
+        ];
+        labels = newLabels['CAN'];
+    }
+
+    // Configuration for the pie chart
+    const config = {
+        type: 'pie',
+        data: {
+            labels: labels, // Use the new labels here
+            datasets: [{
+                label: 'Income Erosion Chart',
+                data: data,
+                backgroundColor: [
+                    'rgba(143, 18, 45, 0.2)', // Income After Deductions
+                    'rgba(17, 47, 128, 0.2)', // Annual Expenses
+                    'rgba(14, 14, 14, 0.2)', // Social Security for USA, CPP for CAN
+                    'rgba(14, 14, 14, 0.2)', // Medicare for USA, EI for CAN
+                    'rgba(14, 14, 14, 0.2)', // Income Tax
+                    'rgba(14, 14, 14, 0.2)' // Capital Gains Tax for USA only
+                ],
+                borderColor: [
+                    'rgb(194, 194, 194)',
+                    'rgb(165, 165, 165)',
+                    'rgb(118, 118, 118)',
+                    'rgb(101, 101, 101)',
+                    'rgb(76, 76, 76)',
+                    'rgb(63, 63, 63)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Income Erosion Chart'
+                }
+            }
+        }
+    };
+
+    // Create the pie chart
+    const myPieChart = new Chart(
+        document.getElementById('myPieChartTax'),
+        config
+    );
+});
 
 function updateOnChange() {
     const frequencySelect = document.getElementById('frequency');
