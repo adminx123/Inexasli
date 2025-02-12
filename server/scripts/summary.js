@@ -61,31 +61,7 @@ function getCookie(name) {
     return '0'; // or return 0 if you want it as a number
 }
 
-function calculateAnnualTax() {
-    const regionValue = getCookie('RegionDropdown') || 'NONE'; // Default to 'NONE' if cookie not found
-    
-    let annualTax = 0;
 
-    // Fetch values from cookies
-    const annualRegionalTax = Number(getCookie('ANNUALREGIONALTAX')) || 0;
-    const annualSubregionalTax = Number(getCookie('ANNUALSUBREGIONALTAX')) || 0;
-    
-
-    if (regionValue === 'USA') {
-        annualTax = annualRegionalTax + annualSubregionalTax;
-    } else if (regionValue === 'CAN') {
-        annualTax = annualRegionalTax + annualSubregionalTax;
-    } else {
-        // Optionally log a warning or handle unrecognized regions here
-        console.warn('Region not recognized for tax calculation');
-    }
-
-    return annualTax;
-}
-
-// Assuming you want to update the DOM with the calculated tax
-const annualTax = calculateAnnualTax();
-document.getElementById('annualTax').textContent = '$' + annualTax.toFixed(2);
 
 
 function updateOnLoad() {    // Update HTML elements with cookie values
@@ -103,7 +79,7 @@ function updateOnLoad() {    // Update HTML elements with cookie values
 
     
     document.getElementById('annual_income_sum').textContent = " $" + parseFloat(getCookie('ANNUALINCOME')).toFixed(2);
-    document.getElementById('annual_expense_sum').textContent = " $" + parseFloat(getCookie('ANNUALEXPENSESUM')).toFixed(2);
+    document.getElementById('ANNUALEXPENSESUM').textContent = " $" + parseFloat(getCookie('ANNUALEXPENSESUM')).toFixed(2);
     document.getElementById('cpp_sum').textContent = " $" + parseFloat(getCookie('ANNUALCPP')).toFixed(2);
     document.getElementById('ANNUALEI').textContent = " $" + parseFloat(getCookie('ANNUALEI')).toFixed(2);
 
@@ -208,21 +184,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-function governmentObligations() {
-    let ANNUALGOVERNMENTOBLIGATIONS;
 
-    if (getCookie('RegionDropdown') === 'USA') {
-        ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('TOTALSOCIALSECURITY')) +
-            parseFloat(getCookie('TOTALMEDICARE'));
-    } else if (getCookie('RegionDropdown') === 'CAN') {
-        ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('ANNUALCPP')) +
-            parseFloat(getCookie('ANNUALEI'));
+
+
+
+
+function calculateAnnualTax() {
+    const regionValue = getCookie('RegionDropdown') || 'NONE'; // Default to 'NONE' if cookie not found
+    
+    let annualTax = 0;
+
+    // Fetch values from cookies
+    const annualRegionalTax = Number(getCookie('ANNUALREGIONALTAX')) || 0;
+    const annualSubregionalTax = Number(getCookie('ANNUALSUBREGIONALTAX')) || 0;
+
+    if (regionValue === 'USA') {
+        annualTax = annualRegionalTax + annualSubregionalTax;
+    } else if (regionValue === 'CAN') {
+        annualTax = annualRegionalTax + annualSubregionalTax;
     } else {
-        ANNUALGOVERNMENTOBLIGATIONS = 0
+        // Optionally log a warning or handle unrecognized regions here
+        console.warn('Region not recognized for tax calculation');
     }
 
-    // Update HTML element with the calculated value
-    document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
+    // Update the DOM with the calculated tax
+    const annualTaxElement = document.getElementById('annualTax');
+    if (annualTaxElement) {
+        annualTaxElement.textContent = '$' + annualTax.toFixed(2);
+    }
+
+    return annualTax; // Return for use elsewhere if needed
 }
 
 function disposableIncome() {
@@ -252,6 +243,23 @@ function disposableIncome() {
     return DISPOSABLEINCOME; // returns for use elsewhere
 }
 
+
+function governmentObligations() {
+    let ANNUALGOVERNMENTOBLIGATIONS;
+
+    if (getCookie('RegionDropdown') === 'USA') {
+        ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('TOTALSOCIALSECURITY')) +
+            parseFloat(getCookie('TOTALMEDICARE'));
+    } else if (getCookie('RegionDropdown') === 'CAN') {
+        ANNUALGOVERNMENTOBLIGATIONS = parseFloat(getCookie('ANNUALCPP')) +
+            parseFloat(getCookie('ANNUALEI'));
+    } else {
+        ANNUALGOVERNMENTOBLIGATIONS = 0
+    }
+
+    // Update HTML element with the calculated value
+    document.getElementById('ANNUALGOVERNMENTOBLIGATIONS').textContent = ' $' + ANNUALGOVERNMENTOBLIGATIONS.toFixed(2);
+}
 
 
 FIRERATIO = parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSESUM')); // Descriptive variable name
@@ -611,14 +619,37 @@ function updateOnChange() {
     }
 
     // Update elements based on frequency
-    updateElementText('ANNUALTAXABLEINCOME', 'ANNUALTAXABLEINCOME');
+    // For DOM elements not stored in cookies:
+    const annualTaxElement = document.getElementById('annualTax');
+    const disposableIncomeElement = document.getElementById('DISPOSABLEINCOME');
+    const annualGovernmentElement = document.getElementById('ANNUALGOVERNMENTOBLIGATIONS');
 
-     updateElementText('annualTax', 'annualTax');
+
+    if (annualTaxElement) {
+        let annualTaxValue = parseFloat(annualTaxElement.textContent.replace(/[^0-9.-]+/g,"")) * multiplier;
+        annualTaxElement.textContent = " $" + annualTaxValue.toFixed(2);
+    }
+
+    if (disposableIncomeElement) {
+        // Assuming DISPOSABLEINCOME calculation involves values from other cookies
+        let disposableIncomeValue = calculateDisposableIncome(multiplier);
+        disposableIncomeElement.textContent = " $" + disposableIncomeValue.toFixed(2);
+    }
+
+    if (annualGovernmentElement) {
+        // Assuming DISPOSABLEINCOME calculation involves values from other cookies
+        let annualGovernmentValue = governmentObligations();
+        annualGovernmentElement.textContent = " $" + annualGovernmentValue.toFixed(2);
+    }
+
+    // Update other elements based on cookies
+    updateElementText('ANNUALTAXABLEINCOME', 'ANNUALTAXABLEINCOME');
     updateElementText('region_tax_sum', 'ANNUALREGIONALTAX');
     updateElementText('subregion_tax_sum', 'ANNUALSUBREGIONALTAX');
+    
 
     updateElementText('annual_income_sum', 'ANNUALINCOME');
-    updateElementText('annual_expense_sum', 'ANNUALEXPENSESUM');
+    updateElementText('ANNUALEXPENSESUM', 'ANNUALEXPENSESUM');
     updateElementText('cpp_sum', 'ANNUALCPP');
     updateElementText('ANNUALEI', 'ANNUALEI');
     updateElementText('HOUSING', 'HOUSING');
@@ -634,6 +665,36 @@ function updateOnChange() {
     updateElementText('TOTALSOCIALSECURITYE', 'TOTALSOCIALSECURITYE');
     updateElementText('TOTALSOCIALSECURITYSE', 'TOTALSOCIALSECURITYSE');
     updateElementText('TOTALTAXCG', 'TOTALTAXCG');
+}
+
+// Helper function to calculate DISPOSABLEINCOME based on the current frequency
+function calculateDisposableIncome(multiplier) {
+    let disposableIncome = 0;
+
+    if (getCookie('RegionDropdown') === 'USA') {
+        disposableIncome = (parseFloat(getCookie('ANNUALINCOME')) -
+            parseFloat(getCookie('ANNUALEXPENSESUM')) -
+            parseFloat(getCookie('TOTALMEDICARE')) -
+            parseFloat(getCookie('TOTALSOCIALSECURITY')) -
+            parseFloat(getCookie('TOTALTAXCG')) -
+            parseFloat(document.getElementById('annualTax').textContent.replace(/[^0-9.-]+/g,""))) * multiplier;
+    } else if (getCookie('RegionDropdown') === 'CAN') {
+        disposableIncome = (parseFloat(getCookie('ANNUALINCOME')) -
+            parseFloat(getCookie('ANNUALEXPENSESUM')) -
+            parseFloat(getCookie('ANNUALEI')) -
+            parseFloat(getCookie('ANNUALCPP')) -
+            parseFloat(document.getElementById('annualTax').textContent.replace(/[^0-9.-]+/g,""))) * multiplier;
+    } else {
+        disposableIncome = 0;
+    }
+
+    // Update the DOM with the calculated value
+    let disposableIncomeElement = document.getElementById('DISPOSABLEINCOME');
+    if (disposableIncomeElement) {
+        disposableIncomeElement.textContent = " $" + disposableIncome.toFixed(2);
+    }
+
+    return disposableIncome;
 }
 
 // DOM Event Listener
@@ -665,7 +726,6 @@ frequencyDropdown.addEventListener('change', function () {
    updateOnChange(); 
     
     governmentObligations();
-    disposableIncome();
     colorChangeFIRE();
     colorChangeSavingsToDebt();
     colorChangeHTI();
