@@ -285,7 +285,7 @@ function calculateAnnual(inputId, frequencyId) {
         }
     }
 
-
+/*
    function calculateNormalizedSum() {
     // Define all income fields with their corresponding frequency fields
     const incomeFields = [
@@ -350,6 +350,98 @@ function calculateAnnual(inputId, frequencyId) {
                 annualTaxableSum -= income; // Assuming not taxable in other regions
             }
             // For USA, no adjustment needed here since capital gains are included by default in annualIncomeSum
+        }
+    });
+    
+    // Apply standard deduction for USA
+    if (document.getElementById('RegionDropdown').value === 'USA') {
+        annualTaxableSum -= SD;
+    } else {
+        // Apply BPA for other regions
+        annualTaxableSum -= BPA;
+    }
+    
+    // Ensure result is not less than 0
+    annualTaxableSum = Math.max(annualTaxableSum, 0);
+    
+    ANNUALTAXABLEINCOME = annualTaxableSum;
+    
+    // Display the results
+    document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
+    document.getElementById('taxable_sum').textContent = `$${ANNUALTAXABLEINCOME.toFixed(2)}`;
+}
+    */
+
+function calculateNormalizedSum() {
+    // Define all income fields with their corresponding frequency fields
+    const incomeFields = [
+        ['income_salary_wages', 'income_salary_wages_frequency'],
+        ['income_tips', 'income_tips_frequency'],
+        ['income_bonuses', 'income_bonuses_frequency'],
+        ['income_sole_prop', 'income_sole_prop_frequency'],
+        ['income_investment_property', 'income_investment_property_frequency'],
+        ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
+        ['income_interest', 'income_interest_frequency'],
+        ['income_owner_dividend', 'income_owner_dividend_frequency'],
+        ['income_public_dividend', 'income_public_dividend_frequency'],
+        ['income_trust', 'income_trust_frequency'],
+        ['income_federal_pension', 'income_federal_pension_frequency'],
+        ['income_work_pension', 'income_work_pension_frequency'],
+        ['income_social_security', 'income_social_security_frequency'],
+        ['income_employment_insurance', 'income_employment_insurance_frequency'],
+        ['income_alimony', 'income_alimony_frequency'],
+        ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
+        ['income_royalties', 'income_royalties_frequency'],
+        ['income_gambling_winnings', 'income_gambling_winnings_frequency'], // This is included here
+        ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+        ['income_venture_capital', 'income_venture_capital_frequency'],
+        ['income_tax_free_income', 'income_tax_free_income_frequency']
+    ];
+
+    let annualIncomeSum = 0;
+    
+
+    // Calculate annual income sum
+    incomeFields.forEach(field => {
+        const [inputId, frequencyId] = field;
+        annualIncomeSum += calculateAnnual(inputId, frequencyId);
+    });
+
+    ANNUALINCOME = annualIncomeSum;
+
+    let annualTaxableSum = annualIncomeSum; // Start with the total income for taxable sum
+
+    incomeFields.forEach(field => {
+        const [inputId, frequencyId] = field;
+        let income = calculateAnnual(inputId, frequencyId);
+    
+        // Exclude gambling winnings for Canada
+        if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_gambling_winnings') {
+            annualTaxableSum -= income; // Exclude from taxable sum for Canada
+            return; // Skip this iteration for Canada
+        }
+    
+        // Exclude tax-free income
+        if (inputId === 'income_tax_free_income') {
+            annualTaxableSum -= income; // Exclude from taxable sum
+            return; // Skip this iteration for tax-free income
+        }
+    
+        // Handle capital gains/losses based on region
+        if (inputId === 'income_capital_gains_losses') {
+            if (document.getElementById('RegionDropdown').value === 'CAN') {
+                annualTaxableSum -= income * 0.5; // Only half are taxable in Canada
+            } else if (document.getElementById('RegionDropdown').value !== 'USA') {
+                // For non-USA regions (excluding Canada), you might want to handle differently if needed
+                annualTaxableSum -= income; // Assuming not taxable in other regions
+            }
+            // For USA, no adjustment needed here since capital gains are included by default in annualIncomeSum
+        }
+        
+        // Exclude alimony from taxable income for USA
+        if (document.getElementById('RegionDropdown').value === 'USA' && inputId === 'income_alimony') {
+            annualTaxableSum -= income; // Exclude alimony from taxable income
+            return; // Skip this iteration for USA alimony
         }
     });
     
