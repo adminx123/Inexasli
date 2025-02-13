@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
    window.openTermsModal = function () {
   console.log('openTermsModal() function called');
   // **Change:** Move setting modal display to within the then block after content is retrieved
-  fetch('../../client/finance/legal.txt') // Corrected file extension to '.txt'
+  fetch('./legal.txt') // Corrected file extension to '.txt'
     .then(response => response.text())
     .then(data => {
       document.getElementById('modalContent').innerText = data;

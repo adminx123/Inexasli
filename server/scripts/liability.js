@@ -106,7 +106,7 @@ var LIABILITIES;
     
     
     for (let i = 0; i < liabilitiesFields.length; i++) {
-      // console.log('working')
+    
       const liabilitiesInput = document.getElementById(liabilitiesFields[i]);
       if (liabilitiesInput.value.trim() !== "") {
         const liabilities = liabilitiesInput.value;
