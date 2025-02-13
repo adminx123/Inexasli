@@ -701,8 +701,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
-    governmentObligations();
-    disposableIncome();
+    
+    
     colorChangeFIRE();
     colorChangeSavingsToDebt();
     colorChangeHTI();
@@ -722,7 +722,7 @@ frequencyDropdown.addEventListener('change', function () {
     // Call the update function when the frequency dropdown value changes
     updateOnChange();
 
-    governmentObligations();
+    
     colorChangeFIRE();
     colorChangeSavingsToDebt();
     colorChangeHTI();
