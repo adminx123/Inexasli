@@ -62,9 +62,7 @@ var LIQUIDASSETS;
                 }
                 assets += (parsedValue * fieldPercentage / 100);
             }
-        } else {
-            console.error(`Invalid value for ${assetFields[i]}: ${fieldValue}`);
-        }
+        } 
     }
 
     ASSETS = assets;
@@ -99,9 +97,7 @@ var LIQUIDASSETS;
 
             liquidAssets += (parsedValue * fieldPercentage / 100);
             // console.log(`${parsedValue}, ${fieldPercentage}, ${parsedValue * fieldPercentage / 100}`)
-        } else {
-            console.error(`Invalid value for ${liquidAssetFields[i]}: ${fieldValue}`);
-        }
+        } 
     }
 
 LIQUIDASSETS = liquidAssets;
