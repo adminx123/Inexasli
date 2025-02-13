@@ -517,20 +517,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (getCookie('RegionDropdown') === 'USA') {
         data = [
-            incomeAfterTaxAndObligations, 
-            getValueFromCookie('ANNUALEXPENSESUM'), 
-            getValueFromCookie('TOTALSOCIALSECURITY'), 
-            getValueFromCookie('TOTALMEDICARE'), 
+            incomeAfterTaxAndObligations,
+            getValueFromCookie('ANNUALEXPENSESUM'),
+            getValueFromCookie('TOTALSOCIALSECURITY'),
+            getValueFromCookie('TOTALMEDICARE'),
             annualTax, // Inserted here
             getValueFromCookie('TOTALTAXCG')
         ];
         labels = newLabels['USA'];
     } else {
         data = [
-            incomeAfterTaxAndObligations, 
-            getValueFromCookie('ANNUALEXPENSESUM'), 
-            getValueFromCookie('ANNUALCPP'), 
-            getValueFromCookie('ANNUALEI'), 
+            incomeAfterTaxAndObligations,
+            getValueFromCookie('ANNUALEXPENSESUM'),
+            getValueFromCookie('ANNUALCPP'),
+            getValueFromCookie('ANNUALEI'),
             annualTax // Inserted at the end for CAN since there's no Capital Gains Tax
         ];
         labels = newLabels['CAN'];
@@ -640,38 +640,38 @@ function updateOnChange() {
     updateElementText('TOTALSOCIALSECURITYSE', 'TOTALSOCIALSECURITYSE');
 
     // Update DISPOSABLEINCOME, ANNUALGOVERNMENTOBLIGATIONS, and annualTax
-    calculateAndUpdate('DISPOSABLEINCOME', function() {
+    calculateAndUpdate('DISPOSABLEINCOME', function () {
         if (getCookie('RegionDropdown') === 'USA') {
-            return parseFloat(getCookie('ANNUALINCOME')) - 
-                   parseFloat(getCookie('ANNUALEXPENSESUM')) - 
-                   parseFloat(getCookie('TOTALMEDICARE')) - 
-                   parseFloat(getCookie('TOTALSOCIALSECURITY')) - 
-                   calculateAnnualTax();
+            return parseFloat(getCookie('ANNUALINCOME')) -
+                parseFloat(getCookie('ANNUALEXPENSESUM')) -
+                parseFloat(getCookie('TOTALMEDICARE')) -
+                parseFloat(getCookie('TOTALSOCIALSECURITY')) -
+                calculateAnnualTax();
         } else if (getCookie('RegionDropdown') === 'CAN') {
-            return parseFloat(getCookie('ANNUALINCOME')) - 
-                   parseFloat(getCookie('ANNUALEXPENSESUM')) - 
-                   parseFloat(getCookie('ANNUALEI')) - 
-                   parseFloat(getCookie('ANNUALCPP')) - 
-                   calculateAnnualTax();
+            return parseFloat(getCookie('ANNUALINCOME')) -
+                parseFloat(getCookie('ANNUALEXPENSESUM')) -
+                parseFloat(getCookie('ANNUALEI')) -
+                parseFloat(getCookie('ANNUALCPP')) -
+                calculateAnnualTax();
         } else {
             return 0;
         }
     });
 
-    calculateAndUpdate('ANNUALGOVERNMENTOBLIGATIONS', function() {
+    calculateAndUpdate('ANNUALGOVERNMENTOBLIGATIONS', function () {
         if (getCookie('RegionDropdown') === 'USA') {
-            return parseFloat(getCookie('TOTALSOCIALSECURITY')) + 
-                   parseFloat(getCookie('TOTALMEDICARE'));
+            return parseFloat(getCookie('TOTALSOCIALSECURITY')) +
+                parseFloat(getCookie('TOTALMEDICARE'));
         } else if (getCookie('RegionDropdown') === 'CAN') {
-            return parseFloat(getCookie('ANNUALCPP')) + 
-                   parseFloat(getCookie('ANNUALEI'));
+            return parseFloat(getCookie('ANNUALCPP')) +
+                parseFloat(getCookie('ANNUALEI'));
         } else {
             return 0;
         }
     });
 
     // Annual Tax calculation and update
-    calculateAndUpdate('annualTax', function() {
+    calculateAndUpdate('annualTax', function () {
         const regionValue = getCookie('RegionDropdown') || 'NONE'; // Default to 'NONE' if cookie not found
         let annualTax = 0;
 
@@ -701,8 +701,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('goalAmount').addEventListener('input', calculateGoal);
 
-    
-    
+
+
     colorChangeFIRE();
     colorChangeSavingsToDebt();
     colorChangeHTI();
@@ -722,7 +722,7 @@ frequencyDropdown.addEventListener('change', function () {
     // Call the update function when the frequency dropdown value changes
     updateOnChange();
 
-    
+
     colorChangeFIRE();
     colorChangeSavingsToDebt();
     colorChangeHTI();

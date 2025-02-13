@@ -69,9 +69,7 @@ var LIABILITIES;
                 }
                 liabilities += (parsedValue * fieldPercentage / 100);
             }
-        } else {
-            console.error(`Invalid value for ${liabilitiesFields[i]}: ${fieldValue}`);
-        }
+        } 
     }
 
     LIABILITIES = liabilities;
