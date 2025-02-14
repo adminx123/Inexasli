@@ -1,3 +1,7 @@
+
+import { displayWarning } from './utils.js';
+
+
 document.querySelector('#cookie-delete-link').addEventListener('click', (event) => {
     event.preventDefault();  // Prevent the link's default behavior
     deleteCookies();         // Trigger the cookie deletion function
@@ -44,3 +48,4 @@ function deleteCookies() {
     // Reload the page to apply changes
     document.location.reload();
 }
+
