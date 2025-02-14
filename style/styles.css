@@ -22,6 +22,7 @@
   width: 30px;
 }
 
+/* Modal background */
 .modal {
   display: none;
   position: fixed;
@@ -30,10 +31,34 @@
   left: 0;
   right: 0;
   bottom: 0;
-  justify-content: stretch;
-  align-items: stretch;
+  display: flex; /* Use flexbox to center the content */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
   padding: 30px;
+  z-index: 1000; /* Ensure the modal is above all other content */
 }
+
+/* Modal content */
+.modal-content {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 10px;
+  gap: 20px;
+  width: 80%; /* Limit the width of the modal */
+  max-width: 600px; /* Prevent it from becoming too wide */
+  max-height: 80vh; /* Limit the height of the modal */
+  overflow-y: auto; /* Allow vertical scrolling if content overflows */
+  border-radius: 10px; /* Optional: rounded corners for better appearance */
+  box-sizing: border-box; /* Ensure padding is included in width/height calculations */
+}
+
+.modal-content button {
+  align-self: flex-end;
+}
+
+
 .roi-btn {
   padding: 8px 12px ;
   border-radius: 0;
@@ -60,20 +85,7 @@
   
 }
 
-.modal-content {
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px 10px;
-  gap: 20px;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
-.modal-content button {
-  align-self: flex-end;
-}
+
 
 
 .warning-parent {
@@ -860,6 +872,13 @@ input[type="checkbox"]:checked ~   .box-checkbox {
       background-color: #000;
       color: #fff;
     }
+
+    .grid-item img {
+      width: 100%;  /* Makes the image as wide as its container */
+      height: auto; /* Maintains aspect ratio */
+      object-fit: cover; /* Ensures the image covers the area without distortion */
+      object-position: center; /* Centers the image if it's cropped */
+  }
 
 .benefits {
   display: grid;
