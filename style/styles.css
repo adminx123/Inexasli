@@ -59,6 +59,7 @@
   padding: 30px;
   
 }
+
 .modal-content {
   background-color: white;
   display: flex;
@@ -841,6 +842,8 @@ input[type="checkbox"]:checked ~   .box-checkbox {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 0.5rem;
+      max-width: 100%; /* Ensure container doesn't overflow */
+
     }
     .grid-item {
       background-color: #f0f0f0;
@@ -850,6 +853,8 @@ input[type="checkbox"]:checked ~   .box-checkbox {
       text-align: center;
       cursor: pointer;
       transition: background-color 0.3s, color 0.3s;
+      overflow: hidden; /* Prevent content overflow */
+      box-sizing: border-box; /* Make padding and border part of the element's total size */
     }
     .grid-item.selected {
       background-color: #000;
@@ -1088,4 +1093,3 @@ background-color: none;
   display: block;
   left: 100%;
 }
-
