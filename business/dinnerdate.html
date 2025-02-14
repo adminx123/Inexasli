@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTRO</title>
+    <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
+    <link rel="stylesheet" href="/style/styles.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+
+    <div class="menu" id="menuToggle">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    
+    <div class="dropdown" id="dropdownMenu">
+       <a href="mailto:support@inexasli.com" id="contact" class="menu-item">CONTACT</a> 
+       <a href="/index.html" id="home" class="menu-item">HOME</a>
+    </div>
+
+    <a href="./intro.html">
+        <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;" onclick="calculateAll();">
+    </a>
+
+    <div class="containerround">
+        <div class="grid-container">
+            <!-- Person 1 -->
+            <div class="grid-item person" onclick="openModal('person1')">
+                <img src="/images/logo.png" alt="Person 1">
+            </div>
+
+            <!-- Person 2 -->
+            <div class="grid-item person" onclick="openModal('person2')">
+                <img src="/images/logo.png" alt="Person 2">
+            </div>
+
+            <!-- Person 3 -->
+            <div class="grid-item person" onclick="openModal('person3')">
+                <img src="/images/logo.png" alt="Person 3">
+            </div>
+
+            <!-- Person 4 -->
+            <div class="grid-item person" onclick="openModal('person4')">
+                <img src="/images/logo.png" alt="Person 4">
+            </div>
+
+            <!-- Person 5 -->
+            <div class="grid-item person" onclick="openModal('person5')">
+                <img src="/images/logo.png" alt="Person 5">
+            </div>
+
+            <!-- Person 6 -->
+            <div class="grid-item person" onclick="openModal('person6')">
+                <img src="/images/logo.png" alt="Person 6">
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <div id="modal-person1" class="modal hidden">
+            <div class="modal-content">
+              <span class="close" onclick="closeModal('person1')">×</span>
+              <h2>Name: John Doe</h2>
+              <p>Age: 30</p>
+              <p>Languages: English, Spanish</p>
+              <a href="//p122-caldav.icloud.com/published/2/MTE3ODk0MjM3NjExNzg5NKlpsb8s8qjtRbRp573a485dr6w05jmDRnRUFC6yeVnH1XWIL7-4yPPwnPB6T_gddggu43hIiWEQ7DYlsTHRfG4">Availability</a>
+            </div>
+        </div>
+
+        <div id="modal-person2" class="modal hidden">
+            <div class="modal-content">
+              <span class="close" onclick="closeModal('person2')">×</span>
+              <h2>Name: Jane Doe</h2>
+              <p>Age: 28</p>
+              <p>Languages: French, German</p>
+            </div>
+        </div>
+
+        <div id="modal-person3" class="modal hidden">
+            <div class="modal-content">
+              <span class="close" onclick="closeModal('person3')">×</span>
+              <h2>Name: Bob Smith</h2>
+              <p>Age: 35</p>
+              <p>Languages: English, Mandarin</p>
+            </div>
+        </div>
+
+        <!-- Additional modals can follow the same structure -->
+    </div>
+
+    <script>
+        // Open Modal Function
+        function openModal(personId) {
+            const modal = document.getElementById(`modal-${personId}`);
+            if (modal) modal.style.display = 'flex';
+        }
+
+       //  Close Modal Function
+        function closeModal(personId) {
+            const modal = document.getElementById(`modal-${personId}`);
+            if (modal) modal.style.display = 'none';
+        }
+
+        
+    </script>
+</body>
+</html>
