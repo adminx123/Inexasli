@@ -799,6 +799,7 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 2000, "rate": 0.022 }
     ],
     "FL": [],
+
     "GA": [
         { "limit": 7000, "rate": 0.0575 },
         { "limit": 5250, "rate": 0.05 },
@@ -807,6 +808,7 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 750, "rate": 0.02 },
         { "limit": 0, "rate": 0.01 }
     ],
+
     "HI": [
         { "limit": 200000, "rate": 0.11 },
         { "limit": 175000, "rate": 0.1 },
@@ -821,39 +823,48 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 2400, "rate": 0.032 },
         { "limit": 0, "rate": 0.014 }
     ],
+
     "ID": [
         { "limit": 0, "rate": 0.058 }
     ],
+
     "IL": [
         { "limit": 0, "rate": 0.0495 }
     ],
+
     "IN": [
         { "limit": 0, "rate": 0.0315 }
     ],
+
     "IA": [
         { "limit": 75000, "rate": 0.06 },
         { "limit": 30000, "rate": 0.057 },
         { "limit": 6000, "rate": 0.0482 },
         { "limit": 0, "rate": 0.044 }
     ],
+
     "KS": [
         { "limit": 30000, "rate": 0.057 },
         { "limit": 15000, "rate": 0.0525 },
         { "limit": 0, "rate": 0.031 }
     ],
+
     "KY": [
         { "limit": 0, "rate": 0.045 }
     ],
+
     "LA": [
         { "limit": 50000, "rate": 0.0425 },
         { "limit": 12500, "rate": 0.035 },
         { "limit": 0, "rate": 0.0185 }
     ],
+
     "ME": [
         { "limit": 58050, "rate": 0.0715 },
         { "limit": 24500, "rate": 0.0675 },
         { "limit": 0, "rate": 0.058 }
     ],
+
     "MD": [
         { "limit": 250000, "rate": 0.0575 },
         { "limit": 150000, "rate": 0.055 },
@@ -864,22 +875,27 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 1000, "rate": 0.03 },
         { "limit": 0, "rate": 0.02 }
     ],
+
     "MA": [
         { "limit": 1000000, "rate": 0.09 },
         { "limit": 0, "rate": 0.05 }
     ],
+
     "MI": [
         { "limit": 0, "rate": 0.0425 }
     ],
+
     "MN": [
         { "limit": 183340, "rate": 0.0985 },
         { "limit": 98760, "rate": 0.0785 },
         { "limit": 30070, "rate": 0.068 },
         { "limit": 0, "rate": 0.0535 }
     ],
+
     "MS": [
         { "limit": 10000, "rate": 0.05 }
     ],
+
     "MO": [
         { "limit": 7847, "rate": 0.0495 },
         { "limit": 6726, "rate": 0.045 },
@@ -889,6 +905,7 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 2242, "rate": 0.025 },
         { "limit": 1121, "rate": 0.02 }
     ],
+
     "MT": [
         { "limit": 21600, "rate": 0.0675 },
         { "limit": 16800, "rate": 0.06 },
@@ -898,9 +915,11 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 3600, "rate": 0.02 },
         { "limit": 0, "rate": 0.01 }
     ],
+
     "NC": [
         { "limit": 0, "rate": 0.0475 }
     ],
+
     "ND": [
         { "limit": 458350, "rate": 0.029 },
         { "limit": 210825, "rate": 0.0264 },
@@ -908,7 +927,9 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 41775, "rate": 0.0204 },
         { "limit": 0, "rate": 0.011 }
     ],
+
     "NH": [],
+
     "NJ": [
         { "limit": 1000000, "rate": 0.1075 },
         { "limit": 500000, "rate": 0.0897 },
@@ -918,6 +939,7 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 20000, "rate": 0.0175 },
         { "limit": 0, "rate": 0.014 }
     ],
+
     "NM": [
         { "limit": 210000, "rate": 0.059 },
         { "limit": 16000, "rate": 0.049 },
@@ -925,6 +947,7 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 5500, "rate": 0.032 },
         { "limit": 0, "rate": 0.017 }
     ],
+
     "NY": [
         { "limit": 25000000, "rate": 0.109 },
         { "limit": 5000000, "rate": 0.103 },
@@ -936,19 +959,23 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 8500, "rate": 0.045 },
         { "limit": 0, "rate": 0.04 }
     ],
+    
     "NE": [
         { "limit": 35730, "rate": 0.0664 },
         { "limit": 22170, "rate": 0.0501 },
         { "limit": 3700, "rate": 0.0351 },
         { "limit": 0, "rate": 0.0246 }
     ],
+
     "NV": [],
+
     "OH": [
         { "limit": 115300, "rate": 0.0399 },
         { "limit": 92150, "rate": 0.03688 },
         { "limit": 46100, "rate": 0.03226 },
         { "limit": 26050, "rate": 0.02765 }
     ],
+
     "OK": [
         { "limit": 7200, "rate": 0.0475 },
         { "limit": 4900, "rate": 0.0375 },
@@ -957,31 +984,40 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 1000, "rate": 0.0075 },
         { "limit": 0, "rate": 0.0025 }
     ],
+
     "OR": [
         { "limit": 125000, "rate": 0.099 },
         { "limit": 10200, "rate": 0.0875 },
         { "limit": 4050, "rate": 0.0675 },
         { "limit": 0, "rate": 0.0475 }
     ],
+
     "PA": [
         { "limit": 0, "rate": 0.0307 }
     ],
+
     "RI": [
         { "limit": 155050, "rate": 0.0599 },
         { "limit": 68200, "rate": 0.0475 },
         { "limit": 0, "rate": 0.0375 }
     ],
+
     "SC": [
         { "limit": 16040, "rate": 0.065 },
         { "limit": 3200, "rate": 0.03 },
         { "limit": 0, "rate": 0.00 }
     ],
+
     "SD": [],
+
     "TN": [],
+
     "TX": [],
+
     "UT": [
         { "limit": 0, "rate": 0.0485 }
     ],
+
     "VA": [
         { "limit": 17000, "rate": 0.0575 },
         { "limit": 5000, "rate": 0.05 },
@@ -995,6 +1031,7 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 42150, "rate": 0.066 },
         { "limit": 0, "rate": 0.0335 }
     ],
+
     "WV": [
         { "limit": 60000, "rate": 0.065 },
         { "limit": 40000, "rate": 0.06 },
@@ -1002,13 +1039,16 @@ const SUBREGIONALTAXBRACKETS = {
         { "limit": 10000, "rate": 0.04 },
         { "limit": 0, "rate": 0.03 }
     ],
+
     "WA": [],
+
     "WI": [
         { "limit": 304170, "rate": 0.0765 },
         { "limit": 27630, "rate": 0.053 },
         { "limit": 13810, "rate": 0.0465 },
         { "limit": 0, "rate": 0.0354 }
     ],
+    
     "WY": []
 };
 
