@@ -1,3 +1,6 @@
+let handleKeyDown; // Define handleKeyDown outside of any function
+let handleClickOutside; // Define handleClickOutside outside of any function
+
 // Function to open a modal
 function openModal(modalId, tooltipClass = '.tooltip') {
     const modal = document.getElementById(modalId);
@@ -11,7 +14,7 @@ function openModal(modalId, tooltipClass = '.tooltip') {
         });
 
         // Close modal on Escape key
-        const handleKeyDown = (event) => {
+        handleKeyDown = (event) => { // Assign to the global variable
             if (event.key === 'Escape') {
                 closeModal(modalId, tooltipClass);
             }
@@ -19,8 +22,10 @@ function openModal(modalId, tooltipClass = '.tooltip') {
         document.addEventListener('keydown', handleKeyDown);
 
         // Close modal when clicking outside
-        const handleClickOutside = (event) => {
+        handleClickOutside = (event) => {
+            console.log('Click event target:', event.target);
             if (!modal.contains(event.target) && event.target.id !== modalId.replace('-modal', '_MODAL_OPEN')) {
+                console.log('Click is outside modal');
                 closeModal(modalId, tooltipClass);
             }
         };
@@ -53,6 +58,3 @@ document.querySelectorAll('[id$="_MODAL_OPEN"]').forEach(button => {
         openModal(modalId);
     });
 });
-
-// Example usage:
-// openModal('TERMS-modal');
