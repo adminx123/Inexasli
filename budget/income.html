@@ -471,13 +471,19 @@
        </div>
 <label for="termscheckbox">I have read, understand, and agree to the <a href="#" onclick="openTermsModal()" >terms of service</a>. (last updated: 16/Jan/25 )</label><br>
 
-<div id="termsModal" class="modal">
+<!-- 
+<div id="TERMS-modal" class="modal"> 
         <div class="modal-content" id="modalContent">
              <button onclick="closeModal()">Close</button>
         </div>
-    </div>
+    </div> 
+    -->
 
-
+    <label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter net amount after expenses and before tax and contributions.">
+        <span class="tooltip-content"></span>
+        Se
+        <span id="TERMS_MODAL_OPEN" title="Calculate self-employment income for educational purposes">(TERMS)</span>
+      
     
     </div>
 	       
@@ -567,7 +573,11 @@
 
 
 
-	   
+<div id="TERMS-modal" class="modal">
+                <div class="modal-content">
+                    <iframe src="/budget/legal.txt" height="99%" width="99%" frameborder="0"></iframe>
+                </div>
+            </div> 
 
 <div id="ROI-modal" class="roi-modal">
     <div class="modal-content" id="ROI-modal-content">
@@ -584,6 +594,8 @@
 <script src="/server/scripts/hamburger.js"></script>
 <script type="module" src="/server/scripts/utils.js"></script>
 <script type="module" src="/server/scripts/cookiedelete.js"></script>
+<script src="/server/scripts/modal.js"></script>
+
 
 
 </body>
