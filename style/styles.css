@@ -433,6 +433,13 @@ body {
   margin: 20px;
 }
 
+
+a {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+}
+
 .form-row {
   display: flex; /* Make the container a flex container */
   align-items: center; /* Vertically center the label and select */
