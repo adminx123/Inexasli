@@ -183,35 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 }
 
-   window.openTermsModal = function () {
-  console.log('openTermsModal() function called');
-  // **Change:** Move setting modal display to within the then block after content is retrieved
-  fetch('./legal.txt') // Corrected file extension to '.txt'
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('modalContent').innerText = data;
-      // Set modal display to block after content is retrieved
-      document.getElementById('termsModal').style.display = 'block';
-    })
-    .catch(error => console.error('Error fetching legal content:', error));
-}
-
-    window.closeModal = function (event) {
-    const modal = document.getElementById('termsModal');
-    const modalContent = document.getElementById('modalContent');
-
-    if (event.target === modal && event.target !== modalContent) {
-        modal.style.display = 'none';
-    }
-}
-    
-document.addEventListener('click', closeModal);
-    
-    document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && document.getElementById('termsModal').style.display === 'block') {
-        closeModal();
-    }
-});    
+ 
           
 const regionDropdown = document.getElementById("RegionDropdown");
 const subregionDropdown = document.getElementById("SubregionDropdown");
