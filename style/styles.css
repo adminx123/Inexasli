@@ -440,6 +440,15 @@ a {
   margin: 0 auto;
 }
 
+/* Specific styling for the inline <a> */
+.inline-link {
+  display: inline; /* Keeps the link inline with the text */
+  width: auto; /* Resets the width to fit the content naturally */
+  margin: 0; /* Removes any centering or margins */
+  text-decoration: underline; /* Optional: Ensures the link is visually distinct */
+  color: #007bff; /* Optional: Style the link color */
+}
+
 .form-row {
   display: flex; /* Make the container a flex container */
   align-items: center; /* Vertically center the label and select */
