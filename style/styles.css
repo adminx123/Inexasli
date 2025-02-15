@@ -34,6 +34,8 @@
   align-items: stretch;
   padding: 30px;
 }
+
+
 .roi-btn {
   padding: 8px 12px ;
   border-radius: 0;
@@ -54,8 +56,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  justify-content: stretch;
-  align-items: stretch;
+ 
   padding: 30px;
   
 }
