@@ -655,401 +655,430 @@ const REGIONALTAXBRACKETSUSA =
 // Define the SUBREGIONAL tax brackets
 const SUBREGIONALTAXBRACKETS = {
     //Canada Provinces
-    'AB': [
-        { limit: 341502, rate: 0.15 },
-        { limit: 227668, rate: 0.14 },
-        { limit: 170751, rate: 0.13 },
-        { limit: 142292, rate: 0.12 },
-        { limit: 0, rate: 0.10 }
-    ],
-    'BC': [
-        { limit: 240716, rate: 0.205 },
-        { limit: 172602, rate: 0.168 },
-        { limit: 127299, rate: 0.147 },
-        { limit: 104835, rate: 0.1229 },
-        { limit: 91310, rate: 0.105 },
-        { limit: 45654, rate: 0.077 },
-        { limit: 0, rate: 0.0506 }
-    ],
-    'MB': [
-        { limit: 79625, rate: 0.174 },
-        { limit: 36842, rate: 0.1275 },
-        { limit: 0, rate: 0.108 }
-    ],
-    'NB': [
-        { limit: 176756, rate: 0.195 },
-        { limit: 95431, rate: 0.16 },
-        { limit: 47715, rate: 0.14 },
-        { limit: 0, rate: 0.094 }
-    ],
-    'NL': [
-        { limit: 1059000, rate: 0.218 },
-        { limit: 529500, rate: 0.213 },
-        { limit: 264750, rate: 0.208 },
-        { limit: 207239, rate: 0.198 },
-        { limit: 148027, rate: 0.178 },
-        { limit: 82913, rate: 0.158 },
-        { limit: 41457, rate: 0.145 },
-        { limit: 0, rate: 0.087 }
-    ],
-    'NT': [
-        { limit: 157139, rate: 0.1405 },
-        { limit: 96655, rate: 0.122 },
-        { limit: 48326, rate: 0.086 },
-        { limit: 0, rate: 0.059 }
-    ],
-    'NS': [
-        { limit: 150000, rate: 0.21 },
-        { limit: 93000, rate: 0.175 },
-        { limit: 59180, rate: 0.1667 },
-        { limit: 29590, rate: 0.1495 },
-        { limit: 0, rate: 0.0879 }
-    ],
-    'NU': [
-        { limit: 165429, rate: 0.115 },
-        { limit: 101754, rate: 0.09 },
-        { limit: 50877, rate: 0.07 },
-        { limit: 0, rate: 0.04 }
-    ],
-    'ON': [
-        { limit: 220000, rate: 0.1316 },
-        { limit: 150000, rate: 0.1216 },
-        { limit: 98463, rate: 0.1116 },
-        { limit: 49231, rate: 0.0915 },
-        { limit: 0, rate: 0.0505 }
-    ],
-    'PE': [
-        { limit: 63969, rate: 0.167 },
-        { limit: 31984, rate: 0.138 },
-        { limit: 0, rate: 0.098 }
-    ],
-    'QC': [
-        { limit: 119910, rate: 0.2575 },
-        { limit: 98540, rate: 0.24 },
-        { limit: 49275, rate: 0.19 },
-        { limit: 0, rate: 0.14 }
-    ],
-    'SK': [
-        { limit: 142058, rate: 0.145 },
-        { limit: 49720, rate: 0.125 },
-        { limit: 0, rate: 0.105 }
-    ],
-    'YT': [
-        { limit: 500000, rate: 0.15 },
-        { limit: 165430, rate: 0.128 },
-        { limit: 106717, rate: 0.109 },
-        { limit: 53359, rate: 0.09 },
-        { limit: 0, rate: 0.064 }
-    ],
+   'AB': [
+    { limit: 151234, rate: 0.10 }, // on the portion of taxable income that is $151,234 or less, plus
+    { limit: 181481, rate: 0.12 }, // on the portion of taxable income over $151,234 up to $181,481, plus
+    { limit: 241974, rate: 0.13 }, // on the portion of taxable income over $181,481 up to $241,974, plus
+    { limit: 362961, rate: 0.14 }, // on the portion of taxable income over $241,974 up to $362,961, plus
+    { limit: 0, rate: 0.15 }       // on the portion of taxable income over $362,961
+],
+
+'BC': [
+    { limit: 49279, rate: 0.0506 }, // on the portion of taxable income that is $49,279 or less, plus
+    { limit: 98560, rate: 0.077 },  // on the portion of taxable income over $49,279 up to $98,560, plus
+    { limit: 113158, rate: 0.105 }, // on the portion of taxable income over $98,560 up to $113,158, plus
+    { limit: 137407, rate: 0.1229 },// on the portion of taxable income over $113,158 up to $137,407, plus
+    { limit: 186306, rate: 0.147 }, // on the portion of taxable income over $137,407 up to $186,306, plus
+    { limit: 259829, rate: 0.168 }, // on the portion of taxable income over $186,306 up to $259,829, plus
+    { limit: 0, rate: 0.205 }       // on the portion of taxable income over $259,829
+],
+
+'MB': [
+    { limit: 47564, rate: 0.108 },  // on the portion of taxable income that is $47,564 or less, plus
+    { limit: 101200, rate: 0.1275 },// on the portion of taxable income over $47,564 up to $101,200, plus
+    { limit: 0, rate: 0.174 }       // on the portion of taxable income over $101,200
+],
+
+'NB': [
+    { limit: 51306, rate: 0.094 },  // on the portion of taxable income that is $51,306 or less, plus
+    { limit: 102614, rate: 0.14 },  // on the portion of taxable income over $51,306 up to $102,614, plus
+    { limit: 190060, rate: 0.16 },  // on the portion of taxable income over $102,614 up to $190,060, plus
+    { limit: 0, rate: 0.195 }       // on the portion of taxable income over $190,060
+],
+
+'NL': [
+    { limit: 44192, rate: 0.087 },  // on the portion of taxable income that is $44,192 or less, plus
+    { limit: 88382, rate: 0.145 },  // on the portion of taxable income over $44,192 up to $88,382, plus
+    { limit: 157792, rate: 0.158 }, // on the portion of taxable income over $88,382 up to $157,792, plus
+    { limit: 220910, rate: 0.178 }, // on the portion of taxable income over $157,792 up to $220,910, plus
+    { limit: 282214, rate: 0.198 }, // on the portion of taxable income over $220,910 up to $282,214, plus
+    { limit: 564429, rate: 0.208 }, // on the portion of taxable income over $282,214 up to $564,429, plus
+    { limit: 1128858, rate: 0.213 },// on the portion of taxable income over $564,429 up to $1,128,858, plus
+    { limit: 0, rate: 0.218 }       // on the portion of taxable income over $1,128,858
+],
+
+'NT': [
+    { limit: 51964, rate: 0.059 },  // on the portion of taxable income that is $51,964 or less, plus
+    { limit: 103930, rate: 0.086 }, // on the portion of taxable income over $51,964 up to $103,930, plus
+    { limit: 168967, rate: 0.122 }, // on the portion of taxable income over $103,930 up to $168,967, plus
+    { limit: 0, rate: 0.1405 }      // on the portion of taxable income over $168,967
+],
+
+'NS': [
+    { limit: 30507, rate: 0.0879 }, // on the portion of taxable income that is $30,507 or less, plus
+    { limit: 61015, rate: 0.1495 }, // on the portion of taxable income over $30,507 up to $61,015, plus
+    { limit: 95883, rate: 0.1667 }, // on the portion of taxable income over $61,015 up to $95,883, plus
+    { limit: 154650, rate: 0.175 }, // on the portion of taxable income over $95,883 up to $154,650, plus
+    { limit: 0, rate: 0.21 }        // on the portion of taxable income over $154,650
+],
+
+'NU': [
+    { limit: 54707, rate: 0.04 },   // on the portion of taxable income that is $54,707 or less, plus
+    { limit: 109413, rate: 0.07 },  // on the portion of taxable income over $54,707 up to $109,413, plus
+    { limit: 177881, rate: 0.09 },  // on the portion of taxable income over $109,413 up to $177,881, plus
+    { limit: 0, rate: 0.115 }       // on the portion of taxable income over $177,881
+],
+
+'ON': [
+    { limit: 52886, rate: 0.0505 }, // on the portion of taxable income that is $52,886 or less, plus
+    { limit: 105775, rate: 0.0915 },// on the portion of taxable income over $52,886 up to $105,775, plus
+    { limit: 150000, rate: 0.1116 },// on the portion of taxable income over $105,775 up to $150,000, plus
+    { limit: 220000, rate: 0.1216 },// on the portion of taxable income over $150,000 up to $220,000, plus
+    { limit: 0, rate: 0.1316 }      // on the portion of taxable income over $220,000
+],
+
+'PE': [
+    { limit: 33328, rate: 0.095 },  // on the portion of taxable income that is $33,328 or less, plus
+    { limit: 64656, rate: 0.1347 }, // on the portion of taxable income over $33,328 up to $64,656, plus
+    { limit: 105000, rate: 0.166 }, // on the portion of taxable income over $64,656 up to $105,000, plus
+    { limit: 140000, rate: 0.1762 },// on the portion of taxable income over $105,000 up to $140,000, plus
+    { limit: 0, rate: 0.19 }        // on the portion of taxable income over $140,000
+],
+
+'QC': [
+    // See Revenu Québec's income tax rates for specific brackets and rates
+],
+
+'SK': [
+    { limit: 53463, rate: 0.105 },  // on the portion of taxable income that is $53,463 or less, plus
+    { limit: 152750, rate: 0.125 }, // on the portion of taxable income over $53,463 up to $152,750, plus
+    { limit: 0, rate: 0.145 }       // on the portion of taxable income over $152,750
+],
+
+'YT': [
+    { limit: 57375, rate: 0.064 },  // on the portion of taxable income that is $57,375 or less, plus
+    { limit: 114750, rate: 0.09 },  // on the portion of taxable income over $57,375 up to $114,750, plus
+    { limit: 177882, rate: 0.109 }, // on the portion of taxable income over $114,750 up to $177,882, plus
+    { limit: 500000, rate: 0.128 }, // on the portion of taxable income over $177,882 up to $500,000, plus
+    { limit: 0, rate: 0.15 }        // on the portion of taxable income over $500,000
+],
 
     //US STATES
-    "AL": [
-        { "limit": 3000, "rate": 0.05 },
-        { "limit": 500, "rate": 0.04 },
-        { "limit": 0, "rate": 0.02 }
-    ],
-    "AK": [],
-    "AZ": [
-        { "limit": 0, "rate": 0.025 }
-    ],
-    "AR": [
-        { "limit": 8500, "rate": 0.049 },
-        { "limit": 4300, "rate": 0.04 },
-        { "limit": 0, "rate": 0.02 }
-    ],
-    "CA": [
-        { "limit": 1000000, "rate": 0.133 },
-        { "limit": 677275, "rate": 0.123 },
-        { "limit": 406364, "rate": 0.113 },
-        { "limit": 338639, "rate": 0.103 },
-        { "limit": 66295, "rate": 0.093 },
-        { "limit": 52455, "rate": 0.08 },
-        { "limit": 37788, "rate": 0.06 },
-        { "limit": 23942, "rate": 0.04 },
-        { "limit": 10099, "rate": 0.02 },
-        { "limit": 0, "rate": 0.01 }
-    ],
-    "CO": [
-        { "limit": 0, "rate": 0.044 }
-    ],
-    "CT": [
-        { "limit": 500000, "rate": 0.0699 },
-        { "limit": 250000, "rate": 0.069 },
-        { "limit": 200000, "rate": 0.065 },
-        { "limit": 100000, "rate": 0.06 },
-        { "limit": 50000, "rate": 0.055 },
-        { "limit": 10000, "rate": 0.05 },
-        { "limit": 0, "rate": 0.03 }
-    ],
-    "DC": [
-        { "limit": 1000000, "rate": 0.1075 },
-        { "limit": 500000, "rate": 0.0975 },
-        { "limit": 250000, "rate": 0.0925 },
-        { "limit": 60000, "rate": 0.085 },
-        { "limit": 40000, "rate": 0.065 },
-        { "limit": 10000, "rate": 0.06 },
-        { "limit": 0, "rate": 0.04 }
-    ],
-    "DE": [
-        { "limit": 60000, "rate": 0.066 },
-        { "limit": 25000, "rate": 0.0555 },
-        { "limit": 20000, "rate": 0.052 },
-        { "limit": 10000, "rate": 0.048 },
-        { "limit": 5000, "rate": 0.039 },
-        { "limit": 2000, "rate": 0.022 }
-    ],
-    "FL": [],
+   // US STATES
 
-    "GA": [
-        { "limit": 7000, "rate": 0.0575 },
-        { "limit": 5250, "rate": 0.05 },
-        { "limit": 3750, "rate": 0.04 },
-        { "limit": 2250, "rate": 0.03 },
-        { "limit": 750, "rate": 0.02 },
-        { "limit": 0, "rate": 0.01 }
-    ],
+"AL": [
+    { "limit": 3000, "rate": 0.05 }, // No change
+    { "limit": 500, "rate": 0.04 },  // No change
+    { "limit": 0, "rate": 0.02 }     // No change
+],
 
-    "HI": [
-        { "limit": 200000, "rate": 0.11 },
-        { "limit": 175000, "rate": 0.1 },
-        { "limit": 150000, "rate": 0.09 },
-        { "limit": 48000, "rate": 0.0825 },
-        { "limit": 36000, "rate": 0.079 },
-        { "limit": 24000, "rate": 0.076 },
-        { "limit": 19200, "rate": 0.072 },
-        { "limit": 14400, "rate": 0.068 },
-        { "limit": 9600, "rate": 0.064 },
-        { "limit": 4800, "rate": 0.055 },
-        { "limit": 2400, "rate": 0.032 },
-        { "limit": 0, "rate": 0.014 }
-    ],
+"AK": [],
+// No state income tax
 
-    "ID": [
-        { "limit": 0, "rate": 0.058 }
-    ],
+"AZ": [
+    { "limit": 0, "rate": 0.025 }    // No change, flat rate
+],
 
-    "IL": [
-        { "limit": 0, "rate": 0.0495 }
-    ],
+"AR": [
+    { "limit": 8500, "rate": 0.049 }, // No change
+    { "limit": 4300, "rate": 0.04 },  // No change
+    { "limit": 0, "rate": 0.02 }      // No change
+],
 
-    "IN": [
-        { "limit": 0, "rate": 0.0315 }
-    ],
+"CA": [
+    { "limit": 1162000, "rate": 0.133 }, // Increased from 1000000 due to inflation adjustment
+    { "limit": 788800, "rate": 0.123 },  // Increased from 677275
+    { "limit": 473300, "rate": 0.113 },  // Increased from 406364
+    { "limit": 394000, "rate": 0.103 },  // Increased from 338639
+    { "limit": 77000, "rate": 0.093 },   // Increased from 66295
+    { "limit": 61000, "rate": 0.08 },    // Increased from 52455
+    { "limit": 44000, "rate": 0.06 },    // Increased from 37788
+    { "limit": 27800, "rate": 0.04 },    // Increased from 23942
+    { "limit": 11700, "rate": 0.02 },    // Increased from 10099
+    { "limit": 0, "rate": 0.01 }
+],
 
-    "IA": [
-        { "limit": 75000, "rate": 0.06 },
-        { "limit": 30000, "rate": 0.057 },
-        { "limit": 6000, "rate": 0.0482 },
-        { "limit": 0, "rate": 0.044 }
-    ],
+"CO": [
+    { "limit": 0, "rate": 0.044 }    // No change, flat rate
+],
 
-    "KS": [
-        { "limit": 30000, "rate": 0.057 },
-        { "limit": 15000, "rate": 0.0525 },
-        { "limit": 0, "rate": 0.031 }
-    ],
+"CT": [
+    { "limit": 500000, "rate": 0.0699 }, // No change
+    { "limit": 250000, "rate": 0.069 },  // No change
+    { "limit": 200000, "rate": 0.065 },  // No change
+    { "limit": 100000, "rate": 0.06 },   // No change
+    { "limit": 50000, "rate": 0.055 },   // No change
+    { "limit": 10000, "rate": 0.05 },    // No change
+    { "limit": 0, "rate": 0.03 }
+],
 
-    "KY": [
-        { "limit": 0, "rate": 0.045 }
-    ],
+"DC": [
+    { "limit": 1000000, "rate": 0.1075 }, // No change
+    { "limit": 500000, "rate": 0.0975 },  // No change
+    { "limit": 250000, "rate": 0.0925 },  // No change
+    { "limit": 60000, "rate": 0.085 },    // No change
+    { "limit": 40000, "rate": 0.065 },    // No change
+    { "limit": 10000, "rate": 0.06 },     // No change
+    { "limit": 0, "rate": 0.04 }
+],
 
-    "LA": [
-        { "limit": 50000, "rate": 0.0425 },
-        { "limit": 12500, "rate": 0.035 },
-        { "limit": 0, "rate": 0.0185 }
-    ],
+"DE": [
+    { "limit": 60000, "rate": 0.066 }, // No change
+    { "limit": 25000, "rate": 0.0555 }, // No change
+    { "limit": 20000, "rate": 0.052 },  // No change
+    { "limit": 10000, "rate": 0.048 },  // No change
+    { "limit": 5000, "rate": 0.039 },   // No change
+    { "limit": 2000, "rate": 0.022 } 
+],
 
-    "ME": [
-        { "limit": 58050, "rate": 0.0715 },
-        { "limit": 24500, "rate": 0.0675 },
-        { "limit": 0, "rate": 0.058 }
-    ],
+"FL": [],
+// No state income tax
 
-    "MD": [
-        { "limit": 250000, "rate": 0.0575 },
-        { "limit": 150000, "rate": 0.055 },
-        { "limit": 125000, "rate": 0.0525 },
-        { "limit": 100000, "rate": 0.05 },
-        { "limit": 3000, "rate": 0.0475 },
-        { "limit": 2000, "rate": 0.04 },
-        { "limit": 1000, "rate": 0.03 },
-        { "limit": 0, "rate": 0.02 }
-    ],
+"GA": [
+    { "limit": 7000, "rate": 0.0575 }, // No change
+    { "limit": 5250, "rate": 0.05 },   // No change
+    { "limit": 3750, "rate": 0.04 },   // No change
+    { "limit": 2250, "rate": 0.03 },   // No change
+    { "limit": 750, "rate": 0.02 },    // No change
+    { "limit": 0, "rate": 0.01 } 
+],
 
-    "MA": [
-        { "limit": 1000000, "rate": 0.09 },
-        { "limit": 0, "rate": 0.05 }
-    ],
+"HI": [
+    { "limit": 325000, "rate": 0.11 }, // Increased from 200000, brackets widened
+    { "limit": 280000, "rate": 0.1 },  // Increased from 175000
+    { "limit": 240000, "rate": 0.09 }, // Increased from 150000
+    { "limit": 77000, "rate": 0.0825 },// Increased from 48000
+    { "limit": 58000, "rate": 0.079 }, // Increased from 36000
+    { "limit": 39000, "rate": 0.076 }, // Increased from 24000
+    { "limit": 31000, "rate": 0.072 }, // Increased from 19200
+    { "limit": 23000, "rate": 0.068 }, // Increased from 14400
+    { "limit": 15000, "rate": 0.064 }, // Increased from 9600
+    { "limit": 7700, "rate": 0.055 },  // Increased from 4800
+    { "limit": 3900, "rate": 0.032 },  // Increased from 2400
+    { "limit": 0, "rate": 0.014 }
+],
 
-    "MI": [
-        { "limit": 0, "rate": 0.0425 }
-    ],
+"ID": [
+    { "limit": 0, "rate": 0.058 }    // No change, flat rate
+],
 
-    "MN": [
-        { "limit": 183340, "rate": 0.0985 },
-        { "limit": 98760, "rate": 0.0785 },
-        { "limit": 30070, "rate": 0.068 },
-        { "limit": 0, "rate": 0.0535 }
-    ],
+"IL": [
+    { "limit": 0, "rate": 0.0495 }    // No change, flat rate
+],
 
-    "MS": [
-        { "limit": 10000, "rate": 0.05 }
-    ],
+"IN": [
+    { "limit": 0, "rate": 0.030 }     // Reduced from 0.0315 to 0.03
+],
 
-    "MO": [
-        { "limit": 7847, "rate": 0.0495 },
-        { "limit": 6726, "rate": 0.045 },
-        { "limit": 5605, "rate": 0.04 },
-        { "limit": 4484, "rate": 0.035 },
-        { "limit": 3363, "rate": 0.03 },
-        { "limit": 2242, "rate": 0.025 },
-        { "limit": 1121, "rate": 0.02 }
-    ],
+"IA": [
+    { "limit": 75000, "rate": 0.06 },  // No change, moving towards flat rate in future years
+    { "limit": 30000, "rate": 0.057 }, // No change
+    { "limit": 6000, "rate": 0.0482 }, // No change
+    { "limit": 0, "rate": 0.044 } 
+],
 
-    "MT": [
-        { "limit": 21600, "rate": 0.0675 },
-        { "limit": 16800, "rate": 0.06 },
-        { "limit": 13000, "rate": 0.05 },
-        { "limit": 9700, "rate": 0.04 },
-        { "limit": 6300, "rate": 0.03 },
-        { "limit": 3600, "rate": 0.02 },
-        { "limit": 0, "rate": 0.01 }
-    ],
+"KS": [
+    { "limit": 30000, "rate": 0.057 }, // No change
+    { "limit": 15000, "rate": 0.0525 },// No change
+    { "limit": 0, "rate": 0.031 } 
+],
 
-    "NC": [
-        { "limit": 0, "rate": 0.0475 }
-    ],
+"KY": [
+    { "limit": 0, "rate": 0.040 }     // Reduced from 0.045 to 0.04
+],
 
-    "ND": [
-        { "limit": 458350, "rate": 0.029 },
-        { "limit": 210825, "rate": 0.0264 },
-        { "limit": 101050, "rate": 0.0227 },
-        { "limit": 41775, "rate": 0.0204 },
-        { "limit": 0, "rate": 0.011 }
-    ],
+"LA": [
+    { "limit": 50000, "rate": 0.030 }, // Reduced from 0.0425 to 0.03, new flat rate
+],
 
-    "NH": [],
+"ME": [
+    { "limit": 58050, "rate": 0.0715 }, // No change
+    { "limit": 24500, "rate": 0.0675 }, // No change
+    { "limit": 0, "rate": 0.058 }
+],
 
-    "NJ": [
-        { "limit": 1000000, "rate": 0.1075 },
-        { "limit": 500000, "rate": 0.0897 },
-        { "limit": 75000, "rate": 0.0637 },
-        { "limit": 40000, "rate": 0.05525 },
-        { "limit": 35000, "rate": 0.035 },
-        { "limit": 20000, "rate": 0.0175 },
-        { "limit": 0, "rate": 0.014 }
-    ],
+"MD": [
+    { "limit": 250000, "rate": 0.0575 }, // No change
+    { "limit": 150000, "rate": 0.055 },  // No change
+    { "limit": 125000, "rate": 0.0525 }, // No change
+    { "limit": 100000, "rate": 0.05 },   // No change
+    { "limit": 3000, "rate": 0.0475 },   // No change
+    { "limit": 2000, "rate": 0.04 },     // No change
+    { "limit": 1000, "rate": 0.03 },     // No change
+    { "limit": 0, "rate": 0.02 }
+],
 
-    "NM": [
-        { "limit": 210000, "rate": 0.059 },
-        { "limit": 16000, "rate": 0.049 },
-        { "limit": 11000, "rate": 0.047 },
-        { "limit": 5500, "rate": 0.032 },
-        { "limit": 0, "rate": 0.017 }
-    ],
+"MA": [
+    { "limit": 1000000, "rate": 0.09 }, // No change
+    { "limit": 0, "rate": 0.05 }        // No change
+],
 
-    "NY": [
-        { "limit": 25000000, "rate": 0.109 },
-        { "limit": 5000000, "rate": 0.103 },
-        { "limit": 1077550, "rate": 0.0965 },
-        { "limit": 215400, "rate": 0.0685 },
-        { "limit": 80650, "rate": 0.06 },
-        { "limit": 13900, "rate": 0.055 },
-        { "limit": 11700, "rate": 0.0525 },
-        { "limit": 8500, "rate": 0.045 },
-        { "limit": 0, "rate": 0.04 }
-    ],
-    
-    "NE": [
-        { "limit": 35730, "rate": 0.0664 },
-        { "limit": 22170, "rate": 0.0501 },
-        { "limit": 3700, "rate": 0.0351 },
-        { "limit": 0, "rate": 0.0246 }
-    ],
+"MI": [
+    { "limit": 0, "rate": 0.0405 }     // Reduced from 0.0425 to 0.0405
+],
 
-    "NV": [],
+"MN": [
+    { "limit": 183340, "rate": 0.0985 }, // No change
+    { "limit": 98760, "rate": 0.0785 },  // No change
+    { "limit": 30070, "rate": 0.068 },   // No change
+    { "limit": 0, "rate": 0.0535 } 
+],
 
-    "OH": [
-        { "limit": 115300, "rate": 0.0399 },
-        { "limit": 92150, "rate": 0.03688 },
-        { "limit": 46100, "rate": 0.03226 },
-        { "limit": 26050, "rate": 0.02765 }
-    ],
+"MS": [
+    { "limit": 10000, "rate": 0.044 }  // Reduced from 0.05 to 0.044
+],
 
-    "OK": [
-        { "limit": 7200, "rate": 0.0475 },
-        { "limit": 4900, "rate": 0.0375 },
-        { "limit": 3750, "rate": 0.0275 },
-        { "limit": 2500, "rate": 0.0175 },
-        { "limit": 1000, "rate": 0.0075 },
-        { "limit": 0, "rate": 0.0025 }
-    ],
+"MO": [
+    { "limit": 7847, "rate": 0.0495 }, // No change
+    { "limit": 6726, "rate": 0.045 },  // No change
+    { "limit": 5605, "rate": 0.04 },   // No change
+    { "limit": 4484, "rate": 0.035 },  // No change
+    { "limit": 3363, "rate": 0.03 },   // No change
+    { "limit": 2242, "rate": 0.025 },  // No change
+    { "limit": 1121, "rate": 0.02 } 
+],
 
-    "OR": [
-        { "limit": 125000, "rate": 0.099 },
-        { "limit": 10200, "rate": 0.0875 },
-        { "limit": 4050, "rate": 0.0675 },
-        { "limit": 0, "rate": 0.0475 }
-    ],
+"MT": [
+    { "limit": 21600, "rate": 0.0675 }, // No change
+    { "limit": 16800, "rate": 0.06 },   // No change
+    { "limit": 13000, "rate": 0.05 },   // No change
+    { "limit": 9700, "rate": 0.04 },    // No change
+    { "limit": 6300, "rate": 0.03 },    // No change
+    { "limit": 3600, "rate": 0.02 },    // No change
+    { "limit": 0, "rate": 0.01 } 
+],
 
-    "PA": [
-        { "limit": 0, "rate": 0.0307 }
-    ],
+"NC": [
+    { "limit": 0, "rate": 0.045 }     // Reduced from 0.0475 to 0.045
+],
 
-    "RI": [
-        { "limit": 155050, "rate": 0.0599 },
-        { "limit": 68200, "rate": 0.0475 },
-        { "limit": 0, "rate": 0.0375 }
-    ],
+"ND": [
+    { "limit": 458350, "rate": 0.029 }, // No change
+    { "limit": 210825, "rate": 0.0264 },// No change
+    { "limit": 101050, "rate": 0.0227 },// No change
+    { "limit": 41775, "rate": 0.0204 }, // No change
+    { "limit": 0, "rate": 0.011 } 
+],
 
-    "SC": [
-        { "limit": 16040, "rate": 0.065 },
-        { "limit": 3200, "rate": 0.03 },
-        { "limit": 0, "rate": 0.00 }
-    ],
+"NH": [],
+// Interest and dividends tax repealed
 
-    "SD": [],
+"NJ": [
+    { "limit": 1000000, "rate": 0.1075 }, // No change
+    { "limit": 500000, "rate": 0.0897 },  // No change
+    { "limit": 75000, "rate": 0.0637 },   // No change
+    { "limit": 40000, "rate": 0.05525 },  // No change
+    { "limit": 35000, "rate": 0.035 },    // No change
+    { "limit": 20000, "rate": 0.0175 },   // No change
+    { "limit": 0, "rate": 0.014 } 
+],
 
-    "TN": [],
+"NM": [
+    { "limit": 210000, "rate": 0.059 }, // No change
+    { "limit": 16000, "rate": 0.049 },  // No change
+    { "limit": 11000, "rate": 0.047 },  // No change
+    { "limit": 5500, "rate": 0.032 },   // No change
+    { "limit": 0, "rate": 0.017 } 
+],
 
-    "TX": [],
+"NY": [
+    { "limit": 25000000, "rate": 0.109 }, // No change
+    { "limit": 5000000, "rate": 0.103 },  // No change
+    { "limit": 1077550, "rate": 0.0965 }, // No change
+    { "limit": 215400, "rate": 0.0685 },  // No change
+    { "limit": 80650, "rate": 0.06 },     // No change
+    { "limit": 13900, "rate": 0.055 },    // No change
+    { "limit": 11700, "rate": 0.0525 },   // No change
+    { "limit": 8500, "rate": 0.045 },     // No change
+    { "limit": 0, "rate": 0.04 } 
+],
 
-    "UT": [
-        { "limit": 0, "rate": 0.0485 }
-    ],
+"NE": [
+    { "limit": 35730, "rate": 0.0664 }, // No change
+    { "limit": 22170, "rate": 0.0501 }, // No change
+    { "limit": 3700, "rate": 0.0351 },  // No change
+    { "limit": 0, "rate": 0.0246 } 
+],
 
-    "VA": [
-        { "limit": 17000, "rate": 0.0575 },
-        { "limit": 5000, "rate": 0.05 },
-        { "limit": 3000, "rate": 0.03 },
-        { "limit": 0, "rate": 0.02 }
-    ],
-    
-    "VT": [
-        { "limit": 213150, "rate": 0.0875 },
-        { "limit": 102200, "rate": 0.076 },
-        { "limit": 42150, "rate": 0.066 },
-        { "limit": 0, "rate": 0.0335 }
-    ],
+"NV": [],
+// No state income tax
 
-    "WV": [
-        { "limit": 60000, "rate": 0.065 },
-        { "limit": 40000, "rate": 0.06 },
-        { "limit": 25000, "rate": 0.045 },
-        { "limit": 10000, "rate": 0.04 },
-        { "limit": 0, "rate": 0.03 }
-    ],
+"OH": [
+    { "limit": 115300, "rate": 0.0399 }, // No change
+    { "limit": 92150, "rate": 0.03688 }, // No change
+    { "limit": 46100, "rate": 0.03226 }, // No change
+    { "limit": 26050, "rate": 0.02765 } 
+],
 
-    "WA": [],
+"OK": [
+    { "limit": 7200, "rate": 0.0475 }, // No change
+    { "limit": 4900, "rate": 0.0375 }, // No change
+    { "limit": 3750, "rate": 0.0275 }, // No change
+    { "limit": 2500, "rate": 0.0175 }, // No change
+    { "limit": 1000, "rate": 0.0075 }, // No change
+    { "limit": 0, "rate": 0.0025 } 
+],
 
-    "WI": [
-        { "limit": 304170, "rate": 0.0765 },
-        { "limit": 27630, "rate": 0.053 },
-        { "limit": 13810, "rate": 0.0465 },
-        { "limit": 0, "rate": 0.0354 }
-    ],
-    
-    "WY": []
+"OR": [
+    { "limit": 125000, "rate": 0.099 }, // No change
+    { "limit": 10200, "rate": 0.0875 }, // No change
+    { "limit": 4050, "rate": 0.0675 },  // No change
+    { "limit": 0, "rate": 0.0475 } 
+],
+
+"PA": [
+    { "limit": 0, "rate": 0.0307 }     // No change, flat rate
+],
+
+"RI": [
+    { "limit": 155050, "rate": 0.0599 }, // No change
+    { "limit": 68200, "rate": 0.0475 },  // No change
+    { "limit": 0, "rate": 0.0375 } 
+],
+
+"SC": [
+    { "limit": 16040, "rate": 0.064 }, // Reduced from 0.065 to 0.064
+    { "limit": 3200, "rate": 0.03 },   // No change
+    { "limit": 0, "rate": 0.00 } 
+],
+
+"SD": [],
+// No state income tax
+
+"TN": [],
+// No state income tax
+
+"TX": [],
+// No state income tax
+
+"UT": [
+    { "limit": 0, "rate": 0.0465 }     // Reduced from 0.0485 to 0.0465
+],
+
+"VA": [
+    { "limit": 17000, "rate": 0.0575 }, // No change
+    { "limit": 5000, "rate": 0.05 },    // No change
+    { "limit": 3000, "rate": 0.03 },    // No change
+    { "limit": 0, "rate": 0.02 } 
+],
+
+"VT": [
+    { "limit": 213150, "rate": 0.0875 }, // No change
+    { "limit": 102200, "rate": 0.076 },  // No change
+    { "limit": 42150, "rate": 0.066 },   // No change
+    { "limit": 0, "rate": 0.0335 } 
+],
+
+"WV": [
+    { "limit": 60000, "rate": 0.065 }, // No change
+    { "limit": 40000, "rate": 0.06 },  // No change
+    { "limit": 25000, "rate": 0.045 }, // No change
+    { "limit": 10000, "rate": 0.04 },  // No change
+    { "limit": 0, "rate": 0.03 } 
+],
+
+"WA": [],
+// No state income tax
+
+"WI": [
+    { "limit": 304170, "rate": 0.0765 }, // No change
+    { "limit": 27630, "rate": 0.053 },   // No change
+    { "limit": 13810, "rate": 0.0465 },  // No change
+    { "limit": 0, "rate": 0.0354 } 
+],
+
+"WY": []
+// No state income tax
 };
 
 
@@ -1071,11 +1100,18 @@ function calculateTax(taxBrackets) {
 
 
 
-    // Define the calculateFederalTax function
+ // Function to calculate regional tax based on selected region
 function calculateRegionalTax() {
-ANNUALREGIONALTAX = calculateTax(REGIONALTAXBRACKETSCAN);
-document.getElementById('ANNUALREGIONALTAX').textContent = '$' + (ANNUALREGIONALTAX).toFixed(2);
+    var regionDropdown = document.getElementById("RegionDropdown");
+    let selectedRegion = regionDropdown.value;
+    let taxBrackets = selectedRegion === "CAN" ? REGIONALTAXBRACKETSCAN : REGIONALTAXBRACKETSUSA;
+
+    ANNUALREGIONALTAX = calculateTax(taxBrackets);
+    document.getElementById('ANNUALREGIONALTAX').textContent = '$' + ANNUALREGIONALTAX.toFixed(2);
 }
+
+// Assuming you have an event listener for the dropdown change, if not, you might want to add one:
+document.getElementById("RegionDropdown").addEventListener('change', calculateRegionalTax);
 
 
 // Define the calculateSubregionalTax function
