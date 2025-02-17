@@ -103,6 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 var ANNUALTAXABLEINCOME;
+var ANNUALTAXABLEINCOMESUB;
     var ANNUALREGIONALTAX;
     var ANNUALSUBREGIONALTAX;
     var TOTALTAXCG;
@@ -298,57 +299,104 @@ function calculateNormalizedSum() {
 
     let annualTaxableSum = annualIncomeSum; // Start with the total income for taxable sum
 
-    incomeFields.forEach(field => {
-        const [inputId, frequencyId] = field;
-        let income = calculateAnnual(inputId, frequencyId);
-    
-        // Exclude gambling winnings for Canada
-        if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_gambling_winnings') {
-            annualTaxableSum -= income; // Exclude from taxable sum for Canada
-            return; // Skip this iteration for Canada
-        }
-    
-        // Exclude tax-free income
-        if (inputId === 'income_tax_free_income') {
-            annualTaxableSum -= income; // Exclude from taxable sum
-            return; // Skip this iteration for tax-free income
-        }
-    
-        // Handle capital gains/losses based on region
-        if (inputId === 'income_capital_gains_losses') {
-            if (document.getElementById('RegionDropdown').value === 'CAN') {
-                annualTaxableSum -= income * 0.5; // Only half are taxable in Canada
-            } else if (document.getElementById('RegionDropdown').value !== 'USA') {
-                // For non-USA regions (excluding Canada), you might want to handle differently if needed
-                annualTaxableSum -= income; // Assuming not taxable in other regions
-            }
-            // For USA, no adjustment needed here since capital gains are included by default in annualIncomeSum
-        }
-        
-        // Exclude alimony from taxable income for USA
-        if (document.getElementById('RegionDropdown').value === 'USA' && inputId === 'income_alimony') {
-            annualTaxableSum -= income; // Exclude alimony from taxable income
-            return; // Skip this iteration for USA alimony
-        }
-    });
-    
-    // Apply standard deduction for USA
-    if (document.getElementById('RegionDropdown').value === 'USA') {
-        annualTaxableSum -= SD;
-    } else {
-        // Apply BPA for other regions
-        annualTaxableSum -= BPA;
+incomeFields.forEach(field => {
+    const [inputId, frequencyId] = field;
+    let income = calculateAnnual(inputId, frequencyId);
+
+    // Exclude gambling winnings for Canada
+    if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_gambling_winnings') {
+        annualTaxableSum -= income; // Exclude from taxable sum for Canada
+        return; // Skip this iteration for Canada
     }
-    
-    // Ensure result is not less than 0
-    annualTaxableSum = Math.max(annualTaxableSum, 0);
-    
-    ANNUALTAXABLEINCOME = annualTaxableSum;
-    
-    // Display the results
-    document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
-    document.getElementById('taxable_sum').textContent = `$${ANNUALTAXABLEINCOME.toFixed(2)}`;
+
+    // Exclude tax-free income
+    if (inputId === 'income_tax_free_income') {
+        annualTaxableSum -= income; // Exclude from taxable sum
+        return; // Skip this iteration for tax-free income
+    }
+
+    // Handle capital gains/losses based on region
+    if (inputId === 'income_capital_gains_losses') {
+        if (document.getElementById('RegionDropdown').value === 'CAN') {
+            annualTaxableSum -= income * 0.5; // Only half are taxable in Canada
+        } else if (document.getElementById('RegionDropdown').value !== 'USA') {
+            // For non-USA regions (excluding Canada), you might want to handle differently if needed
+            annualTaxableSum -= income; // Assuming not taxable in other regions
+        }
+        // For USA, no adjustment needed here since capital gains are included by default in annualIncomeSum
+    }
+
+    // Exclude alimony from taxable income for USA
+    if (document.getElementById('RegionDropdown').value === 'USA' && inputId === 'income_alimony') {
+        annualTaxableSum -= income; // Exclude alimony from taxable income
+        return; // Skip this iteration for USA alimony
+    }
+});
+
+// Get the subregion-specific BPA or SD
+const subregion = document.getElementById('SubregionDropdown').value;
+const bpaOrSD = getBPAorSD(subregion);
+
+// Calculate ANNUALTAXABLEINCOMESUB (before federal deductions)
+ANNUALTAXABLEINCOMESUB = Math.max(annualTaxableSum - bpaOrSD, 0);
+
+// Apply standard deduction for USA or BPA for other regions
+if (document.getElementById('RegionDropdown').value === 'USA') {
+    annualTaxableSum -= SD;
+} else {
+    annualTaxableSum -= BPA;
 }
+
+// Ensure result is not less than 0
+annualTaxableSum = Math.max(annualTaxableSum, 0);
+
+// Set ANNUALTAXABLEINCOME
+ANNUALTAXABLEINCOME = annualTaxableSum;
+
+// Display the results
+document.getElementById('annual_income_sum').textContent = `$${annualIncomeSum.toFixed(2)}`;
+document.getElementById('taxable_sum').textContent = `$${ANNUALTAXABLEINCOME.toFixed(2)}`;
+}
+
+function getBPAorSD(subregion) {
+
+    /* Usage would be like this:
+const subregion = document.getElementById('SubregionDropdown').value;
+const bpaOrSD = getBPAorSD(subregion);
+*/
+
+    const amount = {
+        // Canadian provinces
+        'AB': 21003, 'BC': 12580, 'MB': 11132, 'NB': 12644, 'NL': 10382,
+        'NS': 11481, 'ON': 12399, 'PE': 13500, 'QC': 18056, 'SK': 18491,
+        'NT': 17373, 'NU': 18718, 'YT': 15705,
+
+        // American states
+        'AL': 3000, 'AK': 0, 'AZ': 12750, 'AR': 2270, 'CA': 4700,
+        'CO': 12750, 'CT': 15000, 'DC': 12750, 'DE': 3250, 'FL': 0,
+        'GA': 3000, 'HI': 2200, 'ID': 12760, 'IL': 2325, 'IN': 1000,
+        'IA': 2180, 'KS': 3500, 'KY': 0, 'LA': 4500, 'ME': 12750,
+        'MD': 2200, 'MA': 4400, 'MI': 4750, 'MN': 12750, 'MS': 2300,
+        'MO': 12750, 'MT': 5000, 'NC': 10000, 'ND': 4200, 'NH': 0,
+        'NJ': 1000, 'NM': 12750, 'NY': 8000, 'NE': 7300, 'NV': 0,
+        'OH': 2400, 'OK': 1000, 'OR': 2315, 'PA': 0, 'RI': 8500,
+        'SC': 4010, 'SD': 0, 'TN': 0, 'TX': 0, 'UT': 0,
+        'VA': 8000, 'VT': 4350, 'WV': 0, 'WA': 0, 'WI': 11150,
+        'WY': 0
+    };
+
+    // Check if the subregion matches any key in the amount object
+    if (subregion in amount) {
+        return amount[subregion];
+    } else {
+        // If the subregion isn't found, return a default value or handle the error
+        console.error("Subregion not found:", subregion);
+        return 0; // Default or error handling
+    }
+}
+
+
+
 
 function calculateEmploymentIncome() {
     const employmentIncomeFields = [
@@ -1011,7 +1059,19 @@ function calculateTax(taxBrackets) {
     return tax;
 }
 
+function calculateTaxSub(taxBrackets) {
+    let tax = 0;
+    let taxableIncome = ANNUALTAXABLEINCOMESUB;
 
+    for (const bracket of taxBrackets) {
+        if (taxableIncome > bracket.limit) {
+            let bracketTax = (taxableIncome - bracket.limit) * bracket.rate;
+            tax += parseFloat(bracketTax.toFixed(2)); // Round to two decimal places and add to total tax
+            taxableIncome = bracket.limit;
+        }
+    }
+    return tax;
+}
 
  // Function to calculate regional tax based on selected region
 function calculateRegionalTax() {
@@ -1020,6 +1080,7 @@ function calculateRegionalTax() {
     let taxBrackets = selectedRegion === "CAN" ? REGIONALTAXBRACKETSCAN : REGIONALTAXBRACKETSUSA;
 
     ANNUALREGIONALTAX = calculateTax(taxBrackets);
+    
     document.getElementById('ANNUALREGIONALTAX').textContent = '$' + ANNUALREGIONALTAX.toFixed(2);
 }
 
@@ -1029,7 +1090,7 @@ document.getElementById("RegionDropdown").addEventListener('change', calculateRe
 
 // Define the calculateSubregionalTax function
 function calculateSubregionalTax(Subregion, taxBrackets) {
-  ANNUALSUBREGIONALTAX = calculateTax(taxBrackets[Subregion]);
+  ANNUALSUBREGIONALTAX = calculateTaxSub(taxBrackets[Subregion]);
   document.getElementById('ANNUALSUBREGIONALTAX').textContent = '$' + (ANNUALSUBREGIONALTAX).toFixed(2);
 }
 
