@@ -630,27 +630,25 @@ TOTALSOCIALSECURITYE = employmentSocialSecurityTax;
 }
 
 
-// Define the tax brackets
+// Define the federal tax brackets for Canada for 2025
 const REGIONALTAXBRACKETSCAN = [
-    { limit: 235675, rate: 0.33 },
-    { limit: 165430, rate: 0.29 },
-    { limit: 106717, rate: 0.26 },
-    { limit: 53359, rate: 0.205 },
-    { limit: 0, rate: 0.15 }
+    { limit: 57375, rate: 0.15 },   // on the portion of taxable income that is $57,375 or less, plus
+    { limit: 114750, rate: 0.205 }, // on the portion of taxable income over $57,375 up to $114,750, plus
+    { limit: 177882, rate: 0.26 },  // on the portion of taxable income over $114,750 up to $177,882, plus
+    { limit: 253414, rate: 0.29 },  // on the portion of taxable income over $177,882 up to $253,414, plus
+    { limit: 0, rate: 0.33 }        // on the portion of taxable income over $253,414
 ];
 
 
-const REGIONALTAXBRACKETSUSA =
-
-     [
-        { limit: 609350, rate: 0.37 },
-        { limit: 243725, rate: 0.35 },
-        { limit: 191950, rate: 0.32 },
-        { limit: 100525, rate: 0.24 },
-        { limit: 47150, rate: 0.22 },
-        { limit: 11600, rate: 0.12 },
-        { limit: 0, rate: 0.10 }
-    ];
+// Define the federal tax brackets for USA for 2025
+const REGIONALTAXBRACKETSUSA = [
+    { limit: 250525, rate: 0.35 },  // on the portion of taxable income over $250,525
+    { limit: 197300, rate: 0.32 },  // on the portion of taxable income over $197,300 up to $250,525
+    { limit: 103350, rate: 0.24 },  // on the portion of taxable income over $103,350 up to $197,300
+    { limit: 48475, rate: 0.22 },   // on the portion of taxable income over $48,475 up to $103,350
+    { limit: 11925, rate: 0.12 },   // on the portion of taxable income over $11,925 up to $48,475
+    { limit: 0, rate: 0.10 }        // on the portion of taxable income that is $11,925 or less
+];
     
 // Define the SUBREGIONAL tax brackets
 const SUBREGIONALTAXBRACKETS = {
