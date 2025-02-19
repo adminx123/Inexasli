@@ -1044,18 +1044,27 @@ const SUBREGIONALTAXBRACKETS = {
 
 
 
-// Define the calculateTax function to calculate both federal and SUBREGIONAL tax
 function calculateTax(taxBrackets) {
     let tax = 0;
     let taxableIncome = ANNUALTAXABLEINCOME;
 
+    // Sort brackets in ascending order of limit (if not already sorted)
+    taxBrackets.sort((a, b) => a.limit - b.limit);
+
+    let previousLimit = 0; // Track the lower limit of the current bracket
+
     for (const bracket of taxBrackets) {
-        if (taxableIncome > bracket.limit) {
-            let bracketTax = (taxableIncome - bracket.limit) * bracket.rate;
+        if (taxableIncome > previousLimit) {
+            // Calculate the portion of income in this bracket
+            let bracketIncome = Math.min(taxableIncome, bracket.limit) - previousLimit;
+            // Apply the tax rate to this portion
+            let bracketTax = bracketIncome * bracket.rate;
             tax += parseFloat(bracketTax.toFixed(2)); // Round to two decimal places and add to total tax
-            taxableIncome = bracket.limit;
+            // Update the previous limit for the next bracket
+            previousLimit = bracket.limit;
         }
     }
+
     return tax;
 }
 
@@ -1063,13 +1072,23 @@ function calculateTaxSub(taxBrackets) {
     let tax = 0;
     let taxableIncome = ANNUALTAXABLEINCOMESUB;
 
+    // Sort brackets in ascending order of limit (if not already sorted)
+    taxBrackets.sort((a, b) => a.limit - b.limit);
+
+    let previousLimit = 0; // Track the lower limit of the current bracket
+
     for (const bracket of taxBrackets) {
-        if (taxableIncome > bracket.limit) {
-            let bracketTax = (taxableIncome - bracket.limit) * bracket.rate;
+        if (taxableIncome > previousLimit) {
+            // Calculate the portion of income in this bracket
+            let bracketIncome = Math.min(taxableIncome, bracket.limit) - previousLimit;
+            // Apply the tax rate to this portion
+            let bracketTax = bracketIncome * bracket.rate;
             tax += parseFloat(bracketTax.toFixed(2)); // Round to two decimal places and add to total tax
-            taxableIncome = bracket.limit;
+            // Update the previous limit for the next bracket
+            previousLimit = bracket.limit;
         }
     }
+
     return tax;
 }
 
