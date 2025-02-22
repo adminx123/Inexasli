@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Maker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .section {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #666;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        #copyButton {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #copyButton:hover {
+            background-color: #45a049;
+        }
+        #result {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prompt Maker</h1>
+
+    <!-- Price Calculator Section -->
+    <div class="section">
+        <h2>Price Calculator Prompt</h2>
+        <div class="input-group">
+            <label>Quantity:</label>
+            <input type="number" id="quantity" placeholder="Enter quantity">
+        </div>
+        <div class="input-group">
+            <label>Unit:</label>
+            <select id="unit">
+                <option value="grams">grams</option>
+                <option value="kilograms">kilograms</option>
+                <option value="pounds">pounds</option>
+                <option value="ounces">ounces</option>
+                <option value="liters">liters</option>
+                <option value="milliliters">milliliters</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>Total Price ($):</label>
+            <input type="number" id="price" placeholder="Enter total price">
+        </div>
+    </div>
+
+    <!-- App Development Section -->
+    <div class="section">
+        <h2>App Development Prompt</h2>
+        <div class="input-group">
+            <label>Main Purpose:</label>
+            <input type="text" id="appPurpose" placeholder="Enter app's main purpose">
+        </div>
+        <div class="input-group">
+            <label>Features (one per line):</label>
+            <textarea id="features" rows="5" placeholder="Enter features..."></textarea>
+        </div>
+        <div class="input-group">
+            <label>Aesthetic Preferences (one per line):</label>
+            <textarea id="aesthetic" rows="3" placeholder="Enter aesthetic preferences..."></textarea>
+        </div>
+        <div class="input-group">
+            <label>Target Platforms (one per line):</label>
+            <textarea id="platforms" rows="3" placeholder="e.g., iOS, Android, Web..."></textarea>
+        </div>
+        <div class="input-group">
+            <label>Performance Requirements (one per line):</label>
+            <textarea id="performance" rows="3" placeholder="e.g., load time, battery usage..."></textarea>
+        </div>
+        <div class="input-group">
+            <label>Budget and Timeline:</label>
+            <textarea id="budget" rows="3" placeholder="e.g., budget range, deadline..."></textarea>
+        </div>
+    </div>
+
+    <button id="copyButton">Generate and Copy Prompt</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            let prompt = '';
+
+            // Price Calculator Prompt
+            const quantity = document.getElementById('quantity').value;
+            const unit = document.getElementById('unit').value;
+            const price = document.getElementById('price').value;
+            
+            if (quantity && unit && price) {
+                prompt += `I have ${quantity} ${unit} at a price of $${price}. Calculate the price per ${unit === 'kilograms' ? 'kilogram' : unit.slice(0, -1)}.`;
+                prompt += '\n\n';
+            }
+
+            // App Development Prompt
+            const purpose = document.getElementById('appPurpose').value;
+            const features = document.getElementById('features').value;
+            const aesthetic = document.getElementById('aesthetic').value;
+            const platforms = document.getElementById('platforms').value;
+            const performance = document.getElementById('performance').value;
+            const budget = document.getElementById('budget').value;
+
+            if (purpose) {
+                prompt += 'I want you to code an app. The app\'s main purpose is to ' + purpose + '.\n\n';
+                
+                if (features) {
+                    prompt += 'Here are the following features I would like incorporated:\n';
+                    prompt += features.split('\n').map((f, i) => `${i + 1}. ${f}`).join('\n') + '\n\n';
+                }
+
+                if (aesthetic) {
+                    prompt += 'I would like the aesthetic to be:\n';
+                    prompt += aesthetic.split('\n').map((a, i) => `${i + 1}. ${a}`).join('\n') + '\n\n';
+                }
+
+                if (platforms) {
+                    prompt += 'Target Platforms:\n';
+                    prompt += platforms.split('\n').map((p, i) => `${i + 1}. ${p}`).join('\n') + '\n\n';
+                }
+
+                if (performance) {
+                    prompt += 'Performance Requirements:\n';
+                    prompt += performance.split('\n').map((p, i) => `${i + 1}. ${p}`).join('\n') + '\n\n';
+                }
+
+                if (budget) {
+                    prompt += 'Budget and Timeline:\n';
+                    prompt += budget.split('\n').map((b, i) => `${i + 1}. ${b}`).join('\n');
+                }
+            }
+
+            // Display and copy the prompt
+            document.getElementById('result').textContent = prompt;
+            navigator.clipboard.writeText(prompt).then(() => {
+                alert('Prompt copied to clipboard!');
+            });
+        });
+    </script>
+</body>
+</html>
