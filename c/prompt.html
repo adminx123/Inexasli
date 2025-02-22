@@ -14,10 +14,25 @@
         }
         .section {
             background-color: white;
-            padding: 20px;
             margin-bottom: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .section-header {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            border-radius: 5px 5px 0 0;
+        }
+        .section-header:hover {
+            background-color: #f0f0f0;
+        }
+        .section-content {
+            padding: 20px;
+            display: none; /* Hidden by default */
+        }
+        .section.expanded .section-content {
+            display: block; /* Show when expanded */
         }
         h1 {
             color: #333;
@@ -25,6 +40,12 @@
         }
         h2 {
             color: #666;
+            margin: 0;
+            display: inline-block;
+        }
+        .toggle-icon {
+            float: right;
+            font-size: 18px;
         }
         .input-group {
             margin: 10px 0;
@@ -61,56 +82,37 @@
 <body>
     <h1>Prompt Maker</h1>
 
-    <!-- Price Calculator Section -->
-    <div class="section">
-        <h2>Price Calculator Prompt</h2>
-        <div class="input-group">
-            <label>Quantity:</label>
-            <input type="number" id="quantity" placeholder="Enter quantity">
-        </div>
-        <div class="input-group">
-            <label>Unit:</label>
-            <select id="unit">
-                <option value="grams">grams</option>
-                <option value="kilograms">kilograms</option>
-                <option value="pounds">pounds</option>
-                <option value="ounces">ounces</option>
-                <option value="liters">liters</option>
-                <option value="milliliters">milliliters</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>Total Price ($):</label>
-            <input type="number" id="price" placeholder="Enter total price">
-        </div>
-    </div>
-
     <!-- App Development Section -->
     <div class="section">
-        <h2>App Development Prompt</h2>
-        <div class="input-group">
-            <label>Main Purpose:</label>
-            <input type="text" id="appPurpose" placeholder="Enter app's main purpose">
+        <div class="section-header" onclick="toggleSection(this)">
+            <h2>App Development Prompt</h2>
+            <span class="toggle-icon">+</span>
         </div>
-        <div class="input-group">
-            <label>Features (one per line):</label>
-            <textarea id="features" rows="5" placeholder="Enter features..."></textarea>
-        </div>
-        <div class="input-group">
-            <label>Aesthetic Preferences (one per line):</label>
-            <textarea id="aesthetic" rows="3" placeholder="Enter aesthetic preferences..."></textarea>
-        </div>
-        <div class="input-group">
-            <label>Target Platforms (one per line):</label>
-            <textarea id="platforms" rows="3" placeholder="e.g., iOS, Android, Web..."></textarea>
-        </div>
-        <div class="input-group">
-            <label>Performance Requirements (one per line):</label>
-            <textarea id="performance" rows="3" placeholder="e.g., load time, battery usage..."></textarea>
-        </div>
-        <div class="input-group">
-            <label>Budget and Timeline:</label>
-            <textarea id="budget" rows="3" placeholder="e.g., budget range, deadline..."></textarea>
+        <div class="section-content">
+            <div class="input-group">
+                <label>Main Purpose:</label>
+                <input type="text" id="appPurpose" placeholder="Enter app's main purpose">
+            </div>
+            <div class="input-group">
+                <label>Features (one per line):</label>
+                <textarea id="features" rows="5" placeholder="Enter features..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Aesthetic Preferences (one per line):</label>
+                <textarea id="aesthetic" rows="3" placeholder="Enter aesthetic preferences..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Target Platforms (one per line):</label>
+                <textarea id="platforms" rows="3" placeholder="e.g., iOS, Android, Web..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Performance Requirements (one per line):</label>
+                <textarea id="performance" rows="3" placeholder="e.g., load time, battery usage..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Budget and Timeline:</label>
+                <textarea id="budget" rows="3" placeholder="e.g., budget range, deadline..."></textarea>
+            </div>
         </div>
     </div>
 
@@ -118,18 +120,15 @@
     <div id="result"></div>
 
     <script>
+        function toggleSection(header) {
+            const section = header.parentElement;
+            const icon = header.querySelector('.toggle-icon');
+            section.classList.toggle('expanded');
+            icon.textContent = section.classList.contains('expanded') ? '−' : '+';
+        }
+
         document.getElementById('copyButton').addEventListener('click', function() {
             let prompt = '';
-
-            // Price Calculator Prompt
-            const quantity = document.getElementById('quantity').value;
-            const unit = document.getElementById('unit').value;
-            const price = document.getElementById('price').value;
-            
-            if (quantity && unit && price) {
-                prompt += `I have ${quantity} ${unit} at a price of $${price}. Calculate the price per ${unit === 'kilograms' ? 'kilogram' : unit.slice(0, -1)}.`;
-                prompt += '\n\n';
-            }
 
             // App Development Prompt
             const purpose = document.getElementById('appPurpose').value;
