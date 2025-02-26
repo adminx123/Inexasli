@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Maker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .section {
+            background-color: white;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .section-header {
+            padding: 10px 15px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-header:hover {
+            background-color: #f0f0f0;
+        }
+        .section-content {
+            padding: 20px;
+            display: none;
+        }
+        .section.expanded .section-content {
+            display: block;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #666;
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .toggle-icon {
+            font-size: 1.2em;
+            min-width: 20px;
+            text-align: center;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        #copyButton {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+            display: block;
+        }
+        #copyButton:hover {
+            background-color: #45a049;
+        }
+        #result {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .section-header {
+                padding: 8px 12px;
+            }
+            .section-content {
+                padding: 15px;
+            }
+            h2 {
+                font-size: 1em;
+            }
+            .toggle-icon {
+                font-size: 1em;
+            }
+            input, textarea {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Prompt Maker</h1>
+
+    <!-- App Development Section -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <h2>App Development Prompt</h2>
+            <span class="toggle-icon">+</span>
+        </div>
+        <div class="section-content">
+            <div class="input-group">
+                <label>Main Purpose:</label>
+                <input type="text" id="appPurpose" placeholder="Enter app's main purpose">
+            </div>
+            <div class="input-group">
+                <label>Features (one per line):</label>
+                <textarea id="features" rows="5" placeholder="Enter features..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Aesthetic Preferences (one per line):</label>
+                <textarea id="aesthetic" rows="3" placeholder="Enter aesthetic preferences..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Target Platforms (one per line):</label>
+                <textarea id="platforms" rows="3" placeholder="e.g., iOS, Android, Web..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Performance Requirements (one per line):</label>
+                <textarea id="performance" rows="3" placeholder="e.g., load time, battery usage..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Budget and Timeline:</label>
+                <textarea id="budget" rows="3" placeholder="e.g., budget range, deadline..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <button id="copyButton">Generate and Copy Prompt</button>
+    <div id="result"></div>
+
+    <script>
+        function toggleSection(header) {
+            const section = header.parentElement;
+            const icon = header.querySelector('.toggle-icon');
+            section.classList.toggle('expanded');
+            icon.textContent = section.classList.contains('expanded') ? '−' : '+';
+        }
+
+        document.getElementById('copyButton').addEventListener('click', function() {
+            let prompt = '';
+
+            // App Development Prompt
+            const purpose = document.getElementById('appPurpose').value;
+            const features = document.getElementById('features').value;
+            const aesthetic = document.getElementById('aesthetic').value;
+            const platforms = document.getElementById('platforms').value;
+            const performance = document.getElementById('performance').value;
+            const budget = document.getElementById('budget').value;
+
+            if (purpose) {
+                prompt += 'I want you to code an app. The app\'s main purpose is to ' + purpose + '.\n\n';
+                
+                if (features) {
+                    prompt += 'Here are the following features I would like incorporated:\n';
+                    prompt += features.split('\n').map((f, i) => `${i + 1}. ${f}`).join('\n') + '\n\n';
+                }
+
+                if (aesthetic) {
+                    prompt += 'I would like the aesthetic to be:\n';
+                    prompt += aesthetic.split('\n').map((a, i) => `${i + 1}. ${a}`).join('\n') + '\n\n';
+                }
+
+                if (platforms) {
+                    prompt += 'Target Platforms:\n';
+                    prompt += platforms.split('\n').map((p, i) => `${i + 1}. ${p}`).join('\n') + '\n\n';
+                }
+
+                if (performance) {
+                    prompt += 'Performance Requirements:\n';
+                    prompt += performance.split('\n').map((p, i) => `${i + 1}. ${p}`).join('\n') + '\n\n';
+                }
+
+                if (budget) {
+                    prompt += 'Budget and Timeline:\n';
+                    prompt += budget.split('\n').map((b, i) => `${i + 1}. ${b}`).join('\n');
+                }
+            }
+
+            // Display and copy the prompt
+            document.getElementById('result').textContent = prompt;
+            navigator.clipboard.writeText(prompt).then(() => {
+                alert('Prompt copied to clipboard!');
+            });
+        });
+    </script>
+</body>
+</html>
