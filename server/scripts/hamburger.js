@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
       <a href="#" id="create" class="menu-item">CREATE</a>
       <div class="submenu" id="createMenu">
-        <a href="/" id="website">Website</a>
+        <a href="/create/prompt.html" id="website">Prompt</a>
         <a href="/xxxxxx" id="other">Other</a>
       </div>
     </div>

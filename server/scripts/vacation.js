@@ -1,82 +1,141 @@
-function updateFrequency(expense) {
-    const amount = parseFloat(document.getElementById(`expenses_${expense}`).value) || 0;
-    const frequency = document.getElementById(`expenses_${expense}_frequency`).value;
-    let days = 1;
+// Array of expense categories and their IDs
+const expenseCategories = [
+    'flights', 'car', 'uber', 'transit', 'bike',
+    'hotels', 'camping',
+    'dining', 'grocery',
+    'tickets', 'alcohol', 'gambling', 'rental',
+    'insurance', 'sim', 'luggage_fees'
+];
 
-    // If the frequency is not 'one-time', parse it as the number of days
-    if (frequency !== "one-time") {
-        days = parseInt(frequency);
+// Categories that should only have "Total" frequency
+const totalOnlyCategories = ['flights', 'tickets', 'insurance', 'sim', 'luggage_fees'];
+
+// Update frequency and calculate total for a specific expense
+function updateFrequency(category) {
+    const amountInput = document.getElementById(`expenses_${category}`);
+    const frequencySelect = document.getElementById(`expenses_${category}_frequency`);
+    const totalSpan = document.getElementById(`expenses_${category}_total`);
+    const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
+
+    // Only exit if no input value OR (tripDuration is 0 and category isn't total-only and frequency isn't 'total')
+    if (!amountInput || !amountInput.value || (tripDuration <= 0 && !totalOnlyCategories.includes(category) && frequencySelect.value !== 'total')) {
+        if (totalSpan) totalSpan.textContent = '';
+        return;
     }
 
-    // If frequency is "one-time", do not multiply, just use the entered amount
-    const total = (frequency === "one-time") ? amount : amount * days;
+    const amount = parseFloat(amountInput.value) || 0;
+    const frequency = frequencySelect.value;
+    let total = 0;
 
-    // Update the total display for the current expense
-    document.getElementById(`expenses_${expense}_total`).innerText = `$${total.toFixed(2)}`;
+    if (totalOnlyCategories.includes(category)) {
+        total = amount; // Always total for these categories
+    } else {
+        switch (frequency) {
+            case 'total':
+                total = amount;
+                break;
+            case 'daily':
+                total = amount * tripDuration;
+                break;
+            case 'weekly':
+                const fullWeeks = Math.floor(tripDuration / 7); // Full weeks
+                const remainingDays = tripDuration % 7; // Leftover days
+                const dailyRate = amount / 7; // Daily equivalent of weekly cost
+                total = (fullWeeks * amount) + (remainingDays * dailyRate); // Full weeks + prorated days
+                break;
+        }
+    }
+
+    if (totalSpan) totalSpan.textContent = `$${total.toFixed(2)}`;
 }
 
+// Calculate total vacation cost and populate breakdown
 function calculateTotal() {
-    let total = 0;
-    let breakdown = '';  // This will hold the breakdown HTML
-    const expenseTypes = [
-        'flights', 'car', 'uber', 'transit', 'bike', 
-        'hotels', 'camping', 
-        'dining', 'grocery', 
-        'tickets', 'alcohol', 'gambling', 'rental',
-        'insurance', 'sim', 'luggage_fees'  // Updated from luggage to luggage_fees
-    ];
+    const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
+    if (tripDuration <= 0 && expenseCategories.some(cat => !totalOnlyCategories.includes(cat) && document.getElementById(`expenses_${cat}`).value && document.getElementById(`expenses_${cat}_frequency`).value !== 'total')) {
+        alert('Please enter a valid trip duration for expenses with daily or weekly frequencies.');
+        return;
+    }
 
-    expenseTypes.forEach(type => {
-        // Get the input element for the expense
-        const inputElement = document.getElementById(`expenses_${type}`);
-        
-        if (inputElement) {
-            let amount = parseFloat(inputElement.value) || 0;
-            
-            // Get the frequency select element
-            const frequencySelect = document.getElementById(`expenses_${type}_frequency`);
-            let days = 1;  // Default to 1 day if no frequency
+    let grandTotal = 0;
+    const expenseList = document.getElementById('expense_list');
+    expenseList.innerHTML = ''; // Clear previous breakdown
 
-            if (frequencySelect) {
-                const frequency = frequencySelect.value;
-                days = frequency === "one-time" ? 1 : parseInt(frequency);
-            }
+    expenseCategories.forEach(category => {
+        const amountInput = document.getElementById(`expenses_${category}`);
+        const frequencySelect = document.getElementById(`expenses_${category}_frequency`);
+        const totalSpan = document.getElementById(`expenses_${category}_total`);
 
-            // Calculate total for the current expense
-            const expenseTotal = amount * days;
-            total += expenseTotal;
+        const amount = parseFloat(amountInput.value) || 0;
+        const frequency = frequencySelect.value;
+        let total = 0;
 
-            // Create the breakdown item
-            breakdown += `<li>${type.charAt(0).toUpperCase() + type.slice(1).replace('_', ' ')}: $${expenseTotal.toFixed(2)} (${days} day${days > 1 ? 's' : ''})</li>`;
+        if (totalOnlyCategories.includes(category)) {
+            total = amount;
         } else {
-            console.warn(`Input element with id 'expenses_${type}' is missing.`);
+            switch (frequency) {
+                case 'total':
+                    total = amount;
+                    break;
+                case 'daily':
+                    total = amount * tripDuration;
+                    break;
+                case 'weekly':
+                    const fullWeeks = Math.floor(tripDuration / 7);
+                    const remainingDays = tripDuration % 7;
+                    const dailyRate = amount / 7;
+                    total = (fullWeeks * amount) + (remainingDays * dailyRate);
+                    break;
+            }
+        }
+
+        if (total > 0) {
+            grandTotal += total;
+            totalSpan.textContent = `$${total.toFixed(2)}`;
+            const li = document.createElement('li');
+            li.textContent = `${category.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())}: $${total.toFixed(2)} (${frequency})`;
+            expenseList.appendChild(li);
+        } else {
+            totalSpan.textContent = '';
         }
     });
 
-    // Log the total to verify the calculation
-    console.log("Total calculated: ", total);
-
-    // Update the total cost display
     const totalCostDisplay = document.getElementById('total_cost_display');
-    if (totalCostDisplay) {
-        totalCostDisplay.innerText = `$${total.toFixed(2)}`;
-    }
+    totalCostDisplay.textContent = `$${grandTotal.toFixed(2)}`;
+    document.getElementById('totalCost').classList.remove('hidden');
+    document.getElementById('expenseBreakdown').classList.remove('hidden');
+}
 
-    // Make sure total cost div is visible
-    const totalCostDiv = document.getElementById('totalCost');
-    if (totalCostDiv) {
-        totalCostDiv.classList.remove('hidden');
-    }
+// Copy results to clipboard
+function copyResults() {
+    const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
+    const totalCost = document.getElementById('total_cost_display').textContent;
+    const expenseItems = Array.from(document.getElementById('expense_list').getElementsByTagName('li'))
+        .map(li => li.textContent);
 
-    // Show the breakdown
-    const expenseBreakdownDiv = document.getElementById('expenseBreakdown');
-    if (expenseBreakdownDiv) {
-        expenseBreakdownDiv.classList.remove('hidden');
-    }
+    const textToCopy = `Vacation Cost Estimate\nTrip Duration: ${tripDuration} days\nTotal Estimated Cost: ${totalCost}\n\nExpense Breakdown:\n${expenseItems.join('\n')}`;
 
-    // Update the breakdown list
-    const expenseList = document.getElementById('expense_list');
-    if (expenseList) {
-        expenseList.innerHTML = breakdown;  // Add the breakdown HTML
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => alert('Results copied to clipboard!'))
+        .catch(err => alert('Failed to copy results: ' + err));
+}
+
+// Add event listeners to update totals on input change
+expenseCategories.forEach(category => {
+    const inputElement = document.getElementById(`expenses_${category}`);
+    if (inputElement) {
+        inputElement.addEventListener('input', () => updateFrequency(category));
+    } else {
+        console.error(`Input element not found for category: ${category}`);
     }
+});
+
+// Separate trip duration listener to update all categories
+const tripDurationInput = document.getElementById('trip_duration');
+if (tripDurationInput) {
+    tripDurationInput.addEventListener('input', () => {
+        expenseCategories.forEach(category => updateFrequency(category));
+    });
+} else {
+    console.error('Trip duration input not found');
 }
