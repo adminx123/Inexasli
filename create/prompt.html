@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Maker</title>
+    <link rel="stylesheet" href="/style/styleprompt.css">
+</head>
+<body>
+    <h1>Prompt Maker</h1>
+    <div class="container">
+        <div class="row">
+            <div class="grid-container" id="scope-selector">
+                <div class="grid-item" id="personal-btn" data-scope="personal">Personal</div>
+                <div class="grid-item" id="business-btn" data-scope="business">Business</div>
+            </div>
+        </div>
+
+        <!-- Personal Prompts -->
+        <div id="personal-prompts" class="hidden">
+            <!-- 8. General Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>General</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <label>What’s are you trying to accomplish?</label>
+                        <textarea id="general-goal" rows="4" placeholder="e.g., Plan a hiking trip"></textarea>
+                    </div>
+                    <div class="row">
+                        <label>What information do you need returned?</label>
+                        <textarea id="general-info" rows="4" placeholder="e.g., Trail details, distance, difficulty"></textarea>
+                    </div>
+                    <div class="row">
+                        <label>Warnings (specific checks or cautions):</label>
+                        <textarea id="general-warnings" rows="3" placeholder="e.g., Ensure the hiking trail name is correct and exists"></textarea>
+                    </div>
+                    <div class="row">
+                        <label>Context Dump (extra details for tailoring):</label>
+                        <textarea id="general-context" rows="6" placeholder="e.g., I’m hiking in Colorado, prefer trails under 5 miles, need dog-friendly options"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="general">Generate Prompt</button>
+                </div>
+            </div>
+
+            <!-- 5. Budget Management Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Budget Management</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <p>Utilize the Budget calculator to manage your budget. (COMING SOON)</p>
+                    <!-- Placeholder, no button until implemented -->
+                </div>
+            </div>
+
+            <!-- 1. Incident Analysis Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Social Incident Analysis </h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <div class="grid-container" id="incident-info-return" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <div class="grid-item" data-value="alternative-actions">Identify alternative actions that were possible</div>
+                            <div class="grid-item" data-value="responsibility-assessment">Assess who’s responsible</div>
+                            <div class="grid-item" data-value="resolution-steps">Outline the resolution steps</div>
+                            <div class="grid-item" data-value="emotional-impact">Evaluate the potential emotional impact</div>
+                            <div class="grid-item" data-value="lessons-learned">Highlight lessons to learn</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="grid-container" id="incident-warnings" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <div class="grid-item" data-value="anti-social">I am Anti-Social</div>
+                            <div class="grid-item" data-value="manipulative">I am Manipulative</div>
+                            <div class="grid-item" data-value="naive">I am Naive</div>
+                            <div class="grid-item" data-value="passive">I am Passive</div>
+                            <div class="grid-item" data-value="aggressive">I am Aggressive</div>
+                            <div class="grid-item" data-value="overly-emotional">I am Overly Emotional</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="context-details">
+                            <div class="row">
+                                <textarea id="incident-details" rows="4" placeholder="e.g., 'I had an argument with a coworker over a missed deadline'"></textarea>
+                            </div>
+                            <div class="row">
+                                <select id="review-type" onchange="toggleReviewDetails()">
+                                    <option value="">Select type...</option>
+                                    <option value="quick">Quick Review</option>
+                                    <option value="detailed">Detailed Analysis</option>
+                                </select>
+                            </div>
+                            <div class="row hidden" id="review-details">
+                                <div class="grid-container" id="incident-mood">
+                                    <div class="grid-item" data-value="Anger">They seemed angry</div>
+                                    <div class="grid-item" data-value="Sad">They seemed sad</div>
+                                    <div class="grid-item" data-value="Honest">They seemed honest</div>
+                                    <div class="grid-item" data-value="Indirect">They seemed indirect</div>
+                                    <div class="grid-item" data-value="Manipulative">They seemed manipulative</div>
+                                    <div class="grid-item" data-value="Indifferent">They seemed indifferent</div>
+                                    <div class="grid-item" data-value="Cautious">They seemed cautious</div>
+                                    <div class="grid-item" data-value="Surprised">They seemed surprised</div>
+                                    <div class="grid-item" data-value="Confused">They seemed confused</div>
+                                    <div class="grid-item" data-value="Annoyed">They seemed annoyed</div>
+                                    <div class="grid-item" data-value="Relieved">They seemed relieved</div>
+                                    <div class="grid-item" data-value="Excited">They seemed excited</div>
+                                    <div class="grid-item" data-value="Frustrated">They seemed frustrated</div>
+                                    <div class="grid-item" data-value="Calm">They seemed calm</div>
+                                </div>
+                                <textarea id="incident-moments" rows="3" placeholder="Key moments that stood out, one per line (e.g., 'They raised their voice')"></textarea>
+                                <textarea id="incident-thoughts" rows="3" placeholder="What did you feel or think right after?"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="generate-btn" data-prompt="incident">Generate Prompt</button>
+                </div>
+            </div>
+
+            <!-- 7. Event Planning Prompt -->
+<div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>Event Planning</h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content">
+        <div class="row">
+            <div class="grid-container" id="event-types" style="grid-template-columns: 1fr 1fr 1fr;">
+                <div class="grid-item" data-value="birthday">Birthday</div>
+                <div class="grid-item" data-value="wedding">Wedding</div>
+                <div class="grid-item" data-value="house-party">House Party</div>
+                <div class="grid-item" data-value="corporate-event">Corporate Event</div>
+                <div class="grid-item" data-value="family-reunion">Family Reunion</div>
+                <div class="grid-item" data-value="concert">Concert</div>
+                <div class="grid-item" data-value="graduation">Graduation</div>
+                <div class="grid-item" data-value="festival">Festival</div>
+                <div class="grid-item" data-value="charity-event">Charity Event</div>
+                <div class="grid-item" data-value="community-gathering">Community Gathering</div>
+            </div>
+        </div>
+        <div class="row">
+            <label>Indoors or Outdoors?</label>
+            <select id="event-location" onchange="toggleEventDetails()">
+                <option value="">Select location...</option>
+                <option value="indoors">Indoors</option>
+                <option value="outdoors">Outdoors</option>
+            </select>
+        </div>
+        <!-- New Location Input -->
+        <div class="row">
+            <label>Event Location:</label>
+            <textarea id="event-specific-location" rows="1" placeholder="e.g., New York City, The Barn Venue"></textarea>
+        </div>
+        <div class="row hidden" id="event-indoors">
+            <label>Venue Setup:</label>
+            <div class="grid-container" id="event-indoor-setup">
+                <div class="grid-item" data-value="Seating">Seating</div>
+                <div class="grid-item" data-value="Lighting">Lighting</div>
+                <div class="grid-item" data-value="Sound">Sound</div>
+                <div class="grid-item" data-value="Decor">Decor</div>
+            </div>
+        </div>
+        <div class="row hidden" id="event-outdoors">
+            <label>Weather Considerations:</label>
+            <div class="grid-container" id="event-weather">
+                <div class="grid-item" data-value="Tent">Tent</div>
+                <div class="grid-item" data-value="Shade">Shade</div>
+                <div class="grid-item" data-value="Backup Plan">Backup Plan</div>
+                <div class="grid-item" data-value="Heaters">Heaters</div>
+            </div>
+        </div>
+        <div class="row hidden" id="event-details">
+            <label>Elements:</label>
+            <div class="grid-container" id="event-elements">
+                <div class="grid-item" data-value="Food">Food</div>
+                <div class="grid-item" data-value="Decorations">Decorations</div>
+                <div class="grid-item" data-value="Music">Music</div>
+                <div class="grid-item" data-value="Invitations">Invitations</div>
+            </div>
+            <label>Guest Count:</label>
+            <textarea id="event-guests" rows="1" placeholder="e.g., 20"></textarea>
+            <label>Budget:</label>
+            <textarea id="event-budget" rows="1" placeholder="e.g., $200"></textarea>
+            <label>Timeline:</label>
+            <textarea id="event-timeline" rows="1" placeholder="e.g., 6pm-10pm"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="event">Generate Prompt</button>
+    </div>
+</div>
+
+            <!-- 2. Fitness Plan Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Fitness Plan</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <label>What’s your fitness goal?</label>
+                        <textarea id="fitness-goal" rows="4" placeholder="e.g., build strength"></textarea>
+                    </div>
+                    <div class="row">
+                        <label>Home or Gym?</label>
+                        <select id="fitness-location" onchange="toggleFitnessDetails()">
+                            <option value="">Select location...</option>
+                            <option value="home">Home</option>
+                            <option value="gym">Gym</option>
+                        </select>
+                    </div>
+                    <div class="row hidden" id="fitness-home">
+                        <label>Bodyweight Exercises:</label>
+                        <div class="grid-container" id="fitness-home-exercises">
+                            <div class="grid-item" data-value="Push-Ups">Push-Ups</div>
+                            <div class="grid-item" data-value="Squats">Squats</div>
+                            <div class="grid-item" data-value="Plank">Plank</div>
+                            <div class="grid-item" data-value="Lunges">Lunges</div>
+                        </div>
+                    </div>
+                    <div class="row hidden" id="fitness-gym">
+                        <label>Equipment Needed:</label>
+                        <div class="grid-container" id="fitness-gym-equipment">
+                            <div class="grid-item" data-value="Treadmill">Treadmill</div>
+                            <div class="grid-item" data-value="Weights">Weights</div>
+                            <div class="grid-item" data-value="Bike">Bike</div>
+                            <div class="grid-item" data-value="Bench">Bench</div>
+                        </div>
+                    </div>
+                    <div class="row hidden" id="fitness-details">
+                        <label>Frequency:</label>
+                        <textarea id="fitness-frequency" rows="3" placeholder="e.g., 3 times/week"></textarea>
+                        <label>Duration per Session:</label>
+                        <textarea id="fitness-duration" rows="1" placeholder="e.g., 30 mins"></textarea>
+                        <label>Rest Days?</label>
+                        <textarea id="fitness-rest" rows="1" placeholder="e.g., 2 days/week"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="fitness">Generate Prompt</button>
+                </div>
+            </div>
+
+            <!-- 6. Home Organization Prompt 
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Home Organization</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <label>What’s your organization goal?</label>
+                        <textarea id="home-goal" rows="4" placeholder="e.g., declutter bedroom"></textarea>
+                    </div>
+                    <div class="row">
+                        <label>Full Clean or Quick Tidy?</label>
+                        <select id="home-scope" onchange="toggleHomeDetails()">
+                            <option value="">Select scope...</option>
+                            <option value="full">Full Clean</option>
+                            <option value="quick">Quick Tidy</option>
+                        </select>
+                    </div>
+                    <div class="row hidden" id="home-full">
+                        <label>Areas:</label>
+                        <div class="grid-container" id="home-areas">
+                            <div class="grid-item" data-value="Kitchen">Kitchen</div>
+                            <div class="grid-item" data-value="Bedroom">Bedroom</div>
+                            <div class="grid-item" data-value="Living Room">Living Room</div>
+                            <div class="grid-item" data-value="Closet">Closet</div>
+                        </div>
+                        <label>Methods:</label>
+                        <textarea id="home-methods" rows="3" placeholder="One per line (e.g., donate items, storage bins)"></textarea>
+                        <label>Time Estimate:</label>
+                        <textarea id="home-time" rows="1" placeholder="e.g., 2 hours"></textarea>
+                        <label>Donation Plan?</label>
+                        <textarea id="home-donation" rows="1" placeholder="e.g., local charity"></textarea>
+                    </div>
+                    <div class="row hidden" id="home-quick">
+                        <label>Priority Area:</label>
+                        <textarea id="home-priority" rows="1" placeholder="e.g., desk"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="home">Generate Prompt</button>
+                </div>
+            </div>
+            -->
+
+            <!-- 3. Meal Planning Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Meal Planning </h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <label>What’s the purpose of your meal plan?</label>
+                        <textarea id="meal-purpose" rows="4" placeholder="e.g., healthy eating"></textarea>
+                    </div>
+                    <div class="row">
+                        <label>One Meal or Multiple Days?</label>
+                        <select id="meal-scope" onchange="toggleMealDetails()">
+                            <option value="">Select scope...</option>
+                            <option value="one">One Meal</option>
+                            <option value="multiple">Multiple Days</option>
+                        </select>
+                    </div>
+                    <div class="row hidden" id="meal-details">
+                        <label>Dietary Preferences:</label>
+                        <div class="grid-container" id="meal-diet">
+                            <div class="grid-item" data-value="Vegetarian">Vegetarian</div>
+                            <div class="grid-item" data-value="Low-Carb">Low-Carb</div>
+                            <div class="grid-item" data-value="Gluten-Free">Gluten-Free</div>
+                            <div class="grid-item" data-value="Quick Meals">Quick Meals</div>
+                        </div>
+                        <div class="hidden" id="meal-multiple-days">
+                            <label>Number of Days:</label>
+                            <textarea id="meal-days" rows="1" placeholder="e.g., 7"></textarea>
+                        </div>
+                        <label>Budget:</label>
+                        <textarea id="meal-budget" rows="1" placeholder="e.g., $50"></textarea>
+                        <label>Max Prep Time per Meal:</label>
+                        <textarea id="meal-prep" rows="1" placeholder="e.g., 20 mins"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="meal">Generate Prompt</button>
+                </div>
+            </div>
+
+            <!-- 4. Trip Planner Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Trip Planner</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        
+                       
+                        <label>Activities:</label>
+                        <div class="grid-container" id="trip-activities">
+                            <div class="grid-item" data-value="Hiking">Hiking</div>
+<div class="grid-item" data-value="Sightseeing">Sightseeing</div>
+<div class="grid-item" data-value="Relaxation">Relaxation</div>
+<div class="grid-item" data-value="Attractions">Attractions</div>
+<div class="grid-item" data-value="Event">Event</div>
+<div class="grid-item" data-value="Cultural Tours">Cultural Tours</div>
+<div class="grid-item" data-value="Shopping">Shopping</div>
+<div class="grid-item" data-value="Adventure">Adventure</div>
+<div class="grid-item" data-value="Wildlife Watching">Wildlife Watching</div>
+<div class="grid-item" data-value="Water Sports">Water Sports</div>
+<div class="grid-item" data-value="Food Tours">Food Tours</div>
+<div class="grid-item" data-value="Museums">Museums</div>
+<div class="grid-item" data-value="Nightlife">Nightlife</div>
+<div class="grid-item" data-value="Wellness">Wellness</div>
+<div class="grid-item" data-value="Beach Time">Beach Time</div>
+<div class="grid-item" data-value="Skiing">Skiing</div>
+<div class="grid-item" data-value="Road Trips">Road Trips</div>
+<div class="grid-item" data-value="Camping">Camping</div>
+<div class="grid-item" data-value="Photography">Photography</div>
+<div class="grid-item" data-value="Historical Sites">Historical Sites</div>
+
+                        </div>
+                       
+                        <label>What information are you looking to have returned to you?</label>
+                        <textarea id="trip-purpose" rows="4" placeholder="One per line&#10;Top rated hiking trails&#10;Best ice cream shops..."></textarea>
+                    </div>
+
+                    <div class="row">
+                        <label>Schedule so far:</label>
+                        <textarea id="trip-plans" rows="3" placeholder="One per line&#10;6am mountain trail &#10;8pm dinner at bistro"></textarea>
+                        
+                        </div>
+
+                    <div class="row">
+                        <label>Trip Duration:</label>
+                        <select id="trip-duration" onchange="toggleTripDetails()">
+                            <option value="">Select duration...</option>
+                            <option value="one-day">One Day</option>
+                            <option value="multi-day">Multi-Day</option>
+                        </select>
+                    </div>
+                    <div class="row hidden" id="trip-multi">
+                        <label>Accommodation Needed?</label>
+                        <select id="trip-accom" onchange="toggleAccomDetails()">
+                            <option value="">Select...</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                        <div class="row hidden" id="trip-accom-details">
+                            <label>Accommodation Budget:</label>
+                            <textarea id="trip-accom-budget" rows="1" placeholder="e.g., $100/night"></textarea>
+                        </div>
+                    </div>
+
+               
+
+                    <div class="row hidden" id="trip-details">
+                        
+                        <label>Transport Method:</label>
+                        <textarea id="trip-transport" rows="1" placeholder="e.g., car, plane"></textarea>
+                    </div>
+
+               
+                    <button class="generate-btn" data-prompt="trip">Generate Prompt</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Prompts -->
+        <div id="business-prompts" class="hidden">
+            <!-- 1. App Development Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>App Development</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <label>What’s the purpose of your app?</label>
+                        <textarea id="app-purpose" rows="4" placeholder="e.g., task management"></textarea>
+                    </div>
+                    <div class="row">
+                        <label>Do you have any code so far?</label>
+                        <div class="grid-container" id="app-code-status" style="grid-template-columns: 1fr 1fr; max-width: 300px;">
+                            <div class="grid-item" data-value="code-started" onclick="toggleCodeInput('code-started')">Code Started</div>
+                            <div class="grid-item" data-value="no-code" onclick="toggleCodeInput('no-code')">No Code</div>
+                        </div>
+                    </div>
+                    <div class="row hidden" id="app-current-code-row">
+                        <label>Current Code:</label>
+                        <textarea id="app-current-code" rows="6" placeholder="Paste your existing code here (e.g., HTML, CSS, JS, etc.)"></textarea>
+                    </div>
+                    <div class="row">
+                        <label>Key Features:</label>
+                        <div class="grid-container" id="app-features">
+                            <div class="grid-item" data-value="Notifications">Notifications</div>
+                            <div class="grid-item" data-value="User Accounts">User Accounts</div>
+                            <div class="grid-item" data-value="Payments">Payments</div>
+                            <div class="grid-item" data-value="Offline Mode">Offline Mode</div>
+                            <div class="grid-item" data-value="Contact Form">Contact Form</div>
+                            <div class="grid-item" data-value="Mobile Responsiveness">Mobile Responsiveness</div>
+                            <div class="grid-item" data-value="About Us">About Us</div>
+                            <div class="grid-item" data-value="E-commerce Platform">E-commerce Platform</div>
+                            <div class="grid-item" data-value="Payment Gateway">Payment Gateway</div>
+                            <div class="grid-item" data-value="Gallery">Product/Service Gallery</div>
+                            <div class="grid-item" data-value="Social Media Integration">Social Media Integration</div>
+                            <div class="grid-item" data-value="Testimonials">Testimonials</div>
+                            <div class="grid-item" data-value="Event Calendar">FAQ Section</div>
+                            <div class="grid-item" data-value="Blog Integration">Blog Integration</div>
+                            <div class="grid-item" data-value="Custom Graphics">Custom Graphics</div>
+                            <div class="grid-item" data-value="Calculation Functionality">Calculation Functionality</div>
+                            <div class="grid-item" data-value="Event Calendar">Event Calendar</div>
+                        </div>
+                    </div>
+                    <div class="row hidden" id="app-details">
+                        <label>Platform:</label>
+                        <textarea id="app-platform" rows="1" placeholder="e.g., iOS, Android"></textarea>
+                        <label>Budget:</label>
+                        <textarea id="app-budget" rows="1" placeholder="e.g., $5000"></textarea>
+                        <label>Timeline:</label>
+                        <textarea id="app-timeline" rows="1" placeholder="e.g., 3 months"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="app">Generate Prompt</button>
+                </div>
+            </div>
+
+            <!-- 3. Business Strategy Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Business Strategy</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <label>What’s your business goal?</label>
+                        <textarea id="biz-goal" rows="4" placeholder="e.g., expand market share"></textarea>
+                    </div>
+                    <div class="row">
+                        <label>Tactics:</label>
+                        <div class="grid-container" id="biz-tactics">
+                            <div class="grid-item" data-value="Research">Research</div>
+                            <div class="grid-item" data-value="Branding">Branding</div>
+                            <div class="grid-item" data-value="Partnerships">Partnerships</div>
+                            <div class="grid-item" data-value="Cost Reduction">Cost Reduction</div>
+                        </div>
+                    </div>
+                    <div class="row hidden" id="biz-details">
+                        <label>Target Market:</label>
+                        <textarea id="biz-market" rows="3" placeholder="One per line (e.g., small businesses)"></textarea>
+                        <label>Resources Needed:</label>
+                        <textarea id="biz-resources" rows="1" placeholder="e.g., $10k, 5 staff"></textarea>
+                        <label>Milestones:</label>
+                        <textarea id="biz-milestones" rows="1" placeholder="e.g., Q1 launch"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="business-strategy">Generate Prompt</button>
+                </div>
+            </div>
+
+            <!-- 2. Marketing Campaign Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Marketing Campaign</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <label>What’s the goal of your campaign?</label>
+                        <textarea id="market-goal" rows="4" placeholder="e.g., increase sales"></textarea>
+                    </div>
+                    <div class="row">
+                        <label>Channels:</label>
+                        <div class="grid-container" id="market-channels">
+                            <div class="grid-item" data-value="Social Media">Social Media</div>
+                            <div class="grid-item" data-value="Email">Email</div>
+                            <div class="grid-item" data-value="Ads">Ads</div>
+                            <div class="grid-item" data-value="SEO">SEO</div>
+                        </div>
+                    </div>
+                    <div class="row hidden" id="market-details">
+                        <label>Target Audience:</label>
+                        <textarea id="market-audience" rows="3" placeholder="One per line (e.g., age 18-35)"></textarea>
+                        <label>Budget:</label>
+                        <textarea id="market-budget" rows="1" placeholder="e.g., $1000"></textarea>
+                        <label>Success Metrics:</label>
+                        <textarea id="market-metrics" rows="1" placeholder="e.g., 10% conversion"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="marketing">Generate Prompt</button>
+                </div>
+            </div>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let activeScope = null;
+
+        function toggleSection(header) {
+            const section = header.parentElement;
+            section.classList.toggle('expanded');
+        }
+
+        function toggleScope(scope) {
+            const personalBtn = document.getElementById('personal-btn');
+            const businessBtn = document.getElementById('business-btn');
+            const personalPrompts = document.getElementById('personal-prompts');
+            const businessPrompts = document.getElementById('business-prompts');
+
+            if (activeScope === scope) {
+                personalPrompts.classList.add('hidden');
+                businessPrompts.classList.add('hidden');
+                personalBtn.classList.remove('selected');
+                businessBtn.classList.remove('selected');
+                activeScope = null;
+            } else {
+                personalPrompts.classList.add('hidden');
+                businessPrompts.classList.add('hidden');
+                personalBtn.classList.remove('selected');
+                businessBtn.classList.remove('selected');
+
+                if (scope === 'personal') {
+                    personalPrompts.classList.remove('hidden');
+                    personalBtn.classList.add('selected');
+                } else if (scope === 'business') {
+                    businessPrompts.classList.remove('hidden');
+                    businessBtn.classList.add('selected');
+                }
+                activeScope = scope;
+            }
+        }
+
+        const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
+        const formatGrid = (selector, prefix) => {
+            const items = Array.from(document.querySelectorAll(selector)).map(el => el.dataset.value).join('\n');
+            return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
+        };
+
+        function toggleReviewDetails() {
+            const typeEl = document.getElementById('review-type');
+            if (typeEl) document.getElementById('review-details').classList.toggle('hidden', typeEl.value !== 'detailed');
+        }
+
+        function toggleFitnessDetails() {
+            const locationEl = document.getElementById('fitness-location');
+            if (locationEl) {
+                const location = locationEl.value;
+                document.getElementById('fitness-home').classList.toggle('hidden', location !== 'home');
+                document.getElementById('fitness-gym').classList.toggle('hidden', location !== 'gym');
+                document.getElementById('fitness-details').classList.toggle('hidden', !location);
+            }
+        }
+
+        function toggleMealDetails() {
+            const scopeEl = document.getElementById('meal-scope');
+            if (scopeEl) {
+                const scope = scopeEl.value;
+                document.getElementById('meal-details').classList.toggle('hidden', !scope);
+                document.getElementById('meal-multiple-days').classList.toggle('hidden', scope !== 'multiple');
+            }
+        }
+
+        function toggleTripDetails() {
+            const durationEl = document.getElementById('trip-duration');
+            if (durationEl) {
+                const duration = durationEl.value;
+                document.getElementById('trip-multi').classList.toggle('hidden', duration !== 'multi-day');
+                document.getElementById('trip-details').classList.toggle('hidden', !duration);
+            }
+        }
+
+        function toggleAccomDetails() {
+            const accomEl = document.getElementById('trip-accom');
+            if (accomEl) document.getElementById('trip-accom-details').classList.toggle('hidden', accomEl.value !== 'yes');
+        }
+
+        /* function toggleHomeDetails() {
+            const scopeEl = document.getElementById('home-scope');
+            if (scopeEl) {
+                const scope = scopeEl.value;
+                document.getElementById('home-full').classList.toggle('hidden', scope !== 'full');
+                document.getElementById('home-quick').classList.toggle('hidden', scope !== 'quick');
+            }
+        }
+            */
+
+        function toggleEventDetails() {
+            const locationEl = document.getElementById('event-location');
+            if (locationEl) {
+                const location = locationEl.value;
+                document.getElementById('event-indoors').classList.toggle('hidden', location !== 'indoors');
+                document.getElementById('event-outdoors').classList.toggle('hidden', location !== 'outdoors');
+                document.getElementById('event-details').classList.toggle('hidden', !location);
+            }
+        }
+
+        function toggleCodeInput(selected) {
+            const codeRow = document.getElementById('app-current-code-row');
+            const codeStartedBtn = document.querySelector('#app-code-status .grid-item[data-value="code-started"]');
+            const noCodeBtn = document.querySelector('#app-code-status .grid-item[data-value="no-code"]');
+            if (codeRow) {
+                if (selected === 'code-started') {
+                    codeRow.classList.remove('hidden');
+                    if (codeStartedBtn) codeStartedBtn.classList.add('selected');
+                    if (noCodeBtn) noCodeBtn.classList.remove('selected');
+                } else if (selected === 'no-code') {
+                    codeRow.classList.add('hidden');
+                    if (codeStartedBtn) codeStartedBtn.classList.remove('selected');
+                    if (noCodeBtn) noCodeBtn.classList.add('selected');
+                }
+            }
+        }
+
+        document.getElementById('personal-btn').addEventListener('click', () => toggleScope('personal'));
+        document.getElementById('business-btn').addEventListener('click', () => toggleScope('business'));
+
+        document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-status) .grid-item').forEach(item => {
+            item.addEventListener('click', () => item.classList.toggle('selected'));
+        });
+
+        function generatePrompt(promptType) {
+            let prompt = '';
+
+            switch (promptType) {
+                case 'general':
+                    const generalGoal = document.getElementById('general-goal');
+                    if (generalGoal && generalGoal.value) {
+                        prompt += `I want to accomplish a goal. My goal is: ${generalGoal.value}.\n\n`;
+                        const generalInfo = document.getElementById('general-info');
+                        if (generalInfo && generalInfo.value) prompt += formatList(generalInfo.value, 'Information Needed');
+                        const generalWarnings = document.getElementById('general-warnings');
+                        if (generalWarnings && generalWarnings.value) prompt += formatList(generalWarnings.value, 'Warnings');
+                        const generalContext = document.getElementById('general-context');
+                        if (generalContext && generalContext.value) prompt += formatList(generalContext.value, 'Context');
+                    }
+                    break;
+
+                case 'incident':
+                    const incidentDetails = document.getElementById('incident-details');
+                    if (incidentDetails && incidentDetails.value) {
+                        prompt += `I want to analyze an incident.\n\n`;
+                        prompt += formatGrid('#incident-info-return .grid-item.selected', 'Information I want');
+                        prompt += formatGrid('#incident-warnings .grid-item.selected', 'Personality Traits to Consider');
+                        prompt += formatList(incidentDetails.value, 'What Happened');
+                        const reviewType = document.getElementById('review-type');
+                        if (reviewType && reviewType.value) {
+                            prompt += `Type: ${reviewType.value === 'quick' ? 'Quick Review' : 'Detailed Analysis'}\n\n`;
+                            if (reviewType.value === 'detailed') {
+                                prompt += formatGrid('#incident-mood .grid-item.selected', 'Mood/Tone');
+                                const incidentMoments = document.getElementById('incident-moments');
+                                if (incidentMoments && incidentMoments.value) prompt += formatList(incidentMoments.value, 'Key Moments');
+                                const incidentThoughts = document.getElementById('incident-thoughts');
+                                if (incidentThoughts && incidentThoughts.value) prompt += formatList(incidentThoughts.value, 'Initial Thoughts');
+                            }
+                        }
+                    }
+                    break;
+
+                    case 'event':
+    const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
+    if (eventTypesSelected.length > 0) {
+        prompt += `I want to plan an event.\n\n`;
+        prompt += formatGrid('#event-types .grid-item.selected', 'Event Type');
+        const location = document.getElementById('event-location');
+        if (location && location.value) {
+            prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n`;
+            const specificLocation = document.getElementById('event-specific-location');
+            if (specificLocation && specificLocation.value) {
+                prompt += `Location: ${specificLocation.value}\n\n`;
+            } else {
+                prompt += `\n`; // Add spacing if no specific location
+            }
+            if (location.value === 'indoors') {
+                prompt += formatGrid('#event-indoor-setup .grid-item.selected', 'Venue Setup');
+            } else {
+                prompt += formatGrid('#event-weather .grid-item.selected', 'Weather Considerations');
+            }
+            prompt += formatGrid('#event-elements .grid-item.selected', 'Elements');
+            const guests = document.getElementById('event-guests');
+            if (guests && guests.value) prompt += formatList(guests.value, 'Guest Count');
+            const budget = document.getElementById('event-budget');
+            if (budget && budget.value) prompt += formatList(budget.value, 'Budget');
+            const timeline = document.getElementById('event-timeline');
+            if (timeline && timeline.value) prompt += formatList(timeline.value, 'Timeline');
+        }
+    }
+    break;
+
+                case 'fitness':
+                    const fitnessGoal = document.getElementById('fitness-goal');
+                    if (fitnessGoal && fitnessGoal.value) {
+                        prompt += `I want to create a fitness plan. My goal is: ${fitnessGoal.value}.\n\n`;
+                        const location = document.getElementById('fitness-location');
+                        if (location && location.value) {
+                            prompt += `Location: ${location.value === 'home' ? 'Home' : 'Gym'}\n\n`;
+                            if (location.value === 'home') {
+                                prompt += formatGrid('#fitness-home-exercises .grid-item.selected', 'Bodyweight Exercises');
+                            } else {
+                                prompt += formatGrid('#fitness-gym-equipment .grid-item.selected', 'Equipment Needed');
+                            }
+                            const frequency = document.getElementById('fitness-frequency');
+                            if (frequency && frequency.value) prompt += formatList(frequency.value, 'Frequency');
+                            const duration = document.getElementById('fitness-duration');
+                            if (duration && duration.value) prompt += formatList(duration.value, 'Duration per Session');
+                            const rest = document.getElementById('fitness-rest');
+                            if (rest && rest.value) prompt += formatList(rest.value, 'Rest Days');
+                        }
+                    }
+                    break;
+
+                /* case 'home':
+                    const homeGoal = document.getElementById('home-goal');
+                    if (homeGoal && homeGoal.value) {
+                        prompt += `I want to organize my home. My goal is: ${homeGoal.value}.\n\n`;
+                        const scope = document.getElementById('home-scope');
+                        if (scope && scope.value) {
+                            prompt += `Scope: ${scope.value === 'full' ? 'Full Clean' : 'Quick Tidy'}\n\n`;
+                            if (scope.value === 'full') {
+                                prompt += formatGrid('#home-areas .grid-item.selected', 'Areas');
+                                const methods = document.getElementById('home-methods');
+                                if (methods && methods.value) prompt += formatList(methods.value, 'Methods');
+                                const time = document.getElementById('home-time');
+                                if (time && time.value) prompt += formatList(time.value, 'Time Estimate');
+                                const donation = document.getElementById('home-donation');
+                                if (donation && donation.value) prompt += formatList(donation.value, 'Donation Plan');
+                            } else {
+                                const priority = document.getElementById('home-priority');
+                                if (priority && priority.value) prompt += formatList(priority.value, 'Priority Area');
+                            }
+                        }
+                    }
+                    break;
+                    */
+
+                case 'meal':
+                    const mealPurpose = document.getElementById('meal-purpose');
+                    if (mealPurpose && mealPurpose.value) {
+                        prompt += `I want to plan my meals. The purpose is: ${mealPurpose.value}.\n\n`;
+                        const scope = document.getElementById('meal-scope');
+                        if (scope && scope.value) {
+                            prompt += `Scope: ${scope.value === 'one' ? 'One Meal' : 'Multiple Days'}\n\n`;
+                            if (scope.value === 'multiple') {
+                                const days = document.getElementById('meal-days');
+                                if (days && days.value) prompt += formatList(days.value, 'Number of Days');
+                            }
+                            prompt += formatGrid('#meal-diet .grid-item.selected', 'Dietary Preferences');
+                            const budget = document.getElementById('meal-budget');
+                            if (budget && budget.value) prompt += formatList(budget.value, 'Budget');
+                            const prep = document.getElementById('meal-prep');
+                            if (prep && prep.value) prompt += formatList(prep.value, 'Max Prep Time per Meal');
+                        }
+                    }
+                    break;
+
+                case 'trip':
+                    const tripPurpose = document.getElementById('trip-purpose');
+                    if (tripPurpose && tripPurpose.value) {
+                        prompt += `I want to plan a trip. The purpose is: ${tripPurpose.value}.\n\n`;
+                        const duration = document.getElementById('trip-duration');
+                        if (duration && duration.value) {
+                            prompt += `Duration: ${duration.value === 'one-day' ? 'One Day' : 'Multi-Day'}\n\n`;
+                            if (duration.value === 'multi-day') {
+                                const accom = document.getElementById('trip-accom');
+                                if (accom && accom.value) {
+                                    prompt += `Accommodation Needed: ${accom.value}\n\n`;
+                                    if (accom.value === 'yes') {
+                                        const accomBudget = document.getElementById('trip-accom-budget');
+                                        if (accomBudget && accomBudget.value) prompt += formatList(accomBudget.value, 'Accommodation Budget');
+                                    }
+                                }
+                            }
+                            prompt += formatGrid('#trip-activities .grid-item.selected', 'Activities');
+                            const plans = document.getElementById('trip-plans');
+                            if (plans && plans.value) prompt += formatList(plans.value, 'plans');
+                            const transport = document.getElementById('trip-transport');
+                            if (transport && transport.value) prompt += formatList(transport.value, 'Transport Method');
+                        }
+                    }
+                    break;
+
+                case 'app':
+                    const appPurpose = document.getElementById('app-purpose');
+                    if (appPurpose && appPurpose.value) {
+                        prompt += `I want to develop an app. The purpose is: ${appPurpose.value}.\n\n`;
+                        prompt += formatGrid('#app-features .grid-item.selected', 'Key Features');
+                        const platform = document.getElementById('app-platform');
+                        if (platform && platform.value) prompt += formatList(platform.value, 'Platform');
+                        const budget = document.getElementById('app-budget');
+                        if (budget && budget.value) prompt += formatList(budget.value, 'Budget');
+                        const timeline = document.getElementById('app-timeline');
+                        if (timeline && timeline.value) prompt += formatList(timeline.value, 'Timeline');
+                    }
+                    break;
+
+                case 'marketing':
+                    const marketGoal = document.getElementById('market-goal');
+                    if (marketGoal && marketGoal.value) {
+                        prompt += `I want to create a marketing campaign. The goal is: ${marketGoal.value}.\n\n`;
+                        prompt += formatGrid('#market-channels .grid-item.selected', 'Channels');
+                        const audience = document.getElementById('market-audience');
+                        if (audience && audience.value) prompt += formatList(audience.value, 'Target Audience');
+                        const budget = document.getElementById('market-budget');
+                        if (budget && budget.value) prompt += formatList(budget.value, 'Budget');
+                        const metrics = document.getElementById('market-metrics');
+                        if (metrics && metrics.value) prompt += formatList(metrics.value, 'Success Metrics');
+                    }
+                    break;
+
+                case 'business-strategy':
+                    const bizGoal = document.getElementById('biz-goal');
+                    if (bizGoal && bizGoal.value) {
+                        prompt += `I want to develop a business strategy. The goal is: ${bizGoal.value}.\n\n`;
+                        prompt += formatGrid('#biz-tactics .grid-item.selected', 'Tactics');
+                        const market = document.getElementById('biz-market');
+                        if (market && market.value) prompt += formatList(market.value, 'Target Market');
+                        const resources = document.getElementById('biz-resources');
+                        if (resources && resources.value) prompt += formatList(resources.value, 'Resources Needed');
+                        const milestones = document.getElementById('biz-milestones');
+                        if (milestones && milestones.value) prompt += formatList(milestones.value, 'Milestones');
+                    }
+                    break;
+            }
+
+            document.getElementById('result').textContent = prompt;
+            navigator.clipboard.writeText(prompt).then(() => alert('Prompt copied to clipboard!'));
+        }
+
+        document.querySelectorAll('.generate-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const promptType = button.getAttribute('data-prompt');
+                generatePrompt(promptType);
+            });
+        });
+    </script>
+</body>
+</html>
