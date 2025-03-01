@@ -319,7 +319,7 @@
 
                     <div class="row">
                         <textarea id="endeavour-vision" rows="4"
-                            placeholder="e.g., Build a sustainable small business"></textarea>
+                            placeholder="What are you trying to accomplish: Build a sustainable small business"></textarea>
                     </div>
 
 
@@ -399,20 +399,12 @@
                             <div class="grid-item" data-value="Flexible">I Plan Loosely</div>
                             <div class="grid-item" data-value="Collaborative">I Plan with Others</div>
                         </div>
-                        <textarea id="endeavour-organization" rows="1"
-                            placeholder="e.g., Trello for task management"></textarea>
+                        <textarea id="endeavour-organization" rows="3"
+                            placeholder="Organization Method:(1 per line)&#10;Trello for task management&#10;Outlook for scheduling appointments"></textarea>
                     </div>
 
 
-                    <div class="row">
-                        <div class="grid-container" id="endeavour-routine-style">
-                            <div class="grid-item" data-value="Rigid">I Stick to Schedules</div>
-                            <div class="grid-item" data-value="Adaptable">I Adjust Daily</div>
-                            <div class="grid-item" data-value="Goal-Driven">I Focus on Goals</div>
-                        </div>
-                        <textarea id="endeavour-routine" rows="2"
-                            placeholder="e.g., 1 hr/day on skill development"></textarea>
-                    </div>
+                    
 
 
                     <div class="row">
@@ -421,20 +413,12 @@
                             <div class="grid-item" data-value="Professionals">I Have Professionals</div>
                             <div class="grid-item" data-value="Communities">I Have Communities</div>
                         </div>
-                        <textarea id="endeavour-network" rows="2"
-                            placeholder="e.g., Join a local entrepreneur group"></textarea>
+                        <textarea id="endeavour-network" rows="4"
+                            placeholder="Network Resources:(1 per line)&#10;Local entrepreneur group&#10;Social media groups&#10;Mentor"></textarea>
                     </div>
 
 
-                    <div class="row">
-                        <div class="grid-container" id="endeavour-adaptability-style">
-                            <div class="grid-item" data-value="Proactive">I Anticipate Change</div>
-                            <div class="grid-item" data-value="Reactive">I React to Change</div>
-                            <div class="grid-item" data-value="Resistant">I Prefer Stability</div>
-                        </div>
-                        <textarea id="endeavour-adaptability" rows="2"
-                            placeholder="e.g., Review progress monthly and adjust"></textarea>
-                    </div>
+                    
 
                     <button class="generate-btn" data-prompt="endeavour">Generate Prompt</button>
                 </div>
@@ -868,23 +852,20 @@
                 case 'endeavour':
                     const vision = document.getElementById('endeavour-vision');
                     if (vision && vision.value) {
-                        prompt += `I’m starting a new endeavour with this vision: ${vision.value}\n\n`;
+                        prompt += `Anaylze the following data and create a logical plan for me to follow.\n\n`;
+
+                        prompt += `Goal: ${vision.value}\n\n`;
                         prompt += formatGrid('#endeavour-knowledge-level .grid-item.selected', 'Knowledge Level');
-                        prompt += formatGrid('#endeavour-general-skills .grid-item.selected', 'Skills');
+                        prompt += formatGrid('#endeavour-general-skills .grid-item.selected', 'Skills Possessed');
                         prompt += formatGrid('#endeavour-weaknesses .grid-item.selected', 'Weaknesses');
                         prompt += formatGrid('#endeavour-tools .grid-item.selected', 'Tools');
                         prompt += formatGrid('#endeavour-organization-style .grid-item.selected', 'Organization Style');
                         const organization = document.getElementById('endeavour-organization');
                         if (organization && organization.value) prompt += formatList(organization.value, 'Organization Method');
-                        prompt += formatGrid('#endeavour-routine-style .grid-item.selected', 'Routine Style');
-                        const routine = document.getElementById('endeavour-routine');
-                        if (routine && routine.value) prompt += formatList(routine.value, 'Routine');
-                        prompt += formatGrid('#endeavour-network-sources .grid-item.selected', 'Network Sources');
+                                                prompt += formatGrid('#endeavour-network-sources .grid-item.selected', 'Network Sources');
                         const network = document.getElementById('endeavour-network');
                         if (network && network.value) prompt += formatList(network.value, 'Network');
-                        prompt += formatGrid('#endeavour-adaptability-style .grid-item.selected', 'Adaptability');
-                        const adaptability = document.getElementById('endeavour-adaptability');
-                        if (adaptability && adaptability.value) prompt += formatList(adaptability.value, 'Adaptability Plan');
+                       
                     }
                     break;
 
