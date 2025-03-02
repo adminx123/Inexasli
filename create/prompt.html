@@ -20,13 +20,13 @@
 </head>
 
 <body>
-     <a href="/">
-     <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
-     </a>
+    <a href="/">
+        <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
+    </a>
 
 
- 
-     <h2 style="text-align: center;font-size: 16px; color: white;">Promptify</h2>
+
+    <h2 style="text-align: center;font-size: 16px; color: white;">Promptify</h2>
 
 
     <div class="container">
@@ -54,29 +54,32 @@
                     <div class="row">
                         <div class="grid-container" id="general-purpose">
 
-                            <div class="grid-item" data-value="Personalized Recommendations">Personalized Recommendations</div>
+                            <div class="grid-item" data-value="Personalized Recommendations">Personalized
+                                Recommendations</div>
                             <div class="grid-item" data-value="Informed Decision Making">Informed Decision Making</div>
                             <div class="grid-item" data-value="Focused Problem Solving">Focused Problem Solving</div>
                             <div class="grid-item" data-value="Time Management Support">Time Management Support</div>
                             <div class="grid-item" data-value="Resource Optimization">Resource Optimization</div>
                             <div class="grid-item" data-value="Skill Development">Skill Development</div>
                             <div class="grid-item" data-value="Tracking Accountability">Tracking & Accountability</div>
-                            <div class="grid-item" data-value="Motivation Encouragement">Motivation & Encouragement</div>
+                            <div class="grid-item" data-value="Motivation Encouragement">Motivation & Encouragement
+                            </div>
                             <div class="grid-item" data-value="Simplification">Simplification</div>
-                            <div class="grid-item" data-value="Collaboration Networking">Collaboration & Networking</div>
-                            
+                            <div class="grid-item" data-value="Collaboration Networking">Collaboration & Networking
+                            </div>
 
 
 
 
 
 
-                         
+
+
+                        </div>
                     </div>
-                    </div>
 
 
-                    
+
                     <div class="row">
                         <textarea id="general-context" rows="5"
                             placeholder="General Context:(1 per line)&#10;I’m hiking in Colorado&#10;Prefer trails under 5 miles&#10;Need dog-friendly options&#10;Fitness level of hiking group"></textarea>
@@ -96,11 +99,11 @@
                             <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
                             <div class="grid-item" data-value="timeline">Return Timeline Format</div>
                             <div class="grid-item" data-value="json">Return JSON Format</div>
-                    </div>
+                        </div>
                     </div>
 
-                    
-                    
+
+
 
                     <button class="generate-btn" data-prompt="general">Generate Prompt</button>
                 </div>
@@ -125,18 +128,40 @@
                 </div>
                 <div class="section-content">
                     <div class="row">
-                        <div class="grid-container" id="incident-info-return"
-                           >
-                            <div class="grid-item" data-value="alternative-actions">I Want Alternative Actions</div>
-                            <div class="grid-item" data-value="responsibility-assessment">I Want Responsibility Assessed
+                        <div class="grid-container" id="incident-purpose">
+
+
+
+
+                            <div class="grid-item" data-value="Personalized Recommendations">Personalized
+                                Recommendations</div>
+                            <div class="grid-item" data-value="Informed Decision Making">Informed Decision Making</div>
+                            <div class="grid-item" data-value="Focused Problem Solving">Focused Problem Solving</div>
+                            <div class="grid-item" data-value="Time Management Support">Time Management Support</div>
+                            <div class="grid-item" data-value="Resource Optimization">Resource Optimization</div>
+                            <div class="grid-item" data-value="Skill Development">Skill Development</div>
+                            <div class="grid-item" data-value="Tracking Accountability">Tracking & Accountability</div>
+                            <div class="grid-item" data-value="Motivation Encouragement">Motivation & Encouragement
                             </div>
-                            <div class="grid-item" data-value="resolution-steps">I Want Resolution Steps</div>
-                            <div class="grid-item" data-value="emotional-impact">I Want Emotional Impact Evaluated</div>
-                            <div class="grid-item" data-value="lessons-learned">I Want Lessons Learned</div>
+                            <div class="grid-item" data-value="Simplification">Simplification</div>
+                            <div class="grid-item" data-value="Collaboration Networking">Collaboration & Networking
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
                         </div>
                     </div>
 
-                    
+
 
 
                     <div class="row">
@@ -144,37 +169,37 @@
                             <div class="row">
                                 <textarea id="incident-details" rows="4"
                                     placeholder="Incident details:(1 per line)&#10;I had an argument with a coworker over a missed deadline&#10;They said it was my fault&#10;It was hard for me to accept any responsbility given their tone"></textarea>
-                           
-                           
-                                    <textarea id="incident-moments" rows="3"
+
+
+                                <textarea id="incident-moments" rows="3"
                                     placeholder="Key moments that stood out:(1 per line)&#10;They raised their voice&#10;They smiled"></textarea>
-                               
-                                    <textarea id="incident-thoughts" rows="3"
+
+                                <textarea id="incident-thoughts" rows="3"
                                     placeholder="Thoughts proceeding the incident:(1 per line)&#10;Am I going to lose my job&#10;Was I too harsh"></textarea>
-                            
+
+                            </div>
+
+                            <div class="row">
+                                <div class="grid-container" id="incident-warnings">
+                                    <div class="grid-item" data-value="anti-social">I’m Anti-Social</div>
+                                    <div class="grid-item" data-value="manipulative">I’m Manipulative</div>
+                                    <div class="grid-item" data-value="naive">I’m Naive</div>
+                                    <div class="grid-item" data-value="passive">I’m Passive</div>
+                                    <div class="grid-item" data-value="aggressive">I’m Aggressive</div>
+                                    <div class="grid-item" data-value="overly-emotional">I’m Overly Emotional</div>
+                                    <div class="grid-item" data-value="impulsive">I’m Impulsive</div>
+                                    <div class="grid-item" data-value="insecure">I’m Insecure</div>
+                                    <div class="grid-item" data-value="stubborn">I’m Stubborn</div>
+                                    <div class="grid-item" data-value="pessimistic">I’m Pessimistic</div>
+                                    <div class="grid-item" data-value="jealous">I’m Jealous</div>
+                                    <div class="grid-item" data-value="disorganized">I’m Disorganized</div>
+                                    <div class="grid-item" data-value="procrastinator">I’m a Procrastinator</div>
+                                    <div class="grid-item" data-value="self-centered">I’m Self-Centered</div>
+
                                 </div>
+                            </div>
 
-                    <div class="row">
-                        <div class="grid-container" id="incident-warnings" >
-                            <div class="grid-item" data-value="anti-social">I’m Anti-Social</div>
-                            <div class="grid-item" data-value="manipulative">I’m Manipulative</div>
-                            <div class="grid-item" data-value="naive">I’m Naive</div>
-                            <div class="grid-item" data-value="passive">I’m Passive</div>
-                            <div class="grid-item" data-value="aggressive">I’m Aggressive</div>
-                            <div class="grid-item" data-value="overly-emotional">I’m Overly Emotional</div>
-                            <div class="grid-item" data-value="impulsive">I’m Impulsive</div>
-                            <div class="grid-item" data-value="insecure">I’m Insecure</div>
-                            <div class="grid-item" data-value="stubborn">I’m Stubborn</div>
-                            <div class="grid-item" data-value="pessimistic">I’m Pessimistic</div>
-                            <div class="grid-item" data-value="jealous">I’m Jealous</div>
-                            <div class="grid-item" data-value="disorganized">I’m Disorganized</div>
-                            <div class="grid-item" data-value="procrastinator">I’m a Procrastinator</div>
-                            <div class="grid-item" data-value="self-centered">I’m Self-Centered</div>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
+                            <div class="row">
                                 <div class="grid-container" id="incident-mood">
                                     <div class="grid-item" data-value="Anger">They Seemed Angry</div>
                                     <div class="grid-item" data-value="Sad">They Seemed Sad</div>
@@ -192,7 +217,7 @@
                                     <div class="grid-item" data-value="Calm">They Seemed Calm</div>
                                 </div>
 
-                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -209,7 +234,7 @@
                             <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
                             <div class="grid-item" data-value="timeline">Return Timeline Format</div>
                             <div class="grid-item" data-value="json">Return JSON Format</div>
-                    </div>
+                        </div>
                     </div>
 
                     <button class="generate-btn" data-prompt="incident">Generate Prompt</button>
@@ -239,7 +264,32 @@
                         </div>
                     </div>
 
-                    
+                    <div class="row">
+                        <div class="grid-container" id="event-purpose">
+
+                            <div class="grid-item" data-value="Personalized Recommendations">Personalized
+                                Recommendations</div>
+                            <div class="grid-item" data-value="Informed Decision Making">Informed Decision Making</div>
+                            <div class="grid-item" data-value="Focused Problem Solving">Focused Problem Solving</div>
+                            <div class="grid-item" data-value="Time Management Support">Time Management Support</div>
+                            <div class="grid-item" data-value="Resource Optimization">Resource Optimization</div>
+                            <div class="grid-item" data-value="Skill Development">Skill Development</div>
+                            <div class="grid-item" data-value="Tracking Accountability">Tracking & Accountability</div>
+                            <div class="grid-item" data-value="Motivation Encouragement">Motivation & Encouragement
+                            </div>
+                            <div class="grid-item" data-value="Simplification">Simplification</div>
+                            <div class="grid-item" data-value="Collaboration Networking">Collaboration & Networking
+                            </div>
+
+
+
+
+
+
+
+
+                        </div>
+                    </div>
 
 
 
@@ -267,7 +317,7 @@
                             <div class="grid-item" data-value="Security">Security Needed</div>
                         </div>
                     </div>
-                    
+
 
 
                     <div class="row hidden" id="event-outdoors">
@@ -286,7 +336,7 @@
                             <div class="grid-item" data-value="Decor">Decor Needed</div>
                         </div>
                     </div>
-                    
+
 
 
 
@@ -302,7 +352,7 @@
                         <div class="grid-item" data-value="Invitations">Invitations Needed</div>
                         <div class="grid-item" data-value="Gift Bags">Gift Bags Needed</div>
                     </div>
-                    
+
 
 
                     <textarea id="event-guests" rows="1" placeholder="Number of people expected:"></textarea>
@@ -328,7 +378,7 @@
                             <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
                             <div class="grid-item" data-value="timeline">Return Timeline Format</div>
                             <div class="grid-item" data-value="json">Return JSON Format</div>
-                    </div>
+                        </div>
                     </div>
 
                     <button class="generate-btn" data-prompt="event">Generate Prompt</button>
@@ -336,108 +386,173 @@
             </div>
 
             <!-- 2. Fitness Plan Prompt -->
-<div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-        <h2>Fitness Plan</h2>
-        <span class="toggle-icon">+</span>
-    </div>
-    <div class="section-content">
-        <div class="row">
-            <textarea id="fitness-goal" rows="4" placeholder="Goal (1 per line):&#10;Build strength&#10;Cardio&#10;Endurance"></textarea>
-        </div>
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Fitness Plan</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <textarea id="fitness-goal" rows="4"
+                            placeholder="Goal (1 per line):&#10;Build strength&#10;Cardio&#10;Endurance"></textarea>
+                    </div>
 
-        <div class="row">
-            <textarea id="fitness-frequency" rows="1" placeholder="Workouts I can do a week:"></textarea>
-            <textarea id="fitness-duration" rows="1" placeholder="Workout length I can schedule:"></textarea>
-        </div>
+                    <div class="row">
+                        <div class="grid-container" id="fitness-purpose">
 
-        <div class="row">
-            <textarea id="fitness-age" rows="1" placeholder="My age (e.g., 30):"></textarea>
-            <textarea id="fitness-height" rows="1" placeholder="My height (e.g., 5'10 or 170 cm):"></textarea>
-            <textarea id="fitness-weight" rows="1" placeholder="My weight (e.g., 150 lbs or 70 kg):"></textarea>
-        </div>
+                            <div class="grid-item" data-value="Personalized Recommendations">Personalized
+                                Recommendations</div>
+                            <div class="grid-item" data-value="Informed Decision Making">Informed Decision Making</div>
+                            <div class="grid-item" data-value="Focused Problem Solving">Focused Problem Solving</div>
+                            <div class="grid-item" data-value="Time Management Support">Time Management Support</div>
+                            <div class="grid-item" data-value="Resource Optimization">Resource Optimization</div>
+                            <div class="grid-item" data-value="Skill Development">Skill Development</div>
+                            <div class="grid-item" data-value="Tracking Accountability">Tracking & Accountability</div>
+                            <div class="grid-item" data-value="Motivation Encouragement">Motivation & Encouragement
+                            </div>
+                            <div class="grid-item" data-value="Simplification">Simplification</div>
+                            <div class="grid-item" data-value="Collaboration Networking">Collaboration & Networking
+                            </div>
 
-        <div class="row">
-            <div class="grid-container" id="fitness-level">
-                <div class="grid-item" data-value="Beginner">Beginner</div>
-                <div class="grid-item" data-value="Intermediate">Intermediate</div>
-                <div class="grid-item" data-value="Advanced">Advanced</div>
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <textarea id="fitness-frequency" rows="1" placeholder="Workouts I can do a week:"></textarea>
+                        <textarea id="fitness-duration" rows="1"
+                            placeholder="Workout length I can schedule:"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="fitness-age" rows="1" placeholder="My age (e.g., 30):"></textarea>
+                        <textarea id="fitness-height" rows="1"
+                            placeholder="My height (e.g., 5'10 or 170 cm):"></textarea>
+                        <textarea id="fitness-weight" rows="1"
+                            placeholder="My weight (e.g., 150 lbs or 70 kg):"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="grid-container" id="fitness-level">
+                            <div class="grid-item" data-value="Beginner">Beginner</div>
+                            <div class="grid-item" data-value="Intermediate">Intermediate</div>
+                            <div class="grid-item" data-value="Advanced">Advanced</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="grid-container" id="fitness-home-exercises">
+                            <div class="grid-item" data-value="Gym">I want to workout in the gym</div>
+                            <div class="grid-item" data-value="Home">I want to workout at home</div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <textarea id="fitness-injuries" rows="3"
+                            placeholder="Injuries/Health Conditions (1 per line):&#10;Knee pain&#10;Asthma"></textarea>
+                    </div>
+
+                    <button class="generate-btn" data-prompt="fitness">Generate Prompt</button>
+                </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="grid-container" id="fitness-home-exercises">
-                <div class="grid-item" data-value="Gym">I want to workout in the gym</div>
-                <div class="grid-item" data-value="Home">I want to workout at home</div>
+            <!-- 3. Calorie Counter Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Calorie & Macronutrient Monitor</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+
+                        <div class="grid-container" id="calorie-goal">
+                            <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
+                            <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
+                            <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
+                            <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="grid-container" id="calorie-purpose">
+
+                            <div class="grid-item" data-value="Personalized Recommendations">Personalized
+                                Recommendations</div>
+                            <div class="grid-item" data-value="Informed Decision Making">Informed Decision Making</div>
+                            <div class="grid-item" data-value="Focused Problem Solving">Focused Problem Solving</div>
+                            <div class="grid-item" data-value="Time Management Support">Time Management Support</div>
+                            <div class="grid-item" data-value="Resource Optimization">Resource Optimization</div>
+                            <div class="grid-item" data-value="Skill Development">Skill Development</div>
+                            <div class="grid-item" data-value="Tracking Accountability">Tracking & Accountability</div>
+                            <div class="grid-item" data-value="Motivation Encouragement">Motivation & Encouragement
+                            </div>
+                            <div class="grid-item" data-value="Simplification">Simplification</div>
+                            <div class="grid-item" data-value="Collaboration Networking">Collaboration & Networking
+                            </div>
+
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="grid-container" id="calorie-activity">
+                            <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
+                            <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3
+                                days/week)</div>
+                            <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise
+                                3-5 days/week)</div>
+                            <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)
+                            </div>
+                            <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="calorie-weight" rows="1" placeholder="Weight:"></textarea>
+                        <textarea id="calorie-height" rows="1" placeholder="Height:"></textarea>
+                        <textarea id="calorie-age" rows="1" placeholder="Age:"></textarea>
+                        <textarea id="calorie-food-log" rows="3"
+                            placeholder="Meals:&#10;Chicken breast 200g with rice 1cup&#10;Potato 100g with broccoli 150g"></textarea>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="grid-container" id="calorie-format-return">
+
+                            <div class="grid-item" data-value="narrative">Return Narrative Format</div>
+                            <div class="grid-item" data-value="faq">Return FAQ Format</div>
+                            <div class="grid-item" data-value="table">Return Table Format</div>
+                            <div class="grid-item" data-value="checklist">Return Checklist Format</div>
+                            <div class="grid-item" data-value="step-by-step">Return Step-by-Step Format</div>
+                            <div class="grid-item" data-value="q-and-a">Return Q&A Format</div>
+                            <div class="grid-item" data-value="summary">Return Summary Format</div>
+                            <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
+                            <div class="grid-item" data-value="timeline">Return Timeline Format</div>
+                            <div class="grid-item" data-value="json">Return JSON Format</div>
+                        </div>
+                    </div>
+
+                    <button class="generate-btn" data-prompt="calorie">Generate Prompt</button>
+                </div>
             </div>
-        </div>
-
-        
-
-        <div class="row">
-            <textarea id="fitness-injuries" rows="3" placeholder="Injuries/Health Conditions (1 per line):&#10;Knee pain&#10;Asthma"></textarea>
-        </div>
-
-        <button class="generate-btn" data-prompt="fitness">Generate Prompt</button>
-    </div>
-</div>
-
-           <!-- 3. Calorie Counter Prompt -->
-<div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-        <h2>Calorie & Macronutrient Monitor</h2>
-        <span class="toggle-icon">+</span>
-    </div>
-    <div class="section-content">
-        <div class="row">
-           
-            <div class="grid-container" id="calorie-goal">
-                <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
-                <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
-                <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
-                <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
-            </div>
-        </div>
-
-        <div class="row">
-            
-            <div class="grid-container" id="calorie-activity">
-                <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
-                <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
-                <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5 days/week)</div>
-                <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
-                <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <textarea id="calorie-weight" rows="1" placeholder="Weight:"></textarea>
-            <textarea id="calorie-height" rows="1" placeholder="Height:"></textarea>
-            <textarea id="calorie-age" rows="1" placeholder="Age:"></textarea>
-            <textarea id="calorie-food-log" rows="3" placeholder="Meals:&#10;Chicken breast 200g with rice 1cup&#10;Potato 100g with broccoli 150g"></textarea>
-
-        </div>
-        
-       
-        <div class="row">
-            <div class="grid-container" id="calorie-format-return">
-
-                <div class="grid-item" data-value="narrative">Return Narrative Format</div>
-                <div class="grid-item" data-value="faq">Return FAQ Format</div>
-                <div class="grid-item" data-value="table">Return Table Format</div>
-                <div class="grid-item" data-value="checklist">Return Checklist Format</div>
-                <div class="grid-item" data-value="step-by-step">Return Step-by-Step Format</div>
-                <div class="grid-item" data-value="q-and-a">Return Q&A Format</div>
-                <div class="grid-item" data-value="summary">Return Summary Format</div>
-                <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
-                <div class="grid-item" data-value="timeline">Return Timeline Format</div>
-                <div class="grid-item" data-value="json">Return JSON Format</div>
-        </div>
-        </div>
-
-        <button class="generate-btn" data-prompt="calorie">Generate Prompt</button>
-    </div>
-</div>
 
 
 
@@ -450,53 +565,87 @@
                 <div class="section-content">
                     <div class="row">
                         <div class="grid-container" id="trip-activities">
-                            <div class="grid-item" data-value="Hiking">I Want Hiking</div>
-                            <div class="grid-item" data-value="Sightseeing">I Want Sightseeing</div>
-                            <div class="grid-item" data-value="Relaxation">I Want Relaxation</div>
-                            <div class="grid-item" data-value="Attractions">I Want Attractions</div>
-                            <div class="grid-item" data-value="Event">I Want an Event</div>
-                            <div class="grid-item" data-value="Cultural Tours">I Want Cultural Tours</div>
-                            <div class="grid-item" data-value="Shopping">I Want Shopping</div>
-                            <div class="grid-item" data-value="Adventure">I Want Adventure</div>
-                            <div class="grid-item" data-value="Wildlife Watching">I Want Wildlife Watching</div>
-                            <div class="grid-item" data-value="Water Sports">I Want Water Sports</div>
-                            <div class="grid-item" data-value="Food Tours">I Want Food Tours</div>
-                            <div class="grid-item" data-value="Museums">I Want Museums</div>
-                            <div class="grid-item" data-value="Nightlife">I Want Nightlife</div>
-                            <div class="grid-item" data-value="Wellness">I Want Wellness</div>
-                            <div class="grid-item" data-value="Beach Time">I Want Beach Time</div>
-                            <div class="grid-item" data-value="Skiing">I Want Skiing</div>
-                            <div class="grid-item" data-value="Road Trips">I Want Road Trips</div>
-                            <div class="grid-item" data-value="Camping">I Want Camping</div>
-                            <div class="grid-item" data-value="Photography">I Want Photography</div>
-                            <div class="grid-item" data-value="Historical Sites">I Want Historical Sites</div>
+                            <div class="grid-item" data-value="Hiking">Hiking</div>
+                            <div class="grid-item" data-value="Sightseeing">Sightseeing</div>
+                            <div class="grid-item" data-value="Relaxation">Relaxation</div>
+                            <div class="grid-item" data-value="Attractions">Attractions</div>
+                            <div class="grid-item" data-value="Event">Event</div>
+                            <div class="grid-item" data-value="Cultural Tours">Cultural Tours</div>
+                            <div class="grid-item" data-value="Shopping">Shopping</div>
+                            <div class="grid-item" data-value="Adventure">Adventure</div>
+                            <div class="grid-item" data-value="Wildlife Watching">Wildlife Watching</div>
+                            <div class="grid-item" data-value="Water Sports">Water Sports</div>
+                            <div class="grid-item" data-value="Food Tours">Food Tours</div>
+                            <div class="grid-item" data-value="Museums">Museums</div>
+                            <div class="grid-item" data-value="Nightlife">Nightlife</div>
+                            <div class="grid-item" data-value="Wellness">Wellness</div>
+                            <div class="grid-item" data-value="Beach Time">Beach Time</div>
+                            <div class="grid-item" data-value="Skiing">Skiing</div>
+                            <div class="grid-item" data-value="Road Trips">Road Trips</div>
+                            <div class="grid-item" data-value="Camping">Camping</div>
+                            <div class="grid-item" data-value="Photography">Photography</div>
+                            <div class="grid-item" data-value="Historical Sites">Historical Sites</div>
+
                         </div>
 
-                        <textarea id="trip-purpose" rows="4"
-                            placeholder="Specifics Needed (One per line):&#10;Top rated hiking trails&#10;Hikes under 5km&#10;Best ice cream shops within 5km from city centre"></textarea>
+                        <div class="row">
+                            <div class="grid-container" id="trip-purpose">
+
+                                <div class="grid-item" data-value="Personalized Recommendations">Personalized
+                                    Recommendations</div>
+                                <div class="grid-item" data-value="Informed Decision Making">Informed Decision Making
+                                </div>
+                                <div class="grid-item" data-value="Focused Problem Solving">Focused Problem Solving
+                                </div>
+                                <div class="grid-item" data-value="Time Management Support">Time Management Support
+                                </div>
+                                <div class="grid-item" data-value="Resource Optimization">Resource Optimization</div>
+                                <div class="grid-item" data-value="Skill Development">Skill Development</div>
+                                <div class="grid-item" data-value="Tracking Accountability">Tracking & Accountability
+                                </div>
+                                <div class="grid-item" data-value="Motivation Encouragement">Motivation & Encouragement
+                                </div>
+                                <div class="grid-item" data-value="Simplification">Simplification</div>
+                                <div class="grid-item" data-value="Collaboration Networking">Collaboration & Networking
+                                </div>
+
+
+         </div>
+                        </div>
+
+
                     </div>
+
+
 
                     <div class="row">
                         <div class="grid-container" id="trip-relationship">
-                            <div class="grid-item" data-value="Parents">I’m With Parents</div>
-                            <div class="grid-item" data-value="Siblings">I’m With Siblings</div>
-                            <div class="grid-item" data-value="Friends">I’m With Friends</div>
+                            <div class="grid-item" data-value="Parents">With Parents</div>
+                            <div class="grid-item" data-value="Siblings">With Siblings</div>
+                            <div class="grid-item" data-value="Friends">With Friends</div>
 
-                            <div class="grid-item" data-value="Intimate Partner">I’m With Intimate Partner</div>
-                            <div class="grid-item" data-value="Business Partner">I’m With Business Partner</div>
-                            <div class="grid-item" data-value="Co-Worker">I’m With Co-Worker</div>
-                            <div class="grid-item" data-value="Client">I’m With Client</div>
+                            <div class="grid-item" data-value="Intimate Partner">With Intimate Partner</div>
+                            <div class="grid-item" data-value="Business Partner">With Business Partner</div>
+                            <div class="grid-item" data-value="Co-Worker">With Co-Worker</div>
+                            <div class="grid-item" data-value="Client">With Client</div>
                         </div>
                     </div>
 
                     <div class="row">
+
+                        <textarea id="trip-specifics" rows="4"
+                            placeholder="Specifics Needed (One per line):&#10;Top rated hiking trails&#10;Hikes under 5km&#10;Best ice cream shops within 5km from city centre"></textarea>
+
+
                         <textarea id="trip-plans" rows="3"
                             placeholder="Trip Schedule (one per line):&#10;Monday - 6am hike, 8pm dinner&#10;Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
+
+
                     </div>
 
                     <div class="row">
                         <select id="trip-packing">
-                            
+
                             <option value="YM">Packing tips needed for male</option>
                             <option value="YF">Packing tips needed for female</option>
                             <option value="YMF">Packing tips needed for male & female</option>
@@ -505,15 +654,16 @@
                     </div>
 
                     <div class="row">
-                        <textarea id="trip-people" rows="1"
-                            placeholder="Amount of people on trip:"></textarea>
+                        <textarea id="trip-people" rows="1" placeholder="Amount of people on trip:"></textarea>
                     </div>
 
-                   
+                    <div class="row">
+                        <textarea id="trip-days" rows="1" placeholder="Trip Length:"></textarea>
+                    </div>
+
 
                     <div class="row">
-                        <textarea id="trip-cost" rows="16"
-                            placeholder="Vacation Cost Estimator Results:"></textarea>
+                        <textarea id="trip-cost" rows="16" placeholder="Vacation Cost Estimator Results:"></textarea>
                         <a href="/budget/vacation.html">Vacation Cost Estimator</a>
                     </div>
 
@@ -531,7 +681,7 @@
                             <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
                             <div class="grid-item" data-value="timeline">Return Timeline Format</div>
                             <div class="grid-item" data-value="json">Return JSON Format</div>
-                    </div>
+                        </div>
                     </div>
 
                     <button class="generate-btn" data-prompt="trip">Generate Prompt</button>
@@ -543,88 +693,91 @@
         <div id="business-prompts" class="hidden">
 
 
- <!-- Starting a New Business Prompt -->
- <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-        <h2>Starting a New Business</h2>
-        <span class="toggle-icon">+</span>
-    </div>
-    <div class="section-content">
-        <div class="row">
-            <textarea id="business-vision" rows="1" placeholder="What’s your business idea? e.g., Launch a coffee shop"></textarea>
-        </div>
+            <!-- Starting a New Business Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Starting a New Business</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <textarea id="business-vision" rows="1"
+                            placeholder="What’s your business idea? e.g., Launch a coffee shop"></textarea>
+                    </div>
 
-        <div class="row">
-            <div class="grid-container" id="business-knowledge-level">
-                <div class="grid-item" data-value="New">I’m New to Business</div>
-                <div class="grid-item" data-value="Intermediate">I’ve Run a Business Before</div>
-                <div class="grid-item" data-value="Sophisticated">I’m an Experienced Entrepreneur</div>
+                    <div class="row">
+                        <div class="grid-container" id="business-knowledge-level">
+                            <div class="grid-item" data-value="New">I’m New to Business</div>
+                            <div class="grid-item" data-value="Intermediate">I’ve Run a Business Before</div>
+                            <div class="grid-item" data-value="Sophisticated">I’m an Experienced Entrepreneur</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="grid-container" id="business-general-skills">
+                            <div class="grid-item" data-value="Communication">I Communicate Well</div>
+                            <div class="grid-item" data-value="Problem-Solving">I Solve Problems</div>
+                            <div class="grid-item" data-value="Teamwork">I Work in Teams</div>
+                            <div class="grid-item" data-value="Time-Management">I Manage Time</div>
+                            <div class="grid-item" data-value="Adaptability">I Adapt Easily</div>
+                            <div class="grid-item" data-value="Critical-Thinking">I Think Critically</div>
+                            <div class="grid-item" data-value="Leadership">I Lead Others</div>
+                            <div class="grid-item" data-value="Creativity">I’m Creative</div>
+                            <div class="grid-item" data-value="Work-Ethic">I Have Strong Work Ethic</div>
+                            <div class="grid-item" data-value="Interpersonal">I Connect with People</div>
+                            <div class="grid-item" data-value="Organization">I Stay Organized</div>
+                            <div class="grid-item" data-value="Attention-to-Detail">I Focus on Details</div>
+                            <div class="grid-item" data-value="Decision-Making">I Make Decisions</div>
+                            <div class="grid-item" data-value="Analytical">I Analyze Well</div>
+                            <div class="grid-item" data-value="Initiative">I Take Initiative</div>
+                            <div class="grid-item" data-value="Technical">I’m Tech-Savvy</div>
+                            <div class="grid-item" data-value="Emotional-Intelligence">I Understand Emotions</div>
+                            <div class="grid-item" data-value="Negotiation">I Negotiate Effectively</div>
+                            <div class="grid-item" data-value="Resilience">I’m Resilient</div>
+                            <div class="grid-item" data-value="Project-Management">I Manage Projects</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="grid-container" id="business-weaknesses">
+                            <div class="grid-item" data-value="Procrastination">I Procrastinate</div>
+                            <div class="grid-item" data-value="Impatience">I’m Impatient</div>
+                            <div class="grid-item" data-value="Disorganization">I’m Disorganized</div>
+                            <div class="grid-item" data-value="Overthinking">I Overthink</div>
+                            <div class="grid-item" data-value="Perfectionism">I’m a Perfectionist</div>
+                            <div class="grid-item" data-value="Lack-of-Confidence">I Lack Confidence</div>
+                            <div class="grid-item" data-value="Difficulty-Delegating">I Struggle to Delegate</div>
+                            <div class="grid-item" data-value="Poor-Time-Management">I Manage Time Poorly</div>
+                            <div class="grid-item" data-value="Indecisiveness">I’m Indecisive</div>
+                            <div class="grid-item" data-value="Fear-of-Failure">I Fear Failure</div>
+                            <div class="grid-item" data-value="Limited-Technical-Skills">I Lack Tech Skills</div>
+                            <div class="grid-item" data-value="Overcommitting">I Overcommit</div>
+                            <div class="grid-item" data-value="Lack-of-Focus">I Lose Focus</div>
+                            <div class="grid-item" data-value="Impulsiveness">I’m Impulsive</div>
+                            <div class="grid-item" data-value="Difficulty-with-Feedback">I Resist Feedback</div>
+                            <div class="grid-item" data-value="Resistance-to-Change">I Resist Change</div>
+                            <div class="grid-item" data-value="Poor-Communication">I Communicate Poorly</div>
+                            <div class="grid-item" data-value="Stress-Management">I Handle Stress Badly</div>
+                            <div class="grid-item" data-value="Lack-of-Initiative">I Lack Initiative</div>
+                            <div class="grid-item" data-value="Detail-Overload">I Miss the Big Picture</div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <textarea id="business-organization" rows="4"
+                            placeholder="Business Equipment & Tools (1 per line):&#10;QuickBooks for accounting&#10;Shopify for e-commerce&#10;Ladder&#10;Welding Torch&#10;"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="business-network" rows="4"
+                            placeholder="Who can you leverage? (1 per line):&#10;Friend who owns a café&#10;Local Chamber of Commerce&#10;Business mentor"></textarea>
+                    </div>
+
+                    <button class="generate-btn" data-prompt="business">Generate Prompt</button>
+                </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="grid-container" id="business-general-skills">
-                <div class="grid-item" data-value="Communication">I Communicate Well</div>
-                <div class="grid-item" data-value="Problem-Solving">I Solve Problems</div>
-                <div class="grid-item" data-value="Teamwork">I Work in Teams</div>
-                <div class="grid-item" data-value="Time-Management">I Manage Time</div>
-                <div class="grid-item" data-value="Adaptability">I Adapt Easily</div>
-                <div class="grid-item" data-value="Critical-Thinking">I Think Critically</div>
-                <div class="grid-item" data-value="Leadership">I Lead Others</div>
-                <div class="grid-item" data-value="Creativity">I’m Creative</div>
-                <div class="grid-item" data-value="Work-Ethic">I Have Strong Work Ethic</div>
-                <div class="grid-item" data-value="Interpersonal">I Connect with People</div>
-                <div class="grid-item" data-value="Organization">I Stay Organized</div>
-                <div class="grid-item" data-value="Attention-to-Detail">I Focus on Details</div>
-                <div class="grid-item" data-value="Decision-Making">I Make Decisions</div>
-                <div class="grid-item" data-value="Analytical">I Analyze Well</div>
-                <div class="grid-item" data-value="Initiative">I Take Initiative</div>
-                <div class="grid-item" data-value="Technical">I’m Tech-Savvy</div>
-                <div class="grid-item" data-value="Emotional-Intelligence">I Understand Emotions</div>
-                <div class="grid-item" data-value="Negotiation">I Negotiate Effectively</div>
-                <div class="grid-item" data-value="Resilience">I’m Resilient</div>
-                <div class="grid-item" data-value="Project-Management">I Manage Projects</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="grid-container" id="business-weaknesses">
-                <div class="grid-item" data-value="Procrastination">I Procrastinate</div>
-                <div class="grid-item" data-value="Impatience">I’m Impatient</div>
-                <div class="grid-item" data-value="Disorganization">I’m Disorganized</div>
-                <div class="grid-item" data-value="Overthinking">I Overthink</div>
-                <div class="grid-item" data-value="Perfectionism">I’m a Perfectionist</div>
-                <div class="grid-item" data-value="Lack-of-Confidence">I Lack Confidence</div>
-                <div class="grid-item" data-value="Difficulty-Delegating">I Struggle to Delegate</div>
-                <div class="grid-item" data-value="Poor-Time-Management">I Manage Time Poorly</div>
-                <div class="grid-item" data-value="Indecisiveness">I’m Indecisive</div>
-                <div class="grid-item" data-value="Fear-of-Failure">I Fear Failure</div>
-                <div class="grid-item" data-value="Limited-Technical-Skills">I Lack Tech Skills</div>
-                <div class="grid-item" data-value="Overcommitting">I Overcommit</div>
-                <div class="grid-item" data-value="Lack-of-Focus">I Lose Focus</div>
-                <div class="grid-item" data-value="Impulsiveness">I’m Impulsive</div>
-                <div class="grid-item" data-value="Difficulty-with-Feedback">I Resist Feedback</div>
-                <div class="grid-item" data-value="Resistance-to-Change">I Resist Change</div>
-                <div class="grid-item" data-value="Poor-Communication">I Communicate Poorly</div>
-                <div class="grid-item" data-value="Stress-Management">I Handle Stress Badly</div>
-                <div class="grid-item" data-value="Lack-of-Initiative">I Lack Initiative</div>
-                <div class="grid-item" data-value="Detail-Overload">I Miss the Big Picture</div>
-            </div>
-        </div>
-
-      
-
-        <div class="row">
-            <textarea id="business-organization" rows="4" placeholder="Business Equipment & Tools (1 per line):&#10;QuickBooks for accounting&#10;Shopify for e-commerce&#10;Ladder&#10;Welding Torch&#10;"></textarea>
-        </div>
-
-        <div class="row">
-            <textarea id="business-network" rows="4" placeholder="Who can you leverage? (1 per line):&#10;Friend who owns a café&#10;Local Chamber of Commerce&#10;Business mentor"></textarea>
-        </div>
-
-        <button class="generate-btn" data-prompt="business">Generate Prompt</button>
-    </div>
-</div>
 
 
             <!-- 1. App Development Prompt -->
@@ -737,7 +890,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="button-container">
 
             <button class="ai-button" onclick="openAIApp('https://grok.x.ai', 'https://grok.x.ai')">
@@ -761,10 +914,10 @@
                 <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
             </button>
 
-            
+
 
         </div>
-    
+
 
     </div>
 
@@ -772,18 +925,18 @@
 
     <script>
         let activeScope = null;
-    
+
         function toggleSection(header) {
             const section = header.parentElement;
             section.classList.toggle('expanded');
         }
-    
+
         function toggleScope(scope) {
             const personalBtn = document.getElementById('personal-btn');
             const businessBtn = document.getElementById('business-btn');
             const personalPrompts = document.getElementById('personal-prompts');
             const businessPrompts = document.getElementById('business-prompts');
-    
+
             if (activeScope === scope) {
                 personalPrompts.classList.add('hidden');
                 businessPrompts.classList.add('hidden');
@@ -795,7 +948,7 @@
                 businessPrompts.classList.add('hidden');
                 personalBtn.classList.remove('selected');
                 businessBtn.classList.remove('selected');
-    
+
                 if (scope === 'personal') {
                     personalPrompts.classList.remove('hidden');
                     personalBtn.classList.add('selected');
@@ -806,7 +959,7 @@
                 activeScope = scope;
             }
         }
-    
+
         const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
         const formatGrid = (selector, prefix) => {
             const items = Array.from(document.querySelectorAll(selector))
@@ -815,7 +968,7 @@
                 .join('\n');
             return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
         };
-    
+
         function toggleMealDetails() {
             const scopeEl = document.getElementById('meal-scope');
             if (scopeEl) {
@@ -824,7 +977,7 @@
                 document.getElementById('meal-multiple-days').classList.toggle('hidden', scope !== 'multiple');
             }
         }
-    
+
         function toggleEventDetails() {
             const locationEl = document.getElementById('event-location');
             if (locationEl) {
@@ -833,7 +986,7 @@
                 document.getElementById('event-outdoors').classList.toggle('hidden', location !== 'outdoors');
             }
         }
-    
+
         function toggleCodeInput(selected) {
             const codeRow = document.getElementById('app-current-code-row');
             const codeStartedBtn = document.querySelector('#app-code-status .grid-item[data-value="code-started"]');
@@ -850,187 +1003,193 @@
                 }
             }
         }
-    
+
         document.getElementById('personal-btn').addEventListener('click', () => toggleScope('personal'));
         document.getElementById('business-btn').addEventListener('click', () => toggleScope('business'));
-    
+
         document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-status) .grid-item').forEach(item => {
             item.addEventListener('click', () => item.classList.toggle('selected'));
         });
-    
+
         function generatePrompt(promptType) {
             let prompt = '';
-    
+
             switch (promptType) {
                 case 'general':
                     const generalGoal = document.getElementById('general-goal');
                     if (generalGoal && generalGoal.value) {
-                        prompt += `Create a brief summary and then return information needed\n\n`;
-                        prompt += `My goal is: ${generalGoal.value}\n\n`;
-    
+                        prompt += `Goal: ${generalGoal.value}\n\n`;
+
+                        prompt += formatGrid('#general-purpose .grid-item.selected', 'Purpose');
+
                         const generalInfoReturn = document.getElementById('general-info-return');
                         const selectedFormat = generalInfoReturn.querySelector('.grid-item.selected');
                         if (selectedFormat) {
                             const formatValue = selectedFormat.getAttribute('data-value');
                             prompt += `Return the information in this format: ${formatValue}\n\n`;
                         }
-    
+
                         const generalContext = document.getElementById('general-context');
                         if (generalContext && generalContext.value) {
                             prompt += formatList(generalContext.value, 'Context');
                         }
                     }
                     break;
-    
+
                 case 'incident':
                     const incidentDetails = document.getElementById('incident-details');
                     if (incidentDetails && incidentDetails.value) {
-                        prompt += `Create a brief summary and then return information wanted\n\n`;
-                        prompt += formatGrid('#incident-info-return .grid-item.selected', 'Information needed');
-    
+
+                        prompt += formatGrid('#incident-purpose .grid-item.selected', 'Purpose');
+
                         const incidentFormatReturn = document.getElementById('incident-format-return');
                         const selectedFormatIncident = incidentFormatReturn.querySelector('.grid-item.selected');
                         if (selectedFormatIncident) {
                             const formatValue = selectedFormatIncident.getAttribute('data-value');
                             prompt += `Return the information in this format: ${formatValue}\n\n`;
                         }
-    
+
                         prompt += formatGrid('#incident-warnings .grid-item.selected', 'My personality traits');
                         prompt += formatList(incidentDetails.value, 'What Happened');
                         prompt += formatGrid('#incident-mood .grid-item.selected', 'Perceived mood/tone of other people involved');
-    
+
                         const incidentMoments = document.getElementById('incident-moments');
                         if (incidentMoments && incidentMoments.value) prompt += formatList(incidentMoments.value, 'Key moments');
-    
+
                         const incidentThoughts = document.getElementById('incident-thoughts');
                         if (incidentThoughts && incidentThoughts.value) prompt += formatList(incidentThoughts.value, 'My initial thoughts');
                     }
                     break;
-    
+
                 case 'event':
                     const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
                     if (eventTypesSelected.length > 0) {
-                        prompt += `Assess the feasibility of the event based on the provided variables. If feasible, create a detailed plan that accounts for all variables.\n\n`;
                         prompt += formatGrid('#event-types .grid-item.selected', 'Event Type');
-    
+
+                        prompt += formatGrid('#event-purpose .grid-item.selected', 'Purpose');
+
                         const eventFormatReturn = document.getElementById('event-format-return');
                         const selectedFormatEvent = eventFormatReturn.querySelector('.grid-item.selected');
                         if (selectedFormatEvent) {
                             const formatValue = selectedFormatEvent.getAttribute('data-value');
                             prompt += `Return the information in this format: ${formatValue}\n\n`;
                         }
-    
+
                         const location = document.getElementById('event-location');
                         if (location && location.value) {
                             prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`;
-    
+
                             if (location.value === 'indoors') {
                                 prompt += formatGrid('#event-indoor-setup .grid-item.selected', 'Venue Setup Needs');
                             } else {
                                 prompt += formatGrid('#event-weather .grid-item.selected', 'Weather Considerations');
                             }
-    
+
                             prompt += formatGrid('#event-elements .grid-item.selected', 'Elements');
-    
+
                             const guests = document.getElementById('event-guests');
                             if (guests && guests.value) prompt += formatList(guests.value, 'Guest Count');
-    
+
                             const budget = document.getElementById('event-budget');
                             if (budget && budget.value) prompt += formatList(budget.value, 'Budget');
-    
+
                             const timeline = document.getElementById('event-timeline');
                             if (timeline && timeline.value) prompt += formatList(timeline.value, 'Timeline');
-    
+
                             const specificContext = document.getElementById('event-specific-context');
                             if (specificContext && specificContext.value) prompt += `Context Dump: ${specificContext.value}\n\n`;
                         }
                     }
                     break;
-    
+
                 case 'fitness':
                     const fitnessGoal = document.getElementById('fitness-goal');
                     if (fitnessGoal && fitnessGoal.value) {
-                        prompt += `Create a fitness, calorie & macro nutrient plan based on the provided variables.\n\n`;
                         prompt += `My fitness goal is: ${fitnessGoal.value}\n\n`;
-    
+
+                        prompt += formatGrid('#fitness-purpose .grid-item.selected', 'Purpose');
+
                         const fitnessFormatReturn = document.getElementById('fitness-format-return');
                         const selectedFitnessFormat = fitnessFormatReturn ? fitnessFormatReturn.querySelector('.grid-item.selected') : null;
                         if (selectedFitnessFormat) {
                             const formatValue = selectedFitnessFormat.getAttribute('data-value');
                             prompt += `Return the information in this format: ${formatValue}\n\n`;
                         }
-    
+
                         const locationSelection = document.querySelector('#fitness-home-exercises .grid-item.selected');
                         if (locationSelection) {
                             const locationValue = locationSelection.getAttribute('data-value');
                             prompt += `Location: ${locationValue === 'Home' ? 'Home' : 'Gym'}\n\n`;
                         }
-    
+
                         const age = document.getElementById('fitness-age');
                         if (age && age.value) prompt += formatList(age.value, 'Age');
-    
+
                         const height = document.getElementById('fitness-height');
                         if (height && height.value) prompt += formatList(height.value, 'Height');
-    
+
                         const weight = document.getElementById('fitness-weight');
                         if (weight && weight.value) prompt += formatList(weight.value, 'Weight');
-    
+
                         prompt += formatGrid('#fitness-level .grid-item.selected', 'Fitness Level');
-    
+
                         const injuries = document.getElementById('fitness-injuries');
                         if (injuries && injuries.value) prompt += formatList(injuries.value, 'Injuries/Health Conditions');
-    
+
                         const frequency = document.getElementById('fitness-frequency');
                         if (frequency && frequency.value) prompt += formatList(frequency.value, 'Amount of times that I can workout a week');
-    
+
                         const duration = document.getElementById('fitness-duration');
                         if (duration && duration.value) prompt += formatList(duration.value, 'Length of workout session I can perform');
                     }
                     break;
-    
+
                 case 'calorie':
                     prompt += `I want to track my calorie and macronutrient intake (carbs, protein, fats) for today to reach my fitness goal. Please estimate my daily calorie and macro targets based on my details and provide the percentage of daily value I've consumed so far based on my food log.\n\n`;
-    
+
+                    prompt += formatGrid('#calorie-purpose .grid-item.selected', 'I want to track my calorie and macronutrient intake (carbs, protein, fats) for today to reach my fitness goal. Please estimate my daily calorie and macro targets based on my details and provide the percentage of daily value Ive consumed so far based on my food log.');
+
                     const calorieFormatReturn = document.getElementById('calorie-format-return');
                     const selectedCalorieFormat = calorieFormatReturn.querySelector('.grid-item.selected');
                     if (selectedCalorieFormat) {
                         const formatValue = selectedCalorieFormat.getAttribute('data-value');
                         prompt += `Return the information in this format: ${formatValue}\n\n`;
                     }
-    
+
                     prompt += formatGrid('#calorie-goal .grid-item.selected', 'My Goal');
-    
+
                     const weight = document.getElementById('calorie-weight');
                     if (weight && weight.value) prompt += formatList(weight.value, 'Weight');
                     const height = document.getElementById('calorie-height');
                     if (height && height.value) prompt += formatList(height.value, 'Height');
                     const age = document.getElementById('calorie-age');
                     if (age && age.value) prompt += formatList(age.value, 'Age');
-    
+
                     prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
-    
+
                     const foodLog = document.getElementById('calorie-food-log');
                     if (foodLog && foodLog.value) {
                         prompt += `Today's Food Log:\n${foodLog.value}\n\n`;
                     }
                     break;
-    
+
                 case 'trip':
-                    const tripPurpose = document.getElementById('trip-purpose');
-                    if (tripPurpose && tripPurpose.value) {
+                    const tripSpecifics = document.getElementById('trip-specifics');
+                    if (tripSpecifics && tripSpecifics.value) {
                         prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
-                        prompt += `Activity specific information sought:\n${tripPurpose.value}\n\n`;
-    
+                        prompt += formatGrid('#trip-purpose .grid-item.selected', 'Purpose');
+                        prompt += `Activity specific information sought:\n${tripSpecifics.value}\n\n`;
+
                         const tripFormatReturn = document.getElementById('trip-format-return');
                         const selectedTripFormat = tripFormatReturn.querySelector('.grid-item.selected');
                         if (selectedTripFormat) {
                             const formatValue = selectedTripFormat.getAttribute('data-value');
                             prompt += `Return the information in this format: ${formatValue}\n\n`;
                         }
-    
+
                         const plans = document.getElementById('trip-plans');
                         if (plans && plans.value) prompt += formatList(plans.value, 'Confirmed Schedule');
-    
+
                         const packing = document.getElementById('trip-packing');
                         if (packing && packing.value) {
                             let packingDescription = '';
@@ -1042,42 +1201,46 @@
                             }
                             prompt += `${packingDescription}\n\n`;
                         }
-    
+
                         const people = document.getElementById('trip-people');
                         if (people && people.value) prompt += formatList(people.value, 'Number of People on Trip');
-    
+
+                        const days = document.getElementById('trip-days');
+                        if (days && days.value) prompt += formatList(days.value, 'Trip Length');
+
+
                         prompt += formatGrid('#trip-relationship .grid-item.selected', 'Relationship to People on Trip');
-    
+
                         const cost = document.getElementById('trip-cost');
                         if (cost && cost.value) prompt += formatList(cost.value, 'Budget');
                     }
                     break;
-    
+
                 case 'business':
                     const vision = document.getElementById('business-vision');
                     if (vision && vision.value) {
                         prompt += `Analyze the following data and create a logical business plan for starting a new business. Include actionable steps tailored to my strengths, weaknesses, and resources.\n\n`;
                         prompt += `Business Idea: ${vision.value}\n\n`;
-    
+
                         const businessFormatReturn = document.getElementById('business-format-return');
                         const selectedBusinessFormat = businessFormatReturn ? businessFormatReturn.querySelector('.grid-item.selected') : null;
                         if (selectedBusinessFormat) {
                             const formatValue = selectedBusinessFormat.getAttribute('data-value');
                             prompt += `Return the information in this format: ${formatValue}\n\n`;
                         }
-    
+
                         prompt += formatGrid('#business-knowledge-level .grid-item.selected', 'Experience Level');
                         prompt += formatGrid('#business-general-skills .grid-item.selected', 'Business Skills');
                         prompt += formatGrid('#business-weaknesses .grid-item.selected', 'Challenges');
-    
+
                         const organization = document.getElementById('business-organization');
                         if (organization && organization.value) prompt += formatList(organization.value, 'Business Tools & Equipment');
-    
+
                         const network = document.getElementById('business-network');
                         if (network && network.value) prompt += formatList(network.value, 'Business Network');
                     }
                     break;
-    
+
                 case 'app':
                     const appPurpose = document.getElementById('app-purpose');
                     if (appPurpose && appPurpose.value) {
@@ -1094,7 +1257,7 @@
                         if (timeline && timeline.value) prompt += formatList(timeline.value, 'Timeline');
                     }
                     break;
-    
+
                 case 'marketing':
                     const marketGoal = document.getElementById('market-goal');
                     if (marketGoal && marketGoal.value) {
@@ -1108,7 +1271,7 @@
                         if (metrics && metrics.value) prompt += formatList(metrics.value, 'Metrics');
                     }
                     break;
-    
+
                 case 'business-strategy':
                     const bizGoal = document.getElementById('biz-goal');
                     if (bizGoal && bizGoal.value) {
@@ -1123,18 +1286,18 @@
                     }
                     break;
             }
-    
+
             document.getElementById('result').textContent = prompt;
             navigator.clipboard.writeText(prompt).then(() => alert('Prompt copied to clipboard!'));
         }
-    
+
         document.querySelectorAll('.generate-btn').forEach(button => {
             button.addEventListener('click', () => {
                 const promptType = button.getAttribute('data-prompt');
                 generatePrompt(promptType);
             });
         });
-    
+
         function openAIApp(appLink, fallbackUrl) {
             window.location = appLink;
             setTimeout(() => {
@@ -1145,7 +1308,7 @@
         }
     </script>
 
-<script src="/server/scripts/hamburger.js"></script>
+    <script src="/server/scripts/hamburger.js"></script>
 
 </body>
 
