@@ -178,10 +178,12 @@ button:hover {
 #result {
     margin-top: 20px; /* Same in both */
     padding: 15px; /* Same in first, second CSS has no direct match */
-    background-color: #fafafa; /* Not in second CSS, kept as is */
+    background-color: #000000; /* Not in second CSS, kept as is */
     border-radius: 3px; /* Same in first, second CSS has no direct match */
     white-space: pre-wrap; /* Not in second CSS, kept as is */
     font-size: 14px; /* Same in first, second CSS has no direct match */
+     /* Same in first, second CSS has no direct match */
+ color: white;
 }
 
 .hidden {
