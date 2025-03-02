@@ -26,7 +26,7 @@
 
 
  
-     <h2 style="text-align: center;font-size: 16px; color: white;">Promptify™</h2>
+     <h2 style="text-align: center;font-size: 16px; color: white;">Promptify</h2>
 
 
     <div class="container">
@@ -140,7 +140,7 @@
                                 <textarea id="incident-moments" rows="3"
                                     placeholder="Key moments that stood out:(1 per line)&#10;They raised their voice&#10;They smiled"></textarea>
                                 <textarea id="incident-thoughts" rows="3"
-                                    placeholder="What did you feel or think right after?"></textarea>
+                                    placeholder="Thoughts proceeding the incident:(1 per line)&#10;Am I going to lose my job&#10;Was I too harsh"></textarea>
                             </div>
                         </div>
                     </div>
@@ -245,49 +245,51 @@
             </div>
 
             <!-- 2. Fitness Plan Prompt -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Fitness Plan</h2>
-                    <span class="toggle-icon">+</span>
-                </div>
-                <div class="section-content">
-                    <div class="row">
-                        <textarea id="fitness-goal" rows="4"
-                            placeholder="Goal:(1 per line):&#10;Build strength&#10;Cardio&#10;Endurance"></textarea>
-                    </div>
+<div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>Fitness Plan</h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content">
+        <div class="row">
+            <textarea id="fitness-goal" rows="4" placeholder="Goal (1 per line):&#10;Build strength&#10;Cardio&#10;Endurance"></textarea>
+        </div>
 
+        <div class="row">
+            <textarea id="fitness-frequency" rows="1" placeholder="Workouts I can do a week:"></textarea>
+            <textarea id="fitness-duration" rows="1" placeholder="Workout length I can schedule:"></textarea>
+        </div>
 
-                    <div class="grid-container" id="fitness-home-exercises">
-                        <div class="grid-item" data-value="Push-Ups">I Do Push-Ups</div>
-                        <div class="grid-item" data-value="Squats">I Do Squats</div>
-                        <div class="grid-item" data-value="Plank">I Do Plank</div>
-                        <div class="grid-item" data-value="Lunges">I Do Lunges</div>
-                        <div class="grid-item" data-value="Mountain Climbers">I Do Mountain Climbers</div>
-                        <div class="grid-item" data-value="Burpees">I Do Burpees</div>
-                        <div class="grid-item" data-value="Sit-Ups">I Do Sit-Ups</div>
-                        <div class="grid-item" data-value="High Knees">I Do High Knees</div>
-                        <div class="grid-item" data-value="Jumping Jacks">I Do Jumping Jacks</div>
-                        <div class="grid-item" data-value="Leg Raises">I Do Leg Raises</div>
-                        <div class="grid-item" data-value="Bicycle Crunches">I Do Bicycle Crunches</div>
-                        <div class="grid-item" data-value="Tricep Dips">I Do Tricep Dips</div>
-                        <div class="grid-item" data-value="Wall Sits">I Do Wall Sits</div>
-                        <div class="grid-item" data-value="Glute Bridges">I Do Glute Bridges</div>
-                        <div class="grid-item" data-value="Treadmill">I have access to a treadmill</div>
-                        <div class="grid-item" data-value="Weights">I have access to free weights</div>
-                        <div class="grid-item" data-value="Bike">I have access to a stationary bike</div>
-                        <div class="grid-item" data-value="Bench">I have access to a weight bench</div>
+        <div class="row">
+            <textarea id="fitness-age" rows="1" placeholder="My age (e.g., 30):"></textarea>
+            <textarea id="fitness-height" rows="1" placeholder="My height (e.g., 5'10 or 170 cm):"></textarea>
+            <textarea id="fitness-weight" rows="1" placeholder="My weight (e.g., 150 lbs or 70 kg):"></textarea>
+        </div>
 
-
-                    </div>
-
-
-
-                    <textarea id="fitness-frequency" rows="1" placeholder="Workouts I can do a week:"></textarea>
-                    <textarea id="fitness-duration" rows="1" placeholder="Workout length I can schedule:"></textarea>
-
-                    <button class="generate-btn" data-prompt="fitness">Generate Prompt</button>
-                </div>
+        <div class="row">
+            <div class="grid-container" id="fitness-level">
+                <div class="grid-item" data-value="Beginner">Beginner</div>
+                <div class="grid-item" data-value="Intermediate">Intermediate</div>
+                <div class="grid-item" data-value="Advanced">Advanced</div>
             </div>
+        </div>
+
+        <div class="row">
+            <div class="grid-container" id="fitness-home-exercises">
+                <div class="grid-item" data-value="Gym">I want to workout in the gym</div>
+                <div class="grid-item" data-value="Home">I want to workout at home</div>
+            </div>
+        </div>
+
+        
+
+        <div class="row">
+            <textarea id="fitness-injuries" rows="3" placeholder="Injuries/Health Conditions (1 per line):&#10;Knee pain&#10;Asthma"></textarea>
+        </div>
+
+        <button class="generate-btn" data-prompt="fitness">Generate Prompt</button>
+    </div>
+</div>
 
            <!-- 3. Calorie Counter Prompt -->
 <div class="section">
@@ -305,11 +307,7 @@
                 <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
             </div>
         </div>
-        <div class="row">
-            <textarea id="calorie-weight" rows="1" placeholder="Weight:"></textarea>
-            <textarea id="calorie-height" rows="1" placeholder="Height:"></textarea>
-            <textarea id="calorie-age" rows="1" placeholder="Age:"></textarea>
-        </div>
+
         <div class="row">
             
             <div class="grid-container" id="calorie-activity">
@@ -320,10 +318,16 @@
                 <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
             </div>
         </div>
+
         <div class="row">
-            
+            <textarea id="calorie-weight" rows="1" placeholder="Weight:"></textarea>
+            <textarea id="calorie-height" rows="1" placeholder="Height:"></textarea>
+            <textarea id="calorie-age" rows="1" placeholder="Age:"></textarea>
             <textarea id="calorie-food-log" rows="3" placeholder="Meals:&#10;Chicken breast 200g with rice 1cup&#10;Potato 100g with broccoli 150g"></textarea>
+
         </div>
+        
+       
         <button class="generate-btn" data-prompt="calorie">Generate Prompt</button>
     </div>
 </div>
@@ -360,41 +364,52 @@
                             <div class="grid-item" data-value="Photography">I Want Photography</div>
                             <div class="grid-item" data-value="Historical Sites">I Want Historical Sites</div>
                         </div>
+
                         <textarea id="trip-purpose" rows="4"
-                            placeholder="One per line: Top rated hiking trails, Best ice cream shops..."></textarea>
+                            placeholder="Specifics Needed (One per line):&#10;Top rated hiking trails&#10;Hikes under 5km&#10;Best ice cream shops within 5km from city centre"></textarea>
                     </div>
-                    <div class="row">
-                        <textarea id="trip-plans" rows="3"
-                            placeholder="One per line: 6am mountain trail, 8pm dinner at bistro"></textarea>
-                    </div>
-                    <div class="row">
-                        <select id="trip-packing">
-                            <option value="">Select duration...</option>
-                            <option value="YM">Yes for Male</option>
-                            <option value="YF">Yes for Female</option>
-                            <option value="YMF">Yes for Male & Female</option>
-                            <option value="NN">No</option>
-                        </select>
-                    </div>
-                    <div class="row">
-                        <textarea id="trip-accom-budget" rows="5"
-                            placeholder="One per line: 10 People, Parents, Friends, Girlfriend/Boyfriend"></textarea>
-                    </div>
+
                     <div class="row">
                         <div class="grid-container" id="trip-relationship">
                             <div class="grid-item" data-value="Parents">I’m With Parents</div>
                             <div class="grid-item" data-value="Siblings">I’m With Siblings</div>
+                            <div class="grid-item" data-value="Friends">I’m With Friends</div>
+
                             <div class="grid-item" data-value="Intimate Partner">I’m With Intimate Partner</div>
                             <div class="grid-item" data-value="Business Partner">I’m With Business Partner</div>
                             <div class="grid-item" data-value="Co-Worker">I’m With Co-Worker</div>
                             <div class="grid-item" data-value="Client">I’m With Client</div>
                         </div>
                     </div>
+
                     <div class="row">
-                        <textarea id="trip-transport" rows="16"
-                            placeholder="Copy and paste from Vacation Cost Estimator"></textarea>
+                        <textarea id="trip-plans" rows="3"
+                            placeholder="Trip Schedule (one per line):&#10;Monday - 6am hike, 8pm dinner&#10;Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <select id="trip-packing">
+                            
+                            <option value="YM">Packing tips needed for male</option>
+                            <option value="YF">Packing tips needed for female</option>
+                            <option value="YMF">Packing tips needed for male & female</option>
+                            <option value="NN">Packing tips not needed</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="trip-people" rows="1"
+                            placeholder="Amount of people on trip:"></textarea>
+                    </div>
+
+                   
+
+                    <div class="row">
+                        <textarea id="trip-cost" rows="16"
+                            placeholder="Vacation Cost Estimator Results:"></textarea>
                         <a href="/budget/vacation.html">Vacation Cost Estimator</a>
                     </div>
+
                     <button class="generate-btn" data-prompt="trip">Generate Prompt</button>
                 </div>
             </div>
@@ -598,9 +613,10 @@
                 </div>
             </div>
         </div>
-        <div id="result"></div>
+        
     </div>
 
+    <div id="result"></div>
 
     <script>
         let activeScope = null;
@@ -766,28 +782,43 @@
     }
     break;
 
-                case 'fitness':
-                    const fitnessGoal = document.getElementById('fitness-goal');
-                    if (fitnessGoal && fitnessGoal.value) {
-                        prompt += `Create a fitness plan based on the provided variables in day by day format.\n\n`;
+    case 'fitness':
+    const fitnessGoal = document.getElementById('fitness-goal');
+    if (fitnessGoal && fitnessGoal.value) {
+        prompt += `Create a fitness, calorie & macro nutrient plan based on the provided variables in day-by-day format.\n\n`;
 
-                        prompt += `My fitness goal is: ${fitnessGoal.value}\n\n`;
-                        const location = document.getElementById('fitness-location');
-                        if (location && location.value) {
-                            prompt += `Location: ${location.value === 'home' ? 'Home' : 'Gym'}\n\n`;
-                            if (location.value === 'home') {
-                                prompt += formatGrid('#fitness-home-exercises .grid-item.selected', 'Exercises');
-                            } else {
-                                prompt += formatGrid('#fitness-gym-equipment .grid-item.selected', 'Equipment');
-                            }
-                            const frequency = document.getElementById('fitness-frequency');
-                            if (frequency && frequency.value) prompt += formatList(frequency.value, 'Amount of times that I can workout a week');
-                            const duration = document.getElementById('fitness-duration');
-                            if (duration && duration.value) prompt += formatList(duration.value, 'Length of workout session I can perform');
+        prompt += `My fitness goal is: ${fitnessGoal.value}\n\n`;
 
-                        }
-                    }
-                    break;
+        // Location from grid
+        const locationSelection = document.querySelector('#fitness-home-exercises .grid-item.selected');
+        if (locationSelection) {
+            const locationValue = locationSelection.getAttribute('data-value');
+            prompt += `Location: ${locationValue === 'Home' ? 'Home' : 'Gym'}\n\n`;
+        }
+
+        // New variables
+        const age = document.getElementById('fitness-age');
+        if (age && age.value) prompt += formatList(age.value, 'Age');
+
+        const height = document.getElementById('fitness-height');
+        if (height && height.value) prompt += formatList(height.value, 'Height');
+
+        const weight = document.getElementById('fitness-weight');
+        if (weight && weight.value) prompt += formatList(weight.value, 'Weight');
+
+        prompt += formatGrid('#fitness-level .grid-item.selected', 'Fitness Level');
+
+
+        const injuries = document.getElementById('fitness-injuries');
+        if (injuries && injuries.value) prompt += formatList(injuries.value, 'Injuries/Health Conditions');
+
+        const frequency = document.getElementById('fitness-frequency');
+        if (frequency && frequency.value) prompt += formatList(frequency.value, 'Amount of times that I can workout a week');
+
+        const duration = document.getElementById('fitness-duration');
+        if (duration && duration.value) prompt += formatList(duration.value, 'Length of workout session I can perform');
+    }
+    break;
 
                     case 'calorie':
     prompt += `I want to track my calorie and macronutrient intake (carbs, protein, fats) for today to reach my fitness goal. Please estimate my daily calorie and macro targets based on my details and provide the percentage of daily value I've consumed so far based on my food log.\n\n`;
@@ -813,33 +844,38 @@
     }
     break;
 
-                case 'trip':
-                    const tripPurpose = document.getElementById('trip-purpose');
-                    if (tripPurpose && tripPurpose.value) {
-                        prompt += `I want to plan a trip. The purpose is:\n${tripPurpose.value}\n\n`;
-                        const packing = document.getElementById('trip-packing');
-                        if (packing && packing.value) {
-                            let packingDescription = '';
-                            switch (packing.value) {
-                                case 'YM': packingDescription = 'Yes, for Male'; break;
-                                case 'YF': packingDescription = 'Yes, for Female'; break;
-                                case 'YMF': packingDescription = 'Yes, for Male & Female'; break;
-                                case 'NN': packingDescription = 'No'; break;
-                            }
-                            prompt += `Packing: ${packingDescription}\n\n`;
-                            if (packingDescription.includes('Yes')) {
-                                const accomBudget = document.getElementById('trip-accom-budget');
-                                if (accomBudget && accomBudget.value) prompt += formatList(accomBudget.value, 'People Joining');
-                                prompt += formatGrid('#trip-relationship .grid-item.selected', 'Relationships');
-                            }
-                            prompt += formatGrid('#trip-activities .grid-item.selected', 'Activities');
-                            const plans = document.getElementById('trip-plans');
-                            if (plans && plans.value) prompt += formatList(plans.value, 'Schedule');
-                            const transport = document.getElementById('trip-transport');
-                            if (transport && transport.value) prompt += formatList(transport.value, 'Budget');
-                        }
-                    }
-                    break;
+    case 'trip':
+    const tripPurpose = document.getElementById('trip-purpose');
+    if (tripPurpose && tripPurpose.value) {
+        prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
+
+        prompt += `Activity specific information sought:\n${tripPurpose.value}\n\n`;
+
+
+        const plans = document.getElementById('trip-plans');
+        if (plans && plans.value) prompt += formatList(plans.value, 'Confirmed Schedule');
+
+        const packing = document.getElementById('trip-packing');
+        if (packing && packing.value) {
+            let packingDescription = '';
+            switch (packing.value) {
+                case 'YM': packingDescription = 'Yes, for Male'; break;
+                case 'YF': packingDescription = 'Yes, for Female'; break;
+                case 'YMF': packingDescription = 'Yes, for Male & Female'; break;
+                case 'NN': packingDescription = 'No'; break;
+            }
+            prompt += `${packingDescription}\n\n`;
+        }
+
+        const people = document.getElementById('trip-people');
+        if (people && people.value) prompt += formatList(people.value, 'Number of People on Trip');
+
+        prompt += formatGrid('#trip-relationship .grid-item.selected', 'Relationship to People on Trip');
+
+        const cost = document.getElementById('trip-cost');
+        if (cost && cost.value) prompt += formatList(cost.value, 'Budget');
+    }
+    break;
 
                     case 'business':
     const vision = document.getElementById('business-vision');
