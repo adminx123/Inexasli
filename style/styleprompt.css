@@ -1,157 +1,204 @@
 body {
-    font-family: "Roboto", sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
-    margin: 0;
-    padding: 20px;
-    line-height: 1.6;
+    font-family: "Roboto", sans-serif; /* Same in both */
+    background-color: #000; /* Updated from #020202 to #000 (second CSS) */
+    color: #000; /* Updated from #333 to #000 (second CSS) */
+    margin: 20px; /* Updated from 0 to 20px (second CSS) */
+    padding: 20px; /* Same in both */
+    line-height: 1.6; /* Not in second CSS, kept as is */
 }
 
-h1 {
+h1{
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    /* From first CSS’s h1, applied broadly */
     font-size: 24px;
     text-align: center;
     margin-bottom: 30px;
     font-weight: 500;
-}
+    color: rgb(7, 7, 7);
+    /* From second CSS’s h2 */
+    margin-top: 10px; /* Non-conflicting with margin-bottom */
+  }
+  
+  h2{
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    /* From first CSS’s h1, applied broadly */
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 1px;
+    font-weight: 500;
+    color: rgb(0, 0, 0);
+    /* From second CSS’s h2 */
+    margin-top: 10px; /* Non-conflicting with margin-bottom */
+  }
+  
+  h3{
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    /* From first CSS’s h1, applied broadly */
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 500;
+    color: white;
+    /* From second CSS’s h2 */
+    margin-top: 10px; /* Non-conflicting with margin-bottom */
+  }
+  
+  h4 {
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    /* From first CSS’s h1, applied broadly */
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 500;
+    color: white;
+    /* From second CSS’s h2 */
+    margin-top: 10px; /* Non-conflicting with margin-bottom */
+  }
 
 .container {
-    background-color: #fff;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 5px;
-    box-sizing: border-box;
+    background-color: #fff; /* Same in both */
+    max-width: 800px; /* Same in both */
+    margin: 0 auto; /* Same in both */
+    padding: 20px; /* Updated to 20px (first CSS), second CSS uses 0 15px with padding-top/bottom 10px, but we'll keep 20px as a close match */
+    border-radius: 5px; /* Same in both */
+    box-sizing: border-box; /* Same in both */
 }
 
 .section {
-    margin-bottom: 2px;
-    padding: 1px;
+    margin-bottom: 2px; /* Not in second CSS, kept as is */
+    padding: 1px; /* Not in second CSS, kept as is */
 }
 
 .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    padding: 0px 0px 0 0px;
-    background-color: #fafafa;
-    border-radius: 1px;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1;
-    margin: 5px;
+    display: flex; /* Same in both */
+    justify-content: space-between; /* Same in first, not contradicted in second */
+    align-items: center; /* Same in both */
+    cursor: pointer; /* Same in both */
+    padding: 0px 0px 0 0px; /* Updated to match first CSS, second doesn’t override */
+    background-color: #fafafa; /* Not in second CSS, kept as is */
+    border-radius: 1px; /* Not in second CSS, kept as is */
+    font-size: 12px; /* Same in first, second CSS has no direct match */
+    font-weight: 500; /* Same in first, second CSS has no direct match */
+    line-height: 1; /* Not in second CSS, kept as is */
+    margin: 5px; /* Not in second CSS, kept as is */
 }
 
 .toggle-icon {
-    font-size: 18px;
-    transition: transform 0.2s ease;
+    font-size: 18px; /* Not in second CSS, kept as is */
+    transition: transform 0.2s ease; /* Not in second CSS, kept as is */
 }
 
 .section.expanded .toggle-icon {
-    transform: rotate(45deg);
+    transform: rotate(45deg); /* Not in second CSS, kept as is */
 }
 
 .section-content {
-    display: none;
-    padding: 10px;
+    display: none; /* Same in both via .hidden */
+    padding: 10px; /* Same in first, second CSS has no direct match */
 }
 
 .section.expanded .section-content {
-    display: block;
+    display: block; /* Same in first, second CSS has no direct match */
 }
 
 .row {
-    margin-bottom: 15px;
-    padding-top: 1px;
-    padding-bottom: 1px;
-    padding-left: 1px;
-    padding-right: 1px;
+    margin-bottom: 15px; /* Updated to 15px (first CSS), second CSS uses margin-top 10px but no bottom */
+    padding-top: 1px; /* Not in second CSS, kept as is */
+    padding-bottom: 1px; /* Not in second CSS, kept as is */
+    padding-left: 1px; /* Not in second CSS, kept as is */
+    padding-right: 1px; /* Not in second CSS, kept as is */
 }
 
 label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
-    font-weight: 500;
+    display: block; /* Same in both */
+    font-size: 14px; /* Same in first, second CSS has no direct match */
+    margin-bottom: 5px; /* Same in both */
+    font-weight: 500; /* Same in first, second CSS has no direct match */
 }
 
 textarea,
 select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    font-size: 14px;
-    background-color: #fafafa;
+    width: 100%; /* Same in both */
+    padding: 10px; /* Updated to 10px (first CSS), second CSS uses 4px for inputs but we’ll match textarea */
+    border: 1px solid #7c7c7c; /* Updated from #ddd to #7c7c7c (second CSS) */
+    border-radius: 5px; /* Updated from 3px to 5px (second CSS for inputs) */
+    font-size: 17px; /* Updated from 14px to 17px (second CSS) */
+    background-color: transparent; /* Updated from #fafafa to transparent (second CSS) */
 }
 
 textarea {
-    resize: vertical;
+    resize: vertical; /* Not in second CSS, kept as is */
+    font-size: 14px; /* Same in first, second CSS has no direct match */
+
 }
 
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-    margin-bottom: 20px;
+    display: grid; /* Same in both */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Updated from 150px to 200px (second CSS) */
+    gap: 0.5rem; /* Updated from 10px to 0.5rem (second CSS) */
+    margin-bottom: 20px; /* Same in both */
 }
 
 .grid-item {
-    padding: 10px;
-    background-color: #f0f0f0;
-    border-radius: 3px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s ease;
+    padding: 1rem; /* Updated from 10px to 1rem (second CSS) */
+    background-color: #f0f0f0; /* Same in both */
+    border-radius: 5px; /* Updated from 3px to 5px (second CSS) */
+    text-align: center; /* Same in both */
+    cursor: pointer; /* Same in both */
+    font-size: 14px; /* Same in first, second CSS has no direct match */
+    transition: background-color 0.3s ease; /* Updated from 0.2s to 0.3s (second CSS) */
 }
 
 .grid-item.selected {
-    background-color: #060606;
-    color: #fff;
+    background-color: #000; /* Updated from #060606 to #000 (second CSS) */
+    color: #fff; /* Same in both */
 }
 
 button {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    display: block; /* Same in both */
+    width: 100%; /* Same in both */
+    padding: 12px; /* Same in first, second CSS uses 10px 20px but we’ll keep 12px */
+    background-color: #000000; /* Updated from #333 to #000000 (second CSS) */
+    color: white; /* Updated from #fff to white (second CSS) */
+    border: none; /* Same in both */
+    border-radius: 5px; /* Updated from 3px to 5px (second CSS) */
+    font-size: 16px; /* Same in both */
+    cursor: pointer; /* Same in both */
+    transition: background-color 0.2s ease; /* Same in first, second CSS has no direct match */
 }
 
 button:hover {
-    background-color: #555;
+    background-color: #333; /* Updated from #555 to #333 (second CSS for .form-sumbit-btn:hover) */
 }
 
 #result {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #fafafa;
-    border-radius: 3px;
-    white-space: pre-wrap;
-    font-size: 14px;
+    margin-top: 20px; /* Same in both */
+    padding: 15px; /* Same in first, second CSS has no direct match */
+    background-color: #fafafa; /* Not in second CSS, kept as is */
+    border-radius: 3px; /* Same in first, second CSS has no direct match */
+    white-space: pre-wrap; /* Not in second CSS, kept as is */
+    font-size: 14px; /* Same in first, second CSS has no direct match */
 }
 
 .hidden {
-    display: none;
+    display: none; /* Same in both */
 }
 
 #scope-selector {
-    grid-template-columns: 1fr 1fr;
-    max-width: 300px;
-    margin: 0 auto 20px;
+    grid-template-columns: 1fr 1fr; /* Same in first, second CSS has no direct match */
+    max-width: 300px; /* Same in first, second CSS has no direct match */
+    margin: 0 auto 20px; /* Same in first, second CSS has no direct match */
 }
 
 #scope-selector .grid-item {
-    background-color: #f7f1f1;
+    background-color: #f7f1f1; /* Not in second CSS, kept as is */
 }
 
 #scope-selector .grid-item.selected {
-    background-color: #0e0e0e;
-    color: #f9f8f8;
+    background-color: #0e0e0e; /* Not in second CSS, kept as is */
+    color: #f9f8f8; /* Not in second CSS, kept as is */
 }
