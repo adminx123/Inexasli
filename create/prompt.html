@@ -614,8 +614,24 @@
             </div>
         </div>
         
-        <button onclick="window.location.href='grok://';">Open Grok</button>
-
+        <div class="button-container">
+            <button class="ai-button" onclick="openAIApp('chatgpt://open', 'https://chat.openai.com')">
+                <img src="/images/chatgpt-logo.png" alt="ChatGPT" class="ai-logo">
+            </button>
+            <button class="ai-button" onclick="openAIApp('deepseek://open', 'https://deepseek.com')">
+                <img src="/images/deepseek-logo.png" alt="DeepSeek" class="ai-logo">
+            </button>
+            <button class="ai-button" onclick="openAIApp('copilot://open', 'https://github.com/features/copilot')">
+                <img src="/images/copilot-logo.png" alt="Copilot" class="ai-logo">
+            </button>
+            <button class="ai-button" onclick="openAIApp('gemini://open', 'https://gemini.google.com')">
+                <img src="/images/gemini-logo.png" alt="Gemini" class="ai-logo">
+            </button>
+            <button class="ai-button" onclick="openAIApp('grok://open', 'https://grok.x.ai')">
+                <img src="/images/grok-logo.png" alt="Grok" class="ai-logo">
+            </button>
+        </div>
+    
 
     </div>
 
@@ -954,6 +970,21 @@
                 generatePrompt(promptType);
             });
         });
+
+
+        function openAIApp(appScheme, fallbackUrl) {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                window.location.href = appScheme;
+                setTimeout(() => {
+                    if (document.hasFocus()) {
+                        window.location.href = fallbackUrl;
+                    }
+                }, 1000);
+            } else {
+                window.location.href = fallbackUrl;
+            }
+        }
     </script>
 
 

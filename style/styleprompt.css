@@ -204,3 +204,32 @@ button:hover {
     background-color: #0e0e0e; /* Not in second CSS, kept as is */
     color: #f9f8f8; /* Not in second CSS, kept as is */
 }
+
+.button-container {
+    display: flex; /* Horizontal row */
+    justify-content: center; /* Center the row on screen */
+    align-items: center; /* Vertically align buttons */
+    gap: 10px; /* Space between buttons */
+    width: 100%; /* Full width for centering */
+    padding: 20px 0; /* Optional vertical padding */
+}
+.ai-button {
+    width: 50px; /* Square size */
+    height: 50px; /* Matches width */
+    background-color: #333;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    overflow: hidden; /* Contain logo */
+    padding: 0; /* No internal padding */
+    border: none; /* Clean look */
+}
+.ai-button:hover {
+    background-color: #555;
+}
+.ai-logo {
+    width: 100%; /* Fills button */
+    height: 100%; /* Fills button */
+    object-fit: contain; /* Preserves logo aspect */
+    display: block; /* No inline spacing */
+}
