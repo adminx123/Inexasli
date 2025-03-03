@@ -1,4 +1,3 @@
-
 let activeScope = null;
 
 function toggleSection(header) {
@@ -93,72 +92,61 @@ function generatePrompt(promptType) {
         case 'general':
             const generalGoal = document.getElementById('general-goal');
             if (generalGoal && generalGoal.value) {
-                prompt += `Goal: ${generalGoal.value}\n\n`;
+                prompt += `Analyze the following input relative to the goal: ${generalGoal.value}\n\n`;
 
-                prompt += formatGrid('#general-purpose .grid-item.selected', 'Consider the following details & then output for');
+                prompt += formatGrid('#general-purpose .grid-item.selected', 'Purpose of this analysis');
 
                 const generalInfoReturn = document.getElementById('general-info-return');
-                const selectedFormat = generalInfoReturn.querySelector('.grid-item.selected');
+                const selectedFormat = generalInfoReturn?.querySelector('.grid-item.selected');
                 if (selectedFormat) {
                     const formatValue = selectedFormat.getAttribute('data-value');
                     prompt += `Return the information in this format: ${formatValue}\n\n`;
                 }
 
                 const generalContext = document.getElementById('general-context');
-                if (generalContext && generalContext.value) {
+                if (generalContext?.value) {
                     prompt += formatList(generalContext.value, 'Context');
                 }
             }
             break;
 
         case 'incident':
+            prompt += formatGrid('#incident-goal .grid-item.selected', 'Analyze the following incident details input relative to my goal');
 
-        prompt += ('Goal: To have you analyze the following information');
-
-        prompt += formatGrid('#incident-purpose .grid-item.selected', 'Purpose for analyzation');
-
+            prompt += 'Purpose of analysis: Maximize the efficiency, productivity, and safety of the workplace\n\n';
 
             const incidentDetails = document.getElementById('incident-details');
-            if (incidentDetails && incidentDetails.value) {
-
-
-                const incidentFormatReturn = document.getElementById('incident-format-return');
-                const selectedFormatIncident = incidentFormatReturn.querySelector('.grid-item.selected');
-                if (selectedFormatIncident) {
-                    const formatValue = selectedFormatIncident.getAttribute('data-value');
-                    prompt += `Return the information in this format: ${formatValue}\n\n`;
-                }
+            if (incidentDetails?.value) {
+                
 
                 prompt += formatGrid('#incident-warnings .grid-item.selected', 'My personality traits');
                 prompt += formatList(incidentDetails.value, 'What Happened');
                 prompt += formatGrid('#incident-mood .grid-item.selected', 'Perceived mood/tone of other people involved');
 
                 const incidentMoments = document.getElementById('incident-moments');
-                if (incidentMoments && incidentMoments.value) prompt += formatList(incidentMoments.value, 'Key moments');
+                if (incidentMoments?.value) prompt += formatList(incidentMoments.value, 'Key moments');
 
                 const incidentThoughts = document.getElementById('incident-thoughts');
-                if (incidentThoughts && incidentThoughts.value) prompt += formatList(incidentThoughts.value, 'My initial thoughts');
+                if (incidentThoughts?.value) prompt += formatList(incidentThoughts.value, 'My initial thoughts');
             }
             break;
 
         case 'event':
-
-        prompt += formatGrid('#event-purpose .grid-item.selected', 'Consider the following event details. Then output for');
-
             const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
             if (eventTypesSelected.length > 0) {
-                prompt += formatGrid('#event-types .grid-item.selected', 'Event Type');
+                prompt += formatGrid('#event-types .grid-item.selected', 'Consider the following input relative to my goal');
 
+                prompt += 'Purpose of analysis: To create a logical checklist walkthrough for hosting an event\n\n';
 
                 const eventFormatReturn = document.getElementById('event-format-return');
-                const selectedFormatEvent = eventFormatReturn.querySelector('.grid-item.selected');
+                const selectedFormatEvent = eventFormatReturn?.querySelector('.grid-item.selected');
                 if (selectedFormatEvent) {
                     const formatValue = selectedFormatEvent.getAttribute('data-value');
                     prompt += `Return the information in this format: ${formatValue}\n\n`;
                 }
 
                 const location = document.getElementById('event-location');
-                if (location && location.value) {
+                if (location?.value) {
                     prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`;
 
                     if (location.value === 'indoors') {
@@ -170,122 +158,110 @@ function generatePrompt(promptType) {
                     prompt += formatGrid('#event-elements .grid-item.selected', 'Elements');
 
                     const guests = document.getElementById('event-guests');
-                    if (guests && guests.value) prompt += formatList(guests.value, 'Guest Count');
+                    if (guests?.value) prompt += formatList(guests.value, 'Guest Count');
 
                     const budget = document.getElementById('event-budget');
-                    if (budget && budget.value) prompt += formatList(budget.value, 'Budget');
+                    if (budget?.value) prompt += formatList(budget.value, 'Budget');
 
                     const timeline = document.getElementById('event-timeline');
-                    if (timeline && timeline.value) prompt += formatList(timeline.value, 'Timeline');
+                    if (timeline?.value) prompt += formatList(timeline.value, 'Timeline');
 
                     const specificContext = document.getElementById('event-specific-context');
-                    if (specificContext && specificContext.value) prompt += `Context Dump: ${specificContext.value}\n\n`;
+                    if (specificContext?.value) prompt += `Context Dump: ${specificContext.value}\n\n`;
                 }
             }
             break;
 
-            case 'fitness':
+        case 'fitness':
+            const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
+            if (fitnessGoalsSelected.length > 0) {
+                prompt += formatGrid('#fitness-goal .grid-item.selected', 'Consider the following input relative to my fitness goal');
 
-            prompt += formatGrid('#fitness-purpose .grid-item.selected', 'Consider the following fitness details. Then output for');
+                prompt += 'Purpose of analysis: Create a personalized fitness plan to achieve my goal in checklist format with headings of Workout 1, 2, etc., and subcategories\n\n';
 
-
-const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
-if (fitnessGoalsSelected.length > 0) {
-prompt += formatGrid('#fitness-goal .grid-item.selected', 'My fitness goal is');
-
-
-const locationSelection = document.querySelector('#fitness-home-exercises .grid-item.selected');
-if (locationSelection) {
-    const locationValue = locationSelection.getAttribute('data-value');
-    prompt += `Location: ${locationValue === 'Home' ? 'Home' : 'Gym'}\n\n`;
-}
-
-const age = document.getElementById('fitness-age');
-if (age && age.value) prompt += formatList(age.value, 'Age');
-
-const height = document.getElementById('fitness-height');
-if (height && height.value) prompt += formatList(height.value, 'Height');
-
-const weight = document.getElementById('fitness-weight');
-if (weight && weight.value) prompt += formatList(weight.value, 'Weight');
-
-prompt += formatGrid('#fitness-level .grid-item.selected', 'Fitness Level');
-
-const injuries = document.getElementById('fitness-injuries');
-if (injuries && injuries.value) prompt += formatList(injuries.value, 'Injuries/Health Conditions');
-
-const frequency = document.getElementById('fitness-frequency');
-if (frequency && frequency.value) prompt += formatList(frequency.value, 'Amount of times that I can workout a week');
-
-const duration = document.getElementById('fitness-duration');
-if (duration && duration.value) prompt += formatList(duration.value, 'Length of workout session I can perform');
-}
-break;
-
-case 'calorie':
-    prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macro nutrients on the following input as a percentage of daily requirement relative to my goal');
-    
-    const weight = document.getElementById('calorie-weight');
-    if (weight && weight.value) prompt += formatList(weight.value, 'Weight');
-    const height = document.getElementById('calorie-height');
-    if (height && height.value) prompt += formatList(height.value, 'Height');
-    const age = document.getElementById('calorie-age');
-    if (age && age.value) prompt += formatList(age.value, 'Age');
-
-    prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
-
-    const foodLog = document.getElementById('calorie-food-log');
-    if (foodLog && foodLog.value) {
-        prompt += `Days Food Log(do not breakdown in summary):\n${foodLog.value}\n\n`;
-    }
-
-    prompt += `
-    This is an example of the format I want you to return: 
-    Your Goal: Gain Muscle
-    Daily Requirements (Target for Muscle Gain):
-    Calories: 2587 kcal/day
-    Protein: 158.8 g
-    Carbs: 317.6 g
-    Fats: 79.4 g
-    
-    Food Log Intake:
-    Calories: 1104 kcal (43% of goal)
-    Protein: 80 g (50% of goal)
-    Carbs: 86 g (27% of goal)
-    Fats: 50 g (63% of goal)
-    
-    Recommendations:
-    Increase calories by 1483 kcal to hit your target.
-    Add around 79 g protein to reach your goal.
-    Boost carbs by 232 g.
-    Add 29 g more fats to meet your daily fat requirement.
-    `;
-    break;
-
-
-
-        case 'trip':
-            
-        prompt += formatGrid('#trip-purpose .grid-item.selected', 'Consider the following trip details. Then output for');
-
-        
-        const tripSpecifics = document.getElementById('trip-specifics');
-            if (tripSpecifics && tripSpecifics.value) {
-                prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
-                prompt += `Activity specific information sought:\n${tripSpecifics.value}\n\n`;
-
-                const tripFormatReturn = document.getElementById('trip-format-return');
-                const selectedTripFormat = tripFormatReturn.querySelector('.grid-item.selected');
-                if (selectedTripFormat) {
-                    const formatValue = selectedTripFormat.getAttribute('data-value');
-                    prompt += `Response should be in the followig format: ${formatValue}\n\n`;
+                const locationSelection = document.querySelector('#fitness-home-exercises .grid-item.selected');
+                if (locationSelection) {
+                    const locationValue = locationSelection.getAttribute('data-value');
+                    prompt += `Location: ${locationValue === 'Home' ? 'Home' : 'Gym'}\n\n`;
                 }
 
+                const age = document.getElementById('fitness-age');
+                if (age?.value) prompt += formatList(age.value, 'Age');
+
+                const height = document.getElementById('fitness-height');
+                if (height?.value) prompt += formatList(height.value, 'Height');
+
+                const weight = document.getElementById('fitness-weight');
+                if (weight?.value) prompt += formatList(weight.value, 'Weight');
+
+                prompt += formatGrid('#fitness-level .grid-item.selected', 'Fitness Level');
+
+                const injuries = document.getElementById('fitness-injuries');
+                if (injuries?.value) prompt += formatList(injuries.value, 'Injuries/Health Conditions');
+
+                const frequency = document.getElementById('fitness-frequency');
+                if (frequency?.value) prompt += formatList(frequency.value, 'Number of weekly workouts I can do');
+
+                const duration = document.getElementById('fitness-duration');
+                if (duration?.value) prompt += formatList(duration.value, 'Length of workout sessions I can perform');
+            }
+            break;
+
+        case 'calorie':
+            prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal');
+
+            prompt += `
+The purpose of the estimates is to create a report in the following format:
+Your Goal: Gain Muscle
+Daily Requirements (Target for Muscle Gain):
+Calories: 2587 kcal/day
+Protein: 158.8 g
+Carbs: 317.6 g
+Fats: 79.4 g
+
+Food Log Intake:
+Calories: 1104 kcal (43% of goal)
+Protein: 80 g (50% of goal)
+Carbs: 86 g (27% of goal)
+Fats: 50 g (63% of goal)
+
+Recommendations:
+Increase calories by 1483 kcal to hit your target.
+Add approximately 79 g of protein to reach your goal.
+Boost carbs by 232 g.
+Add 29 g more fats to meet your daily fat requirement.
+`;
+
+            const weight = document.getElementById('calorie-weight');
+            if (weight?.value) prompt += formatList(weight.value, 'Weight');
+            const height = document.getElementById('calorie-height');
+            if (height?.value) prompt += formatList(height.value, 'Height');
+            const age = document.getElementById('calorie-age');
+            if (age?.value) prompt += formatList(age.value, 'Age');
+
+            prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
+
+            const foodLog = document.getElementById('calorie-food-log');
+            if (foodLog?.value) {
+                prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
+            }
+            break;
+
+        case 'trip':
+            prompt += formatGrid('#trip-purpose .grid-item.selected', 'Review the following activities I want to do on my trip');
+
+            prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format\n\n';
+
+            const tripSpecifics = document.getElementById('trip-specifics');
+            if (tripSpecifics?.value) {
+                prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
+                prompt += `Activity-specific information requested:\n${tripSpecifics.value}\n\n`;
+
                 const plans = document.getElementById('trip-plans');
-                if (plans && plans.value) prompt += formatList(plans.value, 'Confirmed Schedule');
+                if (plans?.value) prompt += formatList(plans.value, 'Confirmed Schedule');
 
                 const packing = document.getElementById('trip-packing');
-                if (packing && packing.value) {
+                if (packing?.value) {
                     let packingDescription = '';
                     switch (packing.value) {
                         case 'YM': packingDescription = 'Yes, for Male'; break;
@@ -297,24 +273,24 @@ case 'calorie':
                 }
 
                 const people = document.getElementById('trip-people');
-                if (people && people.value) prompt += formatList(people.value, 'Number of People on Trip');
+                if (people?.value) prompt += formatList(people.value, 'Number of People on Trip');
 
                 const days = document.getElementById('trip-days');
-                if (days && days.value) prompt += formatList(days.value, 'Trip Length');
-
+                if (days?.value) prompt += formatList(days.value, 'Trip Length');
 
                 prompt += formatGrid('#trip-relationship .grid-item.selected', 'Relationship to People on Trip');
 
                 const cost = document.getElementById('trip-cost');
-                if (cost && cost.value) prompt += formatList(cost.value, 'Budget');
+                if (cost?.value) prompt += formatList(cost.value, 'Budget');
             }
             break;
 
         case 'business':
             const vision = document.getElementById('business-vision');
-            if (vision && vision.value) {
-                prompt += `Analyze the following data and create a logical business plan for starting a new business. Include actionable steps tailored to my strengths, weaknesses, and resources.\n\n`;
-                prompt += `Business Idea: ${vision.value}\n\n`;
+            if (vision?.value) {
+                prompt += `Analyze the following data for starting the following new business: ${vision.value}\n\n`;
+
+                prompt += 'Purpose of analysis: To review the feasibility, risks, rewards, and potential of the business idea\n\n';
 
                 const businessFormatReturn = document.getElementById('business-format-return');
                 const selectedBusinessFormat = businessFormatReturn ? businessFormatReturn.querySelector('.grid-item.selected') : null;
@@ -328,55 +304,59 @@ case 'calorie':
                 prompt += formatGrid('#business-weaknesses .grid-item.selected', 'Challenges');
 
                 const organization = document.getElementById('business-organization');
-                if (organization && organization.value) prompt += formatList(organization.value, 'Business Tools & Equipment');
+                if (organization?.value) prompt += formatList(organization.value, 'Business Tools & Equipment');
 
                 const network = document.getElementById('business-network');
-                if (network && network.value) prompt += formatList(network.value, 'Business Network');
+                if (network?.value) prompt += formatList(network.value, 'Business Network');
             }
             break;
 
         case 'app':
             const appPurpose = document.getElementById('app-purpose');
-            if (appPurpose && appPurpose.value) {
-                prompt += `I want to develop an app. The purpose is: ${appPurpose.value}\n\n`;
+            if (appPurpose?.value) {
+                prompt += `Analyze the following input relative to the app I want to build that: ${appPurpose.value}\n\n`;
+
+                prompt += 'Purpose of analysis: Create code for the user to start or continue the development of their app\n\n';
+
                 prompt += formatGrid('#app-code-status .grid-item.selected', 'Code Status');
+
                 const currentCode = document.getElementById('app-current-code');
-                if (currentCode && currentCode.value) prompt += formatList(currentCode.value, 'Current Code');
+                if (currentCode?.value) prompt += formatList(currentCode.value, 'Current Code');
                 prompt += formatGrid('#app-features .grid-item.selected', 'Features');
                 const platform = document.getElementById('app-platform');
-                if (platform && platform.value) prompt += formatList(platform.value, 'Platform');
+                if (platform?.value) prompt += formatList(platform.value, 'Platform');
                 const budget = document.getElementById('app-budget');
-                if (budget && budget.value) prompt += formatList(budget.value, 'Budget');
+                if (budget?.value) prompt += formatList(budget.value, 'Budget');
                 const timeline = document.getElementById('app-timeline');
-                if (timeline && timeline.value) prompt += formatList(timeline.value, 'Timeline');
+                if (timeline?.value) prompt += formatList(timeline.value, 'Timeline');
             }
             break;
 
         case 'marketing':
             const marketGoal = document.getElementById('market-goal');
-            if (marketGoal && marketGoal.value) {
+            if (marketGoal?.value) {
                 prompt += `I want to create a marketing campaign. The goal is: ${marketGoal.value}\n\n`;
                 prompt += formatGrid('#market-channels .grid-item.selected', 'Channels');
                 const audience = document.getElementById('market-audience');
-                if (audience && audience.value) prompt += formatList(audience.value, 'Audience');
+                if (audience?.value) prompt += formatList(audience.value, 'Audience');
                 const budget = document.getElementById('market-budget');
-                if (budget && budget.value) prompt += formatList(budget.value, 'Budget');
+                if (budget?.value) prompt += formatList(budget.value, 'Budget');
                 const metrics = document.getElementById('market-metrics');
-                if (metrics && metrics.value) prompt += formatList(metrics.value, 'Metrics');
+                if (metrics?.value) prompt += formatList(metrics.value, 'Metrics');
             }
             break;
 
         case 'business-strategy':
             const bizGoal = document.getElementById('biz-goal');
-            if (bizGoal && bizGoal.value) {
+            if (bizGoal?.value) {
                 prompt += `I want to develop a business strategy. The goal is: ${bizGoal.value}\n\n`;
                 prompt += formatGrid('#biz-tactics .grid-item.selected', 'Tactics');
                 const market = document.getElementById('biz-market');
-                if (market && market.value) prompt += formatList(market.value, 'Market');
+                if (market?.value) prompt += formatList(market.value, 'Market');
                 const resources = document.getElementById('biz-resources');
-                if (resources && resources.value) prompt += formatList(resources.value, 'Resources');
+                if (resources?.value) prompt += formatList(resources.value, 'Resources');
                 const milestones = document.getElementById('biz-milestones');
-                if (milestones && milestones.value) prompt += formatList(milestones.value, 'Milestones');
+                if (milestones?.value) prompt += formatList(milestones.value, 'Milestones');
             }
             break;
     }
