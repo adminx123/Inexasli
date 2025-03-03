@@ -222,33 +222,47 @@ if (duration && duration.value) prompt += formatList(duration.value, 'Length of 
 }
 break;
 
-        case 'calorie':
+case 'calorie':
+    prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macro nutrients on the following input as a percentage of daily requirement relative to my goal');
+    
+    const weight = document.getElementById('calorie-weight');
+    if (weight && weight.value) prompt += formatList(weight.value, 'Weight');
+    const height = document.getElementById('calorie-height');
+    if (height && height.value) prompt += formatList(height.value, 'Height');
+    const age = document.getElementById('calorie-age');
+    if (age && age.value) prompt += formatList(age.value, 'Age');
 
-            prompt += formatGrid('#calorie-purpose .grid-item.selected', 'The purpose of this prompt is to display the users calorie & macronutrient deficit/surplus relative to their food log for the following purpose(s)');
+    prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
 
-            const calorieFormatReturn = document.getElementById('calorie-format-return');
-            const selectedCalorieFormat = calorieFormatReturn.querySelector('.grid-item.selected');
-            if (selectedCalorieFormat) {
-                const formatValue = selectedCalorieFormat.getAttribute('data-value');
-                prompt += `Format for output: ${formatValue}\n\n`;
-            }
+    const foodLog = document.getElementById('calorie-food-log');
+    if (foodLog && foodLog.value) {
+        prompt += `Days Food Log(do not breakdown in summary):\n${foodLog.value}\n\n`;
+    }
 
-            prompt += formatGrid('#calorie-goal .grid-item.selected', 'My Goal');
+    prompt += `
+    This is an example of the format I want you to return: 
+    Your Goal: Gain Muscle
+    Daily Requirements (Target for Muscle Gain):
+    Calories: 2587 kcal/day
+    Protein: 158.8 g
+    Carbs: 317.6 g
+    Fats: 79.4 g
+    
+    Food Log Intake:
+    Calories: 1104 kcal (43% of goal)
+    Protein: 80 g (50% of goal)
+    Carbs: 86 g (27% of goal)
+    Fats: 50 g (63% of goal)
+    
+    Recommendations:
+    Increase calories by 1483 kcal to hit your target.
+    Add around 79 g protein to reach your goal.
+    Boost carbs by 232 g.
+    Add 29 g more fats to meet your daily fat requirement.
+    `;
+    break;
 
-            const weight = document.getElementById('calorie-weight');
-            if (weight && weight.value) prompt += formatList(weight.value, 'Weight');
-            const height = document.getElementById('calorie-height');
-            if (height && height.value) prompt += formatList(height.value, 'Height');
-            const age = document.getElementById('calorie-age');
-            if (age && age.value) prompt += formatList(age.value, 'Age');
 
-            prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
-
-            const foodLog = document.getElementById('calorie-food-log');
-            if (foodLog && foodLog.value) {
-                prompt += `Today's Food Log:\n${foodLog.value}\n\n`;
-            }
-            break;
 
         case 'trip':
             
@@ -264,7 +278,7 @@ break;
                 const selectedTripFormat = tripFormatReturn.querySelector('.grid-item.selected');
                 if (selectedTripFormat) {
                     const formatValue = selectedTripFormat.getAttribute('data-value');
-                    prompt += `Return the information in this format: ${formatValue}\n\n`;
+                    prompt += `Response should be in the followig format: ${formatValue}\n\n`;
                 }
 
                 const plans = document.getElementById('trip-plans');
