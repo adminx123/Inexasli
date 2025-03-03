@@ -39,89 +39,11 @@
 
         <!-- Personal Prompts -->
         <div id="personal-prompts" class="hidden">
-            <!-- 8. General Prompt -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2>General</h2>
-                    <span class="toggle-icon">+</span>
-                </div>
-                <div class="section-content">
-                    <div class="row">
-                        <textarea id="general-goal" rows="4"
-                            placeholder="Focus On:&#10;Planning an exciting hike&#10;Sales data&#10;Restaurants within 6km of LA city center"></textarea>
-                    </div>
-
-                    <div class="row">
-                        <div class="grid-container" id="general-purpose">
-
-                            <div class="grid-item" data-value="Identifying Trends and Patterns">Identifying Trends and Patterns</div>
-<div class="grid-item" data-value="Improving Decision-Making">Improving Decision-Making</div>
-<div class="grid-item" data-value="Problem Identification">Problem Identification</div>
-<div class="grid-item" data-value="Enhancing Performance and Efficiency">Enhancing Performance and Efficiency</div>
-<div class="grid-item" data-value="Predicting Future Outcomes">Predicting Future Outcomes</div>
-<div class="grid-item" data-value="Measuring Success and KPIs">Measuring Success and KPIs</div>
-<div class="grid-item" data-value="Personalization and Targeting">Personalization and Targeting</div>
-<div class="grid-item" data-value="Market Research and Competitor Analysis">Market Research and Competitor Analysis</div>
-<div class="grid-item" data-value="Cost Reduction and Resource Allocation">Cost Reduction and Resource Allocation</div>
-<div class="grid-item" data-value="Ensuring Compliance and Risk Management">Ensuring Compliance and Risk Management</div>
-
-
-
-
-
-
-
-
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="row">
-                        <textarea id="general-context" rows="5"
-                            placeholder="General Context:(1 per line)&#10;I’m hiking in Colorado&#10;Prefer trails under 5 miles&#10;Need dog-friendly options&#10;Fitness level of hiking group"></textarea>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="grid-container" id="general-info-return">
-
-                            <div class="grid-item" data-value="narrative">Return Narrative Format</div>
-                            <div class="grid-item" data-value="faq">Return FAQ Format</div>
-                            <div class="grid-item" data-value="table">Return Table Format</div>
-                            <div class="grid-item" data-value="checklist">Return Checklist Format</div>
-                            <div class="grid-item" data-value="step-by-step">Return Step-by-Step Format</div>
-                            <div class="grid-item" data-value="q-and-a">Return Q&A Format</div>
-                            <div class="grid-item" data-value="summary">Return Summary Format</div>
-                            <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
-                            <div class="grid-item" data-value="timeline">Return Timeline Format</div>
-                            <div class="grid-item" data-value="json">Return JSON Format</div>
-                        </div>
-                    </div>
-
-
-
-
-                    <button class="generate-btn" data-prompt="general">Generate Prompt</button>
-                </div>
-            </div>
-
-            <!-- 5. Budget Management Prompt -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Budget Management</h2>
-                    <span class="toggle-icon">+</span>
-                </div>
-                <div class="section-content">
-                    <p>Utilize the Budget calculator to manage your budget. (COMING SOON)</p>
-                </div>
-            </div>
-
+          
             <!-- 1. Incident Analysis Prompt -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Social Incident Analysis</h2>
+                    <h2>Analysis - Social Incident</h2>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="section-content">
@@ -212,11 +134,94 @@
                     <button class="generate-btn" data-prompt="incident">Generate Prompt</button>
                 </div>
             </div>
+         
+
+            <!-- 5. Budget Management Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Budget Management</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <p>Utilize the Budget calculator to manage your budget. (COMING SOON)</p>
+                </div>
+            </div>
+
+          
+
+
+   <!-- 8. General Prompt -->
+   <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>General</h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content">
+        <div class="row">
+            <textarea id="general-goal" rows="4"
+                placeholder="Focus On:&#10;Planning an exciting hike&#10;Sales data&#10;Restaurants within 6km of LA city center"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="grid-container" id="general-purpose">
+
+                <div class="grid-item" data-value="Identifying Trends and Patterns">Identifying Trends and Patterns</div>
+<div class="grid-item" data-value="Improving Decision-Making">Improving Decision-Making</div>
+<div class="grid-item" data-value="Problem Identification">Problem Identification</div>
+<div class="grid-item" data-value="Enhancing Performance and Efficiency">Enhancing Performance and Efficiency</div>
+<div class="grid-item" data-value="Predicting Future Outcomes">Predicting Future Outcomes</div>
+<div class="grid-item" data-value="Measuring Success and KPIs">Measuring Success and KPIs</div>
+<div class="grid-item" data-value="Personalization and Targeting">Personalization and Targeting</div>
+<div class="grid-item" data-value="Market Research and Competitor Analysis">Market Research and Competitor Analysis</div>
+<div class="grid-item" data-value="Cost Reduction and Resource Allocation">Cost Reduction and Resource Allocation</div>
+<div class="grid-item" data-value="Ensuring Compliance and Risk Management">Ensuring Compliance and Risk Management</div>
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <textarea id="general-context" rows="5"
+                placeholder="General Context:(1 per line)&#10;I’m hiking in Colorado&#10;Prefer trails under 5 miles&#10;Need dog-friendly options&#10;Fitness level of hiking group"></textarea>
+        </div>
+
+
+        <div class="row">
+            <div class="grid-container" id="general-info-return">
+
+                <div class="grid-item" data-value="narrative">Return Narrative Format</div>
+                <div class="grid-item" data-value="faq">Return FAQ Format</div>
+                <div class="grid-item" data-value="table">Return Table Format</div>
+                <div class="grid-item" data-value="checklist">Return Checklist Format</div>
+                <div class="grid-item" data-value="step-by-step">Return Step-by-Step Format</div>
+                <div class="grid-item" data-value="q-and-a">Return Q&A Format</div>
+                <div class="grid-item" data-value="summary">Return Summary Format</div>
+                <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
+                <div class="grid-item" data-value="timeline">Return Timeline Format</div>
+                <div class="grid-item" data-value="json">Return JSON Format</div>
+            </div>
+        </div>
+
+
+
+
+        <button class="generate-btn" data-prompt="general">Generate Prompt</button>
+    </div>
+</div>
 
             <!-- 7. Event Planning Prompt -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Event Planning</h2>
+                    <h2>Plan - Event</h2>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="section-content">
@@ -312,21 +317,7 @@
                     </div>
 
 
-                    <div class="row">
-                        <div class="grid-container" id="event-format-return">
-
-                            <div class="grid-item" data-value="narrative">Return Narrative Format</div>
-                            <div class="grid-item" data-value="faq">Return FAQ Format</div>
-                            <div class="grid-item" data-value="table">Return Table Format</div>
-                            <div class="grid-item" data-value="checklist">Return Checklist Format</div>
-                            <div class="grid-item" data-value="step-by-step">Return Step-by-Step Format</div>
-                            <div class="grid-item" data-value="q-and-a">Return Q&A Format</div>
-                            <div class="grid-item" data-value="summary">Return Summary Format</div>
-                            <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
-                            <div class="grid-item" data-value="timeline">Return Timeline Format</div>
-                            <div class="grid-item" data-value="json">Return JSON Format</div>
-                        </div>
-                    </div>
+                    
 
                     <button class="generate-btn" data-prompt="event">Generate Prompt</button>
                 </div>
@@ -335,7 +326,7 @@
             <!-- 2. Fitness Plan Prompt -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Fitness Plan</h2>
+                    <h2>Plan - Fitness</h2>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="section-content">
@@ -394,50 +385,10 @@
                 </div>
             </div>
 
-           <!-- 3. Calorie Counter Prompt -->
-<div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-        <h2>Calorie & Macronutrient Monitor</h2>
-        <span class="toggle-icon">+</span>
-    </div>
-    <div class="section-content">
-        <div class="row">
-            <div class="grid-container" id="calorie-goal">
-                <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
-                <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
-                <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
-                <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="grid-container" id="calorie-activity">
-                <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
-                <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
-                <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5 days/week)</div>
-                <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
-                <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <textarea id="calorie-weight" rows="1" placeholder="Weight:"></textarea>
-            <textarea id="calorie-height" rows="1" placeholder="Height:"></textarea>
-            <textarea id="calorie-age" rows="1" placeholder="Age:"></textarea>
-            <textarea id="calorie-food-log" rows="3" placeholder="Meals:&#10;Chicken breast 200g with rice 1cup&#10;Potato 100g with broccoli 150g"></textarea>
-        </div>
-
-        <button class="generate-btn" data-prompt="calorie" onclick="generateCaloriePrompt()">Generate Prompt</button>
-    </div>
-</div>
-
-
-
-
-            <!-- 4. Trip Planner Prompt -->
-            <div class="section">
+             <!-- 4. Trip Planner Prompt -->
+             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Trip Planner</h2>
+                    <h2>Plan -  Trip</h2>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="section-content">
@@ -528,6 +479,48 @@
                     <button class="generate-btn" data-prompt="trip">Generate Prompt</button>
                 </div>
             </div>
+
+           <!-- 3. Calorie Counter Prompt -->
+<div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>Monitor - Calorie & Macronutrients</h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content">
+        <div class="row">
+            <div class="grid-container" id="calorie-goal">
+                <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
+                <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
+                <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
+                <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="grid-container" id="calorie-activity">
+                <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
+                <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
+                <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5 days/week)</div>
+                <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
+                <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <textarea id="calorie-weight" rows="1" placeholder="Weight:"></textarea>
+            <textarea id="calorie-height" rows="1" placeholder="Height:"></textarea>
+            <textarea id="calorie-age" rows="1" placeholder="Age:"></textarea>
+            <textarea id="calorie-food-log" rows="3" placeholder="Meals:&#10;Chicken breast 200g with rice 1cup&#10;Potato 100g with broccoli 150g"></textarea>
+        </div>
+
+        <button class="generate-btn" data-prompt="calorie" onclick="generateCaloriePrompt()">Generate Prompt</button>
+    </div>
+</div>
+
+
+
+
+           
         </div>
 
         <!-- Business Prompts -->
@@ -624,7 +617,7 @@
             <!-- 1. App Development Prompt -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <h2>App Development</h2>
+                    <h2>Design - App</h2>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="section-content">
@@ -679,7 +672,7 @@
             <!-- 3. Business Strategy Prompt -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Business Strategy</h2>
+                    <h2>Strategy - New Business</h2>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="section-content">
@@ -707,7 +700,7 @@
             <!-- 2. Marketing Campaign Prompt -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Marketing Campaign</h2>
+                    <h2>Design - Marketing Campaign</h2>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="section-content">

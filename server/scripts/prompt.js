@@ -1,3 +1,15 @@
+ /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */
+
+
+
 let activeScope = null;
 
 function toggleSection(header) {
@@ -134,9 +146,9 @@ function generatePrompt(promptType) {
         case 'event':
             const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
             if (eventTypesSelected.length > 0) {
-                prompt += formatGrid('#event-types .grid-item.selected', 'Consider the following input relative to my goal');
+                prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event');
 
-                prompt += 'Purpose of analysis: To create a logical checklist walkthrough for hosting an event\n\n';
+                prompt += 'Purpose of Analysis: To develop a clear, logical checklist for hosting a feasible event based on the provided details. If the event is not feasible given the inputted data (such as budget, guest count, or timeline), this will be stated immediately, along with an estimate of what adjustments or additional resources are necessary to make the event possible.\n\n';
 
                 const eventFormatReturn = document.getElementById('event-format-return');
                 const selectedFormatEvent = eventFormatReturn?.querySelector('.grid-item.selected');
