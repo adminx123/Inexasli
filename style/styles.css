@@ -1,81 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
+
 * {
+  /* margin: 0; */
   padding: 0;
-  box-sizing: border-box; /* From both, consolidated */
-  /* margin: 0; remains commented out as in original */
-}
-
-body {
-  font-family: "Roboto", sans-serif;
-  background-color: #000;
-  color: #000;
-  text-align: left;
-  margin: 20px;
-  padding: 20px; /* From first CSS */
-  line-height: 1.6; /* From first CSS */
-}
-
-h1{
-  font-family: "Montserrat", sans-serif;
-  margin: 0;
-  /* From first CSS’s h1, applied broadly */
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 30px;
-  font-weight: 500;
-  color: rgb(7, 7, 7);
-  /* From second CSS’s h2 */
-  margin-top: 10px; /* Non-conflicting with margin-bottom */
-}
-
-h2{
-  font-family: "Montserrat", sans-serif;
-  margin: 0;
-  /* From first CSS’s h1, applied broadly */
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 30px;
-  font-weight: 500;
-  color: rgb(0, 0, 0);
-  /* From second CSS’s h2 */
-  margin-top: 10px; /* Non-conflicting with margin-bottom */
-}
-
-h3{
-  font-family: "Montserrat", sans-serif;
-  margin: 0;
-  /* From first CSS’s h1, applied broadly */
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 30px;
-  font-weight: 500;
-  color: white;
-  /* From second CSS’s h2 */
-  margin-top: 10px; /* Non-conflicting with margin-bottom */
-}
-
-h4 {
-  font-family: "Montserrat", sans-serif;
-  margin: 0;
-  /* From first CSS’s h1, applied broadly */
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 30px;
-  font-weight: 500;
-  color: white;
-  /* From second CSS’s h2 */
-  margin-top: 10px; /* Non-conflicting with margin-bottom */
-}
-
-h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
-  font-size: 10px;
+  box-sizing: border-box;
 }
 
 #frequency {
   margin-top: 10px;
 }
-
 .checkbox-wrapper-2 .ikxBAC {
   appearance: none;
   background-color: #dfe1e4;
@@ -88,6 +22,125 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
   width: 30px;
 }
 
+.modal {
+  display: none;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 3%;
+  left: 3%;
+  right: 3%;
+  bottom: 3%;
+  justify-content: stretch;
+  align-items: stretch;
+  padding: 30px;
+  z-index: 1000; /* or any value higher than other elements but not too high */
+
+}
+
+
+.modal-content {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 10px;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.modal-content button {
+  align-self: flex-end;
+}
+
+.roi-btn {
+  padding: 8px 12px ;
+  border-radius: 0;
+  margin-right: 10px;
+}
+
+#ROI_MODAL_OPEN {
+  color: rgb(14, 72, 92);
+  cursor: pointer;
+}
+
+#ROI-modal {
+  display: none;
+  overflow-y: scroll;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+ 
+  padding: 30px;
+  
+}
+
+
+
+.warning-parent {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff00;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.warning-content {
+  background-color: white;
+  width: 92%;
+  max-width: 600px;
+  padding: 10px;
+  min-height: 200px;
+  height: auto;
+  max-height: 550px;
+  border-radius: 20px;
+  border: 1px solid #dddddd;
+  box-shadow: 5px 5px  10px rgba(0, 0, 0, 0.05);
+
+}
+
+#debt-parent, #depandant-parent {
+  display: none;
+}
+
+#debt-parent h2, #depandant-parent h2{
+  width: 100%;
+}
+
+.warning-content h2 {
+  font-size: 2rem;
+}
+
+.warning-close-btn {
+  padding: 10px 20px;
+  border-radius: 0;
+  font-weight: bold;
+  float: right;
+}
+.warning-close-btn:hover  {
+filter: opacity(90%);
+}
+
+
+
+
+
+
+
+
+@media (min-width: 800px) {
+  .modal {
+    padding: 50px;
+  }
+}
+
 .checkbox-wrapper-2 .ikxBAC::before {
   bottom: -6px;
   content: "";
@@ -97,7 +150,8 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
   top: -6px;
 }
 
-.checkbox-wrapper-2 .ikxBAC, .checkbox-wrapper-2 .ikxBAC::after {
+.checkbox-wrapper-2 .ikxBAC,
+.checkbox-wrapper-2 .ikxBAC::after {
   transition: all 100ms ease-out;
 }
 
@@ -138,223 +192,33 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
   background-color: #000000;
 }
 
-input[type="number"], input, select {
+input[type="number"],
+input,
+select {
   text-align: center;
-  padding: 4px;
+  padding: 4px ;
   outline: none;
   border: solid 1px #7c7c7c;
   background-color: transparent;
 }
 
-input[type="number"]:focus, input:focus {
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+}
+input[type="number"]:focus,
+input:focus {
   border-color: #242323;
 }
 
-input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   appearance: none;
   margin: 0;
-}
-
-input:not([type="date"]), textarea, select {
-  font-size: 17px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  width: 100%; /* From first CSS */
-  padding: 10px; /* From first CSS */
-  border: 1px solid #7c7c7c; /* From first CSS, matches second */
-  border-radius: 5px; /* From first CSS */
-  background-color: transparent; /* From first CSS, matches second */
-}
-
-select {
-  appearance: none;
-  text-align-last: center;
-}
-
-textarea {
-  resize: vertical; /* From first CSS */
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  row-gap: 10px;
-  /* From first CSS */
-  margin-bottom: 15px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-left: 1px;
-  padding-right: 1px;
-}
-
-.row input[type="number"] {
-  margin-right: 15px;
-}
-
-@media (max-width: 700px) {
-  .row {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .row label, .row div {
-    flex-grow: 1;
-    flex-shrink: 0;
-    flex-basis: 100%;
-  }
-
-  .row > input, .row select {
-    box-sizing: border-box;
-    margin: 0;
-    width: 100%;
-  }
-}
-
-label, input[type="number"], select {
-  flex: 1;
-}
-
-label {
-  display: block;
-  font-size: 14px; /* From first CSS */
-  margin-bottom: 5px; /* From first CSS */
-  font-weight: 500; /* From first CSS */
-}
-
-@media (max-width: 768px) {
-  label, input[type="number"], select {
-    width: 100%;
-    margin-right: 0;
-  }
-}
-
-button {
-  background-color: #000000;
-  color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  display: block; /* From first CSS */
-  width: 100%; /* From first CSS */
-  padding: 12px; /* From first CSS */
-  transition: background-color 0.2s ease; /* From first CSS */
-}
-
-button:hover {
-  background-color: #333; /* From first CSS */
-}
-
-.modal {
-  display: none;
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.5);
-  top: 3%;
-  left: 3%;
-  right: 3%;
-  bottom: 3%;
-  justify-content: stretch;
-  align-items: stretch;
-  padding: 30px;
-  z-index: 1000;
-}
-
-@media (min-width: 800px) {
-  .modal {
-    padding: 50px;
-  }
-}
-
-.modal-content {
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px 10px;
-  gap: 20px;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
-
-.modal-content button {
-  align-self: flex-end;
-}
-
-#ROI-modal {
-  display: none;
-  overflow-y: scroll;
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.5);
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 30px;
-}
-
-.roi-btn {
-  padding: 8px 12px;
-  border-radius: 0;
-  margin-right: 10px;
-}
-
-#ROI_MODAL_OPEN {
-  color: rgb(14, 72, 92);
-  cursor: pointer;
-}
-
-.warning-parent {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ffffff00;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.warning-content {
-  background-color: white;
-  width: 92%;
-  max-width: 600px;
-  padding: 10px;
-  min-height: 200px;
-  height: auto;
-  max-height: 550px;
-  border-radius: 20px;
-  border: 1px solid #dddddd;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
-}
-
-.warning-content h2 {
-  font-size: 2rem;
-}
-
-#debt-parent, #depandant-parent {
-  display: none;
-}
-
-#debt-parent h2, #depandant-parent h2 {
-  width: 100%;
-}
-
-.warning-close-btn {
-  padding: 10px 20px;
-  border-radius: 0;
-  font-weight: bold;
-  float: right;
-}
-
-.warning-close-btn:hover {
-  filter: opacity(90%);
 }
 
 .nav-div {
@@ -363,13 +227,26 @@ button:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  
 }
 
-.alert {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
+h2 {
+  margin-top: 10px;
 }
+
+/* .nav-left {
+
+} */
+
+/* .nav-right {
+} */
+
+
+.alert {
+  display: block; width: 100%; margin: 10px 0 ;
+}
+
 
 .nav-inner {
   transform: scale(1.5);
@@ -380,12 +257,16 @@ button:hover {
   background-color: transparent;
   margin: -5px 0;
   overflow: hidden;
+
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
 .nav-btn span {
+
   font-size: 40px;
 }
+
+  /* text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2); */
 
 .nav-btn:hover {
   color: #f8f8f8;
@@ -404,7 +285,7 @@ button:hover {
   min-height: 100px;
   display: flex;
   flex-direction: column;
-  padding: 15px;
+  padding:  15px;
   align-items: start;
   justify-content: space-between;
 }
@@ -439,7 +320,13 @@ button:hover {
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
+.row input[type = 'number'] {
+  margin-right: 15px;
+}
+
 .cookie-container button:hover {
+  /* background-color: #3078ec;
+  */
   box-shadow: none;
   background-color: transparent;
   border: solid 2px #000000;
@@ -453,29 +340,75 @@ button:hover {
 }
 
 .result-parent {
-  padding-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-top: 20px;
+  padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;
+}
+
+
+
+
+.percent-input {
+  max-width: 75px;
+  display: none;
+
+
+}
+
+.percent-input:invalid {
+  border: 1px solid red;
+
+}
+
+.percent-input:focus:invalid {
+  border: 1px solid red;
+
 }
 
 @media (max-width: 700px) {
+  .row {
+    flex-direction: row;
+    /* display: flex; */
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 10px;
+    
+  }
+
   .result-parent {
     flex-direction: column;
     align-items: start;
     gap: 0;
     padding-top: 0;
   }
+ 
+
+  .row label, .row div {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 100%;
+  }
+
+  .row > input,
+  .row select {
+    /* color: #1863dc; */
+    /* max-width: 100%; */
+    box-sizing: border-box;
+    margin: 0;
+    width: 100%;
+  }
 }
 
-.percent-input {
-  max-width: 75px;
-  display: none;
+input:not([type="date"]),
+textarea,
+select {
+  font-size: 17px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
-.percent-input:invalid, .percent-input:focus:invalid {
-  border: 1px solid red;
+select {
+  appearance: none;
+  text-align-last: center;
 }
 
 .contact-support {
@@ -490,42 +423,84 @@ button:hover {
   margin-top: 20px;
 }
 
+/* Modal styles */
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #000;
+  color: #000;
+  text-align: left;
+  margin: 20px;
+}
+
+
 a {
   display: block;
   width: fit-content;
   margin: 0 auto;
 }
 
+/* Specific styling for the inline <a> */
 .inline-link {
-  display: inline;
-  width: auto;
-  margin: 0;
-  text-decoration: underline;
-  color: #007bff;
+  display: inline; /* Keeps the link inline with the text */
+  width: auto; /* Resets the width to fit the content naturally */
+  margin: 0; /* Removes any centering or margins */
+  text-decoration: underline; /* Optional: Ensures the link is visually distinct */
+  color: #007bff; /* Optional: Style the link color */
 }
 
 .form-row {
+  display: flex; /* Make the container a flex container */
+  align-items: center; /* Vertically center the label and select */
+  gap: 10px; /* Optional: Adds space between the label and select */
+}
+
+.row {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: center; /* Align items vertically */
+  margin-top: 10px;
+  /* gapx: 50px; */
+  row-gap: 10px;
+}
+
+label,
+input[type="number"],
+select {
+  flex: 1; /* Equal width for all elements */
+  /* margin-right: 10px; */
 }
 
 details div *, details * {
   margin-bottom: 10px;
 }
 
-.tooltip {
-  font-style: normal;
+button {
+  background-color: #000000;
+  color: white;
+  /* padding: 10px 20px; */
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
-  position: relative;
-  display: inline-block;
-  font-size: 10px;
 }
 
+
+
+/* Media Query for smaller screens (e.g., mobile) */
+@media (max-width: 768px) {
+  label,
+  input[type="number"],
+  select {
+    width: 100%; /* Set width to 100% for smaller screens */
+    margin-right: 0; /* Remove margin between elements */
+  }
+}
+
+/* Tooltip text */
 .tooltip .tooltiptext {
-  display: none;
-  visibility: hidden;
-  width: 200px;
+  display: none; /* Hide the tooltip */
+  visibility: hidden; /* Initially hidden */
+  width: 200px; /* Adjust width as needed */
   background-color: #333;
   color: #fff;
   text-align: center;
@@ -533,45 +508,11 @@ details div *, details * {
   padding: 5px 0;
   position: absolute;
   z-index: 1;
-  bottom: 125%;
+  bottom: 125%; /* Adjust positioning as needed */
   left: 50%;
   margin-left: -100px;
   opacity: 0;
   transition: opacity 0.3s;
-}
-
-.tooltip-content {
-  font-weight: normal;
-  display: none;
-  position: absolute;
-  bottom: 95%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  width: max-content;
-  max-width: 300px;
-  color: #fff;
-  padding: 8px;
-  border-radius: 5px;
-  font-size: 12px;
-  z-index: 1000;
-  opacity: 0;
-}
-
-.tooltip.show .tooltip-content {
-  display: block;
-  opacity: 1;
-}
-
-@media (max-width: 400px) {
-  .tooltip.show .tooltip-content {
-    bottom: 80%;
-    max-width: 50vw;
-    font-size: 10px;
-  }
-  #results {
-    display: block;
-  }
 }
 
 .numeric-input {
@@ -583,12 +524,15 @@ details div *, details * {
 }
 
 .container {
-  background-color: #fff;
-  color: #000;
+  background-color: #fff; /* White background for contrast */
+  color: #000; /* Black text for readability */
   max-width: 800px;
   margin: 0 auto;
-  border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px; /* Rounded corners on bottom only to accommodate tabs */
+  
+  /* Initial shadow */
   box-shadow: 3px 3px 5px rgba(80, 80, 80, 0.2);
+  
   text-align: left;
   display: flex;
   padding: 0 15px;
@@ -597,28 +541,33 @@ details div *, details * {
   flex-direction: column;
   align-items: stretch;
   box-sizing: border-box;
+  
+  /* Add transition for smooth effect */
   transition: all 0.3s ease;
-  /* From first CSS */
-  padding: 20px; /* Note: Conflicts with second CSS’s padding */
 }
 
+/* Hover effect for desktop */
 .container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(80, 80, 80, 0.4);
+  transform: translateY(-5px); /* Slight lift */
+  box-shadow: 0 8px 15px rgba(80, 80, 80, 0.4); /* Bigger shadow for more depth */
 }
 
+/* Active effect for touch devices or when clicked */
 .container:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 5px rgba(80, 80, 80, 0.3);
+  transform: translateY(1px); /* Press down effect */
+  box-shadow: 0 2px 5px rgba(80, 80, 80, 0.3); /* Smaller shadow to mimic being pressed */
 }
 
 .containerround {
-  background-color: #fff;
-  color: #000;
+  background-color: #fff; /* White background for contrast */
+  color: #000; /* Black text for readability */
   max-width: 800px;
   margin: 10px auto;
   border-radius: 5px;
+  
+  /* Initial shadow */
   box-shadow: 3px 3px 5px rgba(174, 173, 173, 0.2);
+  
   text-align: left;
   display: flex;
   padding: 0 15px;
@@ -627,18 +576,22 @@ details div *, details * {
   flex-direction: column;
   align-items: stretch;
   box-sizing: border-box;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #e0e0e0; /* Light border for edge definition */
+  
+  /* Add transition for smooth effect */
   transition: all 0.3s ease;
 }
 
+/* Hover effect for desktop */
 .containerround:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(174, 173, 173, 0.4);
+  transform: translateY(-5px); /* Slight lift */
+  box-shadow: 0 8px 15px rgba(174, 173, 173, 0.4); /* Bigger shadow for more depth */
 }
 
+/* Active effect for touch devices or when clicked */
 .containerround:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 5px rgba(174, 173, 173, 0.3);
+  transform: translateY(1px); /* Press down effect */
+  box-shadow: 0 2px 5px rgba(174, 173, 173, 0.3); /* Smaller shadow to mimic being pressed */
 }
 
 .hidden {
@@ -664,7 +617,9 @@ details div *, details * {
   width: 100%;
   max-width: 450px;
   gap: 10px;
+  /* align-items: flex-start; */
 }
+
 
 .delete-div {
   width: 100%;
@@ -674,20 +629,23 @@ details div *, details * {
   justify-content: flex-end;
   align-items: center;
 }
-
 .delete-div button {
   background-color: #000;
-  padding: 10px;
+  padding: 10px ;
   border-radius: 0;
+  
 }
 
 .delete-div button:hover {
   background-color: #222222;
+  
 }
 
 .delete-div button:active {
   background-color: #000000;
+  
 }
+
 
 .payment-input {
   padding: 10px 5px 10px 5px;
@@ -708,9 +666,67 @@ details div *, details * {
   min-width: 50px;
 }
 
+/* <span class=" tooltip" data-tooltip="This is my tooltip 2">ÃƒÂ¢Ã¢â‚¬Å“Ã‹Å“
+<span class="tooltip-content"></span>
+</span> */
+
+/* <script src="/server/scripts/toolTip.js"></script> */
+
+/* other tooltips effects iii logo and everything except heading icons */
+.tooltip {
+  font-style: normal;
+  cursor: pointer;
+  /* font-weight: bold; */
+  /* font-size: 2rem; */
+  position: relative;
+  display: inline-block;
+  font-size: 10px;
+  
+
+}
+/* tooltip icon on headings Only */
+h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
+  font-size: 10px;
+}
+
+.tooltip-content {
+  font-weight: normal;
+  display: none;
+  position: absolute;
+  bottom: 95%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  width:max-content;
+  max-width: 300px;
+  color: #fff;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  z-index: 1000;
+  opacity: 0;
+}
+
+.tooltip.show .tooltip-content {
+  display: block;
+  opacity: 1;
+}
+
+@media (max-width: 400px) {
+  .tooltip.show .tooltip-content {
+  bottom: 80%;
+    max-width: 50vw;
+    font-size: 10px;
+  }
+  #results {
+    display: block;
+  }
+}
+
+
 .tab-container {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Center-align tabs */
   gap: 5px;
   max-width: 800px;
   margin: 20px auto 0;
@@ -727,138 +743,143 @@ details div *, details * {
 
 .tab {
   text-decoration: none;
-  flex: 1;
+  flex: 1; /* Make each tab equally spaced */
   padding: 5px 1px;
+   /* Adjust padding as needed */
   cursor: pointer;
   background-color: black;
-  border: 1px solid;
+  border: 1px solid; /* Adjust border thickness as needed */
   border-radius: 5px 5px 0 0;
-  color: white;
-  box-sizing: border-box;
+  /* margin: 0 5px;  */
+  /* Adjust spacing between tabs */
+  color: white; /* Set the text color to white */
+  /*text-align: center; /* Center-align text within the tab */
+  box-sizing: border-box; /* Include padding and border in the width */
   font-size: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 12px;
   font-weight: normal;
 }
-
+/* Style for the active tab */
 .active {
   border: solid 1px white;
+  /* cursor:default; */
   background-color: white;
-  color: black;
+  color: black; /* Set the text color of the active tab to black */
 }
 
-#addToHomeScreenBanner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50px;
-  background-color: #000;
-  color: #fff;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px;
-}
 
-#addToHomeScreenBanner p {
-  margin: 0;
-}
+   #addToHomeScreenBanner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        background-color: #000;
+        color: #fff;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px;
+      }
 
-#addToHomeScreenBanner button {
-  background-color: white;
-  color: black;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+      #addToHomeScreenBanner p {
+        margin: 0;
+      }
 
-.special-label {
-  margin-right: -10px;
-}
+      #addToHomeScreenBanner button {
+        background-color: white;
+        color: black;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
-.special {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
+      
 
-.special * {
-  width: 100%;
-}
+     .special-label {
+      margin-right: -10px;
+     }
 
-.box-checkbox {
-  width: 100%;
-  height: 50px;
-  text-wrap: wrap;
-  background-color: #f0f0f0;
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  font-size: 15px;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2); /* Fixed typo "px" to "1px" */
-  cursor: pointer;
-  margin: 0 !important;
-}
 
-input[type="checkbox"]:checked ~ .box-checkbox {
-  background-color: #000;
-  color: #f0f0f0;
-}
+      .special {
+        /* border: 1px solid; */
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      
+      .special * {
+        width: 100%;
+      }
 
-.checkboxes-parent {
-  display: flex;
-  justify-content: stretch;
-  flex-direction: column;
-  row-gap: 20px;
-  padding: 0px 0;
-}
+      .box-checkbox {
+        width: 100%;
+        height: 50px;
+        text-wrap: wrap;
+        background-color: #f0f0f0;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        font-size: 15px;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 1px px 10px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        margin: 0 !important;
+      }
 
-.checkboxes-parent > div {
-  display: flex;
-  width: 100%;
-  margin: 0;
-  justify-content: stretch;
-  align-items: stretch;
-}
+input[type="checkbox"]:checked ~   .box-checkbox {
+        background-color: #000;
+        color: #f0f0f0;
+      }
+
+
+      .checkboxes-parent {
+        display: flex;
+        justify-content: stretch;
+        flex-direction: column;
+        row-gap: 20px;
+        padding: 0px 0;
+      }
+
+      .checkboxes-parent > div {
+        display: flex;
+        width: 100%;
+        margin: 0;
+        justify-content: stretch;
+        align-items: stretch;
+      }
+
+
 
 .grid-container {
-    display: grid; /* Same in both */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Updated from 150px to 200px (second CSS) */
-    gap: 0.5rem; /* Updated from 10px to 0.5rem (second CSS) */
-    margin-bottom: 20px; /* Same in both */
-}
-
-.grid-item {
-  padding: 1rem; /* Updated from 10px to 1rem (second CSS) */
-  background-color: #f0f0f0; /* Same in both */
-  border-radius: 5px; /* Updated from 3px to 5px (second CSS) */
-  text-align: center; /* Same in both */
-  cursor: pointer; /* Same in both */
-  font-size: 14px; /* Same in first, second CSS has no direct match */
-  transition: background-color 0.3s ease; /* Updated from 0.2s to 0.3s (second CSS) */
-}
-
-.grid-item.selected {
-  background-color: #000;
-  color: #fff;
-}
-
-@media (max-width: 375px) {
-  .grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  }
-}
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.5rem;
+    }
+    .grid-item {
+      background-color: #f0f0f0;
+      color: #000;
+      padding: 1rem;
+      border-radius: 5px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .grid-item.selected {
+      background-color: #000;
+      color: #fff;
+    }
 
 .benefits {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin: 20px auto;
   max-width: 1000px;
@@ -866,12 +887,12 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 }
 
 .benefit-card {
-  background-color: #f8f8f8;
-  border: 1px solid #e0e0e0;
+  background-color: #f8f8f8; /* Slightly off-white for a subtle highlight */
+  border: 1px solid #e0e0e0; /* Light border for enclosure */
   border-radius: 5px;
   padding: 1rem;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Very light shadow for depth */
   transition: all 0.3s ease;
 }
 
@@ -886,6 +907,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   margin-bottom: 0;
 }
 
+/* Optional: Hover effect for interactivity */
 .benefit-card:hover {
   background-color: #f0f0f0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -898,6 +920,13 @@ input[type="checkbox"]:checked ~ .box-checkbox {
     max-width: 100vw;
     padding: 0;
   }
+}
+
+@media (max-width: 375px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+  
 }
 
 @media (max-width: 360px) {
@@ -922,15 +951,18 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   padding-bottom: 10px;
 }
 
-.hoead-1 {
-  animation: fade 3s;
-  overflow: hidden;
-}
 
-.hoead-2 {
-  animation: fades 3s;
+.hoead-1  {
+  animation:  fade 3s ;
   overflow: hidden;
-  background-color: none;
+  
+}
+.hoead-2 {
+  animation:  fades 3s ;
+  overflow: hidden;
+background-color: none;
+  
+  
 }
 
 @keyframes fade {
@@ -938,34 +970,53 @@ input[type="checkbox"]:checked ~ .box-checkbox {
     opacity: 0;
     transform: translateY(-100px);
   }
+
   100% {
     opacity: 100%;
-    transform: translateY(0);
+  transform: translateY(0);
+
   }
+  
 }
+
 
 @keyframes fades {
   0% {
     opacity: 0;
     transform: translateY(-200px);
   }
+
+  /* 50% {
+    background-color: #ff00002f;
+  } */
+
   100% {
     opacity: 100%;
-    transform: translateY(0);
+  transform: translateY(0);
+
   }
+  
 }
 
+
+/* Show submenu when clicking the parent link */
+#calculations.active + #calculationsMenu {
+  display: block;
+  left: 100%; /* Slide in from right */
+}
+
+/* Hover behavior for CALCULATE */
 #calculations {
   position: relative;
 }
 
 #calculationsMenu {
   position: absolute;
-  top: 100%;
+  top: 100%; /* Ensure it appears directly below CALCULATE */
   left: 0;
   width: 100%;
   z-index: 10;
-  display: none;
+  display: none; /* Initially hidden */
 }
 
 #calculations.active + #calculationsMenu {
@@ -973,86 +1024,22 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   left: 100%;
 }
 
-.chatbot {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 300px;
-  border: 1px solid #ccc;
-  color: white;
-  background-color: #333;
+.chatbot { 
+  position: fixed; 
+  bottom: 20px; 
+  right: 20px; 
+  width: 300px; 
+  border: 1px solid #ccc; 
+  color: white; 
+  background-color: #333; 
 }
-
-.chat-toggle {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  color: white;
+.chat-toggle { 
+  position: fixed; 
+  bottom: 10px; 
+  right: 10px; 
+  color: white; 
 }
-
-.chat-input {
-  color: white;
-  background-color: #333;
-}
-
-/* New Styling from First CSS */
-.section {
-  margin-bottom: 2px;
-  padding: 1px;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  padding: 0px 0px 0 0px;
-  background-color: #fafafa;
-  border-radius: 1px;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1;
-  margin: 5px;
-}
-
-.toggle-icon {
-  font-size: 18px;
-  transition: transform 0.2s ease;
-}
-
-.section.expanded .toggle-icon {
-  transform: rotate(45deg);
-}
-
-.section-content {
-  display: none;
-  padding: 10px;
-}
-
-.section.expanded .section-content {
-  display: block;
-}
-
-#result {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #fafafa;
-  border-radius: 3px;
-  white-space: pre-wrap;
-  font-size: 14px;
-}
-
-#scope-selector {
-  grid-template-columns: 1fr 1fr;
-  max-width: 300px;
-  margin: 0 auto 20px;
-}
-
-#scope-selector .grid-item {
-  background-color: #f7f1f1;
-}
-
-#scope-selector .grid-item.selected {
-  background-color: #0e0e0e;
-  color: #f9f8f8;
+.chat-input { 
+  color: white; 
+  background-color: #333; 
 }
