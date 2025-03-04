@@ -421,22 +421,31 @@ document.querySelectorAll('.generate-btn').forEach(button => {
 });
 
 function openApp(appScheme, fallbackUrl) {
-    // Check if the device is Android or iOS
     var userAgent = navigator.userAgent || navigator.vendor || window.opera;
     var isAndroid = /android/i.test(userAgent);
     var isiOS = /iPhone|iPad|iPod/i.test(userAgent);
 
-    // If it's Android, try opening with the app scheme
+    // Store the current page to detect if the app launch fails
+    var startTime = Date.now();
+    var launched = false;
+
     if (isAndroid) {
-        window.location = "intent://" + appScheme + "#Intent;package=" + appScheme + ";end";
-    }
-    // If it's iOS, use the custom URL scheme for deep linking
-    else if (isiOS) {
-        window.location = "yourappscheme://" + appScheme;
+        // Correct intent syntax for Android
+        window.location.href = `intent://app/#Intent;package=${appScheme};end`;
+    } else if (isiOS) {
+        // Replace with the actual iOS URL scheme for Grok
+        window.location.href = `${appScheme}://`; // e.g., "grok://"
+    } else {
+        // Fallback for non-mobile devices
+        window.location.href = fallbackUrl;
+        return;
     }
 
-    // If the app isn't installed, redirect to the fallback URL (such as App Store or Google Play)
+    // Check if the app launched by monitoring focus
     setTimeout(function () {
-        window.location = fallbackUrl;
-    }, 3000);  // Wait for 3 seconds to see if the app opens; then fallback to URL
+        if (Date.now() - startTime < 2000) {
+            // If we're still on the page after 1.5s, assume app launch failed
+            window.location.href = fallbackUrl;
+        }
+    }, 1500);
 }
