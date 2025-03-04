@@ -143,15 +143,23 @@ textarea {
     margin-bottom: 20px; /* Same in both */
 }
 
-.grid-item {
-    padding: 1rem; /* Updated from 10px to 1rem (second CSS) */
-    background-color: #f0f0f0; /* Same in both */
-    border-radius: 5px; /* Updated from 3px to 5px (second CSS) */
-    text-align: center; /* Same in both */
-    cursor: pointer; /* Same in both */
-    font-size: 14px; /* Same in first, second CSS has no direct match */
-    transition: background-color 0.3s ease; /* Updated from 0.2s to 0.3s (second CSS) */
+#event-types {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Same as other grid containers */
+    max-width: 100%; /* Ensure it doesn’t exceed parent container width */
+    padding: 0 1rem; /* Optional, adjust if needed */
 }
+
+.grid-item {
+    padding: 1rem;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    word-wrap: break-word; /* Prevent overflow */
+}
+
 
 .grid-item.selected {
     background-color: #000; /* Updated from #060606 to #000 (second CSS) */
@@ -233,3 +241,4 @@ button:hover {
     object-fit: contain; /* Preserves logo aspect */
     display: block; /* No inline spacing */
 }
+
