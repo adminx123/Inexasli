@@ -11,12 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="#" id="calculations" class="menu-item">CALCULATE</a>
       <div class="submenu" id="calculationsMenu">
         <a href="/xxxxxx" id="vacation">Vacation</a>
-        <a href="/xxxxxx" id="personal">Personal</a>
+        <a href="/xxxxxx" id="personal">IncomeIQ™</a>
       </div>
       <a href="#" id="create" class="menu-item">CREATE</a>
       <div class="submenu" id="createMenu">
-        <a href="/create/prompt.html" id="website">Prompt</a>
-        <a href="/xxxxxx" id="other">Other</a>
+        <a href="/create/prompt.html" id="website">Promptify™</a>
       </div>
     </div>
   `;
@@ -84,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     .menu-item.active {
       font-weight: bold;
-      background-color: #333;
+      background-color: #000;
     }
     .submenu {
       display: none;
