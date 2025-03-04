@@ -143,46 +143,54 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'event':
-            const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
-            if (eventTypesSelected.length > 0) {
-                prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event');
-
-                prompt += 'Purpose of Analysis: To develop a clear, logical checklist for hosting a feasible event based on the provided details. If the event is not feasible given the inputted data (such as budget, guest count, or timeline), this will be stated immediately, along with an estimate of what adjustments or additional resources are necessary to make the event possible.\n\n';
-
-                const eventFormatReturn = document.getElementById('event-format-return');
-                const selectedFormatEvent = eventFormatReturn?.querySelector('.grid-item.selected');
-                if (selectedFormatEvent) {
-                    const formatValue = selectedFormatEvent.getAttribute('data-value');
-                    prompt += `Return the information in this format: ${formatValue}\n\n`;
-                }
-
-                const location = document.getElementById('event-location');
-                if (location?.value) {
-                    prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`;
-
-                    if (location.value === 'indoors') {
-                        prompt += formatGrid('#event-indoor-setup .grid-item.selected', 'Venue Setup Needs');
-                    } else {
-                        prompt += formatGrid('#event-weather .grid-item.selected', 'Weather Considerations');
+            case 'event':
+                const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
+                if (eventTypesSelected.length > 0) {
+                    prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event');
+            
+                    prompt += 'Purpose of Analysis: To generate a clear and actionable checklist with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event.';
+            
+            
+                    const eventFormatReturn = document.getElementById('event-format-return');
+                    const selectedFormatEvent = eventFormatReturn?.querySelector('.grid-item.selected');
+                    if (selectedFormatEvent) {
+                        const formatValue = selectedFormatEvent.getAttribute('data-value');
+                        prompt += `Return the information in this format: ${formatValue}\n\n`;
                     }
-
+            
                     prompt += formatGrid('#event-elements .grid-item.selected', 'Elements');
-
-                    const guests = document.getElementById('event-guests');
-                    if (guests?.value) prompt += formatList(guests.value, 'Guest Count');
-
-                    const budget = document.getElementById('event-budget');
-                    if (budget?.value) prompt += formatList(budget.value, 'Budget');
-
-                    const timeline = document.getElementById('event-timeline');
-                    if (timeline?.value) prompt += formatList(timeline.value, 'Timeline');
-
-                    const specificContext = document.getElementById('event-specific-context');
-                    if (specificContext?.value) prompt += `Context Dump: ${specificContext.value}\n\n`;
+            
+                    // Venue Section
+                    const venueStatus = document.getElementById('event-venue').value;
+                    if (venueStatus) {
+                        prompt += `Venue Status: ${venueStatus}\n\n`;
+                    }
+            
+                    const location = document.getElementById('event-location');
+                    if (location?.value) {
+                        prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`;
+            
+                        if (location.value === 'indoors') {
+                            prompt += formatGrid('#event-indoor-setup .grid-item.selected', 'Venue Setup Needs');
+                        } else {
+                            prompt += formatGrid('#event-outdoor .grid-item.selected', 'Setup Considerations');
+                        }
+            
+                        const guests = document.getElementById('event-guests');
+                        if (guests?.value) prompt += formatList(guests.value, 'Guest Count');
+            
+                        const budget = document.getElementById('event-budget');
+                        if (budget?.value) prompt += formatList(budget.value, 'Budget');
+            
+                        const timeline = document.getElementById('event-timeline');
+                        if (timeline?.value) prompt += formatList(timeline.value, 'Timeline');
+            
+                        const specificContext = document.getElementById('event-specific-context');
+                        if (specificContext?.value) prompt += `Context Dump: ${specificContext.value}\n\n`;
+                    }
                 }
-            }
-            break;
+                break;
+            
 
         case 'fitness':
             const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
@@ -371,6 +379,34 @@ Add 29 g more fats to meet your daily fat requirement.
                 if (milestones?.value) prompt += formatList(milestones.value, 'Milestones');
             }
             break;
+
+
+            case 'research':
+                prompt += formatList(document.getElementById('research-goal')?.value, 'Research Goal');
+                prompt += formatList(document.getElementById('research-purpose')?.value, 'Purpose of this research');
+                prompt += formatList(document.getElementById('research-type')?.value?.charAt(0).toUpperCase() + document.getElementById('research-type')?.value.slice(1), 'Type of research');
+                prompt += formatList(document.getElementById('research-scope')?.value, 'Scope of the research');
+                prompt += formatList(document.getElementById('data-collection-method')?.value, 'Data collection method');
+                prompt += formatList(document.getElementById('research-audience')?.value, 'Target audience for research');
+                prompt += formatList(document.getElementById('research-context')?.value, 'Context of research');
+                prompt += formatList(document.getElementById('research-deliverables')?.value, 'Expected deliverables');
+                prompt += formatList(document.getElementById('additional-details')?.value, 'Additional details');
+            
+                if (prompt) {
+                    // Show the generated prompt in the result div
+                    document.getElementById('result').textContent = prompt;
+            
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(prompt).then(() => alert('Prompt copied to clipboard!'));
+                } else {
+                    alert('Please fill in the necessary details for the research prompt.');
+                }
+                break;
+            
+            
+            
+
+
     }
 
     document.getElementById('result').textContent = prompt;
@@ -384,11 +420,23 @@ document.querySelectorAll('.generate-btn').forEach(button => {
     });
 });
 
-function openAIApp(appLink, fallbackUrl) {
-    window.location = appLink;
-    setTimeout(() => {
-        if (document.visibilityState === 'visible') {
-            window.location = fallbackUrl;
-        }
-    }, 1000);
+function openApp(appScheme, fallbackUrl) {
+    // Check if the device is Android or iOS
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    var isAndroid = /android/i.test(userAgent);
+    var isiOS = /iPhone|iPad|iPod/i.test(userAgent);
+
+    // If it's Android, try opening with the app scheme
+    if (isAndroid) {
+        window.location = "intent://" + appScheme + "#Intent;package=" + appScheme + ";end";
+    }
+    // If it's iOS, use the custom URL scheme for deep linking
+    else if (isiOS) {
+        window.location = "yourappscheme://" + appScheme;
+    }
+
+    // If the app isn't installed, redirect to the fallback URL (such as App Store or Google Play)
+    setTimeout(function () {
+        window.location = fallbackUrl;
+    }, 3000);  // Wait for 3 seconds to see if the app opens; then fallback to URL
 }
