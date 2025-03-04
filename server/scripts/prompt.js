@@ -450,24 +450,3 @@ function openApp(appScheme, fallbackUrl) {
     }, 1500);
 }
 
-function openGrok() {
-    var ua = navigator.userAgent.toLowerCase();
-    var isAndroid = ua.indexOf("android") > -1;
-    var isIOS = /iphone|ipad|ipod/.test(ua);
-    var fallbackUrl = "https://grok.x.ai";
-
-    if (isAndroid) {
-        window.location.href = "intent://#Intent;package=com.xai.grok;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;end";
-    } else if (isIOS) {
-        window.location.href = "grok://";
-    } else {
-        window.location.href = fallbackUrl;
-        return;
-    }
-
-    setTimeout(function() {
-        if (document.hasFocus()) { // If still on page, app didn’t open
-            window.location.href = fallbackUrl;
-        }
-    }, 1500);
-}
