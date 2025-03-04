@@ -17,7 +17,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promptify</title>
+    <title>Promptlets</title>
     <link rel="stylesheet" href="/style/styleprompt.css">
     
 
@@ -29,8 +29,9 @@
     </a>
 
 
+    <h2 style="text-align: center;font-size: 16px; color: white;">Prompify™</h2>
 
-    <h2 style="text-align: center;font-size: 16px; color: white;">Promptify</h2>
+    <h2 style="text-align: center;font-size: 12px; color: white;">Prompt - Optimized Templates for Efficient & Effective AI Communication</h2>
 
 
     <div class="container">
@@ -618,31 +619,48 @@
 
 
               <!-- 2. Marketing Campaign Prompt -->
-              <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Design - Marketing Campaign</h2>
-                    <span class="toggle-icon">+</span>
-                </div>
-                <div class="section-content">
-                    <div class="row">
-                        <textarea id="market-goal" rows="4" placeholder="e.g., increase sales"></textarea>
-                    </div>
-                    <div class="row">
-                        <div class="grid-container" id="market-channels">
-                            <div class="grid-item" data-value="Social Media">I Use Social Media</div>
-                            <div class="grid-item" data-value="Email">I Use Email</div>
-                            <div class="grid-item" data-value="Ads">I Use Ads</div>
-                            <div class="grid-item" data-value="SEO">I Use SEO</div>
-                        </div>
-                    </div>
-                    <div class="row hidden" id="market-details">
-                        <textarea id="market-audience" rows="3" placeholder="One per line (e.g., age 18-35)"></textarea>
-                        <textarea id="market-budget" rows="1" placeholder="e.g., $1000"></textarea>
-                        <textarea id="market-metrics" rows="1" placeholder="e.g., 10% conversion"></textarea>
-                    </div>
-                    <button class="generate-btn" data-prompt="marketing">Generate Prompt</button>
-                </div>
+<div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>Design - Marketing Campaign</h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content">
+        <div class="row">
+            <textarea id="market-goal" rows="4" placeholder="e.g., increase sales by 20%, boost brand awareness"></textarea>
+        </div>
+        <div class="row">
+            <div class="grid-container" id="market-channels">
+                <div class="grid-item" data-value="Social Media">I Use Social Media</div>
+                <div class="grid-item" data-value="Email">I Use Email</div>
+                <div class="grid-item" data-value="Ads">I Use Ads</div>
+                <div class="grid-item" data-value="SEO">I Use SEO</div>
+                <div class="grid-item" data-value="Content Marketing">I Use Content Marketing</div>
+                <div class="grid-item" data-value="Influencer Partnerships">I Use Influencer Partnerships</div>
             </div>
+        </div>
+
+        <textarea id="market-audience" rows="4" placeholder="Target Audience: (1 per line):&#10;Age 18-35&#10;Tech enthusiasts&#10;Small business owners"></textarea>
+            <textarea id="market-budget" rows="1" placeholder="Budget: $1000 or flexible based on ROI"></textarea>
+            <textarea id="market-metrics" rows="4" placeholder="Metrics: (1 per line)&#10;10% conversion&#10;5000 clicks&#10;15% engagement"></textarea>
+            <textarea id="market-message" rows="3" placeholder="Market Message: (1 per line)&#10;Unlock your potential with our AI tools&#10;Save time & boost efficiency with Promptify™"></textarea>
+            <textarea id="market-timeline" rows="1" placeholder="Timeline: 3 months, Q2 2025"></textarea>
+            <textarea id="market-competitors" rows="3" placeholder="Competitor Strenghts: (1 per line)&#10;Competitor A has a value advantage&#10;Competitor B has a cost advantage"></textarea>
+
+            <div class="grid-container">
+            <div class="grid-item" data-value="Videos">Include Videos</div>
+                <div class="grid-item" data-value="Infographics">Include Infographics</div>
+                <div class="grid-item" data-value="Banners">Include Banners</div>
+                <div class="grid-item" data-value="Logos">Include Logos</div>
+            </div>
+
+
+
+                <button class="generate-btn" data-prompt="marketing">Generate Prompt</button>
+
+            </div>
+
+           
+    </div>
 
 
 <!-- Starting a New Business Prompt -->
@@ -736,7 +754,7 @@
             <!-- 3. Business Strategy Prompt -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Strategy - New Business</h2>
+                    <h2>Strategy - Business</h2>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="section-content">

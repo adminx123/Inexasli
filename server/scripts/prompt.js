@@ -307,19 +307,26 @@ Add 29 g more fats to meet your daily fat requirement.
             }
             break;
 
-        case 'marketing':
-            const marketGoal = document.getElementById('market-goal');
-            if (marketGoal?.value) {
-                prompt += `I want to create a marketing campaign. The goal is: ${marketGoal.value}\n\n`;
-                prompt += formatGrid('#market-channels .grid-item.selected', 'Channels');
-                const audience = document.getElementById('market-audience');
-                if (audience?.value) prompt += formatList(audience.value, 'Audience');
-                const budget = document.getElementById('market-budget');
-                if (budget?.value) prompt += formatList(budget.value, 'Budget');
-                const metrics = document.getElementById('market-metrics');
-                if (metrics?.value) prompt += formatList(metrics.value, 'Metrics');
-            }
-            break;
+            case 'marketing':
+                const marketGoal = document.getElementById('market-goal');
+                if (marketGoal?.value) {
+                    prompt += `I want to create a marketing campaign. The goal is: ${marketGoal.value}\n\n`;
+                    prompt += formatGrid('#market-channels .grid-item.selected', 'Channels');
+                    const audience = document.getElementById('market-audience');
+                    if (audience?.value) prompt += formatList(audience.value, 'Audience');
+                    const budget = document.getElementById('market-budget');
+                    if (budget?.value) prompt += formatList(budget.value, 'Budget');
+                    const metrics = document.getElementById('market-metrics');
+                    if (metrics?.value) prompt += formatList(metrics.value, 'Metrics');
+                    const message = document.getElementById('market-message');
+                    if (message?.value) prompt += formatList(message.value, 'Key Messages');
+                    const timeline = document.getElementById('market-timeline');
+                    if (timeline?.value) prompt += formatList(timeline.value, 'Timeline');
+                    const competitors = document.getElementById('market-competitors');
+                    if (competitors?.value) prompt += formatList(competitors.value, 'Competitors');
+                    prompt += formatGrid('#market-visuals .grid-item.selected', 'Visual Assets');
+                }
+                break;
 
         case 'business-strategy':
             const bizGoal = document.getElementById('biz-goal');
