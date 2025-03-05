@@ -19,7 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Promptlets</title>
     <link rel="stylesheet" href="/style/styleprompt.css">
-    
+
 
 </head>
 
@@ -31,7 +31,8 @@
 
     <h2 style="text-align: center;font-size: 16px; color: white;">Prompify™</h2>
 
-    <h2 style="text-align: center;font-size: 12px; color: white;">Prompt - Optimized Templates for Efficient & Effective AI Communication</h2>
+    <h2 style="text-align: center;font-size: 12px; color: white;">Prompt - Optimized Templates for Efficient & Effective
+        AI Communication</h2>
 
 
     <div class="container">
@@ -268,7 +269,7 @@
 
                     <div class="row">
                         <select id="event-venue" onchange="toggleEventDetails()">
-                            
+
                             <option value="Venue Secured">Venue Secured</option>
                             <option value="Venue Needed">Venue Needed</option>
                         </select>
@@ -560,7 +561,7 @@
         <div id="business-prompts" class="hidden">
 
 
-            
+
 
             <!-- 1. App Development Prompt -->
             <div class="section">
@@ -618,136 +619,143 @@
             </div>
 
 
-              <!-- 2. Marketing Campaign Prompt -->
-<div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-        <h2>Design - Marketing Campaign</h2>
-        <span class="toggle-icon">+</span>
-    </div>
-    <div class="section-content">
-        <div class="row">
-            <textarea id="market-goal" rows="4" placeholder="e.g., increase sales by 20%, boost brand awareness"></textarea>
-        </div>
-        <div class="row">
-            <div class="grid-container" id="market-channels">
-                <div class="grid-item" data-value="Social Media">I Use Social Media</div>
-                <div class="grid-item" data-value="Email">I Use Email</div>
-                <div class="grid-item" data-value="Ads">I Use Ads</div>
-                <div class="grid-item" data-value="SEO">I Use SEO</div>
-                <div class="grid-item" data-value="Content Marketing">I Use Content Marketing</div>
-                <div class="grid-item" data-value="Influencer Partnerships">I Use Influencer Partnerships</div>
+            <!-- 2. Marketing Campaign Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Design - Marketing Campaign</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <textarea id="market-goal" rows="4"
+                            placeholder="e.g., increase sales by 20%, boost brand awareness"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="grid-container" id="market-channels">
+                            <div class="grid-item" data-value="Social Media">I Use Social Media</div>
+                            <div class="grid-item" data-value="Email">I Use Email</div>
+                            <div class="grid-item" data-value="Ads">I Use Ads</div>
+                            <div class="grid-item" data-value="SEO">I Use SEO</div>
+                            <div class="grid-item" data-value="Content Marketing">I Use Content Marketing</div>
+                            <div class="grid-item" data-value="Influencer Partnerships">I Use Influencer Partnerships
+                            </div>
+                        </div>
+                    </div>
+
+                    <textarea id="market-audience" rows="4"
+                        placeholder="Target Audience: (1 per line):&#10;Age 18-35&#10;Tech enthusiasts&#10;Small business owners"></textarea>
+                    <textarea id="market-budget" rows="1"
+                        placeholder="Budget: $1000 or flexible based on ROI"></textarea>
+                    <textarea id="market-metrics" rows="4"
+                        placeholder="Metrics: (1 per line)&#10;10% conversion&#10;5000 clicks&#10;15% engagement"></textarea>
+                    <textarea id="market-message" rows="3"
+                        placeholder="Market Message: (1 per line)&#10;Unlock your potential with our AI tools&#10;Save time & boost efficiency with Promptify™"></textarea>
+                    <textarea id="market-timeline" rows="1" placeholder="Timeline: 3 months, Q2 2025"></textarea>
+                    <textarea id="market-competitors" rows="3"
+                        placeholder="Competitor Strenghts: (1 per line)&#10;Competitor A has a value advantage&#10;Competitor B has a cost advantage"></textarea>
+
+                    <div class="grid-container">
+                        <div class="grid-item" data-value="Videos">Include Videos</div>
+                        <div class="grid-item" data-value="Infographics">Include Infographics</div>
+                        <div class="grid-item" data-value="Banners">Include Banners</div>
+                        <div class="grid-item" data-value="Logos">Include Logos</div>
+                    </div>
+
+
+
+                    <button class="generate-btn" data-prompt="marketing">Generate Prompt</button>
+
+                </div>
+
+
             </div>
-        </div>
 
-        <textarea id="market-audience" rows="4" placeholder="Target Audience: (1 per line):&#10;Age 18-35&#10;Tech enthusiasts&#10;Small business owners"></textarea>
-            <textarea id="market-budget" rows="1" placeholder="Budget: $1000 or flexible based on ROI"></textarea>
-            <textarea id="market-metrics" rows="4" placeholder="Metrics: (1 per line)&#10;10% conversion&#10;5000 clicks&#10;15% engagement"></textarea>
-            <textarea id="market-message" rows="3" placeholder="Market Message: (1 per line)&#10;Unlock your potential with our AI tools&#10;Save time & boost efficiency with Promptify™"></textarea>
-            <textarea id="market-timeline" rows="1" placeholder="Timeline: 3 months, Q2 2025"></textarea>
-            <textarea id="market-competitors" rows="3" placeholder="Competitor Strenghts: (1 per line)&#10;Competitor A has a value advantage&#10;Competitor B has a cost advantage"></textarea>
 
-            <div class="grid-container">
-            <div class="grid-item" data-value="Videos">Include Videos</div>
-                <div class="grid-item" data-value="Infographics">Include Infographics</div>
-                <div class="grid-item" data-value="Banners">Include Banners</div>
-                <div class="grid-item" data-value="Logos">Include Logos</div>
+            <!-- Starting a New Business Prompt -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Plan - New Business</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row">
+                        <textarea id="business-vision" rows="1"
+                            placeholder="What’s your business idea? e.g., Launch a coffee shop"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="grid-container" id="business-knowledge-level">
+                            <div class="grid-item" data-value="New">I’m New to Business</div>
+                            <div class="grid-item" data-value="Intermediate">I’ve Run a Business Before</div>
+                            <div class="grid-item" data-value="Sophisticated">I’m an Experienced Entrepreneur</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="grid-container" id="business-general-skills">
+                            <div class="grid-item" data-value="Communication">I Communicate Well</div>
+                            <div class="grid-item" data-value="Problem-Solving">I Solve Problems</div>
+                            <div class="grid-item" data-value="Teamwork">I Work in Teams</div>
+                            <div class="grid-item" data-value="Time-Management">I Manage Time</div>
+                            <div class="grid-item" data-value="Adaptability">I Adapt Easily</div>
+                            <div class="grid-item" data-value="Critical-Thinking">I Think Critically</div>
+                            <div class="grid-item" data-value="Leadership">I Lead Others</div>
+                            <div class="grid-item" data-value="Creativity">I’m Creative</div>
+                            <div class="grid-item" data-value="Work-Ethic">I Have Strong Work Ethic</div>
+                            <div class="grid-item" data-value="Interpersonal">I Connect with People</div>
+                            <div class="grid-item" data-value="Organization">I Stay Organized</div>
+                            <div class="grid-item" data-value="Attention-to-Detail">I Focus on Details</div>
+                            <div class="grid-item" data-value="Decision-Making">I Make Decisions</div>
+                            <div class="grid-item" data-value="Analytical">I Analyze Well</div>
+                            <div class="grid-item" data-value="Initiative">I Take Initiative</div>
+                            <div class="grid-item" data-value="Technical">I’m Tech-Savvy</div>
+                            <div class="grid-item" data-value="Emotional-Intelligence">I Understand Emotions</div>
+                            <div class="grid-item" data-value="Negotiation">I Negotiate Effectively</div>
+                            <div class="grid-item" data-value="Resilience">I’m Resilient</div>
+                            <div class="grid-item" data-value="Project-Management">I Manage Projects</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="grid-container" id="business-weaknesses">
+                            <div class="grid-item" data-value="Procrastination">I Procrastinate</div>
+                            <div class="grid-item" data-value="Impatience">I’m Impatient</div>
+                            <div class="grid-item" data-value="Disorganization">I’m Disorganized</div>
+                            <div class="grid-item" data-value="Overthinking">I Overthink</div>
+                            <div class="grid-item" data-value="Perfectionism">I’m a Perfectionist</div>
+                            <div class="grid-item" data-value="Lack-of-Confidence">I Lack Confidence</div>
+                            <div class="grid-item" data-value="Difficulty-Delegating">I Struggle to Delegate</div>
+                            <div class="grid-item" data-value="Poor-Time-Management">I Manage Time Poorly</div>
+                            <div class="grid-item" data-value="Indecisiveness">I’m Indecisive</div>
+                            <div class="grid-item" data-value="Fear-of-Failure">I Fear Failure</div>
+                            <div class="grid-item" data-value="Limited-Technical-Skills">I Lack Tech Skills</div>
+                            <div class="grid-item" data-value="Overcommitting">I Overcommit</div>
+                            <div class="grid-item" data-value="Lack-of-Focus">I Lose Focus</div>
+                            <div class="grid-item" data-value="Impulsiveness">I’m Impulsive</div>
+                            <div class="grid-item" data-value="Difficulty-with-Feedback">I Resist Feedback</div>
+                            <div class="grid-item" data-value="Resistance-to-Change">I Resist Change</div>
+                            <div class="grid-item" data-value="Poor-Communication">I Communicate Poorly</div>
+                            <div class="grid-item" data-value="Stress-Management">I Handle Stress Badly</div>
+                            <div class="grid-item" data-value="Lack-of-Initiative">I Lack Initiative</div>
+                            <div class="grid-item" data-value="Detail-Overload">I Miss the Big Picture</div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <textarea id="business-organization" rows="4"
+                            placeholder="Business Equipment & Tools (1 per line):&#10;QuickBooks for accounting&#10;Shopify for e-commerce&#10;Ladder&#10;Welding Torch&#10;"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="business-network" rows="4"
+                            placeholder="Who can you leverage? (1 per line):&#10;Friend who owns a café&#10;Local Chamber of Commerce&#10;Business mentor"></textarea>
+                    </div>
+
+                    <button class="generate-btn" data-prompt="business">Generate Prompt</button>
+                </div>
             </div>
-
-
-
-                <button class="generate-btn" data-prompt="marketing">Generate Prompt</button>
-
-            </div>
-
-           
-    </div>
-
-
-<!-- Starting a New Business Prompt -->
-<div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-        <h2>Plan - New Business</h2>
-        <span class="toggle-icon">+</span>
-    </div>
-    <div class="section-content">
-        <div class="row">
-            <textarea id="business-vision" rows="1"
-                placeholder="What’s your business idea? e.g., Launch a coffee shop"></textarea>
-        </div>
-
-        <div class="row">
-            <div class="grid-container" id="business-knowledge-level">
-                <div class="grid-item" data-value="New">I’m New to Business</div>
-                <div class="grid-item" data-value="Intermediate">I’ve Run a Business Before</div>
-                <div class="grid-item" data-value="Sophisticated">I’m an Experienced Entrepreneur</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="grid-container" id="business-general-skills">
-                <div class="grid-item" data-value="Communication">I Communicate Well</div>
-                <div class="grid-item" data-value="Problem-Solving">I Solve Problems</div>
-                <div class="grid-item" data-value="Teamwork">I Work in Teams</div>
-                <div class="grid-item" data-value="Time-Management">I Manage Time</div>
-                <div class="grid-item" data-value="Adaptability">I Adapt Easily</div>
-                <div class="grid-item" data-value="Critical-Thinking">I Think Critically</div>
-                <div class="grid-item" data-value="Leadership">I Lead Others</div>
-                <div class="grid-item" data-value="Creativity">I’m Creative</div>
-                <div class="grid-item" data-value="Work-Ethic">I Have Strong Work Ethic</div>
-                <div class="grid-item" data-value="Interpersonal">I Connect with People</div>
-                <div class="grid-item" data-value="Organization">I Stay Organized</div>
-                <div class="grid-item" data-value="Attention-to-Detail">I Focus on Details</div>
-                <div class="grid-item" data-value="Decision-Making">I Make Decisions</div>
-                <div class="grid-item" data-value="Analytical">I Analyze Well</div>
-                <div class="grid-item" data-value="Initiative">I Take Initiative</div>
-                <div class="grid-item" data-value="Technical">I’m Tech-Savvy</div>
-                <div class="grid-item" data-value="Emotional-Intelligence">I Understand Emotions</div>
-                <div class="grid-item" data-value="Negotiation">I Negotiate Effectively</div>
-                <div class="grid-item" data-value="Resilience">I’m Resilient</div>
-                <div class="grid-item" data-value="Project-Management">I Manage Projects</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="grid-container" id="business-weaknesses">
-                <div class="grid-item" data-value="Procrastination">I Procrastinate</div>
-                <div class="grid-item" data-value="Impatience">I’m Impatient</div>
-                <div class="grid-item" data-value="Disorganization">I’m Disorganized</div>
-                <div class="grid-item" data-value="Overthinking">I Overthink</div>
-                <div class="grid-item" data-value="Perfectionism">I’m a Perfectionist</div>
-                <div class="grid-item" data-value="Lack-of-Confidence">I Lack Confidence</div>
-                <div class="grid-item" data-value="Difficulty-Delegating">I Struggle to Delegate</div>
-                <div class="grid-item" data-value="Poor-Time-Management">I Manage Time Poorly</div>
-                <div class="grid-item" data-value="Indecisiveness">I’m Indecisive</div>
-                <div class="grid-item" data-value="Fear-of-Failure">I Fear Failure</div>
-                <div class="grid-item" data-value="Limited-Technical-Skills">I Lack Tech Skills</div>
-                <div class="grid-item" data-value="Overcommitting">I Overcommit</div>
-                <div class="grid-item" data-value="Lack-of-Focus">I Lose Focus</div>
-                <div class="grid-item" data-value="Impulsiveness">I’m Impulsive</div>
-                <div class="grid-item" data-value="Difficulty-with-Feedback">I Resist Feedback</div>
-                <div class="grid-item" data-value="Resistance-to-Change">I Resist Change</div>
-                <div class="grid-item" data-value="Poor-Communication">I Communicate Poorly</div>
-                <div class="grid-item" data-value="Stress-Management">I Handle Stress Badly</div>
-                <div class="grid-item" data-value="Lack-of-Initiative">I Lack Initiative</div>
-                <div class="grid-item" data-value="Detail-Overload">I Miss the Big Picture</div>
-            </div>
-        </div>
-
-
-
-        <div class="row">
-            <textarea id="business-organization" rows="4"
-                placeholder="Business Equipment & Tools (1 per line):&#10;QuickBooks for accounting&#10;Shopify for e-commerce&#10;Ladder&#10;Welding Torch&#10;"></textarea>
-        </div>
-
-        <div class="row">
-            <textarea id="business-network" rows="4"
-                placeholder="Who can you leverage? (1 per line):&#10;Friend who owns a café&#10;Local Chamber of Commerce&#10;Business mentor"></textarea>
-        </div>
-
-        <button class="generate-btn" data-prompt="business">Generate Prompt</button>
-    </div>
-</div>
 
 
 
@@ -779,77 +787,151 @@
                 </div>
             </div>
 
-          
 
-           
-<!-- Research Prompt Template -->
-<div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-        <h2>Research - Work Through</h2>
-        <span class="toggle-icon">+</span>
-    </div>
-    <div class="section-content">
 
-        <div class="row">
-            <textarea id="research-goal" rows="2"
-                placeholder="What is the goal of your research? (e.g., understand market trends, analyze customer behavior, etc.)"></textarea>
-        </div>
 
-        <div class="row">
-            <textarea id="research-purpose" rows="2"
-                placeholder="What is the purpose of this research? (e.g., inform a business decision, identify new opportunities, etc.)"></textarea>
-        </div>
+            <!-- Research Prompt Template -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Research - Work Through</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
 
-        <div class="row">
-            <label for="research-type">Select the type of research:</label>
-            <select id="research-type">
-                <option value="qualitative">Qualitative Research</option>
-                <option value="quantitative">Quantitative Research</option>
-                <option value="mixed-methods">Mixed Methods</option>
-            </select>
-        </div>
+                    <div class="row">
+                        <textarea id="research-goal" rows="2"
+                            placeholder="What is the goal of your research? (e.g., understand market trends, analyze customer behavior, etc.)"></textarea>
+                    </div>
 
-        <div class="row">
-            <textarea id="research-scope" rows="2"
-                placeholder="What is the scope of your research? (e.g., specific region, target demographic, timeframe, etc.)"></textarea>
-        </div>
+                    <div class="row">
+                        <textarea id="research-purpose" rows="2"
+                            placeholder="What is the purpose of this research? (e.g., inform a business decision, identify new opportunities, etc.)"></textarea>
+                    </div>
 
-        <div class="row">
-            <label for="data-collection-method">How will the data be collected?</label>
-            <select id="data-collection-method">
-                <option value="survey">Survey</option>
-                <option value="interview">Interview</option>
-                <option value="focus-group">Focus Group</option>
-                <option value="observational">Observational Research</option>
-                <option value="secondary-data">Secondary Data Analysis</option>
-                <option value="experiment">Experiment</option>
-            </select>
-        </div>
+                    <div class="row">
+                        <label for="research-type">Select the type of research:</label>
+                        <select id="research-type">
+                            <option value="qualitative">Qualitative Research</option>
+                            <option value="quantitative">Quantitative Research</option>
+                            <option value="mixed-methods">Mixed Methods</option>
+                        </select>
+                    </div>
 
-        <div class="row">
-            <textarea id="research-audience" rows="2"
-                placeholder="Who is the target audience for your research? (e.g., age group, professional background, geographic location, etc.)"></textarea>
-        </div>
+                    <div class="row">
+                        <textarea id="research-scope" rows="2"
+                            placeholder="What is the scope of your research? (e.g., specific region, target demographic, timeframe, etc.)"></textarea>
+                    </div>
 
-        <div class="row">
-            <textarea id="research-context" rows="3"
-                placeholder="Provide any context or background information that will help the research. (e.g., historical background, previous research, external factors, etc.)"></textarea>
-        </div>
+                    <div class="row">
+                        <label for="data-collection-method">How will the data be collected?</label>
+                        <select id="data-collection-method">
+                            <option value="survey">Survey</option>
+                            <option value="interview">Interview</option>
+                            <option value="focus-group">Focus Group</option>
+                            <option value="observational">Observational Research</option>
+                            <option value="secondary-data">Secondary Data Analysis</option>
+                            <option value="experiment">Experiment</option>
+                        </select>
+                    </div>
 
-        <div class="row">
-            <textarea id="research-deliverables" rows="2"
-                placeholder="What are the expected deliverables from this research? (e.g., report, presentation, data analysis, etc.)"></textarea>
-        </div>
+                    <div class="row">
+                        <textarea id="research-audience" rows="2"
+                            placeholder="Who is the target audience for your research? (e.g., age group, professional background, geographic location, etc.)"></textarea>
+                    </div>
 
-        <div class="row">
-            <textarea id="additional-details" rows="3"
-                placeholder="Is there any other relevant detail or information to consider for your research? (e.g., ethical concerns, special requirements, etc.)"></textarea>
-        </div>
+                    <div class="row">
+                        <textarea id="research-context" rows="3"
+                            placeholder="Provide any context or background information that will help the research. (e.g., historical background, previous research, external factors, etc.)"></textarea>
+                    </div>
 
-        <button class="generate-btn" data-prompt="research">Generate Prompt</button>
+                    <div class="row">
+                        <textarea id="research-deliverables" rows="2"
+                            placeholder="What are the expected deliverables from this research? (e.g., report, presentation, data analysis, etc.)"></textarea>
+                    </div>
 
-    </div>
-</div>
+                    <div class="row">
+                        <textarea id="additional-details" rows="3"
+                            placeholder="Is there any other relevant detail or information to consider for your research? (e.g., ethical concerns, special requirements, etc.)"></textarea>
+                    </div>
+
+                    <button class="generate-btn" data-prompt="research">Generate Prompt</button>
+
+                </div>
+
+
+
+
+
+            </div>
+
+            <!-- Speculation Prompt Template -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Speculation - Explore Possibilities</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+
+                    <div class="row">
+                        <textarea id="speculation-goal" rows="2"
+                            placeholder="What is the goal of your speculation? (e.g., imagine future trends, explore 'what if' scenarios, etc.)"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="speculation-purpose" rows="2"
+                            placeholder="Why are you speculating? (e.g., inspire new ideas, prepare for uncertainty, challenge assumptions, etc.)"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <label for="speculation-type">Select the type of speculation:</label>
+                        <select id="speculation-type">
+                            <option value="futuristic">Futuristic (e.g., predicting long-term outcomes)</option>
+                            <option value="alternative">Alternative Scenarios (e.g., 'what if' possibilities)</option>
+                            <option value="creative">Creative Exploration (e.g., wild ideas, no limits)</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="speculation-scope" rows="2"
+                            placeholder="What is the scope of your speculation? (e.g., a specific industry, time period, hypothetical event, etc.)"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <label for="speculation-approach">How will you approach this speculation?</label>
+                        <select id="speculation-approach">
+                            <option value="brainstorming">Brainstorming</option>
+                            <option value="thought-experiment">Thought Experiment</option>
+                            <option value="storytelling">Storytelling/Narrative Building</option>
+                            <option value="trend-extrapolation">Trend Extrapolation</option>
+                            <option value="random-association">Random Idea Association</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="speculation-audience" rows="2"
+                            placeholder="Who or what is the focus of your speculation? (e.g., a group of people, a technology, a society, etc.)"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="speculation-context" rows="3"
+                            placeholder="Provide any context or starting point for your speculation. (e.g., current trends, recent events, a specific problem, etc.)"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="speculation-outcomes" rows="2"
+                            placeholder="What kinds of outcomes or ideas do you hope to generate? (e.g., new concepts, scenarios, hypotheses, etc.)"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <textarea id="additional-details" rows="3"
+                            placeholder="Any additional details or constraints to guide your speculation? (e.g., tone, wildness level, specific inspirations, etc.)"></textarea>
+                    </div>
+
+                    <button class="generate-btn" data-prompt="speculation">Generate Speculation</button>
+
+                </div>
+            </div>
+
 
 
         </div>
@@ -857,39 +939,39 @@
 
 
         <div class="button-container">
-            
-           
+
+
 
             <button class="ai-button" onclick="openApp('grok', 'https://x.ai/')">
                 <img src="/images/grok.png" alt="Grok" class="ai-logo">
             </button>
-        
+
             <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
                 <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
             </button>
-        
+
             <button class="ai-button" onclick="openApp('com.deepseek.app', 'https://deepseek.com')">
                 <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
             </button>
-        
+
             <button class="ai-button" onclick="openApp('com.google.gemini', 'https://gemini.google.com/app')">
                 <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
             </button>
-        
-
-
-    </div>
-
-    <div class="hidden" id="prompt-results">
-       
-        
-    <div id="result"></div>
-    </div>
 
 
 
-    <script src="/server/scripts/hamburger.js"></script>
-    <script src="/server/scripts/prompt.js"></script>
+        </div>
+
+        <div class="hidden" id="prompt-results">
+
+
+            <div id="result"></div>
+        </div>
+
+
+
+        <script src="/server/scripts/hamburger.js"></script>
+        <script src="/server/scripts/prompt.js"></script>
 
 
 </body>
