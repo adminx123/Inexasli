@@ -353,6 +353,25 @@ Add 29 g more fats to meet your daily fat requirement.
             prompt += formatList(document.getElementById('research-deliverables')?.value, 'Expected deliverables');
             prompt += formatList(document.getElementById('additional-details')?.value, 'Additional details');
             break;
+
+
+            case 'speculation':
+                prompt += formatList(document.getElementById('speculation-goal')?.value, 'Speculation Goal');
+                prompt += formatList(document.getElementById('speculation-purpose')?.value, 'Purpose of this speculation');
+                prompt += formatList(
+                    document.getElementById('speculation-type')?.value?.charAt(0).toUpperCase() + 
+                    document.getElementById('speculation-type')?.value.slice(1), 
+                    'Type of speculation'
+                );
+                prompt += formatList(document.getElementById('speculation-scope')?.value, 'Scope of the speculation');
+                prompt += formatList(document.getElementById('speculation-approach')?.value, 'Approach to speculation');
+                prompt += formatList(document.getElementById('speculation-audience')?.value, 'Focus of speculation');
+                prompt += formatList(document.getElementById('speculation-context')?.value, 'Context of speculation');
+                prompt += formatList(document.getElementById('speculation-outcomes')?.value, 'Expected outcomes');
+                prompt += formatList(document.getElementById('additional-details')?.value, 'Additional details');
+                break;
+
+
     }
 
     // Display prompt and show it in the alert along with confirmation
