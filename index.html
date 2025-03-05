@@ -97,23 +97,26 @@
 -->
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                const empoweringThee = document.getElementById('empoweringThee');
-                empoweringThee.style.opacity = '1'; // Fade in the text
-            }, 250); // Start the fade-in after 0.5 seconds
-        });
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const empoweringThee = document.getElementById('empoweringThee');
+            empoweringThee.style.opacity = '1'; // Fade in the text
+        }, 250);
 
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log('Service Worker registered successfully'))
+                .catch((err) => console.error('Service Worker registration failed:', err));
+        }
+    });
+</script>
+<script src="/server/scripts/install.js"></script>
 
+<script src="/sw.js"></script>
 
+   <script src="/server/scripts/install.js"></script>
 
-   
-
-
-    </script>
-
-    <script src="/server/scripts/hamburger.js"></script>
     
     <!-- <script src="/server/scripts/chat.js"></script> -->
 </body>
