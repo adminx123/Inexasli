@@ -565,6 +565,7 @@ TOTALSOCIALSECURITYE = employmentSocialSecurityTax;
 }
 
     
+
 function getMedicare() {
     // Normalize annual employment income
     const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
