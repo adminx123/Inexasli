@@ -8,3 +8,5 @@ if ('serviceWorker' in navigator) {
         });
     });
   }
+
+  // It appears that the service worker, uses this becuase this file is called on every page

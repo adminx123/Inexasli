@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>INEXASLI</title>
+    <link rel="stylesheet" href="/style/styles.css">
+    <!-- Icon links -->
+    <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
+    <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
+    <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
+    <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
+    <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
+    <link rel="manifest" href="manifest.json" />
+
+    <style>
+
+
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000; /* Black background */
+        }
+
+        /* Inline flex container to align elements */
+        .inline-container {
+            display: inline-flex;
+            align-items: baseline; /* Align text to the baseline */
+            gap: 0; /* No gap between elements */
+        }
+
+        #fadeInText {
+            font-family: Arial, sans-serif;
+            font-size: 10vw; /* Use viewport width for responsive font size */
+            font-weight: bold;
+            color: white; /* White text color */
+            text-transform: uppercase;
+        }
+
+        h1 {
+            color: rgb(49, 49, 49);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 4vw; /* Make it scale with viewport width */
+            margin: 0; /* Remove default margin */
+            opacity: 0; /* Start hidden */
+            transition: opacity 2s ease; /* Smooth fade-in transition */
+        }
+
+        /* Responsive design for small screens */
+        @media screen and (max-width: 768px) {
+    .inline-container {
+        flex-direction: column;
+        align-items: center; /* Center align items vertically */
+    }
+    #fadeInText, h1 {
+        text-align: center; /* Center text for better visual balance */
+    }
+}
+
+        @media screen and (max-width: 480px) {
+            #fadeInText {
+                font-size: 16vw; /* Even larger font size for very small screens */
+            }
+
+            h1 {
+                font-size: 10vw; /* Adjust h1 size for very small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    
+    
+    <!-- Inline container to hold both elements -->
+    <div class="inline-container">
+        <div id="fadeInText">INEXASLI</div>
+        <h1 id="empoweringThee">Empowering Thee</h1>
+    </div>
+
+
+    <!-- <button class="chat-toggle">💬</button> 
+    <div class="chatbot" style="display:none;">
+      <div class="chat-header">Your DIY Coach</div>
+      <div class="chat-body"><p>Hi! How can I help you today?</p></div>
+      <input type="text" class="chat-input" placeholder="Ask me anything...">
+    </div>
+-->
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const empoweringThee = document.getElementById('empoweringThee');
+            empoweringThee.style.opacity = '1'; // Fade in the text
+        }, 250);
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log('Service Worker registered successfully'))
+                .catch((err) => console.error('Service Worker registration failed:', err));
+        }
+    });
+</script>
+
+
+
+   <script src="/server/scripts/hamburger.js"></script>
+
+    
+    <!-- <script src="/server/scripts/chat.js"></script> -->
+</body>
+</html>
