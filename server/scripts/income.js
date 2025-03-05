@@ -432,8 +432,8 @@ function getCppPayable() {
     // Define CPP rates and maximums
     var cppRateEmployed = 0.0595;
     var cppRateSelfEmployed = 0.1190;
-    var cppMaxEmployed = 3867.5;
-    var cppMaxEmployer = 7735;
+    var cppMaxEmployed = 4034.10;
+    var cppMaxEmployer = 8068.20;
     var cppExemptionAmount = 3500;
 
     // Calculate left over contribution room employed
@@ -512,10 +512,10 @@ document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmp
     var annualSelfEmployedIncome = calculateAnnual(selfEmploymentIncomeField[0], selfEmploymentIncomeField[1]);
 
     // Define EI rates and maximums
-    var eiRateEmployed = 0.0166;
-    var eiRateSelfEmployed = 0.0166;
-    var eiEmployeePremiumMax = 1049.12;
-    var eiEmployerPremiumMax = 1468.77;
+    var eiRateEmployed = 0.0164;
+    var eiRateSelfEmployed = 0.0164;
+    var eiEmployeePremiumMax = 1077.48;
+    var eiEmployerPremiumMax = 1508.47;
 
     // Calculate EI payable for employed and self-employed individuals
     var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualEmployedIncome * eiRateEmployed);
@@ -542,8 +542,8 @@ function getSocialSecurity() {
     const totalAnnualIncome = annualEmployedIncome + annualSelfEmployedIncome;
 
     // Social Security tax rate and maximum taxable earnings
-    const socialSecurityRate = 0.062; // 6.2%
-    const socialSecurityMaxTaxable = 142800; // Maximum taxable earnings for Social Security
+    const socialSecurityRate = 0.0765; // 6.2%
+    const socialSecurityMaxTaxable = 176100; // Maximum taxable earnings for Social Security
 
     // Calculate Social Security tax for employed income (up to the maximum taxable earnings)
     let employmentSocialSecurityTax = Math.min(annualEmployedIncome, socialSecurityMaxTaxable) * socialSecurityRate;
@@ -565,7 +565,7 @@ TOTALSOCIALSECURITYE = employmentSocialSecurityTax;
 }
 
     
-    function getMedicare() {
+function getMedicare() {
     // Normalize annual employment income
     const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
     const annualTips = calculateAnnual('income_tips', 'income_tips_frequency');
@@ -580,27 +580,35 @@ TOTALSOCIALSECURITYE = employmentSocialSecurityTax;
     const totalAnnualIncome = annualEmployedIncome + annualSelfEmployedIncome;
 
     // Medicare tax rates and thresholds
-    const medicareRate = 0.0145; // 1.45%
+    const medicareRate = 0.0145; // 1.45% for employee portion
+    const medicareSelfEmploymentRate = 0.029; // 2.9% for self-employed (employee + employer)
     const medicareAdditionalRate = 0.009; // Additional 0.9% for high earners
     const medicareThreshold = 200000; // Threshold for additional Medicare tax
 
-    // Calculate Medicare tax for total income
+    // Initialize total Medicare tax
     let totalMedicareTax = 0;
 
-    // If total income exceeds Medicare threshold, apply additional rate
+    // Calculate Medicare tax for employed income (1.45% - employee portion)
+    let employmentMedicareTax = annualEmployedIncome * medicareRate;
+
+    // Calculate Medicare tax for self-employed income (2.9% - employee + employer portion)
+    let selfEmploymentMedicareTax = annualSelfEmployedIncome * medicareSelfEmploymentRate;
+
+    // Combine both taxes
+    totalMedicareTax = employmentMedicareTax + selfEmploymentMedicareTax;
+
+    // If total income exceeds the Medicare threshold, apply the additional 0.9%
     if (totalAnnualIncome > medicareThreshold) {
-        totalMedicareTax = (totalAnnualIncome - medicareThreshold) * medicareAdditionalRate;
+        totalMedicareTax += (totalAnnualIncome - medicareThreshold) * medicareAdditionalRate;
     }
 
-    // Apply standard Medicare rate to total income
-    totalMedicareTax += totalAnnualIncome * medicareRate;
-
-    // Total US equivalent tax
-   TOTALMEDICARE = totalMedicareTax;
+    // Total US equivalent Medicare tax
+    TOTALMEDICARE = totalMedicareTax;
 
     // Update the DOM element with the calculated value
     document.getElementById('TOTALMEDICARE').textContent = '$' + TOTALMEDICARE.toFixed(2);
 }
+
 
 
 // Define the federal tax brackets for Canada for 2025
