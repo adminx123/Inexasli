@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="mailto:support@inexasli.com" id="contact" class="menu-item">CONTACT</a>
       <a href="#" id="calculations" class="menu-item">CALCULATE</a>
       <div class="submenu" id="calculationsMenu">
-        <a href="/xxxxxx" id="vacation">Vacation</a>
-        <a href="/xxxxxx" id="personal">IncomeIQ™</a>
+        <a href="/budget/vacation.html" id="vacation">Vacation</a>
+        <a href="/budget/intro.html" id="personal">IncomeIQ™</a>
       </div>
       <a href="#" id="create" class="menu-item">CREATE</a>
       <div class="submenu" id="createMenu">
