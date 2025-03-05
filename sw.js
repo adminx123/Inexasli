@@ -1,9 +1,13 @@
 const CACHE_NAME = 'inexasli-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style/styles.css', // Adjust to '/style/styles.css' if your CSS is in a style folder
-  '/install.js'
+  '/',                    // Root (optional)
+  '/budget/index1.html',  // Budget page
+  '/create/prompt.html',  // Prompt page
+  '/style/styles.css',    // Styles (if used)
+  '/index.js',            // SW registration
+  '/install.js',          // A2HS script
+  '/manifest.json',       // Manifest
+  '/images/newLogo.jpg'   // Icon
 ];
 
 // Install event
@@ -16,6 +20,7 @@ self.addEventListener('install', (event) => {
         return cache.addAll(urlsToCache);
       })
       .then(() => self.skipWaiting())
+      .catch(err => console.error('Cache failed:', err))
   );
 });
 
@@ -43,16 +48,17 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request)
       .then((response) => {
         if (response) return response;
-        const fetchRequest = event.request.clone();
-        return fetch(fetchRequest)
+        return fetch(event.request.clone())
           .then((networkResponse) => {
-            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') return networkResponse;
+            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+              return networkResponse;
+            }
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME)
               .then((cache) => cache.put(event.request, responseToCache));
             return networkResponse;
           })
-          .catch(() => caches.match('/offline.html')); // Optional: Create offline.html if needed
+          .catch(() => caches.match('/offline.html')); // Optional
       })
   );
 });
