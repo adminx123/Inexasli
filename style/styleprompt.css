@@ -62,13 +62,12 @@ h1{
   .container {
     background-color: #fff;
     width: 100%; /* Full width */
-    min-height: 80vh; /* This will make the container at least as tall as the viewport */
-    margin: 0 auto;
+    height: 100%; /* Full height */
     padding: 20px;
     border-radius: 5px;
     box-sizing: border-box;
+    flex-grow: 1; /* Allows the container to take up more space vertically */
 }
-
 
 .section {
     margin-bottom: 2px; /* Not in second CSS, kept as is */
