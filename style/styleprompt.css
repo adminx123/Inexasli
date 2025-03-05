@@ -59,14 +59,16 @@ h1{
     margin-top: 10px; /* Non-conflicting with margin-bottom */
   }
 
-.container {
-    background-color: #fff; /* Same in both */
-    max-width: 800px; /* Same in both */
-    margin: 0 auto; /* Same in both */
-    padding: 20px; /* Updated to 20px (first CSS), second CSS uses 0 15px with padding-top/bottom 10px, but we'll keep 20px as a close match */
-    border-radius: 5px; /* Same in both */
-    box-sizing: border-box; /* Same in both */
+  .container {
+    background-color: #fff;
+    width: 100%; /* Full width */
+    min-height: 80vh; /* This will make the container at least as tall as the viewport */
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
+
 
 .section {
     margin-bottom: 2px; /* Not in second CSS, kept as is */
