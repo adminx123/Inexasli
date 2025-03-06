@@ -1,13 +1,6 @@
 const CACHE_NAME = 'inexasli-v1';
 const urlsToCache = [
-  '/',                    // Root (optional)
-  '/budget/index1.html',  // Budget page
-  '/create/prompt.html',  // Prompt page
-  '/style/styles.css',    // Styles (if used)
-  '/index.js',            // SW registration
-  '/install.js',          // A2HS script
-  '/manifest.json',       // Manifest
-  '/images/newLogo.jpg'   // Icon
+  '/budget/index1.html'
 ];
 
 // Install event

@@ -793,6 +793,55 @@
 
 
 
+<!-- Business Receipts Prompt -->
+<div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>Receipts - Busineses</h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content">
+        <!-- Location Selection -->
+        <div class="row">
+            <div class="grid-container" id="expense-location">
+                <div class="grid-item" data-value="Canada">Canada</div>
+                <div class="grid-item" data-value="USA">USA</div>
+            </div>
+        </div>
+        <!-- Depreciable Assets Table -->
+        <div class="row">
+            <label>Depreciable Assets</label>
+            <table id="depreciable-assets-table" border="1">
+                <thead>
+                    <tr>
+                        <th>Asset Name</th>
+                        <th>Personal Use %</th>
+                        <th>Business 1 Use %</th>
+                        <th>Business 2 Use %</th>
+                        <th>Undepreciated Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" placeholder="e.g., Laptop" class="table-input" data-field="asset-name"></td>
+                        <td><input type="number" min="0" max="100" placeholder="e.g., 20" class="table-input" data-field="personal-use"></td>
+                        <td><input type="number" min="0" max="100" placeholder="e.g., 60" class="table-input" data-field="business1-use"></td>
+                        <td><input type="number" min="0" max="100" placeholder="e.g., 20" class="table-input" data-field="business2-use"></td>
+                        <td><input type="number" min="0" step="0.01" placeholder="e.g., 500.00" class="table-input" data-field="undepreciated-value"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="e.g., Vehicle" class="table-input" data-field="asset-name"></td>
+                        <td><input type="number" min="0" max="100" placeholder="e.g., 50" class="table-input" data-field="personal-use"></td>
+                        <td><input type="number" min="0" max="100" placeholder="e.g., 30" class="table-input" data-field="business1-use"></td>
+                        <td><input type="number" min="0" max="100" placeholder="e.g., 20" class="table-input" data-field="business2-use"></td>
+                        <td><input type="number" min="0" step="0.01" placeholder="e.g., 10000.00" class="table-input" data-field="undepreciated-value"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <button class="generate-btn" data-prompt="expense">Generate Receipt Tally</button>
+    </div>
+</div>
+
 
             <!-- Research Prompt Template -->
             <div class="section">
@@ -867,6 +916,10 @@
 
 
             </div>
+
+
+
+
 
             <!-- Speculation Prompt Template -->
             <div class="section">

@@ -1,18 +1,18 @@
- /*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
- */
+/*
+* Copyright (c) 2025 INEXASLI. All rights reserved.
+* This code is protected under Canadian and international copyright laws.
+* Unauthorized use, reproduction, distribution, or modification of this code 
+* without explicit written permission via email from info@inexasli.com 
+* is strictly prohibited. Violators will be pursued and prosecuted to the 
+* fullest extent of the law in British Columbia, Canada, and applicable 
+* jurisdictions worldwide.
+*/
 
 
 
- let activeScope = null;
+let activeScope = null;
 
- function toggleSection(header) {
+function toggleSection(header) {
     const section = header.parentElement;
     const allSections = document.querySelectorAll('.section');
     allSections.forEach(otherSection => {
@@ -22,88 +22,88 @@
     });
     section.classList.toggle('expanded');
 }
- 
- function toggleScope(scope) {
-     const personalBtn = document.getElementById('personal-btn');
-     const businessBtn = document.getElementById('business-btn');
-     const personalPrompts = document.getElementById('personal-prompts');
-     const businessPrompts = document.getElementById('business-prompts');
- 
-     if (activeScope === scope) {
-         personalPrompts.classList.add('hidden');
-         businessPrompts.classList.add('hidden');
-         personalBtn.classList.remove('selected');
-         businessBtn.classList.remove('selected');
-         activeScope = null;
-     } else {
-         personalPrompts.classList.add('hidden');
-         businessPrompts.classList.add('hidden');
-         personalBtn.classList.remove('selected');
-         businessBtn.classList.remove('selected');
- 
-         if (scope === 'personal') {
-             personalPrompts.classList.remove('hidden');
-             personalBtn.classList.add('selected');
-         } else if (scope === 'business') {
-             businessPrompts.classList.remove('hidden');
-             businessBtn.classList.add('selected');
-         }
-         activeScope = scope;
-     }
- }
- 
- const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
- const formatGrid = (selector, prefix) => {
-     const items = Array.from(document.querySelectorAll(selector))
-         .filter(el => el.classList.contains('selected'))
-         .map(el => el.dataset.value)
-         .join('\n');
-     return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
- };
- 
- function toggleMealDetails() {
-     const scopeEl = document.getElementById('meal-scope');
-     if (scopeEl) {
-         const scope = scopeEl.value;
-         document.getElementById('meal-details').classList.toggle('hidden', !scope);
-         document.getElementById('meal-multiple-days').classList.toggle('hidden', scope !== 'multiple');
-     }
- }
- 
- function toggleEventDetails() {
-     const locationEl = document.getElementById('event-location');
-     if (locationEl) {
-         const location = locationEl.value;
-         document.getElementById('event-indoors').classList.toggle('hidden', location !== 'indoors');
-         document.getElementById('event-outdoors').classList.toggle('hidden', location !== 'outdoors');
-     }
- }
- 
- function toggleCodeInput(selected) {
-     const codeRow = document.getElementById('app-current-code-row');
-     const codeStartedBtn = document.querySelector('#app-code-status .grid-item[data-value="code-started"]');
-     const noCodeBtn = document.querySelector('#app-code-status .grid-item[data-value="no-code"]');
-     if (codeRow) {
-         if (selected === 'code-started') {
-             codeRow.classList.remove('hidden');
-             if (codeStartedBtn) codeStartedBtn.classList.add('selected');
-             if (noCodeBtn) noCodeBtn.classList.remove('selected');
-         } else if (selected === 'no-code') {
-             codeRow.classList.add('hidden');
-             if (codeStartedBtn) codeStartedBtn.classList.remove('selected');
-             if (noCodeBtn) noCodeBtn.classList.add('selected');
-         }
-     }
- }
- 
- document.getElementById('personal-btn').addEventListener('click', () => toggleScope('personal'));
- document.getElementById('business-btn').addEventListener('click', () => toggleScope('business'));
- 
- document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-status) .grid-item').forEach(item => {
-     item.addEventListener('click', () => item.classList.toggle('selected'));
- });
- 
- function generatePrompt(promptType) {
+
+function toggleScope(scope) {
+    const personalBtn = document.getElementById('personal-btn');
+    const businessBtn = document.getElementById('business-btn');
+    const personalPrompts = document.getElementById('personal-prompts');
+    const businessPrompts = document.getElementById('business-prompts');
+
+    if (activeScope === scope) {
+        personalPrompts.classList.add('hidden');
+        businessPrompts.classList.add('hidden');
+        personalBtn.classList.remove('selected');
+        businessBtn.classList.remove('selected');
+        activeScope = null;
+    } else {
+        personalPrompts.classList.add('hidden');
+        businessPrompts.classList.add('hidden');
+        personalBtn.classList.remove('selected');
+        businessBtn.classList.remove('selected');
+
+        if (scope === 'personal') {
+            personalPrompts.classList.remove('hidden');
+            personalBtn.classList.add('selected');
+        } else if (scope === 'business') {
+            businessPrompts.classList.remove('hidden');
+            businessBtn.classList.add('selected');
+        }
+        activeScope = scope;
+    }
+}
+
+const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
+const formatGrid = (selector, prefix) => {
+    const items = Array.from(document.querySelectorAll(selector))
+        .filter(el => el.classList.contains('selected'))
+        .map(el => el.dataset.value)
+        .join('\n');
+    return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
+};
+
+function toggleMealDetails() {
+    const scopeEl = document.getElementById('meal-scope');
+    if (scopeEl) {
+        const scope = scopeEl.value;
+        document.getElementById('meal-details').classList.toggle('hidden', !scope);
+        document.getElementById('meal-multiple-days').classList.toggle('hidden', scope !== 'multiple');
+    }
+}
+
+function toggleEventDetails() {
+    const locationEl = document.getElementById('event-location');
+    if (locationEl) {
+        const location = locationEl.value;
+        document.getElementById('event-indoors').classList.toggle('hidden', location !== 'indoors');
+        document.getElementById('event-outdoors').classList.toggle('hidden', location !== 'outdoors');
+    }
+}
+
+function toggleCodeInput(selected) {
+    const codeRow = document.getElementById('app-current-code-row');
+    const codeStartedBtn = document.querySelector('#app-code-status .grid-item[data-value="code-started"]');
+    const noCodeBtn = document.querySelector('#app-code-status .grid-item[data-value="no-code"]');
+    if (codeRow) {
+        if (selected === 'code-started') {
+            codeRow.classList.remove('hidden');
+            if (codeStartedBtn) codeStartedBtn.classList.add('selected');
+            if (noCodeBtn) noCodeBtn.classList.remove('selected');
+        } else if (selected === 'no-code') {
+            codeRow.classList.add('hidden');
+            if (codeStartedBtn) codeStartedBtn.classList.remove('selected');
+            if (noCodeBtn) noCodeBtn.classList.add('selected');
+        }
+    }
+}
+
+document.getElementById('personal-btn').addEventListener('click', () => toggleScope('personal'));
+document.getElementById('business-btn').addEventListener('click', () => toggleScope('business'));
+
+document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-status) .grid-item').forEach(item => {
+    item.addEventListener('click', () => item.classList.toggle('selected'));
+});
+
+function generatePrompt(promptType) {
     let prompt = '';
 
     switch (promptType) {
@@ -307,26 +307,26 @@ Add 29 g more fats to meet your daily fat requirement.
             }
             break;
 
-            case 'marketing':
-                const marketGoal = document.getElementById('market-goal');
-                if (marketGoal?.value) {
-                    prompt += `I want to create a marketing campaign. The goal is: ${marketGoal.value}\n\n`;
-                    prompt += formatGrid('#market-channels .grid-item.selected', 'Channels');
-                    const audience = document.getElementById('market-audience');
-                    if (audience?.value) prompt += formatList(audience.value, 'Audience');
-                    const budget = document.getElementById('market-budget');
-                    if (budget?.value) prompt += formatList(budget.value, 'Budget');
-                    const metrics = document.getElementById('market-metrics');
-                    if (metrics?.value) prompt += formatList(metrics.value, 'Metrics');
-                    const message = document.getElementById('market-message');
-                    if (message?.value) prompt += formatList(message.value, 'Key Messages');
-                    const timeline = document.getElementById('market-timeline');
-                    if (timeline?.value) prompt += formatList(timeline.value, 'Timeline');
-                    const competitors = document.getElementById('market-competitors');
-                    if (competitors?.value) prompt += formatList(competitors.value, 'Competitors');
-                    prompt += formatGrid('#market-visuals .grid-item.selected', 'Visual Assets');
-                }
-                break;
+        case 'marketing':
+            const marketGoal = document.getElementById('market-goal');
+            if (marketGoal?.value) {
+                prompt += `I want to create a marketing campaign. The goal is: ${marketGoal.value}\n\n`;
+                prompt += formatGrid('#market-channels .grid-item.selected', 'Channels');
+                const audience = document.getElementById('market-audience');
+                if (audience?.value) prompt += formatList(audience.value, 'Audience');
+                const budget = document.getElementById('market-budget');
+                if (budget?.value) prompt += formatList(budget.value, 'Budget');
+                const metrics = document.getElementById('market-metrics');
+                if (metrics?.value) prompt += formatList(metrics.value, 'Metrics');
+                const message = document.getElementById('market-message');
+                if (message?.value) prompt += formatList(message.value, 'Key Messages');
+                const timeline = document.getElementById('market-timeline');
+                if (timeline?.value) prompt += formatList(timeline.value, 'Timeline');
+                const competitors = document.getElementById('market-competitors');
+                if (competitors?.value) prompt += formatList(competitors.value, 'Competitors');
+                prompt += formatGrid('#market-visuals .grid-item.selected', 'Visual Assets');
+            }
+            break;
 
         case 'business-strategy':
             const bizGoal = document.getElementById('biz-goal');
@@ -339,6 +339,43 @@ Add 29 g more fats to meet your daily fat requirement.
                 if (resources?.value) prompt += formatList(resources.value, 'Resources');
                 const milestones = document.getElementById('biz-milestones');
                 if (milestones?.value) prompt += formatList(milestones.value, 'Milestones');
+            }
+            break;
+
+
+        case 'expense':
+            const locationsSelected = document.querySelectorAll('#expense-location .grid-item.selected');
+            console.log('Selected locations count:', locationsSelected.length);
+            console.log('Selected locations:', Array.from(locationsSelected).map(item => item.getAttribute('data-value')));
+            if (locationsSelected.length > 0) {
+                prompt += formatGrid('#expense-location .grid-item.selected', 'Location');
+
+
+                prompt += `I have included separate attachments of receipts.Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
+Advertising, Insurance, Interest, Maintenance and Repairs, Management and Administration Fees, Motor Vehicle Expenses, Office Expenses, Legal, Accounting, and Other Professional Fees 
+Property Taxes, Salaries/Wages/and Benefits, Travel, Utilities, Other Expenses (for miscellaneous items)
+Table headings, should be in the following order: Date,Receipt #,Item,Amount,T1125 Category,Subtotal (Excl. Tax),GST,PST,Total, Personal use %, Business 1 use % Business 2 use %
+
+Ensure that all items on all receipts are accounted for and categorized appropriately.
+
+
+\n\n`;
+                const tableRows = document.querySelectorAll('#depreciable-assets-table tbody tr');
+                let assets = [];
+                tableRows.forEach(row => {
+                    const assetName = row.querySelector('[data-field="asset-name"]').value;
+                    const personalUse = row.querySelector('[data-field="personal-use"]').value || '0';
+                    const business1Use = row.querySelector('[data-field="business1-use"]').value || '0';
+                    const business2Use = row.querySelector('[data-field="business2-use"]').value || '0';
+                    const undepreciatedValue = row.querySelector('[data-field="undepreciated-value"]').value || '0';
+                    if (assetName) {
+                        assets.push(`${assetName}: Personal Use ${personalUse}%, Business 1 Use ${business1Use}%, Business 2 Use ${business2Use}%, Undepreciated Value $${undepreciatedValue}`);
+                    }
+                });
+                prompt += formatList(assets.length ? assets.join('\n') : 'None', 'Depreciable Assets');
+                console.log('Prompt after building:', prompt);
+            } else {
+                console.log('No locations selected, prompt not built');
             }
             break;
 
@@ -355,21 +392,24 @@ Add 29 g more fats to meet your daily fat requirement.
             break;
 
 
-            case 'speculation':
-                prompt += formatList(document.getElementById('speculation-goal')?.value, 'Speculation Goal');
-                prompt += formatList(document.getElementById('speculation-purpose')?.value, 'Purpose of this speculation');
-                prompt += formatList(
-                    document.getElementById('speculation-type')?.value?.charAt(0).toUpperCase() + 
-                    document.getElementById('speculation-type')?.value.slice(1), 
-                    'Type of speculation'
-                );
-                prompt += formatList(document.getElementById('speculation-scope')?.value, 'Scope of the speculation');
-                prompt += formatList(document.getElementById('speculation-approach')?.value, 'Approach to speculation');
-                prompt += formatList(document.getElementById('speculation-audience')?.value, 'Focus of speculation');
-                prompt += formatList(document.getElementById('speculation-context')?.value, 'Context of speculation');
-                prompt += formatList(document.getElementById('speculation-outcomes')?.value, 'Expected outcomes');
-                prompt += formatList(document.getElementById('additional-details')?.value, 'Additional details');
-                break;
+        case 'speculation':
+            prompt += formatList(document.getElementById('speculation-goal')?.value, 'Speculation Goal');
+            prompt += formatList(document.getElementById('speculation-purpose')?.value, 'Purpose of this speculation');
+            prompt += formatList(
+                document.getElementById('speculation-type')?.value?.charAt(0).toUpperCase() +
+                document.getElementById('speculation-type')?.value.slice(1),
+                'Type of speculation'
+            );
+            prompt += formatList(document.getElementById('speculation-scope')?.value, 'Scope of the speculation');
+            prompt += formatList(document.getElementById('speculation-approach')?.value, 'Approach to speculation');
+            prompt += formatList(document.getElementById('speculation-audience')?.value, 'Focus of speculation');
+            prompt += formatList(document.getElementById('speculation-context')?.value, 'Context of speculation');
+            prompt += formatList(document.getElementById('speculation-outcomes')?.value, 'Expected outcomes');
+            prompt += formatList(document.getElementById('additional-details')?.value, 'Additional details');
+            break;
+
+
+
 
 
     }
@@ -389,42 +429,41 @@ Add 29 g more fats to meet your daily fat requirement.
         alert('No prompt generated. Please fill in the required fields.');
     }
 }
- 
- document.querySelectorAll('.generate-btn').forEach(button => {
-     button.addEventListener('click', () => {
-         const promptType = button.getAttribute('data-prompt');
-         generatePrompt(promptType);
-     });
- });
- 
- function openApp(appScheme, fallbackUrl) {
-     var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-     var isAndroid = /android/i.test(userAgent);
-     var isiOS = /iPhone|iPad|iPod/i.test(userAgent);
- 
-     // Store the current page to detect if the app launch fails
-     var startTime = Date.now();
-     var launched = false;
- 
-     if (isAndroid) {
-         // Correct intent syntax for Android
-         window.location.href = `intent://app/#Intent;package=${appScheme};end`;
-     } else if (isiOS) {
-         // Replace with the actual iOS URL scheme for Grok
-         window.location.href = `${appScheme}://`; // e.g., "grok://"
-     } else {
-         // Fallback for non-mobile devices
-         window.location.href = fallbackUrl;
-         return;
-     }
- 
-     // Check if the app launched by monitoring focus
-     setTimeout(function () {
-         if (Date.now() - startTime < 2000) {
-             // If we're still on the page after 1.5s, assume app launch failed
-             window.location.href = fallbackUrl;
-         }
-     }, 1500);
- }
- 
- 
+
+document.querySelectorAll('.generate-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const promptType = button.getAttribute('data-prompt');
+        generatePrompt(promptType);
+    });
+});
+
+function openApp(appScheme, fallbackUrl) {
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    var isAndroid = /android/i.test(userAgent);
+    var isiOS = /iPhone|iPad|iPod/i.test(userAgent);
+
+    // Store the current page to detect if the app launch fails
+    var startTime = Date.now();
+    var launched = false;
+
+    if (isAndroid) {
+        // Correct intent syntax for Android
+        window.location.href = `intent://app/#Intent;package=${appScheme};end`;
+    } else if (isiOS) {
+        // Replace with the actual iOS URL scheme for Grok
+        window.location.href = `${appScheme}://`; // e.g., "grok://"
+    } else {
+        // Fallback for non-mobile devices
+        window.location.href = fallbackUrl;
+        return;
+    }
+
+    // Check if the app launched by monitoring focus
+    setTimeout(function () {
+        if (Date.now() - startTime < 2000) {
+            // If we're still on the page after 1.5s, assume app launch failed
+            window.location.href = fallbackUrl;
+        }
+    }, 1500);
+}
+
