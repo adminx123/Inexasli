@@ -11,6 +11,8 @@
 
 import { displayWarning, hideShow } from "./utils.js"
 import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
+import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
+
 
 
 const tabs = document.querySelectorAll('.tab')
@@ -403,130 +405,45 @@ function setIncomeData() {
 }
 
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    // Decode the cookie value
-    const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
-    // If the value is empty and it's a frequency field, set it to 'annually'
-    if (decodedValue === '' && name.includes('_frequency')) {
-      return 'annually';
-    }
-    return decodedValue == 0 || decodedValue == '0' ? '' : decodedValue;
-  } else {
-    return 'annually';
-  }
-}
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Function to retrieve cookie value by name
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) {
-      // Decode the cookie value
-      const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
-      // If the value is empty and it's a frequency field, set it to 'annually'
-      if (decodedValue === '' && name.includes('_frequency')) {
-        return 'annually';
-      }
-      return decodedValue == 0 || decodedValue == '0' ? '' : decodedValue;
-    } else {
-      return 'annually';
+  // List of form element IDs you want to set based on cookies
+  const formElements = [
+    'expenses_grocery', 'expenses_dining', 'expenses_fitness', 'expenses_hygiene', 
+    'expenses_subscriptions', 'expenses_entertainment', 'expenses_clothing', 
+    'expenses_vacation', 'expenses_beauty', 'expenses_travel_life_insurance', 
+    'expenses_cellphone_service', 'expenses_medical_dental', 'expenses_perscription', 
+    'expenses_line_of_credit_payment', 'expenses_student_loan_payment', 'expenses_credit_card_payment',
+    'expenses_tax_arrears_payment', 'expenses_small_business_loan_payment', 'housing_mortgage_payment', 
+    'housing_rent_payment', 'housing_property_tax', 'housing_condo_fee', 'housing_hydro', 'housing_insurance', 
+    'housing_repairs', 'housing_water', 'housing_gas', 'housing_internet', 'transportation_car_loan_payment', 
+    'transportation_insurance', 'transportation_fuel', 'transportation_maintenance', 'transportation_public_transit',
+    'transportation_ride_hailing', 'dependant_day_care', 'dependant_medical_dental', 'dependant_clothing',
+    'dependant_sports_recreation', 'dependant_transportation', 'dependant_tuition', 'dependant_housing',
+    'dependant_cellular_service', 'expenses_grocery_frequency', 'expenses_dining_frequency', 'expenses_fitness_frequency',
+    'expenses_hygiene_frequency', 'expenses_subscriptions_frequency', 'expenses_entertainment_frequency', 
+    'expenses_clothing_frequency', 'expenses_vacation_frequency', 'expenses_beauty_frequency', 
+    'expenses_travel_life_insurance_frequency', 'expenses_cellphone_service_frequency', 'expenses_medical_dental_frequency',
+    'expenses_line_of_credit_payment_frequency', 'expenses_student_loan_payment_frequency', 
+    'expenses_credit_card_payment_frequency', 'expenses_tax_arrears_payment_frequency', 
+    'expenses_small_business_loan_payment_frequency', 'housing_mortgage_payment_frequency', 'housing_rent_payment_frequency',
+    'housing_property_tax_frequency', 'housing_condo_fee_frequency', 'housing_hydro_frequency', 'housing_insurance_frequency', 
+    'housing_repairs_frequency', 'housing_water_frequency', 'housing_gas_frequency', 'housing_internet_frequency', 
+    'transportation_car_loan_payment_frequency', 'transportation_insurance_frequency', 'transportation_fuel_frequency', 
+    'transportation_maintenance_frequency', 'transportation_public_transit_frequency', 'transportation_ride_hailing_frequency',
+    'dependant_day_care_frequency', 'dependant_medical_dental_frequency', 'dependant_clothing_frequency', 
+    'dependant_sports_recreation_frequency', 'dependant_transportation_frequency', 'dependant_tuition_frequency', 
+    'dependant_housing_frequency', 'dependant_cellular_service_frequency'
+  ];
+
+  // Loop through each element ID and set the value using getCookie
+  formElements.forEach(function(elementId) {
+    const value = getCookie(elementId); // Get the value from the cookie
+    const element = document.getElementById(elementId);
+    if (element) { // Check if the element exists before trying to set its value
+      element.value = value;
     }
-  }
-
-
-
-  document.getElementById('expenses_grocery').value = getCookie('expenses_grocery');
-  document.getElementById('expenses_dining').value = getCookie('expenses_dining');
-  document.getElementById('expenses_fitness').value = getCookie('expenses_fitness');
-  document.getElementById('expenses_hygiene').value = getCookie('expenses_hygiene');
-  document.getElementById('expenses_subscriptions').value = getCookie('expenses_subscriptions');
-  document.getElementById('expenses_entertainment').value = getCookie('expenses_entertainment');
-  document.getElementById('expenses_clothing').value = getCookie('expenses_clothing');
-  document.getElementById('expenses_vacation').value = getCookie('expenses_vacation');
-  document.getElementById('expenses_beauty').value = getCookie('expenses_beauty');
-
-  document.getElementById('expenses_travel_life_insurance').value = getCookie('expenses_travel_life_insurance');
-  document.getElementById('expenses_cellphone_service').value = getCookie('expenses_cellphone_service');
-  document.getElementById('expenses_medical_dental').value = getCookie('expenses_medical_dental');
-  document.getElementById('expenses_perscription').value = getCookie('expenses_perscription');
-
-  document.getElementById('expenses_line_of_credit_payment').value = getCookie('expenses_line_of_credit_payment');
-  document.getElementById('expenses_student_loan_payment').value = getCookie('expenses_student_loan_payment');
-  document.getElementById('expenses_credit_card_payment').value = getCookie('expenses_credit_card_payment');
-  document.getElementById('expenses_tax_arrears_payment').value = getCookie('expenses_tax_arrears_payment');
-  document.getElementById('expenses_small_business_loan_payment').value = getCookie('expenses_small_business_loan_payment');
-  document.getElementById('housing_mortgage_payment').value = getCookie('housing_mortgage_payment');
-  document.getElementById('housing_rent_payment').value = getCookie('housing_rent_payment');
-  document.getElementById('housing_property_tax').value = getCookie('housing_property_tax');
-  document.getElementById('housing_condo_fee').value = getCookie('housing_condo_fee');
-  document.getElementById('housing_hydro').value = getCookie('housing_hydro');
-  document.getElementById('housing_insurance').value = getCookie('housing_insurance');
-  document.getElementById('housing_repairs').value = getCookie('housing_repairs');
-  document.getElementById('housing_water').value = getCookie('housing_water');
-  document.getElementById('housing_gas').value = getCookie('housing_gas');
-  document.getElementById('housing_internet').value = getCookie('housing_internet');
-  document.getElementById('transportation_car_loan_payment').value = getCookie('transportation_car_loan_payment');
-  document.getElementById('transportation_insurance').value = getCookie('transportation_insurance');
-  document.getElementById('transportation_fuel').value = getCookie('transportation_fuel');
-  document.getElementById('transportation_maintenance').value = getCookie('transportation_maintenance');
-  document.getElementById('transportation_public_transit').value = getCookie('transportation_public_transit');
-  document.getElementById('transportation_ride_hailing').value = getCookie('transportation_ride_hailing');
-  document.getElementById('dependant_day_care').value = getCookie('dependant_day_care');
-  document.getElementById('dependant_medical_dental').value = getCookie('dependant_medical_dental');
-  document.getElementById('dependant_clothing').value = getCookie('dependant_clothing');
-  document.getElementById('dependant_sports_recreation').value = getCookie('dependant_sports_recreation');
-  document.getElementById('dependant_transportation').value = getCookie('dependant_transportation');
-  document.getElementById('dependant_tuition').value = getCookie('dependant_tuition');
-  document.getElementById('dependant_housing').value = getCookie('dependant_housing');
-  document.getElementById('dependant_cellular_service').value = getCookie('dependant_cellular_service');
-
-  document.getElementById('expenses_grocery_frequency').value = getCookie('expenses_grocery_frequency');
-  document.getElementById('expenses_dining_frequency').value = getCookie('expenses_dining_frequency');
-  document.getElementById('expenses_fitness_frequency').value = getCookie('expenses_fitness_frequency');
-  document.getElementById('expenses_hygiene_frequency').value = getCookie('expenses_hygiene_frequency');
-  document.getElementById('expenses_subscriptions_frequency').value = getCookie('expenses_subscriptions_frequency');
-  document.getElementById('expenses_entertainment_frequency').value = getCookie('expenses_entertainment_frequency');
-  document.getElementById('expenses_clothing_frequency').value = getCookie('expenses_clothing_frequency');
-  document.getElementById('expenses_vacation_frequency').value = getCookie('expenses_vacation_frequency');
-  document.getElementById('expenses_beauty_frequency').value = getCookie('expenses_beauty_frequency');
-
-
-  document.getElementById('expenses_travel_life_insurance_frequency').value = getCookie('expenses_travel_life_insurance_frequency');
-  document.getElementById('expenses_cellphone_service_frequency').value = getCookie('expenses_cellphone_service_frequency');
-  document.getElementById('expenses_medical_dental_frequency').value = getCookie('expenses_medical_dental_frequency');
-  document.getElementById('expenses_line_of_credit_payment_frequency').value = getCookie('expenses_line_of_credit_payment_frequency');
-  document.getElementById('expenses_student_loan_payment_frequency').value = getCookie('expenses_student_loan_payment_frequency');
-  document.getElementById('expenses_credit_card_payment_frequency').value = getCookie('expenses_credit_card_payment_frequency');
-  document.getElementById('expenses_tax_arrears_payment_frequency').value = getCookie('expenses_tax_arrears_payment_frequency');
-  document.getElementById('expenses_small_business_loan_payment_frequency').value = getCookie('expenses_small_business_loan_payment_frequency');
-  document.getElementById('housing_mortgage_payment_frequency').value = getCookie('housing_mortgage_payment_frequency');
-  document.getElementById('housing_rent_payment_frequency').value = getCookie('housing_rent_payment_frequency');
-  document.getElementById('housing_property_tax_frequency').value = getCookie('housing_property_tax_frequency');
-  document.getElementById('housing_condo_fee_frequency').value = getCookie('housing_condo_fee_frequency');
-  document.getElementById('housing_hydro_frequency').value = getCookie('housing_hydro_frequency');
-  document.getElementById('housing_insurance_frequency').value = getCookie('housing_insurance_frequency');
-  document.getElementById('housing_repairs_frequency').value = getCookie('housing_repairs_frequency');
-  document.getElementById('housing_water_frequency').value = getCookie('housing_water_frequency');
-  document.getElementById('housing_gas_frequency').value = getCookie('housing_gas_frequency');
-  document.getElementById('housing_internet_frequency').value = getCookie('housing_internet_frequency');
-  document.getElementById('transportation_car_loan_payment_frequency').value = getCookie('transportation_car_loan_payment_frequency');
-  document.getElementById('transportation_insurance_frequency').value = getCookie('transportation_insurance_frequency');
-  document.getElementById('transportation_fuel_frequency').value = getCookie('transportation_fuel_frequency');
-  document.getElementById('transportation_maintenance_frequency').value = getCookie('transportation_maintenance_frequency');
-  document.getElementById('transportation_public_transit_frequency').value = getCookie('transportation_public_transit_frequency');
-  document.getElementById('transportation_ride_hailing_frequency').value = getCookie('transportation_ride_hailing_frequency');
-  document.getElementById('dependant_day_care_frequency').value = getCookie('dependant_day_care_frequency');
-  document.getElementById('dependant_medical_dental_frequency').value = getCookie('dependant_medical_dental_frequency');
-  document.getElementById('dependant_clothing_frequency').value = getCookie('dependant_clothing_frequency');
-  document.getElementById('dependant_sports_recreation_frequency').value = getCookie('dependant_sports_recreation_frequency');
-  document.getElementById('dependant_transportation_frequency').value = getCookie('dependant_transportation_frequency');
-  document.getElementById('dependant_tuition_frequency').value = getCookie('dependant_tuition_frequency');
-  document.getElementById('dependant_housing_frequency').value = getCookie('dependant_housing_frequency');
-  document.getElementById('dependant_cellular_service_frequency').value = getCookie('dependant_cellular_service_frequency');
+  });
 });
 
 window.calculateNext = function () {
