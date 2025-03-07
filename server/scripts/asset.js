@@ -9,6 +9,8 @@
   */ 
 
 import { displayWarning } from "./utils.js"
+import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
+
 
 const tabs = document.querySelectorAll('.tab')
 

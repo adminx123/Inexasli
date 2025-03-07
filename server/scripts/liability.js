@@ -8,7 +8,11 @@
  * jurisdictions worldwide.
   */ 
 
+
+console.log('Global setCookie exists:', typeof window.setCookie !== 'undefined');
 import { displayWarning } from "./utils.js"
+import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
+
 
 const tabs = document.querySelectorAll('.tab')
 
@@ -87,61 +91,42 @@ var LIABILITIES;
 }
     
     
-    function setCookie(name, value, days) {
-        var expires = "";
-        if (value === undefined || value === null || value === '') {
-            value = '0';
-        }
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
-    }
+ 
     
     
-    function setIncomeData(){ 
+
+    function setIncomeData() { 
       const liabilitiesFields = [
         'liabilities_small_business_loan',
         'liabilities_primary_residence',
         'liabilities_investment_properties',
         'liabilities_vehicle_loan',
-          'liabilities_personal_debt',
+        'liabilities_personal_debt',
         'liabilities_student_loan',
         'liabilities_line_of_credit',
         'liabilities_credit_card',
         'liabilities_tax_arrears'
-        ];
+      ];
     
+      for (let i = 0; i < liabilitiesFields.length; i++) {
+        const liabilitiesInput = document.getElementById(liabilitiesFields[i]);
+        if (liabilitiesInput.value.trim() !== "") {
+          const liabilities = liabilitiesInput.value;
+          setCookie(liabilitiesFields[i], liabilities, 365); // Set liability value
     
-    for (let i = 0; i < liabilitiesFields.length; i++) {
-    
-      const liabilitiesInput = document.getElementById(liabilitiesFields[i]);
-      if (liabilitiesInput.value.trim() !== "") {
-        const liabilities = liabilitiesInput.value;
-        const expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + 365);
-        document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
-
-        // Set the cookie for the percentage field as well
-
-        let fieldPercentage = parseFloat(document.querySelector(`#${liabilitiesFields[i]}_percent`).value)
-
-        if (!fieldPercentage || isNaN(fieldPercentage)) {
-          // fieldPercentage = 100
-          continue
+          // Set the cookie for the percentage field as well
+          let fieldPercentage = parseFloat(document.querySelector(`#${liabilitiesFields[i]}_percent`).value);
+          if (!fieldPercentage || isNaN(fieldPercentage)) {
+            // fieldPercentage = 100 (not setting a default here, just skipping as before)
+            continue;
+          }
+          setCookie(`${liabilitiesFields[i]}_percent`, fieldPercentage, 365); // Set percentage
+        } else {
+          setCookie(liabilitiesFields[i], "0", 365); // Set to 0 if empty
         }
-
-        document.cookie = `${liabilitiesFields[i]}_percent=${fieldPercentage}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
-      } else {
-        const liabilities = "0";
-        const expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + 365);
-        document.cookie = `${liabilitiesFields[i]}=${liabilities}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
       }
     }
-    }
+    
     
     let LIABILITIESNA;
     
