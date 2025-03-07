@@ -103,6 +103,40 @@ document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-st
     item.addEventListener('click', () => item.classList.toggle('selected'));
 });
 
+
+// Add Row Functionality
+document.getElementById('add-row-btn').addEventListener('click', function () {
+    const tableBody = document.querySelector('#depreciable-assets-table tbody');
+    const newRow = document.createElement('tr');
+
+    // Create and append table cells with input fields and a Remove button
+    newRow.innerHTML = `
+        <td><input type="text" placeholder="e.g., Laptop" class="table-input" data-field="asset-name"></td>
+        <td><input type="number" min="0" max="100" placeholder="e.g., 20" class="table-input" data-field="personal-use"></td>
+        <td><input type="number" min="0" max="100" placeholder="e.g., 60" class="table-input" data-field="business1-use"></td>
+        <td><input type="number" min="0" max="100" placeholder="e.g., 20" class="table-input" data-field="business2-use"></td>
+        <td><input type="number" min="0" step="0.01" placeholder="e.g., 500.00" class="table-input" data-field="undepreciated-value"></td>
+        <td><button class="remove-row-btn">Remove</button></td>
+    `;
+
+    tableBody.appendChild(newRow);
+
+    // Add event listener to the new Remove button
+    newRow.querySelector('.remove-row-btn').addEventListener('click', function () {
+        tableBody.removeChild(newRow);
+    });
+});
+
+// Remove Row Functionality (for existing rows)
+document.querySelectorAll('.remove-row-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const row = this.closest('tr'); // Find the closest row to the clicked button
+        row.remove(); // Remove the row
+    });
+});
+
+
+
 function generatePrompt(promptType) {
     let prompt = '';
 
