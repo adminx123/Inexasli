@@ -12,6 +12,8 @@
 console.log('Global setCookie exists:', typeof window.setCookie !== 'undefined');
 import { displayWarning } from "./utils.js"
 import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
+import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
+
 
 
 const tabs = document.querySelectorAll('.tab')
@@ -26,14 +28,7 @@ tabs.forEach(tab => {
     }
 })
 
-  // Function to retrieve cookie value by name
-  function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  const val = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
-  return val == 0 || val == '0'? '': val
 
-}
 
 
 
@@ -169,37 +164,26 @@ const isPartner = getCookie('liabilityspousecheckbox') == 'checked'
     
     
       
-      document.addEventListener('DOMContentLoaded', function() {
-        // Function to retrieve cookie value by name
-        function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        const val = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
-        return val == 0 || val == '0'? '': val
-
-    }
-       
-        
-    document.getElementById('liabilities_small_business_loan').value = getCookie('liabilities_small_business_loan');
-    document.getElementById('liabilities_primary_residence').value = getCookie('liabilities_primary_residence');
-    document.getElementById('liabilities_investment_properties').value = getCookie('liabilities_investment_properties');
-    document.getElementById('liabilities_vehicle_loan').value = getCookie('liabilities_vehicle_loan');
-          document.getElementById('liabilities_personal_debt').value = getCookie('liabilities_personal_debt');
-    document.getElementById('liabilities_student_loan').value = getCookie('liabilities_student_loan');
-    document.getElementById('liabilities_line_of_credit').value = getCookie('liabilities_line_of_credit');
-    document.getElementById('liabilities_credit_card').value = getCookie('liabilities_credit_card');
-    document.getElementById('liabilities_tax_arrears').value = getCookie('liabilities_tax_arrears');
-
-    document.getElementById('liabilities_small_business_loan_percent').value = getCookie('liabilities_small_business_loan_percent');
-    document.getElementById('liabilities_primary_residence_percent').value = getCookie('liabilities_primary_residence_percent');
-    document.getElementById('liabilities_investment_properties_percent').value = getCookie('liabilities_investment_properties_percent');
-    document.getElementById('liabilities_vehicle_loan_percent').value = getCookie('liabilities_vehicle_loan_percent');
-          document.getElementById('liabilities_personal_debt_percent').value = getCookie('liabilities_personal_debt_percent');
-    document.getElementById('liabilities_student_loan_percent').value = getCookie('liabilities_student_loan_percent');
-    document.getElementById('liabilities_line_of_credit_percent').value = getCookie('liabilities_line_of_credit_percent');
-    document.getElementById('liabilities_credit_card_percent').value = getCookie('liabilities_credit_card_percent');
-    document.getElementById('liabilities_tax_arrears_percent').value = getCookie('liabilities_tax_arrears_percent');
-      })	
+    document.addEventListener('DOMContentLoaded', function () {
+      // List of form element IDs you want to set based on cookies
+      const formElements = [
+          'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
+          'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan', 'liabilities_line_of_credit',
+          'liabilities_credit_card', 'liabilities_tax_arrears',
+          'liabilities_small_business_loan_percent', 'liabilities_primary_residence_percent', 'liabilities_investment_properties_percent',
+          'liabilities_vehicle_loan_percent', 'liabilities_personal_debt_percent', 'liabilities_student_loan_percent',
+          'liabilities_line_of_credit_percent', 'liabilities_credit_card_percent', 'liabilities_tax_arrears_percent'
+      ];
+  
+      // Loop through each element ID and set the value using getCookie
+      formElements.forEach(function (elementId) {
+          const value = getCookie(elementId); // Get the value from the cookie
+          const element = document.getElementById(elementId);
+          if (element) { // Check if the element exists before trying to set its value
+              element.value = value;
+          }
+      });
+  });	
 
 
       
