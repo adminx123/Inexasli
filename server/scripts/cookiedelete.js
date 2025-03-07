@@ -21,7 +21,7 @@ function deleteCookies() {
 
     // Retrieve cookies and delete them
     const cookies = document.cookie.split(";");
-    const paths = ["/", "/client/finance"];
+    const paths = ["/"];
     const domains = [window.location.hostname];
 
     cookies.forEach(cookie => {
