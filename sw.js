@@ -61,3 +61,10 @@ self.addEventListener('message', (event) => {
     self.skipWaiting(); // Force the new service worker to activate
   }
 });
+
+// ...existing code...
+
+// Log the protocol (http or https)
+console.log('Service Worker running on protocol:', self.location.protocol);
+
+// ...existing code...
