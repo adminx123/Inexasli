@@ -9,6 +9,9 @@
   */ 
 
 import { displayWarning, hideShowClass } from "./utils.js"
+import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
+
+
 
 function getTermsCookie(name) {
     const now = Date.now()
@@ -1389,33 +1392,6 @@ function handleUSAResident() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    function setCookie(name, value, days) {
-  var expires = "";
-  if (value === undefined || value === null || value === '') {
-    value = '0';
-  }
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    expires = "; expires=" + date.toUTCString();
-  }
-
-  document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Strict; Secure";
-}
     
 window.calculateNext = function () {
     calculateAll();
