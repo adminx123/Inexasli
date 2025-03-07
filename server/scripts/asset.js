@@ -10,6 +10,8 @@
 
 import { displayWarning } from "./utils.js"
 import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
+import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
+
 
 
 const tabs = document.querySelectorAll('.tab')
@@ -164,57 +166,26 @@ if (!fieldPercentage || isNaN(fieldPercentage)) {
 }
 }
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    const val = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
-    return val == 0 || val == '0'? '': val
-}
+document.addEventListener('DOMContentLoaded', function () {
+    // List of form element IDs you want to set based on cookies
+    const formElements = [
+        'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+        'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+        'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
+        'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
+        'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent', 'assets_primary_residence_percent',
+        'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
+    ];
 
-
-
-
-
-
-	document.addEventListener('DOMContentLoaded', function() {
-    // Function to retrieve cookie value by name
-		function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    const val = parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
-    return val == 0 || val == '0'? '': val
-}
-   
-    
-document.getElementById('assets_checking_accounts').value = getCookie('assets_checking_accounts');
-document.getElementById('assets_savings_accounts').value = getCookie('assets_savings_accounts');
-document.getElementById('assets_other_liquid_accounts').value = getCookie('assets_other_liquid_accounts');
-document.getElementById('assets_money_lent_out').value = getCookie('assets_money_lent_out');
-document.getElementById('assets_long_term_investment_accounts').value = getCookie('assets_long_term_investment_accounts');
-document.getElementById('assets_primary_residence').value = getCookie('assets_primary_residence');
-document.getElementById('assets_investment_properties').value = getCookie('assets_investment_properties');
-document.getElementById('assets_small_business').value = getCookie('assets_small_business');
-document.getElementById('assets_vehicles').value = getCookie('assets_vehicles');
-document.getElementById('assets_art_jewelry').value = getCookie('assets_art_jewelry');
-
-
-
-document.getElementById('assets_checking_accounts_percent').value = getCookie('assets_checking_accounts_percent');
-document.getElementById('assets_savings_accounts_percent').value = getCookie('assets_savings_accounts_percent');
-document.getElementById('assets_other_liquid_accounts_percent').value = getCookie('assets_other_liquid_accounts_percent');
-document.getElementById('assets_money_lent_out_percent').value = getCookie('assets_money_lent_out_percent');
-document.getElementById('assets_long_term_investment_accounts_percent').value = getCookie('assets_long_term_investment_accounts_percent');
-document.getElementById('assets_primary_residence_percent').value = getCookie('assets_primary_residence_percent');
-document.getElementById('assets_investment_properties_percent').value = getCookie('assets_investment_properties_percent');
-document.getElementById('assets_small_business_percent').value = getCookie('assets_small_business_percent');
-document.getElementById('assets_vehicles_percent').value = getCookie('assets_vehicles_percent');
-document.getElementById('assets_art_jewelry_percent').value = getCookie('assets_art_jewelry_percent');
-
-
-
-
-
-	})	
+    // Loop through each element ID and set the value using getCookie
+    formElements.forEach(function (elementId) {
+        const value = getCookie(elementId); // Get the value from the cookie
+        const element = document.getElementById(elementId);
+        if (element) { // Check if the element exists before trying to set its value
+            element.value = value;
+        }
+    });
+});
 
     
 window.calculateNext = function () {
