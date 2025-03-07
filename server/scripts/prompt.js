@@ -351,7 +351,7 @@ Add 29 g more fats to meet your daily fat requirement.
                 prompt += formatGrid('#expense-location .grid-item.selected', 'Location');
 
 
-                prompt += `I have included separate attachments of receipts.Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
+                prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
 Advertising, Insurance, Interest, Maintenance and Repairs, Management and Administration Fees, Motor Vehicle Expenses, Office Expenses, Legal, Accounting, and Other Professional Fees 
 Property Taxes, Salaries/Wages/and Benefits, Travel, Utilities, Other Expenses (for miscellaneous items)
 Table headings, should be in the following order: Date,Receipt #,Item,Amount,T1125 Category,Subtotal (Excl. Tax),GST,PST,Total, Personal use %, Business 1 use % Business 2 use %
