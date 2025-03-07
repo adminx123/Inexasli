@@ -1,4 +1,4 @@
-const CACHE_NAME = 'inexasli-v1';
+const CACHE_NAME = 'inexasli-v1'; //#CHANGEVERSION with each major update
 const urlsToCache = [
   '/budget/index1.html'
 ];
@@ -12,7 +12,7 @@ self.addEventListener('install', (event) => {
         console.log('Caching static assets');
         return cache.addAll(urlsToCache);
       })
-      .then(() => self.skipWaiting())
+      .then(() => self.skipWaiting()) // Skip waiting to activate immediately
       .catch(err => console.error('Cache failed:', err))
   );
 });
@@ -31,27 +31,33 @@ self.addEventListener('activate', (event) => {
         })
       );
     })
-    .then(() => self.clients.claim())
+    .then(() => self.clients.claim()) // Take control of clients immediately
   );
 });
 
 // Fetch event
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        if (response) return response;
-        return fetch(event.request.clone())
-          .then((networkResponse) => {
-            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-              return networkResponse;
-            }
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME)
-              .then((cache) => cache.put(event.request, responseToCache));
-            return networkResponse;
-          })
-          .catch(() => caches.match('/offline.html')); // Optional
-      })
-  );
+  // Bypass cache for local development
+  if (self.location.hostname === '127.0.0.1' || self.location.hostname === 'localhost') {
+    event.respondWith(fetch(event.request));
+  } else {
+    event.respondWith(
+      fetch(event.request) // Always try the network first
+        .then((networkResponse) => {
+          // Cache the new response
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME)
+            .then((cache) => cache.put(event.request, responseToCache));
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request)) // Fallback to cache if network fails
+    );
+  }
+});
+
+// Handle messages from clients (e.g., skipWaiting)
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.action === 'skipWaiting') {
+    self.skipWaiting(); // Force the new service worker to activate
+  }
 });
