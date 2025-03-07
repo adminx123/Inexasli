@@ -243,3 +243,29 @@ button:hover {
     display: block; /* No inline spacing */
 }
 
+.add-row-btn {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.add-row-btn:hover {
+    background-color: #45a049;
+}
+
+.remove-row-btn {
+    background-color: #ff4d4d; /* Red */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.remove-row-btn:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
