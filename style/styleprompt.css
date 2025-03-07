@@ -244,21 +244,27 @@ button:hover {
 }
 
 .add-row-btn {
-    background-color: #4CAF50; /* Green */
+    background-color: #050505; /* Black */
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
+    margin-right: 26px;
+
+    width: 10%; /* Adjust width as needed */
+    height: auto; /* Let height adjust based on content */
+    margin-left: auto; /* Push button to the right */
+    display: block; /* Ensure it behaves as a block element */
 }
 
 .add-row-btn:hover {
-    background-color: #45a049;
+    background-color: #040404;
 }
 
 .remove-row-btn {
-    background-color: #ff4d4d; /* Red */
+    background-color: #050505; /* Red */
     color: white;
     padding: 5px 10px;
     border: none;
