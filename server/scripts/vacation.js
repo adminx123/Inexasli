@@ -6,18 +6,14 @@
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
-  */ 
-
-
+ */
 import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
 import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
 
-
-
 window.updateFrequency = function(category) {
-    const amountInput = document.getElementById(`expenses_${category}`);
-    const frequencySelect = document.getElementById(`expenses_${category}_frequency`);
-    const totalSpan = document.getElementById(`expenses_${category}_total`);
+    const amountInput = document.getElementById(`trip_${category}`);
+    const frequencySelect = document.getElementById(`trip_${category}_frequency`);
+    const totalSpan = document.getElementById(`trip_${category}_total`);
     const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
 
     if (!amountInput || !amountInput.value || (tripDuration <= 0 && !totalOnlyCategories.includes(category) && frequencySelect.value !== 'total')) {
@@ -51,37 +47,34 @@ window.updateFrequency = function(category) {
     if (totalSpan) totalSpan.textContent = `$${total.toFixed(2)}`;
 };
 
-
-// Array of expense categories and their IDs
+// Array of expense categories
 const expenseCategories = [
     'flights', 'car', 'uber', 'transit', 'bike',
     'hotels', 'camping',
     'dining', 'grocery',
     'tickets', 'alcohol', 'gambling', 'rental',
-    'insurance', 'sim', 'luggage_fees'
+    'insurance', 'sim', 'luggage'
 ];
 
 // Categories that should only have "Total" frequency
-const totalOnlyCategories = ['flights', 'tickets', 'insurance', 'sim', 'luggage_fees'];
-
-
+const totalOnlyCategories = ['flights', 'tickets', 'insurance', 'sim', 'luggage'];
 
 // Calculate total vacation cost and populate breakdown
 window.calculateTotal = function() {
     const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
-    if (tripDuration <= 0 && expenseCategories.some(cat => !totalOnlyCategories.includes(cat) && document.getElementById(`expenses_${cat}`).value && document.getElementById(`expenses_${cat}_frequency`).value !== 'total')) {
+    if (tripDuration <= 0 && expenseCategories.some(cat => !totalOnlyCategories.includes(cat) && document.getElementById(`trip_${cat}`).value && document.getElementById(`trip_${cat}_frequency`).value !== 'total')) {
         alert('Please enter a valid trip duration for expenses with daily or weekly frequencies.');
         return;
     }
-    // Rest of your calculateTotal function remains unchanged...
+
     let grandTotal = 0;
     const expenseList = document.getElementById('expense_list');
     expenseList.innerHTML = ''; // Clear previous breakdown
 
     expenseCategories.forEach(category => {
-        const amountInput = document.getElementById(`expenses_${category}`);
-        const frequencySelect = document.getElementById(`expenses_${category}_frequency`);
-        const totalSpan = document.getElementById(`expenses_${category}_total`);
+        const amountInput = document.getElementById(`trip_${category}`);
+        const frequencySelect = document.getElementById(`trip_${category}_frequency`);
+        const totalSpan = document.getElementById(`trip_${category}_total`);
 
         const amount = parseFloat(amountInput.value) || 0;
         const frequency = frequencySelect.value;
@@ -139,7 +132,7 @@ window.copyResults = function() {
 
 // Add event listeners to update totals on input change
 expenseCategories.forEach(category => {
-    const inputElement = document.getElementById(`expenses_${category}`);
+    const inputElement = document.getElementById(`trip_${category}`);
     if (inputElement) {
         inputElement.addEventListener('input', () => updateFrequency(category));
     } else {
@@ -157,46 +150,43 @@ if (tripDurationInput) {
     console.error('Trip duration input not found');
 }
 
-
-
-
-// List of all input and select element IDs from your HTML
+// List of all input and select element IDs
 const formElementIds = [
     // Input elements
     'trip_duration',
-    'expenses_flights',
-    'expenses_car',
-    'expenses_uber',
-    'expenses_transit',
-    'expenses_bike',
-    'expenses_hotels',
-    'expenses_camping',
-    'expenses_dining',
-    'expenses_grocery',
-    'expenses_tickets',
-    'expenses_alcohol',
-    'expenses_gambling',
-    'expenses_rental',
-    'expenses_insurance',
-    'expenses_sim',
-    'expenses_luggage_fees',
+    'trip_flights',
+    'trip_car',
+    'trip_uber',
+    'trip_transit',
+    'trip_bike',
+    'trip_hotels',
+    'trip_camping',
+    'trip_dining',
+    'trip_grocery',
+    'trip_tickets',
+    'trip_alcohol',
+    'trip_gambling',
+    'trip_rental',
+    'trip_insurance',
+    'trip_sim',
+    'trip_luggage',
     // Select elements
-    'expenses_flights_frequency',
-    'expenses_car_frequency',
-    'expenses_uber_frequency',
-    'expenses_transit_frequency',
-    'expenses_bike_frequency',
-    'expenses_hotels_frequency',
-    'expenses_camping_frequency',
-    'expenses_dining_frequency',
-    'expenses_grocery_frequency',
-    'expenses_tickets_frequency',
-    'expenses_alcohol_frequency',
-    'expenses_gambling_frequency',
-    'expenses_rental_frequency',
-    'expenses_insurance_frequency',
-    'expenses_sim_frequency',
-    'expenses_luggage_fees_frequency'
+    'trip_flights_frequency',
+    'trip_car_frequency',
+    'trip_uber_frequency',
+    'trip_transit_frequency',
+    'trip_bike_frequency',
+    'trip_hotels_frequency',
+    'trip_camping_frequency',
+    'trip_dining_frequency',
+    'trip_grocery_frequency',
+    'trip_tickets_frequency',
+    'trip_alcohol_frequency',
+    'trip_gambling_frequency',
+    'trip_rental_frequency',
+    'trip_insurance_frequency',
+    'trip_sim_frequency',
+    'trip_luggage_frequency'
 ];
 
 // Function to create cookies for all form elements using imported setCookie
@@ -204,13 +194,11 @@ window.createCookies = function() {
     formElementIds.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
-            const value = element.value || '0'; // Default to '0' if empty, matching setCookie logic
+            const value = element.value || '0'; // Default to '0' if empty
             setCookie(id, value, 365); // Use imported setCookie with 1-year expiry
         } else {
             console.warn(`Element with ID '${id}' not found in the DOM`);
         }
     });
     console.log('Cookies created for all form elements');
-}
-
-// Note: No export here - this is just a function to be used in another script
+};
