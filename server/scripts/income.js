@@ -1325,24 +1325,38 @@ document.addEventListener('DOMContentLoaded', function () {
         'income_peer_to_peer_lending_frequency', 'income_venture_capital_frequency', 'income_tax_free_income_frequency'
     ];
 
-    // Loop through each element ID and set the value using getCookie
-    formElements.forEach(function (elementId) {
-        const value = getCookie(elementId); // Get the value from the cookie
-        const element = document.getElementById(elementId);
-        if (element) { // Check if the element exists before trying to set its value
-            element.value = value;
-        }
-    });
+ // Get elements
+ const regionDropdown = document.getElementById('RegionDropdown');
+ const subregionDropdown = document.getElementById('SubregionDropdown');
 
-    // Handle special cases for dropdowns
-    const region = getCookie('RegionDropdown');
-    const subregion = getCookie('SubregionDropdown');
+ // Set RegionDropdown first
+ const regionValue = getCookie('RegionDropdown');
+ regionDropdown.value = regionValue; // 'NONE', 'CAN', or 'USA'
 
-    if (region === 'USA' && subregionMap.USA && !subregionMap.USA.includes(subregion)) {
-        document.getElementById('SubregionDropdown').value = subregionMap.USA[0]; // Default to first USA subregion
-    } else if (region === 'CAN' && subregionMap.CAN && !subregionMap.CAN.includes(subregion)) {
-        document.getElementById('SubregionDropdown').value = subregionMap.CAN[0]; // Default to first CAN subregion
-    }
+ // Populate SubregionDropdown options based on RegionDropdown
+ updateSubregionDropdown(); // Ensure options are available
+
+ // Set all other form elements, including SubregionDropdown
+ formElements.forEach(function (elementId) {
+     if (elementId !== 'RegionDropdown') { // Already set
+         const value = getCookie(elementId);
+         const element = document.getElementById(elementId);
+         if (element) {
+             element.value = value;
+         }
+     }
+ });
+
+ // Adjust SubregionDropdown if invalid
+ const subregionValue = subregionDropdown.value;
+ if (regionValue === 'USA' && subregionMap.USA && !subregionMap.USA.includes(subregionValue)) {
+     subregionDropdown.value = subregionMap.USA[0]; // e.g., 'AL'
+ } else if (regionValue === 'CAN' && subregionMap.CAN && !subregionMap.CAN.includes(subregionValue)) {
+     subregionDropdown.value = subregionMap.CAN[0]; // e.g., 'AB'
+ }
+
+ // Ensure initial state is handled
+ handleRegionChange.call(regionDropdown);
 });
 
 

@@ -1,19 +1,32 @@
+// getcookie.js
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
+    console.log(`getCookie called for ${name}, cookie string: ${value}`);
+    
     if (parts.length === 2) {
-        // Decode the cookie value
         const decodedValue = decodeURIComponent(parts.pop().split(';').shift());
-        // If the value is empty and it's a frequency field, set it to 'annually'
-        if (decodedValue === '' && name.includes('_frequency')) {
-            return 'annually';
+        console.log(`Decoded value for ${name}: ${decodedValue}`);
+        
+        if (decodedValue === '' || decodedValue === '0') {
+            if (name.includes('_frequency')) return 'annually';
+            return '';
         }
-        return decodedValue == 0 || decodedValue == '0'? '': decodedValue;
+        
+        if (name === 'RegionDropdown' && !['CAN', 'USA'].includes(decodedValue)) {
+            console.log(`Invalid RegionDropdown value '${decodedValue}', returning 'NONE'`);
+            return 'NONE';
+        }
+        
+        return decodedValue;
     } else {
-        return 'annually';
+        console.log(`No cookie found for ${name}`);
+        if (name.includes('_frequency')) return 'annually';
+        if (name === 'RegionDropdown') return 'NONE';
+        if (name === 'SubregionDropdown') return '';
+        return '';
     }
 }
 
+export { getCookie };
 
-
-export { getCookie }; // Export the function
