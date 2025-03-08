@@ -1,8 +1,6 @@
 import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
 
-
-
-// Function to overwrite cookies and clear input fields
+// Function to overwrite cookies and clear input fields when they exist
 export function overwriteCookies() {
     const formElements = [
         'RegionDropdown', 'SubregionDropdown',
@@ -12,7 +10,6 @@ export function overwriteCookies() {
         'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony', 
         'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending', 
         'income_venture_capital', 'income_tax_free_income',
-        // Add all other cookie names you want to overwrite
         'expenses_grocery', 'expenses_dining', 'expenses_fitness', 'expenses_hygiene', 
         'expenses_subscriptions', 'expenses_entertainment', 'expenses_clothing', 
         'expenses_vacation', 'expenses_beauty', 'expenses_travel_life_insurance', 
@@ -24,41 +21,32 @@ export function overwriteCookies() {
         'transportation_insurance', 'transportation_fuel', 'transportation_maintenance', 'transportation_public_transit',
         'transportation_ride_hailing', 'dependant_day_care', 'dependant_medical_dental', 'dependant_clothing',
         'dependant_sports_recreation', 'dependant_transportation', 'dependant_tuition', 'dependant_housing',
-        'dependant_cellular_service', 'expenses_grocery_frequency', 'expenses_dining_frequency', 'expenses_fitness_frequency',
-        'expenses_hygiene_frequency', 'expenses_subscriptions_frequency', 'expenses_entertainment_frequency', 
-        'expenses_clothing_frequency', 'expenses_vacation_frequency', 'expenses_beauty_frequency', 
-        'expenses_travel_life_insurance_frequency', 'expenses_cellphone_service_frequency', 'expenses_medical_dental_frequency',
-        'expenses_line_of_credit_payment_frequency', 'expenses_student_loan_payment_frequency', 
-        'expenses_credit_card_payment_frequency', 'expenses_tax_arrears_payment_frequency', 
-        'expenses_small_business_loan_payment_frequency', 'housing_mortgage_payment_frequency', 'housing_rent_payment_frequency',
-        'housing_property_tax_frequency', 'housing_condo_fee_frequency', 'housing_hydro_frequency', 'housing_insurance_frequency', 
-        'housing_repairs_frequency', 'housing_water_frequency', 'housing_gas_frequency', 'housing_internet_frequency', 
-        'transportation_car_loan_payment_frequency', 'transportation_insurance_frequency', 'transportation_fuel_frequency', 
-        'transportation_maintenance_frequency', 'transportation_public_transit_frequency', 'transportation_ride_hailing_frequency',
-        'dependant_day_care_frequency', 'dependant_medical_dental_frequency', 'dependant_clothing_frequency', 
-        'dependant_sports_recreation_frequency', 'dependant_transportation_frequency', 'dependant_tuition_frequency', 
-        'dependant_housing_frequency', 'dependant_cellular_service_frequency',
+        'dependant_cellular_service',
         'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
         'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
         'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
         'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
         'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent', 'assets_primary_residence_percent',
-        'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
+        'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent',
+        'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
+        'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan',
+        'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears'
     ];
 
-    // Loop through each element ID, overwrite the cookies, and reset the input fields
+    const value = ''; // Default value to clear cookies
+
+    // First, overwrite all cookies regardless of whether elements exist
+    formElements.forEach(function (cookieName) {
+        setCookie(cookieName, value, 365); // Set all cookies with a 1-year expiry
+    });
+
+    // Then, only clear input fields that exist on the current page
     formElements.forEach(function (elementId) {
         const element = document.getElementById(elementId);
-        const value = ''; // Clear the value for now
-
         if (element) {
-            // Overwrite the cookie with an empty value (or a default value like '0')
-            setCookie(elementId, value, 365); // Set cookie with a 1-year expiry
-
-            // Clear the input field value
-            element.value = value; 
+            element.value = value; // Only clear the input if it exists on current page
         }
     });
 
-    console.log("Cookies have been overwritten and input fields cleared.");
+    console.log("All specified cookies have been overwritten and existing input fields cleared.");
 }
