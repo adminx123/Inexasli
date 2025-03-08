@@ -42,6 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
         background-color: #000;
         padding: 5px;
         width: 100%;
+                box-shadow: 0 -8px 8px rgba(64, 49, 49, 0.3);
+
       }
       .tray-menu div {
         width: 25px;
@@ -69,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
         background-color: #000;
         padding: 5px 0;
         z-index: 90;
-        box-shadow: 0 -4px 8px rgba(126, 4, 4, 0.3);
+        box-shadow: 0 -8px 8px rgba(66, 49, 49, 0.3);
       }
       .tray-dropdown.show {
         display: flex;
@@ -98,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       .tray-menu-item.active {
         font-weight: bold;
-        background-color: #fff;
+        background-color: #000;
       }
       .tray-submenu {
         display: none;
@@ -126,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         transition: background-color 0.2s ease;
       }
       .tray-submenu a:hover {
-        background-color: #555;
+        background-color: #000;
       }
     `;
     document.head.appendChild(style);
