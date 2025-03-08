@@ -1,211 +1,211 @@
-<!-- /*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
+<!-- /*Copyright (c) 2025 INEXASLI. All rights reserved.
+This code is protected under Canadian and international copyright laws.
+Unauthorized use, reproduction, distribution, or modification of this code 
+without explicit written permission via email from info@inexasli.com 
+is strictly prohibited. Violators will be pursued and prosecuted to the 
+fullest extent of the law in British Columbia, Canada, and applicable 
+jurisdictions worldwide.
  */ -->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vacation Expenses</title>
-    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="/style/styles.css">
-</head>
-<body>
-    <a href="/index.html">
-        <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto; padding-bottom: 10px;">
-    </a>
-    <h2 style="text-align: center; font-size: 16px; color: white;">Vacation Cost Estimator</h2>
-
-    <p>Step 1: Enter expense amounts for your trip:</p>
-
-    <!-- Trip Duration Input -->
-    <div class="containerround">
-        <div class="row">
-            <label for="trip_duration">Trip Duration (days):</label>
-            <input type="number" inputmode="numeric" id="trip_duration" min="1" placeholder="e.g., 7">
-        </div>
-    </div>
-
-    <!-- Transportation -->
-    <div class="containerround">
-        <h3 style="text-align: center;">Transportation</h3>
-        <div class="row">
-            <label for="expenses_flights">Flights: <span id="expenses_flights_total"></span></label>
-            <input type="number" inputmode="numeric" id="expenses_flights" step="0.01">
-            <select id="expenses_flights_frequency" onchange="updateFrequency('flights')">
-                <option value="total">Total</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="expenses_car">Car Rental: <span id="expenses_car_total"></span></label>
-            <input type="number" inputmode="numeric" id="expenses_car" step="0.01">
-            <select id="expenses_car_frequency" onchange="updateFrequency('car')">
-                <option value="total">Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="expenses_uber">Uber: <span id="expenses_uber_total"></span></label>
-            <input type="number" inputmode="numeric" id="expenses_uber" step="0.01">
-            <select id="expenses_uber_frequency" onchange="updateFrequency('uber')">
-                <option value="total">Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="expenses_transit">Public Transit: <span id="expenses_transit_total"></span></label>
-            <input type="number" inputmode="numeric" id="expenses_transit" step="0.01">
-            <select id="expenses_transit_frequency" onchange="updateFrequency('transit')">
-                <option value="total">Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="expenses_bike">Bike Rental: <span id="expenses_bike_total"></span></label>
-            <input type="number" inputmode="numeric" id="expenses_bike" step="0.01">
-            <select id="expenses_bike_frequency" onchange="updateFrequency('bike')">
-                <option value="total">Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Accommodation -->
-    <div class="containerround">
-        <h3 style="text-align: center;">Accommodation</h3>
-        <div class="row">
-            <label for="expenses_hotels">Hotels: <span id="expenses_hotels_total"></span></label>
-            <input type="number" inputmode="numeric" id="expenses_hotels" step="0.01">
-            <select id="expenses_hotels_frequency" onchange="updateFrequency('hotels')">
-                <option value="total">Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="expenses_camping_fees">Camping Fees: <span id="expenses_camping_total"></span></label>
-            <input type="number" inputmode="numeric" id="expenses_camping" step="0.01">
-            <select id="expenses_camping_frequency" onchange="updateFrequency('camping')">
-                <option value="total">Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Dining & Groceries -->
-    <div class="containerround">
-        <h3 style="text-align: center;">Dining & Groceries</h3>
-        <div class="row">
-            <label for="expenses_dining">Dining Out: <span id="expenses_dining_total"></span></label>
-            <input type="number" inputmode="numeric" id="expenses_dining" step="0.01">
-            <select id="expenses_dining_frequency" onchange="updateFrequency('dining')">
-                <option value="total">Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="expenses_grocery">Grocery (Additional for trip): <span id="expenses_grocery_total"></span></label>
-            <input type="number" inputmode="numeric" id="expenses_grocery" step="0.01">
-            <select id="expenses_grocery_frequency" onchange="updateFrequency('grocery')">
-                <option value="total">Total</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Entertainment -->
-<div class="containerround">
-    <h3 style="text-align: center;">Entertainment</h3>
-    <div class="row">
-        <label for="expenses_entertainment_tickets">Tickets: <span id="expenses_tickets_total"></span></label>
-        <input type="number" inputmode="numeric" id="expenses_tickets" step="0.01">
-        <select id="expenses_tickets_frequency" onchange="updateFrequency('tickets')">
-            <option value="total">Total</option>
-        </select>
-    </div>
-    <div class="row">
-        <label for="expenses_entertainment_alcohol">Alcohol: <span id="expenses_alcohol_total"></span></label>
-        <input type="number" inputmode="numeric" id="expenses_alcohol" step="0.01">
-        <select id="expenses_alcohol_frequency" onchange="updateFrequency('alcohol')">
-            <option value="total">Total</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-        </select>
-    </div>
-    <div class="row">
-        <label for="expenses_entertainment_gambling">Gambling: <span id="expenses_gambling_total"></span></label>
-        <input type="number" inputmode="numeric" id="expenses_gambling" step="0.01">
-        <select id="expenses_gambling_frequency" onchange="updateFrequency('gambling')">
-            <option value="total">Total</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-        </select>
-    </div>
-    <div class="row">
-        <label for="expenses_entertainment_rental">Rental: <span id="expenses_rental_total"></span></label>
-        <input type="number" inputmode="numeric" id="expenses_rental" step="0.01">
-        <select id="expenses_rental_frequency" onchange="updateFrequency('rental')">
-            <option value="total">Total</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-        </select>
-    </div>
-</div>
-
-<!-- Essentials -->
-<div class="containerround">
-    <h3 style="text-align: center;">Essentials</h3>
-    <div class="row">
-        <label for="expenses_insurance">Travel Insurance: <span id="expenses_insurance_total"></span></label>
-        <input type="number" inputmode="numeric" id="expenses_insurance" step="0.01">
-        <select id="expenses_insurance_frequency" onchange="updateFrequency('insurance')">
-            <option value="total">Total</option>
-        </select>
-    </div>
-    <div class="row">
-        <label for="expenses_sim">New SIM/Data Plan: <span id="expenses_sim_total"></span></label>
-        <input type="number" inputmode="numeric" id="expenses_sim" step="0.01">
-        <select id="expenses_sim_frequency" onchange="updateFrequency('sim')">
-            <option value="total">Total</option>
-        </select>
-    </div>
-    <div class="row">
-        <label for="expenses_luggage_fees">Excessive Luggage Fees: <span id="expenses_luggage_fees_total"></span></label>
-        <input type="number" inputmode="numeric" id="expenses_luggage_fees" step="0.01">
-        <select id="expenses_luggage_fees_frequency" onchange="updateFrequency('luggage_fees')">
-            <option value="total">Total</option>
-        </select>
-    </div>
-</div>
-
-    <div class="containerround">
-        <button onclick="createCookies()" style="margin-bottom: 5px;">Save</button>        <button onclick="calculateTotal()">Calculate Total</button>
-        <div id="totalCost" class="hidden">
-            <h4 style="text-align: center;">Total Estimated Vacation Cost: <span id="total_cost_display"></span></h4>
-            <button onclick="copyResults()" style="display: block; margin: 10px auto;">Copy Results</button>
-        </div>
-        <div class="containerround hidden" id="expenseBreakdown">
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <link rel="manifest" href="/manifest.json">
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Vacation Expenses</title>
+     <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+     <link rel="stylesheet" href="/style/styles.css">
+ </head>
+ <body>
+     <a href="/index.html">
+         <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto; padding-bottom: 10px;">
+     </a>
+     <h2 style="text-align: center; font-size: 16px; color: white;">Vacation Cost Estimator</h2>
+     <p>Step 1: Enter expense amounts for your trip:</p>
+ 
+     <!-- Trip Duration Input -->
+     <div class="containerround">
+         <div class="row">
+             <label for="trip_duration">Trip Duration (days):</label>
+             <input type="number" inputmode="numeric" id="trip_duration" min="1" placeholder="e.g., 7">
+         </div>
+     </div>
+ 
+     <!-- Transportation -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Transportation</h3>
+         <div class="row">
+             <label for="trip_flights">Flights: <span id="trip_flights_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_flights" step="0.01">
+             <select id="trip_flights_frequency" onchange="updateFrequency('flights')">
+                 <option value="total">Total</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_car">Car Rental: <span id="trip_car_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_car" step="0.01">
+             <select id="trip_car_frequency" onchange="updateFrequency('car')">
+                 <option value="total">Total</option>
+                 <option value="daily">Daily</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_uber">Uber: <span id="trip_uber_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_uber" step="0.01">
+             <select id="trip_uber_frequency" onchange="updateFrequency('uber')">
+                 <option value="total">Total</option>
+                 <option value="daily">Daily</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_transit">Public Transit: <span id="trip_transit_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_transit" step="0.01">
+             <select id="trip_transit_frequency" onchange="updateFrequency('transit')">
+                 <option value="total">Total</option>
+                 <option value="daily">Daily</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_bike">Bike Rental: <span id="trip_bike_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_bike" step="0.01">
+             <select id="trip_bike_frequency" onchange="updateFrequency('bike')">
+                 <option value="total">Total</option>
+                 <option value="daily">Daily</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+     </div>
+ 
+     <!-- Accommodation -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Accommodation</h3>
+         <div class="row">
+             <label for="trip_hotels">Hotels: <span id="trip_hotels_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_hotels" step="0.01">
+             <select id="trip_hotels_frequency" onchange="updateFrequency('hotels')">
+                 <option value="total">Total</option>
+                 <option value="daily">Daily</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_camping">Camping Fees: <span id="trip_camping_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_camping" step="0.01">
+             <select id="trip_camping_frequency" onchange="updateFrequency('camping')">
+                 <option value="total">Total</option>
+                 <option value="daily">Daily</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+     </div>
+ 
+     <!-- Dining & Groceries -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Dining & Groceries</h3>
+         <div class="row">
+             <label for="trip_dining">Dining Out: <span id="trip_dining_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_dining" step="0.01">
+             <select id="trip_dining_frequency" onchange="updateFrequency('dining')">
+                 <option value="total">Total</option>
+                 <option value="daily">Daily</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_grocery">Grocery (Additional for trip): <span id="trip_grocery_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_grocery" step="0.01">
+             <select id="trip_grocery_frequency" onchange="updateFrequency('grocery')">
+                 <option value="total">Total</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+     </div>
+ 
+     <!-- Entertainment -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Entertainment</h3>
+         <div class="row">
+             <label for="trip_tickets">Tickets: <span id="trip_tickets_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_tickets" step="0.01">
+             <select id="trip_tickets_frequency" onchange="updateFrequency('tickets')">
+                 <option value="total">Total</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_alcohol">Alcohol: <span id="trip_alcohol_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_alcohol" step="0.01">
+             <select id="trip_alcohol_frequency" onchange="updateFrequency('alcohol')">
+                 <option value="total">Total</option>
+                 <option value="daily">Daily</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_gambling">Gambling: <span id="trip_gambling_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_gambling" step="0.01">
+             <select id="trip_gambling_frequency" onchange="updateFrequency('gambling')">
+                 <option value="total">Total</option>
+                 <option value="daily">Daily</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_rental">Rental: <span id="trip_rental_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_rental" step="0.01">
+             <select id="trip_rental_frequency" onchange="updateFrequency('rental')">
+                 <option value="total">Total</option>
+                 <option value="daily">Daily</option>
+                 <option value="weekly">Weekly</option>
+             </select>
+         </div>
+     </div>
+ 
+     <!-- Essentials -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Essentials</h3>
+         <div class="row">
+             <label for="trip_insurance">Travel Insurance: <span id="trip_insurance_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_insurance" step="0.01">
+             <select id="trip_insurance_frequency" onchange="updateFrequency('insurance')">
+                 <option value="total">Total</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_sim">New SIM/Data Plan: <span id="trip_sim_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_sim" step="0.01">
+             <select id="trip_sim_frequency" onchange="updateFrequency('sim')">
+                 <option value="total">Total</option>
+             </select>
+         </div>
+         <div class="row">
+             <label for="trip_luggage">Excessive Luggage Fees: <span id="trip_luggage_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_luggage" step="0.01">
+             <select id="trip_luggage_frequency" onchange="updateFrequency('luggage')">
+                 <option value="total">Total</option>
+             </select>
+         </div>
+     </div>
+     <div class="containerround">
+         <button onclick="createCookies()" style="margin-bottom: 5px;">Save</button>
+         <button onclick="calculateTotal()">Calculate Total</button>
+         <div id="totalCost" class="hidden">
+             <h4 style="text-align: center;">Total Estimated Vacation Cost: <span id="total_cost_display"></span></h4>
+             <button onclick="copyResults()" style="display: block; margin: 10px auto;">Copy Results</button>
+         </div>
+        
+        
+        
+         <div class="containerround hidden" id="expenseBreakdown" style="width: 80%; max-width: 800px; margin: 0 auto; padding: 30px; font-size: 18px;">
             <h3>Expense Breakdown</h3>
             <ul id="expense_list"></ul>
         </div>
-    </div>
-
-    <script type="module" src="/server/scripts/vacation.js"></script>
-        <script src="/server/scripts/toolTip.js"></script>
-</body>
-</html>
+ 
+     <script type="module" src="/server/scripts/vacation.js"></script>
+     <script src="/server/scripts/toolTip.js"></script>
+ </body>
+ </html>
