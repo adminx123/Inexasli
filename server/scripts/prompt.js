@@ -161,14 +161,18 @@ function generatePrompt(promptType) {
 
         case 'incident':
             prompt += formatGrid('#incident-goal .grid-item.selected', 'Analyze the following incident details input relative to my goal');
-            prompt += 'Purpose of analysis: Maximize the efficiency, productivity, and safety of the workplace\n\n';
+    
+        
+        prompt += formatGrid('#area-goal .grid-item.selected', 'Incident Area');
+
+            prompt += 'Purpose of analysis: Maximize the efficiency, productivity, safety and understanding of social dynamics for the workplace or personal life.\n\n';
             const incidentDetails = document.getElementById('incident-details');
             if (incidentDetails?.value) {
                 prompt += formatGrid('#incident-warnings .grid-item.selected', 'My personality traits');
                 prompt += formatList(incidentDetails.value, 'What Happened');
                 prompt += formatGrid('#incident-mood .grid-item.selected', 'Perceived mood/tone of other people involved');
                 const incidentMoments = document.getElementById('incident-moments');
-                if (incidentMoments?.value) prompt += formatList(incidentMoments.value, 'Key moments');
+                if (incidentMoments?.value) prompt += formatList(incidentMoments.value, 'Key moments that stood out');
                 const incidentThoughts = document.getElementById('incident-thoughts');
                 if (incidentThoughts?.value) prompt += formatList(incidentThoughts.value, 'My initial thoughts');
             }
