@@ -55,14 +55,14 @@ document.addEventListener("DOMContentLoaded", () => {
     .dropdown {
       display: none;
       position: absolute;
-      top: 40px;
+      top: 60px;
       left: 10px;
-      background-color: #222;
+      background-color: #FFF;
       border-radius: 5px;
-      padding: 10px 0;
+      padding: 5px 0;
       min-width: 200px;
       z-index: 90;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 8px rgba(252, 252, 252, 0.3);
     }
     .dropdown.show {
       display: block;
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .menu-item {
       display: block;
       padding: 10px 20px;
-      color: #fff;
+      color: #000;
       text-decoration: none;
       font-family: Arial, sans-serif;
       font-size: 16px;
@@ -84,12 +84,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     .menu-item.active {
       font-weight: bold;
-      background-color: #000;
+      background-color: #fff;
     }
     .submenu {
       display: none;
       position: static; /* Consistent flow within dropdown */
-      background-color: #333;
+      background-color: #000;
       padding: 5px 0;
       width: 100%; /* Match parent width */
       box-sizing: border-box;
