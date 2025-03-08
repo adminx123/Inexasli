@@ -263,3 +263,37 @@ window.createCookies = function() {
     });
     console.log('Cookies created for all form elements');
 };
+
+
+
+
+// Function to overwrite cookies and clear input fields for Vacation Worksheet
+window.overwriteCookies1 = function() {
+    const formElements = [
+        'trip_duration',
+        'trip_flights', 'trip_car', 'trip_uber', 'trip_transit', 'trip_bike',
+        'trip_hotels', 'trip_camping', 'trip_dining', 'trip_grocery', 'trip_tickets',
+        'trip_alcohol', 'trip_gambling', 'trip_rental', 'trip_insurance', 'trip_sim', 'trip_luggage',
+        'trip_flights_frequency', 'trip_car_frequency', 'trip_uber_frequency', 'trip_transit_frequency',
+        'trip_bike_frequency', 'trip_hotels_frequency', 'trip_camping_frequency', 'trip_dining_frequency',
+        'trip_grocery_frequency', 'trip_tickets_frequency', 'trip_alcohol_frequency', 'trip_gambling_frequency',
+        'trip_rental_frequency', 'trip_insurance_frequency', 'trip_sim_frequency', 'trip_luggage_frequency'
+    ];
+
+    const value = ''; // Default value to clear cookies
+
+    // First, overwrite all cookies regardless of whether elements exist
+    formElements.forEach(function (cookieName) {
+        setCookie(cookieName, value, 365); // Set all cookies with a 1-year expiry
+    });
+
+    // Then, only clear input fields that exist on the current page
+    formElements.forEach(function (elementId) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.value = value; // Only clear the input/select if it exists on current page
+        }
+    });
+
+    console.log("All Vacation Worksheet cookies have been overwritten and existing input fields cleared.");
+}
