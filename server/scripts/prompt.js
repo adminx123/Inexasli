@@ -168,7 +168,7 @@ function generatePrompt(promptType) {
             prompt += 'Purpose of analysis: Maximize the efficiency, productivity, safety and understanding of social dynamics for the workplace or personal life.\n\n';
             const incidentDetails = document.getElementById('incident-details');
             if (incidentDetails?.value) {
-                prompt += formatGrid('#incident-warnings .grid-item.selected', 'My personality traits');
+                prompt += formatGrid('#incident-warnings .grid-item.selected', 'My general personality traits');
                 prompt += formatList(incidentDetails.value, 'What Happened');
                 prompt += formatGrid('#incident-mood .grid-item.selected', 'Perceived mood/tone of other people involved');
                 const incidentMoments = document.getElementById('incident-moments');
