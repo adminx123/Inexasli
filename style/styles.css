@@ -423,7 +423,8 @@ select {
   margin-top: 20px;
 }
 
-/* Modal styles */
+/* Modal styles */ 
+
 
 body {
   font-family: "Roboto", sans-serif;
@@ -431,6 +432,8 @@ body {
   color: #000;
   text-align: left;
   margin: 20px;
+  padding-bottom: 25px; /* Adjust this value as needed */
+
 }
 
 
