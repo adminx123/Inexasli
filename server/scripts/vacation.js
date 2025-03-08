@@ -9,6 +9,49 @@
   */ 
 
 
+import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
+import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
+
+
+
+window.updateFrequency = function(category) {
+    const amountInput = document.getElementById(`expenses_${category}`);
+    const frequencySelect = document.getElementById(`expenses_${category}_frequency`);
+    const totalSpan = document.getElementById(`expenses_${category}_total`);
+    const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
+
+    if (!amountInput || !amountInput.value || (tripDuration <= 0 && !totalOnlyCategories.includes(category) && frequencySelect.value !== 'total')) {
+        if (totalSpan) totalSpan.textContent = '';
+        return;
+    }
+
+    const amount = parseFloat(amountInput.value) || 0;
+    const frequency = frequencySelect.value;
+    let total = 0;
+
+    if (totalOnlyCategories.includes(category)) {
+        total = amount;
+    } else {
+        switch (frequency) {
+            case 'total':
+                total = amount;
+                break;
+            case 'daily':
+                total = amount * tripDuration;
+                break;
+            case 'weekly':
+                const fullWeeks = Math.floor(tripDuration / 7);
+                const remainingDays = tripDuration % 7;
+                const dailyRate = amount / 7;
+                total = (fullWeeks * amount) + (remainingDays * dailyRate);
+                break;
+        }
+    }
+
+    if (totalSpan) totalSpan.textContent = `$${total.toFixed(2)}`;
+};
+
+
 // Array of expense categories and their IDs
 const expenseCategories = [
     'flights', 'car', 'uber', 'transit', 'bike',
@@ -21,53 +64,16 @@ const expenseCategories = [
 // Categories that should only have "Total" frequency
 const totalOnlyCategories = ['flights', 'tickets', 'insurance', 'sim', 'luggage_fees'];
 
-// Update frequency and calculate total for a specific expense
-function updateFrequency(category) {
-    const amountInput = document.getElementById(`expenses_${category}`);
-    const frequencySelect = document.getElementById(`expenses_${category}_frequency`);
-    const totalSpan = document.getElementById(`expenses_${category}_total`);
-    const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
 
-    // Only exit if no input value OR (tripDuration is 0 and category isn't total-only and frequency isn't 'total')
-    if (!amountInput || !amountInput.value || (tripDuration <= 0 && !totalOnlyCategories.includes(category) && frequencySelect.value !== 'total')) {
-        if (totalSpan) totalSpan.textContent = '';
-        return;
-    }
-
-    const amount = parseFloat(amountInput.value) || 0;
-    const frequency = frequencySelect.value;
-    let total = 0;
-
-    if (totalOnlyCategories.includes(category)) {
-        total = amount; // Always total for these categories
-    } else {
-        switch (frequency) {
-            case 'total':
-                total = amount;
-                break;
-            case 'daily':
-                total = amount * tripDuration;
-                break;
-            case 'weekly':
-                const fullWeeks = Math.floor(tripDuration / 7); // Full weeks
-                const remainingDays = tripDuration % 7; // Leftover days
-                const dailyRate = amount / 7; // Daily equivalent of weekly cost
-                total = (fullWeeks * amount) + (remainingDays * dailyRate); // Full weeks + prorated days
-                break;
-        }
-    }
-
-    if (totalSpan) totalSpan.textContent = `$${total.toFixed(2)}`;
-}
 
 // Calculate total vacation cost and populate breakdown
-function calculateTotal() {
+window.calculateTotal = function() {
     const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
     if (tripDuration <= 0 && expenseCategories.some(cat => !totalOnlyCategories.includes(cat) && document.getElementById(`expenses_${cat}`).value && document.getElementById(`expenses_${cat}_frequency`).value !== 'total')) {
         alert('Please enter a valid trip duration for expenses with daily or weekly frequencies.');
         return;
     }
-
+    // Rest of your calculateTotal function remains unchanged...
     let grandTotal = 0;
     const expenseList = document.getElementById('expense_list');
     expenseList.innerHTML = ''; // Clear previous breakdown
@@ -115,10 +121,10 @@ function calculateTotal() {
     totalCostDisplay.textContent = `$${grandTotal.toFixed(2)}`;
     document.getElementById('totalCost').classList.remove('hidden');
     document.getElementById('expenseBreakdown').classList.remove('hidden');
-}
+};
 
 // Copy results to clipboard
-function copyResults() {
+window.copyResults = function() {
     const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
     const totalCost = document.getElementById('total_cost_display').textContent;
     const expenseItems = Array.from(document.getElementById('expense_list').getElementsByTagName('li'))
@@ -129,7 +135,7 @@ function copyResults() {
     navigator.clipboard.writeText(textToCopy)
         .then(() => alert('Results copied to clipboard!'))
         .catch(err => alert('Failed to copy results: ' + err));
-}
+};
 
 // Add event listeners to update totals on input change
 expenseCategories.forEach(category => {
@@ -150,3 +156,61 @@ if (tripDurationInput) {
 } else {
     console.error('Trip duration input not found');
 }
+
+
+
+
+// List of all input and select element IDs from your HTML
+const formElementIds = [
+    // Input elements
+    'trip_duration',
+    'expenses_flights',
+    'expenses_car',
+    'expenses_uber',
+    'expenses_transit',
+    'expenses_bike',
+    'expenses_hotels',
+    'expenses_camping',
+    'expenses_dining',
+    'expenses_grocery',
+    'expenses_tickets',
+    'expenses_alcohol',
+    'expenses_gambling',
+    'expenses_rental',
+    'expenses_insurance',
+    'expenses_sim',
+    'expenses_luggage_fees',
+    // Select elements
+    'expenses_flights_frequency',
+    'expenses_car_frequency',
+    'expenses_uber_frequency',
+    'expenses_transit_frequency',
+    'expenses_bike_frequency',
+    'expenses_hotels_frequency',
+    'expenses_camping_frequency',
+    'expenses_dining_frequency',
+    'expenses_grocery_frequency',
+    'expenses_tickets_frequency',
+    'expenses_alcohol_frequency',
+    'expenses_gambling_frequency',
+    'expenses_rental_frequency',
+    'expenses_insurance_frequency',
+    'expenses_sim_frequency',
+    'expenses_luggage_fees_frequency'
+];
+
+// Function to create cookies for all form elements using imported setCookie
+function createCookies() {
+    formElementIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            const value = element.value || '0'; // Default to '0' if empty, matching setCookie logic
+            setCookie(id, value, 365); // Use imported setCookie with 1-year expiry
+        } else {
+            console.warn(`Element with ID '${id}' not found in the DOM`);
+        }
+    });
+    console.log('Cookies created for all form elements');
+}
+
+// Note: No export here - this is just a function to be used in another script
