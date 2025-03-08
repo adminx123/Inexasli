@@ -1,31 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Inject HTML
+  // Inject HTML with unique class names
   const menuHTML = `
-    <div class="menu" id="menuToggle">
+    <div class="hamburger-menu" id="hamburgerMenuToggle">
       <div></div>
       <div></div>
       <div></div>
     </div>
-    <div class="dropdown" id="dropdownMenu">
-      <a href="#" id="calculations" class="menu-item">CALCULATE</a>
-      <div class="submenu" id="calculationsMenu">
+    <div class="hamburger-dropdown" id="hamburgerDropdownMenu">
+      <a href="#" id="hamburgerCalculations" class="hamburger-menu-item">CALCULATE</a>
+      <div class="hamburger-submenu" id="hamburgerCalculationsMenu">
         <a href="/budget/vacation.html" id="vacation">Vacation</a>
         <a href="/budget/intro.html" id="personal">IncomeIQ™</a>
       </div>
-      <a href="#" id="create" class="menu-item">CREATE</a>
-      <div class="submenu" id="createMenu">
+      <a href="#" id="hamburgerCreate" class="hamburger-menu-item">CREATE</a>
+      <div class="hamburger-submenu" id="hamburgerCreateMenu">
         <a href="/create/prompt.html" id="website">Promptify™</a>
       </div>
-            <a href="mailto:support@inexasli.com" id="contact" class="menu-item">CONTACT</a>
-
+      <a href="mailto:support@inexasli.com" id="hamburgerContact" class="hamburger-menu-item">CONTACT</a>
     </div>
   `;
   document.body.insertAdjacentHTML("afterbegin", menuHTML);
 
-  // Inject CSS
+  // Inject CSS with unique class names
   const style = document.createElement("style");
   style.textContent = `
-    .menu {
+    .hamburger-menu {
       position: absolute;
       top: 10px;
       left: 10px;
@@ -36,23 +35,23 @@ document.addEventListener("DOMContentLoaded", () => {
       background-color: transparent;
       border: none;
     }
-    .menu div {
+    .hamburger-menu div {
       width: 25px;
       height: 3px;
       background-color: #fff;
       margin: 4px 0;
       transition: transform 0.3s ease, opacity 0.3s ease;
     }
-    .menu.active div:nth-child(1) {
+    .hamburger-menu.active div:nth-child(1) {
       transform: rotate(-45deg) translate(-5px, 6px);
     }
-    .menu.active div:nth-child(2) {
+    .hamburger-menu.active div:nth-child(2) {
       opacity: 0;
     }
-    .menu.active div:nth-child(3) {
+    .hamburger-menu.active div:nth-child(3) {
       transform: rotate(45deg) translate(-5px, -6px);
     }
-    .dropdown {
+    .hamburger-dropdown {
       display: none;
       position: absolute;
       top: 60px;
@@ -64,10 +63,10 @@ document.addEventListener("DOMContentLoaded", () => {
       z-index: 90;
       box-shadow: 0 4px 8px rgba(252, 252, 252, 0.3);
     }
-    .dropdown.show {
+    .hamburger-dropdown.show {
       display: block;
     }
-    .menu-item {
+    .hamburger-menu-item {
       display: block;
       padding: 10px 20px;
       color: #000;
@@ -76,28 +75,28 @@ document.addEventListener("DOMContentLoaded", () => {
       font-size: 16px;
       text-transform: uppercase;
       transition: background-color 0.2s ease;
-      width: 100%; /* Ensure it takes full width */
-      box-sizing: border-box; /* Include padding in width */
+      width: 100%;
+      box-sizing: border-box;
     }
-    .menu-item:hover {
+    .hamburger-menu-item:hover {
       background-color: #444;
     }
-    .menu-item.active {
+    .hamburger-menu-item.active {
       font-weight: bold;
       background-color: #fff;
     }
-    .submenu {
+    .hamburger-submenu {
       display: none;
-      position: static; /* Consistent flow within dropdown */
+      position: static; /* Keep in normal flow for vertical stacking */
       background-color: #000;
       padding: 5px 0;
-      width: 100%; /* Match parent width */
+      width: 100%;
       box-sizing: border-box;
     }
-    .submenu.show {
+    .hamburger-submenu.show {
       display: block;
     }
-    .submenu a {
+    .hamburger-submenu a {
       display: block;
       padding: 8px 20px;
       color: #ddd;
@@ -105,24 +104,24 @@ document.addEventListener("DOMContentLoaded", () => {
       font-family: Arial, sans-serif;
       font-size: 14px;
       transition: background-color 0.2s ease;
-      width: 100%; /* Full width for consistency */
+      width: 100%;
       box-sizing: border-box;
     }
-    .submenu a:hover {
+    .hamburger-submenu a:hover {
       background-color: #555;
     }
   `;
   document.head.appendChild(style);
 
-  // JavaScript behavior
-  const menuToggle = document.querySelector("#menuToggle");
-  const dropdownMenu = document.querySelector("#dropdownMenu");
-  const calculations = document.querySelector("#calculations");
-  const calculationsMenu = document.querySelector("#calculationsMenu");
-  const create = document.querySelector("#create");
-  const createMenu = document.querySelector("#createMenu");
-  const allMenuItems = document.querySelectorAll(".menu-item");
-  const allSubmenus = document.querySelectorAll(".submenu");
+  // JavaScript behavior with updated selectors
+  const menuToggle = document.querySelector("#hamburgerMenuToggle");
+  const dropdownMenu = document.querySelector("#hamburgerDropdownMenu");
+  const calculations = document.querySelector("#hamburgerCalculations");
+  const calculationsMenu = document.querySelector("#hamburgerCalculationsMenu");
+  const create = document.querySelector("#hamburgerCreate");
+  const createMenu = document.querySelector("#hamburgerCreateMenu");
+  const allMenuItems = document.querySelectorAll(".hamburger-menu-item");
+  const allSubmenus = document.querySelectorAll(".hamburger-submenu");
 
   if (menuToggle && dropdownMenu) {
     menuToggle.addEventListener("click", () => {
@@ -172,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  const dropdownLinks = document.querySelectorAll(".dropdown a");
+  const dropdownLinks = document.querySelectorAll(".hamburger-dropdown a");
   if (dropdownLinks.length > 0) {
     dropdownLinks.forEach(link => {
       link.addEventListener("click", (event) => {
