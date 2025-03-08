@@ -24,45 +24,48 @@ document.addEventListener("DOMContentLoaded", () => {
   // Inject CSS with unique class names
   const style = document.createElement("style");
   style.textContent = `
-    .hamburger-menu {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
-      z-index: 100;
-      background-color: transparent;
-      border: none;
-    }
-    .hamburger-menu div {
-      width: 25px;
-      height: 3px;
-      background-color: #fff;
-      margin: 4px 0;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-    .hamburger-menu.active div:nth-child(1) {
-      transform: rotate(-45deg) translate(-5px, 6px);
-    }
-    .hamburger-menu.active div:nth-child(2) {
-      opacity: 0;
-    }
-    .hamburger-menu.active div:nth-child(3) {
-      transform: rotate(45deg) translate(-5px, -6px);
-    }
-    .hamburger-dropdown {
-      display: none;
-      position: absolute;
-      top: 60px;
-      left: 10px;
-      background-color: #FFF;
-      border-radius: 5px;
-      padding: 5px 0;
-      min-width: 200px;
-      z-index: 90;
-      box-shadow: 0 4px 8px rgba(252, 252, 252, 0.3);
-    }
+   .hamburger-menu {
+  position: fixed; /* Changed from absolute to fixed */
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  z-index: 100;
+  background-color: transparent;
+  border: none;
+}
+.hamburger-menu div {
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  margin: 4px 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.hamburger-menu.active div:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+.hamburger-menu.active div:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-menu.active div:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+.hamburger-dropdown {
+  display: none;
+  position: fixed; /* Changed from absolute to fixed */
+  top: 50px; /* Adjusted to position below the fixed hamburger */
+  left: 10px;
+  background-color: #FFF;
+  border-radius: 5px;
+  padding: 5px 0;
+  min-width: 200px;
+  z-index: 90;
+  box-shadow: 0 4px 8px rgba(126, 4, 4, 0.3);
+}
+/* Rest of your CSS remains the same */
+
+
     .hamburger-dropdown.show {
       display: block;
     }
