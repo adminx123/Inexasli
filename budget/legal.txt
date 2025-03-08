@@ -1,231 +1,245 @@
-Terms_of_Service:
+Terms of Service for IncomeIQ™, Vacation Worksheet, and Promptify™
 
-  Introduction:
-    Note: "This document outlines the terms of service for the use of the Worksheet and, where applicable, participation in interviews conducted by INEXASLI (hereinafter referred to as the 'Developer'). Sections marked as 'Interviews' apply only to users who choose to participate in interviews."
+Introduction
+------------
+Note: This document outlines the terms of service for the use of IncomeIQ™, Vacation Worksheet, Promptify™, and, where applicable, participation in interviews conducted by INEXASLI (hereinafter referred to as the "Developer"). Sections marked as "Interviews" apply only to users who choose to participate in interviews.
 
-    Description: "This document outlines the terms of service for the use of the Worksheet (referred to collectively as the 'Worksheet') provided by INEXASLI (hereinafter referred to as the 'Developer'). By using the Worksheet, you agree to be bound by these terms of service. The term 'user' refers to you, the reader, when accessing the Worksheet. If you do not agree with these terms, you must not use the Worksheet."
+Description: This document outlines the terms of service for the use of IncomeIQ™, Vacation Worksheet, and Promptify™ (referred to collectively as the "Services") provided by INEXASLI (hereinafter referred to as the "Developer"). By using any of these Services, you agree to be bound by these terms of service. The term "user" refers to you, the reader, when accessing any of the Services. If you do not agree with these terms, you must not use the Services.
 
-    Privacy_Policy_Compliance:
-      - "The Developer complies with the General Data Protection Regulation (GDPR) for users within the European Union and also adheres to the Personal Information Protection and Electronic Documents Act (PIPEDA) for users in Canada."
+Privacy Policy Compliance:
+- The Developer complies with the General Data Protection Regulation (GDPR) for users within the European Union and also adheres to the Personal Information Protection and Electronic Documents Act (PIPEDA) for users in Canada.
 
-  Intellectual_Property_Rights:
-    Ownership:
-      - "All rights, title, and interest in and to the Worksheet, including but not limited to the website, its software, source code, databases, functionalities, graphics, designs, trademarks, service marks, and all related content (collectively, the 'IP Assets'), are and will remain the exclusive property of INEXASLI."
-      - "Users are granted a limited, non-exclusive, non-transferable, revocable license to access and use the Worksheet for their personal, non-commercial, educational purposes."
+Intellectual Property Rights
+---------------------------
+Ownership
+- All rights, title, and interest in and to the Services, including IncomeIQ™, Vacation Worksheet, Promptify™, their respective pages, website, software, source code, databases, functionalities, graphics, designs, trademarks, service marks, and all related content (collectively, the "IP Assets"), are and will remain the exclusive property of INEXASLI.
+- Users are granted a limited, non-exclusive, non-transferable, revocable license to access and use the Services for their personal, non-commercial, educational purposes.
 
-    User_Generated_Content:
-      - "Any content, data, text, or information you submit or upload to the Worksheet ('User Content') may be used by you solely for your personal, non-commercial use in connection with the educational objectives of the Worksheet."
-      - "By submitting User Content, you grant the Developer a non-exclusive, royalty-free, worldwide license to use, store, display, reproduce, modify, create derivative works, and distribute such User Content as necessary to provide the service."
-      - "If you share any User Content publicly or in a manner that allows others to view or use it, you agree that such content may be viewed, used, or shared by others in accordance with these Terms of Service."
+User-Generated Content
+- Any content, data, text, or information you submit or upload to the Services ("User Content"), including vacation cost estimates from Vacation Worksheet and prompts from Promptify™, may be used by you solely for your personal, non-commercial use in connection with the educational objectives of the Services.
+- By submitting User Content, you grant the Developer a non-exclusive, royalty-free, worldwide license to use, store, display, reproduce, modify, create derivative works, and distribute such User Content as necessary to provide the Services.
+- If you share any User Content publicly or in a manner that allows others to view or use it, you agree that such content may be viewed, used, or shared by others in accordance with these Terms of Service.
 
-    Restrictions:
-      - "You may not reproduce, duplicate, copy, sell, trade, or exploit for any commercial purposes any portion of the Worksheet or its IP Assets without express written permission by the Developer."
-      - "This includes reverse engineering or attempting to extract the source code of the Worksheet or any part thereof, except as permitted by applicable law."
+Restrictions
+- You may not reproduce, duplicate, copy, sell, trade, or exploit for any commercial purposes any portion of the Services or their IP Assets without express written permission by the Developer.
+- This includes reverse engineering or attempting to extract the source code of the Services or any part thereof, except as permitted by applicable law.
 
-    Feedback:
-      - "If you provide feedback or suggestions about the Worksheet, you grant the Developer a perpetual, non-exclusive, and royalty-free license to use, modify, and incorporate your feedback into the Worksheet without further compensation to you."
-      - "However, you will still maintain any ownership rights you have in your pre-existing intellectual property."
+Feedback
+- If you provide feedback or suggestions about the Services, you grant the Developer a perpetual, non-exclusive, and royalty-free license to use, modify, and incorporate your feedback into the Services without further compensation to you.
+- However, you will still maintain any ownership rights you have in your pre-existing intellectual property.
 
-  Worksheet_Purpose:
-    Educational_Tool_for_Financial_Literacy:
-      - "The Worksheet is primarily intended to serve as an educational platform designed to enhance your understanding of personal finance."
-      - "Interactive Learning: Users engage with financial concepts by inputting real-life data, gaining a practical understanding of how income, expenses, assets, and liabilities impact financial health."
-      - "Visual and Analytical Insights: The tool provides visual representations and analyses of your financial data, serving as educational aids to demonstrate financial principles in action."
+Services Purpose
+-----------------
+Educational Tool for Financial Literacy
+- IncomeIQ™ is an educational platform designed to enhance your understanding of personal finance by tracking income, expenses, assets, and liabilities.
+- Vacation Worksheet is an educational tool to estimate vacation costs based on user-inputted expenses, aiding in travel budgeting understanding.
+- Promptify™ is an educational tool allowing users to input financial or lifestyle data to generate customized prompts for scenario-based learning.
+- Interactive Learning: Users engage with financial concepts by inputting real-life data across the Services, gaining practical understanding of financial principles.
+- Visual and Analytical Insights: The Services provide visual representations and analyses of your data, serving as educational aids to demonstrate financial concepts in action.
 
-    Personal_Record_Keeping:
-      - "Track Financial Metrics: The Worksheet allows users to keep a personal record of their financial transactions."
-      - "Helps monitor income and expenses."
-      - "Catalogs assets and liabilities."
-      - "Observes changes in financial status over time."
+Personal Record-Keeping
+- Track Financial Metrics: IncomeIQ™ allows users to keep a personal record of their financial transactions.
+- Helps monitor income and expenses.
+- Catalogs assets and liabilities.
+- Observes changes in financial status over time.
 
-    No_Professional_Advice:
-      - "While the Worksheet calculates various financial metrics based on user input, these calculations are for educational purposes only."
-      - "Estimates, Not Advice: All figures generated by the Worksheet are estimates and should be viewed as educational examples rather than personalized financial advice."
-      - "For Learning, Not Decision-Making: Use these results to understand how financial calculations work and to experiment with 'what if' scenarios. Seek independent advice from qualified professionals for specific financial matters."
+No Professional Advice
+- While the Services calculate various metrics based on user input, these calculations are for educational purposes only. None of these Services—IncomeIQ™, Vacation Worksheet, or Promptify™—provide professional financial advice.
+- Estimates, Not Advice: All figures and outputs generated by the Services are estimates and should be viewed as educational examples rather than personalized financial advice.
+- For Learning, Not Decision-Making: Use these results to understand how financial calculations work and to experiment with "what if" scenarios. Seek independent advice from qualified professionals for specific financial matters.
 
-  Worksheet_Accuracy_of_Results:
-    - "The calculations provided by the Worksheet are educational estimates and are meant to offer a general understanding of financial concepts."
-    - "While the Developer endeavors for accuracy, they cannot guarantee precise results."
-    - "Users should consult with a professional financial advisor, accountant, and/or tax authority for specific financial matters."
-    - "Please note that the frequency selector dropdown for expenses and income operates on a weekly basis, with 52 weeks constituting a year."
+Services Accuracy of Results
+-----------------------------
+- The calculations provided by the Services are educational estimates and are meant to offer a general understanding of financial concepts.
+- While the Developer endeavors for accuracy, they cannot guarantee precise results.
+- Users should consult with a professional financial advisor, accountant, and/or tax authority for specific financial matters.
+- Please note that the frequency selector dropdown for expenses and income in IncomeIQ™ operates on a weekly basis, with 52 weeks constituting a year.
 
-  Worksheet_User_Responsibility:
+Services User Responsibility
+-----------------------------
+Accuracy of Information
+- You are responsible for providing accurate and complete information when using the Services.
+- Inaccuracies or omissions may impact the calculations and results.
+- Examples of errors include:
+  - Duplicate Entries: Entering the same financial data in multiple places on IncomeIQ™.
+  - Typographical Errors: Unintentional mistakes from hitting the wrong button.
+  - Unit Errors: Attributing an amount to the incorrect field within the specified time frame in IncomeIQ™.
+  - Transposition Errors: Unintentional errors where numbers or letters are swapped or reversed.
+  - Inaccurate vacation expenses (e.g., travel or lodging costs) in Vacation Worksheet.
+  - Incomplete data in Promptify™ affecting generated prompts.
+- Consult with financial professionals before making any financial decisions.
 
-    Accuracy_of_Information:
-      - "You are responsible for providing accurate and complete information when using the Worksheet."
-      - "Inaccuracies or omissions may impact the calculations and results."
+Appropriate Use
+- You agree to use the Services for educational purposes only and in compliance with all applicable laws. Each Service must be used only on its respective page for its intended educational purpose.
+- The Services must not be used in a manner that violates laws, infringes on anyone’s rights, or is offensive or harmful.
+- Prohibited actions include, but are not limited to:
+  - Attempting to reverse engineer or reproduce any part of the Services without consent.
+  - Transmitting or uploading any virus or malicious code.
+  - Sending spam or unsolicited promotional materials.
+  - Collecting or storing personal data about other users inappropriately.
+- In the event of unauthorized use or any violation of these terms, please notify support@inexasli.com immediately.
 
-      - "Examples of errors include:"
-        - "Duplicate Entries: Entering the same financial data in multiple places on the Worksheet."
-        - "Typographical Errors: Unintentional mistakes from hitting the wrong button."
-        - "Unit Errors: Attributing an amount to the incorrect field within the specified time frame."
-        - "Transposition Errors: Unintentional errors where numbers or letters are swapped or reversed."
-      - "Consult with financial professionals before making any financial decisions."
+Confidentiality
+- If you receive any confidential or proprietary information from the Developer or through the Services, you agree to maintain confidentiality and not disclose it to any third party.
 
-    Appropriate_Use:
-      - "You agree to use the Worksheet for educational purposes only and in compliance with all applicable laws."
-      - "The Worksheet must not be used in a manner that violates laws, infringes on anyone’s rights, or is offensive or harmful."
-      - "Prohibited actions include, but are not limited to:"
-        - "Attempting to reverse engineer or reproduce any part of the Worksheet without consent."
-        - "Transmitting or uploading any virus or malicious code."
-        - "Sending spam or unsolicited promotional materials."
-        - "Collecting or storing personal data about other users inappropriately."
-      - "In the event of unauthorized use or any violation of these terms, please notify support@inexasli.com immediately."
+Changes in Financial Situation
+- As a user, you acknowledge that your financial situation may change over time.
+- It is your responsibility to update your information in the Services for accurate results.
+- Failure to update may result in inaccurate calculations.
 
-    Confidentiality:
-      - "If you receive any confidential or proprietary information from the Developer or through the Worksheet, you agree to maintain confidentiality and not disclose it to any third party."
+Data Security
+-------------
+Introduction
+- By utilizing the Services, you consent to the following practices.
+- The Developer utilizes data solely for the purpose of providing estimations and facilitating your use of the Services.
+- Data Storage: We do not store user data on our servers. Instead, data from IncomeIQ™, Vacation Worksheet, and Promptify™ is temporarily kept in secure cookies on your device, specific to each Service’s page, which are accessed only as you navigate through the Services. These cookies are set with security attributes like Secure, and SameSite=None when necessary to ensure data integrity and confidentiality.
+- Data Retention: Your information is held in these cookies for the duration of your session and may persist on your device for a maximum of 365 days unless you choose to clear your cookies. This temporary retention allows for continuity of your learning experience. You can manage these cookies through your browser settings or by using the cookie management options provided on our site.
+- Security Measures: While we utilize secure temporary cookies as a data protection measure, we are committed to taking further reasonable steps to ensure the confidentiality and integrity of your information.
+- International Users: For users accessing our Services from outside Canada, we align with local data protection laws to the extent applicable. For European users, we ensure GDPR compliance by providing clear consent mechanisms, rights to access, correct, or erase personal data, and by processing data in a transparent manner.
 
-    Changes_in_Financial_Situation:
-      - "As a user, you acknowledge that your financial situation may change over time."
-      - "It is your responsibility to update your information in the Worksheet for accurate results."
-      - "Failure to update may result in inaccurate calculations."
+User Responsibilities
+- Users should be cautious about shared information, as even with secure temporary cookies, additional data protection measures may be necessary.
+- Being mindful of data sensitivity contributes to a secure experience.
+- We recommend that you use private browsing modes and avoid entering sensitive personal information (such as credit card numbers or passwords) while using the Services.
 
-   Data_Security:
+Reporting Concerns
+- If individuals have concerns regarding data security during consultations, we welcome and value their feedback at support@inexasli.com.
 
-    Introduction:
-      - "By utilizing our worksheet, you consent to the following practices."
-      - "The Developer utilizes data solely for the purpose of providing estimations and facilitating your use of the Worksheet."
-      - "Data Storage: We do not store user data on our servers. Instead, it is temporarily kept in secure cookies on your device, which are accessed only as you navigate through our Worksheet. These cookies are set with security attributes like Secure, and SameSite=None when necessary to ensure data integrity and confidentiality."
+Limitation of Liability
+----------------------
+Disclaimer of Accuracy
+- While the Developer strives to provide accurate financial estimations for educational purposes, no system is entirely free from vulnerabilities or errors, and results from IncomeIQ™, vacation cost estimates from Vacation Worksheet, and prompts from Promptify™ should not be relied upon for actual financial decision-making.
 
-      - "Data Retention:  Your financial information is held in these cookies for the duration of your session and may persist on your device for a maximum of 365 days unless you choose to clear your cookies. This temporary retention allows for continuity of your learning experience. You can manage these cookies through your browser settings or by using the cookie management options provided on our site."
+Limitation of Reliance
+- Users and interviewees acknowledge that the Services are for educational use only, and any decisions made based on their outputs are at their own discretion and risk.
 
-      - "Security Measures: While we utilize secure temporary cookies as a data protection measure, we are committed to taking further reasonable steps to ensure the confidentiality and integrity of your information."
+Data Security
+- The security of information during internet transmission or in the context of public interactions cannot be guaranteed, and users assume the risk of data exposure during such activities.
 
-      - "International Users: For users accessing our service from outside Canada, we align with local data protection laws to the extent applicable. For European users, we ensure GDPR compliance by providing clear consent mechanisms, rights to access, correct, or erase personal data, and by processing data in a transparent manner."
+Liability Cap
+- The Developer's liability for any claim arising out of or in connection with these Terms of Service, including use of IncomeIQ™, Vacation Worksheet, or Promptify™, whether in contract, tort, or otherwise, shall be limited to the greater of:
+  - The amount paid by the user for the Services in the 6 months preceding the event giving rise to the claim, or
+  - A nominal sum of $100 if no payment was made, to the fullest extent permitted by law. This cap applies collectively to all claims.
+- The same limitations apply to the use of content from interviews, with the added understanding that content sharing involves inherent risks not covered by the Services’ standard use.
 
-    User_Responsibilities:
-      - "Users should be cautious about shared information, as even with secure temporary cookies, additional data protection measures may be necessary."
-      - "Being mindful of data sensitivity contributes to a secure experience."
-      - "We recommend that you use private browsing modes and avoid entering sensitive personal information (such as credit card numbers or passwords) while using the Worksheet."
+Exclusion of Indirect Damages
+- To the fullest extent permitted by law, the Developer shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to:
+  - Loss of profits,
+  - Business interruption,
+  - Loss of business opportunity,
+  - Loss of data, or
+  - Any other intangible loss.
 
-    Reporting_Concerns:
-      - "If individuals have concerns regarding data security during consultations, we welcome and value their feedback at support@inexasli.com."
+Warranty Disclaimer
+- The Services and related offerings are provided "AS IS" and "AS AVAILABLE", without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.
 
-  Limitation_of_Liability:
+Exclusion of Claims
+- To the fullest extent permitted by law, the Developer shall not be liable for any of the following types of damages or claims:
+  - Emotional Distress: Claims for mental anguish, emotional distress, or similar non-economic harm.
+  - Loss of Reputation: Any loss of goodwill, reputation, or similar intangible losses.
+  - Data Loss: Loss or corruption of data, unless directly resulting from Developer's gross negligence or willful misconduct.
+  - Third-Party Content: Claims arising from content provided by third parties, including but not limited to advertisements or user-generated content.
+  - Unforeseen Misuse: Damages resulting from misuse or unauthorized use of the Services by users or third parties.
+  - Any action against the Developer must be brought within one year after the cause of action arises, otherwise, it shall be barred.
+- This exclusion applies to all claims whether in contract, tort (including negligence), strict liability, or otherwise.
 
-    Disclaimer_of_Accuracy:
-      - "While the Developer strives to provide accurate financial estimations for educational purposes, no system is entirely free from vulnerabilities or errors, and results should not be relied upon for actual financial decision-making."
+Changes to Terms
+----------------
+- These Terms of Service may be updated from time to time.
+- Continued use of the Services after any changes constitutes your acceptance of the new terms.
 
-    Limitation_of_Reliance:
-      - "Users and interviewees acknowledge that the Worksheet is for educational use only, and any decisions made based on its outputs are at their own discretion and risk."
+Interview Content Consent
+- By participating in interviews for content creation, you consent to the use of your likeness, voice, and any provided information for educational and promotional purposes without any right to compensation or further approval, acknowledging that such use carries inherent risks for which the Developer assumes no responsibility.
 
-    Data_Security:
-      - "The security of information during internet transmission or in the context of public interactions cannot be guaranteed, and users assume the risk of data exposure during such activities."
+Force Majeure
+- The Developer shall not be liable for any failure or delay in the performance of its obligations hereunder, where such failure arises from any cause beyond its reasonable control, including acts of God, civil unrest, war, fire, flood, strikes, or failure of internet service providers.
 
-    Liability_Cap:
-      - "The Developer's liability for any claim arising out of or in connection with these Terms of Service, whether in contract, tort, or otherwise, shall be limited to the greater of:
-        - the amount paid by the user for the Worksheet in the 6 months preceding the event giving rise to the claim, or
-        - A nominal sum of $100 if no payment was made, to the fullest extent permitted by law. This cap applies collectively to all claims."
-      - "The same limitations apply to the use of content from interviews, with the added understanding that content sharing involves inherent risks not covered by the Worksheet's standard use."
+Governing Law
+- These limitations shall be governed by and construed in accordance with the laws of British Columbia, Canada, without regard to its conflict of law principles.
 
-    Exclusion_of_Indirect_Damages:
-      - "To the fullest extent permitted by law, the Developer shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to:
-        - Loss of profits,
-        - Business interruption,
-        - Loss of business opportunity,
-        - Loss of data, or
-        - Any other intangible loss."
+Exclusive Remedy
+- The user's or interviewee's sole and exclusive remedy for any liability or breach of warranty shall be limited to the portion of the payment made by the user that directly corresponds to the period during which the issue arose. This limitation constitutes the complete extent of the user's or interviewee's recourse for that specific issue.
 
-    Warranty_Disclaimer:
-        - "The Worksheet and related services are provided 'AS IS' and 'AS AVAILABLE', without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement."
+Services Liability Disclaimer
+------------------------------
+- The Developer is not liable for any harm or loss you may experience from using the Services or partaking in an interview, including loss of profits, business interruption, or loss of data.
+- Results from the Services should not be solely relied upon for financial decisions. By using the Services, you acknowledge and agree to do so at your own risk.
 
-    Exclusion_of_Claims:
-     - "To the fullest extent permitted by law, the Developer shall not be liable for any of the following types of damages or claims:"
-     - "Emotional Distress: Claims for mental anguish, emotional distress, or similar non-economic harm."
-     - "Loss of Reputation: Any loss of goodwill, reputation, or similar intangible losses."
-     - "Data Loss: Loss or corruption of data, unless directly resulting from Developer's gross negligence or willful misconduct."
-     - "Third-Party Content: Claims arising from content provided by third parties, including but not limited to advertisements or user-generated content."
-     - "Unforeseen Misuse: Damages resulting from misuse or unauthorized use of the Worksheet by users or third parties."
-     - "Any action against the Developer must be brought within one year after the cause of action arises, otherwise, it shall be barred."
-     - "This exclusion applies to all claims whether in contract, tort (including negligence), strict liability, or otherwise."
+Interview Consent
+-----------------
+- By voluntarily participating in the interview, you consent to the use of screen share, audio, text, and possible video recordings shared indefinitely online on platforms such as Twitter, YouTube, or similar.
+- You acknowledge that the interview's content is not to be considered as financial advice, and any decisions made based on this content are done at your own risk.
 
- Changes_to_Terms:
-    - "These Terms of Service may be updated from time to time."
-    - "Continued use of the Worksheet after any changes constitutes your acceptance of the new terms."
+Interview Content Disclaimer
+----------------------------
+- The information, discussions, and any insights shared during interviews are provided for educational and illustrative purposes only. By participating in an interview, you acknowledge and agree that:
+  - No content from the interview, including but not limited to financial strategies, personal experiences, or theoretical scenarios discussed, constitutes professional financial advice.
+  - You are encouraged to consult with a licensed financial advisor for personalized financial advice.
+  - Any use or reliance on the information for making financial decisions is at your own risk.
+- By agreeing to these terms, you confirm that you understand and accept that the Developer, its representatives, or any content derived from interviews are not offering financial advice.
 
-    Interview_Content_Consent:
-      - "By participating in interviews for content creation, you consent to the use of your likeness, voice, and any provided information for educational and promotional purposes without any right to compensation or further approval, acknowledging that such use carries inherent risks for which the Developer assumes no responsibility."
+Interview Privacy and Information Sharing
+-----------------------------------------
+- It is your responsibility to decide what information to share during the interview.
+- Certain information may be necessary for the interview and content creation.
+- If unwilling to provide required information, the interview may not proceed.
+- You are solely responsible for shared information used for creating online content.
+- You can use an alias and request voice alteration if possible.
 
-    Force_Majeure:
-      - "The Developer shall not be liable for any failure or delay in the performance of its obligations hereunder, where such failure arises from any cause beyond its reasonable control, including acts of God, civil unrest, war, fire, flood, strikes, or failure of internet service providers."
+Interview Monetization Disclaimer
+---------------------------------
+- Interviewees are not entitled to compensation or revenue share from content or the Services created during the interview and its subsequent use indefinitely.
 
-    Governing_Law:
-      - "These limitations shall be governed by and construed in accordance with the laws of British Columbia, Canada, without regard to its conflict of law principles."
+Interview Liability Disclaimer
+------------------------------
+- The Developer and interviewer are not liable for damages arising from content creation and display online.
+- Your participation is voluntary, and associated risks are assumed by you.
 
-    Exclusive_Remedy:
-      - "The user's or interviewee's sole and exclusive remedy for any liability or breach of warranty shall be limited to the portion of the payment made by the user that directly corresponds to the period during which the issue arose. This limitation constitutes the complete extent of the user's or interviewee's recourse for that specific issue."
+Pre-Publication Review and Modification
+---------------------------------------
+Opportunity for Review
+- Before the content derived from your interview is published or shared online, you have the right to review the content for any parts you would like to be left out or modified.
 
-  Worksheet_Liability_Disclaimer:
-    - "The Developer is not liable for any harm or loss you may experience from using the Worksheet or partaking in an interview, including loss of profits, business interruption, or loss of data."
-    - "The Worksheet results should not be solely relied upon for financial decisions. By using the Worksheet, you acknowledge and agree to do so at your own risk."
+Request Procedure
+- You must contact us within 24 hours after the interview to request this review.
+- Contact can be made via support@inexasli.com.
 
-  Interview_Consent:
-    - "By voluntarily participating in the interview, you consent to the use of screen share, audio, text, and possible video recordings shared indefinitely online on platforms such as Twitter, YouTube, or similar."
-    - "You acknowledge that the interview's content is not to be considered as financial advice, and any decisions made based on this content are done at your own risk."
+Exclusions
+- Certain edits might not be feasible if they significantly alter the essence or value of the content.
 
-Interview_Content_Disclaimer:
-  - "The information, discussions, and any insights shared during interviews are provided for educational and illustrative purposes only. By participating in an interview, you acknowledge and agree that:"
-    - "No content from the interview, including but not limited to financial strategies, personal experiences, or theoretical scenarios discussed, constitutes professional financial advice."
-    - "You are encouraged to consult with a licensed financial advisor for personalized financial advice."
-    - "Any use or reliance on the information for making financial decisions is at your own risk."
-  - "By agreeing to these terms, you confirm that you understand and accept that the Developer, its representatives, or any content derived from interviews are not offering financial advice."
+Final Decision
+- The final decision on what can be edited or removed will be at the discretion of the content creator/developer, considering the integrity and purpose of the content.
+- Please discuss any sensitive information during the interview with this understanding.
 
-  Interview_Privacy_and_Information_Sharing:
-    - "It is your responsibility to decide what information to share during the interview."
-    - "Certain information may be necessary for the interview and content creation."
-    - "If unwilling to provide required information, the interview may not proceed."
-    - "You are solely responsible for shared information used for creating online content."
-    - "You can use an alias and request voice alteration if possible."
+Interview Content Removal Policy
+--------------------------------
+- By participating in an interview, you consent to the content being shared indefinitely on platforms like Twitter, YouTube, or similar.
+- Request for the removal of this content from utilized platforms is not guaranteed.
+- Complete removal from all platforms is not guaranteed due to the nature of internet sharing.
+- Please consider your content's long-term visibility before agreeing to participate.
 
-  Interview_Monetization_Disclaimer:
-    - "Interviewees are not entitled to compensation or revenue share from content or the Worksheet created during the interview and its subsequent use indefinitely."
+Indemnification
+---------------
+- You agree to defend, indemnify, and hold harmless the Developer, its officers, directors, representatives, employees, and agents from any actions, claims, damages, losses, liabilities, costs, and expenses arising from your access to or use of the Services or Interviews, or your violation of these Terms of Service.
 
-  Interview_Liability_Disclaimer:
-    - "The Developer and interviewer are not liable for damages arising from content creation and display online."
-    - "Your participation is voluntary, and associated risks are assumed by you."
+Dispute Resolution
+------------------
+- Any dispute shall be resolved through negotiation, consultation, mediation, and/or arbitration, with the place and language specified.
+- Costs associated with dispute resolution are your responsibility.
+- The place of dispute resolution shall be British Columbia, Canada, and the language used shall be English. All parties agree to submit to the jurisdiction of the courts of British Columbia for any disputes that cannot be resolved through mediation or arbitration.
 
-  Pre_Publication_Review_and_Modification:
+Governing Law
+-------------
+- These terms will be governed by and construed in accordance with the laws of British Columbia, Canada.
+- Disputes will be resolved in the courts of British Columbia.
 
-    Opportunity_for_Review:
-      - "Before the content derived from your interview is published or shared online, you have the right to review the content for any parts you would like to be left out or modified."
+Acceptance
+----------
+- By using the Services, participating in interviews, signing a physical copy of these Terms of Service, or by indicating your acceptance through an electronic means (e.g., clicking "I Agree", checking a box, or replying to an email with the Terms of Service with a confirmation of agreement), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
+- You consent to the collection, use, storage, and disposal of your financial information and any other personal data as outlined in these terms.
+- You agree that your use of the Services and/or participation in interviews are at your own risk, understanding the educational nature and limitations of liability as described herein.
+- Electronic Acceptance: If you're unable to provide a physical signature, electronic methods of acceptance are also considered binding.
 
-    Request_Procedure:
-      - "You must contact us within 24 hours after the interview to request this review."
-      - "Contact can be made via support@inexasli.com."
-
-    Exclusions:
-      - "Certain edits might not be feasible if they significantly alter the essence or value of the content."
-
-    Final_Decision:
-      - "The final decision on what can be edited or removed will be at the discretion of the content creator/developer, considering the integrity and purpose of the content."
-      - "Please discuss any sensitive information during the interview with this understanding."
-
-  Interview_Content_Removal_Policy:
-    - "By participating in an interview, you consent to the content being shared indefinitely on platforms like Twitter, YouTube, or similar."
-    - "Request for the removal of this content from utilized platforms is not guaranteed."
-    - "Complete removal from all platforms is not guaranteed due to the nature of internet sharing."
-    - "Please consider your content's long-term visibility before agreeing to participate."
-
-  Indemnification:
-    - "You agree to defend, indemnify, and hold harmless the Developer, its officers, directors, representatives, employees, and agents from any actions, claims, damages, losses, liabilities, costs, and expenses arising from your access to or use of the Worksheet or Interviews, or your violation of these Terms of Service."
-
-  Dispute_Resolution:
-    - "Any dispute shall be resolved through negotiation, consultation, mediation, and/or arbitration, with the place and language specified."
-    - "Costs associated with dispute resolution are your responsibility."
-    - "The place of dispute resolution shall be British Columbia, Canada, and the language used shall be English. All parties agree to submit to the jurisdiction of the courts of British Columbia for any disputes that cannot be resolved through mediation or arbitration."
-
-  Governing_Law:
-    - "These terms will be governed by and construed in accordance with the laws of British Columbia, Canada."
-    - "Disputes will be resolved in the courts of British Columbia."
-
-  Acceptance:
-    - "By using the Worksheet, participating in interviews, signing a physical copy of these Terms of Service, or by indicating your acceptance through an electronic means (e.g., clicking 'I Agree', checking a box, or replying to an email with the Terms of Service with a confirmation of agreement), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service."
-    - "You consent to the collection, use, storage, and disposal of your financial information and any other personal data as outlined in these terms."
-    - "You agree that your use of the Worksheet and/or participation in interviews are at your own risk, understanding the educational nature and limitations of liability as described herein."
-     - "Electronic Acceptance: If you're unable to provide a physical signature, electronic methods of acceptance are also considered binding."
-
-  Signature: _________________________ 
-
-  Email: _________________________ 
-
-  Date: _________________________
+Signature: _________________________
+Email: _________________________
+Date: _________________________
