@@ -9,7 +9,7 @@
   */ 
 
 
-console.log('Global setCookie exists:', typeof window.setCookie !== 'undefined');
+
 import { displayWarning } from "./utils.js"
 import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
 import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
