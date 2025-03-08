@@ -121,6 +121,7 @@ jurisdictions worldwide.
              <input type="number" inputmode="numeric" id="trip_grocery" step="0.01">
              <select id="trip_grocery_frequency" onchange="updateFrequency('grocery')">
                  <option value="total">Total</option>
+                 <option value="daily">Daily</option>
                  <option value="weekly">Weekly</option>
              </select>
          </div>
@@ -190,23 +191,70 @@ jurisdictions worldwide.
              </select>
          </div>
      </div>
+     
      <div class="containerround">
-         <button onclick="createCookies()" style="margin-bottom: 5px;">Save</button>
-         <button onclick="calculateTotal()">Calculate Total</button>
-         <div id="totalCost" class="hidden">
-             <h4 style="text-align: center;">Total Estimated Vacation Cost: <span id="total_cost_display"></span></h4>
-             <button onclick="copyResults()" style="display: block; margin: 10px auto;">Copy Results</button>
-         </div>
-        
-        
-        
-         <div class="containerround hidden" id="expenseBreakdown" style="width: 80%; max-width: 800px; margin: 0 auto; padding: 30px; font-size: 18px;">
-            <h3>Expense Breakdown</h3>
-            <ul id="expense_list"></ul>
+	
+       
+        <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+            <div class="checkbox-wrapper-2">
+              <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
+            </div>
+            <label for="termscheckbox">
+                I have read, understand, and agree to the  <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Terms of Service</a> 
+                (last updated: 16/Jan/25). By proceeding, I acknowledge that I use IncomeIQ™ at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
+
+
+             
+            </label>
         </div>
+       
+
+
+
+   
+<div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">    
+    <div class="checkbox-wrapper-2">
+        <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
+    </div>
+    <label for="notintended">
+        I consent to the creation, storage, and use of cookies for essential website functionality, including but not limited to, calculations for my financial educational reports and payment verification for premium access. These cookies are necessary for the services I request.
+        <a href="#" id="cookie-overwrite-link" style="text-decoration: none; color: #007bff;" class="inline-link">Click here to overwrite cookies</a>
+    </label>
+</div>
+
+
+ 
+       
+       
+        
+           
+         </div>
+     
+         <div class="containerround">
+            <button onclick="createCookies()" style="margin-bottom: 5px;">Save</button>
+            <button onclick="window.termsAgreed()" style="margin-bottom: 5px;">Calculate Total</button>
+            <div id="totalCost" class="hidden">
+                <h4 style="text-align: center;">Total Estimated Vacation Cost: <span id="total_cost_display"></span></h4>
+                <button onclick="window.copyResults()" style="display: block; margin: 10px auto;">Copy Results</button>
+            </div>
+            <div class="containerround hidden" id="expenseBreakdown" style="width: 80%; max-width: 800px; margin: 0 auto; padding: 30px; font-size: 18px;">
+                <h3>Expense Breakdown</h3>
+                <ul id="expense_list"></ul>
+            </div>
+        </div>
+
+
+     <div id="TERMS-modal" class="modal">
+        <div class="modal-content">
+            <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
+        </div>
+    </div> 
+
  
      <script type="module" src="/server/scripts/vacation.js"></script>
      <script type="module" src="/server/scripts/hamburger.js"></script>
+     <script src="/server/scripts/modal.js"></script>
+
 
      <script src="/server/scripts/toolTip.js"></script>
  </body>
