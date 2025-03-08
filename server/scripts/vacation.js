@@ -200,7 +200,7 @@ const formElementIds = [
 ];
 
 // Function to create cookies for all form elements using imported setCookie
-function createCookies() {
+window.createCookies = function() {
     formElementIds.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
