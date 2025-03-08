@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
       <div></div>
     </div>
     <div class="dropdown" id="dropdownMenu">
-      <a href="mailto:support@inexasli.com" id="contact" class="menu-item">CONTACT</a>
       <a href="#" id="calculations" class="menu-item">CALCULATE</a>
       <div class="submenu" id="calculationsMenu">
         <a href="/budget/vacation.html" id="vacation">Vacation</a>
@@ -17,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="submenu" id="createMenu">
         <a href="/create/prompt.html" id="website">Promptify™</a>
       </div>
+            <a href="mailto:support@inexasli.com" id="contact" class="menu-item">CONTACT</a>
+
     </div>
   `;
   document.body.insertAdjacentHTML("afterbegin", menuHTML);
