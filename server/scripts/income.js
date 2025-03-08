@@ -1495,3 +1495,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+import { overwriteCookies } from '/server/scripts/cookieoverwrite.js'; // Adjust path as needed
+
+document.addEventListener('DOMContentLoaded', () => {
+    const overwriteLink = document.getElementById('cookie-overwrite-link');
+    if (overwriteLink) {
+        overwriteLink.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent the default link behavior
+            overwriteCookies(); // Call the function to overwrite cookies
+        });
+    }
+});
