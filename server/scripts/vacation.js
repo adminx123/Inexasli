@@ -7,8 +7,92 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
  */
-import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
-import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
+import { setCookie } from '/server/scripts/setcookie.js';
+import { getCookie } from '/server/scripts/getcookie.js';
+
+// Define expenseCategories and totalOnlyCategories FIRST
+const expenseCategories = [
+    'flights', 'car', 'uber', 'transit', 'bike',
+    'hotels', 'camping',
+    'dining', 'grocery',
+    'tickets', 'alcohol', 'gambling', 'rental',
+    'insurance', 'sim', 'luggage'
+];
+
+const totalOnlyCategories = ['flights', 'tickets', 'insurance', 'sim', 'luggage'];
+
+function getTermsCookie(name) {
+    const now = Date.now();
+    const status = JSON.parse(window.localStorage.getItem(name));
+
+    if (status && now > status.time) {
+        localStorage.removeItem(name);
+        return false;
+    }
+
+    if (status && status.accepted) {
+        return true;
+    } else if (status && !status.accepted) {
+        return false;
+    }
+
+    return false;
+}
+
+function setTermsCookie(name, value) {
+    const date = new Date();
+    window.localStorage.setItem(name, JSON.stringify({
+        accepted: value,
+        time: date.setTime(date.getTime() + 30 * 60 * 1000)
+    }));
+}
+
+const tabs = document.querySelectorAll('.tab');
+
+tabs.forEach(tab => {
+    const dataL = tab.getAttribute('data-location');
+    const location = document.location.pathname;
+
+    tab.addEventListener('click', (e) => {
+        const checkbox1 = document.querySelector('#termscheckbox');
+        const checkbox2 = document.querySelector('#notintended');
+
+        const isChecked1 = getTermsCookie('term1');
+        const isChecked2 = getTermsCookie('term2');
+
+        if (!isChecked1 || !isChecked2) {
+            e.preventDefault();
+            alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
+        }
+    });
+
+    if (location.includes(dataL)) {
+        tab.removeAttribute('href');
+        tab.classList.add('active');
+    }
+});
+
+const checkbox1 = document.querySelector('#termscheckbox');
+const checkbox2 = document.querySelector('#notintended');
+
+checkbox1.addEventListener('click', () => {
+    setTermsCookie('term1', checkbox1.checked);
+});
+
+checkbox2.addEventListener('click', () => {
+    setTermsCookie('term2', checkbox2.checked);
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    const checkbox1 = document.querySelector('#termscheckbox');
+    const checkbox2 = document.querySelector('#notintended');
+
+    const isChecked1 = getTermsCookie('term1');
+    const isChecked2 = getTermsCookie('term2');
+
+    if (isChecked1) checkbox1.checked = true;
+    if (isChecked2) checkbox2.checked = true;
+});
 
 window.updateFrequency = function(category) {
     const amountInput = document.getElementById(`trip_${category}`);
@@ -47,77 +131,85 @@ window.updateFrequency = function(category) {
     if (totalSpan) totalSpan.textContent = `$${total.toFixed(2)}`;
 };
 
-// Array of expense categories
-const expenseCategories = [
-    'flights', 'car', 'uber', 'transit', 'bike',
-    'hotels', 'camping',
-    'dining', 'grocery',
-    'tickets', 'alcohol', 'gambling', 'rental',
-    'insurance', 'sim', 'luggage'
-];
+window.termsAgreed = function() {
+    const termsCheckbox = document.querySelector('#termscheckbox');
+    const cookieCheckbox = document.querySelector('#notintended');
 
-// Categories that should only have "Total" frequency
-const totalOnlyCategories = ['flights', 'tickets', 'insurance', 'sim', 'luggage'];
-
-// Calculate total vacation cost and populate breakdown
-window.calculateTotal = function() {
-    const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
-    if (tripDuration <= 0 && expenseCategories.some(cat => !totalOnlyCategories.includes(cat) && document.getElementById(`trip_${cat}`).value && document.getElementById(`trip_${cat}_frequency`).value !== 'total')) {
-        alert('Please enter a valid trip duration for expenses with daily or weekly frequencies.');
+    if (!termsCheckbox.checked) {
+        alert('Please agree to the Terms of Service before calculating the total.');
+        return;
+    }
+    if (!cookieCheckbox.checked) {
+        alert('Please consent to cookie usage before calculating the total.');
         return;
     }
 
-    let grandTotal = 0;
-    const expenseList = document.getElementById('expense_list');
-    expenseList.innerHTML = ''; // Clear previous breakdown
+    function calculateTotal() {
+        const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
+        if (tripDuration <= 0 && expenseCategories.some(cat => !totalOnlyCategories.includes(cat) && document.getElementById(`trip_${cat}`).value && document.getElementById(`trip_${cat}_frequency`).value !== 'total')) {
+            alert('Please enter a valid trip duration for expenses with daily or weekly frequencies.');
+            return;
+        }
 
-    expenseCategories.forEach(category => {
-        const amountInput = document.getElementById(`trip_${category}`);
-        const frequencySelect = document.getElementById(`trip_${category}_frequency`);
-        const totalSpan = document.getElementById(`trip_${category}_total`);
+        let grandTotal = 0;
+        const expenseList = document.getElementById('expense_list');
+        expenseList.innerHTML = '';
 
-        const amount = parseFloat(amountInput.value) || 0;
-        const frequency = frequencySelect.value;
-        let total = 0;
+        expenseCategories.forEach(category => {
+            const amountInput = document.getElementById(`trip_${category}`);
+            const frequencySelect = document.getElementById(`trip_${category}_frequency`);
+            const totalSpan = document.getElementById(`trip_${category}_total`);
 
-        if (totalOnlyCategories.includes(category)) {
-            total = amount;
-        } else {
-            switch (frequency) {
-                case 'total':
-                    total = amount;
-                    break;
-                case 'daily':
-                    total = amount * tripDuration;
-                    break;
-                case 'weekly':
-                    const fullWeeks = Math.floor(tripDuration / 7);
-                    const remainingDays = tripDuration % 7;
-                    const dailyRate = amount / 7;
-                    total = (fullWeeks * amount) + (remainingDays * dailyRate);
-                    break;
+            const amount = parseFloat(amountInput.value) || 0;
+            const frequency = frequencySelect.value;
+            let total = 0;
+
+            if (totalOnlyCategories.includes(category)) {
+                total = amount;
+            } else {
+                switch (frequency) {
+                    case 'total':
+                        total = amount;
+                        break;
+                    case 'daily':
+                        total = amount * tripDuration;
+                        break;
+                    case 'weekly':
+                        const fullWeeks = Math.floor(tripDuration / 7);
+                        const remainingDays = tripDuration % 7;
+                        const dailyRate = amount / 7;
+                        total = (fullWeeks * amount) + (remainingDays * dailyRate);
+                        break;
+                }
             }
-        }
 
-        if (total > 0) {
-            grandTotal += total;
-            totalSpan.textContent = `$${total.toFixed(2)}`;
-            const li = document.createElement('li');
-            li.textContent = `${category.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())}: $${total.toFixed(2)} (${frequency})`;
-            expenseList.appendChild(li);
-        } else {
-            totalSpan.textContent = '';
-        }
-    });
+            if (total > 0) {
+                grandTotal += total;
+                totalSpan.textContent = `$${total.toFixed(2)}`;
+                const li = document.createElement('li');
+                li.textContent = `${category.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())}: $${total.toFixed(2)} (${frequency})`;
+                expenseList.appendChild(li);
+            } else {
+                totalSpan.textContent = '';
+            }
+        });
 
-    const totalCostDisplay = document.getElementById('total_cost_display');
-    totalCostDisplay.textContent = `$${grandTotal.toFixed(2)}`;
-    document.getElementById('totalCost').classList.remove('hidden');
-    document.getElementById('expenseBreakdown').classList.remove('hidden');
+        const totalCostDisplay = document.getElementById('total_cost_display');
+        totalCostDisplay.textContent = `$${grandTotal.toFixed(2)}`;
+        document.getElementById('totalCost').classList.remove('hidden');
+        document.getElementById('expenseBreakdown').classList.remove('hidden');
+    }
+
+    calculateTotal();
 };
 
-// Copy results to clipboard
 window.copyResults = function() {
+    const termsCheckbox = document.querySelector('#termscheckbox');
+    if (!termsCheckbox.checked) {
+        alert('Please agree to the Terms of Service before copying results.');
+        return;
+    }
+
     const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
     const totalCost = document.getElementById('total_cost_display').textContent;
     const expenseItems = Array.from(document.getElementById('expense_list').getElementsByTagName('li'))
@@ -140,7 +232,6 @@ expenseCategories.forEach(category => {
     }
 });
 
-// Separate trip duration listener to update all categories
 const tripDurationInput = document.getElementById('trip_duration');
 if (tripDurationInput) {
     tripDurationInput.addEventListener('input', () => {
@@ -150,52 +241,22 @@ if (tripDurationInput) {
     console.error('Trip duration input not found');
 }
 
-// List of all input and select element IDs
 const formElementIds = [
-    // Input elements
-    'trip_duration',
-    'trip_flights',
-    'trip_car',
-    'trip_uber',
-    'trip_transit',
-    'trip_bike',
-    'trip_hotels',
-    'trip_camping',
-    'trip_dining',
-    'trip_grocery',
-    'trip_tickets',
-    'trip_alcohol',
-    'trip_gambling',
-    'trip_rental',
-    'trip_insurance',
-    'trip_sim',
-    'trip_luggage',
-    // Select elements
-    'trip_flights_frequency',
-    'trip_car_frequency',
-    'trip_uber_frequency',
-    'trip_transit_frequency',
-    'trip_bike_frequency',
-    'trip_hotels_frequency',
-    'trip_camping_frequency',
-    'trip_dining_frequency',
-    'trip_grocery_frequency',
-    'trip_tickets_frequency',
-    'trip_alcohol_frequency',
-    'trip_gambling_frequency',
-    'trip_rental_frequency',
-    'trip_insurance_frequency',
-    'trip_sim_frequency',
-    'trip_luggage_frequency'
+    'trip_duration', 'trip_flights', 'trip_car', 'trip_uber', 'trip_transit', 'trip_bike',
+    'trip_hotels', 'trip_camping', 'trip_dining', 'trip_grocery', 'trip_tickets',
+    'trip_alcohol', 'trip_gambling', 'trip_rental', 'trip_insurance', 'trip_sim', 'trip_luggage',
+    'trip_flights_frequency', 'trip_car_frequency', 'trip_uber_frequency', 'trip_transit_frequency',
+    'trip_bike_frequency', 'trip_hotels_frequency', 'trip_camping_frequency', 'trip_dining_frequency',
+    'trip_grocery_frequency', 'trip_tickets_frequency', 'trip_alcohol_frequency', 'trip_gambling_frequency',
+    'trip_rental_frequency', 'trip_insurance_frequency', 'trip_sim_frequency', 'trip_luggage_frequency'
 ];
 
-// Function to create cookies for all form elements using imported setCookie
 window.createCookies = function() {
     formElementIds.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
-            const value = element.value || '0'; // Default to '0' if empty
-            setCookie(id, value, 365); // Use imported setCookie with 1-year expiry
+            const value = element.value || '0';
+            setCookie(id, value, 365);
         } else {
             console.warn(`Element with ID '${id}' not found in the DOM`);
         }
