@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-nextPage = function() {
+window.nextPage = function() {
   // Navigate to the new page after setting cookies
   window.location.href = './income.html';
 }
