@@ -1090,3 +1090,135 @@ text-align: center; /* Center text for better visual balance */
       font-size: 10vw; /* Adjust h1 size for very small screens */
   }
 }
+
+
+
+.section {
+  margin-bottom: 2px; /* Not in second CSS, kept as is */
+  padding: 1px; /* Not in second CSS, kept as is */
+}
+
+.section-header {
+  display: flex; /* Same in both */
+  justify-content: space-between; /* Same in first, not contradicted in second */
+  align-items: center; /* Same in both */
+  cursor: pointer; /* Same in both */
+  padding: 0px 0px 0 0px; /* Updated to match first CSS, second doesn’t override */
+  background-color: #fafafa; /* Not in second CSS, kept as is */
+  border-radius: 1px; /* Not in second CSS, kept as is */
+  font-size: 12px; /* Same in first, second CSS has no direct match */
+  font-weight: 500; /* Same in first, second CSS has no direct match */
+  line-height: 1; /* Not in second CSS, kept as is */
+  margin: 5px; /* Not in second CSS, kept as is */
+}
+
+.toggle-icon {
+  font-size: 18px; /* Not in second CSS, kept as is */
+  transition: transform 0.2s ease; /* Not in second CSS, kept as is */
+}
+
+.section.expanded .toggle-icon {
+  transform: rotate(45deg); /* Not in second CSS, kept as is */
+}
+
+.section-content {
+  display: none; /* Same in both via .hidden */
+  padding: 10px; /* Same in first, second CSS has no direct match */
+}
+
+.section.expanded .section-content {
+  display: block; /* Same in first, second CSS has no direct match */
+}
+
+textarea,
+select {
+    width: 100%; /* Same in both */
+    padding: 10px; /* Updated to 10px (first CSS), second CSS uses 4px for inputs but we’ll match textarea */
+    border: 1px solid #7c7c7c; /* Updated from #ddd to #7c7c7c (second CSS) */
+    border-radius: 5px; /* Updated from 3px to 5px (second CSS for inputs) */
+    font-size: 17px; /* Updated from 14px to 17px (second CSS) */
+    background-color: transparent; /* Updated from #fafafa to transparent (second CSS) */
+}
+
+textarea {
+    resize: vertical; /* Not in second CSS, kept as is */
+    font-size: 14px; /* Same in first, second CSS has no direct match */
+
+}
+
+.ai-button {
+  width: 50px; /* Square size */
+  height: 50px; /* Matches width */
+  background-color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  overflow: hidden; /* Contain logo */
+  padding: 0; /* No internal padding */
+  border: none; /* Clean look */
+}
+.ai-button:hover {
+  background-color: #555;
+}
+.ai-logo {
+  width: 100%; /* Fills button */
+  height: 100%; /* Fills button */
+  object-fit: contain; /* Preserves logo aspect */
+  display: block; /* No inline spacing */
+}
+
+.add-row-btn {
+  background-color: #050505; /* Black */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-right: 26px;
+
+  width: 10%; /* Adjust width as needed */
+  height: auto; /* Let height adjust based on content */
+  margin-left: auto; /* Push button to the right */
+  display: block; /* Ensure it behaves as a block element */
+}
+
+.add-row-btn:hover {
+  background-color: #040404;
+}
+
+.remove-row-btn {
+  background-color: #050505; /* Red */
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.remove-row-btn:hover {
+  background-color: #cc0000; /* Darker red on hover */
+}
+
+#scope-selector {
+  grid-template-columns: 1fr 1fr; /* Same in first, second CSS has no direct match */
+  max-width: 300px; /* Same in first, second CSS has no direct match */
+  margin: 0 auto 20px; /* Same in first, second CSS has no direct match */
+}
+
+#scope-selector .grid-item {
+  background-color: #f7f1f1; /* Not in second CSS, kept as is */
+}
+
+#scope-selector .grid-item.selected {
+  background-color: #0e0e0e; /* Not in second CSS, kept as is */
+  color: #f9f8f8; /* Not in second CSS, kept as is */
+}
+
+.row1 {
+  margin-bottom: 15px; /* Updated to 15px (first CSS), second CSS uses margin-top 10px but no bottom */
+  padding-top: 1px; /* Not in second CSS, kept as is */
+  padding-bottom: 1px; /* Not in second CSS, kept as is */
+  padding-left: 1px; /* Not in second CSS, kept as is */
+  padding-right: 1px; /* Not in second CSS, kept as is */
+}
