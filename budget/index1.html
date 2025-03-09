@@ -19,68 +19,10 @@
     <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
     <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
     <link rel="manifest" href="manifest.json" />
-
-    <style>
-
+    <link rel="stylesheet" href="/style/styles.css"> 
 
 
-        body, html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #000; /* Black background */
-        }
-
-        /* Inline flex container to align elements */
-        .inline-container {
-            display: inline-flex;
-            align-items: baseline; /* Align text to the baseline */
-            gap: 0; /* No gap between elements */
-        }
-
-        #fadeInText {
-            font-family: Arial, sans-serif;
-            font-size: 10vw; /* Use viewport width for responsive font size */
-            font-weight: bold;
-            color: white; /* White text color */
-            text-transform: uppercase;
-        }
-
-        h1 {
-            color: rgb(49, 49, 49);
-            font-family: 'Montserrat', sans-serif;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 4vw; /* Make it scale with viewport width */
-            margin: 0; /* Remove default margin */
-            opacity: 0; /* Start hidden */
-            transition: opacity 2s ease; /* Smooth fade-in transition */
-        }
-
-        /* Responsive design for small screens */
-        @media screen and (max-width: 768px) {
-    .inline-container {
-        flex-direction: column;
-        align-items: center; /* Center align items vertically */
-    }
-    #fadeInText, h1 {
-        text-align: center; /* Center text for better visual balance */
-    }
-}
-
-        @media screen and (max-width: 480px) {
-            #fadeInText {
-                font-size: 16vw; /* Even larger font size for very small screens */
-            }
-
-            h1 {
-                font-size: 10vw; /* Adjust h1 size for very small screens */
-            }
-        }
-    </style>
+   
 </head>
 <body>
 
@@ -88,9 +30,9 @@
     
     
     <!-- Inline container to hold both elements -->
-    <div class="inline-container">
+    <div class="inline-container" style="text-align: center;">
         <div id="fadeInText">INEXASLI</div>
-        <h1 id="empoweringThee">Empowering Thee</h1>
+        <h4 id="empoweringThee">Empowering Thee</h4>
     </div>
 
 
