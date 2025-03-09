@@ -1046,3 +1046,47 @@ background-color: none;
   color: white; 
   background-color: #333; 
 }
+
+
+h4 {
+  color: rgb(49, 49, 49);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 4vw; /* Make it scale with viewport width */
+  margin: 0; /* Remove default margin */
+  opacity: 0; /* Start hidden */
+  transition: opacity 2s ease; /* Smooth fade-in transition */
+}
+
+
+#fadeInText {
+  font-family: Arial, sans-serif;
+  font-size: 10vw; /* Use viewport width for responsive font size */
+  font-weight: bold;
+  color: white; /* White text color */
+  text-transform: uppercase;
+}
+
+
+/* Responsive design for small screens */
+@media screen and (max-width: 768px) {
+.inline-container {
+flex-direction: column;
+align-items: center; /* Center align items vertically */
+}
+#fadeInText, h1 {
+text-align: center; /* Center text for better visual balance */
+}
+}
+
+@media screen and (max-width: 480px) {
+  #fadeInText {
+      font-size: 16vw; /* Even larger font size for very small screens */
+  }
+
+  h1 {
+      font-size: 10vw; /* Adjust h1 size for very small screens */
+  }
+}
