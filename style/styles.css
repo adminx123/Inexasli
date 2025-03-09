@@ -1222,3 +1222,12 @@ textarea {
   padding-left: 1px; /* Not in second CSS, kept as is */
   padding-right: 1px; /* Not in second CSS, kept as is */
 }
+
+.button-container {
+  display: flex; /* Horizontal row */
+  justify-content: center; /* Center the row on screen */
+  align-items: center; /* Vertically align buttons */
+  gap: 10px; /* Space between buttons */
+  width: 100%; /* Full width for centering */
+  padding: 20px 0; /* Optional vertical padding */
+}
