@@ -8,18 +8,32 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
       <div class="tray-dropdown" id="trayDropdownMenu">
         <div class="tray-menu-item-container">
-          <a href="#" id="trayCalculations" class="tray-menu-item">CALCULATE</a>
-          <div class="tray-submenu" id="trayCalculationsMenu">
-            <a href="/budget/vacation.html" id="vacation">Vacation</a>
-            <a href="/budget/intro.html" id="personal">IncomeIQ™</a>
-          </div>
+          <a href="/budget/vacation.html" id="website" class="tray-menu-item">IncomeIQ™</a>
+          // <div class="tray-submenu" id="trayCalculationsMenu">
+            // <a href="/budget/vacation.html" id="vacation">Vacation</a>
+            // <a href="/budget/intro.html" id="personal">IncomeIQ™</a>
+          // </div>
         </div>
+
+
+
+<div class="tray-menu-item-container">
+          <a href="/budget/vacation.html" id="website" class="tray-menu-item">Vacation</a>
+          // <div class="tray-submenu" id="trayCreateMenu">
+            // <a href="/create/prompt.html" id="website">Promptify™</a>
+          // </div>
+        </div>
+
+
+
         <div class="tray-menu-item-container">
-          <a href="#" id="trayCreate" class="tray-menu-item">CREATE</a>
-          <div class="tray-submenu" id="trayCreateMenu">
-            <a href="/create/prompt.html" id="website">Promptify™</a>
-          </div>
+          <a href="/create/prompt.html" id="website" class="tray-menu-item">Promptify™</a>
+          // <div class="tray-submenu" id="trayCreateMenu">
+            // <a href="/create/prompt.html" id="website">Promptify™</a>
+          // </div>
         </div>
+
+
         <div class="tray-menu-item-container">
           <a href="mailto:support@inexasli.com" id="trayContact" class="tray-menu-item">CONTACT</a>
         </div>
