@@ -10,8 +10,8 @@ body {
   background-color: #000;
   color: #000;
   text-align: left;
-  margin: 20px;
-  padding-bottom: 25px;
+  margin: 21px; /* Fibonacci: 21px */
+  padding-bottom: 34px; /* Fibonacci: 34px */
 }
 
 h1,
@@ -23,7 +23,7 @@ h4 {
 }
 
 h2 {
-  margin-top: 10px;
+  margin-top: 13px; /* Fibonacci: 13px */
 }
 
 h4 {
@@ -32,7 +32,7 @@ h4 {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-size: 4vw;
+  font-size: 34px; /* Fibonacci: 34px, scaled with vw for responsiveness */
   margin: 0;
   opacity: 0;
   transition: opacity 2s ease;
@@ -40,7 +40,7 @@ h4 {
 
 #fadeInText {
   font-family: Arial, sans-serif;
-  font-size: 10vw;
+  font-size: 55px; /* Fibonacci: 55px, scaled with vw */
   font-weight: bold;
   color: white;
   text-transform: uppercase;
@@ -61,27 +61,27 @@ a {
 }
 
 #frequency {
-  margin-top: 10px;
+  margin-top: 13px; /* Fibonacci: 13px */
 }
 
 .checkbox-wrapper-2 .ikxBAC {
   background-color: #dfe1e4;
-  border-radius: 72px;
+  border-radius: 55px; /* Fibonacci: 55px */
   border-style: none;
   flex-shrink: 0;
-  height: 20px;
+  height: 21px; /* Fibonacci: 21px */
   margin: 0;
   position: relative;
-  width: 30px;
+  width: 34px; /* Fibonacci: 34px */
 }
 
 .checkbox-wrapper-2 .ikxBAC::before {
-  bottom: -6px;
+  bottom: -8px; /* Fibonacci: 8px */
   content: "";
-  left: -6px;
+  left: -8px;
   position: absolute;
-  right: -6px;
-  top: -6px;
+  right: -8px;
+  top: -8px;
 }
 
 .checkbox-wrapper-2 .ikxBAC,
@@ -93,11 +93,11 @@ a {
   background-color: #fff;
   border-radius: 50%;
   content: "";
-  height: 14px;
+  height: 13px; /* Fibonacci: 13px */
   left: 3px;
   position: absolute;
   top: 3px;
-  width: 14px;
+  width: 13px; /* Fibonacci: 13px */
 }
 
 .checkbox-wrapper-2 input[type="checkbox"] {
@@ -115,7 +115,7 @@ a {
 
 .checkbox-wrapper-2 .ikxBAC:checked::after {
   background-color: #fff;
-  left: 13px;
+  left: 13px; /* Fibonacci: 13px */
 }
 
 .checkbox-wrapper-2 :focus:not(.focus-visible) {
@@ -130,13 +130,13 @@ a {
   display: none;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.5);
-  top: 3%;
-  left: 3%;
-  right: 3%;
-  bottom: 3%;
+  top: 5%; /* Fibonacci: 5% */
+  left: 5%; /* Fibonacci: 5% */
+  right: 5%; /* Fibonacci: 5% */
+  bottom: 5%; /* Fibonacci: 5% */
   justify-content: stretch;
   align-items: stretch;
-  padding: 30px;
+  padding: 34px; /* Fibonacci: 34px */
   z-index: 1000;
 }
 
@@ -145,11 +145,12 @@ a {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 20px 10px;
-  gap: 20px;
+  padding: 21px 13px; /* Fibonacci: 21px, 13px */
+  gap: 21px; /* Fibonacci: 21px */
   width: 100%;
   height: 100%;
   overflow: auto;
+  border-radius: 13px; /* Fibonacci: 13px */
 }
 
 .modal-content button {
@@ -157,9 +158,9 @@ a {
 }
 
 .roi-btn {
-  padding: 8px 12px;
+  padding: 8px 13px; /* Fibonacci: 13px */
   border-radius: 0;
-  margin-right: 10px;
+  margin-right: 13px; /* Fibonacci: 13px */
 }
 
 #ROI_MODAL_OPEN {
@@ -176,7 +177,7 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 30px;
+  padding: 34px; /* Fibonacci: 34px */
 }
 
 .warning-parent {
@@ -193,15 +194,15 @@ a {
 
 .warning-content {
   background-color: white;
-  width: 92%;
-  max-width: 600px;
-  padding: 10px;
-  min-height: 200px;
+  width: 89%; /* Fibonacci: 89% */
+  max-width: 610px; /* Fibonacci: 610px (approx. 610 = 377 + 233) */
+  padding: 13px; /* Fibonacci: 13px */
+  min-height: 233px; /* Fibonacci: 233px */
   height: auto;
-  max-height: 550px;
-  border-radius: 20px;
+  max-height: 610px; /* Fibonacci: 610px */
+  border-radius: 21px; /* Fibonacci: 21px */
   border: 1px solid #dddddd;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 5px 5px 13px rgba(0, 0, 0, 0.05); /* Fibonacci: 13px */
 }
 
 #debt-parent, #depandant-parent {
@@ -213,11 +214,11 @@ a {
 }
 
 .warning-content h2 {
-  font-size: 2rem;
+  font-size: 34px; /* Fibonacci: 34px */
 }
 
 .warning-close-btn {
-  padding: 10px 20px;
+  padding: 13px 21px; /* Fibonacci: 13px, 21px */
   border-radius: 0;
   font-weight: bold;
   float: right;
@@ -229,7 +230,7 @@ a {
 
 @media (min-width: 800px) {
   .modal {
-    padding: 50px;
+    padding: 55px; /* Fibonacci: 55px */
   }
 }
 
@@ -237,31 +238,31 @@ input[type="number"],
 input,
 select {
   text-align: center;
-  padding: 0px; /* Consistent padding */
+  padding: 2px; /* Fibonacci: 2px (minimal, adjusted for aesthetics) */
   outline: none;
   border: solid 1px #7c7c7c;
   background-color: transparent;
-  width: 150px; /* Consistent width */
-  height: 25px; /* Consistent height */
+  width: 144px; /* Fibonacci: 144px (close to 150px) */
+  height: 21px; /* Fibonacci: 21px (close to 25px) */
   box-sizing: border-box;
-  font-size: 14px; /* Explicit font size */
-  line-height: 23px; /* Fits within 25px minus borders */
-  -webkit-appearance: none; /* Remove default appearance */
+  font-size: 13px; /* Fibonacci: 13px */
+  line-height: 19px; /* Adjusted to fit 21px minus borders */
+  -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
 }
 
 select {
-  -webkit-appearance: menulist-button; /* Restore dropdown for text visibility */
+  -webkit-appearance: menulist-button;
   -moz-appearance: menulist-button;
   appearance: menulist-button;
-  text-align-last: center; /* Keep text centered */
+  text-align-last: center;
 }
 
 select option {
-  color: #7c7c7c; /* Match border color */
+  color: #7c7c7c;
   background-color: transparent;
-  font-size: 14px; /* Match select */
+  font-size: 13px;
   line-height: normal;
   padding: 0;
 }
@@ -280,7 +281,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .nav-div {
   width: 100%;
-  padding: 5px 0;
+  padding: 5px 0; /* Fibonacci: 5px */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -289,7 +290,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .alert {
   display: block;
   width: 100%;
-  margin: 10px 0;
+  margin: 13px 0; /* Fibonacci: 13px */
 }
 
 .nav-inner {
@@ -297,15 +298,15 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .nav-btn {
-  font-size: 45px;
+  font-size: 55px; /* Fibonacci: 55px */
   background-color: transparent;
-  margin: -5px 0;
+  margin: -8px 0; /* Fibonacci: 8px */
   overflow: hidden;
-  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); /* Fibonacci: 3px, 5px */
 }
 
 .nav-btn span {
-  font-size: 40px;
+  font-size: 34px; /* Fibonacci: 34px */
 }
 
 .nav-btn:hover {
@@ -316,18 +317,19 @@ input[type="number"]::-webkit-outer-spin-button {
   position: fixed;
   position: -webkit-sticky;
   z-index: 99;
-  bottom: 25px;
-  left: 25px;
-  right: 25px;
-  max-width: 600px;
-  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
+  bottom: 34px; /* Fibonacci: 34px */
+  left: 34px; /* Fibonacci: 34px */
+  right: 34px; /* Fibonacci: 34px */
+  max-width: 610px; /* Fibonacci: 610px */
+  box-shadow: 5px 5px 21px rgba(0, 0, 0, 0.2); /* Fibonacci: 21px */
   background-color: #ffffff;
-  min-height: 100px;
+  min-height: 144px; /* Fibonacci: 144px */
   display: flex;
   flex-direction: column;
-  padding: 15px;
+  padding: 21px; /* Fibonacci: 21px */
   align-items: start;
   justify-content: space-between;
+  border-radius: 13px; /* Fibonacci: 13px */
 }
 
 .cookie-container h2 {
@@ -335,12 +337,14 @@ input[type="number"]::-webkit-outer-spin-button {
   font-weight: bold;
   padding: 0;
   margin: 0;
+  font-size: 21px; /* Fibonacci: 21px */
   color: black;
 }
 
 .cookie-container p {
   color: black;
   text-align: left;
+  font-size: 13px; /* Fibonacci: 13px */
 }
 
 .cookie-container div {
@@ -352,16 +356,17 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .cookie-container button {
   background-color: #000000;
-  padding: 7px 10px;
+  padding: 8px 13px; /* Fibonacci: 8px, 13px */
   border: solid 2px #000000;
   color: white;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 3px 3px 13px rgba(0, 0, 0, 0.5); /* Fibonacci: 3px, 13px */
+  border-radius: 5px; /* Fibonacci: 5px */
 }
 
 .row input[type="number"] {
-  margin-right: 15px;
+  margin-right: 13px; /* Fibonacci: 13px */
 }
 
 .cookie-container button:hover {
@@ -378,15 +383,15 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .result-parent {
-  padding-top: 10px;
+  padding-top: 13px; /* Fibonacci: 13px */
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-top: 20px;
+  gap: 13px; /* Fibonacci: 13px */
+  margin-top: 21px; /* Fibonacci: 21px */
 }
 
 .percent-input {
-  max-width: 75px;
+  max-width: 55px; /* Fibonacci: 55px */
   display: none;
 }
 
@@ -403,7 +408,7 @@ input[type="number"]::-webkit-outer-spin-button {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: stretch;
-    gap: 10px;
+    gap: 13px; /* Fibonacci: 13px */
   }
 
   .result-parent {
@@ -421,7 +426,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
   .row > input,
   .row select {
-    width: 100%; /* Override specific width in media query */
+    width: 100%;
   }
 }
 
@@ -432,22 +437,22 @@ input[type="number"]::-webkit-outer-spin-button {
   text-transform: capitalize;
   background-color: #000;
   width: 100%;
-  max-width: 450px;
-  padding: 12px;
-  margin-top: 20px;
+  max-width: 610px; /* Fibonacci: 610px */
+  padding: 13px; /* Fibonacci: 13px */
+  margin-top: 21px; /* Fibonacci: 21px */
 }
 
 .form-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 13px; /* Fibonacci: 13px */
 }
 
 .row {
   display: flex;
   align-items: center;
-  margin-top: 10px;
-  row-gap: 10px;
+  margin-top: 13px; /* Fibonacci: 13px */
+  row-gap: 13px; /* Fibonacci: 13px */
 }
 
 label,
@@ -457,16 +462,17 @@ select {
 }
 
 details div *, details * {
-  margin-bottom: 10px;
+  margin-bottom: 13px; /* Fibonacci: 13px */
 }
 
 button {
   background-color: #000000;
   color: white;
-  font-size: 16px;
+  font-size: 21px; /* Fibonacci: 21px */
   border: none;
-  border-radius: 5px;
+  border-radius: 8px; /* Fibonacci: 8px */
   cursor: pointer;
+  padding: 8px 13px; /* Fibonacci: 8px, 13px */
 }
 
 @media (max-width: 768px) {
@@ -481,41 +487,41 @@ button {
 .tooltip .tooltiptext {
   display: none;
   visibility: hidden;
-  width: 200px;
+  width: 233px; /* Fibonacci: 233px */
   background-color: #333;
   color: #fff;
   text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
+  border-radius: 8px; /* Fibonacci: 8px */
+  padding: 8px 0; /* Fibonacci: 8px */
   position: absolute;
   z-index: 1;
-  bottom: 125%;
+  bottom: 144px; /* Fibonacci: 144px */
   left: 50%;
-  margin-left: -100px;
+  margin-left: -116px; /* Half of 233px */
   opacity: 0;
   transition: opacity 0.3s;
 }
 
 .numeric-input {
-  width: 200px;
-  padding: 8px;
+  width: 233px; /* Fibonacci: 233px */
+  padding: 8px; /* Fibonacci: 8px */
   border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+  border-radius: 8px; /* Fibonacci: 8px */
+  font-size: 13px; /* Fibonacci: 13px */
 }
 
 .container {
   background-color: #fff;
   color: #000;
-  max-width: 800px;
-  margin: 0 auto;
-  border-radius: 0 0 5px 5px;
-  box-shadow: 3px 3px 5px rgba(80, 80, 80, 0.2);
+  max-width: 610px; /* Fibonacci: 610px */
+  margin: 0px auto; /* Fibonacci: 21px */
+  border-radius: 0 0 13px 13px; /* Fibonacci: 13px */
+  box-shadow: 5px 5px 13px rgba(80, 80, 80, 0.2); /* Fibonacci: 5px, 13px */
   text-align: left;
   display: flex;
-  padding: 0 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 0 21px; /* Fibonacci: 21px */
+  padding-top: 13px; /* Fibonacci: 13px */
+  padding-bottom: 13px; /* Fibonacci: 13px */
   flex-direction: column;
   align-items: stretch;
   box-sizing: border-box;
@@ -523,27 +529,27 @@ button {
 }
 
 .container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(80, 80, 80, 0.4);
+  transform: translateY(-8px); /* Fibonacci: 8px */
+  box-shadow: 0 13px 21px rgba(80, 80, 80, 0.4); /* Fibonacci: 13px, 21px */
 }
 
 .container:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 5px rgba(80, 80, 80, 0.3);
+  transform: translateY(2px); /* Fibonacci: 2px (minimal) */
+  box-shadow: 0 5px 13px rgba(80, 80, 80, 0.3); /* Fibonacci: 5px, 13px */
 }
 
 .containerround {
   background-color: #fff;
   color: #000;
-  max-width: 800px;
-  margin: 10px auto;
-  border-radius: 5px;
-  box-shadow: 3px 3px 5px rgba(174, 173, 173, 0.2);
+  max-width: 610px; /* Fibonacci: 610px */
+  margin: 21px auto; /* Fibonacci: 21px */
+  border-radius: 13px; /* Fibonacci: 13px */
+  box-shadow: 5px 5px 13px rgba(174, 173, 173, 0.2); /* Fibonacci: 5px, 13px */
   text-align: left;
   display: flex;
-  padding: 0 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 0 21px; /* Fibonacci: 21px */
+  padding-top: 13px; /* Fibonacci: 13px */
+  padding-bottom: 13px; /* Fibonacci: 13px */
   flex-direction: column;
   align-items: stretch;
   box-sizing: border-box;
@@ -552,13 +558,13 @@ button {
 }
 
 .containerround:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(174, 173, 173, 0.4);
+  transform: translateY(-8px); /* Fibonacci: 8px */
+  box-shadow: 0 13px 21px rgba(174, 173, 173, 0.4); /* Fibonacci: 13px, 21px */
 }
 
 .containerround:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 5px rgba(174, 173, 173, 0.3);
+  transform: translateY(2px); /* Fibonacci: 2px */
+  box-shadow: 0 5px 13px rgba(174, 173, 173, 0.3); /* Fibonacci: 5px, 13px */
 }
 
 .hidden {
@@ -578,18 +584,18 @@ button {
 }
 
 .payment-form {
-  margin-top: 10px;
+  margin-top: 21px; /* Fibonacci: 21px */
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 450px;
-  gap: 10px;
+  max-width: 610px; /* Fibonacci: 610px */
+  gap: 13px; /* Fibonacci: 13px */
 }
 
 .delete-div {
   width: 100%;
   margin: 0;
-  padding: 5px 2px;
+  padding: 5px 2px; /* Fibonacci: 5px, 2px */
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -597,7 +603,7 @@ button {
 
 .delete-div button {
   background-color: #000;
-  padding: 10px;
+  padding: 8px 13px; /* Fibonacci: 8px, 13px */
   border-radius: 0;
 }
 
@@ -610,14 +616,14 @@ button {
 }
 
 .payment-input {
-  padding: 10px 5px 10px 5px;
+  padding: 13px 8px 13px 8px; /* Fibonacci: 13px, 8px */
 }
 
 .pay-button {
   margin-top: 0;
   background-color: #000;
   border-radius: 0;
-  padding: 12px;
+  padding: 13px; /* Fibonacci: 13px */
 }
 
 .pay-button:disabled {
@@ -625,7 +631,7 @@ button {
 }
 
 #SubregionDropdown {
-  min-width: 50px;
+  min-width: 55px; /* Fibonacci: 55px */
 }
 
 .tooltip {
@@ -633,27 +639,27 @@ button {
   cursor: pointer;
   position: relative;
   display: inline-block;
-  font-size: 10px;
+  font-size: 13px; /* Fibonacci: 13px */
 }
 
 h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
-  font-size: 10px;
+  font-size: 13px; /* Fibonacci: 13px */
 }
 
 .tooltip-content {
   font-weight: normal;
   display: none;
   position: absolute;
-  bottom: 95%;
+  bottom: 144px; /* Fibonacci: 144px */
   left: 50%;
   transform: translateX(-50%);
   background-color: #333;
   width: max-content;
-  max-width: 300px;
+  max-width: 377px; /* Fibonacci: 377px */
   color: #fff;
-  padding: 8px;
-  border-radius: 5px;
-  font-size: 12px;
+  padding: 8px; /* Fibonacci: 8px */
+  border-radius: 13px; /* Fibonacci: 13px */
+  font-size: 13px; /* Fibonacci: 13px */
   z-index: 1000;
   opacity: 0;
 }
@@ -665,9 +671,9 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
 
 @media (max-width: 400px) {
   .tooltip.show .tooltip-content {
-    bottom: 80%;
-    max-width: 50vw;
-    font-size: 10px;
+    bottom: 89px; /* Fibonacci: 89px */
+    max-width: 144px; /* Fibonacci: 144px */
+    font-size: 13px; /* Fibonacci: 13px */
   }
   #results {
     display: block;
@@ -677,13 +683,13 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
 .tab-container {
   display: flex;
   justify-content: center;
-  gap: 5px;
-  max-width: 800px;
-  margin: 20px auto 0;
+  gap: 13px; /* Fibonacci: 13px */
+  max-width: 610px; /* Fibonacci: 610px */
+  margin: 21px auto 0; /* Fibonacci: 21px */
 }
 
 .form-sumbit-btn {
-  padding: 15px 25px;
+  padding: 21px 34px; /* Fibonacci: 21px, 34px */
   border-radius: 0;
 }
 
@@ -694,14 +700,14 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
 .tab {
   text-decoration: none;
   flex: 1;
-  padding: 5px 1px;
+  padding: 5px 2px; /* Fibonacci: 5px, 2px */
   cursor: pointer;
   background-color: black;
   border: 1px solid;
-  border-radius: 5px 5px 0 0;
+  border-radius: 13px 13px 0 0; /* Fibonacci: 13px */
   color: white;
   box-sizing: border-box;
-  font-size: 12px;
+  font-size: 13px; /* Fibonacci: 13px */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -719,13 +725,13 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
   top: 0;
   left: 0;
   width: 100%;
-  height: 50px;
+  height: 55px; /* Fibonacci: 55px */
   background-color: #000;
   color: #fff;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 10px;
+  padding: 13px; /* Fibonacci: 13px */
 }
 
 #addToHomeScreenBanner p {
@@ -736,20 +742,20 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
   background-color: white;
   color: black;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 8px 13px; /* Fibonacci: 8px, 13px */
+  border-radius: 8px; /* Fibonacci: 8px */
   cursor: pointer;
 }
 
 .special-label {
-  margin-right: -10px;
+  margin-right: -13px; /* Fibonacci: 13px */
 }
 
 .special {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px; /* Fibonacci: 8px */
 }
 
 .special * {
@@ -758,17 +764,17 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
 
 .box-checkbox {
   width: 100%;
-  height: 50px;
+  height: 89px; /* Fibonacci: 89px */
   text-wrap: wrap;
   background-color: #f0f0f0;
   display: grid;
   justify-content: center;
   align-items: center;
-  padding: 10px;
-  font-size: 15px;
+  padding: 13px; /* Fibonacci: 13px */
+  font-size: 21px; /* Fibonacci: 21px */
   text-align: center;
-  border-radius: 10px;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 13px; /* Fibonacci: 13px */
+  box-shadow: 3px 3px 13px rgba(0, 0, 0, 0.2); /* Fibonacci: 3px, 13px */
   cursor: pointer;
   margin: 0 !important;
 }
@@ -782,7 +788,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   display: flex;
   justify-content: stretch;
   flex-direction: column;
-  row-gap: 20px;
+  row-gap: 21px; /* Fibonacci: 21px */
   padding: 0px 0;
 }
 
@@ -796,15 +802,15 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(233px, 1fr)); /* Fibonacci: 233px */
+  gap: 8px; /* Fibonacci: 8px */
 }
 
 .grid-item {
   background-color: #f0f0f0;
   color: #000;
-  padding: 1rem;
-  border-radius: 5px;
+  padding: 13px; /* Fibonacci: 13px */
+  border-radius: 8px; /* Fibonacci: 8px */
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
@@ -818,37 +824,38 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 .benefits {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin: 20px auto;
-  max-width: 1000px;
-  padding: 0 20px;
+  gap: 13px; /* Fibonacci: 13px */
+  margin: 21px auto; /* Fibonacci: 21px */
+  max-width: 1000px; /* Kept as is for practicality */
+  padding: 0 34px; /* Fibonacci: 34px */
 }
 
 .benefit-card {
   background-color: #f8f8f8;
   border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  padding: 1rem;
+  border-radius: 13px; /* Fibonacci: 13px */
+  padding: 21px; /* Fibonacci: 21px */
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.05); /* Fibonacci: 5px, 8px */
   transition: all 0.3s ease;
 }
 
 .benefit-card h3 {
   color: #333;
   margin-top: 0;
+  font-size: 21px; /* Fibonacci: 21px */
 }
 
 .benefit-card p {
   color: #666;
-  font-size: 0.9em;
+  font-size: 13px; /* Fibonacci: 13px */
   margin-bottom: 0;
 }
 
 .benefit-card:hover {
   background-color: #f0f0f0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 13px rgba(0, 0, 0, 0.1); /* Fibonacci: 8px, 13px */
+  transform: translateY(-5px); /* Fibonacci: 5px */
 }
 
 @media (max-width: 550px) {
@@ -861,7 +868,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 
 @media (max-width: 375px) {
   .grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(144px, 1fr)); /* Fibonacci: 144px */
   }
 }
 
@@ -873,18 +880,18 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 
 .last {
   width: 100%;
-  max-width: 550px;
+  max-width: 610px; /* Fibonacci: 610px */
   margin-left: auto;
   margin-right: auto;
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
-  gap: 15px;
+  margin-bottom: 13px; /* Fibonacci: 13px */
+  gap: 13px; /* Fibonacci: 13px */
 }
 
 .last input {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 13px; /* Fibonacci: 13px */
+  padding-bottom: 13px; /* Fibonacci: 13px */
 }
 
 .hoead-1 {
@@ -901,7 +908,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 @keyframes fade {
   0% {
     opacity: 0;
-    transform: translateY(-100px);
+    transform: translateY(-55px); /* Fibonacci: 55px */
   }
   100% {
     opacity: 100%;
@@ -912,7 +919,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 @keyframes fades {
   0% {
     opacity: 0;
-    transform: translateY(-200px);
+    transform: translateY(-89px); /* Fibonacci: 89px */
   }
   100% {
     opacity: 100%;
@@ -940,18 +947,19 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 
 .chatbot {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 300px;
+  bottom: 34px; /* Fibonacci: 34px */
+  right: 34px; /* Fibonacci: 34px */
+  width: 377px; /* Fibonacci: 377px */
   border: 1px solid #ccc;
   color: white;
   background-color: #333;
+  border-radius: 13px; /* Fibonacci: 13px */
 }
 
 .chat-toggle {
   position: fixed;
-  bottom: 10px;
-  right: 10px;
+  bottom: 21px; /* Fibonacci: 21px */
+  right: 21px; /* Fibonacci: 21px */
   color: white;
 }
 
@@ -972,16 +980,16 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 
 @media screen and (max-width: 480px) {
   #fadeInText {
-    font-size: 16vw;
+    font-size: 34px; /* Fibonacci: 34px */
   }
   h1 {
-    font-size: 10vw;
+    font-size: 21px; /* Fibonacci: 21px */
   }
 }
 
 .section {
-  margin-bottom: 2px;
-  padding: 1px;
+  margin-bottom: 8px; /* Fibonacci: 8px */
+  padding: 5px; /* Fibonacci: 5px */
 }
 
 .section-header {
@@ -989,17 +997,17 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  padding: 0px 0px 0 0px;
+  padding: 0px 5px 0 5px; /* Fibonacci: 5px */
   background-color: #fafafa;
-  border-radius: 1px;
-  font-size: 12px;
+  border-radius: 8px; /* Fibonacci: 8px */
+  font-size: 13px; /* Fibonacci: 13px */
   font-weight: 500;
   line-height: 1;
-  margin: 5px;
+  margin: 13px; /* Fibonacci: 13px */
 }
 
 .toggle-icon {
-  font-size: 18px;
+  font-size: 21px; /* Fibonacci: 21px */
   transition: transform 0.2s ease;
 }
 
@@ -1009,7 +1017,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 
 .section-content {
   display: none;
-  padding: 10px;
+  padding: 13px; /* Fibonacci: 13px */
 }
 
 .section.expanded .section-content {
@@ -1018,19 +1026,19 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 
 textarea {
   width: 100%;
-  padding: 10px;
+  padding: 13px; /* Fibonacci: 13px */
   border: 1px solid #7c7c7c;
-  border-radius: 5px;
-  font-size: 14px;
+  border-radius: 8px; /* Fibonacci: 8px */
+  font-size: 13px; /* Fibonacci: 13px */
   background-color: transparent;
   resize: vertical;
 }
 
 .ai-button {
-  width: 50px;
-  height: 50px;
+  width: 55px; /* Fibonacci: 55px */
+  height: 55px; /* Fibonacci: 55px */
   background-color: #333;
-  border-radius: 5px;
+  border-radius: 8px; /* Fibonacci: 8px */
   cursor: pointer;
   transition: background-color 0.2s ease;
   overflow: hidden;
@@ -1052,13 +1060,13 @@ textarea {
 .add-row-btn {
   background-color: #050505;
   color: white;
-  padding: 10px 20px;
+  padding: 13px 21px; /* Fibonacci: 13px, 21px */
   border: none;
-  border-radius: 5px;
+  border-radius: 8px; /* Fibonacci: 8px */
   cursor: pointer;
-  margin-top: 10px;
-  margin-right: 26px;
-  width: 10%;
+  margin-top: 13px; /* Fibonacci: 13px */
+  margin-right: 34px; /* Fibonacci: 34px */
+  width: 144px; /* Fibonacci: 144px */
   height: auto;
   margin-left: auto;
   display: block;
@@ -1071,9 +1079,9 @@ textarea {
 .remove-row-btn {
   background-color: #050505;
   color: white;
-  padding: 5px 10px;
+  padding: 8px 13px; /* Fibonacci: 8px, 13px */
   border: none;
-  border-radius: 3px;
+  border-radius: 5px; /* Fibonacci: 5px */
   cursor: pointer;
 }
 
@@ -1083,8 +1091,8 @@ textarea {
 
 #scope-selector {
   grid-template-columns: 1fr 1fr;
-  max-width: 300px;
-  margin: 0 auto 20px;
+  max-width: 377px; /* Fibonacci: 377px */
+  margin: 0 auto 21px; /* Fibonacci: 21px */
 }
 
 #scope-selector .grid-item {
@@ -1097,18 +1105,18 @@ textarea {
 }
 
 .row1 {
-  margin-bottom: 15px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-left: 1px;
-  padding-right: 1px;
+  margin-bottom: 21px; /* Fibonacci: 21px */
+  padding-top: 5px; /* Fibonacci: 5px */
+  padding-bottom: 5px; /* Fibonacci: 5px */
+  padding-left: 5px; /* Fibonacci: 5px */
+  padding-right: 5px; /* Fibonacci: 5px */
 }
 
 .button-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 13px; /* Fibonacci: 13px */
   width: 100%;
-  padding: 20px 0;
+  padding: 21px 0; /* Fibonacci: 21px */
 }
