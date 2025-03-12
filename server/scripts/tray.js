@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
       <div class="tray-dropdown" id="trayDropdownMenu">
         <div class="tray-menu-item-container">
-          <a href="/budget/vacation.html" id="website" class="tray-menu-item">IncomeIQ™</a>
+          <a href="/budget/intro.html" id="website" class="tray-menu-item">IncomeIQ™</a>
           // <div class="tray-submenu" id="trayCalculationsMenu">
             // <a href="/budget/vacation.html" id="vacation">Vacation</a>
             // <a href="/budget/intro.html" id="personal">IncomeIQ™</a>
