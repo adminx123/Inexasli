@@ -811,48 +811,22 @@
             </div>
 
 
-                    <!-- EXPENSE -->
-
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Data Collection & Aggregation - Business Expense Receipts</h2>
-                    <span class="toggle-icon">+</span>
-                </div>
-                <div class="section-content">
-                    <div class="row1">
-                        <div class="grid-container" id="expense-location">
-                            <div class="grid-item" data-value="Canada">Canada</div>
-                            <div class="grid-item" data-value="USA">USA</div>
-                        </div>
-                    </div>
-                    <div class="row1">
-                        <label>Depreciable Assets</label>
-                        <table id="depreciable-assets-table" border="1">
-                            <thead>
-                                <tr>
-                                    <th>Asset Name</th>
-                                    <th>Personal Use %</th>
-                                    <th>Business 1 Use %</th>
-                                    <th>Business 2 Use %</th>
-                                    <th>Undepreciated Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="text" placeholder="e.g., Laptop" class="table-input" data-field="asset-name"></td>
-                                    <td><input type="number" min="0" max="100" placeholder="e.g., 20" class="table-input" data-field="personal-use"></td>
-                                    <td><input type="number" min="0" max="100" placeholder="e.g., 60" class="table-input" data-field="business1-use"></td>
-                                    <td><input type="number" min="0" max="100" placeholder="e.g., 20" class="table-input" data-field="business2-use"></td>
-                                    <td><input type="number" min="0" step="0.01" placeholder="e.g., 500.00" class="table-input" data-field="undepreciated-value"></td>
-                                    <td><button class="remove-row1-btn">Remove</button></td> 
-                                </tr>
-                            </tbody>
-                        </table>
-                        <button id="add-row-btn" class="add-row-btn">Add Row</button>
-                    </div>
-                    <button class="generate-btn" data-prompt="expense">Generate Receipt Tally</button>
-                </div>
+         <!-- EXPENSE -->
+<div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>Data Collection & Aggregation - Business Expense Receipts</h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content">
+        <div class="row1">
+            <div class="grid-container" id="expense-location">
+                <div class="grid-item" data-value="Canada">Canada</div>
+                <div class="grid-item" data-value="USA">USA</div>
             </div>
+        </div>
+        <button class="generate-btn" data-prompt="expense">Generate Receipt Tally</button>
+    </div>
+</div>
 
 
             <!-- Research Prompt Template -->

@@ -104,36 +104,7 @@ document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-st
 });
 
 
-// Add Row Functionality
-document.getElementById('add-row-btn').addEventListener('click', function () {
-    const tableBody = document.querySelector('#depreciable-assets-table tbody');
-    const newRow = document.createElement('tr');
 
-    // Create and append table cells with input fields and a Remove button
-    newRow.innerHTML = `
-        <td><input type="text" placeholder="e.g., Laptop" class="table-input" data-field="asset-name"></td>
-        <td><input type="number" min="0" max="100" placeholder="e.g., 20" class="table-input" data-field="personal-use"></td>
-        <td><input type="number" min="0" max="100" placeholder="e.g., 60" class="table-input" data-field="business1-use"></td>
-        <td><input type="number" min="0" max="100" placeholder="e.g., 20" class="table-input" data-field="business2-use"></td>
-        <td><input type="number" min="0" step="0.01" placeholder="e.g., 500.00" class="table-input" data-field="undepreciated-value"></td>
-        <td><button class="remove-row-btn">Remove</button></td>
-    `;
-
-    tableBody.appendChild(newRow);
-
-    // Add event listener to the new Remove button
-    newRow.querySelector('.remove-row-btn').addEventListener('click', function () {
-        tableBody.removeChild(newRow);
-    });
-});
-
-// Remove Row Functionality (for existing rows)
-document.querySelectorAll('.remove-row-btn').forEach(button => {
-    button.addEventListener('click', function () {
-        const row = this.closest('tr'); // Find the closest row to the clicked button
-        row.remove(); // Remove the row
-    });
-});
 
 
 
@@ -381,41 +352,24 @@ Add 29 g more fats to meet your daily fat requirement.
             break;
 
 
-        case 'expense':
-            const locationsSelected = document.querySelectorAll('#expense-location .grid-item.selected');
-            console.log('Selected locations count:', locationsSelected.length);
-            console.log('Selected locations:', Array.from(locationsSelected).map(item => item.getAttribute('data-value')));
-            if (locationsSelected.length > 0) {
-                prompt += formatGrid('#expense-location .grid-item.selected', 'Location');
-
-
-                prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
-Advertising, Insurance, Interest, Maintenance and Repairs, Management and Administration Fees, Motor Vehicle Expenses, Office Expenses, Legal, Accounting, and Other Professional Fees 
-Property Taxes, Salaries/Wages/and Benefits, Travel, Utilities, Other Expenses (for miscellaneous items)
-Table headings, should be in the following order: Date,Receipt #,Item,Amount,T1125 Category,Subtotal (Excl. Tax),GST,PST,Total, Personal use %, Business 1 use % Business 2 use %
-
-Ensure that all items on all receipts are accounted for and categorized appropriately.
-
-
-\n\n`;
-                const tableRows = document.querySelectorAll('#depreciable-assets-table tbody tr');
-                let assets = [];
-                tableRows.forEach(row => {
-                    const assetName = row.querySelector('[data-field="asset-name"]').value;
-                    const personalUse = row.querySelector('[data-field="personal-use"]').value || '0';
-                    const business1Use = row.querySelector('[data-field="business1-use"]').value || '0';
-                    const business2Use = row.querySelector('[data-field="business2-use"]').value || '0';
-                    const undepreciatedValue = row.querySelector('[data-field="undepreciated-value"]').value || '0';
-                    if (assetName) {
-                        assets.push(`${assetName}: Personal Use ${personalUse}%, Business 1 Use ${business1Use}%, Business 2 Use ${business2Use}%, Undepreciated Value $${undepreciatedValue}`);
-                    }
-                });
-                prompt += formatList(assets.length ? assets.join('\n') : 'None', 'Depreciable Assets');
-                console.log('Prompt after building:', prompt);
-            } else {
-                console.log('No locations selected, prompt not built');
-            }
-            break;
+            case 'expense':
+                const locationsSelected = document.querySelectorAll('#expense-location .grid-item.selected');
+                console.log('Selected locations count:', locationsSelected.length);
+                console.log('Selected locations:', Array.from(locationsSelected).map(item => item.getAttribute('data-value')));
+                if (locationsSelected.length > 0) {
+                    prompt += formatGrid('#expense-location .grid-item.selected', 'Location');
+                    prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
+            Advertising, Insurance, Interest, Maintenance and Repairs, Management and Administration Fees, Motor Vehicle Expenses, Office Expenses, Legal, Accounting, and Other Professional Fees 
+            Property Taxes, Salaries/Wages/and Benefits, Travel, Utilities, Other Expenses (for miscellaneous items)
+            
+            Ensure that all items on all receipts are accounted for and categorized appropriately.
+            
+            \n\n`;
+                    console.log('Prompt after building:', prompt);
+                } else {
+                    console.log('No locations selected, prompt not built');
+                }
+                break;
 
         case 'research':
             prompt += formatList(document.getElementById('research-goal')?.value, 'Research Goal');
