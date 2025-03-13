@@ -15,19 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
           // </div>
         </div>
 
-
-
-<div class="tray-menu-item-container">
-          <a href="/budget/vacation.html" id="website" class="tray-menu-item">Vacation</a>
+ <div class="tray-menu-item-container">
+          <a href="/create/prompt.html" id="website" class="tray-menu-item">Promptify™</a>
           // <div class="tray-submenu" id="trayCreateMenu">
             // <a href="/create/prompt.html" id="website">Promptify™</a>
           // </div>
         </div>
 
-
-
-        <div class="tray-menu-item-container">
-          <a href="/create/prompt.html" id="website" class="tray-menu-item">Promptify™</a>
+<div class="tray-menu-item-container">
+          <a href="/budget/vacation.html" id="website" class="tray-menu-item">Vacation</a>
           // <div class="tray-submenu" id="trayCreateMenu">
             // <a href="/create/prompt.html" id="website">Promptify™</a>
           // </div>
