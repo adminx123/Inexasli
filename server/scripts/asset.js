@@ -123,48 +123,7 @@ LIQUIDASSETS = liquidAssets;
 
 
 
-function setIncomeData(){ 
-	const assetsFields = [
-        'assets_checking_accounts', 
-        'assets_savings_accounts', 
-        'assets_other_liquid_accounts',
-		'assets_money_lent_out',
-        'assets_long_term_investment_accounts', 
-        'assets_primary_residence', 
-        'assets_investment_properties', 
-        'assets_small_business', 
-        'assets_vehicles', 
-        'assets_art_jewelry'
-    ];
 
-
-
-
-for (let i = 0; i < assetsFields.length; i++) {
-  const assetsInput = document.getElementById(assetsFields[i]);
-  if (assetsInput.value.trim() !== "") {
-    const assets = assetsInput.value;
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${assetsFields[i]}=${assets}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
-// set percentage cookie
-
-let fieldPercentage = parseFloat(document.querySelector(`#${assetsFields[i]}_percent`).value)
-
-if (!fieldPercentage || isNaN(fieldPercentage)) {
-    // fieldPercentage = 100
-    continue
-}
-
-    document.cookie = `${assetsFields[i]}_percent=${fieldPercentage}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
-  } else {
-    const assets = "0";
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 365);
-    document.cookie = `${assetsFields[i]}=${assets}; expires=${expirationDate.toUTCString()};  path=/;SameSite=Strict; Secure`;
-  }
-}
-}
 
 document.addEventListener('DOMContentLoaded', function () {
     // List of form element IDs you want to set based on cookies
@@ -207,7 +166,29 @@ window.calculateNext = function () {
         setCookie("ASSETS", ASSETS, 365);
         setCookie("LIQUIDASSETS", LIQUIDASSETS, 365);
 
-	    setIncomeData();
+        setCookie("assets_checking_accounts", document.getElementById("assets_checking_accounts").value.trim() !== "" ? document.getElementById("assets_checking_accounts").value : "0", 365);
+        setCookie("assets_savings_accounts", document.getElementById("assets_savings_accounts").value.trim() !== "" ? document.getElementById("assets_savings_accounts").value : "0", 365);
+        setCookie("assets_other_liquid_accounts", document.getElementById("assets_other_liquid_accounts").value.trim() !== "" ? document.getElementById("assets_other_liquid_accounts").value : "0", 365);
+        setCookie("assets_money_lent_out", document.getElementById("assets_money_lent_out").value.trim() !== "" ? document.getElementById("assets_money_lent_out").value : "0", 365);
+        setCookie("assets_long_term_investment_accounts", document.getElementById("assets_long_term_investment_accounts").value.trim() !== "" ? document.getElementById("assets_long_term_investment_accounts").value : "0", 365);
+        setCookie("assets_primary_residence", document.getElementById("assets_primary_residence").value.trim() !== "" ? document.getElementById("assets_primary_residence").value : "0", 365);
+        setCookie("assets_investment_properties", document.getElementById("assets_investment_properties").value.trim() !== "" ? document.getElementById("assets_investment_properties").value : "0", 365);
+        setCookie("assets_small_business", document.getElementById("assets_small_business").value.trim() !== "" ? document.getElementById("assets_small_business").value : "0", 365);
+        setCookie("assets_vehicles", document.getElementById("assets_vehicles").value.trim() !== "" ? document.getElementById("assets_vehicles").value : "0", 365);
+        setCookie("assets_art_jewelry", document.getElementById("assets_art_jewelry").value.trim() !== "" ? document.getElementById("assets_art_jewelry").value : "0", 365);
+    
+
+        setCookie("assets_checking_accounts_percent", document.getElementById("assets_checking_accounts_percent").value.trim() !== "" ? document.getElementById("assets_checking_accounts_percent").value : "100", 365);
+    setCookie("assets_savings_accounts_percent", document.getElementById("assets_savings_accounts_percent").value.trim() !== "" ? document.getElementById("assets_savings_accounts_percent").value : "100", 365);
+    setCookie("assets_other_liquid_accounts_percent", document.getElementById("assets_other_liquid_accounts_percent").value.trim() !== "" ? document.getElementById("assets_other_liquid_accounts_percent").value : "100", 365);
+    setCookie("assets_money_lent_out_percent", document.getElementById("assets_money_lent_out_percent").value.trim() !== "" ? document.getElementById("assets_money_lent_out_percent").value : "100", 365);
+    setCookie("assets_long_term_investment_accounts_percent", document.getElementById("assets_long_term_investment_accounts_percent").value.trim() !== "" ? document.getElementById("assets_long_term_investment_accounts_percent").value : "100", 365);
+    setCookie("assets_primary_residence_percent", document.getElementById("assets_primary_residence_percent").value.trim() !== "" ? document.getElementById("assets_primary_residence_percent").value : "100", 365);
+    setCookie("assets_investment_properties_percent", document.getElementById("assets_investment_properties_percent").value.trim() !== "" ? document.getElementById("assets_investment_properties_percent").value : "100", 365);
+    setCookie("assets_small_business_percent", document.getElementById("assets_small_business_percent").value.trim() !== "" ? document.getElementById("assets_small_business_percent").value : "100", 365);
+    setCookie("assets_vehicles_percent", document.getElementById("assets_vehicles_percent").value.trim() !== "" ? document.getElementById("assets_vehicles_percent").value : "100", 365);
+    setCookie("assets_art_jewelry_percent", document.getElementById("assets_art_jewelry_percent").value.trim() !== "" ? document.getElementById("assets_art_jewelry_percent").value : "100", 365);
+
     }
 
 

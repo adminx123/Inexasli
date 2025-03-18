@@ -1212,85 +1212,7 @@ function passiveincome() {
 
 
 
-function setIncomeData() {
-    const frequencyFields = [
-        "income_salary_wages_frequency",
-        "income_tips_frequency",
-        "income_bonuses_frequency",
-        "income_sole_prop_frequency",
-        "income_investment_property_frequency",
-        "income_capital_gains_losses_frequency",
-        "income_interest_frequency",
-        "income_owner_dividend_frequency",
-        "income_public_dividend_frequency",
-        "income_trust_frequency",
-        "income_federal_pension_frequency",
-        "income_work_pension_frequency",
-        "income_social_security_frequency",
-        "income_employment_insurance_frequency",
-        "income_alimony_frequency",
-        "income_scholarships_grants_frequency",
-        "income_royalties_frequency",
-        "income_gambling_winnings_frequency",
-        "income_peer_to_peer_lending_frequency",
-        "income_venture_capital_frequency",
-        "income_tax_free_income_frequency"
-    ];
 
-    const incomeFields = [
-        "income_salary_wages",
-        "income_tips",
-        "income_bonuses",
-        "income_sole_prop",
-        "income_investment_property",
-        "income_capital_gains_losses",
-        "income_interest",
-        "income_owner_dividend",
-        "income_public_dividend",
-        "income_trust",
-        "income_federal_pension",
-        "income_work_pension",
-        "income_social_security",
-        "income_employment_insurance",
-        "income_alimony",
-        "income_scholarships_grants",
-        "income_royalties",
-        "income_gambling_winnings",
-        "income_peer_to_peer_lending",
-        "income_venture_capital",
-        "income_tax_free_income"
-    ];
-
-    for (let i = 0; i < frequencyFields.length; i++) {
-        const frequencyInput = document.getElementById(frequencyFields[i]);
-        if (frequencyInput.value.trim() !== "") {
-            const frequency = frequencyInput.value;
-            const expirationDate = new Date();
-            expirationDate.setDate(expirationDate.getDate() + 365);
-            document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Strict; Secure`;
-        } else {
-            const frequency = "0";
-            const expirationDate = new Date();
-            expirationDate.setDate(expirationDate.getDate() + 365);
-            document.cookie = `${frequencyFields[i]}=${frequency}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Strict; Secure`;
-        }
-    }
-
-    for (let i = 0; i < incomeFields.length; i++) {
-        const incomeInput = document.getElementById(incomeFields[i]);
-        if (incomeInput.value.trim() !== "") {
-            const income = incomeInput.value;
-            const expirationDate = new Date();
-            expirationDate.setDate(expirationDate.getDate() + 365);
-            document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
-        } else {
-            const income = "0";
-            const expirationDate = new Date();
-            expirationDate.setDate(expirationDate.getDate() + 365);
-            document.cookie = `${incomeFields[i]}=${income}; expires=${expirationDate.toUTCString()};  path=/; SameSite=Strict; Secure`;
-        }
-    }
-}
 
 
 document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', () => {
@@ -1378,63 +1300,87 @@ window.calculateNext = function () {
 }
 
 window.calculateAll = function () {
-
     calculateNormalizedSum();
-
     calculateRegionalTax();
-
     const SubregionDropdown = document.getElementById('SubregionDropdown');
     const Subregion = SubregionDropdown.value;
     calculateSubregionalTax(Subregion, SUBREGIONALTAXBRACKETS);
-
-
-
     calculateEmploymentIncome();
-
     getCppPayable();
-
     getEIPayable();
-
     passiveincome();
-
     handleUSAResident();
 
-    setIncomeData();
+    // Frequency fields
+    setCookie("income_salary_wages_frequency", document.getElementById("income_salary_wages_frequency").value.trim() !== "" ? document.getElementById("income_salary_wages_frequency").value : "0", 365);
+    setCookie("income_tips_frequency", document.getElementById("income_tips_frequency").value.trim() !== "" ? document.getElementById("income_tips_frequency").value : "0", 365);
+    setCookie("income_bonuses_frequency", document.getElementById("income_bonuses_frequency").value.trim() !== "" ? document.getElementById("income_bonuses_frequency").value : "0", 365);
+    setCookie("income_sole_prop_frequency", document.getElementById("income_sole_prop_frequency").value.trim() !== "" ? document.getElementById("income_sole_prop_frequency").value : "0", 365);
+    setCookie("income_investment_property_frequency", document.getElementById("income_investment_property_frequency").value.trim() !== "" ? document.getElementById("income_investment_property_frequency").value : "0", 365);
+    setCookie("income_capital_gains_losses_frequency", document.getElementById("income_capital_gains_losses_frequency").value.trim() !== "" ? document.getElementById("income_capital_gains_losses_frequency").value : "0", 365);
+    setCookie("income_interest_frequency", document.getElementById("income_interest_frequency").value.trim() !== "" ? document.getElementById("income_interest_frequency").value : "0", 365);
+    setCookie("income_owner_dividend_frequency", document.getElementById("income_owner_dividend_frequency").value.trim() !== "" ? document.getElementById("income_owner_dividend_frequency").value : "0", 365);
+    setCookie("income_public_dividend_frequency", document.getElementById("income_public_dividend_frequency").value.trim() !== "" ? document.getElementById("income_public_dividend_frequency").value : "0", 365);
+    setCookie("income_trust_frequency", document.getElementById("income_trust_frequency").value.trim() !== "" ? document.getElementById("income_trust_frequency").value : "0", 365);
+    setCookie("income_federal_pension_frequency", document.getElementById("income_federal_pension_frequency").value.trim() !== "" ? document.getElementById("income_federal_pension_frequency").value : "0", 365);
+    setCookie("income_work_pension_frequency", document.getElementById("income_work_pension_frequency").value.trim() !== "" ? document.getElementById("income_work_pension_frequency").value : "0", 365);
+    setCookie("income_social_security_frequency", document.getElementById("income_social_security_frequency").value.trim() !== "" ? document.getElementById("income_social_security_frequency").value : "0", 365);
+    setCookie("income_employment_insurance_frequency", document.getElementById("income_employment_insurance_frequency").value.trim() !== "" ? document.getElementById("income_employment_insurance_frequency").value : "0", 365);
+    setCookie("income_alimony_frequency", document.getElementById("income_alimony_frequency").value.trim() !== "" ? document.getElementById("income_alimony_frequency").value : "0", 365);
+    setCookie("income_scholarships_grants_frequency", document.getElementById("income_scholarships_grants_frequency").value.trim() !== "" ? document.getElementById("income_scholarships_grants_frequency").value : "0", 365);
+    setCookie("income_royalties_frequency", document.getElementById("income_royalties_frequency").value.trim() !== "" ? document.getElementById("income_royalties_frequency").value : "0", 365);
+    setCookie("income_gambling_winnings_frequency", document.getElementById("income_gambling_winnings_frequency").value.trim() !== "" ? document.getElementById("income_gambling_winnings_frequency").value : "0", 365);
+    setCookie("income_peer_to_peer_lending_frequency", document.getElementById("income_peer_to_peer_lending_frequency").value.trim() !== "" ? document.getElementById("income_peer_to_peer_lending_frequency").value : "0", 365);
+    setCookie("income_venture_capital_frequency", document.getElementById("income_venture_capital_frequency").value.trim() !== "" ? document.getElementById("income_venture_capital_frequency").value : "0", 365);
+    setCookie("income_tax_free_income_frequency", document.getElementById("income_tax_free_income_frequency").value.trim() !== "" ? document.getElementById("income_tax_free_income_frequency").value : "0", 365);
 
+    // Income fields
+    setCookie("income_salary_wages", document.getElementById("income_salary_wages").value.trim() !== "" ? document.getElementById("income_salary_wages").value : "0", 365);
+    setCookie("income_tips", document.getElementById("income_tips").value.trim() !== "" ? document.getElementById("income_tips").value : "0", 365);
+    setCookie("income_bonuses", document.getElementById("income_bonuses").value.trim() !== "" ? document.getElementById("income_bonuses").value : "0", 365);
+    setCookie("income_sole_prop", document.getElementById("income_sole_prop").value.trim() !== "" ? document.getElementById("income_sole_prop").value : "0", 365);
+    setCookie("income_investment_property", document.getElementById("income_investment_property").value.trim() !== "" ? document.getElementById("income_investment_property").value : "0", 365);
+    setCookie("income_capital_gains_losses", document.getElementById("income_capital_gains_losses").value.trim() !== "" ? document.getElementById("income_capital_gains_losses").value : "0", 365);
+    setCookie("income_interest", document.getElementById("income_interest").value.trim() !== "" ? document.getElementById("income_interest").value : "0", 365);
+    setCookie("income_owner_dividend", document.getElementById("income_owner_dividend").value.trim() !== "" ? document.getElementById("income_owner_dividend").value : "0", 365);
+    setCookie("income_public_dividend", document.getElementById("income_public_dividend").value.trim() !== "" ? document.getElementById("income_public_dividend").value : "0", 365);
+    setCookie("income_trust", document.getElementById("income_trust").value.trim() !== "" ? document.getElementById("income_trust").value : "0", 365);
+    setCookie("income_federal_pension", document.getElementById("income_federal_pension").value.trim() !== "" ? document.getElementById("income_federal_pension").value : "0", 365);
+    setCookie("income_work_pension", document.getElementById("income_work_pension").value.trim() !== "" ? document.getElementById("income_work_pension").value : "0", 365);
+    setCookie("income_social_security", document.getElementById("income_social_security").value.trim() !== "" ? document.getElementById("income_social_security").value : "0", 365);
+    setCookie("income_employment_insurance", document.getElementById("income_employment_insurance").value.trim() !== "" ? document.getElementById("income_employment_insurance").value : "0", 365);
+    setCookie("income_alimony", document.getElementById("income_alimony").value.trim() !== "" ? document.getElementById("income_alimony").value : "0", 365);
+    setCookie("income_scholarships_grants", document.getElementById("income_scholarships_grants").value.trim() !== "" ? document.getElementById("income_scholarships_grants").value : "0", 365);
+    setCookie("income_royalties", document.getElementById("income_royalties").value.trim() !== "" ? document.getElementById("income_royalties").value : "0", 365);
+    setCookie("income_gambling_winnings", document.getElementById("income_gambling_winnings").value.trim() !== "" ? document.getElementById("income_gambling_winnings").value : "0", 365);
+    setCookie("income_peer_to_peer_lending", document.getElementById("income_peer_to_peer_lending").value.trim() !== "" ? document.getElementById("income_peer_to_peer_lending").value : "0", 365);
+    setCookie("income_venture_capital", document.getElementById("income_venture_capital").value.trim() !== "" ? document.getElementById("income_venture_capital").value : "0", 365);
+    setCookie("income_tax_free_income", document.getElementById("income_tax_free_income").value.trim() !== "" ? document.getElementById("income_tax_free_income").value : "0", 365);
+
+    // Existing setCookie calls
     const regionDropdown = document.getElementById("RegionDropdown");
     const subregionDropdown = document.getElementById("SubregionDropdown");
-    setCookie("RegionDropdown", RegionDropdown.value, 365);
-    setCookie("SubregionDropdown", SubregionDropdown.value, 365);
+    setCookie("RegionDropdown", regionDropdown.value, 365);
+    setCookie("SubregionDropdown", subregionDropdown.value, 365);
 
-    // Save global variables as cookies with a longer expiration date
     setCookie("ANNUALINCOME", ANNUALINCOME, 365);
     setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
     setCookie("PASSIVEINCOME", PASSIVEINCOME, 365);
-
-
     setCookie("BPA", BPA, 365);
     setCookie("SD", SD, 365);
-
-
     setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
     setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
     setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
-    setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
-
-
     setCookie("ANNUALCPP", ANNUALCPP, 365);
     setCookie("CPPPAYABLEEMPLOYED", CPPPAYABLEEMPLOYED, 365);
     setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
-
     setCookie("ANNUALEI", ANNUALEI, 365);
-
-
     setCookie("TOTALTAXCG", TOTALTAXCG, 365);
     setCookie("TOTALMEDICARE", TOTALMEDICARE, 365);
     setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
     setCookie("TOTALSOCIALSECURITYE", TOTALSOCIALSECURITYE, 365);
     setCookie("TOTALSOCIALSECURITYSE", TOTALSOCIALSECURITYSE, 365);
-}
+};
 
 
 
