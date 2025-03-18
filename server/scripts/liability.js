@@ -90,37 +90,7 @@ var LIABILITIES;
     
     
 
-    function setIncomeData() { 
-      const liabilitiesFields = [
-        'liabilities_small_business_loan',
-        'liabilities_primary_residence',
-        'liabilities_investment_properties',
-        'liabilities_vehicle_loan',
-        'liabilities_personal_debt',
-        'liabilities_student_loan',
-        'liabilities_line_of_credit',
-        'liabilities_credit_card',
-        'liabilities_tax_arrears'
-      ];
-    
-      for (let i = 0; i < liabilitiesFields.length; i++) {
-        const liabilitiesInput = document.getElementById(liabilitiesFields[i]);
-        if (liabilitiesInput.value.trim() !== "") {
-          const liabilities = liabilitiesInput.value;
-          setCookie(liabilitiesFields[i], liabilities, 365); // Set liability value
-    
-          // Set the cookie for the percentage field as well
-          let fieldPercentage = parseFloat(document.querySelector(`#${liabilitiesFields[i]}_percent`).value);
-          if (!fieldPercentage || isNaN(fieldPercentage)) {
-            // fieldPercentage = 100 (not setting a default here, just skipping as before)
-            continue;
-          }
-          setCookie(`${liabilitiesFields[i]}_percent`, fieldPercentage, 365); // Set percentage
-        } else {
-          setCookie(liabilitiesFields[i], "0", 365); // Set to 0 if empty
-        }
-      }
-    }
+
     
     
     let LIABILITIESNA;
@@ -187,11 +157,6 @@ const isPartner = getCookie('liabilityspousecheckbox') == 'checked'
 
 
       
-    
-    
-    
-    
-      
       window.calculateNext = function () {
       calculateAll();
       window.location.href = '/budget/summary.html';
@@ -206,11 +171,35 @@ const isPartner = getCookie('liabilityspousecheckbox') == 'checked'
             
         calculateLiabilities();
     
-    setIncomeData();    
+      
         setCookie("LIABILITIES", LIABILITIES, 365);
           
               setDebtData2();
           setCookie("LIABILITIESNA", LIABILITIESNA, 365);
+
+          setCookie("liabilities_small_business_loan", document.getElementById("liabilities_small_business_loan").value.trim() !== "" ? document.getElementById("liabilities_small_business_loan").value : "0", 365);
+          setCookie("liabilities_primary_residence", document.getElementById("liabilities_primary_residence").value.trim() !== "" ? document.getElementById("liabilities_primary_residence").value : "0", 365);
+          setCookie("liabilities_investment_properties", document.getElementById("liabilities_investment_properties").value.trim() !== "" ? document.getElementById("liabilities_investment_properties").value : "0", 365);
+          setCookie("liabilities_vehicle_loan", document.getElementById("liabilities_vehicle_loan").value.trim() !== "" ? document.getElementById("liabilities_vehicle_loan").value : "0", 365);
+          setCookie("liabilities_personal_debt", document.getElementById("liabilities_personal_debt").value.trim() !== "" ? document.getElementById("liabilities_personal_debt").value : "0", 365);
+          setCookie("liabilities_student_loan", document.getElementById("liabilities_student_loan").value.trim() !== "" ? document.getElementById("liabilities_student_loan").value : "0", 365);
+          setCookie("liabilities_line_of_credit", document.getElementById("liabilities_line_of_credit").value.trim() !== "" ? document.getElementById("liabilities_line_of_credit").value : "0", 365);
+          setCookie("liabilities_credit_card", document.getElementById("liabilities_credit_card").value.trim() !== "" ? document.getElementById("liabilities_credit_card").value : "0", 365);
+          setCookie("liabilities_tax_arrears", document.getElementById("liabilities_tax_arrears").value.trim() !== "" ? document.getElementById("liabilities_tax_arrears").value : "0", 365);
+
+
+// Percentages (matching asset percentage style)
+setCookie("liabilities_small_business_loan_percent", document.getElementById("liabilities_small_business_loan_percent").value.trim() !== "" ? document.getElementById("liabilities_small_business_loan_percent").value : "100", 365);
+setCookie("liabilities_primary_residence_percent", document.getElementById("liabilities_primary_residence_percent").value.trim() !== "" ? document.getElementById("liabilities_primary_residence_percent").value : "100", 365);
+setCookie("liabilities_investment_properties_percent", document.getElementById("liabilities_investment_properties_percent").value.trim() !== "" ? document.getElementById("liabilities_investment_properties_percent").value : "100", 365);
+setCookie("liabilities_vehicle_loan_percent", document.getElementById("liabilities_vehicle_loan_percent").value.trim() !== "" ? document.getElementById("liabilities_vehicle_loan_percent").value : "100", 365);
+setCookie("liabilities_personal_debt_percent", document.getElementById("liabilities_personal_debt_percent").value.trim() !== "" ? document.getElementById("liabilities_personal_debt_percent").value : "100", 365);
+setCookie("liabilities_student_loan_percent", document.getElementById("liabilities_student_loan_percent").value.trim() !== "" ? document.getElementById("liabilities_student_loan_percent").value : "100", 365);
+setCookie("liabilities_line_of_credit_percent", document.getElementById("liabilities_line_of_credit_percent").value.trim() !== "" ? document.getElementById("liabilities_line_of_credit_percent").value : "100", 365);
+setCookie("liabilities_credit_card_percent", document.getElementById("liabilities_credit_card_percent").value.trim() !== "" ? document.getElementById("liabilities_credit_card_percent").value : "100", 365);
+setCookie("liabilities_tax_arrears_percent", document.getElementById("liabilities_tax_arrears_percent").value.trim() !== "" ? document.getElementById("liabilities_tax_arrears_percent").value : "100", 365);
+
+
         }
     
     
