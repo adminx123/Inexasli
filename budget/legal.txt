@@ -92,20 +92,20 @@ Changes in Financial Situation
 Data Security
 -------------
 Introduction
-- By utilizing the Services, you consent to the following practices.
-- The Developer utilizes data solely for the purpose of providing estimations and facilitating your use of the Services.
-- Data Storage: We do not store user data on our servers. Instead, data from IncomeIQ™, Vacation Worksheet, and Promptemplate™ is temporarily kept in secure cookies and local storage on your device, specific to each Service’s page, which are accessed only as you navigate through the Services. These cookies are set with security attributes like Secure, and SameSite=None when necessary to ensure data integrity and confidentiality.
-- Data Retention: Your information is held in these cookies and local storage for the duration of your session and may persist on your device for a maximum of 365 days unless you choose to clear your cookies. This temporary retention allows for continuity of your learning experience. You can manage these cookies through your browser settings or by using the cookie management options provided on our site.
-- Security Measures: While we utilize local storage and cookies and local storage as a data protection measure, we are committed to taking further reasonable steps to ensure the confidentiality and integrity of your information.
-- International Users: For users accessing our Services from outside Canada, we align with local data protection laws to the extent applicable. For European users, we ensure GDPR compliance by providing clear consent mechanisms, rights to access, correct, or erase personal data, and by processing data in a transparent manner.
+- By using the Services, you consent to the following practices.
+- The Services (IncomeIQ™, Vacation Worksheet, Promptemplate™) operate entirely client-side in your browser. We do not collect, store, or process your data on our servers.
+- Data Storage: All data you enter is stored in your browser’s `localStorage`, specific to each Service’s page, and remains on your device in plain text. This data is accessible only by the browser on your device as you use the Services.
+- Data Retention: Your data stays in `localStorage` until you clear it or for up to 365 days, whichever comes first, to support continuity in your experience. You control this data through your browser settings.
+- Security Measures: As all data resides in `localStorage` on your device, its security depends on your browser and system. `localStorage` is not encrypted by default, meaning it could be accessed if your device is compromised (e.g., by malware or unauthorized users). We do not add additional security layers beyond standard browser functionality.
+- International Users: Since no data leaves your device, local data protection laws (e.g., GDPR for European users) apply to your own management of the data. We provide transparency about this client-side approach.
 
 User Responsibilities
-- Users should be cautious about shared information, as even with secure temporary cookies and local storage, additional data protection measures may be necessary.
-- Being mindful of data sensitivity contributes to a secure experience.
-- We recommend that you use private browsing modes and avoid entering sensitive personal information (such as credit card numbers or passwords) while using the Services.
+- You are responsible for securing your device, as all data stays in `localStorage`. Avoid entering highly sensitive information (e.g., credit card numbers, passwords) into the Services, as it is stored unencrypted.
+- Using private browsing modes or clearing `localStorage` can enhance your privacy.
+- Be cautious with data sensitivity to ensure a secure experience.
 
 Reporting Concerns
-- If individuals have concerns regarding data security during consultations, we welcome and value their feedback at support@inexasli.com.
+- For questions or concerns about client-side data security, contact us at support@inexasli.com.
 
 Limitation of Liability
 ----------------------
