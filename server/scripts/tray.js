@@ -16,9 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
  <div class="tray-menu-item-container">
-          <a href="/create/prompt.html" id="website" class="tray-menu-item">Promptify™</a>
+          <a href="/create/prompt.html" id="website" class="tray-menu-item">Promptemplate™</a>
           // <div class="tray-submenu" id="trayCreateMenu">
-            // <a href="/create/prompt.html" id="website">Promptify™</a>
+            // <a href="/create/prompt.html" id="website">Promptemplate™</a>
           // </div>
         </div>
 

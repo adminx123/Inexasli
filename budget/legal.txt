@@ -1,10 +1,10 @@
-Terms of Service for IncomeIQ™, Vacation Worksheet, and Promptify™
+Terms of Service for IncomeIQ™, Vacation Worksheet, and Promptemplate™
 
 Introduction
 ------------
-Note: This document outlines the terms of service for the use of IncomeIQ™, Vacation Worksheet, Promptify™, and, where applicable, participation in interviews conducted by INEXASLI (hereinafter referred to as the "Developer"). Sections marked as "Interviews" apply only to users who choose to participate in interviews.
+Note: This document outlines the terms of service for the use of IncomeIQ™, Vacation Worksheet, Promptemplate™, and, where applicable, participation in interviews conducted by INEXASLI (hereinafter referred to as the "Developer"). Sections marked as "Interviews" apply only to users who choose to participate in interviews.
 
-Description: This document outlines the terms of service for the use of IncomeIQ™, Vacation Worksheet, and Promptify™ (referred to collectively as the "Services") provided by INEXASLI (hereinafter referred to as the "Developer"). By using any of these Services, you agree to be bound by these terms of service. The term "user" refers to you, the reader, when accessing any of the Services. If you do not agree with these terms, you must not use the Services.
+Description: This document outlines the terms of service for the use of IncomeIQ™, Vacation Worksheet, and Promptemplate™ (referred to collectively as the "Services") provided by INEXASLI (hereinafter referred to as the "Developer"). By using any of these Services, you agree to be bound by these terms of service. The term "user" refers to you, the reader, when accessing any of the Services. If you do not agree with these terms, you must not use the Services.
 
 Privacy Policy Compliance:
 - The Developer complies with the General Data Protection Regulation (GDPR) for users within the European Union and also adheres to the Personal Information Protection and Electronic Documents Act (PIPEDA) for users in Canada.
@@ -12,11 +12,11 @@ Privacy Policy Compliance:
 Intellectual Property Rights
 ---------------------------
 Ownership
-- All rights, title, and interest in and to the Services, including IncomeIQ™, Vacation Worksheet, Promptify™, their respective pages, website, software, source code, databases, functionalities, graphics, designs, trademarks, service marks, and all related content (collectively, the "IP Assets"), are and will remain the exclusive property of INEXASLI.
+- All rights, title, and interest in and to the Services, including IncomeIQ™, Vacation Worksheet, Promptemplate™, their respective pages, website, software, source code, databases, functionalities, graphics, designs, trademarks, service marks, and all related content (collectively, the "IP Assets"), are and will remain the exclusive property of INEXASLI.
 - Users are granted a limited, non-exclusive, non-transferable, revocable license to access and use the Services for their personal, non-commercial, educational purposes.
 
 User-Generated Content
-- Any content, data, text, or information you submit or upload to the Services ("User Content"), including vacation cost estimates from Vacation Worksheet and prompts from Promptify™, may be used by you solely for your personal, non-commercial use in connection with the educational objectives of the Services.
+- Any content, data, text, or information you submit or upload to the Services ("User Content"), including vacation cost estimates from Vacation Worksheet and prompts from Promptemplate™, may be used by you solely for your personal, non-commercial use in connection with the educational objectives of the Services.
 - By submitting User Content, you grant the Developer a non-exclusive, royalty-free, worldwide license to use, store, display, reproduce, modify, create derivative works, and distribute such User Content as necessary to provide the Services.
 - If you share any User Content publicly or in a manner that allows others to view or use it, you agree that such content may be viewed, used, or shared by others in accordance with these Terms of Service.
 
@@ -33,7 +33,7 @@ Services Purpose
 Educational Tool for Financial Literacy
 - IncomeIQ™ is an educational platform designed to enhance your understanding of personal finance by tracking income, expenses, assets, and liabilities.
 - Vacation Worksheet is an educational tool to estimate vacation costs based on user-inputted expenses, aiding in travel budgeting understanding.
-- Promptify™ is an educational tool allowing users to input financial or lifestyle data to generate customized prompts for scenario-based learning.
+- Promptemplate™ is an educational tool allowing users to input financial or lifestyle data to generate customized prompts for scenario-based learning.
 - Interactive Learning: Users engage with financial concepts by inputting real-life data across the Services, gaining practical understanding of financial principles.
 - Visual and Analytical Insights: The Services provide visual representations and analyses of your data, serving as educational aids to demonstrate financial concepts in action.
 
@@ -44,7 +44,7 @@ Personal Record-Keeping
 - Observes changes in financial status over time.
 
 No Professional Advice
-- While the Services calculate various metrics based on user input, these calculations are for educational purposes only. None of these Services—IncomeIQ™, Vacation Worksheet, or Promptify™—provide professional financial advice.
+- While the Services calculate various metrics based on user input, these calculations are for educational purposes only. None of these Services—IncomeIQ™, Vacation Worksheet, or Promptemplate™—provide professional financial advice.
 - Estimates, Not Advice: All figures and outputs generated by the Services are estimates and should be viewed as educational examples rather than personalized financial advice.
 - For Learning, Not Decision-Making: Use these results to understand how financial calculations work and to experiment with "what if" scenarios. Seek independent advice from qualified professionals for specific financial matters.
 
@@ -66,7 +66,7 @@ Accuracy of Information
   - Unit Errors: Attributing an amount to the incorrect field within the specified time frame in IncomeIQ™.
   - Transposition Errors: Unintentional errors where numbers or letters are swapped or reversed.
   - Inaccurate vacation expenses (e.g., travel or lodging costs) in Vacation Worksheet.
-  - Incomplete data in Promptify™ affecting generated prompts.
+  - Incomplete data in Promptemplate™ affecting generated prompts.
 - Consult with financial professionals before making any financial decisions.
 
 Appropriate Use
@@ -92,7 +92,7 @@ Data Security
 Introduction
 - By utilizing the Services, you consent to the following practices.
 - The Developer utilizes data solely for the purpose of providing estimations and facilitating your use of the Services.
-- Data Storage: We do not store user data on our servers. Instead, data from IncomeIQ™, Vacation Worksheet, and Promptify™ is temporarily kept in secure cookies on your device, specific to each Service’s page, which are accessed only as you navigate through the Services. These cookies are set with security attributes like Secure, and SameSite=None when necessary to ensure data integrity and confidentiality.
+- Data Storage: We do not store user data on our servers. Instead, data from IncomeIQ™, Vacation Worksheet, and Promptemplate™ is temporarily kept in secure cookies on your device, specific to each Service’s page, which are accessed only as you navigate through the Services. These cookies are set with security attributes like Secure, and SameSite=None when necessary to ensure data integrity and confidentiality.
 - Data Retention: Your information is held in these cookies for the duration of your session and may persist on your device for a maximum of 365 days unless you choose to clear your cookies. This temporary retention allows for continuity of your learning experience. You can manage these cookies through your browser settings or by using the cookie management options provided on our site.
 - Security Measures: While we utilize secure temporary cookies as a data protection measure, we are committed to taking further reasonable steps to ensure the confidentiality and integrity of your information.
 - International Users: For users accessing our Services from outside Canada, we align with local data protection laws to the extent applicable. For European users, we ensure GDPR compliance by providing clear consent mechanisms, rights to access, correct, or erase personal data, and by processing data in a transparent manner.
@@ -108,7 +108,7 @@ Reporting Concerns
 Limitation of Liability
 ----------------------
 Disclaimer of Accuracy
-- While the Developer strives to provide accurate financial estimations for educational purposes, no system is entirely free from vulnerabilities or errors, and results from IncomeIQ™, vacation cost estimates from Vacation Worksheet, and prompts from Promptify™ should not be relied upon for actual financial decision-making.
+- While the Developer strives to provide accurate financial estimations for educational purposes, no system is entirely free from vulnerabilities or errors, and results from IncomeIQ™, vacation cost estimates from Vacation Worksheet, and prompts from Promptemplate™ should not be relied upon for actual financial decision-making.
 
 Limitation of Reliance
 - Users and interviewees acknowledge that the Services are for educational use only, and any decisions made based on their outputs are at their own discretion and risk.
@@ -117,7 +117,7 @@ Data Security
 - The security of information during internet transmission or in the context of public interactions cannot be guaranteed, and users assume the risk of data exposure during such activities.
 
 Liability Cap
-- The Developer's liability for any claim arising out of or in connection with these Terms of Service, including use of IncomeIQ™, Vacation Worksheet, or Promptify™, whether in contract, tort, or otherwise, shall be limited to the greater of:
+- The Developer's liability for any claim arising out of or in connection with these Terms of Service, including use of IncomeIQ™, Vacation Worksheet, or Promptemplate™, whether in contract, tort, or otherwise, shall be limited to the greater of:
   - The amount paid by the user for the Services in the 6 months preceding the event giving rise to the claim, or
   - A nominal sum of $100 if no payment was made, to the fullest extent permitted by law. This cap applies collectively to all claims.
 - The same limitations apply to the use of content from interviews, with the added understanding that content sharing involves inherent risks not covered by the Services’ standard use.
