@@ -33,7 +33,6 @@ Services Purpose
 Educational Tool for Financial Literacy
 - IncomeIQ™ is an educational platform designed to enhance your understanding of personal finance by tracking income, expenses, assets, and liabilities.
 - Vacation Worksheet is an educational tool to estimate vacation costs based on user-inputted expenses, aiding in travel budgeting understanding.
-- Promptemplate™ is an educational tool allowing users to input financial or lifestyle data to generate customized prompts for scenario-based learning.
 - Interactive Learning: Users engage with financial concepts by inputting real-life data across the Services, gaining practical understanding of financial principles.
 - Visual and Analytical Insights: The Services provide visual representations and analyses of your data, serving as educational aids to demonstrate financial concepts in action.
 
@@ -42,6 +41,9 @@ Personal Record-Keeping
 - Helps monitor income and expenses.
 - Catalogs assets and liabilities.
 - Observes changes in financial status over time.
+
+Facilitation
+- Promptemplate™ is a template building tool that allows users input data to generate customized prompts for more efficient and effective input into ai.
 
 No Professional Advice
 - While the Services calculate various metrics based on user input, these calculations are for educational purposes only. None of these Services—IncomeIQ™, Vacation Worksheet, or Promptemplate™—provide professional financial advice.
@@ -92,13 +94,13 @@ Data Security
 Introduction
 - By utilizing the Services, you consent to the following practices.
 - The Developer utilizes data solely for the purpose of providing estimations and facilitating your use of the Services.
-- Data Storage: We do not store user data on our servers. Instead, data from IncomeIQ™, Vacation Worksheet, and Promptemplate™ is temporarily kept in secure cookies on your device, specific to each Service’s page, which are accessed only as you navigate through the Services. These cookies are set with security attributes like Secure, and SameSite=None when necessary to ensure data integrity and confidentiality.
-- Data Retention: Your information is held in these cookies for the duration of your session and may persist on your device for a maximum of 365 days unless you choose to clear your cookies. This temporary retention allows for continuity of your learning experience. You can manage these cookies through your browser settings or by using the cookie management options provided on our site.
-- Security Measures: While we utilize secure temporary cookies as a data protection measure, we are committed to taking further reasonable steps to ensure the confidentiality and integrity of your information.
+- Data Storage: We do not store user data on our servers. Instead, data from IncomeIQ™, Vacation Worksheet, and Promptemplate™ is temporarily kept in secure cookies and local storage on your device, specific to each Service’s page, which are accessed only as you navigate through the Services. These cookies are set with security attributes like Secure, and SameSite=None when necessary to ensure data integrity and confidentiality.
+- Data Retention: Your information is held in these cookies and local storage for the duration of your session and may persist on your device for a maximum of 365 days unless you choose to clear your cookies. This temporary retention allows for continuity of your learning experience. You can manage these cookies through your browser settings or by using the cookie management options provided on our site.
+- Security Measures: While we utilize local storage and cookies and local storage as a data protection measure, we are committed to taking further reasonable steps to ensure the confidentiality and integrity of your information.
 - International Users: For users accessing our Services from outside Canada, we align with local data protection laws to the extent applicable. For European users, we ensure GDPR compliance by providing clear consent mechanisms, rights to access, correct, or erase personal data, and by processing data in a transparent manner.
 
 User Responsibilities
-- Users should be cautious about shared information, as even with secure temporary cookies, additional data protection measures may be necessary.
+- Users should be cautious about shared information, as even with secure temporary cookies and local storage, additional data protection measures may be necessary.
 - Being mindful of data sensitivity contributes to a secure experience.
 - We recommend that you use private browsing modes and avoid entering sensitive personal information (such as credit card numbers or passwords) while using the Services.
 
