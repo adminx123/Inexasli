@@ -10,179 +10,200 @@
 
 <!DOCTYPE html>
 <html lang="en">
-	 
+
 <head>
-	 <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LIABILITY</title>
-         <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="/style/styles.css">	
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/style/styles.css">
 
-<!-- this is an extended list of places icon could be needed -->
+    <!-- this is an extended list of places icon could be needed -->
     <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
     <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
     <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
     <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg"/>
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
     <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
     <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
     <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
     <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
     <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
     <link rel="manifest" href="/manifest.json">
-     
+
 </head>
 
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1-crypto-js.js"></script>
 
 
-    
+    <a href="./intro.html">
+        <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;"
+            onclick="calculateAll();">
+    </a>
 
-<a href="./intro.html">
-    <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;" onclick="calculateAll();">
-</a>
+    <h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2>
 
-	<h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2>
-	
-            
-     <div class="tab-container">
-		
-        <a href="./income.html" class="tooltip tab " data-location="income" data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket." onclick="calculateAll();">
+
+    <div class="tab-container">
+
+        <a href="./income.html" class="tooltip tab " data-location="income"
+            data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket."
+            onclick="calculateAll();">
             Income
-            <span class="tooltip-content"></span>  
-</a>
-
-        <a href="./expense.html" class="tooltip tab " data-location="expense" data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn." onclick="calculateAll();">
-          Expense
-          <span class="tooltip-content"></span>
+            <span class="tooltip-content"></span>
         </a>
 
-       <a href="./asset.html" class="tooltip tab " data-location="asset" data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection." onclick="calculateAll();">
-      Asset
-      <span class="tooltip-content"></span>
-      </a>
-      
-      <a href="./liability.html" class="tooltip tab " data-location="liability" data-tooltip="Money you owe to others, which you need to pay back. Examples include loans, mortgages, or credit card debts. It's like a promise you've made to pay someone in the future." onclick="calculateAll();">
-        Liability
-        <span class="tooltip-content"></span>
-      </a>
+        <a href="./expense.html" class="tooltip tab " data-location="expense"
+            data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn."
+            onclick="calculateAll();">
+            Expense
+            <span class="tooltip-content"></span>
+        </a>
 
-            </div>
-    
-    
+        <a href="./asset.html" class="tooltip tab " data-location="asset"
+            data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection."
+            onclick="calculateAll();">
+            Asset
+            <span class="tooltip-content"></span>
+        </a>
+
+        <a href="./liability.html" class="tooltip tab " data-location="liability"
+            data-tooltip="Money you owe to others, which you need to pay back. Examples include loans, mortgages, or credit card debts. It's like a promise you've made to pay someone in the future."
+            onclick="calculateAll();">
+            Liability
+            <span class="tooltip-content"></span>
+        </a>
+
+    </div>
+
+
     <div class="container">
-		
- <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="A type of debt where the borrower receives a fixed amount of money upfront, which they repay over time through regular payments until the loan is fully paid off. Once the loan is settled, the account is closed, and the borrower must apply for a new loan if they need more funds.">
-    Non-Revolving Liabilities<span class="tooltip-content"></span>
-</h2>
 
-<p>Step 6: Enter any debts that you have in the fields below.</p>
+        <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+            data-tooltip="A type of debt where the borrower receives a fixed amount of money upfront, which they repay over time through regular payments until the loan is fully paid off. Once the loan is settled, the account is closed, and the borrower must apply for a new loan if they need more funds.">
+            Non-Revolving Liabilities<span class="tooltip-content"></span>
+        </h2>
 
-	
-    <div class ="row">
-    <label for="liabilities_small_business_loan">Small Business Loan:</label>
-    <input type='number' inputmode="numeric"  id="liabilities_small_business_loan">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities_small_business_loan_percent" inputmode="numeric">
-</div>
-
-<div class ="row">
-    <label for="liabilities_primary_residence">Primary Residence, Mortgage:</label>
-    <input type='number' inputmode="numeric"  id="liabilities_primary_residence">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities_primary_residence_percent" inputmode="numeric">
-</div>
-
-<div class ="row">
-    <label for="liabilities_investment_properties">Investment Property, Mortgage:</label>
-    <input type='number' inputmode="numeric"  id="liabilities_investment_properties">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities_investment_properties_percent" inputmode="numeric">
-</div>
-
-<div class ="row">
-    <label for="liabilities_vehicle_loan">Vehicle Loan:</label>
-    <input type='number' inputmode="numeric"  id="liabilities_vehicle_loan">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities_vehicle_loan_percent" inputmode="numeric">
-</div>
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="List money you owe, whether it's to personal connections (like borrowing from family) or business suppliers that hasnt been accounted for elsewhere. In a sole proprietorship, these liabilities are part of your personal financial responsibility.">
-  <span class="tooltip-content"></span>
-    Accounts Payable:</label>
-    <input type='number' inputmode="numeric"  id="liabilities_personal_debt">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities_personal_debt_percent" inputmode="numeric">
-</div>
-</div>
-	
-
-	<div class="containerround">
-
-<h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Debts where you can borrow money up to a certain limit, pay it back, and borrow again. The amount you can borrow revolves as you pay off what you owe.">
-    Revolving Liabilities<span class="tooltip-content"></span>
-</h2>
+        <p>Step 6: Enter any debts that you have in the fields below.</p>
 
 
-		
-<div class ="row">
-    <label for="liabilities_student_loan">Student Loan:</label>
-    <input type='number' inputmode="numeric"  id="liabilities_student_loan">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities_student_loan_percent" inputmode="numeric">
-</div>
+        <div class="row">
+            <label for="liabilities_small_business_loan">Small Business Loan:</label>
+            <input type='number' inputmode="numeric" id="liabilities_small_business_loan">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_small_business_loan_percent" inputmode="numeric">
+        </div>
 
-<div class ="row">
-    <label for="liabilities_line_of_credit">Line of Credit:</label>
-    <input type='number' inputmode="numeric"  id="liabilities_line_of_credit">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities_line_of_credit_percent" inputmode="numeric">
-</div>
+        <div class="row">
+            <label for="liabilities_primary_residence">Primary Residence, Mortgage:</label>
+            <input type='number' inputmode="numeric" id="liabilities_primary_residence">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_primary_residence_percent" inputmode="numeric">
+        </div>
 
-<div class ="row">
-    <label for="liabilities_credit_card">Credit Card, Current Balance:</label>
-    <input type='number' inputmode="numeric"  id="liabilities_credit_card">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities_credit_card_percent" inputmode="numeric">
-</div>
+        <div class="row">
+            <label for="liabilities_investment_properties">Investment Property, Mortgage:</label>
+            <input type='number' inputmode="numeric" id="liabilities_investment_properties">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_investment_properties_percent" inputmode="numeric">
+        </div>
 
-<div class ="row">
+        <div class="row">
+            <label for="liabilities_vehicle_loan">Vehicle Loan:</label>
+            <input type='number' inputmode="numeric" id="liabilities_vehicle_loan">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_vehicle_loan_percent" inputmode="numeric">
+        </div>
 
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Total tax payable">
-  <span class="tooltip-content"></span>
-    Tax Arrears:</label>
-    <input type='number' inputmode="numeric"  id="liabilities_tax_arrears">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities_tax_arrears_percent" inputmode="numeric">
-</div>
+        <div class="row">
+            <label for="" style="font-size: unset;" class="tooltip"
+                data-tooltip="List money you owe, whether it's to personal connections (like borrowing from family) or business suppliers that hasnt been accounted for elsewhere. In a sole proprietorship, these liabilities are part of your personal financial responsibility.">
+                <span class="tooltip-content"></span>
+                Accounts Payable:</label>
+            <input type='number' inputmode="numeric" id="liabilities_personal_debt">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_personal_debt_percent" inputmode="numeric">
+        </div>
+    </div>
 
 
-<!-- <div class="nav-div">
+    <div class="containerround">
+
+        <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+            data-tooltip="Debts where you can borrow money up to a certain limit, pay it back, and borrow again. The amount you can borrow revolves as you pay off what you owe.">
+            Revolving Liabilities<span class="tooltip-content"></span>
+        </h2>
+
+
+
+        <div class="row">
+            <label for="liabilities_student_loan">Student Loan:</label>
+            <input type='number' inputmode="numeric" id="liabilities_student_loan">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_student_loan_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="liabilities_line_of_credit">Line of Credit:</label>
+            <input type='number' inputmode="numeric" id="liabilities_line_of_credit">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_line_of_credit_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="liabilities_credit_card">Credit Card, Current Balance:</label>
+            <input type='number' inputmode="numeric" id="liabilities_credit_card">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_credit_card_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+
+            <label for="" style="font-size: unset;" class="tooltip" data-tooltip="Total tax payable">
+                <span class="tooltip-content"></span>
+                Tax Arrears:</label>
+            <input type='number' inputmode="numeric" id="liabilities_tax_arrears">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_tax_arrears_percent" inputmode="numeric">
+        </div>
+
+
+        <!-- <div class="nav-div">
 
     <button onclick="calculateBack()" class="nav-btn nav-left"><i class='bx nav-inner bx-left-arrow-alt' ></i></button>
 -->
 
 
-</div>
+    </div>
 
-	<div class="containerround">
-		    <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
-	</div>
+    <div class="containerround">
+        <button onclick="calculateNext()" class="nav-btn nav-right"><i
+                class='bx nav-inner bx-right-arrow-alt'></i></button>
+    </div>
 
 
 
 
-    <div class = "hidden">
+    <div class="hidden">
 
-         <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
-<span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy formulation.</span>
+        <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
+        <span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy
+            formulation.</span>
 
     </div>
 
-	
+
     <script src="/index.js"></script>
 
-    <script src="/server/scripts/liability.js" type="module"></script>    
+    <script src="/server/scripts/liability.js" type="module"></script>
     <script src="/server/scripts/toolTip.js"></script>
     <script src="/server/scripts/tray.js"></script>
 
 
 </body>
+
 </html>

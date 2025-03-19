@@ -10,16 +10,17 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	
-	 <link rel="manifest" href="/manifest.json">
+
+    <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ASSET</title>
-         <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-	
-         <!-- this is an extended list of places icon could be needed -->
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- this is an extended list of places icon could be needed -->
     <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
     <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
@@ -33,141 +34,158 @@
     <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
     <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
     <link rel="manifest" href="/manifest.json">
-    
 
-    
-<link rel="stylesheet" href="/style/styles.css">
-   
+
+
+    <link rel="stylesheet" href="/style/styles.css">
+
 
 </head>
 
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1-crypto-js.js"></script>
 
 
 
 
-        <a href="./intro.html">
-            <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;" onclick="calculateAll();">
+    <a href="./intro.html">
+        <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;"
+            onclick="calculateAll();">
+    </a>
+    <h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2>
+
+    <div class="tab-container">
+
+        <a href="./income.html" class="tab" data-location="income" onclick="calculateAll();">Income</a>
+
+        <a href="./expense.html" class="tab" data-location="expense" onclick="calculateAll();">Expense</a>
+
+        <a href="./asset.html" class="tooltip tab " data-location="asset"
+            data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection."
+            onclick="calculateAll();">
+            Asset
+            <span class="tooltip-content"></span>
         </a>
-<h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2>
-	
-        <div class="tab-container">
-		
-            <a href="./income.html" class="tab" data-location="income" onclick="calculateAll();">Income</a>
-		
-            <a href="./expense.html" class="tab" data-location="expense" onclick="calculateAll();">Expense</a>
-		
-           <a href="./asset.html" class="tooltip tab " data-location="asset" data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection." onclick="calculateAll();">
-  Asset
-  <span class="tooltip-content"></span>
-</a>
-		
-            <a href="./liability.html" class="tab" data-location="liability" onclick="calculateAll();">Liability</a>
-		
-                </div>
 
-                
-<div class="container"> 
-   
+        <a href="./liability.html" class="tab" data-location="liability" onclick="calculateAll();">Liability</a>
 
-		
-	<h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Assets that an individual can readily convert to cash or use to pay for immediate needs within a short period, typically within one year.">
-    Current<span class="tooltip-content"></span>
-</h2>
-
-	<p>Step 5: Enter the MARKET value of the following assets. Market value can be defined as the value of the particular asset if you were to sell it today.</p>
-
-	
-<div class ="row">
-    <label for="assets_checking_accounts">Checking Account:</label>
-    <input type='number' inputmode="numeric"  id="assets_checking_accounts">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_checking_accounts_percent" inputmode="numeric">
-</div>
-
-<div class ="row">
-    <label for="assets_savings_accounts">Savings Account:</label>
-    <input type='number' inputmode="numeric"  id="assets_savings_accounts">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_savings_accounts_percent" inputmode="numeric">
-</div>
-
-<div class ="row">
-    <label for="assets_other_liquid_accounts">Other Liquid Account:</label>
-    <input type='number' inputmode="numeric"  id="assets_other_liquid_accounts">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_other_liquid_accounts_percent" inputmode="numeric">
-</div>
-
-	<div class ="row">
-
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Include money owed to you from both personal sources (like loans to friends) and business activities (like sales on credit) that you havent accounted for elsewhere. As a sole proprietor, these are all considered your assets.">
-  <span class="tooltip-content"></span>
-    Accounts Receivable:</label>
-    <input type='number' inputmode="numeric"  id="assets_money_lent_out">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_money_lent_out_percent" inputmode="numeric">
-</div>
-
-</div>
-
-	<div class="containerround">
-
-	
-	<h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Assets in personal finance that are not expected to be converted into cash or used up within one year. These assets might provide value over a longer period.">
-    Non-Current/Long Term<span class="tooltip-content"></span>
-</h2>
-	
-<div class ="row">
-    <label for="assets_long_term_investment_accounts">Long Term Investment Account:</label>
-    <input type='number' inputmode="numeric"  id="assets_long_term_investment_accounts">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_long_term_investment_accounts_percent" inputmode="numeric">
-</div>
-
-	<div class ="row">
-    <label for="assets_investment_properties">Investment Property:</label>
-    <input type='number' inputmode="numeric"  id="assets_investment_properties">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_investment_properties_percent" inputmode="numeric">
-
-</div>
-
-	<div class ="row">
-    <label for="assets_art_jewelry">Art/Jewelry:</label>
-    <input type='number' inputmode="numeric"  id="assets_art_jewelry">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_art_jewelry_percent" inputmode="numeric">
-</div>
-
-	</div>
-
-	<div class="containerround">
+    </div>
 
 
-	<h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Assets that are fixed from a personal view are those meant for long-term use, like homes, cars, or furniture, which you don’t plan to sell soon.">
-    Fixed<span class="tooltip-content"></span>
-</h2>
-
-<div class ="row">
-    <label for="assets_primary_residence">Primary Residence:</label>
-    <input type='number' inputmode="numeric"  id="assets_primary_residence">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_primary_residence_percent" inputmode="numeric">
-</div>
+    <div class="container">
 
 
 
-<div class ="row">
-    <label for="assets_small_business">Small Business:</label>
-    <input type='number' inputmode="numeric"  id="assets_small_business">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_small_business_percent" inputmode="numeric">
-</div>
+        <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+            data-tooltip="Assets that an individual can readily convert to cash or use to pay for immediate needs within a short period, typically within one year.">
+            Current<span class="tooltip-content"></span>
+        </h2>
 
-<div class ="row">
-    <label for="assets_vehicles">Vehicle:</label>
-    <input type='number' inputmode="numeric"  id="assets_vehicles">
-    <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_vehicles_percent" inputmode="numeric">
-</div>
+        <p>Step 5: Enter the MARKET value of the following assets. Market value can be defined as the value of the
+            particular asset if you were to sell it today.</p>
 
 
-	
+        <div class="row">
+            <label for="assets_checking_accounts">Checking Account:</label>
+            <input type='number' inputmode="numeric" id="assets_checking_accounts">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_checking_accounts_percent" inputmode="numeric">
+        </div>
 
-		
-	<!-- <div class="nav-div"> 
+        <div class="row">
+            <label for="assets_savings_accounts">Savings Account:</label>
+            <input type='number' inputmode="numeric" id="assets_savings_accounts">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_savings_accounts_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="assets_other_liquid_accounts">Other Liquid Account:</label>
+            <input type='number' inputmode="numeric" id="assets_other_liquid_accounts">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_other_liquid_accounts_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+
+            <label for="" style="font-size: unset;" class="tooltip"
+                data-tooltip="Include money owed to you from both personal sources (like loans to friends) and business activities (like sales on credit) that you havent accounted for elsewhere. As a sole proprietor, these are all considered your assets.">
+                <span class="tooltip-content"></span>
+                Accounts Receivable:</label>
+            <input type='number' inputmode="numeric" id="assets_money_lent_out">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_money_lent_out_percent" inputmode="numeric">
+        </div>
+
+    </div>
+
+    <div class="containerround">
+
+
+        <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+            data-tooltip="Assets in personal finance that are not expected to be converted into cash or used up within one year. These assets might provide value over a longer period.">
+            Non-Current/Long Term<span class="tooltip-content"></span>
+        </h2>
+
+        <div class="row">
+            <label for="assets_long_term_investment_accounts">Long Term Investment Account:</label>
+            <input type='number' inputmode="numeric" id="assets_long_term_investment_accounts">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_long_term_investment_accounts_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="assets_investment_properties">Investment Property:</label>
+            <input type='number' inputmode="numeric" id="assets_investment_properties">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_investment_properties_percent" inputmode="numeric">
+
+        </div>
+
+        <div class="row">
+            <label for="assets_art_jewelry">Art/Jewelry:</label>
+            <input type='number' inputmode="numeric" id="assets_art_jewelry">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_art_jewelry_percent" inputmode="numeric">
+        </div>
+
+    </div>
+
+    <div class="containerround">
+
+
+        <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+            data-tooltip="Assets that are fixed from a personal view are those meant for long-term use, like homes, cars, or furniture, which you don’t plan to sell soon.">
+            Fixed<span class="tooltip-content"></span>
+        </h2>
+
+        <div class="row">
+            <label for="assets_primary_residence">Primary Residence:</label>
+            <input type='number' inputmode="numeric" id="assets_primary_residence">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_primary_residence_percent" inputmode="numeric">
+        </div>
+
+
+
+        <div class="row">
+            <label for="assets_small_business">Small Business:</label>
+            <input type='number' inputmode="numeric" id="assets_small_business">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_small_business_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="assets_vehicles">Vehicle:</label>
+            <input type='number' inputmode="numeric" id="assets_vehicles">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_vehicles_percent"
+                inputmode="numeric">
+        </div>
+
+
+
+
+
+        <!-- <div class="nav-div"> 
 
     <button onclick="calculateBack()" class="nav-btn nav-left"><i class='bx nav-inner bx-left-arrow-alt' ></i></button>
 
@@ -176,33 +194,36 @@
 
 
 
-</div>
+    </div>
 
-<div class = "containerround">
-    <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
-</div>
+    <div class="containerround">
+        <button onclick="calculateNext()" class="nav-btn nav-right"><i
+                class='bx nav-inner bx-right-arrow-alt'></i></button>
+    </div>
 
-	
-	
+
+
     <div class="hidden">
 
-	    <div class ="tooltipd">
+        <div class="tooltipd">
             <p><u>Assets:</u><span id="ASSETS"></span></p>
-    <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
+            <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for
+                loans.</span>
 
 
             <p><u>Liquid Assets:</u><span id="LIQUIDASSETS"></span></p>
-    <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for loans.</span>
-</div>
+            <span class="tooltiptext">Resources with economic value owned. Use: Wealth assessment, collateral for
+                loans.</span>
+        </div>
 
-   </div>
-</div>
+    </div>
+    </div>
 
-	
-<script src="/index.js"></script>
 
-	<script type="module" src="../../server/scripts/asset.js"></script>
-   
+    <script src="/index.js"></script>
+
+    <script type="module" src="../../server/scripts/asset.js"></script>
+
     <script src="/server/scripts/toolTip.js"></script>
     <script src="/server/scripts/tray.js"></script>
 
