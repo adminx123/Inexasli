@@ -211,33 +211,40 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'calorie':
-            prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal');
-            prompt += `
+            case 'calorie':
+                prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal');
+                prompt += `
             The purpose of the estimates is to create a report in the following format:
             
             ### Your Goal: Gain Muscle
             
-            | Nutrient | Target Amount     | Food Log Intake  | Percentage Reached |
-            |----------|-------------------|------------------|--------------------|
-            | Calories | 2587 kcal/day     | 1104 kcal        | 43%                |
-            | Protein  | 158.8 g           | 80 g             | 50%                |
-            | Carbs    | 317.6 g           | 86 g             | 27%                |
-            | Fats     | 79.4 g            | 50 g             | 63%                |
-            `
+            Output as a **text-based table** with columns: **Nutrient**, **Target Amount**, **Food Log Intake**, and **Percentage Reached**. Ensure the values are properly aligned using spaces and avoid any markdown symbols. **Do not include any additional comments, explanations, or recommendations. Just the raw data in the requested format.**
             
-            const weight = document.getElementById('calorie-weight');
-            if (weight?.value) prompt += formatList(weight.value, 'Weight');
-            const height = document.getElementById('calorie-height');
-            if (height?.value) prompt += formatList(height.value, 'Height');
-            const age = document.getElementById('calorie-age');
-            if (age?.value) prompt += formatList(age.value, 'Age');
-            prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
-            const foodLog = document.getElementById('calorie-food-log');
-            if (foodLog?.value) {
-                prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
-            }
-            break;
+            Example format:
+            
+            Nutrient       | Target Amount     | Food Log Intake  | Percentage Reached
+            Calories       | 2587 kcal/day     | 1104 kcal        | 43%
+            Protein        | 158.8 g           | 80 g             | 50%
+            Carbs          | 317.6 g           | 86 g             | 27%
+            Fats           | 79.4 g            | 50 g             | 63%
+            `;
+            
+                // Gathering user inputs and appending to prompt
+                const weight = document.getElementById('calorie-weight');
+                if (weight?.value) prompt += formatList(weight.value, 'Weight');
+                const height = document.getElementById('calorie-height');
+                if (height?.value) prompt += formatList(height.value, 'Height');
+                const age = document.getElementById('calorie-age');
+                if (age?.value) prompt += formatList(age.value, 'Age');
+                prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
+                
+                const foodLog = document.getElementById('calorie-food-log');
+                if (foodLog?.value) {
+                    prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
+                }
+                break;
+            
+            
 
         case 'trip':
             prompt += formatGrid('#trip-purpose .grid-item.selected', 'Review the following activities I want to do on my trip');
