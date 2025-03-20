@@ -227,37 +227,27 @@ function updateSubregionDropdown() {
 
 regionDropdown.addEventListener("change", updateSubregionDropdown);
 
-function calculateAnnual(inputId, frequencyId) {
-    const input = parseFloat(document.getElementById(inputId).value) || 0;
+function calculateAnnual(inputId, frequency) { // Change frequencyId to frequency
+    let input = parseFloat(document.getElementById(inputId).value) || 0;
 
-
-    if (inputId == 'income_sole_prop') {
-        console.log('we are here')
+    if (inputId === 'income_sole_prop') {
+        console.log('we are here');
         const calculatedFromWorksheet = getCookie("calculated_from_worksheet");
 
-        if (calculatedFromWorksheet == true) {
+        if (calculatedFromWorksheet === true) {
             const totalRevenue = getCookie("totalRevenue");
-            console.log(totalRevenue)
-            console.log('calculatedFromWorksheet')
+            console.log(totalRevenue);
+            console.log('calculatedFromWorksheet');
 
-            // const incomesole = getCookie('income_sole_prop')
-            if (totalRevenue && totalRevenue != 'annually' && !isNaN(parseFloat(totalRevenue))) {
+            if (totalRevenue && totalRevenue !== 'annually' && !isNaN(parseFloat(totalRevenue))) {
                 if (input != totalRevenue) {
-                    console.log(input)
-                    input = parseFloat(totalRevenue)
-                    console.log('changed to', input)
-
+                    console.log(input);
+                    input = parseFloat(totalRevenue);
+                    console.log('changed to', input);
                 }
-
             }
         }
-
-        // console.log(totalRevenue)
-        // console.log(incomesole)
-
     }
-
-    const frequency = document.getElementById(frequencyId).value;
 
     switch (frequency) {
         case 'annually':
@@ -303,20 +293,22 @@ function calculateNormalizedSum() {
 
     let annualIncomeSum = 0;
 
-
-    // Calculate annual income sum
     incomeFields.forEach(field => {
-        const [inputId, frequencyId] = field;
-        annualIncomeSum += calculateAnnual(inputId, frequencyId);
+        const [inputId, frequencyGroupId] = field;
+        const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+        const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually'; // Default to annually if none checked
+        annualIncomeSum += calculateAnnual(inputId, frequency);
     });
 
     ANNUALINCOME = annualIncomeSum;
 
-    let annualTaxableSum = annualIncomeSum; // Start with the total income for taxable sum
+    let annualTaxableSum = annualIncomeSum;
 
     incomeFields.forEach(field => {
-        const [inputId, frequencyId] = field;
-        let income = calculateAnnual(inputId, frequencyId);
+        const [inputId, frequencyGroupId] = field;
+        const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+        const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+        let income = calculateAnnual(inputId, frequency);
 
         // Exclude gambling winnings for Canada
         if (document.getElementById('RegionDropdown').value === 'CAN' && inputId === 'income_gambling_winnings') {
@@ -422,11 +414,12 @@ function calculateEmploymentIncome() {
     let annualEmploymentIncome = 0;
 
     employmentIncomeFields.forEach(field => {
-        const [inputId, frequencyId] = field;
-        annualEmploymentIncome += calculateAnnual(inputId, frequencyId);
+        const [inputId, frequencyGroupId] = field;
+        const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+        const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+        annualEmploymentIncome += calculateAnnual(inputId, frequency);
     });
 
-    // Update global variable and DOM after loop completes
     ANNUALEMPLOYMENTINCOME = annualEmploymentIncome;
     document.getElementById('ANNUALEMPLOYMENTINCOME').textContent = `$${ANNUALEMPLOYMENTINCOME.toFixed(2)}`;
 }
@@ -1238,13 +1231,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony', 
         'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending', 
         'income_venture_capital', 'income_tax_free_income',
-        'income_salary_wages_frequency', 'income_tips_frequency', 'income_bonuses_frequency', 
-        'income_sole_prop_frequency', 'income_investment_property_frequency', 'income_capital_gains_losses_frequency',
-        'income_interest_frequency', 'income_owner_dividend_frequency', 'income_public_dividend_frequency',
-        'income_trust_frequency', 'income_federal_pension_frequency', 'income_work_pension_frequency',
-        'income_social_security_frequency', 'income_employment_insurance_frequency', 'income_alimony_frequency',
-        'income_scholarships_grants_frequency', 'income_royalties_frequency', 'income_gambling_winnings_frequency',
-        'income_peer_to_peer_lending_frequency', 'income_venture_capital_frequency', 'income_tax_free_income_frequency'
+        
     ];
 
  // Get elements
@@ -1311,30 +1298,14 @@ window.calculateAll = function () {
     passiveincome();
     handleUSAResident();
 
-    // Frequency fields
-    setCookie("income_salary_wages_frequency", document.getElementById("income_salary_wages_frequency").value.trim() !== "" ? document.getElementById("income_salary_wages_frequency").value : "0", 365);
-    setCookie("income_tips_frequency", document.getElementById("income_tips_frequency").value.trim() !== "" ? document.getElementById("income_tips_frequency").value : "0", 365);
-    setCookie("income_bonuses_frequency", document.getElementById("income_bonuses_frequency").value.trim() !== "" ? document.getElementById("income_bonuses_frequency").value : "0", 365);
-    setCookie("income_sole_prop_frequency", document.getElementById("income_sole_prop_frequency").value.trim() !== "" ? document.getElementById("income_sole_prop_frequency").value : "0", 365);
-    setCookie("income_investment_property_frequency", document.getElementById("income_investment_property_frequency").value.trim() !== "" ? document.getElementById("income_investment_property_frequency").value : "0", 365);
-    setCookie("income_capital_gains_losses_frequency", document.getElementById("income_capital_gains_losses_frequency").value.trim() !== "" ? document.getElementById("income_capital_gains_losses_frequency").value : "0", 365);
-    setCookie("income_interest_frequency", document.getElementById("income_interest_frequency").value.trim() !== "" ? document.getElementById("income_interest_frequency").value : "0", 365);
-    setCookie("income_owner_dividend_frequency", document.getElementById("income_owner_dividend_frequency").value.trim() !== "" ? document.getElementById("income_owner_dividend_frequency").value : "0", 365);
-    setCookie("income_public_dividend_frequency", document.getElementById("income_public_dividend_frequency").value.trim() !== "" ? document.getElementById("income_public_dividend_frequency").value : "0", 365);
-    setCookie("income_trust_frequency", document.getElementById("income_trust_frequency").value.trim() !== "" ? document.getElementById("income_trust_frequency").value : "0", 365);
-    setCookie("income_federal_pension_frequency", document.getElementById("income_federal_pension_frequency").value.trim() !== "" ? document.getElementById("income_federal_pension_frequency").value : "0", 365);
-    setCookie("income_work_pension_frequency", document.getElementById("income_work_pension_frequency").value.trim() !== "" ? document.getElementById("income_work_pension_frequency").value : "0", 365);
-    setCookie("income_social_security_frequency", document.getElementById("income_social_security_frequency").value.trim() !== "" ? document.getElementById("income_social_security_frequency").value : "0", 365);
-    setCookie("income_employment_insurance_frequency", document.getElementById("income_employment_insurance_frequency").value.trim() !== "" ? document.getElementById("income_employment_insurance_frequency").value : "0", 365);
-    setCookie("income_alimony_frequency", document.getElementById("income_alimony_frequency").value.trim() !== "" ? document.getElementById("income_alimony_frequency").value : "0", 365);
-    setCookie("income_scholarships_grants_frequency", document.getElementById("income_scholarships_grants_frequency").value.trim() !== "" ? document.getElementById("income_scholarships_grants_frequency").value : "0", 365);
-    setCookie("income_royalties_frequency", document.getElementById("income_royalties_frequency").value.trim() !== "" ? document.getElementById("income_royalties_frequency").value : "0", 365);
-    setCookie("income_gambling_winnings_frequency", document.getElementById("income_gambling_winnings_frequency").value.trim() !== "" ? document.getElementById("income_gambling_winnings_frequency").value : "0", 365);
-    setCookie("income_peer_to_peer_lending_frequency", document.getElementById("income_peer_to_peer_lending_frequency").value.trim() !== "" ? document.getElementById("income_peer_to_peer_lending_frequency").value : "0", 365);
-    setCookie("income_venture_capital_frequency", document.getElementById("income_venture_capital_frequency").value.trim() !== "" ? document.getElementById("income_venture_capital_frequency").value : "0", 365);
-    setCookie("income_tax_free_income_frequency", document.getElementById("income_tax_free_income_frequency").value.trim() !== "" ? document.getElementById("income_tax_free_income_frequency").value : "0", 365);
+    // Helper function to get the checked frequency value
+    function getCheckedFrequency(id) {
+        const checkedCheckbox = document.querySelector(`#${id} input[type="checkbox"]:checked`);
+        return checkedCheckbox ? checkedCheckbox.value : "0";
+    }
 
-    // Income fields
+
+    // Income fields (unchanged)
     setCookie("income_salary_wages", document.getElementById("income_salary_wages").value.trim() !== "" ? document.getElementById("income_salary_wages").value : "0", 365);
     setCookie("income_tips", document.getElementById("income_tips").value.trim() !== "" ? document.getElementById("income_tips").value : "0", 365);
     setCookie("income_bonuses", document.getElementById("income_bonuses").value.trim() !== "" ? document.getElementById("income_bonuses").value : "0", 365);
@@ -1357,7 +1328,7 @@ window.calculateAll = function () {
     setCookie("income_venture_capital", document.getElementById("income_venture_capital").value.trim() !== "" ? document.getElementById("income_venture_capital").value : "0", 365);
     setCookie("income_tax_free_income", document.getElementById("income_tax_free_income").value.trim() !== "" ? document.getElementById("income_tax_free_income").value : "0", 365);
 
-    // Existing setCookie calls
+    // Existing setCookie calls (unchanged)
     const regionDropdown = document.getElementById("RegionDropdown");
     const subregionDropdown = document.getElementById("SubregionDropdown");
     setCookie("RegionDropdown", regionDropdown.value, 365);
@@ -1466,3 +1437,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Total checkbox groups found:', document.querySelectorAll('.checkbox-button-group').length);
+  
+    document.querySelectorAll('.checkbox-button-group').forEach((group, index) => {
+      try {
+        console.log(`Processing group ${index + 1}: ${group.id || 'no-id'}`);
+  
+        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        if (!checkboxes.length) {
+          console.warn(`No checkboxes found in group ${group.id || 'no-id'}`);
+          return;
+        }
+  
+        // Single-selection logic with save
+        checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', function() {
+            try {
+              if (this.checked) {
+                checkboxes.forEach(cb => {
+                  if (cb !== this) cb.checked = false;
+                });
+                const input = group.closest('.row').querySelector('input[type="number"]');
+                const inputId = input ? input.id : null;
+                if (inputId && typeof calculateAnnual === 'function') {
+                  calculateAnnual(inputId, this.value);
+                }
+                setCookie(`frequency_${group.id}`, this.value, 365);
+                console.log(`Saved ${this.value} to cookie for ${group.id}`);
+              }
+            } catch (error) {
+              console.error(`Error in checkbox change for ${group.id}:`, error);
+            }
+          });
+        });
+  
+        // Load saved selection or default to "annually"
+        const savedFrequency = getCookie(`frequency_${group.id}`);
+        const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) || 
+                               group.querySelector('input[value="annually"]');
+        if (checkboxToCheck) {
+          checkboxes.forEach(cb => {
+            if (cb !== checkboxToCheck) cb.checked = false;
+          });
+          checkboxToCheck.checked = true;
+          console.log(`Set ${checkboxToCheck.value} as checked for ${group.id} (saved: ${savedFrequency})`);
+  
+          const input = group.closest('.row').querySelector('input[type="number"]');
+          const inputId = input ? input.id : null;
+          if (inputId && typeof calculateAnnual === 'function') {
+            calculateAnnual(inputId, checkboxToCheck.value);
+          }
+        } else {
+          console.warn(`No valid checkbox for saved value '${savedFrequency}' in ${group.id}`);
+        }
+      } catch (error) {
+        console.error(`Error processing group ${group.id || 'no-id'}:`, error);
+      }
+    });
+  });

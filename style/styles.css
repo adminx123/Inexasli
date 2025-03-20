@@ -1113,3 +1113,55 @@ textarea {
   width: 100%;
   padding: 20px 0;
 }
+
+.checkbox-button-group {
+  display: flex;
+  gap: 0; /* No gap to ensure full width usage */
+  height: 25px; /* Match input height */
+  flex: 1; /* Match the flex behavior of input and select */
+}
+
+.checkbox-button-group input[type="checkbox"] {
+  display: none; /* Hide the actual checkbox */
+}
+
+.checkbox-button {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the text */
+  flex: 1; /* Each button takes equal share of available space */
+  height: 25px; /* Match input height */
+  background-color: #f3f3f3; /* Default background */
+  border: 1px solid #0a0a0a; /* Match input border color */
+  cursor: pointer;
+  text-align: center;
+  font-size: 12px; /* Slightly smaller to fit */
+  font-weight: bold; /* Consistent with prior styling */
+  user-select: none; /* Prevent text selection */
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  color: black;
+}
+
+.checkbox-button:hover {
+  background-color: #fdfdfd; /* Hover effect */
+  border-color: #bbb;
+}
+
+.checkbox-button-group input[type="checkbox"]:checked + .checkbox-button {
+  background-color: #000000; /* Match your active color scheme */
+  border-color: #000000;
+  color: white; /* White text when active */
+}
+
+/* Ensure consistency within .row */
+.row .checkbox-button-group {
+  margin-right: 15px; /* Match .row input[type="number"] margin */
+}
+
+/* Media query to match input/select behavior */
+@media (max-width: 700px) {
+  .row .checkbox-button-group {
+    width: 100%; /* Match input and select */
+    margin-right: 0; /* Align with other elements */
+  }
+}

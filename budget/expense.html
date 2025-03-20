@@ -8,765 +8,809 @@
  * jurisdictions worldwide.
  */ -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-
-<head>
-  <link rel="manifest" href="/manifest.json">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>EXPENSE</title>
-  <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-  <!-- <link rel="stylesheet" href="../../style/template.css">  -->
-
-
-  <!--  this is an extended list of places icon could be needed -->
-  <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
-  <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
-  <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg" />
-  <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
-  <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
-  <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
-  <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
-  <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
-  <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
-  <link rel="manifest" href="/manifest.json">
-  <link rel="stylesheet" href="/style/styles.css">
-
-
-</head>
-
-<body>
-
-
-
-
-
-
-  <a href="./intro.html">
-    <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;"
-      onclick="calculateAll();">
-  </a>
-
-  <h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2>
-
-
-
-
-
-  <div class="tab-container">
-
-    <a href="./income.html" class="tab" data-location="income" onclick="calculateAll();">Income</a>
-
-    <a href="./expense.html" class="tooltip tab " data-location="expense"
-      data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn."
-      onclick="calculateAll();">
-      Expense
-      <span class="tooltip-content"></span>
-
-      <a href="./asset.html" class="tab " data-location="asset" onclick="calculateAll();">
-        Asset
-
-      </a>
-
-      <a href="./liability.html" class="tab" data-location="liability" onclick="calculateAll();">Liability</a>
-
-  </div>
-
-
-
-
-  <div class="container">
-
-    <h2 style="text-align: center; font-size: 18px;" class="tooltip"
-      data-tooltip="Expenses that are necessary for basic living, health, and safety, without which one's quality of life or ability to function would be significantly compromised. These are non-negotiable costs like food, housing, healthcare, and utilities.">
-      Essentials<span class="tooltip-content"></span>
-    </h2>
-
-    <p>Step 4: Enter expense amounts & select the corresponding frequency.</p>
-
-    <div class="row">
-      <label for="expenses_grocery">Grocery:</label>
-      <input type='number' inputmode="numeric" id="expenses_grocery">
-      <select id="expenses_grocery_frequency"
-        onchange="calculateAnnual('expenses_grocery', 'expenses_grocery_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_grocery_annual"></span>
-    </div>
-
-
-
-    <div class="row">
-      <label for="expenses_fitness">Fitness:</label>
-      <input type='number' inputmode="numeric" id="expenses_fitness">
-      <select id="expenses_fitness_frequency"
-        onchange="calculateAnnual('expenses_fitness', 'expenses_fitness_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_fitness_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="expenses_hygiene">Hygiene:</label>
-      <input type='number' inputmode="numeric" id="expenses_hygiene">
-      <select id="expenses_hygiene_frequency"
-        onchange="calculateAnnual('expenses_hygiene', 'expenses_hygiene_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_hygiene_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="expenses_medical_dental">Medical,Dental & Insurance:</label>
-      <input type='number' inputmode="numeric" id="expenses_medical_dental">
-      <select id="expenses_medical_dental_frequency"
-        onchange="calculateAnnual('expenses_medical_dental', 'expenses_medical_dental_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_medical_dental_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="expenses_perscription">Perscription:</label>
-      <input type='number' inputmode="numeric" id="expenses_perscription">
-      <select id="expenses_perscription_frequency"
-        onchange="calculateAnnual('expenses_perscription', 'expenses_perscription_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_perscription_annual"></span>
-    </div>
-
-
-
-    <div class="row">
-      <label for="expenses_clothing">Clothing:</label>
-      <input type='number' inputmode="numeric" id="expenses_clothing">
-      <select id="expenses_clothing_frequency"
-        onchange="calculateAnnual('expenses_clothing', 'expenses_clothing_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_clothing_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="expenses_cellphone_service">Cellphone:</label>
-      <input type='number' inputmode="numeric" id="expenses_cellphone_service">
-      <select id="expenses_cellphone_service_frequency"
-        onchange="calculateAnnual('expenses_cellphone_service', 'expenses_cellphone_service_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_cellphone_service_annual"></span>
-    </div>
-
-  </div>
-
-  <div class="containerround">
-
-    <h2 style="text-align: center; font-size: 18px;" class="tooltip"
-      data-tooltip="Expenses that are not essential for survival or basic functioning but are related to lifestyle choices, comfort, entertainment, or luxury. These are costs you have control over and can adjust or eliminate without affecting your basic needs, such as dining out, vacations, subscriptions for entertainment, and non-essentials.">
-      Discretionary<span class="tooltip-content"></span>
-    </h2>
-
-    <div class="row">
-      <label for="expenses_dining">Dining:</label>
-      <input type='number' inputmode="numeric" id="expenses_dining">
-      <select id="expenses_dining_frequency" onchange="calculateAnnual('expenses_dining', 'expenses_dining_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_dining_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="" style="font-size: unset;" class="tooltip"
-        data-tooltip="Concert tickets, movies, sporting events, nightlife, video games.">
-        <span class="tooltip-content"></span>
-        Entertainment:</label>
-      <input type='number' inputmode="numeric" id="expenses_entertainment">
-      <select id="expenses_entertainment_frequency"
-        onchange="calculateAnnual('expenses_entertainment', 'expenses_pet_entertainment')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_entertainment_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="expenses_vacation">Vacation:</label>
-      <input type='number' inputmode="numeric" id="expenses_vacation">
-      <select id="expenses_vacation_frequency"
-        onchange="calculateAnnual('expenses_vacation', 'expenses_vacation_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_vacation_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="expenses_travel_life_insurance">Life & Travel Insurance:</label>
-      <input type='number' inputmode="numeric" id="expenses_travel_life_insurance">
-      <select id="expenses_travel_life_insurance_frequency"
-        onchange="calculateAnnual('expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_travel_life_insurance_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="expenses_subscriptions">Subscriptions:</label>
-      <input type='number' inputmode="numeric" id="expenses_subscriptions">
-      <select id="expenses_subscriptions_frequency"
-        onchange="calculateAnnual('expenses_subscriptions', 'expenses_subscriptions_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_subscriptions_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="" style="font-size: unset;" class="tooltip"
-        data-tooltip="Include all salon services such as hair, makeup, nails, waxing, eyebrows, teeth whitening, and more.">
-        <span class="tooltip-content"></span>
-        Beauty:</label>
-      <input type='number' inputmode="numeric" id="expenses_beauty">
-      <select id="expenses_beauty_frequency" onchange="calculateAnnual('expenses_beauty', 'expenses_beauty_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="expenses_beauty_annual"></span>
-    </div>
-
-
-
-
-
-  </div>
-
-  <div class="containerround">
-
-    <h2 style="text-align: center; font-size: 18px;" class="tooltip"
-      data-tooltip="This heading covers all costs related to your living space, including rent or mortgage, utilities, property taxes, insurance, and home maintenance or improvements. It's the foundation of your expense tracking, ensuring your home sweet home remains a sanctuary, not a financial burden.">
-      Housing<span class="tooltip-content"></span>
-    </h2>
-
-    <div class="row">
-      <label for="housing_mortgage_payment">Mortgage Payment:</label>
-      <input type='number' inputmode="numeric" id="housing_mortgage_payment">
-      <select id="housing_mortgage_payment_frequency"
-        onchange="calculateAnnual('housing_mortgage_payment', 'housing_mortgage_payment_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="housing_mortgage_payment_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="housing_rent_payment">Rent:</label>
-      <input type='number' inputmode="numeric" id="housing_rent_payment">
-      <select id="housing_rent_payment_frequency"
-        onchange="calculateAnnual('housing_rent_payment', 'housing_rent_payment_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="housing_rent_payment_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="housing_property_tax">Property Tax:</label>
-      <input type='number' inputmode="numeric" id="housing_property_tax">
-      <select id="housing_property_tax_frequency"
-        onchange="calculateAnnual('housing_property_tax', 'housing_property_tax_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="housing_property_tax_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="housing_condo_fee">Condo Fee:</label>
-      <input type='number' inputmode="numeric" id="housing_condo_fee">
-      <select id="housing_condo_fee_frequency"
-        onchange="calculateAnnual('housing_condo_fee', 'housing_condo_fee_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="housing_condo_fee_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="housing_hydro">Hydro:</label>
-      <input type='number' inputmode="numeric" id="housing_hydro">
-      <select id="housing_hydro_frequency" onchange="calculateAnnual('housing_hydro', 'housing_hydro_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="housing_hydro_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="housing_water">Water:</label>
-      <input type='number' inputmode="numeric" id="housing_water">
-      <select id="housing_water_frequency" onchange="calculateAnnual('housing_water', 'housing_water_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="housing_water_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="" style="font-size: unset;" class="tooltip" data-tooltip="Natural gas, propane, wood, oil.">
-        <span class="tooltip-content"></span>
-        Heating:</label>
-      <input type='number' inputmode="numeric" id="housing_gas">
-      <select id="housing_gas_frequency" onchange="calculateAnnual('housing_gas', 'housing_gas_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="housing_gas_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="housing_insurance">Insurance:</label>
-      <input type='number' inputmode="numeric" id="housing_insurance">
-      <select id="housing_insurance_frequency"
-        onchange="calculateAnnual('housing_insurance', 'housing_insurance_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="housing_insurance_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="housing_repairs">Repairs:</label>
-      <input type='number' inputmode="numeric" id="housing_repairs">
-      <select id="housing_repairs_frequency" onchange="calculateAnnual('housing_repairs', 'housing_repairs_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="housing_repairs_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="housing_internet">Internet:</label>
-      <input type='number' inputmode="numeric" id="housing_internet">
-      <select id="housing_internet_frequency"
-        onchange="calculateAnnual('housing_internet', 'housing_internet_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="housing_internet_annual"></span>
-    </div>
-
-  </div>
-
-
-
-
-
-  <div id="debt-parent">
-
-    <div class="containerround">
-
-      <h2 style="text-align: center; font-size: 18px;" class="tooltip"
-        data-tooltip="Debt payments refer to the regular amounts paid towards loans, credit cards, or any borrowed money. This includes principal and interest, reducing what you owe over time.">
-        Debt Payments<span class="tooltip-content"></span>
-      </h2>
-
-      <div class="row">
-        <label for="expenses_line_of_credit_payment">Line of Credit Payment:</label>
-        <input type='number' inputmode="numeric" id="expenses_line_of_credit_payment">
-        <select id="expenses_line_of_credit_payment_frequency"
-          onchange="calculateAnnual('expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="expenses_line_of_credit_payment_annual"></span>
-      </div>
-
-      <div class="row">
-        <label for="expenses_student_loan_payment">Student Loan Payment:</label>
-        <input type='number' inputmode="numeric" id="expenses_student_loan_payment">
-        <select id="expenses_student_loan_payment_frequency"
-          onchange="calculateAnnual('expenses_student_loan_payment', 'expenses_student_loan_payment_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="expenses_student_loan_payment_annual"></span>
-      </div>
-
-      <div class="row">
-
-
-        <!-- expenses_credit_card_payment -->
-        <label for="" style="font-size: unset;" class="tooltip"
-          data-tooltip="Enter only the payment amount you are making towards the credit card balance carried over from previous billing cycles.">
-          <span class="tooltip-content"></span>
-          Credit Card, Payment on Previous Balance:</label>
-        <input type='number' inputmode="numeric" id="expenses_credit_card_payment">
-        <select id="expenses_credit_card_payment_frequency"
-          onchange="calculateAnnual('expenses_credit_card_payment', 'expenses_credit_card_payment_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="expenses_credit_card_payment_annual"></span>
-      </div>
-
-      <div class="row">
-        <label for="" style="font-size: unset;" class="tooltip" data-tooltip="Unpaid tax from prior years.">
-          <span class="tooltip-content"></span>
-          Tax Arrears Payment:</label>
-        <input type='number' inputmode="numeric" id="expenses_tax_arrears_payment">
-        <select id="expenses_tax_arrears_payment_frequency"
-          onchange="calculateAnnual('expenses_tax_arrears_payment', 'expenses_tax_arrears_payment_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="expenses_tax_arrears_payment_annual"></span>
-      </div>
-
-      <div class="row">
-        <label for="expenses_small_business_loan_payment">Small Business Loan Payment:</label>
-        <input type='number' inputmode="numeric" id="expenses_small_business_loan_payment">
-        <select id="expenses_small_business_loan_payment_frequency"
-          onchange="calculateAnnual('expenses_small_business_loan_payment', 'expenses_small_business_loan_payment_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="expenses_small_business_loan_payment_annual"></span>
-      </div>
-
-
-    </div>
-  </div>
-
-
-
-  <div id="depandant-parent">
-    <div class="containerround">
-
-      <h2 style="text-align: center; font-size: 18px;" class="tooltip"
-        data-tooltip="Costs associated with supporting family members or others who rely on you financially, plus expenses for pets like food, veterinary care, and pet supplies.">
-        Dependants/Pets<span class="tooltip-content"></span>
-      </h2>
-
-      <div class="row">
-        <label for="dependant_day_care">Day Care:</label>
-        <input type='number' inputmode="numeric" id="dependant_day_care">
-        <select id="dependant_day_care_frequency"
-          onchange="calculateAnnual('dependant_day_care', 'dependant_day_care_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="dependant_day_care_annual"></span>
-      </div>
-
-      <div class="row">
-        <label for="dependant_medical_dental">Medical, Dental & Insurance:</label>
-        <input type='number' inputmode="numeric" id="dependant_medical_dental">
-        <select id="dependant_medical_dental_frequency"
-          onchange="calculateAnnual('dependant_medical_dental', 'dependant_medical_dental_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="dependant_medical_dental_annual"></span>
-      </div>
-
-
-
-      <div class="row">
-        <label for="dependant_clothing">Clothing:</label>
-        <input type='number' inputmode="numeric" id="dependant_clothing">
-        <select id="dependant_clothing_frequency"
-          onchange="calculateAnnual('dependant_clothing', 'dependant_clothing_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="dependant_clothing_annual"></span>
-      </div>
-
-      <div class="row">
-        <label for="dependant_sports_recreation">Sports & Recreation:</label>
-        <input type='number' inputmode="numeric" id="dependant_sports_recreation">
-        <select id="dependant_sports_recreation_frequency"
-          onchange="calculateAnnual('dependant_sports_recreation', 'dependant_sports_recreation_frequency')">
-          <option value="monthly">Monthly</option>
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="dependant_sports_recreation_annual"></span>
-      </div>
-
-      <div class="row">
-        <label for="dependant_transportation">Transportation:</label>
-        <input type='number' inputmode="numeric" id="dependant_transportation">
-        <select id="dependant_transportation_frequency"
-          onchange="calculateAnnual('dependant_transportation', 'dependant_transportation_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="dependant_transportation_annual"></span>
-      </div>
-
-      <div class="row">
-        <label for="dependant_tuition">Tuition:</label>
-        <input type='number' inputmode="numeric" id="dependant_tuition">
-        <select id="dependant_tuition_frequency"
-          onchange="calculateAnnual('dependant_tuition', 'dependant_tuition_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="dependant_tuition_annual"></span>
-      </div>
-
-      <div class="row">
-        <label for="dependant_housing">Housing:</label>
-        <input type='number' inputmode="numeric" id="dependant_housing">
-        <select id="dependant_housing_frequency"
-          onchange="calculateAnnual('dependant_housing', 'dependant_housing_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="dependant_housing_annual"></span>
-      </div>
-
-      <div class="row">
-        <label for="dependant_cellular_service">Cellular Service:</label>
-        <input type='number' inputmode="numeric" id="dependant_cellular_service">
-        <select id="dependant_cellular_service_frequency"
-          onchange="calculateAnnual('dependant_cellular_service', 'dependant_cellular_service_frequency')">
-          <option value="annually">Annually</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="monthly">Monthly</option>
-          <option value="weekly">Weekly</option>
-        </select>
-        <span id="dependant_cellular_service_annual"></span>
-      </div>
-
-
-    </div>
-  </div>
-
-  <div class="containerround">
-
-    <h2 style="text-align: center; font-size: 18px;" class="tooltip"
-      data-tooltip="Expenses related to travel or moving people or goods, including fuel, public transit fares, vehicle maintenance, insurance, and any car rental or taxi services.">
-      Transportation<span class="tooltip-content"></span>
-    </h2>
-
-    <div class="row">
-      <label for="transportation_car_loan_payment">Car Loan Payment:</label>
-      <input type='number' inputmode="numeric" id="transportation_car_loan_payment">
-      <select id="transportation_car_loan_payment_frequency"
-        onchange="calculateAnnual('transportation_car_loan_payment', 'transportation_car_loan_payment_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="transportation_car_loan_payment_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="transportation_insurance">Insurance:</label>
-      <input type='number' inputmode="numeric" id="transportation_insurance">
-      <select id="transportation_insurance_frequency"
-        onchange="calculateAnnual('transportation_insurance', 'transportation_insurance_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="transportation_insurance_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="transportation_fuel">Fuel:</label>
-      <input type='number' inputmode="numeric" id="transportation_fuel">
-      <select id="transportation_fuel_frequency"
-        onchange="calculateAnnual('transportation_fuel', 'transportation_fuel_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="transportation_fuel_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="transportation_maintenance">Maintenance:</label>
-      <input type='number' inputmode="numeric" id="transportation_maintenance">
-      <select id="transportation_maintenance_frequency"
-        onchange="calculateAnnual('transportation_maintenance', 'transportation_maintenance_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="transportation_maintenance_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="transportation_public_transit">Public Transit:</label>
-      <input type='number' inputmode="numeric" id="transportation_public_transit">
-      <select id="transportation_public_transit_frequency"
-        onchange="calculateAnnual('transportation_public_transit', 'transportation_public_transit_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="transportation_public_transit_annual"></span>
-    </div>
-
-    <div class="row">
-      <label for="transportation_ride_hailing">Ride Hailing:</label>
-      <input type='number' inputmode="numeric" id="transportation_ride_hailing">
-      <select id="transportation_ride_hailing_frequency"
-        onchange="calculateAnnual('transportation_ride_hailing', 'transportation_ride_hailing_frequency')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-      </select>
-      <span id="transportation_ride_hailing_annual"></span>
-    </div>
-  </div>
-
-
-  <div class="containerround">
-    <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt'></i></button>
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-  <div class="hidden">
-
-    <p><u>Expense:</u> <span id="ANNUALEXPENSESUM"></span></p>
-    <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
-
-    <p><u>Transportation:</u> <span id="TRANSPORTATION"></span></p>
-    <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
-
-    <p><u>Dependant:</u> <span id="DEPENDANT"></span></p>
-    <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
-
-    <p><u>Housing:</u> <span id="HOUSING"></span></p>
-    <span class="tooltiptext">Total housing expenses.</span>
-
-    <p><u>Debt:</u> <span id="DEBT"></span></p>
-    <span class="tooltiptext">Total debt expenses.</span>
-
-    <p><u>Essential:</u> <span id="ESSENTIAL"></span></p>
-    <span class="tooltiptext">Total essential expenses.</span>
-
-    <p><u>Discretionary:</u> <span id="DISCRETIONARY"></span></p>
-    <span class="tooltiptext">Total discretionary expenses.</span>
-
-  </div>
-
-
-
-
-  <script src="/index.js"></script>
-
-  <script type="module" src="/server/scripts/expense.js"></script>
-
-  <script src="/server/scripts/toolTip.js"></script>
-  <script src="/server/scripts/tray.js"></script>
-
-
-</body>
-
-</html>
+ <!DOCTYPE html>
+ <html lang="en">
+ 
+ <head>
+   <link rel="manifest" href="/manifest.json">
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <title>EXPENSE</title>
+   <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+   <link rel="stylesheet" href="/style/styles.css">
+ 
+   <!-- Extended list of favicon/icon references -->
+   <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
+   <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
+   <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
+   <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
+   <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
+   <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg" />
+   <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
+   <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
+   <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
+   <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
+   <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
+   <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
+ </head>
+ 
+ <body>
+   <a href="./intro.html">
+     <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;"
+       onclick="calculateAll();">
+   </a>
+   <h2 style="text-align: center; font-size: 16px; color: white;">IncomeIQ™</h2>
+ 
+   <div class="tab-container">
+     <a href="./income.html" class="tab" data-location="income" onclick="calculateAll();">Income</a>
+     <a href="./expense.html" class="tooltip tab active" data-location="expense"
+       data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn."
+       onclick="calculateAll();">
+       Expense
+       <span class="tooltip-content"></span>
+     </a>
+     <a href="./asset.html" class="tab" data-location="asset" onclick="calculateAll();">Asset</a>
+     <a href="./liability.html" class="tab" data-location="liability" onclick="calculateAll();">Liability</a>
+   </div>
+ 
+   <div class="container">
+     <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+       data-tooltip="Expenses that are necessary for basic living, health, and safety, without which one's quality of life or ability to function would be significantly compromised. These are non-negotiable costs like food, housing, healthcare, and utilities.">
+       Essentials<span class="tooltip-content"></span>
+     </h2>
+     <p>Step 4: Enter expense amounts & select the corresponding frequency.</p>
+ 
+     <div class="row">
+       <label for="expenses_grocery">Grocery:</label>
+       <input type="number" inputmode="numeric" id="expenses_grocery">
+       <div class="checkbox-button-group" id="expenses_grocery_frequency">
+         <input type="checkbox" id="annually_grocery" name="expenses_grocery_frequency" value="annually">
+         <label for="annually_grocery" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_grocery" name="expenses_grocery_frequency" value="quarterly">
+         <label for="quarterly_grocery" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_grocery" name="expenses_grocery_frequency" value="monthly">
+         <label for="monthly_grocery" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_grocery" name="expenses_grocery_frequency" value="weekly">
+         <label for="weekly_grocery" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_grocery_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_fitness">Fitness:</label>
+       <input type="number" inputmode="numeric" id="expenses_fitness">
+       <div class="checkbox-button-group" id="expenses_fitness_frequency">
+         <input type="checkbox" id="annually_fitness" name="expenses_fitness_frequency" value="annually">
+         <label for="annually_fitness" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_fitness" name="expenses_fitness_frequency" value="quarterly">
+         <label for="quarterly_fitness" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_fitness" name="expenses_fitness_frequency" value="monthly">
+         <label for="monthly_fitness" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_fitness" name="expenses_fitness_frequency" value="weekly">
+         <label for="weekly_fitness" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_fitness_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_hygiene">Hygiene:</label>
+       <input type="number" inputmode="numeric" id="expenses_hygiene">
+       <div class="checkbox-button-group" id="expenses_hygiene_frequency">
+         <input type="checkbox" id="annually_hygiene" name="expenses_hygiene_frequency" value="annually">
+         <label for="annually_hygiene" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_hygiene" name="expenses_hygiene_frequency" value="quarterly">
+         <label for="quarterly_hygiene" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_hygiene" name="expenses_hygiene_frequency" value="monthly">
+         <label for="monthly_hygiene" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_hygiene" name="expenses_hygiene_frequency" value="weekly">
+         <label for="weekly_hygiene" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_hygiene_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_medical_dental">Medical, Dental & Insurance:</label>
+       <input type="number" inputmode="numeric" id="expenses_medical_dental">
+       <div class="checkbox-button-group" id="expenses_medical_dental_frequency">
+         <input type="checkbox" id="annually_medical_dental" name="expenses_medical_dental_frequency" value="annually">
+         <label for="annually_medical_dental" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_medical_dental" name="expenses_medical_dental_frequency" value="quarterly">
+         <label for="quarterly_medical_dental" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_medical_dental" name="expenses_medical_dental_frequency" value="monthly">
+         <label for="monthly_medical_dental" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_medical_dental" name="expenses_medical_dental_frequency" value="weekly">
+         <label for="weekly_medical_dental" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_medical_dental_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_perscription">Prescription:</label>
+       <input type="number" inputmode="numeric" id="expenses_perscription">
+       <div class="checkbox-button-group" id="expenses_perscription_frequency">
+         <input type="checkbox" id="annually_perscription" name="expenses_perscription_frequency" value="annually">
+         <label for="annually_perscription" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_perscription" name="expenses_perscription_frequency" value="quarterly">
+         <label for="quarterly_perscription" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_perscription" name="expenses_perscription_frequency" value="monthly">
+         <label for="monthly_perscription" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_perscription" name="expenses_perscription_frequency" value="weekly">
+         <label for="weekly_perscription" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_perscription_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_clothing">Clothing:</label>
+       <input type="number" inputmode="numeric" id="expenses_clothing">
+       <div class="checkbox-button-group" id="expenses_clothing_frequency">
+         <input type="checkbox" id="annually_clothing" name="expenses_clothing_frequency" value="annually">
+         <label for="annually_clothing" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_clothing" name="expenses_clothing_frequency" value="quarterly">
+         <label for="quarterly_clothing" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_clothing" name="expenses_clothing_frequency" value="monthly">
+         <label for="monthly_clothing" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_clothing" name="expenses_clothing_frequency" value="weekly">
+         <label for="weekly_clothing" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_clothing_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_cellphone_service">Cellphone:</label>
+       <input type="number" inputmode="numeric" id="expenses_cellphone_service">
+       <div class="checkbox-button-group" id="expenses_cellphone_service_frequency">
+         <input type="checkbox" id="annually_cellphone_service" name="expenses_cellphone_service_frequency" value="annually">
+         <label for="annually_cellphone_service" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_cellphone_service" name="expenses_cellphone_service_frequency" value="quarterly">
+         <label for="quarterly_cellphone_service" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_cellphone_service" name="expenses_cellphone_service_frequency" value="monthly">
+         <label for="monthly_cellphone_service" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_cellphone_service" name="expenses_cellphone_service_frequency" value="weekly">
+         <label for="weekly_cellphone_service" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_cellphone_service_annual"></span>
+     </div>
+   </div>
+ 
+   <div class="containerround">
+     <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+       data-tooltip="Expenses that are not essential for survival or basic functioning but are related to lifestyle choices, comfort, entertainment, or luxury. These are costs you have control over and can adjust or eliminate without affecting your basic needs, such as dining out, vacations, subscriptions for entertainment, and non-essentials.">
+       Discretionary<span class="tooltip-content"></span>
+     </h2>
+ 
+     <div class="row">
+       <label for="expenses_dining">Dining:</label>
+       <input type="number" inputmode="numeric" id="expenses_dining">
+       <div class="checkbox-button-group" id="expenses_dining_frequency">
+         <input type="checkbox" id="annually_dining" name="expenses_dining_frequency" value="annually">
+         <label for="annually_dining" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_dining" name="expenses_dining_frequency" value="quarterly">
+         <label for="quarterly_dining" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_dining" name="expenses_dining_frequency" value="monthly">
+         <label for="monthly_dining" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_dining" name="expenses_dining_frequency" value="weekly">
+         <label for="weekly_dining" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_dining_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_entertainment" style="font-size: unset;" class="tooltip"
+         data-tooltip="Concert tickets, movies, sporting events, nightlife, video games.">
+         <span class="tooltip-content"></span>
+         Entertainment:</label>
+       <input type="number" inputmode="numeric" id="expenses_entertainment">
+       <div class="checkbox-button-group" id="expenses_entertainment_frequency">
+         <input type="checkbox" id="annually_entertainment" name="expenses_entertainment_frequency" value="annually">
+         <label for="annually_entertainment" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_entertainment" name="expenses_entertainment_frequency" value="quarterly">
+         <label for="quarterly_entertainment" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_entertainment" name="expenses_entertainment_frequency" value="monthly">
+         <label for="monthly_entertainment" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_entertainment" name="expenses_entertainment_frequency" value="weekly">
+         <label for="weekly_entertainment" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_entertainment_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_vacation">Vacation:</label>
+       <input type="number" inputmode="numeric" id="expenses_vacation">
+       <div class="checkbox-button-group" id="expenses_vacation_frequency">
+         <input type="checkbox" id="annually_vacation" name="expenses_vacation_frequency" value="annually">
+         <label for="annually_vacation" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_vacation" name="expenses_vacation_frequency" value="quarterly">
+         <label for="quarterly_vacation" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_vacation" name="expenses_vacation_frequency" value="monthly">
+         <label for="monthly_vacation" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_vacation" name="expenses_vacation_frequency" value="weekly">
+         <label for="weekly_vacation" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_vacation_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_travel_life_insurance">Life & Travel Insurance:</label>
+       <input type="number" inputmode="numeric" id="expenses_travel_life_insurance">
+       <div class="checkbox-button-group" id="expenses_travel_life_insurance_frequency">
+         <input type="checkbox" id="annually_travel_life_insurance" name="expenses_travel_life_insurance_frequency" value="annually">
+         <label for="annually_travel_life_insurance" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_travel_life_insurance" name="expenses_travel_life_insurance_frequency" value="quarterly">
+         <label for="quarterly_travel_life_insurance" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_travel_life_insurance" name="expenses_travel_life_insurance_frequency" value="monthly">
+         <label for="monthly_travel_life_insurance" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_travel_life_insurance" name="expenses_travel_life_insurance_frequency" value="weekly">
+         <label for="weekly_travel_life_insurance" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_travel_life_insurance_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_subscriptions">Subscriptions:</label>
+       <input type="number" inputmode="numeric" id="expenses_subscriptions">
+       <div class="checkbox-button-group" id="expenses_subscriptions_frequency">
+         <input type="checkbox" id="annually_subscriptions" name="expenses_subscriptions_frequency" value="annually">
+         <label for="annually_subscriptions" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_subscriptions" name="expenses_subscriptions_frequency" value="quarterly">
+         <label for="quarterly_subscriptions" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_subscriptions" name="expenses_subscriptions_frequency" value="monthly">
+         <label for="monthly_subscriptions" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_subscriptions" name="expenses_subscriptions_frequency" value="weekly">
+         <label for="weekly_subscriptions" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_subscriptions_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="expenses_beauty" style="font-size: unset;" class="tooltip"
+         data-tooltip="Include all salon services such as hair, makeup, nails, waxing, eyebrows, teeth whitening, and more.">
+         <span class="tooltip-content"></span>
+         Beauty:</label>
+       <input type="number" inputmode="numeric" id="expenses_beauty">
+       <div class="checkbox-button-group" id="expenses_beauty_frequency">
+         <input type="checkbox" id="annually_beauty" name="expenses_beauty_frequency" value="annually">
+         <label for="annually_beauty" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_beauty" name="expenses_beauty_frequency" value="quarterly">
+         <label for="quarterly_beauty" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_beauty" name="expenses_beauty_frequency" value="monthly">
+         <label for="monthly_beauty" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_beauty" name="expenses_beauty_frequency" value="weekly">
+         <label for="weekly_beauty" class="checkbox-button">1W</label>
+       </div>
+       <span id="expenses_beauty_annual"></span>
+     </div>
+   </div>
+ 
+   <div class="containerround">
+     <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+       data-tooltip="This heading covers all costs related to your living space, including rent or mortgage, utilities, property taxes, insurance, and home maintenance or improvements. It's the foundation of your expense tracking, ensuring your home sweet home remains a sanctuary, not a financial burden.">
+       Housing<span class="tooltip-content"></span>
+     </h2>
+ 
+     <div class="row">
+       <label for="housing_mortgage_payment">Mortgage Payment:</label>
+       <input type="number" inputmode="numeric" id="housing_mortgage_payment">
+       <div class="checkbox-button-group" id="housing_mortgage_payment_frequency">
+         <input type="checkbox" id="annually_mortgage_payment" name="housing_mortgage_payment_frequency" value="annually">
+         <label for="annually_mortgage_payment" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_mortgage_payment" name="housing_mortgage_payment_frequency" value="quarterly">
+         <label for="quarterly_mortgage_payment" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_mortgage_payment" name="housing_mortgage_payment_frequency" value="monthly">
+         <label for="monthly_mortgage_payment" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_mortgage_payment" name="housing_mortgage_payment_frequency" value="weekly">
+         <label for="weekly_mortgage_payment" class="checkbox-button">1W</label>
+       </div>
+       <span id="housing_mortgage_payment_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="housing_rent_payment">Rent:</label>
+       <input type="number" inputmode="numeric" id="housing_rent_payment">
+       <div class="checkbox-button-group" id="housing_rent_payment_frequency">
+         <input type="checkbox" id="annually_rent_payment" name="housing_rent_payment_frequency" value="annually">
+         <label for="annually_rent_payment" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_rent_payment" name="housing_rent_payment_frequency" value="quarterly">
+         <label for="quarterly_rent_payment" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_rent_payment" name="housing_rent_payment_frequency" value="monthly">
+         <label for="monthly_rent_payment" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_rent_payment" name="housing_rent_payment_frequency" value="weekly">
+         <label for="weekly_rent_payment" class="checkbox-button">1W</label>
+       </div>
+       <span id="housing_rent_payment_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="housing_property_tax">Property Tax:</label>
+       <input type="number" inputmode="numeric" id="housing_property_tax">
+       <div class="checkbox-button-group" id="housing_property_tax_frequency">
+         <input type="checkbox" id="annually_property_tax" name="housing_property_tax_frequency" value="annually">
+         <label for="annually_property_tax" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_property_tax" name="housing_property_tax_frequency" value="quarterly">
+         <label for="quarterly_property_tax" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_property_tax" name="housing_property_tax_frequency" value="monthly">
+         <label for="monthly_property_tax" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_property_tax" name="housing_property_tax_frequency" value="weekly">
+         <label for="weekly_property_tax" class="checkbox-button">1W</label>
+       </div>
+       <span id="housing_property_tax_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="housing_condo_fee">Condo Fee:</label>
+       <input type="number" inputmode="numeric" id="housing_condo_fee">
+       <div class="checkbox-button-group" id="housing_condo_fee_frequency">
+         <input type="checkbox" id="annually_condo_fee" name="housing_condo_fee_frequency" value="annually">
+         <label for="annually_condo_fee" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_condo_fee" name="housing_condo_fee_frequency" value="quarterly">
+         <label for="quarterly_condo_fee" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_condo_fee" name="housing_condo_fee_frequency" value="monthly">
+         <label for="monthly_condo_fee" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_condo_fee" name="housing_condo_fee_frequency" value="weekly">
+         <label for="weekly_condo_fee" class="checkbox-button">1W</label>
+       </div>
+       <span id="housing_condo_fee_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="housing_hydro">Hydro:</label>
+       <input type="number" inputmode="numeric" id="housing_hydro">
+       <div class="checkbox-button-group" id="housing_hydro_frequency">
+         <input type="checkbox" id="annually_hydro" name="housing_hydro_frequency" value="annually">
+         <label for="annually_hydro" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_hydro" name="housing_hydro_frequency" value="quarterly">
+         <label for="quarterly_hydro" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_hydro" name="housing_hydro_frequency" value="monthly">
+         <label for="monthly_hydro" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_hydro" name="housing_hydro_frequency" value="weekly">
+         <label for="weekly_hydro" class="checkbox-button">1W</label>
+       </div>
+       <span id="housing_hydro_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="housing_water">Water:</label>
+       <input type="number" inputmode="numeric" id="housing_water">
+       <div class="checkbox-button-group" id="housing_water_frequency">
+         <input type="checkbox" id="annually_water" name="housing_water_frequency" value="annually">
+         <label for="annually_water" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_water" name="housing_water_frequency" value="quarterly">
+         <label for="quarterly_water" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_water" name="housing_water_frequency" value="monthly">
+         <label for="monthly_water" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_water" name="housing_water_frequency" value="weekly">
+         <label for="weekly_water" class="checkbox-button">1W</label>
+       </div>
+       <span id="housing_water_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="housing_gas" style="font-size: unset;" class="tooltip" data-tooltip="Natural gas, propane, wood, oil.">
+         <span class="tooltip-content"></span>
+         Heating:</label>
+       <input type="number" inputmode="numeric" id="housing_gas">
+       <div class="checkbox-button-group" id="housing_gas_frequency">
+         <input type="checkbox" id="annually_gas" name="housing_gas_frequency" value="annually">
+         <label for="annually_gas" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_gas" name="housing_gas_frequency" value="quarterly">
+         <label for="quarterly_gas" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_gas" name="housing_gas_frequency" value="monthly">
+         <label for="monthly_gas" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_gas" name="housing_gas_frequency" value="weekly">
+         <label for="weekly_gas" class="checkbox-button">1W</label>
+       </div>
+       <span id="housing_gas_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="housing_insurance">Insurance:</label>
+       <input type="number" inputmode="numeric" id="housing_insurance">
+       <div class="checkbox-button-group" id="housing_insurance_frequency">
+         <input type="checkbox" id="annually_insurance" name="housing_insurance_frequency" value="annually">
+         <label for="annually_insurance" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_insurance" name="housing_insurance_frequency" value="quarterly">
+         <label for="quarterly_insurance" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_insurance" name="housing_insurance_frequency" value="monthly">
+         <label for="monthly_insurance" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_insurance" name="housing_insurance_frequency" value="weekly">
+         <label for="weekly_insurance" class="checkbox-button">1W</label>
+       </div>
+       <span id="housing_insurance_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="housing_repairs">Repairs:</label>
+       <input type="number" inputmode="numeric" id="housing_repairs">
+       <div class="checkbox-button-group" id="housing_repairs_frequency">
+         <input type="checkbox" id="annually_repairs" name="housing_repairs_frequency" value="annually">
+         <label for="annually_repairs" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_repairs" name="housing_repairs_frequency" value="quarterly">
+         <label for="quarterly_repairs" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_repairs" name="housing_repairs_frequency" value="monthly">
+         <label for="monthly_repairs" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_repairs" name="housing_repairs_frequency" value="weekly">
+         <label for="weekly_repairs" class="checkbox-button">1W</label>
+       </div>
+       <span id="housing_repairs_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="housing_internet">Internet:</label>
+       <input type="number" inputmode="numeric" id="housing_internet">
+       <div class="checkbox-button-group" id="housing_internet_frequency">
+         <input type="checkbox" id="annually_internet" name="housing_internet_frequency" value="annually">
+         <label for="annually_internet" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_internet" name="housing_internet_frequency" value="quarterly">
+         <label for="quarterly_internet" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_internet" name="housing_internet_frequency" value="monthly">
+         <label for="monthly_internet" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_internet" name="housing_internet_frequency" value="weekly">
+         <label for="weekly_internet" class="checkbox-button">1W</label>
+       </div>
+       <span id="housing_internet_annual"></span>
+     </div>
+   </div>
+ 
+   <div id="debt-parent">
+     <div class="containerround">
+       <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+         data-tooltip="Debt payments refer to the regular amounts paid towards loans, credit cards, or any borrowed money. This includes principal and interest, reducing what you owe over time.">
+         Debt Payments<span class="tooltip-content"></span>
+       </h2>
+ 
+       <div class="row">
+         <label for="expenses_line_of_credit_payment">Line of Credit Payment:</label>
+         <input type="number" inputmode="numeric" id="expenses_line_of_credit_payment">
+         <div class="checkbox-button-group" id="expenses_line_of_credit_payment_frequency">
+           <input type="checkbox" id="annually_line_of_credit_payment" name="expenses_line_of_credit_payment_frequency" value="annually">
+           <label for="annually_line_of_credit_payment" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_line_of_credit_payment" name="expenses_line_of_credit_payment_frequency" value="quarterly">
+           <label for="quarterly_line_of_credit_payment" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_line_of_credit_payment" name="expenses_line_of_credit_payment_frequency" value="monthly">
+           <label for="monthly_line_of_credit_payment" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_line_of_credit_payment" name="expenses_line_of_credit_payment_frequency" value="weekly">
+           <label for="weekly_line_of_credit_payment" class="checkbox-button">1W</label>
+         </div>
+         <span id="expenses_line_of_credit_payment_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="expenses_student_loan_payment">Student Loan Payment:</label>
+         <input type="number" inputmode="numeric" id="expenses_student_loan_payment">
+         <div class="checkbox-button-group" id="expenses_student_loan_payment_frequency">
+           <input type="checkbox" id="annually_student_loan_payment" name="expenses_student_loan_payment_frequency" value="annually">
+           <label for="annually_student_loan_payment" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_student_loan_payment" name="expenses_student_loan_payment_frequency" value="quarterly">
+           <label for="quarterly_student_loan_payment" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_student_loan_payment" name="expenses_student_loan_payment_frequency" value="monthly">
+           <label for="monthly_student_loan_payment" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_student_loan_payment" name="expenses_student_loan_payment_frequency" value="weekly">
+           <label for="weekly_student_loan_payment" class="checkbox-button">1W</label>
+         </div>
+         <span id="expenses_student_loan_payment_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="expenses_credit_card_payment" style="font-size: unset;" class="tooltip"
+           data-tooltip="Enter only the payment amount you are making towards the credit card balance carried over from previous billing cycles.">
+           <span class="tooltip-content"></span>
+           Credit Card, Payment on Previous Balance:</label>
+         <input type="number" inputmode="numeric" id="expenses_credit_card_payment">
+         <div class="checkbox-button-group" id="expenses_credit_card_payment_frequency">
+           <input type="checkbox" id="annually_credit_card_payment" name="expenses_credit_card_payment_frequency" value="annually">
+           <label for="annually_credit_card_payment" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_credit_card_payment" name="expenses_credit_card_payment_frequency" value="quarterly">
+           <label for="quarterly_credit_card_payment" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_credit_card_payment" name="expenses_credit_card_payment_frequency" value="monthly">
+           <label for="monthly_credit_card_payment" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_credit_card_payment" name="expenses_credit_card_payment_frequency" value="weekly">
+           <label for="weekly_credit_card_payment" class="checkbox-button">1W</label>
+         </div>
+         <span id="expenses_credit_card_payment_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="expenses_tax_arrears_payment" style="font-size: unset;" class="tooltip" data-tooltip="Unpaid tax from prior years.">
+           <span class="tooltip-content"></span>
+           Tax Arrears Payment:</label>
+         <input type="number" inputmode="numeric" id="expenses_tax_arrears_payment">
+         <div class="checkbox-button-group" id="expenses_tax_arrears_payment_frequency">
+           <input type="checkbox" id="annually_tax_arrears_payment" name="expenses_tax_arrears_payment_frequency" value="annually">
+           <label for="annually_tax_arrears_payment" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_tax_arrears_payment" name="expenses_tax_arrears_payment_frequency" value="quarterly">
+           <label for="quarterly_tax_arrears_payment" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_tax_arrears_payment" name="expenses_tax_arrears_payment_frequency" value="monthly">
+           <label for="monthly_tax_arrears_payment" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_tax_arrears_payment" name="expenses_tax_arrears_payment_frequency" value="weekly">
+           <label for="weekly_tax_arrears_payment" class="checkbox-button">1W</label>
+         </div>
+         <span id="expenses_tax_arrears_payment_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="expenses_small_business_loan_payment">Small Business Loan Payment:</label>
+         <input type="number" inputmode="numeric" id="expenses_small_business_loan_payment">
+         <div class="checkbox-button-group" id="expenses_small_business_loan_payment_frequency">
+           <input type="checkbox" id="annually_small_business_loan_payment" name="expenses_small_business_loan_payment_frequency" value="annually">
+           <label for="annually_small_business_loan_payment" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_small_business_loan_payment" name="expenses_small_business_loan_payment_frequency" value="quarterly">
+           <label for="quarterly_small_business_loan_payment" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_small_business_loan_payment" name="expenses_small_business_loan_payment_frequency" value="monthly">
+           <label for="monthly_small_business_loan_payment" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_small_business_loan_payment" name="expenses_small_business_loan_payment_frequency" value="weekly">
+           <label for="weekly_small_business_loan_payment" class="checkbox-button">1W</label>
+         </div>
+         <span id="expenses_small_business_loan_payment_annual"></span>
+       </div>
+     </div>
+   </div>
+ 
+   <div id="depandant-parent">
+     <div class="containerround">
+       <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+         data-tooltip="Costs associated with supporting family members or others who rely on you financially, plus expenses for pets like food, veterinary care, and pet supplies.">
+         Dependants/Pets<span class="tooltip-content"></span>
+       </h2>
+ 
+       <div class="row">
+         <label for="dependant_day_care">Day Care:</label>
+         <input type="number" inputmode="numeric" id="dependant_day_care">
+         <div class="checkbox-button-group" id="dependant_day_care_frequency">
+           <input type="checkbox" id="annually_day_care" name="dependant_day_care_frequency" value="annually">
+           <label for="annually_day_care" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_day_care" name="dependant_day_care_frequency" value="quarterly">
+           <label for="quarterly_day_care" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_day_care" name="dependant_day_care_frequency" value="monthly">
+           <label for="monthly_day_care" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_day_care" name="dependant_day_care_frequency" value="weekly">
+           <label for="weekly_day_care" class="checkbox-button">1W</label>
+         </div>
+         <span id="dependant_day_care_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="dependant_medical_dental">Medical, Dental & Insurance:</label>
+         <input type="number" inputmode="numeric" id="dependant_medical_dental">
+         <div class="checkbox-button-group" id="dependant_medical_dental_frequency">
+           <input type="checkbox" id="annually_medical_dental_dep" name="dependant_medical_dental_frequency" value="annually">
+           <label for="annually_medical_dental_dep" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_medical_dental_dep" name="dependant_medical_dental_frequency" value="quarterly">
+           <label for="quarterly_medical_dental_dep" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_medical_dental_dep" name="dependant_medical_dental_frequency" value="monthly">
+           <label for="monthly_medical_dental_dep" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_medical_dental_dep" name="dependant_medical_dental_frequency" value="weekly">
+           <label for="weekly_medical_dental_dep" class="checkbox-button">1W</label>
+         </div>
+         <span id="dependant_medical_dental_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="dependant_clothing">Clothing:</label>
+         <input type="number" inputmode="numeric" id="dependant_clothing">
+         <div class="checkbox-button-group" id="dependant_clothing_frequency">
+           <input type="checkbox" id="annually_clothing_dep" name="dependant_clothing_frequency" value="annually">
+           <label for="annually_clothing_dep" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_clothing_dep" name="dependant_clothing_frequency" value="quarterly">
+           <label for="quarterly_clothing_dep" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_clothing_dep" name="dependant_clothing_frequency" value="monthly">
+           <label for="monthly_clothing_dep" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_clothing_dep" name="dependant_clothing_frequency" value="weekly">
+           <label for="weekly_clothing_dep" class="checkbox-button">1W</label>
+         </div>
+         <span id="dependant_clothing_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="dependant_sports_recreation">Sports & Recreation:</label>
+         <input type="number" inputmode="numeric" id="dependant_sports_recreation">
+         <div class="checkbox-button-group" id="dependant_sports_recreation_frequency">
+           <input type="checkbox" id="annually_sports_recreation" name="dependant_sports_recreation_frequency" value="annually">
+           <label for="annually_sports_recreation" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_sports_recreation" name="dependant_sports_recreation_frequency" value="quarterly">
+           <label for="quarterly_sports_recreation" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_sports_recreation" name="dependant_sports_recreation_frequency" value="monthly">
+           <label for="monthly_sports_recreation" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_sports_recreation" name="dependant_sports_recreation_frequency" value="weekly">
+           <label for="weekly_sports_recreation" class="checkbox-button">1W</label>
+         </div>
+         <span id="dependant_sports_recreation_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="dependant_transportation">Transportation:</label>
+         <input type="number" inputmode="numeric" id="dependant_transportation">
+         <div class="checkbox-button-group" id="dependant_transportation_frequency">
+           <input type="checkbox" id="annually_transportation_dep" name="dependant_transportation_frequency" value="annually">
+           <label for="annually_transportation_dep" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_transportation_dep" name="dependant_transportation_frequency" value="quarterly">
+           <label for="quarterly_transportation_dep" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_transportation_dep" name="dependant_transportation_frequency" value="monthly">
+           <label for="monthly_transportation_dep" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_transportation_dep" name="dependant_transportation_frequency" value="weekly">
+           <label for="weekly_transportation_dep" class="checkbox-button">1W</label>
+         </div>
+         <span id="dependant_transportation_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="dependant_tuition">Tuition:</label>
+         <input type="number" inputmode="numeric" id="dependant_tuition">
+         <div class="checkbox-button-group" id="dependant_tuition_frequency">
+           <input type="checkbox" id="annually_tuition" name="dependant_tuition_frequency" value="annually">
+           <label for="annually_tuition" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_tuition" name="dependant_tuition_frequency" value="quarterly">
+           <label for="quarterly_tuition" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_tuition" name="dependant_tuition_frequency" value="monthly">
+           <label for="monthly_tuition" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_tuition" name="dependant_tuition_frequency" value="weekly">
+           <label for="weekly_tuition" class="checkbox-button">1W</label>
+         </div>
+         <span id="dependant_tuition_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="dependant_housing">Housing:</label>
+         <input type="number" inputmode="numeric" id="dependant_housing">
+         <div class="checkbox-button-group" id="dependant_housing_frequency">
+           <input type="checkbox" id="annually_housing_dep" name="dependant_housing_frequency" value="annually">
+           <label for="annually_housing_dep" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_housing_dep" name="dependant_housing_frequency" value="quarterly">
+           <label for="quarterly_housing_dep" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_housing_dep" name="dependant_housing_frequency" value="monthly">
+           <label for="monthly_housing_dep" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_housing_dep" name="dependant_housing_frequency" value="weekly">
+           <label for="weekly_housing_dep" class="checkbox-button">1W</label>
+         </div>
+         <span id="dependant_housing_annual"></span>
+       </div>
+ 
+       <div class="row">
+         <label for="dependant_cellular_service">Cellular Service:</label>
+         <input type="number" inputmode="numeric" id="dependant_cellular_service">
+         <div class="checkbox-button-group" id="dependant_cellular_service_frequency">
+           <input type="checkbox" id="annually_cellular_service" name="dependant_cellular_service_frequency" value="annually">
+           <label for="annually_cellular_service" class="checkbox-button">1Y</label>
+           <input type="checkbox" id="quarterly_cellular_service" name="dependant_cellular_service_frequency" value="quarterly">
+           <label for="quarterly_cellular_service" class="checkbox-button">3M</label>
+           <input type="checkbox" id="monthly_cellular_service" name="dependant_cellular_service_frequency" value="monthly">
+           <label for="monthly_cellular_service" class="checkbox-button">1M</label>
+           <input type="checkbox" id="weekly_cellular_service" name="dependant_cellular_service_frequency" value="weekly">
+           <label for="weekly_cellular_service" class="checkbox-button">1W</label>
+         </div>
+         <span id="dependant_cellular_service_annual"></span>
+       </div>
+     </div>
+   </div>
+ 
+   <div class="containerround">
+     <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+       data-tooltip="Expenses related to travel or moving people or goods, including fuel, public transit fares, vehicle maintenance, insurance, and any car rental or taxi services.">
+       Transportation<span class="tooltip-content"></span>
+     </h2>
+ 
+     <div class="row">
+       <label for="transportation_car_loan_payment">Car Loan Payment:</label>
+       <input type="number" inputmode="numeric" id="transportation_car_loan_payment">
+       <div class="checkbox-button-group" id="transportation_car_loan_payment_frequency">
+         <input type="checkbox" id="annually_car_loan_payment" name="transportation_car_loan_payment_frequency" value="annually">
+         <label for="annually_car_loan_payment" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_car_loan_payment" name="transportation_car_loan_payment_frequency" value="quarterly">
+         <label for="quarterly_car_loan_payment" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_car_loan_payment" name="transportation_car_loan_payment_frequency" value="monthly">
+         <label for="monthly_car_loan_payment" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_car_loan_payment" name="transportation_car_loan_payment_frequency" value="weekly">
+         <label for="weekly_car_loan_payment" class="checkbox-button">1W</label>
+       </div>
+       <span id="transportation_car_loan_payment_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="transportation_insurance">Insurance:</label>
+       <input type="number" inputmode="numeric" id="transportation_insurance">
+       <div class="checkbox-button-group" id="transportation_insurance_frequency">
+         <input type="checkbox" id="annually_insurance_trans" name="transportation_insurance_frequency" value="annually">
+         <label for="annually_insurance_trans" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_insurance_trans" name="transportation_insurance_frequency" value="quarterly">
+         <label for="quarterly_insurance_trans" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_insurance_trans" name="transportation_insurance_frequency" value="monthly">
+         <label for="monthly_insurance_trans" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_insurance_trans" name="transportation_insurance_frequency" value="weekly">
+         <label for="weekly_insurance_trans" class="checkbox-button">1W</label>
+       </div>
+       <span id="transportation_insurance_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="transportation_fuel">Fuel:</label>
+       <input type="number" inputmode="numeric" id="transportation_fuel">
+       <div class="checkbox-button-group" id="transportation_fuel_frequency">
+         <input type="checkbox" id="annually_fuel" name="transportation_fuel_frequency" value="annually">
+         <label for="annually_fuel" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_fuel" name="transportation_fuel_frequency" value="quarterly">
+         <label for="quarterly_fuel" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_fuel" name="transportation_fuel_frequency" value="monthly">
+         <label for="monthly_fuel" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_fuel" name="transportation_fuel_frequency" value="weekly">
+         <label for="weekly_fuel" class="checkbox-button">1W</label>
+       </div>
+       <span id="transportation_fuel_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="transportation_maintenance">Maintenance:</label>
+       <input type="number" inputmode="numeric" id="transportation_maintenance">
+       <div class="checkbox-button-group" id="transportation_maintenance_frequency">
+         <input type="checkbox" id="annually_maintenance" name="transportation_maintenance_frequency" value="annually">
+         <label for="annually_maintenance" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_maintenance" name="transportation_maintenance_frequency" value="quarterly">
+         <label for="quarterly_maintenance" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_maintenance" name="transportation_maintenance_frequency" value="monthly">
+         <label for="monthly_maintenance" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_maintenance" name="transportation_maintenance_frequency" value="weekly">
+         <label for="weekly_maintenance" class="checkbox-button">1W</label>
+       </div>
+       <span id="transportation_maintenance_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="transportation_public_transit">Public Transit:</label>
+       <input type="number" inputmode="numeric" id="transportation_public_transit">
+       <div class="checkbox-button-group" id="transportation_public_transit_frequency">
+         <input type="checkbox" id="annually_public_transit" name="transportation_public_transit_frequency" value="annually">
+         <label for="annually_public_transit" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_public_transit" name="transportation_public_transit_frequency" value="quarterly">
+         <label for="quarterly_public_transit" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_public_transit" name="transportation_public_transit_frequency" value="monthly">
+         <label for="monthly_public_transit" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_public_transit" name="transportation_public_transit_frequency" value="weekly">
+         <label for="weekly_public_transit" class="checkbox-button">1W</label>
+       </div>
+       <span id="transportation_public_transit_annual"></span>
+     </div>
+ 
+     <div class="row">
+       <label for="transportation_ride_hailing">Ride Hailing:</label>
+       <input type="number" inputmode="numeric" id="transportation_ride_hailing">
+       <div class="checkbox-button-group" id="transportation_ride_hailing_frequency">
+         <input type="checkbox" id="annually_ride_hailing" name="transportation_ride_hailing_frequency" value="annually">
+         <label for="annually_ride_hailing" class="checkbox-button">1Y</label>
+         <input type="checkbox" id="quarterly_ride_hailing" name="transportation_ride_hailing_frequency" value="quarterly">
+         <label for="quarterly_ride_hailing" class="checkbox-button">3M</label>
+         <input type="checkbox" id="monthly_ride_hailing" name="transportation_ride_hailing_frequency" value="monthly">
+         <label for="monthly_ride_hailing" class="checkbox-button">1M</label>
+         <input type="checkbox" id="weekly_ride_hailing" name="transportation_ride_hailing_frequency" value="weekly">
+         <label for="weekly_ride_hailing" class="checkbox-button">1W</label>
+       </div>
+       <span id="transportation_ride_hailing_annual"></span>
+     </div>
+   </div>
+ 
+   <div class="containerround">
+     <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt'></i></button>
+   </div>
+ 
+   <div class="hidden">
+     <p><u>Expense:</u> <span id="ANNUALEXPENSESUM"></span></p>
+     <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
+     <p><u>Transportation:</u> <span id="TRANSPORTATION"></span></p>
+     <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
+     <p><u>Dependant:</u> <span id="DEPENDANT"></span></p>
+     <span class="tooltiptext">Total yearly expenditures. Use: Identify spending patterns, budget adjustments.</span>
+     <p><u>Housing:</u> <span id="HOUSING"></span></p>
+     <span class="tooltiptext">Total housing expenses.</span>
+     <p><u>Debt:</u> <span id="DEBT"></span></p>
+     <span class="tooltiptext">Total debt expenses.</span>
+     <p><u>Essential:</u> <span id="ESSENTIAL"></span></p>
+     <span class="tooltiptext">Total essential expenses.</span>
+     <p><u>Discretionary:</u> <span id="DISCRETIONARY"></span></p>
+     <span class="tooltiptext">Total discretionary expenses.</span>
+   </div>
+ 
+   <script src="/index.js"></script>
+   <script type="module" src="/server/scripts/expense.js"></script>
+   <script src="/server/scripts/toolTip.js"></script>
+   <script src="/server/scripts/tray.js"></script>
+ </body>
+ 
+ </html>
