@@ -1444,58 +1444,60 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Total checkbox groups found:', document.querySelectorAll('.checkbox-button-group').length);
   
     document.querySelectorAll('.checkbox-button-group').forEach((group, index) => {
-      try {
-        console.log(`Processing group ${index + 1}: ${group.id || 'no-id'}`);
+        try {
+            console.log(`Processing group ${index + 1}: ${group.id || 'no-id'}`);
   
-        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
-        if (!checkboxes.length) {
-          console.warn(`No checkboxes found in group ${group.id || 'no-id'}`);
-          return;
-        }
+            const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+            if (!checkboxes.length) {
+                console.warn(`No checkboxes found in group ${group.id || 'no-id'}`);
+                return;
+            }
   
-        // Single-selection logic with save
-        checkboxes.forEach(checkbox => {
-          checkbox.addEventListener('change', function() {
-            try {
-              if (this.checked) {
-                checkboxes.forEach(cb => {
-                  if (cb !== this) cb.checked = false;
+            // Single-selection logic with save
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    try {
+                        if (this.checked) {
+                            checkboxes.forEach(cb => {
+                                if (cb !== this) cb.checked = false;
+                            });
+                            // Fix: Use .checkboxrow instead of .row
+                            const input = group.closest('.checkboxrow').querySelector('input[type="number"]');
+                            const inputId = input ? input.id : null;
+                            if (inputId && typeof calculateAnnual === 'function') {
+                                calculateAnnual(inputId, this.value);
+                            }
+                            setCookie(`frequency_${group.id}`, this.value, 365);
+                            console.log(`Saved ${this.value} to cookie for ${group.id}`);
+                        }
+                    } catch (error) {
+                        console.error(`Error in checkbox change for ${group.id}:`, error);
+                    }
                 });
-                const input = group.closest('.row').querySelector('input[type="number"]');
+            });
+  
+            // Load saved selection or default to "annually"
+            const savedFrequency = getCookie(`frequency_${group.id}`);
+            const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) || 
+                                   group.querySelector('input[value="annually"]');
+            if (checkboxToCheck) {
+                checkboxes.forEach(cb => {
+                    if (cb !== checkboxToCheck) cb.checked = false;
+                });
+                checkboxToCheck.checked = true;
+                console.log(`Set ${checkboxToCheck.value} as checked for ${group.id} (saved: ${savedFrequency})`);
+  
+                // Fix: Use .checkboxrow instead of .row here too
+                const input = group.closest('.checkboxrow').querySelector('input[type="number"]');
                 const inputId = input ? input.id : null;
                 if (inputId && typeof calculateAnnual === 'function') {
-                  calculateAnnual(inputId, this.value);
+                    calculateAnnual(inputId, checkboxToCheck.value);
                 }
-                setCookie(`frequency_${group.id}`, this.value, 365);
-                console.log(`Saved ${this.value} to cookie for ${group.id}`);
-              }
-            } catch (error) {
-              console.error(`Error in checkbox change for ${group.id}:`, error);
+            } else {
+                console.warn(`No valid checkbox for saved value '${savedFrequency}' in ${group.id}`);
             }
-          });
-        });
-  
-        // Load saved selection or default to "annually"
-        const savedFrequency = getCookie(`frequency_${group.id}`);
-        const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) || 
-                               group.querySelector('input[value="annually"]');
-        if (checkboxToCheck) {
-          checkboxes.forEach(cb => {
-            if (cb !== checkboxToCheck) cb.checked = false;
-          });
-          checkboxToCheck.checked = true;
-          console.log(`Set ${checkboxToCheck.value} as checked for ${group.id} (saved: ${savedFrequency})`);
-  
-          const input = group.closest('.row').querySelector('input[type="number"]');
-          const inputId = input ? input.id : null;
-          if (inputId && typeof calculateAnnual === 'function') {
-            calculateAnnual(inputId, checkboxToCheck.value);
-          }
-        } else {
-          console.warn(`No valid checkbox for saved value '${savedFrequency}' in ${group.id}`);
+        } catch (error) {
+            console.error(`Error processing group ${group.id || 'no-id'}:`, error);
         }
-      } catch (error) {
-        console.error(`Error processing group ${group.id || 'no-id'}:`, error);
-      }
     });
-  });
+});
