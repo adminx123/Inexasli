@@ -1114,96 +1114,105 @@ textarea {
   padding: 20px 0;
 }
 
+/* Your original checkbox styles, untouched */
 .checkbox-button-group {
   display: flex;
-  gap: 0; /* No gap between buttons */
-  height: 25px; /* Match input height */
-  max-width: 100%; /* Prevent overflow */
+  gap: 0;
+  height: 25px;
+  max-width: 100%;
 }
 
 .checkbox-button-group input[type="checkbox"] {
-  display: none; /* Hide the actual checkbox */
+  display: none;
 }
 
 .checkbox-button {
   display: flex;
   align-items: center;
-  justify-content: center; /* Center the text */
-  flex: 1; /* Equal share within group */
-  height: 25px; /* Match input height */
-  background-color: #f3f3f3; /* Default background */
-  border: 1px solid #0a0a0a; /* Match input border */
+  justify-content: center;
+  flex: 1;
+  height: 25px;
+  background-color: #f3f3f3;
+  border: 1px solid #0a0a0a;
   cursor: pointer;
   text-align: center;
-  font-size: 12px; /* Default size */
-  font-weight: bold; /* Consistent styling */
-  user-select: none; /* Prevent text selection */
+  font-size: 12px;
+  font-weight: bold;
+  user-select: none;
   transition: background-color 0.2s, border-color 0.2s, color 0.2s;
   color: black;
-  min-width: 0; /* Allow shrinking */
-  box-sizing: border-box; /* Include border in width */
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .checkbox-button:hover {
-  background-color: #fdfdfd; /* Hover effect */
+  background-color: #fdfdfd;
   border-color: #bbb;
 }
 
 .checkbox-button-group input[type="checkbox"]:checked + .checkbox-button {
-  background-color: #000000; /* Active state */
+  background-color: #000000;
   border-color: #000000;
-  color: white; /* White text when active */
+  color: white;
 }
 
 /* Checkbox row layout */
 .checkboxrow {
   display: flex;
-  align-items: center; /* Align items vertically */
-  gap: 10px; /* Space between label, input, and checkbox group */
+  align-items: center;
+  gap: 10px;
+}
+
+/* Distort only non-active checkboxrows */
+.checkboxrow:not(.active) {
+  transform: scale(0.9); /* 10% smaller */
+  transition: transform 0.2s ease;
+}
+
+/* Ensure the active row stays normal */
+.checkboxrow.active {
+  transform: none !important; /* No distortion */
 }
 
 .checkboxrow input[type="number"] {
-  height: 25px !important; /* Force height */
-  padding: 0 !important; /* Override .last input padding */
+  height: 25px !important;
+  padding: 0 !important;
   flex: 1;
   min-width: 100px;
   max-width: 300px;
   margin-right: 15px;
 }
 
-/* Checkbox group positioning */
 .checkboxrow .checkbox-button-group {
-  flex: 1; /* Grow to fill remaining space on desktop */
-  margin-right: 0; /* No extra margin */
+  flex: 1;
+  margin-right: 0;
 }
 
-/* Media query for mobile */
+/* Mobile adjustments */
 @media (max-width: 700px) {
   .checkboxrow {
-    flex-direction: column; /* Stack vertically */
-    align-items: stretch; /* Stretch items to full width */
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  @media (max-width: 700px) {
-    .checkboxrow input[type="number"] {
-      width: 100%;
-      max-width: none;
-      margin-right: 0;
-      height: 25px !important;
-      padding: 0 !important;
-    }
+  .checkboxrow input[type="number"] {
+    width: 100%;
+    max-width: none;
+    margin-right: 0;
+    height: 25px !important;
+    padding: 0 !important;
   }
 
   .checkboxrow .checkbox-button-group {
-    width: 100%; /* Match input width */
-    display: flex; /* Keep buttons side by side */
+    width: 100%;
+    display: flex;
   }
 
   .checkbox-button {
-    font-size: 10px; /* Smaller text to fit */
-    flex: 1; /* Equal width within group */
-    overflow: hidden; /* Prevent text overflow */
-    text-overflow: ellipsis; /* Truncate long text */
-    white-space: nowrap; /* Keep text on one line */
+    font-size: 10px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
