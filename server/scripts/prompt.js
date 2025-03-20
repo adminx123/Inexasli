@@ -214,7 +214,7 @@ function generatePrompt(promptType) {
         case 'calorie':
             prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal');
             prompt += `
-The purpose of the estimates is to create a report in the following format:
+The purpose of the estimates is to create a report in the following format. This report needs to preceed everything else:
 Your Goal: Gain Muscle
 Daily Requirements (Target for Muscle Gain):
 Calories: 2587 kcal/day
