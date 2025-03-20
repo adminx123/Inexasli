@@ -884,7 +884,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 }
 
 .last input {
-  padding-top: 10px;
+  padding-top: 5px;
   padding-bottom: 10px;
 }
 
@@ -1163,11 +1163,12 @@ textarea {
 }
 
 .checkboxrow input[type="number"] {
-  height: 25px; /* Match checkbox height */
-  flex: 1; /* Take available space */
-  min-width: 100px; /* Minimum width */
-  max-width: 300px; /* Cap width on desktop */
-  margin-right: 15px; /* Space before checkbox group */
+  height: 25px !important; /* Force height */
+  padding: 0 !important; /* Override .last input padding */
+  flex: 1;
+  min-width: 100px;
+  max-width: 300px;
+  margin-right: 15px;
 }
 
 /* Checkbox group positioning */
@@ -1183,10 +1184,14 @@ textarea {
     align-items: stretch; /* Stretch items to full width */
   }
 
-  .checkboxrow input[type="number"] {
-    width: 100%; /* Full width of row */
-    max-width: none; /* Remove cap on mobile */
-    margin-right: 0; /* No margin */
+  @media (max-width: 700px) {
+    .checkboxrow input[type="number"] {
+      width: 100%;
+      max-width: none;
+      margin-right: 0;
+      height: 25px !important;
+      padding: 0 !important;
+    }
   }
 
   .checkboxrow .checkbox-button-group {
