@@ -1113,12 +1113,12 @@ textarea {
   width: 100%;
   padding: 20px 0;
 }
-
 .checkbox-button-group {
   display: flex;
   gap: 0; /* No gap to ensure full width usage */
   height: 25px; /* Match input height */
   flex: 1; /* Match the flex behavior of input and select */
+  max-width: 100%; /* Prevent overflow beyond parent */
 }
 
 .checkbox-button-group input[type="checkbox"] {
@@ -1140,6 +1140,7 @@ textarea {
   user-select: none; /* Prevent text selection */
   transition: background-color 0.2s, border-color 0.2s, color 0.2s;
   color: black;
+  min-width: 0; /* Allow shrinking below content size */
 }
 
 .checkbox-button:hover {
@@ -1158,10 +1159,18 @@ textarea {
   margin-right: 15px; /* Match .row input[type="number"] margin */
 }
 
-/* Media query to match input/select behavior */
+/* Media query for mobile */
 @media (max-width: 700px) {
   .row .checkbox-button-group {
-    width: 100%; /* Match input and select */
+    width: 100%; /* Full width of the row */
     margin-right: 0; /* Align with other elements */
+    flex-wrap: wrap; /* Allow buttons to wrap to new lines */
+    height: auto; /* Allow height to adjust based on content */
+  }
+
+  .checkbox-button {
+    flex: 1 1 50%; /* Each button takes ~50% width, wrapping to 2 per row */
+    box-sizing: border-box; /* Include border in width calculation */
+    font-size: 10px; /* Slightly smaller text for mobile */
   }
 }
