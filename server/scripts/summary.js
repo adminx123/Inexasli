@@ -169,31 +169,31 @@ if (isNaN(FIRERATIO)) {
 }
 
 // SAVINGSTODEBT
-let SAVINGSTODEBT = parseFloat(getCookie('LIQUIDASSETS')) / parseFloat(getCookie('LIABILITIES')) || 0;
+let ASSETS = parseFloat(getCookie('ASSETS')) || 0;
+let LIABILITIES = parseFloat(getCookie('LIABILITIES')) || 0;
+let SAVINGSTODEBT = LIABILITIES === 0 ? NaN : ASSETS / LIABILITIES; // Avoid division by 0
 
-function colorChangeSavingsToDebt() {
-    const savingsToDebt = parseFloat(document.getElementById("SAVINGSTODEBT").textContent);
-    const greatRange = 2;
-    const goodMinRange = 1;
-    const goodMaxRange = 2;
+function colorChangeSavingsToDebt(savingsToDebt) {
+  if (isNaN(savingsToDebt)) return; // Skip coloring if NaN
+  const greatRange = 2;
+  const goodMinRange = 1;
+  const goodMaxRange = 2;
 
-    if (savingsToDebt >= greatRange) {
-        document.getElementById("SAVINGSTODEBT").style.color = "green";
-    } else if (savingsToDebt >= goodMinRange && savingsToDebt <= goodMaxRange) {
-        document.getElementById("SAVINGSTODEBT").style.color = "orange";
-    } else {
-        document.getElementById("SAVINGSTODEBT").style.color = "red";
-    }
+  if (savingsToDebt >= greatRange) {
+    document.getElementById("SAVINGSTODEBT").style.color = "green";
+  } else if (savingsToDebt >= goodMinRange && savingsToDebt <= goodMaxRange) {
+    document.getElementById("SAVINGSTODEBT").style.color = "orange";
+  } else {
+    document.getElementById("SAVINGSTODEBT").style.color = "red";
+  }
 }
 
+// Display logic
 if (isNaN(SAVINGSTODEBT)) {
-    document.getElementById('SAVINGSTODEBT').textContent = 'Not Applicable';
-} else if (SAVINGSTODEBT === 0) {
-    document.getElementById('SAVINGSTODEBT').textContent = 'RISK OF INSOLVENCY';
-    document.getElementById('SAVINGSTODEBT').style.color = "red";
+  document.getElementById('SAVINGSTODEBT').textContent = 'Not Applicable';
 } else {
-    document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(2);
-    colorChangeSavingsToDebt();
+  document.getElementById('SAVINGSTODEBT').textContent = SAVINGSTODEBT.toFixed(2);
+  colorChangeSavingsToDebt(SAVINGSTODEBT);
 }
 
 // HOUSINGTOINCOME
