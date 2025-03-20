@@ -343,3 +343,23 @@ window.calculateAll = function() {
   setCookie("ESSENTIAL", ESSENTIAL, 365);
   setCookie("DISCRETIONARY", DISCRETIONARY, 365);
 };
+
+// Add distort on input click
+document.querySelectorAll('.checkboxrow input[type="number"]').forEach(input => {
+  input.addEventListener('click', function() {
+    const row = this.closest('.checkboxrow');
+    
+    // Remove active from all rows
+    document.querySelectorAll('.checkboxrow').forEach(r => r.classList.remove('active'));
+    
+    // Add active to the clicked row
+    row.classList.add('active');
+  });
+});
+
+// Clear active when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.checkboxrow')) {
+    document.querySelectorAll('.checkboxrow').forEach(r => r.classList.remove('active'));
+  }
+});
