@@ -25,5 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (region === 'USA') {
         hideShowClass('usa-hide', 'show');
         hideShowClass('can-hide', 'hide');
+    } else {
+        // Default case: no region picked (null, undefined, empty string, or anything else)
+        hideShowClass('usa-hide', 'hide');
+        hideShowClass('can-hide', 'hide');
     }
 });
