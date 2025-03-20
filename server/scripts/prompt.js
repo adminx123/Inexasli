@@ -409,7 +409,7 @@ function generatePrompt(promptType) {
     if (prompt) {
         document.getElementById('result').textContent = prompt;
         navigator.clipboard.writeText(prompt).then(() => {
-            alert(`Prompt copied to clipboard. Proceed to Grok, ChatGPT, Gemini, Deepseek, etc and paste:\n\n${prompt}`);
+            alert(`Prompt copied to clipboard. Proceed to Grok, ChatGPT, Gemini, Deepseek, etc and paste: **Disclaimer** The AI systems you are pasting this into may make errors or misinterpret the information provided. Always verify the output independently.\n\n${prompt}`);
         }).catch(err => {
             console.error('Failed to copy prompt:', err);
             alert('Failed to copy prompt to clipboard.');
