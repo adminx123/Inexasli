@@ -214,26 +214,18 @@ function generatePrompt(promptType) {
         case 'calorie':
             prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal');
             prompt += `
-The purpose of the estimates is to create a report in the following format. This report needs to preceed everything else:
-Your Goal: Gain Muscle
-Daily Requirements (Target for Muscle Gain):
-Calories: 2587 kcal/day
-Protein: 158.8 g
-Carbs: 317.6 g
-Fats: 79.4 g
-
-Food Log Intake:
-Calories: 1104 kcal (43% of goal)
-Protein: 80 g (50% of goal)
-Carbs: 86 g (27% of goal)
-Fats: 50 g (63% of goal)
-
-Recommendations:
-Increase calories by 1483 kcal to hit your target.
-Add approximately 79 g of protein to reach your goal.
-Boost carbs by 232 g.
-Add 29 g more fats to meet your daily fat requirement.
-`;
+            The purpose of the estimates is to create a report in the following format:
+            
+            ### Your Goal: Gain Muscle
+            
+            | Nutrient | Target Amount     | Food Log Intake  | Percentage Reached |
+            |----------|-------------------|------------------|--------------------|
+            | Calories | 2587 kcal/day     | 1104 kcal        | 43%                |
+            | Protein  | 158.8 g           | 80 g             | 50%                |
+            | Carbs    | 317.6 g           | 86 g             | 27%                |
+            | Fats     | 79.4 g            | 50 g             | 63%                |
+            `
+            
             const weight = document.getElementById('calorie-weight');
             if (weight?.value) prompt += formatList(weight.value, 'Weight');
             const height = document.getElementById('calorie-height');
