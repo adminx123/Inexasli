@@ -6,62 +6,48 @@
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
-  */ 
+ */
 
+import { displayWarning, hideShow } from "./utils.js";
+import { setCookie } from '/server/scripts/setcookie.js';
+import { getCookie } from '/server/scripts/getcookie.js';
 
-import { displayWarning, hideShow } from "./utils.js"
-import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
-import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
-
-
-
-const tabs = document.querySelectorAll('.tab')
-
+// Tab highlighting
+const tabs = document.querySelectorAll('.tab');
 tabs.forEach(tab => {
-  const dataL = tab.getAttribute('data-location')
-  const location = document.location.pathname
-
-
+  const dataL = tab.getAttribute('data-location');
+  const location = document.location.pathname;
   if (location.includes(dataL)) {
-    tab.removeAttribute('href')
-
-    tab.classList.add('active')
+    tab.removeAttribute('href');
+    tab.classList.add('active');
   }
-})
+});
 
+// Global variables for totals
+let ANNUALEXPENSESUM = 0;
+let HOUSING = 0;
+let TRANSPORTATION = 0;
+let ESSENTIAL = 0;
+let DISCRETIONARY = 0;
+let DEBT = 0;
+let DEPENDANT = 0;
 
-var ANNUALEXPENSESUM;
-var HOUSING;
-var TRANSPORTATION;
-var ESSENTIAL;
-var DISCRETIONARY;
-var DEBT;
-var DEPENDANT;
-
-;
-
-
-function calculateAnnual(inputId, frequencyId) {
-  const input = parseFloat(document.getElementById(inputId).value) || 0;
-  const frequency = document.getElementById(frequencyId).value;
-
+// Calculate annual amount based on frequency
+function calculateAnnual(inputId, frequency) {
+  const input = document.getElementById(inputId);
+  if (!input || !input.value) return 0;
+  const amount = parseFloat(input.value) || 0;
   switch (frequency) {
-    case 'annually':
-      return input;
-    case 'quarterly':
-      return input * 4;
-    case 'monthly':
-      return input * 12;
-    case 'weekly':
-      return input * 52;
-    default:
-      return 0;
+    case 'annually': return amount;
+    case 'quarterly': return amount * 4;
+    case 'monthly': return amount * 12;
+    case 'weekly': return amount * 52;
+    default: return 0;
   }
 }
 
-
+// Calculate total annual expenses
 function calculateNormalizedSum() {
-  // Define all expense fields with their corresponding frequency fields
   const expenseFields = [
     ['expenses_grocery', 'expenses_grocery_frequency'],
     ['expenses_fitness', 'expenses_fitness_frequency'],
@@ -70,13 +56,10 @@ function calculateNormalizedSum() {
     ['expenses_cellphone_service', 'expenses_cellphone_service_frequency'],
     ['expenses_medical_dental', 'expenses_medical_dental_frequency'],
     ['expenses_perscription', 'expenses_perscription_frequency'],
-
     ['expenses_dining', 'expenses_dining_frequency'],
     ['expenses_subscriptions', 'expenses_subscriptions_frequency'],
     ['expenses_vacation', 'expenses_vacation_frequency'],
-
     ['expenses_beauty', 'expenses_beauty_frequency'],
-
     ['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
     ['expenses_entertainment', 'expenses_entertainment_frequency'],
     ['expenses_line_of_credit_payment', 'expenses_line_of_credit_payment_frequency'],
@@ -108,28 +91,20 @@ function calculateNormalizedSum() {
     ['dependant_tuition', 'dependant_tuition_frequency'],
     ['dependant_housing', 'dependant_housing_frequency'],
     ['dependant_cellular_service', 'dependant_cellular_service_frequency']
-    // Add more expense fields here
   ];
-  let annualExpenseSum = 0;
 
-  // Calculate annual expense sum
-  expenseFields.forEach(field => {
-    const [inputId, frequencyId] = field;
-    annualExpenseSum += calculateAnnual(inputId, frequencyId);
+  let annualExpenseSum = 0;
+  expenseFields.forEach(([inputId, frequencyGroupId]) => {
+    const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+    const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+    annualExpenseSum += calculateAnnual(inputId, frequency);
   });
 
   ANNUALEXPENSESUM = annualExpenseSum;
-
-  // Display the results
   document.getElementById('ANNUALEXPENSESUM').textContent = `$${ANNUALEXPENSESUM.toFixed(2)}`;
-
-
 }
 
-
-
-
-
+// Category-specific calculations
 function essentialExpenses() {
   const essentialFields = [
     ['expenses_grocery', 'expenses_grocery_frequency'],
@@ -142,43 +117,36 @@ function essentialExpenses() {
   ];
 
   let essential = 0;
-
-  for (const [expenseField, frequencyField] of essentialFields) {
-    essential += calculateAnnual(expenseField, frequencyField);
-  }
+  essentialFields.forEach(([inputId, frequencyGroupId]) => {
+    const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+    const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+    essential += calculateAnnual(inputId, frequency);
+  });
 
   ESSENTIAL = essential;
-
   document.getElementById('ESSENTIAL').textContent = `$${ESSENTIAL.toFixed(2)}`;
-
-
 }
 
 function discretionaryExpenses() {
   const discretionaryFields = [
     ['expenses_dining', 'expenses_dining_frequency'],
     ['expenses_subscriptions', 'expenses_subscriptions_frequency'],
-
     ['expenses_vacation', 'expenses_vacation_frequency'],
     ['expenses_beauty', 'expenses_beauty_frequency'],
-
     ['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
     ['expenses_entertainment', 'expenses_entertainment_frequency']
   ];
 
   let discretionary = 0;
-
-  for (const [expenseField, frequencyField] of discretionaryFields) {
-    discretionary += calculateAnnual(expenseField, frequencyField);
-  }
+  discretionaryFields.forEach(([inputId, frequencyGroupId]) => {
+    const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+    const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+    discretionary += calculateAnnual(inputId, frequency);
+  });
 
   DISCRETIONARY = discretionary;
-
   document.getElementById('DISCRETIONARY').textContent = `$${DISCRETIONARY.toFixed(2)}`;
-
-
 }
-
 
 function housingExpenses() {
   const housingFields = [
@@ -195,16 +163,14 @@ function housingExpenses() {
   ];
 
   let housing = 0;
-
-  for (const [expenseField, frequencyField] of housingFields) {
-    housing += calculateAnnual(expenseField, frequencyField);
-  }
+  housingFields.forEach(([inputId, frequencyGroupId]) => {
+    const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+    const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+    housing += calculateAnnual(inputId, frequency);
+  });
 
   HOUSING = housing;
-
   document.getElementById('HOUSING').textContent = `$${HOUSING.toFixed(2)}`;
-
-
 }
 
 function transportationExpenses() {
@@ -215,20 +181,17 @@ function transportationExpenses() {
     ['transportation_maintenance', 'transportation_maintenance_frequency'],
     ['transportation_public_transit', 'transportation_public_transit_frequency'],
     ['transportation_ride_hailing', 'transportation_ride_hailing_frequency']
-
   ];
 
   let transportation = 0;
-
-  for (const [expenseField, frequencyField] of transportationFields) {
-    transportation += calculateAnnual(expenseField, frequencyField);
-  }
+  transportationFields.forEach(([inputId, frequencyGroupId]) => {
+    const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+    const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+    transportation += calculateAnnual(inputId, frequency);
+  });
 
   TRANSPORTATION = transportation;
-
   document.getElementById('TRANSPORTATION').textContent = `$${TRANSPORTATION.toFixed(2)}`;
-
-
 }
 
 function dependantExpenses() {
@@ -241,20 +204,17 @@ function dependantExpenses() {
     ['dependant_tuition', 'dependant_tuition_frequency'],
     ['dependant_housing', 'dependant_housing_frequency'],
     ['dependant_cellular_service', 'dependant_cellular_service_frequency']
-
   ];
 
   let dependant = 0;
-
-  for (const [expenseField, frequencyField] of dependantFields) {
-    dependant += calculateAnnual(expenseField, frequencyField);
-  }
+  dependantFields.forEach(([inputId, frequencyGroupId]) => {
+    const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+    const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+    dependant += calculateAnnual(inputId, frequency);
+  });
 
   DEPENDANT = dependant;
-
   document.getElementById('DEPENDANT').textContent = `$${DEPENDANT.toFixed(2)}`;
-
-
 }
 
 function debtExpenses() {
@@ -267,134 +227,107 @@ function debtExpenses() {
   ];
 
   let debt = 0;
-
-  for (const [expenseField, frequencyField] of debtFields) {
-    debt += calculateAnnual(expenseField, frequencyField);
-  }
+  debtFields.forEach(([inputId, frequencyGroupId]) => {
+    const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+    const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+    debt += calculateAnnual(inputId, frequency);
+  });
 
   DEBT = debt;
-
   document.getElementById('DEBT').textContent = `$${DEBT.toFixed(2)}`;
-
-
 }
 
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
-  // List of form element IDs you want to set based on cookies
+// Event listeners and initialization
+document.addEventListener('DOMContentLoaded', () => {
   const formElements = [
-    'expenses_grocery',
-    'expenses_dining',
-    'expenses_fitness',
-    'expenses_hygiene',
-    'expenses_subscriptions',
-    'expenses_entertainment',
-    'expenses_clothing',
-    'expenses_vacation',
-    'expenses_beauty',
-    'expenses_travel_life_insurance',
-    'expenses_cellphone_service',
-    'expenses_medical_dental',
-    'expenses_perscription',
-    'expenses_line_of_credit_payment',
-    'expenses_student_loan_payment',
-    'expenses_credit_card_payment',
-    'expenses_tax_arrears_payment',
-    'expenses_small_business_loan_payment',
-    'housing_mortgage_payment',
-    'housing_rent_payment',
-    'housing_property_tax',
-    'housing_condo_fee',
-    'housing_hydro',
-    'housing_insurance',
-    'housing_repairs',
-    'housing_water',
-    'housing_gas',
-    'housing_internet',
-    'transportation_car_loan_payment',
-    'transportation_insurance',
-    'transportation_fuel',
-    'transportation_maintenance',
-    'transportation_public_transit',
-    'transportation_ride_hailing',
-    'dependant_day_care',
-    'dependant_medical_dental',
-    'dependant_clothing',
-    'dependant_sports_recreation',
-    'dependant_transportation',
-    'dependant_tuition',
-    'dependant_housing',
-    'dependant_cellular_service',
-    //
-    'expenses_grocery_frequency',
-    'expenses_dining_frequency',
-    'expenses_fitness_frequency',
-    'expenses_hygiene_frequency',
-    'expenses_subscriptions_frequency',
-    'expenses_entertainment_frequency',
-    'expenses_clothing_frequency',
-    'expenses_vacation_frequency',
-    'expenses_beauty_frequency',
-    'expenses_travel_life_insurance_frequency',
-    'expenses_cellphone_service_frequency',
-    'expenses_medical_dental_frequency',
-    'expenses_prescription_frequency',
-    'expenses_line_of_credit_payment_frequency',
-    'expenses_student_loan_payment_frequency',
-    'expenses_credit_card_payment_frequency',
-    'expenses_tax_arrears_payment_frequency',
-    'expenses_small_business_loan_payment_frequency',
-    'housing_mortgage_payment_frequency',
-    'housing_rent_payment_frequency',
-    'housing_property_tax_frequency',
-    'housing_condo_fee_frequency',
-    'housing_hydro_frequency',
-    'housing_insurance_frequency',
-    'housing_repairs_frequency',
-    'housing_water_frequency',
-    'housing_gas_frequency',
-    'housing_internet_frequency',
-    'transportation_car_loan_payment_frequency',
-    'transportation_insurance_frequency',
-    'transportation_fuel_frequency',
-    'transportation_maintenance_frequency',
-    'transportation_public_transit_frequency',
-    'transportation_ride_hailing_frequency',
-    'dependant_day_care_frequency',
-    'dependant_medical_dental_frequency',
-    'dependant_clothing_frequency',
-    'dependant_sports_recreation_frequency',
-    'dependant_transportation_frequency',
-    'dependant_tuition_frequency',
-    'dependant_housing_frequency',
-    'dependant_cellular_service_frequency'
-];
+    'expenses_grocery', 'expenses_dining', 'expenses_fitness', 'expenses_hygiene', 'expenses_subscriptions',
+    'expenses_entertainment', 'expenses_clothing', 'expenses_vacation', 'expenses_beauty',
+    'expenses_travel_life_insurance', 'expenses_cellphone_service', 'expenses_medical_dental',
+    'expenses_perscription', 'expenses_line_of_credit_payment', 'expenses_student_loan_payment',
+    'expenses_credit_card_payment', 'expenses_tax_arrears_payment', 'expenses_small_business_loan_payment',
+    'housing_mortgage_payment', 'housing_rent_payment', 'housing_property_tax', 'housing_condo_fee',
+    'housing_hydro', 'housing_insurance', 'housing_repairs', 'housing_water', 'housing_gas',
+    'housing_internet', 'transportation_car_loan_payment', 'transportation_insurance', 'transportation_fuel',
+    'transportation_maintenance', 'transportation_public_transit', 'transportation_ride_hailing',
+    'dependant_day_care', 'dependant_medical_dental', 'dependant_clothing', 'dependant_sports_recreation',
+    'dependant_transportation', 'dependant_tuition', 'dependant_housing', 'dependant_cellular_service'
+  ];
 
-  // Loop through each element ID and set the value using getCookie
-  formElements.forEach(function(elementId) {
-    const value = getCookie(elementId); // Get the value from the cookie
+  // Load saved input values and attach listeners
+  formElements.forEach(elementId => {
     const element = document.getElementById(elementId);
-    if (element) { // Check if the element exists before trying to set its value
-      element.value = value;
+    if (!element) return;
+
+    const savedValue = getCookie(elementId);
+    if (savedValue) element.value = savedValue;
+
+    element.addEventListener('input', () => {
+      setCookie(elementId, element.value, 365);
+      calculateAll();
+    });
+  });
+
+  // Setup checkbox groups
+  document.querySelectorAll('.checkbox-button-group').forEach(group => {
+    const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+    if (!checkboxes.length) return;
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        if (this.checked) {
+          checkboxes.forEach(cb => {
+            if (cb !== this) cb.checked = false;
+          });
+          setCookie(`frequency_${group.id}`, this.value, 365);
+          calculateAll();
+        }
+      });
+    });
+
+    const savedFrequency = getCookie(`frequency_${group.id}`);
+    const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) || 
+                           group.querySelector('input[value="annually"]');
+    if (checkboxToCheck) {
+      checkboxes.forEach(cb => {
+        if (cb !== checkboxToCheck) cb.checked = false;
+      });
+      checkboxToCheck.checked = true;
     }
   });
+
+  // Initial calculations
+  calculateAll();
+
+  // Conditional UI updates
+  const romanticexpenseCookie = getCookie('romanticexpense');
+  const debtcheckboxCookie = getCookie('debtcheckbox');
+  const dependantcheckboxCookie = getCookie('dependantcheckbox');
+
+  if (romanticexpenseCookie === 'checked') {
+    displayWarning("You've indicated that you share expenses with your romantic partner. Include only your portion of the expenditures here.");
+  }
+
+  if (dependantcheckboxCookie === 'checked') {
+    hideShow('depandant-parent', 'show');
+  } else if (dependantcheckboxCookie === 'unChecked') {
+    hideShow('depandant-parent', 'hide');
+  }
+
+  if (debtcheckboxCookie === 'checked') {
+    hideShow('debt-parent', 'show');
+  } else if (debtcheckboxCookie === 'unChecked') {
+    hideShow('debt-parent', 'hide');
+  }
 });
 
-window.calculateNext = function () {
+// Navigation and calculation functions
+window.calculateNext = function() {
   calculateAll();
   window.location.href = '/budget/asset.html';
-}
+};
 
-
-
-window.calculateAll = function () {
-
+window.calculateAll = function() {
   calculateNormalizedSum();
-
   housingExpenses();
   transportationExpenses();
   dependantExpenses();
@@ -409,125 +342,4 @@ window.calculateAll = function () {
   setCookie("DEBT", DEBT, 365);
   setCookie("ESSENTIAL", ESSENTIAL, 365);
   setCookie("DISCRETIONARY", DISCRETIONARY, 365);
-  
-
-    // Frequency fields
-    setCookie("expenses_grocery_frequency", document.getElementById("expenses_grocery_frequency").value.trim() !== "" ? document.getElementById("expenses_grocery_frequency").value : "0", 365);
-    setCookie("expenses_dining_frequency", document.getElementById("expenses_dining_frequency").value.trim() !== "" ? document.getElementById("expenses_dining_frequency").value : "0", 365);
-    setCookie("expenses_fitness_frequency", document.getElementById("expenses_fitness_frequency").value.trim() !== "" ? document.getElementById("expenses_fitness_frequency").value : "0", 365);
-    setCookie("expenses_hygiene_frequency", document.getElementById("expenses_hygiene_frequency").value.trim() !== "" ? document.getElementById("expenses_hygiene_frequency").value : "0", 365);
-    setCookie("expenses_subscriptions_frequency", document.getElementById("expenses_subscriptions_frequency").value.trim() !== "" ? document.getElementById("expenses_subscriptions_frequency").value : "0", 365);
-    setCookie("expenses_entertainment_frequency", document.getElementById("expenses_entertainment_frequency").value.trim() !== "" ? document.getElementById("expenses_entertainment_frequency").value : "0", 365);
-    setCookie("expenses_clothing_frequency", document.getElementById("expenses_clothing_frequency").value.trim() !== "" ? document.getElementById("expenses_clothing_frequency").value : "0", 365);
-    setCookie("expenses_vacation_frequency", document.getElementById("expenses_vacation_frequency").value.trim() !== "" ? document.getElementById("expenses_vacation_frequency").value : "0", 365);
-    setCookie("expenses_beauty_frequency", document.getElementById("expenses_beauty_frequency").value.trim() !== "" ? document.getElementById("expenses_beauty_frequency").value : "0", 365);
-    setCookie("expenses_travel_life_insurance_frequency", document.getElementById("expenses_travel_life_insurance_frequency").value.trim() !== "" ? document.getElementById("expenses_travel_life_insurance_frequency").value : "0", 365);
-    setCookie("expenses_cellphone_service_frequency", document.getElementById("expenses_cellphone_service_frequency").value.trim() !== "" ? document.getElementById("expenses_cellphone_service_frequency").value : "0", 365);
-    setCookie("expenses_medical_dental_frequency", document.getElementById("expenses_medical_dental_frequency").value.trim() !== "" ? document.getElementById("expenses_medical_dental_frequency").value : "0", 365);
-    setCookie("expenses_perscription_frequency", document.getElementById("expenses_perscription_frequency").value.trim() !== "" ? document.getElementById("expenses_perscription_frequency").value : "0", 365);
-    setCookie("expenses_line_of_credit_payment_frequency", document.getElementById("expenses_line_of_credit_payment_frequency").value.trim() !== "" ? document.getElementById("expenses_line_of_credit_payment_frequency").value : "0", 365);
-    setCookie("expenses_student_loan_payment_frequency", document.getElementById("expenses_student_loan_payment_frequency").value.trim() !== "" ? document.getElementById("expenses_student_loan_payment_frequency").value : "0", 365);
-    setCookie("expenses_credit_card_payment_frequency", document.getElementById("expenses_credit_card_payment_frequency").value.trim() !== "" ? document.getElementById("expenses_credit_card_payment_frequency").value : "0", 365);
-    setCookie("expenses_tax_arrears_payment_frequency", document.getElementById("expenses_tax_arrears_payment_frequency").value.trim() !== "" ? document.getElementById("expenses_tax_arrears_payment_frequency").value : "0", 365);
-    setCookie("expenses_small_business_loan_payment_frequency", document.getElementById("expenses_small_business_loan_payment_frequency").value.trim() !== "" ? document.getElementById("expenses_small_business_loan_payment_frequency").value : "0", 365);
-    setCookie("housing_mortgage_payment_frequency", document.getElementById("housing_mortgage_payment_frequency").value.trim() !== "" ? document.getElementById("housing_mortgage_payment_frequency").value : "0", 365);
-    setCookie("housing_rent_payment_frequency", document.getElementById("housing_rent_payment_frequency").value.trim() !== "" ? document.getElementById("housing_rent_payment_frequency").value : "0", 365);
-    setCookie("housing_property_tax_frequency", document.getElementById("housing_property_tax_frequency").value.trim() !== "" ? document.getElementById("housing_property_tax_frequency").value : "0", 365);
-    setCookie("housing_condo_fee_frequency", document.getElementById("housing_condo_fee_frequency").value.trim() !== "" ? document.getElementById("housing_condo_fee_frequency").value : "0", 365);
-    setCookie("housing_hydro_frequency", document.getElementById("housing_hydro_frequency").value.trim() !== "" ? document.getElementById("housing_hydro_frequency").value : "0", 365);
-    setCookie("housing_insurance_frequency", document.getElementById("housing_insurance_frequency").value.trim() !== "" ? document.getElementById("housing_insurance_frequency").value : "0", 365);
-    setCookie("housing_repairs_frequency", document.getElementById("housing_repairs_frequency").value.trim() !== "" ? document.getElementById("housing_repairs_frequency").value : "0", 365);
-    setCookie("housing_water_frequency", document.getElementById("housing_water_frequency").value.trim() !== "" ? document.getElementById("housing_water_frequency").value : "0", 365);
-    setCookie("housing_gas_frequency", document.getElementById("housing_gas_frequency").value.trim() !== "" ? document.getElementById("housing_gas_frequency").value : "0", 365);
-    setCookie("housing_internet_frequency", document.getElementById("housing_internet_frequency").value.trim() !== "" ? document.getElementById("housing_internet_frequency").value : "0", 365);
-    setCookie("transportation_car_loan_payment_frequency", document.getElementById("transportation_car_loan_payment_frequency").value.trim() !== "" ? document.getElementById("transportation_car_loan_payment_frequency").value : "0", 365);
-    setCookie("transportation_insurance_frequency", document.getElementById("transportation_insurance_frequency").value.trim() !== "" ? document.getElementById("transportation_insurance_frequency").value : "0", 365);
-    setCookie("transportation_fuel_frequency", document.getElementById("transportation_fuel_frequency").value.trim() !== "" ? document.getElementById("transportation_fuel_frequency").value : "0", 365);
-    setCookie("transportation_maintenance_frequency", document.getElementById("transportation_maintenance_frequency").value.trim() !== "" ? document.getElementById("transportation_maintenance_frequency").value : "0", 365);
-    setCookie("transportation_public_transit_frequency", document.getElementById("transportation_public_transit_frequency").value.trim() !== "" ? document.getElementById("transportation_public_transit_frequency").value : "0", 365);
-    setCookie("transportation_ride_hailing_frequency", document.getElementById("transportation_ride_hailing_frequency").value.trim() !== "" ? document.getElementById("transportation_ride_hailing_frequency").value : "0", 365);
-    setCookie("dependant_day_care_frequency", document.getElementById("dependant_day_care_frequency").value.trim() !== "" ? document.getElementById("dependant_day_care_frequency").value : "0", 365);
-    setCookie("dependant_medical_dental_frequency", document.getElementById("dependant_medical_dental_frequency").value.trim() !== "" ? document.getElementById("dependant_medical_dental_frequency").value : "0", 365);
-    setCookie("dependant_clothing_frequency", document.getElementById("dependant_clothing_frequency").value.trim() !== "" ? document.getElementById("dependant_clothing_frequency").value : "0", 365);
-    setCookie("dependant_sports_recreation_frequency", document.getElementById("dependant_sports_recreation_frequency").value.trim() !== "" ? document.getElementById("dependant_sports_recreation_frequency").value : "0", 365);
-    setCookie("dependant_transportation_frequency", document.getElementById("dependant_transportation_frequency").value.trim() !== "" ? document.getElementById("dependant_transportation_frequency").value : "0", 365);
-    setCookie("dependant_tuition_frequency", document.getElementById("dependant_tuition_frequency").value.trim() !== "" ? document.getElementById("dependant_tuition_frequency").value : "0", 365);
-    setCookie("dependant_housing_frequency", document.getElementById("dependant_housing_frequency").value.trim() !== "" ? document.getElementById("dependant_housing_frequency").value : "0", 365);
-    setCookie("dependant_cellular_service_frequency", document.getElementById("dependant_cellular_service_frequency").value.trim() !== "" ? document.getElementById("dependant_cellular_service_frequency").value : "0", 365);
-
-    // Expense fields
-    setCookie("expenses_grocery", document.getElementById("expenses_grocery").value.trim() !== "" ? document.getElementById("expenses_grocery").value : "0", 365);
-    setCookie("expenses_dining", document.getElementById("expenses_dining").value.trim() !== "" ? document.getElementById("expenses_dining").value : "0", 365);
-    setCookie("expenses_fitness", document.getElementById("expenses_fitness").value.trim() !== "" ? document.getElementById("expenses_fitness").value : "0", 365);
-    setCookie("expenses_hygiene", document.getElementById("expenses_hygiene").value.trim() !== "" ? document.getElementById("expenses_hygiene").value : "0", 365);
-    setCookie("expenses_subscriptions", document.getElementById("expenses_subscriptions").value.trim() !== "" ? document.getElementById("expenses_subscriptions").value : "0", 365);
-    setCookie("expenses_entertainment", document.getElementById("expenses_entertainment").value.trim() !== "" ? document.getElementById("expenses_entertainment").value : "0", 365);
-    setCookie("expenses_clothing", document.getElementById("expenses_clothing").value.trim() !== "" ? document.getElementById("expenses_clothing").value : "0", 365);
-    setCookie("expenses_beauty", document.getElementById("expenses_beauty").value.trim() !== "" ? document.getElementById("expenses_beauty").value : "0", 365);
-    setCookie("expenses_vacation", document.getElementById("expenses_vacation").value.trim() !== "" ? document.getElementById("expenses_vacation").value : "0", 365);
-    setCookie("expenses_travel_life_insurance", document.getElementById("expenses_travel_life_insurance").value.trim() !== "" ? document.getElementById("expenses_travel_life_insurance").value : "0", 365);
-    setCookie("expenses_cellphone_service", document.getElementById("expenses_cellphone_service").value.trim() !== "" ? document.getElementById("expenses_cellphone_service").value : "0", 365);
-    setCookie("expenses_medical_dental", document.getElementById("expenses_medical_dental").value.trim() !== "" ? document.getElementById("expenses_medical_dental").value : "0", 365);
-    setCookie("expenses_perscription", document.getElementById("expenses_perscription").value.trim() !== "" ? document.getElementById("expenses_perscription").value : "0", 365);
-    setCookie("expenses_line_of_credit_payment", document.getElementById("expenses_line_of_credit_payment").value.trim() !== "" ? document.getElementById("expenses_line_of_credit_payment").value : "0", 365);
-    setCookie("expenses_student_loan_payment", document.getElementById("expenses_student_loan_payment").value.trim() !== "" ? document.getElementById("expenses_student_loan_payment").value : "0", 365);
-    setCookie("expenses_credit_card_payment", document.getElementById("expenses_credit_card_payment").value.trim() !== "" ? document.getElementById("expenses_credit_card_payment").value : "0", 365);
-    setCookie("expenses_tax_arrears_payment", document.getElementById("expenses_tax_arrears_payment").value.trim() !== "" ? document.getElementById("expenses_tax_arrears_payment").value : "0", 365);
-    setCookie("expenses_small_business_loan_payment", document.getElementById("expenses_small_business_loan_payment").value.trim() !== "" ? document.getElementById("expenses_small_business_loan_payment").value : "0", 365);
-    setCookie("housing_mortgage_payment", document.getElementById("housing_mortgage_payment").value.trim() !== "" ? document.getElementById("housing_mortgage_payment").value : "0", 365);
-    setCookie("housing_rent_payment", document.getElementById("housing_rent_payment").value.trim() !== "" ? document.getElementById("housing_rent_payment").value : "0", 365);
-    setCookie("housing_property_tax", document.getElementById("housing_property_tax").value.trim() !== "" ? document.getElementById("housing_property_tax").value : "0", 365);
-    setCookie("housing_condo_fee", document.getElementById("housing_condo_fee").value.trim() !== "" ? document.getElementById("housing_condo_fee").value : "0", 365);
-    setCookie("housing_hydro", document.getElementById("housing_hydro").value.trim() !== "" ? document.getElementById("housing_hydro").value : "0", 365);
-    setCookie("housing_insurance", document.getElementById("housing_insurance").value.trim() !== "" ? document.getElementById("housing_insurance").value : "0", 365);
-    setCookie("housing_repairs", document.getElementById("housing_repairs").value.trim() !== "" ? document.getElementById("housing_repairs").value : "0", 365);
-    setCookie("housing_water", document.getElementById("housing_water").value.trim() !== "" ? document.getElementById("housing_water").value : "0", 365);
-    setCookie("housing_gas", document.getElementById("housing_gas").value.trim() !== "" ? document.getElementById("housing_gas").value : "0", 365);
-    setCookie("housing_internet", document.getElementById("housing_internet").value.trim() !== "" ? document.getElementById("housing_internet").value : "0", 365);
-    setCookie("transportation_car_loan_payment", document.getElementById("transportation_car_loan_payment").value.trim() !== "" ? document.getElementById("transportation_car_loan_payment").value : "0", 365);
-    setCookie("transportation_insurance", document.getElementById("transportation_insurance").value.trim() !== "" ? document.getElementById("transportation_insurance").value : "0", 365);
-    setCookie("transportation_fuel", document.getElementById("transportation_fuel").value.trim() !== "" ? document.getElementById("transportation_fuel").value : "0", 365);
-    setCookie("transportation_maintenance", document.getElementById("transportation_maintenance").value.trim() !== "" ? document.getElementById("transportation_maintenance").value : "0", 365);
-    setCookie("transportation_public_transit", document.getElementById("transportation_public_transit").value.trim() !== "" ? document.getElementById("transportation_public_transit").value : "0", 365);
-    setCookie("transportation_ride_hailing", document.getElementById("transportation_ride_hailing").value.trim() !== "" ? document.getElementById("transportation_ride_hailing").value : "0", 365);
-    setCookie("dependant_day_care", document.getElementById("dependant_day_care").value.trim() !== "" ? document.getElementById("dependant_day_care").value : "0", 365);
-    setCookie("dependant_medical_dental", document.getElementById("dependant_medical_dental").value.trim() !== "" ? document.getElementById("dependant_medical_dental").value : "0", 365);
-    setCookie("dependant_clothing", document.getElementById("dependant_clothing").value.trim() !== "" ? document.getElementById("dependant_clothing").value : "0", 365);
-    setCookie("dependant_sports_recreation", document.getElementById("dependant_sports_recreation").value.trim() !== "" ? document.getElementById("dependant_sports_recreation").value : "0", 365);
-    setCookie("dependant_transportation", document.getElementById("dependant_transportation").value.trim() !== "" ? document.getElementById("dependant_transportation").value : "0", 365);
-    setCookie("dependant_tuition", document.getElementById("dependant_tuition").value.trim() !== "" ? document.getElementById("dependant_tuition").value : "0", 365);
-    setCookie("dependant_housing", document.getElementById("dependant_housing").value.trim() !== "" ? document.getElementById("dependant_housing").value : "0", 365);
-    setCookie("dependant_cellular_service", document.getElementById("dependant_cellular_service").value.trim() !== "" ? document.getElementById("dependant_cellular_service").value : "0", 365);
-
-
-}
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const romanticexpenseCookie = getCookie('romanticexpense');
-  const debtcheckboxCookie = getCookie('debtcheckbox');
-  const dependantcheckboxCookie = getCookie('dependantcheckbox');
-
-  // Check for romantic expense sharing
-  if (romanticexpenseCookie === 'checked') {
-    displayWarning("You've indicated that you share expenses with your romantic partner. Include only your portion of the expenditures here.");
-    // Assuming there's no specific action for showing elements related to this checkbox
-  }
-
-  // Check for dependants/pets
-  if (dependantcheckboxCookie === 'checked') {
-    hideShow('depandant-parent', 'show');
-  } else if (dependantcheckboxCookie === 'unChecked') {
-    hideShow('depandant-parent', 'hide');
-  }
-
-  // Check for debt payments
-  if (debtcheckboxCookie === 'checked') {
-    hideShow('debt-parent', 'show');
-  } else if (debtcheckboxCookie === 'unChecked') {
-    hideShow('debt-parent', 'hide');
-  }
-});
+};

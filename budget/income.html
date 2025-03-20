@@ -8,586 +8,586 @@
  * jurisdictions worldwide.
  */ -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-
+ <!DOCTYPE html>
+ <html lang="en">
+ 
  <head>
-        <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>INCOME</title>
-         <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
-	 <link rel="stylesheet" href="/style/styles.css"> 
+     <link rel="manifest" href="/manifest.json">
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+     <title>INCOME</title>
+     <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
+     <link rel="stylesheet" href="/style/styles.css"> 
      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
-
+ 
      <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
-    <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
-    <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
-    <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
-    <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
-    <link rel="manifest" href="/manifest.json">
-
-</head>
-
-
-
-
-
-<body>
-    
-        
-<a href="./intro.html">
-    <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;" onclick="calculateAll();">
-</a>
-    
- <h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2>
-     
-
-
-
- <div class="tab-container">
-		
-    <a href="./income.html" class="tooltip tab " data-location="income" data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket." onclick="calculateAll();">
-        Income
-        <span class="tooltip-content"></span>  
-    <a href="./expense.html" class="tooltip tab " data-location="expense" data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn." onclick="calculateAll();">
-      Expense
-      <span class="tooltip-content"></span>
-  
-   <a href="./asset.html" class="tooltip tab " data-location="asset" data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection." onclick="calculateAll();">
-  Asset
-  <span class="tooltip-content"></span>
-  </a>
-  
-    <a href="./liability.html" class="tab" data-location="liability" onclick="calculateAll();">Liability</a>
-  
-        </div>
-
-
+     <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
+     <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
+     <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
+     <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg" />
+     <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
+     <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
+     <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
+     <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
+     <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
+     <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
+     <link rel="manifest" href="/manifest.json">
+ </head>
  
- 
-       
-
-
-	       <div class="container">
-		       
-   <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Where you're legally considered to live for tax purposes.">
-    Tax Residency<span class="tooltip-content"></span>
-</h2>   
-
-<p>Step 2: Select Region & Subregion.</p>
-
-		        <div class="row">
-<label>Region:</label>
-<select id="RegionDropdown">
-        <option value="NONE">Select Tax Region</option> 
-        <option value="CAN">Canada</option>
-        <option value="USA">USA</option>
-    </select>
-		       </div>
-
-		       <div class="row">
-			       <label>Subregion:</label>
-    <select id="SubregionDropdown">
-        <option value="">Select Tax Subregion</option> </select>
-		       </div>
-
-	       </div>
-
-	       <div class="containerround">
-
-<h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Employment involves working under a contract for an employer, receiving a regular salary or wage, and generally includes benefits like health insurance. Self-employment means working for oneself, where income might fluctuate based on work volume, with the individual handling their own taxes, benefits, and business expenses.">
-    Employment - Self Employment<span class="tooltip-content"></span>
-</h2>
-
-<p style="margin-bottom: 20px;">Step 3: Enter gross income amounts (before tax & contributions) and select the corresponding frequency that you receive the amount.</p>
-
-		       
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
-  <span class="tooltip-content"></span>
-    Salary/Wages:</label>
-	<input type='number' inputmode="numeric"  id="income_salary_wages">
-<select id="income_salary_wages_frequency" onchange="calculateAnnual('income_salary_wages', 'income_salary_wages_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_salary_wages_annual"></span>
-</div>
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
-  <span class="tooltip-content"></span>
-    Tips:</label>
-<input type='number' inputmode="numeric"  id="income_tips">
-<select id="income_tips_frequency" onchange="calculateAnnual('income_tips', 'income_tips_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_tips_annual"></span>
-</div>
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
-  <span class="tooltip-content"></span>
-    Bonus:</label>
-<input type='number' inputmode="numeric"  id="income_bonuses">
-<select id="income_bonuses_frequency" onchange="calculateAnnual('income_bonuses', 'income_bonuses_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_bonuses_annual"></span>
-</div>
-
-
-
-<div class ="row">
-    
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter net amount after expenses and before tax and contributions.">
-  <span class="tooltip-content"></span>
-  Self Employment:
-  <span id="ROI_MODAL_OPEN" title="Calculate self-employment income for educational purposes">(Worksheet)</span>
-
-</label>
-
-
-	<input type='number' inputmode="numeric"  id="income_sole_prop">
-<select id="income_sole_prop_frequency" onchange="calculateAnnual('income_sole_prop', 'income_sole_prop_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_sole_prop_annual"></span>
-</div>
-
-	       </div>
-
-	       <div class="containerround">
-
-	
-<h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Retirement income refers to the money received by individuals after they stop working, sourced from personal savings, pensions, or investment plans. Social benefit income encompasses payments from government welfare programs providing financial assistance based on criteria like age, unemployment, or disability, aimed at supporting those in need when they cannot earn through regular employment.">
-    Retirement - Social Benefit<span class="tooltip-content"></span>
-</h2>
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
-  <span class="tooltip-content"></span>
-    Pension, Federal:</label>
-<input type='number' inputmode="numeric"  id="income_federal_pension">
-<select id="income_federal_pension_frequency" onchange="calculateAnnual('income_federal_pension', 'income_federal_pension_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_federal_pension_annual"></span>
-</div>
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
-  <span class="tooltip-content"></span>
-    Pension, Work:</label>
-<input type='number' inputmode="numeric"  id="income_work_pension">
-<select id="income_work_pension_frequency" onchange="calculateAnnual('income_work_pension', 'income_work_pension_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_work_pension_annual"></span>
-</div>
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
-  <span class="tooltip-content"></span>
-    Social Security:</label>
-<input type='number' inputmode="numeric"  id="income_social_security">
-<select id="income_social_security_frequency" onchange="calculateAnnual('income_social_security', 'income_social_security_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_social_security_annual"></span>
-</div>
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
-  <span class="tooltip-content"></span>
-    Employment Insurance:</label>
-<input type='number' inputmode="numeric"  id="income_employment_insurance">
-<select id="income_employment_insurance_frequency" onchange="calculateAnnual('income_employment_insurance', 'income_employment_insurance_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_employment_insurance_annual"></span>
-</div>
-
-	       </div>
-
-	       <div class="containerround">
-	
-   <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Passive income is earnings derived from ventures in which an individual is not actively involved, such as rental properties, royalties from creative works, or income from investments like dividends from stocks, interest from savings, or capital gains from asset sales. It contrasts with active income from employment or business operations where direct labor is exchanged for money.">
-    Passive<span class="tooltip-content"></span>
-</h2>
-    
-    <div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter net amount before tax and contributions, but after expenses.">
-  <span class="tooltip-content"></span>
-    Investment Property:</label>
-<input type='number' inputmode="numeric"  id="income_investment_property">
-<select id="income_investment_property_frequency" onchange="calculateAnnual('income_investment_property', 'income_investment_property_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_investment_property_annual"></span>
-</div>
-
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses.">
-  <span class="tooltip-content"></span>
-    Capital Gains/Losses:</label>
-<input type='number' inputmode="numeric"  id="income_capital_gains_losses">
-<select id="income_capital_gains_losses_frequency" onchange="calculateAnnual('income_capital_gains_losses', 'income_capital_gains_losses_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_capital_gains_losses_annual"></span>
-</div>
-
- <div class = "usa-hide">
- <div class = "row">
-    <label for = "capital_gain_state_rate">Capital Gain State Tax Rate</label>
-    <input type='number' inputmode="numeric"  id="income_capital_gain_state_rate">
-    <label>%</label>
- </div>
-</div>
-    
-
-
-    <div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and after expenses.">
-  <span class="tooltip-content"></span>
-    Venture:</label>
-<input type='number' inputmode="numeric"  id="income_venture_capital">
-<select id="income_venture_capital_frequency" onchange="calculateAnnual('income_venture_capital', 'income_venture_capital_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_venture_capital_annual"></span>
-</div>
-
-		       
-    <div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses.">
-  <span class="tooltip-content"></span>
-    Dividend, Public:</label>
-<input type='number' inputmode="numeric"  id="income_public_dividend">
-<select id="income_public_dividend_frequency" onchange="calculateAnnual('income_public_dividend', 'income_public_dividend_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_public_dividend_annual"></span>
-</div>
-
-		       <div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses.">
-  <span class="tooltip-content"></span>
-    Dividend, Owner:</label>
-<input type='number' inputmode="numeric"  id="income_owner_dividend">
-<select id="income_owner_dividend_frequency" onchange="calculateAnnual('income_owner_dividend', 'income_owner_dividend_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_owner_dividend_annual"></span>
-</div>
-    
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses.">
-  <span class="tooltip-content"></span>
-    Interest:</label>
-<input type='number' inputmode="numeric"  id="income_interest">
-<select id="income_interest_frequency" onchange="calculateAnnual('income_interest', 'income_interest_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_interest_annual"></span>
-</div>
-    
-    
-    <div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses.">
-  <span class="tooltip-content"></span>
-    Royalties:</label>
-<input type='number' inputmode="numeric"  id="income_royalties">
-<select id="income_royalties_frequency" onchange="calculateAnnual('income_royalties', 'income_royalties_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_royalties_annual"></span>
-</div>
-    
-    <div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses.">
-  <span class="tooltip-content"></span>
-    Peer to Peer Lending:</label>
-<input type='number' inputmode="numeric"  id="income_peer_to_peer_lending">
-<select id="income_peer_to_peer_lending_frequency" onchange="calculateAnnual('income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_peer_to_peer_lending_annual"></span>
-</div>
-
-    <div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax.">
-  <span class="tooltip-content"></span>
-    Trust:</label>
-<input type='number' inputmode="numeric"  id="income_trust">
-<select id="income_trust_frequency" onchange="calculateAnnual('income_trust', 'income_trust_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_trust_annual"></span>
-</div>
-
-	       </div>
-
-	       <div class="containerround">
-	
-    <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Refers to any income that doesn't fit neatly into the categories of employment, self-employment, investment, or social benefits. This can include earnings from side gigs not considered a primary job, child support or alimony, lottery winnings, inheritances, or any other miscellaneous sources of revenue not derived from regular work or investments.">
-    Other<span class="tooltip-content"></span>
-</h2>
-
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax.">
-  <span class="tooltip-content"></span>
-    Alimony:</label>
-<input type='number' inputmode="numeric"  id="income_alimony">
-<select id="income_alimony_frequency" onchange="calculateAnnual('income_alimony', 'income_alimony_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_alimony_annual"></span>
-</div>
-
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax.">
-  <span class="tooltip-content"></span>
-    Scholarship/Grants:</label>
-<input type='number' inputmode="numeric"  id="income_scholarships_grants">
-<select id="income_scholarships_grants_frequency" onchange="calculateAnnual('income_scholarships_grants', 'income_scholarships_grants_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_scholarships_grants_annual"></span>
-</div>
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount. Note some regions charge tax on inhertiance & gifts, please consult with a financial advisor for accurate information.">
-  <span class="tooltip-content"></span>
-    Tax Free - Inheritence/Gifts:</label>
-<input type='number' inputmode="numeric"  id="income_tax_free_income">
-<select id="income_tax_free_income_frequency" onchange="calculateAnnual('income_tax_free_income', 'income_tax_free_income_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_tax_free_income_annual"></span>
-</div>
-
-
-<div class ="row">
-<label for="" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax. Note Canadians do not pay tax on winnings from gambling unless done professionaly.">
-  <span class="tooltip-content"></span>
-    Gambling:</label>
-<input type='number' inputmode="numeric"  id="income_gambling_winnings">
-<select id="income_gambling_winnings_frequency" onchange="calculateAnnual('income_gambling_winnings', 'income_gambling_winnings_frequency')">
-    <option value="annually">Annually</option>
-    <option value="quarterly">Quarterly</option>
-    <option value="monthly">Monthly</option>
-    <option value="weekly">Weekly</option>
-</select>
-<span id="income_gambling_winnings_annual"></span>
-</div>
-
-	       </div>
-	    
-   	       <div class="containerround">
-	
-       
-            <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
-                <div class="checkbox-wrapper-2">
-                  <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
-                </div>
-                <label for="termscheckbox">
-                    I have read, understand, and agree to the  <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Terms of Service</a> 
-                    (last updated: 18/Mar/2025). By proceeding, I acknowledge that I use IncomeIQ™ at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
-
-
-                 
-                </label>
-            </div>
-	       
-
-   
-
-	   
-    <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">    
-        <div class="checkbox-wrapper-2">
-            <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
-        </div>
-        <label for="notintended">
-            I consent to the use and storage of data in my browser’s local storage for essential website functionality, including but not limited to, calculations for my financial educational reports. Minimal cookies may be used for payment verification for premium access. These are necessary for the services I request.
-            <a href="#" id="cookie-overwrite-link" style="text-decoration: none; color: #007bff;" class="inline-link">Click here to overwrite cookies</a>
-        </label>
-    </div>
-    
-    
+ <body>
+     <a href="./intro.html">
+         <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;" onclick="calculateAll();">
+     </a>
      
-           
-		   
-		    
-		       
+     <h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2>
+      
+     <div class="tab-container">
+         <a href="./income.html" class="tooltip tab " data-location="income" data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket." onclick="calculateAll();">
+             Income
+             <span class="tooltip-content"></span>  
+         </a>
+         <a href="./expense.html" class="tooltip tab " data-location="expense" data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn." onclick="calculateAll();">
+             Expense
+             <span class="tooltip-content"></span>
+         </a>
+         <a href="./asset.html" class="tooltip tab " data-location="asset" data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection." onclick="calculateAll();">
+             Asset
+             <span class="tooltip-content"></span>
+         </a>
+         <a href="./liability.html" class="tab" data-location="liability" onclick="calculateAll();">Liability</a>
+     </div>
+ 
+     <div class="container">
+         <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Where you're legally considered to live for tax purposes.">
+             Tax Residency<span class="tooltip-content"></span>
+         </h2>   
+         <p>Step 2: Select Region & Subregion.</p>
+         <div class="row">
+             <label>Region:</label>
+             <select id="RegionDropdown">
+                 <option value="NONE">Select Tax Region</option> 
+                 <option value="CAN">Canada</option>
+                 <option value="USA">USA</option>
+             </select>
+         </div>
+         <div class="row">
+             <label>Subregion:</label>
+             <select id="SubregionDropdown">
+                 <option value="">Select Tax Subregion</option>
+             </select>
+         </div>
+     </div>
+ 
+     <div class="containerround">
+         <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Employment involves working under a contract for an employer, receiving a regular salary or wage, and generally includes benefits like health insurance. Self-employment means working for oneself, where income might fluctuate based on work volume, with the individual handling their own taxes, benefits, and business expenses.">
+             Employment - Self Employment<span class="tooltip-content"></span>
+         </h2>
+         <p style="margin-bottom: 20px;">Step 3: Enter gross income amounts (before tax & contributions) and select the corresponding frequency that you receive the amount.</p>
+ 
+         <div class="row">
+             <label for="income_salary_wages" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Salary/Wages:
+             </label>
+             <input type="number" inputmode="numeric" id="income_salary_wages">
+             <div class="checkbox-button-group" id="income_salary_wages_frequency">
+                 <input type="checkbox" id="annually_salary_wages" name="income_salary_wages_frequency" value="annually">
+                 <label for="annually_salary_wages" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_salary_wages" name="income_salary_wages_frequency" value="quarterly">
+                 <label for="quarterly_salary_wages" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_salary_wages" name="income_salary_wages_frequency" value="monthly">
+                 <label for="monthly_salary_wages" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_salary_wages" name="income_salary_wages_frequency" value="weekly">
+                 <label for="weekly_salary_wages" class="checkbox-button">1W</label>
              </div>
-
-   
-<div class = "containerround">
-	          <button onclick="validatecheckbox()" class="nav-btn"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
-
-
-
-  <div class="hidden"> 
-    <p><u>Income:</u> <span id="annual_income_sum"></span></p>
-    <span class="tooltiptext">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</span>
-     
-            <p><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
-    <span class="tooltiptext"> Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</span>
-          
-        <p><u>Regional Tax Payable:</u> <span id="ANNUALREGIONALTAX"></span></p>
-    <span class="tooltiptext">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</span>
-      
-       <p><u>Subregional Tax Payable:</u> <span id="ANNUALSUBREGIONALTAX"></span></p> 
-    <span class="tooltiptext">Tax owed to subregion government. Use: Budgeting for taxe obligations, financial planning.</span>
-      
-        <p><u>Total Tax Payable:</u> <span id="ANNUALTAX"></span></p>
-    <span class="tooltiptext">Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</span>
-    
-               
-   
-    <p><u>Annual Employment Income:</u> <span id="ANNUALEMPLOYMENTINCOME"></span></p>
-    
-    <p><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
-    
-   
-    <p><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
-
-    <p><u>Total CPP Payable:</u> <span id="ANNUALCPP"></span></p>
-
-    
-    <p><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
-        <span class="tooltiptext"> Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</span>
-    
-        
-    
-    
-        <p><u>CG: </u> <span id="TOTALTAXCG"></span></p>
-    <span class="tooltiptext">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket.
-    Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</span>
-    
-        <p><u>Social Security US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
-    <span class="tooltiptext">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors.
-    Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</span>
-    
-    <p><u>Medicare: </u> <span id="TOTALMEDICARE"></span></p>
-    <span class="tooltiptext">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use:
-    Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals. </span>
-    
-      </div>  
-
-
-
-            </div>
-      
-
-
-
-
-
-
-<div id="TERMS-modal" class="modal">
-                <div class="modal-content">
-                    <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
-                </div>
-            </div> 
-
-<div id="ROI-modal" class="roi-modal">
-    <div class="modal-content" id="ROI-modal-content">
-        <iframe src="/budget/ROI.html" height="100%" width="100%" frameborder="10%"></iframe>
-    </div>
-</div>
-
-
-
-<script src="/index.js"></script>
-
-<script src="/server/scripts/income.js" type="module"></script>
-<script src="/server/scripts/toolTip.js"></script>
-<script src="/server/scripts/hideShow.js"></script>
-<script type="module" src="/server/scripts/utils.js"></script>
-<script type="module" src="/server/scripts/cookieoverwrite.js"></script>
-<script src="/server/scripts/modal.js"></script>
-<script src="/server/scripts/tray.js"></script>
-
-
-
-
-</body>
-
-
-</html>
-
+             <span id="income_salary_wages_annual"></span>
+         </div>
  
+         <div class="row">
+             <label for="income_tips" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Tips:
+             </label>
+             <input type="number" inputmode="numeric" id="income_tips">
+             <div class="checkbox-button-group" id="income_tips_frequency">
+                 <input type="checkbox" id="annually_tips" name="income_tips_frequency" value="annually">
+                 <label for="annually_tips" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_tips" name="income_tips_frequency" value="quarterly">
+                 <label for="quarterly_tips" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_tips" name="income_tips_frequency" value="monthly">
+                 <label for="monthly_tips" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_tips" name="income_tips_frequency" value="weekly">
+                 <label for="weekly_tips" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_tips_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_bonuses" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Bonus:
+             </label>
+             <input type="number" inputmode="numeric" id="income_bonuses">
+             <div class="checkbox-button-group" id="income_bonuses_frequency">
+                 <input type="checkbox" id="annually_bonuses" name="income_bonuses_frequency" value="annually">
+                 <label for="annually_bonuses" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_bonuses" name="income_bonuses_frequency" value="quarterly">
+                 <label for="quarterly_bonuses" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_bonuses" name="income_bonuses_frequency" value="monthly">
+                 <label for="monthly_bonuses" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_bonuses" name="income_bonuses_frequency" value="weekly">
+                 <label for="weekly_bonuses" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_bonuses_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_sole_prop" style="font-size: unset;" class="tooltip" data-tooltip="Enter net amount after expenses and before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Self Employment:
+                 <span id="ROI_MODAL_OPEN" title="Calculate self-employment income for educational purposes">(Worksheet)</span>
+             </label>
+             <input type="number" inputmode="numeric" id="income_sole_prop">
+             <div class="checkbox-button-group" id="income_sole_prop_frequency">
+                 <input type="checkbox" id="annually_sole_prop" name="income_sole_prop_frequency" value="annually">
+                 <label for="annually_sole_prop" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_sole_prop" name="income_sole_prop_frequency" value="quarterly">
+                 <label for="quarterly_sole_prop" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_sole_prop" name="income_sole_prop_frequency" value="monthly">
+                 <label for="monthly_sole_prop" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_sole_prop" name="income_sole_prop_frequency" value="weekly">
+                 <label for="weekly_sole_prop" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_sole_prop_annual"></span>
+         </div>
+     </div>
+ 
+     <div class="containerround">
+         <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Retirement income refers to the money received by individuals after they stop working, sourced from personal savings, pensions, or investment plans. Social benefit income encompasses payments from government welfare programs providing financial assistance based on criteria like age, unemployment, or disability, aimed at supporting those in need when they cannot earn through regular employment.">
+             Retirement - Social Benefit<span class="tooltip-content"></span>
+         </h2>
+ 
+         <div class="row">
+             <label for="income_federal_pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Pension, Federal:
+             </label>
+             <input type="number" inputmode="numeric" id="income_federal_pension">
+             <div class="checkbox-button-group" id="income_federal_pension_frequency">
+                 <input type="checkbox" id="annually_federal_pension" name="income_federal_pension_frequency" value="annually">
+                 <label for="annually_federal_pension" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_federal_pension" name="income_federal_pension_frequency" value="quarterly">
+                 <label for="quarterly_federal_pension" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_federal_pension" name="income_federal_pension_frequency" value="monthly">
+                 <label for="monthly_federal_pension" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_federal_pension" name="income_federal_pension_frequency" value="weekly">
+                 <label for="weekly_federal_pension" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_federal_pension_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_work_pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Pension, Work:
+             </label>
+             <input type="number" inputmode="numeric" id="income_work_pension">
+             <div class="checkbox-button-group" id="income_work_pension_frequency">
+                 <input type="checkbox" id="annually_work_pension" name="income_work_pension_frequency" value="annually">
+                 <label for="annually_work_pension" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_work_pension" name="income_work_pension_frequency" value="quarterly">
+                 <label for="quarterly_work_pension" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_work_pension" name="income_work_pension_frequency" value="monthly">
+                 <label for="monthly_work_pension" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_work_pension" name="income_work_pension_frequency" value="weekly">
+                 <label for="weekly_work_pension" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_work_pension_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_social_security" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Social Security:
+             </label>
+             <input type="number" inputmode="numeric" id="income_social_security">
+             <div class="checkbox-button-group" id="income_social_security_frequency">
+                 <input type="checkbox" id="annually_social_security" name="income_social_security_frequency" value="annually">
+                 <label for="annually_social_security" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_social_security" name="income_social_security_frequency" value="quarterly">
+                 <label for="quarterly_social_security" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_social_security" name="income_social_security_frequency" value="monthly">
+                 <label for="monthly_social_security" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_social_security" name="income_social_security_frequency" value="weekly">
+                 <label for="weekly_social_security" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_social_security_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_employment_insurance" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Employment Insurance:
+             </label>
+             <input type="number" inputmode="numeric" id="income_employment_insurance">
+             <div class="checkbox-button-group" id="income_employment_insurance_frequency">
+                 <input type="checkbox" id="annually_employment_insurance" name="income_employment_insurance_frequency" value="annually">
+                 <label for="annually_employment_insurance" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_employment_insurance" name="income_employment_insurance_frequency" value="quarterly">
+                 <label for="quarterly_employment_insurance" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_employment_insurance" name="income_employment_insurance_frequency" value="monthly">
+                 <label for="monthly_employment_insurance" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_employment_insurance" name="income_employment_insurance_frequency" value="weekly">
+                 <label for="weekly_employment_insurance" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_employment_insurance_annual"></span>
+         </div>
+     </div>
+ 
+     <div class="containerround">
+         <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Passive income is earnings derived from ventures in which an individual is not actively involved, such as rental properties, royalties from creative works, or income from investments like dividends from stocks, interest from savings, or capital gains from asset sales. It contrasts with active income from employment or business operations where direct labor is exchanged for money.">
+             Passive<span class="tooltip-content"></span>
+         </h2>
+ 
+         <div class="row">
+             <label for="income_investment_property" style="font-size: unset;" class="tooltip" data-tooltip="Enter net amount before tax and contributions, but after expenses;">
+                 <span class="tooltip-content"></span>
+                 Investment Property:
+             </label>
+             <input type="number" inputmode="numeric" id="income_investment_property">
+             <div class="checkbox-button-group" id="income_investment_property_frequency">
+                 <input type="checkbox" id="annually_investment_property" name="income_investment_property_frequency" value="annually">
+                 <label for="annually_investment_property" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_investment_property" name="income_investment_property_frequency" value="quarterly">
+                 <label for="quarterly_investment_property" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_investment_property" name="income_investment_property_frequency" value="monthly">
+                 <label for="monthly_investment_property" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_investment_property" name="income_investment_property_frequency" value="weekly">
+                 <label for="weekly_investment_property" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_investment_property_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_capital_gains_losses" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses;">
+                 <span class="tooltip-content"></span>
+                 Capital Gains/Losses:
+             </label>
+             <input type="number" inputmode="numeric" id="income_capital_gains_losses">
+             <div class="checkbox-button-group" id="income_capital_gains_losses_frequency">
+                 <input type="checkbox" id="annually_capital_gains_losses" name="income_capital_gains_losses_frequency" value="annually">
+                 <label for="annually_capital_gains_losses" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="quarterly">
+                 <label for="quarterly_capital_gains_losses" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="monthly">
+                 <label for="monthly_capital_gains_losses" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="weekly">
+                 <label for="weekly_capital_gains_losses" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_capital_gains_losses_annual"></span>
+         </div>
+ 
+         <div class="usa-hide">
+             <div class="row">
+                 <label for="capital_gain_state_rate">Capital Gain State Tax Rate</label>
+                 <input type="number" inputmode="numeric" id="income_capital_gain_state_rate">
+                 <label>%</label>
+             </div>
+         </div>
+ 
+         <div class="row">
+             <label for="income_venture_capital" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and after expenses;">
+                 <span class="tooltip-content"></span>
+                 Venture:
+             </label>
+             <input type="number" inputmode="numeric" id="income_venture_capital">
+             <div class="checkbox-button-group" id="income_venture_capital_frequency">
+                 <input type="checkbox" id="annually_venture_capital" name="income_venture_capital_frequency" value="annually">
+                 <label for="annually_venture_capital" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_venture_capital" name="income_venture_capital_frequency" value="quarterly">
+                 <label for="quarterly_venture_capital" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_venture_capital" name="income_venture_capital_frequency" value="monthly">
+                 <label for="monthly_venture_capital" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_venture_capital" name="income_venture_capital_frequency" value="weekly">
+                 <label for="weekly_venture_capital" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_venture_capital_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_public_dividend" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses;">
+                 <span class="tooltip-content"></span>
+                 Dividend, Public:
+             </label>
+             <input type="number" inputmode="numeric" id="income_public_dividend">
+             <div class="checkbox-button-group" id="income_public_dividend_frequency">
+                 <input type="checkbox" id="annually_public_dividend" name="income_public_dividend_frequency" value="annually">
+                 <label for="annually_public_dividend" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_public_dividend" name="income_public_dividend_frequency" value="quarterly">
+                 <label for="quarterly_public_dividend" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_public_dividend" name="income_public_dividend_frequency" value="monthly">
+                 <label for="monthly_public_dividend" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_public_dividend" name="income_public_dividend_frequency" value="weekly">
+                 <label for="weekly_public_dividend" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_public_dividend_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_owner_dividend" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses;">
+                 <span class="tooltip-content"></span>
+                 Dividend, Owner:
+             </label>
+             <input type="number" inputmode="numeric" id="income_owner_dividend">
+             <div class="checkbox-button-group" id="income_owner_dividend_frequency">
+                 <input type="checkbox" id="annually_owner_dividend" name="income_owner_dividend_frequency" value="annually">
+                 <label for="annually_owner_dividend" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_owner_dividend" name="income_owner_dividend_frequency" value="quarterly">
+                 <label for="quarterly_owner_dividend" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_owner_dividend" name="income_owner_dividend_frequency" value="monthly">
+                 <label for="monthly_owner_dividend" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_owner_dividend" name="income_owner_dividend_frequency" value="weekly">
+                 <label for="weekly_owner_dividend" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_owner_dividend_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_interest" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses;">
+                 <span class="tooltip-content"></span>
+                 Interest:
+             </label>
+             <input type="number" inputmode="numeric" id="income_interest">
+             <div class="checkbox-button-group" id="income_interest_frequency">
+                 <input type="checkbox" id="annually_interest" name="income_interest_frequency" value="annually">
+                 <label for="annually_interest" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_interest" name="income_interest_frequency" value="quarterly">
+                 <label for="quarterly_interest" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_interest" name="income_interest_frequency" value="monthly">
+                 <label for="monthly_interest" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_interest" name="income_interest_frequency" value="weekly">
+                 <label for="weekly_interest" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_interest_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_royalties" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses;">
+                 <span class="tooltip-content"></span>
+                 Royalties:
+             </label>
+             <input type="number" inputmode="numeric" id="income_royalties">
+             <div class="checkbox-button-group" id="income_royalties_frequency">
+                 <input type="checkbox" id="annually_royalties" name="income_royalties_frequency" value="annually">
+                 <label for="annually_royalties" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_royalties" name="income_royalties_frequency" value="quarterly">
+                 <label for="quarterly_royalties" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_royalties" name="income_royalties_frequency" value="monthly">
+                 <label for="monthly_royalties" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_royalties" name="income_royalties_frequency" value="weekly">
+                 <label for="weekly_royalties" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_royalties_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_peer_to_peer_lending" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax and after expenses;">
+                 <span class="tooltip-content"></span>
+                 Peer to Peer Lending:
+             </label>
+             <input type="number" inputmode="numeric" id="income_peer_to_peer_lending">
+             <div class="checkbox-button-group" id="income_peer_to_peer_lending_frequency">
+                 <input type="checkbox" id="annually_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="annually">
+                 <label for="annually_peer_to_peer_lending" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="quarterly">
+                 <label for="quarterly_peer_to_peer_lending" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="monthly">
+                 <label for="monthly_peer_to_peer_lending" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="weekly">
+                 <label for="weekly_peer_to_peer_lending" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_peer_to_peer_lending_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_trust" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Trust:
+             </label>
+             <input type="number" inputmode="numeric" id="income_trust">
+             <div class="checkbox-button-group" id="income_trust_frequency">
+                 <input type="checkbox" id="annually_trust" name="income_trust_frequency" value="annually">
+                 <label for="annually_trust" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_trust" name="income_trust_frequency" value="quarterly">
+                 <label for="quarterly_trust" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_trust" name="income_trust_frequency" value="monthly">
+                 <label for="monthly_trust" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_trust" name="income_trust_frequency" value="weekly">
+                 <label for="weekly_trust" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_trust_annual"></span>
+         </div>
+     </div>
+ 
+     <div class="containerround">
+         <h2 style="text-align: center; font-size: 18px;" class="tooltip" data-tooltip="Refers to any income that doesn't fit neatly into the categories of employment, self-employment, investment, or social benefits. This can include earnings from side gigs not considered a primary job, child support or alimony, lottery winnings, inheritances, or any other miscellaneous sources of revenue not derived from regular work or investments.">
+             Other<span class="tooltip-content"></span>
+         </h2>
+ 
+         <div class="row">
+             <label for="income_alimony" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Alimony:
+             </label>
+             <input type="number" inputmode="numeric" id="income_alimony">
+             <div class="checkbox-button-group" id="income_alimony_frequency">
+                 <input type="checkbox" id="annually_alimony" name="income_alimony_frequency" value="annually">
+                 <label for="annually_alimony" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_alimony" name="income_alimony_frequency" value="quarterly">
+                 <label for="quarterly_alimony" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_alimony" name="income_alimony_frequency" value="monthly">
+                 <label for="monthly_alimony" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_alimony" name="income_alimony_frequency" value="weekly">
+                 <label for="weekly_alimony" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_alimony_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_scholarships_grants" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Scholarship/Grants:
+             </label>
+             <input type="number" inputmode="numeric" id="income_scholarships_grants">
+             <div class="checkbox-button-group" id="income_scholarships_grants_frequency">
+                 <input type="checkbox" id="annually_scholarships_grants" name="income_scholarships_grants_frequency" value="annually">
+                 <label for="annually_scholarships_grants" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_scholarships_grants" name="income_scholarships_grants_frequency" value="quarterly">
+                 <label for="quarterly_scholarships_grants" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_scholarships_grants" name="income_scholarships_grants_frequency" value="monthly">
+                 <label for="monthly_scholarships_grants" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_scholarships_grants" name="income_scholarships_grants_frequency" value="weekly">
+                 <label for="weekly_scholarships_grants" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_scholarships_grants_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_tax_free_income" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount. Note some regions charge tax on inheritance & gifts, please consult with a financial advisor for accurate information;">
+                 <span class="tooltip-content"></span>
+                 Tax Free - Inheritance/Gifts:
+             </label>
+             <input type="number" inputmode="numeric" id="income_tax_free_income">
+             <div class="checkbox-button-group" id="income_tax_free_income_frequency">
+                 <input type="checkbox" id="annually_tax_free_income" name="income_tax_free_income_frequency" value="annually">
+                 <label for="annually_tax_free_income" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_tax_free_income" name="income_tax_free_income_frequency" value="quarterly">
+                 <label for="quarterly_tax_free_income" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_tax_free_income" name="income_tax_free_income_frequency" value="monthly">
+                 <label for="monthly_tax_free_income" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_tax_free_income" name="income_tax_free_income_frequency" value="weekly">
+                 <label for="weekly_tax_free_income" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_tax_free_income_annual"></span>
+         </div>
+ 
+         <div class="row">
+             <label for="income_gambling_winnings" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax. Note Canadians do not pay tax on winnings from gambling unless done professionally;">
+                 <span class="tooltip-content"></span>
+                 Gambling:
+             </label>
+             <input type="number" inputmode="numeric" id="income_gambling_winnings">
+             <div class="checkbox-button-group" id="income_gambling_winnings_frequency">
+                 <input type="checkbox" id="annually_gambling_winnings" name="income_gambling_winnings_frequency" value="annually">
+                 <label for="annually_gambling_winnings" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_gambling_winnings" name="income_gambling_winnings_frequency" value="quarterly">
+                 <label for="quarterly_gambling_winnings" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_gambling_winnings" name="income_gambling_winnings_frequency" value="monthly">
+                 <label for="monthly_gambling_winnings" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_gambling_winnings" name="income_gambling_winnings_frequency" value="weekly">
+                 <label for="weekly_gambling_winnings" class="checkbox-button">1W</label>
+             </div>
+             <span id="income_gambling_winnings_annual"></span>
+         </div>
+     </div>
+ 
+     <div class="containerround">
+         <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+             <div class="checkbox-wrapper-2">
+                 <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
+             </div>
+             <label for="termscheckbox">
+                 I have read, understand, and agree to the  <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Terms of Service</a> 
+                 (last updated: 18/Mar/2025). By proceeding, I acknowledge that I use IncomeIQ™ at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
+             </label>
+         </div>
+ 
+         <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">    
+             <div class="checkbox-wrapper-2">
+                 <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
+             </div>
+             <label for="notintended">
+                 I consent to the use and storage of data in my browser’s local storage for essential website functionality, including but not limited to, calculations for my financial educational reports. Minimal cookies may be used for payment verification for premium access. These are necessary for the services I request.
+                 <a href="#" id="cookie-overwrite-link" style="text-decoration: none; color: #007bff;" class="inline-link">Click here to overwrite cookies</a>
+             </label>
+         </div>
+     </div>
+ 
+     <div class="containerround">
+         <button onclick="validatecheckbox()" class="nav-btn"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
+ 
+         <div class="hidden"> 
+             <p><u>Income:</u> <span id="annual_income_sum"></span></p>
+             <span class="tooltiptext">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</span>
+             <p><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
+             <span class="tooltiptext"> Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</span>
+             <p><u>Regional Tax Payable:</u> <span id="ANNUALREGIONALTAX"></span></p>
+             <span class="tooltiptext">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</span>
+             <p><u>Subregional Tax Payable:</u> <span id="ANNUALSUBREGIONALTAX"></span></p> 
+             <span class="tooltiptext">Tax owed to subregion government. Use: Budgeting for taxe obligations, financial planning.</span>
+             <p><u>Total Tax Payable:</u> <span id="ANNUALTAX"></span></p>
+             <span class="tooltiptext">Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</span>
+             <p><u>Annual Employment Income:</u> <span id="ANNUALEMPLOYMENTINCOME"></span></p>
+             <p><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
+             <p><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
+             <p><u>Total CPP Payable:</u> <span id="ANNUALCPP"></span></p>
+             <p><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
+             <span class="tooltiptext"> Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</span>
+             <p><u>CG: </u> <span id="TOTALTAXCG"></span></p>
+             <span class="tooltiptext">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket.
+             Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</span>
+             <p><u>Social Security US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
+             <span class="tooltiptext">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors.
+             Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</span>
+             <p><u>Medicare: </u> <span id="TOTALMEDICARE"></span></p>
+             <span class="tooltiptext">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use:
+             Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals. </span>
+         </div>  
+     </div>
+ 
+     <div id="TERMS-modal" class="modal">
+         <div class="modal-content">
+             <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
+         </div>
+     </div> 
+ 
+     <div id="ROI-modal" class="roi-modal">
+         <div class="modal-content" id="ROI-modal-content">
+             <iframe src="/budget/ROI.html" height="100%" width="100%" frameborder="10%"></iframe>
+         </div>
+     </div>
+     <script src="/server/scripts/hideShow.js" type="module"></script>
+     <script src="/index.js"></script>
+     <script src="/server/scripts/income.js" type="module"></script>
+     <script src="/server/scripts/toolTip.js"></script>
+     
+     <script type="module" src="/server/scripts/utils.js"></script>
+     <script type="module" src="/server/scripts/cookieoverwrite.js"></script>
+     <script src="/server/scripts/modal.js"></script>
+     <script src="/server/scripts/tray.js"></script>
+ 
+   
+ </body>
+ 
+ </html>
