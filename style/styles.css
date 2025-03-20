@@ -1117,8 +1117,7 @@ textarea {
   display: flex;
   gap: 0; /* No gap to ensure full width usage */
   height: 25px; /* Match input height */
-  flex: 1; /* Match the flex behavior of input and select */
-  max-width: 100%; /* Prevent overflow beyond parent */
+  max-width: 100%; /* Prevent overflow */
 }
 
 .checkbox-button-group input[type="checkbox"] {
@@ -1155,22 +1154,45 @@ textarea {
 }
 
 /* Ensure consistency within .row */
+.row {
+  display: flex;
+  flex-wrap: wrap; /* Allow elements to stack on mobile */
+  align-items: center; /* Align items vertically */
+  gap: 10px; /* Space between label, input, and checkbox group */
+}
+
+.row input[type="number"] {
+  height: 25px; /* Consistent height */
+  flex: 1; /* Take available space */
+  min-width: 100px; /* Minimum width for input */
+  margin-right: 15px; /* Space before checkbox group on desktop */
+}
+
+/* Match checkbox group width to input width */
 .row .checkbox-button-group {
-  margin-right: 15px; /* Match .row input[type="number"] margin */
+  flex-basis: 100%; /* Full width on mobile, below input */
+  margin-right: 0; /* No extra margin */
 }
 
 /* Media query for mobile */
 @media (max-width: 700px) {
+  .row {
+    flex-direction: column; /* Stack label, input, and checkbox group vertically */
+    align-items: stretch; /* Stretch items to full width */
+  }
+
+  .row input[type="number"] {
+    width: 100%; /* Full width of row */
+    margin-right: 0; /* No margin on mobile */
+  }
+
   .row .checkbox-button-group {
-    width: 100%; /* Full width of the row */
-    margin-right: 0; /* Align with other elements */
-    flex-wrap: wrap; /* Allow buttons to wrap to new lines */
-    height: auto; /* Allow height to adjust based on content */
+    width: 100%; /* Match input width */
+    display: flex; /* Keep buttons side by side */
   }
 
   .checkbox-button {
-    flex: 1 1 50%; /* Each button takes ~50% width, wrapping to 2 per row */
-    box-sizing: border-box; /* Include border in width calculation */
-    font-size: 10px; /* Slightly smaller text for mobile */
+    font-size: 10px; /* Smaller text to fit */
+    flex: 1; /* Equal width within group */
   }
 }
