@@ -717,22 +717,23 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
 
 #install-instructions {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.9); /* Slightly transparent white for contrast */
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  max-width: 320px;
+  bottom: 0; /* Flush with the bottom */
+  left: 0; /* Full width from left */
+  right: 0; /* Full width to right */
+  padding: 10px 20px; /* Reduced vertical padding for thinness, horizontal padding for spacing */
+  background: rgba(255, 255, 255, 0.9); /* Keep the slightly transparent white */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3); /* Shadow upwards for a lifted effect */
   font-family: Arial, sans-serif;
-  color: #000; /* Black text for readability on light background */
+  color: #000; /* Black text */
   z-index: 1000; /* Above other content */
   display: none; /* Hidden by default, shown by JS */
+  text-align: center; /* Center the content */
 }
 
 #install-instructions p {
-  margin: 0 0 10px 0; /* Spacing between paragraphs */
+  margin: 0; /* Remove margin for a compact look */
   font-size: 14px;
+  display: inline; /* Keep text inline with button */
 }
 
 #install-instructions strong {
@@ -741,18 +742,49 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
 }
 
 #install-instructions button {
-  padding: 6px 12px;
-  background: #007bff; /* Blue button to stand out */
+  padding: 4px 10px; /* Smaller padding for a thinner button */
+  background: #000000; /* Black button as requested */
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px; /* Slightly smaller font */
   transition: background 0.3s ease;
+  margin-left: 15px; /* Space between text and button */
+  vertical-align: middle; /* Align with text */
 }
 
 #install-instructions button:hover {
-  background: #0056b3; /* Darker blue on hover */
+  background: #0056b3; /* Darker blue on hover, as you kept this */
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  #install-instructions {
+      padding: 8px 15px; /* Slightly less padding on smaller screens */
+  }
+  #install-instructions p {
+      font-size: 12px; /* Smaller text */
+  }
+  #install-instructions button {
+      font-size: 11px;
+      padding: 3px 8px;
+      margin-left: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #install-instructions {
+      padding: 6px 10px; /* Even thinner */
+  }
+  #install-instructions p {
+      font-size: 11px;
+  }
+  #install-instructions button {
+      font-size: 10px;
+      padding: 2px 6px;
+      margin-left: 8px;
+  }
 }
 
 /* Responsive adjustments */
