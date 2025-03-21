@@ -9,6 +9,12 @@ window.addEventListener('beforeinstallprompt', (e) => {
     showAddToHomeScreenBanner();
 });
 
+// Fallback for iOS (Safari doesn’t support beforeinstallprompt)
+if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream) {
+    console.log('Detected iOS - showing manual install instructions');
+    showIOSBanner();
+}
+
 function showAddToHomeScreenBanner() {
     const banner = document.createElement('div');
     banner.id = 'addToHomeScreenBanner';
@@ -16,16 +22,33 @@ function showAddToHomeScreenBanner() {
     const message = document.createElement('span');
     message.textContent = 'Add to Home Screen';
 
-    const addButton = document.createElement('button');
-    addButton.textContent = 'Add';
-    addButton.addEventListener('click', handleAddToHomeScreen);
+    const addLink = document.createElement('span');
+    addLink.textContent = 'Add';
+    addLink.className = 'add-link';
+    addLink.addEventListener('click', handleAddToHomeScreen);
 
     const closeButton = document.createElement('button');
     closeButton.textContent = '✕';
     closeButton.addEventListener('click', hideBanner);
 
     banner.appendChild(message);
-    banner.appendChild(addButton);
+    banner.appendChild(addLink);
+    banner.appendChild(closeButton);
+    document.body.appendChild(banner);
+}
+
+function showIOSBanner() {
+    const banner = document.createElement('div');
+    banner.id = 'addToHomeScreenBanner';
+
+    const message = document.createElement('span');
+    message.textContent = 'To install, tap Share () then "Add to Home Screen"';
+
+    const closeButton = document.createElement('button');
+    closeButton.textContent = '✕';
+    closeButton.addEventListener('click', hideBanner);
+
+    banner.appendChild(message);
     banner.appendChild(closeButton);
     document.body.appendChild(banner);
 }
