@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         installBox.style.display = "block";
     } else if (userAgent.includes("chrome")) {
-        installMsg.textContent = "Click the + or ⬇️ icon in the address bar, then choose 'Install' to add this site as an app.";
+        installMsg.textContent = "Click the iamge of the computer monitor with the down arrow on the right side of the address bar, then choose 'Install' to add this site as an app.";
         installBox.style.display = "block";
     } else if (userAgent.includes("firefox")) {
         installMsg.textContent = "Firefox doesn’t support app installation yet. Bookmark this page (Ctrl + D) for easy access.";
