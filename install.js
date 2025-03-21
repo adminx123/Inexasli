@@ -13,15 +13,34 @@ window.addEventListener('load', () => {
     }
 });
 
-// Commenting out old PWA banner logic for now
-/*
+// Chrome-specific PWA install banner
 window.addEventListener('beforeinstallprompt', (e) => {
-    console.log('beforeinstallprompt event fired');
-    e.preventDefault();
-    deferredPrompt = e;
-    showAddToHomeScreenBanner();
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (userAgent.includes("chrome") && !userAgent.includes("edg")) { // Exclude Edge, which uses Chrome engine
+        console.log('beforeinstallprompt event fired for Chrome');
+        e.preventDefault();
+        deferredPrompt = e;
+
+        // Redirect to /budget/index1.html if not there
+        if (window.location.pathname !== '/budget/index1.html') {
+            console.log('Redirecting to /budget/index1.html for Chrome install');
+            localStorage.setItem('installPending', 'true');
+            window.location.href = '/budget/index1.html';
+        } else {
+            console.log('Showing Chrome install banner');
+            showAddToHomeScreenBanner();
+        }
+    }
 });
-*/
+
+// Resume install after redirect for Chrome
+window.addEventListener('load', () => {
+    if (localStorage.getItem('installPending') === 'true' && deferredPrompt) {
+        console.log('Resuming Chrome install on /budget/index1.html');
+        showAddToHomeScreenBanner();
+        localStorage.removeItem('installPending');
+    }
+});
 
 // Check service worker status immediately
 if ('serviceWorker' in navigator) {
@@ -30,9 +49,14 @@ if ('serviceWorker' in navigator) {
     }).catch((err) => {
         console.error('Service Worker not ready:', err);
     });
+
+    // Register service worker
+    navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('Service Worker registered'))
+        .catch((err) => console.error('Service Worker registration failed:', err));
 }
 
-// Browser detection and custom instructions
+// Browser detection and custom instructions for non-Chrome
 document.addEventListener('DOMContentLoaded', () => {
     const installBox = document.getElementById("install-instructions");
     const installMsg = document.getElementById("install-message");
@@ -50,9 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
             installMsg.textContent = "Tap the Share icon (square with an arrow) at the top, then select 'Add to Dock'.";
         }
         installBox.style.display = "block";
-    } else if (userAgent.includes("chrome")) {
-        installMsg.textContent = "Click the iamge of the computer monitor with the down arrow on the right side of the address bar, then choose 'Install' to add this site as an app.";
-        installBox.style.display = "block";
+    } else if (userAgent.includes("chrome") && !userAgent.includes("edg")) {
+        // Chrome gets the banner via beforeinstallprompt, not static instructions
+        installBox.style.display = "none"; // Hide static banner for Chrome
     } else if (userAgent.includes("firefox")) {
         installMsg.textContent = "Firefox doesn’t support app installation yet. Bookmark this page (Ctrl + D) for easy access.";
         installBox.style.display = "block";
@@ -65,48 +89,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Commenting out old banner functions for now
-/*
+// Chrome install banner functions
 function showAddToHomeScreenBanner() {
     console.log('Showing banner for Chrome');
     const banner = document.createElement('div');
     banner.id = 'addToHomeScreenBanner';
+    banner.style.position = 'fixed';
+    banner.style.bottom = '0';
+    banner.style.left = '0';
+    banner.style.right = '0';
+    banner.style.padding = '10px 20px';
+    banner.style.background = 'rgba(255, 255, 255, 0.9)';
+    banner.style.boxShadow = '0 -2px 10px rgba(0, 0, 0, 0.3)';
+    banner.style.textAlign = 'center';
+    banner.style.zIndex = '1000';
+
     const message = document.createElement('span');
-    message.textContent = 'Add to Home Screen';
+    message.textContent = 'Add INEXASLI to your desktop!';
+    message.style.fontSize = '14px';
+    message.style.color = '#000';
+
     const addLink = document.createElement('span');
-    addLink.textContent = 'Add';
-    addLink.className = 'add-link';
+    addLink.textContent = 'Install';
+    addLink.style.color = '#007bff';
+    addLink.style.cursor = 'pointer';
+    addLink.style.marginLeft = '15px';
+    addLink.style.fontSize = '14px';
     addLink.addEventListener('click', handleAddToHomeScreen);
+
     const closeButton = document.createElement('button');
     closeButton.textContent = '✕';
+    closeButton.style.background = 'none';
+    closeButton.style.border = 'none';
+    closeButton.style.color = '#000';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.fontSize = '14px';
+    closeButton.style.marginLeft = '15px';
     closeButton.addEventListener('click', hideBanner);
+
     banner.appendChild(message);
     banner.appendChild(addLink);
-    banner.appendChild(closeButton);
-    document.body.appendChild(banner);
-}
-
-function showIOSBanner() {
-    console.log('Showing banner for iOS');
-    const banner = document.createElement('div');
-    banner.id = 'addToHomeScreenBanner';
-    const message = document.createElement('span');
-    const shareIcon = document.createElement('span');
-    shareIcon.innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="4 14 12 6 20 14"></polyline>
-            <rect x="2" y="14" width="20" height="8"></rect>
-        </svg>
-    `;
-    shareIcon.style.verticalAlign = 'middle';
-    shareIcon.style.marginRight = '4px';
-    message.textContent = 'To install, tap ';
-    message.appendChild(shareIcon);
-    message.appendChild(document.createTextNode(' then "Add to Home Screen"'));
-    const closeButton = document.createElement('button');
-    closeButton.textContent = '✕';
-    closeButton.addEventListener('click', hideBanner);
-    banner.appendChild(message);
     banner.appendChild(closeButton);
     document.body.appendChild(banner);
 }
@@ -133,4 +155,3 @@ function hideBanner() {
         banner.style.display = 'none';
     }
 }
-*/
