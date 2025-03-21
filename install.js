@@ -1,3 +1,6 @@
+console.log('Script loaded and running'); // Add this at the top
+
+
 // Select the body or a container where the banner will be appended
 const body = document.body;
 
@@ -6,6 +9,7 @@ let deferredPrompt;
 
 // Listen for the beforeinstallprompt event (fires when the browser thinks the site can be installed)
 window.addEventListener('beforeinstallprompt', (e) => {
+    console.log('beforeinstallprompt event fired'); // Debug log
     // Prevent the default mini-infobar prompt
     e.preventDefault();
     // Store the event for later use
