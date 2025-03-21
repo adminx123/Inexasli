@@ -18,7 +18,7 @@
     <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
     <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
     <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
-    <link rel="manifest" href="/manifest.json" />
+    <!-- <link rel="manifest" href="/manifest.json" /> -->
 
     <style>
 
@@ -84,7 +84,11 @@
 </head>
 <body>
 
-
+    <div id="install-instructions" style="display: none;">
+        <p><strong>Add this site to your device!</strong></p>
+        <p id="install-message"></p>
+        <button onclick="document.getElementById('install-instructions').style.display='none'">Got it</button>
+    </div>
     
     
     <!-- Inline container to hold both elements -->

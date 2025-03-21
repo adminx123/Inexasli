@@ -13,12 +13,15 @@ window.addEventListener('load', () => {
     }
 });
 
+// Commenting out old PWA banner logic for now
+/*
 window.addEventListener('beforeinstallprompt', (e) => {
     console.log('beforeinstallprompt event fired');
     e.preventDefault();
     deferredPrompt = e;
     showAddToHomeScreenBanner();
 });
+*/
 
 // Check service worker status immediately
 if ('serviceWorker' in navigator) {
@@ -29,29 +32,54 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// Fallback for iOS
-if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream) {
-    console.log('Detected iOS - showing manual install instructions');
-    showIOSBanner();
-}
+// Browser detection and custom instructions
+document.addEventListener('DOMContentLoaded', () => {
+    const installBox = document.getElementById("install-instructions");
+    const installMsg = document.getElementById("install-message");
+    const userAgent = navigator.userAgent.toLowerCase();
 
+    if (!installBox || !installMsg) {
+        console.error('Install elements not found in DOM');
+        return;
+    }
+
+    if (userAgent.includes("safari") && !userAgent.includes("chrome")) {
+        if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
+            installMsg.textContent = "Tap the Share icon (square with an arrow) at the bottom, then select 'Add to Home Screen'.";
+        } else {
+            installMsg.textContent = "Safari on desktop doesn’t support app installation. Bookmark this page (Cmd + D) for quick access.";
+        }
+        installBox.style.display = "block";
+    } else if (userAgent.includes("chrome")) {
+        installMsg.textContent = "Click the + or ⬇️ icon in the address bar, then choose 'Install' to add this site as an app.";
+        installBox.style.display = "block";
+    } else if (userAgent.includes("firefox")) {
+        installMsg.textContent = "Firefox doesn’t support app installation yet. Bookmark this page (Ctrl + D) for easy access.";
+        installBox.style.display = "block";
+    } else if (userAgent.includes("edg")) {
+        installMsg.textContent = "Click the … menu in the top-right corner, then select 'Apps' > 'Install this site as an app'.";
+        installBox.style.display = "block";
+    } else {
+        installMsg.textContent = "To save this site, add it to your bookmarks or home screen using your browser’s options.";
+        installBox.style.display = "block";
+    }
+});
+
+// Commenting out old banner functions for now
+/*
 function showAddToHomeScreenBanner() {
     console.log('Showing banner for Chrome');
     const banner = document.createElement('div');
     banner.id = 'addToHomeScreenBanner';
-
     const message = document.createElement('span');
     message.textContent = 'Add to Home Screen';
-
     const addLink = document.createElement('span');
     addLink.textContent = 'Add';
     addLink.className = 'add-link';
     addLink.addEventListener('click', handleAddToHomeScreen);
-
     const closeButton = document.createElement('button');
     closeButton.textContent = '✕';
     closeButton.addEventListener('click', hideBanner);
-
     banner.appendChild(message);
     banner.appendChild(addLink);
     banner.appendChild(closeButton);
@@ -62,7 +90,6 @@ function showIOSBanner() {
     console.log('Showing banner for iOS');
     const banner = document.createElement('div');
     banner.id = 'addToHomeScreenBanner';
-
     const message = document.createElement('span');
     const shareIcon = document.createElement('span');
     shareIcon.innerHTML = `
@@ -73,15 +100,12 @@ function showIOSBanner() {
     `;
     shareIcon.style.verticalAlign = 'middle';
     shareIcon.style.marginRight = '4px';
-
     message.textContent = 'To install, tap ';
     message.appendChild(shareIcon);
     message.appendChild(document.createTextNode(' then "Add to Home Screen"'));
-
     const closeButton = document.createElement('button');
     closeButton.textContent = '✕';
     closeButton.addEventListener('click', hideBanner);
-
     banner.appendChild(message);
     banner.appendChild(closeButton);
     document.body.appendChild(banner);
@@ -109,3 +133,4 @@ function hideBanner() {
         banner.style.display = 'none';
     }
 }
+*/
