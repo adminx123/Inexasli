@@ -56,42 +56,51 @@ function getBrowser(userAgent) {
     return 'Unknown Browser';
 }
 
-// Browser detection and custom instructions
 document.addEventListener('DOMContentLoaded', () => {
     const installBox = document.getElementById("install-instructions");
     const installMsg = document.getElementById("install-message");
     const userAgent = navigator.userAgent.toLowerCase();
-    const deviceType = getDeviceType(userAgent);
-    const browser = getBrowser(userAgent);
 
     if (!installBox || !installMsg) {
         console.error('Install elements not found in DOM');
         return;
     }
 
-    // Base message with device and browser info
-    const deviceBrowserInfo = `You're on a ${deviceType} using ${browser}. `;
-
-    if (browser === 'Safari') {
-        if (deviceType === 'iOS Device' || deviceType === 'Tablet') {
-            installMsg.textContent = `${deviceBrowserInfo}Tap the Share icon (square with an arrow) at the bottom, then select 'Add to Home Screen'.`;
+    // Safari (iOS and other platforms)
+    if (userAgent.includes("safari") && !userAgent.includes("chrome") && !userAgent.includes("crios")) {
+        if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
+            installMsg.textContent = "Tap the Share icon (square with an arrow) at the bottom, then select 'Add to Home Screen'.";
         } else {
-            installMsg.textContent = `${deviceBrowserInfo}Tap the Share icon (square with an arrow) at the top, then select 'Add to Dock'.`;
+            installMsg.textContent = "Tap the Share icon (square with an arrow) at the top, then select 'Add to Dock'.";
         }
         installBox.style.display = "block";
-    } else if (browser === 'Chrome') {
-        installBox.style.display = "none"; // Chrome uses the dynamic banner
-    } else if (browser === 'Firefox') {
-        installMsg.textContent = `${deviceBrowserInfo}Firefox doesn’t support app installation yet. Bookmark this page (Ctrl + D) for easy access.`;
+    } 
+    // Chrome on iOS (detecting "crios" which is part of the Chrome iOS user agent)
+    else if (userAgent.includes("chrome") && userAgent.includes("crios")) {
+        installMsg.textContent = "Tap the Share icon (square with an arrow) at the bottom, then select 'Add to Home Screen'.";
         installBox.style.display = "block";
-    } else if (browser === 'Edge') {
-        installMsg.textContent = `${deviceBrowserInfo}Click the … menu in the top-right corner, then select 'Apps' > 'Install this site as an app'.`;
+    } 
+    // Chrome (excluding Edge and Chrome on iOS)
+    else if (userAgent.includes("chrome") && !userAgent.includes("edg") && !userAgent.includes("crios")) {
+        installBox.style.display = "none"; // Hide static banner for Chrome
+    } 
+    // Firefox
+    else if (userAgent.includes("firefox")) {
+        installMsg.textContent = "Firefox doesn’t support app installation yet. Bookmark this page (Ctrl + D) for easy access.";
         installBox.style.display = "block";
-    } else {
-        installMsg.textContent = `${deviceBrowserInfo}To save this site, add it to your bookmarks or home screen using your browser’s options.`;
+    } 
+    // Edge
+    else if (userAgent.includes("edg")) {
+        installMsg.textContent = "Click the … menu in the top-right corner, then select 'Apps' > 'Install this site as an app'.";
+        installBox.style.display = "block";
+    } 
+    // Other browsers
+    else {
+        installMsg.textContent = "To save this site, add it to your bookmarks or home screen using your browser’s options.";
         installBox.style.display = "block";
     }
 });
+
 
 // Chrome install banner functions
 function showAddToHomeScreenBanner() {
