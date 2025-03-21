@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } 
     // Other browsers
     else {
-        installMsg.textContent = "To save this site, add it to your bookmarks or home screen using your browser’s options.";
+        installMsg.textContent = "To save this site, add it to your home screen using your browser’s options.";
         installBox.style.display = "block";
     }
 });
