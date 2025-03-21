@@ -21,7 +21,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
         console.log('Showing Chrome install banner');
-        showInstallInstructions(); // Show existing install instructions
+        showInstallInstructions("chrome"); // Show instructions for Chrome
     }
 });
 
@@ -101,11 +101,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Function to show the install instructions (using existing styles)
-function showInstallInstructions() {
+// Function to show the install instructions based on browser
+function showInstallInstructions(browserType) {
     const installBox = document.getElementById("install-instructions");
-    if (installBox) {
-        installBox.style.display = "block"; // Make sure the instructions box is visible
+    const installMsg = document.getElementById("install-message");
+
+    if (!installBox || !installMsg) {
+        console.error('Install elements not found in DOM');
+        return;
+    }
+
+    installBox.style.display = "block"; // Ensure the instructions box is visible
+
+    switch (browserType) {
+        case 'chrome':
+            installMsg.textContent = "To install, click the Install button in the address bar or press 'Add to Home Screen' in the menu.";
+            break;
+        case 'safari':
+            installMsg.textContent = "Tap the Share icon (square with an arrow), then select 'Add to Home Screen'.";
+            break;
+        default:
+            installMsg.textContent = "For installation instructions, please check your browser's menu options.";
     }
 }
 
