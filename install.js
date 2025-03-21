@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
             installMsg.textContent = "Tap the Share icon (square with an arrow) at the bottom, then select 'Add to Home Screen'.";
         } else {
-            installMsg.textContent = "Safari on desktop doesn’t support app installation. Bookmark this page (Cmd + D) for quick access.";
+            installMsg.textContent = "Tap the Share icon (square with an arrow) at the top, then select 'Add to Dock'.";
         }
         installBox.style.display = "block";
     } else if (userAgent.includes("chrome")) {
