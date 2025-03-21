@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Function to show the install instructions based on browser
+// Function to show install instructions based on browser
 function showInstallInstructions(browserType) {
     const installBox = document.getElementById("install-instructions");
     const installMsg = document.getElementById("install-message");
@@ -113,15 +113,23 @@ function showInstallInstructions(browserType) {
 
     installBox.style.display = "block"; // Ensure the instructions box is visible
 
+    const baseMessage = "Access INEXASLI via installing the web app. ";
+
     switch (browserType) {
         case 'chrome':
-            installMsg.textContent = "To install, click the Install button in the address bar or press 'Add to Home Screen' in the menu.";
+            installMsg.textContent = `${baseMessage}Click the + icon in the address bar, then select 'Install', or use the banner below.`;
             break;
         case 'safari':
-            installMsg.textContent = "Tap the Share icon (square with an arrow), then select 'Add to Home Screen'.";
+            installMsg.textContent = `${baseMessage}Tap the Share icon (square with an arrow), then select 'Add to Home Screen'.`;
+            break;
+        case 'firefox':
+            installMsg.textContent = `${baseMessage}Firefox doesn’t support app installation yet. Please use Chrome or Safari.`;
+            break;
+        case 'edge':
+            installMsg.textContent = `${baseMessage}Click the … menu in the top-right corner, then select 'Apps' > 'Install this site as an app'.`;
             break;
         default:
-            installMsg.textContent = "For installation instructions, please check your browser's menu options.";
+            installMsg.textContent = `${baseMessage}Check your browser’s menu for installation options, or use Chrome/Safari for the best experience.`;
     }
 }
 
