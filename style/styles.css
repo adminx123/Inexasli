@@ -716,48 +716,45 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
 
 #addToHomeScreenBanner {
   position: fixed;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
   width: 100%;
-  max-width: 400px;
-  background-color: #ffffff;
-  color: #000000;
+  background-color: #000000; /* Black background */
+  color: #ffffff; /* White text */
   padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
-  font-family: "Roboto", sans-serif; /* Matches your body font */
+  font-family: "Roboto", sans-serif;
 }
 
 #addToHomeScreenBanner span {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px; /* Slightly larger for readability */
+  font-weight: 700; /* Bold for emphasis */
+  letter-spacing: 0.5px; /* Subtle spacing for refinement */
 }
 
 #addToHomeScreenBanner button:first-of-type {
-  background-color: #000000; /* Apple blue */
-  color: #ffffff;
+  background-color: #ffffff; /* White button */
+  color: #000000; /* Black text */
   border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
+  padding: 6px 12px; /* Slightly larger for touch targets */
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 700; /* Bold */
+  letter-spacing: 0.5px;
 }
 
 #addToHomeScreenBanner button:first-of-type:hover {
-  background-color: #5e5e5e; /* Slightly darker blue on hover */
+  background-color: #e0e0e0; /* Light gray hover, minimal use of gray */
 }
 
 #addToHomeScreenBanner button:last-of-type {
   background: none;
   border: none;
-  color: #888888;
-  font-size: 16px;
+  color: #888888; /* Gray for close button */
+  font-size: 18px; /* Slightly larger for visibility */
   cursor: pointer;
 }
 
