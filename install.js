@@ -21,22 +21,16 @@ window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
 
-        // Redirect to /budget/index1.html if not there
-        if (window.location.pathname !== '/budget/index1.html') {
-            console.log('Redirecting to /budget/index1.html for Chrome install');
-            localStorage.setItem('installPending', 'true');
-            window.location.href = '/budget/index1.html';
-        } else {
-            console.log('Showing Chrome install banner');
-            showAddToHomeScreenBanner();
-        }
+        // Show Chrome install banner
+        console.log('Showing Chrome install banner');
+        showAddToHomeScreenBanner();
     }
 });
 
 // Resume install after redirect for Chrome
 window.addEventListener('load', () => {
     if (localStorage.getItem('installPending') === 'true' && deferredPrompt) {
-        console.log('Resuming Chrome install on /budget/index1.html');
+        console.log('Resuming Chrome install');
         showAddToHomeScreenBanner();
         localStorage.removeItem('installPending');
     }
@@ -94,37 +88,17 @@ function showAddToHomeScreenBanner() {
     console.log('Showing banner for Chrome');
     const banner = document.createElement('div');
     banner.id = 'addToHomeScreenBanner';
-    banner.style.position = 'fixed';
-    banner.style.bottom = '0';
-    banner.style.left = '0';
-    banner.style.right = '0';
-    banner.style.padding = '10px 20px';
-    banner.style.background = 'rgba(255, 255, 255, 0.9)';
-    banner.style.boxShadow = '0 -2px 10px rgba(0, 0, 0, 0.3)';
-    banner.style.textAlign = 'center';
-    banner.style.zIndex = '1000';
 
     const message = document.createElement('span');
     message.textContent = 'Add INEXASLI to your desktop!';
-    message.style.fontSize = '14px';
-    message.style.color = '#000';
 
     const addLink = document.createElement('span');
     addLink.textContent = 'Install';
-    addLink.style.color = '#007bff';
     addLink.style.cursor = 'pointer';
-    addLink.style.marginLeft = '15px';
-    addLink.style.fontSize = '14px';
     addLink.addEventListener('click', handleAddToHomeScreen);
 
     const closeButton = document.createElement('button');
     closeButton.textContent = '✕';
-    closeButton.style.background = 'none';
-    closeButton.style.border = 'none';
-    closeButton.style.color = '#000';
-    closeButton.style.cursor = 'pointer';
-    closeButton.style.fontSize = '14px';
-    closeButton.style.marginLeft = '15px';
     closeButton.addEventListener('click', hideBanner);
 
     banner.appendChild(message);
