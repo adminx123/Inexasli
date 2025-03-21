@@ -21,7 +21,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
         console.log('Showing Chrome install banner');
-        showAddToHomeScreenBanner();
+        showInstallInstructions(); // Show existing install instructions
     }
 });
 
@@ -96,60 +96,20 @@ document.addEventListener('DOMContentLoaded', () => {
     } 
     // Other browsers
     else {
-        installMsg.textContent = "To save this site, add it to your home screen using your browser’s options.";
+        installMsg.textContent = "To save this site, add it to your bookmarks or home screen using your browser’s options.";
         installBox.style.display = "block";
     }
 });
 
-
-// Chrome install banner functions
-function showAddToHomeScreenBanner() {
-    console.log('Showing banner for Chrome');
-    const userAgent = navigator.userAgent.toLowerCase();
-    const deviceType = getDeviceType(userAgent);
-    const browser = getBrowser(userAgent);
-
-    const banner = document.createElement('div');
-    banner.id = 'addToHomeScreenBanner';
-    banner.style.position = 'fixed';
-    banner.style.bottom = '0';
-    banner.style.left = '0';
-    banner.style.right = '0';
-    banner.style.padding = '10px 20px';
-    banner.style.background = 'rgba(255, 255, 255, 0.9)';
-    banner.style.boxShadow = '0 -2px 10px rgba(0, 0, 0, 0.3)';
-    banner.style.textAlign = 'center';
-    banner.style.zIndex = '1000';
-
-    const message = document.createElement('span');
-    message.textContent = `You're on a ${deviceType} using ${browser}. Add INEXASLI to your desktop!`;
-    message.style.fontSize = '14px';
-    message.style.color = '#000';
-
-    const addLink = document.createElement('span');
-    addLink.textContent = 'Install';
-    addLink.style.color = '#007bff';
-    addLink.style.cursor = 'pointer';
-    addLink.style.marginLeft = '15px';
-    addLink.style.fontSize = '14px';
-    addLink.addEventListener('click', handleAddToHomeScreen);
-
-    const closeButton = document.createElement('button');
-    closeButton.textContent = '✕';
-    closeButton.style.background = 'none';
-    closeButton.style.border = 'none';
-    closeButton.style.color = '#000';
-    closeButton.style.cursor = 'pointer';
-    closeButton.style.fontSize = '14px';
-    closeButton.style.marginLeft = '15px';
-    closeButton.addEventListener('click', hideBanner);
-
-    banner.appendChild(message);
-    banner.appendChild(addLink);
-    banner.appendChild(closeButton);
-    document.body.appendChild(banner);
+// Function to show the install instructions (using existing styles)
+function showInstallInstructions() {
+    const installBox = document.getElementById("install-instructions");
+    if (installBox) {
+        installBox.style.display = "block"; // Make sure the instructions box is visible
+    }
 }
 
+// Handle install event for deferredPrompt
 function handleAddToHomeScreen() {
     if (deferredPrompt) {
         deferredPrompt.prompt();
@@ -160,15 +120,15 @@ function handleAddToHomeScreen() {
                 console.log('User dismissed the A2HS prompt');
             }
             deferredPrompt = null;
-            hideBanner();
+            hideInstallInstructions();
         });
     }
 }
 
-function hideBanner() {
-    const banner = document.getElementById('addToHomeScreenBanner');
-    if (banner) {
-        console.log('Hiding banner');
-        banner.style.display = 'none';
+// Hide install instructions
+function hideInstallInstructions() {
+    const installBox = document.getElementById("install-instructions");
+    if (installBox) {
+        installBox.style.display = "none";
     }
 }
