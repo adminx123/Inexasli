@@ -9,14 +9,14 @@
   "status_bar": "translucent",
   "icons": [
     {
-      "src": "/images/newLogo.jpg",
+      "src": "/images/web-app-manifest-192x192.png",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "/images/newLogo.jpg",
+      "src": "/images/web-app-manifest-512x512.png",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/png"
     }
   ]
 }
