@@ -42,7 +42,7 @@ function showIOSBanner() {
     banner.id = 'addToHomeScreenBanner';
 
     const message = document.createElement('span');
-    message.textContent = 'To install, tap Share () then "Add to Home Screen"';
+    message.textContent = 'To install, tap Share ⇧ then "Add to Home Screen"';
 
     const closeButton = document.createElement('button');
     closeButton.textContent = '✕';
