@@ -1,7 +1,7 @@
 {
   "name": "INEXASLI",
   "short_name": "INEXASLI",
-  "start_url": "/budget/index1.html",
+  "start_url": "/",
   "scope": "/",  
   "id": "/budget/index1.html",
   "display": "standalone",
