@@ -104,7 +104,7 @@ function showInstallInstructions(browserType) {
 
     switch (browserType) {
         case 'chrome':
-            installMsg.textContent = `${baseMessage}Click the + icon in the address bar, then select 'Install', or use the banner below.`;
+            installMsg.textContent = `${baseMessage}Click the monitor icon in the right side of the address bar, then select 'Install', or use the banner below.`;
             break;
         default:
             installMsg.textContent = `${baseMessage}Please use Chrome or an iOS device for installation options.`;
