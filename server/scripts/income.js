@@ -1503,10 +1503,17 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Select all interactive elements within .checkboxrow
     const interactiveElements = document.querySelectorAll(
       ".checkboxrow input[type='number'], .checkboxrow label, .checkboxrow .checkbox-button-group input[type='checkbox']"
     );
+  
+    // Initialize tooltip content for .checkboxrow
+    const tooltips = document.querySelectorAll(".checkboxrow .tooltip");
+    tooltips.forEach((tooltip) => {
+      const content = tooltip.querySelector(".tooltip-content");
+      const message = tooltip.getAttribute("data-tooltip");
+      content.textContent = message;
+    });
   
     interactiveElements.forEach((element) => {
       element.addEventListener("click", (e) => {
@@ -1514,20 +1521,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const tooltip = row.querySelector(".tooltip");
         const content = tooltip ? tooltip.querySelector(".tooltip-content") : null;
   
-        // Remove .active and hide tooltips from all rows
         document.querySelectorAll(".checkboxrow").forEach(r => {
           r.classList.remove("active");
           const otherTooltip = r.querySelector(".tooltip");
           if (otherTooltip) otherTooltip.classList.remove("show");
         });
   
-        // Add .active to the clicked row
         row.classList.add("active");
   
-        // Show the tooltip if it exists
         if (tooltip && content) {
           tooltip.classList.add("show");
-  
           const contentRect = content.getBoundingClientRect();
           const viewportWidth = window.innerWidth;
   
@@ -1543,12 +1546,10 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
   
-        // Prevent event from bubbling up to document click handler
         e.stopPropagation();
       });
     });
   
-    // Clear .active and hide tooltips when clicking outside
     document.addEventListener("click", (e) => {
       if (!e.target.closest(".checkboxrow")) {
         document.querySelectorAll(".checkboxrow").forEach(r => {
