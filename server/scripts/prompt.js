@@ -23,19 +23,42 @@ function toggleSection(header) {
     section.classList.toggle('expanded');
 }
 
+
+
 function toggleScope(scope) {
     const personalBtn = document.getElementById('personal-btn');
     const businessBtn = document.getElementById('business-btn');
     const personalPrompts = document.getElementById('personal-prompts');
     const businessPrompts = document.getElementById('business-prompts');
+    const promptContainer = document.getElementById('personal-prompts')?.parentElement; // Prompt container
+    const aiButtonContainer = document.querySelector('.button-container')?.parentElement; // AI button container
+
+    // Null checks for debugging
+    if (!personalBtn || !businessBtn || !personalPrompts || !businessPrompts || !promptContainer || !aiButtonContainer) {
+        console.error('Missing elements:', {
+            personalBtn,
+            businessBtn,
+            personalPrompts,
+            businessPrompts,
+            promptContainer,
+            aiButtonContainer
+        });
+        return;
+    }
 
     if (activeScope === scope) {
+        // If the same scope is clicked again, hide everything
         personalPrompts.classList.add('hidden');
         businessPrompts.classList.add('hidden');
         personalBtn.classList.remove('selected');
         businessBtn.classList.remove('selected');
+        promptContainer.classList.add('hidden');
+        aiButtonContainer.classList.add('hidden'); // Hide AI buttons
         activeScope = null;
     } else {
+        // Show both containers and toggle the appropriate scope
+        promptContainer.classList.remove('hidden');
+        aiButtonContainer.classList.remove('hidden'); // Show AI buttons
         personalPrompts.classList.add('hidden');
         businessPrompts.classList.add('hidden');
         personalBtn.classList.remove('selected');
@@ -52,6 +75,8 @@ function toggleScope(scope) {
     }
 }
 
+// Rest of your JavaScript remains unchanged...
+// Rest of your JavaScript (unchanged)...
 const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
 const formatGrid = (selector, prefix) => {
     const items = Array.from(document.querySelectorAll(selector))
