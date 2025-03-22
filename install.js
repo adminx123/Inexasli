@@ -100,14 +100,14 @@ function showInstallInstructions(browserType) {
 
     installBox.style.display = "block"; // Ensure the instructions box is visible
 
-    const baseMessage = "Access INEXASLI via installing the web app. ";
+    const baseMessage = "Enhance your experience by installing the INEXASLI web app.";
 
     switch (browserType) {
         case 'chrome':
-            installMsg.textContent = `${baseMessage}Click the monitor icon in the right side of the address bar, then select 'Install'`;
+            installMsg.textContent = `${baseMessage} Click the monitor icon in the right side of the address bar & 'Install'`;
             break;
         default:
-            installMsg.textContent = `${baseMessage}Please use Chrome or an iOS device for installation options.`;
+            installMsg.textContent = `${baseMessage} Please use Chrome or Safari for web app installation options.`;
     }
 }
 
