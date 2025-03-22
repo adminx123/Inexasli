@@ -478,23 +478,7 @@ button {
   }
 }
 
-.tooltip .tooltiptext {
-  display: none;
-  visibility: hidden;
-  width: 200px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -100px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
+
 
 .numeric-input {
   width: 200px;
@@ -626,6 +610,25 @@ button {
 
 #SubregionDropdown {
   min-width: 50px;
+}
+
+
+.tooltip .tooltiptext {
+  display: none;
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .tooltip {
@@ -1263,6 +1266,10 @@ textarea {
 .checkboxrow:not(.active) {
   transform: scale(0.9); /* 10% smaller */
   transition: transform 0.2s ease;
+}
+
+.checkboxrow:not(.active) .tooltip-content {
+  transform: scale(1); /* Undo the 0.9 scaling */
 }
 
 /* Ensure the active row stays normal */

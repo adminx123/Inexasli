@@ -1502,22 +1502,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Add distort on input click
-document.querySelectorAll('.checkboxrow input[type="number"]').forEach(input => {
-    input.addEventListener('click', function() {
-      const row = this.closest('.checkboxrow');
-      
-      // Remove active from all rows
-      document.querySelectorAll('.checkboxrow').forEach(r => r.classList.remove('active'));
-      
-      // Add active to the clicked row
-      row.classList.add('active');
-    });
-  });
+document.addEventListener("DOMContentLoaded", () => {
+    // Select all interactive elements within .checkboxrow
+    const interactiveElements = document.querySelectorAll(
+      ".checkboxrow input[type='number'], .checkboxrow label, .checkboxrow .checkbox-button-group input[type='checkbox']"
+    );
   
-  // Clear active when clicking outside
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.checkboxrow')) {
-      document.querySelectorAll('.checkboxrow').forEach(r => r.classList.remove('active'));
-    }
+    interactiveElements.forEach((element) => {
+      element.addEventListener("click", (e) => {
+        const row = element.closest(".checkboxrow");
+  
+        // Remove .active from all rows
+        document.querySelectorAll(".checkboxrow").forEach(r => r.classList.remove("active"));
+  
+        // Add .active to the clicked row
+        row.classList.add("active");
+  
+        // Prevent event from bubbling up to document click handler immediately
+        e.stopPropagation();
+      });
+    });
+  
+    // Clear .active when clicking outside any .checkboxrow
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".checkboxrow")) {
+        document.querySelectorAll(".checkboxrow").forEach(r => r.classList.remove("active"));
+      }
+    });
   });
