@@ -766,7 +766,7 @@ h1 > .tooltip1, h2 > .tooltip1, h3 > .tooltip1 {
 /* Install Instructions */
 #install-instructions {
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 0;
   right: 0;
   padding: 10px 20px;
