@@ -344,22 +344,60 @@ window.calculateAll = function() {
   setCookie("DISCRETIONARY", DISCRETIONARY, 365);
 };
 
-// Add distort on input click
-document.querySelectorAll('.checkboxrow input[type="number"]').forEach(input => {
-  input.addEventListener('click', function() {
-    const row = this.closest('.checkboxrow');
-    
-    // Remove active from all rows
-    document.querySelectorAll('.checkboxrow').forEach(r => r.classList.remove('active'));
-    
-    // Add active to the clicked row
-    row.classList.add('active');
-  });
-});
+document.addEventListener("DOMContentLoaded", () => {
+  // Select all interactive elements within .checkboxrow
+  const interactiveElements = document.querySelectorAll(
+    ".checkboxrow input[type='number'], .checkboxrow label, .checkboxrow .checkbox-button-group input[type='checkbox']"
+  );
 
-// Clear active when clicking outside
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.checkboxrow')) {
-    document.querySelectorAll('.checkboxrow').forEach(r => r.classList.remove('active'));
-  }
+  interactiveElements.forEach((element) => {
+    element.addEventListener("click", (e) => {
+      const row = element.closest(".checkboxrow");
+      const tooltip = row.querySelector(".tooltip");
+      const content = tooltip ? tooltip.querySelector(".tooltip-content") : null;
+
+      // Remove .active and hide tooltips from all rows
+      document.querySelectorAll(".checkboxrow").forEach(r => {
+        r.classList.remove("active");
+        const otherTooltip = r.querySelector(".tooltip");
+        if (otherTooltip) otherTooltip.classList.remove("show");
+      });
+
+      // Add .active to the clicked row
+      row.classList.add("active");
+
+      // Show the tooltip if it exists
+      if (tooltip && content) {
+        tooltip.classList.add("show");
+
+        const contentRect = content.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+
+        if (contentRect.left < 0) {
+          content.style.left = '0';
+          content.style.transform = 'translateX(0)';
+        } else if (contentRect.right > viewportWidth) {
+          content.style.left = '100%';
+          content.style.transform = 'translateX(-100%)';
+        } else {
+          content.style.left = '50%';
+          content.style.transform = 'translateX(-50%)';
+        }
+      }
+
+      // Prevent event from bubbling up to document click handler
+      e.stopPropagation();
+    });
+  });
+
+  // Clear .active and hide tooltips when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".checkboxrow")) {
+      document.querySelectorAll(".checkboxrow").forEach(r => {
+        r.classList.remove("active");
+        const tooltip = r.querySelector(".tooltip");
+        if (tooltip) tooltip.classList.remove("show");
+      });
+    }
+  });
 });

@@ -48,28 +48,28 @@
             data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket."
             onclick="calculateAll();">
             Income
-            <span class="tooltip-content"></span>
+            <span class="tooltip1-content"></span>
         </a>
 
         <a href="./expense.html" class="tooltip tab " data-location="expense"
             data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn."
             onclick="calculateAll();">
             Expense
-            <span class="tooltip-content"></span>
+            <span class="tooltip1-content"></span>
         </a>
 
         <a href="./asset.html" class="tooltip tab " data-location="asset"
             data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection."
             onclick="calculateAll();">
             Asset
-            <span class="tooltip-content"></span>
+            <span class="tooltip1-content"></span>
         </a>
 
         <a href="./liability.html" class="tooltip tab " data-location="liability"
             data-tooltip="Money you owe to others, which you need to pay back. Examples include loans, mortgages, or credit card debts. It's like a promise you've made to pay someone in the future."
             onclick="calculateAll();">
             Liability
-            <span class="tooltip-content"></span>
+            <span class="tooltip1-content"></span>
         </a>
 
     </div>
@@ -77,12 +77,12 @@
 
     <div class="container">
 
-        <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+        <h2 style="text-align: center; font-size: 18px;" class="tooltip1"
             data-tooltip="A type of debt where the borrower receives a fixed amount of money upfront, which they repay over time through regular payments until the loan is fully paid off. Once the loan is settled, the account is closed, and the borrower must apply for a new loan if they need more funds.">
-            Non-Revolving Liabilities<span class="tooltip-content"></span>
+            Non-Revolving Liabilities<span class="tooltip1-content"></span>
         </h2>
 
-        <p>Step 6: Enter any debts that you have in the fields below.</p>
+ 
 
 
         <div class="row">
@@ -114,9 +114,9 @@
         </div>
 
         <div class="row">
-            <label for="" style="font-size: unset;" class="tooltip"
+            <label for="" style="font-size: unset;" class="tooltip1"
                 data-tooltip="List money you owe, whether it's to personal connections (like borrowing from family) or business suppliers that hasnt been accounted for elsewhere. In a sole proprietorship, these liabilities are part of your personal financial responsibility.">
-                <span class="tooltip-content"></span>
+                <span class="tooltip1-content"></span>
                 Accounts Payable:</label>
             <input type='number' inputmode="numeric" id="liabilities_personal_debt">
             <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
@@ -127,9 +127,9 @@
 
     <div class="containerround">
 
-        <h2 style="text-align: center; font-size: 18px;" class="tooltip"
+        <h2 style="text-align: center; font-size: 18px;" class="tooltip1"
             data-tooltip="Debts where you can borrow money up to a certain limit, pay it back, and borrow again. The amount you can borrow revolves as you pay off what you owe.">
-            Revolving Liabilities<span class="tooltip-content"></span>
+            Revolving Liabilities<span class="tooltip1-content"></span>
         </h2>
 
 
@@ -157,8 +157,8 @@
 
         <div class="row">
 
-            <label for="" style="font-size: unset;" class="tooltip" data-tooltip="Total tax payable">
-                <span class="tooltip-content"></span>
+            <label for="" style="font-size: unset;" class="tooltip1" data-tooltip="Total tax payable">
+                <span class="tooltip1-content"></span>
                 Tax Arrears:</label>
             <input type='number' inputmode="numeric" id="liabilities_tax_arrears">
             <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
