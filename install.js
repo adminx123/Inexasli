@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } 
     // Firefox
     else if (userAgent.includes("firefox")) {
-        installMsg.textContent = "Firefox doesn’t support app installation yet. Bookmark this page (Ctrl + D) for easy access.";
+        installMsg.textContent = "Firefox doesn’t support app installation yet. Please visit on a differnt browser for installation instructions. Bookmark this page (Ctrl + D) for easy access.";
         installBox.style.display = "block";
     } 
     // Edge
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } 
     // Other browsers
     else {
-        installMsg.textContent = "To save this site, add it to your bookmarks or home screen using your browser’s options.";
+        installMsg.textContent = "Save INEXASLI to your home screen by clicking the share button > 'Save to homescreen'";
         installBox.style.display = "block";
     }
 });
