@@ -1259,11 +1259,48 @@ textarea {
   padding: 20px 0;
 }
 
-/* Your original checkbox styles, untouched */
+
+/* Checkbox row layout */
+.checkboxrow {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Larger gap for more separation */
+  margin: 10px 0; /* Add vertical spacing between rows if multiple exist */
+}
+
+/* Distort only non-active checkboxrows */
+.checkboxrow:not(.active) {
+  transform: scale(0.9);
+  transition: transform 0.2s ease;
+}
+
+.checkboxrow:not(.active) .tooltip-content {
+  transform: scale(1);
+}
+
+.checkboxrow.active {
+  transform: none !important;
+}
+
+.checkboxrow input[type="number"] {
+  height: 32px !important; /* Taller for better touch and visibility */
+  padding: 0 8px !important; /* More padding for breathing room */
+  flex: 1;
+  min-width: 80px; /* Reduced min-width for smaller screens */
+  max-width: 200px; /* Tighter max-width to prevent overstretch */
+  border: 1px solid #ccc; /* Lighter border for less visual weight */
+  border-radius: 4px; /* Softer edges */
+}
+
+.checkboxrow .checkbox-button-group {
+  flex: 1;
+  height: 32px; /* Match input height */
+}
+
+/* Checkbox button group */
 .checkbox-button-group {
   display: flex;
-  gap: 0;
-  height: 25px;
+  gap: 2px; /* Small gap between buttons for separation */
   max-width: 100%;
 }
 
@@ -1276,65 +1313,30 @@ textarea {
   align-items: center;
   justify-content: center;
   flex: 1;
-  height: 25px;
-  background-color: #f3f3f3;
-  border: 1px solid #0a0a0a;
+  height: 32px;
+  background-color: #f8f8f8; /* Lighter background */
+  border: 1px solid #ccc; /* Softer border */
+  border-radius: 4px; /* Rounded corners */
   cursor: pointer;
   text-align: center;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 13px; /* Slightly smaller but readable */
+  font-weight: normal; /* Less bold for less intensity */
   user-select: none;
   transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-  color: black;
+  color: #333; /* Softer black */
   min-width: 0;
   box-sizing: border-box;
 }
 
 .checkbox-button:hover {
-  background-color: #fdfdfd;
-  border-color: #bbb;
+  background-color: #e8e8e8; /* Subtle hover effect */
+  border-color: #999;
 }
 
 .checkbox-button-group input[type="checkbox"]:checked + .checkbox-button {
-  background-color: #000000;
-  border-color: #000000;
+  background-color: #333; /* Darker but not pure black */
+  border-color: #333;
   color: white;
-}
-
-/* Checkbox row layout */
-.checkboxrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Distort only non-active checkboxrows */
-.checkboxrow:not(.active) {
-  transform: scale(0.9); /* 10% smaller */
-  transition: transform 0.2s ease;
-}
-
-.checkboxrow:not(.active) .tooltip-content {
-  transform: scale(1); /* Undo the 0.9 scaling */
-}
-
-/* Ensure the active row stays normal */
-.checkboxrow.active {
-  transform: none !important; /* No distortion */
-}
-
-.checkboxrow input[type="number"] {
-  height: 25px !important;
-  padding: 0 !important;
-  flex: 1;
-  min-width: 100px;
-  max-width: 300px;
-  margin-right: 15px;
-}
-
-.checkboxrow .checkbox-button-group {
-  flex: 1;
-  margin-right: 0;
 }
 
 /* Mobile adjustments */
@@ -1342,26 +1344,25 @@ textarea {
   .checkboxrow {
     flex-direction: column;
     align-items: stretch;
+    gap: 15px; /* Larger gap for vertical stacking */
   }
 
   .checkboxrow input[type="number"] {
     width: 100%;
     max-width: none;
-    margin-right: 0;
-    height: 25px !important;
-    padding: 0 !important;
+    height: 32px !important;
+    padding: 0 8px !important;
   }
 
   .checkboxrow .checkbox-button-group {
     width: 100%;
     display: flex;
+    gap: 4px; /* Slightly larger gap for mobile */
   }
 
   .checkbox-button {
-    font-size: 10px;
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 12px;
+    height: 32px;
+    padding: 0 6px; /* Add padding to prevent text crowding */
   }
 }
