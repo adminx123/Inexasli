@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } 
     // Other browsers
     else {
-        installMsg.textContent = "Save INEXASLI to your home screen by clicking the share button > 'Save to homescreen'";
+        installMsg.textContent = "Save INEXASLI to your home screen by clicking the share button > 'Add to Home Screen'";
         installBox.style.display = "block";
     }
 });
