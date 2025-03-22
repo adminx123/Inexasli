@@ -1511,22 +1511,51 @@ document.addEventListener("DOMContentLoaded", () => {
     interactiveElements.forEach((element) => {
       element.addEventListener("click", (e) => {
         const row = element.closest(".checkboxrow");
+        const tooltip = row.querySelector(".tooltip");
+        const content = tooltip ? tooltip.querySelector(".tooltip-content") : null;
   
-        // Remove .active from all rows
-        document.querySelectorAll(".checkboxrow").forEach(r => r.classList.remove("active"));
+        // Remove .active and hide tooltips from all rows
+        document.querySelectorAll(".checkboxrow").forEach(r => {
+          r.classList.remove("active");
+          const otherTooltip = r.querySelector(".tooltip");
+          if (otherTooltip) otherTooltip.classList.remove("show");
+        });
   
         // Add .active to the clicked row
         row.classList.add("active");
   
-        // Prevent event from bubbling up to document click handler immediately
+        // Show the tooltip if it exists
+        if (tooltip && content) {
+          tooltip.classList.add("show");
+  
+          const contentRect = content.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+  
+          if (contentRect.left < 0) {
+            content.style.left = '0';
+            content.style.transform = 'translateX(0)';
+          } else if (contentRect.right > viewportWidth) {
+            content.style.left = '100%';
+            content.style.transform = 'translateX(-100%)';
+          } else {
+            content.style.left = '50%';
+            content.style.transform = 'translateX(-50%)';
+          }
+        }
+  
+        // Prevent event from bubbling up to document click handler
         e.stopPropagation();
       });
     });
   
-    // Clear .active when clicking outside any .checkboxrow
+    // Clear .active and hide tooltips when clicking outside
     document.addEventListener("click", (e) => {
       if (!e.target.closest(".checkboxrow")) {
-        document.querySelectorAll(".checkboxrow").forEach(r => r.classList.remove("active"));
+        document.querySelectorAll(".checkboxrow").forEach(r => {
+          r.classList.remove("active");
+          const tooltip = r.querySelector(".tooltip");
+          if (tooltip) tooltip.classList.remove("show");
+        });
       }
     });
   });
