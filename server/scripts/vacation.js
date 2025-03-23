@@ -150,20 +150,20 @@ window.termsAgreed = function() {
             alert('Please enter a valid trip duration for expenses with daily or weekly frequencies.');
             return;
         }
-
+    
         let grandTotal = 0;
         const expenseList = document.getElementById('expense_list');
         expenseList.innerHTML = ''; // Clear previous list
-
+    
         expenseCategories.forEach(category => {
             const amountInput = document.getElementById(`trip_${category}`);
             const frequencySelect = document.getElementById(`trip_${category}_frequency`);
             const totalSpan = document.getElementById(`trip_${category}_total`);
-
+    
             const amount = parseFloat(amountInput.value) || 0;
             const frequency = frequencySelect.value;
             let total = 0;
-
+    
             if (totalOnlyCategories.includes(category)) {
                 total = amount;
             } else {
@@ -182,24 +182,24 @@ window.termsAgreed = function() {
                         break;
                 }
             }
-
+    
             if (total > 0) {
                 grandTotal += total;
                 totalSpan.textContent = `$${total.toFixed(2)}`;
                 const li = document.createElement('li');
-                li.textContent = `${category.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())}: $${total.toFixed(2)} (${frequency})`;
+                li.textContent = `${category.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())}: $${total.toFixed(2)}`; // Removed (${frequency})
                 expenseList.appendChild(li);
             } else {
                 totalSpan.textContent = '';
             }
         });
-
+    
         // Add the total of all expenses to the breakdown
         const totalLi = document.createElement('li');
         totalLi.textContent = `Total Expenses: $${grandTotal.toFixed(2)}`;
         totalLi.style.fontWeight = 'bold'; // Optional: make it stand out
         expenseList.appendChild(totalLi);
-
+    
         const totalCostDisplay = document.getElementById('total_cost_display');
         totalCostDisplay.textContent = `$${grandTotal.toFixed(2)}`;
         document.getElementById('totalCost').classList.remove('hidden');
