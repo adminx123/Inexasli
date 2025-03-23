@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if ((userAgent.includes("safari") && !userAgent.includes("chrome") && !userAgent.includes("crios")) ||
       (userAgent.includes("chrome") && userAgent.includes("crios"))) {
     if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
-      installMsg.textContent = "Tap the Share icon, then 'Add to Home Screen'.";
+      installMsg.textContent = "For an enhanced experience Tap the Share icon, then 'Add to Home Screen'.";
       installBox.style.display = "block";
     }
   } 
@@ -73,7 +73,7 @@ function showInstallInstructions(browserType) {
   installBox.style.display = "block";
   const baseMessage = "Install the INEXASLI web app for a better experience.";
   installMsg.textContent = browserType === 'chrome' 
-    ? `${baseMessage} Click the monitor icon & 'Install'`
+    ? `${baseMessage} For an enhanced experience Click the monitor icon located on the right side of the address bar  & 'Install'`
     : `${baseMessage} Use Chrome or Safari.`;
 }
 
