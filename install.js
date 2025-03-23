@@ -2,135 +2,95 @@ console.log('Script loaded and running');
 
 let deferredPrompt;
 
-// Ensure service worker is ready after page load
-window.addEventListener('load', () => {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then(() => {
-            console.log('Service Worker ready after load');
-        }).catch((err) => {
-            console.error('Service Worker failed to be ready:', err);
-        });
-    }
-});
-
-// Chrome-specific PWA install banner
-window.addEventListener('beforeinstallprompt', (e) => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    if (userAgent.includes("chrome") && !userAgent.includes("crios")) {
-        console.log('beforeinstallprompt event fired for Chrome');
-        e.preventDefault();
-        deferredPrompt = e;
-        console.log('Showing Chrome install banner');
-        showInstallInstructions("chrome"); // Show instructions for Chrome
-    }
-});
-
-// Check service worker status immediately
+// Register service worker
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then((registration) => {
-        console.log('Service Worker active:', registration.active ? 'Yes' : 'No');
-    }).catch((err) => {
-        console.error('Service Worker not ready:', err);
-    });
+  navigator.serviceWorker.register('/sw.js')
+    .then(() => console.log('Service Worker registered'))
+    .catch(err => console.error('Service Worker registration failed:', err));
 
-    navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('Service Worker registered'))
-        .catch((err) => console.error('Service Worker registration failed:', err));
+  navigator.serviceWorker.ready.then(reg => {
+    console.log('Service Worker active:', reg.active ? 'Yes' : 'No');
+  }).catch(err => console.error('Service Worker not ready:', err));
 }
 
-// Function to detect device type
-function getDeviceType(userAgent) {
-    if (/iphone|ipad|ipod/.test(userAgent)) return 'iOS Device';
-    if (/android/.test(userAgent)) return 'Android Device';
-    if (/tablet|ipad/.test(userAgent)) return 'Tablet';
-    if (/mobile/.test(userAgent)) return 'Mobile';
-    return 'Desktop'; // Default to desktop if no mobile/tablet indicators
-}
+// Check if running as standalone (installed PWA)
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
 
-// Function to detect browser
-function getBrowser(userAgent) {
-    if (userAgent.includes("chrome") && !userAgent.includes("crios")) return 'Chrome';
-    if (userAgent.includes("safari") && !userAgent.includes("chrome") && !userAgent.includes("crios")) return 'Safari';
-    if (userAgent.includes("chrome") && userAgent.includes("crios")) return 'Chrome iOS';
-    return 'Other Browser';
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const installBox = document.getElementById("install-instructions");
-    const installMsg = document.getElementById("install-message");
-    const userAgent = navigator.userAgent.toLowerCase();
-
-    if (!installBox || !installMsg) {
-        console.error('Install elements not found in DOM');
-        return;
-    }
-
-    // iOS Safari
-    if (userAgent.includes("safari") && !userAgent.includes("chrome") && !userAgent.includes("crios")) {
-        if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
-            installMsg.textContent = "Tap the Share icon (square with an arrow) at the bottom, then select 'Add to Home Screen'.";
-            installBox.style.display = "block";
-        }
-    } 
-    // Chrome on iOS
-    else if (userAgent.includes("chrome") && userAgent.includes("crios")) {
-        installMsg.textContent = "Tap the Share icon (square with an arrow) at the bottom, then select 'Add to Home Screen'.";
-        installBox.style.display = "block";
-    } 
-    // Chrome (non-iOS)
-    else if (userAgent.includes("chrome") && !userAgent.includes("crios")) {
-        installBox.style.display = "none"; // Hide static banner for Chrome
-    } 
-    // All other browsers
-    else {
-        installMsg.textContent = "To install this app, please use Chrome or an iOS device. Alternatively, bookmark this page for easy access.";
-        installBox.style.display = "block";
-    }
+// Chrome-specific PWA install prompt
+window.addEventListener('beforeinstallprompt', (e) => {
+  const userAgent = navigator.userAgent.toLowerCase();
+  if (userAgent.includes("chrome") && !userAgent.includes("crios") && !isStandalone) {
+    console.log('beforeinstallprompt event fired for Chrome');
+    e.preventDefault();
+    deferredPrompt = e;
+    showInstallInstructions("chrome");
+  }
 });
 
-// Function to show install instructions based on browser
+// DOM content loaded handler
+document.addEventListener('DOMContentLoaded', () => {
+  const installBox = document.getElementById("install-instructions");
+  const installMsg = document.getElementById("install-message");
+  const userAgent = navigator.userAgent.toLowerCase();
+
+  if (!installBox || !installMsg) {
+    console.error('Install elements not found in DOM');
+    return;
+  }
+
+  // Skip banner if running as standalone
+  if (isStandalone) {
+    installBox.style.display = "none";
+    return;
+  }
+
+  // iOS Safari or Chrome iOS
+  if ((userAgent.includes("safari") && !userAgent.includes("chrome") && !userAgent.includes("crios")) ||
+      (userAgent.includes("chrome") && userAgent.includes("crios"))) {
+    if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
+      installMsg.textContent = "Tap the Share icon, then 'Add to Home Screen'.";
+      installBox.style.display = "block";
+    }
+  } 
+  // Chrome (non-iOS)
+  else if (userAgent.includes("chrome") && !userAgent.includes("crios")) {
+    installBox.style.display = "none"; // Hidden by default, shown via beforeinstallprompt
+  } 
+  // Other browsers
+  else {
+    installMsg.textContent = "Use Chrome or iOS for installation, or bookmark this page.";
+    installBox.style.display = "block";
+  }
+});
+
+// Show install instructions
 function showInstallInstructions(browserType) {
-    const installBox = document.getElementById("install-instructions");
-    const installMsg = document.getElementById("install-message");
+  const installBox = document.getElementById("install-instructions");
+  const installMsg = document.getElementById("install-message");
 
-    if (!installBox || !installMsg) {
-        console.error('Install elements not found in DOM');
-        return;
-    }
+  if (!installBox || !installMsg || isStandalone) return;
 
-    installBox.style.display = "block"; // Ensure the instructions box is visible
-
-    const baseMessage = "Enhance your experience by installing the INEXASLI web app.";
-
-    switch (browserType) {
-        case 'chrome':
-            installMsg.textContent = `${baseMessage} Click the monitor icon in the right side of the address bar & 'Install'`;
-            break;
-        default:
-            installMsg.textContent = `${baseMessage} Please use Chrome or Safari for web app installation options.`;
-    }
+  installBox.style.display = "block";
+  const baseMessage = "Install the INEXASLI web app for a better experience.";
+  installMsg.textContent = browserType === 'chrome' 
+    ? `${baseMessage} Click the monitor icon & 'Install'`
+    : `${baseMessage} Use Chrome or Safari.`;
 }
 
-// Handle install event for deferredPrompt
+// Handle install prompt
 function handleAddToHomeScreen() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the A2HS prompt');
-            } else {
-                console.log('User dismissed the A2HS prompt');
-            }
-            deferredPrompt = null;
-            hideInstallInstructions();
-        });
-    }
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      console.log(choiceResult.outcome === 'accepted' ? 'User accepted A2HS' : 'User dismissed A2HS');
+      deferredPrompt = null;
+      hideInstallInstructions();
+    });
+  }
 }
 
 // Hide install instructions
 function hideInstallInstructions() {
-    const installBox = document.getElementById("install-instructions");
-    if (installBox) {
-        installBox.style.display = "none";
-    }
+  const installBox = document.getElementById("install-instructions");
+  if (installBox) installBox.style.display = "none";
 }
