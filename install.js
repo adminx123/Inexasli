@@ -73,7 +73,7 @@ function showInstallInstructions(browserType) {
   installBox.style.display = "block";
   const baseMessage = "Install the INEXASLI web app for a better experience.";
   installMsg.textContent = browserType === 'chrome' 
-    ? `${baseMessage} For an enhanced experience Click the monitor icon located on the right side of the address bar  & 'Install'`
+    ? `${baseMessage} Click the monitor icon located on the right side of the address bar  & 'Install'`
     : `${baseMessage} Use Chrome or Safari.`;
 }
 
