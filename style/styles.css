@@ -1388,8 +1388,16 @@ summary {
   font-weight: bold; /* Make the summary text stand out */
   display: flex; /* Flexbox for better alignment */
   align-items: center; /* Vertically center content */
-  justify-content: space-between; /* Space out content and potential arrows */
+  justify-content: space-between; /* Space out content and plus sign */
   transition: background-color 0.3s ease; /* Smooth hover effect */
+  position: relative; /* For positioning the pseudo-element */
+}
+
+/* Add plus sign using ::after */
+summary::after {
+  content: '+'; /* Plus sign when closed */
+  font-size: 1.2em; /* Slightly larger for visibility */
+  margin-left: 10px; /* Space from the text */
 }
 
 /* Hover effect for summary */
@@ -1402,6 +1410,11 @@ details[open] > summary {
   background-color: #e0e0e0; /* Different shade when expanded */
   border-bottom-left-radius: 0; /* Remove bottom radius when open */
   border-bottom-right-radius: 0;
+}
+
+/* Change plus to minus when open */
+details[open] > summary::after {
+  content: '-'; /* Minus sign when open */
 }
 
 /* Style the content inside details */
