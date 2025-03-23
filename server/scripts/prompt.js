@@ -247,11 +247,11 @@ function generatePrompt(promptType) {
             
             Example format:
             
-            Nutrient       | Target Amount     | Food Log Intake  | Percentage Reached
-            Calories       | 2587 kcal/day     | 1104 kcal        | 43%
-            Protein        | 158.8 g           | 80 g             | 50%
-            Carbs          | 317.6 g           | 86 g             | 27%
-            Fats           | 79.4 g            | 50 g             | 63%
+            NUTRIENT| TARGET       | FOOD INTAKE | % REACHED
+            Calories| 2587 kcal/day| 1104 kcal   | 43%
+            Protein | 158.8 g      | 80 g        | 50%
+            Carbs   | 317.6 g      | 86 g        | 27%
+            Fats    | 79.4 g       | 50 g        | 63%
             `;
             
                 // Gathering user inputs and appending to prompt
