@@ -185,6 +185,79 @@
 
 
 
+<!-- Enneagram Questionnaire Template -->
+<div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>Annalyis - Enneagram Questionnaire</h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content">
+        <!-- Core Self-Reflection -->
+        <div class="row1">
+            <textarea id="enneagram-self" rows="4" placeholder="Describe yourself in detail (e.g., I’m a hard worker who needs order, but I get stressed when things go wrong)"></textarea>
+        </div>
+
+        <!-- Core Traits (Type Indicators) -->
+        <div class="row1">
+            <div class="grid-container" id="enneagram-traits">
+                <div class="grid-item" data-value="1-Perfection">I must be perfect and avoid mistakes</div>
+                <div class="grid-item" data-value="2-Help">I feel fulfilled by helping others</div>
+                <div class="grid-item" data-value="3-Success">I’m driven to succeed and be recognized</div>
+                <div class="grid-item" data-value="4-Unique">I need to be unique and authentic</div>
+                <div class="grid-item" data-value="5-Knowledge">I seek knowledge and conserve energy</div>
+                <div class="grid-item" data-value="6-Security">I crave security and question everything</div>
+                <div class="grid-item" data-value="7-Fun">I chase excitement and avoid pain</div>
+                <div class="grid-item" data-value="8-Control">I take charge and protect what’s mine</div>
+                <div class="grid-item" data-value="9-Peace">I seek peace and avoid conflict</div>
+                <div class="grid-item" data-value="1-Critic">I’m my own harshest critic</div>
+                <div class="grid-item" data-value="2-Give">I give too much and neglect myself</div>
+                <div class="grid-item" data-value="3-Image">I care about how others see me</div>
+                <div class="grid-item" data-value="4-Emotion">I feel emotions more deeply than most</div>
+                <div class="grid-item" data-value="5-Detach">I detach to think clearly</div>
+                <div class="grid-item" data-value="6-Doubt">I doubt myself and others</div>
+                <div class="grid-item" data-value="7-Scattered">I get scattered when bored</div>
+                <div class="grid-item" data-value="8-Confront">I confront issues head-on</div>
+                <div class="grid-item" data-value="9-Avoid">I avoid saying no</div>
+            </div>
+        </div>
+
+        <!-- Behavioral Scenarios -->
+        <div class="row1">
+            <div class="grid-container" id="enneagram-behaviors">
+                <div class="grid-item" data-value="Conflict-1">In conflict, I focus on what’s right/wrong</div>
+                <div class="grid-item" data-value="Conflict-2">In conflict, I try to mediate or please</div>
+                <div class="grid-item" data-value="Conflict-3">In conflict, I defend my image</div>
+                <div class="grid-item" data-value="Conflict-4">In conflict, I feel misunderstood</div>
+                <div class="grid-item" data-value="Conflict-5">In conflict, I withdraw to think</div>
+                <div class="grid-item" data-value="Conflict-6">In conflict, I get anxious and defensive</div>
+                <div class="grid-item" data-value="Conflict-7">In conflict, I deflect with humor</div>
+                <div class="grid-item" data-value="Conflict-8">In conflict, I assert dominance</div>
+                <div class="grid-item" data-value="Conflict-9">In conflict, I shut down or agree</div>
+                <div class="grid-item" data-value="Stress-1">Under stress, I get rigid and critical</div>
+                <div class="grid-item" data-value="Stress-2">Under stress, I cling to others</div>
+                <div class="grid-item" data-value="Stress-3">Under stress, I push harder</div>
+                <div class="grid-item" data-value="Stress-4">Under stress, I feel isolated</div>
+                <div class="grid-item" data-value="Stress-5">Under stress, I retreat completely</div>
+                <div class="grid-item" data-value="Stress-6">Under stress, I panic or overthink</div>
+                <div class="grid-item" data-value="Stress-7">Under stress, I distract myself</div>
+                <div class="grid-item" data-value="Stress-8">Under stress, I lash out</div>
+                <div class="grid-item" data-value="Stress-9">Under stress, I numb out</div>
+            </div>
+        </div>
+
+        <!-- Detailed Reflections -->
+        <div class="row1 hidden" id="enneagram-details">
+            <textarea id="enneagram-motivations" rows="3" placeholder="What motivates you deep down? (e.g., being perfect, being loved)"></textarea>
+            <textarea id="enneagram-fears" rows="3" placeholder="What are your core fears? (e.g., being corrupt, being abandoned)"></textarea>
+            <textarea id="enneagram-stress" rows="3" placeholder="Describe your behavior under stress (e.g., I criticize everything or shut down)"></textarea>
+            <textarea id="enneagram-growth" rows="3" placeholder="Describe yourself at your best (e.g., I’m calm and inspire others)"></textarea>
+            <textarea id="enneagram-childhood" rows="3" placeholder="A childhood memory that shaped you (e.g., I was praised for being good)"></textarea>
+        </div>
+
+        <!-- Generate Button -->
+        <button class="generate-btn" data-prompt="enneagram-questionnaire">Generate Result</button>
+    </div>
+</div>
 
 
 
@@ -782,34 +855,6 @@
             </div>
 
 
-
-            <!-- 3. Business Strategy Prompt -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Strategy - Business</h2>
-                    <span class="toggle-icon">+</span>
-                </div>
-                <div class="section-content">
-                    <div class="row1">
-                        <textarea id="biz-goal" rows="4" placeholder="e.g., expand market share"></textarea>
-                    </div>
-                    <div class="row1">
-                        <div class="grid-container" id="biz-tactics">
-                            <div class="grid-item" data-value="Research">I Use Research</div>
-                            <div class="grid-item" data-value="Branding">I Use Branding</div>
-                            <div class="grid-item" data-value="Partnerships">I Use Partnerships</div>
-                            <div class="grid-item" data-value="Cost Reduction">I Use Cost Reduction</div>
-                        </div>
-                    </div>
-                    <div class="row1 hidden" id="biz-details">
-                        <textarea id="biz-market" rows="3"
-                            placeholder="One per line (e.g., small businesses)"></textarea>
-                        <textarea id="biz-resources" rows="1" placeholder="e.g., $10k, 5 staff"></textarea>
-                        <textarea id="biz-milestones" rows="1" placeholder="e.g., Q1 launch"></textarea>
-                    </div>
-                    <button class="generate-btn" data-prompt="business-strategy">Generate Prompt</button>
-                </div>
-            </div>
 
 
          <!-- EXPENSE -->

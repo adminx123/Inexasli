@@ -361,21 +361,31 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'business-strategy':
-            const bizGoal = document.getElementById('biz-goal');
-            if (bizGoal?.value) {
-                prompt += `I want to develop a business strategy. The goal is: ${bizGoal.value}\n\n`;
-                prompt += formatGrid('#biz-tactics .grid-item.selected', 'Tactics');
-                const market = document.getElementById('biz-market');
-                if (market?.value) prompt += formatList(market.value, 'Market');
-                const resources = document.getElementById('biz-resources');
-                if (resources?.value) prompt += formatList(resources.value, 'Resources');
-                const milestones = document.getElementById('biz-milestones');
-                if (milestones?.value) prompt += formatList(milestones.value, 'Milestones');
-            }
-            break;
-
-
+            
+            
+            case 'enneagram-questionnaire':
+                const enneagramSelf = document.getElementById('enneagram-self');
+                if (enneagramSelf?.value) {
+                    prompt += `Here’s my completed Enneagram questionnaire template for AI analysis:\n\n`;
+                    prompt += `Self-Description:\n${enneagramSelf.value}\n\n`;
+                    prompt += formatGrid('#enneagram-traits .grid-item.selected', 'Core Traits I Identify With');
+                    prompt += formatGrid('#enneagram-behaviors .grid-item.selected', 'Behavioral Responses');
+            
+                    const motivations = document.getElementById('enneagram-motivations');
+                    if (motivations?.value) prompt += formatList(motivations.value, 'Core Motivations');
+                    const fears = document.getElementById('enneagram-fears');
+                    if (fears?.value) prompt += formatList(fears.value, 'Core Fears');
+                    const stress = document.getElementById('enneagram-stress');
+                    if (stress?.value) prompt += `Behavior Under Stress:\n${stress.value}\n\n`;
+                    const growth = document.getElementById('enneagram-growth');
+                    if (growth?.value) prompt += `Behavior at My Best:\n${growth.value}\n\n`;
+                    const childhood = document.getElementById('enneagram-childhood');
+                    if (childhood?.value) prompt += `Influential Childhood Memory:\n${childhood.value}\n\n`;
+            
+                    prompt += `\nPlease paste this into an AI to determine my primary Enneagram type, potential wing(s), stress and growth directions, and any additional insights based on Enneagram theory.`;
+                }
+                break;
+            
             case 'expense':
                 const locationsSelected = document.querySelectorAll('#expense-location .grid-item.selected');
                 console.log('Selected locations count:', locationsSelected.length);
