@@ -24,6 +24,21 @@ jurisdictions worldwide.
    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
    
  </head>
+
+ <style>
+
+
+/* Header styling */
+#expenseBreakdown h3 {
+    font-size: 24px;
+    color: #333; /* Darker gray for contrast */
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+        
+        </style>
  <body>
      <a href="/index1.html">
          <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto; padding-bottom: 10px;">
@@ -239,6 +254,15 @@ jurisdictions worldwide.
         
            
          </div>
+
+
+         <div class="containerround hidden" id="expenseBreakdown">
+            <h3>Expense Breakdown</h3>
+            <p id="expense_list"></p>
+
+            <button onclick="window.copyResults()" style="display: block; margin: 10px auto;">Copy Results</button>
+
+        </div>
      
          <div class="containerround">
             <button onclick="createCookies()" style="margin-bottom: 5px;">Save</button>
@@ -249,15 +273,12 @@ jurisdictions worldwide.
             <button onclick="window.termsAgreed()" style="margin-bottom: 5px;">Calculate Total</button>
             <div id="totalCost" class="hidden">
                 <h4 style="text-align: center;">Total Estimated Vacation Cost: <span id="total_cost_display"></span></h4>
-                <button onclick="window.copyResults()" style="display: block; margin: 10px auto;">Copy Results</button>
 
             </div>
-            <div class="containerround hidden" id="expenseBreakdown" style="width: 80%; max-width: 800px; margin: 0 auto; padding: 30px; font-size: 18px;">
-                <h3>Expense Breakdown</h3>
-                <ul id="expense_list"></ul>
-            </div>
+           
         </div>
 
+      
 
      <div id="TERMS-modal" class="modal">
         <div class="modal-content">
