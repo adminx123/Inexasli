@@ -153,7 +153,7 @@ window.termsAgreed = function() {
 
         let grandTotal = 0;
         const expenseList = document.getElementById('expense_list');
-        expenseList.innerHTML = '';
+        expenseList.innerHTML = ''; // Clear previous list
 
         expenseCategories.forEach(category => {
             const amountInput = document.getElementById(`trip_${category}`);
@@ -193,6 +193,12 @@ window.termsAgreed = function() {
                 totalSpan.textContent = '';
             }
         });
+
+        // Add the total of all expenses to the breakdown
+        const totalLi = document.createElement('li');
+        totalLi.textContent = `Total Expenses: $${grandTotal.toFixed(2)}`;
+        totalLi.style.fontWeight = 'bold'; // Optional: make it stand out
+        expenseList.appendChild(totalLi);
 
         const totalCostDisplay = document.getElementById('total_cost_display');
         totalCostDisplay.textContent = `$${grandTotal.toFixed(2)}`;
