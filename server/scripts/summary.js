@@ -546,3 +546,23 @@ frequencyDropdown.addEventListener('change', function () {
     timeToPay();
     calculateGoal();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateOnLoad();
+    updateOnChange();
+    // ... other listeners ...
+
+    // Add hiding logic here
+    const region = getCookie('RegionDropdown');
+    console.log('Region after all updates:', region);
+    if (region === 'CAN') {
+        document.querySelectorAll('.usa-hide').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.can-hide').forEach(el => el.style.display = 'block');
+    } else if (region === 'USA') {
+        document.querySelectorAll('.usa-hide').forEach(el => el.style.display = 'block');
+        document.querySelectorAll('.can-hide').forEach(el => el.style.display = 'none');
+    } else {
+        document.querySelectorAll('.usa-hide').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.can-hide').forEach(el => el.style.display = 'none');
+    }
+});
