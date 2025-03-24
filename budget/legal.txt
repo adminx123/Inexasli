@@ -31,7 +31,7 @@ Feedback
 Services Purpose
 -----------------
 Educational Tool for Financial Literacy
-- IncomeIQ™ is an educational platform designed to enhance your understanding of personal finance by tracking income, expenses, assets, and liabilities.
+- IncomeIQ™ is an educational tool designed to help you learn about personal finance through hypothetical scenarios involving income, expenses, assets, and liabilities. It is not for actual tracking or planning.
 - Vacation Worksheet is an educational tool to estimate vacation costs based on user-inputted expenses, aiding in travel budgeting understanding.
 - Interactive Learning: Users engage with financial concepts by inputting real-life data across the Services, gaining practical understanding of financial principles.
 - Visual and Analytical Insights: The Services provide visual representations and analyses of your data, serving as educational aids to demonstrate financial concepts in action.
@@ -53,7 +53,7 @@ No Professional Advice
 Services Accuracy of Results
 -----------------------------
 - The calculations provided by the Services are educational estimates and are meant to offer a general understanding of financial concepts.
-- While the Developer endeavors for accuracy, they cannot guarantee precise results.
+- The Developer aims to provide accurate educational examples, but these are simplified estimates for learning purposes only and may not reflect your real-world financial situation. Do not rely on them for decisions.
 - Users should consult with a professional financial advisor, accountant, and/or tax authority for specific financial matters.
 - Please note that the frequency selector dropdown for expenses and income in IncomeIQ™ operates on a weekly basis, with 52 weeks constituting a year.
 
@@ -238,6 +238,7 @@ Governing Law
 Acceptance
 ----------
 - By using the Services, participating in interviews, signing a physical copy of these Terms of Service, or by indicating your acceptance through an electronic means (e.g., clicking "I Agree", checking a box, or replying to an email with the Terms of Service with a confirmation of agreement), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
+- By using the Services, you confirm that you will not use them for financial planning or decision-making and understand their educational limitations.
 - You consent to the collection, use, storage, and disposal of your financial information and any other personal data as outlined in these terms.
 - You agree that your use of the Services and/or participation in interviews are at your own risk, understanding the educational nature and limitations of liability as described herein.
 - Electronic Acceptance: If you're unable to provide a physical signature, electronic methods of acceptance are also considered binding.
