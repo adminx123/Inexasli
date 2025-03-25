@@ -9,19 +9,10 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <div class="menu" id="menuToggle">
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
     
-    <div class="dropdown" id="dropdownMenu">
-       <a href="mailto:support@inexasli.com" id="contact" class="menu-item">CONTACT</a> 
-       <a href="/index.html" id="home" class="menu-item">HOME</a>
-    </div>
 
     <a href="./intro.html">
-        <img src="/images/newLogo.jpg" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;" onclick="calculateAll();">
+        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;" onclick="calculateAll();">
     </a>
 
     <div class="containerround">
@@ -52,6 +43,19 @@
                 <h2>Name: John Doe</h2>
                 <p>Age: 30</p>
                 <p>Languages: English, Spanish</p>
+                <div class="dropdown-container">
+                    <label for="services-person1">Service:</label>
+                    <select id="services-person1" name="services">
+                        <option value="" disabled selected>Select a date</option>
+                        <option value="dinner">Dinner Date</option>
+                        <option value="event">Event Date</option>
+                        <option value="billiards">Billiards Date</option>
+                        <option value="coffee">Coffee Date</option>
+                        <option value="phone">Phone Date</option>
+                        <option value="shopping">Shopping Date</option>
+                        <option value="spa">Spa Date</option>
+                    </select>
+                </div>
                 <p>Availability:</p>
                 <iframe 
                     src="https://open-web-calendar.hosted.quelltext.eu/calendar.html?url=webcal%3A%2F%2Fp122-caldav.icloud.com%2Fpublished%2F2%2FMTE3ODk0MjM3NjExNzg5NKlpsb8s8qjtRbRp573a487GTJuioLe8ezShDpctCcVoymvsnMjMMdim3RABc_XmCem5ppVyq45j_xZqgt7Bm3U" 
@@ -62,52 +66,116 @@
                 </iframe>
             </div>
         </div>
-
+        
         <div id="modal-person2" class="modal hidden">
             <div class="modal-content">
-              <span class="close" onclick="closeModal('person2')">×</span>
-              <h2>Name: Jane Doe</h2>
-              <p>Age: 28</p>
-              <p>Languages: French, German</p>
+                <span class="close" onclick="closeModal('person2')">×</span>
+                <h2>Name: Jane Doe</h2>
+                <p>Age: 28</p>
+                <p>Languages: French, German</p>
+                <div class="dropdown-container">
+                    <label for="services-person2">Service:</label>
+                    <select id="services-person2" name="services">
+                        <option value="" disabled selected>Select a date</option>
+                        <option value="dinner">Dinner Date</option>
+                        <option value="event">Event Date</option>
+                        <option value="billiards">Billiards Date</option>
+                        <option value="coffee">Coffee Date</option>
+                        <option value="phone">Phone Date</option>
+                        <option value="shopping">Shopping Date</option>
+                        <option value="spa">Spa Date</option>
+                    </select>
+                </div>
             </div>
         </div>
-
+        
         <div id="modal-person3" class="modal hidden">
             <div class="modal-content">
-              <span class="close" onclick="closeModal('person3')">×</span>
-              <h2>Name: Bob Smith</h2>
-              <p>Age: 35</p>
-              <p>Languages: English, Mandarin</p>
+                <span class="close" onclick="closeModal('person3')">×</span>
+                <h2>Name: Bob Smith</h2>
+                <p>Age: 35</p>
+                <p>Languages: English, Mandarin</p>
+                <div class="dropdown-container">
+                    <label for="services-person3">Service:</label>
+                    <select id="services-person3" name="services">
+                        <option value="" disabled selected>Select a date</option>
+                        <option value="dinner">Dinner Date</option>
+                        <option value="event">Event Date</option>
+                        <option value="billiards">Billiards Date</option>
+                        <option value="coffee">Coffee Date</option>
+                        <option value="phone">Phone Date</option>
+                        <option value="shopping">Shopping Date</option>
+                        <option value="spa">Spa Date</option>
+                    </select>
+                </div>
             </div>
         </div>
-
+        
         <div id="modal-person4" class="modal hidden">
-          <div class="modal-content">
-              <span class="close" onclick="closeModal('person4')">×</span>
-              <h2>Name: Ayumi Takahashi</h2>
-              <p>Age: 25</p>
-              <p>Languages: Japanese, English</p>
-          </div>
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('person4')">×</span>
+                <h2>Name: Ayumi Takahashi</h2>
+                <p>Age: 25</p>
+                <p>Languages: Japanese, English</p>
+                <div class="dropdown-container">
+                    <label for="services-person4">Service:</label>
+                    <select id="services-person4" name="services">
+                        <option value="" disabled selected>Select a date</option>
+                        <option value="dinner">Dinner Date</option>
+                        <option value="event">Event Date</option>
+                        <option value="billiards">Billiards Date</option>
+                        <option value="coffee">Coffee Date</option>
+                        <option value="phone">Phone Date</option>
+                        <option value="shopping">Shopping Date</option>
+                        <option value="spa">Spa Date</option>
+                    </select>
+                </div>
+            </div>
         </div>
         
         <div id="modal-person5" class="modal hidden">
-          <div class="modal-content">
-              <span class="close" onclick="closeModal('person5')">×</span>
-              <h2>Name: Yuna Sato</h2>
-              <p>Age: 25</p>
-              <p>Languages: Japanese, Korean</p>
-          </div>
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('person5')">×</span>
+                <h2>Name: Yuna Sato</h2>
+                <p>Age: 25</p>
+                <p>Languages: Japanese, Korean</p>
+                <div class="dropdown-container">
+                    <label for="services-person5">Service:</label>
+                    <select id="services-person5" name="services">
+                        <option value="" disabled selected>Select a date</option>
+                        <option value="dinner">Dinner Date</option>
+                        <option value="event">Event Date</option>
+                        <option value="billiards">Billiards Date</option>
+                        <option value="coffee">Coffee Date</option>
+                        <option value="phone">Phone Date</option>
+                        <option value="shopping">Shopping Date</option>
+                        <option value="spa">Spa Date</option>
+                    </select>
+                </div>
+            </div>
         </div>
         
         <div id="modal-person6" class="modal hidden">
-          <div class="modal-content">
-              <span class="close" onclick="closeModal('person6')">×</span>
-              <h2>Name: Haruka Tanaka</h2>
-              <p>Age: 25</p>
-              <p>Languages: Japanese, Spanish</p>
-          </div>
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('person6')">×</span>
+                <h2>Name: Haruka Tanaka</h2>
+                <p>Age: 25</p>
+                <p>Languages: Japanese, Spanish</p>
+                <div class="dropdown-container">
+                    <label for="services-person6">Service:</label>
+                    <select id="services-person6" name="services">
+                        <option value="" disabled selected>Select a date</option>
+                        <option value="dinner">Dinner Date</option>
+                        <option value="event">Event Date</option>
+                        <option value="billiards">Billiards Date</option>
+                        <option value="coffee">Coffee Date</option>
+                        <option value="phone">Phone Date</option>
+                        <option value="shopping">Shopping Date</option>
+                        <option value="spa">Spa Date</option>
+                    </select>
+                </div>
+            </div>
         </div>
-    </div>
 
     <script>
         function openModal(personId) {
