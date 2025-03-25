@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>INTRO</title>
     <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
-    <link rel="stylesheet" href="/style/styles.css">
+    <link rel="stylesheet" href="/style/stylesDD.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-
     <div class="menu" id="menuToggle">
         <div></div>
         <div></div>
@@ -27,45 +26,40 @@
 
     <div class="containerround">
         <div class="grid-container">
-            <!-- Person 1 -->
-            <div class="grid-item person" onclick="openModal('person1')">
+            <div class="grid-item" onclick="openModal('person1')">
                 <img src="/images/image-2.jpg" alt="Person 1">
             </div>
-
-            <!-- Person 2 -->
-            <div class="grid-item person" onclick="openModal('person2')">
+            <div class="grid-item" onclick="openModal('person2')">
                 <img src="/images/image-3.jpg" alt="Person 2">
             </div>
-
-            <!-- Person 3 -->
-            <div class="grid-item person" onclick="openModal('person3')">
+            <div class="grid-item" onclick="openModal('person3')">
                 <img src="/images/image-4.jpg" alt="Person 3">
             </div>
-
-            <!-- Person 4 -->
-            <div class="grid-item person" onclick="openModal('person4')">
+            <div class="grid-item" onclick="openModal('person4')">
                 <img src="/images/image-5.jpg" alt="Person 4">
             </div>
-
-            <!-- Person 5 -->
-            <div class="grid-item person" onclick="openModal('person5')">
+            <div class="grid-item" onclick="openModal('person5')">
                 <img src="/images/image-3.jpg" alt="Person 5">
             </div>
-
-            <!-- Person 6 -->
-            <div class="grid-item person" onclick="openModal('person6')">
+            <div class="grid-item" onclick="openModal('person6')">
                 <img src="/images/image.jpg" alt="Person 6">
             </div>
         </div>
 
-        <!-- Modals -->
         <div id="modal-person1" class="modal hidden">
             <div class="modal-content">
-              <span class="close" onclick="closeModal('person1')">×</span>
-              <h2>Name: John Doe</h2>
-              <p>Age: 30</p>
-              <p>Languages: English, Spanish</p>
-              <a href="//p122-caldav.icloud.com/published/2/MTE3ODk0MjM3NjExNzg5NKlpsb8s8qjtRbRp573a485dr6w05jmDRnRUFC6yeVnH1XWIL7-4yPPwnPB6T_gddggu43hIiWEQ7DYlsTHRfG4">Availability</a>
+                <span class="close" onclick="closeModal('person1')">×</span>
+                <h2>Name: John Doe</h2>
+                <p>Age: 30</p>
+                <p>Languages: English, Spanish</p>
+                <p>Availability:</p>
+                <iframe 
+                    src="https://open-web-calendar.hosted.quelltext.eu/calendar.html?url=webcal%3A%2F%2Fp122-caldav.icloud.com%2Fpublished%2F2%2FMTE3ODk0MjM3NjExNzg5NKlpsb8s8qjtRbRp573a487GTJuioLe8ezShDpctCcVoymvsnMjMMdim3RABc_XmCem5ppVyq45j_xZqgt7Bm3U" 
+                    width="100%" 
+                    height="400" 
+                    style="border:none;" 
+                    title="John Doe's Availability">
+                </iframe>
             </div>
         </div>
 
@@ -94,43 +88,48 @@
               <p>Age: 25</p>
               <p>Languages: Japanese, English</p>
           </div>
-      </div>
-      
-      <div id="modal-person5" class="modal hidden">
+        </div>
+        
+        <div id="modal-person5" class="modal hidden">
           <div class="modal-content">
               <span class="close" onclick="closeModal('person5')">×</span>
               <h2>Name: Yuna Sato</h2>
               <p>Age: 25</p>
               <p>Languages: Japanese, Korean</p>
           </div>
-      </div>
-      
-      <div id="modal-person6" class="modal hidden">
+        </div>
+        
+        <div id="modal-person6" class="modal hidden">
           <div class="modal-content">
               <span class="close" onclick="closeModal('person6')">×</span>
               <h2>Name: Haruka Tanaka</h2>
               <p>Age: 25</p>
               <p>Languages: Japanese, Spanish</p>
           </div>
-      </div>
-
-        <!-- Additional modals can follow the same structure -->
+        </div>
     </div>
 
     <script>
-        // Open Modal Function
         function openModal(personId) {
             const modal = document.getElementById(`modal-${personId}`);
-            if (modal) modal.style.display = 'flex';
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
         }
 
-       //  Close Modal Function
         function closeModal(personId) {
             const modal = document.getElementById(`modal-${personId}`);
-            if (modal) modal.style.display = 'none';
+            if (modal) {
+                modal.classList.add('hidden');
+            }
         }
 
-        
+        document.addEventListener('click', (e) => {
+            const modal = document.querySelector('.modal:not(.hidden)');
+            if (modal && !modal.querySelector('.modal-content').contains(e.target) && !e.target.closest('.grid-item')) {
+                closeModal(modal.id.replace('modal-', ''));
+            }
+        });
     </script>
 </body>
 </html>
