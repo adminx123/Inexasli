@@ -25,8 +25,25 @@
 
     */      
           
+
+
+//This goes on teh Html where data is to be dipslayed
+          /* 
+
+
+
+          const paid = getCookie("authenticated");
           
           
+          if (paid == "paid") {
+              window.location.href = "/budget/summary.html";
+      
+        } else {
+          document.body.style.display = 'initial'
+        }*/
+          
+
+
           
           // payment scripts
           const lambda =
