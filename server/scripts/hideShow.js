@@ -2,12 +2,12 @@ import { getCookie } from '/server/scripts/getcookie.js';
 
 function hideShowClass(className, task) {
     const elements = document.getElementsByClassName(className);
+    if (elements.length === 0) {
+        console.warn(`No elements with class '${className}' found.`);
+        return;
+    }
     Array.from(elements).forEach((element) => {
-        if (element) {
-            element.style.display = task === 'hide' ? 'none' : 'block';
-        } else {
-            console.error(`No element with class '${className}' found.`);
-        }
+        element.style.display = task === 'hide' ? 'none' : 'block';
     });
 }
 
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const region = getCookie('RegionDropdown');
     console.log('Region in hideShow.js:', region); // Debug
 
-    // Inject CSS to enforce hiding
+    // Inject CSS to enforce hiding (optional, but ensures precedence)
     const styleSheet = document.createElement('style');
     document.head.appendChild(styleSheet);
 
@@ -33,3 +33,5 @@ document.addEventListener('DOMContentLoaded', () => {
         styleSheet.textContent = `.usa-hide { display: none !important; } .can-hide { display: none !important; }`;
     }
 });
+
+export { hideShowClass }; // Export if you want to reuse this function elsewhere
