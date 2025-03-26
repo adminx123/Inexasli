@@ -47,6 +47,26 @@ function setTermsCookie(name, value) {
     }));
 }
 
+window.loadCookies = function() {
+    formElementIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            const cookieValue = getCookie(id);
+            if (cookieValue !== null && cookieValue !== undefined) {
+                element.value = cookieValue; // Set the input/select value from the cookie
+                // Update the total display if applicable
+                const category = id.replace('trip_', '').replace('_frequency', '');
+                if (expenseCategories.includes(category)) {
+                    updateFrequency(category);
+                }
+            }
+        } else {
+            console.warn(`Element with ID '${id}' not found in the DOM`);
+        }
+    });
+    console.log('Cookies loaded into form elements');
+};
+
 const tabs = document.querySelectorAll('.tab');
 
 tabs.forEach(tab => {
@@ -54,9 +74,6 @@ tabs.forEach(tab => {
     const location = document.location.pathname;
 
     tab.addEventListener('click', (e) => {
-        const checkbox1 = document.querySelector('#termscheckbox');
-        const checkbox2 = document.querySelector('#notintended');
-
         const isChecked1 = getTermsCookie('term1');
         const isChecked2 = getTermsCookie('term2');
 
@@ -64,6 +81,7 @@ tabs.forEach(tab => {
             e.preventDefault();
             alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
         }
+        loadCookies(); // Optional: Keep this if you want tab clicks to reload cookies
     });
 
     if (location.includes(dataL)) {
@@ -92,6 +110,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (isChecked1) checkbox1.checked = true;
     if (isChecked2) checkbox2.checked = true;
+    loadCookies(); // Added here to load trip expense inputs on page load
 });
 
 window.updateFrequency = function(category) {
@@ -269,9 +288,6 @@ window.createCookies = function() {
     });
     console.log('Cookies created for all form elements');
 };
-
-
-
 
 // Function to overwrite cookies and clear input fields for Vacation Worksheet
 window.overwriteCookies1 = function() {
