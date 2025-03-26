@@ -8,10 +8,6 @@
  * jurisdictions worldwide.
  */ 
 
-
-
-
-
 document.addEventListener("DOMContentLoaded", () => {
   // Inject HTML - unchanged
   const menuHTML = `
@@ -94,25 +90,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     .tray-dropdown.show {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      align-items: flex-start;
+      flex-direction: column; /* Changed to stack vertically on all devices */
+      align-items: center; /* Center items vertically */
+      padding: 10px 0; /* Consistent padding */
     }
     .tray-menu-item-container {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: 100%; /* Ensure full width for consistency */
+      text-align: center; /* Center text */
     }
     .tray-menu-item {
       display: block;
-      padding: 10px 20px;
+      padding: 12px 20px; /* Adjusted padding for better spacing */
       color: #fff;
       text-decoration: none;
       font-family: Arial, sans-serif;
       font-size: 16px;
       text-transform: uppercase;
       transition: background-color 0.2s ease;
+      width: 100%; /* Full width for each item */
     }
     .tray-menu-item:hover {
       background-color: #333;
@@ -149,20 +148,18 @@ document.addEventListener("DOMContentLoaded", () => {
     .tray-submenu a:hover {
       background-color: #333;
     }
-    /* Mobile stacking */
+    /* Mobile stacking (optional adjustments) */
     @media (max-width: 768px) {
       .tray-dropdown.show {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px 0;
+        padding: 10px 0; /* Already set above, kept for consistency */
       }
       .tray-menu-item-container {
-        width: 100%;
-        text-align: center;
+        width: 100%; /* Already set above */
+        text-align: center; /* Already set above */
       }
       .tray-menu-item {
-        padding: 12px 0;
-        width: 100%;
+        padding: 12px 0; /* Adjusted for mobile consistency */
+        width: 100%; /* Already set above */
       }
     }
   `;
