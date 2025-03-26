@@ -534,6 +534,17 @@ document.addEventListener('DOMContentLoaded', function () {
     timeToPay();
     calculateGoal();
     calculateIncomeAfterTaxAndObligations();
+
+
+    const paid = getCookie("authenticated");
+                
+                
+if (paid == "paid") {
+    window.location.href = "/budget/summary.html";
+
+} else {
+document.body.style.display = 'initial'
+}
 });
 
 const frequencyDropdown = document.getElementById('frequency');
@@ -549,12 +560,3 @@ frequencyDropdown.addEventListener('change', function () {
 
 
 
-const paid = getCookie("authenticated");
-                
-                
-if (paid == "paid") {
-    window.location.href = "/budget/summary.html";
-
-} else {
-document.body.style.display = 'initial'
-}
