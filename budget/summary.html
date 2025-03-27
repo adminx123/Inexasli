@@ -24,7 +24,109 @@
    <link rel="shortcut icon" href="/images/favicon.ico" />
    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
  </head>
- 
+ <style>/* Premium Section Styling */
+  .premium-section {
+      border: 1px solid #000000; /* Blue border to signify premium */
+      border-radius: 8px;
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #f9f9fb; /* Light background for contrast */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  /* Premium Section Summary */
+  .premium-section summary {
+      cursor: pointer;
+      padding: 8px;
+      font-weight: bold;
+      color: #000000; /* Blue text for premium feel */
+      background-color: #eef4ff; /* Slightly darker premium background */
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+  }
+  
+  .premium-section summary:hover {
+      background-color: #d9e6ff; /* Hover effect */
+  }
+  
+  /* Premium Content (Locked State) */
+  .premium-blur {
+      filter: blur(3px); /* Blur effect for locked content */
+      color: #888; /* Grayed out text */
+      pointer-events: none; /* Disable interaction */
+      transition: filter 0.3s ease, color 0.3s ease; /* Smooth unlock transition */
+  }
+  
+  /* Premium Notice */
+  .premium-notice {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 4px 8px;
+      background-color: #000000; /* Yellow notice background */
+      color: #ffffff; /* Dark text for readability */
+      font-size: 0.85em;
+      border-radius: 4px;
+      font-weight: bold;
+  }
+  
+  /* Unlocked Premium Content */
+  .premium-section:not(.premium-blur) span[id="DISPOSABLEINCOME"],
+  .premium-section:not(.premium-blur) span[id="DEBTTOINCOME"],
+  .premium-section:not(.premium-blur) span[id="FIRERATIO"],
+  .premium-section:not(.premium-blur) span[id="HOUSINGTOINCOME"],
+  .premium-section:not(.premium-blur) span[id="SAVINGSTODEBT"] {
+      color: #2c5282; /* Dark blue for unlocked premium values */
+      font-weight: 600;
+      margin-left: 5px;
+  }
+  
+  /* Specific Premium Elements */
+  #DISPOSABLEINCOME {
+      font-size: 1.1em; /* Slightly larger for emphasis */
+      display: inline-block;
+      padding: 2px 6px;
+      background-color: #e6f0ff; /* Light blue background */
+      border-radius: 4px;
+  }
+  
+  #DEBTTOINCOME, #FIRERATIO, #HOUSINGTOINCOME, #SAVINGSTODEBT {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background-color: #edf2f7; /* Subtle gray-blue background */
+  }
+  
+  /* Premium Ratios List */
+  .premium-section details ul {
+      list-style-type: none; /* Remove default bullets */
+      padding-left: 0;
+      margin: 5px 0;
+  }
+  
+  .premium-section details li {
+      padding: 4px 0;
+      color: #4a5568; /* Darker gray for readability */
+  }
+  
+  .premium-section details li strong {
+      color: #2d3748; /* Even darker for emphasis */
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+      .premium-section {
+          padding: 8px;
+      }
+      .premium-section summary {
+          font-size: 0.95em;
+      }
+      #DISPOSABLEINCOME {
+          font-size: 1em;
+      }
+      .premium-notice {
+          font-size: 0.8em;
+      }
+  }</style>
  <body style="display: none;"> <!-- Start hidden, JS will show it -->
    <!-- Logo -->
    <a href="./intro.html">
@@ -196,7 +298,6 @@
           <span class="tooltip1" data-tooltip="Detailed tax and obligation breakdowns based on your inputs.">
             <h2>TAXES & OBLIGATIONS<span class="tooltip1-content"></span></h2>
           </span>
-          <span class="premium-notice"></span>
         </summary>
         <p style="margin-left:21px;">
           <span class="tooltip1" data-tooltip="Total taxes calculated from your income and region.">
@@ -283,7 +384,6 @@
       <span class="tooltip1" data-tooltip="Assets minus liabilities. A snapshot of wealth based on your inputs.">
         <h2>NET WORTH:<span class="tooltip1-content"></span><span id="NETWORTH" class="premium-blur"></span></h2>
       </span>
-      <span class="premium-notice"></span>
     </summary>
 
     <p style="margin-left:21px;">
