@@ -43,12 +43,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const frequencyDropdown = document.getElementById('frequency');
     frequencyDropdown.addEventListener('change', () => {
         updateFreeContent();
-        if (isPaid) updatePremiumContent();
+        if (isPaid) {
+            updatePremiumContent();
+            timeToPay(true); // Update revolving debt time for paid users
+        } else {
+            timeToPay(false); // Update revolving debt time for free users
+        }
+        calculateGoal(isPaid); // Update goal calculation
     });
 
     const goalAmountInput = document.getElementById('goalAmount');
     if (goalAmountInput) {
-        goalAmountInput.addEventListener('input', calculateGoal);
+        goalAmountInput.addEventListener('input', () => calculateGoal(isPaid));
     }
 });
 
@@ -82,14 +88,14 @@ function updateFreeContent() {
     updateElement('TOTALSOCIALSECURITYSE', 'TOTALSOCIALSECURITYSE', multiplier, null, 'usa-hide');
     updateElement('TOTALMEDICARE', 'TOTALMEDICARE', multiplier, null, 'usa-hide');
 
-    // Net Worth (free)
-    updateElement('NETWORTH', null, multiplier, () => (parseFloat(getCookie('ASSETS')) || 0) - (parseFloat(getCookie('LIABILITIES')) || 0));
+    // Net Worth (free) - No frequency adjustment
+    updateElement('NETWORTH', null, 1, () => (parseFloat(getCookie('ASSETS')) || 0) - (parseFloat(getCookie('LIABILITIES')) || 0));
     updateElement('ASSETS', 'ASSETS', multiplier);
     updateElement('LIABILITIES', 'LIABILITIES', multiplier);
 
     // Financial Projections (free)
-    timeToPay(false); // Non-paid version
-    calculateGoal(false); // Non-paid version
+    timeToPay(false);
+    calculateGoal(false);
 
     // Expense Pie Chart (free)
     updateExpensePieChart();
@@ -97,9 +103,7 @@ function updateFreeContent() {
 
 // Unlock premium content
 function unlockPremiumContent() {
-    document.querySelectorAll('.premium-blur').forEach(el => {
-        el.classList.remove('premium-blur');
-    });
+    document.querySelectorAll('.premium-blur').forEach(el => el.classList.remove('premium-blur'));
     document.querySelectorAll('.premium-notice').forEach(el => el.style.display = 'none');
     const goalAmount = document.getElementById('goalAmount');
     if (goalAmount) goalAmount.disabled = false;
@@ -113,12 +117,12 @@ function updatePremiumContent() {
     // Disposable Income (premium)
     updateElement('DISPOSABLEINCOME', null, multiplier, calculateDisposableIncome);
 
-    // Premium Subscribers (Ratios)
+    // Premium Subscribers (Ratios) - Only set once, not updated on frequency change
     const debtToIncome = (parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME')) || 0);
     document.getElementById('DEBTTOINCOME').textContent = isNaN(debtToIncome) || !isFinite(debtToIncome) ? 'Not Applicable' : debtToIncome.toFixed(2);
     colorChangeDTI();
 
-    const housingToIncome = (parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')) || 0) * multiplier;
+    const housingToIncome = (parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')) || 0);
     document.getElementById('HOUSINGTOINCOME').textContent = isNaN(housingToIncome) ? 'Not Applicable' : housingToIncome.toFixed(2);
     colorChangeHTI();
 
@@ -130,9 +134,9 @@ function updatePremiumContent() {
     document.getElementById('FIRERATIO').textContent = isNaN(fireRatio) ? 'Not Applicable' : fireRatio.toFixed(2);
     colorChangeFIRE();
 
-    // Financial Projections (update with premium data)
-    timeToPay(true); // Paid version
-    calculateGoal(true); // Paid version
+    // Financial Projections (premium)
+    timeToPay(true);
+    calculateGoal(true);
 
     // Income Erosion Pie Chart (premium)
     updateIncomeErosionPieChart();
@@ -233,7 +237,10 @@ function updateExpensePieChart() {
             }
         }
     };
-    if (window.myPieChart) window.myPieChart.destroy();
+    // Only destroy if the chart exists
+    if (window.myPieChart && typeof window.myPieChart.destroy === 'function') {
+        window.myPieChart.destroy();
+    }
     window.myPieChart = new Chart(document.getElementById('myPieChart'), config);
 }
 
@@ -292,7 +299,10 @@ function updateIncomeErosionPieChart() {
             }
         }
     };
-    if (window.myPieChartTax) window.myPieChartTax.destroy();
+    // Only destroy if the chart exists
+    if (window.myPieChartTax && typeof window.myPieChartTax.destroy === 'function') {
+        window.myPieChartTax.destroy();
+    }
     window.myPieChartTax = new Chart(document.getElementById('myPieChartTax'), config);
 }
 
@@ -327,7 +337,7 @@ function colorChangeDTI() {
 // Financial Projections (free with premium enhancement)
 function timeToPay(isPaid) {
     const frequency = document.getElementById('frequency').value;
-    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getCookie('ANNUALINCOME')) || 0) - (parseFloat(getCookie('ANNUALEXPENSESUM')) || 0); // Simplified for free users
+    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getCookie('ANNUALINCOME')) || 0) - (parseFloat(getCookie('ANNUALEXPENSESUM')) || 0);
     const revolvingDebt = parseFloat(getCookie('LIABILITIESNA')) || 0;
 
     let timeToPayDebt = document.getElementById('TIMETOPAYDEBT');
@@ -343,7 +353,7 @@ function timeToPay(isPaid) {
 }
 
 function calculateGoal(isPaid) {
-    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getCookie('ANNUALINCOME')) || 0) - (parseFloat(getCookie('ANNUALEXPENSESUM')) || 0); // Simplified for free users
+    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getCookie('ANNUALINCOME')) || 0) - (parseFloat(getCookie('ANNUALEXPENSESUM')) || 0);
     const goalAmount = parseFloat(document.getElementById('goalAmount').value) || 0;
     const frequency = document.getElementById('frequency').value;
 
