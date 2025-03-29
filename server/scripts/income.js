@@ -1367,9 +1367,9 @@ window.addEventListener("message", (event) => {
         const totalRevenue = getCookie("totalRevenue");
         const paid = getCookie("authenticated") == "paid";
 
-        //   console.log(selfEmploymentIncomeField);
-        //   console.log(totalRevenue);
-        //   console.log(paid);
+         console.log(selfEmploymentIncomeField);
+          console.log(totalRevenue);
+          console.log(paid);
 
         if (totalRevenue && totalRevenue != "annually" && totalRevenue != "") {
             if (paid) {

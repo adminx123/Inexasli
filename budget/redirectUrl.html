@@ -8,148 +8,118 @@
  * jurisdictions worldwide.
  */ -->
 
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>please wait</title>
-    
-    <!-- this is an extended list of places icon could be needed -->
-    <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
-    <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
-    <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
-    <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
-    <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
-    <link rel="manifest" href="/manifest.json">
-
-    <link rel="stylesheet" href="/style/styles.css">
-  </head>
-
-  <body>
-    <img
-      src="/images/newLogo.jpg"
-      alt="Logo"
-      style="width: 50px; height: auto; display: block; margin: 0 auto"
-    />
-
-    <div class="container" style="min-height: 50vh">
-      <h1 style="margin: 0 auto; text-transform: capitalize;">LOADING PAYMENT INFORMATION .......</h1>
-    </div>
-    
-    <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      const sessionId = urlParams.get("session_id");
-      const container = document.querySelector(".container");
-
-      // console.log(sessionId)
-      const lambda =
-        "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
-      function getCookie(name) {
-        const cookieArray = document.cookie.split(";");
-        for (let cookie of cookieArray) {
-          cookie = cookie.trim(); // Remove extra spaces
-          if (cookie.startsWith(`${name}=`)) {
-            return cookie.substring(name.length + 1);
-          }
-        }
-        return null; // Return null if my cookie doesn't exist
-      }
-      function setCookie(name, value, days) {
-        let expires = "";
-        if (days) {
-          const date = new Date();
-          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Convert days to milliseconds
-          expires = `; expires=${date.toUTCString()}`;
-        }
-        document.cookie = `${name}=${value || ""}${expires}; path=/;SameSite=Lax`;
-      }
-
-
-      document.addEventListener("DOMContentLoaded", async () => {
-        const paid = getCookie("authenticated");
-
-        if (paid == "paid") {
-          // change page to summary page
-          window.location.href = "/budget/summary.html";
-        } else {
-          if (sessionId) {
-            try {
-              const res = await fetch(lambda, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  task: "checkPayment",
-                  sessionId: sessionId,
-                }),
-              });
-
-              const data = await res.json();
-
-              if (data.paymentStatus) {
-                if (data.paymentStatus == "paid" || data.paymentStatus == 'no_payment_required')
-                  setCookie('authenticated', "paid", 365);
-                container.innerHTML = "payment successfull redirecting ......";
-                const calculatedFromWorksheet = getCookie("calculated_from_worksheet");
-
-                if ( calculatedFromWorksheet && calculatedFromWorksheet == 'true') {
-          const totalRevenue = getCookie("totalRevenue");
-          
-
-
-          if (totalRevenue) {
-            setCookie("income_sole_prop", totalRevenue, 365);
-            setCookie("calculated_from_worksheet", "resolved", 365);
-          }
-
-
-
-                }
-
-
-                window.location.href = "/budget/summary.html";
-              } else if (data.error) {
-                container.innerHTML = `
-                     <h1 style="text-transform: capitalize;">payment failed</h1>
-      <p>sorry your payment attempt failed</p>
-      <p>${data.error ? data.error : ""}</p>
-      <a href="mailto:support@inexasli.com" class=" contact-support">somethings wrong? contact support</a>
-               `;
-              } else {
-                container.innerHTML = `
-                     <h1 style="text-transform: capitalize;">payment failed</h1>
-      <p>sorry your payment attempt failed</p>
-      <a href="mailto:support@inexasli.com" class=" contact-support">somethings wrong? contact support</a>
-               `;
-              }
-            } catch (error) {
-              console.error(error.message);
-              container.innerHTML = `
-            <h1 style="text-transform: capitalize;">something went wrong</h1>
-      <p>${error.message}</p>
-      <p>try again later</p>`;
-            }
-          } else {
-            container.innerHTML = "no or invalid session id";
-            window.location.href = "/budget/summary.html";
-          }
-        }
-      });
-      //  2 markups
-      // 1- payment failed
-      // payment not found
-    </script>
-
-  </body>
-</html>
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <title>please wait</title>
+     
+     <!-- this is an extended list of places icon could be needed -->
+     <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg" />
+     <link rel="shortcut icon" type="image/x-icon" href="/images/newLogo.jpg" />
+     <link rel="icon" type="image/png" sizes="32x32" href="/images/newLogo.jpg" />
+     <link rel="icon" type="image/png" sizes="16x16" href="/images/newLogo.jpg" />
+     <link rel="apple-touch-icon" href="/images/newLogo.jpg" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/images/newLogo.jpg" />
+     <link rel="apple-touch-icon" sizes="152x152" href="/images/newLogo.jpg" />
+     <link rel="apple-touch-icon" sizes="120x120" href="/images/newLogo.jpg" />
+     <link rel="apple-touch-icon" sizes="76x76" href="/images/newLogo.jpg" />
+     <link rel="icon" sizes="192x192" href="/images/newLogo.jpg" />
+     <link rel="icon" sizes="512x512" href="/images/newLogo.jpg" />
+     <link rel="mask-icon" href="/images/newLogo.jpg" color="#5bbad5" />
+     <link rel="manifest" href="/manifest.json">
+ 
+     <link rel="stylesheet" href="/style/styles.css">
+   </head>
+ 
+   <body>
+     <img
+       src="/images/newLogo.jpg"
+       alt="Logo"
+       style="width: 50px; height: auto; display: block; margin: 0 auto"
+     />
+ 
+     <div class="container" style="min-height: 50vh">
+       <h1 style="margin: 0 auto; text-transform: capitalize;">LOADING PAYMENT INFORMATION .......</h1>
+     </div>
+     
+     <script type="module">
+       import { setCookie } from '/server/scripts/setcookie.js';
+       import { getCookie } from '/server/scripts/getcookie.js';
+ 
+       const urlParams = new URLSearchParams(window.location.search);
+       const sessionId = urlParams.get("session_id");
+       const container = document.querySelector(".container");
+ 
+       const lambda =
+         "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
+ 
+       document.addEventListener("DOMContentLoaded", async () => {
+         const paid = getCookie("authenticated");
+ 
+         if (paid === "paid") {
+           window.location.href = "/budget/summary.html";
+         } else {
+           if (sessionId) {
+             try {
+               const res = await fetch(lambda, {
+                 method: "POST",
+                 headers: {
+                   "Content-Type": "application/json",
+                 },
+                 body: JSON.stringify({
+                   task: "checkPayment",
+                   sessionId: sessionId,
+                 }),
+               });
+ 
+               const data = await res.json();
+ 
+               if (data.paymentStatus) {
+                 if (data.paymentStatus === "paid" || data.paymentStatus === 'no_payment_required') {
+                   setCookie('authenticated', "paid", 365);
+                   container.innerHTML = "payment successful redirecting ......";
+                   const calculatedFromWorksheet = getCookie("calculated_from_worksheet");
+ 
+                   if (calculatedFromWorksheet === 'true') {
+                     const totalRevenue = getCookie("totalRevenue");
+                     
+                     if (totalRevenue) {
+                       setCookie("income_sole_prop", totalRevenue, 365);
+                       setCookie("calculated_from_worksheet", "resolved", 365);
+                     }
+                   }
+ 
+                   window.location.href = "/budget/summary.html";
+                 }
+               } else if (data.error) {
+                 container.innerHTML = `
+                   <h1 style="text-transform: capitalize;">payment failed</h1>
+                   <p>sorry your payment attempt failed</p>
+                   <p>${data.error ? data.error : ""}</p>
+                   <a href="mailto:support@inexasli.com" class="contact-support">something's wrong? contact support</a>
+                 `;
+               } else {
+                 container.innerHTML = `
+                   <h1 style="text-transform: capitalize;">payment failed</h1>
+                   <p>sorry your payment attempt failed</p>
+                   <a href="mailto:support@inexasli.com" class="contact-support">something's wrong? contact support</a>
+                 `;
+               }
+             } catch (error) {
+               console.error(error.message);
+               container.innerHTML = `
+                 <h1 style="text-transform: capitalize;">something went wrong</h1>
+                 <p>${error.message}</p>
+                 <p>try again later</p>`;
+             }
+           } else {
+             container.innerHTML = "no or invalid session id";
+             window.location.href = "/budget/summary.html";
+           }
+         }
+       });
+     </script>
+   </body>
+ </html>
