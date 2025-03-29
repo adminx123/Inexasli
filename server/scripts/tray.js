@@ -1,13 +1,3 @@
-/*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
- */ 
-
 document.addEventListener("DOMContentLoaded", () => {
   // Inject HTML - unchanged
   const menuHTML = `
@@ -43,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   document.body.insertAdjacentHTML("afterbegin", menuHTML);
 
-  // Inject modified CSS
+  // Inject modified CSS with stationary pulsing glow
   const style = document.createElement("style");
   style.textContent = `
     .tray-menu {
@@ -58,7 +48,29 @@ document.addEventListener("DOMContentLoaded", () => {
       background-color: #000;
       padding: 5px;
       width: 100%;
-      box-shadow: 0 -8px 8px rgba(64, 49, 49, 0.3);
+      box-shadow: 0 -8px 8px rgba(64, 49, 49, 0.3); /* Static shadow */
+    }
+    .tray-menu:not(.active)::before {
+      content: '';
+      position: absolute;
+      bottom: 100%; /* Fixed at the top edge of the tray */
+      left: 0;
+      width: 100%; /* Full width of the tray */
+      height: 48px; /* Height of the glow */
+      background: linear-gradient(to top, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 100%); /* Glow fading upward */
+      animation: glowPulse 3s infinite ease-in-out;
+      z-index: -1; /* Behind tray and content */
+    }
+    @keyframes glowPulse {
+      0% {
+        opacity: 0.5; /* Dim starting point */
+      }
+      50% {
+        opacity: 1; /* Brightest point */
+      }
+      100% {
+        opacity: 0.5; /* Back to dim */
+      }
     }
     .tray-menu div {
       width: 25px;
@@ -90,28 +102,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     .tray-dropdown.show {
       display: flex;
-      flex-direction: column; /* Changed to stack vertically on all devices */
-      align-items: center; /* Center items vertically */
-      padding: 10px 0; /* Consistent padding */
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0;
     }
     .tray-menu-item-container {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 100%; /* Ensure full width for consistency */
-      text-align: center; /* Center text */
+      width: 100%;
+      text-align: center;
     }
     .tray-menu-item {
       display: block;
-      padding: 12px 20px; /* Adjusted padding for better spacing */
+      padding: 12px 20px;
       color: #fff;
       text-decoration: none;
       font-family: Arial, sans-serif;
       font-size: 16px;
       text-transform: uppercase;
       transition: background-color 0.2s ease;
-      width: 100%; /* Full width for each item */
+      width: 100%;
     }
     .tray-menu-item:hover {
       background-color: #333;
@@ -148,24 +160,23 @@ document.addEventListener("DOMContentLoaded", () => {
     .tray-submenu a:hover {
       background-color: #333;
     }
-    /* Mobile stacking (optional adjustments) */
     @media (max-width: 768px) {
       .tray-dropdown.show {
-        padding: 10px 0; /* Already set above, kept for consistency */
+        padding: 10px 0;
       }
       .tray-menu-item-container {
-        width: 100%; /* Already set above */
-        text-align: center; /* Already set above */
+        width: 100%;
+        text-align: center;
       }
       .tray-menu-item {
-        padding: 12px 0; /* Adjusted for mobile consistency */
-        width: 100%; /* Already set above */
+        padding: 12px 0;
+        width: 100%;
       }
     }
   `;
   document.head.appendChild(style);
 
-  // JavaScript behavior (unchanged)
+  // JavaScript behavior - unchanged
   const menuToggle = document.querySelector("#trayMenuToggle");
   const dropdownMenu = document.querySelector("#trayDropdownMenu");
   const calculations = document.querySelector("#trayCalculations");
