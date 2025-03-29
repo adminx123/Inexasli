@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
       padding: 5px;
       width: 100%;
       box-shadow: 0 -8px 8px rgba(64, 49, 49, 0.3); /* Static shadow */
+      cursor: pointer; /* Entire tray area clickable */
     }
     .tray-menu-glow {
       position: fixed;
@@ -67,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
       background-color: #fff;
       margin: 4px auto;
       transition: transform 0.3s ease, opacity 0.3s ease;
-      cursor: pointer; /* Cursor only on hamburger bars */
     }
     .tray-menu.active div:nth-child(1) {
       transform: rotate(-45deg) translate(-5px, 6px);
@@ -142,22 +142,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const glowHTML = `<div class="tray-menu-glow"></div>`;
   document.body.insertAdjacentHTML("afterbegin", glowHTML);
 
-  // JavaScript behavior - refined click target
+  // JavaScript behavior - click targets entire tray area
   const menuToggle = document.querySelector("#trayMenuToggle");
   const dropdownMenu = document.querySelector("#trayDropdownMenu");
-  const hamburgerBars = menuToggle.querySelectorAll("div"); // Target only the bars
 
   if (menuToggle && dropdownMenu) {
-    hamburgerBars.forEach(bar => {
-      bar.addEventListener("click", (event) => {
-        event.stopPropagation(); // Prevent bubbling to tray-menu
-        menuToggle.classList.toggle("active");
-        dropdownMenu.classList.toggle("show");
-        if (!dropdownMenu.classList.contains("show")) {
-          document.querySelectorAll(".tray-submenu").forEach(submenu => submenu.classList.remove("show"));
-          document.querySelectorAll(".tray-menu-item").forEach(item => item.classList.remove("active"));
-        }
-      });
+    menuToggle.addEventListener("click", (event) => {
+      event.stopPropagation(); // Prevent bubbling to document
+      menuToggle.classList.toggle("active");
+      dropdownMenu.classList.toggle("show");
+      if (!dropdownMenu.classList.contains("show")) {
+        document.querySelectorAll(".tray-submenu").forEach(submenu => submenu.classList.remove("show"));
+        document.querySelectorAll(".tray-menu-item").forEach(item => item.classList.remove("active"));
+      }
     });
   }
 
