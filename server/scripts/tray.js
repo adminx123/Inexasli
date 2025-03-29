@@ -9,22 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="tray-dropdown" id="trayDropdownMenu">
       <div class="tray-menu-item-container">
         <a href="/budget/intro.html" id="website" class="tray-menu-item">IncomeIQ™</a>
-        // <div class="tray-submenu" id="trayCalculationsMenu">
-          // <a href="/budget/vacation.html" id="vacation">Vacation</a>
-          // <a href="/budget/intro.html" id="personal">IncomeIQ™</a>
-        // </div>
       </div>
       <div class="tray-menu-item-container">
         <a href="/create/prompt.html" id="website" class="tray-menu-item">Promptemplate™</a>
-        // <div class="tray-submenu" id="trayCreateMenu">
-          // <a href="/create/prompt.html" id="website">Promptemplate™</a>
-        // </div>
       </div>
       <div class="tray-menu-item-container">
         <a href="/budget/vacation.html" id="website" class="tray-menu-item">Vacation</a>
-        // <div class="tray-submenu" id="trayCreateMenu">
-          // <a href="/create/prompt.html" id="website">Promptify™</a>
-        // </div>
       </div>
       <div class="tray-menu-item-container">
         <a href="mailto:support@inexasli.com" id="trayContact" class="tray-menu-item">CONTACT</a>
@@ -33,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   document.body.insertAdjacentHTML("afterbegin", menuHTML);
 
-  // Inject modified CSS with stationary pulsing glow
+  // Inject modified CSS with non-clickable glow
   const style = document.createElement("style");
   style.textContent = `
     .tray-menu {
@@ -43,33 +33,32 @@ document.addEventListener("DOMContentLoaded", () => {
       right: 0;
       display: flex;
       flex-direction: column;
-      cursor: pointer;
       z-index: 100;
       background-color: #000;
       padding: 5px;
       width: 100%;
       box-shadow: 0 -8px 8px rgba(64, 49, 49, 0.3); /* Static shadow */
     }
-    .tray-menu:not(.active)::before {
-      content: '';
-      position: absolute;
-      bottom: 100%; /* Fixed at the top edge of the tray */
+    .tray-menu-glow {
+      position: fixed;
+      bottom: 35px; /* Matches tray height to sit just above it */
       left: 0;
-      width: 100%; /* Full width of the tray */
-      height: 48px; /* Height of the glow */
-      background: linear-gradient(to top, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 100%); /* Glow fading upward */
+      width: 100%;
+      height: 48px; /* Glow height */
+      background: linear-gradient(to top, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
       animation: glowPulse 3s infinite ease-in-out;
-      z-index: -1; /* Behind tray and content */
+      z-index: 99; /* Behind tray but above content */
+      pointer-events: none; /* Prevents clicks */
     }
     @keyframes glowPulse {
       0% {
-        opacity: 0.5; /* Dim starting point */
+        opacity: 0.5;
       }
       50% {
-        opacity: 1; /* Brightest point */
+        opacity: 1;
       }
       100% {
-        opacity: 0.5; /* Back to dim */
+        opacity: 0.5;
       }
     }
     .tray-menu div {
@@ -78,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
       background-color: #fff;
       margin: 4px auto;
       transition: transform 0.3s ease, opacity 0.3s ease;
+      cursor: pointer; /* Cursor only on hamburger bars */
     }
     .tray-menu.active div:nth-child(1) {
       transform: rotate(-45deg) translate(-5px, 6px);
@@ -132,34 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
       font-weight: bold;
       background-color: #000;
     }
-    .tray-submenu {
-      display: none;
-      position: absolute;
-      bottom: calc(100% + 5px);
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #000;
-      padding: 5px 0;
-      width: 200px;
-      box-sizing: border-box;
-      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
-      z-index: 91;
-    }
-    .tray-submenu.show {
-      display: block;
-    }
-    .tray-submenu a {
-      display: block;
-      padding: 8px 20px;
-      color: #ddd;
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      transition: background-color 0.2s ease;
-    }
-    .tray-submenu a:hover {
-      background-color: #333;
-    }
     @media (max-width: 768px) {
       .tray-dropdown.show {
         padding: 10px 0;
@@ -176,52 +138,26 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   document.head.appendChild(style);
 
-  // JavaScript behavior - unchanged
+  // Inject glow element after tray
+  const glowHTML = `<div class="tray-menu-glow"></div>`;
+  document.body.insertAdjacentHTML("afterbegin", glowHTML);
+
+  // JavaScript behavior - refined click target
   const menuToggle = document.querySelector("#trayMenuToggle");
   const dropdownMenu = document.querySelector("#trayDropdownMenu");
-  const calculations = document.querySelector("#trayCalculations");
-  const calculationsMenu = document.querySelector("#trayCalculationsMenu");
-  const create = document.querySelector("#trayCreate");
-  const createMenu = document.querySelector("#trayCreateMenu");
-  const allMenuItems = document.querySelectorAll(".tray-menu-item");
-  const allSubmenus = document.querySelectorAll(".tray-submenu");
+  const hamburgerBars = menuToggle.querySelectorAll("div"); // Target only the bars
 
   if (menuToggle && dropdownMenu) {
-    menuToggle.addEventListener("click", () => {
-      menuToggle.classList.toggle("active");
-      dropdownMenu.classList.toggle("show");
-      if (!dropdownMenu.classList.contains("show")) {
-        allSubmenus.forEach(submenu => submenu.classList.remove("show"));
-        allMenuItems.forEach(item => item.classList.remove("active"));
-      }
-    });
-  }
-
-  if (calculations && calculationsMenu) {
-    calculations.addEventListener("click", (event) => {
-      event.preventDefault();
-      allSubmenus.forEach(submenu => {
-        if (submenu !== calculationsMenu) submenu.classList.remove("show");
+    hamburgerBars.forEach(bar => {
+      bar.addEventListener("click", (event) => {
+        event.stopPropagation(); // Prevent bubbling to tray-menu
+        menuToggle.classList.toggle("active");
+        dropdownMenu.classList.toggle("show");
+        if (!dropdownMenu.classList.contains("show")) {
+          document.querySelectorAll(".tray-submenu").forEach(submenu => submenu.classList.remove("show"));
+          document.querySelectorAll(".tray-menu-item").forEach(item => item.classList.remove("active"));
+        }
       });
-      allMenuItems.forEach(item => {
-        if (item !== calculations) item.classList.remove("active");
-      });
-      calculations.classList.toggle("active");
-      calculationsMenu.classList.toggle("show");
-    });
-  }
-
-  if (create && createMenu) {
-    create.addEventListener("click", (event) => {
-      event.preventDefault();
-      allSubmenus.forEach(submenu => {
-        if (submenu !== createMenu) submenu.classList.remove("show");
-      });
-      allMenuItems.forEach(item => {
-        if (item !== create) item.classList.remove("active");
-      });
-      create.classList.toggle("active");
-      createMenu.classList.toggle("show");
     });
   }
 
@@ -229,8 +165,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (menuToggle && dropdownMenu && !menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
       dropdownMenu.classList.remove("show");
       menuToggle.classList.remove("active");
-      allSubmenus.forEach(submenu => submenu.classList.remove("show"));
-      allMenuItems.forEach(item => item.classList.remove("active"));
+      document.querySelectorAll(".tray-submenu").forEach(submenu => submenu.classList.remove("show"));
+      document.querySelectorAll(".tray-menu-item").forEach(item => item.classList.remove("active"));
     }
   });
 
