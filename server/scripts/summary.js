@@ -99,6 +99,8 @@ function updateFreeContent() {
 
     // Expense Pie Chart (free)
     updateExpensePieChart();
+    // Income Erosion Pie Chart (premium)
+    updateIncomeErosionPieChart();
 }
 
 // Unlock premium content
@@ -138,8 +140,7 @@ function updatePremiumContent() {
     timeToPay(true);
     calculateGoal(true);
 
-    // Income Erosion Pie Chart (premium)
-    updateIncomeErosionPieChart();
+    
 }
 
 // Helper function to update elements
