@@ -401,152 +401,193 @@ function calculateEmploymentIncome() {
 }
 
 function getCppPayable() {
+    // Get income values
     var annualIncomeSelfEmployed = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
+    var annualEmployedIncome = ANNUALEMPLOYMENTINCOME; // Assumes this is set elsewhere
 
-    var cppRateEmployed = 0.0595;
-    var cppRateSelfEmployed = 0.1190;
-    var cppMaxEmployed = 4034.10;
-    var cppMaxEmployer = 8068.20;
-    var cppExemptionAmount = 3500;
+    // Define CPP constants for 2025
+    const cppRateEmployed = 0.0595; // 5.95% employee portion
+    const cppRateSelfEmployed = 0.1190; // 11.9% total for self-employed
+    const cppMaxEmployed = 3867.50; // Max employee contribution
+    const cppMaxSelfEmployed = 7735; // Max self-employed contribution (total max)
+    const cppExemptionAmount = 3500; // Basic exemption
+    const cppYMPE = 68500; // 2025 YMPE
 
-    var LCR;
-    if (ANNUALEMPLOYMENTINCOME <= cppExemptionAmount) {
-        LCR = cppMaxEmployed;
-    } else {
-        LCR = cppMaxEmployed - ((ANNUALEMPLOYMENTINCOME - cppExemptionAmount) * cppRateEmployed);
-    }
+    // Calculate total pensionable earnings and apply YMPE cap
+    const totalPensionableIncome = annualEmployedIncome + annualIncomeSelfEmployed;
+    const cappedPensionableIncome = Math.min(cppYMPE, totalPensionableIncome);
+    const taxableIncome = Math.max(cappedPensionableIncome - cppExemptionAmount, 0);
 
-    var LEA;
-    if ((ANNUALEMPLOYMENTINCOME - cppExemptionAmount) <= 0) {
-        LEA = Math.abs(ANNUALEMPLOYMENTINCOME - cppExemptionAmount);
-    } else {
-        LEA = 0;
-    }
+    let cppPayableEmployed = 0;
+    let cppPayableSelfEmployed = 0;
 
-    var cppPayableEmployed;
-    if (ANNUALEMPLOYMENTINCOME <= cppExemptionAmount) {
-        cppPayableEmployed = 0;
-    } else {
-        cppPayableEmployed = (ANNUALEMPLOYMENTINCOME - cppExemptionAmount) * cppRateEmployed;
-    }
+    if (taxableIncome > 0) {
+        // Proportions of total income (before cap)
+        const employedFraction = annualEmployedIncome / totalPensionableIncome;
+        const selfEmployedFraction = annualIncomeSelfEmployed / totalPensionableIncome;
 
-    if (cppPayableEmployed > cppMaxEmployed) {
-        cppPayableEmployed = cppMaxEmployed;
-    }
+        // Employed contribution
+        const employedTaxable = taxableIncome * employedFraction;
+        cppPayableEmployed = Math.min(employedTaxable * cppRateEmployed, cppMaxEmployed);
 
-    var cppPayableSelfEmployed;
-    if (LCR <= 0) {
-        cppPayableSelfEmployed = 0;
-    } else {
-        var adjustedIncome = Math.max(annualIncomeSelfEmployed - LEA, 0);
-        cppPayableSelfEmployed = adjustedIncome * cppRateSelfEmployed;
-
-        if (cppPayableSelfEmployed > LCR) {
-            cppPayableSelfEmployed = LCR * 2;
+        // Self-employed contribution: Fill to max if mixed income exceeds YMPE
+        if (totalPensionableIncome > cppYMPE && annualIncomeSelfEmployed > 0) {
+            cppPayableSelfEmployed = cppMaxSelfEmployed - cppPayableEmployed;
+        } else if (annualEmployedIncome === 0) {
+            // Pure self-employed case
+            cppPayableSelfEmployed = Math.min(taxableIncome * cppRateSelfEmployed, cppMaxSelfEmployed);
+        } else {
+            // Proportionate self-employed contribution if below YMPE
+            const selfEmployedTaxable = taxableIncome * selfEmployedFraction;
+            cppPayableSelfEmployed = selfEmployedTaxable * cppRateSelfEmployed;
         }
     }
 
+    // Set global variables
     ANNUALCPP = cppPayableEmployed + cppPayableSelfEmployed;
     CPPPAYABLEEMPLOYED = cppPayableEmployed;
     CPPPAYABLESELFEMPLOYED = cppPayableSelfEmployed;
 
-    document.getElementById('ANNUALCPP').textContent = '$' + (ANNUALCPP).toFixed(2);
-    document.getElementById('annual_cpp_eresult').textContent = '$' + (cppPayableEmployed).toFixed(2);
-    document.getElementById('annual_cpp_seresult').textContent = '$' + (cppPayableSelfEmployed).toFixed(2);
+    // Display results
+    document.getElementById('ANNUALCPP').textContent = '$' + ANNUALCPP.toFixed(2);
+    document.getElementById('annual_cpp_eresult').textContent = '$' + cppPayableEmployed.toFixed(2);
+    document.getElementById('annual_cpp_seresult').textContent = '$' + cppPayableSelfEmployed.toFixed(2);
 }
 
 
+
 function getEIPayable() {
+    // Check region
+    if (document.getElementById('RegionDropdown').value !== 'CAN') {
+        ANNUALEI = 0;
+        document.getElementById('ANNUALEI').textContent = '$0.00';
+        return;
+    }
+
     const employmentIncomeFields = [
         ['income_salary_wages', 'income_salary_wages_frequency'],
         ['income_tips', 'income_tips_frequency'],
         ['income_bonuses', 'income_bonuses_frequency']
     ];
-
     const selfEmploymentIncomeField = ['income_sole_prop', 'income_sole_prop_frequency'];
 
     var annualEmployedIncome = 0;
     employmentIncomeFields.forEach(function (incomeField) {
-        var annualIncome = calculateAnnual(incomeField[0], incomeField[1]);
-        annualEmployedIncome += annualIncome;
+        annualEmployedIncome += calculateAnnual(incomeField[0], incomeField[1]);
     });
 
     var annualSelfEmployedIncome = calculateAnnual(selfEmploymentIncomeField[0], selfEmploymentIncomeField[1]);
 
-    var eiRateEmployed = 0.0164;
-    var eiRateSelfEmployed = 0.0164;
-    var eiEmployeePremiumMax = 1077.48;
-    var eiEmployerPremiumMax = 1508.47;
+    const eiRate = 0.0164; // Same rate for both
+    const eiMaxPremium = 1077.48; // Max for 2025
+    const eiMIE = 65700; // Maximum Insurable Earnings for 2025
 
-    var eiPayableEmployed = Math.min(eiEmployeePremiumMax, annualEmployedIncome * eiRateEmployed);
-    var eiPayableSelfEmployed = Math.min(eiEmployerPremiumMax, annualSelfEmployedIncome * eiRateSelfEmployed);
+    // Combine and cap insurable earnings
+    const totalInsurableIncome = annualEmployedIncome + annualSelfEmployedIncome;
+    const cappedInsurableIncome = Math.min(eiMIE, totalInsurableIncome);
 
-    ANNUALEI = eiPayableEmployed + eiPayableSelfEmployed;
+    // Calculate total EI premium
+    const totalEiPayable = cappedInsurableIncome * eiRate;
+
+    // Proportionally allocate if needed (optional breakdown)
+    let eiPayableEmployed = 0;
+    let eiPayableSelfEmployed = 0;
+    if (totalInsurableIncome > 0) {
+        const employedFraction = annualEmployedIncome / totalInsurableIncome;
+        const selfEmployedFraction = annualSelfEmployedIncome / totalInsurableIncome;
+        eiPayableEmployed = Math.min(totalEiPayable * employedFraction, eiMaxPremium);
+        eiPayableSelfEmployed = Math.min(totalEiPayable * selfEmployedFraction, eiMaxPremium);
+    }
+
+    // Total should not exceed max
+    ANNUALEI = Math.min(totalEiPayable, eiMaxPremium);
 
     document.getElementById('ANNUALEI').textContent = '$' + ANNUALEI.toFixed(2);
 }
 
 function getSocialSecurity() {
-    const employmentIncomeFields = [
-        ['income_salary_wages', 'income_salary_wages_frequency'],
-        ['income_tips', 'income_tips_frequency'],
-        ['income_bonuses', 'income_bonuses_frequency']
-    ];
-    const selfEmploymentIncomeField = ['income_sole_prop', 'income_sole_prop_frequency'];
+    // Normalize annual employment income
+    const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
+    const annualTips = calculateAnnual('income_tips', 'income_tips_frequency');
+    const annualBonuses = calculateAnnual('income_bonuses', 'income_bonuses_frequency');
+    const annualEmployedIncome = annualSalaryWages + annualTips + annualBonuses;
 
-    var annualEmployedIncome = 0;
-    employmentIncomeFields.forEach(function (incomeField) {
-        annualEmployedIncome += calculateAnnual(incomeField[0], incomeField[1]);
-    });
+    // Normalize annual self-employment income
+    const annualSoleProp = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
+    const annualSelfEmployedIncome = annualSoleProp;
 
-    var annualSelfEmployedIncome = calculateAnnual(selfEmploymentIncomeField[0], selfEmploymentIncomeField[1]);
+    // Social Security tax rate and maximum taxable earnings
+    const socialSecurityRate = 0.062; // 6.2% employee rate
+    const socialSecurityMaxTaxable = 142800; // Update to 2025 value (e.g., $168,600 for 2024)
 
-    const ssRateEmployed = 0.062; // 6.2% employee portion
-    const ssRateSelfEmployed = 0.124; // 12.4% total for self-employed
-    const ssMaxWageBase = 168600; // 2025 cap, adjust annually
+    // Total taxable income (before cap)
+    const taxableEmploymentIncome = annualEmployedIncome;
+    const taxableSelfEmploymentIncome = annualSelfEmployedIncome * 0.9235; // 92.35% factor
+    const totalTaxableIncome = taxableEmploymentIncome + taxableSelfEmploymentIncome;
 
-    var ssPayableEmployed = Math.min(ssMaxWageBase, annualEmployedIncome) * ssRateEmployed;
-    var ssPayableSelfEmployed = Math.min(ssMaxWageBase, annualSelfEmployedIncome) * ssRateSelfEmployed;
+    // Cap total taxable income at the maximum
+    const cappedTaxableIncome = Math.min(totalTaxableIncome, socialSecurityMaxTaxable);
 
-    TOTALSOCIALSECURITY = ssPayableEmployed + ssPayableSelfEmployed;
+    // Allocate the capped amount proportionally
+    let employmentSocialSecurityTax = 0;
+    let selfEmploymentSocialSecurityTax = 0;
+    if (totalTaxableIncome > 0) {
+        const employmentFraction = taxableEmploymentIncome / totalTaxableIncome;
+        const selfEmploymentFraction = taxableSelfEmploymentIncome / totalTaxableIncome;
+        const cappedEmploymentIncome = cappedTaxableIncome * employmentFraction;
+        const cappedSelfEmploymentIncome = cappedTaxableIncome * selfEmploymentFraction;
+
+        employmentSocialSecurityTax = cappedEmploymentIncome * socialSecurityRate;
+        selfEmploymentSocialSecurityTax = cappedSelfEmploymentIncome * socialSecurityRate * 2; // 12.4%
+    }
+
+    // Total Social Security tax
+    const totalSocialSecurityTax = employmentSocialSecurityTax + selfEmploymentSocialSecurityTax;
+
+    // Store and display
+    TOTALSOCIALSECURITY = totalSocialSecurityTax;
+    TOTALSOCIALSECURITYSE = selfEmploymentSocialSecurityTax;
+    TOTALSOCIALSECURITYE = employmentSocialSecurityTax;
 
     document.getElementById('TOTALSOCIALSECURITY').textContent = '$' + TOTALSOCIALSECURITY.toFixed(2);
 }
 
 
-
 function getMedicare() {
-    const employmentIncomeFields = [
-        ['income_salary_wages', 'income_salary_wages_frequency'],
-        ['income_tips', 'income_tips_frequency'],
-        ['income_bonuses', 'income_bonuses_frequency']
-    ];
-    const selfEmploymentIncomeField = ['income_sole_prop', 'income_sole_prop_frequency'];
+    // Normalize annual employment income
+    const annualSalaryWages = calculateAnnual('income_salary_wages', 'income_salary_wages_frequency');
+    const annualTips = calculateAnnual('income_tips', 'income_tips_frequency');
+    const annualBonuses = calculateAnnual('income_bonuses', 'income_bonuses_frequency');
+    const annualEmployedIncome = annualSalaryWages + annualTips + annualBonuses;
 
-    var annualEmployedIncome = 0;
-    employmentIncomeFields.forEach(function (incomeField) {
-        annualEmployedIncome += calculateAnnual(incomeField[0], incomeField[1]);
-    });
+    // Normalize annual self-employment income
+    const annualSoleProp = calculateAnnual('income_sole_prop', 'income_sole_prop_frequency');
+    const annualSelfEmployedIncome = annualSoleProp;
 
-    var annualSelfEmployedIncome = calculateAnnual(selfEmploymentIncomeField[0], selfEmploymentIncomeField[1]);
+    // Total normalized annual income
+    const totalAnnualIncome = annualEmployedIncome + annualSelfEmployedIncome;
 
-    const medicareRateEmployed = 0.0145; // 1.45% employee portion
-    const medicareRateSelfEmployed = 0.029; // 2.9% total for self-employed
-    const additionalMedicareThreshold = 200000; // Single filer threshold
-    const additionalMedicareRate = 0.009; // 0.9% additional tax
+    // Medicare tax rates and thresholds
+    const medicareEmployeeRate = 0.0145; // 1.45% for employees
+    const medicareSelfEmployedRate = 0.029; // 2.9% for self-employed
+    const medicareAdditionalRate = 0.009; // Additional 0.9%
+    const medicareThreshold = 200000; // Single filer threshold (adjust for filing status)
 
-    var medicarePayableEmployed = annualEmployedIncome * medicareRateEmployed;
-    var medicarePayableSelfEmployed = annualSelfEmployedIncome * medicareRateSelfEmployed;
+    // Calculate base Medicare tax
+    const employmentMedicareTax = annualEmployedIncome * medicareEmployeeRate;
+    const selfEmploymentMedicareTax = annualSelfEmployedIncome * medicareSelfEmployedRate;
 
-    // Additional Medicare tax for high earners
-    const totalEarnedIncome = annualEmployedIncome + annualSelfEmployedIncome;
-    if (totalEarnedIncome > additionalMedicareThreshold) {
-        const excessIncome = totalEarnedIncome - additionalMedicareThreshold;
-        medicarePayableEmployed += excessIncome * additionalMedicareRate;
+    // Calculate additional Medicare tax
+    let additionalMedicareTax = 0;
+    if (totalAnnualIncome > medicareThreshold) {
+        additionalMedicareTax = (totalAnnualIncome - medicareThreshold) * medicareAdditionalRate;
     }
 
-    TOTALMEDICARE = medicarePayableEmployed + medicarePayableSelfEmployed;
+    // Total Medicare tax
+    const totalMedicareTax = employmentMedicareTax + selfEmploymentMedicareTax + additionalMedicareTax;
 
+    // Store and display
+    TOTALMEDICARE = totalMedicareTax;
     document.getElementById('TOTALMEDICARE').textContent = '$' + TOTALMEDICARE.toFixed(2);
 }
 
