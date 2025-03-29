@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <a href="/create/prompt.html" id="website" class="tray-menu-item">Promptemplate™</a>
       </div>
       <div class="tray-menu-item-container">
-        <a href="/budget/vacation.html" id="website" class="tray-menu-item">Vacation</a>
+        <a href="/budget/vacation.html" id="website" class="tray-menu-item">Vacation Estimate</a>
       </div>
       <div class="tray-menu-item-container">
         <a href="mailto:support@inexasli.com" id="trayContact" class="tray-menu-item">CONTACT</a>
