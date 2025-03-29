@@ -8,36 +8,36 @@
 body {
   font-family: "Roboto", sans-serif;
   background-color: #000;
-  color: #000; /* Your original text color; consider #fff for visibility */
+  color: #000; /* Consider #fff for visibility */
   text-align: left;
   margin-bottom: 75px;
   padding-bottom: 25px;
-  position: relative; /* For pseudo-element positioning */
-  overflow: hidden; /* Keeps the pulse contained */
+  position: relative; /* Still needed for pseudo-element */
+  /* Removed overflow: hidden to restore scrolling */
 }
 
 body::before {
   content: '';
   position: absolute;
-  top: -35px; /* Half the height above the top edge to center vertically at the boundary */
-  left: 50%; /* Centered horizontally */
-  transform: translateX(-50%); /* Keeps it centered */
-  width: 150px; /* ~1 inch at standard 96 DPI */
-  height: 96px; /* Circular, ~1 inch */
-  background: radial-gradient(circle, rgba(240, 240, 240, 0.2) 0%, rgba(0, 0, 0, 0) 50%); /* Small, soft glow */
-  animation: smallPulse 2s infinite ease-in-out; /* Slow pulse */
+  top: -48px; /* Half the height above top edge */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px; /* ~1 inch */
+  height: 96px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 50%);
+  animation: smallPulse 4s infinite ease-in-out;
   z-index: -1; /* Behind content */
 }
 
 @keyframes smallPulse {
   0% {
-    opacity: 0; /* Fully faded (black) */
+    opacity: 0;
   }
   50% {
-    opacity: 1; /* Brightest point */
+    opacity: 1;
   }
   100% {
-    opacity: 0; /* Back to black */
+    opacity: 0;
   }
 }
 
