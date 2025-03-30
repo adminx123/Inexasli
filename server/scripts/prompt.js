@@ -247,11 +247,11 @@ function generatePrompt(promptType) {
             
             Example format:
             
-            NUTRIENT| TARGET       | FOOD INTAKE | % REACHED
-            Calories| 2587 kcal/day| 1104 kcal   | 43%
-            Protein | 158.8 g      | 80 g        | 50%
-            Carbs   | 317.6 g      | 86 g        | 27%
-            Fats    | 79.4 g       | 50 g        | 63%
+           NUTRIENT    TARGET         FOOD INTAKE    % REACHED
+Calories    2587 kcal/day  1104 kcal      43%
+Protein     158.8 g        80 g           50%
+Carbs       317.6 g        86 g           27%
+Fats        79.4 g         50 g           63%
             `;
             
                 // Gathering user inputs and appending to prompt
@@ -270,36 +270,37 @@ function generatePrompt(promptType) {
                 break;
             
             
-
-        case 'trip':
-            prompt += formatGrid('#trip-purpose .grid-item.selected', 'Review the following activities I want to do on my trip');
-            prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format\n\n';
-            const tripSpecifics = document.getElementById('trip-specifics');
-            if (tripSpecifics?.value) {
-                prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
-                prompt += `Activity-specific information requested:\n${tripSpecifics.value}\n\n`;
-                const plans = document.getElementById('trip-plans');
-                if (plans?.value) prompt += formatList(plans.value, 'Confirmed Schedule');
-                const packing = document.getElementById('trip-packing');
-                if (packing?.value) {
-                    let packingDescription = '';
-                    switch (packing.value) {
-                        case 'YM': packingDescription = 'Yes, for Male'; break;
-                        case 'YF': packingDescription = 'Yes, for Female'; break;
-                        case 'YMF': packingDescription = 'Yes, for Male & Female'; break;
-                        case 'NN': packingDescription = 'No'; break;
-                    }
-                    prompt += `${packingDescription}\n\n`;
-                }
-                const people = document.getElementById('trip-people');
-                if (people?.value) prompt += formatList(people.value, 'Number of People on Trip');
-                const days = document.getElementById('trip-days');
-                if (days?.value) prompt += formatList(days.value, 'Trip Length');
-                prompt += formatGrid('#trip-relationship .grid-item.selected', 'Relationship to People on Trip');
-                const cost = document.getElementById('trip-cost');
-                if (cost?.value) prompt += formatList(cost.value, 'Budget');
+                case 'trip':
+    prompt += formatGrid('#trip-activities .grid-item.selected', 'Review the following activities I want to do on my trip');
+    prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format\n\n';
+    const tripSpecifics = document.getElementById('trip-specifics');
+    if (tripSpecifics?.value) {
+        prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
+        prompt += `Activity-specific information requested:\n${tripSpecifics.value}\n\n`;
+        const plans = document.getElementById('trip-plans');
+        if (plans?.value) prompt += formatList(plans.value, 'Confirmed Schedule');
+        const packing = document.getElementById('trip-packing');
+        if (packing?.value) {
+            let packingDescription = '';
+            switch (packing.value) {
+                case 'YM': packingDescription = 'Yes, for Male'; break;
+                case 'YF': packingDescription = 'Yes, for Female'; break;
+                case 'YMF': packingDescription = 'Yes, for Male & Female'; break;
+                case 'NN': packingDescription = 'No'; break;
             }
-            break;
+            prompt += `${packingDescription}\n\n`;
+        }
+        const people = document.getElementById('trip-people');
+        if (people?.value) prompt += formatList(people.value, 'Number of People on Trip');
+        const days = document.getElementById('trip-days');
+        if (days?.value) prompt += formatList(days.value, 'Trip Length');
+        const location = document.getElementById('trip-location');
+        if (location?.value) prompt += formatList(location.value, 'Trip Location');
+        prompt += formatGrid('#trip-relationship .grid-item.selected', 'Relationship to People on Trip');
+        const cost = document.getElementById('trip-cost');
+        if (cost?.value) prompt += formatList(cost.value, 'Budget');
+    }
+    break;
 
         case 'business':
             const vision = document.getElementById('business-vision');
@@ -440,20 +441,76 @@ function generatePrompt(promptType) {
 
     }
 
-    // Display prompt and show it in the alert along with confirmation
-    if (prompt) {
-        document.getElementById('result').textContent = prompt;
-        navigator.clipboard.writeText(prompt).then(() => {
-            alert(`Prompt copied to clipboard. Proceed to Grok, ChatGPT, Gemini, Deepseek, etc and paste: **Disclaimer** The AI systems you are pasting this into may make errors or misinterpret the information provided. Always verify the output independently.\n\n${prompt}`);
-        }).catch(err => {
-            console.error('Failed to copy prompt:', err);
-            alert('Failed to copy prompt to clipboard.');
-        });
-    } else if (promptType === 'research') {
-        alert('Please fill in the necessary details for the research prompt.');
-    } else {
-        alert('No prompt generated. Please fill in the required fields.');
+    // Add this CSS to your <style> or stylesheet (only once, not in the function)
+const style = document.createElement('style');
+style.textContent = `
+    .prompt-modal {
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #fff;
+        padding: 20px;
+        border: 2px solid #000;
+        box-shadow: 4px 4px 0 #000;
+        z-index: 1000;
+        text-align: center;
+        font-size: 16px;
+        color: #000;
     }
+    .prompt-modal button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background: #000;
+        color: #fff;
+        border: 2px solid #000;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .prompt-modal button:hover {
+        background: #333;
+    }
+`;
+document.head.appendChild(style);
+
+// Replace your old alert block with this
+if (prompt) {
+    document.getElementById('result').textContent = prompt;
+    navigator.clipboard.writeText(prompt).then(() => {
+        const modal = document.createElement('div');
+        modal.className = 'prompt-modal';
+        modal.innerHTML = `
+            <p>Your Promptemplate™ is ready! It’s copied to your clipboard—paste it into your favorite AI chat with Ctrl+V (Cmd+V on Mac) or right-click > Paste.</p>
+            <button onclick="this.parentElement.remove()">Got It</button>
+        `;
+        document.body.appendChild(modal);
+    }).catch(err => {
+        console.error('Failed to copy prompt:', err);
+        const modal = document.createElement('div');
+        modal.className = 'prompt-modal';
+        modal.innerHTML = `
+            <p>Prompt generated but failed to copy. Copy it manually from the page.</p>
+            <button onclick="this.parentElement.remove()">Got It</button>
+        `;
+        document.body.appendChild(modal);
+    });
+} else if (promptType === 'research') {
+    const modal = document.createElement('div');
+    modal.className = 'prompt-modal';
+    modal.innerHTML = `
+        <p>Please fill in the necessary details for the research prompt.</p>
+        <button onclick="this.parentElement.remove()">Got It</button>
+    `;
+    document.body.appendChild(modal);
+} else {
+    const modal = document.createElement('div');
+    modal.className = 'prompt-modal';
+    modal.innerHTML = `
+        <p>No prompt generated. Please fill in the required fields.</p>
+        <button onclick="this.parentElement.remove()">Got It</button>
+    `;
+    document.body.appendChild(modal);
+}
 }
 
 document.querySelectorAll('.generate-btn').forEach(button => {
