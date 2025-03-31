@@ -174,41 +174,36 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'event':
-            const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
-            if (eventTypesSelected.length > 0) {
-                prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event');
-                prompt += 'Purpose of Analysis: To generate a clear and actionable checklist with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event.\n\n';
-                const eventFormatReturn = document.getElementById('event-format-return');
-                const selectedFormatEvent = eventFormatReturn?.querySelector('.grid-item.selected');
-                if (selectedFormatEvent) {
-                    const formatValue = selectedFormatEvent.getAttribute('data-value');
-                    prompt += `Return the information in this format: ${formatValue}\n\n`;
-                }
-                prompt += formatGrid('#event-elements .grid-item.selected', 'Elements');
-                const venueStatus = document.getElementById('event-venue').value;
-                if (venueStatus) {
-                    prompt += `Venue Status: ${venueStatus}\n\n`;
-                }
-                const location = document.getElementById('event-location');
-                if (location?.value) {
-                    prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`;
-                    if (location.value === 'indoors') {
-                        prompt += formatGrid('#event-indoor-setup .grid-item.selected', 'Venue Setup Needs');
-                    } else {
-                        prompt += formatGrid('#event-outdoor .grid-item.selected', 'Setup Considerations');
-                    }
-                    const guests = document.getElementById('event-guests');
-                    if (guests?.value) prompt += formatList(guests.value, 'Guest Count');
-                    const budget = document.getElementById('event-budget');
-                    if (budget?.value) prompt += formatList(budget.value, 'Budget');
-                    const timeline = document.getElementById('event-timeline');
-                    if (timeline?.value) prompt += formatList(timeline.value, 'Timeline');
-                    const specificContext = document.getElementById('event-specific-context');
-                    if (specificContext?.value) prompt += `Context Dump: ${specificContext.value}\n\n`;
-                }
-            }
+            case 'event': 
+            const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected'); 
+            if (eventTypesSelected.length > 0) { 
+                prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event'); 
+                prompt += 'Purpose of Analysis: To generate a clear and actionable checklist in code block with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event.\n\n'; 
+            } 
+            prompt += formatGrid('#event-elements .grid-item.selected', 'Elements'); 
+            const venueStatus = document.getElementById('event-venue').value; 
+            if (venueStatus) { 
+                prompt += `Venue Status: ${venueStatus}\n\n`; 
+            } 
+            const location = document.getElementById('event-location'); 
+            if (location?.value) { 
+                prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`; 
+                if (location.value === 'indoors') { 
+                    prompt += formatGrid('#event-indoor-setup .grid-item.selected', 'Venue Setup Needs'); 
+                } else { 
+                    prompt += formatGrid('#event-outdoor .grid-item.selected', 'Setup Considerations'); 
+                } 
+                const guests = document.getElementById('event-guests'); 
+                if (guests?.value) prompt += formatList(guests.value, 'Guest Count'); 
+                const budget = document.getElementById('event-budget'); 
+                if (budget?.value) prompt += formatList(budget.value, 'Budget'); 
+                const timeline = document.getElementById('event-timeline'); 
+                if (timeline?.value) prompt += formatList(timeline.value, 'Timeline'); 
+                const specificContext = document.getElementById('event-specific-context'); 
+                if (specificContext?.value) prompt += `Context Dump: ${specificContext.value}\n\n`; 
+            } 
             break;
+        
 
         case 'fitness':
             const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
@@ -243,7 +238,7 @@ function generatePrompt(promptType) {
             
             ### Your Goal: Gain Muscle
             
-            Output as a **text-based table** with columns: **Nutrient**, **Target Amount**, **Food Log Intake**, and **Percentage Reached**. Ensure the values are properly aligned using spaces and avoid any markdown symbols. **Do not include any additional comments, explanations, or recommendations. Just the raw data in the requested format.**
+            Generate a **text-based table** with columns: **Nutrient**, **Target Amount**, **Food Log Intake**, and **Percentage Reached** in code block. **Do not include any additional comments, explanations, or recommendations. Just the raw data in the requested format.**
             
             Example format:
             
@@ -367,23 +362,35 @@ Fats        79.4 g         50 g           63%
             case 'enneagram-questionnaire':
                 const enneagramSelf = document.getElementById('enneagram-self');
                 if (enneagramSelf?.value) {
-                    prompt += `Here’s my completed Enneagram questionnaire template for AI analysis:\n\n`;
+                    prompt += `Here’s my completed Enneagram questionnaire:\n\n`;
                     prompt += `Self-Description:\n${enneagramSelf.value}\n\n`;
-                    prompt += formatGrid('#enneagram-traits .grid-item.selected', 'Core Traits I Identify With');
-                    prompt += formatGrid('#enneagram-behaviors .grid-item.selected', 'Behavioral Responses');
+                    
+                    const traits = Array.from(document.querySelectorAll('#enneagram-traits .grid-item.selected'))
+                        .map(el => el.getAttribute('data-value'))
+                        .join('\n');
+                    if (traits) prompt += `Core Traits I Identify With:\n${traits}\n\n`;
+            
+                    const behaviors = Array.from(document.querySelectorAll('#enneagram-behaviors .grid-item.selected'))
+                        .map(el => el.getAttribute('data-value'))
+                        .join('\n');
+                    if (behaviors) prompt += `Behavioral Responses:\n${behaviors}\n\n`;
             
                     const motivations = document.getElementById('enneagram-motivations');
-                    if (motivations?.value) prompt += formatList(motivations.value, 'Core Motivations');
+                    if (motivations?.value) prompt += `Core Motivations:\n${motivations.value}\n\n`;
+                    
                     const fears = document.getElementById('enneagram-fears');
-                    if (fears?.value) prompt += formatList(fears.value, 'Core Fears');
+                    if (fears?.value) prompt += `Core Fears:\n${fears.value}\n\n`;
+                    
                     const stress = document.getElementById('enneagram-stress');
                     if (stress?.value) prompt += `Behavior Under Stress:\n${stress.value}\n\n`;
+                    
                     const growth = document.getElementById('enneagram-growth');
                     if (growth?.value) prompt += `Behavior at My Best:\n${growth.value}\n\n`;
+                    
                     const childhood = document.getElementById('enneagram-childhood');
                     if (childhood?.value) prompt += `Influential Childhood Memory:\n${childhood.value}\n\n`;
-            
-                    prompt += `\nPlease paste this into an AI to determine my primary Enneagram type, potential wing(s), stress and growth directions, and any additional insights based on Enneagram theory.`;
+                    
+                    prompt += `Please analyze this to determine my primary Enneagram type, potential wing(s), stress and growth directions, and any additional insights based on Enneagram theory.`;
                 }
                 break;
             
