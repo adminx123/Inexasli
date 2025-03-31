@@ -8,7 +8,7 @@
  * jurisdictions worldwide.
   */
 
-import { displayWarning, hideShowClass } from "./utils.js"
+import { hideShowClass } from "/server/scripts/hideShow.js"
 import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
 import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
 
