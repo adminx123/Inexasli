@@ -24,24 +24,21 @@ function toggleSection(header) {
 }
 
 
-
 function toggleScope(scope) {
     const personalBtn = document.getElementById('personal-btn');
     const businessBtn = document.getElementById('business-btn');
     const personalPrompts = document.getElementById('personal-prompts');
     const businessPrompts = document.getElementById('business-prompts');
-    const promptContainer = document.getElementById('personal-prompts')?.parentElement; // Prompt container
-    const aiButtonContainer = document.querySelector('.button-container')?.parentElement; // AI button container
+    const promptContainer = document.getElementById('personal-prompts')?.parentElement;
 
     // Null checks for debugging
-    if (!personalBtn || !businessBtn || !personalPrompts || !businessPrompts || !promptContainer || !aiButtonContainer) {
+    if (!personalBtn || !businessBtn || !personalPrompts || !businessPrompts || !promptContainer) {
         console.error('Missing elements:', {
             personalBtn,
             businessBtn,
             personalPrompts,
             businessPrompts,
-            promptContainer,
-            aiButtonContainer
+            promptContainer
         });
         return;
     }
@@ -53,12 +50,10 @@ function toggleScope(scope) {
         personalBtn.classList.remove('selected');
         businessBtn.classList.remove('selected');
         promptContainer.classList.add('hidden');
-        aiButtonContainer.classList.add('hidden'); // Hide AI buttons
         activeScope = null;
     } else {
-        // Show both containers and toggle the appropriate scope
+        // Show container and toggle the appropriate scope
         promptContainer.classList.remove('hidden');
-        aiButtonContainer.classList.remove('hidden'); // Show AI buttons
         personalPrompts.classList.add('hidden');
         businessPrompts.classList.add('hidden');
         personalBtn.classList.remove('selected');
@@ -447,8 +442,7 @@ Fats        79.4 g         50 g           63%
 
 
     }
-
-    // Add this CSS to your <style> or stylesheet (only once, not in the function)
+// Add this CSS to your <style> or stylesheet (only once, not in the function)
 const style = document.createElement('style');
 style.textContent = `
     .prompt-modal {
@@ -464,6 +458,8 @@ style.textContent = `
         text-align: center;
         font-size: 16px;
         color: #000;
+        width: 80%;
+        max-width: 500px;
     }
     .prompt-modal button {
         margin-top: 10px;
@@ -477,6 +473,21 @@ style.textContent = `
     .prompt-modal button:hover {
         background: #333;
     }
+    .button-container {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+    .ai-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+    .ai-logo {
+        width: 40px;
+        height: 40px;
+    }
 `;
 document.head.appendChild(style);
 
@@ -488,6 +499,20 @@ if (prompt) {
         modal.className = 'prompt-modal';
         modal.innerHTML = `
             <p>Your Promptemplate™ is ready! It’s copied to your clipboard—paste it into your favorite AI chat with Ctrl+V (Cmd+V on Mac) or right-click > Paste.</p>
+            <div class="button-container">
+                <button class="ai-button" onclick="openApp('grok', 'https://x.https://grok.com/?referrer=website/')">
+                    <img src="/images/grok.png" alt="Grok" class="ai-logo">
+                </button>
+                <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
+                    <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
+                </button>
+                <button class="ai-button" onclick="openApp('com.deepseek.app', 'https://deepseek.com')">
+                    <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
+                </button>
+                <button class="ai-button" onclick="openApp('com.google.gemini', 'https://gemini.google.com/app')">
+                    <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
+                </button>
+            </div>
             <button onclick="this.parentElement.remove()">Got It</button>
         `;
         document.body.appendChild(modal);
@@ -497,6 +522,20 @@ if (prompt) {
         modal.className = 'prompt-modal';
         modal.innerHTML = `
             <p>Prompt generated but failed to copy. Copy it manually from the page.</p>
+            <div class="button-container">
+                <button class="ai-button" onclick="openApp('grok', 'https://x.https://grok.com/?referrer=website/')">
+                    <img src="/images/grok.png" alt="Grok" class="ai-logo">
+                </button>
+                <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
+                    <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
+                </button>
+                <button class="ai-button" onclick="openApp('com.deepseek.app', 'https://deepseek.com')">
+                    <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
+                </button>
+                <button class="ai-button" onclick="openApp('com.google.gemini', 'https://gemini.google.com/app')">
+                    <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
+                </button>
+            </div>
             <button onclick="this.parentElement.remove()">Got It</button>
         `;
         document.body.appendChild(modal);
