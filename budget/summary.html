@@ -120,7 +120,90 @@
       .premium-notice {
           font-size: 0.8em;
       }
-  }</style>
+  }
+  
+  /* Payment Form */
+.payment-form {
+  margin-top: 30px; /* Kept from inline style */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 15px;
+  padding: 20px;
+  background: #fff;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0 #000;
+  border-radius: 8px;
+  align-items: center;
+}
+
+.payment-form .payment-input {
+  padding: 12px 15px;
+  font-size: 16px;
+  color: #000;
+  background: #fff;
+  border: 2px solid #7b7b7b;
+  border-radius: 5px;
+  outline: none;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+  
+}
+
+.payment-form .payment-input:focus {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  transform: scale(1.02);
+
+}
+
+.payment-form .pay-button {
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background: #000000;
+  border: 2px solid #caa81f;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  position: relative; /* Ensures it doesn’t overlap links */
+  z-index: 1; /* Keeps button above other elements */
+}
+
+.payment-form .pay-button:hover {
+  background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.payment-form .pay-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.payment-form .contact-support {
+  color: #000;
+  font-size: 14px;
+  text-decoration: none;
+  text-align: center;
+  transition: color 0.2s ease;
+  display: block; /* Ensures links stack properly */
+  position: relative; /* Prevents overlap */
+  z-index: 2; /* Above button if needed */
+}
+
+.payment-form .contact-support:hover {
+  color: #555;
+  text-decoration: underline;
+}
+
+.payment-form #status {
+  text-align: center;
+  font-size: 14px;
+  color: #000;
+  min-height: 20px;
+}
+  
+  </style>
   
  <body style="display: none;"> <!-- Start hidden, JS will show it -->
    <!-- Logo -->
@@ -474,6 +557,8 @@
        <a href="mailto:support@inexasli.com" class="contact-support" style="color: #fff;">I have paid</a>
        <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support" style="margin-bottom: 20px;color: #fff;">Customer portal</a>
      </form>
+
+
    </div>
  
    <!-- Scripts -->
