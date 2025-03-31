@@ -178,7 +178,7 @@ function generatePrompt(promptType) {
             const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected'); 
             if (eventTypesSelected.length > 0) { 
                 prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event'); 
-                prompt += 'Purpose of Analysis: To generate a clear and actionable checklist in code block with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event.\n\n'; 
+                prompt += 'Purpose of Analysis: To generate a clear and actionable checklist in code block format with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event.\n\n'; 
             } 
             prompt += formatGrid('#event-elements .grid-item.selected', 'Elements'); 
             const venueStatus = document.getElementById('event-venue').value; 
@@ -209,7 +209,7 @@ function generatePrompt(promptType) {
             const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
             if (fitnessGoalsSelected.length > 0) {
                 prompt += formatGrid('#fitness-goal .grid-item.selected', 'Consider the following input relative to my fitness goal');
-                prompt += 'Purpose of analysis: Create a personalized fitness plan to achieve my goal in checklist format with headings of Workout 1, 2, etc., and subcategories\n\n';
+                prompt += 'Purpose of analysis: Create a personalized fitness plan to achieve my goal in checklist format with headings of Workout 1, 2, etc., and subcategories in code block format\n\n';
                 const locationSelection = document.querySelector('#fitness-home-exercises .grid-item.selected');
                 if (locationSelection) {
                     const locationValue = locationSelection.getAttribute('data-value');
@@ -238,7 +238,7 @@ function generatePrompt(promptType) {
             
             ### Your Goal: Gain Muscle
             
-            Generate a **text-based table** with columns: **Nutrient**, **Target Amount**, **Food Log Intake**, and **Percentage Reached** in code block. **Do not include any additional comments, explanations, or recommendations. Just the raw data in the requested format.**
+            Generate a **text-based table** with columns: **Nutrient**, **Target Amount**, **Food Log Intake**, and **Percentage Reached** in code block format. **Do not include any additional comments, explanations, or recommendations. Just the raw data in the requested format.**
             
             Example format:
             
