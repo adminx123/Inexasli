@@ -390,7 +390,7 @@ Fats        79.4 g         50 g           63%
                     const childhood = document.getElementById('enneagram-childhood');
                     if (childhood?.value) prompt += `Influential Childhood Memory:\n${childhood.value}\n\n`;
                     
-                    prompt += `Please analyze this to determine my primary Enneagram type, potential wing(s), stress and growth directions, and any additional insights based on Enneagram theory.`;
+                    prompt += `Please analyze this to determine my primary Enneagram type, potential wing(s), stress and growth directions, and any additional insights based on Enneagram theory output in a code block formatted chart.`;
                 }
                 break;
             
