@@ -442,7 +442,9 @@ Fats        79.4 g         50 g           63%
 
 
     }
-// Add this CSS to your <style> or stylesheet (only once, not in the function)
+
+
+    // In your generatePrompt function, update the style.textContent
 const style = document.createElement('style');
 style.textContent = `
     .prompt-modal {
@@ -483,10 +485,16 @@ style.textContent = `
         background: none;
         border: none;
         cursor: pointer;
+        width: 60px; /* Fixed width for consistency */
+        height: 60px; /* Fixed height for consistency */
+        display: flex; /* Make button a flex container */
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
     }
     .ai-logo {
         width: 40px;
         height: 40px;
+        display: block; /* Ensure image behaves as a block for centering */
     }
 `;
 document.head.appendChild(style);
