@@ -8,7 +8,7 @@
  * jurisdictions worldwide.
   */
 
-import { hideShowClass } from "/server/scripts/hideShow.js"
+import { hideShowClass, updateHideShow } from "/server/scripts/hideShow.js"
 import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
 import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
 
@@ -139,44 +139,42 @@ var TOTALSOCIALSECURITYE;
 
 
 document.addEventListener('DOMContentLoaded', function () {
-
     function handleRegionChange() {
-
         if (this.value === 'USA') {
-
-            setCookie("RegionDropdown", this.value, 365)
-            hideShowClass('usa-hide', 'show')
-
+            setCookie("RegionDropdown", this.value, 365);
+            hideShowClass('usa-hide', 'show');
         } else if (this.value === 'CAN') {
-            setCookie("RegionDropdown", this.value, 365)
-            hideShowClass('usa-hide', 'hide')
-
+            setCookie("RegionDropdown", this.value, 365);
+            hideShowClass('usa-hide', 'hide');
         }
 
-        const isIncomeUsa = getCookie('RegionDropdown') == 'USA'
+        const isIncomeUsa = getCookie('RegionDropdown') == 'USA';
 
-
-        if (this.value === 'USA' || this.value === '' || this.value === "NONE" || isIncomeUsa) { // Check for USA or empty value
-            hideShowClass('USAHIDE', 'show')
-
-            // console.log('is block')
+        if (this.value === 'USA' || this.value === '' || this.value === "NONE" || isIncomeUsa) {
+            hideShowClass('USAHIDE', 'show');
+            // console.log('is block');
         } else {
-            hideShowClass('USAHIDE', 'hide')
-            // console.log('is none')
+            hideShowClass('USAHIDE', 'hide');
+            // console.log('is none');
         }
+
+        // Update hideShow.js visibility on region change
+        updateHideShow();
     }
 
     function handleSubRegionChange() {
-        setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365)
+        setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365);
     }
-    // Call handleRegionChange function to handle initial state
-    handleRegionChange.call(document.getElementById('RegionDropdown'));
 
-    // Add event listener to the dropdown for change in value
-    document.getElementById('RegionDropdown').addEventListener('change', handleRegionChange);
+    // Call handleRegionChange and updateHideShow for initial state
+    const regionDropdown = document.getElementById('RegionDropdown');
+    handleRegionChange.call(regionDropdown);
+    updateHideShow(); // Ensure hideShow.js runs on load
+
+    // Add event listeners for changes
+    regionDropdown.addEventListener('change', handleRegionChange);
     document.getElementById('SubregionDropdown').addEventListener('change', handleSubRegionChange);
 });
-
 
 
 window.validatecheckbox = function () {

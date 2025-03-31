@@ -1,3 +1,4 @@
+/* hideShow.js */
 import { getCookie } from '/server/scripts/getcookie.js';
 
 function hideShowClass(className, task) {
@@ -11,13 +12,18 @@ function hideShowClass(className, task) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// Define the visibility logic as a reusable function
+function updateHideShow() {
     const region = getCookie('RegionDropdown');
     console.log('Region in hideShow.js:', region); // Debug
 
     // Inject CSS to enforce hiding (optional, but ensures precedence)
-    const styleSheet = document.createElement('style');
-    document.head.appendChild(styleSheet);
+    let styleSheet = document.getElementById('hide-show-styles');
+    if (!styleSheet) {
+        styleSheet = document.createElement('style');
+        styleSheet.id = 'hide-show-styles';
+        document.head.appendChild(styleSheet);
+    }
 
     if (region === 'CAN') {
         hideShowClass('usa-hide', 'hide');
@@ -32,6 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
         hideShowClass('can-hide', 'hide');
         styleSheet.textContent = `.usa-hide { display: none !important; } .can-hide { display: none !important; }`;
     }
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', () => {
+    updateHideShow();
 });
 
-export { hideShowClass }; // Export if you want to reuse this function elsewhere
+export { hideShowClass, updateHideShow }; // Export both functions
