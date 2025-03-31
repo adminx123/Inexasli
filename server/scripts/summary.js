@@ -93,6 +93,20 @@ function updateFreeContent() {
     updateElement('ASSETS', 'ASSETS', multiplier);
     updateElement('LIABILITIES', 'LIABILITIES', multiplier);
 
+    // Add these lines for your HTML elements
+    updateElement('ANNUALTAXABLEINCOME', 'ANNUALTAXABLEINCOME', multiplier); // Taxable Income
+    updateElement('SD', 'SD', multiplier, null, 'usa-hide'); // Standard Deduction (USA)
+    updateElement('BPA', 'BPA', multiplier, null, 'can-hide'); // Basic Personal Amount (Canada)
+    // Region and Subregion (no multiplier, just raw values)
+    const regionElement = document.getElementById('RegionDropdown');
+    if (regionElement) {
+        regionElement.textContent = getCookie('RegionDropdown').trim() !== "" ? getCookie('RegionDropdown') : "NONE";
+    }
+    const subregionElement = document.getElementById('SubregionDropdown');
+    if (subregionElement) {
+        subregionElement.textContent = getCookie('SubregionDropdown').trim() !== "" ? getCookie('SubregionDropdown') : "";
+    }
+
     // Financial Projections (free)
     timeToPay(false);
     calculateGoal(false);
