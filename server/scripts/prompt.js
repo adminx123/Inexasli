@@ -530,7 +530,7 @@ if (prompt) {
         modal.innerHTML = `
             <p>Your Promptemplate™ is ready! It’s copied to your clipboard—paste it into your favorite AI chat with Ctrl+V (Cmd+V on Mac) or right-click > Paste.</p>
             <div class="button-container">
-                <button class="ai-button" onclick="openApp('grok', 'https://x.https://grok.com/?referrer=website/')">
+                <button class="ai-button" onclick="openApp('grok', 'https://grok.com')">
                     <img src="/images/grok.png" alt="Grok" class="ai-logo">
                 </button>
                 <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
