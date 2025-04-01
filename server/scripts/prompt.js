@@ -200,6 +200,28 @@ function generatePrompt(promptType) {
             break;
         
 
+            case 'therapy':
+                const therapyGoal = document.getElementById('therapy-goal');
+                if (therapyGoal?.value) {
+                    prompt += `Act as a compassionate and professional counselor/therapist. Use the following input to provide me with empathetic guidance, insights, and actionable steps to support my emotional well-being and work toward my therapy goal: ${therapyGoal.value}\n\n`;
+                    prompt += `Purpose of this session: Respond as a therapist would, offering a structured response in checklist format with headings like "Reflections" (for observations on my input) and "Suggestions" (for practical next steps), using a warm and supportive tone. Avoid clinical jargon unless it’s clearly explained.\n\n`;
+                    
+                    prompt += formatGrid('#therapy-emotions .grid-item.selected', 'Current Emotional State');
+                    prompt += formatGrid('#therapy-triggers .grid-item.selected', 'Triggers or Stressors');
+                    
+                    const recentEvents = document.getElementById('therapy-recent');
+                    if (recentEvents?.value) prompt += formatList(recentEvents.value, 'Recent Events or Feelings');
+                    
+                    prompt += formatGrid('#therapy-coping .grid-item.selected', 'Coping Strategies I’ve Tried');
+                    
+                    const therapyHistory = document.getElementById('therapy-history');
+                    if (therapyHistory?.value) prompt += formatList(therapyHistory.value, 'Therapy History or Context');
+                    
+                    const therapyContext = document.getElementById('therapy-context');
+                    if (therapyContext?.value) prompt += formatList(therapyContext.value, 'Additional Context (Past or Future)');
+                }
+                break;
+
         case 'fitness':
             const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
             if (fitnessGoalsSelected.length > 0) {
