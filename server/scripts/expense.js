@@ -402,3 +402,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', () => {
+  document.querySelector('#ROI-modal').style.display = 'block'
+  // 
+
+  const tooltips = document.querySelectorAll(".tooltip");
+
+  tooltips.forEach(tooltip => {
+      tooltip.classList.add("show");
+  })
+})
