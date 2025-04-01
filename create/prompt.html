@@ -23,32 +23,6 @@
      <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
      <style>
          .generate-btn:hover { background: #fff; color: #000; } /* Hover effect for buttons */
-
-
-
-         #floating-terms {
-    position: sticky;
-    top: 10px;
-    z-index: 1000;
-    background: #fff;
-    padding: 10px;
-    border: 2px solid #000;
-    box-shadow: 4px 4px 0 #000;
-    width: 90%;
-    max-width: 600px;
-    margin: 0 auto; /* Center it horizontally */
-}
-
-/* Ensure it doesn’t overlap content on smaller screens */
-@media (max-width: 768px) {
-    #floating-terms {
-        width: 95%;
-        padding: 5px;
-    }
-    #floating-terms label {
-        font-size: 10px;
-    }
-}
      </style>
  </head>
  
@@ -56,27 +30,6 @@
      <a href="/">
          <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
      </a>
-
-
-     <div id="floating-terms" style="position: sticky; top: 10px; z-index: 1000; background: #fff; padding: 10px; border: 2px solid #000; box-shadow: 4px 4px 0 #000;">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <div class="checkbox-wrapper-2">
-                <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
-            </div>
-            <label for="termscheckbox" style="font-size: 11px;">
-                I have read, understand, and agree to the Terms of Service (last updated: 31/Mar/2025). By proceeding, I acknowledge that I use Promptemplate™ at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
-                <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Read Terms of Service</a>
-            </label>
-        </div>
-    </div>
-
-
-     <div id="TERMS-modal" class="modal">
-        <div class="modal-content">
-            <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
-        </div>
-    </div> 
-
  
      <div class="containerround">
         <h2 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">| Promptemplate™ |</h2>
@@ -103,7 +56,17 @@
 
 
 
-      
+        <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+            <div class="checkbox-wrapper-2">
+                <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
+            </div>
+            <label for="termscheckbox" style="font-size: 11px;">
+                I have read, understand, and agree to the Terms of Service.(last updated: 31/Mar/2025). By proceeding, I acknowledge that I use Promptemplate™ at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
+           
+                <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Read Terms of Service</a> 
+
+               </label>
+         </div>
 
 
 
@@ -991,7 +954,11 @@ Hamptons"></textarea>
          <div id="result"></div>
      </div>
 
-     
+     <div id="TERMS-modal" class="modal">
+        <div class="modal-content">
+            <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
+        </div>
+    </div> 
   
     <script src="/server/scripts/modal.js"></script>
 
