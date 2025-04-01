@@ -244,22 +244,21 @@
       </summary>
       
       <p style="margin-left:34px;">
-        <span class="tooltip1" data-tooltip="Taxable income is what’s taxed after adjusting gross income (wages, interest, etc.). In Canada, only 50% of capital gains (profit from sold assets) is included; in the USA, 100% of capital gains is included, with rates varying by holding period (short-term at income rates, long-term at 0%-20%). It’s calculated by subtracting deductions—like Standard Deduction (USA) or Basic Personal Amount (Canada)—and exemptions from gross income. Excludes tax-free items (e.g., Canada’s TFSA gains). Use: Calculate tax owed and plan filings.">          <u>Taxable Income:</u><span class="tooltip1-content"></span><span id="ANNUALTAXABLEINCOME"></span>
+        <span class="tooltip1" data-tooltip="Taxable income is what’s taxed after adjusting gross income (wages, interest, etc.). In Canada, only 50% of capital gains (profit from sold assets) is included; in the USA, 100% of capital gains is included, with rates varying by holding period (short-term at income rates, long-term at 0%-20%). It’s calculated by subtracting deductions—like Standard Deduction (USA) or Basic Personal Amount (Canada)—and exemptions from gross income. Excludes tax-free items (e.g., Canada’s TFSA gains). Use: Calculate tax owed and plan filings.">
+        <u>Taxable Income:</u><span class="tooltip1-content"></span><span id="ANNUALTAXABLEINCOME"></span>
         </span>
       </p>
       
       <div class="usa-hide" style="margin-left:34px;">
         <p>
-          <span class="tooltip1" data-tooltip="Reduces Taxable Income">
-            <u>Standard Deduction:</u><span class="tooltip1-content"></span><span id="SD"></span>
+          <span class="tooltip1" data-tooltip="Fixed amount subtracted from gross income to lower taxable income (e.g., ~$15,000 for singles in 2025, per IRS). Calculated automatically based on filing status (single, married, etc.); reduces tax owed instead of itemizing deductions like mortgage interest. Excludes additional deductions. Use: Estimate tax savings.">            <u>Standard Deduction:</u><span class="tooltip1-content"></span><span id="SD"></span>
           </span>
         </p>
       </div>
     
       <div class="can-hide" style="margin-left:34px;">
         <p>
-          <span class="tooltip1" data-tooltip="Reduces Taxable Income">
-            <u>Basic Personal Amount:</u><span class="tooltip1-content"></span><span id="BPA"></span>
+          <span class="tooltip1" data-tooltip="Non-refundable credit subtracted from income to reduce taxable amount (e.g., ~$15,000-$16,000 in 2025, per CRA, inflation-adjusted). Calculated for all taxpayers; lowers federal tax owed. Excludes extra credits (e.g., disability). Use: Estimate tax reduction.">            <u>Basic Personal Amount:</u><span class="tooltip1-content"></span><span id="BPA"></span>
           </span>
         </p>
       </div>   
@@ -293,15 +292,13 @@
          </span>
        </summary>
        <p style="margin-left:21px;">
-         <span class="tooltip1" data-tooltip="Total earnings from all sources, as entered by you.">
-           <u>Income:</u><span class="tooltip1-content"></span><span id="annual_income_sum"></span>
+        <span class="tooltip1" data-tooltip="Total gross earnings you’ve entered (e.g., wages, freelance, interest). Calculated by summing all income sources before taxes or deductions. Includes taxable amounts (e.g., 100% capital gains in USA, 50% in Canada); excludes tax-free gains (e.g., Canada’s TFSA). Use: Base for tax and budget planning.">           <u>Income:</u><span class="tooltip1-content"></span><span id="annual_income_sum"></span>
          </span>
        </p>
        <details style="margin-top:10px;">
          <summary>
            <p style="margin-left:21px;">
-             <span class="tooltip1" data-tooltip="Total spending based on your inputs.">
-               <u>Expense:</u><span class="tooltip1-content"></span><span id="ANNUALEXPENSESUM"></span>
+            <span class="tooltip1" data-tooltip="Total spending you’ve entered, calculated by summing all expense categories (essential, discretionary, etc.). Includes costs like housing and debt payments; excludes taxes or obligations unless specified. Use: Track cash outflow and budget.">               <u>Expense:</u><span class="tooltip1-content"></span><span id="ANNUALEXPENSESUM"></span>
              </span>
            </p>
          </summary>
@@ -350,7 +347,7 @@
         <details style="margin-top:10px;">
 <summary>
         <p style="margin-left:21px;">
-          <span class="tooltip1" data-tooltip="Total taxes calculated from your income and region.">
+          <span class="tooltip1" data-tooltip="Total taxes owed, calculated from taxable income (gross minus deductions like SD in USA or BPA in Canada) using regional rates (e.g., USA federal/state, Canada federal/provincial). Includes income tax and full (USA) or 50% (Canada) capital gains tax; excludes obligations like CPP/Social Security. Use: Estimate tax burden.">            
             <u>Total Tax Payable:</u><span class="tooltip1-content"></span><span id="annualTax" ></span>
           </span>
         </p>
@@ -371,8 +368,8 @@
 
           <div class="usa-hide">
             <p style="margin-left:34px;">
-              <span class="tooltip1" data-tooltip="Capital gains tax calculated from your asset sales data.">
-                <u>Capital Gains Tax:</u><span class="tooltip1-content"></span><span id="TOTALTAXCG" ></span>
+              <span class="tooltip1" data-tooltip="Tax on profit from asset sales, calculated as 100% of capital gains added to taxable income. Based on your asset sale inputs; excludes losses offsetting gains. Use: Assess tax impact of investments.">               
+                 <u>Capital Gains Tax:</u><span class="tooltip1-content"></span><span id="TOTALTAXCG" ></span>
               </span>
             </p>
 
@@ -501,8 +498,8 @@
       <!-- Premium: Disposable Income -->
       <details style="margin-top:10px;" class="premium-section">
        <summary>
-         <span class="tooltip1" data-tooltip="Income remaining after expenses, taxes, and obligations.">
-           <p style="margin-left:21px;"></style>DISPOSABLE INCOME:<span class="tooltip1-content"></span><span id="DISPOSABLEINCOME" class="premium-blur">[Locked]</span></p>
+        <span class="tooltip1" data-tooltip="Income left after subtracting expenses, taxes, and obligations from gross income. Calculated as: gross income - (taxes like income/capital gains + obligations like CPP/Social Security + all expenses). Includes only your spendable remainder; excludes locked savings. Use: Gauge financial flexibility.">
+                     <p style="margin-left:21px;"></style>DISPOSABLE INCOME:<span class="tooltip1-content"></span><span id="DISPOSABLEINCOME" class="premium-blur">[Locked]</span></p>
          </span>
        </summary>
       </details>
