@@ -591,7 +591,21 @@ if (prompt) {
 
 document.querySelectorAll('.generate-btn').forEach(button => {
     button.addEventListener('click', () => {
+        const termsChecked = document.getElementById('termscheckbox')?.checked;
         const promptType = button.getAttribute('data-prompt');
+
+        if (!termsChecked) {
+            const modal = document.createElement('div');
+            modal.className = 'prompt-modal';
+            modal.innerHTML = `
+                <p style="font-weight: bold; color: #ff0000;">STOP! You MUST agree to the Terms of Service by checking the box above before generating a prompt. This is required to confirm you understand Promptemplate™ generates AI prompts, not professional advice, and involves sharing data with third-party AI systems.</p>
+                <button onclick="this.parentElement.remove()">Understood</button>
+            `;
+            document.body.appendChild(modal);
+            return; // Stop execution if terms aren’t checked
+        }
+
+        // If terms are checked, proceed with generating the prompt
         generatePrompt(promptType);
     });
 });
