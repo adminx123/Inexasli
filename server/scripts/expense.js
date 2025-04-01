@@ -8,9 +8,10 @@
  * jurisdictions worldwide.
  */
 
-import { displayWarning, hideShow } from "./utils.js";
+import { displayWarning } from "./utils.js";
 import { setCookie } from '/server/scripts/setcookie.js';
 import { getCookie } from '/server/scripts/getcookie.js';
+import { hideShowClass } from "./hideShow.js";
 
 // Tab highlighting
 const tabs = document.querySelectorAll('.tab');
@@ -308,15 +309,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (dependantcheckboxCookie === 'checked') {
-    hideShow('depandant-parent', 'show');
+    hideShowClass('depandant-parent', 'show');
   } else if (dependantcheckboxCookie === 'unChecked') {
-    hideShow('depandant-parent', 'hide');
+    hideShowClass('depandant-parent', 'hide');
   }
 
   if (debtcheckboxCookie === 'checked') {
-    hideShow('debt-parent', 'show');
+    hideShowClass('debt-parent', 'show');
   } else if (debtcheckboxCookie === 'unChecked') {
-    hideShow('debt-parent', 'hide');
+    hideShowClass('debt-parent', 'hide');
   }
 });
 
