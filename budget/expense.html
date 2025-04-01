@@ -223,6 +223,14 @@
        </div>
        <span id="expenses_vacation_annual"></span>
      </div>
+
+     <div class="checkboxrow">
+
+      <span id="ROI_MODAL_OPEN" title="Calculate self-employment income for educational purposes">Optional - Vacation Cost Estimator</span>
+      </div>
+
+      
+
  
      <div class="checkboxrow">
        <label for="expenses_travel_life_insurance">Life & Travel Insurance:</label>
@@ -782,6 +790,8 @@
    <div class="containerround">
      <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt'></i></button>
    </div>
+
+ 
  
    <div class="hidden">
      <p><u>Expense:</u> <span id="ANNUALEXPENSESUM"></span></p>
@@ -804,6 +814,14 @@
    <script type="module" src="/server/scripts/expense.js"></script>
    <script src="/server/scripts/toolTip.js"></script>
    <script src="/server/scripts/tray.js"></script>
+   <script src="/server/scripts/modal.js"></script>
+
+   <div id="ROI-modal" class="roi-modal">
+    <div class="modal-content" id="ROI-modal-content">
+        <iframe src="/budget/vacation.html" height="100%" width="100%" frameborder="10%"></iframe>
+    </div>
+</div>
+
  </body>
  
  </html>
