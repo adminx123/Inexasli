@@ -116,8 +116,7 @@ function toggleCodeInput(selected) {
     }
 }
 
-document.getElementById('personal-btn').addEventListener('click', () => toggleScope('personal'));
-document.getElementById('business-btn').addEventListener('click', () => toggleScope('business'));
+
 
 document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-status) .grid-item').forEach(item => {
     item.addEventListener('click', () => item.classList.toggle('selected'));
@@ -589,21 +588,21 @@ if (prompt) {
 }
 }
 
-document.querySelectorAll('.generate-btn').forEach(button => {
-    button.addEventListener('click', () => {
+document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
         const termsChecked = document.getElementById('termscheckbox')?.checked;
-        const promptType = button.getAttribute('data-prompt');
+        const scope = button.getAttribute('data-scope');
 
         if (!termsChecked) {
+            e.preventDefault();
             const modal = document.createElement('div');
             modal.className = 'prompt-modal';
             modal.innerHTML = `
-                <p style="font-weight: bold; color: #ff0000;">STOP! You MUST agree to the Terms of Service by checking the box above before generating a prompt. This is required to confirm you understand Promptemplate™ generates AI prompts, not professional advice, and involves sharing data with third-party AI systems.</p>
+                <p style="font-weight: bold; color: #ff0000;">STOP! You MUST agree to the Terms of Service by checking the box above before accessing prompts. This is required to confirm you understand Promptemplate™ generates AI prompts, not professional advice, and involves sharing data with third-party AI systems.</p>
                 <button onclick="this.parentElement.remove()">Understood</button>
             `;
             document.body.appendChild(modal);
 
-            // Ensure the modal is centered and visible
             const style = document.createElement('style');
             style.textContent = `
                 .prompt-modal {
@@ -636,10 +635,16 @@ document.querySelectorAll('.generate-btn').forEach(button => {
                 }
             `;
             document.head.appendChild(style);
-            return; // Stop execution if terms aren’t checked
+            return;
         }
 
-        // If terms are checked, proceed with generating the prompt
+        toggleScope(scope);
+    });
+});
+
+document.querySelectorAll('.generate-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const promptType = button.getAttribute('data-prompt');
         generatePrompt(promptType);
     });
 });
