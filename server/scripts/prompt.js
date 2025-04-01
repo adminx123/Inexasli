@@ -602,6 +602,40 @@ document.querySelectorAll('.generate-btn').forEach(button => {
                 <button onclick="this.parentElement.remove()">Understood</button>
             `;
             document.body.appendChild(modal);
+
+            // Ensure the modal is centered and visible
+            const style = document.createElement('style');
+            style.textContent = `
+                .prompt-modal {
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: #fff;
+                    padding: 20px;
+                    border: 2px solid #000;
+                    box-shadow: 4px 4px 0 #000;
+                    z-index: 1000;
+                    text-align: center;
+                    font-size: 16px;
+                    color: #000;
+                    width: 80%;
+                    max-width: 500px;
+                }
+                .prompt-modal button {
+                    margin-top: 10px;
+                    padding: 10px 20px;
+                    background: #000;
+                    color: #fff;
+                    border: 2px solid #000;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+                .prompt-modal button:hover {
+                    background: #333;
+                }
+            `;
+            document.head.appendChild(style);
             return; // Stop execution if terms aren’t checked
         }
 
