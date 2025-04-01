@@ -598,7 +598,7 @@ document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
             const modal = document.createElement('div');
             modal.className = 'prompt-modal';
             modal.innerHTML = `
-                <p style="font-weight: bold; color: #ff0000;">STOP! You MUST agree to the Terms of Service by checking the box above before accessing prompts. This is required to confirm you understand Promptemplate™ generates AI prompts, not professional advice, and involves sharing data with third-party AI systems.</p>
+                <p style="font-weight: bold; color: #ff0000;">Please agree to the Terms of Service before accessing the Promptemplates™</p>
                 <button onclick="this.parentElement.remove()">Understood</button>
             `;
             document.body.appendChild(modal);
