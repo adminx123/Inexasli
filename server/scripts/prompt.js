@@ -553,7 +553,7 @@ if (prompt) {
         modal.innerHTML = `
             <p>Prompt generated but failed to copy. Copy it manually from the page.</p>
             <div class="button-container">
-                <button class="ai-button" onclick="openApp('grok', 'https://x.https://grok.com/?referrer=website/')">
+                <button class="ai-button" onclick="openApp('grok', 'https://grok.com')">
                     <img src="/images/grok.png" alt="Grok" class="ai-logo">
                 </button>
                 <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
