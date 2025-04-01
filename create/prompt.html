@@ -44,7 +44,22 @@
                  <div class="grid-item" id="business-btn" data-scope="business">Prompts for Business Matters</div>
              </div>
          </div>
-     </div>
+
+         <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+            <div class="checkbox-wrapper-2">
+                <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
+            </div>
+            <label for="termscheckbox" style="font-size: 11px;">
+                I have read, understand, and agree to the Terms of Service.(last updated: 31/Mar/2025). By proceeding, I acknowledge that I use Promptemplate™ at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
+           
+                <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Read Terms of Service</a> 
+
+               </label>
+
+     
+       
+     
+
  
      <div class="containerround hidden">
          <!-- Personal Prompts -->
@@ -924,12 +939,20 @@ Hamptons"></textarea>
          </div>
      </div>
  
-     
+    
  
      <div class="hidden" id="prompt-results">
          <div id="result"></div>
      </div>
- 
+
+     <div id="TERMS-modal" class="modal">
+        <div class="modal-content">
+            <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
+        </div>
+    </div> 
+  
+    <script src="/server/scripts/modal.js"></script>
+
      <script src="/index.js"></script>
      <script src="/server/scripts/tray.js"></script>
      <script src="/server/scripts/prompt.js"></script>
