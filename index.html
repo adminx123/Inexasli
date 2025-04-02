@@ -12,23 +12,17 @@
    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
    
     <link rel="manifest" href="/manifest.json" />
-
-
-   
 </head>
 
 <style>
-
-
 body {
   font-family: "Roboto", sans-serif;
   background-color: #000;
-  color: #000; /* Consider #fff for visibility */
-  text-align: left;
+  color: #fff; /* Changed for visibility */
+  text-align: center; /* Centering content */
   margin-bottom: 75px;
   padding-bottom: 25px;
-  position: relative; /* Still needed for pseudo-element */
-  /* Removed overflow: hidden to restore scrolling */
+  position: relative;
 }
 
 /* Install Instructions */
@@ -145,8 +139,9 @@ body {
   font-weight: bold;
   color: white;
   text-transform: uppercase;
+  opacity: 1;
+  animation: fadeOut 3s ease-in forwards;
 }
-
 
 h1,
 h2,
@@ -169,7 +164,7 @@ h4 {
   font-size: 4vw;
   margin: 0;
   opacity: 0;
-  transition: opacity 2s ease;
+  animation: fadeIn 3s ease-in forwards;
 }
 
 @keyframes rotateImage {
@@ -181,11 +176,24 @@ h4 {
     }
 }
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
 
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
 </style>
-
-
-
 
 <body>
 
@@ -193,39 +201,31 @@ h4 {
         <p id="install-message"></p>
     </div>
     
-    
     <!-- Inline container to hold both elements -->
     <div class="inline-container" style="text-align: center; margin-top: 25%;">
         <div id="fadeInText">INEXASLI</div>
+    </div>
+
+    <!-- Image remains visible and rotating -->
+    <img src="/images/apple-touch-icon.png" alt="Logo" 
+         style="width: 25px; height: auto;margin-bottom: 5px; animation: rotateImage 10s linear infinite;">
+
+    <div class="inline-container" style="text-align: center;">
         <h4 id="empoweringThee">Empowering Thee</h4>
     </div>
 
-
-    <!-- <button class="chat-toggle">💬</button> 
-    <div class="chatbot" style="display:none;">
-      <div class="chat-header">Your DIY Coach</div>
-      <div class="chat-body"><p>Hi! How can I help you today?</p></div>
-      <input type="text" class="chat-input" placeholder="Ask me anything...">
-    </div>
--->
-
-
-<img src="/images/apple-touch-icon.png" alt="Logo" 
-     style="width: 25px; height: auto; position: absolute; top: 95%; left: 50%; transform: translate(-50%, -75%); animation: rotateImage 10s linear infinite;" 
-     onclick="calculateAll();">
-
-
-
-
-
- 
-
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Set both fade-in and fade-out for text elements
+        const fadeInText = document.getElementById('fadeInText');
+        const empoweringText = document.getElementById('empoweringThee');
+
+        // Fade out INEXASLI and fade in Empowering Thee at the same time
+        fadeInText.style.animation = 'fadeOut 3s ease-in forwards';
+        empoweringText.style.animation = 'fadeIn 3s ease-in forwards';
+
         setTimeout(function() {
-            const empoweringThee = document.getElementById('empoweringThee');
-            empoweringThee.style.opacity = '1'; // Fade in the text
+            empoweringText.style.opacity = '1'; // Ensures "Empowering Thee" fades in
         }, 250);
 
         if ('serviceWorker' in navigator) {
@@ -236,20 +236,8 @@ h4 {
     });
 </script>
 
-
 <script src="/install.js"></script>
-   <script src="/server/scripts/tray.js"></script>
+<script src="/server/scripts/tray.js"></script>
 
-    
-    <!-- <script src="/server/scripts/chat.js"></script> -->
 </body>
 </html>
-
-
-
-
-
-
-
-
-  
