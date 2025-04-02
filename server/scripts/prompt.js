@@ -638,7 +638,19 @@ document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
             return;
         }
 
+        // Toggle the scope and center the section
         toggleScope(scope);
+        const targetSection = document.getElementById(`${scope}-prompts`);
+        if (targetSection) {
+            const sectionHeight = targetSection.offsetHeight; // Height of the div
+            const windowHeight = window.innerHeight; // Height of the viewport
+            const scrollPosition = targetSection.getBoundingClientRect().top + window.scrollY - (windowHeight - sectionHeight) / 2;
+
+            window.scrollTo({
+                top: scrollPosition,
+                behavior: 'smooth'
+            });
+        }
     });
 });
 
