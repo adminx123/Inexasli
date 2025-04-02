@@ -1,12 +1,13 @@
-// Import the getCookie function from getcookie.js (assumed already present in your project)
-import { getCookie } from './getcookie.js';
+// Import getCookie from getcookie.js
+import { getCookie } from '/server/scripts/getcookie.js'; // Matches your absolute path
 
-// Function to inject the CSS styles directly into the page
+// Inject CSS styles into the page
 function injectStyles() {
     const styles = `
         #gotosummary {
-            position: sticky;
-            top: 10px;
+            position: fixed; /* Stays in viewport */
+            bottom: 10px; /* 50px from bottom */
+            left: 10px; /* 10px from left */
             z-index: 1000;
             background: #fff;
             padding: 10px;
@@ -14,7 +15,6 @@ function injectStyles() {
             box-shadow: 4px 4px 0 #000;
             width: auto;
             display: inline-block;
-            margin: 0 auto;
         }
 
         #summary-btn {
@@ -42,26 +42,21 @@ function injectStyles() {
             }
             #summary-btn {
                 padding: 6px 12px;
-                font-size: 12px;
+                font-size: 11px;
             }
         }
     `;
-
-    // Create a new <style> element
     const styleSheet = document.createElement('style');
     styleSheet.type = 'text/css';
     styleSheet.innerText = styles;
-
-    // Append the style element to the <head> of the document
     document.head.appendChild(styleSheet);
 }
 
-// Function to create the HTML for the floating button
+// Create the floating button HTML
 function createFloatingButton() {
-    // Create the button container and button elements
     const buttonContainer = document.createElement('div');
     buttonContainer.id = 'gotosummary';
-    buttonContainer.style.display = 'none'; // Hide by default
+    buttonContainer.style.display = 'none'; // Hidden by default
 
     const innerContainer = document.createElement('div');
     innerContainer.style.display = 'flex';
@@ -70,52 +65,38 @@ function createFloatingButton() {
 
     const button = document.createElement('button');
     button.id = 'summary-btn';
-    button.style.padding = '8px 15px';
-    button.style.background = '#000';
-    button.style.color = '#fff';
-    button.style.border = '2px solid #000';
-    button.style.borderRadius = '5px';
-    button.style.cursor = 'pointer';
     button.textContent = 'SUMMARY';
 
     innerContainer.appendChild(button);
     buttonContainer.appendChild(innerContainer);
-
-    // Append the button container to the body
     document.body.appendChild(buttonContainer);
+    console.log('Button created at:', buttonContainer.getBoundingClientRect()); // Debug position
 }
 
-// Function to check the cookie and show/hide the floating button
+// Check cookie and toggle button visibility
 function checkCookieAndToggleButton() {
-    const summaryCookie = getCookie('showSummaryButton'); // Assume the cookie is named 'showSummaryButton'
-
-    // Get the button container
+    const summaryCookie = getCookie('summary_reached');
+    console.log('summary_reached value:', summaryCookie);
     const summaryButtonContainer = document.getElementById('gotosummary');
-
-    // If cookie exists and equals 'true', show the button
     if (summaryCookie === 'true') {
-        summaryButtonContainer.style.display = 'block';
+        summaryButtonContainer.style.display = 'inline-block';
+        console.log('Button shown at:', summaryButtonContainer.getBoundingClientRect());
     } else {
         summaryButtonContainer.style.display = 'none';
     }
 }
 
-// Add an event listener to the button to navigate when clicked
+// Add click listener for redirect
 function addButtonClickListener() {
-    const summaryButton = document.getElementById('summary-btn');
-
-    if (summaryButton) {
-        summaryButton.addEventListener('click', () => {
-            // Redirect to the summary page
-            window.location.href = '/budget/summary.html';
-        });
-    }
+    document.getElementById('summary-btn').addEventListener('click', () => {
+        window.location.href = '/budget/summary.html';
+    });
 }
 
-// Call the function to check the cookie and toggle visibility
+// Initialize on page load
 window.addEventListener('DOMContentLoaded', () => {
-    injectStyles(); // Inject the styles into the page
-    createFloatingButton(); // Create the floating button HTML
-    checkCookieAndToggleButton(); // Check cookie and show the button if needed
-    addButtonClickListener(); // Add click listener to the button
+    injectStyles();
+    createFloatingButton();
+    checkCookieAndToggleButton();
+    addButtonClickListener();
 });
