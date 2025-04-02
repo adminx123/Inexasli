@@ -1,6 +1,6 @@
-const CACHE_NAME = 'inexasli-v5'; //#CHANGEVERSION with each major update
+const CACHE_NAME = 'inexasli-v6'; //#CHANGEVERSION with each major update
 const urlsToCache = [
-  '/budget/index1.html'
+  '/budget/index.html'
 ];
 
 // Install event
