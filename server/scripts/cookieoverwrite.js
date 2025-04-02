@@ -41,7 +41,7 @@ export function overwriteCookies() {
         'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent',
         'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
         'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan',
-        'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears'
+        'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears','summary_reached'
     ];
 
     const value = ''; // Default value to clear cookies
