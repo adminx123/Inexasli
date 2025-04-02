@@ -1334,3 +1334,10 @@ summary h2 {
 details p {
   margin: 5px 0; /* Consistent spacing for paragraphs */
 }
+
+.tm {
+  font-size: 0.5em;      /* Smaller font size */
+  position: relative;    /* Allows shifting */
+  top: -0.2em;           /* Moves the symbol up; adjust the value as needed */
+  vertical-align: top;   /* Ensures proper alignment */
+}
