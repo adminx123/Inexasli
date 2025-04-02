@@ -140,6 +140,7 @@ body {
   color: white;
   text-transform: uppercase;
   opacity: 1;
+  /* Both texts will fade out together */
   animation: fadeOut 3s ease-in forwards;
 }
 
@@ -163,16 +164,19 @@ h4 {
   letter-spacing: 2px;
   font-size: 4vw;
   margin: 0;
-  opacity: 0;
-  animation: fadeIn 3s ease-in forwards;
+  opacity: 1;
+  /* Both texts fade out together */
+  animation: fadeOut 3s ease-in forwards;
 }
 
 @keyframes rotateImage {
     0% {
         transform: rotate(0deg);
+        opacity: 0;  /* Image starts invisible */
     }
     100% {
         transform: rotate(360deg);
+        opacity: 1;  /* Image becomes visible */
     }
 }
 
@@ -201,6 +205,21 @@ h4 {
     vertical-align: top;   /* Ensures proper alignment */
 }
 
+.fadeOutEmpowering {
+    animation: fadeOut 3s ease-in forwards; /* Fading out together */
+    animation-delay: 4s; /* Delay for Empowering Thee to start fading out */
+}
+
+.fadeOutInexasli {
+    animation: fadeOut 3s ease-in forwards;
+    animation-delay: 4s; /* Both will fade out after 3 seconds */
+}
+
+img {
+    opacity: 0;  /* Initially hidden */
+    transition: opacity 2s ease-in;  /* Add transition for fade-in effect */
+    animation: rotateImage 10s linear infinite; /* Continuous rotation */
+}
 
 </style>
 
@@ -220,22 +239,28 @@ h4 {
          style="width: 25px; height: auto;margin-bottom: 5px; animation: rotateImage 10s linear infinite;">
 
     <div class="inline-container" style="text-align: center;">
-      <h4 id="empoweringThee">Empowering Thee<span class="tm">™</span></h4>
+      <h4 id="empoweringThee" class="fadeOutEmpowering">Empowering Thee<span class="tm">™</span></h4>
     </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Set both fade-in and fade-out for text elements
+        // Add the fade-out for both texts and fade-in for the image
         const fadeInText = document.getElementById('fadeInText');
         const empoweringText = document.getElementById('empoweringThee');
+        const rotatingImage = document.querySelector('img');
 
-        // Fade out INEXASLI and fade in Empowering Thee at the same time
+        // Both texts fade out together
         fadeInText.style.animation = 'fadeOut 3s ease-in forwards';
-        empoweringText.style.animation = 'fadeIn 3s ease-in forwards';
+        empoweringText.style.animation = 'fadeOut 3s ease-in forwards';
+
+        // After the fade out (3 seconds), the image fades in with a 2-second delay
+        setTimeout(function() {
+            rotatingImage.style.opacity = '1';  // Start fading in image
+        }, 2000);  // 2-second delay
 
         setTimeout(function() {
-            empoweringText.style.opacity = '1'; // Ensures "Empowering Thee" fades in
-        }, 250);
+            rotatingImage.style.animation = 'rotateImage 10s linear infinite';  // Start rotating after 5 seconds
+        }, 5000);
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js')
