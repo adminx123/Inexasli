@@ -10,7 +10,6 @@
 
  <!DOCTYPE html>
  <html lang="en">
- 
  <head>
      <link rel="manifest" href="/manifest.json">
      <meta charset="UTF-8">
@@ -22,20 +21,122 @@
      <link rel="shortcut icon" href="/images/favicon.ico" />
      <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
      <style>
-         .generate-btn:hover { background: #fff; color: #000; } /* Hover effect for buttons */
+         .generate-btn:hover { background: #fff; color: #000; }
+ 
+         /* Standardized Section Header Styling */
+         .section-header {
+             cursor: pointer;
+             padding: 5px;
+             font-weight: bold;
+             color: #000000;
+             background-color: #f5f5f5;
+             border-radius: 4px;
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             font-size: 12px; /* Standardized font size */
+             transition: background-color 0.3s ease;
+         }
+         .section-header:hover {
+             background-color: #d3bc0f;
+         }
+         .toggle-icon {
+             font-size: 18px; /* Matches header text size */
+         }
+ 
+         /* Premium Section Styling */
+         .premium-blur {
+             filter: blur(3px);
+             color: #888;
+             pointer-events: none;
+             transition: filter 0.3s ease, color 0.3s ease;
+         }
+         .premium-notice {
+             display: inline-block;
+             margin-left: 10px;
+             padding: 4px 8px;
+             background-color: #000000;
+             color: #ffffff;
+             font-size: 0.85em;
+             border-radius: 4px;
+             font-weight: bold;
+         }
+ 
+         /* Payment Form */
+         .payment-form {
+             margin-top: 30px;
+             display: flex;
+             flex-direction: column;
+             width: 100%;
+             gap: 15px;
+             padding: 20px;
+             background: #fff;
+             border: 2px solid #000;
+             box-shadow: 4px 4px 0 #000;
+             border-radius: 8px;
+             align-items: center;
+         }
+         .payment-form .payment-input {
+             padding: 12px 15px;
+             font-size: 16px;
+             color: #000;
+             background: #fff;
+             border: 2px solid #7b7b7b;
+             border-radius: 5px;
+             outline: none;
+             transition: box-shadow 0.2s ease, transform 0.1s ease;
+         }
+         .payment-form .payment-input:focus {
+             box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+             transform: scale(1.02);
+         }
+         .payment-form .pay-button {
+             padding: 14px 20px;
+             font-size: 16px;
+             font-weight: bold;
+             color: #ffffff;
+             background: #000000;
+             border: 2px solid #caa81f;
+             border-radius: 5px;
+             cursor: pointer;
+             transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+         }
+         .payment-form .pay-button:hover {
+             background: #333;
+             transform: translateY(-2px);
+             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+         }
+         .payment-form .pay-button:active {
+             transform: translateY(0);
+             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+         }
+         .payment-form .contact-support {
+             color: #ffffff;
+             font-size: 14px;
+             text-decoration: none;
+             text-align: center;
+             transition: color 0.2s ease;
+         }
+         .payment-form .contact-support:hover {
+             color: #555;
+             text-decoration: underline;
+         }
+         .payment-form #status {
+             text-align: center;
+             font-size: 14px;
+             color: #000;
+             min-height: 20px;
+         }
      </style>
  </head>
- 
  <body>
      <a href="/">
          <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto;">
      </a>
  
      <div class="containerround">
-        <h2 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">| Promptemplate<span class="tm">™</span> |</h2>
-
-         <h2 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">Unlock AI’s Power—Free Premium, Zero Hassle Prompts in Seconds.</h2>
-
+         <h2 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">| Promptemplate<span class="tm">™</span> |</h2>
+         <h2 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">Unlock AI’s Power—Free & Premium, Zero Hassle Prompts in Seconds.</h2>
          <p style="text-align: center; color: rgb(0, 0, 0); font-size: 14px; margin-bottom: 15px;">From epic parties to killer business plans—make AI your genius sidekick.</p>
          <p style="text-align: center; color: rgb(0, 0, 0); font-size: 14px; margin-bottom: 15px; font-style: italic;">Turn AI into your secret weapon—start now and save time today!</p>
          <div class="row1">
@@ -44,37 +145,21 @@
                  <div class="grid-item" id="business-btn" data-scope="business">Prompts for Business Matters</div>
              </div>
          </div>
-
          <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
-            <div class="checkbox-wrapper-2">
-                <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
-            </div>
-            <label for="termscheckbox" style="font-size: 11px;">
-                I agree to the Terms of Service (updated 31/Mar/2025). I understand Promptemplate™ is an educational tool, not professional advice, and I use it at my own risk. INEXASLI isn’t liable for losses or decisions, and my data may be shared with third-party AI. Liability is limited per the Terms.           
-                <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Read Terms of Service</a> 
-
-               </label>
+             <div class="checkbox-wrapper-2">
+                 <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
+             </div>
+             <label for="termscheckbox" style="font-size: 11px;">
+                 I agree to the Terms of Service (updated 31/Mar/2025). I understand Promptemplate™ is an educational tool, not professional advice, and I use it at my own risk. INEXASLI isn’t liable for losses or decisions. Liability is limited per the Terms.           
+                 <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Read Terms of Service</a>
+             </label>
          </div>
      </div>
-        
-
-     
-       
-     
-
  
      <div class="containerround hidden">
-
-
-
-        
-
-
-
-
          <!-- Personal Prompts -->
          <div id="personal-prompts" class="hidden">
-             <!-- 5. Budget Management Prompt -->
+             <!-- Free: Budget Management -->
              <div class="section">
                  <div class="section-header" onclick="toggleSection(this)">
                      <h2>Analysis - Budget</h2>
@@ -86,13 +171,13 @@
                  </div>
              </div>
  
-             <!-- 1. Incident Analysis Prompt -->
-             <div class="section">
+             <!-- Premium: Social Incident -->
+             <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Analysis - Social Incident</h2>
+                     <h2>Analysis - Social Incident <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
-                 <div class="section-content">
+                 <div class="section-content premium-blur">
                      <div class="row1">
                          <div class="grid-container" id="area-goal">
                              <div class="grid-item" data-value="Workplace">Workplace</div>
@@ -169,176 +254,164 @@
                  </div>
              </div>
  
-             <!-- Enneagram Questionnaire Template -->
-<div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-        <h2>Analysis - Enneagram Assesment</h2>
-        <span class="toggle-icon">+</span>
-    </div>
-    <div class="section-content">
-        <!-- Self-Description -->
-        <div class="row1">
-            <label for="enneagram-self">Describe Yourself:</label>
-            <textarea id="enneagram-self" rows="4" placeholder="Tell us about yourself (e.g., I’m creative, impatient, and value efficiency. I’m ADHD and hate inefficiency)."></textarea>
-        </div>
-
-        <!-- Core Traits -->
-        <div class="row1">
-            <label>Core Traits You Identify With (select all that apply):</label>
-            <div class="grid-container" id="enneagram-traits">
-                <div class="grid-item" data-value="1-Perfection">I must be perfect and avoid mistakes</div>
-                <div class="grid-item" data-value="2-Help">I feel fulfilled by helping others</div>
-                <div class="grid-item" data-value="3-Success">I’m driven to succeed and be recognized</div>
-                <div class="grid-item" data-value="4-Unique">I need to be unique and authentic</div>
-                <div class="grid-item" data-value="5-Knowledge">I seek knowledge and conserve energy</div>
-                <div class="grid-item" data-value="6-Security">I crave security and question everything</div>
-                <div class="grid-item" data-value="7-Fun">I chase excitement and avoid pain</div>
-                <div class="grid-item" data-value="8-Control">I take charge and protect what’s mine</div>
-                <div class="grid-item" data-value="9-Peace">I seek peace and avoid conflict</div>
-            </div>
-        </div>
-
-        <!-- Behavioral Responses -->
-        <div class="row1">
-            <label>Behavioral Responses (select all that apply):</label>
-            <div class="grid-container" id="enneagram-behaviors">
-                <div class="grid-item" data-value="Conflict-1">In conflict, I focus on right/wrong</div>
-                <div class="grid-item" data-value="Conflict-2">In conflict, I mediate or please</div>
-                <div class="grid-item" data-value="Conflict-3">In conflict, I defend my image</div>
-                <div class="grid-item" data-value="Conflict-4">In conflict, I feel misunderstood</div>
-                <div class="grid-item" data-value="Conflict-5">In conflict, I withdraw to think</div>
-                <div class="grid-item" data-value="Conflict-6">In conflict, I get anxious and defensive</div>
-                <div class="grid-item" data-value="Conflict-7">In conflict, I deflect with humor</div>
-                <div class="grid-item" data-value="Conflict-8">In conflict, I assert dominance</div>
-                <div class="grid-item" data-value="Conflict-9">In conflict, I shut down or agree</div>
-                <div class="grid-item" data-value="Stress-1">Under stress, I get rigid and critical</div>
-                <div class="grid-item" data-value="Stress-2">Under stress, I cling to others</div>
-                <div class="grid-item" data-value="Stress-3">Under stress, I push harder</div>
-                <div class="grid-item" data-value="Stress-4">Under stress, I feel isolated</div>
-                <div class="grid-item" data-value="Stress-5">Under stress, I retreat completely</div>
-                <div class="grid-item" data-value="Stress-6">Under stress, I panic or overthink</div>
-                <div class="grid-item" data-value="Stress-7">Under stress, I distract myself</div>
-                <div class="grid-item" data-value="Stress-8">Under stress, I lash out</div>
-                <div class="grid-item" data-value="Stress-9">Under stress, I numb out</div>
-                <div class="grid-item" data-value="Growth-1">At my best, I’m calm and accepting</div>
-                <div class="grid-item" data-value="Growth-2">At my best, I’m independent</div>
-                <div class="grid-item" data-value="Growth-3">At my best, I’m genuine</div>
-                <div class="grid-item" data-value="Growth-4">At my best, I inspire others</div>
-                <div class="grid-item" data-value="Growth-5">At my best, I’m focused and insightful</div>
-                <div class="grid-item" data-value="Growth-6">At my best, I’m brave and reliable</div>
-                <div class="grid-item" data-value="Growth-7">At my best, I’m steady and productive</div>
-                <div class="grid-item" data-value="Growth-8">At my best, I’m generous and open</div>
-                <div class="grid-item" data-value="Growth-9">At my best, I’m engaged and assertive</div>
-            </div>
-        </div>
-
-        <!-- Additional Details -->
-        <div class="row1">
-            <label for="enneagram-motivations">Core Motivations:</label>
-            <textarea id="enneagram-motivations" rows="3" placeholder="What drives you deep down? (e.g., being perfect, avoiding pain)"></textarea>
-        </div>
-        <div class="row1">
-            <label for="enneagram-fears">Core Fears:</label>
-            <textarea id="enneagram-fears" rows="3" placeholder="What do you fear most? (e.g., being corrupt, being abandoned)"></textarea>
-        </div>
-        <div class="row1">
-            <label for="enneagram-stress">Behavior Under Stress:</label>
-            <textarea id="enneagram-stress" rows="3" placeholder="How do you act when stressed? (e.g., I criticize everything or distract myself)"></textarea>
-        </div>
-        <div class="row1">
-            <label for="enneagram-growth">Behavior at Your Best:</label>
-            <textarea id="enneagram-growth" rows="3" placeholder="How do you act at your peak? (e.g., I’m focused and inspire others)"></textarea>
-        </div>
-        <div class="row1">
-            <label for="enneagram-childhood">Influential Childhood Memory:</label>
-            <textarea id="enneagram-childhood" rows="3" placeholder="A memory that shaped you (e.g., I was praised for being good)"></textarea>
-        </div>
-
-        <!-- Generate Button -->
-        <button class="generate-btn" data-prompt="enneagram-questionnaire">Generate Promptemplate™ Now!</button>
-    </div>
-</div>
-
-
-<!-- Counseling/Therapy Prompt -->
-<div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-        <h2>Discussion - Counseling/Therapy</h2>
-        <span class="toggle-icon">+</span>
-    </div>
-    <div class="section-content">
-        <div class="row1">
-            <label for="therapy-goal">What’s Your Therapy Goal?</label>
-            <textarea id="therapy-goal" rows="3" placeholder="e.g., Manage anxiety, process grief, improve self-esteem"></textarea>
-        </div>
-        <div class="row1">
-            <label>Current Emotional State (select all that apply):</label>
-            <div class="grid-container" id="therapy-emotions">
-                <div class="grid-item" data-value="Anxious">Anxious</div>
-                <div class="grid-item" data-value="Sad">Sad</div>
-                <div class="grid-item" data-value="Angry">Angry</div>
-                <div class="grid-item" data-value="Overwhelmed">Overwhelmed</div>
-                <div class="grid-item" data-value="Numb">Numb</div>
-                <div class="grid-item" data-value="Hopeful">Hopeful</div>
-                <div class="grid-item" data-value="Confused">Confused</div>
-                <div class="grid-item" data-value="Guilty">Guilty</div>
-                <div class="grid-item" data-value="Excited">Excited</div>
-                <div class="grid-item" data-value="Lonely">Lonely</div>
-            </div>
-        </div>
-        <div class="row1">
-            <label>Triggers or Stressors (select all that apply):</label>
-            <div class="grid-container" id="therapy-triggers">
-                <div class="grid-item" data-value="Work">Work Stress</div>
-                <div class="grid-item" data-value="Relationships">Relationships</div>
-                <div class="grid-item" data-value="Family">Family Issues</div>
-                <div class="grid-item" data-value="Finances">Finances</div>
-                <div class="grid-item" data-value="Health">Health Concerns</div>
-                <div class="grid-item" data-value="Past Trauma">Past Trauma</div>
-                <div class="grid-item" data-value="Social Pressure">Social Pressure</div>
-                <div class="grid-item" data-value="Lack of Sleep">Lack of Sleep</div>
-                <div class="grid-item" data-value="Change">Recent Changes</div>
-            </div>
-        </div>
-        <div class="row1">
-            <label for="therapy-recent">Recent Events or Feelings:</label>
-            <textarea id="therapy-recent" rows="4" placeholder="What’s been on your mind lately? (1 per line):
-Had a fight with my partner
-Felt overwhelmed at work
-Couldn’t sleep last night"></textarea>
-        </div>
-        <div class="row1">
-            <label>Coping Strategies You’ve Tried (select all that apply):</label>
-            <div class="grid-container" id="therapy-coping">
-                <div class="grid-item" data-value="Talking">Talking to Someone</div>
-                <div class="grid-item" data-value="Exercise">Exercise</div>
-                <div class="grid-item" data-value="Meditation">Meditation</div>
-                <div class="grid-item" data-value="Journaling">Journaling</div>
-                <div class="grid-item" data-value="Distraction">Distraction (e.g., TV, games)</div>
-                <div class="grid-item" data-value="Avoidance">Avoidance</div>
-                <div class="grid-item" data-value="Sleep">Sleeping More</div>
-                <div class="grid-item" data-value="Hobbies">Hobbies</div>
-                <div class="grid-item" data-value="Therapy">Therapy/Counseling</div>
-            </div>
-        </div>
-        <div class="row1">
-            <label for="therapy-history">Therapy History or Context:</label>
-            <textarea id="therapy-history" rows="3" placeholder="e.g., I’ve been in therapy for 6 months, I had a tough childhood, etc."></textarea>
-        </div>
-        <div class="row1">
-            <label for="therapy-context">Context Dump (Past or Future Details):</label>
-            <textarea id="therapy-context" rows="4" placeholder="Anything from your past or future that might relate (1 per line):
-        Had a tough breakup last year
-        Worried about a big presentation next week
-        Childhood memory of being ignored"></textarea>
-        </div>
-        <button class="generate-btn" data-prompt="therapy">Generate Promptemplate™ Now!</button>
-    </div>
-</div>
+             <!-- Premium: Enneagram Assessment -->
+             <div class="section premium-section">
+                 <div class="section-header" onclick="toggleSection(this)">
+                     <h2>Analysis - Enneagram Assessment <span class="premium-notice">Premium</span></h2>
+                     <span class="toggle-icon">+</span>
+                 </div>
+                 <div class="section-content premium-blur">
+                     <div class="row1">
+                         <label for="enneagram-self">Describe Yourself:</label>
+                         <textarea id="enneagram-self" rows="4" placeholder="Tell us about yourself (e.g., I’m creative, impatient, and value efficiency. I’m ADHD and hate inefficiency)."></textarea>
+                     </div>
+                     <div class="row1">
+                         <label>Core Traits You Identify With (select all that apply):</label>
+                         <div class="grid-container" id="enneagram-traits">
+                             <div class="grid-item" data-value="1-Perfection">I must be perfect and avoid mistakes</div>
+                             <div class="grid-item" data-value="2-Help">I feel fulfilled by helping others</div>
+                             <div class="grid-item" data-value="3-Success">I’m driven to succeed and be recognized</div>
+                             <div class="grid-item" data-value="4-Unique">I need to be unique and authentic</div>
+                             <div class="grid-item" data-value="5-Knowledge">I seek knowledge and conserve energy</div>
+                             <div class="grid-item" data-value="6-Security">I crave security and question everything</div>
+                             <div class="grid-item" data-value="7-Fun">I chase excitement and avoid pain</div>
+                             <div class="grid-item" data-value="8-Control">I take charge and protect what’s mine</div>
+                             <div class="grid-item" data-value="9-Peace">I seek peace and avoid conflict</div>
+                         </div>
+                     </div>
+                     <div class="row1">
+                         <label>Behavioral Responses (select all that apply):</label>
+                         <div class="grid-container" id="enneagram-behaviors">
+                             <div class="grid-item" data-value="Conflict-1">In conflict, I focus on right/wrong</div>
+                             <div class="grid-item" data-value="Conflict-2">In conflict, I mediate or please</div>
+                             <div class="grid-item" data-value="Conflict-3">In conflict, I defend my image</div>
+                             <div class="grid-item" data-value="Conflict-4">In conflict, I feel misunderstood</div>
+                             <div class="grid-item" data-value="Conflict-5">In conflict, I withdraw to think</div>
+                             <div class="grid-item" data-value="Conflict-6">In conflict, I get anxious and defensive</div>
+                             <div class="grid-item" data-value="Conflict-7">In conflict, I deflect with humor</div>
+                             <div class="grid-item" data-value="Conflict-8">In conflict, I assert dominance</div>
+                             <div class="grid-item" data-value="Conflict-9">In conflict, I shut down or agree</div>
+                             <div class="grid-item" data-value="Stress-1">Under stress, I get rigid and critical</div>
+                             <div class="grid-item" data-value="Stress-2">Under stress, I cling to others</div>
+                             <div class="grid-item" data-value="Stress-3">Under stress, I push harder</div>
+                             <div class="grid-item" data-value="Stress-4">Under stress, I feel isolated</div>
+                             <div class="grid-item" data-value="Stress-5">Under stress, I retreat completely</div>
+                             <div class="grid-item" data-value="Stress-6">Under stress, I panic or overthink</div>
+                             <div class="grid-item" data-value="Stress-7">Under stress, I distract myself</div>
+                             <div class="grid-item" data-value="Stress-8">Under stress, I lash out</div>
+                             <div class="grid-item" data-value="Stress-9">Under stress, I numb out</div>
+                             <div class="grid-item" data-value="Growth-1">At my best, I’m calm and accepting</div>
+                             <div class="grid-item" data-value="Growth-2">At my best, I’m independent</div>
+                             <div class="grid-item" data-value="Growth-3">At my best, I’m genuine</div>
+                             <div class="grid-item" data-value="Growth-4">At my best, I inspire others</div>
+                             <div class="grid-item" data-value="Growth-5">At my best, I’m focused and insightful</div>
+                             <div class="grid-item" data-value="Growth-6">At my best, I’m brave and reliable</div>
+                             <div class="grid-item" data-value="Growth-7">At my best, I’m steady and productive</div>
+                             <div class="grid-item" data-value="Growth-8">At my best, I’m generous and open</div>
+                             <div class="grid-item" data-value="Growth-9">At my best, I’m engaged and assertive</div>
+                         </div>
+                     </div>
+                     <div class="row1">
+                         <label for="enneagram-motivations">Core Motivations:</label>
+                         <textarea id="enneagram-motivations" rows="3" placeholder="What drives you deep down? (e.g., being perfect, avoiding pain)"></textarea>
+                     </div>
+                     <div class="row1">
+                         <label for="enneagram-fears">Core Fears:</label>
+                         <textarea id="enneagram-fears" rows="3" placeholder="What do you fear most? (e.g., being corrupt, being abandoned)"></textarea>
+                     </div>
+                     <div class="row1">
+                         <label for="enneagram-stress">Behavior Under Stress:</label>
+                         <textarea id="enneagram-stress" rows="3" placeholder="How do you act when stressed? (e.g., I criticize everything or distract myself)"></textarea>
+                     </div>
+                     <div class="row1">
+                         <label for="enneagram-growth">Behavior at Your Best:</label>
+                         <textarea id="enneagram-growth" rows="3" placeholder="How do you act at your peak? (e.g., I’m focused and inspire others)"></textarea>
+                     </div>
+                     <div class="row1">
+                         <label for="enneagram-childhood">Influential Childhood Memory:</label>
+                         <textarea id="enneagram-childhood" rows="3" placeholder="A memory that shaped you (e.g., I was praised for being good)"></textarea>
+                     </div>
+                     <button class="generate-btn" data-prompt="enneagram-questionnaire">Generate Promptemplate™ Now!</button>
+                 </div>
+             </div>
  
-            
+             <!-- Premium: Counseling/Therapy -->
+             <div class="section premium-section">
+                 <div class="section-header" onclick="toggleSection(this)">
+                     <h2>Discussion - Counseling/Therapy <span class="premium-notice">Premium</span></h2>
+                     <span class="toggle-icon">+</span>
+                 </div>
+                 <div class="section-content premium-blur">
+                     <div class="row1">
+                         <label for="therapy-goal">What’s Your Therapy Goal?</label>
+                         <textarea id="therapy-goal" rows="3" placeholder="e.g., Manage anxiety, process grief, improve self-esteem"></textarea>
+                     </div>
+                     <div class="row1">
+                         <label>Current Emotional State (select all that apply):</label>
+                         <div class="grid-container" id="therapy-emotions">
+                             <div class="grid-item" data-value="Anxious">Anxious</div>
+                             <div class="grid-item" data-value="Sad">Sad</div>
+                             <div class="grid-item" data-value="Angry">Angry</div>
+                             <div class="grid-item" data-value="Overwhelmed">Overwhelmed</div>
+                             <div class="grid-item" data-value="Numb">Numb</div>
+                             <div class="grid-item" data-value="Hopeful">Hopeful</div>
+                             <div class="grid-item" data-value="Confused">Confused</div>
+                             <div class="grid-item" data-value="Guilty">Guilty</div>
+                             <div class="grid-item" data-value="Excited">Excited</div>
+                             <div class="grid-item" data-value="Lonely">Lonely</div>
+                         </div>
+                     </div>
+                     <div class="row1">
+                         <label>Triggers or Stressors (select all that apply):</label>
+                         <div class="grid-container" id="therapy-triggers">
+                             <div class="grid-item" data-value="Work">Work Stress</div>
+                             <div class="grid-item" data-value="Relationships">Relationships</div>
+                             <div class="grid-item" data-value="Family">Family Issues</div>
+                             <div class="grid-item" data-value="Finances">Finances</div>
+                             <div class="grid-item" data-value="Health">Health Concerns</div>
+                             <div class="grid-item" data-value="Past Trauma">Past Trauma</div>
+                             <div class="grid-item" data-value="Social Pressure">Social Pressure</div>
+                             <div class="grid-item" data-value="Lack of Sleep">Lack of Sleep</div>
+                             <div class="grid-item" data-value="Change">Recent Changes</div>
+                         </div>
+                     </div>
+                     <div class="row1">
+                         <label for="therapy-recent">Recent Events or Feelings:</label>
+                         <textarea id="therapy-recent" rows="4" placeholder="What’s been on your mind lately? (1 per line):
+ Had a fight with my partner
+ Felt overwhelmed at work
+ Couldn’t sleep last night"></textarea>
+                     </div>
+                     <div class="row1">
+                         <label>Coping Strategies You’ve Tried (select all that apply):</label>
+                         <div class="grid-container" id="therapy-coping">
+                             <div class="grid-item" data-value="Talking">Talking to Someone</div>
+                             <div class="grid-item" data-value="Exercise">Exercise</div>
+                             <div class="grid-item" data-value="Meditation">Meditation</div>
+                             <div class="grid-item" data-value="Journaling">Journaling</div>
+                             <div class="grid-item" data-value="Distraction">Distraction (e.g., TV, games)</div>
+                             <div class="grid-item" data-value="Avoidance">Avoidance</div>
+                             <div class="grid-item" data-value="Sleep">Sleeping More</div>
+                             <div class="grid-item" data-value="Hobbies">Hobbies</div>
+                             <div class="grid-item" data-value="Therapy">Therapy/Counseling</div>
+                         </div>
+                     </div>
+                     <div class="row1">
+                         <label for="therapy-history">Therapy History or Context:</label>
+                         <textarea id="therapy-history" rows="3" placeholder="e.g., I’ve been in therapy for 6 months, I had a tough childhood, etc."></textarea>
+                     </div>
+                     <div class="row1">
+                         <label for="therapy-context">Context Dump (Past or Future Details):</label>
+                         <textarea id="therapy-context" rows="4" placeholder="Anything from your past or future that might relate (1 per line):
+ Had a tough breakup last year
+ Worried about a big presentation next week
+ Childhood memory of being ignored"></textarea>
+                     </div>
+                     <button class="generate-btn" data-prompt="therapy">Generate Promptemplate™ Now!</button>
+                 </div>
+             </div>
  
-             <!-- 7. Event Planning Prompt -->
+             <!-- Free: Event Planning -->
              <div class="section">
                  <div class="section-header" onclick="toggleSection(this)">
                      <h2>Plan - Event</h2>
@@ -424,7 +497,7 @@ Couldn’t sleep last night"></textarea>
                  </div>
              </div>
  
-             <!-- 2. Fitness Plan Prompt -->
+             <!-- Free: Fitness Plan -->
              <div class="section">
                  <div class="section-header" onclick="toggleSection(this)">
                      <h2>Plan - Fitness</h2>
@@ -469,13 +542,13 @@ Couldn’t sleep last night"></textarea>
                  </div>
              </div>
  
-             <!-- 4. Trip Planner Prompt -->
-             <div class="section">
+             <!-- Premium: Trip Planner -->
+             <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Plan - Trip</h2>
+                     <h2>Plan - Trip <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
-                 <div class="section-content">
+                 <div class="section-content premium-blur">
                      <div class="row1">
                          <div class="grid-container" id="trip-activities">
                              <div class="grid-item" data-value="Hiking">Hiking</div>
@@ -511,12 +584,10 @@ Couldn’t sleep last night"></textarea>
                              <div class="grid-item" data-value="Client">With Client</div>
                          </div>
                      </div>
-
                      <textarea id="trip-location" rows="3" placeholder="Trip Locations (one per line):
-New York
-New Jersey
-Hamptons"></textarea>
-
+ New York
+ New Jersey
+ Hamptons"></textarea>
                      <div class="row1">
                          <textarea id="trip-specifics" rows="4" placeholder="Specifics Needed (one per line):
  Top rated hiking trails
@@ -541,14 +612,14 @@ Hamptons"></textarea>
                          <textarea id="trip-days" rows="1" placeholder="Trip Length:"></textarea>
                      </div>
                      <div class="row1">
-                        <a href="/budget/vacation.html"> Use Vacation Cost Estimator & then Input Results Below!</a>
+                         <a href="/budget/vacation.html"> Use Vacation Cost Estimator & then Input Results Below!</a>
                          <textarea id="trip-cost" rows="16" placeholder="Vacation Cost Estimator Results:"></textarea>
-                                             </div>
+                     </div>
                      <button class="generate-btn" data-prompt="trip">Generate Promptemplate™ Now!</button>
                  </div>
              </div>
  
-             <!-- 3. Calorie Counter Prompt -->
+             <!-- Free: Calorie Counter -->
              <div class="section">
                  <div class="section-header" onclick="toggleSection(this)">
                      <h2>Monitor - Calorie & Macronutrients</h2>
@@ -587,13 +658,13 @@ Hamptons"></textarea>
  
          <!-- Business Prompts -->
          <div id="business-prompts" class="hidden">
-             <!-- 1. App Development Prompt -->
-             <div class="section">
+             <!-- Premium: App Development -->
+             <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Design - App</h2>
+                     <h2>Design - App <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
-                 <div class="section-content">
+                 <div class="section-content premium-blur">
                      <div class="row1">
                          <textarea id="app-purpose" rows="4" placeholder="e.g., task management"></textarea>
                      </div>
@@ -636,13 +707,13 @@ Hamptons"></textarea>
                  </div>
              </div>
  
-             <!-- 2. Marketing Campaign Prompt -->
-             <div class="section">
+             <!-- Premium: Marketing Campaign -->
+             <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Design - Marketing Campaign</h2>
+                     <h2>Design - Marketing Campaign <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
-                 <div class="section-content">
+                 <div class="section-content premium-blur">
                      <div class="row1">
                          <textarea id="market-goal" rows="4" placeholder="e.g., increase sales by 20%, boost brand awareness"></textarea>
                      </div>
@@ -681,66 +752,66 @@ Hamptons"></textarea>
                      <button class="generate-btn" data-prompt="marketing">Generate Promptemplate™ Now!</button>
                  </div>
              </div>
-
-              <!-- 8. General Prompt -->
-              <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2>General</h2>
-                    <span class="toggle-icon">+</span>
-                </div>
-                <div class="section-content">
-                    <div class="row1">
-                        <textarea id="general-goal" rows="4" placeholder="Focus On:
-Planning an exciting hike
-Sales data
-Restaurants within 6km of LA city center"></textarea>
-                    </div>
-                    <div class="row1">
-                        <div class="grid-container" id="general-purpose">
-                            <div class="grid-item" data-value="Identifying Trends and Patterns">Identifying Trends and Patterns</div>
-                            <div class="grid-item" data-value="Improving Decision-Making">Improving Decision-Making</div>
-                            <div class="grid-item" data-value="Problem Identification">Problem Identification</div>
-                            <div class="grid-item" data-value="Enhancing Performance and Efficiency">Enhancing Performance and Efficiency</div>
-                            <div class="grid-item" data-value="Predicting Future Outcomes">Predicting Future Outcomes</div>
-                            <div class="grid-item" data-value="Measuring Success and KPIs">Measuring Success and KPIs</div>
-                            <div class="grid-item" data-value="Personalization and Targeting">Personalization and Targeting</div>
-                            <div class="grid-item" data-value="Market Research and Competitor Analysis">Market Research and Competitor Analysis</div>
-                            <div class="grid-item" data-value="Cost Reduction and Resource Allocation">Cost Reduction and Resource Allocation</div>
-                            <div class="grid-item" data-value="Ensuring Compliance and Risk Management">Ensuring Compliance and Risk Management</div>
-                        </div>
-                    </div>
-                    <div class="row1">
-                        <textarea id="general-context" rows="5" placeholder="General Context:(1 per line)
-I’m hiking in Colorado
-Prefer trails under 5 miles
-Need dog-friendly options
-Fitness level of hiking group"></textarea>
-                    </div>
-                    <div class="row1">
-                        <div class="grid-container" id="general-info-return">
-                            <div class="grid-item" data-value="narrative">Return Narrative Format</div>
-                            <div class="grid-item" data-value="faq">Return FAQ Format</div>
-                            <div class="grid-item" data-value="table">Return Table Format</div>
-                            <div class="grid-item" data-value="checklist">Return Checklist Format</div>
-                            <div class="grid-item" data-value="step-by-step">Return Step-by-Step Format</div>
-                            <div class="grid-item" data-value="q-and-a">Return Q&A Format</div>
-                            <div class="grid-item" data-value="summary">Return Summary Format</div>
-                            <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
-                            <div class="grid-item" data-value="timeline">Return Timeline Format</div>
-                            <div class="grid-item" data-value="json">Return JSON Format</div>
-                        </div>
-                    </div>
-                    <button class="generate-btn" data-prompt="general">Generate Promptemplate™ Now!</button>
-                </div>
-            </div>
  
-             <!-- Starting a New Business Prompt -->
+             <!-- Free: General -->
              <div class="section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Plan - New Business</h2>
+                     <h2>General</h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content">
+                     <div class="row1">
+                         <textarea id="general-goal" rows="4" placeholder="Focus On:
+ Planning an exciting hike
+ Sales data
+ Restaurants within 6km of LA city center"></textarea>
+                     </div>
+                     <div class="row1">
+                         <div class="grid-container" id="general-purpose">
+                             <div class="grid-item" data-value="Identifying Trends and Patterns">Identifying Trends and Patterns</div>
+                             <div class="grid-item" data-value="Improving Decision-Making">Improving Decision-Making</div>
+                             <div class="grid-item" data-value="Problem Identification">Problem Identification</div>
+                             <div class="grid-item" data-value="Enhancing Performance and Efficiency">Enhancing Performance and Efficiency</div>
+                             <div class="grid-item" data-value="Predicting Future Outcomes">Predicting Future Outcomes</div>
+                             <div class="grid-item" data-value="Measuring Success and KPIs">Measuring Success and KPIs</div>
+                             <div class="grid-item" data-value="Personalization and Targeting">Personalization and Targeting</div>
+                             <div class="grid-item" data-value="Market Research and Competitor Analysis">Market Research and Competitor Analysis</div>
+                             <div class="grid-item" data-value="Cost Reduction and Resource Allocation">Cost Reduction and Resource Allocation</div>
+                             <div class="grid-item" data-value="Ensuring Compliance and Risk Management">Ensuring Compliance and Risk Management</div>
+                         </div>
+                     </div>
+                     <div class="row1">
+                         <textarea id="general-context" rows="5" placeholder="General Context:(1 per line)
+ I’m hiking in Colorado
+ Prefer trails under 5 miles
+ Need dog-friendly options
+ Fitness level of hiking group"></textarea>
+                     </div>
+                     <div class="row1">
+                         <div class="grid-container" id="general-info-return">
+                             <div class="grid-item" data-value="narrative">Return Narrative Format</div>
+                             <div class="grid-item" data-value="faq">Return FAQ Format</div>
+                             <div class="grid-item" data-value="table">Return Table Format</div>
+                             <div class="grid-item" data-value="checklist">Return Checklist Format</div>
+                             <div class="grid-item" data-value="step-by-step">Return Step-by-Step Format</div>
+                             <div class="grid-item" data-value="q-and-a">Return Q&A Format</div>
+                             <div class="grid-item" data-value="summary">Return Summary Format</div>
+                             <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
+                             <div class="grid-item" data-value="timeline">Return Timeline Format</div>
+                             <div class="grid-item" data-value="json">Return JSON Format</div>
+                         </div>
+                     </div>
+                     <button class="generate-btn" data-prompt="general">Generate Promptemplate™ Now!</button>
+                 </div>
+             </div>
+ 
+             <!-- Premium: New Business -->
+             <div class="section premium-section">
+                 <div class="section-header" onclick="toggleSection(this)">
+                     <h2>Plan - New Business <span class="premium-notice">Premium</span></h2>
+                     <span class="toggle-icon">+</span>
+                 </div>
+                 <div class="section-content premium-blur">
                      <div class="row1">
                          <textarea id="business-vision" rows="1" placeholder="What’s your business idea? e.g., Launch a coffee shop"></textarea>
                      </div>
@@ -816,8 +887,8 @@ Fitness level of hiking group"></textarea>
                  </div>
              </div>
  
-             <!-- EXPENSE -->
-             <div class="hidden">
+             <!-- Free: Business Expense Receipts -->
+             <div class="section">
                  <div class="section-header" onclick="toggleSection(this)">
                      <h2>Data Collection & Aggregation - Business Expense Receipts</h2>
                      <span class="toggle-icon">+</span>
@@ -833,13 +904,13 @@ Fitness level of hiking group"></textarea>
                  </div>
              </div>
  
-             <!-- Research Prompt Template -->
-             <div class="section">
+             <!-- Premium: Research -->
+             <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Research - Work Through</h2>
+                     <h2>Research - Work Through <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
-                 <div class="section-content">
+                 <div class="section-content premium-blur">
                      <div class="row1">
                          <textarea id="research-goal" rows="2" placeholder="What is the goal of your research? (e.g., understand market trends, analyze customer behavior, etc.)"></textarea>
                      </div>
@@ -884,13 +955,13 @@ Fitness level of hiking group"></textarea>
                  </div>
              </div>
  
-             <!-- Speculation Prompt Template -->
-             <div class="section">
+             <!-- Premium: Speculation -->
+             <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Speculation - Explore Possibilities</h2>
+                     <h2>Speculation - Explore Possibilities <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
-                 <div class="section-content">
+                 <div class="section-content premium-blur">
                      <div class="row1">
                          <textarea id="speculation-goal" rows="2" placeholder="What is the goal of your speculation? (e.g., imagine future trends, explore 'what if' scenarios, etc.)"></textarea>
                      </div>
@@ -951,23 +1022,36 @@ Fitness level of hiking group"></textarea>
          </div>
      </div>
  
-    
+     <div id="payment-container" class="hidden">
+
+     <div class="containerround">
+     <!-- Payment Form -->
+     <form class="payment-form" id="payment-form">
+         <input type="text" class="payment-input" id="username" placeholder="Input your name" required>
+         <input type="email" class="payment-input" id="useremail" placeholder="Input your email" required>
+         <div id="status"></div>
+         <button class="pay-button" id="pay-button">Subscribe for Premium Promptemplates™!</button>
+         <a href="mailto:support@inexasli.com" class="contact-support">I have paid</a>
+         <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support">Customer portal</a>
+     </form>
  
+     </div>
+     </div>
+
      <div class="hidden" id="prompt-results">
          <div id="result"></div>
      </div>
-
+ 
      <div id="TERMS-modal" class="modal">
-        <div class="modal-content">
-            <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
-        </div>
-    </div> 
-  
-    <script src="/server/scripts/modal.js"></script>
-
+         <div class="modal-content">
+             <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
+         </div>
+     </div>
+ 
+     <script src="/server/scripts/modal.js"></script>
      <script src="/index.js"></script>
      <script src="/server/scripts/tray.js"></script>
      <script src="/server/scripts/prompt.js"></script>
+     <script src="https://js.stripe.com/v3/" async></script>
  </body>
- 
  </html>
