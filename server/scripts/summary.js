@@ -383,3 +383,7 @@ function calculateGoal(isPaid) {
     else if (frequency === 'weekly') { time *= 52; unit = 'Weeks'; }
     document.getElementById('goalResult').textContent = `${unit} needed: ${time.toFixed(2)}`;
 }
+
+document.getElementById('close-sidebar').addEventListener('click', function() {
+    document.getElementById('subscribe-sidebar').style.display = 'none';
+});
