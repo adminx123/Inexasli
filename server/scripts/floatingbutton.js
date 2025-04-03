@@ -5,16 +5,21 @@ import { getCookie } from '/server/scripts/getcookie.js'; // Matches your absolu
 function injectStyles() {
     const styles = `
         #gotosummary {
-            position: fixed; /* Stays in viewport */
-            bottom: 10px; /* 50px from bottom */
-            left: 10px; /* 10px from left */
+            position: fixed; /* Original position retained */
+            bottom: 10px; /* 10px from bottom */
+            right: 10px; /* 10px from left */
             z-index: 1000;
-            background: #fff;
+            background-color: #f5f5f5; /* Matches subscribe-sidebar */
             padding: 10px;
             border: 2px solid #000;
-            box-shadow: 4px 4px 0 #000;
-            width: auto;
+            border-radius: 8px; /* Matches subscribe-sidebar */
+            box-shadow: 4px 4px 0 #000; /* Matches subscribe-sidebar shadow */
             display: inline-block;
+            transition: background-color 0.3s ease; /* Smooth hover transition */
+        }
+
+        #gotosummary:hover {
+            background-color: #d3bc0f; /* Matches subscribe-sidebar hover */
         }
 
         #summary-btn {
@@ -52,7 +57,7 @@ function injectStyles() {
     document.head.appendChild(styleSheet);
 }
 
-// Create the floating button HTML
+// Create the floating button HTML with inline styles
 function createFloatingButton() {
     const buttonContainer = document.createElement('div');
     buttonContainer.id = 'gotosummary';
