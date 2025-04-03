@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Fetch response headers:", [...res.headers.entries()]);
   
         const data = await res.json();
-        console.log("Fetch response data:", data);
+console.log("Fetch response data:", JSON.stringify(data));
   
         if (data.id) {
           console.log("Checkout session ID received:", data.id);
