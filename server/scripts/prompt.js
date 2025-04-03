@@ -30,15 +30,17 @@ function toggleScope(scope) {
     const personalPrompts = document.getElementById('personal-prompts');
     const businessPrompts = document.getElementById('business-prompts');
     const promptContainer = document.getElementById('personal-prompts')?.parentElement;
+    const paymentContainer = document.getElementById('payment-container'); // New ID added
 
     // Null checks for debugging
-    if (!personalBtn || !businessBtn || !personalPrompts || !businessPrompts || !promptContainer) {
+    if (!personalBtn || !businessBtn || !personalPrompts || !businessPrompts || !promptContainer || !paymentContainer) {
         console.error('Missing elements:', {
             personalBtn,
             businessBtn,
             personalPrompts,
             businessPrompts,
-            promptContainer
+            promptContainer,
+            paymentContainer
         });
         return;
     }
@@ -50,10 +52,12 @@ function toggleScope(scope) {
         personalBtn.classList.remove('selected');
         businessBtn.classList.remove('selected');
         promptContainer.classList.add('hidden');
+        paymentContainer.classList.add('hidden'); // Hide payment section
         activeScope = null;
     } else {
         // Show container and toggle the appropriate scope
         promptContainer.classList.remove('hidden');
+        paymentContainer.classList.remove('hidden'); // Show payment section
         personalPrompts.classList.add('hidden');
         businessPrompts.classList.add('hidden');
         personalBtn.classList.remove('selected');
