@@ -1,0 +1,115 @@
+/* Payment Form Container */
+.payment-form {
+    margin: 30px auto;
+    max-width: 400px; /* Limits width for better focus */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Increased for breathing room */
+    padding: 25px;
+    background: #ffffff;
+    border: 2px solid #000000;
+    border-radius: 10px; /* Slightly softer corners */
+    box-shadow: 4px 4px 0 #000000;
+}
+
+/* Input Group (for labels and inputs) */
+.payment-form .input-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.payment-form .input-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+}
+
+/* Input Fields */
+.payment-form .payment-input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    color: #000000;
+    background: #f9f9f9; /* Light gray for subtle contrast */
+    border: 2px solid #7b7b7b;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.payment-form .payment-input:focus {
+    border-color: #caa81f; /* Matches button border for consistency */
+    box-shadow: 0 0 6px rgba(202, 168, 31, 0.5);
+    transform: scale(1.01); /* Subtle scale for feedback */
+}
+
+/* Pay Button */
+.payment-form .pay-button {
+    width: 100%; /* Full width for prominence */
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background: #000000;
+    border: 2px solid #caa81f;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.payment-form .pay-button:hover {
+    background: #333333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.payment-form .pay-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Status Message */
+.payment-form #status {
+    text-align: center;
+    font-size: 14px;
+    color: #333333;
+    min-height: 20px;
+    width: 100%;
+}
+
+/* Support Links Container */
+.payment-form .support-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+}
+
+/* Support Links */
+.payment-form .contact-support {
+    font-size: 14px;
+    color: #ffffff; /* Changed from white for visibility on white bg */
+    text-decoration: none;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.payment-form .contact-support:hover {
+    color: #caa81f; /* Matches button border for theme */
+    text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+    .payment-form {
+        padding: 20px;
+        margin: 20px auto;
+    }
+    .payment-form .pay-button {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+}
