@@ -157,12 +157,11 @@ const isPartner = getCookie('liabilityspousecheckbox') == 'checked'
 
 
       
-      window.calculateNext = function () {
-      calculateAll();
-      setCookie('summary_reached', 'true', 30); // Cookie named 'summary_reached', value 'true', expires in 30 days
-      window.location.href = '/budget/summary.html';
-   
-    }
+  window.calculateNext = function () {
+    calculateAll();
+    setCookie('summary_reached', 'true', 30 / (24 * 60)); // Cookie expires in 30 minutes
+    window.location.href = '/budget/summary.html';
+}
     
       window.calculateBack = function () {
       calculateAll();
