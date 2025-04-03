@@ -58,10 +58,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         console.log("Fetch response status:", res.status, res.statusText);
         console.log("Fetch response headers:", [...res.headers.entries()]);
-  
+      
         const data = await res.json();
-console.log("Fetch response data:", JSON.stringify(data));
-  
+        console.log("Fetch response data:", JSON.stringify(data)); // Updated line
+      
         if (data.id) {
           console.log("Checkout session ID received:", data.id);
           payStatus.innerHTML = "Redirecting to payment...";
