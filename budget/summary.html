@@ -124,7 +124,12 @@
       }
   }
   
- 
+  #subscribe-sidebar:hover {
+        background-color: #d3bc0f; /* Matches your premium hover color */
+    }
+    #close-sidebar:hover {
+        color: #ff0000; /* Red on hover for emphasis */
+    }
   
   </style>
   
@@ -220,14 +225,27 @@
            <h2>INCOME & EXPENSES<span class="tooltip1-content"></span></h2>
          </span>
        </summary>
+
+<!-- Premium: Disposable Income -->
+
+<p style="margin-left:21px;" class="premium-section">
+   <span class="tooltip1" data-tooltip="Income left after subtracting expenses, taxes, and obligations from gross income. Calculated as: gross income - (taxes like income/capital gains + obligations like CPP/Social Security + all expenses). Includes only your spendable remainder; excludes locked savings. Use: Gauge financial flexibility.">
+               </style>DISPOSABLE INCOME:<span class="premium-notice">Premium</span><span class="tooltip1-content"></span><span id="DISPOSABLEINCOME" class="premium-blur">[Locked]</span>
+    </span>
+  </p>
+ 
+ 
+
        <p style="margin-left:21px;">
-        <span class="tooltip1" data-tooltip="Total gross earnings you’ve entered (e.g., wages, freelance, interest). Calculated by summing all income sources before taxes or deductions. Includes taxable amounts (e.g., 100% capital gains in USA, 50% in Canada); excludes tax-free gains (e.g., Canada’s TFSA). Use: Base for tax and budget planning.">           <u>Income:</u><span class="tooltip1-content"></span><span id="annual_income_sum"></span>
+        <span class="tooltip1" data-tooltip="Total gross earnings you’ve entered (e.g., wages, freelance, interest). Calculated by summing all income sources before taxes or deductions. Includes taxable amounts (e.g., 100% capital gains in USA, 50% in Canada); excludes tax-free gains (e.g., Canada’s TFSA). Use: Base for tax and budget planning.">          
+           <u>Income:</u><span class="tooltip1-content"></span><span id="annual_income_sum"></span>
          </span>
        </p>
        <details style="margin-top:10px;">
          <summary>
            <p style="margin-left:21px;">
-            <span class="tooltip1" data-tooltip="Total spending you’ve entered, calculated by summing all expense categories (essential, discretionary, etc.). Includes costs like housing and debt payments; excludes taxes or obligations unless specified. Use: Track cash outflow and budget.">               <u>Expense:</u><span class="tooltip1-content"></span><span id="ANNUALEXPENSESUM"></span>
+            <span class="tooltip1" data-tooltip="Total spending you’ve entered, calculated by summing all expense categories (essential, discretionary, etc.). Includes costs like housing and debt payments; excludes taxes or obligations unless specified. Use: Track cash outflow and budget.">            
+                 <u>Expense:</u><span class="tooltip1-content"></span><span id="ANNUALEXPENSESUM"></span>
              </span>
            </p>
          </summary>
@@ -262,6 +280,9 @@
            </span>
          </p>
        </details>
+
+  
+
      </details>
  
 
@@ -415,29 +436,21 @@
     
  
           <!-- Premium: Premium Ratios -->
-          <details style="margin-top:10px;" class="premium-section">
+          <details style="margin-top:10px;" >
             <summary >
               <span class="tooltip1" data-tooltip="Advanced ratios to explore financial relationships.">
-                <h2 style="justify-content: center;">PREMIUM CONTENT<span class="premium-notice">Premium</span><span class="tooltip1-content"></span></h2>
+                <h2 style="justify-content: center;">RATIOS<span class="tooltip1-content"></span></h2>
               </span>
             </summary>
       
-            <a href="#payment-form" style="text-decoration: none; color: rgb(0, 0, 0); font-size: 14px; display: block; text-align: center; padding: 10px;">SUBSCRIBE HERE TO UNLOCK PREMIUM CONTENT   💳</a>
       
-      <!-- Premium: Disposable Income -->
-      <details style="margin-top:10px;" class="premium-section">
-       <summary>
-        <span class="tooltip1" data-tooltip="Income left after subtracting expenses, taxes, and obligations from gross income. Calculated as: gross income - (taxes like income/capital gains + obligations like CPP/Social Security + all expenses). Includes only your spendable remainder; excludes locked savings. Use: Gauge financial flexibility.">
-                     <p style="margin-left:21px;"></style>DISPOSABLE INCOME:<span class="tooltip1-content"></span><span id="DISPOSABLEINCOME" class="premium-blur">[Locked]</span></p>
-         </span>
-       </summary>
-      </details>
+    
       
             <details style="margin-top:10px;">
               <summary>
-                <p style="margin-left:21px;">
+                <p style="margin-left:21px;"class="premium-section">
                   <span class="tooltip1" data-tooltip="Debt divided by income. A common metric from your inputs.">
-                    <u>Debt to Income:</u><span class="tooltip1-content"></span><span id="DEBTTOINCOME" class="premium-blur">[Locked]</span>
+                    <u>Debt to Income:<span class="premium-notice">Premium</span></u><span class="tooltip1-content"></span><span id="DEBTTOINCOME" class="premium-blur">[Locked]</span>
                   </span>
                 </p>
               </summary>
@@ -449,9 +462,9 @@
             </details>
             <details style="margin-top:10px;">
               <summary>
-                <p style="margin-left:21px;">
+                <p style="margin-left:21px;"class="premium-section">
                   <span class="tooltip1" data-tooltip="Passive income vs. expenses. A FIRE concept calculated from your data.">
-                    <u>FIRE:</u><span class="tooltip1-content"></span><span id="FIRERATIO" class="premium-blur">[Locked]</span>
+                    <u>FIRE:<span class="premium-notice">Premium</span></u><span class="tooltip1-content"></span><span id="FIRERATIO" class="premium-blur">[Locked]</span>
                   </span>
                 </p>
               </summary>
@@ -465,9 +478,9 @@
            
              <details style="margin-top:10px;">
                <summary>
-                 <p style="margin-left:21px;">
+                 <p style="margin-left:21px;"class="premium-section">
                    <span class="tooltip1" data-tooltip="Housing costs divided by income, calculated from your data.">
-                     <u>Housing to Income:</u><span class="tooltip1-content"></span><span id="HOUSINGTOINCOME"class="premium-blur">[Locked]</span>
+                     <u>Housing to Income:<span class="premium-notice">Premium</span></u><span class="tooltip1-content"></span><span id="HOUSINGTOINCOME"class="premium-blur">[Locked]</span>
                    </span>
                  </p>
                </summary>
@@ -479,9 +492,9 @@
              </details>
              <details style="margin-top:10px;">
                <summary>
-                 <p style="margin-left:21px;">
+                 <p style="margin-left:21px;"class="premium-section">
                    <span class="tooltip1" data-tooltip="Savings divided by debt, based on your inputs.">
-                     <u>Savings to Debt:</u><span class="tooltip1-content"></span><span id="SAVINGSTODEBT"class="premium-blur">[Locked]</span>
+                     <u>Savings to Debt:<span class="premium-notice">Premium</span></u><span class="tooltip1-content"></span><span id="SAVINGSTODEBT"class="premium-blur">[Locked]</span>
                    </span>
                  </p>
                </summary>
@@ -492,25 +505,27 @@
                </ul>
              </details>
 
-             <details style="margin-top:10px;" >
-              <summary>
-                <span class="tooltip1" data-tooltip="Hypothetical calculations based on your current data, for learning purposes only.">
-                  <h2>FINANCIAL PROJECTIONS<span class="tooltip1-content"></span></h2>
-                </span>
-               
-              </summary>
-              <p style="margin-left:21px;">
-                <span class="tooltip1" data-tooltip="Hypothetical time to pay revolving debt using your disposable income, no interest assumed.">
-                  <u>Revolving Debt - Time to Pay:</u><span class="tooltip1-content"></span><span id="TIMETOPAYDEBT"class="premium-blur" ></span>
-                </span>
-              </p>
-              <p style="margin-left:21px;">
-                <span class="tooltip1" data-tooltip="Enter a savings goal to see a hypothetical timeline based on your disposable income.">
-                  <u>Savings Goal:</u><input id="goalAmount" type="number" disabled style="margin-left: 15px;"><span class="tooltip1-content"></span><span id="goalResult"></span>
-                </span>
-              </p>
-            </details>
+             
            
+          </details>
+
+          <details style="margin-top:10px;" >
+            <summary>
+              <span class="tooltip1" data-tooltip="Hypothetical calculations based on your current data, for learning purposes only.">
+                <h2>FINANCIAL PROJECTIONS<span class="tooltip1-content"></span></h2>
+              </span>
+             
+            </summary>
+            <p style="margin-left:21px;" class="premium-section">
+              <span class="tooltip1" data-tooltip="Hypothetical time to pay revolving debt using your disposable income, no interest assumed.">
+                  <u>Revolving Debt - Time to Pay:<span class="premium-notice">Premium</span></u><span class="tooltip1-content"></span><span id="TIMETOPAYDEBT" class="premium-blur">[Locked]</span>
+              </span>
+          </p>
+            <p style="margin-left:21px;" class="premium-section">
+              <span class="tooltip1" data-tooltip="Enter a savings goal to see a hypothetical timeline based on your disposable income.">
+                <u>Savings Goal:<span class="premium-notice">Premium</span></u><input id="goalAmount" type="number" disabled style="margin-left: 15px;"><span class="tooltip1-content"></span><span id="goalResult"></span>
+              </span>
+            </p>
           </details>
     
  
@@ -534,6 +549,11 @@
 
 
    </div>
+   <div id="subscribe-sidebar" style="position: fixed; top: 50%; right: 0; transform: translateY(-50%); background-color: #f5f5f5; padding: 10px; border: 2px solid #000; border-right: none; border-radius: 8px 0 0 8px; box-shadow: -4px 4px 0 #000; z-index: 1000;">
+    <span id="close-sidebar" style="position: absolute; top: 5px; right: 5px; font-size: 16px; color: #000; cursor: pointer; font-weight: bold;">X</span>
+    <a href="#payment-form" style="text-decoration: none; color: rgb(0, 0, 0); font-size: 14px; display: block; text-align: center; padding: 10px 20px;">SUBSCRIBE HERE TO UNLOCK PREMIUM CONTENT 💳</a>
+</div>
+
  
    <!-- Scripts -->
    <script src="/index.js"></script>
