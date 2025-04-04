@@ -7,8 +7,8 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
  */
-import { setCookie } from '/server/scripts/setcookie.js';
-import { getCookie } from '/server/scripts/getcookie.js';
+import { setLocal } from '/server/scripts/setLocal.js';
+import { getLocal } from '/server/scripts/getLocal.js';
 
 // Define expenseCategories and totalOnlyCategories FIRST
 const expenseCategories = [
@@ -51,7 +51,7 @@ window.loadCookies = function() {
     formElementIds.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
-            const cookieValue = getCookie(id);
+            const cookieValue = getLocal(id);
             if (cookieValue !== null && cookieValue !== undefined) {
                 element.value = cookieValue; // Set the input/select value from the cookie
                 // Update the total display if applicable
@@ -281,7 +281,7 @@ window.createCookies = function() {
         const element = document.getElementById(id);
         if (element) {
             const value = element.value || '0';
-            setCookie(id, value, 365);
+            setLocal(id, value, 365);
         } else {
             console.warn(`Element with ID '${id}' not found in the DOM`);
         }
@@ -306,7 +306,7 @@ window.overwriteCookies1 = function() {
 
     // First, overwrite all cookies regardless of whether elements exist
     formElements.forEach(function (cookieName) {
-        setCookie(cookieName, value, 365); // Set all cookies with a 1-year expiry
+        setLocal(cookieName, value, 365); // Set all cookies with a 1-year expiry
     });
 
     // Then, only clear input fields that exist on the current page

@@ -10,7 +10,7 @@
 
 
 
-import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
+import { setLocal } from '/server/scripts/setLocal.js'; // Adjust path as needed
 
 // Function to overwrite cookies and clear input fields when they exist
 export function overwriteCookies() {
@@ -48,7 +48,7 @@ export function overwriteCookies() {
 
     // First, overwrite all cookies regardless of whether elements exist
     formElements.forEach(function (cookieName) {
-        setCookie(cookieName, value, 365); // Set all cookies with a 1-year expiry
+        setLocal(cookieName, value, 365); // Set all cookies with a 1-year expiry
     });
 
     // Then, only clear input fields that exist on the current page

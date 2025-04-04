@@ -8,7 +8,7 @@
  * jurisdictions worldwide.
  */ 
 
-// getcookie.js
+// getLocal.js
 function getLocal(name) {
     const value = localStorage.getItem(name);
     console.log(`getLocal called for ${name}, stored value: ${value}`);

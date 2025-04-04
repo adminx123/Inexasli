@@ -9,8 +9,8 @@
   */ 
 
 import { displayWarning } from "./utils.js"
-import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
-import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
+import { setLocal } from '/server/scripts/setLocal.js'; // Adjust path as needed
+import { getLocal } from '/server/scripts/getLocal.js'; // Adjust path as needed
 
 
 
@@ -53,7 +53,7 @@ var LIQUIDASSETS;
         console.log(`Field value for ${assetFields[i]}: ${fieldValue}`);
         const parsedValue = parseFloat(fieldValue);
 
-        const cookieValue = getCookie('romanticasset');
+        const cookieValue = getLocal('romanticasset');
         
         if (!isNaN(parsedValue)) {
             let fieldPercentage = parseFloat(document.querySelector(`#${assetFields[i]}_percent`).value);
@@ -96,7 +96,7 @@ var LIQUIDASSETS;
         const fieldValue = document.getElementById(liquidAssetFields[i]).value;
         console.log(`Field value for ${liquidAssetFields[i]}: ${fieldValue}`);
         const parsedValue = parseFloat(fieldValue);
-        const isPartner = getCookie('assetspousecheckbox') == 'checked'
+        const isPartner = getLocal('assetspousecheckbox') == 'checked'
 
         if (!isNaN(parsedValue)) {
             let fieldPercentage = parseFloat(document.querySelector(`#${liquidAssetFields[i]}_percent`).value)
@@ -136,9 +136,9 @@ document.addEventListener('DOMContentLoaded', function () {
         'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
     ];
 
-    // Loop through each element ID and set the value using getCookie
+    // Loop through each element ID and set the value using getLocal
     formElements.forEach(function (elementId) {
-        const value = getCookie(elementId); // Get the value from the cookie
+        const value = getLocal(elementId); // Get the value from the cookie
         const element = document.getElementById(elementId);
         if (element) { // Check if the element exists before trying to set its value
             element.value = value;
@@ -163,31 +163,31 @@ window.calculateNext = function () {
  
  calculateLiquidAssets();
 
-        setCookie("ASSETS", ASSETS, 365);
-        setCookie("LIQUIDASSETS", LIQUIDASSETS, 365);
+        setLocal("ASSETS", ASSETS, 365);
+        setLocal("LIQUIDASSETS", LIQUIDASSETS, 365);
 
-        setCookie("assets_checking_accounts", document.getElementById("assets_checking_accounts").value.trim() !== "" ? document.getElementById("assets_checking_accounts").value : "0", 365);
-        setCookie("assets_savings_accounts", document.getElementById("assets_savings_accounts").value.trim() !== "" ? document.getElementById("assets_savings_accounts").value : "0", 365);
-        setCookie("assets_other_liquid_accounts", document.getElementById("assets_other_liquid_accounts").value.trim() !== "" ? document.getElementById("assets_other_liquid_accounts").value : "0", 365);
-        setCookie("assets_money_lent_out", document.getElementById("assets_money_lent_out").value.trim() !== "" ? document.getElementById("assets_money_lent_out").value : "0", 365);
-        setCookie("assets_long_term_investment_accounts", document.getElementById("assets_long_term_investment_accounts").value.trim() !== "" ? document.getElementById("assets_long_term_investment_accounts").value : "0", 365);
-        setCookie("assets_primary_residence", document.getElementById("assets_primary_residence").value.trim() !== "" ? document.getElementById("assets_primary_residence").value : "0", 365);
-        setCookie("assets_investment_properties", document.getElementById("assets_investment_properties").value.trim() !== "" ? document.getElementById("assets_investment_properties").value : "0", 365);
-        setCookie("assets_small_business", document.getElementById("assets_small_business").value.trim() !== "" ? document.getElementById("assets_small_business").value : "0", 365);
-        setCookie("assets_vehicles", document.getElementById("assets_vehicles").value.trim() !== "" ? document.getElementById("assets_vehicles").value : "0", 365);
-        setCookie("assets_art_jewelry", document.getElementById("assets_art_jewelry").value.trim() !== "" ? document.getElementById("assets_art_jewelry").value : "0", 365);
+        setLocal("assets_checking_accounts", document.getElementById("assets_checking_accounts").value.trim() !== "" ? document.getElementById("assets_checking_accounts").value : "0", 365);
+        setLocal("assets_savings_accounts", document.getElementById("assets_savings_accounts").value.trim() !== "" ? document.getElementById("assets_savings_accounts").value : "0", 365);
+        setLocal("assets_other_liquid_accounts", document.getElementById("assets_other_liquid_accounts").value.trim() !== "" ? document.getElementById("assets_other_liquid_accounts").value : "0", 365);
+        setLocal("assets_money_lent_out", document.getElementById("assets_money_lent_out").value.trim() !== "" ? document.getElementById("assets_money_lent_out").value : "0", 365);
+        setLocal("assets_long_term_investment_accounts", document.getElementById("assets_long_term_investment_accounts").value.trim() !== "" ? document.getElementById("assets_long_term_investment_accounts").value : "0", 365);
+        setLocal("assets_primary_residence", document.getElementById("assets_primary_residence").value.trim() !== "" ? document.getElementById("assets_primary_residence").value : "0", 365);
+        setLocal("assets_investment_properties", document.getElementById("assets_investment_properties").value.trim() !== "" ? document.getElementById("assets_investment_properties").value : "0", 365);
+        setLocal("assets_small_business", document.getElementById("assets_small_business").value.trim() !== "" ? document.getElementById("assets_small_business").value : "0", 365);
+        setLocal("assets_vehicles", document.getElementById("assets_vehicles").value.trim() !== "" ? document.getElementById("assets_vehicles").value : "0", 365);
+        setLocal("assets_art_jewelry", document.getElementById("assets_art_jewelry").value.trim() !== "" ? document.getElementById("assets_art_jewelry").value : "0", 365);
     
 
-        setCookie("assets_checking_accounts_percent", document.getElementById("assets_checking_accounts_percent").value.trim() !== "" ? document.getElementById("assets_checking_accounts_percent").value : "100", 365);
-    setCookie("assets_savings_accounts_percent", document.getElementById("assets_savings_accounts_percent").value.trim() !== "" ? document.getElementById("assets_savings_accounts_percent").value : "100", 365);
-    setCookie("assets_other_liquid_accounts_percent", document.getElementById("assets_other_liquid_accounts_percent").value.trim() !== "" ? document.getElementById("assets_other_liquid_accounts_percent").value : "100", 365);
-    setCookie("assets_money_lent_out_percent", document.getElementById("assets_money_lent_out_percent").value.trim() !== "" ? document.getElementById("assets_money_lent_out_percent").value : "100", 365);
-    setCookie("assets_long_term_investment_accounts_percent", document.getElementById("assets_long_term_investment_accounts_percent").value.trim() !== "" ? document.getElementById("assets_long_term_investment_accounts_percent").value : "100", 365);
-    setCookie("assets_primary_residence_percent", document.getElementById("assets_primary_residence_percent").value.trim() !== "" ? document.getElementById("assets_primary_residence_percent").value : "100", 365);
-    setCookie("assets_investment_properties_percent", document.getElementById("assets_investment_properties_percent").value.trim() !== "" ? document.getElementById("assets_investment_properties_percent").value : "100", 365);
-    setCookie("assets_small_business_percent", document.getElementById("assets_small_business_percent").value.trim() !== "" ? document.getElementById("assets_small_business_percent").value : "100", 365);
-    setCookie("assets_vehicles_percent", document.getElementById("assets_vehicles_percent").value.trim() !== "" ? document.getElementById("assets_vehicles_percent").value : "100", 365);
-    setCookie("assets_art_jewelry_percent", document.getElementById("assets_art_jewelry_percent").value.trim() !== "" ? document.getElementById("assets_art_jewelry_percent").value : "100", 365);
+        setLocal("assets_checking_accounts_percent", document.getElementById("assets_checking_accounts_percent").value.trim() !== "" ? document.getElementById("assets_checking_accounts_percent").value : "100", 365);
+    setLocal("assets_savings_accounts_percent", document.getElementById("assets_savings_accounts_percent").value.trim() !== "" ? document.getElementById("assets_savings_accounts_percent").value : "100", 365);
+    setLocal("assets_other_liquid_accounts_percent", document.getElementById("assets_other_liquid_accounts_percent").value.trim() !== "" ? document.getElementById("assets_other_liquid_accounts_percent").value : "100", 365);
+    setLocal("assets_money_lent_out_percent", document.getElementById("assets_money_lent_out_percent").value.trim() !== "" ? document.getElementById("assets_money_lent_out_percent").value : "100", 365);
+    setLocal("assets_long_term_investment_accounts_percent", document.getElementById("assets_long_term_investment_accounts_percent").value.trim() !== "" ? document.getElementById("assets_long_term_investment_accounts_percent").value : "100", 365);
+    setLocal("assets_primary_residence_percent", document.getElementById("assets_primary_residence_percent").value.trim() !== "" ? document.getElementById("assets_primary_residence_percent").value : "100", 365);
+    setLocal("assets_investment_properties_percent", document.getElementById("assets_investment_properties_percent").value.trim() !== "" ? document.getElementById("assets_investment_properties_percent").value : "100", 365);
+    setLocal("assets_small_business_percent", document.getElementById("assets_small_business_percent").value.trim() !== "" ? document.getElementById("assets_small_business_percent").value : "100", 365);
+    setLocal("assets_vehicles_percent", document.getElementById("assets_vehicles_percent").value.trim() !== "" ? document.getElementById("assets_vehicles_percent").value : "100", 365);
+    setLocal("assets_art_jewelry_percent", document.getElementById("assets_art_jewelry_percent").value.trim() !== "" ? document.getElementById("assets_art_jewelry_percent").value : "100", 365);
 
     }
 
@@ -197,11 +197,11 @@ window.calculateNext = function () {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    const romanticassetCookie = getCookie('romanticasset');
+    const romanticassetLocal = getLocal('romanticasset');
     const percentInputs = document.querySelectorAll('.percent-input');
 
     // Check for romantic liability sharing based on cookie value
-    if (romanticassetCookie === 'checked') {
+    if (romanticassetLocal === 'checked') {
 		              displayWarning("You have indicated that you own one or more assets jointly with your romantic partner. Please enter the market value of the assets and your corresponding percentage of ownership.")
 
         percentInputs.forEach(input => {

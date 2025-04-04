@@ -1,5 +1,5 @@
 /* hideShow.js */
-import { getCookie } from '/server/scripts/getcookie.js';
+import { getLocal } from '/server/scripts/getLocal.js';
 
 function hideShowClass(className, task) {
     const elements = document.getElementsByClassName(className);
@@ -14,7 +14,7 @@ function hideShowClass(className, task) {
 
 // Define the visibility logic as a reusable function
 function updateHideShow() {
-    const region = getCookie('RegionDropdown');
+    const region = getLocal('RegionDropdown');
     console.log('Region in hideShow.js:', region); // Debug
 
     // Inject CSS to enforce hiding (optional, but ensures precedence)

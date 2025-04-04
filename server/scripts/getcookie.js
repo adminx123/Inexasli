@@ -8,10 +8,10 @@
  * jurisdictions worldwide.
  */ 
 
-// getcookie.js
-function getCookie(name) {
+// getLocal.js
+function getLocal(name) {
     const value = localStorage.getItem(name);
-    console.log(`getCookie called for ${name}, stored value: ${value}`);
+    console.log(`getLocal called for ${name}, stored value: ${value}`);
     
     if (value !== null) {
         const decodedValue = decodeURIComponent(value);
@@ -37,4 +37,4 @@ function getCookie(name) {
     }
 }
 
-export { getCookie };
+export { getLocal };

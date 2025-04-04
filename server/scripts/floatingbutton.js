@@ -1,5 +1,5 @@
-// Import getCookie from getcookie.js
-import { getCookie } from '/server/scripts/getcookie.js'; // Matches your absolute path
+// Import getLocal from getLocal.js
+import { getLocal } from '/server/scripts/getLocal.js'; // Matches your absolute path
 
 // Inject CSS styles into the page
 function injectStyles() {
@@ -80,7 +80,7 @@ function createFloatingButton() {
 
 // Check cookie and toggle button visibility
 function checkCookieAndToggleButton() {
-    const summaryCookie = getCookie('summary_reached');
+    const summaryCookie = getLocal('summary_reached');
     console.log('summary_reached value:', summaryCookie);
     const summaryButtonContainer = document.getElementById('gotosummary');
     if (summaryCookie === 'true') {
