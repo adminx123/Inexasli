@@ -141,23 +141,52 @@ var TOTALSOCIALSECURITYE;
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    const regionDropdown = document.getElementById('RegionDropdown');
+    const subregionDropdown = document.getElementById('SubregionDropdown');
+
+    // Function to update subregion dropdown
+    function updateSubregionDropdown() {
+        const selectedRegion = regionDropdown.value;
+        subregionDropdown.innerHTML = ""; // Clear existing options
+
+        if (selectedRegion in subregionMap) {
+            subregionMap[selectedRegion].forEach(subregionCode => {
+                const subregionOption = document.createElement("option");
+                subregionOption.text = subregionCode;
+                subregionOption.value = subregionCode;
+                subregionDropdown.appendChild(subregionOption);
+            });
+            // Optionally set a default value after updating
+            subregionDropdown.value = subregionMap[selectedRegion][0]; // e.g., 'AL' for USA, 'AB' for CAN
+        }
+    }
+
+    // Add event listeners for both 'change' and 'input'
+    regionDropdown.addEventListener('change', function () {
+        updateSubregionDropdown();
+        handleRegionChange.call(this); // Ensure other logic (e.g., hideShow) runs
+    });
+    regionDropdown.addEventListener('input', updateSubregionDropdown); // For mobile compatibility
+
+    // Initial setup
+    const regionValue = getLocal('RegionDropdown') || 'NONE';
+    regionDropdown.value = regionValue;
+    updateSubregionDropdown(); // Populate subregion on load
+
+    // Rest of your existing logic
     function handleRegionChange() {
-        setLocal("RegionDropdown", this.value, 365); // Update region in local storage
-        updateHideShow(); // Delegate all visibility to hideShow.js
+        setLocal("RegionDropdown", this.value, 365);
+        updateHideShow();
     }
 
     function handleSubRegionChange() {
-        setLocal('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365);
+        setLocal('SubregionDropdown', subregionDropdown.value, 365);
     }
 
-    // Initial setup
-    const regionDropdown = document.getElementById('RegionDropdown');
-    handleRegionChange.call(regionDropdown); // Set initial state
-    // updateHideShow() will be called by hideShow.js on DOMContentLoaded
-
-    // Add event listeners
     regionDropdown.addEventListener('change', handleRegionChange);
-    document.getElementById('SubregionDropdown').addEventListener('change', handleSubRegionChange);
+    subregionDropdown.addEventListener('change', handleSubRegionChange);
+
+    handleRegionChange.call(regionDropdown); // Initial state
 });
 
 
