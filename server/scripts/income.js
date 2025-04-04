@@ -117,22 +117,25 @@ window.validateAndProceed = function() {
     console.log("income.js: validateAndProceed called");
     const termscheckbox = document.getElementById("termscheckbox");
     const notintended = document.getElementById("notintended");
+    const regionDropdown = document.getElementById('RegionDropdown'); // Added here
+    const subregionDropdown = document.getElementById('SubregionDropdown'); // Added here
+
     console.log("income.js: Validation state", {
         terms: termscheckbox?.checked,
         notintended: notintended?.checked,
-        region: regionDropdown.value,
-        subregion: subregionDropdown.value
+        region: regionDropdown?.value,
+        subregion: subregionDropdown?.value
     });
 
-    if (!termscheckbox.checked || !notintended.checked) {
+    if (!termscheckbox?.checked || !notintended?.checked) {
         alert("Check the damn boxes.");
         return;
     }
-    if (regionDropdown.value === "" || regionDropdown.value === "NONE") {
+    if (!regionDropdown?.value || regionDropdown.value === "NONE") {
         alert("Pick a region, dipshit.");
         return;
     }
-    if (!subregionDropdown.value) {
+    if (!subregionDropdown?.value) {
         alert("Pick a subregion too.");
         return;
     }
