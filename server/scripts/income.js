@@ -138,41 +138,24 @@ var TOTALSOCIALSECURITYSE;
 var TOTALSOCIALSECURITYE;
 
 
-function handleRegionChange() {
-    if (this.value === 'USA') {
-        setLocal("RegionDropdown", this.value, 365);
-        hideShowClass('usa-hide', 'show');
-    } else if (this.value === 'CAN') {
-        setLocal("RegionDropdown", this.value, 365);
-        hideShowClass('usa-hide', 'hide');
-    }
 
-    const isIncomeUsa = getLocal('RegionDropdown') == 'USA';
 
-    if (this.value === 'USA' || this.value === '' || this.value === "NONE" || isIncomeUsa) {
-        hideShowClass('USAHIDE', 'show');
-        // console.log('is block');
-    } else {
-        hideShowClass('USAHIDE', 'hide');
-        // console.log('is none');
-    }
-
-    // Update hideShow.js visibility on region change
-    updateHideShow();
-}
 document.addEventListener('DOMContentLoaded', function () {
-  
+    function handleRegionChange() {
+        setLocal("RegionDropdown", this.value, 365); // Update region in local storage
+        updateHideShow(); // Delegate all visibility to hideShow.js
+    }
 
     function handleSubRegionChange() {
         setLocal('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365);
     }
 
-    // Call handleRegionChange and updateHideShow for initial state
+    // Initial setup
     const regionDropdown = document.getElementById('RegionDropdown');
-    handleRegionChange.call(regionDropdown);
-    updateHideShow(); // Ensure hideShow.js runs on load
+    handleRegionChange.call(regionDropdown); // Set initial state
+    // updateHideShow() will be called by hideShow.js on DOMContentLoaded
 
-    // Add event listeners for changes
+    // Add event listeners
     regionDropdown.addEventListener('change', handleRegionChange);
     document.getElementById('SubregionDropdown').addEventListener('change', handleSubRegionChange);
 });
