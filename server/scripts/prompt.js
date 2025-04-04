@@ -169,36 +169,88 @@ function generatePrompt(promptType) {
             }
             break;
 
-            case 'event': 
-            const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected'); 
-            if (eventTypesSelected.length > 0) { 
-                prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event'); 
-                prompt += 'Purpose of Analysis: To generate a clear and actionable checklist in code block format with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event.\n\n'; 
-            } 
-            prompt += formatGrid('#event-elements .grid-item.selected', 'Elements'); 
-            const venueStatus = document.getElementById('event-venue').value; 
-            if (venueStatus) { 
-                prompt += `Venue Status: ${venueStatus}\n\n`; 
-            } 
-            const location = document.getElementById('event-location'); 
-            if (location?.value) { 
-                prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`; 
-                if (location.value === 'indoors') { 
-                    prompt += formatGrid('#event-indoor-setup .grid-item.selected', 'Venue Setup Needs'); 
-                } else { 
-                    prompt += formatGrid('#event-outdoor .grid-item.selected', 'Setup Considerations'); 
-                } 
-                const guests = document.getElementById('event-guests'); 
-                if (guests?.value) prompt += formatList(guests.value, 'Guest Count'); 
-                const budget = document.getElementById('event-budget'); 
-                if (budget?.value) prompt += formatList(budget.value, 'Budget'); 
-                const timeline = document.getElementById('event-timeline'); 
-                if (timeline?.value) prompt += formatList(timeline.value, 'Timeline'); 
-                const specificContext = document.getElementById('event-specific-context'); 
-                if (specificContext?.value) prompt += `Context Dump: ${specificContext.value}\n\n`; 
-            } 
-            break;
-        
+            case 'event':
+    const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
+    if (eventTypesSelected.length > 0) {
+        prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event');
+        prompt += 'Purpose of Analysis: To generate a clear and actionable checklist in code block format with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event.\n\n';
+    } else {
+        prompt += 'No event type selected. Assuming a generic event for planning purposes.\n\n';
+    }
+
+    // Event Elements
+    prompt += formatGrid('#event-elements .grid-item.selected', 'Elements');
+
+    // Venue Status
+    const venueStatus = document.getElementById('event-venue')?.value;
+    if (venueStatus) {
+        prompt += `Venue Status: ${venueStatus}\n\n`;
+    }
+
+    // Location (Indoor/Outdoor) and Related Setup
+    const location = document.getElementById('event-location');
+    if (location?.value) {
+        prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`;
+        if (location.value === 'indoors') {
+            prompt += formatGrid('#event-indoor-setup .grid-item.selected', 'Venue Setup Needs');
+        } else if (location.value === 'outdoors') {
+            prompt += formatGrid('#event-outdoor .grid-item.selected', 'Setup Considerations');
+        }
+    }
+
+    // Guest Count
+    const guests = document.getElementById('event-guests')?.value;
+    if (guests) {
+        prompt += formatList(guests, 'Guest Count');
+    }
+
+    // Budget
+    const budget = document.getElementById('event-budget')?.value;
+    if (budget) {
+        prompt += formatList(budget, 'Budget');
+    }
+
+    // Start and End Times
+    const startTimeEl = document.getElementById('event-start');
+    const endTimeEl = document.getElementById('event-end');
+    const startTime = startTimeEl?.value || ''; // Default to empty string if undefined
+    const endTime = endTimeEl?.value || '';     // Default to empty string if undefined
+
+    // Debug logging
+    console.log('Start Time Element:', startTimeEl);
+    console.log('Start Time Value:', startTime);
+    console.log('End Time Element:', endTimeEl);
+    console.log('End Time Value:', endTime);
+
+    let timeString = '';
+    if (startTime) {
+        timeString += `Start: ${startTime}`;
+    }
+    if (endTime) {
+        timeString += `${timeString ? ' - ' : ''}End: ${endTime}`;
+    }
+
+    // Include Timeline if either startTime or endTime has a value
+    if (startTime || endTime) {
+        prompt += formatList(timeString || 'No specific times provided', 'Timeline');
+    } else {
+        prompt += 'Timeline: Not specified\n\n';
+        console.log('No start or end time provided (both empty)');
+    }
+
+    // Specific Location
+    const specificLocation = document.getElementById('event-specific-location')?.value;
+    if (specificLocation) {
+        prompt += formatList(specificLocation, 'Specific Location');
+    }
+
+    // Specific Context
+    const specificContext = document.getElementById('event-specific-context')?.value;
+    if (specificContext) {
+        prompt += formatList(specificContext, 'Context Dump');
+    }
+
+    break;
 
             case 'therapy':
                 const therapyGoal = document.getElementById('therapy-goal');
