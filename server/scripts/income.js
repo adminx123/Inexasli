@@ -138,29 +138,30 @@ var TOTALSOCIALSECURITYSE;
 var TOTALSOCIALSECURITYE;
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    function handleRegionChange() {
-        if (this.value === 'USA') {
-            setLocal("RegionDropdown", this.value, 365);
-            hideShowClass('usa-hide', 'show');
-        } else if (this.value === 'CAN') {
-            setLocal("RegionDropdown", this.value, 365);
-            hideShowClass('usa-hide', 'hide');
-        }
-
-        const isIncomeUsa = getLocal('RegionDropdown') == 'USA';
-
-        if (this.value === 'USA' || this.value === '' || this.value === "NONE" || isIncomeUsa) {
-            hideShowClass('USAHIDE', 'show');
-            // console.log('is block');
-        } else {
-            hideShowClass('USAHIDE', 'hide');
-            // console.log('is none');
-        }
-
-        // Update hideShow.js visibility on region change
-        updateHideShow();
+function handleRegionChange() {
+    if (this.value === 'USA') {
+        setLocal("RegionDropdown", this.value, 365);
+        hideShowClass('usa-hide', 'show');
+    } else if (this.value === 'CAN') {
+        setLocal("RegionDropdown", this.value, 365);
+        hideShowClass('usa-hide', 'hide');
     }
+
+    const isIncomeUsa = getLocal('RegionDropdown') == 'USA';
+
+    if (this.value === 'USA' || this.value === '' || this.value === "NONE" || isIncomeUsa) {
+        hideShowClass('USAHIDE', 'show');
+        // console.log('is block');
+    } else {
+        hideShowClass('USAHIDE', 'hide');
+        // console.log('is none');
+    }
+
+    // Update hideShow.js visibility on region change
+    updateHideShow();
+}
+document.addEventListener('DOMContentLoaded', function () {
+  
 
     function handleSubRegionChange() {
         setLocal('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365);
