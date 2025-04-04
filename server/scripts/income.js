@@ -1190,15 +1190,8 @@ function passiveincome() {
 
 
 document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', () => {
-    document.querySelector('#ROI-modal').style.display = 'block'
-    // 
-
-    const tooltips = document.querySelectorAll(".tooltip");
-
-    tooltips.forEach(tooltip => {
-        tooltip.classList.add("show");
-    })
-})
+    document.querySelector('#ROI-modal').style.display = 'block';
+});
 
 
 
@@ -1483,61 +1476,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    const interactiveElements = document.querySelectorAll(
-      ".checkboxrow input[type='number'], .checkboxrow label, .checkboxrow .checkbox-button-group input[type='checkbox']"
-    );
-  
-    // Initialize tooltip content for .checkboxrow
-    const tooltips = document.querySelectorAll(".checkboxrow .tooltip");
-    tooltips.forEach((tooltip) => {
-      const content = tooltip.querySelector(".tooltip-content");
-      const message = tooltip.getAttribute("data-tooltip");
-      content.textContent = message;
-    });
-  
-    interactiveElements.forEach((element) => {
-      element.addEventListener("click", (e) => {
-        const row = element.closest(".checkboxrow");
-        const tooltip = row.querySelector(".tooltip");
-        const content = tooltip ? tooltip.querySelector(".tooltip-content") : null;
-  
-        document.querySelectorAll(".checkboxrow").forEach(r => {
-          r.classList.remove("active");
-          const otherTooltip = r.querySelector(".tooltip");
-          if (otherTooltip) otherTooltip.classList.remove("show");
-        });
-  
-        row.classList.add("active");
-  
-        if (tooltip && content) {
-          tooltip.classList.add("show");
-          const contentRect = content.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
-  
-          if (contentRect.left < 0) {
-            content.style.left = '0';
-            content.style.transform = 'translateX(0)';
-          } else if (contentRect.right > viewportWidth) {
-            content.style.left = '100%';
-            content.style.transform = 'translateX(-100%)';
-          } else {
-            content.style.left = '50%';
-            content.style.transform = 'translateX(-50%)';
-          }
-        }
-  
-        e.stopPropagation();
-      });
-    });
-  
-    document.addEventListener("click", (e) => {
-      if (!e.target.closest(".checkboxrow")) {
-        document.querySelectorAll(".checkboxrow").forEach(r => {
-          r.classList.remove("active");
-          const tooltip = r.querySelector(".tooltip");
-          if (tooltip) tooltip.classList.remove("show");
-        });
-      }
-    });
-  });
