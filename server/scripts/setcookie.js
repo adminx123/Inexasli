@@ -1,4 +1,4 @@
-function setLocal(name, value, days) {
+function setCookie(name, value, days) {
   if (value === undefined || value === null || value === '') {
       value = '0';
   }
@@ -7,7 +7,7 @@ function setLocal(name, value, days) {
   localStorage.setItem(name, encodeURIComponent(value));
 }
 
-export { setLocal };
+export { setCookie };
 
 /*
 * Copyright (c) 2025 INEXASLI. All rights reserved.

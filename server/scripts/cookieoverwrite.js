@@ -10,7 +10,7 @@
 
 
 
-import { setLocal } from '/server/scripts/setLocal.js'; // Adjust path as needed
+import { setLocal } from '/server/scripts/setlocal.js'; // Adjust path as needed
 
 // Function to overwrite cookies and clear input fields when they exist
 export function overwriteCookies() {

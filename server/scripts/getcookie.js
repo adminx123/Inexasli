@@ -9,7 +9,7 @@
  */ 
 
 // getLocal.js
-function getLocal(name) {
+function getCookie(name) {
     const value = localStorage.getItem(name);
     console.log(`getLocal called for ${name}, stored value: ${value}`);
     
@@ -37,4 +37,4 @@ function getLocal(name) {
     }
 }
 
-export { getLocal };
+export { getCookie };

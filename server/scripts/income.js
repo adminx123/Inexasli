@@ -9,7 +9,7 @@
   */
 
 import { hideShowClass, updateHideShow } from "/server/scripts/hideShow.js"
-import { setLocal } from '/server/scripts/setLocal.js'; // Adjust path as needed
+import { setLocal } from '/server/scripts/setlocal.js'; // Adjust path as needed
 import { getLocal } from '/server/scripts/getLocal.js'; // Adjust path as needed
 
 
