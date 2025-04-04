@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         sidebar.dataset.state = 'initial';
         sidebar.innerHTML = `
             <span id="close-sidebar">+</span>
-            <a class="subscribe-link">SUBSCRIBE & UNLOCK PREMIUM CONTENT 💳</a>
+            <a class="subscribe-link">SUBSCRIBE & UNLOCK<br> PREMIUM CONTENT 💳</a>
             <form class="payment-form" id="payment-form">
                 <input type="text" class="payment-input" id="username" placeholder="input your name" required>
                 <input type="email" class="payment-input" id="useremail" placeholder="input your email" required>
