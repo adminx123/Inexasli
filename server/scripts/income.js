@@ -95,31 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    window.validateAndProceed = function() {
-        console.log("income.js: validateAndProceed called");
-        const termscheckbox = document.getElementById("termscheckbox");
-        const notintended = document.getElementById("notintended");
-        console.log("income.js: Validation state", {
-            terms: termscheckbox?.checked,
-            notintended: notintended?.checked,
-            region: regionDropdown.value,
-            subregion: subregionDropdown.value
-        });
-
-        if (!termscheckbox.checked || !notintended.checked) {
-            alert("Check the damn boxes.");
-            return;
-        }
-        if (regionDropdown.value === "" || regionDropdown.value === "NONE") {
-            alert("Pick a region, dipshit.");
-            return;
-        }
-        if (!subregionDropdown.value) {
-            alert("Pick a subregion too.");
-            return;
-        }
-        calculateNext();
-    };
+   
 
     regionDropdown.addEventListener('change', () => {
         setLocal("RegionDropdown", regionDropdown.value, 365);
@@ -136,6 +112,32 @@ document.addEventListener('DOMContentLoaded', () => {
     regionDropdown.value = regionValue;
     updateSubregionDropdown();
 });
+
+window.validateAndProceed = function() {
+    console.log("income.js: validateAndProceed called");
+    const termscheckbox = document.getElementById("termscheckbox");
+    const notintended = document.getElementById("notintended");
+    console.log("income.js: Validation state", {
+        terms: termscheckbox?.checked,
+        notintended: notintended?.checked,
+        region: regionDropdown.value,
+        subregion: subregionDropdown.value
+    });
+
+    if (!termscheckbox.checked || !notintended.checked) {
+        alert("Check the damn boxes.");
+        return;
+    }
+    if (regionDropdown.value === "" || regionDropdown.value === "NONE") {
+        alert("Pick a region, dipshit.");
+        return;
+    }
+    if (!subregionDropdown.value) {
+        alert("Pick a subregion too.");
+        return;
+    }
+    calculateNext();
+};
 
 // Frequency calculation
 function calculateAnnual(inputId, frequencyGroupId) {
