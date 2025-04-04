@@ -8,7 +8,10 @@
  * jurisdictions worldwide.
  */ 
 
-import { getLocal } from '/server/scripts/getLocal.js';
+import { getLocal } from '/server/scripts/getlocal.js';
+import { setCookie } from '/server/scripts/setcookie.js';
+
+
 
 // Tab highlighting
 const tabs = document.querySelectorAll('.tab');
@@ -23,6 +26,10 @@ tabs.forEach(tab => {
 
 // Core DOMContentLoaded listener
 document.addEventListener('DOMContentLoaded', function () {
+
+    setCookie("summary", "loaded", 32, Date.now()); // "loaded" is arbitrary; timestamp is key
+
+
     const paid = getLocal("authenticated");
     const isPaid = paid === "paid";
     const currentPath = window.location.pathname;
