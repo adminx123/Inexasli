@@ -9,7 +9,7 @@
  */
 
 import { displayWarning } from "./utils.js";
-import { setLocal } from '/server/scripts/setLocal.js';
+import { setLocal } from '/server/scripts/setlocal.js';
 import { getLocal } from '/server/scripts/getLocal.js';
 import { hideShowClass } from "./hideShow.js";
 

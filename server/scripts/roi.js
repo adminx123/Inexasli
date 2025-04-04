@@ -1,4 +1,4 @@
-import { setLocal } from '/server/scripts/setLocal.js';
+import { setLocal } from '/server/scripts/setlocal.js';
 import { getLocal } from '/server/scripts/getLocal.js';
 
 // Expose functions to global scope for inline HTML events
