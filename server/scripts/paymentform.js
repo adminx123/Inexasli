@@ -109,10 +109,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 width: 250px;
             }
             #subscribe-sidebar.initial {
-                height: 65px; /* Adjusted for smaller screens */
+                height: auto; /* Adjusted for smaller screens */
             }
             #subscribe-sidebar.expanded {
-                height: 380px;
+                height: auto;
             }
             .payment-form {
                 max-width: 220px;
