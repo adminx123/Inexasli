@@ -144,6 +144,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const regionDropdown = document.getElementById('RegionDropdown');
     const subregionDropdown = document.getElementById('SubregionDropdown');
 
+    const formElements = [
+        'RegionDropdown', 'SubregionDropdown',
+        'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop', 
+        'income_investment_property', 'income_capital_gains_losses', 'income_interest', 
+        'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension', 
+        'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony', 
+        'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending', 
+        'income_venture_capital', 'income_tax_free_income'
+    ];
+
     // Function to update subregion dropdown
     function updateSubregionDropdown() {
         const selectedRegion = regionDropdown.value;
@@ -156,39 +166,54 @@ document.addEventListener('DOMContentLoaded', function () {
                 subregionOption.value = subregionCode;
                 subregionDropdown.appendChild(subregionOption);
             });
-            // Optionally set a default value after updating
-            subregionDropdown.value = subregionMap[selectedRegion][0]; // e.g., 'AL' for USA, 'AB' for CAN
+            // Set default subregion
+            subregionDropdown.value = subregionMap[selectedRegion][0]; // e.g., 'AL' or 'AB'
         }
     }
 
-    // Add event listeners for both 'change' and 'input'
-    regionDropdown.addEventListener('change', function () {
-        updateSubregionDropdown();
-        handleRegionChange.call(this); // Ensure other logic (e.g., hideShow) runs
-    });
-    regionDropdown.addEventListener('input', updateSubregionDropdown); // For mobile compatibility
-
-    // Initial setup
-    const regionValue = getLocal('RegionDropdown') || 'NONE';
-    regionDropdown.value = regionValue;
-    updateSubregionDropdown(); // Populate subregion on load
-
-    // Rest of your existing logic
+    // Handle region change
     function handleRegionChange() {
         setLocal("RegionDropdown", this.value, 365);
         updateHideShow();
+        updateSubregionDropdown(); // Ensure subregion updates on change
     }
 
+    // Handle subregion change
     function handleSubRegionChange() {
         setLocal('SubregionDropdown', subregionDropdown.value, 365);
     }
 
+    // Initialize form elements
+    const regionValue = getLocal('RegionDropdown') || 'NONE';
+    regionDropdown.value = regionValue;
+    updateSubregionDropdown(); // Populate subregion options
+
+    formElements.forEach(function (elementId) {
+        if (elementId !== 'RegionDropdown') {
+            const value = getLocal(elementId);
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.value = value;
+            }
+        }
+    });
+
+    // Validate subregion
+    const subregionValue = subregionDropdown.value;
+    if (regionValue === 'USA' && subregionMap.USA && !subregionMap.USA.includes(subregionValue)) {
+        subregionDropdown.value = subregionMap.USA[0];
+    } else if (regionValue === 'CAN' && subregionMap.CAN && !subregionMap.CAN.includes(subregionValue)) {
+        subregionDropdown.value = subregionMap.CAN[0];
+    }
+
+    // Set up event listeners
+    regionDropdown.addEventListener('input', updateSubregionDropdown); // Mobile fix
     regionDropdown.addEventListener('change', handleRegionChange);
     subregionDropdown.addEventListener('change', handleSubRegionChange);
 
-    handleRegionChange.call(regionDropdown); // Initial state
+    // Trigger initial state
+    handleRegionChange.call(regionDropdown);
 });
-
 
 window.validatecheckbox = function () {
     var termscheckbox = document.getElementById("termscheckbox");
@@ -1208,52 +1233,7 @@ document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', () => {
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    // List of form element IDs you want to set based on cookies
-    const formElements = [
-        'RegionDropdown', 'SubregionDropdown',
-        'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop', 
-        'income_investment_property', 'income_capital_gains_losses', 'income_interest', 
-        'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension', 
-        'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony', 
-        'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending', 
-        'income_venture_capital', 'income_tax_free_income',
-        
-    ];
 
- // Get elements
- const regionDropdown = document.getElementById('RegionDropdown');
- const subregionDropdown = document.getElementById('SubregionDropdown');
-
- // Set RegionDropdown first
- const regionValue = getLocal('RegionDropdown');
- regionDropdown.value = regionValue; // 'NONE', 'CAN', or 'USA'
-
- // Populate SubregionDropdown options based on RegionDropdown
- updateSubregionDropdown(); // Ensure options are available
-
- // Set all other form elements, including SubregionDropdown
- formElements.forEach(function (elementId) {
-     if (elementId !== 'RegionDropdown') { // Already set
-         const value = getLocal(elementId);
-         const element = document.getElementById(elementId);
-         if (element) {
-             element.value = value;
-         }
-     }
- });
-
- // Adjust SubregionDropdown if invalid
- const subregionValue = subregionDropdown.value;
- if (regionValue === 'USA' && subregionMap.USA && !subregionMap.USA.includes(subregionValue)) {
-     subregionDropdown.value = subregionMap.USA[0]; // e.g., 'AL'
- } else if (regionValue === 'CAN' && subregionMap.CAN && !subregionMap.CAN.includes(subregionValue)) {
-     subregionDropdown.value = subregionMap.CAN[0]; // e.g., 'AB'
- }
-
- // Ensure initial state is handled
- handleRegionChange.call(regionDropdown);
-});
 
 
 function handleUSAResident() {
