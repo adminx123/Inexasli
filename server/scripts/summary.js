@@ -8,7 +8,7 @@
  * jurisdictions worldwide.
  */ 
 
-import { getCookie } from '/server/scripts/getcookie.js';
+import { getLocal } from '/server/scripts/getLocal.js';
 
 // Tab highlighting
 const tabs = document.querySelectorAll('.tab');
@@ -23,7 +23,7 @@ tabs.forEach(tab => {
 
 // Core DOMContentLoaded listener
 document.addEventListener('DOMContentLoaded', function () {
-    const paid = getCookie("authenticated");
+    const paid = getLocal("authenticated");
     const isPaid = paid === "paid";
     const currentPath = window.location.pathname;
 
@@ -89,7 +89,7 @@ function updateFreeContent() {
     updateElement('TOTALMEDICARE', 'TOTALMEDICARE', multiplier, null, 'usa-hide');
 
     // Net Worth (free) - No frequency adjustment
-    updateElement('NETWORTH', null, 1, () => (parseFloat(getCookie('ASSETS')) || 0) - (parseFloat(getCookie('LIABILITIES')) || 0));
+    updateElement('NETWORTH', null, 1, () => (parseFloat(getLocal('ASSETS')) || 0) - (parseFloat(getLocal('LIABILITIES')) || 0));
     updateElement('ASSETS', 'ASSETS', multiplier);
     updateElement('LIABILITIES', 'LIABILITIES', multiplier);
 
@@ -100,11 +100,11 @@ function updateFreeContent() {
     // Region and Subregion (no multiplier, just raw values)
     const regionElement = document.getElementById('RegionDropdown');
     if (regionElement) {
-        regionElement.textContent = getCookie('RegionDropdown').trim() !== "" ? getCookie('RegionDropdown') : "NONE";
+        regionElement.textContent = getLocal('RegionDropdown').trim() !== "" ? getLocal('RegionDropdown') : "NONE";
     }
     const subregionElement = document.getElementById('SubregionDropdown');
     if (subregionElement) {
-        subregionElement.textContent = getCookie('SubregionDropdown').trim() !== "" ? getCookie('SubregionDropdown') : "";
+        subregionElement.textContent = getLocal('SubregionDropdown').trim() !== "" ? getLocal('SubregionDropdown') : "";
     }
 
     // Financial Projections (free)
@@ -134,19 +134,19 @@ function updatePremiumContent() {
     updateElement('DISPOSABLEINCOME', null, multiplier, calculateDisposableIncome);
 
     // Premium Subscribers (Ratios) - Only set once, not updated on frequency change
-    const debtToIncome = (parseFloat(getCookie('LIABILITIES')) / parseFloat(getCookie('ANNUALINCOME')) || 0);
+    const debtToIncome = (parseFloat(getLocal('LIABILITIES')) / parseFloat(getLocal('ANNUALINCOME')) || 0);
     document.getElementById('DEBTTOINCOME').textContent = isNaN(debtToIncome) || !isFinite(debtToIncome) ? 'Not Applicable' : debtToIncome.toFixed(2);
     colorChangeDTI();
 
-    const housingToIncome = (parseFloat(getCookie('HOUSING')) / parseFloat(getCookie('ANNUALINCOME')) || 0);
+    const housingToIncome = (parseFloat(getLocal('HOUSING')) / parseFloat(getLocal('ANNUALINCOME')) || 0);
     document.getElementById('HOUSINGTOINCOME').textContent = isNaN(housingToIncome) ? 'Not Applicable' : housingToIncome.toFixed(2);
     colorChangeHTI();
 
-    const savingsToDebt = (parseFloat(getCookie('ASSETS')) / parseFloat(getCookie('LIABILITIES')) || 0);
+    const savingsToDebt = (parseFloat(getLocal('ASSETS')) / parseFloat(getLocal('LIABILITIES')) || 0);
     document.getElementById('SAVINGSTODEBT').textContent = isNaN(savingsToDebt) || !isFinite(savingsToDebt) ? 'Not Applicable' : savingsToDebt.toFixed(2);
     colorChangeSavingsToDebt(savingsToDebt);
 
-    const fireRatio = (parseFloat(getCookie('PASSIVEINCOME')) / parseFloat(getCookie('ANNUALEXPENSESUM')) || 0);
+    const fireRatio = (parseFloat(getLocal('PASSIVEINCOME')) / parseFloat(getLocal('ANNUALEXPENSESUM')) || 0);
     document.getElementById('FIRERATIO').textContent = isNaN(fireRatio) ? 'Not Applicable' : fireRatio.toFixed(2);
     colorChangeFIRE();
 
@@ -161,7 +161,7 @@ function updatePremiumContent() {
 function updateElement(elementId, cookieName, multiplier, calcFunction = null, regionClass = null) {
     const element = document.getElementById(elementId);
     if (element && (!regionClass || element.closest(`.${regionClass}`))) {
-        const value = calcFunction ? calcFunction() : (parseFloat(getCookie(cookieName)) || 0);
+        const value = calcFunction ? calcFunction() : (parseFloat(getLocal(cookieName)) || 0);
         element.textContent = '$' + (value * multiplier).toFixed(2);
     }
 }
@@ -177,28 +177,28 @@ function getFrequencyMultiplier(frequency) {
 
 // Calculate Disposable Income (premium)
 function calculateDisposableIncome() {
-    const region = getCookie('RegionDropdown');
-    const income = parseFloat(getCookie('ANNUALINCOME')) || 0;
-    const expenses = parseFloat(getCookie('ANNUALEXPENSESUM')) || 0;
+    const region = getLocal('RegionDropdown');
+    const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
+    const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
     const tax = calculateAnnualTax();
 
     if (region === 'USA') {
-        return income - expenses - (parseFloat(getCookie('TOTALMEDICARE')) || 0) - 
-               (parseFloat(getCookie('TOTALSOCIALSECURITY')) || 0) - tax - 
-               (parseFloat(getCookie('TOTALTAXCG')) || 0);
+        return income - expenses - (parseFloat(getLocal('TOTALMEDICARE')) || 0) - 
+               (parseFloat(getLocal('TOTALSOCIALSECURITY')) || 0) - tax - 
+               (parseFloat(getLocal('TOTALTAXCG')) || 0);
     } else if (region === 'CAN') {
-        return income - expenses - (parseFloat(getCookie('ANNUALEI')) || 0) - 
-               (parseFloat(getCookie('ANNUALCPP')) || 0) - tax;
+        return income - expenses - (parseFloat(getLocal('ANNUALEI')) || 0) - 
+               (parseFloat(getLocal('ANNUALCPP')) || 0) - tax;
     }
     return 0;
 }
 
 // Calculate Annual Tax (free)
 function calculateAnnualTax() {
-    const region = getCookie('RegionDropdown') || 'NONE';
-    const regionalTax = parseFloat(getCookie('ANNUALREGIONALTAX')) || 0;
-    const subregionalTax = parseFloat(getCookie('ANNUALSUBREGIONALTAX')) || 0;
-    const cgTax = region === 'USA' ? (parseFloat(getCookie('TOTALTAXCG')) || 0) : 0;
+    const region = getLocal('RegionDropdown') || 'NONE';
+    const regionalTax = parseFloat(getLocal('ANNUALREGIONALTAX')) || 0;
+    const subregionalTax = parseFloat(getLocal('ANNUALSUBREGIONALTAX')) || 0;
+    const cgTax = region === 'USA' ? (parseFloat(getLocal('TOTALTAXCG')) || 0) : 0;
 
     if (region === 'USA' || region === 'CAN') {
         return regionalTax + subregionalTax + cgTax;
@@ -209,13 +209,13 @@ function calculateAnnualTax() {
 
 // Calculate Government Obligations (free)
 function calculateGovernmentObligations() {
-    const region = getCookie('RegionDropdown');
+    const region = getLocal('RegionDropdown');
     if (region === 'USA') {
-        return (parseFloat(getCookie('TOTALSOCIALSECURITY')) || 0) + 
-               (parseFloat(getCookie('TOTALMEDICARE')) || 0);
+        return (parseFloat(getLocal('TOTALSOCIALSECURITY')) || 0) + 
+               (parseFloat(getLocal('TOTALMEDICARE')) || 0);
     } else if (region === 'CAN') {
-        return (parseFloat(getCookie('ANNUALCPP')) || 0) + 
-               (parseFloat(getCookie('ANNUALEI')) || 0);
+        return (parseFloat(getLocal('ANNUALCPP')) || 0) + 
+               (parseFloat(getLocal('ANNUALEI')) || 0);
     }
     return 0;
 }
@@ -223,7 +223,7 @@ function calculateGovernmentObligations() {
 // Expense Pie Chart (free)
 function updateExpensePieChart() {
     const cookieNames = ['ESSENTIAL', 'DEBT', 'DEPENDANT', 'DISCRETIONARY', 'HOUSING', 'TRANSPORTATION'];
-    const data = cookieNames.map(name => parseFloat(getCookie(name)) || 0);
+    const data = cookieNames.map(name => parseFloat(getLocal(name)) || 0);
     const config = {
         type: 'pie',
         data: {
@@ -261,9 +261,9 @@ function updateExpensePieChart() {
 
 // Income Erosion Pie Chart (premium)
 function updateIncomeErosionPieChart() {
-    const region = getCookie('RegionDropdown');
-    const income = parseFloat(getCookie('ANNUALINCOME')) || 0;
-    const expenses = parseFloat(getCookie('ANNUALEXPENSESUM')) || 0;
+    const region = getLocal('RegionDropdown');
+    const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
+    const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
     const tax = calculateAnnualTax();
     const disposable = calculateDisposableIncome();
 
@@ -271,16 +271,16 @@ function updateIncomeErosionPieChart() {
     if (region === 'USA') {
         data = [
             disposable, expenses, 
-            parseFloat(getCookie('TOTALSOCIALSECURITY')) || 0, 
-            parseFloat(getCookie('TOTALMEDICARE')) || 0, 
-            tax, parseFloat(getCookie('TOTALTAXCG')) || 0
+            parseFloat(getLocal('TOTALSOCIALSECURITY')) || 0, 
+            parseFloat(getLocal('TOTALMEDICARE')) || 0, 
+            tax, parseFloat(getLocal('TOTALTAXCG')) || 0
         ];
         labels = ['Income After Deductions', 'Annual Expenses', 'Social Security', 'Medicare', 'Income Tax', 'Capital Gains Tax'];
     } else {
         data = [
             disposable, expenses, 
-            parseFloat(getCookie('ANNUALCPP')) || 0, 
-            parseFloat(getCookie('ANNUALEI')) || 0, 
+            parseFloat(getLocal('ANNUALCPP')) || 0, 
+            parseFloat(getLocal('ANNUALEI')) || 0, 
             tax
         ];
         labels = ['Income After Deductions', 'Annual Expenses', 'CPP', 'EI', 'Income Tax'];
@@ -352,8 +352,8 @@ function colorChangeDTI() {
 // Financial Projections (free with premium enhancement)
 function timeToPay(isPaid) {
     const frequency = document.getElementById('frequency').value;
-    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getCookie('ANNUALINCOME')) || 0) - (parseFloat(getCookie('ANNUALEXPENSESUM')) || 0);
-    const revolvingDebt = parseFloat(getCookie('LIABILITIESNA')) || 0;
+    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getLocal('ANNUALINCOME')) || 0) - (parseFloat(getLocal('ANNUALEXPENSESUM')) || 0);
+    const revolvingDebt = parseFloat(getLocal('LIABILITIESNA')) || 0;
 
     let timeToPayDebt = document.getElementById('TIMETOPAYDEBT');
     if (!revolvingDebt || disposableIncome <= 0) {
@@ -368,7 +368,7 @@ function timeToPay(isPaid) {
 }
 
 function calculateGoal(isPaid) {
-    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getCookie('ANNUALINCOME')) || 0) - (parseFloat(getCookie('ANNUALEXPENSESUM')) || 0);
+    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getLocal('ANNUALINCOME')) || 0) - (parseFloat(getLocal('ANNUALEXPENSESUM')) || 0);
     const goalAmount = parseFloat(document.getElementById('goalAmount').value) || 0;
     const frequency = document.getElementById('frequency').value;
 

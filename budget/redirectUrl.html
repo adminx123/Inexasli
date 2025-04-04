@@ -37,8 +37,8 @@
      </div>
      
      <script type="module">
-       import { setCookie } from '/server/scripts/setcookie.js';
-       import { getCookie } from '/server/scripts/getcookie.js';
+       import { setLocal } from '/server/scripts/setLocal.js';
+       import { getLocal } from '/server/scripts/getLocal.js';
  
        const urlParams = new URLSearchParams(window.location.search);
        const sessionId = urlParams.get("session_id");
@@ -48,7 +48,7 @@
          "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
  
        document.addEventListener("DOMContentLoaded", async () => {
-         const paid = getCookie("authenticated");
+         const paid = getLocal("authenticated");
  
          if (paid === "paid") {
            window.location.href = "/budget/summary.html";
@@ -70,16 +70,16 @@
  
                if (data.paymentStatus) {
                  if (data.paymentStatus === "paid" || data.paymentStatus === 'no_payment_required') {
-                   setCookie('authenticated', "paid", 32);
+                   setLocal('authenticated', "paid", 32);
                    container.innerHTML = "payment successful redirecting ......";
-                   const calculatedFromWorksheet = getCookie("calculated_from_worksheet");
+                   const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
  
                    if (calculatedFromWorksheet === 'true') {
-                     const totalRevenue = getCookie("totalRevenue");
+                     const totalRevenue = getLocal("totalRevenue");
                      
                      if (totalRevenue) {
-                       setCookie("income_sole_prop", totalRevenue, 32);
-                       setCookie("calculated_from_worksheet", "resolved", 32);
+                       setLocal("income_sole_prop", totalRevenue, 32);
+                       setLocal("calculated_from_worksheet", "resolved", 32);
                      }
                    }
  

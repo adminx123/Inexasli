@@ -9,8 +9,8 @@
  */
 
 import { displayWarning } from "./utils.js";
-import { setCookie } from '/server/scripts/setcookie.js';
-import { getCookie } from '/server/scripts/getcookie.js';
+import { setLocal } from '/server/scripts/setLocal.js';
+import { getLocal } from '/server/scripts/getLocal.js';
 import { hideShowClass } from "./hideShow.js";
 
 // Tab highlighting
@@ -259,11 +259,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const element = document.getElementById(elementId);
     if (!element) return;
 
-    const savedValue = getCookie(elementId);
+    const savedValue = getLocal(elementId);
     if (savedValue) element.value = savedValue;
 
     element.addEventListener('input', () => {
-      setCookie(elementId, element.value, 365);
+      setLocal(elementId, element.value, 365);
       calculateAll();
     });
   });
@@ -279,13 +279,13 @@ document.addEventListener('DOMContentLoaded', () => {
           checkboxes.forEach(cb => {
             if (cb !== this) cb.checked = false;
           });
-          setCookie(`frequency_${group.id}`, this.value, 365);
+          setLocal(`frequency_${group.id}`, this.value, 365);
           calculateAll();
         }
       });
     });
 
-    const savedFrequency = getCookie(`frequency_${group.id}`);
+    const savedFrequency = getLocal(`frequency_${group.id}`);
     const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) || 
                            group.querySelector('input[value="annually"]');
     if (checkboxToCheck) {
@@ -300,9 +300,9 @@ document.addEventListener('DOMContentLoaded', () => {
   calculateAll();
 
   // Conditional UI updates
-  const romanticexpenseCookie = getCookie('romanticexpense');
-  const debtcheckboxCookie = getCookie('debtcheckbox');
-  const dependantcheckboxCookie = getCookie('dependantcheckbox');
+  const romanticexpenseCookie = getLocal('romanticexpense');
+  const debtcheckboxCookie = getLocal('debtcheckbox');
+  const dependantcheckboxCookie = getLocal('dependantcheckbox');
 
   if (romanticexpenseCookie === 'checked') {
     displayWarning("You've indicated that you share expenses with your romantic partner. Include only your portion of the expenditures here.");
@@ -336,13 +336,13 @@ window.calculateAll = function() {
   essentialExpenses();
   discretionaryExpenses();
 
-  setCookie("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
-  setCookie("HOUSING", HOUSING, 365);
-  setCookie("TRANSPORTATION", TRANSPORTATION, 365);
-  setCookie("DEPENDANT", DEPENDANT, 365);
-  setCookie("DEBT", DEBT, 365);
-  setCookie("ESSENTIAL", ESSENTIAL, 365);
-  setCookie("DISCRETIONARY", DISCRETIONARY, 365);
+  setLocal("ANNUALEXPENSESUM", ANNUALEXPENSESUM, 365);
+  setLocal("HOUSING", HOUSING, 365);
+  setLocal("TRANSPORTATION", TRANSPORTATION, 365);
+  setLocal("DEPENDANT", DEPENDANT, 365);
+  setLocal("DEBT", DEBT, 365);
+  setLocal("ESSENTIAL", ESSENTIAL, 365);
+  setLocal("DISCRETIONARY", DISCRETIONARY, 365);
 };
 
 document.addEventListener("DOMContentLoaded", () => {

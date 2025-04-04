@@ -1,5 +1,5 @@
-import { setCookie } from '/server/scripts/setcookie.js';
-import { getCookie } from '/server/scripts/getcookie.js';
+import { setLocal } from '/server/scripts/setLocal.js';
+import { getLocal } from '/server/scripts/getLocal.js';
 
 // Expose functions to global scope for inline HTML events
 window.toggleCogs = function () {
@@ -28,7 +28,7 @@ window.toggleRevenueType = function () {
 window.updateFrequency = function (field) {
     const frequencySelect = document.getElementById(`${field}Frequency`);
     const frequency = frequencySelect.value;
-    setCookie(`${field}Frequency`, frequency, 365); // Days ignored, stored in localStorage
+    setLocal(`${field}Frequency`, frequency, 365); // Days ignored, stored in localStorage
     console.log(`Updated frequency for ${field} to ${frequency}`);
     // Optionally trigger calculate() if immediate update is desired
     // window.calculate();
@@ -88,18 +88,18 @@ window.calculate = function () {
     const totalCOGSDivided = totalCOGS / selectedValue;
     const netIncomeAdjusted = netIncome / selectedValue;
 
-    setCookie('totalRevenue', totalRevenue.toFixed(2), 365);
-    setCookie('totalCOGS', totalCOGS.toFixed(2), 365);
-    setCookie('totalOperationalCostsDivided', totalOperationalCostsDivided.toFixed(2), 365);
-    setCookie('totalBuildingCostsDivided', totalBuildingCostsDivided.toFixed(2), 365);
-    setCookie('totalVehicleCostsDivided', totalVehicleCostsDivided.toFixed(2), 365);
-    setCookie('netIncomeAdjusted', netIncomeAdjusted.toFixed(2), 365);
-    setCookie('revenueType', document.getElementById('revenueType').value, 365);
+    setLocal('totalRevenue', totalRevenue.toFixed(2), 365);
+    setLocal('totalCOGS', totalCOGS.toFixed(2), 365);
+    setLocal('totalOperationalCostsDivided', totalOperationalCostsDivided.toFixed(2), 365);
+    setLocal('totalBuildingCostsDivided', totalBuildingCostsDivided.toFixed(2), 365);
+    setLocal('totalVehicleCostsDivided', totalVehicleCostsDivided.toFixed(2), 365);
+    setLocal('netIncomeAdjusted', netIncomeAdjusted.toFixed(2), 365);
+    setLocal('revenueType', document.getElementById('revenueType').value, 365);
 
     saveCookies();
 
     document.querySelector('#alert').textContent = 'Business data captured. Go back now...';
-    setCookie("calculated_from_worksheet", true, 365);
+    setLocal("calculated_from_worksheet", true, 365);
     console.log('Calculated cookie added from worksheet');
 };
 
@@ -122,7 +122,7 @@ function saveCookies() {
     ];
     fields.forEach(field => {
         const value = document.querySelector(`#${field}`)?.value || '';
-        setCookie(field, value, 365);
+        setLocal(field, value, 365);
     });
 }
 
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ];
 
     fields.forEach(field => {
-        const value = getCookie(field);
+        const value = getLocal(field);
         const element = document.querySelector(`#${field}`);
         if (element) {
             if (field === 'revenueType' || field === 'cogs' || field === 'resultChange') {

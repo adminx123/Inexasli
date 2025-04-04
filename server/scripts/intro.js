@@ -11,21 +11,21 @@
 
   
 
-import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
-import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
+import { setLocal } from '/server/scripts/setLocal.js'; // Adjust path as needed
+import { getLocal } from '/server/scripts/getLocal.js'; // Adjust path as needed
 
 
 document.addEventListener('DOMContentLoaded', () => {
   // Function to check cookie and set grid item state
   const setGridItemFromCookie = (id, name) => {
     const item = document.querySelector('#' + id);
-    const cookieValue = getCookie(name);
+    const cookieValue = getLocal(name);
 
     if (item) {
       item.classList.toggle('selected', cookieValue === 'checked');
       // If no cookie is set or it's not 'checked', set it to 'unChecked'
       if (cookieValue !== 'checked') {
-        setCookie(name, 'unChecked', 365);
+        setLocal(name, 'unChecked', 365);
       }
     }
   };
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     item.classList.toggle('selected');
     
     // Set cookie based on item's selection state
-    setCookie(item.id, item.classList.contains('selected') ? 'checked' : 'unChecked', 365);
+    setLocal(item.id, item.classList.contains('selected') ? 'checked' : 'unChecked', 365);
   }
 
   document.querySelectorAll('.grid-item').forEach(item => {
