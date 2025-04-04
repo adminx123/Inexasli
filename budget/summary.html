@@ -23,7 +23,6 @@
    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
    <link rel="shortcut icon" href="/images/favicon.ico" />
    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-   <link rel="stylesheet" href="/style/payment.css">
 
  </head>
 
@@ -535,24 +534,7 @@
      <canvas id="myPieChartTax" width="250" height="250"></canvas>
  
 
-         <!-- Payment Form -->
-     <form class="payment-form" id="payment-form" style="margin-top: 30px;">
-      <input type="text" class="payment-input" id="username" placeholder="input your name" required>
-      <input type="email" class="payment-input" id="useremail" placeholder="input your email" required>
-      <div id="status"></div>
-      <button class="pay-button" id="pay-button">Subscribe for Premium Educational Insights!</button>
-      
-      
-      <a href="mailto:support@inexasli.com" class="contact-support" style="color: #fff;">I have paid</a>
-      <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support" style="margin-bottom: 20px;color: #fff;">Customer portal</a>
-    </form>
-
-
-   </div>
-   <div id="subscribe-sidebar" style="position: fixed; top: 50%; right: 0; transform: translateY(-50%); background-color: #f5f5f5; padding: 10px; border: 2px solid #000; border-right: none; border-radius: 8px 0 0 8px; box-shadow: -4px 4px 0 #000; z-index: 1000;">
-    <span id="close-sidebar" style="position: absolute; top: 5px; right: 5px; font-size: 16px; color: #000; cursor: pointer; font-weight: bold;">X</span>
-    <a href="#payment-form" style="text-decoration: none; color: rgb(0, 0, 0); font-size: 14px; display: block; text-align: center; padding: 10px 20px;">SUBSCRIBE HERE TO UNLOCK PREMIUM CONTENT 💳</a>
-</div>
+        
 
  
    <!-- Scripts -->
@@ -563,5 +545,7 @@
    <script src="https://js.stripe.com/v3/" async></script>
    <script src="/server/scripts/toolTip.js"></script>
    <script src="/server/scripts/tray.js"></script>
+   <script src="/server/scripts/paymentform.js"></script>
+
  </body>
  </html>
