@@ -75,99 +75,16 @@ const SUBREGIONALTAXBRACKETS = {
     // Add remaining US states from your original SUBREGIONALTAXBRACKETS as needed
 };
 
-// DOMContentLoaded: Main setup
 document.addEventListener('DOMContentLoaded', () => {
     console.log("income.js: DOMContentLoaded fired");
 
-    // Tab navigation
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => {
-        const dataL = tab.getAttribute('data-location');
-        const location = document.location.pathname;
-        tab.addEventListener('click', (e) => {
-            if (!getTermsCookie('term1') || !getTermsCookie('term2')) {
-                e.preventDefault();
-                alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
-            }
-        });
-        if (location.includes(dataL)) {
-            tab.removeAttribute('href');
-            tab.classList.add('active');
-        }
-    });
-
-    // Checkbox setup
-    const checkbox1 = document.getElementById('termscheckbox');
-    const checkbox2 = document.getElementById('notintended');
-    if (checkbox1) {
-        checkbox1.addEventListener('click', () => setTermsCookie('term1', checkbox1.checked));
-        checkbox1.checked = getTermsCookie('term1');
-    } else console.warn("income.js: #termscheckbox not found");
-    if (checkbox2) {
-        checkbox2.addEventListener('click', () => setTermsCookie('term2', checkbox2.checked));
-        checkbox2.checked = getTermsCookie('term2');
-    } else console.warn("income.js: #notintended not found");
-
-    // Navigation button setup
-    function validateAndProceed() {
-        console.log("income.js: validateAndProceed called");
-        const termscheckbox = document.getElementById("termscheckbox");
-        const notintended = document.getElementById("notintended");
-        const regionDropdown = document.getElementById("RegionDropdown");
-
-        if (!termscheckbox || !notintended || !regionDropdown) {
-            console.error("income.js: Missing required elements", { termscheckbox, notintended, regionDropdown });
-            alert("Error: Required form elements are missing.");
-            return;
-        }
-
-        if (regionDropdown.value === "" || regionDropdown.value === "NONE") {
-            console.log("income.js: No region selected");
-            alert("Please select a region from the dropdown.");
-            return;
-        }
-
-        if (termscheckbox.checked && notintended.checked) {
-            console.log("income.js: Checkboxes valid, proceeding to calculateNext");
-            calculateNext();
-        } else {
-            console.log("income.js: Checkboxes not checked");
-            alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
-        }
-    }
-
-    const navButton = document.querySelector('.nav-btn');
-    if (navButton) {
-        console.log("income.js: .nav-btn found, attaching listener");
-        navButton.addEventListener('click', validateAndProceed);
-    } else {
-        console.error("income.js: .nav-btn not found, starting polling");
-        const interval = setInterval(() => {
-            const lateNavButton = document.querySelector('.nav-btn');
-            if (lateNavButton) {
-                console.log("income.js: .nav-btn found via polling");
-                lateNavButton.addEventListener('click', validateAndProceed);
-                clearInterval(interval);
-            }
-        }, 100);
-        setTimeout(() => clearInterval(interval), 5000); // Stop after 5s
-    }
-
-    // Form initialization
     const regionDropdown = document.getElementById('RegionDropdown');
     const subregionDropdown = document.getElementById('SubregionDropdown');
-    const formElements = [
-        'RegionDropdown', 'SubregionDropdown', 'income_salary_wages', 'income_tips', 'income_bonuses',
-        'income_sole_prop', 'income_investment_property', 'income_capital_gains_losses', 'income_interest',
-        'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension',
-        'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony',
-        'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending',
-        'income_venture_capital', 'income_tax_free_income'
-    ];
 
     function updateSubregionDropdown() {
+        console.log("income.js: updateSubregionDropdown called");
         const selectedRegion = regionDropdown.value;
-        subregionDropdown.innerHTML = "";
+        subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
         if (selectedRegion in subregionMap) {
             subregionMap[selectedRegion].forEach(subregionCode => {
                 const subregionOption = document.createElement("option");
@@ -178,90 +95,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function handleRegionChange() {
-        setLocal("RegionDropdown", this.value, 365);
+    window.validateAndProceed = function() {
+        console.log("income.js: validateAndProceed called");
+        const termscheckbox = document.getElementById("termscheckbox");
+        const notintended = document.getElementById("notintended");
+        console.log("income.js: Validation state", {
+            terms: termscheckbox?.checked,
+            notintended: notintended?.checked,
+            region: regionDropdown.value,
+            subregion: subregionDropdown.value
+        });
+
+        if (!termscheckbox.checked || !notintended.checked) {
+            alert("Check the damn boxes.");
+            return;
+        }
+        if (regionDropdown.value === "" || regionDropdown.value === "NONE") {
+            alert("Pick a region, dipshit.");
+            return;
+        }
+        if (!subregionDropdown.value) {
+            alert("Pick a subregion too.");
+            return;
+        }
+        calculateNext();
+    };
+
+    regionDropdown.addEventListener('change', () => {
+        setLocal("RegionDropdown", regionDropdown.value, 365);
         updateHideShow();
         updateSubregionDropdown();
-    }
-
-    function handleSubRegionChange() {
-        setLocal('SubregionDropdown', subregionDropdown.value, 365);
-    }
+    });
+    regionDropdown.addEventListener('input', () => {
+        setLocal("RegionDropdown", regionDropdown.value, 365);
+        updateHideShow();
+        updateSubregionDropdown();
+    });
 
     const regionValue = getLocal('RegionDropdown') || 'NONE';
     regionDropdown.value = regionValue;
     updateSubregionDropdown();
-
-    formElements.forEach(elementId => {
-        if (elementId !== 'RegionDropdown') {
-            const value = getLocal(elementId);
-            const element = document.getElementById(elementId);
-            if (element) element.value = value || '';
-        }
-    });
-
-    const subregionValue = subregionDropdown.value;
-    if (regionValue === 'USA' && !subregionMap.USA.includes(subregionValue)) subregionDropdown.value = subregionMap.USA[0];
-    else if (regionValue === 'CAN' && !subregionMap.CAN.includes(subregionValue)) subregionDropdown.value = subregionMap.CAN[0];
-
-    regionDropdown.addEventListener('input', updateSubregionDropdown);
-    regionDropdown.addEventListener('change', handleRegionChange);
-    subregionDropdown.addEventListener('change', handleSubRegionChange);
-    handleRegionChange.call(regionDropdown);
-
-    // Additional event listeners
-    document.querySelector('#ROI_MODAL_OPEN')?.addEventListener('click', () => {
-        document.querySelector('#ROI-modal').style.display = 'block';
-    });
-
-    const overwriteLink = document.getElementById('cookie-overwrite-link');
-    overwriteLink?.addEventListener('click', (e) => {
-        e.preventDefault();
-        overwriteCookies();
-    });
-
-    if (getLocal('romanticincome') === 'checked') {
-        alert("You have indicated that you share one or more sources of income. Include only your portion of personal income here.");
-    }
-
-    const paid = getLocal("authenticated") === "paid";
-    const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
-    const selfEmploymentIncomeField = document.querySelector("#income_sole_prop");
-    if (calculatedFromWorksheet === 'true') {
-        const totalRevenue = getLocal("totalRevenue");
-        if (paid) {
-            selfEmploymentIncomeField.value = totalRevenue;
-            setLocal("income_sole_prop", totalRevenue, 365);
-            setLocal('calculated_from_worksheet', 'resolved', 365);
-            selfEmploymentIncomeField.placeholder = "";
-        } else {
-            selfEmploymentIncomeField.placeholder = "payment required";
-        }
-    }
-
-    // Checkbox group handling
-    document.querySelectorAll('.checkbox-button-group').forEach(group => {
-        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    checkboxes.forEach(cb => { if (cb !== this) cb.checked = false; });
-                    const input = group.closest('.checkboxrow')?.querySelector('input[type="number"]');
-                    if (input) calculateAnnual(input.id, group.id);
-                    setLocal(`frequency_${group.id}`, this.value, 365);
-                }
-            });
-        });
-
-        const savedFrequency = getLocal(`frequency_${group.id}`) || 'annually';
-        const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) || group.querySelector('input[value="annually"]');
-        if (checkboxToCheck) {
-            checkboxes.forEach(cb => { if (cb !== checkboxToCheck) cb.checked = false; });
-            checkboxToCheck.checked = true;
-            const input = group.closest('.checkboxrow')?.querySelector('input[type="number"]');
-            if (input) calculateAnnual(input.id, group.id);
-        }
-    });
 });
 
 // Frequency calculation
