@@ -1,5 +1,5 @@
 // paymentform.js
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     // Inject CSS styles
     const style = document.createElement('style');
     style.textContent = `
@@ -21,11 +21,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         #subscribe-sidebar.initial {
-            height: 70px; /* Increased to fit full text */
+            height: auto; /* Increased to fit full text */
         }
 
         #subscribe-sidebar.expanded {
-            height: 400px; /* Adjust based on form height */
+            height: auto; /* Adjust based on form height */
         }
 
         #subscribe-sidebar a.subscribe-link {
@@ -54,11 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
             color: #000;
             cursor: pointer;
             font-weight: bold;
-            display: none;
-        }
-
-        #subscribe-sidebar.expanded #close-sidebar {
-            display: block;
+            display: block; /* Always visible to show + or - */
         }
 
         .payment-form {
@@ -136,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebar.classList.add('initial');
         sidebar.dataset.state = 'initial';
         sidebar.innerHTML = `
-            <span id="close-sidebar">X</span>
+            <span id="close-sidebar">+</span>
             <a class="subscribe-link">SUBSCRIBE HERE TO UNLOCK PREMIUM CONTENT 💳</a>
             <form class="payment-form" id="payment-form">
                 <input type="text" class="payment-input" id="username" placeholder="input your name" required>
@@ -148,45 +144,65 @@ document.addEventListener('DOMContentLoaded', function() {
             </form>
         `;
         document.body.appendChild(sidebar);
-    }
 
-    // Sidebar functionality
-    const sidebar = document.getElementById('subscribe-sidebar');
-    const closeButton = document.getElementById('close-sidebar');
-    const subscribeLink = document.querySelector('#subscribe-sidebar a.subscribe-link');
+        console.log('Payment form injected');
 
-    console.log('Sidebar:', sidebar);
-    console.log('Subscribe Link:', subscribeLink);
-    console.log('Close Button:', closeButton);
-    console.log('Initial State:', sidebar.dataset.state);
+        // Set up sidebar functionality after the DOM is updated
+        const closeButton = document.getElementById('close-sidebar');
+        const subscribeLink = document.querySelector('#subscribe-sidebar a.subscribe-link');
+        const sidebarElement = document.getElementById('subscribe-sidebar');
 
-    if (subscribeLink) {
-        subscribeLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Subscribe link clicked. Current state:', sidebar.dataset.state);
-            if (sidebar.dataset.state === 'initial') {
-                sidebar.classList.remove('initial');
-                sidebar.classList.add('expanded');
-                sidebar.dataset.state = 'expanded';
+        console.log('Sidebar:', sidebarElement);
+        console.log('Subscribe Link:', subscribeLink);
+        console.log('Close Button:', closeButton);
+        console.log('Initial State:', sidebarElement.dataset.state);
+
+        // Function to toggle the sidebar state
+        const toggleSidebar = () => {
+            if (sidebarElement.dataset.state === 'initial') {
+                // Expand the sidebar
+                sidebarElement.classList.remove('initial');
+                sidebarElement.classList.add('expanded');
+                sidebarElement.dataset.state = 'expanded';
+                closeButton.textContent = '-'; // Change to minus when expanded
                 console.log('Sidebar expanded downward');
-            }
-        });
-    } else {
-        console.error('Subscribe link not found');
-    }
-
-    if (closeButton) {
-        closeButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Close button clicked. Current state:', sidebar.dataset.state);
-            if (sidebar.dataset.state === 'expanded') {
-                sidebar.classList.remove('expanded');
-                sidebar.classList.add('initial');
-                sidebar.dataset.state = 'initial';
+            } else {
+                // Collapse the sidebar
+                sidebarElement.classList.remove('expanded');
+                sidebarElement.classList.add('initial');
+                sidebarElement.dataset.state = 'initial';
+                closeButton.textContent = '+'; // Change to plus when collapsed
                 console.log('Sidebar returned to initial state');
             }
-        });
-    } else {
-        console.error('Close button not found');
+        };
+
+        if (subscribeLink) {
+            subscribeLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Subscribe link clicked. Current state:', sidebarElement.dataset.state);
+                toggleSidebar();
+            });
+        } else {
+            console.error('Subscribe link not found');
+        }
+
+        if (closeButton) {
+            closeButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Close button clicked. Current state:', sidebarElement.dataset.state);
+                toggleSidebar();
+            });
+        } else {
+            console.error('Close button not found');
+        }
+
+        // Import and initialize payment.js
+        try {
+            const { initializePayment } = await import('./payment.js');
+            initializePayment();
+            console.log('payment.js initialized');
+        } catch (error) {
+            console.error('Failed to import and initialize payment.js:', error);
+        }
     }
 });
