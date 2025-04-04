@@ -13,98 +13,147 @@ import { setLocal } from '/server/scripts/setlocal.js';
 import { getLocal } from '/server/scripts/getlocal.js';
 import { overwriteCookies } from '/server/scripts/cookieoverwrite.js';
 
-// Cookie management for terms
+console.log("income.js: Script starting");
+
+// Cookie management
 function getTermsCookie(name) {
     const now = Date.now();
-    const status = JSON.parse(window.localStorage.getItem(name));
-    if (status && now > status.time) {
+    const status = JSON.parse(window.localStorage.getItem(name) || '{}');
+    if (status.time && now > status.time) {
         localStorage.removeItem(name);
         return false;
     }
-    return status && status.accepted ? true : false;
+    return status.accepted || false;
 }
 
 function setTermsCookie(name, value) {
     const date = new Date();
     window.localStorage.setItem(name, JSON.stringify({
         accepted: value,
-        time: date.setTime(date.getTime() + 30 * 60 * 1000) // 30 minutes
+        time: date.setTime(date.getTime() + 30 * 60 * 1000)
     }));
 }
-
-// Tab navigation and terms enforcement
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => {
-        const dataL = tab.getAttribute('data-location');
-        const location = document.location.pathname;
-
-        tab.addEventListener('click', (e) => {
-            const isChecked1 = getTermsCookie('term1');
-            const isChecked2 = getTermsCookie('term2');
-            if (!isChecked1 || !isChecked2) {
-                e.preventDefault();
-                alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
-            }
-        });
-
-        if (location.includes(dataL)) {
-            tab.removeAttribute('href');
-            tab.classList.add('active');
-        }
-    });
-
-    // Checkbox event listeners
-    const checkbox1 = document.querySelector('#termscheckbox');
-    const checkbox2 = document.querySelector('#notintended');
-    
-    if (checkbox1) {
-        checkbox1.addEventListener('click', () => {
-            setTermsCookie('term1', checkbox1.checked);
-        });
-    }
-    
-    if (checkbox2) {
-        checkbox2.addEventListener('click', () => {
-            setTermsCookie('term2', checkbox2.checked);
-        });
-    }
-
-    // Initialize checkbox states
-    const isChecked1 = getTermsCookie('term1');
-    const isChecked2 = getTermsCookie('term2');
-    if (checkbox1 && isChecked1) checkbox1.checked = true;
-    if (checkbox2 && isChecked2) checkbox2.checked = true;
-
-    // Navigation button logic (replacing validatecheckbox)
-    const navButton = document.querySelector('.nav-btn');
-    if (navButton) {
-        navButton.addEventListener('click', () => {
-            const termscheckbox = document.getElementById("termscheckbox");
-            const notintended = document.getElementById("notintended");
-            const regionDropdown = document.getElementById("RegionDropdown");
-
-            if (!regionDropdown || regionDropdown.value === "" || regionDropdown.value === "NONE") {
-                alert("Please select a region from the dropdown.");
-                return;
-            }
-
-            if (termscheckbox.checked && notintended.checked) {
-                calculateNext();
-            } else {
-                alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
-            }
-        });
-    }
-});
 
 // Global variables
 let ANNUALTAXABLEINCOME, ANNUALTAXABLEINCOMESUB, ANNUALREGIONALTAX, ANNUALSUBREGIONALTAX, TOTALTAXCG,
     ANNUALEMPLOYMENTINCOME, ANNUALINCOME, ANNUALCPP, CPPPAYABLESELFEMPLOYED, CPPPAYABLEEMPLOYED, ANNUALEI,
     BPA = 15705, SD = 14600, PASSIVEINCOME, TOTALMEDICARE, TOTALSOCIALSECURITY, TOTALSOCIALSECURITYSE, TOTALSOCIALSECURITYE;
 
-// Form initialization and dropdown handling
+// Subregion mapping
+const subregionMap = {
+    CAN: ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
+    USA: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+};
+
+// Tax brackets
+const REGIONALTAXBRACKETSCAN = [
+    { limit: 57375, rate: 0.15 }, { limit: 114750, rate: 0.205 }, { limit: 177882, rate: 0.26 },
+    { limit: 253414, rate: 0.29 }, { limit: 0, rate: 0.33 }
+];
+const REGIONALTAXBRACKETSUSA = [
+    { limit: 250525, rate: 0.35 }, { limit: 197300, rate: 0.32 }, { limit: 103350, rate: 0.24 },
+    { limit: 48475, rate: 0.22 }, { limit: 11925, rate: 0.12 }, { limit: 0, rate: 0.10 }
+];
+const SUBREGIONALTAXBRACKETS = {
+    'AB': [{ limit: 151234, rate: 0.10 }, { limit: 181481, rate: 0.12 }, { limit: 241974, rate: 0.13 }, { limit: 362961, rate: 0.14 }, { limit: 0, rate: 0.15 }],
+    'BC': [{ limit: 49279, rate: 0.0506 }, { limit: 98560, rate: 0.077 }, { limit: 113158, rate: 0.105 }, { limit: 137407, rate: 0.1229 }, { limit: 186306, rate: 0.147 }, { limit: 259829, rate: 0.168 }, { limit: 0, rate: 0.205 }],
+    'MB': [{ limit: 47564, rate: 0.108 }, { limit: 101200, rate: 0.1275 }, { limit: 0, rate: 0.174 }],
+    'NB': [{ limit: 51306, rate: 0.094 }, { limit: 102614, rate: 0.14 }, { limit: 190060, rate: 0.16 }, { limit: 0, rate: 0.195 }],
+    'NL': [{ limit: 44192, rate: 0.087 }, { limit: 88382, rate: 0.145 }, { limit: 157792, rate: 0.158 }, { limit: 220910, rate: 0.178 }, { limit: 282214, rate: 0.198 }, { limit: 564429, rate: 0.208 }, { limit: 1128858, rate: 0.213 }, { limit: 0, rate: 0.218 }],
+    'NT': [{ limit: 51964, rate: 0.059 }, { limit: 103930, rate: 0.086 }, { limit: 168967, rate: 0.122 }, { limit: 0, rate: 0.1405 }],
+    'NS': [{ limit: 30507, rate: 0.0879 }, { limit: 61015, rate: 0.1495 }, { limit: 95883, rate: 0.1667 }, { limit: 154650, rate: 0.175 }, { limit: 0, rate: 0.21 }],
+    'NU': [{ limit: 54707, rate: 0.04 }, { limit: 109413, rate: 0.07 }, { limit: 177881, rate: 0.09 }, { limit: 0, rate: 0.115 }],
+    'ON': [{ limit: 52886, rate: 0.0505 }, { limit: 105775, rate: 0.0915 }, { limit: 150000, rate: 0.1116 }, { limit: 220000, rate: 0.1216 }, { limit: 0, rate: 0.1316 }],
+    'PE': [{ limit: 33328, rate: 0.095 }, { limit: 64656, rate: 0.1347 }, { limit: 105000, rate: 0.166 }, { limit: 140000, rate: 0.1762 }, { limit: 0, rate: 0.19 }],
+    'QC': [], // Add QC brackets if needed
+    'SK': [{ limit: 53463, rate: 0.105 }, { limit: 152750, rate: 0.125 }, { limit: 0, rate: 0.145 }],
+    'YT': [{ limit: 57375, rate: 0.064 }, { limit: 114750, rate: 0.09 }, { limit: 177882, rate: 0.109 }, { limit: 500000, rate: 0.128 }, { limit: 0, rate: 0.15 }],
+    'AL': [{ limit: 3000, rate: 0.05 }, { limit: 500, rate: 0.04 }, { limit: 0, rate: 0.02 }],
+    'AK': [], 'AZ': [{ limit: 0, rate: 0.025 }], 'AR': [{ limit: 8500, rate: 0.049 }, { limit: 4300, rate: 0.04 }, { limit: 0, rate: 0.02 }],
+    'CA': [{ limit: 1162000, rate: 0.133 }, { limit: 788800, rate: 0.123 }, { limit: 473300, rate: 0.113 }, { limit: 394000, rate: 0.103 }, { limit: 77000, rate: 0.093 }, { limit: 61000, rate: 0.08 }, { limit: 44000, rate: 0.06 }, { limit: 27800, rate: 0.04 }, { limit: 11700, rate: 0.02 }, { limit: 0, rate: 0.01 }],
+    'CO': [{ limit: 0, rate: 0.044 }],
+    // Add remaining US states from your original SUBREGIONALTAXBRACKETS as needed
+};
+
+// DOMContentLoaded: Main setup
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("income.js: DOMContentLoaded fired");
+
+    // Tab navigation
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        const dataL = tab.getAttribute('data-location');
+        const location = document.location.pathname;
+        tab.addEventListener('click', (e) => {
+            if (!getTermsCookie('term1') || !getTermsCookie('term2')) {
+                e.preventDefault();
+                alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
+            }
+        });
+        if (location.includes(dataL)) {
+            tab.removeAttribute('href');
+            tab.classList.add('active');
+        }
+    });
+
+    // Checkbox setup
+    const checkbox1 = document.getElementById('termscheckbox');
+    const checkbox2 = document.getElementById('notintended');
+    if (checkbox1) {
+        checkbox1.addEventListener('click', () => setTermsCookie('term1', checkbox1.checked));
+        checkbox1.checked = getTermsCookie('term1');
+    } else console.warn("income.js: #termscheckbox not found");
+    if (checkbox2) {
+        checkbox2.addEventListener('click', () => setTermsCookie('term2', checkbox2.checked));
+        checkbox2.checked = getTermsCookie('term2');
+    } else console.warn("income.js: #notintended not found");
+
+    // Navigation button setup
+    function validateAndProceed() {
+        console.log("income.js: validateAndProceed called");
+        const termscheckbox = document.getElementById("termscheckbox");
+        const notintended = document.getElementById("notintended");
+        const regionDropdown = document.getElementById("RegionDropdown");
+
+        if (!termscheckbox || !notintended || !regionDropdown) {
+            console.error("income.js: Missing required elements", { termscheckbox, notintended, regionDropdown });
+            alert("Error: Required form elements are missing.");
+            return;
+        }
+
+        if (regionDropdown.value === "" || regionDropdown.value === "NONE") {
+            console.log("income.js: No region selected");
+            alert("Please select a region from the dropdown.");
+            return;
+        }
+
+        if (termscheckbox.checked && notintended.checked) {
+            console.log("income.js: Checkboxes valid, proceeding to calculateNext");
+            calculateNext();
+        } else {
+            console.log("income.js: Checkboxes not checked");
+            alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
+        }
+    }
+
+    const navButton = document.querySelector('.nav-btn');
+    if (navButton) {
+        console.log("income.js: .nav-btn found, attaching listener");
+        navButton.addEventListener('click', validateAndProceed);
+    } else {
+        console.error("income.js: .nav-btn not found, starting polling");
+        const interval = setInterval(() => {
+            const lateNavButton = document.querySelector('.nav-btn');
+            if (lateNavButton) {
+                console.log("income.js: .nav-btn found via polling");
+                lateNavButton.addEventListener('click', validateAndProceed);
+                clearInterval(interval);
+            }
+        }, 100);
+        setTimeout(() => clearInterval(interval), 5000); // Stop after 5s
+    }
+
+    // Form initialization
     const regionDropdown = document.getElementById('RegionDropdown');
     const subregionDropdown = document.getElementById('SubregionDropdown');
     const formElements = [
@@ -152,34 +201,77 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const subregionValue = subregionDropdown.value;
-    if (regionValue === 'USA' && !subregionMap.USA.includes(subregionValue)) {
-        subregionDropdown.value = subregionMap.USA[0];
-    } else if (regionValue === 'CAN' && !subregionMap.CAN.includes(subregionValue)) {
-        subregionDropdown.value = subregionMap.CAN[0];
-    }
+    if (regionValue === 'USA' && !subregionMap.USA.includes(subregionValue)) subregionDropdown.value = subregionMap.USA[0];
+    else if (regionValue === 'CAN' && !subregionMap.CAN.includes(subregionValue)) subregionDropdown.value = subregionMap.CAN[0];
 
     regionDropdown.addEventListener('input', updateSubregionDropdown);
     regionDropdown.addEventListener('change', handleRegionChange);
     subregionDropdown.addEventListener('change', handleSubRegionChange);
     handleRegionChange.call(regionDropdown);
-});
 
-// Subregion mapping
-const subregionMap = {
-    CAN: ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
-    USA: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
-};
+    // Additional event listeners
+    document.querySelector('#ROI_MODAL_OPEN')?.addEventListener('click', () => {
+        document.querySelector('#ROI-modal').style.display = 'block';
+    });
+
+    const overwriteLink = document.getElementById('cookie-overwrite-link');
+    overwriteLink?.addEventListener('click', (e) => {
+        e.preventDefault();
+        overwriteCookies();
+    });
+
+    if (getLocal('romanticincome') === 'checked') {
+        alert("You have indicated that you share one or more sources of income. Include only your portion of personal income here.");
+    }
+
+    const paid = getLocal("authenticated") === "paid";
+    const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
+    const selfEmploymentIncomeField = document.querySelector("#income_sole_prop");
+    if (calculatedFromWorksheet === 'true') {
+        const totalRevenue = getLocal("totalRevenue");
+        if (paid) {
+            selfEmploymentIncomeField.value = totalRevenue;
+            setLocal("income_sole_prop", totalRevenue, 365);
+            setLocal('calculated_from_worksheet', 'resolved', 365);
+            selfEmploymentIncomeField.placeholder = "";
+        } else {
+            selfEmploymentIncomeField.placeholder = "payment required";
+        }
+    }
+
+    // Checkbox group handling
+    document.querySelectorAll('.checkbox-button-group').forEach(group => {
+        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    checkboxes.forEach(cb => { if (cb !== this) cb.checked = false; });
+                    const input = group.closest('.checkboxrow')?.querySelector('input[type="number"]');
+                    if (input) calculateAnnual(input.id, group.id);
+                    setLocal(`frequency_${group.id}`, this.value, 365);
+                }
+            });
+        });
+
+        const savedFrequency = getLocal(`frequency_${group.id}`) || 'annually';
+        const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) || group.querySelector('input[value="annually"]');
+        if (checkboxToCheck) {
+            checkboxes.forEach(cb => { if (cb !== checkboxToCheck) cb.checked = false; });
+            checkboxToCheck.checked = true;
+            const input = group.closest('.checkboxrow')?.querySelector('input[type="number"]');
+            if (input) calculateAnnual(input.id, group.id);
+        }
+    });
+});
 
 // Frequency calculation
 function calculateAnnual(inputId, frequencyGroupId) {
-    let input = parseFloat(document.getElementById(inputId).value) || 0;
+    let input = parseFloat(document.getElementById(inputId)?.value) || 0;
     if (inputId === 'income_sole_prop') {
         const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
         if (calculatedFromWorksheet === 'true') {
             const totalRevenue = parseFloat(getLocal("totalRevenue")) || 0;
-            if (totalRevenue && totalRevenue !== 'annually') {
-                input = totalRevenue;
-            }
+            if (totalRevenue && totalRevenue !== 'annually') input = totalRevenue;
         }
     }
 
@@ -346,22 +438,6 @@ function getMedicare() {
     document.getElementById('TOTALMEDICARE').textContent = '$' + TOTALMEDICARE.toFixed(2);
 }
 
-// Tax brackets (unchanged from your original)
-const REGIONALTAXBRACKETSCAN = [
-    { limit: 57375, rate: 0.15 }, { limit: 114750, rate: 0.205 }, { limit: 177882, rate: 0.26 },
-    { limit: 253414, rate: 0.29 }, { limit: 0, rate: 0.33 }
-];
-const REGIONALTAXBRACKETSUSA = [
-    { limit: 250525, rate: 0.35 }, { limit: 197300, rate: 0.32 }, { limit: 103350, rate: 0.24 },
-    { limit: 48475, rate: 0.22 }, { limit: 11925, rate: 0.12 }, { limit: 0, rate: 0.10 }
-];
-const SUBREGIONALTAXBRACKETS = {
-    'AB': [{ limit: 151234, rate: 0.10 }, { limit: 181481, rate: 0.12 }, { limit: 241974, rate: 0.13 }, { limit: 362961, rate: 0.14 }, { limit: 0, rate: 0.15 }],
-    'BC': [{ limit: 49279, rate: 0.0506 }, { limit: 98560, rate: 0.077 }, { limit: 113158, rate: 0.105 }, { limit: 137407, rate: 0.1229 }, { limit: 186306, rate: 0.147 }, { limit: 259829, rate: 0.168 }, { limit: 0, rate: 0.205 }],
-    // Add other subregions as in your original code...
-    // For brevity, I've included only a few; copy the rest from your SUBREGIONALTAXBRACKETS
-};
-
 function calculateTax(taxBrackets, taxableIncome) {
     let tax = 0;
     taxBrackets.sort((a, b) => a.limit - b.limit);
@@ -417,11 +493,13 @@ function handleUSAResident() {
 }
 
 function calculateNext() {
+    console.log("income.js: calculateNext called");
     calculateAll();
     window.location.href = './expense.html';
 }
 
 function calculateAll() {
+    console.log("income.js: calculateAll executed");
     calculateNormalizedSum();
     calculateRegionalTax();
     const Subregion = document.getElementById('SubregionDropdown').value;
@@ -451,38 +529,6 @@ function calculateAll() {
     Object.entries(globals).forEach(([key, value]) => setLocal(key, value, 365));
 }
 
-// Modal and additional event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('#ROI_MODAL_OPEN')?.addEventListener('click', () => {
-        document.querySelector('#ROI-modal').style.display = 'block';
-    });
-
-    const overwriteLink = document.getElementById('cookie-overwrite-link');
-    overwriteLink?.addEventListener('click', (e) => {
-        e.preventDefault();
-        overwriteCookies();
-    });
-
-    if (getLocal('romanticincome') === 'checked') {
-        alert("You have indicated that you share one or more sources of income. Include only your portion of personal income here.");
-    }
-
-    const paid = getLocal("authenticated") === "paid";
-    const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
-    const selfEmploymentIncomeField = document.querySelector("#income_sole_prop");
-    if (calculatedFromWorksheet === 'true') {
-        const totalRevenue = getLocal("totalRevenue");
-        if (paid) {
-            selfEmploymentIncomeField.value = totalRevenue;
-            setLocal("income_sole_prop", totalRevenue, 365);
-            setLocal('calculated_from_worksheet', 'resolved', 365);
-            selfEmploymentIncomeField.placeholder = "";
-        } else {
-            selfEmploymentIncomeField.placeholder = "payment required";
-        }
-    }
-});
-
 window.addEventListener("message", (event) => {
     if (event.data === "close-modal") {
         document.querySelector("#ROI-modal").style.display = "none";
@@ -503,28 +549,4 @@ window.addEventListener("message", (event) => {
     }
 });
 
-// Checkbox group handling
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.checkbox-button-group').forEach(group => {
-        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    checkboxes.forEach(cb => { if (cb !== this) cb.checked = false; });
-                    const input = group.closest('.checkboxrow')?.querySelector('input[type="number"]');
-                    if (input) calculateAnnual(input.id, group.id);
-                    setLocal(`frequency_${group.id}`, this.value, 365);
-                }
-            });
-        });
-
-        const savedFrequency = getLocal(`frequency_${group.id}`) || 'annually';
-        const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) || group.querySelector('input[value="annually"]');
-        if (checkboxToCheck) {
-            checkboxes.forEach(cb => { if (cb !== checkboxToCheck) cb.checked = false; });
-            checkboxToCheck.checked = true;
-            const input = group.closest('.checkboxrow')?.querySelector('input[type="number"]');
-            if (input) calculateAnnual(input.id, group.id);
-        }
-    });
-});
+console.log("income.js: Script loaded");
