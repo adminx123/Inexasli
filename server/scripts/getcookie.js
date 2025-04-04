@@ -8,33 +8,45 @@
  * jurisdictions worldwide.
  */ 
 
-// getLocal.js
 function getCookie(name) {
-    const value = localStorage.getItem(name);
-    console.log(`getLocal called for ${name}, stored value: ${value}`);
-    
-    if (value !== null) {
-        const decodedValue = decodeURIComponent(value);
-        console.log(`Decoded value for ${name}: ${decodedValue}`);
-        
-        if (decodedValue === '' || decodedValue === '0') {
-            if (name.includes('_frequency')) return 'annually';
-            return '';
+    const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+    for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName === name) {
+            try {
+                const decodedValue = decodeURIComponent(cookieValue);
+                console.log(`getCookie called for ${name}, stored value: ${cookieValue}`);
+                console.log(`Decoded value for ${name}: ${decodedValue}`);
+                
+                // Parse the JSON stored by setCookie
+                const parsedData = JSON.parse(decodedValue);
+                const value = parsedData.value;
+                const timestamp = parsedData.timestamp;
+
+                // Apply your existing logic to the value
+                if (value === '' || value === '0') {
+                    if (name.includes('_frequency')) return { value: 'annually', timestamp };
+                    return { value: '', timestamp };
+                }
+
+                if (name === 'RegionDropdown' && !['CAN', 'USA'].includes(value)) {
+                    console.log(`Invalid RegionDropdown value '${value}', returning 'NONE'`);
+                    return { value: 'NONE', timestamp };
+                }
+
+                return { value, timestamp };
+            } catch (e) {
+                console.error(`Error parsing cookie ${name}: ${e.message}`);
+                return null; // Invalid JSON
+            }
         }
-        
-        if (name === 'RegionDropdown' && !['CAN', 'USA'].includes(decodedValue)) {
-            console.log(`Invalid RegionDropdown value '${decodedValue}', returning 'NONE'`);
-            return 'NONE';
-        }
-        
-        return decodedValue;
-    } else {
-        console.log(`No value found for ${name}`);
-        if (name.includes('_frequency')) return 'annually';
-        if (name === 'RegionDropdown') return 'NONE';
-        if (name === 'SubregionDropdown') return '';
-        return '';
     }
+    
+    console.log(`No cookie found for ${name}`);
+    if (name.includes('_frequency')) return { value: 'annually', timestamp: 0 };
+    if (name === 'RegionDropdown') return { value: 'NONE', timestamp: 0 };
+    if (name === 'SubregionDropdown') return { value: '', timestamp: 0 };
+    return { value: '', timestamp: 0 };
 }
 
 export { getCookie };

@@ -9,8 +9,41 @@
 */
 
 
+import { setCookie } from '/server/scripts/setcookie.js';
 
 let activeScope = null;
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Set the "prompt" cookie on page load
+    setCookie("prompt", "loaded", 32, Date.now());
+
+    // Attach toggleSection to section headers
+    document.querySelectorAll('.section > h2').forEach(header => {
+        header.addEventListener('click', () => toggleSection(header));
+    });
+
+    // Attach toggleMealDetails to meal-scope dropdown
+    const scopeEl = document.getElementById('meal-scope');
+    if (scopeEl) {
+        scopeEl.addEventListener('change', toggleMealDetails);
+    }
+
+    // Attach toggleEventDetails to event-location dropdown
+    const locationEl = document.getElementById('event-location');
+    if (locationEl) {
+        locationEl.addEventListener('change', toggleEventDetails);
+    }
+
+    // Attach toggleCodeInput to app-code-status grid items
+    const codeStartedBtn = document.querySelector('#app-code-status .grid-item[data-value="code-started"]');
+    const noCodeBtn = document.querySelector('#app-code-status .grid-item[data-value="no-code"]');
+    if (codeStartedBtn) {
+        codeStartedBtn.addEventListener('click', () => toggleCodeInput('code-started'));
+    }
+    if (noCodeBtn) {
+        noCodeBtn.addEventListener('click', () => toggleCodeInput('no-code'));
+    }
+});
 
 function toggleSection(header) {
     const section = header.parentElement;

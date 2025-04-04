@@ -1,13 +1,4 @@
-function setCookie(name, value, days) {
-  if (value === undefined || value === null || value === '') {
-      value = '0';
-  }
-  
-  // Store in localStorage (days parameter is ignored as localStorage doesn't expire)
-  localStorage.setItem(name, encodeURIComponent(value));
-}
 
-export { setCookie };
 
 /*
 * Copyright (c) 2025 INEXASLI. All rights reserved.
@@ -18,3 +9,27 @@ export { setCookie };
 * fullest extent of the law in British Columbia, Canada, and applicable 
 * jurisdictions worldwide.
 */
+
+function setCookie(name, value, days, timestamp) {
+  if (value === undefined || value === null || value === '') {
+    value = '0';
+  }
+
+  // Create a JSON object to store value and timestamp
+  const cookieData = {
+    value: value,
+    timestamp: timestamp || Date.now() // Use provided timestamp or current time
+  };
+
+  // Set expiration date
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+
+  // Serialize and encode the cookie data
+  const cookieValue = encodeURIComponent(JSON.stringify(cookieData));
+
+  // Set the cookie
+  document.cookie = `${name}=${cookieValue}; expires=${expires.toUTCString()}; path=/`;
+}
+
+export { setCookie };

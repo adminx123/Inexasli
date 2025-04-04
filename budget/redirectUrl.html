@@ -16,10 +16,10 @@
      <title>please wait</title>
      
      <!-- this is an extended list of places icon could be needed -->
-    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+     <link rel="shortcut icon" href="/images/favicon.ico" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
      <link rel="manifest" href="/manifest.json">
  
      <link rel="stylesheet" href="/style/styles.css">
@@ -39,6 +39,7 @@
      <script type="module">
        import { setLocal } from '/server/scripts/setlocal.js';
        import { getLocal } from '/server/scripts/getLocal.js';
+       import { getCookie } from '/server/scripts/getcookie.js'; // Import getCookie
  
        const urlParams = new URLSearchParams(window.location.search);
        const sessionId = urlParams.get("session_id");
@@ -51,7 +52,16 @@
          const paid = getLocal("authenticated");
  
          if (paid === "paid") {
-           window.location.href = "/budget/summary.html";
+           // Check newest cookie and redirect
+           const promptCookie = getCookie("prompt") || { timestamp: 0 };
+           const summaryCookie = getCookie("summary") || { timestamp: 0 };
+ 
+           const redirectUrl =
+             promptCookie.timestamp > summaryCookie.timestamp
+               ? "/create/prompt.html" // Adjust URL as needed
+               : "/budget/summary.html";
+ 
+           window.location.href = redirectUrl;
          } else {
            if (sessionId) {
              try {
@@ -83,7 +93,16 @@
                      }
                    }
  
-                   window.location.href = "/";
+                   // Check newest cookie and redirect
+                   const promptCookie = getCookie("prompt") || { timestamp: 0 };
+                   const summaryCookie = getCookie("summary") || { timestamp: 0 };
+ 
+                   const redirectUrl =
+                     promptCookie.timestamp > summaryCookie.timestamp
+                       ? "/create/prompt.html" // Adjust URL as needed
+                       : "/budget/summary.html";
+ 
+                   window.location.href = redirectUrl;
                  }
                } else if (data.error) {
                  container.innerHTML = `
@@ -108,7 +127,16 @@
              }
            } else {
              container.innerHTML = "no or invalid session id";
-             window.location.href = "/budget/summary.html";
+             // Check newest cookie and redirect
+             const promptCookie = getCookie("prompt") || { timestamp: 0 };
+             const summaryCookie = getCookie("summary") || { timestamp: 0 };
+ 
+             const redirectUrl =
+               promptCookie.timestamp > summaryCookie.timestamp
+                 ? "/create/prompt.html" // Adjust URL as needed
+                 : "/budget/summary.html";
+ 
+             window.location.href = redirectUrl;
            }
          }
        });
