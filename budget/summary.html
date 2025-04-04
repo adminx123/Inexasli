@@ -537,15 +537,16 @@
         
 
  
-   <!-- Scripts -->
-   <script src="/index.js"></script>
-   <script src="/server/scripts/hideShow.js" type="module"></script>
-   <script src="/server/scripts/summary.js" type="module"></script>
-   <script src="/server/scripts/payment.js" type="module"></script>
-   <script src="https://js.stripe.com/v3/" async></script>
-   <script src="/server/scripts/toolTip.js"></script>
-   <script src="/server/scripts/tray.js"></script>
-   <script src="/server/scripts/paymentform.js"></script>
+<!-- summary.html (relevant part) -->
+<!-- Scripts -->
+<script src="https://js.stripe.com/v3/" async></script>
+<script src="/index.js"></script>
+<script src="/server/scripts/hideShow.js" type="module"></script>
+<script src="/server/scripts/summary.js" type="module"></script>
+<script src="/server/scripts/paymentform.js" type="module"></script> <!-- Load as module -->
+<!-- Remove this line: <script src="/server/scripts/payment.js" type="module"></script> -->
+<script src="/server/scripts/toolTip.js"></script>
+<script src="/server/scripts/tray.js"></script>
 
  </body>
  </html>
