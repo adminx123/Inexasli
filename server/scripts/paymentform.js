@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         #subscribe-sidebar a.subscribe-link:hover {
-            color: #caa81f; /* Gold on hover */
+            color:rgb(55, 55, 55); /* Gold on hover */
         }
 
         #subscribe-sidebar #close-sidebar {
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         .payment-form .contact-support {
             font-size: 12px;
-            color: #000000;
+            color:rgb(255, 255, 255);
             text-decoration: none;
         }
 
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         sidebar.dataset.state = 'initial';
         sidebar.innerHTML = `
             <span id="close-sidebar">+</span>
-            <a class="subscribe-link">SUBSCRIBE HERE TO UNLOCK PREMIUM CONTENT 💳</a>
+            <a class="subscribe-link">SUBSCRIBE & UNLOCK PREMIUM CONTENT 💳</a>
             <form class="payment-form" id="payment-form">
                 <input type="text" class="payment-input" id="username" placeholder="input your name" required>
                 <input type="email" class="payment-input" id="useremail" placeholder="input your email" required>
