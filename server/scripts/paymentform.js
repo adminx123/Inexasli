@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     style.textContent = `
         #subscribe-sidebar {
             position: fixed;
-            top: 50%;
+            top: 80%;
             right: 0;
             transform: translateY(-50%);
             background-color: #f5f5f5;
