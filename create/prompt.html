@@ -960,21 +960,7 @@
          </div>
      </div>
  
-     <div id="payment-container" class="hidden">
-
-     <div class="containerround">
-     <!-- Payment Form -->
-     <form class="payment-form" id="payment-form">
-         <input type="text" class="payment-input" id="username" placeholder="Input your name" required>
-         <input type="email" class="payment-input" id="useremail" placeholder="Input your email" required>
-         <div id="status"></div>
-         <button class="pay-button" id="pay-button">Subscribe for Premium Promptemplates™!</button>
-         <a href="mailto:support@inexasli.com" class="contact-support">I have paid</a>
-         <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support">Customer portal</a>
-     </form>
- 
-     </div>
-     </div>
+  
 
      <div class="hidden" id="prompt-results">
          <div id="result"></div>
@@ -986,7 +972,10 @@
          </div>
      </div>
  
+
      <script src="/server/scripts/modal.js"></script>
+
+     <script src="/server/scripts/paymentform.js"></script>
      <script src="/index.js"></script>
      <script src="/server/scripts/tray.js"></script>
      <script src="/server/scripts/prompt.js"></script>
