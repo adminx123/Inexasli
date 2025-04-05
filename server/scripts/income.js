@@ -138,21 +138,41 @@ var TOTALSOCIALSECURITYE;
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    const regionDropdown = document.getElementById('RegionDropdown');
+    const subregionDropdown = document.getElementById('SubregionDropdown');
+
+    if (!regionDropdown) {
+        console.error('RegionDropdown element not found');
+        return;
+    }
+    if (!subregionDropdown) {
+        console.error('SubregionDropdown element not found');
+        return;
+    }
+
     function handleRegionChange() {
-        setLocal("RegionDropdown", this.value, 365); // Keeping setLocal as in your original
+        const value = this.value || 'NONE'; // Fallback if empty
+        setLocal("RegionDropdown", value, 365);
+        console.log('RegionDropdown saved:', value); // Debug
     }
 
     function handleSubRegionChange() {
-        setLocal('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365);
+        const value = this.value || '';
+        setLocal('SubregionDropdown', value, 365);
+        console.log('SubregionDropdown saved:', value); // Debug
     }
 
     // Initial setup
-    const regionDropdown = document.getElementById('RegionDropdown');
-    handleRegionChange.call(regionDropdown); // Set initial region value
+    handleRegionChange.call(regionDropdown); // Save initial value
+    handleSubRegionChange.call(subregionDropdown); // Save initial subregion value
 
     // Add event listeners
     regionDropdown.addEventListener('change', handleRegionChange);
-    document.getElementById('SubregionDropdown').addEventListener('change', handleSubRegionChange);
+    subregionDropdown.addEventListener('change', handleSubRegionChange);
+
+    // Ensure other listeners don’t interfere
+    regionDropdown.addEventListener('change', updateSubregionDropdown);
+    regionDropdown.addEventListener('change', calculateRegionalTax);
 });
 
 
