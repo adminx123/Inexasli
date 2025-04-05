@@ -141,15 +141,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const regionDropdown = document.getElementById('RegionDropdown');
     const subregionDropdown = document.getElementById('SubregionDropdown');
 
-    if (!regionDropdown) {
-        console.error('RegionDropdown element not found');
-        return;
-    }
-    if (!subregionDropdown) {
-        console.error('SubregionDropdown element not found');
-        return;
-    }
-
     function handleRegionChange() {
         const value = this.value || 'NONE'; // Fallback if empty
         setLocal("RegionDropdown", value, 365);
@@ -161,10 +152,6 @@ document.addEventListener('DOMContentLoaded', function () {
         setLocal('SubregionDropdown', value, 365);
         console.log('SubregionDropdown saved:', value); // Debug
     }
-
-    // Initial setup
-    handleRegionChange.call(regionDropdown); // Save initial value
-    handleSubRegionChange.call(subregionDropdown); // Save initial subregion value
 
     // Add event listeners
     regionDropdown.addEventListener('change', handleRegionChange);
