@@ -321,11 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Navigation and calculation functions
-window.calculateNext = function() {
-  calculateAll();
-  window.location.href = '/budget/asset.html';
-};
+
 
 window.calculateAll = function() {
   calculateNormalizedSum();
@@ -350,3 +346,9 @@ window.calculateAll = function() {
 document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', () => {
   document.querySelector('#ROI-modal').style.display = 'block';
 });
+
+// Navigation and calculation functions
+window.calculateNext = function() {
+  calculateAll();
+  window.location.href = '/budget/asset.html';
+};
