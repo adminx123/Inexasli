@@ -11,7 +11,6 @@
 import { updateHideShow } from "/server/scripts/hideShow.js";
 import { setLocal } from '/server/scripts/setlocal.js';
 import { getLocal } from '/server/scripts/getlocal.js';
-import { overwriteCookies } from '/server/scripts/cookieoverwrite.js';
 
 console.log("income.js: Script starting");
 
