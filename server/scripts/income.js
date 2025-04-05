@@ -8,7 +8,6 @@
  * jurisdictions worldwide.
   */
 
-import { hideShowClass, updateHideShow } from "/server/scripts/hideShow.js"
 import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
 import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
 
@@ -140,38 +139,18 @@ var TOTALSOCIALSECURITYE;
 
 document.addEventListener('DOMContentLoaded', function () {
     function handleRegionChange() {
-        if (this.value === 'USA') {
-            setCookie("RegionDropdown", this.value, 365);
-            hideShowClass('usa-hide', 'show');
-        } else if (this.value === 'CAN') {
-            setCookie("RegionDropdown", this.value, 365);
-            hideShowClass('usa-hide', 'hide');
-        }
-
-        const isIncomeUsa = getCookie('RegionDropdown') == 'USA';
-
-        if (this.value === 'USA' || this.value === '' || this.value === "NONE" || isIncomeUsa) {
-            hideShowClass('USAHIDE', 'show');
-            // console.log('is block');
-        } else {
-            hideShowClass('USAHIDE', 'hide');
-            // console.log('is none');
-        }
-
-        // Update hideShow.js visibility on region change
-        updateHideShow();
+        setCookie("RegionDropdown", this.value, 365); // Keeping setCookie as in your original
     }
 
     function handleSubRegionChange() {
         setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365);
     }
 
-    // Call handleRegionChange and updateHideShow for initial state
+    // Initial setup
     const regionDropdown = document.getElementById('RegionDropdown');
-    handleRegionChange.call(regionDropdown);
-    updateHideShow(); // Ensure hideShow.js runs on load
+    handleRegionChange.call(regionDropdown); // Set initial region value
 
-    // Add event listeners for changes
+    // Add event listeners
     regionDropdown.addEventListener('change', handleRegionChange);
     document.getElementById('SubregionDropdown').addEventListener('change', handleSubRegionChange);
 });
