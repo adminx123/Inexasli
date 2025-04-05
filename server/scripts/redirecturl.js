@@ -1,6 +1,6 @@
 
        import { setLocal } from '/server/scripts/setlocal.js';
-       import { getLocal } from '/server/scripts/getLocal.js';
+       import { getLocal } from '/server/scripts/getlocal.js';
        import { getCookie } from '/server/scripts/getcookie.js'; // Import getCookie
  
        const urlParams = new URLSearchParams(window.location.search);
