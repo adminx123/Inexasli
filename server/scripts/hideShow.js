@@ -1,5 +1,5 @@
 /* hideShow.js */
-import { getLocal } from '/server/scripts/getLocal.js';
+import { getLocal } from '/server/scripts/getlocal.js';
 
 function hideShowClass(className, task) {
     const elements = document.getElementsByClassName(className);
