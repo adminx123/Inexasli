@@ -11,7 +11,7 @@
 import { displayWarning } from "./utils.js";
 import { setLocal } from '/server/scripts/setlocal.js';
 import { getLocal } from '/server/scripts/getlocal.js';
-import { hideShowClass } from "./hideShow.js";
+// import { hideShowClass } from "./hideShow.js";
 
 // Tab highlighting
 const tabs = document.querySelectorAll('.tab');
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial calculations
   calculateAll();
 
-  // Conditional UI updates
+  /* Conditional UI updates
   const romanticexpenseCookie = getLocal('romanticexpense');
   const debtcheckboxCookie = getLocal('debtcheckbox');
   const dependantcheckboxCookie = getLocal('dependantcheckbox');
@@ -318,10 +318,14 @@ document.addEventListener('DOMContentLoaded', () => {
     hideShowClass('debt-parent', 'show');
   } else if (debtcheckboxCookie === 'unChecked') {
     hideShowClass('debt-parent', 'hide');
-  }
+  } */
 });
 
-
+// Navigation and calculation functions
+window.calculateNext = function() {
+  calculateAll();
+  window.location.href = '/budget/asset.html';
+};
 
 window.calculateAll = function() {
   calculateNormalizedSum();
@@ -346,9 +350,3 @@ window.calculateAll = function() {
 document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', () => {
   document.querySelector('#ROI-modal').style.display = 'block';
 });
-
-// Navigation and calculation functions
-window.calculateNext = function() {
-  calculateAll();
-  window.location.href = '/budget/asset.html';
-};
