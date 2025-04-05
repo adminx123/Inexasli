@@ -8,8 +8,8 @@
  * jurisdictions worldwide.
   */
 
-import { setCookie } from '/server/scripts/setcookie.js'; // Adjust path as needed
-import { getCookie } from '/server/scripts/getcookie.js'; // Adjust path as needed
+import { setLocal } from '/server/scripts/setlocal.js'; // Adjust path as needed
+import { getLocal } from '/server/scripts/getlocal.js'; // Adjust path as needed
 
 
 
