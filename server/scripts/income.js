@@ -139,11 +139,11 @@ var TOTALSOCIALSECURITYE;
 
 document.addEventListener('DOMContentLoaded', function () {
     function handleRegionChange() {
-        setCookie("RegionDropdown", this.value, 365); // Keeping setCookie as in your original
+        setLocal("RegionDropdown", this.value, 365); // Keeping setLocal as in your original
     }
 
     function handleSubRegionChange() {
-        setCookie('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365);
+        setLocal('SubregionDropdown', document.getElementById('SubregionDropdown').value, 365);
     }
 
     // Initial setup
@@ -208,9 +208,9 @@ function calculateAnnual(inputId, frequencyGroupId) {
     let input = parseFloat(document.getElementById(inputId).value) || 0;
 
     if (inputId === 'income_sole_prop') {
-        const calculatedFromWorksheet = getCookie("calculated_from_worksheet");
+        const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
         if (calculatedFromWorksheet === true) {
-            const totalRevenue = getCookie("totalRevenue");
+            const totalRevenue = getLocal("totalRevenue");
             if (totalRevenue && totalRevenue !== 'annually' && !isNaN(parseFloat(totalRevenue))) {
                 if (input != totalRevenue) {
                     input = parseFloat(totalRevenue);
@@ -221,7 +221,7 @@ function calculateAnnual(inputId, frequencyGroupId) {
 
     // Get the checked frequency from the checkbox group
     const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
-    const frequency = checkedCheckbox ? checkedCheckbox.value : getCookie(`frequency_${frequencyGroupId}`) || 'annually';
+    const frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
 
     switch (frequency) {
         case 'annually':
@@ -1199,7 +1199,7 @@ document.addEventListener('DOMContentLoaded', function () {
  const subregionDropdown = document.getElementById('SubregionDropdown');
 
  // Set RegionDropdown first
- const regionValue = getCookie('RegionDropdown');
+ const regionValue = getLocal('RegionDropdown');
  regionDropdown.value = regionValue; // 'NONE', 'CAN', or 'USA'
 
  // Populate SubregionDropdown options based on RegionDropdown
@@ -1208,7 +1208,7 @@ document.addEventListener('DOMContentLoaded', function () {
  // Set all other form elements, including SubregionDropdown
  formElements.forEach(function (elementId) {
      if (elementId !== 'RegionDropdown') { // Already set
-         const value = getCookie(elementId);
+         const value = getLocal(elementId);
          const element = document.getElementById(elementId);
          if (element) {
              element.value = value;
@@ -1266,51 +1266,51 @@ window.calculateAll = function () {
 
 
     // Income fields (unchanged)
-    setCookie("income_salary_wages", document.getElementById("income_salary_wages").value.trim() !== "" ? document.getElementById("income_salary_wages").value : "0", 365);
-    setCookie("income_tips", document.getElementById("income_tips").value.trim() !== "" ? document.getElementById("income_tips").value : "0", 365);
-    setCookie("income_bonuses", document.getElementById("income_bonuses").value.trim() !== "" ? document.getElementById("income_bonuses").value : "0", 365);
-    setCookie("income_sole_prop", document.getElementById("income_sole_prop").value.trim() !== "" ? document.getElementById("income_sole_prop").value : "0", 365);
-    setCookie("income_investment_property", document.getElementById("income_investment_property").value.trim() !== "" ? document.getElementById("income_investment_property").value : "0", 365);
-    setCookie("income_capital_gains_losses", document.getElementById("income_capital_gains_losses").value.trim() !== "" ? document.getElementById("income_capital_gains_losses").value : "0", 365);
-    setCookie("income_interest", document.getElementById("income_interest").value.trim() !== "" ? document.getElementById("income_interest").value : "0", 365);
-    setCookie("income_owner_dividend", document.getElementById("income_owner_dividend").value.trim() !== "" ? document.getElementById("income_owner_dividend").value : "0", 365);
-    setCookie("income_public_dividend", document.getElementById("income_public_dividend").value.trim() !== "" ? document.getElementById("income_public_dividend").value : "0", 365);
-    setCookie("income_trust", document.getElementById("income_trust").value.trim() !== "" ? document.getElementById("income_trust").value : "0", 365);
-    setCookie("income_federal_pension", document.getElementById("income_federal_pension").value.trim() !== "" ? document.getElementById("income_federal_pension").value : "0", 365);
-    setCookie("income_work_pension", document.getElementById("income_work_pension").value.trim() !== "" ? document.getElementById("income_work_pension").value : "0", 365);
-    setCookie("income_social_security", document.getElementById("income_social_security").value.trim() !== "" ? document.getElementById("income_social_security").value : "0", 365);
-    setCookie("income_employment_insurance", document.getElementById("income_employment_insurance").value.trim() !== "" ? document.getElementById("income_employment_insurance").value : "0", 365);
-    setCookie("income_alimony", document.getElementById("income_alimony").value.trim() !== "" ? document.getElementById("income_alimony").value : "0", 365);
-    setCookie("income_scholarships_grants", document.getElementById("income_scholarships_grants").value.trim() !== "" ? document.getElementById("income_scholarships_grants").value : "0", 365);
-    setCookie("income_royalties", document.getElementById("income_royalties").value.trim() !== "" ? document.getElementById("income_royalties").value : "0", 365);
-    setCookie("income_gambling_winnings", document.getElementById("income_gambling_winnings").value.trim() !== "" ? document.getElementById("income_gambling_winnings").value : "0", 365);
-    setCookie("income_peer_to_peer_lending", document.getElementById("income_peer_to_peer_lending").value.trim() !== "" ? document.getElementById("income_peer_to_peer_lending").value : "0", 365);
-    setCookie("income_venture_capital", document.getElementById("income_venture_capital").value.trim() !== "" ? document.getElementById("income_venture_capital").value : "0", 365);
-    setCookie("income_tax_free_income", document.getElementById("income_tax_free_income").value.trim() !== "" ? document.getElementById("income_tax_free_income").value : "0", 365);
+    setLocal("income_salary_wages", document.getElementById("income_salary_wages").value.trim() !== "" ? document.getElementById("income_salary_wages").value : "0", 365);
+    setLocal("income_tips", document.getElementById("income_tips").value.trim() !== "" ? document.getElementById("income_tips").value : "0", 365);
+    setLocal("income_bonuses", document.getElementById("income_bonuses").value.trim() !== "" ? document.getElementById("income_bonuses").value : "0", 365);
+    setLocal("income_sole_prop", document.getElementById("income_sole_prop").value.trim() !== "" ? document.getElementById("income_sole_prop").value : "0", 365);
+    setLocal("income_investment_property", document.getElementById("income_investment_property").value.trim() !== "" ? document.getElementById("income_investment_property").value : "0", 365);
+    setLocal("income_capital_gains_losses", document.getElementById("income_capital_gains_losses").value.trim() !== "" ? document.getElementById("income_capital_gains_losses").value : "0", 365);
+    setLocal("income_interest", document.getElementById("income_interest").value.trim() !== "" ? document.getElementById("income_interest").value : "0", 365);
+    setLocal("income_owner_dividend", document.getElementById("income_owner_dividend").value.trim() !== "" ? document.getElementById("income_owner_dividend").value : "0", 365);
+    setLocal("income_public_dividend", document.getElementById("income_public_dividend").value.trim() !== "" ? document.getElementById("income_public_dividend").value : "0", 365);
+    setLocal("income_trust", document.getElementById("income_trust").value.trim() !== "" ? document.getElementById("income_trust").value : "0", 365);
+    setLocal("income_federal_pension", document.getElementById("income_federal_pension").value.trim() !== "" ? document.getElementById("income_federal_pension").value : "0", 365);
+    setLocal("income_work_pension", document.getElementById("income_work_pension").value.trim() !== "" ? document.getElementById("income_work_pension").value : "0", 365);
+    setLocal("income_social_security", document.getElementById("income_social_security").value.trim() !== "" ? document.getElementById("income_social_security").value : "0", 365);
+    setLocal("income_employment_insurance", document.getElementById("income_employment_insurance").value.trim() !== "" ? document.getElementById("income_employment_insurance").value : "0", 365);
+    setLocal("income_alimony", document.getElementById("income_alimony").value.trim() !== "" ? document.getElementById("income_alimony").value : "0", 365);
+    setLocal("income_scholarships_grants", document.getElementById("income_scholarships_grants").value.trim() !== "" ? document.getElementById("income_scholarships_grants").value : "0", 365);
+    setLocal("income_royalties", document.getElementById("income_royalties").value.trim() !== "" ? document.getElementById("income_royalties").value : "0", 365);
+    setLocal("income_gambling_winnings", document.getElementById("income_gambling_winnings").value.trim() !== "" ? document.getElementById("income_gambling_winnings").value : "0", 365);
+    setLocal("income_peer_to_peer_lending", document.getElementById("income_peer_to_peer_lending").value.trim() !== "" ? document.getElementById("income_peer_to_peer_lending").value : "0", 365);
+    setLocal("income_venture_capital", document.getElementById("income_venture_capital").value.trim() !== "" ? document.getElementById("income_venture_capital").value : "0", 365);
+    setLocal("income_tax_free_income", document.getElementById("income_tax_free_income").value.trim() !== "" ? document.getElementById("income_tax_free_income").value : "0", 365);
 
-    // Existing setCookie calls (unchanged)
+    // Existing setLocal calls (unchanged)
     const regionDropdown = document.getElementById("RegionDropdown");
     const subregionDropdown = document.getElementById("SubregionDropdown");
-    setCookie("RegionDropdown", regionDropdown.value, 365);
-    setCookie("SubregionDropdown", subregionDropdown.value, 365);
+    setLocal("RegionDropdown", regionDropdown.value, 365);
+    setLocal("SubregionDropdown", subregionDropdown.value, 365);
 
-    setCookie("ANNUALINCOME", ANNUALINCOME, 365);
-    setCookie("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
-    setCookie("PASSIVEINCOME", PASSIVEINCOME, 365);
-    setCookie("BPA", BPA, 365);
-    setCookie("SD", SD, 365);
-    setCookie("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
-    setCookie("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
-    setCookie("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
-    setCookie("ANNUALCPP", ANNUALCPP, 365);
-    setCookie("CPPPAYABLEEMPLOYED", CPPPAYABLEEMPLOYED, 365);
-    setCookie("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
-    setCookie("ANNUALEI", ANNUALEI, 365);
-    setCookie("TOTALTAXCG", TOTALTAXCG, 365);
-    setCookie("TOTALMEDICARE", TOTALMEDICARE, 365);
-    setCookie("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
-    setCookie("TOTALSOCIALSECURITYE", TOTALSOCIALSECURITYE, 365);
-    setCookie("TOTALSOCIALSECURITYSE", TOTALSOCIALSECURITYSE, 365);
+    setLocal("ANNUALINCOME", ANNUALINCOME, 365);
+    setLocal("ANNUALEMPLOYMENTINCOME", ANNUALEMPLOYMENTINCOME, 365);
+    setLocal("PASSIVEINCOME", PASSIVEINCOME, 365);
+    setLocal("BPA", BPA, 365);
+    setLocal("SD", SD, 365);
+    setLocal("ANNUALTAXABLEINCOME", ANNUALTAXABLEINCOME, 365);
+    setLocal("ANNUALREGIONALTAX", ANNUALREGIONALTAX, 365);
+    setLocal("ANNUALSUBREGIONALTAX", ANNUALSUBREGIONALTAX, 365);
+    setLocal("ANNUALCPP", ANNUALCPP, 365);
+    setLocal("CPPPAYABLEEMPLOYED", CPPPAYABLEEMPLOYED, 365);
+    setLocal("CPPPAYABLESELFEMPLOYED", CPPPAYABLESELFEMPLOYED, 365);
+    setLocal("ANNUALEI", ANNUALEI, 365);
+    setLocal("TOTALTAXCG", TOTALTAXCG, 365);
+    setLocal("TOTALMEDICARE", TOTALMEDICARE, 365);
+    setLocal("TOTALSOCIALSECURITY", TOTALSOCIALSECURITY, 365);
+    setLocal("TOTALSOCIALSECURITYE", TOTALSOCIALSECURITYE, 365);
+    setLocal("TOTALSOCIALSECURITYSE", TOTALSOCIALSECURITYSE, 365);
 };
 
 
@@ -1324,8 +1324,8 @@ window.addEventListener("message", (event) => {
 
         const selfEmploymentIncomeField =
             document.querySelector("#income_sole_prop");
-        const totalRevenue = getCookie("totalRevenue");
-        const paid = getCookie("authenticated") == "paid";
+        const totalRevenue = getLocal("totalRevenue");
+        const paid = getLocal("authenticated") == "paid";
 
          console.log(selfEmploymentIncomeField);
           console.log(totalRevenue);
@@ -1334,14 +1334,14 @@ window.addEventListener("message", (event) => {
         if (totalRevenue && totalRevenue != "annually" && totalRevenue != "") {
             if (paid) {
                 selfEmploymentIncomeField.value = totalRevenue;
-                setCookie("income_sole_prop", totalRevenue, 365);
+                setLocal("income_sole_prop", totalRevenue, 365);
                 selfEmploymentIncomeField.placeholder = "";
                 //   console.log('everything done since user paid')
             } else {
                 selfEmploymentIncomeField.value = "";
-                //   setCookie("income_sole_prop", totalRevenue, 365);
+                //   setLocal("income_sole_prop", totalRevenue, 365);
 
-                setCookie("calculated_from_worksheet", true, 365);
+                setLocal("calculated_from_worksheet", true, 365);
                 selfEmploymentIncomeField.placeholder = "payment required";
                 //   console.log('everything postponsed since user not paid')
             }
@@ -1352,17 +1352,17 @@ window.addEventListener("message", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const paid = getCookie("authenticated") == "paid";
-    const calculatedFromWorksheet = getCookie("calculated_from_worksheet");
+    const paid = getLocal("authenticated") == "paid";
+    const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
 
     if (calculatedFromWorksheet == 'true' && paid) {
-        const totalRevenue = getCookie("totalRevenue");
+        const totalRevenue = getLocal("totalRevenue");
         const selfEmploymentIncomeField =
             document.querySelector("#income_sole_prop");
 
         selfEmploymentIncomeField.value = totalRevenue;
-        setCookie("income_sole_prop", totalRevenue, 365);
-        setCookie('calculated_from_worksheet', 'resolved', 365)
+        setLocal("income_sole_prop", totalRevenue, 365);
+        setLocal('calculated_from_worksheet', 'resolved', 365)
         selfEmploymentIncomeField.placeholder = "";
         //   console.log('now user has paid and everything is finally resolved')
     } else if (calculatedFromWorksheet == 'true' && !paid) {
@@ -1377,7 +1377,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    const romanticincomeCookie = getCookie('romanticincome');
+    const romanticincomeCookie = getLocal('romanticincome');
 
 
     if (romanticincomeCookie === 'checked') {
@@ -1427,7 +1427,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (inputId && typeof calculateAnnual === 'function') {
                                 calculateAnnual(inputId, this.value);
                             }
-                            setCookie(`frequency_${group.id}`, this.value, 365);
+                            setLocal(`frequency_${group.id}`, this.value, 365);
                             console.log(`Saved ${this.value} to cookie for ${group.id}`);
                         }
                     } catch (error) {
@@ -1437,7 +1437,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
   
             // Load saved selection or default to "annually"
-            const savedFrequency = getCookie(`frequency_${group.id}`);
+            const savedFrequency = getLocal(`frequency_${group.id}`);
             const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) || 
                                    group.querySelector('input[value="annually"]');
             if (checkboxToCheck) {
