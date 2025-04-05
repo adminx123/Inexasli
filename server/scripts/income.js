@@ -10,7 +10,7 @@
 
 import { setLocal } from '/server/scripts/setlocal.js'; // Adjust path as needed
 import { getLocal } from '/server/scripts/getlocal.js'; // Adjust path as needed
-import { hideShow } from '/server/scripts/hideshow.js';
+
 
 
 
