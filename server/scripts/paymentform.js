@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     style.textContent = `
         #subscribe-sidebar {
             position: fixed;
-            bottom: 10px; /* Position closer to the bottom */
+            bottom: 10px;
             right: 0;
             background-color: #f5f5f5;
             padding: 8px;
@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         #subscribe-sidebar.initial {
-            height: auto; /* Collapsed state */
+            height: auto;
         }
 
         #subscribe-sidebar.expanded {
-            height: auto; /* Adjust based on form height */
-            bottom: calc(100% + 10px); /* Expand upwards */
+            height: auto;
+            bottom: calc(100% + 10px);
         }
 
         #subscribe-sidebar a.subscribe-link {
@@ -37,13 +37,13 @@ document.addEventListener('DOMContentLoaded', async function() {
             padding: 8px 8px;
             cursor: pointer;
             transition: color 0.2s ease;
-            line-height: 1.2; /* Better text wrapping */
-            max-height: auto; /* Limits text height in initial state */
-            overflow: hidden; /* Prevents text overflow */
+            line-height: 1.2;
+            max-height: auto;
+            overflow: hidden;
         }
 
         #subscribe-sidebar a.subscribe-link:hover {
-            color:rgb(55, 55, 55); /* Gold on hover */
+            color: rgb(55, 55, 55);
         }
 
         #subscribe-sidebar #close-sidebar {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             color: #000;
             cursor: pointer;
             font-weight: bold;
-            display: block; /* Always visible to show + or - */
+            display: block;
         }
 
         .payment-form {
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         .payment-form .contact-support {
             font-size: 12px;
-            color:rgb(255, 255, 255);
+            color: rgb(255, 255, 255);
             text-decoration: none;
         }
 
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 width: 250px;
             }
             #subscribe-sidebar.initial {
-                height: auto; /* Adjusted for smaller screens */
+                height: auto;
             }
             #subscribe-sidebar.expanded {
                 height: auto;
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         console.log('Payment form injected');
 
-        // Set up sidebar functionality after the DOM is updated
+        // Set up sidebar functionality
         const closeButton = document.getElementById('close-sidebar');
         const subscribeLink = document.querySelector('#subscribe-sidebar a.subscribe-link');
         const sidebarElement = document.getElementById('subscribe-sidebar');
@@ -165,12 +165,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                 sidebarElement.classList.remove('initial');
                 sidebarElement.classList.add('expanded');
                 sidebarElement.dataset.state = 'expanded';
-                closeButton.textContent = '-'; // Change to minus when expanded
+                closeButton.textContent = '-';
 
-                // Dynamically calculate the height needed to show the form
                 const formHeight = paymentForm.scrollHeight;
                 const viewportHeight = window.innerHeight;
-                const bottomOffset = Math.min(viewportHeight - formHeight - 20, 10); // Ensure it doesn't go off-screen
+                const bottomOffset = Math.min(viewportHeight - formHeight - 20, 10);
                 sidebarElement.style.bottom = `${bottomOffset}px`;
 
                 console.log('Sidebar expanded upwards');
@@ -179,15 +178,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                 sidebarElement.classList.remove('expanded');
                 sidebarElement.classList.add('initial');
                 sidebarElement.dataset.state = 'initial';
-                closeButton.textContent = '+'; // Change to plus when collapsed
-
-                // Reset the bottom position to the initial state
+                closeButton.textContent = '+';
                 sidebarElement.style.bottom = '10px';
 
                 console.log('Sidebar returned to initial state');
             }
         };
 
+        // Click handlers for subscribe link and close button
         if (subscribeLink) {
             subscribeLink.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -207,6 +205,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         } else {
             console.error('Close button not found');
         }
+
+        // New: Collapse sidebar when clicking outside
+        document.addEventListener('click', function(e) {
+            const isClickInsideSidebar = sidebarElement.contains(e.target);
+            if (!isClickInsideSidebar && sidebarElement.dataset.state === 'expanded') {
+                console.log('Clicked outside sidebar, collapsing it');
+                toggleSidebar();
+            }
+        });
 
         // Import and initialize payment.js
         try {
