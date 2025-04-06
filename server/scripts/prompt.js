@@ -153,7 +153,7 @@ function toggleCodeInput(selected) {
         if (selected === 'code-started') {
             codeRow.classList.remove('hidden');
             if (codeStartedBtn) codeStartedBtn.classList.add('selected');
-            if (noCodeBtn) noCodeBtn.classList.remove('selected');
+            if (noCodeBtn) codeStartedBtn.classList.remove('selected');
         } else if (selected === 'no-code') {
             codeRow.classList.add('hidden');
             if (codeStartedBtn) codeStartedBtn.classList.remove('selected');
@@ -512,15 +512,28 @@ Fats        79.4 g         50 g           63%
                 const locationsSelected = document.querySelectorAll('#expense-location .grid-item.selected');
                 console.log('Selected locations count:', locationsSelected.length);
                 console.log('Selected locations:', Array.from(locationsSelected).map(item => item.getAttribute('data-value')));
+            
                 if (locationsSelected.length > 0) {
                     prompt += formatGrid('#expense-location .grid-item.selected', 'Location');
-                    prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
-            Advertising, Insurance, Interest, Maintenance and Repairs, Management and Administration Fees, Motor Vehicle Expenses, Office Expenses, Legal, Accounting, and Other Professional Fees 
-            Property Taxes, Salaries/Wages/and Benefits, Travel, Utilities, Other Expenses (for miscellaneous items)
             
-            Ensure that all items on all receipts are accounted for and categorized appropriately.
+                    // Check if "USA" or "Canada" is selected
+                    const selectedLocations = Array.from(locationsSelected).map(item => item.getAttribute('data-value'));
+                    if (selectedLocations.includes('Canada')) {
+                        prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
+                        Advertising, Insurance, Interest, Maintenance and Repairs, Management and Administration Fees, Motor Vehicle Expenses, Office Expenses, Legal, Accounting, and Other Professional Fees, 
+                        Property Taxes, Salaries/Wages/and Benefits, Travel, Utilities, Other Expenses (for miscellaneous items)
+                        
+                        Ensure that all items on all receipts are accounted for and categorized appropriately.\n\n`;
+                    } else if (selectedLocations.includes('USA')) {
+                        prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
+                        Advertising, Insurance (other than health), Interest, Repairs and Maintenance, Other Expenses (for management/admin fees or miscellaneous items), 
+                        Car and Truck Expenses, Office Expense, Legal and Professional Services, Taxes and Licenses, Wages, Travel, Utilities
+                        
+                        Ensure that all items on all receipts are accounted for and categorized appropriately.\n\n`;
+                    } else {
+                        prompt += `No specific region selected. Please select either "USA" or "Canada" to generate the appropriate prompt.\n\n`;
+                    }
             
-            \n\n`;
                     console.log('Prompt after building:', prompt);
                 } else {
                     console.log('No locations selected, prompt not built');
