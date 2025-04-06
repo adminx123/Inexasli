@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Attach toggleSection to section headers
     document.querySelectorAll('.section > h2').forEach(header => {
+        console.log('Attaching toggleSection to:', header); // Debug log
         header.addEventListener('click', () => toggleSection(header));
     });
 
@@ -45,16 +46,27 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function toggleSection(header) {
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.section > h2').forEach(header => {
+        header.addEventListener('click', function () {
+            toggleSection(header);
+        });
+    });
+});
+
+window.toggleSection = function (header) {
+    console.log('toggleSection called for:', header); // Debug log
     const section = header.parentElement;
     const allSections = document.querySelectorAll('.section');
     allSections.forEach(otherSection => {
         if (otherSection !== section && otherSection.classList.contains('expanded')) {
+            console.log('Collapsing section:', otherSection); // Debug log
             otherSection.classList.remove('expanded');
         }
     });
     section.classList.toggle('expanded');
-}
+    console.log('Toggled section:', section); // Debug log
+};
 
 
 function toggleScope(scope) {
@@ -602,6 +614,16 @@ style.textContent = `
         width: 40px;
         height: 40px;
         display: block; /* Ensure image behaves as a block for centering */
+    }
+    .section.expanded {
+        max-height: 500px; /* Adjust as needed */
+        transition: max-height 0.3s ease-in-out;
+        overflow: visible;
+    }
+    .section {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
     }
 `;
 document.head.appendChild(style);
