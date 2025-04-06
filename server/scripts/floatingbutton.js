@@ -1,25 +1,25 @@
-// Import getLocal from getLocal.js
-import { getLocal } from '/server/scripts/getlocal.js'; // Matches your absolute path
+// Import getCookie from getCookie.js
+import { getCookie } from '/server/scripts/getCookie.js';
 
 // Inject CSS styles into the page
 function injectStyles() {
     const styles = `
         #gotosummary {
-            position: fixed; /* Original position retained */
-            bottom: 10px; /* 10px from bottom */
-            right: 10px; /* 10px from left */
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
             z-index: 1000;
-            background-color: #f5f5f5; /* Matches subscribe-sidebar */
+            background-color: #f5f5f5;
             padding: 10px;
             border: 2px solid #000;
-            border-radius: 8px; /* Matches subscribe-sidebar */
-            box-shadow: 4px 4px 0 #000; /* Matches subscribe-sidebar shadow */
+            border-radius: 8px;
+            box-shadow: 4px 4px 0 #000;
             display: inline-block;
-            transition: background-color 0.3s ease; /* Smooth hover transition */
+            transition: background-color 0.3s ease;
         }
 
         #gotosummary:hover {
-            background-color: #d3bc0f; /* Matches subscribe-sidebar hover */
+            background-color: #d3bc0f;
         }
 
         #summary-btn {
@@ -57,7 +57,7 @@ function injectStyles() {
     document.head.appendChild(styleSheet);
 }
 
-// Create the floating button HTML with inline styles
+// Create the floating button HTML
 function createFloatingButton() {
     const buttonContainer = document.createElement('div');
     buttonContainer.id = 'gotosummary';
@@ -75,15 +75,15 @@ function createFloatingButton() {
     innerContainer.appendChild(button);
     buttonContainer.appendChild(innerContainer);
     document.body.appendChild(buttonContainer);
-    console.log('Button created at:', buttonContainer.getBoundingClientRect()); // Debug position
+    console.log('Button created at:', buttonContainer.getBoundingClientRect());
 }
 
-// Check Local and toggle button visibility
+// Check if cookie exists and toggle button visibility
 function checkLocalAndToggleButton() {
-    const summaryLocal = getLocal('summary_reached');
-    console.log('summary_reached value:', summaryLocal);
+    const summaryLocal = getCookie('summary_reached');
+    console.log('summary_reached cookie:', summaryLocal);
     const summaryButtonContainer = document.getElementById('gotosummary');
-    if (summaryLocal === 'true') {
+    if (summaryLocal) { // Check if cookie exists (non-null, non-undefined)
         summaryButtonContainer.style.display = 'inline-block';
         console.log('Button shown at:', summaryButtonContainer.getBoundingClientRect());
     } else {

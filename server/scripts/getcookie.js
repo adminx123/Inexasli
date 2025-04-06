@@ -6,39 +6,24 @@
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
- */ 
+ */
 
 function getCookie(name) {
     const cookies = document.cookie.split(';').map(cookie => cookie.trim());
     for (const cookie of cookies) {
         const [cookieName, cookieValue] = cookie.split('=');
         if (cookieName === name) {
-            try {
-                const decodedValue = decodeURIComponent(cookieValue);
-                console.log(`getCookie called for ${name}, stored value: ${cookieValue}`);
-                console.log(`Decoded value for ${name}: ${decodedValue}`);
-                
-                // Parse the JSON stored by setCookie
-                const parsedData = JSON.parse(decodedValue);
-                const value = parsedData.value;
-                const timestamp = parsedData.timestamp;
-
-                // Apply your existing logic to the value
-                if (value === '' || value === '0') {
-                    if (name.includes('_frequency')) return { value: 'annually', timestamp };
-                    return { value: '', timestamp };
-                }
-
-                if (name === 'RegionDropdown' && !['CAN', 'USA'].includes(value)) {
-                    console.log(`Invalid RegionDropdown value '${value}', returning 'NONE'`);
-                    return { value: 'NONE', timestamp };
-                }
-
-                return { value, timestamp };
-            } catch (e) {
-                console.error(`Error parsing cookie ${name}: ${e.message}`);
-                return null; // Invalid JSON
+            const decodedValue = decodeURIComponent(cookieValue);
+            console.log(`getCookie called for ${name}, stored value: ${cookieValue}`);
+            console.log(`Decoded value for ${name}: ${decodedValue}`);
+            
+            // Assume the value is a timestamp if it’s a number
+            const timestamp = parseInt(decodedValue, 10);
+            if (isNaN(timestamp)) {
+                console.error(`Invalid timestamp for ${name}: ${decodedValue}`);
+                return null; // Not a valid number
             }
+            return { value: '', timestamp }; // Return timestamp, no custom value needed
         }
     }
     
