@@ -5,40 +5,40 @@ document.addEventListener('DOMContentLoaded', async function() {
     style.textContent = `
         #subscribe-sidebar {
             position: fixed;
-            top: 80%;
+            bottom: 10px; /* Position closer to the bottom */
             right: 0;
-            transform: translateY(-50%);
             background-color: #f5f5f5;
-            padding: 10px;
+            padding: 8px;
             border: 2px solid #000;
             border-right: none;
             border-radius: 8px 0 0 8px;
             box-shadow: -4px 4px 0 #000;
             z-index: 1000;
             width: 300px;
-            transition: height 0.3s ease-in-out;
+            transition: bottom 0.3s ease-in-out, height 0.3s ease-in-out;
             overflow: hidden;
         }
 
         #subscribe-sidebar.initial {
-            height: auto; /* Increased to fit full text */
+            height: auto; /* Collapsed state */
         }
 
         #subscribe-sidebar.expanded {
             height: auto; /* Adjust based on form height */
+            bottom: calc(100% + 10px); /* Expand upwards */
         }
 
         #subscribe-sidebar a.subscribe-link {
             text-decoration: none;
             color: #000;
-            font-size: 14px;
+            font-size: 12px;
             display: block;
             text-align: center;
-            padding: 10px 20px;
+            padding: 8px 8px;
             cursor: pointer;
             transition: color 0.2s ease;
             line-height: 1.2; /* Better text wrapping */
-            max-height: 50px; /* Limits text height in initial state */
+            max-height: auto; /* Limits text height in initial state */
             overflow: hidden; /* Prevents text overflow */
         }
 
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             position: absolute;
             top: 5px;
             right: 5px;
-            font-size: 16px;
+            font-size: 18px;
             color: #000;
             cursor: pointer;
             font-weight: bold;
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             flex-direction: column;
             align-items: center;
             gap: 15px;
-            padding: 20px;
+            padding: 5px;
             background: #ffffff;
             border: 2px solid #000000;
             border-radius: 10px;
@@ -77,8 +77,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         .payment-form .payment-input {
             width: 100%;
-            padding: 10px 12px;
-            font-size: 14px;
+            padding: 8px 8px;
+            font-size: 12px;
             color: #000000;
             background: #f9f9f9;
             border: 2px solid #7b7b7b;
@@ -88,8 +88,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         .payment-form .pay-button {
             width: 100%;
-            padding: 12px 18px;
-            font-size: 14px;
+            padding: 8px 8px;
+            font-size: 12px;
             font-weight: bold;
             color: #ffffff;
             background: #000000;
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
             #subscribe-sidebar a.subscribe-link {
                 font-size: 12px;
-                padding: 8px 15px;
+                padding: 8px 8px;
             }
         }
     `;
@@ -159,19 +159,31 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Function to toggle the sidebar state
         const toggleSidebar = () => {
+            const paymentForm = document.querySelector('.payment-form');
             if (sidebarElement.dataset.state === 'initial') {
-                // Expand the sidebar
+                // Expand the sidebar upwards
                 sidebarElement.classList.remove('initial');
                 sidebarElement.classList.add('expanded');
                 sidebarElement.dataset.state = 'expanded';
                 closeButton.textContent = '-'; // Change to minus when expanded
-                console.log('Sidebar expanded downward');
+
+                // Dynamically calculate the height needed to show the form
+                const formHeight = paymentForm.scrollHeight;
+                const viewportHeight = window.innerHeight;
+                const bottomOffset = Math.min(viewportHeight - formHeight - 20, 10); // Ensure it doesn't go off-screen
+                sidebarElement.style.bottom = `${bottomOffset}px`;
+
+                console.log('Sidebar expanded upwards');
             } else {
                 // Collapse the sidebar
                 sidebarElement.classList.remove('expanded');
                 sidebarElement.classList.add('initial');
                 sidebarElement.dataset.state = 'initial';
                 closeButton.textContent = '+'; // Change to plus when collapsed
+
+                // Reset the bottom position to the initial state
+                sidebarElement.style.bottom = '10px';
+
                 console.log('Sidebar returned to initial state');
             }
         };
