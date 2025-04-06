@@ -1333,7 +1333,7 @@ summary h2 {
 /* Adjust paragraph spacing inside details */
 details p {
   margin: 5px 0; /* Consistent spacing for paragraphs */
-}
+}s
 
 .tm {
   font-size: 0.5em;      /* Smaller font size */

@@ -97,10 +97,14 @@
      <div class="containerround hidden">
          <!-- Personal Prompts -->
          <div id="personal-prompts" class="hidden">
+
+
+<H2>ANALYSIS</H2>
+
              <!-- Free: Budget Management -->
              <div class="section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Analysis - Budget</h2>
+                     <h2>Budget</h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content">
@@ -109,10 +113,127 @@
                  </div>
              </div>
  
+ <!-- Free: Calorie Counter -->
+ <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>Calorie & Macronutrients</h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content">
+        <div class="row1">
+            <div class="grid-container" id="calorie-goal">
+                <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
+                <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
+                <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
+                <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="calorie-activity">
+                <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
+                <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
+                <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5 days/week)</div>
+                <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
+                <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
+            </div>
+        </div>
+        <div class="row1">
+            <input type="number" id="calorie-weight" rows="1" placeholder="Weight:"></input>
+            <input type="number" id="calorie-height" rows="1" placeholder="Height:"></input>
+            <input type="number" id="calorie-age" rows="1" placeholder="Age:"></input>
+            <textarea id="calorie-food-log" rows="3" placeholder="Meals:
+Chicken breast 200g with rice 1cup
+Potato 100g with broccoli 150g"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="calorie" onclick="generateCaloriePrompt()">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
+   <!-- Premium: Enneagram Assessment -->
+   <div class="section premium-section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>Enneagram Assess <span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content premium-blur">
+        <div class="row1">
+            <label for="enneagram-self">Describe Yourself:</label>
+            <textarea id="enneagram-self" rows="4" placeholder="Tell us about yourself (e.g., I’m creative, impatient, and value efficiency. I’m ADHD and hate inefficiency)."></textarea>
+        </div>
+        <div class="row1">
+            <label>Core Traits You Identify With (select all that apply):</label>
+            <div class="grid-container" id="enneagram-traits">
+                <div class="grid-item" data-value="1-Perfection">I must be perfect and avoid mistakes</div>
+                <div class="grid-item" data-value="2-Help">I feel fulfilled by helping others</div>
+                <div class="grid-item" data-value="3-Success">I’m driven to succeed and be recognized</div>
+                <div class="grid-item" data-value="4-Unique">I need to be unique and authentic</div>
+                <div class="grid-item" data-value="5-Knowledge">I seek knowledge and conserve energy</div>
+                <div class="grid-item" data-value="6-Security">I crave security and question everything</div>
+                <div class="grid-item" data-value="7-Fun">I chase excitement and avoid pain</div>
+                <div class="grid-item" data-value="8-Control">I take charge and protect what’s mine</div>
+                <div class="grid-item" data-value="9-Peace">I seek peace and avoid conflict</div>
+            </div>
+        </div>
+        <div class="row1">
+            <label>Behavioral Responses (select all that apply):</label>
+            <div class="grid-container" id="enneagram-behaviors">
+                <div class="grid-item" data-value="Conflict-1">In conflict, I focus on right/wrong</div>
+                <div class="grid-item" data-value="Conflict-2">In conflict, I mediate or please</div>
+                <div class="grid-item" data-value="Conflict-3">In conflict, I defend my image</div>
+                <div class="grid-item" data-value="Conflict-4">In conflict, I feel misunderstood</div>
+                <div class="grid-item" data-value="Conflict-5">In conflict, I withdraw to think</div>
+                <div class="grid-item" data-value="Conflict-6">In conflict, I get anxious and defensive</div>
+                <div class="grid-item" data-value="Conflict-7">In conflict, I deflect with humor</div>
+                <div class="grid-item" data-value="Conflict-8">In conflict, I assert dominance</div>
+                <div class="grid-item" data-value="Conflict-9">In conflict, I shut down or agree</div>
+                <div class="grid-item" data-value="Stress-1">Under stress, I get rigid and critical</div>
+                <div class="grid-item" data-value="Stress-2">Under stress, I cling to others</div>
+                <div class="grid-item" data-value="Stress-3">Under stress, I push harder</div>
+                <div class="grid-item" data-value="Stress-4">Under stress, I feel isolated</div>
+                <div class="grid-item" data-value="Stress-5">Under stress, I retreat completely</div>
+                <div class="grid-item" data-value="Stress-6">Under stress, I panic or overthink</div>
+                <div class="grid-item" data-value="Stress-7">Under stress, I distract myself</div>
+                <div class="grid-item" data-value="Stress-8">Under stress, I lash out</div>
+                <div class="grid-item" data-value="Stress-9">Under stress, I numb out</div>
+                <div class="grid-item" data-value="Growth-1">At my best, I’m calm and accepting</div>
+                <div class="grid-item" data-value="Growth-2">At my best, I’m independent</div>
+                <div class="grid-item" data-value="Growth-3">At my best, I’m genuine</div>
+                <div class="grid-item" data-value="Growth-4">At my best, I inspire others</div>
+                <div class="grid-item" data-value="Growth-5">At my best, I’m focused and insightful</div>
+                <div class="grid-item" data-value="Growth-6">At my best, I’m brave and reliable</div>
+                <div class="grid-item" data-value="Growth-7">At my best, I’m steady and productive</div>
+                <div class="grid-item" data-value="Growth-8">At my best, I’m generous and open</div>
+                <div class="grid-item" data-value="Growth-9">At my best, I’m engaged and assertive</div>
+            </div>
+        </div>
+        <div class="row1">
+            <label for="enneagram-motivations">Core Motivations:</label>
+            <textarea id="enneagram-motivations" rows="3" placeholder="What drives you deep down? (e.g., being perfect, avoiding pain)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="enneagram-fears">Core Fears:</label>
+            <textarea id="enneagram-fears" rows="3" placeholder="What do you fear most? (e.g., being corrupt, being abandoned)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="enneagram-stress">Behavior Under Stress:</label>
+            <textarea id="enneagram-stress" rows="3" placeholder="How do you act when stressed? (e.g., I criticize everything or distract myself)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="enneagram-growth">Behavior at Your Best:</label>
+            <textarea id="enneagram-growth" rows="3" placeholder="How do you act at your peak? (e.g., I’m focused and inspire others)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="enneagram-childhood">Influential Childhood Memory:</label>
+            <textarea id="enneagram-childhood" rows="3" placeholder="A memory that shaped you (e.g., I was praised for being good)"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="enneagram-questionnaire">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
              <!-- Premium: Social Incident -->
              <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Analysis - Social Incident <span class="premium-notice">Premium</span></h2>
+                     <h2>Social Incident <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content premium-blur">
@@ -192,91 +313,14 @@
                  </div>
              </div>
  
-             <!-- Premium: Enneagram Assessment -->
-             <div class="section premium-section">
-                 <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Analysis - Enneagram Assessment <span class="premium-notice">Premium</span></h2>
-                     <span class="toggle-icon">+</span>
-                 </div>
-                 <div class="section-content premium-blur">
-                     <div class="row1">
-                         <label for="enneagram-self">Describe Yourself:</label>
-                         <textarea id="enneagram-self" rows="4" placeholder="Tell us about yourself (e.g., I’m creative, impatient, and value efficiency. I’m ADHD and hate inefficiency)."></textarea>
-                     </div>
-                     <div class="row1">
-                         <label>Core Traits You Identify With (select all that apply):</label>
-                         <div class="grid-container" id="enneagram-traits">
-                             <div class="grid-item" data-value="1-Perfection">I must be perfect and avoid mistakes</div>
-                             <div class="grid-item" data-value="2-Help">I feel fulfilled by helping others</div>
-                             <div class="grid-item" data-value="3-Success">I’m driven to succeed and be recognized</div>
-                             <div class="grid-item" data-value="4-Unique">I need to be unique and authentic</div>
-                             <div class="grid-item" data-value="5-Knowledge">I seek knowledge and conserve energy</div>
-                             <div class="grid-item" data-value="6-Security">I crave security and question everything</div>
-                             <div class="grid-item" data-value="7-Fun">I chase excitement and avoid pain</div>
-                             <div class="grid-item" data-value="8-Control">I take charge and protect what’s mine</div>
-                             <div class="grid-item" data-value="9-Peace">I seek peace and avoid conflict</div>
-                         </div>
-                     </div>
-                     <div class="row1">
-                         <label>Behavioral Responses (select all that apply):</label>
-                         <div class="grid-container" id="enneagram-behaviors">
-                             <div class="grid-item" data-value="Conflict-1">In conflict, I focus on right/wrong</div>
-                             <div class="grid-item" data-value="Conflict-2">In conflict, I mediate or please</div>
-                             <div class="grid-item" data-value="Conflict-3">In conflict, I defend my image</div>
-                             <div class="grid-item" data-value="Conflict-4">In conflict, I feel misunderstood</div>
-                             <div class="grid-item" data-value="Conflict-5">In conflict, I withdraw to think</div>
-                             <div class="grid-item" data-value="Conflict-6">In conflict, I get anxious and defensive</div>
-                             <div class="grid-item" data-value="Conflict-7">In conflict, I deflect with humor</div>
-                             <div class="grid-item" data-value="Conflict-8">In conflict, I assert dominance</div>
-                             <div class="grid-item" data-value="Conflict-9">In conflict, I shut down or agree</div>
-                             <div class="grid-item" data-value="Stress-1">Under stress, I get rigid and critical</div>
-                             <div class="grid-item" data-value="Stress-2">Under stress, I cling to others</div>
-                             <div class="grid-item" data-value="Stress-3">Under stress, I push harder</div>
-                             <div class="grid-item" data-value="Stress-4">Under stress, I feel isolated</div>
-                             <div class="grid-item" data-value="Stress-5">Under stress, I retreat completely</div>
-                             <div class="grid-item" data-value="Stress-6">Under stress, I panic or overthink</div>
-                             <div class="grid-item" data-value="Stress-7">Under stress, I distract myself</div>
-                             <div class="grid-item" data-value="Stress-8">Under stress, I lash out</div>
-                             <div class="grid-item" data-value="Stress-9">Under stress, I numb out</div>
-                             <div class="grid-item" data-value="Growth-1">At my best, I’m calm and accepting</div>
-                             <div class="grid-item" data-value="Growth-2">At my best, I’m independent</div>
-                             <div class="grid-item" data-value="Growth-3">At my best, I’m genuine</div>
-                             <div class="grid-item" data-value="Growth-4">At my best, I inspire others</div>
-                             <div class="grid-item" data-value="Growth-5">At my best, I’m focused and insightful</div>
-                             <div class="grid-item" data-value="Growth-6">At my best, I’m brave and reliable</div>
-                             <div class="grid-item" data-value="Growth-7">At my best, I’m steady and productive</div>
-                             <div class="grid-item" data-value="Growth-8">At my best, I’m generous and open</div>
-                             <div class="grid-item" data-value="Growth-9">At my best, I’m engaged and assertive</div>
-                         </div>
-                     </div>
-                     <div class="row1">
-                         <label for="enneagram-motivations">Core Motivations:</label>
-                         <textarea id="enneagram-motivations" rows="3" placeholder="What drives you deep down? (e.g., being perfect, avoiding pain)"></textarea>
-                     </div>
-                     <div class="row1">
-                         <label for="enneagram-fears">Core Fears:</label>
-                         <textarea id="enneagram-fears" rows="3" placeholder="What do you fear most? (e.g., being corrupt, being abandoned)"></textarea>
-                     </div>
-                     <div class="row1">
-                         <label for="enneagram-stress">Behavior Under Stress:</label>
-                         <textarea id="enneagram-stress" rows="3" placeholder="How do you act when stressed? (e.g., I criticize everything or distract myself)"></textarea>
-                     </div>
-                     <div class="row1">
-                         <label for="enneagram-growth">Behavior at Your Best:</label>
-                         <textarea id="enneagram-growth" rows="3" placeholder="How do you act at your peak? (e.g., I’m focused and inspire others)"></textarea>
-                     </div>
-                     <div class="row1">
-                         <label for="enneagram-childhood">Influential Childhood Memory:</label>
-                         <textarea id="enneagram-childhood" rows="3" placeholder="A memory that shaped you (e.g., I was praised for being good)"></textarea>
-                     </div>
-                     <button class="generate-btn" data-prompt="enneagram-questionnaire">Generate Promptemplate™ Now!</button>
-                 </div>
-             </div>
+          
  
+
+             <h2>DISCUSSION</h2>
              <!-- Premium: Counseling/Therapy -->
              <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Discussion - Counseling/Therapy <span class="premium-notice">Premium</span></h2>
+                     <h2>Counseling <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content premium-blur">
@@ -349,10 +393,11 @@
                  </div>
              </div>
  
+             <h2>PLANNING</h2>
             <!-- Free: Event Planning -->
 <div class="section">
     <div class="section-header" onclick="toggleSection(this)">
-        <h2>Plan - Event</h2>
+        <h2>Event</h2>
         <span class="toggle-icon">+</span>
     </div>
     <div class="section-content">
@@ -448,7 +493,7 @@ Most individuals between 5-10 yrs old"></textarea>
              <!-- Free: Fitness Plan -->
              <div class="section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Plan - Fitness</h2>
+                     <h2>Fitness</h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content">
@@ -493,7 +538,7 @@ Most individuals between 5-10 yrs old"></textarea>
              <!-- Premium: Trip Planner -->
              <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Plan - Trip <span class="premium-notice">Premium</span></h2>
+                     <h2>Trip <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content premium-blur">
@@ -567,49 +612,18 @@ Most individuals between 5-10 yrs old"></textarea>
                  </div>
              </div>
  
-             <!-- Free: Calorie Counter -->
-             <div class="section">
-                 <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Monitor - Calorie & Macronutrients</h2>
-                     <span class="toggle-icon">+</span>
-                 </div>
-                 <div class="section-content">
-                     <div class="row1">
-                         <div class="grid-container" id="calorie-goal">
-                             <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
-                             <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
-                             <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
-                             <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
-                         </div>
-                     </div>
-                     <div class="row1">
-                         <div class="grid-container" id="calorie-activity">
-                             <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
-                             <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
-                             <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5 days/week)</div>
-                             <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
-                             <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
-                         </div>
-                     </div>
-                     <div class="row1">
-                         <input type="number" id="calorie-weight" rows="1" placeholder="Weight:"></input>
-                         <input type="number" id="calorie-height" rows="1" placeholder="Height:"></input>
-                         <input type="number" id="calorie-age" rows="1" placeholder="Age:"></input>
-                         <textarea id="calorie-food-log" rows="3" placeholder="Meals:
- Chicken breast 200g with rice 1cup
- Potato 100g with broccoli 150g"></textarea>
-                     </div>
-                     <button class="generate-btn" data-prompt="calorie" onclick="generateCaloriePrompt()">Generate Promptemplate™ Now!</button>
-                 </div>
-             </div>
+            
          </div>
  
          <!-- Business Prompts -->
          <div id="business-prompts" class="hidden">
+
+
+            <h2>DESIGN</h2>
              <!-- Premium: App Development -->
              <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Design - App <span class="premium-notice">Premium</span></h2>
+                     <h2>App <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content premium-blur">
@@ -658,7 +672,7 @@ Most individuals between 5-10 yrs old"></textarea>
              <!-- Premium: Marketing Campaign -->
              <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Design - Marketing Campaign <span class="premium-notice">Premium</span></h2>
+                     <h2>Marketing Campaign <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content premium-blur">
@@ -753,10 +767,11 @@ Most individuals between 5-10 yrs old"></textarea>
                  </div>
              </div>
  
+             <h2>PLAN</h2>
              <!-- Premium: New Business -->
              <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Plan - New Business <span class="premium-notice">Premium</span></h2>
+                     <h2>New Business <span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content premium-blur">
@@ -835,10 +850,11 @@ Most individuals between 5-10 yrs old"></textarea>
                  </div>
              </div>
  
+             <h2>DATA MANAGMENT</h2>
              <!-- Free: Business Expense Receipts -->
              <div class="section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Data Collection & Aggregation - Business Expense Receipts</h2>
+                     <h2>Business Expense Receipts Process</h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content">
@@ -855,7 +871,7 @@ Most individuals between 5-10 yrs old"></textarea>
              <!-- Premium: Research -->
              <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Research - Work Through <span class="premium-notice">Premium</span></h2>
+                     <h2>Research<span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content premium-blur">
@@ -906,7 +922,7 @@ Most individuals between 5-10 yrs old"></textarea>
              <!-- Premium: Speculation -->
              <div class="section premium-section">
                  <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Speculation - Explore Possibilities <span class="premium-notice">Premium</span></h2>
+                     <h2>Speculation<span class="premium-notice">Premium</span></h2>
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content premium-blur">
