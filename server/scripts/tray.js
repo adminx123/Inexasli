@@ -6,17 +6,24 @@ document.addEventListener("DOMContentLoaded", () => {
       <div></div>
       <div></div>
     </div>
+
     <div class="tray-dropdown" id="trayDropdownMenu">
       <div class="tray-menu-item-container">
         <a href="/budget/intro.html" id="website" class="tray-menu-item">IncomeIQ<span class="tm">™</span></a>
       </div>
+
       <div class="tray-menu-item-container">
         <a href="/create/prompt.html" id="website" class="tray-menu-item">Promptemplate<span class="tm">™</span></a>
       </div>
       
-      <div class="tray-menu-item-container">
-        <a href="mailto:support@inexasli.com" id="trayContact" class="tray-menu-item">CONTACT</a>
+         <div class="tray-menu-item-container">
+        <a href="/aboutus.html" id="trayContact" class="tray-menu-item">About</a>
       </div>
+      
+      <div class="tray-menu-item-container">
+        <a href="mailto:support@inexasli.com" id="trayContact" class="tray-menu-item">Contact</a>
+      </div>
+
     </div>
   `;
   document.body.insertAdjacentHTML("afterbegin", menuHTML);
