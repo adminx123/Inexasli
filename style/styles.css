@@ -960,7 +960,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 }
 
 .hoead-4 {
-  animation: fades1 10s;
+  animation: fades1 6s;
   overflow: hidden;
   background-color: none;
 }
@@ -1353,7 +1353,7 @@ details p {
 }s
 
 .tm {
-  font-size: 0.5em;      /* Smaller font size */
+  font-size: 0.15em;      /* Smaller font size */
   position: relative;    /* Allows shifting */
   top: -0.2em;           /* Moves the symbol up; adjust the value as needed */
   vertical-align: top;   /* Ensures proper alignment */
