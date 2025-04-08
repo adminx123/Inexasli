@@ -42,11 +42,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             overflow: hidden;
         }
 
- #subscribe-sidebar:hover {
-        background-color: #FFD700; /* Matches your premium hover color */
-    }
-
-      
+        #subscribe-sidebar:hover {
+            background-color: #FFD700; /* Matches your premium hover color */
+        }
 
         #subscribe-sidebar #close-sidebar {
             position: absolute;
@@ -125,42 +123,55 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
- /* Premium Section Styling */
-         .premium-blur {
-             filter: blur(3px);
-             color: #888;
-             pointer-events: none;
-             transition: filter 0.3s ease, color 0.3s ease;
-         }
-         .premium-notice {
-             display: inline-block;
-             margin-left: 10px;
-             padding: 4px 8px;
-             background-color: #000000;
-             color: #ffffff;
-             font-size: 0.85em;
-             border-radius: 4px;
-             font-weight: bold;
-         }
+        /* Premium Section Styling */
+        .premium-blur {
+            filter: blur(3px);
+            color: #888;
+            pointer-events: none;
+            transition: filter 0.3s ease, color 0.3s ease;
+        }
+        .premium-notice {
+            display: inline-block;
+            margin-left: 10px;
+            padding: 4px 8px;
+            background-color: #000000;
+            color: #ffffff;
+            font-size: 0.85em;
+            border-radius: 4px;
+            font-weight: bold;
+        }
 
-          /* Standardized Section Header Styling */
-         .section-header {
-             cursor: pointer;
-             padding: 5px;
-             font-weight: bold;
-             color: #000000;
-             background-color: #f5f5f5;
-             border-radius: 4px;
-             display: flex;
-             justify-content: space-between;
-             align-items: center;
-             font-size: 12px; /* Standardized font size */
-             transition: background-color 0.3s ease;
-         }
-         .section-header:hover {
-             background-color: #d3bc0f;
-         }
-
+        /* Section1 Styling (Premium-specific) */
+        .section1 {
+            margin-bottom: 2px;
+            padding: 1px;
+        }
+        .section1-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #000000;
+            transition: background-color 0.3s ease;
+        }
+        .section1-header:hover {
+            background-color: #d3bc0f; /* Gold hover */
+        }
+        .section1-content {
+            display: none; /* Hidden by default */
+            padding: 10px;
+        }
+        .section1.expanded .section1-content {
+            display: block; /* Shown when expanded */
+        }
+        .section1.expanded .toggle-icon {
+            transform: rotate(45deg); /* Matches .section behavior */
+        }
     `;
     document.head.appendChild(style);
 
