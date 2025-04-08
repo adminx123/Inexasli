@@ -48,15 +48,18 @@ function setTermsCookie(name, value) {
 }
 
 window.loadCookies = function() {
+    console.log('Starting loadCookies...');
     formElementIds.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
             const cookieValue = getLocal(id);
-            if (cookieValue !== null && cookieValue !== undefined) {
+            if (id.endsWith('_frequency')) {
+                element.value = cookieValue || 'total'; // Default to "total" if no valid cookie exists
+                console.log(`Set ${id} to ${element.value}`);
+            } else if (cookieValue !== null && cookieValue !== undefined && cookieValue !== '') {
                 element.value = cookieValue; // Set the input/select value from the cookie
-                // Update the total display if applicable
                 const category = id.replace('trip_', '').replace('_frequency', '');
-                if (expenseCategories.includes(category)) {
+                if (expenseCategories.includes(category) && !id.endsWith('_frequency')) {
                     updateFrequency(category);
                 }
             }
@@ -102,15 +105,17 @@ checkbox2.addEventListener('click', () => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-    const checkbox1 = document.querySelector('#termscheckbox');
-    const checkbox2 = document.querySelector('#notintended');
+    console.log('DOMContentLoaded event fired');
+    const frequencyDropdowns = document.querySelectorAll('select[id$="_frequency"]');
+    frequencyDropdowns.forEach(dropdown => {
+        const cookieValue = getLocal(dropdown.id);
+        dropdown.value = cookieValue || 'total'; // Default to "total" if no valid cookie exists
+        console.log(`Set ${dropdown.id} to ${dropdown.value}`);
+    });
 
-    const isChecked1 = getTermsCookie('term1');
-    const isChecked2 = getTermsCookie('term2');
-
-    if (isChecked1) checkbox1.checked = true;
-    if (isChecked2) checkbox2.checked = true;
-    loadCookies(); // Added here to load trip expense inputs on page load
+    setTimeout(() => {
+        loadCookies(); // Ensure cookies are loaded after DOM is ready
+    }, 100); // Slight delay to ensure DOM readiness
 });
 
 window.updateFrequency = function(category) {
@@ -169,20 +174,20 @@ window.termsAgreed = function() {
             alert('Please enter a valid trip duration for expenses with daily or weekly frequencies.');
             return;
         }
-    
+
         let grandTotal = 0;
         const expenseList = document.getElementById('expense_list');
         expenseList.innerHTML = ''; // Clear previous list
-    
+
         expenseCategories.forEach(category => {
             const amountInput = document.getElementById(`trip_${category}`);
             const frequencySelect = document.getElementById(`trip_${category}_frequency`);
             const totalSpan = document.getElementById(`trip_${category}_total`);
-    
+
             const amount = parseFloat(amountInput.value) || 0;
             const frequency = frequencySelect.value;
             let total = 0;
-    
+
             if (totalOnlyCategories.includes(category)) {
                 total = amount;
             } else {
@@ -201,7 +206,7 @@ window.termsAgreed = function() {
                         break;
                 }
             }
-    
+
             if (total > 0) {
                 grandTotal += total;
                 totalSpan.textContent = `$${total.toFixed(2)}`;
@@ -212,13 +217,13 @@ window.termsAgreed = function() {
                 totalSpan.textContent = '';
             }
         });
-    
+
         // Add the total of all expenses to the breakdown
         const totalLi = document.createElement('li');
         totalLi.textContent = `Total Expenses: $${grandTotal.toFixed(2)}`;
         totalLi.style.fontWeight = 'bold'; // Optional: make it stand out
         expenseList.appendChild(totalLi);
-    
+
         const totalCostDisplay = document.getElementById('total_cost_display');
         totalCostDisplay.textContent = `$${grandTotal.toFixed(2)}`;
         document.getElementById('totalCost').classList.remove('hidden');
@@ -277,11 +282,13 @@ const formElementIds = [
 ];
 
 window.createCookies = function() {
+    console.log('Saving cookies...');
     formElementIds.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
             const value = element.value || '0';
             setLocal(id, value, 365);
+            console.log(`Saved ${id}: ${value}`);
         } else {
             console.warn(`Element with ID '${id}' not found in the DOM`);
         }
@@ -291,6 +298,7 @@ window.createCookies = function() {
 
 // Function to overwrite cookies and clear input fields for Vacation Worksheet
 window.overwriteCookies1 = function() {
+    console.log('Overwriting cookies...');
     const formElements = [
         'trip_duration',
         'trip_flights', 'trip_car', 'trip_uber', 'trip_transit', 'trip_bike',
@@ -307,6 +315,7 @@ window.overwriteCookies1 = function() {
     // First, overwrite all cookies regardless of whether elements exist
     formElements.forEach(function (cookieName) {
         setLocal(cookieName, value, 365); // Set all cookies with a 1-year expiry
+        console.log(`Cleared cookie for ${cookieName}`);
     });
 
     // Then, only clear input fields that exist on the current page
@@ -314,8 +323,18 @@ window.overwriteCookies1 = function() {
         const element = document.getElementById(elementId);
         if (element) {
             element.value = value; // Only clear the input/select if it exists on current page
+            // Reset frequency dropdowns to "total"
+            if (elementId.endsWith('_frequency')) {
+                element.value = 'total';
+            }
         }
     });
 
     console.log("All Vacation Worksheet cookies have been overwritten and existing input fields cleared.");
-}
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        loadCookies(); // Ensure cookies are loaded after DOM is ready
+    }, 100); // Slight delay to ensure DOM readiness
+});
