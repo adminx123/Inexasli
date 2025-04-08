@@ -332,12 +332,14 @@ function updateIncomeErosionPieChart() {
 function colorChangeFIRE() {
     const fire = parseFloat(document.getElementById("FIRERATIO").textContent);
     if (isNaN(fire)) return;
+    // Colors reflect thresholds from Financial Planning Association for educational purposes
     document.getElementById("FIRERATIO").style.color = 
-        fire >= 0.25 ? "green" : fire >= 0.10 ? "orange" : "red";
+        fire >= 1.0 ? "green" : fire >= 0.25 ? "orange" : "red";
 }
 
 function colorChangeSavingsToDebt(savingsToDebt) {
     if (isNaN(savingsToDebt)) return;
+    // Colors reflect thresholds from Consumer Financial Protection Bureau for educational purposes
     document.getElementById("SAVINGSTODEBT").style.color = 
         savingsToDebt >= 2 ? "green" : savingsToDebt >= 1 ? "orange" : "red";
 }
@@ -345,13 +347,15 @@ function colorChangeSavingsToDebt(savingsToDebt) {
 function colorChangeHTI() {
     const hti = parseFloat(document.getElementById("HOUSINGTOINCOME").textContent);
     if (isNaN(hti)) return;
+    // Colors reflect thresholds from Investopedia for educational purposes
     document.getElementById("HOUSINGTOINCOME").style.color = 
-        hti < 0.25 ? "green" : hti <= 0.35 ? "orange" : "red";
+        hti < 0.28 ? "green" : hti <= 0.35 ? "orange" : "red";
 }
 
 function colorChangeDTI() {
     const dti = parseFloat(document.getElementById("DEBTTOINCOME").textContent);
     if (isNaN(dti)) return;
+    // Colors reflect thresholds from Investopedia for educational purposes
     document.getElementById("DEBTTOINCOME").style.color = 
         dti < 0.20 ? "green" : dti <= 0.36 ? "orange" : "red";
 }
