@@ -151,10 +151,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const value = getLocal(field);
         const element = document.querySelector(`#${field}`);
         if (element) {
-            if (field === 'revenueType' || field === 'cogs' || field === 'resultChange') {
-                element.value = value === '' || value === 'annually' ? (field === 'resultChange' ? '1' : 'blank') : value;
+            if (field === 'revenueType') {
+                // Default to 'rental' if no value is found
+                element.value = value || 'rental';
+            } else if (field === 'cogs') {
+                // Default to 'no' if no value is found
+                element.value = value || 'no';
+            } else if (field === 'salesFrequency' || field.endsWith('Frequency')) {
+                // Default to 'annually' for frequency fields
+                element.value = value || 'annually';
+            } else if (field === 'resultChange') {
+                // Default to '1' (Annual results)
+                element.value = value || '1';
             } else {
-                const parsedValue = parseInt(value) || '';
+                // For other fields, set the value or leave blank
+                const parsedValue = parseFloat(value) || '';
                 element.value = parsedValue === 0 ? '' : parsedValue;
             }
         }
