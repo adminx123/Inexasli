@@ -42,9 +42,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             overflow: hidden;
         }
 
-        #subscribe-sidebar a.subscribe-link:hover {
-            color: rgb(55, 55, 55);
-        }
+ #subscribe-sidebar:hover {
+        background-color: #FFD700; /* Matches your premium hover color */
+    }
+
+      
 
         #subscribe-sidebar #close-sidebar {
             position: absolute;
