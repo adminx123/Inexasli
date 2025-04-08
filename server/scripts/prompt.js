@@ -1,25 +1,61 @@
 /*
-* Copyright (c) 2025 INEXASLI. All rights reserved.
-* This code is protected under Canadian and international copyright laws.
-* Unauthorized use, reproduction, distribution, or modification of this code 
-* without explicit written permission via email from info@inexasli.com 
-* is strictly prohibited. Violators will be pursued and prosecuted to the 
-* fullest extent of the law in British Columbia, Canada, and applicable 
-* jurisdictions worldwide.
-*/
-
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */
 
 import { setCookie } from '/server/scripts/setcookie.js';
 
 let activeScope = null;
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Check if user is authenticated
+    const paid = localStorage.getItem("authenticated");
+    const isPaid = paid === "paid";
+
+    // Redirect unauthenticated users trying to access premium content
+    const currentPath = window.location.pathname;
+    const hasPremiumSection = document.querySelector('.premium-section') !== null;
+
+    if (!isPaid && hasPremiumSection && currentPath !== "/payment.html") {
+        window.location.href = "/payment.html";
+        return;
+    }
+
+    // If user is authenticated, unblur premium content
+    if (isPaid) {
+        document.querySelectorAll('.premium-blur').forEach(el => {
+            el.classList.remove('premium-blur');
+        });
+    } else {
+        // If not authenticated, disable interaction with premium sections
+        document.querySelectorAll('.premium-section .generate-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modal = document.createElement('div');
+                modal.className = 'prompt-modal';
+                modal.innerHTML = `
+                    <p style="font-weight: bold; color:rgb(0, 0, 0);">
+                        Please upgrade to a premium plan to access this feature.
+                        <br><a href="/payment.html" style="color: blue; text-decoration: underline;">Upgrade Now</a>
+                    </p>
+                    <button onclick="this.parentElement.remove()">Close</button>
+                `;
+                document.body.appendChild(modal);
+            });
+        });
+    }
+
     // Set the "prompt" cookie on page load
     setCookie("prompt", "loaded", 32, Date.now());
 
     // Attach toggleSection to section headers
     document.querySelectorAll('.section > h2').forEach(header => {
-        console.log('Attaching toggleSection to:', header); // Debug log
+        console.log('Attaching toggleSection to:', header);
         header.addEventListener('click', () => toggleSection(header));
     });
 
@@ -55,19 +91,18 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.toggleSection = function (header) {
-    console.log('toggleSection called for:', header); // Debug log
+    console.log('toggleSection called for:', header);
     const section = header.parentElement;
     const allSections = document.querySelectorAll('.section');
     allSections.forEach(otherSection => {
         if (otherSection !== section && otherSection.classList.contains('expanded')) {
-            console.log('Collapsing section:', otherSection); // Debug log
+            console.log('Collapsing section:', otherSection);
             otherSection.classList.remove('expanded');
         }
     });
     section.classList.toggle('expanded');
-    console.log('Toggled section:', section); // Debug log
+    console.log('Toggled section:', section);
 };
-
 
 function toggleScope(scope) {
     const personalBtn = document.getElementById('personal-btn');
@@ -83,8 +118,7 @@ function toggleScope(scope) {
             businessBtn,
             personalPrompts,
             businessPrompts,
-            promptContainer,
-            paymentContainer
+            promptContainer
         });
         return;
     }
@@ -117,7 +151,6 @@ function toggleScope(scope) {
 }
 
 // Rest of your JavaScript remains unchanged...
-// Rest of your JavaScript (unchanged)...
 const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
 const formatGrid = (selector, prefix) => {
     const items = Array.from(document.querySelectorAll(selector))
@@ -162,16 +195,9 @@ function toggleCodeInput(selected) {
     }
 }
 
-
-
 document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-status) .grid-item').forEach(item => {
     item.addEventListener('click', () => item.classList.toggle('selected'));
 });
-
-
-
-
-
 
 function generatePrompt(promptType) {
     let prompt = '';
@@ -197,10 +223,7 @@ function generatePrompt(promptType) {
 
         case 'incident':
             prompt += formatGrid('#incident-goal .grid-item.selected', 'Analyze the following incident details input relative to my goal');
-    
-        
-        prompt += formatGrid('#area-goal .grid-item.selected', 'Incident Area');
-
+            prompt += formatGrid('#area-goal .grid-item.selected', 'Incident Area');
             prompt += 'Purpose of analysis: Maximize the efficiency, productivity, safety and understanding of social dynamics for the workplace or personal life.\n\n';
             const incidentDetails = document.getElementById('incident-details');
             if (incidentDetails?.value) {
@@ -214,110 +237,94 @@ function generatePrompt(promptType) {
             }
             break;
 
-            case 'event':
-    const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
-    if (eventTypesSelected.length > 0) {
-        prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event');
-        prompt += 'Purpose of Analysis: To generate a clear and actionable checklist in code block format with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event.\n\n';
-    } else {
-        prompt += 'No event type selected. Assuming a generic event for planning purposes.\n\n';
-    }
+        case 'event':
+            const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
+            if (eventTypesSelected.length > 0) {
+                prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event');
+                prompt += 'Purpose of Analysis: To generate a clear and actionable checklist in code block format with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event.\n\n';
+            } else {
+                prompt += 'No event type selected. Assuming a generic event for planning purposes.\n\n';
+            }
 
-    // Event Elements
-    prompt += formatGrid('#event-elements .grid-item.selected', 'Elements');
+            prompt += formatGrid('#event-elements .grid-item.selected', 'Elements');
 
-    // Venue Status
-    const venueStatus = document.getElementById('event-venue')?.value;
-    if (venueStatus) {
-        prompt += `Venue Status: ${venueStatus}\n\n`;
-    }
+            const venueStatus = document.getElementById('event-venue')?.value;
+            if (venueStatus) {
+                prompt += `Venue Status: ${venueStatus}\n\n`;
+            }
 
-    // Location (Indoor/Outdoor) and Related Setup
-    const location = document.getElementById('event-location');
-    if (location?.value) {
-        prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`;
-        if (location.value === 'indoors') {
-            prompt += formatGrid('#event-indoor-setup .grid-item.selected', 'Venue Setup Needs');
-        } else if (location.value === 'outdoors') {
-            prompt += formatGrid('#event-outdoor .grid-item.selected', 'Setup Considerations');
-        }
-    }
-
-    // Guest Count
-    const guests = document.getElementById('event-guests')?.value;
-    if (guests) {
-        prompt += formatList(guests, 'Guest Count');
-    }
-
-    // Budget
-    const budget = document.getElementById('event-budget')?.value;
-    if (budget) {
-        prompt += formatList(budget, 'Budget');
-    }
-
-    // Start and End Times
-    const startTimeEl = document.getElementById('event-start');
-    const endTimeEl = document.getElementById('event-end');
-    const startTime = startTimeEl?.value || ''; // Default to empty string if undefined
-    const endTime = endTimeEl?.value || '';     // Default to empty string if undefined
-
-    // Debug logging
-    console.log('Start Time Element:', startTimeEl);
-    console.log('Start Time Value:', startTime);
-    console.log('End Time Element:', endTimeEl);
-    console.log('End Time Value:', endTime);
-
-    let timeString = '';
-    if (startTime) {
-        timeString += `Start: ${startTime}`;
-    }
-    if (endTime) {
-        timeString += `${timeString ? ' - ' : ''}End: ${endTime}`;
-    }
-
-    // Include Timeline if either startTime or endTime has a value
-    if (startTime || endTime) {
-        prompt += formatList(timeString || 'No specific times provided', 'Timeline');
-    } else {
-        prompt += 'Timeline: Not specified\n\n';
-        console.log('No start or end time provided (both empty)');
-    }
-
-    // Specific Location
-    const specificLocation = document.getElementById('event-specific-location')?.value;
-    if (specificLocation) {
-        prompt += formatList(specificLocation, 'Specific Location');
-    }
-
-    // Specific Context
-    const specificContext = document.getElementById('event-specific-context')?.value;
-    if (specificContext) {
-        prompt += formatList(specificContext, 'Context Dump');
-    }
-
-    break;
-
-            case 'therapy':
-                const therapyGoal = document.getElementById('therapy-goal');
-                if (therapyGoal?.value) {
-                    prompt += `Act as a compassionate and professional counselor/therapist. Use the following input to provide me with empathetic guidance, insights, and actionable steps to support my emotional well-being and work toward my therapy goal: ${therapyGoal.value}\n\n`;
-                    prompt += `Purpose of this session: Respond as a therapist would, offering a structured response in checklist format with headings like "Reflections" (for observations on my input) and "Suggestions" (for practical next steps), using a warm and supportive tone. Avoid clinical jargon unless it’s clearly explained.\n\n`;
-                    
-                    prompt += formatGrid('#therapy-emotions .grid-item.selected', 'Current Emotional State');
-                    prompt += formatGrid('#therapy-triggers .grid-item.selected', 'Triggers or Stressors');
-                    
-                    const recentEvents = document.getElementById('therapy-recent');
-                    if (recentEvents?.value) prompt += formatList(recentEvents.value, 'Recent Events or Feelings');
-                    
-                    prompt += formatGrid('#therapy-coping .grid-item.selected', 'Coping Strategies I’ve Tried');
-                    
-                    const therapyHistory = document.getElementById('therapy-history');
-                    if (therapyHistory?.value) prompt += formatList(therapyHistory.value, 'Therapy History or Context');
-                    
-                    const therapyContext = document.getElementById('therapy-context');
-                    if (therapyContext?.value) prompt += formatList(therapyContext.value, 'Additional Context (Past or Future)');
+            const location = document.getElementById('event-location');
+            if (location?.value) {
+                prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`;
+                if (location.value === 'indoors') {
+                    prompt += formatGrid('#event-indoor-setup .grid-item.selected', 'Venue Setup Needs');
+                } else if (location.value === 'outdoors') {
+                    prompt += formatGrid('#event-outdoor .grid-item.selected', 'Setup Considerations');
                 }
-                break;
+            }
+
+            const guests = document.getElementById('event-guests')?.value;
+            if (guests) {
+                prompt += formatList(guests, 'Guest Count');
+            }
+
+            const budget = document.getElementById('event-budget')?.value;
+            if (budget) {
+                prompt += formatList(budget, 'Budget');
+            }
+
+            const startTimeEl = document.getElementById('event-start');
+            const endTimeEl = document.getElementById('event-end');
+            const startTime = startTimeEl?.value || '';
+            const endTime = endTimeEl?.value || '';
+
+            console.log('Start Time Element:', startTimeEl);
+            console.log('Start Time Value:', startTime);
+            console.log('End Time Element:', endTimeEl);
+            console.log('End Time Value:', endTime);
+
+            let timeString = '';
+            if (startTime) {
+                timeString += `Start: ${startTime}`;
+            }
+            if (endTime) {
+                timeString += `${timeString ? ' - ' : ''}End: ${endTime}`;
+            }
+
+            if (startTime || endTime) {
+                prompt += formatList(timeString || 'No specific times provided', 'Timeline');
+            } else {
+                prompt += 'Timeline: Not specified\n\n';
+                console.log('No start or end time provided (both empty)');
+            }
+
+            const specificLocation = document.getElementById('event-specific-location')?.value;
+            if (specificLocation) {
+                prompt += formatList(specificLocation, 'Specific Location');
+            }
+
+            const specificContext = document.getElementById('event-specific-context')?.value;
+            if (specificContext) {
+                prompt += formatList(specificContext, 'Context Dump');
+            }
+            break;
+
+        case 'therapy':
+            const therapyGoal = document.getElementById('therapy-goal');
+            if (therapyGoal?.value) {
+                prompt += `Act as a compassionate and professional counselor/therapist. Use the following input to provide me with empathetic guidance, insights, and actionable steps to support my emotional well-being and work toward my therapy goal: ${therapyGoal.value}\n\n`;
+                prompt += `Purpose of this session: Respond as a therapist would, offering a structured response in checklist format with headings like "Reflections" (for observations on my input) and "Suggestions" (for practical next steps), using a warm and supportive tone. Avoid clinical jargon unless it’s clearly explained.\n\n`;
+                prompt += formatGrid('#therapy-emotions .grid-item.selected', 'Current Emotional State');
+                prompt += formatGrid('#therapy-triggers .grid-item.selected', 'Triggers or Stressors');
+                const recentEvents = document.getElementById('therapy-recent');
+                if (recentEvents?.value) prompt += formatList(recentEvents.value, 'Recent Events or Feelings');
+                prompt += formatGrid('#therapy-coping .grid-item.selected', 'Coping Strategies I’ve Tried');
+                const therapyHistory = document.getElementById('therapy-history');
+                if (therapyHistory?.value) prompt += formatList(therapyHistory.value, 'Therapy History or Context');
+                const therapyContext = document.getElementById('therapy-context');
+                if (therapyContext?.value) prompt += formatList(therapyContext.value, 'Additional Context (Past or Future)');
+            }
+            break;
 
         case 'fitness':
             const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
@@ -345,9 +352,9 @@ function generatePrompt(promptType) {
             }
             break;
 
-            case 'calorie':
-                prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal');
-                prompt += `
+        case 'calorie':
+            prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal');
+            prompt += `
             The purpose of the estimates is to create a report in the following format:
             
             ### Your Goal: Gain Muscle
@@ -362,54 +369,50 @@ Protein     158.8 g        80 g           50%
 Carbs       317.6 g        86 g           27%
 Fats        79.4 g         50 g           63%
             `;
-            
-                // Gathering user inputs and appending to prompt
-                const weight = document.getElementById('calorie-weight');
-                if (weight?.value) prompt += formatList(weight.value, 'Weight');
-                const height = document.getElementById('calorie-height');
-                if (height?.value) prompt += formatList(height.value, 'Height');
-                const age = document.getElementById('calorie-age');
-                if (age?.value) prompt += formatList(age.value, 'Age');
-                prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
-                
-                const foodLog = document.getElementById('calorie-food-log');
-                if (foodLog?.value) {
-                    prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
-                }
-                break;
-            
-            
-                case 'trip':
-    prompt += formatGrid('#trip-activities .grid-item.selected', 'Review the following activities I want to do on my trip');
-    prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format\n\n';
-    const tripSpecifics = document.getElementById('trip-specifics');
-    if (tripSpecifics?.value) {
-        prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
-        prompt += `Activity-specific information requested:\n${tripSpecifics.value}\n\n`;
-        const plans = document.getElementById('trip-plans');
-        if (plans?.value) prompt += formatList(plans.value, 'Confirmed Schedule');
-        const packing = document.getElementById('trip-packing');
-        if (packing?.value) {
-            let packingDescription = '';
-            switch (packing.value) {
-                case 'YM': packingDescription = 'Yes, for Male'; break;
-                case 'YF': packingDescription = 'Yes, for Female'; break;
-                case 'YMF': packingDescription = 'Yes, for Male & Female'; break;
-                case 'NN': packingDescription = 'No'; break;
+            const weight = document.getElementById('calorie-weight');
+            if (weight?.value) prompt += formatList(weight.value, 'Weight');
+            const height = document.getElementById('calorie-height');
+            if (height?.value) prompt += formatList(height.value, 'Height');
+            const age = document.getElementById('calorie-age');
+            if (age?.value) prompt += formatList(age.value, 'Age');
+            prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
+            const foodLog = document.getElementById('calorie-food-log');
+            if (foodLog?.value) {
+                prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
             }
-            prompt += `${packingDescription}\n\n`;
-        }
-        const people = document.getElementById('trip-people');
-        if (people?.value) prompt += formatList(people.value, 'Number of People on Trip');
-        const days = document.getElementById('trip-days');
-        if (days?.value) prompt += formatList(days.value, 'Trip Length');
-        const location = document.getElementById('trip-location');
-        if (location?.value) prompt += formatList(location.value, 'Trip Location');
-        prompt += formatGrid('#trip-relationship .grid-item.selected', 'Relationship to People on Trip');
-        const cost = document.getElementById('trip-cost');
-        if (cost?.value) prompt += formatList(cost.value, 'Budget');
-    }
-    break;
+            break;
+
+        case 'trip':
+            prompt += formatGrid('#trip-activities .grid-item.selected', 'Review the following activities I want to do on my trip');
+            prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format\n\n';
+            const tripSpecifics = document.getElementById('trip-specifics');
+            if (tripSpecifics?.value) {
+                prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
+                prompt += `Activity-specific information requested:\n${tripSpecifics.value}\n\n`;
+                const plans = document.getElementById('trip-plans');
+                if (plans?.value) prompt += formatList(plans.value, 'Confirmed Schedule');
+                const packing = document.getElementById('trip-packing');
+                if (packing?.value) {
+                    let packingDescription = '';
+                    switch (packing.value) {
+                        case 'YM': packingDescription = 'Yes, for Male'; break;
+                        case 'YF': packingDescription = 'Yes, for Female'; break;
+                        case 'YMF': packingDescription = 'Yes, for Male & Female'; break;
+                        case 'NN': packingDescription = 'No'; break;
+                    }
+                    prompt += `${packingDescription}\n\n`;
+                }
+                const people = document.getElementById('trip-people');
+                if (people?.value) prompt += formatList(people.value, 'Number of People on Trip');
+                const days = document.getElementById('trip-days');
+                if (days?.value) prompt += formatList(days.value, 'Trip Length');
+                const location = document.getElementById('trip-location');
+                if (location?.value) prompt += formatList(location.value, 'Trip Location');
+                prompt += formatGrid('#trip-relationship .grid-item.selected', 'Relationship to People on Trip');
+                const cost = document.getElementById('trip-cost');
+                if (cost?.value) prompt += formatList(cost.value, 'Budget');
+            }
+            break;
 
         case 'business':
             const vision = document.getElementById('business-vision');
@@ -471,74 +474,58 @@ Fats        79.4 g         50 g           63%
             }
             break;
 
-            
-            
-            case 'enneagram-questionnaire':
-                const enneagramSelf = document.getElementById('enneagram-self');
-                if (enneagramSelf?.value) {
-                    prompt += `Here’s my completed Enneagram questionnaire:\n\n`;
-                    prompt += `Self-Description:\n${enneagramSelf.value}\n\n`;
-                    
-                    const traits = Array.from(document.querySelectorAll('#enneagram-traits .grid-item.selected'))
-                        .map(el => el.getAttribute('data-value'))
-                        .join('\n');
-                    if (traits) prompt += `Core Traits I Identify With:\n${traits}\n\n`;
-            
-                    const behaviors = Array.from(document.querySelectorAll('#enneagram-behaviors .grid-item.selected'))
-                        .map(el => el.getAttribute('data-value'))
-                        .join('\n');
-                    if (behaviors) prompt += `Behavioral Responses:\n${behaviors}\n\n`;
-            
-                    const motivations = document.getElementById('enneagram-motivations');
-                    if (motivations?.value) prompt += `Core Motivations:\n${motivations.value}\n\n`;
-                    
-                    const fears = document.getElementById('enneagram-fears');
-                    if (fears?.value) prompt += `Core Fears:\n${fears.value}\n\n`;
-                    
-                    const stress = document.getElementById('enneagram-stress');
-                    if (stress?.value) prompt += `Behavior Under Stress:\n${stress.value}\n\n`;
-                    
-                    const growth = document.getElementById('enneagram-growth');
-                    if (growth?.value) prompt += `Behavior at My Best:\n${growth.value}\n\n`;
-                    
-                    const childhood = document.getElementById('enneagram-childhood');
-                    if (childhood?.value) prompt += `Influential Childhood Memory:\n${childhood.value}\n\n`;
-                    
-                    prompt += `Please analyze this to determine my primary Enneagram type, potential wing(s), stress and growth directions, and any additional insights based on Enneagram theory output in a code block formatted chart.`;
-                }
-                break;
-            
-            case 'expense':
-                const locationsSelected = document.querySelectorAll('#expense-location .grid-item.selected');
-                console.log('Selected locations count:', locationsSelected.length);
-                console.log('Selected locations:', Array.from(locationsSelected).map(item => item.getAttribute('data-value')));
-            
-                if (locationsSelected.length > 0) {
-                    prompt += formatGrid('#expense-location .grid-item.selected', 'Location');
-            
-                    // Check if "USA" or "Canada" is selected
-                    const selectedLocations = Array.from(locationsSelected).map(item => item.getAttribute('data-value'));
-                    if (selectedLocations.includes('Canada')) {
-                        prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
-                        Advertising, Insurance, Interest, Maintenance and Repairs, Management and Administration Fees, Motor Vehicle Expenses, Office Expenses, Legal, Accounting, and Other Professional Fees, 
-                        Property Taxes, Salaries/Wages/and Benefits, Travel, Utilities, Other Expenses (for miscellaneous items)
-                        
-                        Ensure that all items on all receipts are accounted for and categorized appropriately.\n\n`;
-                    } else if (selectedLocations.includes('USA')) {
-                        prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
-                        Advertising, Insurance (other than health), Interest, Repairs and Maintenance, Other Expenses (for management/admin fees or miscellaneous items), 
-                        Car and Truck Expenses, Office Expense, Legal and Professional Services, Taxes and Licenses, Wages, Travel, Utilities
-                        
-                        Ensure that all items on all receipts are accounted for and categorized appropriately.\n\n`;
-                    } else {
-                        prompt += `No specific region selected. Please select either "USA" or "Canada" to generate the appropriate prompt.\n\n`;
-                    }
-            
-                    console.log('Prompt after building:', prompt);
+        case 'enneagram-questionnaire':
+            const enneagramSelf = document.getElementById('enneagram-self');
+            if (enneagramSelf?.value) {
+                prompt += `Here’s my completed Enneagram questionnaire:\n\n`;
+                prompt += `Self-Description:\n${enneagramSelf.value}\n\n`;
+                const traits = Array.from(document.querySelectorAll('#enneagram-traits .grid-item.selected'))
+                    .map(el => el.getAttribute('data-value'))
+                    .join('\n');
+                if (traits) prompt += `Core Traits I Identify With:\n${traits}\n\n`;
+                const behaviors = Array.from(document.querySelectorAll('#enneagram-behaviors .grid-item.selected'))
+                    .map(el => el.getAttribute('data-value'))
+                    .join('\n');
+                if (behaviors) prompt += `Behavioral Responses:\n${behaviors}\n\n`;
+                const motivations = document.getElementById('enneagram-motivations');
+                if (motivations?.value) prompt += `Core Motivations:\n${motivations.value}\n\n`;
+                const fears = document.getElementById('enneagram-fears');
+                if (fears?.value) prompt += `Core Fears:\n${fears.value}\n\n`;
+                const stress = document.getElementById('enneagram-stress');
+                if (stress?.value) prompt += `Behavior Under Stress:\n${stress.value}\n\n`;
+                const growth = document.getElementById('enneagram-growth');
+                if (growth?.value) prompt += `Behavior at My Best:\n${growth.value}\n\n`;
+                const childhood = document.getElementById('enneagram-childhood');
+                if (childhood?.value) prompt += `Influential Childhood Memory:\n${childhood.value}\n\n`;
+                prompt += `Please analyze this to determine my primary Enneagram type, potential wing(s), stress and growth directions, and any additional insights based on Enneagram theory output in a code block formatted chart.`;
+            }
+            break;
+
+        case 'expense':
+            const locationsSelected = document.querySelectorAll('#expense-location .grid-item.selected');
+            console.log('Selected locations count:', locationsSelected.length);
+            console.log('Selected locations:', Array.from(locationsSelected).map(item => item.getAttribute('data-value')));
+            if (locationsSelected.length > 0) {
+                prompt += formatGrid('#expense-location .grid-item.selected', 'Location');
+                const selectedLocations = Array.from(locationsSelected).map(item => item.getAttribute('data-value'));
+                if (selectedLocations.includes('Canada')) {
+                    prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
+                    Advertising, Insurance, Interest, Maintenance and Repairs, Management and Administration Fees, Motor Vehicle Expenses, Office Expenses, Legal, Accounting, and Other Professional Fees, 
+                    Property Taxes, Salaries/Wages/and Benefits, Travel, Utilities, Other Expenses (for miscellaneous items)
+                    Ensure that all items on all receipts are accounted for and categorized appropriately.\n\n`;
+                } else if (selectedLocations.includes('USA')) {
+                    prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
+                    Advertising, Insurance (other than health), Interest, Repairs and Maintenance, Other Expenses (for management/admin fees or miscellaneous items), 
+                    Car and Truck Expenses, Office Expense, Legal and Professional Services, Taxes and Licenses, Wages, Travel, Utilities
+                    Ensure that all items on all receipts are accounted for and categorized appropriately.\n\n`;
                 } else {
-                    console.log('No locations selected, prompt not built');
+                    prompt += `No specific region selected. Please select either "USA" or "Canada" to generate the appropriate prompt.\n\n`;
                 }
-                break;
+                console.log('Prompt after building:', prompt);
+            } else {
+                console.log('No locations selected, prompt not built');
+            }
+            break;
 
         case 'research':
             prompt += formatList(document.getElementById('research-goal')?.value, 'Research Goal');
@@ -551,7 +538,6 @@ Fats        79.4 g         50 g           63%
             prompt += formatList(document.getElementById('research-deliverables')?.value, 'Expected deliverables');
             prompt += formatList(document.getElementById('additional-details')?.value, 'Additional details');
             break;
-
 
         case 'speculation':
             prompt += formatList(document.getElementById('speculation-goal')?.value, 'Speculation Goal');
@@ -568,145 +554,137 @@ Fats        79.4 g         50 g           63%
             prompt += formatList(document.getElementById('speculation-outcomes')?.value, 'Expected outcomes');
             prompt += formatList(document.getElementById('additional-details')?.value, 'Additional details');
             break;
-
-
-
-
-
     }
 
+    const style = document.createElement('style');
+    style.textContent = `
+        .prompt-modal {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            padding: 20px;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0 #000;
+            z-index: 1000;
+            text-align: center;
+            font-size: 16px;
+            color: #000;
+            width: 80%;
+            max-width: 500px;
+        }
+        .prompt-modal button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #000;
+            color: #fff;
+            border: 2px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .prompt-modal button:hover {
+            background: #333;
+        }
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .ai-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ai-logo {
+            width: 40px;
+            height: 40px;
+            display: block;
+        }
+        .section.expanded {
+            max-height: 500px;
+            transition: max-height 0.3s ease-in-out;
+            overflow: visible;
+        }
+        .section {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+        }
+    `;
+    document.head.appendChild(style);
 
-    // In your generatePrompt function, update the style.textContent
-const style = document.createElement('style');
-style.textContent = `
-    .prompt-modal {
-        position: fixed;
-        top: 20%;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #fff;
-        padding: 20px;
-        border: 2px solid #000;
-        box-shadow: 4px 4px 0 #000;
-        z-index: 1000;
-        text-align: center;
-        font-size: 16px;
-        color: #000;
-        width: 80%;
-        max-width: 500px;
-    }
-    .prompt-modal button {
-        margin-top: 10px;
-        padding: 10px 20px;
-        background: #000;
-        color: #fff;
-        border: 2px solid #000;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .prompt-modal button:hover {
-        background: #333;
-    }
-    .button-container {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-    }
-    .ai-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        width: 60px; /* Fixed width for consistency */
-        height: 60px; /* Fixed height for consistency */
-        display: flex; /* Make button a flex container */
-        justify-content: center; /* Center horizontally */
-        align-items: center; /* Center vertically */
-    }
-    .ai-logo {
-        width: 40px;
-        height: 40px;
-        display: block; /* Ensure image behaves as a block for centering */
-    }
-    .section.expanded {
-        max-height: 500px; /* Adjust as needed */
-        transition: max-height 0.3s ease-in-out;
-        overflow: visible;
-    }
-    .section {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-in-out;
-    }
-`;
-document.head.appendChild(style);
-
-// Replace your old alert block with this
-if (prompt) {
-    document.getElementById('result').textContent = prompt;
-    navigator.clipboard.writeText(prompt).then(() => {
+    if (prompt) {
+        document.getElementById('result').textContent = prompt;
+        navigator.clipboard.writeText(prompt).then(() => {
+            const modal = document.createElement('div');
+            modal.className = 'prompt-modal';
+            modal.innerHTML = `
+                <p>Your Promptemplate™ is ready! It’s copied to your clipboard—paste it into your favorite AI chat with Ctrl+V (Cmd+V on Mac) or right-click > Paste.</p>
+                <div class="button-container">
+                    <button class="ai-button" onclick="openApp('grok', 'https://grok.com')">
+                        <img src="/images/grok.png" alt="Grok" class="ai-logo">
+                    </button>
+                    <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
+                        <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
+                    </button>
+                    <button class="ai-button" onclick="openApp('com.deepseek.app', 'https://deepseek.com')">
+                        <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
+                    </button>
+                    <button class="ai-button" onclick="openApp('com.google.gemini', 'https://gemini.google.com/app')">
+                        <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
+                    </button>
+                </div>
+                <button onclick="this.parentElement.remove()">Got It</button>
+            `;
+            document.body.appendChild(modal);
+        }).catch(err => {
+            console.error('Failed to copy prompt:', err);
+            const modal = document.createElement('div');
+            modal.className = 'prompt-modal';
+            modal.innerHTML = `
+                <p>Prompt generated but failed to copy. Copy it manually from the page.</p>
+                <div class="button-container">
+                    <button class="ai-button" onclick="openApp('grok', 'https://grok.com')">
+                        <img src="/images/grok.png" alt="Grok" class="ai-logo">
+                    </button>
+                    <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
+                        <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
+                    </button>
+                    <button class="ai-button" onclick="openApp('com.deepseek.app', 'https://deepseek.com')">
+                        <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
+                    </button>
+                    <button class="ai-button" onclick="openApp('com.google.gemini', 'https://gemini.google.com/app')">
+                        <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
+                    </button>
+                </div>
+                <button onclick="this.parentElement.remove()">Got It</button>
+            `;
+            document.body.appendChild(modal);
+        });
+    } else if (promptType === 'research') {
         const modal = document.createElement('div');
         modal.className = 'prompt-modal';
         modal.innerHTML = `
-            <p>Your Promptemplate™ is ready! It’s copied to your clipboard—paste it into your favorite AI chat with Ctrl+V (Cmd+V on Mac) or right-click > Paste.</p>
-            <div class="button-container">
-                <button class="ai-button" onclick="openApp('grok', 'https://grok.com')">
-                    <img src="/images/grok.png" alt="Grok" class="ai-logo">
-                </button>
-                <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
-                    <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
-                </button>
-                <button class="ai-button" onclick="openApp('com.deepseek.app', 'https://deepseek.com')">
-                    <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
-                </button>
-                <button class="ai-button" onclick="openApp('com.google.gemini', 'https://gemini.google.com/app')">
-                    <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
-                </button>
-            </div>
+            <p>Please fill in the necessary details for the research prompt.</p>
             <button onclick="this.parentElement.remove()">Got It</button>
         `;
         document.body.appendChild(modal);
-    }).catch(err => {
-        console.error('Failed to copy prompt:', err);
+    } else {
         const modal = document.createElement('div');
         modal.className = 'prompt-modal';
         modal.innerHTML = `
-            <p>Prompt generated but failed to copy. Copy it manually from the page.</p>
-            <div class="button-container">
-                <button class="ai-button" onclick="openApp('grok', 'https://grok.com')">
-                    <img src="/images/grok.png" alt="Grok" class="ai-logo">
-                </button>
-                <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
-                    <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
-                </button>
-                <button class="ai-button" onclick="openApp('com.deepseek.app', 'https://deepseek.com')">
-                    <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
-                </button>
-                <button class="ai-button" onclick="openApp('com.google.gemini', 'https://gemini.google.com/app')">
-                    <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
-                </button>
-            </div>
+            <p>No prompt generated. Please fill in the required fields.</p>
             <button onclick="this.parentElement.remove()">Got It</button>
         `;
         document.body.appendChild(modal);
-    });
-} else if (promptType === 'research') {
-    const modal = document.createElement('div');
-    modal.className = 'prompt-modal';
-    modal.innerHTML = `
-        <p>Please fill in the necessary details for the research prompt.</p>
-        <button onclick="this.parentElement.remove()">Got It</button>
-    `;
-    document.body.appendChild(modal);
-} else {
-    const modal = document.createElement('div');
-    modal.className = 'prompt-modal';
-    modal.innerHTML = `
-        <p>No prompt generated. Please fill in the required fields.</p>
-        <button onclick="this.parentElement.remove()">Got It</button>
-    `;
-    document.body.appendChild(modal);
-}
+    }
 }
 
 document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
@@ -759,12 +737,11 @@ document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
             return;
         }
 
-        // Toggle the scope and center the section
         toggleScope(scope);
         const targetSection = document.getElementById(`${scope}-prompts`);
         if (targetSection) {
-            const sectionHeight = targetSection.offsetHeight; // Height of the div
-            const windowHeight = window.innerHeight; // Height of the viewport
+            const sectionHeight = targetSection.offsetHeight;
+            const windowHeight = window.innerHeight;
             const scrollPosition = targetSection.getBoundingClientRect().top + window.scrollY - (windowHeight - sectionHeight) / 2;
 
             window.scrollTo({
@@ -787,28 +764,21 @@ function openApp(appScheme, fallbackUrl) {
     var isAndroid = /android/i.test(userAgent);
     var isiOS = /iPhone|iPad|iPod/i.test(userAgent);
 
-    // Store the current page to detect if the app launch fails
     var startTime = Date.now();
     var launched = false;
 
     if (isAndroid) {
-        // Correct intent syntax for Android
         window.location.href = `intent://app/#Intent;package=${appScheme};end`;
     } else if (isiOS) {
-        // Replace with the actual iOS URL scheme for Grok
-        window.location.href = `${appScheme}://`; // e.g., "grok://"
+        window.location.href = `${appScheme}://`;
     } else {
-        // Fallback for non-mobile devices
         window.location.href = fallbackUrl;
         return;
     }
 
-    // Check if the app launched by monitoring focus
     setTimeout(function () {
         if (Date.now() - startTime < 2000) {
-            // If we're still on the page after 1.5s, assume app launch failed
             window.location.href = fallbackUrl;
         }
     }, 1500);
 }
-
