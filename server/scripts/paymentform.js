@@ -124,6 +124,43 @@ document.addEventListener('DOMContentLoaded', async function() {
                 padding: 8px 8px;
             }
         }
+
+ /* Premium Section Styling */
+         .premium-blur {
+             filter: blur(3px);
+             color: #888;
+             pointer-events: none;
+             transition: filter 0.3s ease, color 0.3s ease;
+         }
+         .premium-notice {
+             display: inline-block;
+             margin-left: 10px;
+             padding: 4px 8px;
+             background-color: #000000;
+             color: #ffffff;
+             font-size: 0.85em;
+             border-radius: 4px;
+             font-weight: bold;
+         }
+
+          /* Standardized Section Header Styling */
+         .section-header {
+             cursor: pointer;
+             padding: 5px;
+             font-weight: bold;
+             color: #000000;
+             background-color: #f5f5f5;
+             border-radius: 4px;
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             font-size: 12px; /* Standardized font size */
+             transition: background-color 0.3s ease;
+         }
+         .section-header:hover {
+             background-color: #d3bc0f;
+         }
+
     `;
     document.head.appendChild(style);
 
