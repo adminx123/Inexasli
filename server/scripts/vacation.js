@@ -47,27 +47,39 @@ function setTermsCookie(name, value) {
     }));
 }
 
-window.loadCookies = function() {
-    console.log('Starting loadCookies...');
+window.loadLocalStorage = function() {
+    console.log('Starting loadLocalStorage...');
     formElementIds.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
-            const cookieValue = getLocal(id);
-            if (id.endsWith('_frequency')) {
-                element.value = cookieValue || 'total'; // Default to "total" if no valid cookie exists
-                console.log(`Set ${id} to ${element.value}`);
-            } else if (cookieValue !== null && cookieValue !== undefined && cookieValue !== '') {
-                element.value = cookieValue; // Set the input/select value from the cookie
-                const category = id.replace('trip_', '').replace('_frequency', '');
-                if (expenseCategories.includes(category) && !id.endsWith('_frequency')) {
-                    updateFrequency(category);
+            const storedValue = getLocal(id); // Retrieve value from localStorage
+            if (element.tagName === 'SELECT') {
+                // Handle <select> elements
+                element.value = storedValue || element.options[0].value; // Default to the first <option>
+                if (!Array.from(element.options).some(option => option.value === element.value)) {
+                    element.value = element.options[0].value; // Ensure valid value
                 }
+                console.log(`Set <select> ${id} to ${element.value}`);
+            } else if (expenseCategories.includes(id.replace('trip_', '').replace('_frequency', ''))) {
+                // Handle <input> elements for expense inputs
+                element.value = storedValue || ''; // Leave blank if no value
+                console.log(`Set <input> ${id} to ${element.value}`);
+            } else {
+                // Handle other <input> elements
+                element.value = storedValue || '';
+                console.log(`Set other <input> ${id} to ${element.value}`);
+            }
+
+            // Update frequency totals if applicable
+            const category = id.replace('trip_', '').replace('_frequency', '');
+            if (expenseCategories.includes(category) && !id.endsWith('_frequency')) {
+                updateFrequency(category);
             }
         } else {
             console.warn(`Element with ID '${id}' not found in the DOM`);
         }
     });
-    console.log('Cookies loaded into form elements');
+    console.log('LocalStorage values loaded into form elements');
 };
 
 const tabs = document.querySelectorAll('.tab');
@@ -84,7 +96,7 @@ tabs.forEach(tab => {
             e.preventDefault();
             alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
         }
-        loadCookies(); // Optional: Keep this if you want tab clicks to reload cookies
+        loadLocalStorage(); // Optional: Keep this if you want tab clicks to reload cookies
     });
 
     if (location.includes(dataL)) {
@@ -114,7 +126,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     setTimeout(() => {
-        loadCookies(); // Ensure cookies are loaded after DOM is ready
+        loadLocalStorage(); // Ensure cookies are loaded after DOM is ready
     }, 100); // Slight delay to ensure DOM readiness
 });
 
@@ -335,6 +347,6 @@ window.overwriteCookies1 = function() {
 
 window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-        loadCookies(); // Ensure cookies are loaded after DOM is ready
+        loadLocalStorage(); // Ensure cookies are loaded after DOM is ready
     }, 100); // Slight delay to ensure DOM readiness
 });
