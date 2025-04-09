@@ -277,15 +277,8 @@ function generatePrompt(promptType) {
         case 'calorie':
             prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal');
             prompt += `
-            The purpose of the estimates is to create a report in the following format:
-            
-            ### Your Goal: [Goal Here]
-            
-            Generate a **text-based table** with columns: **Nutrient**, **Target Amount**, **Food Log Intake**, and **Percentage Reached** in code block format. **Do not include any additional comments, explanations, or recommendations. Just the raw data in the requested format.** Any amounts I add after your output are to be added to the running total unless I specifically ask for a new estimate.
-            
-            Example headings:
-             NUTRIENT, TARGET, FOOD INTAKE, % REACHED
-            
+            Output only a text-based table in a code block with these exact columns: Nutrient, Target Amount, Food Log Intake, Percentage Reached. Use this header format in the code block:
+Include no text outside the code block—no comments, explanations, or recommendations. Add any future amounts I provide to the running totals unless I request a new estimate.
             `;
             const weight = document.getElementById('calorie-weight');
             if (weight?.value) prompt += formatList(weight.value, 'Weight');
