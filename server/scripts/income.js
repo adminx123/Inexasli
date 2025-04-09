@@ -539,37 +539,33 @@ function getMedicare() {
 
 
 
-// Define the federal tax brackets for Canada for 2025
 const REGIONALTAXBRACKETSCAN = [
-    { limit: 57375, rate: 0.15 },   // on the portion of taxable income that is $57,375 or less, plus
-    { limit: 114750, rate: 0.205 }, // on the portion of taxable income over $57,375 up to $114,750, plus
-    { limit: 177882, rate: 0.26 },  // on the portion of taxable income over $114,750 up to $177,882, plus
-    { limit: 253414, rate: 0.29 },  // on the portion of taxable income over $177,882 up to $253,414, plus
-    { limit: 0, rate: 0.33 }        // on the portion of taxable income over $253,414
+    { limit: 57375, rate: 0.15 },
+    { limit: 114750, rate: 0.205 },
+    { limit: 177882, rate: 0.26 },
+    { limit: 253414, rate: 0.29 },
+    { limit: Infinity, rate: 0.33 } // Use Infinity for top bracket
 ];
 
 
-// Define the federal tax brackets for USA for 2025
 const REGIONALTAXBRACKETSUSA = [
-    { limit: 250525, rate: 0.35 },  // on the portion of taxable income over $250,525
-    { limit: 197300, rate: 0.32 },  // on the portion of taxable income over $197,300 up to $250,525
-    { limit: 103350, rate: 0.24 },  // on the portion of taxable income over $103,350 up to $197,300
-    { limit: 48475, rate: 0.22 },   // on the portion of taxable income over $48,475 up to $103,350
-    { limit: 11925, rate: 0.12 },   // on the portion of taxable income over $11,925 up to $48,475
-    { limit: 0, rate: 0.10 }        // on the portion of taxable income that is $11,925 or less
+    { limit: 11925, rate: 0.10 },   // on the portion of taxable income that is $11,925 or less
+    { limit: 48475, rate: 0.12 },   // on the portion of taxable income over $11,925 up to $48,475
+    { limit: 103350, rate: 0.22 },  // on the portion of taxable income over $48,475 up to $103,350
+    { limit: 197300, rate: 0.24 },  // on the portion of taxable income over $103,350 up to $197,300
+    { limit: 250525, rate: 0.32 },  // on the portion of taxable income over $197,300 up to $250,525
+    { limit: Infinity, rate: 0.35 } // on the portion of taxable income over $250,525
 ];
 
-// Define the SUBREGIONAL tax brackets
 const SUBREGIONALTAXBRACKETS = {
-    //Canada Provinces
+    // Canada Provinces
     'AB': [
         { limit: 151234, rate: 0.10 }, // on the portion of taxable income that is $151,234 or less, plus
         { limit: 181481, rate: 0.12 }, // on the portion of taxable income over $151,234 up to $181,481, plus
         { limit: 241974, rate: 0.13 }, // on the portion of taxable income over $181,481 up to $241,974, plus
         { limit: 362961, rate: 0.14 }, // on the portion of taxable income over $241,974 up to $362,961, plus
-        { limit: 0, rate: 0.15 }       // on the portion of taxable income over $362,961
+        { limit: Infinity, rate: 0.15 } // on the portion of taxable income over $362,961
     ],
-
     'BC': [
         { limit: 49279, rate: 0.0506 }, // on the portion of taxable income that is $49,279 or less, plus
         { limit: 98560, rate: 0.077 },  // on the portion of taxable income over $49,279 up to $98,560, plus
@@ -577,22 +573,19 @@ const SUBREGIONALTAXBRACKETS = {
         { limit: 137407, rate: 0.1229 },// on the portion of taxable income over $113,158 up to $137,407, plus
         { limit: 186306, rate: 0.147 }, // on the portion of taxable income over $137,407 up to $186,306, plus
         { limit: 259829, rate: 0.168 }, // on the portion of taxable income over $186,306 up to $259,829, plus
-        { limit: 0, rate: 0.205 }       // on the portion of taxable income over $259,829
+        { limit: Infinity, rate: 0.205 } // on the portion of taxable income over $259,829
     ],
-
     'MB': [
         { limit: 47564, rate: 0.108 },  // on the portion of taxable income that is $47,564 or less, plus
         { limit: 101200, rate: 0.1275 },// on the portion of taxable income over $47,564 up to $101,200, plus
-        { limit: 0, rate: 0.174 }       // on the portion of taxable income over $101,200
+        { limit: Infinity, rate: 0.174 } // on the portion of taxable income over $101,200
     ],
-
     'NB': [
         { limit: 51306, rate: 0.094 },  // on the portion of taxable income that is $51,306 or less, plus
         { limit: 102614, rate: 0.14 },  // on the portion of taxable income over $51,306 up to $102,614, plus
         { limit: 190060, rate: 0.16 },  // on the portion of taxable income over $102,614 up to $190,060, plus
-        { limit: 0, rate: 0.195 }       // on the portion of taxable income over $190,060
+        { limit: Infinity, rate: 0.195 } // on the portion of taxable income over $190,060
     ],
-
     'NL': [
         { limit: 44192, rate: 0.087 },  // on the portion of taxable income that is $44,192 or less, plus
         { limit: 88382, rate: 0.145 },  // on the portion of taxable income over $44,192 up to $88,382, plus
@@ -601,391 +594,325 @@ const SUBREGIONALTAXBRACKETS = {
         { limit: 282214, rate: 0.198 }, // on the portion of taxable income over $220,910 up to $282,214, plus
         { limit: 564429, rate: 0.208 }, // on the portion of taxable income over $282,214 up to $564,429, plus
         { limit: 1128858, rate: 0.213 },// on the portion of taxable income over $564,429 up to $1,128,858, plus
-        { limit: 0, rate: 0.218 }       // on the portion of taxable income over $1,128,858
+        { limit: Infinity, rate: 0.218 } // on the portion of taxable income over $1,128,858
     ],
-
     'NT': [
         { limit: 51964, rate: 0.059 },  // on the portion of taxable income that is $51,964 or less, plus
         { limit: 103930, rate: 0.086 }, // on the portion of taxable income over $51,964 up to $103,930, plus
         { limit: 168967, rate: 0.122 }, // on the portion of taxable income over $103,930 up to $168,967, plus
-        { limit: 0, rate: 0.1405 }      // on the portion of taxable income over $168,967
+        { limit: Infinity, rate: 0.1405 } // on the portion of taxable income over $168,967
     ],
-
     'NS': [
         { limit: 30507, rate: 0.0879 }, // on the portion of taxable income that is $30,507 or less, plus
         { limit: 61015, rate: 0.1495 }, // on the portion of taxable income over $30,507 up to $61,015, plus
         { limit: 95883, rate: 0.1667 }, // on the portion of taxable income over $61,015 up to $95,883, plus
         { limit: 154650, rate: 0.175 }, // on the portion of taxable income over $95,883 up to $154,650, plus
-        { limit: 0, rate: 0.21 }        // on the portion of taxable income over $154,650
+        { limit: Infinity, rate: 0.21 }  // on the portion of taxable income over $154,650
     ],
-
     'NU': [
         { limit: 54707, rate: 0.04 },   // on the portion of taxable income that is $54,707 or less, plus
         { limit: 109413, rate: 0.07 },  // on the portion of taxable income over $54,707 up to $109,413, plus
         { limit: 177881, rate: 0.09 },  // on the portion of taxable income over $109,413 up to $177,881, plus
-        { limit: 0, rate: 0.115 }       // on the portion of taxable income over $177,881
+        { limit: Infinity, rate: 0.115 } // on the portion of taxable income over $177,881
     ],
-
     'ON': [
         { limit: 52886, rate: 0.0505 }, // on the portion of taxable income that is $52,886 or less, plus
         { limit: 105775, rate: 0.0915 },// on the portion of taxable income over $52,886 up to $105,775, plus
         { limit: 150000, rate: 0.1116 },// on the portion of taxable income over $105,775 up to $150,000, plus
         { limit: 220000, rate: 0.1216 },// on the portion of taxable income over $150,000 up to $220,000, plus
-        { limit: 0, rate: 0.1316 }      // on the portion of taxable income over $220,000
+        { limit: Infinity, rate: 0.1316 } // on the portion of taxable income over $220,000
     ],
-
     'PE': [
         { limit: 33328, rate: 0.095 },  // on the portion of taxable income that is $33,328 or less, plus
         { limit: 64656, rate: 0.1347 }, // on the portion of taxable income over $33,328 up to $64,656, plus
         { limit: 105000, rate: 0.166 }, // on the portion of taxable income over $64,656 up to $105,000, plus
         { limit: 140000, rate: 0.1762 },// on the portion of taxable income over $105,000 up to $140,000, plus
-        { limit: 0, rate: 0.19 }        // on the portion of taxable income over $140,000
+        { limit: Infinity, rate: 0.19 }  // on the portion of taxable income over $140,000
     ],
-
     'QC': [
         // See Revenu Québec's income tax rates for specific brackets and rates
     ],
-
     'SK': [
         { limit: 53463, rate: 0.105 },  // on the portion of taxable income that is $53,463 or less, plus
         { limit: 152750, rate: 0.125 }, // on the portion of taxable income over $53,463 up to $152,750, plus
-        { limit: 0, rate: 0.145 }       // on the portion of taxable income over $152,750
+        { limit: Infinity, rate: 0.145 } // on the portion of taxable income over $152,750
     ],
-
     'YT': [
         { limit: 57375, rate: 0.064 },  // on the portion of taxable income that is $57,375 or less, plus
         { limit: 114750, rate: 0.09 },  // on the portion of taxable income over $57,375 up to $114,750, plus
         { limit: 177882, rate: 0.109 }, // on the portion of taxable income over $114,750 up to $177,882, plus
         { limit: 500000, rate: 0.128 }, // on the portion of taxable income over $177,882 up to $500,000, plus
-        { limit: 0, rate: 0.15 }        // on the portion of taxable income over $500,000
+        { limit: Infinity, rate: 0.15 }  // on the portion of taxable income over $500,000
     ],
-
-    //US STATES
-    // US STATES
-
+    // US States
     "AL": [
-        { "limit": 3000, "rate": 0.05 }, // No change
-        { "limit": 500, "rate": 0.04 },  // No change
-        { "limit": 0, "rate": 0.02 }     // No change
+        { limit: 500, rate: 0.02 },     // on the portion of taxable income that is $500 or less
+        { limit: 3000, rate: 0.04 },    // on the portion of taxable income over $500 up to $3,000
+        { limit: Infinity, rate: 0.05 }  // on the portion of taxable income over $3,000
     ],
-
     "AK": [],
-    // No state income tax
-
     "AZ": [
-        { "limit": 0, "rate": 0.025 }    // No change, flat rate
+        { limit: Infinity, rate: 0.025 } // flat rate
     ],
-
     "AR": [
-        { "limit": 8500, "rate": 0.049 }, // No change
-        { "limit": 4300, "rate": 0.04 },  // No change
-        { "limit": 0, "rate": 0.02 }      // No change
+        { limit: 4300, rate: 0.02 },    // on the portion of taxable income that is $4,300 or less
+        { limit: 8500, rate: 0.04 },    // on the portion of taxable income over $4,300 up to $8,500
+        { limit: Infinity, rate: 0.049 } // on the portion of taxable income over $8,500
     ],
-
     "CA": [
-        { "limit": 1162000, "rate": 0.133 }, // Increased from 1000000 due to inflation adjustment
-        { "limit": 788800, "rate": 0.123 },  // Increased from 677275
-        { "limit": 473300, "rate": 0.113 },  // Increased from 406364
-        { "limit": 394000, "rate": 0.103 },  // Increased from 338639
-        { "limit": 77000, "rate": 0.093 },   // Increased from 66295
-        { "limit": 61000, "rate": 0.08 },    // Increased from 52455
-        { "limit": 44000, "rate": 0.06 },    // Increased from 37788
-        { "limit": 27800, "rate": 0.04 },    // Increased from 23942
-        { "limit": 11700, "rate": 0.02 },    // Increased from 10099
-        { "limit": 0, "rate": 0.01 }
+        { limit: 11700, rate: 0.01 },   // on the portion of taxable income that is $11,700 or less
+        { limit: 27800, rate: 0.02 },   // on the portion of taxable income over $11,700 up to $27,800
+        { limit: 44000, rate: 0.04 },   // on the portion of taxable income over $27,800 up to $44,000
+        { limit: 61000, rate: 0.06 },   // on the portion of taxable income over $44,000 up to $61,000
+        { limit: 77000, rate: 0.08 },   // on the portion of taxable income over $61,000 up to $77,000
+        { limit: 394000, rate: 0.093 }, // on the portion of taxable income over $77,000 up to $394,000
+        { limit: 473300, rate: 0.103 }, // on the portion of taxable income over $394,000 up to $473,300
+        { limit: 788800, rate: 0.113 }, // on the portion of taxable income over $473,300 up to $788,800
+        { limit: 1162000, rate: 0.123 },// on the portion of taxable income over $788,800 up to $1,162,000
+        { limit: Infinity, rate: 0.133 } // on the portion of taxable income over $1,162,000
     ],
-
     "CO": [
-        { "limit": 0, "rate": 0.044 }    // No change, flat rate
+        { limit: Infinity, rate: 0.044 } // flat rate
     ],
-
     "CT": [
-        { "limit": 500000, "rate": 0.0699 }, // No change
-        { "limit": 250000, "rate": 0.069 },  // No change
-        { "limit": 200000, "rate": 0.065 },  // No change
-        { "limit": 100000, "rate": 0.06 },   // No change
-        { "limit": 50000, "rate": 0.055 },   // No change
-        { "limit": 10000, "rate": 0.05 },    // No change
-        { "limit": 0, "rate": 0.03 }
+        { limit: 10000, rate: 0.03 },   // on the portion of taxable income that is $10,000 or less
+        { limit: 50000, rate: 0.05 },   // on the portion of taxable income over $10,000 up to $50,000
+        { limit: 100000, rate: 0.055 }, // on the portion of taxable income over $50,000 up to $100,000
+        { limit: 200000, rate: 0.06 },  // on the portion of taxable income over $100,000 up to $200,000
+        { limit: 250000, rate: 0.065 }, // on the portion of taxable income over $200,000 up to $250,000
+        { limit: 500000, rate: 0.069 }, // on the portion of taxable income over $250,000 up to $500,000
+        { limit: Infinity, rate: 0.0699 } // on the portion of taxable income over $500,000
     ],
-
     "DC": [
-        { "limit": 1000000, "rate": 0.1075 }, // No change
-        { "limit": 500000, "rate": 0.0975 },  // No change
-        { "limit": 250000, "rate": 0.0925 },  // No change
-        { "limit": 60000, "rate": 0.085 },    // No change
-        { "limit": 40000, "rate": 0.065 },    // No change
-        { "limit": 10000, "rate": 0.06 },     // No change
-        { "limit": 0, "rate": 0.04 }
+        { limit: 10000, rate: 0.04 },   // on the portion of taxable income that is $10,000 or less
+        { limit: 40000, rate: 0.06 },   // on the portion of taxable income over $10,000 up to $40,000
+        { limit: 60000, rate: 0.065 },  // on the portion of taxable income over $40,000 up to $60,000
+        { limit: 250000, rate: 0.085 }, // on the portion of taxable income over $60,000 up to $250,000
+        { limit: 500000, rate: 0.0925 },// on the portion of taxable income over $250,000 up to $500,000
+        { limit: 1000000, rate: 0.0975 },// on the portion of taxable income over $500,000 up to $1,000,000
+        { limit: Infinity, rate: 0.1075 } // on the portion of taxable income over $1,000,000
     ],
-
     "DE": [
-        { "limit": 60000, "rate": 0.066 }, // No change
-        { "limit": 25000, "rate": 0.0555 }, // No change
-        { "limit": 20000, "rate": 0.052 },  // No change
-        { "limit": 10000, "rate": 0.048 },  // No change
-        { "limit": 5000, "rate": 0.039 },   // No change
-        { "limit": 2000, "rate": 0.022 }
+        { limit: 2000, rate: 0.022 },   // on the portion of taxable income that is $2,000 or less
+        { limit: 5000, rate: 0.039 },   // on the portion of taxable income over $2,000 up to $5,000
+        { limit: 10000, rate: 0.048 },  // on the portion of taxable income over $5,000 up to $10,000
+        { limit: 20000, rate: 0.052 },  // on the portion of taxable income over $10,000 up to $20,000
+        { limit: 25000, rate: 0.0555 }, // on the portion of taxable income over $20,000 up to $25,000
+        { limit: 60000, rate: 0.066 },  // on the portion of taxable income over $25,000 up to $60,000
+        { limit: Infinity, rate: 0.066 } // on the portion of taxable income over $60,000
     ],
-
     "FL": [],
-    // No state income tax
-
     "GA": [
-        { "limit": 7000, "rate": 0.0575 }, // No change
-        { "limit": 5250, "rate": 0.05 },   // No change
-        { "limit": 3750, "rate": 0.04 },   // No change
-        { "limit": 2250, "rate": 0.03 },   // No change
-        { "limit": 750, "rate": 0.02 },    // No change
-        { "limit": 0, "rate": 0.01 }
+        { limit: 750, rate: 0.01 },     // on the portion of taxable income that is $750 or less
+        { limit: 2250, rate: 0.02 },    // on the portion of taxable income over $750 up to $2,250
+        { limit: 3750, rate: 0.03 },    // on the portion of taxable income over $2,250 up to $3,750
+        { limit: 5250, rate: 0.04 },    // on the portion of taxable income over $3,750 up to $5,250
+        { limit: 7000, rate: 0.05 },    // on the portion of taxable income over $5,250 up to $7,000
+        { limit: Infinity, rate: 0.0575 } // on the portion of taxable income over $7,000
     ],
-
     "HI": [
-        { "limit": 325000, "rate": 0.11 }, // Increased from 200000, brackets widened
-        { "limit": 280000, "rate": 0.1 },  // Increased from 175000
-        { "limit": 240000, "rate": 0.09 }, // Increased from 150000
-        { "limit": 77000, "rate": 0.0825 },// Increased from 48000
-        { "limit": 58000, "rate": 0.079 }, // Increased from 36000
-        { "limit": 39000, "rate": 0.076 }, // Increased from 24000
-        { "limit": 31000, "rate": 0.072 }, // Increased from 19200
-        { "limit": 23000, "rate": 0.068 }, // Increased from 14400
-        { "limit": 15000, "rate": 0.064 }, // Increased from 9600
-        { "limit": 7700, "rate": 0.055 },  // Increased from 4800
-        { "limit": 3900, "rate": 0.032 },  // Increased from 2400
-        { "limit": 0, "rate": 0.014 }
+        { limit: 3900, rate: 0.014 },   // on the portion of taxable income that is $3,900 or less
+        { limit: 7700, rate: 0.032 },   // on the portion of taxable income over $3,900 up to $7,700
+        { limit: 15000, rate: 0.055 },  // on the portion of taxable income over $7,700 up to $15,000
+        { limit: 23000, rate: 0.064 },  // on the portion of taxable income over $15,000 up to $23,000
+        { limit: 31000, rate: 0.068 },  // on the portion of taxable income over $23,000 up to $31,000
+        { limit: 39000, rate: 0.072 },  // on the portion of taxable income over $31,000 up to $39,000
+        { limit: 58000, rate: 0.076 },  // on the portion of taxable income over $39,000 up to $58,000
+        { limit: 77000, rate: 0.079 },  // on the portion of taxable income over $58,000 up to $77,000
+        { limit: 240000, rate: 0.0825 },// on the portion of taxable income over $77,000 up to $240,000
+        { limit: 280000, rate: 0.09 },  // on the portion of taxable income over $240,000 up to $280,000
+        { limit: 325000, rate: 0.10 },  // on the portion of taxable income over $280,000 up to $325,000
+        { limit: Infinity, rate: 0.11 }  // on the portion of taxable income over $325,000
     ],
-
     "ID": [
-        { "limit": 0, "rate": 0.058 }    // No change, flat rate
+        { limit: Infinity, rate: 0.058 } // flat rate
     ],
-
     "IL": [
-        { "limit": 0, "rate": 0.0495 }    // No change, flat rate
+        { limit: Infinity, rate: 0.0495 } // flat rate
     ],
-
     "IN": [
-        { "limit": 0, "rate": 0.030 }     // Reduced from 0.0315 to 0.03
+        { limit: Infinity, rate: 0.030 }  // flat rate
     ],
-
     "IA": [
-        { "limit": 75000, "rate": 0.06 },  // No change, moving towards flat rate in future years
-        { "limit": 30000, "rate": 0.057 }, // No change
-        { "limit": 6000, "rate": 0.0482 }, // No change
-        { "limit": 0, "rate": 0.044 }
+        { limit: 6000, rate: 0.044 },   // on the portion of taxable income that is $6,000 or less
+        { limit: 30000, rate: 0.0482 }, // on the portion of taxable income over $6,000 up to $30,000
+        { limit: 75000, rate: 0.057 },  // on the portion of taxable income over $30,000 up to $75,000
+        { limit: Infinity, rate: 0.06 }  // on the portion of taxable income over $75,000
     ],
-
     "KS": [
-        { "limit": 30000, "rate": 0.057 }, // No change
-        { "limit": 15000, "rate": 0.0525 },// No change
-        { "limit": 0, "rate": 0.031 }
+        { limit: 15000, rate: 0.031 },  // on the portion of taxable income that is $15,000 or less
+        { limit: 30000, rate: 0.0525 }, // on the portion of taxable income over $15,000 up to $30,000
+        { limit: Infinity, rate: 0.057 } // on the portion of taxable income over $30,000
     ],
-
     "KY": [
-        { "limit": 0, "rate": 0.040 }     // Reduced from 0.045 to 0.04
+        { limit: Infinity, rate: 0.040 } // flat rate
     ],
-
     "LA": [
-        { "limit": 50000, "rate": 0.030 }, // Reduced from 0.0425 to 0.03, new flat rate
+        { limit: Infinity, rate: 0.030 } // flat rate
     ],
-
     "ME": [
-        { "limit": 58050, "rate": 0.0715 }, // No change
-        { "limit": 24500, "rate": 0.0675 }, // No change
-        { "limit": 0, "rate": 0.058 }
+        { limit: 24500, rate: 0.058 },  // on the portion of taxable income that is $24,500 or less
+        { limit: 58050, rate: 0.0675 }, // on the portion of taxable income over $24,500 up to $58,050
+        { limit: Infinity, rate: 0.0715 } // on the portion of taxable income over $58,050
     ],
-
     "MD": [
-        { "limit": 250000, "rate": 0.0575 }, // No change
-        { "limit": 150000, "rate": 0.055 },  // No change
-        { "limit": 125000, "rate": 0.0525 }, // No change
-        { "limit": 100000, "rate": 0.05 },   // No change
-        { "limit": 3000, "rate": 0.0475 },   // No change
-        { "limit": 2000, "rate": 0.04 },     // No change
-        { "limit": 1000, "rate": 0.03 },     // No change
-        { "limit": 0, "rate": 0.02 }
+        { limit: 1000, rate: 0.02 },    // on the portion of taxable income that is $1,000 or less
+        { limit: 2000, rate: 0.03 },    // on the portion of taxable income over $1,000 up to $2,000
+        { limit: 3000, rate: 0.04 },    // on the portion of taxable income over $2,000 up to $3,000
+        { limit: 100000, rate: 0.0475 },// on the portion of taxable income over $3,000 up to $100,000
+        { limit: 125000, rate: 0.05 },  // on the portion of taxable income over $100,000 up to $125,000
+        { limit: 150000, rate: 0.0525 },// on the portion of taxable income over $125,000 up to $150,000
+        { limit: 250000, rate: 0.055 }, // on the portion of taxable income over $150,000 up to $250,000
+        { limit: Infinity, rate: 0.0575 } // on the portion of taxable income over $250,000
     ],
-
     "MA": [
-        { "limit": 1000000, "rate": 0.09 }, // No change
-        { "limit": 0, "rate": 0.05 }        // No change
+        { limit: 1000000, rate: 0.05 }, // on the portion of taxable income that is $1,000,000 or less
+        { limit: Infinity, rate: 0.09 }  // on the portion of taxable income over $1,000,000
     ],
-
     "MI": [
-        { "limit": 0, "rate": 0.0405 }     // Reduced from 0.0425 to 0.0405
+        { limit: Infinity, rate: 0.0405 } // flat rate
     ],
-
     "MN": [
-        { "limit": 183340, "rate": 0.0985 }, // No change
-        { "limit": 98760, "rate": 0.0785 },  // No change
-        { "limit": 30070, "rate": 0.068 },   // No change
-        { "limit": 0, "rate": 0.0535 }
+        { limit: 30070, rate: 0.0535 }, // on the portion of taxable income that is $30,070 or less
+        { limit: 98760, rate: 0.068 },  // on the portion of taxable income over $30,070 up to $98,760
+        { limit: 183340, rate: 0.0785 },// on the portion of taxable income over $98,760 up to $183,340
+        { limit: Infinity, rate: 0.0985 } // on the portion of taxable income over $183,340
     ],
-
     "MS": [
-        { "limit": 10000, "rate": 0.044 }  // Reduced from 0.05 to 0.044
+        { limit: 10000, rate: 0.00 },   // on the portion of taxable income that is $10,000 or less
+        { limit: Infinity, rate: 0.044 } // on the portion of taxable income over $10,000
     ],
-
     "MO": [
-        { "limit": 7847, "rate": 0.0495 }, // No change
-        { "limit": 6726, "rate": 0.045 },  // No change
-        { "limit": 5605, "rate": 0.04 },   // No change
-        { "limit": 4484, "rate": 0.035 },  // No change
-        { "limit": 3363, "rate": 0.03 },   // No change
-        { "limit": 2242, "rate": 0.025 },  // No change
-        { "limit": 1121, "rate": 0.02 }
+        { limit: 1121, rate: 0.015 },   // on the portion of taxable income that is $1,121 or less
+        { limit: 2242, rate: 0.02 },    // on the portion of taxable income over $1,121 up to $2,242
+        { limit: 3363, rate: 0.025 },   // on the portion of taxable income over $2,242 up to $3,363
+        { limit: 4484, rate: 0.03 },    // on the portion of taxable income over $3,363 up to $4,484
+        { limit: 5605, rate: 0.035 },   // on the portion of taxable income over $4,484 up to $5,605
+        { limit: 6726, rate: 0.04 },    // on the portion of taxable income over $5,605 up to $6,726
+        { limit: 7847, rate: 0.045 },   // on the portion of taxable income over $6,726 up to $7,847
+        { limit: Infinity, rate: 0.0495 } // on the portion of taxable income over $7,847
     ],
-
     "MT": [
-        { "limit": 21600, "rate": 0.0675 }, // No change
-        { "limit": 16800, "rate": 0.06 },   // No change
-        { "limit": 13000, "rate": 0.05 },   // No change
-        { "limit": 9700, "rate": 0.04 },    // No change
-        { "limit": 6300, "rate": 0.03 },    // No change
-        { "limit": 3600, "rate": 0.02 },    // No change
-        { "limit": 0, "rate": 0.01 }
+        { limit: 3600, rate: 0.01 },    // on the portion of taxable income that is $3,600 or less
+        { limit: 6300, rate: 0.02 },    // on the portion of taxable income over $3,600 up to $6,300
+        { limit: 9700, rate: 0.03 },    // on the portion of taxable income over $6,300 up to $9,700
+        { limit: 13000, rate: 0.04 },   // on the portion of taxable income over $9,700 up to $13,000
+        { limit: 16800, rate: 0.05 },   // on the portion of taxable income over $13,000 up to $16,800
+        { limit: 21600, rate: 0.06 },   // on the portion of taxable income over $16,800 up to $21,600
+        { limit: Infinity, rate: 0.0675 } // on the portion of taxable income over $21,600
     ],
-
     "NC": [
-        { "limit": 0, "rate": 0.045 }     // Reduced from 0.0475 to 0.045
+        { limit: Infinity, rate: 0.045 } // flat rate
     ],
-
     "ND": [
-        { "limit": 458350, "rate": 0.029 }, // No change
-        { "limit": 210825, "rate": 0.0264 },// No change
-        { "limit": 101050, "rate": 0.0227 },// No change
-        { "limit": 41775, "rate": 0.0204 }, // No change
-        { "limit": 0, "rate": 0.011 }
+        { limit: 41775, rate: 0.011 },  // on the portion of taxable income that is $41,775 or less
+        { limit: 101050, rate: 0.0204 },// on the portion of taxable income over $41,775 up to $101,050
+        { limit: 210825, rate: 0.0227 },// on the portion of taxable income over $101,050 up to $210,825
+        { limit: 458350, rate: 0.0264 },// on the portion of taxable income over $210,825 up to $458,350
+        { limit: Infinity, rate: 0.029 } // on the portion of taxable income over $458,350
     ],
-
     "NH": [],
-    // Interest and dividends tax repealed
-
     "NJ": [
-        { "limit": 1000000, "rate": 0.1075 }, // No change
-        { "limit": 500000, "rate": 0.0897 },  // No change
-        { "limit": 75000, "rate": 0.0637 },   // No change
-        { "limit": 40000, "rate": 0.05525 },  // No change
-        { "limit": 35000, "rate": 0.035 },    // No change
-        { "limit": 20000, "rate": 0.0175 },   // No change
-        { "limit": 0, "rate": 0.014 }
+        { limit: 20000, rate: 0.014 },  // on the portion of taxable income that is $20,000 or less
+        { limit: 35000, rate: 0.0175 }, // on the portion of taxable income over $20,000 up to $35,000
+        { limit: 40000, rate: 0.035 },  // on the portion of taxable income over $35,000 up to $40,000
+        { limit: 75000, rate: 0.05525 },// on the portion of taxable income over $40,000 up to $75,000
+        { limit: 500000, rate: 0.0637 },// on the portion of taxable income over $75,000 up to $500,000
+        { limit: 1000000, rate: 0.0897 },// on the portion of taxable income over $500,000 up to $1,000,000
+        { limit: Infinity, rate: 0.1075 } // on the portion of taxable income over $1,000,000
     ],
-
     "NM": [
-        { "limit": 210000, "rate": 0.059 }, // No change
-        { "limit": 16000, "rate": 0.049 },  // No change
-        { "limit": 11000, "rate": 0.047 },  // No change
-        { "limit": 5500, "rate": 0.032 },   // No change
-        { "limit": 0, "rate": 0.017 }
+        { limit: 5500, rate: 0.017 },   // on the portion of taxable income that is $5,500 or less
+        { limit: 11000, rate: 0.032 },  // on the portion of taxable income over $5,500 up to $11,000
+        { limit: 16000, rate: 0.047 },  // on the portion of taxable income over $11,000 up to $16,000
+        { limit: 210000, rate: 0.049 }, // on the portion of taxable income over $16,000 up to $210,000
+        { limit: Infinity, rate: 0.059 } // on the portion of taxable income over $210,000
     ],
-
     "NY": [
-        { "limit": 25000000, "rate": 0.109 }, // No change
-        { "limit": 5000000, "rate": 0.103 },  // No change
-        { "limit": 1077550, "rate": 0.0965 }, // No change
-        { "limit": 215400, "rate": 0.0685 },  // No change
-        { "limit": 80650, "rate": 0.06 },     // No change
-        { "limit": 13900, "rate": 0.055 },    // No change
-        { "limit": 11700, "rate": 0.0525 },   // No change
-        { "limit": 8500, "rate": 0.045 },     // No change
-        { "limit": 0, "rate": 0.04 }
+        { limit: 8500, rate: 0.04 },    // on the portion of taxable income that is $8,500 or less
+        { limit: 11700, rate: 0.045 },  // on the portion of taxable income over $8,500 up to $11,700
+        { limit: 13900, rate: 0.0525 }, // on the portion of taxable income over $11,700 up to $13,900
+        { limit: 80650, rate: 0.055 },  // on the portion of taxable income over $13,900 up to $80,650
+        { limit: 215400, rate: 0.06 },  // on the portion of taxable income over $80,650 up to $215,400
+        { limit: 1077550, rate: 0.0685 },// on the portion of taxable income over $215,400 up to $1,077,550
+        { limit: 5000000, rate: 0.0965 },// on the portion of taxable income over $1,077,550 up to $5,000,000
+        { limit: 25000000, rate: 0.103 },// on the portion of taxable income over $5,000,000 up to $25,000,000
+        { limit: Infinity, rate: 0.109 } // on the portion of taxable income over $25,000,000
     ],
-
     "NE": [
-        { "limit": 35730, "rate": 0.0664 }, // No change
-        { "limit": 22170, "rate": 0.0501 }, // No change
-        { "limit": 3700, "rate": 0.0351 },  // No change
-        { "limit": 0, "rate": 0.0246 }
+        { limit: 3700, rate: 0.0246 },  // on the portion of taxable income that is $3,700 or less
+        { limit: 22170, rate: 0.0351 }, // on the portion of taxable income over $3,700 up to $22,170
+        { limit: 35730, rate: 0.0501 }, // on the portion of taxable income over $22,170 up to $35,730
+        { limit: Infinity, rate: 0.0664 } // on the portion of taxable income over $35,730
     ],
-
     "NV": [],
-    // No state income tax
-
     "OH": [
-        { "limit": 115300, "rate": 0.0399 }, // No change
-        { "limit": 92150, "rate": 0.03688 }, // No change
-        { "limit": 46100, "rate": 0.03226 }, // No change
-        { "limit": 26050, "rate": 0.02765 }
+        { limit: 26050, rate: 0.00 },   // on the portion of taxable income that is $26,050 or less
+        { limit: 46100, rate: 0.02765 },// on the portion of taxable income over $26,050 up to $46,100
+        { limit: 92150, rate: 0.03226 },// on the portion of taxable income over $46,100 up to $92,150
+        { limit: 115300, rate: 0.03688 },// on the portion of taxable income over $92,150 up to $115,300
+        { limit: Infinity, rate: 0.0399 } // on the portion of taxable income over $115,300
     ],
-
     "OK": [
-        { "limit": 7200, "rate": 0.0475 }, // No change
-        { "limit": 4900, "rate": 0.0375 }, // No change
-        { "limit": 3750, "rate": 0.0275 }, // No change
-        { "limit": 2500, "rate": 0.0175 }, // No change
-        { "limit": 1000, "rate": 0.0075 }, // No change
-        { "limit": 0, "rate": 0.0025 }
+        { limit: 1000, rate: 0.0025 },  // on the portion of taxable income that is $1,000 or less
+        { limit: 2500, rate: 0.0075 },  // on the portion of taxable income over $1,000 up to $2,500
+        { limit: 3750, rate: 0.0175 },  // on the portion of taxable income over $2,500 up to $3,750
+        { limit: 4900, rate: 0.0275 },  // on the portion of taxable income over $3,750 up to $4,900
+        { limit: 7200, rate: 0.0375 },  // on the portion of taxable income over $4,900 up to $7,200
+        { limit: Infinity, rate: 0.0475 } // on the portion of taxable income over $7,200
     ],
-
     "OR": [
-        { "limit": 125000, "rate": 0.099 }, // No change
-        { "limit": 10200, "rate": 0.0875 }, // No change
-        { "limit": 4050, "rate": 0.0675 },  // No change
-        { "limit": 0, "rate": 0.0475 }
+        { limit: 4050, rate: 0.0475 },  // on the portion of taxable income that is $4,050 or less
+        { limit: 10200, rate: 0.0675 }, // on the portion of taxable income over $4,050 up to $10,200
+        { limit: 125000, rate: 0.0875 },// on the portion of taxable income over $10,200 up to $125,000
+        { limit: Infinity, rate: 0.099 } // on the portion of taxable income over $125,000
     ],
-
     "PA": [
-        { "limit": 0, "rate": 0.0307 }     // No change, flat rate
+        { limit: Infinity, rate: 0.0307 } // flat rate
     ],
-
     "RI": [
-        { "limit": 155050, "rate": 0.0599 }, // No change
-        { "limit": 68200, "rate": 0.0475 },  // No change
-        { "limit": 0, "rate": 0.0375 }
+        { limit: 68200, rate: 0.0375 }, // on the portion of taxable income that is $68,200 or less
+        { limit: 155050, rate: 0.0475 },// on the portion of taxable income over $68,200 up to $155,050
+        { limit: Infinity, rate: 0.0599 } // on the portion of taxable income over $155,050
     ],
-
     "SC": [
-        { "limit": 16040, "rate": 0.064 }, // Reduced from 0.065 to 0.064
-        { "limit": 3200, "rate": 0.03 },   // No change
-        { "limit": 0, "rate": 0.00 }
+        { limit: 3200, rate: 0.00 },    // on the portion of taxable income that is $3,200 or less
+        { limit: 16040, rate: 0.03 },   // on the portion of taxable income over $3,200 up to $16,040
+        { limit: Infinity, rate: 0.064 } // on the portion of taxable income over $16,040
     ],
-
     "SD": [],
-    // No state income tax
-
     "TN": [],
-    // No state income tax
-
     "TX": [],
-    // No state income tax
-
     "UT": [
-        { "limit": 0, "rate": 0.0465 }     // Reduced from 0.0485 to 0.0465
+        { limit: Infinity, rate: 0.0465 } // flat rate
     ],
-
     "VA": [
-        { "limit": 17000, "rate": 0.0575 }, // No change
-        { "limit": 5000, "rate": 0.05 },    // No change
-        { "limit": 3000, "rate": 0.03 },    // No change
-        { "limit": 0, "rate": 0.02 }
+        { limit: 3000, rate: 0.02 },    // on the portion of taxable income that is $3,000 or less
+        { limit: 5000, rate: 0.03 },    // on the portion of taxable income over $3,000 up to $5,000
+        { limit: 17000, rate: 0.05 },   // on the portion of taxable income over $5,000 up to $17,000
+        { limit: Infinity, rate: 0.0575 } // on the portion of taxable income over $17,000
     ],
-
     "VT": [
-        { "limit": 213150, "rate": 0.0875 }, // No change
-        { "limit": 102200, "rate": 0.076 },  // No change
-        { "limit": 42150, "rate": 0.066 },   // No change
-        { "limit": 0, "rate": 0.0335 }
+        { limit: 42150, rate: 0.0335 }, // on the portion of taxable income that is $42,150 or less
+        { limit: 102200, rate: 0.066 }, // on the portion of taxable income over $42,150 up to $102,200
+        { limit: 213150, rate: 0.076 }, // on the portion of taxable income over $102,200 up to $213,150
+        { limit: Infinity, rate: 0.0875 } // on the portion of taxable income over $213,150
     ],
-
     "WV": [
-        { "limit": 60000, "rate": 0.065 }, // No change
-        { "limit": 40000, "rate": 0.06 },  // No change
-        { "limit": 25000, "rate": 0.045 }, // No change
-        { "limit": 10000, "rate": 0.04 },  // No change
-        { "limit": 0, "rate": 0.03 }
+        { limit: 10000, rate: 0.03 },   // on the portion of taxable income that is $10,000 or less
+        { limit: 25000, rate: 0.04 },   // on the portion of taxable income over $10,000 up to $25,000
+        { limit: 40000, rate: 0.045 },  // on the portion of taxable income over $25,000 up to $40,000
+        { limit: 60000, rate: 0.06 },   // on the portion of taxable income over $40,000 up to $60,000
+        { limit: Infinity, rate: 0.065 } // on the portion of taxable income over $60,000
     ],
-
     "WA": [],
-    // No state income tax
-
     "WI": [
-        { "limit": 304170, "rate": 0.0765 }, // No change
-        { "limit": 27630, "rate": 0.053 },   // No change
-        { "limit": 13810, "rate": 0.0465 },  // No change
-        { "limit": 0, "rate": 0.0354 }
+        { limit: 13810, rate: 0.0354 }, // on the portion of taxable income that is $13,810 or less
+        { limit: 27630, rate: 0.0465 }, // on the portion of taxable income over $13,810 up to $27,630
+        { limit: 304170, rate: 0.053 }, // on the portion of taxable income over $27,630 up to $304,170
+        { limit: Infinity, rate: 0.0765 } // on the portion of taxable income over $304,170
     ],
-
     "WY": []
-    // No state income tax
 };
 
 
@@ -993,48 +920,34 @@ const SUBREGIONALTAXBRACKETS = {
 function calculateTax(taxBrackets) {
     let tax = 0;
     let taxableIncome = ANNUALTAXABLEINCOME;
-
-    // Sort brackets in ascending order of limit (if not already sorted)
     taxBrackets.sort((a, b) => a.limit - b.limit);
-
-    let previousLimit = 0; // Track the lower limit of the current bracket
-
+    let previousLimit = 0;
     for (const bracket of taxBrackets) {
         if (taxableIncome > previousLimit) {
-            // Calculate the portion of income in this bracket
-            let bracketIncome = Math.min(taxableIncome, bracket.limit) - previousLimit;
-            // Apply the tax rate to this portion
-            let bracketTax = bracketIncome * bracket.rate;
-            tax += parseFloat(bracketTax.toFixed(2)); // Round to two decimal places and add to total tax
-            // Update the previous limit for the next bracket
+            let bracketIncome = bracket.limit === Infinity ? taxableIncome - previousLimit : Math.min(taxableIncome, bracket.limit) - previousLimit;
+            if (bracketIncome > 0) {
+                tax += bracketIncome * bracket.rate;
+            }
             previousLimit = bracket.limit;
         }
     }
-
     return tax;
 }
 
 function calculateTaxSub(taxBrackets) {
     let tax = 0;
     let taxableIncome = ANNUALTAXABLEINCOMESUB;
-
-    // Sort brackets in ascending order of limit (if not already sorted)
     taxBrackets.sort((a, b) => a.limit - b.limit);
-
-    let previousLimit = 0; // Track the lower limit of the current bracket
-
+    let previousLimit = 0;
     for (const bracket of taxBrackets) {
         if (taxableIncome > previousLimit) {
-            // Calculate the portion of income in this bracket
-            let bracketIncome = Math.min(taxableIncome, bracket.limit) - previousLimit;
-            // Apply the tax rate to this portion
-            let bracketTax = bracketIncome * bracket.rate;
-            tax += parseFloat(bracketTax.toFixed(2)); // Round to two decimal places and add to total tax
-            // Update the previous limit for the next bracket
+            let bracketIncome = bracket.limit === Infinity ? taxableIncome - previousLimit : Math.min(taxableIncome, bracket.limit) - previousLimit;
+            if (bracketIncome > 0) {
+                tax += bracketIncome * bracket.rate;
+            }
             previousLimit = bracket.limit;
         }
     }
-
     return tax;
 }
 
@@ -1217,6 +1130,16 @@ window.calculateAll = function () {
     getEIPayable();
     passiveincome();
     handleUSAResident();
+
+    // Add these logs
+    console.log('Federal Taxable Income:', ANNUALTAXABLEINCOME); // Should be 984295
+    console.log('Alberta Taxable Income:', ANNUALTAXABLEINCOMESUB); // Should be 978997
+    console.log('Federal Tax (Raw):', ANNUALREGIONALTAX); // Should be 305142.66
+    console.log('Alberta Tax (Raw):', ANNUALSUBREGIONALTAX); // Should be 138700.30
+    console.log('Federal Tax (Displayed):', document.getElementById('ANNUALREGIONALTAX').textContent); // Should be $305142.66
+    console.log('Alberta Tax (Displayed):', document.getElementById('ANNUALSUBREGIONALTAX').textContent); // Should be $138700.30
+
+    // Rest of your code...
 
     // Helper function to get the checked frequency value
     function getCheckedFrequency(id) {
