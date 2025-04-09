@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             border-radius: 8px 0 0 8px;
             box-shadow: -4px 4px 0 #000;
             z-index: 1000;
-            width: 300px;
+            width: 150px;
             transition: bottom 0.3s ease-in-out, height 0.3s ease-in-out;
             overflow: hidden;
         }
