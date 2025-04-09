@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial calculations
   calculateAll();
 
-  /* Conditional UI updates
+ 
   const romanticexpenseCookie = getLocal('romanticexpense');
   const debtcheckboxCookie = getLocal('debtcheckbox');
   const dependantcheckboxCookie = getLocal('dependantcheckbox');
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hideShowClass('debt-parent', 'show');
   } else if (debtcheckboxCookie === 'unChecked') {
     hideShowClass('debt-parent', 'hide');
-  } */
+  } 
 });
 
 // Navigation and calculation functions
