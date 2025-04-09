@@ -59,9 +59,7 @@ function injectModalCSS() {
             }
         }
 
-        .modal-open .tooltip, .modal-open .tooltip1 {
-            display: none !important;
-        }
+        
     `;
     document.head.appendChild(style);
 }
