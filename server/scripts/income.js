@@ -15,105 +15,67 @@ import { getLocal } from '/server/scripts/getlocal.js'; // Adjust path as needed
 
 
 function getTermsCookie(name) {
-    const now = Date.now()
-    const status = JSON.parse(window.localStorage.getItem(name))
+    const now = Date.now();
+    const status = JSON.parse(window.localStorage.getItem(name));
 
     if (status && now > status.time) {
-        localStorage.removeItem(name)
-        return false
-
+        localStorage.removeItem(name);
+        return false;
     }
 
-    if (status && status.accepted) {
-        return true
-    } else if (status && !status.accepted) {
-        return false
-    }
-
-    return false
-
-
-
+    return status ? status.accepted : false;
 }
+
 function setTermsCookie(name, value) {
-    const date = new Date()
+    const date = new Date();
     window.localStorage.setItem(name, JSON.stringify({
         accepted: value,
         time: date.setTime(date.getTime() + 30 * 60 * 1000)
-    }))
+    }));
 }
 
-const tabs = document.querySelectorAll('.tab')
+const tabs = document.querySelectorAll('.tab');
+const checkbox1 = document.querySelector('#termscheckbox');
+const checkbox2 = document.querySelector('#notintended');
+
+function handleCheckboxChange() {
+    setTermsCookie('term1', checkbox1.checked);
+    setTermsCookie('term2', checkbox2.checked);
+}
+
+function handleTabClick(e) {
+    const isChecked1 = getTermsCookie('term1');
+    const isChecked2 = getTermsCookie('term2');
+
+    if (!isChecked1 || !isChecked2) {
+        e.preventDefault();
+        alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
+    }
+}
 
 tabs.forEach(tab => {
-    const dataL = tab.getAttribute('data-location')
-    const location = document.location.pathname
+    const dataL = tab.getAttribute('data-location');
+    const location = document.location.pathname;
 
-    tab.addEventListener('click', (e) => {
-        const checkbox1 = document.querySelector('#termscheckbox')
-        const checkbox2 = document.querySelector('#notintended')
-
-        const isChecked1 = getTermsCookie('term1')
-        const isChecked2 = getTermsCookie('term2')
-
-        if (!isChecked1 || !isChecked2) {
-            e.preventDefault()
-            alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contribtuions");
-        }
-    })
-
+    tab.addEventListener('click', handleTabClick);
 
     if (location.includes(dataL)) {
-        tab.removeAttribute('href')
-
-        tab.classList.add('active')
+        tab.removeAttribute('href');
+        tab.classList.add('active');
     }
-})
+});
 
-
-const checkbox1 = document.querySelector('#termscheckbox')
-const checkbox2 = document.querySelector('#notintended')
-
-checkbox1.addEventListener('click', () => {
-    if (checkbox1.checked) {
-        setTermsCookie('term1', true)
-    } else {
-        setTermsCookie('term1', false)
-
-    }
-})
-
-
-checkbox2.addEventListener('click', () => {
-    if (checkbox2.checked) {
-        setTermsCookie('term2', true)
-    } else {
-        setTermsCookie('term2', false)
-    }
-})
-
+checkbox1.addEventListener('click', handleCheckboxChange);
+checkbox2.addEventListener('click', handleCheckboxChange);
 
 window.addEventListener('DOMContentLoaded', () => {
-    const checkbox1 = document.querySelector('#termscheckbox')
-    const checkbox2 = document.querySelector('#notintended')
+    const isChecked1 = getTermsCookie('term1');
+    const isChecked2 = getTermsCookie('term2');
 
+    checkbox1.checked = isChecked1;
+    checkbox2.checked = isChecked2;
+});
 
-    const isChecked1 = getTermsCookie('term1')
-    const isChecked2 = getTermsCookie('term2')
-
-    // console.log(typeof isChecked1)
-    // console.log(typeof isChecked2)
-
-    if (isChecked1 == true) {
-        checkbox1.checked = true
-    }
-
-    if (isChecked2 == true) {
-        checkbox2.checked = true
-    }
-
-
-})
 
 
 var ANNUALTAXABLEINCOME;
