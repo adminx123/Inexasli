@@ -78,16 +78,28 @@ function createFloatingButton() {
     console.log('Button created at:', buttonContainer.getBoundingClientRect());
 }
 
-// Check if cookie exists and toggle button visibility
+// Check if timestamp is less than 15 minutes old and toggle button visibility
 function checkLocalAndToggleButton() {
-    const summaryLocal = getCookie('summary_reached');
-    console.log('summary_reached cookie:', summaryLocal);
+    const summaryTimestamp = getCookie('summary_reached');
     const summaryButtonContainer = document.getElementById('gotosummary');
-    if (summaryLocal) { // Check if cookie exists (non-null, non-undefined)
-        summaryButtonContainer.style.display = 'inline-block';
-        console.log('Button shown at:', summaryButtonContainer.getBoundingClientRect());
+    console.log('summary_reached timestamp:', summaryTimestamp);
+
+    if (summaryTimestamp) {
+        const timestamp = parseInt(summaryTimestamp, 10); // Convert string to integer
+        const currentTime = Date.now(); // Current time in milliseconds
+        const fifteenMinutes = 15 * 60 * 1000; // 15 minutes in milliseconds
+        const timeDifference = currentTime - timestamp;
+
+        if (timeDifference < fifteenMinutes) {
+            summaryButtonContainer.style.display = 'inline-block';
+            console.log('Button shown - timestamp is less than 15 minutes old:', timeDifference / 1000, 'seconds');
+        } else {
+            summaryButtonContainer.style.display = 'none';
+            console.log('Button hidden - timestamp is older than 15 minutes:', timeDifference / 1000, 'seconds');
+        }
     } else {
         summaryButtonContainer.style.display = 'none';
+        console.log('Button hidden - no summary_reached cookie found');
     }
 }
 
