@@ -17,15 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const paid = localStorage.getItem("authenticated");
     const isPaid = paid === "paid";
 
-    // Redirect unauthenticated users trying to access premium content
-    const currentPath = window.location.pathname;
-    const hasPremiumSection = document.querySelector('.premium-section') !== null;
-
-    if (!isPaid && hasPremiumSection && currentPath !== "/payment.html") {
-        window.location.href = "/payment.html";
-        return;
-    }
-
     // If user is authenticated, unblur premium content
     if (isPaid) {
         document.querySelectorAll('.premium-blur').forEach(el => {
@@ -40,8 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 modal.className = 'prompt-modal';
                 modal.innerHTML = `
                     <p style="font-weight: bold; color:rgb(0, 0, 0);">
-                        Please upgrade to a premium plan to access this feature.
-                        <br><a href="/payment.html" style="color: blue; text-decoration: underline;">Upgrade Now</a>
+                        Please subscribe to a premium plan to access this feature.
+                        <br><span style="color: blue; text-decoration: underline;">Click "SUBSCRIBE & UNLOCK" below to upgrade.</span>
                     </p>
                     <button onclick="this.parentElement.remove()">Close</button>
                 `;
@@ -53,17 +44,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Set the "prompt" cookie on page load
     setCookie("prompt", "loaded", 32, Date.now());
 
-    // Attach toggleSection to section headers
-    document.querySelectorAll('.section > h2').forEach(header => {
-        console.log('Attaching toggleSection to:', header);
+    // Attach toggleSection to section headers (free and premium)
+    document.querySelectorAll('.section > h2, .section1-header').forEach(header => {
         header.addEventListener('click', () => toggleSection(header));
     });
-
-    // Attach toggleMealDetails to meal-scope dropdown
-    const scopeEl = document.getElementById('meal-scope');
-    if (scopeEl) {
-        scopeEl.addEventListener('change', toggleMealDetails);
-    }
 
     // Attach toggleEventDetails to event-location dropdown
     const locationEl = document.getElementById('event-location');
@@ -80,28 +64,22 @@ document.addEventListener('DOMContentLoaded', function () {
     if (noCodeBtn) {
         noCodeBtn.addEventListener('click', () => toggleCodeInput('no-code'));
     }
-});
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.section > h2').forEach(header => {
-        header.addEventListener('click', function () {
-            toggleSection(header);
-        });
+    // Grid item selection for all non-scope/non-code-status grids
+    document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-status) .grid-item').forEach(item => {
+        item.addEventListener('click', () => item.classList.toggle('selected'));
     });
 });
 
 window.toggleSection = function (header) {
-    console.log('toggleSection called for:', header);
     const section = header.parentElement;
-    const allSections = document.querySelectorAll('.section');
+    const allSections = document.querySelectorAll('.section, .section1');
     allSections.forEach(otherSection => {
         if (otherSection !== section && otherSection.classList.contains('expanded')) {
-            console.log('Collapsing section:', otherSection);
             otherSection.classList.remove('expanded');
         }
     });
     section.classList.toggle('expanded');
-    console.log('Toggled section:', section);
 };
 
 function toggleScope(scope) {
@@ -111,20 +89,14 @@ function toggleScope(scope) {
     const businessPrompts = document.getElementById('business-prompts');
     const promptContainer = document.getElementById('personal-prompts')?.parentElement;
 
-    // Null checks for debugging
     if (!personalBtn || !businessBtn || !personalPrompts || !businessPrompts || !promptContainer) {
         console.error('Missing elements:', {
-            personalBtn,
-            businessBtn,
-            personalPrompts,
-            businessPrompts,
-            promptContainer
+            personalBtn, businessBtn, personalPrompts, businessPrompts, promptContainer
         });
         return;
     }
 
     if (activeScope === scope) {
-        // If the same scope is clicked again, hide everything
         personalPrompts.classList.add('hidden');
         businessPrompts.classList.add('hidden');
         personalBtn.classList.remove('selected');
@@ -132,7 +104,6 @@ function toggleScope(scope) {
         promptContainer.classList.add('hidden');
         activeScope = null;
     } else {
-        // Show container and toggle the appropriate scope
         promptContainer.classList.remove('hidden');
         personalPrompts.classList.add('hidden');
         businessPrompts.classList.add('hidden');
@@ -150,7 +121,6 @@ function toggleScope(scope) {
     }
 }
 
-// Rest of your JavaScript remains unchanged...
 const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
 const formatGrid = (selector, prefix) => {
     const items = Array.from(document.querySelectorAll(selector))
@@ -159,15 +129,6 @@ const formatGrid = (selector, prefix) => {
         .join('\n');
     return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
 };
-
-function toggleMealDetails() {
-    const scopeEl = document.getElementById('meal-scope');
-    if (scopeEl) {
-        const scope = scopeEl.value;
-        document.getElementById('meal-details').classList.toggle('hidden', !scope);
-        document.getElementById('meal-multiple-days').classList.toggle('hidden', scope !== 'multiple');
-    }
-}
 
 function toggleEventDetails() {
     const locationEl = document.getElementById('event-location');
@@ -186,7 +147,7 @@ function toggleCodeInput(selected) {
         if (selected === 'code-started') {
             codeRow.classList.remove('hidden');
             if (codeStartedBtn) codeStartedBtn.classList.add('selected');
-            if (noCodeBtn) codeStartedBtn.classList.remove('selected');
+            if (noCodeBtn) noCodeBtn.classList.remove('selected');
         } else if (selected === 'no-code') {
             codeRow.classList.add('hidden');
             if (codeStartedBtn) codeStartedBtn.classList.remove('selected');
@@ -194,10 +155,6 @@ function toggleCodeInput(selected) {
         }
     }
 }
-
-document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-status) .grid-item').forEach(item => {
-    item.addEventListener('click', () => item.classList.toggle('selected'));
-});
 
 function generatePrompt(promptType) {
     let prompt = '';
@@ -245,14 +202,9 @@ function generatePrompt(promptType) {
             } else {
                 prompt += 'No event type selected. Assuming a generic event for planning purposes.\n\n';
             }
-
             prompt += formatGrid('#event-elements .grid-item.selected', 'Elements');
-
             const venueStatus = document.getElementById('event-venue')?.value;
-            if (venueStatus) {
-                prompt += `Venue Status: ${venueStatus}\n\n`;
-            }
-
+            if (venueStatus) prompt += `Venue Status: ${venueStatus}\n\n`;
             const location = document.getElementById('event-location');
             if (location?.value) {
                 prompt += `Indoor/Outdoor: ${location.value === 'indoors' ? 'Indoors' : 'Outdoors'}\n\n`;
@@ -262,51 +214,21 @@ function generatePrompt(promptType) {
                     prompt += formatGrid('#event-outdoor .grid-item.selected', 'Setup Considerations');
                 }
             }
-
             const guests = document.getElementById('event-guests')?.value;
-            if (guests) {
-                prompt += formatList(guests, 'Guest Count');
-            }
-
+            if (guests) prompt += formatList(guests, 'Guest Count');
             const budget = document.getElementById('event-budget')?.value;
-            if (budget) {
-                prompt += formatList(budget, 'Budget');
-            }
-
-            const startTimeEl = document.getElementById('event-start');
-            const endTimeEl = document.getElementById('event-end');
-            const startTime = startTimeEl?.value || '';
-            const endTime = endTimeEl?.value || '';
-
-            console.log('Start Time Element:', startTimeEl);
-            console.log('Start Time Value:', startTime);
-            console.log('End Time Element:', endTimeEl);
-            console.log('End Time Value:', endTime);
-
+            if (budget) prompt += formatList(budget, 'Budget');
+            const startTime = document.getElementById('event-start')?.value || '';
+            const endTime = document.getElementById('event-end')?.value || '';
             let timeString = '';
-            if (startTime) {
-                timeString += `Start: ${startTime}`;
-            }
-            if (endTime) {
-                timeString += `${timeString ? ' - ' : ''}End: ${endTime}`;
-            }
-
-            if (startTime || endTime) {
-                prompt += formatList(timeString || 'No specific times provided', 'Timeline');
-            } else {
-                prompt += 'Timeline: Not specified\n\n';
-                console.log('No start or end time provided (both empty)');
-            }
-
+            if (startTime) timeString += `Start: ${startTime}`;
+            if (endTime) timeString += `${timeString ? ' - ' : ''}End: ${endTime}`;
+            if (startTime || endTime) prompt += formatList(timeString || 'No specific times provided', 'Timeline');
+            else prompt += 'Timeline: Not specified\n\n';
             const specificLocation = document.getElementById('event-specific-location')?.value;
-            if (specificLocation) {
-                prompt += formatList(specificLocation, 'Specific Location');
-            }
-
+            if (specificLocation) prompt += formatList(specificLocation, 'Specific Location');
             const specificContext = document.getElementById('event-specific-context')?.value;
-            if (specificContext) {
-                prompt += formatList(specificContext, 'Context Dump');
-            }
+            if (specificContext) prompt += formatList(specificContext, 'Context Dump');
             break;
 
         case 'therapy':
@@ -357,14 +279,13 @@ function generatePrompt(promptType) {
             prompt += `
             The purpose of the estimates is to create a report in the following format:
             
-            ### Your Goal: Gain Muscle
+            ### Your Goal: [Goal Here]
             
-            Generate a **text-based table** with columns: **Nutrient**, **Target Amount**, **Food Log Intake**, and **Percentage Reached** in code block format. **Do not include any additional comments, explanations, or recommendations. Just the raw data in the requested format.** Any amounts I add after your output are to be added to the running total unless I specifically ask for a new estimate. The table should be formatted as follows:
+            Generate a **text-based table** with columns: **Nutrient**, **Target Amount**, **Food Log Intake**, and **Percentage Reached** in code block format. **Do not include any additional comments, explanations, or recommendations. Just the raw data in the requested format.** Any amounts I add after your output are to be added to the running total unless I specifically ask for a new estimate.
             
             Example headings:
+             NUTRIENT, TARGET, FOOD INTAKE, % REACHED
             
-         NUTRIENT, TARGET, FOOD INTAKE, % REACHED
-
             `;
             const weight = document.getElementById('calorie-weight');
             if (weight?.value) prompt += formatList(weight.value, 'Weight');
@@ -374,9 +295,7 @@ function generatePrompt(promptType) {
             if (age?.value) prompt += formatList(age.value, 'Age');
             prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
             const foodLog = document.getElementById('calorie-food-log');
-            if (foodLog?.value) {
-                prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
-            }
+            if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
             break;
 
         case 'trip':
@@ -416,12 +335,6 @@ function generatePrompt(promptType) {
             if (vision?.value) {
                 prompt += `Analyze the following data for starting the following new business: ${vision.value}\n\n`;
                 prompt += 'Purpose of analysis: To review the feasibility, risks, rewards, and potential of the business idea\n\n';
-                const businessFormatReturn = document.getElementById('business-format-return');
-                const selectedBusinessFormat = businessFormatReturn ? businessFormatReturn.querySelector('.grid-item.selected') : null;
-                if (selectedBusinessFormat) {
-                    const formatValue = selectedBusinessFormat.getAttribute('data-value');
-                    prompt += `Return the information in this format: ${formatValue}\n\n`;
-                }
                 prompt += formatGrid('#business-knowledge-level .grid-item.selected', 'Experience Level');
                 prompt += formatGrid('#business-general-skills .grid-item.selected', 'Business Skills');
                 prompt += formatGrid('#business-weaknesses .grid-item.selected', 'Challenges');
@@ -500,8 +413,6 @@ function generatePrompt(promptType) {
 
         case 'expense':
             const locationsSelected = document.querySelectorAll('#expense-location .grid-item.selected');
-            console.log('Selected locations count:', locationsSelected.length);
-            console.log('Selected locations:', Array.from(locationsSelected).map(item => item.getAttribute('data-value')));
             if (locationsSelected.length > 0) {
                 prompt += formatGrid('#expense-location .grid-item.selected', 'Location');
                 const selectedLocations = Array.from(locationsSelected).map(item => item.getAttribute('data-value'));
@@ -515,12 +426,7 @@ function generatePrompt(promptType) {
                     Advertising, Insurance (other than health), Interest, Repairs and Maintenance, Other Expenses (for management/admin fees or miscellaneous items), 
                     Car and Truck Expenses, Office Expense, Legal and Professional Services, Taxes and Licenses, Wages, Travel, Utilities
                     Ensure that all items on all receipts are accounted for and categorized appropriately.\n\n`;
-                } else {
-                    prompt += `No specific region selected. Please select either "USA" or "Canada" to generate the appropriate prompt.\n\n`;
                 }
-                console.log('Prompt after building:', prompt);
-            } else {
-                console.log('No locations selected, prompt not built');
             }
             break;
 
@@ -604,16 +510,6 @@ function generatePrompt(promptType) {
             height: 40px;
             display: block;
         }
-        .section.expanded {
-            max-height: 500px;
-            transition: max-height 0.3s ease-in-out;
-            overflow: visible;
-        }
-        .section {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-in-out;
-        }
     `;
     document.head.appendChild(style);
 
@@ -665,14 +561,6 @@ function generatePrompt(promptType) {
             `;
             document.body.appendChild(modal);
         });
-    } else if (promptType === 'research') {
-        const modal = document.createElement('div');
-        modal.className = 'prompt-modal';
-        modal.innerHTML = `
-            <p>Please fill in the necessary details for the research prompt.</p>
-            <button onclick="this.parentElement.remove()">Got It</button>
-        `;
-        document.body.appendChild(modal);
     } else {
         const modal = document.createElement('div');
         modal.className = 'prompt-modal';
@@ -698,39 +586,6 @@ document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
                 <button onclick="this.parentElement.remove()">Understood</button>
             `;
             document.body.appendChild(modal);
-
-            const style = document.createElement('style');
-            style.textContent = `
-                .prompt-modal {
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: #fff;
-                    padding: 20px;
-                    border: 2px solid #000;
-                    box-shadow: 4px 4px 0 #000;
-                    z-index: 1000;
-                    text-align: center;
-                    font-size: 16px;
-                    color: #000;
-                    width: 80%;
-                    max-width: 500px;
-                }
-                .prompt-modal button {
-                    margin-top: 10px;
-                    padding: 10px 20px;
-                    background: #000;
-                    color: #fff;
-                    border: 2px solid #000;
-                    border-radius: 5px;
-                    cursor: pointer;
-                }
-                .prompt-modal button:hover {
-                    background: #333;
-                }
-            `;
-            document.head.appendChild(style);
             return;
         }
 
@@ -740,11 +595,7 @@ document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
             const sectionHeight = targetSection.offsetHeight;
             const windowHeight = window.innerHeight;
             const scrollPosition = targetSection.getBoundingClientRect().top + window.scrollY - (windowHeight - sectionHeight) / 2;
-
-            window.scrollTo({
-                top: scrollPosition,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
         }
     });
 });
@@ -762,8 +613,6 @@ function openApp(appScheme, fallbackUrl) {
     var isiOS = /iPhone|iPad|iPod/i.test(userAgent);
 
     var startTime = Date.now();
-    var launched = false;
-
     if (isAndroid) {
         window.location.href = `intent://app/#Intent;package=${appScheme};end`;
     } else if (isiOS) {
