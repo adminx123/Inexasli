@@ -359,15 +359,12 @@ function generatePrompt(promptType) {
             
             ### Your Goal: Gain Muscle
             
-            Generate a **text-based table** with columns: **Nutrient**, **Target Amount**, **Food Log Intake**, and **Percentage Reached** in code block format. **Do not include any additional comments, explanations, or recommendations. Just the raw data in the requested format.**
+            Generate a **text-based table** with columns: **Nutrient**, **Target Amount**, **Food Log Intake**, and **Percentage Reached** in code block format. **Do not include any additional comments, explanations, or recommendations. Just the raw data in the requested format.** Any amounts I add after your output are to be added to the running total unless I specifically ask for a new estimate. The table should be formatted as follows:
             
-            Example format:
+            Example headings:
             
-           NUTRIENT    TARGET         FOOD INTAKE    % REACHED
-Calories    2587 kcal/day  1104 kcal      43%
-Protein     158.8 g        80 g           50%
-Carbs       317.6 g        86 g           27%
-Fats        79.4 g         50 g           63%
+         NUTRIENT, TARGET, FOOD INTAKE, % REACHED
+
             `;
             const weight = document.getElementById('calorie-weight');
             if (weight?.value) prompt += formatList(weight.value, 'Weight');
