@@ -28,10 +28,8 @@ window.toggleRevenueType = function () {
 window.updateFrequency = function (field) {
     const frequencySelect = document.getElementById(`${field}Frequency`);
     const frequency = frequencySelect.value;
-    setLocal(`${field}Frequency`, frequency, 365); // Days ignored, stored in localStorage
+    setLocal(`${field}Frequency`, frequency, 365);
     console.log(`Updated frequency for ${field} to ${frequency}`);
-    // Optionally trigger calculate() if immediate update is desired
-    // window.calculate();
 };
 
 function calculateAnnual(inputId, frequencyId) {
@@ -81,24 +79,17 @@ window.calculate = function () {
     const totalCosts = totalCOGS + totalOperationalCosts + totalBuildingCosts + totalVehicleCosts;
     const netIncome = totalRevenue - totalCosts;
 
-    const selectedValue = parseFloat(document.getElementById('resultChange').value);
-    const totalOperationalCostsDivided = totalOperationalCosts / selectedValue;
-    const totalBuildingCostsDivided = totalBuildingCosts / selectedValue;
-    const totalVehicleCostsDivided = totalVehicleCosts / selectedValue;
-    const totalCOGSDivided = totalCOGS / selectedValue;
-    const netIncomeAdjusted = netIncome / selectedValue;
-
     setLocal('totalRevenue', totalRevenue.toFixed(2), 365);
     setLocal('totalCOGS', totalCOGS.toFixed(2), 365);
-    setLocal('totalOperationalCostsDivided', totalOperationalCostsDivided.toFixed(2), 365);
-    setLocal('totalBuildingCostsDivided', totalBuildingCostsDivided.toFixed(2), 365);
-    setLocal('totalVehicleCostsDivided', totalVehicleCostsDivided.toFixed(2), 365);
-    setLocal('netIncomeAdjusted', netIncomeAdjusted.toFixed(2), 365);
+    setLocal('totalOperationalCosts', totalOperationalCosts.toFixed(2), 365);
+    setLocal('totalBuildingCosts', totalBuildingCosts.toFixed(2), 365);
+    setLocal('totalVehicleCosts', totalVehicleCosts.toFixed(2), 365);
+    setLocal('netIncome', netIncome.toFixed(2), 365);
     setLocal('revenueType', document.getElementById('revenueType').value, 365);
 
     saveCookies();
 
-    document.querySelector('#alert').textContent = 'Business data captured. Tap outside now...';
+    document.querySelector('#alert').textContent = 'Annual Net Income Captured. Tap outside now...';
     setLocal("calculated_from_worksheet", true, 365);
     console.log('Calculated cookie added from worksheet');
 };
@@ -117,8 +108,7 @@ function saveCookies() {
         'salariesFrequency', 'marketingFrequency', 'insuranceFrequency', 'travelFrequency',
         'hotelFrequency', 'buildingRentFrequency', 'buildingMaintenanceFrequency',
         'buildingUtilitiesFrequency', 'vehicleRentalFrequency', 'vehicleLeaseFrequency',
-        'vehicleGasFrequency', 'vehicleMaintenanceFrequency', 'vehicleInsuranceFrequency',
-        'resultChange'
+        'vehicleGasFrequency', 'vehicleMaintenanceFrequency', 'vehicleInsuranceFrequency'
     ];
     fields.forEach(field => {
         const value = document.querySelector(`#${field}`)?.value || '';
@@ -143,8 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'salariesFrequency', 'marketingFrequency', 'insuranceFrequency', 'travelFrequency',
         'hotelFrequency', 'buildingRentFrequency', 'buildingMaintenanceFrequency',
         'buildingUtilitiesFrequency', 'vehicleRentalFrequency', 'vehicleLeaseFrequency',
-        'vehicleGasFrequency', 'vehicleMaintenanceFrequency', 'vehicleInsuranceFrequency',
-        'resultChange'
+        'vehicleGasFrequency', 'vehicleMaintenanceFrequency', 'vehicleInsuranceFrequency'
     ];
 
     fields.forEach(field => {
@@ -152,19 +141,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const element = document.querySelector(`#${field}`);
         if (element) {
             if (field === 'revenueType') {
-                // Default to 'rental' if no value is found
                 element.value = value || 'rental';
             } else if (field === 'cogs') {
-                // Default to 'no' if no value is found
                 element.value = value || 'no';
             } else if (field === 'salesFrequency' || field.endsWith('Frequency')) {
-                // Default to 'annually' for frequency fields
                 element.value = value || 'annually';
-            } else if (field === 'resultChange') {
-                // Default to '1' (Annual results)
-                element.value = value || '1';
             } else {
-                // For other fields, set the value or leave blank
                 const parsedValue = parseFloat(value) || '';
                 element.value = parsedValue === 0 ? '' : parsedValue;
             }
