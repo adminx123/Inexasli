@@ -98,7 +98,8 @@ window.calculateAll = function () {
 
 window.calculateNext = function () {
     window.calculateAll();
-    setCookie('summary_reached', 'true', 15 / (24 * 60)); // 15 minutes
+    const currentTime = Date.now(); // Current timestamp in milliseconds
+    setCookie('summary_reached', currentTime.toString(), 365); // Store timestamp, expires in 1 year
     window.location.href = '/budget/summary.html';
 };
 

@@ -16,22 +16,11 @@ function getCookie(name) {
             const decodedValue = decodeURIComponent(cookieValue);
             console.log(`getCookie called for ${name}, stored value: ${cookieValue}`);
             console.log(`Decoded value for ${name}: ${decodedValue}`);
-            
-            // Assume the value is a timestamp if it’s a number
-            const timestamp = parseInt(decodedValue, 10);
-            if (isNaN(timestamp)) {
-                console.error(`Invalid timestamp for ${name}: ${decodedValue}`);
-                return null; // Not a valid number
-            }
-            return { value: '', timestamp }; // Return timestamp, no custom value needed
+            return decodedValue; // Return the raw string (e.g., "1744221325584")
         }
     }
-    
     console.log(`No cookie found for ${name}`);
-    if (name.includes('_frequency')) return { value: 'annually', timestamp: 0 };
-    if (name === 'RegionDropdown') return { value: 'NONE', timestamp: 0 };
-    if (name === 'SubregionDropdown') return { value: '', timestamp: 0 };
-    return { value: '', timestamp: 0 };
+    return null; // No cookie found
 }
 
 export { getCookie };
