@@ -913,7 +913,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 }
 
 .hoead-4 {
-  animation: fades1 6s;
+  animation: fades1 4s;
   overflow: hidden;
   background-color: none;
 }
