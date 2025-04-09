@@ -78,28 +78,40 @@ function createFloatingButton() {
     console.log('Button created at:', buttonContainer.getBoundingClientRect());
 }
 
-// Check if timestamp is less than 15 minutes old and toggle button visibility
+// Check timestamp and checkbox states to toggle button visibility
 function checkLocalAndToggleButton() {
     const summaryTimestamp = getCookie('summary_reached');
     const summaryButtonContainer = document.getElementById('gotosummary');
     console.log('summary_reached timestamp:', summaryTimestamp);
 
-    if (summaryTimestamp) {
-        const timestamp = parseInt(summaryTimestamp, 10); // Convert string to integer
-        const currentTime = Date.now(); // Current time in milliseconds
+    const termsCheckbox = document.getElementById('termscheckbox');
+    const notIntendedCheckbox = document.getElementById('notintended');
+    const regionDropdown = document.getElementById('RegionDropdown');
+
+    if (summaryTimestamp && termsCheckbox && notIntendedCheckbox && regionDropdown) {
+        const timestamp = parseInt(summaryTimestamp, 10);
+        const currentTime = Date.now();
         const fifteenMinutes = 15 * 60 * 1000; // 15 minutes in milliseconds
         const timeDifference = currentTime - timestamp;
 
-        if (timeDifference < fifteenMinutes) {
+        const isTimestampValid = timeDifference < fifteenMinutes;
+        const areCheckboxesChecked = termsCheckbox.checked && notIntendedCheckbox.checked;
+        const isRegionValid = regionDropdown.value !== "" && regionDropdown.value !== "NONE";
+
+        if (isTimestampValid && areCheckboxesChecked && isRegionValid) {
             summaryButtonContainer.style.display = 'inline-block';
-            console.log('Button shown - timestamp is less than 15 minutes old:', timeDifference / 1000, 'seconds');
+            console.log('Button shown - timestamp < 15 min and conditions met:', timeDifference / 1000, 'seconds');
         } else {
             summaryButtonContainer.style.display = 'none';
-            console.log('Button hidden - timestamp is older than 15 minutes:', timeDifference / 1000, 'seconds');
+            console.log('Button hidden - conditions not met:', {
+                timestampValid: isTimestampValid,
+                checkboxesChecked: areCheckboxesChecked,
+                regionValid: isRegionValid
+            });
         }
     } else {
         summaryButtonContainer.style.display = 'none';
-        console.log('Button hidden - no summary_reached cookie found');
+        console.log('Button hidden - missing timestamp or DOM elements');
     }
 }
 
@@ -110,10 +122,19 @@ function addButtonClickListener() {
     });
 }
 
-// Initialize on page load
+// Initialize on page load and monitor checkbox/region changes
 window.addEventListener('DOMContentLoaded', () => {
     injectStyles();
     createFloatingButton();
     checkLocalAndToggleButton();
     addButtonClickListener();
+
+    // Add event listeners to update button visibility dynamically
+    const termsCheckbox = document.getElementById('termscheckbox');
+    const notIntendedCheckbox = document.getElementById('notintended');
+    const regionDropdown = document.getElementById('RegionDropdown');
+
+    if (termsCheckbox) termsCheckbox.addEventListener('change', checkLocalAndToggleButton);
+    if (notIntendedCheckbox) notIntendedCheckbox.addEventListener('change', checkLocalAndToggleButton);
+    if (regionDropdown) regionDropdown.addEventListener('change', checkLocalAndToggleButton);
 });
