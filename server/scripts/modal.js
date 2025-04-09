@@ -1,7 +1,8 @@
-let handleKeyDown; // Define handleKeyDown outside of any function
-let handleClickOutside; // Define handleClickOutside outside of any function
+// Define global handlers for keydown and click outside actions
+let handleKeyDown;
+let handleClickOutside;
 
-// Function to inject CSS styles into the document
+// Function to inject modal styles directly into the document (no CSS file)
 function injectModalCSS() {
     const style = document.createElement('style');
     style.textContent = `
@@ -18,7 +19,7 @@ function injectModalCSS() {
             padding: 30px;
             z-index: 1000;
         }
-      
+
         .modal-content {
             background-color: white;
             display: flex;
@@ -30,16 +31,11 @@ function injectModalCSS() {
             height: 100%;
             overflow: auto;
         }
-      
+
         .modal-content button {
             align-self: flex-end;
         }
-      
-        #ROI_MODAL_OPEN {
-            color: rgb(14, 72, 92);
-            cursor: pointer;
-        }
-      
+
         #ROI-modal {
             display: none;
             overflow-y: scroll;
@@ -51,42 +47,54 @@ function injectModalCSS() {
             bottom: 0;
             padding: 30px;
         }
-      
+
+        /* Span styles for link-like appearance */
+        #ROI_MODAL_OPEN {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        #ROI_MODAL_OPEN:hover {
+            color: #0056b3;
+            text-decoration: none;
+        }
+
         @media (min-width: 800px) {
             .modal {
                 padding: 50px;
             }
+        }
+
+        /* Disable tooltips when modal is open */
+        .modal-open .tooltip, .modal-open .tooltip1 {
+            display: none !important;
         }
     `;
     document.head.appendChild(style);
 }
 
 // Function to open a modal
-function openModal(modalId, tooltipClass = '.tooltip') {
+function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
         modal.style.display = 'block';
-        
-        // Show tooltips if needed
-        const tooltips = document.querySelectorAll(tooltipClass);
-        tooltips.forEach(tooltip => {
-            tooltip.classList.add('show');
-        });
+
+        // Add class to disable tooltips
+        document.body.classList.add('modal-open');  // Disable tooltips
 
         // Close modal on Escape key
-        handleKeyDown = (event) => { // Assign to the global variable
+        handleKeyDown = (event) => {
             if (event.key === 'Escape') {
-                closeModal(modalId, tooltipClass);
+                closeModal(modalId);
             }
         };
         document.addEventListener('keydown', handleKeyDown);
 
         // Close modal when clicking outside
         handleClickOutside = (event) => {
-            console.log('Click event target:', event.target);
             if (!modal.contains(event.target) && event.target.id !== modalId.replace('-modal', '_MODAL_OPEN')) {
-                console.log('Click is outside modal');
-                closeModal(modalId, tooltipClass);
+                closeModal(modalId);
             }
         };
         document.addEventListener('click', handleClickOutside);
@@ -94,16 +102,13 @@ function openModal(modalId, tooltipClass = '.tooltip') {
 }
 
 // Function to close a modal
-function closeModal(modalId, tooltipClass = '.tooltip') {
+function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
         modal.style.display = 'none';
 
-        // Hide tooltips if needed
-        const tooltips = document.querySelectorAll(tooltipClass);
-        tooltips.forEach(tooltip => {
-            tooltip.classList.remove('show');
-        });
+        // Remove class to re-enable tooltips
+        document.body.classList.remove('modal-open');  // Enable tooltips again
 
         // Remove event listeners to prevent memory leaks
         document.removeEventListener('keydown', handleKeyDown);
@@ -111,13 +116,31 @@ function closeModal(modalId, tooltipClass = '.tooltip') {
     }
 }
 
-// Event listener for opening the modal
-document.querySelectorAll('[id$="_MODAL_OPEN"]').forEach(button => {
-    button.addEventListener('click', (event) => {
-        const modalId = event.target.id.replace('_MODAL_OPEN', '-modal');
-        openModal(modalId);
-    });
-});
+// Function to initialize modal opening triggers
+function setupOpenModalTriggers(modalId) {
+    const modalOpener = document.getElementById(modalId.replace('-modal', '_MODAL_OPEN'));
 
-// Inject the CSS styles when the script runs
+    if (modalOpener) {
+        modalOpener.addEventListener('click', () => {
+            openModal(modalId);
+        });
+
+        // Make sure the span behaves like a link using JS
+        modalOpener.style.color = '#007bff';
+        modalOpener.style.cursor = 'pointer';
+        modalOpener.style.textDecoration = 'underline';
+
+        // Change color on hover via JS (no CSS)
+        modalOpener.addEventListener('mouseover', () => {
+            modalOpener.style.color = '#0056b3';
+        });
+
+        modalOpener.addEventListener('mouseout', () => {
+            modalOpener.style.color = '#007bff';
+        });
+    }
+}
+
+// Inject modal CSS and setup modal triggers
 injectModalCSS();
+setupOpenModalTriggers('ROI-modal'); // Set up open triggers for specific modal (ROI-modal in this case)

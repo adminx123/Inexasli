@@ -1137,16 +1137,7 @@ function passiveincome() {
 
 
 
-document.querySelector('#ROI_MODAL_OPEN').addEventListener('click', () => {
-    document.querySelector('#ROI-modal').style.display = 'block'
-    // 
 
-    const tooltips = document.querySelectorAll(".tooltip");
-
-    tooltips.forEach(tooltip => {
-        tooltip.classList.add("show");
-    })
-})
 
 
 
@@ -1286,39 +1277,7 @@ window.calculateAll = function () {
 
 
 
-window.addEventListener("message", (event) => {
-    if (event.data === "close-modal") {
-        // console.log('message recieved')
-        document.querySelector("#ROI-modal").style.display = "none";
 
-        const selfEmploymentIncomeField =
-            document.querySelector("#income_sole_prop");
-        const totalRevenue = getLocal("totalRevenue");
-        const paid = getLocal("authenticated") == "paid";
-
-         console.log(selfEmploymentIncomeField);
-          console.log(totalRevenue);
-          console.log(paid);
-
-        if (totalRevenue && totalRevenue != "annually" && totalRevenue != "") {
-            if (paid) {
-                selfEmploymentIncomeField.value = totalRevenue;
-                setLocal("income_sole_prop", totalRevenue, 365);
-                selfEmploymentIncomeField.placeholder = "";
-                //   console.log('everything done since user paid')
-            } else {
-                selfEmploymentIncomeField.value = "";
-                //   setLocal("income_sole_prop", totalRevenue, 365);
-
-                setLocal("calculated_from_worksheet", true, 365);
-                selfEmploymentIncomeField.placeholder = "payment required";
-                //   console.log('everything postponsed since user not paid')
-            }
-        }
-
-        return;
-    }
-});
 
 document.addEventListener("DOMContentLoaded", () => {
     const paid = getLocal("authenticated") == "paid";
