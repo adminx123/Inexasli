@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         @media (max-width: 480px) {
             #subscribe-sidebar {
-                width: 250px;
+                width: 150px;
             }
             #subscribe-sidebar.initial {
                 height: auto;
