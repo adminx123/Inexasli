@@ -27,16 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.premium-section .generate-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                const modal = document.createElement('div');
-                modal.className = 'prompt-modal';
-                modal.innerHTML = `
-                    <p style="font-weight: bold; color:rgb(0, 0, 0);">
-                        Please subscribe to a premium plan to access this feature.
-                        <br><span style="color: blue; text-decoration: underline;">Click "SUBSCRIBE & UNLOCK" below to upgrade.</span>
-                    </p>
-                    <button onclick="this.parentElement.remove()">Close</button>
-                `;
-                document.body.appendChild(modal);
+                alert("Please subscribe to a premium plan to access this feature.\nClick 'SUBSCRIBE & UNLOCK' below to upgrade.");
             });
         });
     }
@@ -48,6 +39,28 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.section > h2, .section1-header').forEach(header => {
         header.addEventListener('click', () => toggleSection(header));
     });
+
+    // Monitor terms checkbox state
+    const termsCheckbox = document.getElementById('termscheckbox');
+    if (termsCheckbox) {
+        termsCheckbox.addEventListener('change', function () {
+            if (!this.checked) {
+                // Hide prompts and reset scope if terms are unchecked
+                const personalPrompts = document.getElementById('personal-prompts');
+                const businessPrompts = document.getElementById('business-prompts');
+                const personalBtn = document.getElementById('personal-btn');
+                const businessBtn = document.getElementById('business-btn');
+                const promptContainer = personalPrompts?.parentElement;
+
+                if (personalPrompts) personalPrompts.classList.add('hidden');
+                if (businessPrompts) businessPrompts.classList.add('hidden');
+                if (personalBtn) personalBtn.classList.remove('selected');
+                if (businessBtn) businessBtn.classList.remove('selected');
+                if (promptContainer) promptContainer.classList.add('hidden');
+                activeScope = null; // Reset active scope
+            }
+        });
+    }
 
     // Attach toggleEventDetails to event-location dropdown
     const locationEl = document.getElementById('event-location');
@@ -586,6 +599,9 @@ document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
         }
     });
 });
+
+
+
 document.querySelectorAll('.generate-btn').forEach(button => {
     button.addEventListener('click', () => {
         const promptType = button.getAttribute('data-prompt');
