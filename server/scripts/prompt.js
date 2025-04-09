@@ -572,13 +572,7 @@ document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
 
         if (!termsChecked) {
             e.preventDefault();
-            const modal = document.createElement('div');
-            modal.className = 'prompt-modal';
-            modal.innerHTML = `
-                <p style="font-weight: bold; color:rgb(0, 0, 0);">Please agree to the Terms of Service before accessing the Promptemplates™</p>
-                <button onclick="this.parentElement.remove()">Understood</button>
-            `;
-            document.body.appendChild(modal);
+            alert("Please agree to the Terms of Service before accessing the Promptemplates™");
             return;
         }
 
@@ -592,7 +586,6 @@ document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
         }
     });
 });
-
 document.querySelectorAll('.generate-btn').forEach(button => {
     button.addEventListener('click', () => {
         const promptType = button.getAttribute('data-prompt');
