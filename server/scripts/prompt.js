@@ -306,7 +306,7 @@ Include no text outside the code block—no comments, explanations, or recommend
 
         case 'trip':
             prompt += formatGrid('#trip-activities .grid-item.selected', 'Review the following activities I want to do on my trip');
-            prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format\n\n';
+            prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format code block. If available include the weather forcast for the location(s)\n\n';
             const tripSpecifics = document.getElementById('trip-specifics');
             if (tripSpecifics?.value) {
                 prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
