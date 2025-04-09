@@ -211,7 +211,7 @@ function generatePrompt(promptType) {
             const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
             if (eventTypesSelected.length > 0) {
                 prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event');
-                prompt += 'Purpose of Analysis: To generate a clear and actionable checklist in code block format with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event.\n\n';
+                prompt += 'Purpose of Analysis: To generate a clear and actionable checklist in code block format with options for hosting a feasible event, considering all relevant factors (such as budget, guest count, and timeline). If any aspect of the event is deemed unfeasible, the analysis will immediately highlight the issue and provide recommendations for adjustments or additional resources required. The AI should return suggestions only in a logical and actionable checklist format for planning, setting up, hosting, and ending the event. If available include a weather forecast for the location of the event.\n\n';
             } else {
                 prompt += 'No event type selected. Assuming a generic event for planning purposes.\n\n';
             }
