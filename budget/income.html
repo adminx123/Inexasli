@@ -169,7 +169,7 @@
          <div class="checkboxrow">
 
 <!-- The clickable span that opens the modal -->
-<span id="ROI_MODAL_OPEN" title="Calculate self-employment income for educational purposes">
+<span class="modal-trigger" data-modal-src="/budget/ROI.html" title="Calculate self-employment income for educational purposes">
     Optional - Self Employed Worksheet *Payment Required*
 </span>
          </div>
@@ -534,7 +534,7 @@
              <label for="termscheckbox" style="font-size: 11px;">
                  I have read, understand, and agree to the Terms of Service.(last updated: 6/Apr/2025). By proceeding, I acknowledge that I use IncomeIQ™ at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
             
-                 <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Read Terms of Service</a> 
+                 <span class="modal-trigger inline-link" data-modal-src="/budget/legal.txt" title="terms">Read Terms of Service</span>
 
                 </label>
 
@@ -584,17 +584,7 @@
          </div>  
      </div>
  
-     <div id="TERMS-modal" class="modal">
-         <div class="modal-content">
-             <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
-         </div>
-     </div> 
- 
-     <div id="ROI-modal" class="roi-modal">
-         <div class="modal-content" id="ROI-modal-content">
-             <iframe src="/budget/ROI.html" height="100%" width="100%" frameborder="10%"></iframe>
-         </div>
-     </div>
+  
 
 
 
