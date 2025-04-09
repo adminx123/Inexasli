@@ -98,7 +98,7 @@ window.calculate = function () {
 
     saveCookies();
 
-    document.querySelector('#alert').textContent = 'Business data captured. Go back now...';
+    document.querySelector('#alert').textContent = 'Business data captured. Tap outside now...';
     setLocal("calculated_from_worksheet", true, 365);
     console.log('Calculated cookie added from worksheet');
 };
