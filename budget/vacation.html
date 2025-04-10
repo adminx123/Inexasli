@@ -1,264 +1,303 @@
-<!-- /*Copyright (c) 2025 INEXASLI. All rights reserved.
-This code is protected under Canadian and international copyright laws.
-Unauthorized use, reproduction, distribution, or modification of this code 
-without explicit written permission via email from info@inexasli.com 
-is strictly prohibited. Violators will be pursued and prosecuted to the 
-fullest extent of the law in British Columbia, Canada, and applicable 
-jurisdictions worldwide.
-*/ -->
+<!-- /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */ -->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IncomeIQ™ Vacation</title>
-
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="/style/styles.css">
-
-    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-</head>
-
-<style>
-/* Header styling */
-#expenseBreakdown h3 {
-    font-size: 24px;
-    color: #333; /* Darker gray for contrast */
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: 600;
-}
-</style>
-
-<body>
-    <a href="/">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto; padding-bottom: 10px;">
-    </a>
-
-    <!-- Trip Duration Input -->
-    <div class="containerround">
-        <h2 style="text-align: center; font-size: 16px; color: rgb(0, 0, 0);">Vacation Cost Estimator</h2>
-        <div class="row">
-            <label for="trip_duration">Trip Duration (days):</label>
-            <input type="number" inputmode="numeric" id="trip_duration" min="1" placeholder="e.g., 7">
-        </div>
-    </div>
-
-    <!-- Transportation -->
-    <div class="containerround">
-        <h3 style="text-align: center;">Transportation</h3>
-        <div class="row">
-            <label for="trip_flights">Flights: <span id="trip_flights_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_flights" step="0.01">
-            <select id="trip_flights_frequency" onchange="updateFrequency('flights')">
-                <option value="total" selected>Total</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_car">Car Rental: <span id="trip_car_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_car" step="0.01">
-            <select id="trip_car_frequency" onchange="updateFrequency('car')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_uber">Uber: <span id="trip_uber_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_uber" step="0.01">
-            <select id="trip_uber_frequency" onchange="updateFrequency('uber')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_transit">Public Transit: <span id="trip_transit_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_transit" step="0.01">
-            <select id="trip_transit_frequency" onchange="updateFrequency('transit')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_bike">Bike Rental: <span id="trip_bike_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_bike" step="0.01">
-            <select id="trip_bike_frequency" onchange="updateFrequency('bike')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Accommodation -->
-    <div class="containerround">
-        <h3 style="text-align: center;">Accommodation</h3>
-        <div class="row">
-            <label for="trip_hotels">Hotels: <span id="trip_hotels_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_hotels" step="0.01">
-            <select id="trip_hotels_frequency" onchange="updateFrequency('hotels')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_camping">Camping Fees: <span id="trip_camping_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_camping" step="0.01">
-            <select id="trip_camping_frequency" onchange="updateFrequency('camping')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Dining & Groceries -->
-    <div class="containerround">
-        <h3 style="text-align: center;">Dining & Groceries</h3>
-        <div class="row">
-            <label for="trip_dining">Dining Out: <span id="trip_dining_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_dining" step="0.01">
-            <select id="trip_dining_frequency" onchange="updateFrequency('dining')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_grocery">Grocery (Additional for trip): <span id="trip_grocery_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_grocery" step="0.01">
-            <select id="trip_grocery_frequency" onchange="updateFrequency('grocery')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Entertainment -->
-    <div class="containerround">
-        <h3 style="text-align: center;">Entertainment</h3>
-        <div class="row">
-            <label for="trip_tickets">Tickets: <span id="trip_tickets_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_tickets" step="0.01">
-            <select id="trip_tickets_frequency" onchange="updateFrequency('tickets')">
-                <option value="total" selected>Total</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_alcohol">Alcohol: <span id="trip_alcohol_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_alcohol" step="0.01">
-            <select id="trip_alcohol_frequency" onchange="updateFrequency('alcohol')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_gambling">Gambling: <span id="trip_gambling_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_gambling" step="0.01">
-            <select id="trip_gambling_frequency" onchange="updateFrequency('gambling')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_rental">Rental: <span id="trip_rental_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_rental" step="0.01">
-            <select id="trip_rental_frequency" onchange="updateFrequency('rental')">
-                <option value="total" selected>Total</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Essentials -->
-    <div class="containerround">
-        <h3 style="text-align: center;">Essentials</h3>
-        <div class="row">
-            <label for="trip_insurance">Travel Insurance: <span id="trip_insurance_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_insurance" step="0.01">
-            <select id="trip_insurance_frequency" onchange="updateFrequency('insurance')">
-                <option value="total" selected>Total</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_sim">New SIM/Data Plan: <span id="trip_sim_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_sim" step="0.01">
-            <select id="trip_sim_frequency" onchange="updateFrequency('sim')">
-                <option value="total" selected>Total</option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="trip_luggage">Excessive Luggage Fees: <span id="trip_luggage_total"></span></label>
-            <input type="number" inputmode="numeric" id="trip_luggage" step="0.01">
-            <select id="trip_luggage_frequency" onchange="updateFrequency('luggage')">
-                <option value="total" selected>Total</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- [Rest of the HTML remains unchanged: checkboxes, buttons, modal, scripts] -->
-    <div class="containerround">
-        <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
-            <div class="checkbox-wrapper-2">
-                <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
-            </div>
-            <label for="termscheckbox" style="font-size: 11px;">
-                I have read, understand, and agree to the Terms of Service.(last updated: 31/Mar/2025). By proceeding, I acknowledge that I use the vacation worksheet at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
-                <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Read Terms of Service</a>
-            </label>
-        </div>
-
-        <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">
-            <div class="checkbox-wrapper-2">
-                <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
-            </div>
-            <label for="notintended" style="font-size: 11px;">
-                I consent to the use and storage of data in my browser’s local storage for essential website functionality, including but not limited to, calculations for my financial educational reports. Minimal cookies may be used for payment verification for premium access. These are necessary for the services I request.
-                <a href="#" id="cookie-overwrite-link" style="text-decoration: none; color: #007bff;" class="inline-link">Click here to overwrite cookies</a>
-            </label>
-        </div>
-    </div>
-
-    <div class="containerround hidden" id="expenseBreakdown">
-        <h3>Expense Breakdown</h3>
-        <p id="expense_list"></p>
-        <button onclick="window.copyResults()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 100px; font-size: 14px; text-align: center;">Copy Results</button>
-    </div>
-
-    <div class="containerround">
-        <div class="containerround">
-            <div style="text-align: center; margin-bottom: 5px;">
-                <button onclick="createCookies()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 100px; font-size: 14px;">Save</button>
-                <button onclick="window.termsAgreed()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 120px; font-size: 14px;">Calculate Total</button>
-                <button onclick="overwriteCookies1()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 100px; font-size: 14px;">Clear</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="TERMS-modal" class="modal">
-        <div class="modal-content">
-            <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
-        </div>
-    </div>
-
-    <div id="totalCost" class="hidden">
-        <h4 style="text-align: center;">Total Estimated Vacation Cost: <span id="total_cost_display"></span></h4>
-    </div>
-
-    <script type="module" src="/server/scripts/vacation.js"></script>
-    <script src="/server/scripts/modal.js"></script>
-    <script src="/server/scripts/toolTip.js"></script>
-</body>
-</html>
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <link rel="manifest" href="/manifest.json">
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+     <title>IncomeIQ™ Vacation</title>
+ 
+     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+     <link rel="stylesheet" href="/style/styles.css">
+ 
+     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+     <link rel="shortcut icon" href="/images/favicon.ico" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+ </head>
+ 
+ <style>
+ /* Header styling */
+ #expenseBreakdown h3 {
+     font-size: 24px;
+     color: #333; /* Darker gray for contrast */
+     margin-bottom: 20px;
+     text-align: center;
+     font-weight: 600;
+ }
+ </style>
+ 
+ <body>
+     <a href="/">
+         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto; padding-bottom: 10px;">
+     </a>
+ 
+     <!-- Trip Duration Input -->
+     <div class="containerround">
+         <h2 style="text-align: center; font-size: 16px; color: rgb(0, 0, 0);">Vacation Cost Estimator</h2>
+         <div class="row">
+             <label for="trip_duration">Trip Duration (days):</label>
+             <input type="number" inputmode="numeric" id="trip_duration" min="1" placeholder="e.g., 7">
+         </div>
+     </div>
+ 
+     <!-- Transportation -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Transportation</h3>
+         <div class="checkboxrow">
+             <label for="trip_flights">Flights: <span id="trip_flights_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_flights" step="0.01">
+             <div class="checkbox-button-group" id="trip_flights_frequency">
+                 <input type="checkbox" id="total_flights" name="trip_flights_frequency" value="total">
+                 <label for="total_flights" class="checkbox-button">TOTAL</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_car">Car Rental: <span id="trip_car_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_car" step="0.01">
+             <div class="checkbox-button-group" id="trip_car_frequency">
+                 <input type="checkbox" id="total_car" name="trip_car_frequency" value="total">
+                 <label for="total_car" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_car" name="trip_car_frequency" value="daily">
+                 <label for="daily_car" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_car" name="trip_car_frequency" value="weekly">
+                 <label for="weekly_car" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_uber">Uber: <span id="trip_uber_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_uber" step="0.01">
+             <div class="checkbox-button-group" id="trip_uber_frequency">
+                 <input type="checkbox" id="total_uber" name="trip_uber_frequency" value="total">
+                 <label for="total_uber" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_uber" name="trip_uber_frequency" value="daily">
+                 <label for="daily_uber" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_uber" name="trip_uber_frequency" value="weekly">
+                 <label for="weekly_uber" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_transit">Public Transit: <span id="trip_transit_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_transit" step="0.01">
+             <div class="checkbox-button-group" id="trip_transit_frequency">
+                 <input type="checkbox" id="total_transit" name="trip_transit_frequency" value="total">
+                 <label for="total_transit" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_transit" name="trip_transit_frequency" value="daily">
+                 <label for="daily_transit" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_transit" name="trip_transit_frequency" value="weekly">
+                 <label for="weekly_transit" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_bike">Bike Rental: <span id="trip_bike_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_bike" step="0.01">
+             <div class="checkbox-button-group" id="trip_bike_frequency">
+                 <input type="checkbox" id="total_bike" name="trip_bike_frequency" value="total">
+                 <label for="total_bike" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_bike" name="trip_bike_frequency" value="daily">
+                 <label for="daily_bike" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_bike" name="trip_bike_frequency" value="weekly">
+                 <label for="weekly_bike" class="checkbox-button">1W</label>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Accommodation -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Accommodation</h3>
+         <div class="checkboxrow">
+             <label for="trip_hotels">Hotels: <span id="trip_hotels_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_hotels" step="0.01">
+             <div class="checkbox-button-group" id="trip_hotels_frequency">
+                 <input type="checkbox" id="total_hotels" name="trip_hotels_frequency" value="total">
+                 <label for="total_hotels" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_hotels" name="trip_hotels_frequency" value="daily">
+                 <label for="daily_hotels" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_hotels" name="trip_hotels_frequency" value="weekly">
+                 <label for="weekly_hotels" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_camping">Camping Fees: <span id="trip_camping_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_camping" step="0.01">
+             <div class="checkbox-button-group" id="trip_camping_frequency">
+                 <input type="checkbox" id="total_camping" name="trip_camping_frequency" value="total">
+                 <label for="total_camping" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_camping" name="trip_camping_frequency" value="daily">
+                 <label for="daily_camping" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_camping" name="trip_camping_frequency" value="weekly">
+                 <label for="weekly_camping" class="checkbox-button">1W</label>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Dining & Groceries -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Dining & Groceries</h3>
+         <div class="checkboxrow">
+             <label for="trip_dining">Dining Out: <span id="trip_dining_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_dining" step="0.01">
+             <div class="checkbox-button-group" id="trip_dining_frequency">
+                 <input type="checkbox" id="total_dining" name="trip_dining_frequency" value="total">
+                 <label for="total_dining" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_dining" name="trip_dining_frequency" value="daily">
+                 <label for="daily_dining" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_dining" name="trip_dining_frequency" value="weekly">
+                 <label for="weekly_dining" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_grocery">Grocery (Additional for trip): <span id="trip_grocery_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_grocery" step="0.01">
+             <div class="checkbox-button-group" id="trip_grocery_frequency">
+                 <input type="checkbox" id="total_grocery" name="trip_grocery_frequency" value="total">
+                 <label for="total_grocery" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_grocery" name="trip_grocery_frequency" value="daily">
+                 <label for="daily_grocery" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_grocery" name="trip_grocery_frequency" value="weekly">
+                 <label for="weekly_grocery" class="checkbox-button">1W</label>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Entertainment -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Entertainment</h3>
+         <div class="checkboxrow">
+             <label for="trip_tickets">Tickets: <span id="trip_tickets_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_tickets" step="0.01">
+             <div class="checkbox-button-group" id="trip_tickets_frequency">
+                 <input type="checkbox" id="total_tickets" name="trip_tickets_frequency" value="total">
+                 <label for="total_tickets" class="checkbox-button">TOTAL</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_alcohol">Alcohol: <span id="trip_alcohol_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_alcohol" step="0.01">
+             <div class="checkbox-button-group" id="trip_alcohol_frequency">
+                 <input type="checkbox" id="total_alcohol" name="trip_alcohol_frequency" value="total">
+                 <label for="total_alcohol" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_alcohol" name="trip_alcohol_frequency" value="daily">
+                 <label for="daily_alcohol" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_alcohol" name="trip_alcohol_frequency" value="weekly">
+                 <label for="weekly_alcohol" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_gambling">Gambling: <span id="trip_gambling_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_gambling" step="0.01">
+             <div class="checkbox-button-group" id="trip_gambling_frequency">
+                 <input type="checkbox" id="total_gambling" name="trip_gambling_frequency" value="total">
+                 <label for="total_gambling" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_gambling" name="trip_gambling_frequency" value="daily">
+                 <label for="daily_gambling" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_gambling" name="trip_gambling_frequency" value="weekly">
+                 <label for="weekly_gambling" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_rental">Rental: <span id="trip_rental_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_rental" step="0.01">
+             <div class="checkbox-button-group" id="trip_rental_frequency">
+                 <input type="checkbox" id="total_rental" name="trip_rental_frequency" value="total">
+                 <label for="total_rental" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_rental" name="trip_rental_frequency" value="daily">
+                 <label for="daily_rental" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_rental" name="trip_rental_frequency" value="weekly">
+                 <label for="weekly_rental" class="checkbox-button">1W</label>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Essentials -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Essentials</h3>
+         <div class="checkboxrow">
+             <label for="trip_insurance">Travel Insurance: <span id="trip_insurance_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_insurance" step="0.01">
+             <div class="checkbox-button-group" id="trip_insurance_frequency">
+                 <input type="checkbox" id="total_insurance" name="trip_insurance_frequency" value="total">
+                 <label for="total_insurance" class="checkbox-button">TOTAL</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_sim">New SIM/Data Plan: <span id="trip_sim_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_sim" step="0.01">
+             <div class="checkbox-button-group" id="trip_sim_frequency">
+                 <input type="checkbox" id="total_sim" name="trip_sim_frequency" value="total">
+                 <label for="total_sim" class="checkbox-button">TOTAL</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_luggage">Excessive Luggage Fees: <span id="trip_luggage_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_luggage" step="0.01">
+             <div class="checkbox-button-group" id="trip_luggage_frequency">
+                 <input type="checkbox" id="total_luggage" name="trip_luggage_frequency" value="total">
+                 <label for="total_luggage" class="checkbox-button">TOTAL</label>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Rest of the HTML remains unchanged -->
+     <div class="containerround">
+         <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+             <div class="checkbox-wrapper-2">
+                 <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
+             </div>
+             <label for="termscheckbox" style="font-size: 11px;">
+                 I have read, understand, and agree to the Terms of Service.(last updated: 31/Mar/2025). By proceeding, I acknowledge that I use the vacation worksheet at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
+                 <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Read Terms of Service</a>
+             </label>
+         </div>
+ 
+         <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+             <div class="checkbox-wrapper-2">
+                 <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
+             </div>
+             <label for="notintended" style="font-size: 11px;">
+                 I consent to the use and storage of data in my browser’s local storage for essential website functionality, including but not limited to, calculations for my financial educational reports. Minimal cookies may be used for payment verification for premium access. These are necessary for the services I request.
+                 <a href="#" id="cookie-overwrite-link" style="text-decoration: none; color: #007bff;" class="inline-link">Click here to overwrite cookies</a>
+             </label>
+         </div>
+     </div>
+ 
+     <div class="containerround hidden" id="expenseBreakdown">
+         <h3>Expense Breakdown</h3>
+         <p id="expense_list"></p>
+         <button onclick="window.copyResults()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 100px; font-size: 14px; text-align: center;">Copy Results</button>
+     </div>
+ 
+     <div class="containerround">
+         <div class="containerround">
+             <div style="text-align: center; margin-bottom: 5px;">
+                 <button onclick="createCookies()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 100px; font-size: 14px;">Save</button>
+                 <button onclick="window.termsAgreed()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 120px; font-size: 14px;">Calculate Total</button>
+                 <button onclick="overwriteCookies1()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 100px; font-size: 14px;">Clear</button>
+             </div>
+         </div>
+     </div>
+ 
+     <div id="TERMS-modal" class="modal">
+         <div class="modal-content">
+             <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
+         </div>
+     </div>
+ 
+     <div id="totalCost" class="hidden">
+         <h4 style="text-align: center;">Total Estimated Vacation Cost: <span id="total_cost_display"></span></h4>
+     </div>
+ 
+     <script type="module" src="/server/scripts/vacation.js"></script>
+     <script src="/server/scripts/modal.js"></script>
+     <script src="/server/scripts/toolTip.js"></script>
+ </body>
+ </html>
