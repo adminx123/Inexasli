@@ -873,12 +873,11 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   left: 0;
   width: 100%;
   opacity: 0;
-  animation: fadeInOut 6s infinite;
 }
 
-.hoead-1 { animation-delay: 0s; }
-.hoead-2 { animation-delay: 2s; }
-.hoead-3 { animation-delay: 4s; }
+.hoead-1 { animation: fadeInOut 2s forwards; animation-delay: 0s; }
+.hoead-2 { animation: fadeInOut 2s forwards; animation-delay: 2s; }
+.hoead-3 { animation: fadeInOut 2s forwards; animation-delay: 4s; }
 .hoead-5 { 
   animation: fadeIn 1s forwards;
   animation-delay: 6s;
@@ -886,10 +885,9 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 
 @keyframes fadeInOut {
   0% { opacity: 0; transform: translateY(-20px); }
-  16.67% { opacity: 1; transform: translateY(0); }
-  33.33% { opacity: 1; transform: translateY(0); }
-  50% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 0; transform: translateY(20px); }
+  33.33% { opacity: 1; transform: translateY(0); } /* Fade in */
+  66.67% { opacity: 1; transform: translateY(0); } /* Hold */
+  100% { opacity: 0; transform: translateY(20px); } /* Fade out */
 }
 
 @keyframes fadeIn {
