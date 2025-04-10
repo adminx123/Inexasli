@@ -32,7 +32,7 @@ function displayWarning(content) {
                 height: auto;
                 max-height: 550px;
                 border-radius: 20px;
-                border: 54px solid rgb(0, 0, 0);
+                border: 5px solid rgb(0, 0, 0);
                 box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
             }
 
@@ -45,6 +45,7 @@ function displayWarning(content) {
                 border-radius: 0;
                 font-weight: bold;
                 float: right;
+               
             }
 
             .warning-close-btn:hover {
