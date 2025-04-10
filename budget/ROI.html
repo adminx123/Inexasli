@@ -7,464 +7,385 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
  */ -->
-  
-  
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>IncomeIQ™ Business</title>
 
-      <link rel="stylesheet" href="/style/styles.css">
-
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>IncomeIQ™ Business</title>
+     <link rel="stylesheet" href="/style/styles.css">
      <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-   <link rel="shortcut icon" href="/images/favicon.ico" />
-   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-      <link rel="manifest" href="/manifest.json" />
-  </head>
-  <body>
-
-
-    
-   <div class="containerround">
-
-    
-<h3 style="text-align: center; margin-bottom: 20px;"> Worksheet for Small Business Finances - Educational Purposes Only</h3>
-
-          
-
-         <div class="row" >
-              <label for="revenueType">Income Source:</label>
-                  <select id="revenueType" onchange="toggleRevenueType()">
-                  <option value="rental">Rental</option>
-                  <option value="service">Service</option>
-                  <option value="product">Product</option>
-              </select>
-                   </div> 
-
-      
-
-  <div class="row">
-              <label> Revenue Per Rental, Hour, Unit:</label>
-              <input type="number" id="price" style="margin-right: 0;">
-          </div>
-
-
-<div class ="row special-row">
-  <label class="special-label" for="sales">Number of Rentals, Hours, Units:</label>
-
-<div class="special">
-
-    
-    <input type="number" id="sales" style="margin-right: 0;">
-    <select id="salesFrequency" class="frequency-dropdown" onchange="updateFrequency('sales')">
-        <option value="annually">Annually</option>
-        <option value="quarterly">Quarterly</option>
-        <option value="monthly">Monthly</option>
-        <option value="weekly">Weekly</option>
-    </select>
-</div>
-        </div>
-              
-            
-
-  <div class="row">
-    <label for="" style="font-size: unset;" class="tooltip" data-tooltip="(COGS) Represents the direct costs associated with producing or purchasing the goods sold by a company. Includes materials, labor, and overhead directly tied to production.">
-  <span class="tooltip-content"></span>
-          Cost of goods sold applicable?</label>
-          <select id="cogs" onchange="toggleCogs()">
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-          </select>
-</div>
-
-    
-          <div id="cogsSection">
-        
-            <h2>Cost of Goods Sold</h2>
-
-               <div class  ="row"> 
-                  <label for="cogsMaterials">Material Cost Per Unit</label>
-                  
-                      <input type="number" id="cogsMaterials">
-                  <select>
-                  <option value="annually">Annually</option>
-                  <option value="quarterly">Quarterly</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="weekly">Weekly</option>
-              </select>
-                      
-              </div>
-           
-
-            
-              <div class ="row" >
-                  <label for="cogsLabor">Labor Cost Per Unit</label>
-                  
-                      <input type="number" id="cogsLabor">
-                       <select>
-                  <option value="annually">Annually</option>
-                  <option value="quarterly">Quarterly</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="weekly">Weekly</option>
-              </select>
-                
-              </div>
-  
-              <div class="row">
-                  <label for="cogsOverhead">Overhead Cost Per Unit</label>
-                  
-                      <input type="number" id="cogsOverhead">
-                       <select>
-                  <option value="annually">Annually</option>
-                  <option value="quarterly">Quarterly</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="weekly">Weekly</option>
-              </select>
-                          
-              </div>
-  
-              <div class="row" >
-                  <label for="cogsShipping">Shipping Cost Per Unit</label>
-                  
-                      <input type="number" id="cogsShipping">
-                       <select>
-                  <option value="annually">Annually</option>
-                  <option value="quarterly">Quarterly</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="weekly">Weekly</option>
-              </select>
-                  
-             
-          </div>
-   
-          </div>
-
-            <label for="" style="font-size: unset;" class="tooltip" data-tooltip="Often referred to as operating expenses, are the ongoing expenses necessary to run a business's day-to-day activities. These include costs like rent, utilities, salaries, maintenance, and supplies.">
-  <span class="tooltip-content"></span>
-          <h2>Operational Costs</h2></label>
+     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+     <link rel="shortcut icon" href="/images/favicon.ico" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+     <link rel="manifest" href="/manifest.json" />
+ </head>
+ <body>
+     <div class="containerround">
+         <h3 style="text-align: center; margin-bottom: 20px;">Worksheet for Small Business Finances - Educational Purposes Only</h3>
+ 
          <div class="row">
-              <label for="rent">Rent</label>
-            
-                  <input type="number" id="rent">
-                  <select id="rentFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
+             <label for="revenueType">Income Source:</label>
+             <select id="revenueType" onchange="toggleRevenueType()">
+                 <option value="rental">Rental</option>
+                 <option value="service">Service</option>
+                 <option value="product">Product</option>
+             </select>
          </div>
-         
-  <div class="row">
-              <label for="utilities">Utilities</label>
-             
-                  <input type="number" id="utilities">
-                  <select id="utilitiesFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-      
+ 
          <div class="row">
-              <label for="salaries">Salaries</label>
-             
-                  <input type="number" id="salaries">
-                  <select id="salariesFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-     
-          <div class="row">
-              <label for="marketing">Marketing</label>
-             
-                  <input type="number" id="marketing">
-                  <select id="marketingFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          
-          <div class="row">
-              <label for="insurance">Insurance</label>
-             
-                  <input type="number" id="insurance">
-                  <select id="insuranceFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-           
-      <div class="row">
-      <label for="travel">Travel</label>
-     
-          <input type="number" id="travel">
-          <select id="travelFrequency">
-              <option value="annually">Annually</option>
-              <option value="quarterly">Quarterly</option>
-              <option value="monthly">Monthly</option>
-              <option value="weekly">Weekly</option>
-          </select>
-      </div>
-  
-  <div class="row">
-      <label for="hotel">Hotel</label>
-      
-          <input type="number" id="hotel">
-          <select id="hotelFrequency">
-              <option value="annually">Annually</option>
-              <option value="quarterly">Quarterly</option>
-              <option value="monthly">Monthly</option>
-              <option value="weekly">Weekly</option>
-          </select>
-      </div>
-          
-
-          <h2>Building Costs</h2>
+             <label>Revenue Per Rental, Hour, Unit:</label>
+             <input type="number" id="price" style="margin-right: 0;">
+         </div>
+ 
+         <div class="checkboxrow special-row">
+             <label class="special-label" for="sales">Number of Rentals, Hours, Units:</label>
+             <div class="special">
+                 <input type="number" id="sales" style="margin-right: 0;">
+                 <div class="checkbox-button-group" id="salesFrequency">
+                     <input type="checkbox" id="annually_sales" name="salesFrequency" value="annually">
+                     <label for="annually_sales" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_sales" name="salesFrequency" value="quarterly">
+                     <label for="quarterly_sales" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_sales" name="salesFrequency" value="monthly">
+                     <label for="monthly_sales" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_sales" name="salesFrequency" value="weekly">
+                     <label for="weekly_sales" class="checkbox-button">1W</label>
+                 </div>
+             </div>
+         </div>
+ 
          <div class="row">
-              <label for="buildingRent">Building Rent</label>
-              
-                  <input type="number" id="buildingRent">
-                  <select id="buildingRentFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-      
-         <div class="row">
-              <label for="buildingMaintenance">Building Maintenance</label>
-             
-                  <input type="number" id="buildingMaintenance">
-                  <select id="buildingMaintenanceFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-        
-          <div class="row">
-              <label for="buildingUtilities">Building Utilities</label>
-              
-                  <input type="number" id="buildingUtilities">
-                  <select id="buildingUtilitiesFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-
-
-          <h2>Vehicle Costs</h2>
-        <div class="row">
-              <label for="vehicleRental">Vehicle Rental</label>
-              
-                  <input type="number" id="vehicleRental">
-                  <select id="vehicleRentalFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-       
-         <div class="row">
-              <label for="vehicleLease">Vehicle Lease</label>
-              
-                  <input type="number" id="vehicleLease">
-                  <select id="vehicleLeaseFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          
-         <div class="row">
-              <label for="vehicleGas">Vehicle Gas</label>
-             
-                  <input type="number" id="vehicleGas">
-                  <select id="vehicleGasFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-   
-          <div class="row">
-              <label for="vehicleMaintenance">Vehicle Maintenance</label>
-              
-                  <input type="number" id="vehicleMaintenance">
-                  <select id="vehicleMaintenanceFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-          
-          <div class="row">
-              <label for="vehicleInsurance">Vehicle Insurance</label>
-              
-                  <input type="number" id="vehicleInsurance">
-                  <select id="vehicleInsuranceFrequency">
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="weekly">Weekly</option>
-                  </select>
-              </div>
-        
-<!--
-          <h2>Assets</h2>
-          <div class="row">
-              <label for="cash">Cash</label>
-            
-              <input type="number" id="cash">
-</div>
-            
-          <div class="row">
-              <label for="accountsReceivable">Accounts Receivable</label>
-          
-              <input type="number" id="accountsReceivable">
-</div>
-
-            
-          <div class="row">
-              <label for="inventory">Inventory</label>
-          
-              <input type="number" id="inventory">
-</div>
-            
-          <div class="row">
-              <label for="property">Property</label>
-           
-              <input type="number" id="property">
-</div>
-            
-          <div class="row">
-              <label for="equipment">Equipment</label>
-           
-              <input type="number" id="equipment">
-          </div>
-
-          <h2>Liabilities</h2>
-         <div class="row">
-              <label for="accountsPayable">Accounts Payable</label>
-           
-              <input type="number" id="accountsPayable">
-</div>
-            
-          <div class="row">
-              <label for="loans">Loans</label>
-        
-              <input type="number" id="loans">
-</div>
-            
-                   <div class="row">
-              <label for="mortgages">Mortgages</label>
-                    
-              <input type="number" id="mortgages">
-</div>
-                     
-          <div class="row">
-              <label for="taxesPayable">Taxes Payable</label>
-        
-              <input type="number" id="taxesPayable">
-</div>
-            
-          <div class="row">
-              <label for="otherLiabilities">Other Liabilities</label>
-           
-              <input type="number" id="otherLiabilities">
-          </div>
--->
-
-     
-         
-          
-
-
-       
-  <div class="result-parent">
-    
-      <!-- <div class="checkbox-wrapper-2" >
-        <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
-       </div>
-<label for="termscheckbox">I have read, understand, and agree to the <a href="#" onclick="openTermsModal()" >terms of service</a> and consent to the creation and use of cookies for calculations and functionality.</label><br>
-
-<div id="termsModal" class="modal">
-        <div class="modal-content" id="modalContent">
-             <button onclick="closeModal()">Close</button>
-        </div>
-    </div>
-    </div>
-
-    <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">
-
-        
-        <div class="checkbox-wrapper-2" >
-            <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
-        </div>
-        <label for="notintended"> Enter pre-tax & pre-contributions income amounts & select the corresponding frequency. </label>
-    </div> -->
-    
-
-<div id="results">
-          <button  class="roi-btn" onclick="validatecheckbox()">Calculate</button>
-     
-</div>
-
-
-
-
-    <section id="NIBT">
-        <p id="totalRevenue"></p>
-        <p id="totalCOGS"></p>
-        <p id="operationalCosts"></p>
-        <p id="buildingCosts"></p>
-        <p id="vehicleCosts"></p>
-        <h3 id="netIncome"></h3>
-    </section>
-
-            
-    <section id="balanceSheet">
-        <p id="totalAssets"></p>
-        <p id="totalLiabilities"></p>
-        <h3 id="bookValue"></h3>
-    </section>
-
-            
-
-
-    
-</div>
-<div id="alert" class="alert"></div>
-
-<script src="/server/scripts/toolTip.js"></script>
-<script src="/server/scripts/roi.js" type="module"></script>
-<script src="/server/scripts/modal.js"></script>
-
-
-
-
-            
-
-    
-  
-  </body>
-  </html>
+             <label for="" style="font-size: unset;" class="tooltip" data-tooltip="(COGS) Represents the direct costs associated with producing or purchasing the goods sold by a company. Includes materials, labor, and overhead directly tied to production.">
+                 <span class="tooltip-content"></span>
+                 Cost of goods sold applicable?
+             </label>
+             <select id="cogs" onchange="toggleCogs()">
+                 <option value="no">No</option>
+                 <option value="yes">Yes</option>
+             </select>
+         </div>
+ 
+         <div id="cogsSection">
+             <h2>Cost of Goods Sold</h2>
+             <div class="checkboxrow">
+                 <label for="cogsMaterials">Material Cost Per Unit</label>
+                 <input type="number" id="cogsMaterials">
+                 <div class="checkbox-button-group" id="cogsMaterialsFrequency">
+                     <input type="checkbox" id="annually_cogsMaterials" name="cogsMaterialsFrequency" value="annually">
+                     <label for="annually_cogsMaterials" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_cogsMaterials" name="cogsMaterialsFrequency" value="quarterly">
+                     <label for="quarterly_cogsMaterials" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_cogsMaterials" name="cogsMaterialsFrequency" value="monthly">
+                     <label for="monthly_cogsMaterials" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_cogsMaterials" name="cogsMaterialsFrequency" value="weekly">
+                     <label for="weekly_cogsMaterials" class="checkbox-button">1W</label>
+                 </div>
+             </div>
+ 
+             <div class="checkboxrow">
+                 <label for="cogsLabor">Labor Cost Per Unit</label>
+                 <input type="number" id="cogsLabor">
+                 <div class="checkbox-button-group" id="cogsLaborFrequency">
+                     <input type="checkbox" id="annually_cogsLabor" name="cogsLaborFrequency" value="annually">
+                     <label for="annually_cogsLabor" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_cogsLabor" name="cogsLaborFrequency" value="quarterly">
+                     <label for="quarterly_cogsLabor" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_cogsLabor" name="cogsLaborFrequency" value="monthly">
+                     <label for="monthly_cogsLabor" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_cogsLabor" name="cogsLaborFrequency" value="weekly">
+                     <label for="weekly_cogsLabor" class="checkbox-button">1W</label>
+                 </div>
+             </div>
+ 
+             <div class="checkboxrow">
+                 <label for="cogsOverhead">Overhead Cost Per Unit</label>
+                 <input type="number" id="cogsOverhead">
+                 <div class="checkbox-button-group" id="cogsOverheadFrequency">
+                     <input type="checkbox" id="annually_cogsOverhead" name="cogsOverheadFrequency" value="annually">
+                     <label for="annually_cogsOverhead" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_cogsOverhead" name="cogsOverheadFrequency" value="quarterly">
+                     <label for="quarterly_cogsOverhead" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_cogsOverhead" name="cogsOverheadFrequency" value="monthly">
+                     <label for="monthly_cogsOverhead" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_cogsOverhead" name="cogsOverheadFrequency" value="weekly">
+                     <label for="weekly_cogsOverhead" class="checkbox-button">1W</label>
+                 </div>
+             </div>
+ 
+             <div class="checkboxrow">
+                 <label for="cogsShipping">Shipping Cost Per Unit</label>
+                 <input type="number" id="cogsShipping">
+                 <div class="checkbox-button-group" id="cogsShippingFrequency">
+                     <input type="checkbox" id="annually_cogsShipping" name="cogsShippingFrequency" value="annually">
+                     <label for="annually_cogsShipping" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_cogsShipping" name="cogsShippingFrequency" value="quarterly">
+                     <label for="quarterly_cogsShipping" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_cogsShipping" name="cogsShippingFrequency" value="monthly">
+                     <label for="monthly_cogsShipping" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_cogsShipping" name="cogsShippingFrequency" value="weekly">
+                     <label for="weekly_cogsShipping" class="checkbox-button">1W</label>
+                 </div>
+             </div>
+         </div>
+ 
+         <label for="" style="font-size: unset;" class="tooltip" data-tooltip="Often referred to as operating expenses, are the ongoing expenses necessary to run a business's day-to-day activities. These include costs like rent, utilities, salaries, maintenance, and supplies.">
+             <span class="tooltip-content"></span>
+             <h2>Operational Costs</h2>
+         </label>
+         <div class="checkboxrow">
+             <label for="rent">Rent</label>
+             <input type="number" id="rent">
+             <div class="checkbox-button-group" id="rentFrequency">
+                 <input type="checkbox" id="annually_rent" name="rentFrequency" value="annually">
+                 <label for="annually_rent" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_rent" name="rentFrequency" value="quarterly">
+                 <label for="quarterly_rent" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_rent" name="rentFrequency" value="monthly">
+                 <label for="monthly_rent" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_rent" name="rentFrequency" value="weekly">
+                 <label for="weekly_rent" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="utilities">Utilities</label>
+             <input type="number" id="utilities">
+             <div class="checkbox-button-group" id="utilitiesFrequency">
+                 <input type="checkbox" id="annually_utilities" name="utilitiesFrequency" value="annually">
+                 <label for="annually_utilities" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_utilities" name="utilitiesFrequency" value="quarterly">
+                 <label for="quarterly_utilities" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_utilities" name="utilitiesFrequency" value="monthly">
+                 <label for="monthly_utilities" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_utilities" name="utilitiesFrequency" value="weekly">
+                 <label for="weekly_utilities" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="salaries">Salaries</label>
+             <input type="number" id="salaries">
+             <div class="checkbox-button-group" id="salariesFrequency">
+                 <input type="checkbox" id="annually_salaries" name="salariesFrequency" value="annually">
+                 <label for="annually_salaries" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_salaries" name="salariesFrequency" value="quarterly">
+                 <label for="quarterly_salaries" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_salaries" name="salariesFrequency" value="monthly">
+                 <label for="monthly_salaries" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_salaries" name="salariesFrequency" value="weekly">
+                 <label for="weekly_salaries" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="marketing">Marketing</label>
+             <input type="number" id="marketing">
+             <div class="checkbox-button-group" id="marketingFrequency">
+                 <input type="checkbox" id="annually_marketing" name="marketingFrequency" value="annually">
+                 <label for="annually_marketing" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_marketing" name="marketingFrequency" value="quarterly">
+                 <label for="quarterly_marketing" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_marketing" name="marketingFrequency" value="monthly">
+                 <label for="monthly_marketing" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_marketing" name="marketingFrequency" value="weekly">
+                 <label for="weekly_marketing" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="insurance">Insurance</label>
+             <input type="number" id="insurance">
+             <div class="checkbox-button-group" id="insuranceFrequency">
+                 <input type="checkbox" id="annually_insurance" name="insuranceFrequency" value="annually">
+                 <label for="annually_insurance" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_insurance" name="insuranceFrequency" value="quarterly">
+                 <label for="quarterly_insurance" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_insurance" name="insuranceFrequency" value="monthly">
+                 <label for="monthly_insurance" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_insurance" name="insuranceFrequency" value="weekly">
+                 <label for="weekly_insurance" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="travel">Travel</label>
+             <input type="number" id="travel">
+             <div class="checkbox-button-group" id="travelFrequency">
+                 <input type="checkbox" id="annually_travel" name="travelFrequency" value="annually">
+                 <label for="annually_travel" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_travel" name="travelFrequency" value="quarterly">
+                 <label for="quarterly_travel" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_travel" name="travelFrequency" value="monthly">
+                 <label for="monthly_travel" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_travel" name="travelFrequency" value="weekly">
+                 <label for="weekly_travel" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="hotel">Hotel</label>
+             <input type="number" id="hotel">
+             <div class="checkbox-button-group" id="hotelFrequency">
+                 <input type="checkbox" id="annually_hotel" name="hotelFrequency" value="annually">
+                 <label for="annually_hotel" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_hotel" name="hotelFrequency" value="quarterly">
+                 <label for="quarterly_hotel" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_hotel" name="hotelFrequency" value="monthly">
+                 <label for="monthly_hotel" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_hotel" name="hotelFrequency" value="weekly">
+                 <label for="weekly_hotel" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <h2>Building Costs</h2>
+         <div class="checkboxrow">
+             <label for="buildingRent">Building Rent</label>
+             <input type="number" id="buildingRent">
+             <div class="checkbox-button-group" id="buildingRentFrequency">
+                 <input type="checkbox" id="annually_buildingRent" name="buildingRentFrequency" value="annually">
+                 <label for="annually_buildingRent" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_buildingRent" name="buildingRentFrequency" value="quarterly">
+                 <label for="quarterly_buildingRent" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_buildingRent" name="buildingRentFrequency" value="monthly">
+                 <label for="monthly_buildingRent" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_buildingRent" name="buildingRentFrequency" value="weekly">
+                 <label for="weekly_buildingRent" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="buildingMaintenance">Building Maintenance</label>
+             <input type="number" id="buildingMaintenance">
+             <div class="checkbox-button-group" id="buildingMaintenanceFrequency">
+                 <input type="checkbox" id="annually_buildingMaintenance" name="buildingMaintenanceFrequency" value="annually">
+                 <label for="annually_buildingMaintenance" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_buildingMaintenance" name="buildingMaintenanceFrequency" value="quarterly">
+                 <label for="quarterly_buildingMaintenance" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_buildingMaintenance" name="buildingMaintenanceFrequency" value="monthly">
+                 <label for="monthly_buildingMaintenance" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_buildingMaintenance" name="buildingMaintenanceFrequency" value="weekly">
+                 <label for="weekly_buildingMaintenance" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="buildingUtilities">Building Utilities</label>
+             <input type="number" id="buildingUtilities">
+             <div class="checkbox-button-group" id="buildingUtilitiesFrequency">
+                 <input type="checkbox" id="annually_buildingUtilities" name="buildingUtilitiesFrequency" value="annually">
+                 <label for="annually_buildingUtilities" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_buildingUtilities" name="buildingUtilitiesFrequency" value="quarterly">
+                 <label for="quarterly_buildingUtilities" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_buildingUtilities" name="buildingUtilitiesFrequency" value="monthly">
+                 <label for="monthly_buildingUtilities" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_buildingUtilities" name="buildingUtilitiesFrequency" value="weekly">
+                 <label for="weekly_buildingUtilities" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <h2>Vehicle Costs</h2>
+         <div class="checkboxrow">
+             <label for="vehicleRental">Vehicle Rental</label>
+             <input type="number" id="vehicleRental">
+             <div class="checkbox-button-group" id="vehicleRentalFrequency">
+                 <input type="checkbox" id="annually_vehicleRental" name="vehicleRentalFrequency" value="annually">
+                 <label for="annually_vehicleRental" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_vehicleRental" name="vehicleRentalFrequency" value="quarterly">
+                 <label for="quarterly_vehicleRental" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_vehicleRental" name="vehicleRentalFrequency" value="monthly">
+                 <label for="monthly_vehicleRental" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_vehicleRental" name="vehicleRentalFrequency" value="weekly">
+                 <label for="weekly_vehicleRental" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="vehicleLease">Vehicle Lease</label>
+             <input type="number" id="vehicleLease">
+             <div class="checkbox-button-group" id="vehicleLeaseFrequency">
+                 <input type="checkbox" id="annually_vehicleLease" name="vehicleLeaseFrequency" value="annually">
+                 <label for="annually_vehicleLease" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_vehicleLease" name="vehicleLeaseFrequency" value="quarterly">
+                 <label for="quarterly_vehicleLease" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_vehicleLease" name="vehicleLeaseFrequency" value="monthly">
+                 <label for="monthly_vehicleLease" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_vehicleLease" name="vehicleLeaseFrequency" value="weekly">
+                 <label for="weekly_vehicleLease" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="vehicleGas">Vehicle Gas</label>
+             <input type="number" id="vehicleGas">
+             <div class="checkbox-button-group" id="vehicleGasFrequency">
+                 <input type="checkbox" id="annually_vehicleGas" name="vehicleGasFrequency" value="annually">
+                 <label for="annually_vehicleGas" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_vehicleGas" name="vehicleGasFrequency" value="quarterly">
+                 <label for="quarterly_vehicleGas" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_vehicleGas" name="vehicleGasFrequency" value="monthly">
+                 <label for="monthly_vehicleGas" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_vehicleGas" name="vehicleGasFrequency" value="weekly">
+                 <label for="weekly_vehicleGas" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="vehicleMaintenance">Vehicle Maintenance</label>
+             <input type="number" id="vehicleMaintenance">
+             <div class="checkbox-button-group" id="vehicleMaintenanceFrequency">
+                 <input type="checkbox" id="annually_vehicleMaintenance" name="vehicleMaintenanceFrequency" value="annually">
+                 <label for="annually_vehicleMaintenance" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_vehicleMaintenance" name="vehicleMaintenanceFrequency" value="quarterly">
+                 <label for="quarterly_vehicleMaintenance" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_vehicleMaintenance" name="vehicleMaintenanceFrequency" value="monthly">
+                 <label for="monthly_vehicleMaintenance" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_vehicleMaintenance" name="vehicleMaintenanceFrequency" value="weekly">
+                 <label for="weekly_vehicleMaintenance" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="vehicleInsurance">Vehicle Insurance</label>
+             <input type="number" id="vehicleInsurance">
+             <div class="checkbox-button-group" id="vehicleInsuranceFrequency">
+                 <input type="checkbox" id="annually_vehicleInsurance" name="vehicleInsuranceFrequency" value="annually">
+                 <label for="annually_vehicleInsurance" class="checkbox-button">1Y</label>
+                 <input type="checkbox" id="quarterly_vehicleInsurance" name="vehicleInsuranceFrequency" value="quarterly">
+                 <label for="quarterly_vehicleInsurance" class="checkbox-button">3M</label>
+                 <input type="checkbox" id="monthly_vehicleInsurance" name="vehicleInsuranceFrequency" value="monthly">
+                 <label for="monthly_vehicleInsurance" class="checkbox-button">1M</label>
+                 <input type="checkbox" id="weekly_vehicleInsurance" name="vehicleInsuranceFrequency" value="weekly">
+                 <label for="weekly_vehicleInsurance" class="checkbox-button">1W</label>
+             </div>
+         </div>
+ 
+         <div class="result-parent">
+             <div id="results">
+                 <button class="roi-btn" onclick="validatecheckbox()">Calculate</button>
+             </div>
+ 
+             <section id="NIBT">
+                 <p id="totalRevenue"></p>
+                 <p id="totalCOGS"></p>
+                 <p id="operationalCosts"></p>
+                 <p id="buildingCosts"></p>
+                 <p id="vehicleCosts"></p>
+                 <h3 id="netIncome"></h3>
+             </section>
+ 
+             <section id="balanceSheet">
+                 <p id="totalAssets"></p>
+                 <p id="totalLiabilities"></p>
+                 <h3 id="bookValue"></h3>
+             </section>
+         </div>
+         <div id="alert" class="alert"></div>
+ 
+         <script src="/server/scripts/toolTip.js"></script>
+         <script src="/server/scripts/roi.js" type="module"></script>
+         <script src="/server/scripts/modal.js"></script>
+     </div>
+ </body>
+ </html>
