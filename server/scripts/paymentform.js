@@ -134,10 +134,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             display: inline-block;
             margin-left: 10px;
             padding: 4px 8px;
-            background-color: #000000;
+            background-color: #d3bc0f;
             color: #ffffff;
-            font-size: 0.85em;
-            border-radius: 4px;
+            font-size: 0.75em;
+            border-radius: 2px;
             font-weight: bold;
         }
 
@@ -158,10 +158,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             font-weight: bold;
             color: #000000;
             transition: background-color 0.3s ease;
+              padding-top: 2px; /* Reduce top padding */
+
         }
         .section1-header:hover {
-            background-color: #d3bc0f; /* Gold hover */
+            background-color:rgba(211, 188, 15, 0.18); /* Gold hover */
         }
+
+
         .section1-content {
             display: none; /* Hidden by default */
             padding: 10px;
