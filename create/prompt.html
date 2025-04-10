@@ -76,41 +76,53 @@
                  </div>
              </div>
  
-             <!-- Free: Calorie Counter -->
-             <div class="section">
-                 <div class="section-header" onclick="toggleSection(this)">
-                     <h2>Calorie & Macro-nutrients</h2>
-                     <span class="toggle-icon">+</span>
-                 </div>
-                 <div class="section-content">
-                     <div class="row1">
-                         <div class="grid-container" id="calorie-goal">
-                             <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
-                             <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
-                             <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
-                             <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
-                         </div>
-                     </div>
-                     <div class="row1">
-                         <div class="grid-container" id="calorie-activity">
-                             <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
-                             <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
-                             <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5 days/week)</div>
-                             <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
-                             <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
-                         </div>
-                     </div>
-                     <div class="row1">
-                         <input type="number" id="calorie-weight" rows="1" placeholder="Weight:"></input>
-                         <input type="number" id="calorie-height" rows="1" placeholder="Height:"></input>
-                         <input type="number" id="calorie-age" rows="1" placeholder="Age:"></input>
-                         <textarea id="calorie-food-log" rows="3" placeholder="Meals:
- Chicken breast 200g with rice 1cup
- Potato 100g with broccoli 150g"></textarea>
-                     </div>
-                     <button class="generate-btn" data-prompt="calorie" onclick="generateCaloriePrompt()">Generate Promptemplate™ Now!</button>
-                 </div>
-             </div>
+            <!-- Free: Calorie Counter -->
+<div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+        <h2>Calorie & Macro-nutrients</h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-content">
+        <div class="row1">
+            <div class="grid-container" id="calorie-goal">
+                <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
+                <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
+                <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
+                <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="calorie-activity">
+                <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
+                <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
+                <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5 days/week)</div>
+                <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
+                <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
+            </div>
+        </div>
+        <div class="row1">
+            <input type="number" id="calorie-age" placeholder="Age" min="0">
+            <div class="height-input-group">
+                <input type="number" id="calorie-height" placeholder="Height" step="0.1" min="0">
+                <select id="calorie-height-unit">
+                    <option value="ft">ft</option>
+                    <option value="cm">cm</option>
+                </select>
+            </div>
+            <div class="weight-input-group">
+                <input type="number" id="calorie-weight" placeholder="Weight" step="0.1" min="0">
+                <select id="calorie-weight-unit">
+                    <option value="lbs">lbs</option>
+                    <option value="kg">kg</option>
+                </select>
+            </div>
+        </div>
+        <textarea id="calorie-food-log" rows="3" placeholder="Meals:
+Chicken breast 200g with rice 1cup
+Potato 100g with broccoli 150g"></textarea>
+        <button class="generate-btn" data-prompt="calorie" onclick="generateCaloriePrompt()">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
  
              <!-- Premium: Enneagram Assessment -->
              <div class="section1 premium-section">
@@ -429,16 +441,19 @@
                          </div>
                      </div>
                      <div class="row1">
-                         <input type="number" id="event-guests" placeholder="Number of people expected:" min="2"></input>
-                         <input type="number" id="event-budget" rows="1" placeholder="Event Budget:"></input>
+                         <input type="number" id="event-guests" placeholder="People Expected #" min="1"></input>
+                         <input type="number" id="event-budget" rows="1" placeholder="Event Budget $"></input>
                      </div>
                      <div class="row1">
                          <label for="event-start">Start Time:</label>
                          <input type="time" id="event-start" name="event-start">
-                         <textarea id="event-specific-location" rows="1" placeholder="Address & City (e.g., 123 Main St, New York)"></textarea>
                          <label for="event-end">End Time:</label>
                          <input type="time" id="event-end" name="event-end">
                      </div>
+
+                     <textarea id="event-specific-location" rows="1" placeholder="Address & City (e.g., 123 Main St, New York)"></textarea>
+
+
                      <div class="row1">
                          <textarea id="event-specific-context" rows="3" placeholder="General Context (1 per line):
  Majority of attendees have an Italian background
@@ -455,6 +470,7 @@
                      <span class="toggle-icon">+</span>
                  </div>
                  <div class="section-content">
+
                      <div class="row1">
                          <div class="grid-container" id="fitness-goal">
                              <div class="grid-item" data-value="Build Strength">Build Strength</div>
@@ -462,15 +478,30 @@
                              <div class="grid-item" data-value="Endurance">Endurance</div>
                          </div>
                      </div>
+
                      <div class="row1">
-                         <input type="number" id="fitness-frequency" rows="1" placeholder="Workouts I can do a week:"></input>
-                         <input type="number" id="fitness-duration" rows="1" placeholder="Workout length, in minutes, I can schedule:"></input>
+                         <input type="number" id="fitness-frequency" rows="1" placeholder="Workouts/Week:"></input>
+                         <input type="number" id="fitness-duration" rows="1" placeholder="Workout/Length"></input>
                      </div>
-                     <div class="row1">
-                         <input type="number" id="fitness-age" rows="1" placeholder="My age (e.g., 30):"></input>
-                         <textarea id="fitness-height" rows="1" placeholder="My height (e.g., 5'10 or 170 cm):"></textarea>
-                         <input type="number" id="fitness-weight" rows="1" placeholder="My weight (e.g., 150 lbs or 70 kg):"></input>
-                     </div>
+                 
+                   <div class="row1">
+    <input type="number" id="fitness-age" placeholder="Age" min="0">
+    <div class="height-input-group">
+        <input type="number" id="fitness-height" placeholder="Height" step="0.1" min="0">
+        <select id="fitness-height-unit">
+            <option value="ft">ft</option>
+            <option value="cm">cm</option>
+        </select>
+    </div>
+    <div class="weight-input-group">
+        <input type="number" id="fitness-weight" placeholder="Weight" step="0.1" min="0">
+        <select id="fitness-weight-unit">
+            <option value="lbs">lbs</option>
+            <option value="kg">kg</option>
+        </select>
+    </div>
+</div>
+
                      <div class="row1">
                          <div class="grid-container" id="fitness-level">
                              <div class="grid-item" data-value="Beginner">Beginner</div>
