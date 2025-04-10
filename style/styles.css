@@ -953,10 +953,14 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   font-size: 12px;
   font-weight: 500;
   line-height: 1;
-  margin: 5px;
-     font-weight: bold;
+  margin: 0; /* Remove margin to match section1-header */
+  font-weight: bold;
+  padding-top: 2px; /* Reduce top padding */
 }
 
+.section-header:hover {
+  background-color: #e7e7e7; /* Gold hover */
+}
 
 
 
