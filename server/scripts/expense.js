@@ -300,13 +300,10 @@ document.addEventListener('DOMContentLoaded', () => {
   calculateAll();
 
  
-  const romanticexpenseCookie = getLocal('romanticexpense');
   const debtcheckboxCookie = getLocal('debtcheckbox');
   const dependantcheckboxCookie = getLocal('dependantcheckbox');
 
-  if (romanticexpenseCookie === 'checked') {
-    displayWarning("You've indicated that you share expenses with your romantic partner. Include only your portion of the expenditures here.");
-  }
+ 
 
   if (dependantcheckboxCookie === 'checked') {
     hideShowClass('depandant-parent', 'show');

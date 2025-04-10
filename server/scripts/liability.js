@@ -10,7 +10,6 @@
 
 console.log('Script loaded');
 
-import { displayWarning } from "./utils.js";
 import { setLocal } from '/server/scripts/setlocal.js';
 import { getLocal } from '/server/scripts/getlocal.js';
 import { setCookie } from '/server/scripts/setcookie.js';
@@ -139,9 +138,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const romanticliabilityCookie = getLocal('romanticliability');
     const percentInputs = document.querySelectorAll('.percent-input');
     if (romanticliabilityCookie === 'checked') {
-        displayWarning("You've indicated that you have joint liabilities with your romantic partner. Please enter the current value of the liabilities and your corresponding percentage of responsibility.");
         percentInputs.forEach(input => input.style.display = 'block');
     } else {
         percentInputs.forEach(input => input.style.display = 'none');
     }
+
+
 });
