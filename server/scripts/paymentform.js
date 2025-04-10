@@ -188,10 +188,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         sidebar.innerHTML = `
             <span id="close-sidebar">+</span>
             <a class="subscribe-link">SUBSCRIBE & UNLOCK<br> PREMIUM CONTENT SITEWIDE</a>
+            <div id="status"></div>
             <form class="payment-form" id="payment-form">
                 <input type="text" class="payment-input" id="username" placeholder="input your name" required>
                 <input type="email" class="payment-input" id="useremail" placeholder="input your email" required>
-                <div id="status"></div>
                 <button class="pay-button" id="pay-button">Subscribe for Premium Educational Insights!</button>
                 <a href="mailto:support@inexasli.com" class="contact-support">I have paid</a>
                 <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support" style="margin-bottom: 20px;">Customer portal</a>
