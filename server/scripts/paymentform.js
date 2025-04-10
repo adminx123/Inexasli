@@ -278,4 +278,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.error('Failed to import and initialize payment.js:', error);
         }
     }
+
+    // Add functionality to toggle premium sections
+    const premiumHeaders = document.querySelectorAll('.section1-header');
+
+    premiumHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const section = this.parentElement;
+            section.classList.toggle('expanded');
+        });
+    });
 });
