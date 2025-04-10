@@ -11,7 +11,7 @@
 import { displayWarning } from "./utils.js";
 import { setLocal } from '/server/scripts/setlocal.js';
 import { getLocal } from '/server/scripts/getlocal.js';
-// import { hideShowClass } from "./hideShow.js";
+import { hideShowClass } from "./hideShow.js";
 
 // Tab highlighting
 const tabs = document.querySelectorAll('.tab');
