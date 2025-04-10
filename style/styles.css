@@ -859,60 +859,42 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   padding-bottom: 10px;
 }
 
-.hoead-1 {
-  animation: fade .5s;
-  overflow: hidden;
+.card-overlay {
+  position: relative;
+  height: 100px; /* Adjust to fit your cards */
+  width: 100%;
+  max-width: 400px; /* Match your containerround width */
+  margin: 0 auto;
 }
 
-.hoead-2 {
-  animation: fades 1s;
-  overflow: hidden;
-  background-color: none;
+.hoead-1, .hoead-2, .hoead-3, .hoead-5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  animation: fadeInOut 6s infinite;
 }
 
-.hoead-3 {
-  animation: fades 1.5s;
-  overflow: hidden;
-  background-color: none;
+.hoead-1 { animation-delay: 0s; }
+.hoead-2 { animation-delay: 2s; }
+.hoead-3 { animation-delay: 4s; }
+.hoead-5 { 
+  animation: fadeIn 1s forwards;
+  animation-delay: 6s;
 }
 
-.hoead-4 {
-  animation: fades1 4s;
-  overflow: hidden;
-  background-color: none;
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(-20px); }
+  16.67% { opacity: 1; transform: translateY(0); }
+  33.33% { opacity: 1; transform: translateY(0); }
+  50% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 0; transform: translateY(20px); }
 }
 
-@keyframes fade {
-  0% {
-    opacity: 0;
-    transform: translateY(-100px);
-  }
-  100% {
-    opacity: 100%;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fades {
-  0% {
-    opacity: 0;
-    transform: translateY(-200px);
-  }
-  100% {
-    opacity: 100%;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fades1 {
-  0% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 100%;
-    transform: translateY(0);
-  }
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 #calculations {
