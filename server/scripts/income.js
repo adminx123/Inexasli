@@ -918,6 +918,7 @@ const SUBREGIONALTAXBRACKETS = {
 
 
 function calculateTax(taxBrackets) {
+    console.log('Running updated calculateTax'); // Add this
     let tax = 0;
     let taxableIncome = ANNUALTAXABLEINCOME;
     taxBrackets.sort((a, b) => a.limit - b.limit);
@@ -935,6 +936,7 @@ function calculateTax(taxBrackets) {
 }
 
 function calculateTaxSub(taxBrackets) {
+    console.log('Running updated calculateTaxSub'); // Add this
     let tax = 0;
     let taxableIncome = ANNUALTAXABLEINCOMESUB;
     taxBrackets.sort((a, b) => a.limit - b.limit);
@@ -1371,3 +1373,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
