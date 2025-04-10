@@ -25,16 +25,11 @@ window.toggleRevenueType = function () {
     }
 };
 
-window.updateFrequency = function (field) {
-    const frequencySelect = document.getElementById(`${field}Frequency`);
-    const frequency = frequencySelect.value;
-    setLocal(`${field}Frequency`, frequency, 365);
-    console.log(`Updated frequency for ${field} to ${frequency}`);
-};
-
-function calculateAnnual(inputId, frequencyId) {
+// Updated calculateAnnual to use checked checkbox
+function calculateAnnual(inputId, frequencyGroupId) {
     const input = parseFloat(document.getElementById(inputId).value) || 0;
-    const frequency = document.getElementById(frequencyId).value;
+    const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+    const frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
 
     switch (frequency) {
         case 'annually': return input * 1;
@@ -47,16 +42,15 @@ function calculateAnnual(inputId, frequencyId) {
 
 window.calculate = function () {
     const price = parseFloat(document.getElementById('price').value) || 0;
-    const sales = parseFloat(document.getElementById('sales').value) || 0;
-    const salesFrequency = document.getElementById('salesFrequency').value;
+    const salesAnnual = calculateAnnual('sales', 'salesFrequency');
 
-    const totalRevenue = calculateAnnual('sales', 'salesFrequency') * price;
+    const totalRevenue = salesAnnual * price;
 
-    const cogsMaterialsValue = parseFloat(document.getElementById('cogsMaterials').value) || 0;
-    const cogsLaborValue = parseFloat(document.getElementById('cogsLabor').value) || 0;
-    const cogsOverheadValue = parseFloat(document.getElementById('cogsOverhead').value) || 0;
-    const cogsShippingValue = parseFloat(document.getElementById('cogsShipping').value) || 0;
-    const totalCOGS = (cogsMaterialsValue + cogsLaborValue + cogsOverheadValue + cogsShippingValue) * sales;
+    const cogsMaterialsValue = calculateAnnual('cogsMaterials', 'cogsMaterialsFrequency');
+    const cogsLaborValue = calculateAnnual('cogsLabor', 'cogsLaborFrequency');
+    const cogsOverheadValue = calculateAnnual('cogsOverhead', 'cogsOverheadFrequency');
+    const cogsShippingValue = calculateAnnual('cogsShipping', 'cogsShippingFrequency');
+    const totalCOGS = (cogsMaterialsValue + cogsLaborValue + cogsOverheadValue + cogsShippingValue) * salesAnnual;
 
     const totalOperationalCosts = calculateAnnual('rent', 'rentFrequency') +
         calculateAnnual('utilities', 'utilitiesFrequency') +
@@ -104,15 +98,26 @@ function saveCookies() {
         'rent', 'utilities', 'salaries', 'marketing', 'insurance', 'travel', 'hotel',
         'buildingRent', 'buildingMaintenance', 'buildingUtilities', 'vehicleRental',
         'vehicleLease', 'vehicleGas', 'vehicleMaintenance', 'vehicleInsurance',
-        'revenueType', 'salesFrequency', 'cogs', 'rentFrequency', 'utilitiesFrequency',
-        'salariesFrequency', 'marketingFrequency', 'insuranceFrequency', 'travelFrequency',
-        'hotelFrequency', 'buildingRentFrequency', 'buildingMaintenanceFrequency',
-        'buildingUtilitiesFrequency', 'vehicleRentalFrequency', 'vehicleLeaseFrequency',
-        'vehicleGasFrequency', 'vehicleMaintenanceFrequency', 'vehicleInsuranceFrequency'
+        'revenueType', 'cogs'
     ];
+    const frequencyFields = [
+        'salesFrequency', 'cogsMaterialsFrequency', 'cogsLaborFrequency', 'cogsOverheadFrequency',
+        'cogsShippingFrequency', 'rentFrequency', 'utilitiesFrequency', 'salariesFrequency',
+        'marketingFrequency', 'insuranceFrequency', 'travelFrequency', 'hotelFrequency',
+        'buildingRentFrequency', 'buildingMaintenanceFrequency', 'buildingUtilitiesFrequency',
+        'vehicleRentalFrequency', 'vehicleLeaseFrequency', 'vehicleGasFrequency',
+        'vehicleMaintenanceFrequency', 'vehicleInsuranceFrequency'
+    ];
+
     fields.forEach(field => {
         const value = document.querySelector(`#${field}`)?.value || '';
         setLocal(field, value, 365);
+    });
+
+    frequencyFields.forEach(groupId => {
+        const checkedCheckbox = document.querySelector(`#${groupId} input[type="checkbox"]:checked`);
+        const value = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${groupId}`) || 'annually';
+        setLocal(`frequency_${groupId}`, value, 365);
     });
 }
 
@@ -121,6 +126,7 @@ window.sendMessage = function () {
     window.parent.postMessage('close-modal', '*');
 };
 
+// Checkbox group handling (like income.js)
 document.addEventListener('DOMContentLoaded', function () {
     window.toggleCogs(); // Initial toggle
 
@@ -129,11 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'rent', 'utilities', 'salaries', 'marketing', 'insurance', 'travel', 'hotel',
         'buildingRent', 'buildingMaintenance', 'buildingUtilities', 'vehicleRental',
         'vehicleLease', 'vehicleGas', 'vehicleMaintenance', 'vehicleInsurance',
-        'revenueType', 'salesFrequency', 'cogs', 'rentFrequency', 'utilitiesFrequency',
-        'salariesFrequency', 'marketingFrequency', 'insuranceFrequency', 'travelFrequency',
-        'hotelFrequency', 'buildingRentFrequency', 'buildingMaintenanceFrequency',
-        'buildingUtilitiesFrequency', 'vehicleRentalFrequency', 'vehicleLeaseFrequency',
-        'vehicleGasFrequency', 'vehicleMaintenanceFrequency', 'vehicleInsuranceFrequency'
+        'revenueType', 'cogs'
     ];
 
     fields.forEach(field => {
@@ -144,12 +146,38 @@ document.addEventListener('DOMContentLoaded', function () {
                 element.value = value || 'rental';
             } else if (field === 'cogs') {
                 element.value = value || 'no';
-            } else if (field === 'salesFrequency' || field.endsWith('Frequency')) {
-                element.value = value || 'annually';
             } else {
                 const parsedValue = parseFloat(value) || '';
                 element.value = parsedValue === 0 ? '' : parsedValue;
             }
+        }
+    });
+
+    // Handle checkbox groups
+    document.querySelectorAll('.checkbox-button-group').forEach(group => {
+        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                if (this.checked) {
+                    checkboxes.forEach(cb => {
+                        if (cb !== this) cb.checked = false;
+                    });
+                    setLocal(`frequency_${group.id}`, this.value, 365);
+                    console.log(`Saved ${this.value} to cookie for ${group.id}`);
+                }
+            });
+        });
+
+        // Load saved selection or default to "annually"
+        const savedFrequency = getLocal(`frequency_${group.id}`);
+        const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) ||
+                               group.querySelector('input[value="annually"]');
+        if (checkboxToCheck) {
+            checkboxes.forEach(cb => {
+                if (cb !== checkboxToCheck) cb.checked = false;
+            });
+            checkboxToCheck.checked = true;
+            console.log(`Set ${checkboxToCheck.value} as checked for ${group.id}`);
         }
     });
 });
