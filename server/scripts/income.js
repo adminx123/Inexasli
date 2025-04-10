@@ -1229,15 +1229,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const romanticincomeCookie = getLocal('romanticincome');
 
-
-    if (romanticincomeCookie === 'checked') {
-
-        displayWarning("You have indicated that you share one or more sources of income. Include only your portion of personal income here.");
-    }
-});
 
 import { overwriteCookies } from '/server/scripts/cookieoverwrite.js'; // Adjust path as needed
 

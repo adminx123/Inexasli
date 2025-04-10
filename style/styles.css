@@ -157,30 +157,7 @@ a {
 
 
 
-.warning-parent {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ffffff00;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.warning-content {
-  background-color: white;
-  width: 92%;
-  max-width: 600px;
-  padding: 10px;
-  min-height: 200px;
-  height: auto;
-  max-height: 550px;
-  border-radius: 20px;
-  border: 1px solid #dddddd;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
-}
 
 #debt-parent, #depandant-parent {
   display: none;
@@ -190,20 +167,7 @@ a {
   width: 100%;
 }
 
-.warning-content h2 {
-  font-size: 2rem;
-}
 
-.warning-close-btn {
-  padding: 10px 20px;
-  border-radius: 0;
-  font-weight: bold;
-  float: right;
-}
-
-.warning-close-btn:hover {
-  filter: opacity(90%);
-}
 
 
 
