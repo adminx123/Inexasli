@@ -1010,7 +1010,11 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   font-weight: 500;
   line-height: 1;
   margin: 5px;
+     font-weight: bold;
 }
+
+
+
 
 .toggle-icon {
   font-size: 18px;
