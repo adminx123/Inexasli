@@ -261,50 +261,74 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'fitness':
-            const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
-            if (fitnessGoalsSelected.length > 0) {
-                prompt += formatGrid('#fitness-goal .grid-item.selected', 'Consider the following input relative to my fitness goal');
-                prompt += 'Purpose of analysis: Create a personalized fitness plan to achieve my goal in checklist format with headings of Workout 1, 2, etc., and subcategories in code block format\n\n';
-                const locationSelection = document.querySelector('#fitness-home-exercises .grid-item.selected');
-                if (locationSelection) {
-                    const locationValue = locationSelection.getAttribute('data-value');
-                    prompt += `Location: ${locationValue === 'Home' ? 'Home' : 'Gym'}\n\n`;
-                }
-                const age = document.getElementById('fitness-age');
-                if (age?.value) prompt += formatList(age.value, 'Age');
-                const height = document.getElementById('fitness-height');
-                if (height?.value) prompt += formatList(height.value, 'Height');
-                const weight = document.getElementById('fitness-weight');
-                if (weight?.value) prompt += formatList(weight.value, 'Weight');
-                prompt += formatGrid('#fitness-level .grid-item.selected', 'Fitness Level');
-                const injuries = document.getElementById('fitness-injuries');
-                if (injuries?.value) prompt += formatList(injuries.value, 'Injuries/Health Conditions');
-                const frequency = document.getElementById('fitness-frequency');
-                if (frequency?.value) prompt += formatList(frequency.value, 'Number of weekly workouts I can do');
-                const duration = document.getElementById('fitness-duration');
-                if (duration?.value) prompt += formatList(duration.value, 'Length of workout sessions I can perform');
-            }
-            break;
+  case 'fitness':
+    const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
+    if (fitnessGoalsSelected.length > 0) {
+        prompt += formatGrid('#fitness-goal .grid-item.selected', 'Consider the following input relative to my fitness goal');
+        prompt += 'Purpose of analysis: Create a personalized fitness plan to achieve my goal in checklist format with headings of Workout 1, 2, etc., and subcategories in code block format.\n\n';
+        const locationSelection = document.querySelector('#fitness-home-exercises .grid-item.selected');
+        if (locationSelection) {
+            const locationValue = locationSelection.getAttribute('data-value');
+            prompt += `Location: ${locationValue === 'Home' ? 'Home' : 'Gym'}\n\n`;
+        }
+        const age = document.getElementById('fitness-age');
+        if (age?.value) prompt += formatList(age.value, 'Age');
+        
+        const height = document.getElementById('fitness-height');
+        const heightUnit = document.getElementById('fitness-height-unit');
+        if (height?.value && heightUnit?.value) {
+            prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
+            console.log(`Height: ${height.value} ${heightUnit.value}`); // Debug
+        }
+        
+        const weight = document.getElementById('fitness-weight');
+        const weightUnit = document.getElementById('fitness-weight-unit');
+        if (weight?.value && weightUnit?.value) {
+            prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
+            console.log(`Weight: ${weight.value} ${weightUnit.value}`); // Debug
+        } else {
+            console.log('Weight or unit missing:', { weight: weight?.value, weightUnit: weightUnit?.value });
+        }
+        
+        prompt += formatGrid('#fitness-level .grid-item.selected', 'Fitness Level');
+        const injuries = document.getElementById('fitness-injuries');
+        if (injuries?.value) prompt += formatList(injuries.value, 'Injuries/Health Conditions');
+        const frequency = document.getElementById('fitness-frequency');
+        if (frequency?.value) prompt += formatList(frequency.value, 'Number of weekly workouts I can do');
+        const duration = document.getElementById('fitness-duration');
+        if (duration?.value) prompt += formatList(duration.value, 'Length of workout sessions I can perform');
+    }
+    break;
+    
+    
 
-        case 'calorie':
-            prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal');
-            prompt += `
-            Output only a text-based table in a code block with these exact columns: Nutrient, Target Amount, Food Log Intake, Percentage Reached. Use this header format in the code block:
-Include no text outside the code block—no comments, explanations, or recommendations. Add any future amounts I provide to the running totals unless I request a new estimate.
-            `;
-            const weight = document.getElementById('calorie-weight');
-            if (weight?.value) prompt += formatList(weight.value, 'Weight');
-            const height = document.getElementById('calorie-height');
-            if (height?.value) prompt += formatList(height.value, 'Height');
-            const age = document.getElementById('calorie-age');
-            if (age?.value) prompt += formatList(age.value, 'Age');
-            prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
-            const foodLog = document.getElementById('calorie-food-log');
-            if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
-            break;
+    case 'calorie':
+        prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal. Also analyze my height, weight, and age to compare me against the average person at my height, age, and weight. ');
+        prompt += `
+        Output only a text-based table in a code block with these exact columns: Nutrient, Target Amount, Food Log Intake, Percentage Reached. Use this header format in the code block:
+    Include no text outside the code block—no comments, explanations, or recommendations. Add any future amounts I provide to the running totals unless I request a new estimate.
+        `;
+        const age = document.getElementById('calorie-age');
+        if (age?.value) prompt += formatList(age.value, 'Age');
+        const height = document.getElementById('calorie-height');
+        const heightUnit = document.getElementById('calorie-height-unit');
+        if (height?.value && heightUnit?.value) {
+            prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
+        }
+        const weight = document.getElementById('calorie-weight');
+        const weightUnit = document.getElementById('calorie-weight-unit');
+        if (weight?.value && weightUnit?.value) {
+            prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
+        }
+        prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
+        const foodLog = document.getElementById('calorie-food-log');
+        if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
+        break;
 
-        case 'trip':
+      
+      
+      
+            case 'trip':
             prompt += formatGrid('#trip-activities .grid-item.selected', 'Review the following activities I want to do on my trip');
             prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format code block. If available include the weather forcast for the location(s)\n\n';
             const tripSpecifics = document.getElementById('trip-specifics');
