@@ -866,6 +866,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   margin: 0 auto;
 }
 
+/* Original group stays as-is */
 .hoead-1, .hoead-2, .hoead-3, .hoead-5 {
   position: absolute;
   top: 0;
@@ -874,26 +875,31 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   opacity: 0;
 }
 
-.hoead-4 { animation: fadeIn 3s forwards; animation-delay: 2s; }
+/* Completely separate .hoead-4 */
+.hoead-4 {
+  opacity: 0; /* Hidden on load */
+  animation: fadeIn 3s forwards; 
+  animation-delay: 2s;
+}
 
+/* Animation rules for the group */
 .hoead-1 { animation: fadeInOut 1s forwards; animation-delay: 0s; }
 .hoead-2 { animation: fadeInOut 1s forwards; animation-delay: .5s; }
 .hoead-3 { animation: fadeInOut 1s forwards; animation-delay: 1s; }
-.hoead-5 { animation: fadeIn 1s forwards;  animation-delay: 1.5s;
-}
+.hoead-5 { animation: fadeIn 1s forwards; animation-delay: 1.5s; }
 
+/* Keyframes unchanged */
 @keyframes fadeInOut {
   0% { opacity: 0; transform: translateY(-20px); }
-  33.33% { opacity: 1; transform: translateY(0); } /* Fade in */
-  66.67% { opacity: 1; transform: translateY(0); } /* Hold */
-  100% { opacity: 0; transform: translateY(20px); } /* Fade out */
+  33.33% { opacity: 1; transform: translateY(0); }
+  66.67% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(20px); }
 }
 
 @keyframes fadeIn {
   0% { opacity: 0; transform: translateY(-20px); }
   100% { opacity: 1; transform: translateY(0); }
 }
-
 
 
 #calculations {
