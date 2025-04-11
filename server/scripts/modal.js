@@ -111,32 +111,39 @@ function openModal(contentSrc) {
     document.addEventListener('click', handleClickOutside);
 }
 
-// Function to open the modal with generated prompt content
+// Function to open the modal with auto height for generated prompts
 function openGeneratedPromptModal() {
     const modal = createModal();
     const modalContent = modal.querySelector('.modal-content');
 
-    // Clear existing content and inject AI website links
+    // Add a specific class to differentiate this modal
+    modal.classList.add('generated-prompt-modal');
+
+    // Clear existing content and inject styled content
     modalContent.innerHTML = `
-        <p>Your Promptemplate™ is ready! It’s copied to your clipboard—paste it into your favorite AI chat with Ctrl+V (Cmd+V on Mac) or right-click > Paste.</p>
-        <div class="button-container">
-            <button class="ai-button" onclick="window.open('https://grok.com', '_blank')">
-                <img src="/images/grok.png" alt="Grok" class="ai-logo">
-            </button>
-            <button class="ai-button" onclick="window.open('https://chat.openai.com', '_blank')">
-                <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
-            </button>
-            <button class="ai-button" onclick="window.open('https://deepseek.com', '_blank')">
-                <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
-            </button>
-            <button class="ai-button" onclick="window.open('https://gemini.google.com/app', '_blank')">
-                <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
-            </button>
+        <div style="text-align: center; font-family: Arial, sans-serif;">
+            <h2 style="color: #333; font-size: 24px; margin-bottom: 10px;">Your Promptemplate™ is Ready!</h2>
+            <p style="color: #555; font-size: 16px; margin-bottom: 20px;">It’s copied to your clipboard—paste it into your favorite AI chat with Ctrl+V (Cmd+V on Mac) or right-click > Paste.</p>
+            <div class="button-container" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;">
+                <button class="ai-button" style="background: none; border: none; cursor: pointer;" onclick="window.open('https://grok.com', '_blank')">
+                    <img src="/images/grok.png" alt="Grok" style="width: 60px; height: 60px;">
+                </button>
+                <button class="ai-button" style="background: none; border: none; cursor: pointer;" onclick="window.open('https://chat.openai.com', '_blank')">
+                    <img src="/images/openai.png" alt="ChatGPT" style="width: 60px; height: 60px;">
+                </button>
+                <button class="ai-button" style="background: none; border: none; cursor: pointer;" onclick="window.open('https://deepseek.com', '_blank')">
+                    <img src="/images/deep.png" alt="DeepSeek" style="width: 60px; height: 60px;">
+                </button>
+                <button class="ai-button" style="background: none; border: none; cursor: pointer;" onclick="window.open('https://gemini.google.com/app', '_blank')">
+                    <img src="/images/gemini.png" alt="Gemini" style="width: 60px; height: 60px;">
+                </button>
+            </div>
+            <button onclick="closeModal()" style="padding: 10px 20px; background: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Got It</button>
         </div>
-        <button onclick="closeModal()">Got It</button>
     `;
 
     modal.style.display = 'flex';
+    modalContent.style.height = 'auto'; // Set auto height for the modal content
 
     // Add class to disable tooltips
     document.body.classList.add('modal-open');
