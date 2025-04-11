@@ -190,7 +190,7 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'incident':
+        case 'InteractIQ™':
             prompt += formatGrid('#incident-goal .grid-item.selected', 'Analyze the following incident details input relative to my goal');
             prompt += formatGrid('#area-goal .grid-item.selected', 'Incident Area');
             prompt += 'Purpose of analysis: Maximize the efficiency, productivity, safety and understanding of social dynamics for the workplace or personal life.\n\n';
@@ -243,7 +243,7 @@ function generatePrompt(promptType) {
             if (specificContext) prompt += formatList(specificContext, 'Context Dump');
             break;
 
-        case 'therapy':
+        case 'MindMend™':
             const therapyGoal = document.getElementById('therapy-goal');
             if (therapyGoal?.value) {
                 prompt += `Act as a compassionate and professional counselor/therapist. Use the following input to provide me with empathetic guidance, insights, and actionable steps to support my emotional well-being and work toward my therapy goal: ${therapyGoal.value}\n\n`;
@@ -299,7 +299,7 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'calorie':
+        case 'CalorieCrunch™':
             prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal. Also analyze my height, weight, and age to compare me against the average person at my height, age, and weight. ');
             prompt += `
             Output only a text-based table in a code block with these exact columns: Nutrient, Target Amount, Food Log Intake, Percentage Reached. Use this header format in the code block:
@@ -353,6 +353,26 @@ function generatePrompt(promptType) {
                 if (cost?.value) prompt += formatList(cost.value, 'Budget');
             }
             break;
+
+
+            // Add to the switch statement in the generatePrompt function
+case 'SymptomSolver™':
+    const rootoutSymptoms = document.getElementById('rootout-symptoms');
+    if (rootoutSymptoms?.value) {
+        prompt += `Analyze the following input to identify potential causes of my symptoms, with the goal of eliminating the cause to stop the effect:\n\n`;
+        prompt += formatList(rootoutSymptoms.value, 'Symptoms');
+        prompt += formatGrid('#rootout-triggers .grid-item.selected', 'Potential Triggers');
+        const rootoutDiet = document.getElementById('rootout-diet');
+        if (rootoutDiet?.value) prompt += formatList(rootoutDiet.value, 'Diet (Past 48 Hours)');
+        const rootoutTiming = document.getElementById('rootout-timing');
+        if (rootoutTiming?.value) prompt += formatList(rootoutTiming.value, 'Timing of Symptoms');
+        const rootoutPatterns = document.getElementById('rootout-patterns');
+        if (rootoutPatterns?.value) prompt += formatList(rootoutPatterns.value, 'Observed Patterns');
+        const rootoutContext = document.getElementById('rootout-context');
+        if (rootoutContext?.value) prompt += formatList(rootoutContext.value, 'Additional Context');
+        prompt += `Purpose of analysis: Identify likely causes of my symptoms by analyzing patterns, timing, and triggers. Provide a structured response in checklist format with headings like "Potential Causes" (list possible triggers with reasoning) and "Elimination Plan" (steps to test each cause, e.g., avoid specific foods for a week). Highlight any delayed correlations (e.g., symptoms 24 hours after a trigger). Suggest consulting a professional for medical concerns.`;
+    }
+    break;
 
         case 'business':
             const vision = document.getElementById('business-vision');
