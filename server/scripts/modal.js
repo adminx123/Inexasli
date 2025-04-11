@@ -111,6 +111,53 @@ function openModal(contentSrc) {
     document.addEventListener('click', handleClickOutside);
 }
 
+// Function to open the modal with generated prompt content
+function openGeneratedPromptModal() {
+    const modal = createModal();
+    const modalContent = modal.querySelector('.modal-content');
+
+    // Clear existing content and inject AI website links
+    modalContent.innerHTML = `
+        <p>Your Promptemplate™ is ready! It’s copied to your clipboard—paste it into your favorite AI chat with Ctrl+V (Cmd+V on Mac) or right-click > Paste.</p>
+        <div class="button-container">
+            <button class="ai-button" onclick="window.open('https://grok.com', '_blank')">
+                <img src="/images/grok.png" alt="Grok" class="ai-logo">
+            </button>
+            <button class="ai-button" onclick="window.open('https://chat.openai.com', '_blank')">
+                <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
+            </button>
+            <button class="ai-button" onclick="window.open('https://deepseek.com', '_blank')">
+                <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
+            </button>
+            <button class="ai-button" onclick="window.open('https://gemini.google.com/app', '_blank')">
+                <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
+            </button>
+        </div>
+        <button onclick="closeModal()">Got It</button>
+    `;
+
+    modal.style.display = 'flex';
+
+    // Add class to disable tooltips
+    document.body.classList.add('modal-open');
+
+    // Close modal on Escape key
+    handleKeyDown = (event) => {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Close modal when clicking outside
+    handleClickOutside = (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
+    document.addEventListener('click', handleClickOutside);
+}
+
 // Function to close the modal
 function closeModal() {
     const modal = document.querySelector('.modal');
@@ -142,3 +189,6 @@ setupModalTriggers();
 
 // Make closeModal globally accessible
 window.closeModal = closeModal;
+
+// Make openGeneratedPromptModal globally accessible
+window.openGeneratedPromptModal = openGeneratedPromptModal;
