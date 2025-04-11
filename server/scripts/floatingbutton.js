@@ -18,7 +18,7 @@ function injectStyles() {
       border-radius: 8px; box-shadow: 4px 4px 0 #000; display: inline-block;
       transition: background-color 0.3s ease;
     }
-    #gotosummary:hover { background-color: #d3bc0f; }
+    #gotosummary:hover { background-color:rgb(210, 210, 210); }
     #summary-btn {
       padding: 8px 15px; background: #000; color: #fff; border: 2px solid #000;
       border-radius: 5px; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease;
