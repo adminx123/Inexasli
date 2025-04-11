@@ -8,16 +8,12 @@
  * jurisdictions worldwide.
  */
 
-function setCookie(name, days) {
-  // Use current timestamp as the value
-  const value = Date.now(); // Milliseconds since epoch (e.g., 1743964851967)
-
-  // Set expiration date
+function setCookie(name, value, days) {
   const expires = new Date();
   expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-
-  // Set the cookie with the timestamp as the value
-  document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/`;
+  const cookieValue = String(value);
+  document.cookie = `${name}=${cookieValue}; expires=${expires.toUTCString()}; path=/`;
+  console.log(`setCookie: ${name}=${cookieValue}, expires in ${days} days`);
 }
 
 export { setCookie };

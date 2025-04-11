@@ -97,10 +97,9 @@ window.calculateAll = function () {
 
 window.calculateNext = function () {
     window.calculateAll();
-    const currentTime = Date.now(); // Current timestamp in milliseconds
-    setCookie('summary_reached', currentTime.toString(), 365); // Store timestamp, expires in 1 year
+    setCookie('summary_reached', Date.now(), 365);
     window.location.href = '/budget/summary.html';
-};
+  };
 
 window.calculateBack = function () {
     window.calculateAll();
