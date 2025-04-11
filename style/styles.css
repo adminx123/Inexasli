@@ -863,7 +863,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   position: relative;
   height: 100px; /* Adjust to fit your cards */
   width: 100%;
-  max-width: 400px; /* Match your containerround width */
+  max-width: 4auto00px; /* Match your containerround width */
   margin: 0 auto;
 }
 
@@ -875,12 +875,12 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   opacity: 0;
 }
 
-.hoead-1 { animation: fadeInOut 2s forwards; animation-delay: 0s; }
-.hoead-2 { animation: fadeInOut 2s forwards; animation-delay: 2s; }
-.hoead-3 { animation: fadeInOut 2s forwards; animation-delay: 4s; }
-.hoead-5 { 
-  animation: fadeIn 1s forwards;
-  animation-delay: 6s;
+.hoead-4 { animation: fadeIn 3s forwards; animation-delay: 2s; }
+
+.hoead-1 { animation: fadeInOut 1s forwards; animation-delay: 0s; }
+.hoead-2 { animation: fadeInOut 1s forwards; animation-delay: .5s; }
+.hoead-3 { animation: fadeInOut 1s forwards; animation-delay: 1s; }
+.hoead-5 { animation: fadeIn 1s forwards;  animation-delay: 1.5s;
 }
 
 @keyframes fadeInOut {
@@ -894,6 +894,8 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   0% { opacity: 0; transform: translateY(-20px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+
+
 
 #calculations {
   position: relative;
