@@ -190,7 +190,7 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'InteractIQ™':
+        case 'InteractionIQ™':
             prompt += formatGrid('#incident-goal .grid-item.selected', 'Analyze the following incident details input relative to my goal');
             prompt += formatGrid('#area-goal .grid-item.selected', 'Incident Area');
             prompt += 'Purpose of analysis: Maximize the efficiency, productivity, safety and understanding of social dynamics for the workplace or personal life.\n\n';
@@ -243,7 +243,7 @@ function generatePrompt(promptType) {
             if (specificContext) prompt += formatList(specificContext, 'Context Dump');
             break;
 
-        case 'MindMend™':
+        case 'EmotionIQ™':
             const therapyGoal = document.getElementById('therapy-goal');
             if (therapyGoal?.value) {
                 prompt += `Act as a compassionate and professional counselor/therapist. Use the following input to provide me with empathetic guidance, insights, and actionable steps to support my emotional well-being and work toward my therapy goal: ${therapyGoal.value}\n\n`;
@@ -299,7 +299,7 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'CalorieCrunch™':
+        case 'CalorieIQ™':
             prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal. Also analyze my height, weight, and age to compare me against the average person at my height, age, and weight. ');
             prompt += `
             Output only a text-based table in a code block with these exact columns: Nutrient, Target Amount, Food Log Intake, Percentage Reached. Use this header format in the code block:
@@ -356,7 +356,7 @@ function generatePrompt(promptType) {
 
 
             // Add to the switch statement in the generatePrompt function
-case 'SymptomSolver™':
+case 'SymptomIQ™':
     const rootoutSymptoms = document.getElementById('rootout-symptoms');
     if (rootoutSymptoms?.value) {
         prompt += `Analyze the following input to identify potential causes of my symptoms, with the goal of eliminating the cause to stop the effect:\n\n`;
