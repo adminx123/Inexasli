@@ -206,7 +206,7 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'event':
+        case 'EventIQ™':
             const eventTypesSelected = document.querySelectorAll('#event-types .grid-item.selected');
             if (eventTypesSelected.length > 0) {
                 prompt += formatGrid('#event-types .grid-item.selected', 'I want to host the following event');
@@ -260,7 +260,7 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'fitness':
+        case 'FitnessIQ™':
             const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
             if (fitnessGoalsSelected.length > 0) {
                 prompt += formatGrid('#fitness-goal .grid-item.selected', 'Consider the following input relative to my fitness goal');
