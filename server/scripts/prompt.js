@@ -260,74 +260,69 @@ function generatePrompt(promptType) {
             }
             break;
 
-  case 'fitness':
-    const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
-    if (fitnessGoalsSelected.length > 0) {
-        prompt += formatGrid('#fitness-goal .grid-item.selected', 'Consider the following input relative to my fitness goal');
-        prompt += 'Purpose of analysis: Create a personalized fitness plan to achieve my goal in checklist format with headings of Workout 1, 2, etc., and subcategories in code block format.\n\n';
-        const locationSelection = document.querySelector('#fitness-home-exercises .grid-item.selected');
-        if (locationSelection) {
-            const locationValue = locationSelection.getAttribute('data-value');
-            prompt += `Location: ${locationValue === 'Home' ? 'Home' : 'Gym'}\n\n`;
-        }
-        const age = document.getElementById('fitness-age');
-        if (age?.value) prompt += formatList(age.value, 'Age');
-        
-        const height = document.getElementById('fitness-height');
-        const heightUnit = document.getElementById('fitness-height-unit');
-        if (height?.value && heightUnit?.value) {
-            prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
-            console.log(`Height: ${height.value} ${heightUnit.value}`); // Debug
-        }
-        
-        const weight = document.getElementById('fitness-weight');
-        const weightUnit = document.getElementById('fitness-weight-unit');
-        if (weight?.value && weightUnit?.value) {
-            prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
-            console.log(`Weight: ${weight.value} ${weightUnit.value}`); // Debug
-        } else {
-            console.log('Weight or unit missing:', { weight: weight?.value, weightUnit: weightUnit?.value });
-        }
-        
-        prompt += formatGrid('#fitness-level .grid-item.selected', 'Fitness Level');
-        const injuries = document.getElementById('fitness-injuries');
-        if (injuries?.value) prompt += formatList(injuries.value, 'Injuries/Health Conditions');
-        const frequency = document.getElementById('fitness-frequency');
-        if (frequency?.value) prompt += formatList(frequency.value, 'Number of weekly workouts I can do');
-        const duration = document.getElementById('fitness-duration');
-        if (duration?.value) prompt += formatList(duration.value, 'Length of workout sessions I can perform');
-    }
-    break;
-    
-    
+        case 'fitness':
+            const fitnessGoalsSelected = document.querySelectorAll('#fitness-goal .grid-item.selected');
+            if (fitnessGoalsSelected.length > 0) {
+                prompt += formatGrid('#fitness-goal .grid-item.selected', 'Consider the following input relative to my fitness goal');
+                prompt += 'Purpose of analysis: Create a personalized fitness plan to achieve my goal in checklist format with headings of Workout 1, 2, etc., and subcategories in code block format.\n\n';
+                const locationSelection = document.querySelector('#fitness-home-exercises .grid-item.selected');
+                if (locationSelection) {
+                    const locationValue = locationSelection.getAttribute('data-value');
+                    prompt += `Location: ${locationValue === 'Home' ? 'Home' : 'Gym'}\n\n`;
+                }
+                const age = document.getElementById('fitness-age');
+                if (age?.value) prompt += formatList(age.value, 'Age');
+                
+                const height = document.getElementById('fitness-height');
+                const heightUnit = document.getElementById('fitness-height-unit');
+                if (height?.value && heightUnit?.value) {
+                    prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
+                    console.log(`Height: ${height.value} ${heightUnit.value}`); // Debug
+                }
+                
+                const weight = document.getElementById('fitness-weight');
+                const weightUnit = document.getElementById('fitness-weight-unit');
+                if (weight?.value && weightUnit?.value) {
+                    prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
+                    console.log(`Weight: ${weight.value} ${weightUnit.value}`); // Debug
+                } else {
+                    console.log('Weight or unit missing:', { weight: weight?.value, weightUnit: weightUnit?.value });
+                }
+                
+                prompt += formatGrid('#fitness-level .grid-item.selected', 'Fitness Level');
+                const injuries = document.getElementById('fitness-injuries');
+                if (injuries?.value) prompt += formatList(injuries.value, 'Injuries/Health Conditions');
+                const frequency = document.getElementById('fitness-frequency');
+                if (frequency?.value) prompt += formatList(frequency.value, 'Number of weekly workouts I can do');
+                const duration = document.getElementById('fitness-duration');
+                if (duration?.value) prompt += formatList(duration.value, 'Length of workout sessions I can perform');
+            }
+            break;
 
-    case 'calorie':
-        prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal. Also analyze my height, weight, and age to compare me against the average person at my height, age, and weight. ');
-        prompt += `
-        Output only a text-based table in a code block with these exact columns: Nutrient, Target Amount, Food Log Intake, Percentage Reached. Use this header format in the code block:
-    Include no text outside the code block—no comments, explanations, or recommendations. Add any future amounts I provide to the running totals unless I request a new estimate.
-        `;
-        const age = document.getElementById('calorie-age');
-        if (age?.value) prompt += formatList(age.value, 'Age');
-        const height = document.getElementById('calorie-height');
-        const heightUnit = document.getElementById('calorie-height-unit');
-        if (height?.value && heightUnit?.value) {
-            prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
-        }
-        const weight = document.getElementById('calorie-weight');
-        const weightUnit = document.getElementById('calorie-weight-unit');
-        if (weight?.value && weightUnit?.value) {
-            prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
-        }
-        prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
-        const foodLog = document.getElementById('calorie-food-log');
-        if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
-        break;
+        case 'calorie':
+            prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal. Also analyze my height, weight, and age to compare me against the average person at my height, age, and weight. ');
+            prompt += `
+            Output only a text-based table in a code block with these exact columns: Nutrient, Target Amount, Food Log Intake, Percentage Reached. Use this header format in the code block:
+        Include no text outside the code block—no comments, explanations, or recommendations. Add any future amounts I provide to the running totals unless I request a new estimate.
+            `;
+            const age = document.getElementById('calorie-age');
+            if (age?.value) prompt += formatList(age.value, 'Age');
+            const height = document.getElementById('calorie-height');
+            const heightUnit = document.getElementById('calorie-height-unit');
+            if (height?.value && heightUnit?.value) {
+                prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
+            }
+            const weight = document.getElementById('calorie-weight');
+            const weightUnit = document.getElementById('calorie-weight-unit');
+            if (weight?.value && weightUnit?.value) {
+                prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
+            }
+            prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
+            const foodLog = document.getElementById('calorie-food-log');
+            if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
+            break;
 
-      
-      
-      
-            case 'trip':
+        case 'trip':
             prompt += formatGrid('#trip-activities .grid-item.selected', 'Review the following activities I want to do on my trip');
             prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format code block. If available include the weather forcast for the location(s)\n\n';
             const tripSpecifics = document.getElementById('trip-specifics');
@@ -488,118 +483,32 @@ function generatePrompt(promptType) {
             break;
     }
 
-    const style = document.createElement('style');
-    style.textContent = `
-        .prompt-modal {
-            position: fixed;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            padding: 20px;
-            border: 2px solid #000;
-            box-shadow: 4px 4px 0 #000;
-            z-index: 1000;
-            text-align: center;
-            font-size: 16px;
-            color: #000;
-            width: 80%;
-            max-width: 500px;
-        }
-        .prompt-modal button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background: #000;
-            color: #fff;
-            border: 2px solid #000;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .prompt-modal button:hover {
-            background: #333;
-        }
-        .button-container {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .ai-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .ai-logo {
-            width: 40px;
-            height: 40px;
-            display: block;
-        }
-    `;
-    document.head.appendChild(style);
-
     if (prompt) {
         document.getElementById('result').textContent = prompt;
         navigator.clipboard.writeText(prompt).then(() => {
-            const modal = document.createElement('div');
-            modal.className = 'prompt-modal';
-            modal.innerHTML = `
-                <p>Your Promptemplate™ is ready! It’s copied to your clipboard—paste it into your favorite AI chat with Ctrl+V (Cmd+V on Mac) or right-click > Paste.</p>
-                <div class="button-container">
-                    <button class="ai-button" onclick="openApp('grok', 'https://grok.com')">
-                        <img src="/images/grok.png" alt="Grok" class="ai-logo">
-                    </button>
-                    <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
-                        <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
-                    </button>
-                    <button class="ai-button" onclick="openApp('com.deepseek.app', 'https://deepseek.com')">
-                        <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
-                    </button>
-                    <button class="ai-button" onclick="openApp('com.google.gemini', 'https://gemini.google.com/app')">
-                        <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
-                    </button>
-                </div>
-                <button onclick="this.parentElement.remove()">Got It</button>
-            `;
-            document.body.appendChild(modal);
+            openGeneratedPromptModal(); // Use modal.js to show confirmation and AI links
         }).catch(err => {
             console.error('Failed to copy prompt:', err);
-            const modal = document.createElement('div');
-            modal.className = 'prompt-modal';
-            modal.innerHTML = `
-                <p>Prompt generated but failed to copy. Copy it manually from the page.</p>
-                <div class="button-container">
-                    <button class="ai-button" onclick="openApp('grok', 'https://grok.com')">
-                        <img src="/images/grok.png" alt="Grok" class="ai-logo">
-                    </button>
-                    <button class="ai-button" onclick="openApp('com.openai.chat', 'https://chat.openai.com')">
-                        <img src="/images/openai.png" alt="ChatGPT" class="ai-logo">
-                    </button>
-                    <button class="ai-button" onclick="openApp('com.deepseek.app', 'https://deepseek.com')">
-                        <img src="/images/deep.png" alt="DeepSeek" class="ai-logo">
-                    </button>
-                    <button class="ai-button" onclick="openApp('com.google.gemini', 'https://gemini.google.com/app')">
-                        <img src="/images/gemini.png" alt="Gemini" class="ai-logo">
-                    </button>
-                </div>
-                <button onclick="this.parentElement.remove()">Got It</button>
-            `;
-            document.body.appendChild(modal);
+            openGeneratedPromptModal(); // Show modal even if clipboard fails
         });
     } else {
-        const modal = document.createElement('div');
-        modal.className = 'prompt-modal';
-        modal.innerHTML = `
-            <p>No prompt generated. Please fill in the required fields.</p>
-            <button onclick="this.parentElement.remove()">Got It</button>
-        `;
-        document.body.appendChild(modal);
+        openGeneratedPromptModal(); // Show modal for empty prompt
     }
 }
+
+// Function to open the custom modal with dynamic content
+function openCustomModal(content) {
+    const modal = document.createElement('div');
+    modal.className = 'prompt-modal';
+    modal.innerHTML = `
+        <p>${content}</p>
+        <button onclick="this.parentElement.remove()">Close</button>
+    `;
+    document.body.appendChild(modal);
+}
+
+// Make openCustomModal globally accessible
+window.openCustomModal = openCustomModal;
 
 document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
     button.addEventListener('click', (e) => {
