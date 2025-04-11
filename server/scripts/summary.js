@@ -27,8 +27,7 @@ tabs.forEach(tab => {
 // Core DOMContentLoaded listener
 document.addEventListener('DOMContentLoaded', function () {
 
-    setCookie("summary", "loaded", 32, Date.now()); // "loaded" is arbitrary; timestamp is key
-
+    setCookie("summary", Date.now(), 32);
 
     const paid = getLocal("authenticated");
     const isPaid = paid === "paid";

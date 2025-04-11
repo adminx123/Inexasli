@@ -33,8 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Set the "prompt" cookie on page load
-    setCookie("prompt", "loaded", 32, Date.now());
-
+    setCookie("prompt", Date.now(), 32);
     // Attach toggleSection to section headers (free and premium)
     document.querySelectorAll('.section > h2, .section1-header').forEach(header => {
         header.addEventListener('click', () => toggleSection(header));
