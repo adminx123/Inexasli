@@ -61,27 +61,52 @@ function checkLocalAndToggleButton() {
   const termsCheckbox = document.getElementById('termscheckbox');
   const notIntendedCheckbox = document.getElementById('notintended');
   const regionDropdown = document.getElementById('RegionDropdown');
+  const currentPage = window.location.pathname;
 
-  if (summaryCookie && termsCheckbox && notIntendedCheckbox && regionDropdown) {
+  // Pages where only timestamp matters (no checkboxes/dropdown)
+  const timestampOnlyPages = ['/budget/expense.html', '/budget/asset.html', '/budget/liability.html'];
+
+  if (summaryCookie) {
     const timestamp = summaryCookie.timestamp || 0;
     const currentTime = Date.now();
     const fifteenMinutes = 15 * 60 * 1000;
     const timeDifference = currentTime - timestamp;
-
     const isTimestampValid = timeDifference < fifteenMinutes;
-    const areCheckboxesChecked = termsCheckbox.checked && notIntendedCheckbox.checked;
-    const isRegionValid = regionDropdown.value !== "" && regionDropdown.value !== "NONE";
 
-    if (isTimestampValid && areCheckboxesChecked && isRegionValid) {
-      summaryButtonContainer.style.display = 'inline-block';
-      console.log('Button shown - timestamp < 15 min and conditions met:', timeDifference / 1000, 'seconds');
+    if (timestampOnlyPages.includes(currentPage)) {
+      // On expense.html, asset.html, liability.html: only check timestamp
+      if (isTimestampValid) {
+        summaryButtonContainer.style.display = 'inline-block';
+        console.log('Button shown on timestamp-only page - timestamp < 15 min:', timeDifference / 1000, 'seconds');
+      } else {
+        summaryButtonContainer.style.display = 'none';
+        console.log('Button hidden on timestamp-only page - timestamp > 15 min:', timeDifference / 1000, 'seconds');
+      }
     } else {
-      summaryButtonContainer.style.display = 'none';
-      console.log('Button hidden - conditions not met:', { timestampValid: isTimestampValid, checkboxesChecked: areCheckboxesChecked, regionValid: isRegionValid });
+      // On other pages: check timestamp + checkboxes + dropdown
+      if (termsCheckbox && notIntendedCheckbox && regionDropdown) {
+        const areCheckboxesChecked = termsCheckbox.checked && notIntendedCheckbox.checked;
+        const isRegionValid = regionDropdown.value !== "" && regionDropdown.value !== "NONE";
+
+        if (isTimestampValid && areCheckboxesChecked && isRegionValid) {
+          summaryButtonContainer.style.display = 'inline-block';
+          console.log('Button shown - timestamp < 15 min and conditions met:', timeDifference / 1000, 'seconds');
+        } else {
+          summaryButtonContainer.style.display = 'none';
+          console.log('Button hidden - conditions not met:', {
+            timestampValid: isTimestampValid,
+            checkboxesChecked: areCheckboxesChecked,
+            regionValid: isRegionValid
+          });
+        }
+      } else {
+        summaryButtonContainer.style.display = 'none';
+        console.log('Button hidden - missing DOM elements on non-timestamp-only page');
+      }
     }
   } else {
     summaryButtonContainer.style.display = 'none';
-    console.log('Button hidden - missing cookie or DOM elements');
+    console.log('Button hidden - no summary_reached cookie');
   }
 }
 
