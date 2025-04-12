@@ -1193,6 +1193,22 @@ textarea {
   }
 }
 
+/* Mobile adjustments for stacked layout */
+@media (max-width: 700px) {
+  .checkboxrow {
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-start; /* Align items to the start */
+    gap: 10px; /* Add spacing between elements */
+    width: 50%; /* Restrict to left 50% of the screen */
+  }
+
+  .checkboxrow label,
+  .checkboxrow input[type="number"],
+  .checkboxrow .checkbox-button-group {
+    width: 100%; /* Ensure all elements take full width of the container */
+  }
+}
+
 /* Reset default margins and padding for details/summary */
 details {
   margin: 10px 0; /* Consistent spacing between sections */
