@@ -1,4 +1,4 @@
-<!-- /*
+<!--
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
@@ -6,7 +6,7 @@
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
- */ -->
+-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,70 +20,55 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="/style/styles.css">
 
-   <!-- this is an extended list of places icon could be needed -->
-   <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-   <link rel="shortcut icon" href="/images/favicon.ico" />
-   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-   
+    <!-- Extended icon list -->
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
 
     <link rel="manifest" href="/manifest.json">
-
 </head>
 
 <body>
-
-
     <a href="./intro.html">
         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 0px;" onclick="calculateAll();">
-
     </a>
 
-    <!-- <h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2> -->
-
-
     <div class="tab-container">
-
-        <a href="./income.html" class="tooltip tab " data-location="income"
+        <a href="./income.html" class="tooltip tab" data-location="income"
             data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket."
-            onclick="calculateAll();">
+            onclick="calculateNext();">
             Income
-            <span class="tooltip1-content"></span>
-        </a>
-
-        <a href="./expense.html" class="tooltip tab " data-location="expense"
-            data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn."
-            onclick="calculateAll();">
-            Expense
-            <span class="tooltip1-content"></span>
-        </a>
-
-        <a href="./asset.html" class="tooltip tab " data-location="asset"
-            data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection."
-            onclick="calculateAll();">
-            Asset
-            <span class="tooltip1-content"></span>
-        </a>
-
-        <a href="./liability.html" class="tooltip tab active" data-location="liability"
-            data-tooltip="Money owed to others, which needs to be paid back. Examples: loans, mortgages, or credit card debts."
-            onclick="calculateAll();">
-            Liability
             <span class="tooltip-content"></span>
         </a>
 
+        <a href="./expense.html" class="tooltip tab" data-location="expense"
+            data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn."
+            onclick="calculateNext();">
+            Expense
+            <span class="tooltip-content"></span>
+        </a>
+
+        <a href="./asset.html" class="tooltip tab" data-location="asset"
+            data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection."
+            onclick="calculateNext();">
+            Asset
+            <span class="tooltip-content"></span>
+        </a>
+
+        <a href="#" class="tooltip tab active" data-location="liability"
+            data-tooltip="Money owed to others, which needs to be paid back. Examples: loans, mortgages, or credit card debts."
+            >
+            Liability
+            <span class="tooltip-content"></span>
+        </a>
     </div>
 
-
     <div class="container">
-
-        <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1"
+        <h2 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1"
             data-tooltip="A type of debt where the borrower receives a fixed amount of money upfront, which they repay over time through regular payments until the loan is fully paid off. Once the loan is settled, the account is closed, and the borrower must apply for a new loan if they need more funds.">
             Input Non-Revolving Liabilities<span class="tooltip1-content"></span>
         </h2>
-
- 
-
 
         <div class="row">
             <label for="liabilities_small_business_loan">Small Business Loan:</label>
@@ -114,7 +99,7 @@
         </div>
 
         <div class="row">
-            <label for="" style="font-size: unset;" class="tooltip1"
+            <label for="liabilities_personal_debt" style="font-size: unset;" class="tooltip1"
                 data-tooltip="List money you owe, whether it's to personal connections (like borrowing from family) or business suppliers that hasn't been accounted for elsewhere. In a sole proprietorship, these liabilities are part of your personal financial responsibility.">
                 <span class="tooltip1-content"></span>
                 Accounts Payable:</label>
@@ -124,15 +109,11 @@
         </div>
     </div>
 
-
     <div class="containerround">
-
-        <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1"
+        <h2 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1"
             data-tooltip="Debts where you can borrow money up to a certain limit, pay it back, and borrow again. The amount you can borrow revolves as you pay off what you owe.">
             Input Revolving Liabilities<span class="tooltip1-content"></span>
         </h2>
-
-
 
         <div class="row">
             <label for="liabilities_student_loan">Student Loan:</label>
@@ -156,52 +137,33 @@
         </div>
 
         <div class="row">
-
-            <label for="" style="font-size: unset;" class="tooltip1" data-tooltip="Total tax payable">
+            <label for="liabilities_tax_arrears" style="font-size: unset;" class="tooltip1" data-tooltip="Total tax payable">
                 <span class="tooltip1-content"></span>
                 Tax Arrears:</label>
             <input type='number' inputmode="numeric" id="liabilities_tax_arrears">
             <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
                 id="liabilities_tax_arrears_percent" inputmode="numeric">
         </div>
-
-
-        <!-- <div class="nav-div">
-
-    <button onclick="calculateBack()" class="nav-btn nav-left"><i class='bx nav-inner bx-left-arrow-alt' ></i></button>
--->
-
-
     </div>
 
     <div class="containerround">
-        <button id="nextButton" class="nav-btn nav-right"><i
-                class='bx nav-inner bx-right-arrow-alt'></i></button>
+        <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt'></i></button>
     </div>
-
-
-
 
     <div class="hidden">
-
         <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
-        <span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy
-            formulation.</span>
-
+        <span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy formulation.</span>
     </div>
 
-
     <script src="/index.js"></script>
-
     <script src="/server/scripts/liability.js" type="module"></script>
     <script src="/server/scripts/toolTip.js"></script>
     <script src="/server/scripts/tray.js"></script>
-    <script type="module" src="/server/scripts/floatingbutton.js"></script>
+    <script src="/server/scripts/modal.js"></script>
+    <script src="/server/scripts/hideShow.js" type="module"></script>
     <script src="/server/scripts/utils.js" type="module"></script>
-
-
-
-
+    <script src="/server/scripts/getlocal.js" type="module"></script>
+    <script src="/server/scripts/floatingbutton.js" type="module"></script>
 </body>
 
 </html>
