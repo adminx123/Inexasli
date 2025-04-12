@@ -155,30 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
         initializeFrequencyGroups(frequencyGroups);
     }, 200);
 
-    // Debug row visibility
-    const partnerRows = document.querySelectorAll('.partner-clone');
-    partnerRows.forEach(row => {
-        const display = getComputedStyle(row).display;
-        console.log(`Partner row visibility: ${row.id || row.className}, display: ${display}`);
-        const inputs = row.querySelectorAll('input[type="number"], .frequency-placeholder');
-        inputs.forEach(input => {
-            const inputDisplay = getComputedStyle(input).display;
-            const inputWidth = getComputedStyle(input).width;
-            console.log(`Partner input style: ${input.id || input.className}, display: ${inputDisplay}, width: ${inputWidth}`);
-        });
-    });
-
-    const nonPartnerRows = document.querySelectorAll('.checkboxrow:not(.partner-clone)');
-    nonPartnerRows.forEach(row => {
-        const display = getComputedStyle(row).display;
-        console.log(`Non-partner row visibility: ${row.id || row.className}, display: ${display}`);
-        const inputs = row.querySelectorAll('input[type="number"], .frequency-placeholder');
-        inputs.forEach(input => {
-            const inputDisplay = getComputedStyle(input).display;
-            const inputWidth = getComputedStyle(input).width;
-            console.log(`Non-partner input style: ${input.id || input.className}, display: ${inputDisplay}, width: ${inputWidth}`);
-        });
-    });
+   
 
     
 });
