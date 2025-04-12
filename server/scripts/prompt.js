@@ -299,28 +299,38 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'CalorieIQ™':
-            prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal. Also analyze my height, weight, and age to compare me against the average person at my height, age, and weight. ');
-            prompt += `
-            Output only a text-based table in a code block with these exact columns: Nutrient, Target Amount, Food Log Intake, Percentage Reached. Use this header format in the code block:
-        Include no text outside the code block—no comments, explanations, or recommendations. Add any future amounts I provide to the running totals unless I request a new estimate.
-            `;
-            const age = document.getElementById('calorie-age');
-            if (age?.value) prompt += formatList(age.value, 'Age');
-            const height = document.getElementById('calorie-height');
-            const heightUnit = document.getElementById('calorie-height-unit');
-            if (height?.value && heightUnit?.value) {
-                prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
-            }
-            const weight = document.getElementById('calorie-weight');
-            const weightUnit = document.getElementById('calorie-weight-unit');
-            if (weight?.value && weightUnit?.value) {
-                prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
-            }
-            prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
-            const foodLog = document.getElementById('calorie-food-log');
-            if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
-            break;
+            case 'CalorieIQ™':
+                prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal. Also analyze my height, weight, and age to compare me against the average person at my height, age, and weight. ');
+                prompt += `
+                Output only a text-based table in a code block with these exact columns: Nutrient, Target Amount, Food Log Intake, Percentage Reached. Use this header format in the code block:
+                Include no text outside the code block—no comments, explanations, or recommendations unless specified below.
+                `;
+                const recommendations = document.querySelector('#calorie-recommendations .grid-item.selected');
+                if (recommendations) {
+                    prompt += `
+                    If there are deficits in calories or macronutrients based on my goal and food log, suggest meal recommendations to meet the remaining needs. Output meal suggestions in a separate text-based table in a code block with columns: Meal, Calories, Protein (g), Carbs (g), Fat (g). Use this header format:
+                    Include no text outside the code blocks.
+                    `;
+                }
+                prompt += `
+                Add any future amounts I provide to the running totals unless I request a new estimate.
+                `;
+                const age = document.getElementById('calorie-age');
+                if (age?.value) prompt += formatList(age.value, 'Age');
+                const height = document.getElementById('calorie-height');
+                const heightUnit = document.getElementById('calorie-height-unit');
+                if (height?.value && heightUnit?.value) {
+                    prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
+                }
+                const weight = document.getElementById('calorie-weight');
+                const weightUnit = document.getElementById('calorie-weight-unit');
+                if (weight?.value && weightUnit?.value) {
+                    prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
+                }
+                prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
+                const foodLog = document.getElementById('calorie-food-log');
+                if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
+                break;
 
         case 'trip':
             prompt += formatGrid('#trip-activities .grid-item.selected', 'Review the following activities I want to do on my trip');
