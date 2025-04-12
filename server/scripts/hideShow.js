@@ -1,100 +1,77 @@
-/*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
- */
+// hideShow.js
+// Existing imports or setup (if any, e.g., localStorage handling)
+function updateVisibility() {
+    const fillingStatus = localStorage.getItem('fillingStatus');
+    const partnerRows = document.querySelectorAll('.partner-clone');
+    const styleElement = document.getElementById('hide-show-styles') || document.createElement('style');
 
-import { getLocal } from '/server/scripts/getlocal.js';
-import { setLocal } from '/server/scripts/setlocal.js';
-
-function hideShowClass(className, task) {
-    const elements = document.getElementsByClassName(className);
-    if (elements.length === 0) {
-        console.warn(`No elements with class '${className}' found.`);
-        return;
-    }
-    Array.from(elements).forEach((element) => {
-        element.style.display = task === 'hide' ? 'none' : '';
-        console.log(`Set ${className} display to: ${element.style.display || 'inherit'}`);
-    });
-}
-
-function updateHideShow() {
-    const region = getLocal('RegionDropdown');
-    console.log('Region in hideShow.js:', region);
-
-    const fillingStatus = getLocal('fillingStatus');
-    const dependants = getLocal('dependants');
-    const debt = getLocal('debt');
-    console.log('Dependants in hideShow.js:', dependants);
-    console.log('Debt in hideShow.js:', debt);
-
-    let cssRules = '';
-
-    if (region === 'CAN') {
-        hideShowClass('usa-hide', 'hide');
-        hideShowClass('can-hide', 'show');
-        cssRules += `.usa-hide { display: none !important; } .can-hide { display: block !important; }`;
-    } else if (region === 'USA') {
-        hideShowClass('usa-hide', 'show');
-        hideShowClass('can-hide', 'hide');
-        cssRules += `.usa-hide { display: block !important; } .can-hide { display: none !important; }`;
-    } else {
-        hideShowClass('usa-hide', 'hide');
-        hideShowClass('can-hide', 'hide');
-        cssRules += `.usa-hide { display: none !important; } .can-hide { display: none !important; }`;
-    }
-
-    if (dependants === 'checked') {
-        hideShowClass('dependant-parent', 'show');
-        cssRules += `.dependant-parent { display: block !important; }`;
-    } else {
-        hideShowClass('dependant-parent', 'hide');
-        cssRules += `.dependant-parent { display: none !important; }`;
-    }
+    styleElement.id = 'hide-show-styles';
+    let styles = '';
 
     if (fillingStatus === 'partner') {
-        hideShowClass('partner-clone', 'show');
-        cssRules += `.partner-clone { display: flex !important; }`;
+        styles += `
+            .partner-clone {
+                display: flex !important;
+            }
+        `;
     } else {
-        hideShowClass('partner-clone', 'hide');
-        cssRules += `.partner-clone { display: none !important; }`;
+        styles += `
+            .partner-clone {
+                display: none !important;
+            }
+        `;
     }
 
-    if (debt === 'checked') {
-        hideShowClass('debt-parent', 'show');
-        cssRules += `.debt-parent { display: block !important; }`;
-    } else {
-        hideShowClass('debt-parent', 'hide');
-        cssRules += `.debt-parent { display: none !important; }`;
+    styleElement.textContent = styles;
+    if (!document.getElementById('hide-show-styles')) {
+        document.head.appendChild(styleElement);
     }
 
-    let styleSheet = document.getElementById('hide-show-styles');
-    if (!styleSheet) {
-        styleSheet = document.createElement('style');
-        styleSheet.id = 'hide-show-styles';
-        document.head.appendChild(styleSheet);
-    }
-    styleSheet.textContent = cssRules;
+    // Debug row visibility
+    try {
+        console.log(`[hideShow.js] Debugging on ${window.location.pathname}, fillingStatus: ${fillingStatus}`);
+        
+        // Partner-clone rows
+        partnerRows.forEach(row => {
+            const display = getComputedStyle(row).display;
+            const parent = row.closest('.checkboxrow-container') || row.parentElement;
+            const parentDisplay = parent ? getComputedStyle(parent).display : 'N/A';
+            console.log(`Partner row: ${row.id || row.className}, display: ${display}, parent display: ${parentDisplay}`);
+            
+            const inputs = row.querySelectorAll('input[type="number"], .checkbox-button-group');
+            inputs.forEach(input => {
+                const inputDisplay = getComputedStyle(input).display;
+                const inputWidth = getComputedStyle(input).width;
+                console.log(`  Partner input: ${input.id || input.className}, display: ${inputDisplay}, width: ${inputWidth}`);
+            });
+        });
 
-    document.dispatchEvent(new Event('hideShowUpdated'));
+        // Non-partner rows
+        const nonPartnerRows = document.querySelectorAll('.checkboxrow:not(.partner-clone)');
+        nonPartnerRows.forEach(row => {
+            const display = getComputedStyle(row).display;
+            const parent = row.closest('.checkboxrow-container') || row.parentElement;
+            const parentDisplay = parent ? getComputedStyle(parent).display : 'N/A';
+            console.log(`Non-partner row: ${row.id || row.className}, display: ${display}, parent display: ${parentDisplay}`);
+            
+            const inputs = row.querySelectorAll('input[type="number"], .checkbox-button-group');
+            inputs.forEach(input => {
+                const inputDisplay = getComputedStyle(input).display;
+                const inputWidth = getComputedStyle(input).width;
+                console.log(`  Non-partner input: ${input.id || input.className}, display: ${inputDisplay}, width: ${inputWidth}`);
+            });
+        });
+    } catch (error) {
+        console.error(`[hideShow.js] Debugging error: ${error.message}`);
+    }
 }
 
-const regionDropdown = document.getElementById('RegionDropdown');
+// Run visibility update on DOM load or status change
+document.addEventListener('DOMContentLoaded', updateVisibility);
 
-if (regionDropdown) {
-    regionDropdown.addEventListener('change', () => {
-        const region = regionDropdown.value;
-        console.log(`Region changed to: ${region}`);
-        setLocal('RegionDropdown', region);
-        updateHideShow();
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    updateHideShow();
+// Optional: Re-run if fillingStatus changes (e.g., via user toggle)
+window.addEventListener('storage', (event) => {
+    if (event.key === 'fillingStatus') {
+        updateVisibility();
+    }
 });
-
-export { hideShowClass, updateHideShow };
