@@ -1209,6 +1209,44 @@ textarea {
   }
 }
 
+@media (max-width: 700px) {
+    .checkboxrow-container {
+      display: flex;
+      flex-wrap: nowrap; /* Ensure rows are side by side */
+    }
+
+    .checkboxrow {
+      width: 50%;
+      position: relative;
+      left: 0;
+    }
+
+    .partner-clone {
+      width: 50%;
+      position: relative;
+      left: 0; /* Align next to the original row */
+    }
+  }
+
+  @media (min-width: 701px) {
+    .checkboxrow-container {
+      display: flex;
+      flex-wrap: nowrap; /* Ensure rows are side by side */
+    }
+
+    .checkboxrow {
+      width: 50%;
+      position: relative;
+      left: 0;
+    }
+
+    .partner-clone {
+      width: 50%;
+      position: relative;
+      left: 0; /* Align next to the original row */
+    }
+  }
+
 /* Reset default margins and padding for details/summary */
 details {
   margin: 10px 0; /* Consistent spacing between sections */

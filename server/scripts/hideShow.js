@@ -3,9 +3,7 @@
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
+ * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
 import { getLocal } from '/server/scripts/getlocal.js';
@@ -18,7 +16,8 @@ function hideShowClass(className, task) {
         return;
     }
     Array.from(elements).forEach((element) => {
-        element.style.display = task === 'hide' ? 'none' : 'block';
+        element.style.display = task === 'hide' ? 'none' : '';
+        console.log(`Set ${className} display to: ${element.style.display || 'inherit'}`);
     });
 }
 
@@ -26,7 +25,6 @@ function updateHideShow() {
     const region = getLocal('RegionDropdown');
     console.log('Region in hideShow.js:', region);
 
-    // Check localStorage for dependants and debt
     const dependants = getLocal('dependants');
     const debt = getLocal('debt');
     console.log('Dependants in hideShow.js:', dependants);
@@ -34,7 +32,6 @@ function updateHideShow() {
 
     let cssRules = '';
 
-    // Region-based visibility
     if (region === 'CAN') {
         hideShowClass('usa-hide', 'hide');
         hideShowClass('can-hide', 'show');
@@ -49,13 +46,20 @@ function updateHideShow() {
         cssRules += `.usa-hide { display: none !important; } .can-hide { display: none !important; }`;
     }
 
-    // Strict check: only show if exactly "checked"
     if (dependants === 'checked') {
         hideShowClass('dependant-parent', 'show');
         cssRules += `.dependant-parent { display: block !important; }`;
     } else {
         hideShowClass('dependant-parent', 'hide');
         cssRules += `.dependant-parent { display: none !important; }`;
+    }
+
+    if (dependants === 'checked') {
+        hideShowClass('partner-clone', 'show');
+        cssRules += `.partner-clone { display: flex !important; }`;
+    } else {
+        hideShowClass('partner-clone', 'hide');
+        cssRules += `.partner-clone { display: none !important; }`;
     }
 
     if (debt === 'checked') {
@@ -66,7 +70,6 @@ function updateHideShow() {
         cssRules += `.debt-parent { display: none !important; }`;
     }
 
-    // Apply styles
     let styleSheet = document.getElementById('hide-show-styles');
     if (!styleSheet) {
         styleSheet = document.createElement('style');
@@ -74,6 +77,8 @@ function updateHideShow() {
         document.head.appendChild(styleSheet);
     }
     styleSheet.textContent = cssRules;
+
+    document.dispatchEvent(new Event('hideShowUpdated'));
 }
 
 const regionDropdown = document.getElementById('RegionDropdown');

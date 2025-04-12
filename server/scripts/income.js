@@ -3,23 +3,19 @@
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
+ * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { setLocal } from '/server/scripts/setlocal.js'; // Adjust path as needed
-import { getLocal } from '/server/scripts/getlocal.js'; // Adjust path as needed
+import { setLocal } from '/server/scripts/setlocal.js';
+import { getLocal } from '/server/scripts/getlocal.js';
 
 function getTermsCookie(name) {
     const now = Date.now();
     const status = JSON.parse(window.localStorage.getItem(name));
-
     if (status && now > status.time) {
         localStorage.removeItem(name);
         return false;
     }
-
     return status ? status.accepted : false;
 }
 
@@ -43,7 +39,6 @@ function handleCheckboxChange() {
 function handleTabClick(e) {
     const isChecked1 = getTermsCookie('term1');
     const isChecked2 = getTermsCookie('term2');
-
     if (!isChecked1 || !isChecked2) {
         e.preventDefault();
         alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
@@ -53,9 +48,7 @@ function handleTabClick(e) {
 tabs.forEach(tab => {
     const dataL = tab.getAttribute('data-location');
     const location = document.location.pathname;
-
     tab.addEventListener('click', handleTabClick);
-
     if (location.includes(dataL)) {
         tab.removeAttribute('href');
         tab.classList.add('active');
@@ -64,14 +57,6 @@ tabs.forEach(tab => {
 
 checkbox1.addEventListener('click', handleCheckboxChange);
 checkbox2.addEventListener('click', handleCheckboxChange);
-
-window.addEventListener('DOMContentLoaded', () => {
-    const isChecked1 = getTermsCookie('term1');
-    const isChecked2 = getTermsCookie('term2');
-
-    checkbox1.checked = isChecked1;
-    checkbox2.checked = isChecked2;
-});
 
 const regionDropdown = document.getElementById("RegionDropdown");
 const subregionDropdown = document.getElementById("SubregionDropdown");
@@ -83,9 +68,7 @@ const subregionMap = {
 
 function updateSubregionDropdown() {
     const selectedRegion = regionDropdown.value;
-
-    subregionDropdown.innerHTML = ""; // Clear existing options
-
+    subregionDropdown.innerHTML = "";
     if (selectedRegion in subregionMap) {
         subregionMap[selectedRegion].forEach(subregionCode => {
             const subregionOption = document.createElement("option");
@@ -103,19 +86,16 @@ window.validatecheckbox = function () {
     const notintended = document.getElementById("notintended");
     const regionDropdown = document.getElementById("RegionDropdown");
 
-    // Check if a valid region is selected
     if (regionDropdown.value === "" || regionDropdown.value === "NONE") {
         alert("Please select a region from the dropdown.");
         return false;
     }
 
-    // Check if checkboxes are checked
     if (!termscheckbox.checked || !notintended.checked) {
         alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
         return false;
     }
 
-    // Save all user inputs
     const formElements = [
         'RegionDropdown', 'SubregionDropdown',
         'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop', 
@@ -123,7 +103,14 @@ window.validatecheckbox = function () {
         'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension', 
         'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony', 
         'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 
-        'income_peer_to_peer_lending', 'income_venture_capital', 'income_tax_free_income'
+        'income_peer_to_peer_lending', 'income_venture_capital', 'income_tax_free_income',
+        'income_salary_wages_partner', 'income_tips_partner', 'income_bonuses_partner', 'income_sole_prop_partner', 
+        'income_investment_property_partner', 'income_capital_gains_losses_partner', 'income_interest_partner', 
+        'income_owner_dividend_partner', 'income_public_dividend_partner', 'income_trust_partner', 
+        'income_federal_pension_partner', 'income_work_pension_partner', 'income_social_security_partner', 
+        'income_employment_insurance_partner', 'income_alimony_partner', 'income_scholarships_grants_partner', 
+        'income_royalties_partner', 'income_gambling_winnings_partner', 'income_peer_to_peer_lending_partner', 
+        'income_venture_capital_partner', 'income_tax_free_income_partner'
     ];
 
     formElements.forEach(function (elementId) {
@@ -133,7 +120,6 @@ window.validatecheckbox = function () {
         }
     });
 
-    // Save frequency selections
     const frequencyGroups = [
         'income_salary_wages_frequency', 'income_tips_frequency', 'income_bonuses_frequency', 
         'income_sole_prop_frequency', 'income_investment_property_frequency', 
@@ -144,7 +130,17 @@ window.validatecheckbox = function () {
         'income_employment_insurance_frequency', 'income_alimony_frequency', 
         'income_scholarships_grants_frequency', 'income_royalties_frequency', 
         'income_gambling_winnings_frequency', 'income_peer_to_peer_lending_frequency', 
-        'income_venture_capital_frequency', 'income_tax_free_income_frequency'
+        'income_venture_capital_frequency', 'income_tax_free_income_frequency',
+        'income_salary_wages_partner_frequency', 'income_tips_partner_frequency', 'income_bonuses_partner_frequency', 
+        'income_sole_prop_partner_frequency', 'income_investment_property_partner_frequency', 
+        'income_capital_gains_losses_partner_frequency', 'income_interest_partner_frequency', 
+        'income_owner_dividend_partner_frequency', 'income_public_dividend_partner_frequency', 
+        'income_trust_partner_frequency', 'income_federal_pension_partner_frequency', 
+        'income_work_pension_partner_frequency', 'income_social_security_partner_frequency', 
+        'income_employment_insurance_partner_frequency', 'income_alimony_partner_frequency', 
+        'income_scholarships_grants_partner_frequency', 'income_royalties_partner_frequency', 
+        'income_gambling_winnings_partner_frequency', 'income_peer_to_peer_lending_partner_frequency', 
+        'income_venture_capital_partner_frequency', 'income_tax_free_income_partner_frequency'
     ];
 
     frequencyGroups.forEach(function (groupId) {
@@ -153,24 +149,11 @@ window.validatecheckbox = function () {
         setLocal(`frequency_${groupId}`, value, 365);
     });
 
-    // Navigate to the next page
     window.location.href = '/budget/expense.html';
     return true;
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    // List of form element IDs for inputs
-    const formElements = [
-        'RegionDropdown', 'SubregionDropdown',
-        'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop', 
-        'income_investment_property', 'income_capital_gains_losses', 'income_interest', 
-        'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension', 
-        'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony', 
-        'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 
-        'income_peer_to_peer_lending', 'income_venture_capital', 'income_tax_free_income'
-    ];
-
-    // List of frequency group IDs
+function initializeCheckboxes() {
     const frequencyGroups = [
         'income_salary_wages_frequency', 'income_tips_frequency', 'income_bonuses_frequency', 
         'income_sole_prop_frequency', 'income_investment_property_frequency', 
@@ -181,17 +164,125 @@ document.addEventListener('DOMContentLoaded', function () {
         'income_employment_insurance_frequency', 'income_alimony_frequency', 
         'income_scholarships_grants_frequency', 'income_royalties_frequency', 
         'income_gambling_winnings_frequency', 'income_peer_to_peer_lending_frequency', 
-        'income_venture_capital_frequency', 'income_tax_free_income_frequency'
+        'income_venture_capital_frequency', 'income_tax_free_income_frequency',
+        'income_salary_wages_partner_frequency', 'income_tips_partner_frequency', 'income_bonuses_partner_frequency', 
+        'income_sole_prop_partner_frequency', 'income_investment_property_partner_frequency', 
+        'income_capital_gains_losses_partner_frequency', 'income_interest_partner_frequency', 
+        'income_owner_dividend_partner_frequency', 'income_public_dividend_partner_frequency', 
+        'income_trust_partner_frequency', 'income_federal_pension_partner_frequency', 
+        'income_work_pension_partner_frequency', 'income_social_security_partner_frequency', 
+        'income_employment_insurance_partner_frequency', 'income_alimony_partner_frequency', 
+        'income_scholarships_grants_partner_frequency', 'income_royalties_partner_frequency', 
+        'income_gambling_winnings_partner_frequency', 'income_peer_to_peer_lending_partner_frequency', 
+        'income_venture_capital_partner_frequency', 'income_tax_free_income_partner_frequency'
     ];
 
-    // Set RegionDropdown first
+    frequencyGroups.forEach(function (groupId) {
+        const groupElement = document.getElementById(groupId);
+        if (!groupElement) {
+            console.warn(`Group element not found: ${groupId}`);
+            return;
+        }
+
+        const checkboxes = groupElement.querySelectorAll('input[type="checkbox"]');
+        if (checkboxes.length === 0) {
+            console.warn(`No checkboxes found for group: ${groupId}`);
+            return;
+        }
+
+        const isPartnerGroup = groupId.includes('_partner');
+        const savedFrequency = getLocal(`frequency_${groupId}`);
+        const defaultFrequency = 'annually';
+        const frequencyToSet = isPartnerGroup ? (savedFrequency || 'annually') : (savedFrequency || 'annually');
+
+        let checkedCount = 0;
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = checkbox.value === frequencyToSet;
+            if (checkbox.checked) checkedCount++;
+        });
+
+        if (checkedCount > 1) {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = checkbox.value === defaultFrequency;
+            });
+            setLocal(`frequency_${groupId}`, defaultFrequency, 365);
+            console.log(`Corrected multiple selections in ${groupId}, set to ${defaultFrequency}`);
+        } else if (checkedCount === 0) {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = checkbox.value === frequencyToSet;
+            });
+            setLocal(`frequency_${groupId}`, frequencyToSet, 365);
+        }
+
+        setLocal(`frequency_${groupId}`, frequencyToSet, 365);
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                if (this.checked) {
+                    checkboxes.forEach(otherCheckbox => {
+                        if (otherCheckbox !== this) {
+                            otherCheckbox.checked = false;
+                        }
+                    });
+                    setLocal(`frequency_${groupId}`, this.value, 365);
+                    console.log(`Set frequency for ${groupId} to ${this.value}`);
+                } else {
+                    this.checked = true;
+                    setLocal(`frequency_${groupId}`, this.value, 365);
+                }
+            });
+        });
+
+        console.log(`Initialized group: ${groupId}, set to: ${frequencyToSet}`);
+    });
+
+    const partnerRows = document.querySelectorAll('.partner-clone');
+    partnerRows.forEach(row => {
+        console.log(`Partner row visibility: ${row.id || row.className}, display: ${getComputedStyle(row).display}`);
+        const inputs = row.querySelectorAll('input[type="number"], .checkbox-button-group');
+        inputs.forEach(input => {
+            console.log(`Partner input style: ${input.id || input.className}, display: ${getComputedStyle(input).display}, width: ${getComputedStyle(input).width}`);
+        });
+    });
+    const nonPartnerRows = document.querySelectorAll('.checkboxrow:not(.partner-clone)');
+    nonPartnerRows.forEach(row => {
+        const inputs = row.querySelectorAll('input[type="number"], .checkbox-button-group');
+        inputs.forEach(input => {
+            console.log(`Non-partner input style: ${input.id || input.className}, display: ${getComputedStyle(input).display}, width: ${getComputedStyle(input).width}`);
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Restore terms checkboxes state
+    const isChecked1 = getTermsCookie('term1');
+    const isChecked2 = getTermsCookie('term2');
+    checkbox1.checked = isChecked1;
+    checkbox2.checked = isChecked2;
+    console.log('Restored termscheckbox:', isChecked1, 'notintended:', isChecked2);
+
+    const formElements = [
+        'RegionDropdown', 'SubregionDropdown',
+        'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop', 
+        'income_investment_property', 'income_capital_gains_losses', 'income_interest', 
+        'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension', 
+        'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony', 
+        'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 
+        'income_peer_to_peer_lending', 'income_venture_capital', 'income_tax_free_income',
+        'income_salary_wages_partner', 'income_tips_partner', 'income_bonuses_partner', 'income_sole_prop_partner', 
+        'income_investment_property_partner', 'income_capital_gains_losses_partner', 'income_interest_partner', 
+        'income_owner_dividend_partner', 'income_public_dividend_partner', 'income_trust_partner', 
+        'income_federal_pension_partner', 'income_work_pension_partner', 'income_social_security_partner', 
+        'income_employment_insurance_partner', 'income_alimony_partner', 'income_scholarships_grants_partner', 
+        'income_royalties_partner', 'income_gambling_winnings_partner', 'income_peer_to_peer_lending_partner', 
+        'income_venture_capital_partner', 'income_tax_free_income_partner'
+    ];
+
     const regionValue = getLocal('RegionDropdown');
     regionDropdown.value = regionValue || 'NONE';
 
-    // Populate SubregionDropdown options
     updateSubregionDropdown();
 
-    // Set all other form elements
     formElements.forEach(function (elementId) {
         if (elementId !== 'RegionDropdown') {
             const value = getLocal(elementId);
@@ -202,7 +293,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Adjust SubregionDropdown if invalid
     const subregionValue = subregionDropdown.value;
     if (regionValue === 'USA' && subregionMap.USA && !subregionMap.USA.includes(subregionValue)) {
         subregionDropdown.value = subregionMap.USA[0] || '';
@@ -210,46 +300,6 @@ document.addEventListener('DOMContentLoaded', function () {
         subregionDropdown.value = subregionMap.CAN[0] || '';
     }
 
-    // Restore saved frequency selections
-    frequencyGroups.forEach(function (groupId) {
-        const savedFrequency = getLocal(`frequency_${groupId}`);
-        if (savedFrequency) {
-            const checkbox = document.querySelector(`#${groupId} input[value="${savedFrequency}"]`);
-            if (checkbox) {
-                checkbox.checked = true;
-            }
-        }
-    });
-
-    // Add event listeners for saving inputs
-    formElements.forEach(function (elementId) {
-        const element = document.getElementById(elementId);
-        if (element) {
-            element.addEventListener('change', function () {
-                setLocal(elementId, element.value, 365);
-            });
-        }
-    });
-
-    // Add event listeners for frequency checkboxes
-    frequencyGroups.forEach(function (groupId) {
-        const checkboxes = document.querySelectorAll(`#${groupId} input[type="checkbox"]`);
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('change', function () {
-                // Uncheck other checkboxes in the same group
-                checkboxes.forEach(function (otherCheckbox) {
-                    if (otherCheckbox !== checkbox) {
-                        otherCheckbox.checked = false;
-                    }
-                });
-                // Save the selected frequency
-                if (checkbox.checked) {
-                    setLocal(`frequency_${groupId}`, checkbox.value, 365);
-                } else {
-                    setLocal(`frequency_${groupId}`, '', 365);
-                }
-            });
-        });
-    });
+    document.addEventListener('hideShowUpdated', initializeCheckboxes);
+    setTimeout(initializeCheckboxes, 200);
 });
-
