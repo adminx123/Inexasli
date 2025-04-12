@@ -1,0 +1,115 @@
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */
+
+import { setLocal } from '/server/scripts/setlocal.js'; // Adjust path as needed
+
+export function localOverwrite() {
+    // Confirm user wants to clear data
+    if (!confirm('Are you sure you want to overwrite all saved data? This will clear all inputs and settings.')) {
+        return;
+    }
+
+    const formElements = [
+        // Income fields
+        'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop',
+        'income_investment_property', 'income_capital_gains_losses', 'income_interest',
+        'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension',
+        'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony',
+        'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending',
+        'income_venture_capital', 'income_tax_free_income',
+        // Expense fields
+        'expenses_grocery', 'expenses_dining', 'expenses_fitness', 'expenses_hygiene',
+        'expenses_subscriptions', 'expenses_entertainment', 'expenses_clothing',
+        'expenses_vacation', 'expenses_beauty', 'expenses_travel_life_insurance',
+        'expenses_cellphone_service', 'expenses_medical_dental', 'expenses_perscription',
+        'expenses_line_of_credit_payment', 'expenses_student_loan_payment', 'expenses_credit_card_payment',
+        'expenses_tax_arrears_payment', 'expenses_small_business_loan_payment',
+        // Housing fields
+        'housing_mortgage_payment', 'housing_rent_payment', 'housing_property_tax',
+        'housing_condo_fee', 'housing_hydro', 'housing_insurance', 'housing_repairs',
+        'housing_water', 'housing_gas', 'housing_internet',
+        // Transportation fields
+        'transportation_car_loan_payment', 'transportation_insurance', 'transportation_fuel',
+        'transportation_maintenance', 'transportation_public_transit', 'transportation_ride_hailing',
+        // Dependant fields
+        'dependant_day_care', 'dependant_medical_dental', 'dependant_clothing',
+        'dependant_sports_recreation', 'dependant_transportation', 'dependant_tuition',
+        'dependant_housing', 'dependant_cellular_service',
+        // Assets fields
+        'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+        'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+        'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
+        'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
+        'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent',
+        'assets_primary_residence_percent', 'assets_investment_properties_percent',
+        'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent',
+        // Liabilities fields
+        'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
+        'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan',
+        'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears',
+        // Summary
+        'summary_reached',
+        // Terms and dropdowns
+        'term1', 'term2', 'RegionDropdown', 'SubregionDropdown',
+        // Frequency keys (example subset; add others as needed)
+        'frequency_income_salary_wages_frequency', 'frequency_income_tips_frequency',
+        'frequency_income_bonuses_frequency', 'frequency_income_sole_prop_frequency',
+        'frequency_income_investment_property_frequency', 'frequency_income_capital_gains_losses_frequency',
+        'frequency_income_interest_frequency', 'frequency_income_owner_dividend_frequency',
+        'frequency_income_public_dividend_frequency', 'frequency_income_trust_frequency',
+        'frequency_income_federal_pension_frequency', 'frequency_income_work_pension_frequency',
+        'frequency_income_social_security_frequency', 'frequency_income_employment_insurance_frequency',
+        'frequency_income_alimony_frequency', 'frequency_income_scholarships_grants_frequency',
+        'frequency_income_royalties_frequency', 'frequency_income_gambling_winnings_frequency',
+        'frequency_income_peer_to_peer_lending_frequency', 'frequency_income_venture_capital_frequency',
+        'frequency_income_tax_free_income_frequency'
+    ];
+
+    const value = ''; // Default value to clear cookies
+
+    // Overwrite all localStorage keys
+    formElements.forEach(function (cookieName) {
+        setLocal(cookieName, value, 365); // Set with 1-year expiry
+    });
+
+    // Clear input fields that exist on the current page
+    formElements.forEach(function (elementId) {
+        const element = document.getElementById(elementId);
+        if (element && element.type !== 'checkbox' && element.tagName !== 'SELECT') {
+            element.value = value;
+        }
+    });
+
+    // Reset checkboxes
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Reset dropdowns
+    const regionDropdown = document.getElementById('RegionDropdown');
+    const subregionDropdown = document.getElementById('SubregionDropdown');
+    if (regionDropdown) regionDropdown.value = 'NONE';
+    if (subregionDropdown) subregionDropdown.value = '';
+
+    console.log("All specified localStorage keys have been overwritten, inputs and UI elements cleared.");
+    alert("All data has been cleared successfully.");
+}
+
+// Attach event listener to the overwrite link
+document.addEventListener('DOMContentLoaded', () => {
+    const overwriteLink = document.getElementById('cookie-overwrite-link');
+    if (overwriteLink) {
+        overwriteLink.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            localOverwrite();
+        });
+    }
+});
