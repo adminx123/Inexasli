@@ -1,5 +1,6 @@
 /* hideShow.js */
 import { getLocal } from '/server/scripts/getlocal.js';
+import { setLocal } from '/server/scripts/setlocal.js';
 
 function hideShowClass(className, task) {
     const elements = document.getElementsByClassName(className);
@@ -39,6 +40,19 @@ function updateHideShow() {
         styleSheet.textContent = `.usa-hide { display: none !important; } .can-hide { display: none !important; }`;
     }
 }
+
+const regionDropdown = document.getElementById('RegionDropdown');
+
+regionDropdown.addEventListener('change', () => {
+    const region = regionDropdown.value;
+    console.log(`Region changed to: ${region}`); // Debug log
+
+    // Update localStorage with the new region value
+    setLocal('RegionDropdown', region);
+
+    // Call updateHideShow to handle all visibility updates
+    updateHideShow();
+});
 
 // Run on page load
 document.addEventListener('DOMContentLoaded', () => {
