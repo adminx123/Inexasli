@@ -226,6 +226,8 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('hideShowUpdated triggered, initializing frequency groups');
         initializeFrequencyGroups(frequencyGroups);
     });
+
+    
     setTimeout(() => {
         console.log('Initializing frequency groups after timeout');
         initializeFrequencyGroups(frequencyGroups);
