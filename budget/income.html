@@ -303,13 +303,7 @@
              <span id="income_capital_gains_losses_annual"></span>
          </div>
  
-         <div class="usa-hide">
-             <div class="checkboxrow">
-                 <label for="capital_gain_state_rate">Capital Gain State Tax Rate</label>
-                 <input type="number" inputmode="numeric" id="income_capital_gain_state_rate">
-                 <label>%</label>
-             </div>
-         </div>
+        
  
          <div class="checkboxrow">
              <label for="income_venture_capital" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and after expenses;">
@@ -545,59 +539,22 @@
              <div class="checkbox-wrapper-2">
                  <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
              </div>
-             <label for="notintended" style="font-size: 11px;">
-                 I consent to the use and storage of data in my browser’s local storage for essential website functionality, including but not limited to, calculations for my financial educational reports. Minimal cookies may be used for payment verification for premium access. These are necessary for the services I request.
-                 <a href="#" id="cookie-overwrite-link" style="text-decoration: none; color: #007bff;" class="inline-link">Click here to overwrite cookies</a>
-             </label>
-         </div>
-     </div>
- 
-     <div class="containerround">
-         <button onclick="validatecheckbox()" class="nav-btn"><i class='bx nav-inner bx-right-arrow-alt' ></i></button>
- 
-         <div class="hidden"> 
-             <p><u>Income:</u> <span id="annual_income_sum"></span></p>
-             <span class="tooltiptext">Total yearly earnings from all sources. Use: Budgeting, financial planning, loan applications.</span>
-             <p><u>Taxable Income:</u> <span id="taxable_sum"></span></p>
-             <span class="tooltiptext"> Gross income subject to taxes. Use: Tax planning, understand tax liabilities.</span>
-             <p><u>Regional Tax Payable:</u> <span id="ANNUALREGIONALTAX"></span></p>
-             <span class="tooltiptext">Tax owed to the regional government. Use: Budget for tax obligations, financial planning.</span>
-             <p><u>Subregion Tax Payable:</u> <span id="ANNUALSUBREGIONALTAX"></span></p> 
-             <span class="tooltiptext">Tax owed to subregion government. Use: Budgeting for tax obligations, financial planning.</span>
-             <p><u>Total Tax Payable:</u> <span id="ANNUALTAX"></span></p>
-             <span class="tooltiptext">Sum of all taxes owed. Use: Financial planning, avoid underpayment penalties.</span>
-             <p><u>Annual Employment Income:</u> <span id="ANNUALEMPLOYMENTINCOME"></span></p>
-             <p><u>Self Employed CPP Payable:</u> <span id="annual_cpp_seresult"></span></p>
-             <p><u>Employed CPP Payable:</u> <span id="annual_cpp_eresult"></span></p>
-             <p><u>Total CPP Payable:</u> <span id="ANNUALCPP"></span></p>
-             <p><u>Total Employment Insurance Payable:</u> <span id="ANNUALEI"></span></p>
-             <span class="tooltiptext"> Contributions towards Employment Insurance. Use: Ensure coverage for job loss.</span>
-             <p><u>CG: </u> <span id="TOTALTAXCG"></span></p>
-             <span class="tooltiptext">Capital gains tax is a levy imposed on the profit realized from the sale of an asset, such as stocks, bonds, or real estate, at a higher price than its original purchase price. The tax rate typically depends on factors like the holding period and the individual's income bracket.
-             Use: Capital gains tax generates revenue for governments from the profits made on asset sales.</span>
-             <p><u>Social Security US:</u> <span id="TOTALSOCIALSECURITY"></span></p>
-             <span class="tooltiptext">Social Security taxes are deductions from paychecks that fund benefits for retirees, disabled individuals, and survivors.
-             Use: Social Security taxes are utilized to provide financial assistance to retirees, disabled persons, and survivors of deceased workers, ensuring financial security during various life stages.</span>
-             <p><u>Medicare: </u> <span id="TOTALMEDICARE"></span></p>
-             <span class="tooltiptext">Medicare taxes are payroll taxes that fund the Medicare program in the United States. Use:
-             Medicare taxes fund the Medicare program, covering hospital stays, skilled nursing care, and other medical services for eligible individuals. </span>
-         </div>  
-     </div>
- 
-  
+             <!-- Label with Cookie Overwrite Link -->
+<!-- Label with Cookie Overwrite Link -->
+<label for="notintended" style="font-size: 11px;">
+    I consent to the use and storage of data in my browser’s local storage for essential website functionality, including but not limited to, calculations for my financial educational reports. Minimal cookies may be used for payment verification for premium access. These are necessary for the services I request.
+    <a href="#" id="cookie-overwrite-link" style="text-decoration: none; color: #007bff;" class="inline-link">Click here to overwrite cookies</a></label>
 
-
-
-     <script src="/server/scripts/hideShow.js" type="module"></script>
-     <script src="/index.js"></script>
-     <script src="/server/scripts/income.js" type="module"></script>
-     <script src="/server/scripts/toolTip.js"></script>
-     <script type="module" src="/server/scripts/floatingbutton.js"></script>
-     <script type="module" src="/server/scripts/utils.js"></script>
-     <script type="module" src="/server/scripts/cookieoverwrite.js"></script>
-     <script src="/server/scripts/modal.js"></script>
-     <script src="/server/scripts/tray.js"></script>
-     <script src="/server/scripts/utils.js" type="module"></script>
+<!-- Scripts (replace the scripts section at the bottom of income.html) -->
+<script src="/server/scripts/hideShow.js" type="module"></script>
+<script src="/index.js"></script>
+<script src="/server/scripts/income.js" type="module"></script>
+<script src="/server/scripts/toolTip.js"></script>
+<script type="module" src="/server/scripts/floatingbutton.js"></script>
+<script type="module" src="/server/scripts/utils.js"></script>
+<script type="module" src="/server/scripts/localoverwrite.js"></script>
+<script src="/server/scripts/modal.js"></script>
+<script src="/server/scripts/tray.js"></script>
 
  
    
