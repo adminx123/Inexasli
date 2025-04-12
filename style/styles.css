@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Geist:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 * {
   padding: 0;
@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
   background-color: #000;
   color: #000; /* Consider #fff for visibility */
   text-align: left;
@@ -45,7 +45,7 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Geist", sans-serif;
   margin: 0;
 }
 
@@ -55,7 +55,7 @@ h2 {
 
 h4 {
   color: rgb(64, 63, 63);
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Geist", sans-serif;
   font-weight: bold;
   letter-spacing: 2px;
   font-size: 4vw;
@@ -63,8 +63,6 @@ h4 {
   opacity: 0;
   transition: opacity 2s ease;
 }
-
-
 
 a {
   display: block;
@@ -146,17 +144,12 @@ a {
   background-color: #000000;
 }
 
-
-
 .roi-btn {
   padding: 8px 12px;
   border-radius: 0;
   margin-right: 10px;
+  font-family: "Geist", sans-serif;
 }
-
-
-
-
 
 #debt-parent, #depandant-parent {
   display: none;
@@ -165,10 +158,6 @@ a {
 #debt-parent h2, #depandant-parent h2 {
   width: 100%;
 }
-
-
-
-
 
 input[type="number"],
 input,
@@ -186,6 +175,7 @@ select {
   -webkit-appearance: none; /* Remove default appearance */
   -moz-appearance: none;
   appearance: none;
+  font-family: "Inter", sans-serif;
 }
 
 select {
@@ -201,6 +191,7 @@ select option {
   font-size: 14px; /* Match select */
   line-height: normal;
   padding: 0;
+  font-family: "Inter", sans-serif;
 }
 
 input[type="number"]:focus,
@@ -227,6 +218,7 @@ input[type="number"]::-webkit-outer-spin-button {
   display: block;
   width: 100%;
   margin: 10px 0;
+  font-family: "Inter", sans-serif;
 }
 
 .nav-inner {
@@ -239,6 +231,7 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: -5px 0;
   overflow: hidden;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  font-family: "Geist", sans-serif;
 }
 
 .nav-btn span {
@@ -273,11 +266,13 @@ input[type="number"]::-webkit-outer-spin-button {
   padding: 0;
   margin: 0;
   color: black;
+  font-family: "Geist", sans-serif;
 }
 
 .cookie-container p {
   color: black;
   text-align: left;
+  font-family: "Inter", sans-serif;
 }
 
 .cookie-container div {
@@ -295,6 +290,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-weight: bold;
   cursor: pointer;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  font-family: "Geist", sans-serif;
 }
 
 .row input[type="number"] {
@@ -325,6 +321,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .percent-input {
   max-width: 75px;
   display: none;
+  font-family: "Inter", sans-serif;
 }
 
 .percent-input:invalid {
@@ -372,6 +369,7 @@ input[type="number"]::-webkit-outer-spin-button {
   max-width: 450px;
   padding: 12px;
   margin-top: 20px;
+  font-family: "Geist", sans-serif;
 }
 
 .form-row {
@@ -391,6 +389,7 @@ label,
 input[type="number"],
 select {
   flex: 1;
+  font-family: "Inter", sans-serif;
 }
 
 details div *, details * {
@@ -404,6 +403,7 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-family: "Geist", sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -415,14 +415,13 @@ button {
   }
 }
 
-
-
 .numeric-input {
   width: 200px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 14px;
+  font-family: "Inter", sans-serif;
 }
 
 .container {
@@ -498,16 +497,9 @@ button {
   color: red;
 }
 
-
-
-
-
-
-
 #SubregionDropdown {
   min-width: 50px;
 }
-
 
 .tooltip .tooltiptext {
   display: none;
@@ -525,6 +517,7 @@ button {
   margin-left: -100px;
   opacity: 0;
   transition: opacity 0.3s;
+  font-family: "Inter", sans-serif;
 }
 
 .tooltip {
@@ -555,6 +548,7 @@ h1 > .tooltip, h2 > .tooltip, h3 > .tooltip {
   font-size: 12px;
   z-index: 1000;
   opacity: 0;
+  font-family: "Inter", sans-serif;
 }
 
 .tooltip.show .tooltip-content {
@@ -601,6 +595,7 @@ h1 > .tooltip1, h2 > .tooltip1, h3 > .tooltip1 {
   font-size: 12px;
   z-index: 1000;
   opacity: 0;
+  font-family: "Inter", sans-serif;
 }
 
 .tooltip1.show .tooltip1-content {
@@ -630,6 +625,7 @@ h1 > .tooltip1, h2 > .tooltip1, h3 > .tooltip1 {
 .form-sumbit-btn {
   padding: 15px 25px;
   border-radius: 0;
+  font-family: "Geist", sans-serif;
 }
 
 .form-sumbit-btn:hover {
@@ -651,6 +647,7 @@ h1 > .tooltip1, h2 > .tooltip1, h3 > .tooltip1 {
   justify-content: center;
   align-items: center;
   font-weight: normal;
+  font-family: "Geist", sans-serif;
 }
 
 .active {
@@ -658,8 +655,6 @@ h1 > .tooltip1, h2 > .tooltip1, h3 > .tooltip1 {
   background-color: white;
   color: black;
 }
-
-
 
 /* Install Banner */
 #addToHomeScreenBanner {
@@ -674,7 +669,7 @@ h1 > .tooltip1, h2 > .tooltip1, h3 > .tooltip1 {
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 #addToHomeScreenBanner span {
@@ -692,6 +687,7 @@ h1 > .tooltip1, h2 > .tooltip1, h3 > .tooltip1 {
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.5px;
+  font-family: "Geist", sans-serif;
 }
 
 #addToHomeScreenBanner button:first-of-type:hover {
@@ -710,9 +706,9 @@ h1 > .tooltip1, h2 > .tooltip1, h3 > .tooltip1 {
   color: #555555;
 }
 
-
 .special-label {
   margin-right: -10px;
+  font-family: "Inter", sans-serif;
 }
 
 .special {
@@ -741,6 +737,7 @@ h1 > .tooltip1, h2 > .tooltip1, h3 > .tooltip1 {
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   margin: 0 !important;
+  font-family: "Inter", sans-serif;
 }
 
 input[type="checkbox"]:checked ~ .box-checkbox {
@@ -779,6 +776,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(255, 255, 255, 0.7);
+  font-family: "Inter", sans-serif;
 }
 
 .grid-item.selected {
@@ -808,12 +806,14 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 .benefit-card h3 {
   color: #333;
   margin-top: 0;
+  font-family: "Geist", sans-serif;
 }
 
 .benefit-card p {
   color: #666;
   font-size: 0.9em;
   margin-bottom: 0;
+  font-family: "Inter", sans-serif;
 }
 
 .benefit-card:hover {
@@ -856,13 +856,14 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 .last input {
   padding-top: 5px;
   padding-bottom: 10px;
+  font-family: "Inter", sans-serif;
 }
 
 .card-overlay {
   position: relative;
   height: 100px; /* Adjust to fit your cards */
   width: 100%;
-  max-width: 4auto00px; /* Match your containerround width */
+  max-width: 400px; /* Match your containerround width */
   margin: 0 auto;
 }
 
@@ -901,7 +902,6 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-
 #calculations {
   position: relative;
 }
@@ -928,6 +928,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   border: 1px solid #ccc;
   color: white;
   background-color: #333;
+  font-family: "Inter", sans-serif;
 }
 
 .chat-toggle {
@@ -935,14 +936,14 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   bottom: 10px;
   right: 10px;
   color: white;
+  font-family: "Geist", sans-serif;
 }
 
 .chat-input {
   color: white;
   background-color: #333;
+  font-family: "Inter", sans-serif;
 }
-
-
 
 .section {
   margin-bottom: 2px;
@@ -963,13 +964,12 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   margin: 0; /* Remove margin to match section1-header */
   font-weight: bold;
   padding-top: 2px; /* Reduce top padding */
+  font-family: "Geist", sans-serif;
 }
 
 .section-header:hover {
   background-color: #e7e7e7; /* Gold hover */
 }
-
-
 
 .toggle-icon {
   font-size: 18px;
@@ -983,6 +983,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 .section-content {
   display: none;
   padding: 10px;
+  font-family: "Inter", sans-serif;
 }
 
 .section.expanded .section-content {
@@ -997,6 +998,7 @@ textarea {
   font-size: 14px;
   background-color: transparent;
   resize: vertical;
+  font-family: "Inter", sans-serif;
 }
 
 .ai-button {
@@ -1035,6 +1037,7 @@ textarea {
   height: auto;
   margin-left: auto;
   display: block;
+  font-family: "Geist", sans-serif;
 }
 
 .add-row-btn:hover {
@@ -1048,6 +1051,7 @@ textarea {
   border: none;
   border-radius: 3px;
   cursor: pointer;
+  font-family: "Geist", sans-serif;
 }
 
 .remove-row-btn:hover {
@@ -1086,7 +1090,6 @@ textarea {
   padding: 20px 0;
 }
 
-
 /* Checkbox row layout */
 .checkboxrow {
   display: flex;
@@ -1117,6 +1120,7 @@ textarea {
   max-width: 200px; /* Tighter max-width to prevent overstretch */
   border: 1px solid #ccc; /* Lighter border for less visual weight */
   border-radius: 4px; /* Softer edges */
+  font-family: "Inter", sans-serif;
 }
 
 .checkboxrow .checkbox-button-group {
@@ -1153,6 +1157,7 @@ textarea {
   color: #333; /* Softer black */
   min-width: 0;
   box-sizing: border-box;
+  font-family: "Inter", sans-serif;
 }
 
 .checkbox-button:hover {
@@ -1212,6 +1217,7 @@ summary {
   justify-content: space-between; /* Space out content and plus sign */
   transition: background-color 0.3s ease; /* Smooth hover effect */
   position: relative; /* For positioning the pseudo-element */
+  font-family: "Geist", sans-serif;
 }
 
 /* Add plus sign using ::after */
@@ -1246,6 +1252,7 @@ details > *:not(summary) {
   border-top: none; /* Remove top border to connect with summary */
   border-radius: 0 0 5px 5px; /* Rounded bottom corners */
   margin: 0; /* Remove extra margins */
+  font-family: "Inter", sans-serif;
 }
 
 /* Nested details styling */
@@ -1262,11 +1269,13 @@ summary h2 {
 /* Adjust paragraph spacing inside details */
 details p {
   margin: 5px 0; /* Consistent spacing for paragraphs */
-}s
+  font-family: "Inter", sans-serif;
+}
 
 .tm {
   font-size: 0.15em;      /* Smaller font size */
   position: relative;    /* Allows shifting */
   top: -0.2em;           /* Moves the symbol up; adjust the value as needed */
   vertical-align: top;   /* Ensures proper alignment */
+  font-family: "Inter", sans-serif;
 }

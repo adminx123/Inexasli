@@ -16,19 +16,18 @@ document.addEventListener("DOMContentLoaded", () => {
         <a href="/create/prompt.html" id="website" class="tray-menu-item">Promptemplate<span class="tm">™</span></a>
       </div>
       
-         <div class="tray-menu-item-container">
+      <div class="tray-menu-item-container">
         <a href="/aboutus.html" id="trayContact" class="tray-menu-item">About</a>
       </div>
       
       <div class="tray-menu-item-container">
         <a href="mailto:support@inexasli.com" id="trayContact" class="tray-menu-item">Contact</a>
       </div>
-
     </div>
   `;
   document.body.insertAdjacentHTML("afterbegin", menuHTML);
 
-  // Inject modified CSS with non-clickable glow
+  // Inject modified CSS with Inter and Geist fonts
   const style = document.createElement("style");
   style.textContent = `
     .tray-menu {
@@ -44,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
       width: 100%;
       box-shadow: 0 -8px 8px rgba(64, 49, 49, 0.3); /* Static shadow */
       cursor: pointer; /* Entire tray area clickable */
+      font-family: "Inter", sans-serif;
     }
     .tray-menu-glow {
       position: fixed;
@@ -94,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
       padding: 5px 0;
       z-index: 90;
       box-shadow: 0 -8px 8px rgba(66, 49, 49, 0.3);
+      font-family: "Inter", sans-serif;
     }
     .tray-dropdown.show {
       display: flex;
@@ -114,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
       padding: 12px 20px;
       color: #fff;
       text-decoration: none;
-      font-family: Arial, sans-serif;
+      font-family: "Geist", sans-serif;
       font-size: 16px;
       text-transform: uppercase;
       transition: background-color 0.2s ease;
@@ -127,6 +128,13 @@ document.addEventListener("DOMContentLoaded", () => {
       font-weight: bold;
       background-color: #000;
     }
+    .tm {
+      font-family: "Inter", sans-serif;
+      font-size: 0.6em;
+      position: relative;
+      top: -0.4em;
+      vertical-align: top;
+    }
     @media (max-width: 768px) {
       .tray-dropdown.show {
         padding: 10px 0;
@@ -138,6 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .tray-menu-item {
         padding: 12px 0;
         width: 100%;
+        font-family: "Geist", sans-serif;
       }
     }
   `;
