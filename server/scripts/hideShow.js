@@ -25,6 +25,7 @@ function updateHideShow() {
     const region = getLocal('RegionDropdown');
     console.log('Region in hideShow.js:', region);
 
+    const fillingStatus = getLocal('fillingStatus');
     const dependants = getLocal('dependants');
     const debt = getLocal('debt');
     console.log('Dependants in hideShow.js:', dependants);
@@ -54,7 +55,7 @@ function updateHideShow() {
         cssRules += `.dependant-parent { display: none !important; }`;
     }
 
-    if (dependants === 'checked') {
+    if (fillingStatus === 'partner') {
         hideShowClass('partner-clone', 'show');
         cssRules += `.partner-clone { display: flex !important; }`;
     } else {
