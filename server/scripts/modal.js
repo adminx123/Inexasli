@@ -5,61 +5,61 @@ let handleClickOutside;
 // Function to inject modal styles
 function injectModalCSS() {
     const style = document.createElement('style');
-    style.textContent = `
-        .modal {
-            display: none;
-            position: fixed;
-            background-color: rgba(0, 0, 0, 0.5);
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            justify-content: center;
-            align-items: center;
-            padding: 30px;
-            z-index: 1000;
-            overflow-y: auto;
-        }
+    style.textContent = `.modal {
+    display: none;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    z-index: 1000;
+    overflow-y: auto;
+    font-family: "Inter", sans-serif;
+}
 
-        .modal-content {
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 20px;
-            gap: 20px;
-            width: 90%;
-            max-width: 800px;
-            height: 90%;
-            max-height: 90vh;
-            overflow: auto;
-            position: relative;
-        }
+.modal-content {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 20px;
+    width: 90%;
+    max-width: 800px;
+    height: 90%;
+    max-height: 90vh;
+    overflow: auto;
+    position: relative;
+    font-family: "Inter", sans-serif;
+}
 
-        .modal-content iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+.modal-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
 
-        .modal-trigger {
-            color: #007bff;
-            cursor: pointer;
-            text-decoration: underline;
-        }
+.modal-trigger {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: "Geist", sans-serif;
+}
 
-        .modal-trigger:hover {
-            color: #0056b3;
-            text-decoration: none;
-        }
+.modal-trigger:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
 
-        @media (min-width: 800px) {
-            .modal {
-                padding: 50px;
-            }
-        }
-
-        
+@media (min-width: 800px) {
+    .modal {
+        padding: 50px;
+    }
+}
     `;
     document.head.appendChild(style);
 }

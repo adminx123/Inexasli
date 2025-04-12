@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             width: 150px;
             transition: bottom 0.3s ease-in-out, height 0.3s ease-in-out;
             overflow: hidden;
+            font-family: "Inter", sans-serif;
         }
 
         #subscribe-sidebar.initial {
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             line-height: 1.2;
             max-height: auto;
             overflow: hidden;
+            font-family: "Geist", sans-serif;
         }
 
         #subscribe-sidebar:hover {
@@ -55,6 +57,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             cursor: pointer;
             font-weight: bold;
             display: block;
+            font-family: "Inter", sans-serif;
         }
 
         .payment-form {
@@ -69,6 +72,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             border: 2px solid #000000;
             border-radius: 10px;
             box-shadow: 4px 4px 0 #000000;
+            font-family: "Inter", sans-serif;
         }
 
         #subscribe-sidebar.expanded .payment-form {
@@ -84,6 +88,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             border: 2px solid #7b7b7b;
             border-radius: 6px;
             outline: none;
+            font-family: "Inter", sans-serif;
         }
 
         .payment-form .pay-button {
@@ -96,12 +101,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             border: 2px solid #caa81f;
             border-radius: 6px;
             cursor: pointer;
+            font-family: "Geist", sans-serif;
         }
 
         .payment-form .contact-support {
             font-size: 12px;
             color: rgb(255, 255, 255);
             text-decoration: none;
+            font-family: "Geist", sans-serif;
         }
 
         @media (max-width: 480px) {
@@ -120,6 +127,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             #subscribe-sidebar a.subscribe-link {
                 font-size: 12px;
                 padding: 8px 8px;
+                font-family: "Geist", sans-serif;
             }
         }
 
@@ -129,6 +137,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             color: #888;
             pointer-events: none;
             transition: filter 0.3s ease, color 0.3s ease;
+            font-family: "Inter", sans-serif;
         }
         .premium-notice {
             display: inline-block;
@@ -139,12 +148,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             font-size: 0.75em;
             border-radius: 2px;
             font-weight: bold;
+            font-family: "Geist", sans-serif;
         }
 
         /* Section1 Styling (Premium-specific) */
         .section1 {
             margin-bottom: 2px;
             padding: 1px;
+            font-family: "Inter", sans-serif;
         }
         .section1-header {
             display: flex;
@@ -158,23 +169,24 @@ document.addEventListener('DOMContentLoaded', async function() {
             font-weight: bold;
             color: #000000;
             transition: background-color 0.3s ease;
-              padding-top: 2px; /* Reduce top padding */
-
+            padding-top: 2px; /* Reduce top padding */
+            font-family: "Geist", sans-serif;
         }
         .section1-header:hover {
-            background-color:rgba(211, 188, 15, 0.18); /* Gold hover */
+            background-color: rgba(211, 188, 15, 0.18); /* Gold hover */
         }
-
 
         .section1-content {
             display: none; /* Hidden by default */
             padding: 10px;
+            font-family: "Inter", sans-serif;
         }
         .section1.expanded .section1-content {
             display: block; /* Shown when expanded */
         }
         .section1.expanded .toggle-icon {
             transform: rotate(45deg); /* Matches .section behavior */
+            font-family: "Inter", sans-serif;
         }
     `;
     document.head.appendChild(style);
