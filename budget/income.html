@@ -89,81 +89,172 @@
              Input Employment - Self Employment Income<span class="tooltip1-content"></span>
          </h2>
  
-         <div class="checkboxrow">
-             <label for="income_salary_wages" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
-                 <span class="tooltip-content"></span>
-                 Salary/Wages:
-             </label>
-             <input type="number" inputmode="numeric" id="income_salary_wages">
-             <div class="checkbox-button-group" id="income_salary_wages_frequency">
-                 <input type="checkbox" id="annually_salary_wages" name="income_salary_wages_frequency" value="annually">
-                 <label for="annually_salary_wages" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_salary_wages" name="income_salary_wages_frequency" value="quarterly">
-                 <label for="quarterly_salary_wages" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_salary_wages" name="income_salary_wages_frequency" value="monthly">
-                 <label for="monthly_salary_wages" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_salary_wages" name="income_salary_wages_frequency" value="weekly">
-                 <label for="weekly_salary_wages" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_salary_wages" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Salary/Wages:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_salary_wages">
+                 <div class="checkbox-button-group" id="income_salary_wages_frequency">
+                     <input type="checkbox" id="annually_salary_wages" name="income_salary_wages_frequency" value="annually">
+                     <label for="annually_salary_wages" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_salary_wages" name="income_salary_wages_frequency" value="quarterly">
+                     <label for="quarterly_salary_wages" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_salary_wages" name="income_salary_wages_frequency" value="monthly">
+                     <label for="monthly_salary_wages" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_salary_wages" name="income_salary_wages_frequency" value="weekly">
+                     <label for="weekly_salary_wages" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_salary_wages_annual"></span>
              </div>
-             <span id="income_salary_wages_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_salary_wages" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Salary/Wages:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_salary_wages">
+                 <div class="checkbox-button-group" id="income_salary_wages_frequency">
+                     <input type="checkbox" id="annually_salary_wages" name="income_salary_wages_frequency" value="annually">
+                     <label for="annually_salary_wages" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_salary_wages" name="income_salary_wages_frequency" value="quarterly">
+                     <label for="quarterly_salary_wages" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_salary_wages" name="income_salary_wages_frequency" value="monthly">
+                     <label for="monthly_salary_wages" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_salary_wages" name="income_salary_wages_frequency" value="weekly">
+                     <label for="weekly_salary_wages" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_salary_wages_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-             <label for="income_tips" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
-                 <span class="tooltip-content"></span>
-                 Tips:
-             </label>
-             <input type="number" inputmode="numeric" id="income_tips">
-             <div class="checkbox-button-group" id="income_tips_frequency">
-                 <input type="checkbox" id="annually_tips" name="income_tips_frequency" value="annually">
-                 <label for="annually_tips" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_tips" name="income_tips_frequency" value="quarterly">
-                 <label for="quarterly_tips" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_tips" name="income_tips_frequency" value="monthly">
-                 <label for="monthly_tips" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_tips" name="income_tips_frequency" value="weekly">
-                 <label for="weekly_tips" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_tips" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Tips:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_tips">
+                 <div class="checkbox-button-group" id="income_tips_frequency">
+                     <input type="checkbox" id="annually_tips" name="income_tips_frequency" value="annually">
+                     <label for="annually_tips" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_tips" name="income_tips_frequency" value="quarterly">
+                     <label for="quarterly_tips" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_tips" name="income_tips_frequency" value="monthly">
+                     <label for="monthly_tips" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_tips" name="income_tips_frequency" value="weekly">
+                     <label for="weekly_tips" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_tips_annual"></span>
              </div>
-             <span id="income_tips_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_tips" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Tips:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_tips">
+                 <div class="checkbox-button-group" id="income_tips_frequency">
+                     <input type="checkbox" id="annually_tips" name="income_tips_frequency" value="annually">
+                     <label for="annually_tips" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_tips" name="income_tips_frequency" value="quarterly">
+                     <label for="quarterly_tips" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_tips" name="income_tips_frequency" value="monthly">
+                     <label for="monthly_tips" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_tips" name="income_tips_frequency" value="weekly">
+                     <label for="weekly_tips" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_tips_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-             <label for="income_bonuses" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
-                 <span class="tooltip-content"></span>
-                 Bonus:
-             </label>
-             <input type="number" inputmode="numeric" id="income_bonuses">
-             <div class="checkbox-button-group" id="income_bonuses_frequency">
-                 <input type="checkbox" id="annually_bonuses" name="income_bonuses_frequency" value="annually">
-                 <label for="annually_bonuses" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_bonuses" name="income_bonuses_frequency" value="quarterly">
-                 <label for="quarterly_bonuses" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_bonuses" name="income_bonuses_frequency" value="monthly">
-                 <label for="monthly_bonuses" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_bonuses" name="income_bonuses_frequency" value="weekly">
-                 <label for="weekly_bonuses" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_bonuses" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Bonus:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_bonuses">
+                 <div class="checkbox-button-group" id="income_bonuses_frequency">
+                     <input type="checkbox" id="annually_bonuses" name="income_bonuses_frequency" value="annually">
+                     <label for="annually_bonuses" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_bonuses" name="income_bonuses_frequency" value="quarterly">
+                     <label for="quarterly_bonuses" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_bonuses" name="income_bonuses_frequency" value="monthly">
+                     <label for="monthly_bonuses" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_bonuses" name="income_bonuses_frequency" value="weekly">
+                     <label for="weekly_bonuses" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_bonuses_annual"></span>
              </div>
-             <span id="income_bonuses_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_bonuses" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Bonus:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_bonuses">
+                 <div class="checkbox-button-group" id="income_bonuses_frequency">
+                     <input type="checkbox" id="annually_bonuses" name="income_bonuses_frequency" value="annually">
+                     <label for="annually_bonuses" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_bonuses" name="income_bonuses_frequency" value="quarterly">
+                     <label for="quarterly_bonuses" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_bonuses" name="income_bonuses_frequency" value="monthly">
+                     <label for="monthly_bonuses" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_bonuses" name="income_bonuses_frequency" value="weekly">
+                     <label for="weekly_bonuses" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_bonuses_annual"></span>
+             </div>
          </div>
  
-
-
-         <div class="checkboxrow">
-            <label for="income_sole_prop" style="font-size: unset;" class="tooltip" data-tooltip="Enter net income after business expenses but before taxes;">                 <span class="tooltip-content"></span>
-                 Self Employment:
-             </label>
-             <input type="number" inputmode="numeric" id="income_sole_prop">
-             <div class="checkbox-button-group" id="income_sole_prop_frequency">
-                 <input type="checkbox" id="annually_sole_prop" name="income_sole_prop_frequency" value="annually">
-                 <label for="annually_sole_prop" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_sole_prop" name="income_sole_prop_frequency" value="quarterly">
-                 <label for="quarterly_sole_prop" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_sole_prop" name="income_sole_prop_frequency" value="monthly">
-                 <label for="monthly_sole_prop" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_sole_prop" name="income_sole_prop_frequency" value="weekly">
-                 <label for="weekly_sole_prop" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_sole_prop" style="font-size: unset;" class="tooltip" data-tooltip="Enter net income after business expenses but before taxes;">
+                     <span class="tooltip-content"></span>
+                     Self Employment:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_sole_prop">
+                 <div class="checkbox-button-group" id="income_sole_prop_frequency">
+                     <input type="checkbox" id="annually_sole_prop" name="income_sole_prop_frequency" value="annually">
+                     <label for="annually_sole_prop" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_sole_prop" name="income_sole_prop_frequency" value="quarterly">
+                     <label for="quarterly_sole_prop" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_sole_prop" name="income_sole_prop_frequency" value="monthly">
+                     <label for="monthly_sole_prop" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_sole_prop" name="income_sole_prop_frequency" value="weekly">
+                     <label for="weekly_sole_prop" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_sole_prop_annual"></span>
              </div>
-             <span id="income_sole_prop_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_sole_prop" style="font-size: unset;" class="tooltip" data-tooltip="Enter net income after business expenses but before taxes;">
+                     <span class="tooltip-content"></span>
+                     Self Employment:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_sole_prop">
+                 <div class="checkbox-button-group" id="income_sole_prop_frequency">
+                     <input type="checkbox" id="annually_sole_prop" name="income_sole_prop_frequency" value="annually">
+                     <label for="annually_sole_prop" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_sole_prop" name="income_sole_prop_frequency" value="quarterly">
+                     <label for="quarterly_sole_prop" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_sole_prop" name="income_sole_prop_frequency" value="monthly">
+                     <label for="monthly_sole_prop" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_sole_prop" name="income_sole_prop_frequency" value="weekly">
+                     <label for="weekly_sole_prop" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_sole_prop_annual"></span>
+             </div>
          </div>
 
          <div class="checkboxrow">
@@ -183,80 +274,172 @@
              Input Retirement - Social Benefit Income<span class="tooltip1-content"></span>
          </h2>
  
-         <div class="checkboxrow">
-             <label for="income_federal_pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
-                 <span class="tooltip-content"></span>
-                 Pension, Federal:
-             </label>
-             <input type="number" inputmode="numeric" id="income_federal_pension">
-             <div class="checkbox-button-group" id="income_federal_pension_frequency">
-                 <input type="checkbox" id="annually_federal_pension" name="income_federal_pension_frequency" value="annually">
-                 <label for="annually_federal_pension" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_federal_pension" name="income_federal_pension_frequency" value="quarterly">
-                 <label for="quarterly_federal_pension" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_federal_pension" name="income_federal_pension_frequency" value="monthly">
-                 <label for="monthly_federal_pension" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_federal_pension" name="income_federal_pension_frequency" value="weekly">
-                 <label for="weekly_federal_pension" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_federal_pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Pension, Federal:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_federal_pension">
+                 <div class="checkbox-button-group" id="income_federal_pension_frequency">
+                     <input type="checkbox" id="annually_federal_pension" name="income_federal_pension_frequency" value="annually">
+                     <label for="annually_federal_pension" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_federal_pension" name="income_federal_pension_frequency" value="quarterly">
+                     <label for="quarterly_federal_pension" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_federal_pension" name="income_federal_pension_frequency" value="monthly">
+                     <label for="monthly_federal_pension" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_federal_pension" name="income_federal_pension_frequency" value="weekly">
+                     <label for="weekly_federal_pension" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_federal_pension_annual"></span>
              </div>
-             <span id="income_federal_pension_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_federal_pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Pension, Federal:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_federal_pension">
+                 <div class="checkbox-button-group" id="income_federal_pension_frequency">
+                     <input type="checkbox" id="annually_federal_pension" name="income_federal_pension_frequency" value="annually">
+                     <label for="annually_federal_pension" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_federal_pension" name="income_federal_pension_frequency" value="quarterly">
+                     <label for="quarterly_federal_pension" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_federal_pension" name="income_federal_pension_frequency" value="monthly">
+                     <label for="monthly_federal_pension" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_federal_pension" name="income_federal_pension_frequency" value="weekly">
+                     <label for="weekly_federal_pension" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_federal_pension_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-             <label for="income_work_pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
-                 <span class="tooltip-content"></span>
-                 Pension, Work:
-             </label>
-             <input type="number" inputmode="numeric" id="income_work_pension">
-             <div class="checkbox-button-group" id="income_work_pension_frequency">
-                 <input type="checkbox" id="annually_work_pension" name="income_work_pension_frequency" value="annually">
-                 <label for="annually_work_pension" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_work_pension" name="income_work_pension_frequency" value="quarterly">
-                 <label for="quarterly_work_pension" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_work_pension" name="income_work_pension_frequency" value="monthly">
-                 <label for="monthly_work_pension" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_work_pension" name="income_work_pension_frequency" value="weekly">
-                 <label for="weekly_work_pension" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_work_pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Pension, Work:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_work_pension">
+                 <div class="checkbox-button-group" id="income_work_pension_frequency">
+                     <input type="checkbox" id="annually_work_pension" name="income_work_pension_frequency" value="annually">
+                     <label for="annually_work_pension" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_work_pension" name="income_work_pension_frequency" value="quarterly">
+                     <label for="quarterly_work_pension" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_work_pension" name="income_work_pension_frequency" value="monthly">
+                     <label for="monthly_work_pension" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_work_pension" name="income_work_pension_frequency" value="weekly">
+                     <label for="weekly_work_pension" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_work_pension_annual"></span>
              </div>
-             <span id="income_work_pension_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_work_pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Pension, Work:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_work_pension">
+                 <div class="checkbox-button-group" id="income_work_pension_frequency">
+                     <input type="checkbox" id="annually_work_pension" name="income_work_pension_frequency" value="annually">
+                     <label for="annually_work_pension" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_work_pension" name="income_work_pension_frequency" value="quarterly">
+                     <label for="quarterly_work_pension" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_work_pension" name="income_work_pension_frequency" value="monthly">
+                     <label for="monthly_work_pension" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_work_pension" name="income_work_pension_frequency" value="weekly">
+                     <label for="weekly_work_pension" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_work_pension_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-             <label for="income_social_security" style="font-size: unset; " class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
-                 <span class="tooltip-content"></span>
-                 Social Security:
-             </label>
-             <input type="number" inputmode="numeric" id="income_social_security">
-             <div class="checkbox-button-group" id="income_social_security_frequency">
-                 <input type="checkbox" id="annually_social_security" name="income_social_security_frequency" value="annually">
-                 <label for="annually_social_security" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_social_security" name="income_social_security_frequency" value="quarterly">
-                 <label for="quarterly_social_security" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_social_security" name="income_social_security_frequency" value="monthly">
-                 <label for="monthly_social_security" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_social_security" name="income_social_security_frequency" value="weekly">
-                 <label for="weekly_social_security" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_social_security" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Social Security:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_social_security">
+                 <div class="checkbox-button-group" id="income_social_security_frequency">
+                     <input type="checkbox" id="annually_social_security" name="income_social_security_frequency" value="annually">
+                     <label for="annually_social_security" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_social_security" name="income_social_security_frequency" value="quarterly">
+                     <label for="quarterly_social_security" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_social_security" name="income_social_security_frequency" value="monthly">
+                     <label for="monthly_social_security" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_social_security" name="income_social_security_frequency" value="weekly">
+                     <label for="weekly_social_security" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_social_security_annual"></span>
              </div>
-             <span id="income_social_security_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_social_security" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Social Security:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_social_security">
+                 <div class="checkbox-button-group" id="income_social_security_frequency">
+                     <input type="checkbox" id="annually_social_security" name="income_social_security_frequency" value="annually">
+                     <label for="annually_social_security" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_social_security" name="income_social_security_frequency" value="quarterly">
+                     <label for="quarterly_social_security" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_social_security" name="income_social_security_frequency" value="monthly">
+                     <label for="monthly_social_security" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_social_security" name="income_social_security_frequency" value="weekly">
+                     <label for="weekly_social_security" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_social_security_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-             <label for="income_employment_insurance" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
-                 <span class="tooltip-content"></span>
-                 Employment Insurance:
-             </label>
-             <input type="number" inputmode="numeric" id="income_employment_insurance">
-             <div class="checkbox-button-group" id="income_employment_insurance_frequency">
-                 <input type="checkbox" id="annually_employment_insurance" name="income_employment_insurance_frequency" value="annually">
-                 <label for="annually_employment_insurance" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_employment_insurance" name="income_employment_insurance_frequency" value="quarterly">
-                 <label for="quarterly_employment_insurance" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_employment_insurance" name="income_employment_insurance_frequency" value="monthly">
-                 <label for="monthly_employment_insurance" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_employment_insurance" name="income_employment_insurance_frequency" value="weekly">
-                 <label for="weekly_employment_insurance" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_employment_insurance" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Employment Insurance:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_employment_insurance">
+                 <div class="checkbox-button-group" id="income_employment_insurance_frequency">
+                     <input type="checkbox" id="annually_employment_insurance" name="income_employment_insurance_frequency" value="annually">
+                     <label for="annually_employment_insurance" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_employment_insurance" name="income_employment_insurance_frequency" value="quarterly">
+                     <label for="quarterly_employment_insurance" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_employment_insurance" name="income_employment_insurance_frequency" value="monthly">
+                     <label for="monthly_employment_insurance" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_employment_insurance" name="income_employment_insurance_frequency" value="weekly">
+                     <label for="weekly_employment_insurance" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_employment_insurance_annual"></span>
              </div>
-             <span id="income_employment_insurance_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_employment_insurance" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                     <span class="tooltip-content"></span>
+                     Employment Insurance:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_employment_insurance">
+                 <div class="checkbox-button-group" id="income_employment_insurance_frequency">
+                     <input type="checkbox" id="annually_employment_insurance" name="income_employment_insurance_frequency" value="annually">
+                     <label for="annually_employment_insurance" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_employment_insurance" name="income_employment_insurance_frequency" value="quarterly">
+                     <label for="quarterly_employment_insurance" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_employment_insurance" name="income_employment_insurance_frequency" value="monthly">
+                     <label for="monthly_employment_insurance" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_employment_insurance" name="income_employment_insurance_frequency" value="weekly">
+                     <label for="weekly_employment_insurance" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_employment_insurance_annual"></span>
+             </div>
          </div>
      </div>
  
@@ -265,178 +448,382 @@
              Input Passive Income<span class="tooltip1-content"></span>
          </h2>
  
-         <div class="checkboxrow">
-            <label for="income_investment_property" style="font-size: unset;" class="tooltip" data-tooltip="Enter the net income after all operating expenses (e.g., maintenance, insurance) but before income taxes;">
-            <span class="tooltip-content"></span>
-                 Investment Property:
-             </label>
-             <input type="number" inputmode="numeric" id="income_investment_property">
-             <div class="checkbox-button-group" id="income_investment_property_frequency">
-                 <input type="checkbox" id="annually_investment_property" name="income_investment_property_frequency" value="annually">
-                 <label for="annually_investment_property" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_investment_property" name="income_investment_property_frequency" value="quarterly">
-                 <label for="quarterly_investment_property" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_investment_property" name="income_investment_property_frequency" value="monthly">
-                 <label for="monthly_investment_property" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_investment_property" name="income_investment_property_frequency" value="weekly">
-                 <label for="weekly_investment_property" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_investment_property" style="font-size: unset;" class="tooltip" data-tooltip="Enter the net income after all operating expenses (e.g., maintenance, insurance) but before income taxes;">
+                     <span class="tooltip-content"></span>
+                     Investment Property:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_investment_property">
+                 <div class="checkbox-button-group" id="income_investment_property_frequency">
+                     <input type="checkbox" id="annually_investment_property" name="income_investment_property_frequency" value="annually">
+                     <label for="annually_investment_property" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_investment_property" name="income_investment_property_frequency" value="quarterly">
+                     <label for="quarterly_investment_property" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_investment_property" name="income_investment_property_frequency" value="monthly">
+                     <label for="monthly_investment_property" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_investment_property" name="income_investment_property_frequency" value="weekly">
+                     <label for="weekly_investment_property" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_investment_property_annual"></span>
              </div>
-             <span id="income_investment_property_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_investment_property" style="font-size: unset;" class="tooltip" data-tooltip="Enter the net income after all operating expenses (e.g., maintenance, insurance) but before income taxes;">
+                     <span class="tooltip-content"></span>
+                     Investment Property:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_investment_property">
+                 <div class="checkbox-button-group" id="income_investment_property_frequency">
+                     <input type="checkbox" id="annually_investment_property" name="income_investment_property_frequency" value="annually">
+                     <label for="annually_investment_property" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_investment_property" name="income_investment_property_frequency" value="quarterly">
+                     <label for="quarterly_investment_property" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_investment_property" name="income_investment_property_frequency" value="monthly">
+                     <label for="monthly_investment_property" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_investment_property" name="income_investment_property_frequency" value="weekly">
+                     <label for="weekly_investment_property" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_investment_property_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-            <label for="income_capital_gains_losses" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
-                <span class="tooltip-content"></span>
-                 Capital Gains/Losses:
-             </label>
-             <input type="number" inputmode="numeric" id="income_capital_gains_losses">
-             <div class="checkbox-button-group" id="income_capital_gains_losses_frequency">
-                 <input type="checkbox" id="annually_capital_gains_losses" name="income_capital_gains_losses_frequency" value="annually">
-                 <label for="annually_capital_gains_losses" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="quarterly">
-                 <label for="quarterly_capital_gains_losses" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="monthly">
-                 <label for="monthly_capital_gains_losses" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="weekly">
-                 <label for="weekly_capital_gains_losses" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_capital_gains_losses" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Capital Gains/Losses:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_capital_gains_losses">
+                 <div class="checkbox-button-group" id="income_capital_gains_losses_frequency">
+                     <input type="checkbox" id="annually_capital_gains_losses" name="income_capital_gains_losses_frequency" value="annually">
+                     <label for="annually_capital_gains_losses" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="quarterly">
+                     <label for="quarterly_capital_gains_losses" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="monthly">
+                     <label for="monthly_capital_gains_losses" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="weekly">
+                     <label for="weekly_capital_gains_losses" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_capital_gains_losses_annual"></span>
              </div>
-             <span id="income_capital_gains_losses_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_capital_gains_losses" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Capital Gains/Losses:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_capital_gains_losses">
+                 <div class="checkbox-button-group" id="income_capital_gains_losses_frequency">
+                     <input type="checkbox" id="annually_capital_gains_losses" name="income_capital_gains_losses_frequency" value="annually">
+                     <label for="annually_capital_gains_losses" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="quarterly">
+                     <label for="quarterly_capital_gains_losses" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="monthly">
+                     <label for="monthly_capital_gains_losses" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_capital_gains_losses" name="income_capital_gains_losses_frequency" value="weekly">
+                     <label for="weekly_capital_gains_losses" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_capital_gains_losses_annual"></span>
+             </div>
          </div>
  
-        
- 
-         <div class="checkboxrow">
-             <label for="income_venture_capital" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and after expenses;">
-                 <span class="tooltip-content"></span>
-                 Venture:
-             </label>
-             <input type="number" inputmode="numeric" id="income_venture_capital">
-             <div class="checkbox-button-group" id="income_venture_capital_frequency">
-                 <input type="checkbox" id="annually_venture_capital" name="income_venture_capital_frequency" value="annually">
-                 <label for="annually_venture_capital" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_venture_capital" name="income_venture_capital_frequency" value="quarterly">
-                 <label for="quarterly_venture_capital" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_venture_capital" name="income_venture_capital_frequency" value="monthly">
-                 <label for="monthly_venture_capital" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_venture_capital" name="income_venture_capital_frequency" value="weekly">
-                 <label for="weekly_venture_capital" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_venture_capital" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and after expenses;">
+                     <span class="tooltip-content"></span>
+                     Venture:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_venture_capital">
+                 <div class="checkbox-button-group" id="income_venture_capital_frequency">
+                     <input type="checkbox" id="annually_venture_capital" name="income_venture_capital_frequency" value="annually">
+                     <label for="annually_venture_capital" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_venture_capital" name="income_venture_capital_frequency" value="quarterly">
+                     <label for="quarterly_venture_capital" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_venture_capital" name="income_venture_capital_frequency" value="monthly">
+                     <label for="monthly_venture_capital" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_venture_capital" name="income_venture_capital_frequency" value="weekly">
+                     <label for="weekly_venture_capital" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_venture_capital_annual"></span>
              </div>
-             <span id="income_venture_capital_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_venture_capital" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and after expenses;">
+                     <span class="tooltip-content"></span>
+                     Venture:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_venture_capital">
+                 <div class="checkbox-button-group" id="income_venture_capital_frequency">
+                     <input type="checkbox" id="annually_venture_capital" name="income_venture_capital_frequency" value="annually">
+                     <label for="annually_venture_capital" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_venture_capital" name="income_venture_capital_frequency" value="quarterly">
+                     <label for="quarterly_venture_capital" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_venture_capital" name="income_venture_capital_frequency" value="monthly">
+                     <label for="monthly_venture_capital" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_venture_capital" name="income_venture_capital_frequency" value="weekly">
+                     <label for="weekly_venture_capital" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_venture_capital_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-            <label for="income_public_dividend" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
-                <span class="tooltip-content"></span>
-                 Dividend, Public:
-             </label>
-             <input type="number" inputmode="numeric" id="income_public_dividend">
-             <div class="checkbox-button-group" id="income_public_dividend_frequency">
-                 <input type="checkbox" id="annually_public_dividend" name="income_public_dividend_frequency" value="annually">
-                 <label for="annually_public_dividend" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_public_dividend" name="income_public_dividend_frequency" value="quarterly">
-                 <label for="quarterly_public_dividend" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_public_dividend" name="income_public_dividend_frequency" value="monthly">
-                 <label for="monthly_public_dividend" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_public_dividend" name="income_public_dividend_frequency" value="weekly">
-                 <label for="weekly_public_dividend" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_public_dividend" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Dividend, Public:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_public_dividend">
+                 <div class="checkbox-button-group" id="income_public_dividend_frequency">
+                     <input type="checkbox" id="annually_public_dividend" name="income_public_dividend_frequency" value="annually">
+                     <label for="annually_public_dividend" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_public_dividend" name="income_public_dividend_frequency" value="quarterly">
+                     <label for="quarterly_public_dividend" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_public_dividend" name="income_public_dividend_frequency" value="monthly">
+                     <label for="monthly_public_dividend" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_public_dividend" name="income_public_dividend_frequency" value="weekly">
+                     <label for="weekly_public_dividend" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_public_dividend_annual"></span>
              </div>
-             <span id="income_public_dividend_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_public_dividend" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Dividend, Public:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_public_dividend">
+                 <div class="checkbox-button-group" id="income_public_dividend_frequency">
+                     <input type="checkbox" id="annually_public_dividend" name="income_public_dividend_frequency" value="annually">
+                     <label for="annually_public_dividend" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_public_dividend" name="income_public_dividend_frequency" value="quarterly">
+                     <label for="quarterly_public_dividend" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_public_dividend" name="income_public_dividend_frequency" value="monthly">
+                     <label for="monthly_public_dividend" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_public_dividend" name="income_public_dividend_frequency" value="weekly">
+                     <label for="weekly_public_dividend" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_public_dividend_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-            <label for="income_owner_dividend" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
-                <span class="tooltip-content"></span>
-                 Dividend, Owner:
-             </label>
-             <input type="number" inputmode="numeric" id="income_owner_dividend">
-             <div class="checkbox-button-group" id="income_owner_dividend_frequency">
-                 <input type="checkbox" id="annually_owner_dividend" name="income_owner_dividend_frequency" value="annually">
-                 <label for="annually_owner_dividend" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_owner_dividend" name="income_owner_dividend_frequency" value="quarterly">
-                 <label for="quarterly_owner_dividend" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_owner_dividend" name="income_owner_dividend_frequency" value="monthly">
-                 <label for="monthly_owner_dividend" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_owner_dividend" name="income_owner_dividend_frequency" value="weekly">
-                 <label for="weekly_owner_dividend" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_owner_dividend" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Dividend, Owner:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_owner_dividend">
+                 <div class="checkbox-button-group" id="income_owner_dividend_frequency">
+                     <input type="checkbox" id="annually_owner_dividend" name="income_owner_dividend_frequency" value="annually">
+                     <label for="annually_owner_dividend" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_owner_dividend" name="income_owner_dividend_frequency" value="quarterly">
+                     <label for="quarterly_owner_dividend" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_owner_dividend" name="income_owner_dividend_frequency" value="monthly">
+                     <label for="monthly_owner_dividend" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_owner_dividend" name="income_owner_dividend_frequency" value="weekly">
+                     <label for="weekly_owner_dividend" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_owner_dividend_annual"></span>
              </div>
-             <span id="income_owner_dividend_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_owner_dividend" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Dividend, Owner:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_owner_dividend">
+                 <div class="checkbox-button-group" id="income_owner_dividend_frequency">
+                     <input type="checkbox" id="annually_owner_dividend" name="income_owner_dividend_frequency" value="annually">
+                     <label for="annually_owner_dividend" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_owner_dividend" name="income_owner_dividend_frequency" value="quarterly">
+                     <label for="quarterly_owner_dividend" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_owner_dividend" name="income_owner_dividend_frequency" value="monthly">
+                     <label for="monthly_owner_dividend" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_owner_dividend" name="income_owner_dividend_frequency" value="weekly">
+                     <label for="weekly_owner_dividend" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_owner_dividend_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-            <label for="income_interest" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
-                <span class="tooltip-content"></span>
-                 Interest:
-             </label>
-             <input type="number" inputmode="numeric" id="income_interest">
-             <div class="checkbox-button-group" id="income_interest_frequency">
-                 <input type="checkbox" id="annually_interest" name="income_interest_frequency" value="annually">
-                 <label for="annually_interest" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_interest" name="income_interest_frequency" value="quarterly">
-                 <label for="quarterly_interest" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_interest" name="income_interest_frequency" value="monthly">
-                 <label for="monthly_interest" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_interest" name="income_interest_frequency" value="weekly">
-                 <label for="weekly_interest" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_interest" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Interest:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_interest">
+                 <div class="checkbox-button-group" id="income_interest_frequency">
+                     <input type="checkbox" id="annually_interest" name="income_interest_frequency" value="annually">
+                     <label for="annually_interest" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_interest" name="income_interest_frequency" value="quarterly">
+                     <label for="quarterly_interest" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_interest" name="income_interest_frequency" value="monthly">
+                     <label for="monthly_interest" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_interest" name="income_interest_frequency" value="weekly">
+                     <label for="weekly_interest" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_interest_annual"></span>
              </div>
-             <span id="income_interest_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_interest" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Interest:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_interest">
+                 <div class="checkbox-button-group" id="income_interest_frequency">
+                     <input type="checkbox" id="annually_interest" name="income_interest_frequency" value="annually">
+                     <label for="annually_interest" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_interest" name="income_interest_frequency" value="quarterly">
+                     <label for="quarterly_interest" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_interest" name="income_interest_frequency" value="monthly">
+                     <label for="monthly_interest" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_interest" name="income_interest_frequency" value="weekly">
+                     <label for="weekly_interest" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_interest_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-            <label for="income_royalties" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
-                <span class="tooltip-content"></span>
-                 Royalties:
-             </label>
-             <input type="number" inputmode="numeric" id="income_royalties">
-             <div class="checkbox-button-group" id="income_royalties_frequency">
-                 <input type="checkbox" id="annually_royalties" name="income_royalties_frequency" value="annually">
-                 <label for="annually_royalties" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_royalties" name="income_royalties_frequency" value="quarterly">
-                 <label for="quarterly_royalties" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_royalties" name="income_royalties_frequency" value="monthly">
-                 <label for="monthly_royalties" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_royalties" name="income_royalties_frequency" value="weekly">
-                 <label for="weekly_royalties" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_royalties" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Royalties:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_royalties">
+                 <div class="checkbox-button-group" id="income_royalties_frequency">
+                     <input type="checkbox" id="annually_royalties" name="income_royalties_frequency" value="annually">
+                     <label for="annually_royalties" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_royalties" name="income_royalties_frequency" value="quarterly">
+                     <label for="quarterly_royalties" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_royalties" name="income_royalties_frequency" value="monthly">
+                     <label for="monthly_royalties" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_royalties" name="income_royalties_frequency" value="weekly">
+                     <label for="weekly_royalties" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_royalties_annual"></span>
              </div>
-             <span id="income_royalties_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_royalties" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Royalties:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_royalties">
+                 <div class="checkbox-button-group" id="income_royalties_frequency">
+                     <input type="checkbox" id="annually_royalties" name="income_royalties_frequency" value="annually">
+                     <label for="annually_royalties" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_royalties" name="income_royalties_frequency" value="quarterly">
+                     <label for="quarterly_royalties" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_royalties" name="income_royalties_frequency" value="monthly">
+                     <label for="monthly_royalties" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_royalties" name="income_royalties_frequency" value="weekly">
+                     <label for="weekly_royalties" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_royalties_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-            <label for="income_peer_to_peer_lending" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
-
-                <span class="tooltip-content"></span>
-                 Peer to Peer Lending:
-             </label>
-             <input type="number" inputmode="numeric" id="income_peer_to_peer_lending">
-             <div class="checkbox-button-group" id="income_peer_to_peer_lending_frequency">
-                 <input type="checkbox" id="annually_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="annually">
-                 <label for="annually_peer_to_peer_lending" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="quarterly">
-                 <label for="quarterly_peer_to_peer_lending" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="monthly">
-                 <label for="monthly_peer_to_peer_lending" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="weekly">
-                 <label for="weekly_peer_to_peer_lending" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_peer_to_peer_lending" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Peer to Peer Lending:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_peer_to_peer_lending">
+                 <div class="checkbox-button-group" id="income_peer_to_peer_lending_frequency">
+                     <input type="checkbox" id="annually_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="annually">
+                     <label for="annually_peer_to_peer_lending" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="quarterly">
+                     <label for="quarterly_peer_to_peer_lending" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="monthly">
+                     <label for="monthly_peer_to_peer_lending" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="weekly">
+                     <label for="weekly_peer_to_peer_lending" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_peer_to_peer_lending_annual"></span>
              </div>
-             <span id="income_peer_to_peer_lending_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_peer_to_peer_lending" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Peer to Peer Lending:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_peer_to_peer_lending">
+                 <div class="checkbox-button-group" id="income_peer_to_peer_lending_frequency">
+                     <input type="checkbox" id="annually_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="annually">
+                     <label for="annually_peer_to_peer_lending" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="quarterly">
+                     <label for="quarterly_peer_to_peer_lending" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="monthly">
+                     <label for="monthly_peer_to_peer_lending" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_peer_to_peer_lending" name="income_peer_to_peer_lending_frequency" value="weekly">
+                     <label for="weekly_peer_to_peer_lending" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_peer_to_peer_lending_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-             <label for="income_trust" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
-                 <span class="tooltip-content"></span>
-                 Trust:
-             </label>
-             <input type="number" inputmode="numeric" id="income_trust">
-             <div class="checkbox-button-group" id="income_trust_frequency">
-                 <input type="checkbox" id="annually_trust" name="income_trust_frequency" value="annually">
-                 <label for="annually_trust" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_trust" name="income_trust_frequency" value="quarterly">
-                 <label for="quarterly_trust" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_trust" name="income_trust_frequency" value="monthly">
-                 <label for="monthly_trust" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_trust" name="income_trust_frequency" value="weekly">
-                 <label for="weekly_trust" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_trust" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Trust:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_trust">
+                 <div class="checkbox-button-group" id="income_trust_frequency">
+                     <input type="checkbox" id="annually_trust" name="income_trust_frequency" value="annually">
+                     <label for="annually_trust" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_trust" name="income_trust_frequency" value="quarterly">
+                     <label for="quarterly_trust" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_trust" name="income_trust_frequency" value="monthly">
+                     <label for="monthly_trust" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_trust" name="income_trust_frequency" value="weekly">
+                     <label for="weekly_trust" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_trust_annual"></span>
              </div>
-             <span id="income_trust_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_trust" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Trust:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_trust">
+                 <div class="checkbox-button-group" id="income_trust_frequency">
+                     <input type="checkbox" id="annually_trust" name="income_trust_frequency" value="annually">
+                     <label for="annually_trust" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_trust" name="income_trust_frequency" value="quarterly">
+                     <label for="quarterly_trust" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_trust" name="income_trust_frequency" value="monthly">
+                     <label for="monthly_trust" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_trust" name="income_trust_frequency" value="weekly">
+                     <label for="weekly_trust" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_trust_annual"></span>
+             </div>
          </div>
      </div>
  
@@ -445,78 +832,172 @@
              Input Other Income<span class="tooltip1-content"></span>
          </h2>
  
-         <div class="checkboxrow">
-             <label for="income_alimony" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
-                 <span class="tooltip-content"></span>
-                 Alimony:
-             </label>
-             <input type="number" inputmode="numeric" id="income_alimony">
-             <div class="checkbox-button-group" id="income_alimony_frequency">
-                 <input type="checkbox" id="annually_alimony" name="income_alimony_frequency" value="annually">
-                 <label for="annually_alimony" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_alimony" name="income_alimony_frequency" value="quarterly">
-                 <label for="quarterly_alimony" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_alimony" name="income_alimony_frequency" value="monthly">
-                 <label for="monthly_alimony" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_alimony" name="income_alimony_frequency" value="weekly">
-                 <label for="weekly_alimony" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_alimony" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Alimony:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_alimony">
+                 <div class="checkbox-button-group" id="income_alimony_frequency">
+                     <input type="checkbox" id="annually_alimony" name="income_alimony_frequency" value="annually">
+                     <label for="annually_alimony" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_alimony" name="income_alimony_frequency" value="quarterly">
+                     <label for="quarterly_alimony" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_alimony" name="income_alimony_frequency" value="monthly">
+                     <label for="monthly_alimony" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_alimony" name="income_alimony_frequency" value="weekly">
+                     <label for="weekly_alimony" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_alimony_annual"></span>
              </div>
-             <span id="income_alimony_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_alimony" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Alimony:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_alimony">
+                 <div class="checkbox-button-group" id="income_alimony_frequency">
+                     <input type="checkbox" id="annually_alimony" name="income_alimony_frequency" value="annually">
+                     <label for="annually_alimony" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_alimony" name="income_alimony_frequency" value="quarterly">
+                     <label for="quarterly_alimony" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_alimony" name="income_alimony_frequency" value="monthly">
+                     <label for="monthly_alimony" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_alimony" name="income_alimony_frequency" value="weekly">
+                     <label for="weekly_alimony" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_alimony_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-             <label for="income_scholarships_grants" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
-                 <span class="tooltip-content"></span>
-                 Scholarship/Grants:
-             </label>
-             <input type="number" inputmode="numeric" id="income_scholarships_grants">
-             <div class="checkbox-button-group" id="income_scholarships_grants_frequency">
-                 <input type="checkbox" id="annually_scholarships_grants" name="income_scholarships_grants_frequency" value="annually">
-                 <label for="annually_scholarships_grants" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_scholarships_grants" name="income_scholarships_grants_frequency" value="quarterly">
-                 <label for="quarterly_scholarships_grants" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_scholarships_grants" name="income_scholarships_grants_frequency" value="monthly">
-                 <label for="monthly_scholarships_grants" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_scholarships_grants" name="income_scholarships_grants_frequency" value="weekly">
-                 <label for="weekly_scholarships_grants" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_scholarships_grants" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Scholarship/Grants:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_scholarships_grants">
+                 <div class="checkbox-button-group" id="income_scholarships_grants_frequency">
+                     <input type="checkbox" id="annually_scholarships_grants" name="income_scholarships_grants_frequency" value="annually">
+                     <label for="annually_scholarships_grants" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_scholarships_grants" name="income_scholarships_grants_frequency" value="quarterly">
+                     <label for="quarterly_scholarships_grants" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_scholarships_grants" name="income_scholarships_grants_frequency" value="monthly">
+                     <label for="monthly_scholarships_grants" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_scholarships_grants" name="income_scholarships_grants_frequency" value="weekly">
+                     <label for="weekly_scholarships_grants" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_scholarships_grants_annual"></span>
              </div>
-             <span id="income_scholarships_grants_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_scholarships_grants" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                     <span class="tooltip-content"></span>
+                     Scholarship/Grants:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_scholarships_grants">
+                 <div class="checkbox-button-group" id="income_scholarships_grants_frequency">
+                     <input type="checkbox" id="annually_scholarships_grants" name="income_scholarships_grants_frequency" value="annually">
+                     <label for="annually_scholarships_grants" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_scholarships_grants" name="income_scholarships_grants_frequency" value="quarterly">
+                     <label for="quarterly_scholarships_grants" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_scholarships_grants" name="income_scholarships_grants_frequency" value="monthly">
+                     <label for="monthly_scholarships_grants" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_scholarships_grants" name="income_scholarships_grants_frequency" value="weekly">
+                     <label for="weekly_scholarships_grants" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_scholarships_grants_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-            <label for="income_tax_free_income" style="font-size: unset;" class="tooltip" data-tooltip="Enter total amount received. Note: Some regions tax inheritance or gifts; consult a financial advisor;">                 <span class="tooltip-content"></span>
-                 Tax Free - Inheritance/Gifts:
-             </label>
-             <input type="number" inputmode="numeric" id="income_tax_free_income">
-             <div class="checkbox-button-group" id="income_tax_free_income_frequency">
-                 <input type="checkbox" id="annually_tax_free_income" name="income_tax_free_income_frequency" value="annually">
-                 <label for="annually_tax_free_income" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_tax_free_income" name="income_tax_free_income_frequency" value="quarterly">
-                 <label for="quarterly_tax_free_income" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_tax_free_income" name="income_tax_free_income_frequency" value="monthly">
-                 <label for="monthly_tax_free_income" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_tax_free_income" name="income_tax_free_income_frequency" value="weekly">
-                 <label for="weekly_tax_free_income" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_tax_free_income" style="font-size: unset;" class="tooltip" data-tooltip="Enter total amount received. Note: Some regions tax inheritance or gifts; consult a financial advisor;">
+                     <span class="tooltip-content"></span>
+                     Tax Free - Inheritance/Gifts:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_tax_free_income">
+                 <div class="checkbox-button-group" id="income_tax_free_income_frequency">
+                     <input type="checkbox" id="annually_tax_free_income" name="income_tax_free_income_frequency" value="annually">
+                     <label for="annually_tax_free_income" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_tax_free_income" name="income_tax_free_income_frequency" value="quarterly">
+                     <label for="quarterly_tax_free_income" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_tax_free_income" name="income_tax_free_income_frequency" value="monthly">
+                     <label for="monthly_tax_free_income" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_tax_free_income" name="income_tax_free_income_frequency" value="weekly">
+                     <label for="weekly_tax_free_income" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_tax_free_income_annual"></span>
              </div>
-             <span id="income_tax_free_income_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_tax_free_income" style="font-size: unset;" class="tooltip" data-tooltip="Enter total amount received. Note: Some regions tax inheritance or gifts; consult a financial advisor;">
+                     <span class="tooltip-content"></span>
+                     Tax Free - Inheritance/Gifts:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_tax_free_income">
+                 <div class="checkbox-button-group" id="income_tax_free_income_frequency">
+                     <input type="checkbox" id="annually_tax_free_income" name="income_tax_free_income_frequency" value="annually">
+                     <label for="annually_tax_free_income" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_tax_free_income" name="income_tax_free_income_frequency" value="quarterly">
+                     <label for="quarterly_tax_free_income" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_tax_free_income" name="income_tax_free_income_frequency" value="monthly">
+                     <label for="monthly_tax_free_income" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_tax_free_income" name="income_tax_free_income_frequency" value="weekly">
+                     <label for="weekly_tax_free_income" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_tax_free_income_annual"></span>
+             </div>
          </div>
  
-         <div class="checkboxrow">
-            <label for="income_gambling_winnings" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax. Note: Canadians don’t pay tax on winnings unless professional; US residents do;">                 <span class="tooltip-content"></span>
-                 Gambling:
-             </label>
-             <input type="number" inputmode="numeric" id="income_gambling_winnings">
-             <div class="checkbox-button-group" id="income_gambling_winnings_frequency">
-                 <input type="checkbox" id="annually_gambling_winnings" name="income_gambling_winnings_frequency" value="annually">
-                 <label for="annually_gambling_winnings" class="checkbox-button">1Y</label>
-                 <input type="checkbox" id="quarterly_gambling_winnings" name="income_gambling_winnings_frequency" value="quarterly">
-                 <label for="quarterly_gambling_winnings" class="checkbox-button">3M</label>
-                 <input type="checkbox" id="monthly_gambling_winnings" name="income_gambling_winnings_frequency" value="monthly">
-                 <label for="monthly_gambling_winnings" class="checkbox-button">1M</label>
-                 <input type="checkbox" id="weekly_gambling_winnings" name="income_gambling_winnings_frequency" value="weekly">
-                 <label for="weekly_gambling_winnings" class="checkbox-button">1W</label>
+         <div class="checkboxrow-container">
+             <!-- Original Checkbox Row -->
+             <div class="checkboxrow">
+                 <label for="income_gambling_winnings" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax. Note: Canadians don’t pay tax on winnings unless professional; US residents do;">
+                     <span class="tooltip-content"></span>
+                     Gambling:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_gambling_winnings">
+                 <div class="checkbox-button-group" id="income_gambling_winnings_frequency">
+                     <input type="checkbox" id="annually_gambling_winnings" name="income_gambling_winnings_frequency" value="annually">
+                     <label for="annually_gambling_winnings" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_gambling_winnings" name="income_gambling_winnings_frequency" value="quarterly">
+                     <label for="quarterly_gambling_winnings" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_gambling_winnings" name="income_gambling_winnings_frequency" value="monthly">
+                     <label for="monthly_gambling_winnings" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_gambling_winnings" name="income_gambling_winnings_frequency" value="weekly">
+                     <label for="weekly_gambling_winnings" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_gambling_winnings_annual"></span>
              </div>
-             <span id="income_gambling_winnings_annual"></span>
+ 
+             <!-- Duplicate Checkbox Row for Partner -->
+             <div class="checkboxrow partner-clone">
+                 <label for="income_gambling_winnings" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax. Note: Canadians don’t pay tax on winnings unless professional; US residents do;">
+                     <span class="tooltip-content"></span>
+                     Gambling:
+                 </label>
+                 <input type="number" inputmode="numeric" id="income_gambling_winnings">
+                 <div class="checkbox-button-group" id="income_gambling_winnings_frequency">
+                     <input type="checkbox" id="annually_gambling_winnings" name="income_gambling_winnings_frequency" value="annually">
+                     <label for="annually_gambling_winnings" class="checkbox-button">1Y</label>
+                     <input type="checkbox" id="quarterly_gambling_winnings" name="income_gambling_winnings_frequency" value="quarterly">
+                     <label for="quarterly_gambling_winnings" class="checkbox-button">3M</label>
+                     <input type="checkbox" id="monthly_gambling_winnings" name="income_gambling_winnings_frequency" value="monthly">
+                     <label for="monthly_gambling_winnings" class="checkbox-button">1M</label>
+                     <input type="checkbox" id="weekly_gambling_winnings" name="income_gambling_winnings_frequency" value="weekly">
+                     <label for="weekly_gambling_winnings" class="checkbox-button">1W</label>
+                 </div>
+                 <span id="income_gambling_winnings_annual"></span>
+             </div>
          </div>
      </div>
  
@@ -567,7 +1048,45 @@
 <script src="/server/scripts/modal.js"></script>
 <script src="/server/scripts/tray.js"></script>
 
- 
+<style>
+  @media (max-width: 700px) {
+    .checkboxrow-container {
+      display: flex;
+      flex-wrap: nowrap; /* Ensure rows are side by side */
+    }
+
+    .checkboxrow {
+      width: 50%;
+      position: relative;
+      left: 0;
+    }
+
+    .partner-clone {
+      width: 50%;
+      position: relative;
+      left: 0; /* Align next to the original row */
+    }
+  }
+
+  @media (min-width: 701px) {
+    .checkboxrow-container {
+      display: flex;
+      flex-wrap: nowrap; /* Ensure rows are side by side */
+    }
+
+    .checkboxrow {
+      width: 50%;
+      position: relative;
+      left: 0;
+    }
+
+    .partner-clone {
+      width: 50%;
+      position: relative;
+      left: 0; /* Align next to the original row */
+    }
+  }
+</style>
    
  </body>
  
