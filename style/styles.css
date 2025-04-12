@@ -359,6 +359,19 @@
      flex: 1;
      height: 32px;
    }
+
+   
+
+   .category-label {
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  padding: 5px 0;
+  width: 100%;
+  display: block;
+  font-family: "Inter", sans-serif;
+}
    
    .checkbox-button-group {
      display: flex;
@@ -1207,61 +1220,70 @@
      }
    
      .checkboxrow-container {
-       display: flex;
-       flex-wrap: nowrap;
-       width: 100%;
-     }
-   
-     .checkboxrow,
-     .partner-clone {
-       width: 50%;
-       flex-direction: column;
-       align-items: stretch;
-       gap: 10px;
-     }
-   
-     .checkboxrow input[type="number"],
-     .partner-clone input[type="number"] {
-       width: 100%;
-       max-width: none;
-       height: 32px !important;
-       padding: 0 8px !important;
-     }
-   
-     .checkboxrow .checkbox-button-group,
-     .partner-clone .checkbox-button-group {
-       width: 100%;
-       display: flex;
-       gap: 4px;
-     }
-   
-     .checkbox-button {
-       font-size: 12px;
-       height: 32px;
-       padding: 0 6px;
-     }
-   }
-
-   @media (min-width: 700px) {
-    .checkboxrow {
+      display: flex;
+      flex-wrap: nowrap;
+      width: 100%;
+    }
+    
+    .checkboxrow,
+    .partner-clone {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    
+    /* Default mobile layout: stacked */
+    .checkboxrow .row-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .checkboxrow input[type="checkbox"] {
+      width: auto;
+    }
+    
+    .checkboxrow .checkbox-button-group,
+    .partner-clone .checkbox-button-group {
+      width: 100%;
+      display: flex;
+      gap: 4px;
+    }
+    
+    .checkbox-button {
+      font-size: 12px;
+      height: 32px;
+      padding: 0 6px;
+    }
+    
+    @media (min-width: 700px) {
+      .checkboxrow {
         flex-direction: column;
         align-items: stretch;
-    }
-
-    .checkboxrow label {
+      }
+    
+      .checkboxrow label {
         margin-bottom: 5px;
+      }
+    
+      /* Desktop: input and button group side by side */
+      .checkboxrow .row-container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+      }
+    
+      .checkboxrow input[type="checkbox"] {
+        width: auto;
+      }
+    
+      .checkboxrow .checkbox-button-group {
+        width: auto;
+      }
     }
-
-    .checkboxrow .row-container {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-    }
-
-    .checkboxrow input[type="number"],
-    .checkboxrow .checkbox-button-group {
-        width: 48%;
-    }
+    
    }
    
    @media (max-width: 550px) {
