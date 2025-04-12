@@ -1241,6 +1241,28 @@
        padding: 0 6px;
      }
    }
+
+   @media (min-width: 700px) {
+    .checkboxrow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .checkboxrow label {
+        margin-bottom: 5px;
+    }
+
+    .checkboxrow .row-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .checkboxrow input[type="number"],
+    .checkboxrow .checkbox-button-group {
+        width: 48%;
+    }
+   }
    
    @media (max-width: 550px) {
      .benefits {
