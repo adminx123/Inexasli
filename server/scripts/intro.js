@@ -6,54 +6,47 @@
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
-  */ 
+ */
 
-
-  
-
-import { setLocal } from '/server/scripts/setlocal.js'; // Adjust path as needed
-import { getLocal } from '/server/scripts/getlocal.js'; // Adjust path as needed
-
+import { setLocal } from '/server/scripts/setlocal.js';
+import { getLocal } from '/server/scripts/getlocal.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Function to check cookie and set grid item state
-  const setGridItemFromCookie = (id, name) => {
-    const item = document.querySelector('#' + id);
-    const cookieValue = getLocal(name);
+    // Handle solo/partner as exclusive selection
+    const soloItem = document.getElementById('solo');
+    const partnerItem = document.getElementById('partner');
+    const fillingStatus = getLocal('fillingStatus');
 
-    if (item) {
-      item.classList.toggle('selected', cookieValue === 'checked');
-      // If no cookie is set or it's not 'checked', set it to 'unChecked'
-      if (cookieValue !== 'checked') {
-        setLocal(name, 'unChecked', 365);
-      }
+    if (fillingStatus) {
+        soloItem.classList.toggle('selected', fillingStatus === 'solo');
+        partnerItem.classList.toggle('selected', fillingStatus === 'partner');
     }
-  };
 
-  // Apply cookie values to grid items or set to 'unChecked' if nothing is selected
-  ['romanticincome', 'romanticexpense', 'dependantcheckbox', 'debtcheckbox', 'romanticasset', 'romanticliability'].forEach(id => {
-    setGridItemFromCookie(id, id);
-  });
+    [soloItem, partnerItem].forEach(item => {
+        item.addEventListener('click', () => {
+            soloItem.classList.remove('selected');
+            partnerItem.classList.remove('selected');
+            item.classList.add('selected');
+            setLocal('fillingStatus', item.id, 365);
+        });
+    });
 
-  // Handle grid item clicks
-  function toggleSelection(event) {
-    const item = event.target;
-    item.classList.toggle('selected');
-    
-    // Set cookie based on item's selection state
-    setLocal(item.id, item.classList.contains('selected') ? 'checked' : 'unChecked', 365);
-  }
+    // Handle checkboxes
+    ['dependants', 'debt'].forEach(id => {
+        const item = document.getElementById(id);
+        const value = getLocal(id);
+        item.classList.toggle('selected', value === 'checked');
+        if (value !== 'checked') {
+            setLocal(id, 'unChecked', 365);
+        }
 
-  document.querySelectorAll('.grid-item').forEach(item => {
-    item.addEventListener('click', toggleSelection);
-    // Set unique IDs for each item to match with cookies
-    item.id = item.getAttribute('data-value');
-  });
+        item.addEventListener('click', () => {
+            item.classList.toggle('selected');
+            setLocal(id, item.classList.contains('selected') ? 'checked' : 'unChecked', 365);
+        });
+    });
 });
 
-
-
 window.nextPage = function() {
-  // Navigate to the new page after setting cookies
-  window.location.href = './income.html';
-}
+    window.location.href = './income.html';
+};
