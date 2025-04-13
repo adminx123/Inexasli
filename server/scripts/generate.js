@@ -36,19 +36,19 @@ const formatFrequencySection = (items, prefix) => {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Check if user is authenticated
-    const paid = localStorage.getItem("authenticated");
-    const isPaid = paid === "paid";
+    // // Check if user is authenticated
+    // const paid = localStorage.getItem("authenticated");
+    // const isPaid = paid === "paid";
 
-    // If not authenticated, disable interaction with generate button
-    if (!isPaid) {
-        document.querySelectorAll('.generate-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                alert("Please subscribe to a premium plan to access this feature.\nClick 'SUBSCRIBE & UNLOCK' to upgrade.");
-            });
-        });
-    }
+    // // If not authenticated, disable interaction with generate button
+    // if (!isPaid) {
+    //     document.querySelectorAll('.generate-btn').forEach(btn => {
+    //         btn.addEventListener('click', (e) => {
+    //             e.preventDefault();
+    //             alert("Please subscribe to a premium plan to access this feature.\nClick 'SUBSCRIBE & UNLOCK' to upgrade.");
+    //         });
+    //     });
+    // }
 
     // Set a "generate" cookie on page load
     setCookie("generate", Date.now(), 32);
@@ -56,9 +56,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Attach event listener to generate button
     document.querySelectorAll('.generate-btn').forEach(button => {
         button.addEventListener('click', () => {
-            if (isPaid) {
-                generateFinancialPrompt();
-            }
+            // Always generate prompt for testing
+            generateFinancialPrompt();
         });
     });
 });
