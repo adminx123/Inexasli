@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
@@ -41,8 +41,7 @@ function handleTabClick(e) {
     const isChecked1 = getTermsCookie('term1');
     const isChecked2 = getTermsCookie('term2');
     if (!isChecked1 || !isChecked2) {
-        e.preventDefault();
-        alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
+        e.preventDefault(); // Silently prevent navigation
     }
 }
 
@@ -227,11 +226,8 @@ document.addEventListener('DOMContentLoaded', function () {
         initializeFrequencyGroups(frequencyGroups);
     });
 
-
     setTimeout(() => {
         console.log('Initializing frequency groups after timeout');
         initializeFrequencyGroups(frequencyGroups);
     }, 200);
-
-
 });
