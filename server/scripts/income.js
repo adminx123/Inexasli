@@ -67,30 +67,6 @@ function handleCheckboxChange() {
 if (checkbox1) checkbox1.addEventListener('click', handleCheckboxChange);
 if (checkbox2) checkbox2.addEventListener('click', handleCheckboxChange);
 
-const regionDropdown = document.getElementById("RegionDropdown");
-const subregionDropdown = document.getElementById("SubregionDropdown");
-
-const subregionMap = {
-    CAN: ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
-    USA: ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
-};
-
-function updateSubregionDropdown() {
-    if (!subregionDropdown || !regionDropdown) return;
-    subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
-    const selectedRegion = regionDropdown.value;
-    if (selectedRegion in subregionMap) {
-        subregionMap[selectedRegion].forEach(subregionCode => {
-            const subregionOption = document.createElement("option");
-            subregionOption.text = subregionCode;
-            subregionOption.value = subregionCode;
-            subregionDropdown.appendChild(subregionOption);
-        });
-    }
-}
-
-if (regionDropdown) regionDropdown.addEventListener("change", updateSubregionDropdown);
-
 const frequencyGroups = [
     'income_salary_wages_frequency', 'income_tips_frequency', 'income_bonuses_frequency', 
     'income_sole_prop_frequency', 'income_investment_property_frequency', 
@@ -115,24 +91,18 @@ const frequencyGroups = [
 ];
 
 window.validatecheckbox = function () {
-    if (!regionDropdown || !subregionDropdown || !checkbox1 || !checkbox2) {
-        console.error('Required form elements are missing');
+    if (!checkbox1 || !checkbox2) {
+        console.error('Required checkboxes are missing');
         alert('Form initialization error. Please try refreshing the page.');
         return false;
     }
 
-    if (regionDropdown.value === "" || regionDropdown.value === "NONE") {
-        alert("Please select a region from the dropdown.");
-        return false;
-    }
-
     if (!checkbox1.checked || !checkbox2.checked) {
-        alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
+        alert('Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions');
         return false;
     }
 
     const formElements = [
-        'RegionDropdown', 'SubregionDropdown',
         'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop', 
         'income_investment_property', 'income_capital_gains_losses', 'income_interest', 
         'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension', 
@@ -175,7 +145,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const formElements = [
-        'RegionDropdown', 'SubregionDropdown',
         'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop', 
         'income_investment_property', 'income_capital_gains_losses', 'income_interest', 
         'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension', 
@@ -191,34 +160,15 @@ document.addEventListener('DOMContentLoaded', function () {
         'income_venture_capital_partner', 'income_tax_free_income_partner'
     ];
 
-    if (regionDropdown) {
-        const regionValue = getLocal('RegionDropdown');
-        regionDropdown.value = regionValue || 'NONE';
-        updateSubregionDropdown();
-
-        formElements.forEach(elementId => {
-            if (elementId !== 'RegionDropdown') {
-                const value = getLocal(elementId);
-                const element = document.getElementById(elementId);
-                if (element) {
-                    element.value = value || '';
-                } else {
-                    console.warn(`Element not found for restoring value: ${elementId}`);
-                }
-            }
-        });
-
-        if (subregionDropdown) {
-            const subregionValue = subregionDropdown.value;
-            if (regionValue === 'USA' && subregionMap.USA && !subregionMap.USA.includes(subregionValue)) {
-                subregionDropdown.value = subregionMap.USA[0] || '';
-            } else if (regionValue === 'CAN' && subregionMap.CAN && !subregionMap.CAN.includes(subregionValue)) {
-                subregionDropdown.value = subregionMap.CAN[0] || '';
-            }
+    formElements.forEach(elementId => {
+        const value = getLocal(elementId);
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.value = value || '';
+        } else {
+            console.warn(`Element not found for restoring value: ${elementId}`);
         }
-    } else {
-        console.warn('RegionDropdown not found');
-    }
+    });
 
     // Initialize frequency groups after DOM and hideShow updates
     document.addEventListener('hideShowUpdated', () => {

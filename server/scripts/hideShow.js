@@ -3,19 +3,22 @@
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
+ * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
+import { getLocal } from '/server/scripts/getlocal.js';
+
 function updateVisibility() {
-    const fillingStatus = localStorage.getItem('fillingStatus');
+    const fillingStatus = getLocal('fillingStatus');
+    const dependants = getLocal('dependants');
+    const debt = getLocal('debt');
     const styleElement = document.getElementById('hide-show-styles') || document.createElement('style');
 
     styleElement.id = 'hide-show-styles';
     let styles = '';
 
-    if (fillingStatus === 'partner') {
+    // Partner visibility for partnered filing statuses
+    if (/married|common_law|coupled|mfj|mfs/.test(fillingStatus)) {
         styles += `
             .partner-clone {
                 display: flex !important;
@@ -41,6 +44,16 @@ function updateVisibility() {
         `;
     }
 
+    // Dependants and Debt containers visibility
+    styles += `
+        .dependant-parent {
+            display: ${dependants === 'checked' ? 'block !important' : 'none !important'};
+        }
+        .debt-parent {
+            display: ${debt === 'checked' ? 'block !important' : 'none !important'};
+        }
+    `;
+
     styleElement.textContent = styles;
     if (!document.getElementById('hide-show-styles')) {
         document.head.appendChild(styleElement);
@@ -48,9 +61,9 @@ function updateVisibility() {
 
     // Debug visibility
     try {
-        console.log(`[hideShow.js] Debugging on ${window.location.pathname}, fillingStatus: ${fillingStatus}`);
+        console.log(`[hideShow.js] Debugging on ${window.location.pathname}, fillingStatus: ${fillingStatus}, dependants: ${dependants}, debt: ${debt}`);
 
-        // Partner-clone rows (for expense.html)
+        // Partner-clone rows (expense.html)
         const partnerRows = document.querySelectorAll('.partner-clone');
         partnerRows.forEach(row => {
             const display = getComputedStyle(row).display;
@@ -60,12 +73,11 @@ function updateVisibility() {
             const inputs = row.querySelectorAll('input[type="number"], .checkbox-button-group');
             inputs.forEach(input => {
                 const inputDisplay = getComputedStyle(input).display;
-                const inputWidth = getComputedStyle(input).width;
-                console.log(`  Partner-clone input: ${input.id || input.className}, display: ${inputDisplay}, width: ${inputWidth}`);
+                console.log(`  Partner-clone input: ${input.id || input.className}, display: ${inputDisplay}`);
             });
         });
 
-        // rowa-l inputs (for asset.html, liability.html)
+        // rowa-l inputs (asset.html, liability.html)
         const rowaLRows = document.querySelectorAll('.rowa-l');
         rowaLRows.forEach(row => {
             const display = getComputedStyle(row).display;
@@ -73,10 +85,19 @@ function updateVisibility() {
             const inputs = row.querySelectorAll('input[type="number"]');
             inputs.forEach(input => {
                 const inputDisplay = getComputedStyle(input).display;
-                const inputWidth = getComputedStyle(input).width;
-                console.log(`  rowa-l input: ${input.id}, display: ${inputDisplay}, width: ${inputWidth}`);
+                console.log(`  rowa-l input: ${input.id}, display: ${inputDisplay}`);
             });
         });
+
+        // Dependants and Debt containers
+        const dependantParent = document.querySelector('.dependant-parent');
+        if (dependantParent) {
+            console.log(`dependant-parent display: ${getComputedStyle(dependantParent).display}`);
+        }
+        const debtParent = document.querySelector('.debt-parent');
+        if (debtParent) {
+            console.log(`debt-parent display: ${getComputedStyle(debtParent).display}`);
+        }
     } catch (error) {
         console.error(`[hideShow.js] Debugging error: ${error.message}`);
     }
@@ -85,9 +106,9 @@ function updateVisibility() {
 // Run visibility update on DOM load
 document.addEventListener('DOMContentLoaded', updateVisibility);
 
-// Re-run if fillingStatus changes
+// Re-run if fillingStatus, dependants, or debt changes
 window.addEventListener('storage', (event) => {
-    if (event.key === 'fillingStatus') {
+    if (event.key === 'fillingStatus' || event.key === 'dependants' || event.key === 'debt') {
         updateVisibility();
     }
 });

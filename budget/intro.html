@@ -1,83 +1,183 @@
-<!-- /*
+<!--
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
- */ -->
+ * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
+-->
 
- <!DOCTYPE html>
- <html lang="en">
- <head>
-     <link rel="manifest" href="/manifest.json">
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-     <title>INTRO</title>
-     <link rel="stylesheet" href="/style/styles.css"> 
-     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-     <link rel="shortcut icon" href="/images/favicon.ico" />
-     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
- </head>
- <body>
-     <a href="/"> 
-         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 0px;">
-     </a>
-     <br>
-     <div class="hoead-5">
-         <div class="containerround">
-             <div class="benefit-card" style="margin-top: 15px;">
-                 <h2 style="text-align: center; font-size: 25px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">|   IncomeIQ™   |</h2>
-                 <h2 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">Ready to Unlock the Power of Financial Clarity?</h2>
-                 <p style="text-align: center; color: rgb(0, 0, 0); font-size: 14px; margin-bottom: 10px;">Save time and find relief—master your money fast with a free tool that cuts the bullshit and shows how income, expenses, and more click together.</p>       
-                 <p style="text-align: center; color: rgb(0, 0, 0); font-size: 14px; margin-bottom: 15px; font-style: italic;">Embrace the confidence of financial smarts with deeper insights into the four pillars of personal finances to play with—for education only, so you’re ready to team up with a pro for the real moves.</p>
-             </div>  
-         </div>
-     </div>
-     <div class="card-overlay">
-         <div class="hoead-1">
-             <div class="containerround">
-                 <div class="benefit-card"><h3>Estimate.</h3></div>
-             </div>
-         </div>
-         <div class="hoead-2">
-             <div class="containerround">
-                 <div class="benefit-card"><h3>Educate.</h3></div>
-             </div>
-         </div>
-         <div class="hoead-3">
-             <div class="containerround">
-                 <div class="benefit-card"><h3>Simulate.</h3></div>
-             </div>
-         </div>
-         <div class="hoead-4">
-             <div class="containerround">
-                 <div class="benefit-card"><h3>Estimate. Educate. Simulate.</h3></div>
-             </div>
-         </div>
-     </div>
-     <div class="hoead-5">
-         <div class="containerround"> 
-             <form id="websiteDesignForm">
-                 <h2 style="text-align: center; font-size: 18px; margin-bottom:15px">Select all that apply</h2>
-                 <p style="text-align: center; font-size: 14px; margin-bottom: 10px;">These shape your budget template for an AI financial report.</p>
-                 <div class="grid-item" data-value="solo" id="solo" style="margin: 8.5px;">Filling out: Solo</div>
-                 <div class="grid-item" data-value="partner" id="partner" style="margin: 8.5px;">Filling out: With Partner</div>
-                 <div class="grid-item" data-value="dependants" id="dependants" style="margin: 8.5px;">Include Dependants or Pets</div>
-                 <div class="grid-item" data-value="debt" id="debt" style="margin: 8.5px;">Include Non-Mortgage or Auto Debt</div>
-             </form>
-             
-         </div>
+<!DOCTYPE html>
+<html lang="en">
 
-         <div class="containerround">
-            <button style="width: 150px; padding: 10px 20px; display: block; margin-left: auto; margin-right: auto;" onclick="nextPage()">Proceed</button>
-        </div>
-     </div>
-     <script src="/index.js"></script>
-     <script src="/server/scripts/tray.js"></script>
-     <script src="/server/scripts/intro.js" type="module"></script>
- </body>
- </html>
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IncomeIQ™ Intro</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/style/styles.css">
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <style>
+        .nav-btn.enabled { background-color: #28a745; cursor: pointer; }
+        .nav-btn.disabled { background-color: #ccc; cursor: not-allowed; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .pulse { animation: pulse 1.5s infinite; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+
+<body>
+    <a href="./index.html">
+        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 0px;" onclick="calculateAll();">
+    </a>
+
+    <div class="tab-container">
+        <a href="#" class="tooltip tab active" data-location="intro" data-tooltip="Your starting point! Tell us about your household and situation to kick off your personalized budget journey.">
+            Intro
+            <span class="tooltip-content"></span>
+        </a>
+        <a href="./income.html" class="tab" data-location="income" onclick="calculateNext();">Income</a>
+        <a href="./expense.html" class="tab" data-location="expense" onclick="calculateNext();">Expense</a>
+        <a href="./asset.html" class="tab" data-location="asset" onclick="calculateNext();">Asset</a>
+        <a href="./liability.html" class="tab" data-location="liability" onclick="calculateNext();">Liability</a>
+    </div>
+
+    <div class="container">
+        <form id="websiteDesignForm">
+            <label for="country" class="category-label">Country</label>
+            <select id="country" style="width: 100%; margin-bottom: 10px;">
+                <option value="">Select Country</option>
+                <option value="CAN">Canada</option>
+                <option value="USA">United States</option>
+                <option value="UK">United Kingdom</option>
+                <option value="AUS">Australia</option>
+                <option value="OTHER">Other</option>
+            </select>
+
+            <div id="subregionContainer" style="display: none;">
+                <label for="subregion" class="category-label">Tax Subregion</label>
+                <select id="subregion" style="width: 100%; margin-bottom: 10px;">
+                    <option value="">Select Tax Subregion</option>
+                </select>
+            </div>
+
+            <div id="filingStatusSection" style="display: none;">
+                <h2 style="text-align: center; font-size: 18px; margin-bottom:15px">Select Your Filing Status</h2>
+                <p style="text-align: center; font-size: 14px; margin-bottom: 10px;">This shapes your budget template for an AI financial report.</p>
+                <div id="filingStatusContainer"></div>
+            </div>
+
+            <div id="personalDetailsSection" style="display: none;">
+                <h3 style="text-align: center; font-size: 16px; margin-top: 15px;">Personal Details (Optional)</h3>
+                <label for="numDependants" class="category-label tooltip" data-tooltip="Total number of dependants (children, adults, pets) for budgeting and credits.">
+                    Number of Dependants<span class="tooltip-content"></span>
+                </label>
+                <input type="number" inputmode="numeric" id="numDependants" min="0" style="width: 100%; margin-bottom: 10px; display: none;">
+                <div id="dependantFields" style="display: none;">
+                    <label for="numDisabledDependants" class="category-label tooltip" data-tooltip="Number of dependants with disabilities, qualifying for credits like Canada’s DTC or USA’s Child Tax Credit.">
+                        Number of Disabled Dependants<span class="tooltip-content"></span>
+                    </label>
+                    <input type="number" inputmode="numeric" id="numDisabledDependants" min="0" style="width: 100%; margin-bottom: 10px; display: none;">
+                    <label for="numChildrenUnder19" class="category-label tooltip" data-tooltip="Number of dependants under 19, eligible for benefits like Canada Child Benefit or UK Child Benefit.">
+                        Number of Dependants Under 19<span class="tooltip-content"></span>
+                    </label>
+                    <input type="number" inputmode="numeric" id="numChildrenUnder19" min="0" style="width: 100%; margin-bottom: 10px; display: none;">
+                    <label for="numAdultDependants" class="category-label tooltip" data-tooltip="Number of dependants 19 and over, for budgeting or disability credits.">
+                        Number of Dependants 19 and Over<span class="tooltip-content"></span>
+                    </label>
+                    <input type="number" inputmode="numeric" id="numAdultDependants" min="0" style="width: 100%; margin-bottom: 10px; display: none;">
+                </div>
+                <label for="ageSelf" class="category-label tooltip" data-tooltip="Your age affects credits like Canada’s Age Amount or USA’s Elderly Credit.">
+                    Your Age<span class="tooltip-content"></span>
+                </label>
+                <input type="number" inputmode="numeric" id="ageSelf" min="0" style="width: 100%; margin-bottom: 10px; display: none;">
+                <div id="spouseFields" style="display: none;">
+                    <label for="ageSpouse" class="category-label tooltip" data-tooltip="Spouse’s age, if applicable, for spousal credits or benefits.">
+                        Spouse’s Age (if applicable)<span class="tooltip-content"></span>
+                    </label>
+                    <input type="number" inputmode="numeric" id="ageSpouse" min="0" style="width: 100%; margin-bottom: 10px; display: none;">
+                </div>
+                <label for="employmentStatus" class="category-label tooltip" data-tooltip="Your employment status affects benefits like Canada’s EI or USA’s EITC.">
+                    Employment Status<span class="tooltip-content"></span>
+                </label>
+                <select id="employmentStatus" style="width: 100%; margin-bottom: 10px; display: none;">
+                    <option value="">Select Employment Status</option>
+                    <option value="employed">Employed</option>
+                    <option value="self_employed">Self-Employed</option>
+                    <option value="unemployed">Unemployed</option>
+                    <option value="retired">Retired</option>
+                    <option value="student">Student</option>
+                </select>
+                <div id="disabledSelfContainer" style="display: none;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                        <div class="checkbox-wrapper-2">
+                            <input type="checkbox" id="disabledSelf" class="sc-gJwTLC ikxBAC">
+                        </div>
+                        <label for="disabledSelf" style="font-size: 14px;" class="tooltip" data-tooltip="Check if you qualify for disability credits (e.g., Canada’s DTC, USA’s SSI).">
+                            I Have a Disability<span class="tooltip-content"></span>
+                        </label>
+                    </div>
+                </div>
+                <div id="disabledSpouseContainer" style="display: none;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                        <div class="checkbox-wrapper-2">
+                            <input type="checkbox" id="disabledSpouse" class="sc-gJwTLC ikxBAC">
+                        </div>
+                        <label for="disabledSpouse" style="font-size: 14px;" class="tooltip" data-tooltip="Check if your spouse qualifies for disability credits.">
+                            Spouse Has a Disability<span class="tooltip-content"></span>
+                        </label>
+                    </div>
+                </div>
+                <div id="caregiverContainer" style="display: none;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                        <div class="checkbox-wrapper-2">
+                            <input type="checkbox" id="caregiver" class="sc-gJwTLC ikxBAC">
+                        </div>
+                        <label for="caregiver" style="font-size: 14px;" class="tooltip" data-tooltip="Check if you care for a dependant, qualifying for credits like Canada’s Caregiver Credit or UK’s Carer’s Allowance.">
+                            I Am a Caregiver<span class="tooltip-content"></span>
+                        </label>
+                    </div>
+                </div>
+                <div id="dependantsContainer" style="display: none;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                        <div class="checkbox-wrapper-2">
+                            <input type="checkbox" id="dependants" class="sc-gJwTLC ikxBAC">
+                        </div>
+                        <label for="dependants" style="font-size: 14px;" class="tooltip" data-tooltip="Check to include dependants or pets in your budget.">
+                            Include Dependants or Pets<span class="tooltip-content"></span>
+                        </label>
+                    </div>
+                </div>
+                <div id="debtContainer" style="display: none;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                        <div class="checkbox-wrapper-2">
+                            <input type="checkbox" id="debt" class="sc-gJwTLC ikxBAC">
+                        </div>
+                        <label for="debt" style="font-size: 14px;" class="tooltip" data-tooltip="Check to include non-mortgage or auto debt in your budget.">
+                            Include Non-Mortgage or Auto Debt<span class="tooltip-content"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="containerround">
+                <button onclick="nextPage()" class="nav-btn nav-right disabled"><i class='bx nav-inner bx-right-arrow-alt'></i></button>
+            </div>
+        </form>
+    </div>
+
+    <script src="/index.js"></script>
+    <script type="module" src="/server/scripts/intro.js"></script>
+    <script src="/server/scripts/toolTip.js"></script>
+    <script src="/server/scripts/tray.js"></script>
+    <script src="/server/scripts/modal.js"></script>
+    <script type="module" src="/server/scripts/floatingbutton.js"></script>
+    <script src="/server/scripts/utils.js" type="module"></script>
+</body>
+
+</html>
