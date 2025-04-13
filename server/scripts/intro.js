@@ -312,6 +312,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (clickedItem) {
             filingStatusContainer.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
             clickedItem.classList.add('selected');
+
+            // Set local storage based on filing status
+            if (/_deps/.test(clickedItem.dataset.value) && !/_no_deps/.test(clickedItem.dataset.value)) {
+                setLocal('dependant', 'dependant', 365);
+            } else {
+                setLocal('dependant', 'no_dependant', 365);
+            }
+
             updateDependantsVisibility();
         }
     });
