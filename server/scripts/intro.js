@@ -198,6 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setLocal('fillingStatus', selectedStatus, 365);
                 updateDependantsVisibility();
                 updateMaritalStatusVisibility();
+                updateSpecificsVisibility();
             });
 
             if (savedStatus) {
@@ -332,6 +333,26 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'none');
         }
     }
+
+    function updateSpecificsVisibility() {
+        const filingStatusDropdown = document.getElementById('filingStatus');
+        const specificsDiv = document.querySelector('.specifics');
+
+        if (filingStatusDropdown && filingStatusDropdown.value) {
+            specificsDiv.style.display = 'block';
+        } else {
+            specificsDiv.style.display = 'none';
+        }
+    }
+
+    // Attach event listener to filing status dropdown
+    const filingStatusDropdown = document.getElementById('filingStatus');
+    if (filingStatusDropdown) {
+        filingStatusDropdown.addEventListener('change', updateSpecificsVisibility);
+    }
+
+    // Initial visibility update
+    updateSpecificsVisibility();
 
     filingStatusContainer.addEventListener('click', (event) => {
         const clickedItem = event.target.closest('.grid-item');
