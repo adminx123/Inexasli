@@ -36,27 +36,12 @@ const formatFrequencySection = (items, prefix) => {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    // // Check if user is authenticated
-    // const paid = localStorage.getItem("authenticated");
-    // const isPaid = paid === "paid";
-
-    // // If not authenticated, disable interaction with generate button
-    // if (!isPaid) {
-    //     document.querySelectorAll('.generate-btn').forEach(btn => {
-    //         btn.addEventListener('click', (e) => {
-    //             e.preventDefault();
-    //             alert("Please subscribe to a premium plan to access this feature.\nClick 'SUBSCRIBE & UNLOCK' to upgrade.");
-    //         });
-    //     });
-    // }
-
     // Set a "generate" cookie on page load
     setCookie("generate", Date.now(), 32);
 
     // Attach event listener to generate button
     document.querySelectorAll('.generate-btn').forEach(button => {
         button.addEventListener('click', () => {
-            // Always generate prompt for testing
             generateFinancialPrompt();
         });
     });
@@ -97,7 +82,7 @@ Return all results in annual, monthly, and weekly frequencies where applicable, 
         prompt += `Note: The user is filing with a partner (fillingStatus: ${fillingStatus}). Ensure tax calculations reflect joint filing where applicable.\n\n`;
     }
 
-    // Define all localStorage keys (from localOverwrite.js)
+    // Define all localStorage keys (unchanged)
     const incomeFields = [
         'income_salary_wages', 'income_salary_wages_partner', 'income_salary_wages_shared', 
         'income_salary_wages_shared_p1_percent', 'income_salary_wages_shared_p2_percent',
@@ -378,30 +363,16 @@ Return all results in annual, monthly, and weekly frequencies where applicable, 
    - Savings Goal Timeline: Time to reach a savings goal based on disposable income (use $10,000 if no goal provided).
 
 Return all results in annual, monthly, and weekly frequencies where applicable, in code block format, with side-by-side metrics for the primary user and partner (if filling status includes a partner). Ensure calculations are educational estimates, not financial advice, and suggest consulting a financial advisor for decisions.\n\n`) {
-        openCustomModal('No financial data found. Please enter data in the budget sections before generating a prompt.');
+        openGeneratedPromptModal();
         return;
     }
 
     // Copy to clipboard and show modal
     navigator.clipboard.writeText(prompt).then(() => {
-        openCustomModal('Financial prompt copied to clipboard! Paste it into your preferred AI for analysis.');
+        openGeneratedPromptModal();
     }).catch(err => {
         console.error('Failed to copy prompt:', err);
-        openCustomModal('Generated prompt, but failed to copy to clipboard. Please copy manually from the console.');
+        openGeneratedPromptModal();
         console.log(prompt); // Log for manual copy
     });
 }
-
-// Function to open a custom modal
-function openCustomModal(content) {
-    const modal = document.createElement('div');
-    modal.className = 'prompt-modal';
-    modal.innerHTML = `
-        <p>${content}</p>
-        <button onclick="this.parentElement.remove()">Close</button>
-    `;
-    document.body.appendChild(modal);
-}
-
-// Make openCustomModal globally accessible
-window.openCustomModal = openCustomModal;
