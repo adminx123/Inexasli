@@ -266,6 +266,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const subregion = getLocal('selectedSubregion');
         const fillingStatus = getLocal('fillingStatus');
 
+        const ageSelf = document.getElementById('ageSelf').value;
+        const ageSpouse = document.getElementById('ageSpouse').value;
+        const employmentStatus = document.getElementById('employmentStatus').value;
+
         if (!country) {
             alert('Please select a country.');
             return;
@@ -276,6 +280,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (!fillingStatus) {
             alert('Please select a filing status.');
+            return;
+        }
+        if (!ageSelf) {
+            alert('Please enter your age.');
+            return;
+        }
+        if (!ageSpouse && /married|common_law/.test(fillingStatus)) {
+            alert('Please enter your spouse’s age.');
+            return;
+        }
+        if (!employmentStatus) {
+            alert('Please select an employment status.');
             return;
         }
 

@@ -184,6 +184,8 @@
      -moz-appearance: menulist-button;
      appearance: menulist-button;
      text-align-last: center;
+     width: 250px; /* Set a fixed width for all dropdowns */
+     min-width: 250px; /* Set a minimum width based on the widest text */
    }
    
    select option {
