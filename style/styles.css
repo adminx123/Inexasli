@@ -1264,72 +1264,132 @@
      .row select {
        width: 100%;
      }
-   
+    }
+
+    
      .checkboxrow-container {
-       display: flex;
-       flex-wrap: nowrap;
-       width: 100%;
-     }
-   
-     .checkboxrow,
-     .partner-clone {
-       width: 100%;
-       flex-direction: column;
-       align-items: stretch;
-       gap: 10px;
-     }
-   
-     /* Default mobile layout: stacked */
-     .checkboxrow .row-container {
-       display: flex;
-       flex-direction: column;
-       gap: 10px;
-     }
-   
-     .checkboxrow input[type="checkbox"] {
-       width: auto;
-     }
-   
-     .checkboxrow .checkbox-button-group,
-     .partner-clone .checkbox-button-group {
-       width: 100%;
-       display: flex;
-       gap: 4px;
-     }
-   
-     .checkbox-button {
-       font-size: 12px;
-       height: 32px;
-       padding: 0 6px;
-     }
-   }
-   
-   @media (min-width: 700px) {
-     .checkboxrow {
-       flex-direction: column;
-       align-items: stretch;
-     }
-   
-     .checkboxrow label {
-       margin-bottom: 5px;
-     }
-   
-     /* Desktop: input and button group side by side */
-     .checkboxrow .row-container {
-       flex-direction: row;
-       align-items: center;
-       justify-content: flex-start;
-       gap: 10px;
-     }
-   
-     .checkboxrow input[type="checkbox"] {
-       width: auto;
-     }
-   
-     .checkboxrow .checkbox-button-group {
-       width: auto;
-     }
-   }
+      display: flex;
+      flex-wrap: nowrap; /* Keep items on the same row */
+      width: 100%;
+      gap: 10px; /* Space between .checkboxrow and .partner-clone */
+  }
+  
+  /* Default layout: side by side for .checkboxrow and .partner-clone */
+  .checkboxrow,
+  .partner-clone {
+      flex: 1; /* Equal width for both */
+      display: flex;
+      flex-direction: column; /* Stack input and frequency-placeholder vertically within each */
+      align-items: stretch;
+      gap: 10px;
+  }
+  
+  /* Style for input and frequency-placeholder within .checkboxrow and .partner-clone */
+  .checkboxrow input[type="number"],
+  .partner-clone input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+  }
+  
+  .checkboxrow .frequency-placeholder,
+  .partner-clone .frequency-placeholder {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      text-align: center;
+      font-size: 14px;
+  }
+  
+  /* Handle checkbox-specific styles (from your CSS) */
+  .checkboxrow input[type="checkbox"],
+  .partner-clone input[type="checkbox"] {
+      width: auto;
+  }
+  
+  /* Checkbox button group styles */
+  .checkboxrow .checkbox-button-group,
+  .partner-clone .checkbox-button-group {
+      width: 100%;
+      display: flex;
+      gap: 4px;
+  }
+  
+  .checkbox-button {
+      font-size: 12px;
+      height: 32px;
+      padding: 0 6px;
+  }
+  
+  /* Remove .row-container since it’s not in your HTML snippet */
+  .checkboxrow .row-container,
+  .partner-clone .row-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+  }
+  
+  @media (min-width: 700px) {
+      .checkboxrow-container {
+          flex-direction: row; /* Ensure side-by-side layout */
+          align-items: flex-start; /* Align tops of .checkboxrow and .partner-clone */
+      }
+  
+      .checkboxrow,
+      .partner-clone {
+          flex: 1; /* Equal width */
+          flex-direction: column;
+          align-items: stretch;
+      }
+  
+      /* Ensure partner-clone stays on the right */
+      .partner-clone {
+          order: 2; /* Explicitly place partner-clone after .checkboxrow */
+      }
+  
+      .checkboxrow {
+          order: 1; /* Keep .checkboxrow on the left */
+      }
+  
+      /* Checkbox-specific styles */
+      .checkboxrow input[type="checkbox"],
+      .partner-clone input[type="checkbox"] {
+          width: auto;
+      }
+  
+      .checkboxrow .checkbox-button-group,
+      .partner-clone .checkbox-button-group {
+          width: auto;
+      }
+  
+      /* Remove .row-container for desktop if not needed */
+      .checkboxrow .row-container,
+      .partner-clone .row-container {
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 10px;
+      }
+  }
+  
+  /* Ensure mobile layout doesn’t override side-by-side preference */
+  @media (max-width: 699px) {
+      .checkboxrow-container {
+          flex-direction: row; /* Keep side by side even on mobile */
+          flex-wrap: nowrap;
+      }
+  
+      .checkboxrow,
+      .partner-clone {
+          flex: 1;
+      }
+  }
    
    @media (max-width: 550px) {
      .benefits {
