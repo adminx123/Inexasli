@@ -11,25 +11,25 @@
 import { getLocal } from '/server/scripts/getlocal.js';
 import { setCookie } from '/server/scripts/setcookie.js';
 
-// Helper function to format localStorage data into a readable prompt section
+// Updated the formatSection and formatFrequencySection functions to exclude items with values of 0 and their corresponding frequencies.
 const formatSection = (items, prefix) => {
     let output = '';
     items.forEach(item => {
         const value = getLocal(item);
-        if (value && value !== '') {
+        if (value && value !== '' && value !== '0') {
             output += `${item}: ${value}\n`;
         }
     });
     return output ? `${prefix}:\n${output}\n` : '';
 };
 
-// Helper function to format frequency data
 const formatFrequencySection = (items, prefix) => {
     let output = '';
     items.forEach(item => {
-        const value = getLocal(item);
-        if (value && value !== '') {
-            output += `${item.replace('_frequency', '')}: ${value}\n`;
+        const value = getLocal(item.replace('_frequency', ''));
+        const frequencyValue = getLocal(item);
+        if (value && value !== '' && value !== '0' && frequencyValue && frequencyValue !== '' && frequencyValue !== '0') {
+            output += `${item.replace('_frequency', '')}: ${frequencyValue}\n`;
         }
     });
     return output ? `${prefix} Frequencies:\n${output}\n` : '';
