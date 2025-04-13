@@ -296,4 +296,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.location.href = './income.html';
     };
+
+    function updateDependantVisibility() {
+        const selectedFilingStatus = filingStatusContainer.querySelector('.grid-item.selected');
+        if (selectedFilingStatus && /deps/.test(selectedFilingStatus.dataset.value)) {
+            // Logic for dependants is no longer needed as the dependant fields have been removed
+        }
+    }
+
+    filingStatusContainer.addEventListener('click', updateDependantVisibility);
+
+    // Initial visibility update
+    updateDependantVisibility();
 });
