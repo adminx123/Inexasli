@@ -1423,3 +1423,100 @@
        grid-template-columns: repeat(1, 1fr);
      }
    }
+
+   /* Import Inter font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
+.category-label {
+    display: block;
+    font-family: 'geist', sans-serif;
+    font-size: 16px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.rowa-l {
+    display: flex;
+    align-items: center; /* Centers vertically */
+    gap: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.rowa-l > * {
+    flex: 1; /* Proportional sizing */
+    font-family: 'Geist', sans-serif;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 0;
+}
+
+.rowa-l input[type="number"]::placeholder {
+    color: #999;
+    font-style: italic;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Percentage inputs */
+.rowa-l input[id$="_p1_percent"],
+.rowa-l input[id$="_p2_percent"] {
+    flex: 0 0 80px; /* Fixed width */
+}
+
+/* Shared input */
+.rowa-l input[id$="_shared"] {
+    background-color: #f9f9f9;
+}
+
+/* First row: You, Partner */
+.rowa-l:not(:has([id$="_shared"])) input:not([id$="_partner"]) {
+    order: 1;
+}
+
+.rowa-l:not(:has([id$="_shared"])) input[id$="_partner"] {
+    order: 2;
+}
+
+/* Second row: P1 %, Shared, P2 % */
+.rowa-l:has([id$="_shared"]) input[id$="_p1_percent"] {
+    order: 1;
+}
+
+.rowa-l:has([id$="_shared"]) input[id$="_shared"] {
+    order: 2;
+}
+
+.rowa-l:has([id$="_shared"]) input[id$="_p2_percent"] {
+    order: 3;
+}
+
+@media (min-width: 700px) {
+    .rowa-l {
+        flex-direction: row;
+    }
+    .category-label {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 699px) {
+    .rowa-l {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 5px;
+    }
+    .category-label {
+        font-size: 14px;
+    }
+    .rowa-l > * {
+        font-size: 12px;
+        padding: 6px;
+    }
+    .rowa-l input[id$="_p1_percent"],
+    .rowa-l input[id$="_p2_percent"] {
+        flex: 0 0 60px;
+    }
+}
