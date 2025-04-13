@@ -188,6 +188,6 @@ window.calculateNext = function () {
     });
 
     // Navigate to the next page
-    window.location.href = './intro.html';
+    window.location.href = '/budget/summary.html';
     return true;
 };
