@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedCountry = getLocal('selectedCountry');
     const savedSubregion = getLocal('selectedSubregion');
     const savedStatus = getLocal('fillingStatus');
+    const dependantsContainer = document.querySelector('.dependantsContainer');
 
     const filingOptions = {
         CAN: [
@@ -297,15 +298,24 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = './income.html';
     };
 
-    function updateDependantVisibility() {
+    function updateDependantsVisibility() {
         const selectedFilingStatus = filingStatusContainer.querySelector('.grid-item.selected');
         if (selectedFilingStatus && /deps/.test(selectedFilingStatus.dataset.value)) {
-            // Logic for dependants is no longer needed as the dependant fields have been removed
+            dependantsContainer.style.display = 'block';
+        } else {
+            dependantsContainer.style.display = 'none';
         }
     }
 
-    filingStatusContainer.addEventListener('click', updateDependantVisibility);
+    filingStatusContainer.addEventListener('click', (event) => {
+        const clickedItem = event.target.closest('.grid-item');
+        if (clickedItem) {
+            filingStatusContainer.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
+            clickedItem.classList.add('selected');
+            updateDependantsVisibility();
+        }
+    });
 
     // Initial visibility update
-    updateDependantVisibility();
+    updateDependantsVisibility();
 });

@@ -83,11 +83,14 @@
          </div>
          <div class="containerround"> 
              <form id="websiteDesignForm">
+                
                  <div id="filingStatusSection" style="display: none;">
                      <h2 style="text-align: center; font-size: 18px; margin-bottom:15px">Select Your Filing Status</h2>
                      <p style="text-align: center; font-size: 14px; margin-bottom: 10px;">This shapes your budget template for an AI financial report.</p>
                      <div id="filingStatusContainer"></div>
                  </div>
+
+
                  <h3 style="text-align: center; font-size: 16px; margin-top: 15px;">Personal Details (Optional)</h3>
                      <label for="ageSelf" class="category-label tooltip" data-tooltip="Your age affects credits like Canada’s Age Amount or USA’s Elderly Credit.">
                          Your Age<span class="tooltip-content"></span>
@@ -106,9 +109,9 @@
                      </select>
 
                    
-                    
+                    <div class="dependantsContainer">
                         <div class="checkbox-wrapper-2">
-                                 <input type="checkbox" id="dependants" class="sc-gJwTLC ikxBAC">
+                                 <input type="checkbox" id="dependants" class="sc-gJwTLC ikxBAC">this needs to be delted, if osmene selects filing status with dependants the the form shoudl show automatically although could be pets</input>
                              </div>
                              <label for="dependants" style="font-size: 14px;" class="tooltip" data-tooltip="Check to include dependants or pets in your budget.">
                                  Include Dependants or Pets<span class="tooltip-content"></span>
@@ -130,11 +133,11 @@
                          <label for="numAdultDependants" class="category-label tooltip" data-tooltip="Number of dependants 19 and over, for budgeting or disability credits.">
                              Number of Dependants 19 and Over<span class="tooltip-content"></span>
                          </label>
-                
+                </div>
 
 
 
-                     <div id="spouseFields">
+                     <div class="spouseFields">
                          <label for="ageSpouse" class="category-label tooltip" data-tooltip="Spouse’s age, if applicable, for spousal credits or benefits.">
                              Spouse’s Age<span class="tooltip-content"></span>
                          </label>
