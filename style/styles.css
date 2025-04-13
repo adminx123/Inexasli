@@ -370,7 +370,7 @@
   padding: 5px 0;
   width: 100%;
   display: block;
-  font-family: "Inter", sans-serif;
+  font-family: "Geist", sans-serif;
 }
    
    .checkbox-button-group {
@@ -959,43 +959,44 @@
    /* ==========================================================================
       Animations
       ========================================================================== */
-   .card-overlay {
-     position: relative;
-     height: 100px;
-     width: 100%;
-     max-width: 400px;
-     margin: 0 auto;
-   }
-   
-   .hoead-1,
-   .hoead-2,
-   .hoead-3,
-   .hoead-4,
-   .hoead-5 {
-     position: absolute;
-     top: 0;
-     left: 0;
-     width: 100%;
-     opacity: 0;
-   }
-   
-   .hoead-1 { animation: fadeInOut 1s forwards; animation-delay: 0s; }
-   .hoead-2 { animation: fadeInOut 1s forwards; animation-delay: 0.5s; }
-   .hoead-3 { animation: fadeInOut 1s forwards; animation-delay: 1s; }
-   .hoead-4 { animation: fadeIn 3s forwards; animation-delay: 2s; }
-   .hoead-5 { animation: fadeIn 1s forwards; animation-delay: 1.5s; }
-   
-   @keyframes fadeInOut {
-     0% { opacity: 0; transform: translateY(-20px); }
-     33.33% { opacity: 1; transform: translateY(0); }
-     66.67% { opacity: 1; transform: translateY(0); }
-     100% { opacity: 0; transform: translateY(20px); }
-   }
-   
-   @keyframes fadeIn {
-     0% { opacity: 0; transform: translateY(-20px); }
-     100% { opacity: 1; transform: translateY(0); }
-   }
+      .card-overlay {
+        position: relative;
+        height: 210px; /* Increased to fit .hoead-5 below others */
+        width: 100%;
+        max-width: 400px;
+      }
+      
+      .hoead-1,
+      .hoead-2,
+      .hoead-3,
+      .hoead-4 {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        opacity: 0;
+      }
+      
+      
+      
+      .hoead-1 { animation: fadeInOut 1s forwards; animation-delay: 0s; }
+      .hoead-2 { animation: fadeInOut 1s forwards; animation-delay: 0.5s; }
+      .hoead-3 { animation: fadeInOut 1s forwards; animation-delay: 1s; }
+      .hoead-4 { animation: fadeIn 3s forwards; animation-delay: 2s; }
+      .hoead-5 { animation: fadeIn 1s forwards; animation-delay: 1.5s; }
+      
+      @keyframes fadeInOut {
+        0% { opacity: 0; transform: translateY(-20px); }
+        33.33% { opacity: 1; transform: translateY(0); }
+        66.67% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(20px); }
+      }
+      
+      @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(-20px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
    
    /* ==========================================================================
       Miscellaneous
