@@ -181,22 +181,46 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateFilingStatus(country, savedStatus) {
         filingStatusContainer.innerHTML = '';
         if (country && (getLocal('selectedSubregion') || country === 'OTHER') && filingOptions[country]) {
-            filingStatusContainer.innerHTML = '';
+            const filingStatusDropdown = document.createElement('select');
+            filingStatusDropdown.id = 'filingStatus';
+            filingStatusDropdown.innerHTML = '<option value="">Select Filing Status</option>';
+            filingStatusContainer.appendChild(filingStatusDropdown);
+
+            const filingSubStatusDropdown = document.createElement('select');
+            filingSubStatusDropdown.id = 'filingSubStatus';
+            filingSubStatusDropdown.innerHTML = '<option value="">Select Sub-Status</option>';
+            filingStatusContainer.appendChild(filingSubStatusDropdown);
+
             filingOptions[country].forEach(option => {
-                const div = document.createElement('div');
-                div.className = 'grid-item';
-                div.dataset.value = option.value;
-                div.textContent = option.text;
-                div.style.margin = '8.5px';
-                if (savedStatus === option.value) div.classList.add('selected');
-                div.addEventListener('click', () => {
-                    filingStatusContainer.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
-                    div.classList.add('selected');
-                    setLocal('fillingStatus', option.value, 365);
-                    updateFormVisibility();
-                });
-                filingStatusContainer.appendChild(div);
+                const mainStatus = option.value.split('_')[0];
+                if (!filingStatusDropdown.querySelector(`option[value="${mainStatus}"]`)) {
+                    const mainOption = document.createElement('option');
+                    mainOption.value = mainStatus;
+                    mainOption.text = mainStatus.replace(/_/g, ' ');
+                    filingStatusDropdown.appendChild(mainOption);
+                }
             });
+
+            filingStatusDropdown.addEventListener('change', () => {
+                const status = filingStatusDropdown.value;
+                filingSubStatusDropdown.innerHTML = '<option value="">Select Sub-Status</option>';
+                if (status && filingOptions[country]) {
+                    filingOptions[country].filter(option => option.value.startsWith(status)).forEach(option => {
+                        const subOption = document.createElement('option');
+                        subOption.value = option.value;
+                        subOption.text = option.text;
+                        filingSubStatusDropdown.appendChild(subOption);
+                    });
+                }
+            });
+
+            if (savedStatus) {
+                const mainStatus = savedStatus.split('_')[0];
+                filingStatusDropdown.value = mainStatus;
+                filingStatusDropdown.dispatchEvent(new Event('change'));
+                filingSubStatusDropdown.value = savedStatus;
+            }
+
             filingStatusSection.style.display = 'block';
         } else {
             filingStatusSection.style.display = 'none';
