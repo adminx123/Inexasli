@@ -21,70 +21,7 @@
      <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
      <link rel="shortcut icon" href="/images/favicon.ico" />
      <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-     <style>
-         .grid-item {
-             padding: 10px;
-             border: 1px solid #ccc;
-             border-radius: 5px;
-             cursor: pointer;
-             text-align: center;
-             background-color: #f9f9f9;
-         }
-         .grid-item:hover {
-             background-color: #e0e0e0;
-         }
-         .grid-item.selected {
-             background-color: #28a745;
-             color: white;
-             border-color: #28a745;
-         }
-         #filingStatusContainer {
-             display: grid;
-             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-             gap: 10px;
-         }
-         .checkbox-wrapper-2 input[type="checkbox"] {
-             width: 20px;
-             height: 20px;
-             cursor: pointer;
-         }
-         .checkbox-wrapper-2 input[type="checkbox"].selected + label {
-             font-weight: bold;
-         }
-         select, input[type="number"] {
-             padding: 8px;
-             border: 1px solid #ccc;
-             border-radius: 4px;
-             width: 100%;
-             margin-bottom: 10px;
-         }
-         .containerround {
-             text-align: center;
-             margin-top: 20px;
-         }
-         button.enabled {
-             background-color: #28a745;
-             color: white;
-             cursor: pointer;
-         }
-         button.disabled {
-             background-color: #ccc;
-             cursor: not-allowed;
-         }
-         @keyframes pulse {
-             0% { transform: scale(1); }
-             50% { transform: scale(1.1); }
-             100% { transform: scale(1); }
-         }
-         button.pulse {
-             animation: pulse 1.5s infinite;
-         }
-         .category-label {
-             display: block;
-             font-size: 14px;
-             margin-bottom: 5px;
-         }
-     </style>
+    
  </head>
  <body>
      <a href="/"> 
@@ -151,8 +88,7 @@
                      <p style="text-align: center; font-size: 14px; margin-bottom: 10px;">This shapes your budget template for an AI financial report.</p>
                      <div id="filingStatusContainer"></div>
                  </div>
-                 <div id="personalDetailsSection" style="display: none;">
-                     <h3 style="text-align: center; font-size: 16px; margin-top: 15px;">Personal Details (Optional)</h3>
+                 <h3 style="text-align: center; font-size: 16px; margin-top: 15px;">Personal Details (Optional)</h3>
                      <label for="ageSelf" class="category-label tooltip" data-tooltip="Your age affects credits like Canada’s Age Amount or USA’s Elderly Credit.">
                          Your Age<span class="tooltip-content"></span>
                      </label>
@@ -168,7 +104,7 @@
                          <option value="retired">Retired</option>
                          <option value="student">Student</option>
                      </select>
-                     <div id="dependantsContainer" style="display: none;">
+                     <div id="dependantsContainer">
                          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
                              <div class="checkbox-wrapper-2">
                                  <input type="checkbox" id="dependants" class="sc-gJwTLC ikxBAC">
@@ -178,7 +114,7 @@
                              </label>
                          </div>
                      </div>
-                     <div id="dependantFields" style="display: none;">
+                     <div id="dependantFields">
                          <label for="numDependants" class="category-label tooltip" data-tooltip="Total number of dependants (children, adults, pets) for budgeting and credits.">
                              Number of Dependants<span class="tooltip-content"></span>
                          </label>
@@ -196,16 +132,13 @@
                          </label>
                          <input type="number" inputmode="numeric" id="numAdultDependants" min="0" style="display: block;">
                      </div>
-                     <div id="spouseFields" style="display: none;">
+                     <div id="spouseFields">
                          <label for="ageSpouse" class="category-label tooltip" data-tooltip="Spouse’s age, if applicable, for spousal credits or benefits.">
                              Spouse’s Age<span class="tooltip-content"></span>
                          </label>
                          <input type="number" inputmode="numeric" id="ageSpouse" min="0" style="display: block;">
-                        
                      </div>
-                    
-                
-                     <div id="debtContainer" style="display: none;">
+                     <div id="debtContainer">
                          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
                              <div class="checkbox-wrapper-2">
                                  <input type="checkbox" id="debt" class="sc-gJwTLC ikxBAC">
@@ -215,7 +148,6 @@
                              </label>
                          </div>
                      </div>
-                 </div>
              </form>
          </div>
          <div class="containerround">
