@@ -186,39 +186,23 @@ document.addEventListener('DOMContentLoaded', () => {
             filingStatusDropdown.innerHTML = '<option value="">Select Filing Status</option>';
             filingStatusContainer.appendChild(filingStatusDropdown);
 
-            const filingSubStatusDropdown = document.createElement('select');
-            filingSubStatusDropdown.id = 'filingSubStatus';
-            filingSubStatusDropdown.innerHTML = '<option value="">Select Sub-Status</option>';
-            filingStatusContainer.appendChild(filingSubStatusDropdown);
-
             filingOptions[country].forEach(option => {
-                const mainStatus = option.value.split('_')[0];
-                if (!filingStatusDropdown.querySelector(`option[value="${mainStatus}"]`)) {
-                    const mainOption = document.createElement('option');
-                    mainOption.value = mainStatus;
-                    mainOption.text = mainStatus.replace(/_/g, ' ');
-                    filingStatusDropdown.appendChild(mainOption);
-                }
+                const statusOption = document.createElement('option');
+                statusOption.value = option.value;
+                statusOption.text = option.text;
+                filingStatusDropdown.appendChild(statusOption);
             });
 
             filingStatusDropdown.addEventListener('change', () => {
-                const status = filingStatusDropdown.value;
-                filingSubStatusDropdown.innerHTML = '<option value="">Select Sub-Status</option>';
-                if (status && filingOptions[country]) {
-                    filingOptions[country].filter(option => option.value.startsWith(status)).forEach(option => {
-                        const subOption = document.createElement('option');
-                        subOption.value = option.value;
-                        subOption.text = option.text;
-                        filingSubStatusDropdown.appendChild(subOption);
-                    });
-                }
+                const selectedStatus = filingStatusDropdown.value;
+                setLocal('fillingStatus', selectedStatus, 365);
+                updateDependantsVisibility();
+                updateMaritalStatusVisibility();
             });
 
             if (savedStatus) {
-                const mainStatus = savedStatus.split('_')[0];
-                filingStatusDropdown.value = mainStatus;
+                filingStatusDropdown.value = savedStatus;
                 filingStatusDropdown.dispatchEvent(new Event('change'));
-                filingSubStatusDropdown.value = savedStatus;
             }
 
             filingStatusSection.style.display = 'block';
@@ -323,8 +307,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function updateDependantsVisibility() {
-        const selectedFilingStatus = filingStatusContainer.querySelector('.grid-item.selected');
-        if (selectedFilingStatus && /_deps/.test(selectedFilingStatus.dataset.value) && !/_no_deps/.test(selectedFilingStatus.dataset.value)) {
+        const filingStatusDropdown = document.getElementById('filingStatus');
+        const selectedFilingStatus = filingStatusDropdown.value;
+
+        if (selectedFilingStatus && /_deps/.test(selectedFilingStatus) && !/_no_deps/.test(selectedFilingStatus)) {
             dependantsContainer.style.display = 'block';
         } else {
             dependantsContainer.style.display = 'none';
@@ -332,10 +318,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateMaritalStatusVisibility() {
-        const selectedFilingStatus = filingStatusContainer.querySelector('.grid-item.selected');
-        if (selectedFilingStatus && /married|common_law/.test(selectedFilingStatus.dataset.value)) {
+        const filingStatusDropdown = document.getElementById('filingStatus');
+        const selectedFilingStatus = filingStatusDropdown.value;
+
+        if (selectedFilingStatus && /married|common_law/.test(selectedFilingStatus)) {
             document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'block');
         } else {
+            document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'none');
+        }
+    
+        // Explicitly hide spouse fields for "Single" or "Single, No Dependants"
+        if (selectedFilingStatus === 'single' || selectedFilingStatus === 'single_no_deps') {
             document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'none');
         }
     }
