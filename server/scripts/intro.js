@@ -307,6 +307,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function updateMaritalStatusVisibility() {
+        const selectedFilingStatus = filingStatusContainer.querySelector('.grid-item.selected');
+        if (selectedFilingStatus && /married|common_law/.test(selectedFilingStatus.dataset.value)) {
+            document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'block');
+        } else {
+            document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'none');
+        }
+    }
+
     filingStatusContainer.addEventListener('click', (event) => {
         const clickedItem = event.target.closest('.grid-item');
         if (clickedItem) {
@@ -321,9 +330,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             updateDependantsVisibility();
+            updateMaritalStatusVisibility();
         }
     });
 
     // Initial visibility update
     updateDependantsVisibility();
+    updateMaritalStatusVisibility();
 });
