@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const checkboxes = ['dependants', 'debt']; // Removed 'disabledSpouse' from the list
+    const checkboxes = ['dependants']; // Removed 'debt' from the list
 
     checkboxes.forEach(id => {
         const item = document.getElementById(id);

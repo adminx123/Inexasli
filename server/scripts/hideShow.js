@@ -11,7 +11,6 @@ import { getLocal } from '/server/scripts/getlocal.js';
 function updateVisibility() {
     const fillingStatus = getLocal('fillingStatus');
     const dependants = getLocal('dependants');
-    const debt = getLocal('debt');
     const styleElement = document.getElementById('hide-show-styles') || document.createElement('style');
 
     styleElement.id = 'hide-show-styles';
@@ -44,13 +43,10 @@ function updateVisibility() {
         `;
     }
 
-    // Dependants and Debt containers visibility
+    // Dependants container visibility
     styles += `
         .dependant-parent {
             display: ${dependants === 'checked' ? 'block !important' : 'none !important'};
-        }
-        .debt-parent {
-            display: ${debt === 'checked' ? 'block !important' : 'none !important'};
         }
     `;
 
@@ -61,7 +57,7 @@ function updateVisibility() {
 
     // Debug visibility
     try {
-        console.log(`[hideShow.js] Debugging on ${window.location.pathname}, fillingStatus: ${fillingStatus}, dependants: ${dependants}, debt: ${debt}`);
+        console.log(`[hideShow.js] Debugging on ${window.location.pathname}, fillingStatus: ${fillingStatus}, dependants: ${dependants}`);
 
         // Partner-clone rows (expense.html)
         const partnerRows = document.querySelectorAll('.partner-clone');
@@ -89,14 +85,10 @@ function updateVisibility() {
             });
         });
 
-        // Dependants and Debt containers
+        // Dependants container
         const dependantParent = document.querySelector('.dependant-parent');
         if (dependantParent) {
             console.log(`dependant-parent display: ${getComputedStyle(dependantParent).display}`);
-        }
-        const debtParent = document.querySelector('.debt-parent');
-        if (debtParent) {
-            console.log(`debt-parent display: ${getComputedStyle(debtParent).display}`);
         }
     } catch (error) {
         console.error(`[hideShow.js] Debugging error: ${error.message}`);
