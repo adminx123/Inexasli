@@ -20,13 +20,10 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="/style/styles.css">
 
-    <!-- Extended icon list -->
     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
     <link rel="shortcut icon" href="/images/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-
-    <link rel="manifest" href="/manifest.json">
 </head>
 
 <body>
@@ -35,114 +32,150 @@
     </a>
 
     <div class="tab-container">
-        <a href="./income.html" class="tab" data-location="income"
-            data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket."
-            onclick="calculateNext();">
-            Income
-            <span class="tooltip-content"></span>
-        </a>
-
-        <a href="./expense.html" class="tab" data-location="expense"
-            data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn."
-            onclick="calculateNext();">
-            Expense
-            <span class="tooltip-content"></span>
-        </a>
-
-        <a href="./asset.html" class="tab" data-location="asset"
-            data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection."
-            onclick="calculateNext();">
-            Asset
-            <span class="tooltip-content"></span>
-        </a>
-
-        <a href="#" class="tooltip tab active" data-location="liability"
-            data-tooltip="Money owed to others, which needs to be paid back. Examples: loans, mortgages, or credit card debts."
-            >
+        <a href="./income.html" class="tab" data-location="income" onclick="calculateNext();">Income</a>
+        <a href="./expense.html" class="tab" data-location="expense" onclick="calculateNext();">Expense</a>
+        <a href="./asset.html" class="tab" data-location="asset" onclick="calculateNext();">Asset</a>
+        <a href="#" class="tooltip tab active" data-location="liability" data-tooltip="Money owed to others, which needs to be paid back. Examples: loans, mortgages, or credit card debts.">
             Liability
             <span class="tooltip-content"></span>
         </a>
     </div>
 
-    <div class="container">
-        <h2 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1"
-            data-tooltip="A type of debt where the borrower receives a fixed amount of money upfront, which they repay over time through regular payments until the loan is fully paid off. Once the loan is settled, the account is closed, and the borrower must apply for a new loan if they need more funds.">
+    <div class="containerround">
+        <h2 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="A type of debt where the borrower receives a fixed amount of money upfront, which they repay over time through regular payments until the loan is fully paid off.">
             Input Non-Revolving Liabilities<span class="tooltip1-content"></span>
         </h2>
 
-        <div class="row">
-            <label for="liabilities_small_business_loan">Small Business Loan:</label>
-            <input type='number' inputmode="numeric" id="liabilities_small_business_loan">
-            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
-                id="liabilities_small_business_loan_percent" inputmode="numeric">
+        <label for="liabilities_small_business_loan" class="category-label tooltip" data-tooltip="Enter the value of small business loans for you, your partner, and shared (with percentage split, if applicable).">
+            <span class="tooltip-content"></span>
+            Small Business Loan:
+        </label>
+        <div class="rowa-l">
+            <input type="number" inputmode="numeric" id="liabilities_small_business_loan" placeholder="You">
+            <input type="number" inputmode="numeric" id="liabilities_small_business_loan_partner" placeholder="Partner">
+        </div>
+        <div class="rowa-l">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_small_business_loan_shared_p1_percent" placeholder="P1 %">
+            <input type="number" inputmode="numeric" id="liabilities_small_business_loan_shared" placeholder="Shared">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_small_business_loan_shared_p2_percent" placeholder="P2 %">
         </div>
 
-        <div class="row">
-            <label for="liabilities_primary_residence">Primary Residence, Mortgage:</label>
-            <input type='number' inputmode="numeric" id="liabilities_primary_residence">
-            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
-                id="liabilities_primary_residence_percent" inputmode="numeric">
+        <label for="liabilities_primary_residence" class="category-label tooltip" data-tooltip="Enter the value of primary residence mortgages for you, your partner, and shared (with percentage split, if applicable).">
+            <span class="tooltip-content"></span>
+            Primary Residence, Mortgage:
+        </label>
+        <div class="rowa-l">
+            <input type="number" inputmode="numeric" id="liabilities_primary_residence" placeholder="You">
+            <input type="number" inputmode="numeric" id="liabilities_primary_residence_partner" placeholder="Partner">
+        </div>
+        <div class="rowa-l">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_primary_residence_shared_p1_percent" placeholder="P1 %">
+            <input type="number" inputmode="numeric" id="liabilities_primary_residence_shared" placeholder="Shared">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_primary_residence_shared_p2_percent" placeholder="P2 %">
         </div>
 
-        <div class="row">
-            <label for="liabilities_investment_properties">Investment Property, Mortgage:</label>
-            <input type='number' inputmode="numeric" id="liabilities_investment_properties">
-            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
-                id="liabilities_investment_properties_percent" inputmode="numeric">
+        <label for="liabilities_investment_properties" class="category-label tooltip" data-tooltip="Enter the value of investment property mortgages for you, your partner, and shared (with percentage split, if applicable).">
+            <span class="tooltip-content"></span>
+            Investment Property, Mortgage:
+        </label>
+        <div class="rowa-l">
+            <input type="number" inputmode="numeric" id="liabilities_investment_properties" placeholder="You">
+            <input type="number" inputmode="numeric" id="liabilities_investment_properties_partner" placeholder="Partner">
+        </div>
+        <div class="rowa-l">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_investment_properties_shared_p1_percent" placeholder="P1 %">
+            <input type="number" inputmode="numeric" id="liabilities_investment_properties_shared" placeholder="Shared">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_investment_properties_shared_p2_percent" placeholder="P2 %">
         </div>
 
-        <div class="row">
-            <label for="liabilities_vehicle_loan">Vehicle Loan:</label>
-            <input type='number' inputmode="numeric" id="liabilities_vehicle_loan">
-            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
-                id="liabilities_vehicle_loan_percent" inputmode="numeric">
+        <label for="liabilities_vehicle_loan" class="category-label tooltip" data-tooltip="Enter the value of vehicle loans for you, your partner, and shared (with percentage split, if applicable).">
+            <span class="tooltip-content"></span>
+            Vehicle Loan:
+        </label>
+        <div class="rowa-l">
+            <input type="number" inputmode="numeric" id="liabilities_vehicle_loan" placeholder="You">
+            <input type="number" inputmode="numeric" id="liabilities_vehicle_loan_partner" placeholder="Partner">
+        </div>
+        <div class="rowa-l">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_vehicle_loan_shared_p1_percent" placeholder="P1 %">
+            <input type="number" inputmode="numeric" id="liabilities_vehicle_loan_shared" placeholder="Shared">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_vehicle_loan_shared_p2_percent" placeholder="P2 %">
         </div>
 
-        <div class="row">
-            <label for="liabilities_personal_debt" style="font-size: unset;" class="tooltip1"
-                data-tooltip="List money you owe, whether it's to personal connections (like borrowing from family) or business suppliers that hasn't been accounted for elsewhere. In a sole proprietorship, these liabilities are part of your personal financial responsibility.">
-                <span class="tooltip1-content"></span>
-                Accounts Payable:</label>
-            <input type='number' inputmode="numeric" id="liabilities_personal_debt">
-            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
-                id="liabilities_personal_debt_percent" inputmode="numeric">
+        <label for="liabilities_personal_debt" class="category-label tooltip" data-tooltip="Enter money owed to personal connections or business suppliers for you, your partner, and shared (with percentage split, if applicable).">
+            <span class="tooltip-content"></span>
+            Accounts Payable:
+        </label>
+        <div class="rowa-l">
+            <input type="number" inputmode="numeric" id="liabilities_personal_debt" placeholder="You">
+            <input type="number" inputmode="numeric" id="liabilities_personal_debt_partner" placeholder="Partner">
+        </div>
+        <div class="rowa-l">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_personal_debt_shared_p1_percent" placeholder="P1 %">
+            <input type="number" inputmode="numeric" id="liabilities_personal_debt_shared" placeholder="Shared">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_personal_debt_shared_p2_percent" placeholder="P2 %">
         </div>
     </div>
 
     <div class="containerround">
-        <h2 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1"
-            data-tooltip="Debts where you can borrow money up to a certain limit, pay it back, and borrow again. The amount you can borrow revolves as you pay off what you owe.">
+        <h2 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="Debts where you can borrow money up to a certain limit, pay it back, and borrow again.">
             Input Revolving Liabilities<span class="tooltip1-content"></span>
         </h2>
 
-        <div class="row">
-            <label for="liabilities_student_loan">Student Loan:</label>
-            <input type='number' inputmode="numeric" id="liabilities_student_loan">
-            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
-                id="liabilities_student_loan_percent" inputmode="numeric">
+        <label for="liabilities_student_loan" class="category-label tooltip" data-tooltip="Enter the value of student loans for you, your partner, and shared (with percentage split, if applicable).">
+            <span class="tooltip-content"></span>
+            Student Loan:
+        </label>
+        <div class="rowa-l">
+            <input type="number" inputmode="numeric" id="liabilities_student_loan" placeholder="You">
+            <input type="number" inputmode="numeric" id="liabilities_student_loan_partner" placeholder="Partner">
+        </div>
+        <div class="rowa-l">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_student_loan_shared_p1_percent" placeholder="P1 %">
+            <input type="number" inputmode="numeric" id="liabilities_student_loan_shared" placeholder="Shared">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_student_loan_shared_p2_percent" placeholder="P2 %">
         </div>
 
-        <div class="row">
-            <label for="liabilities_line_of_credit">Line of Credit:</label>
-            <input type='number' inputmode="numeric" id="liabilities_line_of_credit">
-            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
-                id="liabilities_line_of_credit_percent" inputmode="numeric">
+        <label for="liabilities_line_of_credit" class="category-label tooltip" data-tooltip="Enter the value of lines of credit for you, your partner, and shared (with percentage split, if applicable).">
+            <span class="tooltip-content"></span>
+            Line of Credit:
+        </label>
+        <div class="rowa-l">
+            <input type="number" inputmode="numeric" id="liabilities_line_of_credit" placeholder="You">
+            <input type="number" inputmode="numeric" id="liabilities_line_of_credit_partner" placeholder="Partner">
+        </div>
+        <div class="rowa-l">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_line_of_credit_shared_p1_percent" placeholder="P1 %">
+            <input type="number" inputmode="numeric" id="liabilities_line_of_credit_shared" placeholder="Shared">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_line_of_credit_shared_p2_percent" placeholder="P2 %">
         </div>
 
-        <div class="row">
-            <label for="liabilities_credit_card">Credit Card, Current Balance:</label>
-            <input type='number' inputmode="numeric" id="liabilities_credit_card">
-            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
-                id="liabilities_credit_card_percent" inputmode="numeric">
+        <label for="liabilities_credit_card" class="category-label tooltip" data-tooltip="Enter the value of credit card balances for you, your partner, and shared (with percentage split, if applicable).">
+            <span class="tooltip-content"></span>
+            Credit Card, Current Balance:
+        </label>
+        <div class="rowa-l">
+            <input type="number" inputmode="numeric" id="liabilities_credit_card" placeholder="You">
+            <input type="number" inputmode="numeric" id="liabilities_credit_card_partner" placeholder="Partner">
+        </div>
+        <div class="rowa-l">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_credit_card_shared_p1_percent" placeholder="P1 %">
+            <input type="number" inputmode="numeric" id="liabilities_credit_card_shared" placeholder="Shared">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_credit_card_shared_p2_percent" placeholder="P2 %">
         </div>
 
-        <div class="row">
-            <label for="liabilities_tax_arrears" style="font-size: unset;" class="tooltip1" data-tooltip="Total tax payable">
-                <span class="tooltip1-content"></span>
-                Tax Arrears:</label>
-            <input type='number' inputmode="numeric" id="liabilities_tax_arrears">
-            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
-                id="liabilities_tax_arrears_percent" inputmode="numeric">
+        <label for="liabilities_tax_arrears" class="category-label tooltip" data-tooltip="Enter the value of tax arrears for you, your partner, and shared (with percentage split, if applicable).">
+            <span class="tooltip-content"></span>
+            Tax Arrears:
+        </label>
+        <div class="rowa-l">
+            <input type="number" inputmode="numeric" id="liabilities_tax_arrears" placeholder="You">
+            <input type="number" inputmode="numeric" id="liabilities_tax_arrears_partner" placeholder="Partner">
+        </div>
+        <div class="rowa-l">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_tax_arrears_shared_p1_percent" placeholder="P1 %">
+            <input type="number" inputmode="numeric" id="liabilities_tax_arrears_shared" placeholder="Shared">
+            <input type="number" min="0" max="100" inputmode="numeric" id="liabilities_tax_arrears_shared_p2_percent" placeholder="P2 %">
         </div>
     </div>
 
@@ -150,10 +183,7 @@
         <button onclick="calculateNext()" class="nav-btn nav-right"><i class='bx nav-inner bx-right-arrow-alt'></i></button>
     </div>
 
-    <div class="hidden">
-        <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
-        <span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy formulation.</span>
-    </div>
+    
 
     <script src="/index.js"></script>
     <script src="/server/scripts/liability.js" type="module"></script>

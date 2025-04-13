@@ -1,8 +1,15 @@
-// hideShow.js
-// Existing imports or setup (if any, e.g., localStorage handling)
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */
+
 function updateVisibility() {
     const fillingStatus = localStorage.getItem('fillingStatus');
-    const partnerRows = document.querySelectorAll('.partner-clone');
     const styleElement = document.getElementById('hide-show-styles') || document.createElement('style');
 
     styleElement.id = 'hide-show-styles';
@@ -13,10 +20,22 @@ function updateVisibility() {
             .partner-clone {
                 display: flex !important;
             }
+            .rowa-l input[id$="_partner"],
+            .rowa-l input[id$="_shared"],
+            .rowa-l input[id$="_shared_p1_percent"],
+            .rowa-l input[id$="_shared_p2_percent"] {
+                display: inline-block !important;
+            }
         `;
     } else {
         styles += `
             .partner-clone {
+                display: none !important;
+            }
+            .rowa-l input[id$="_partner"],
+            .rowa-l input[id$="_shared"],
+            .rowa-l input[id$="_shared_p1_percent"],
+            .rowa-l input[id$="_shared_p2_percent"] {
                 display: none !important;
             }
         `;
@@ -27,38 +46,35 @@ function updateVisibility() {
         document.head.appendChild(styleElement);
     }
 
-    // Debug row visibility
+    // Debug visibility
     try {
         console.log(`[hideShow.js] Debugging on ${window.location.pathname}, fillingStatus: ${fillingStatus}`);
-        
-        // Partner-clone rows
+
+        // Partner-clone rows (for expense.html)
+        const partnerRows = document.querySelectorAll('.partner-clone');
         partnerRows.forEach(row => {
             const display = getComputedStyle(row).display;
             const parent = row.closest('.checkboxrow-container') || row.parentElement;
             const parentDisplay = parent ? getComputedStyle(parent).display : 'N/A';
-            console.log(`Partner row: ${row.id || row.className}, display: ${display}, parent display: ${parentDisplay}`);
-            
+            console.log(`Partner-clone row: ${row.id || row.className}, display: ${display}, parent display: ${parentDisplay}`);
             const inputs = row.querySelectorAll('input[type="number"], .checkbox-button-group');
             inputs.forEach(input => {
                 const inputDisplay = getComputedStyle(input).display;
                 const inputWidth = getComputedStyle(input).width;
-                console.log(`  Partner input: ${input.id || input.className}, display: ${inputDisplay}, width: ${inputWidth}`);
+                console.log(`  Partner-clone input: ${input.id || input.className}, display: ${inputDisplay}, width: ${inputWidth}`);
             });
         });
 
-        // Non-partner rows
-        const nonPartnerRows = document.querySelectorAll('.checkboxrow:not(.partner-clone)');
-        nonPartnerRows.forEach(row => {
+        // rowa-l inputs (for asset.html, liability.html)
+        const rowaLRows = document.querySelectorAll('.rowa-l');
+        rowaLRows.forEach(row => {
             const display = getComputedStyle(row).display;
-            const parent = row.closest('.checkboxrow-container') || row.parentElement;
-            const parentDisplay = parent ? getComputedStyle(parent).display : 'N/A';
-            console.log(`Non-partner row: ${row.id || row.className}, display: ${display}, parent display: ${parentDisplay}`);
-            
-            const inputs = row.querySelectorAll('input[type="number"], .checkbox-button-group');
+            console.log(`rowa-l row: ${row.id || row.className}, display: ${display}`);
+            const inputs = row.querySelectorAll('input[type="number"]');
             inputs.forEach(input => {
                 const inputDisplay = getComputedStyle(input).display;
                 const inputWidth = getComputedStyle(input).width;
-                console.log(`  Non-partner input: ${input.id || input.className}, display: ${inputDisplay}, width: ${inputWidth}`);
+                console.log(`  rowa-l input: ${input.id}, display: ${inputDisplay}, width: ${inputWidth}`);
             });
         });
     } catch (error) {
@@ -66,10 +82,10 @@ function updateVisibility() {
     }
 }
 
-// Run visibility update on DOM load or status change
+// Run visibility update on DOM load
 document.addEventListener('DOMContentLoaded', updateVisibility);
 
-// Optional: Re-run if fillingStatus changes (e.g., via user toggle)
+// Re-run if fillingStatus changes
 window.addEventListener('storage', (event) => {
     if (event.key === 'fillingStatus') {
         updateVisibility();
