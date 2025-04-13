@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateDependantsVisibility() {
         const selectedFilingStatus = filingStatusContainer.querySelector('.grid-item.selected');
-        if (selectedFilingStatus && /deps/.test(selectedFilingStatus.dataset.value)) {
+        if (selectedFilingStatus && /_deps/.test(selectedFilingStatus.dataset.value) && !/_no_deps/.test(selectedFilingStatus.dataset.value)) {
             dependantsContainer.style.display = 'block';
         } else {
             dependantsContainer.style.display = 'none';
