@@ -121,6 +121,7 @@ function generateFinancialPrompt() {
     const summaryContainer = document.querySelector('.summary-container');
     if (summaryContainer) {
         summaryContainer.style.display = 'block';
+        expandSummaryContainer(); // Expand all contents
     }
 }
 
@@ -179,6 +180,16 @@ function addFrequencyItemsToPrompt(prompt) {
     }
 
     return prompt;
+}
+
+function expandSummaryContainer() {
+    const summaryContainer = document.querySelector('.summary-container');
+    if (summaryContainer) {
+        const detailsElements = summaryContainer.querySelectorAll('details');
+        detailsElements.forEach(details => {
+            details.open = true; // Expand all <details> elements
+        });
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
