@@ -12,8 +12,13 @@
 
 import { setLocal } from '/server/scripts/setlocal.js'; // Adjust path as needed
 
-// Function to overwrite cookies and clear input fields when they exist
+// Add a confirmation prompt before overwriting cookies
 export function overwriteCookies() {
+    if (!confirm("Are you sure you want to overwrite all cookies and clear input fields? This action cannot be undone.")) {
+        console.log("User canceled the overwrite action.");
+        return; // Exit the function if the user cancels
+    }
+
     const formElements = [
         'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop',
         'income_investment_property', 'income_capital_gains_losses', 'income_interest',
