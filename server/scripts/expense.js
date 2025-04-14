@@ -318,10 +318,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Navigation and calculation functions
+// Ensure calculateNext is attached to the global window object
 window.calculateNext = function() {
   calculateAll();
   window.location.href = '/budget/asset.html';
 };
+
+// Debugging: Confirm calculateNext is attached to window
+console.log('calculateNext attached to window:', window.calculateNext);
 
 window.calculateAll = function() {
   calculateNormalizedSum();
