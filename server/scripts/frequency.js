@@ -60,10 +60,9 @@ function initializeFrequencyGroup(frequencyId) {
         return;
     }
 
-    const isPartnerGroup = frequencyId.includes('_partner');
     const savedFrequency = getLocal(`frequency_${frequencyId}`);
     const defaultFrequency = 'annually';
-    const frequencyToSet = isPartnerGroup ? (savedFrequency || defaultFrequency) : (savedFrequency || defaultFrequency);
+    const frequencyToSet = savedFrequency || defaultFrequency;
 
     let checkedCount = 0;
     checkboxes.forEach(checkbox => {
@@ -71,6 +70,7 @@ function initializeFrequencyGroup(frequencyId) {
         if (checkbox.checked) checkedCount++;
     });
 
+    // Ensure only one checkbox is checked
     if (checkedCount > 1) {
         checkboxes.forEach(checkbox => {
             checkbox.checked = checkbox.value === defaultFrequency;
@@ -79,13 +79,15 @@ function initializeFrequencyGroup(frequencyId) {
         console.log(`Corrected multiple selections in ${frequencyId}, set to ${defaultFrequency}`);
     } else if (checkedCount === 0) {
         checkboxes.forEach(checkbox => {
-            checkbox.checked = checkbox.value === frequencyToSet;
+            checkbox.checked = checkbox.value === defaultFrequency;
         });
-        setLocal(`frequency_${frequencyId}`, frequencyToSet, 365);
+        setLocal(`frequency_${frequencyId}`, defaultFrequency, 365);
     }
 
+    // Save the selected frequency
     setLocal(`frequency_${frequencyId}`, frequencyToSet, 365);
 
+    // Add event listeners for checkbox changes
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {
             if (this.checked) {
@@ -96,9 +98,13 @@ function initializeFrequencyGroup(frequencyId) {
                 });
                 setLocal(`frequency_${frequencyId}`, this.value, 365);
                 console.log(`Set frequency for ${frequencyId} to ${this.value}`);
+                // Trigger calculation if needed
+                if (typeof calculateAll === 'function') {
+                    calculateAll();
+                }
             } else {
+                // Prevent unchecking the only selected checkbox
                 this.checked = true;
-                setLocal(`frequency_${frequencyId}`, this.value, 365);
             }
         });
     });
@@ -106,21 +112,32 @@ function initializeFrequencyGroup(frequencyId) {
     console.log(`Initialized group: ${frequencyId}, set to: ${frequencyToSet}`);
 }
 
-// Initialize all frequency groups
-export function initializeFrequencyGroups(frequencyGroups) {
+// Initialize all frequency groups on page load
+export function initializeFrequencyGroups() {
+    const frequencyGroups = Array.from(document.querySelectorAll('[data-frequency-id]')).map(el => el.getAttribute('data-frequency-id'));
+    if (frequencyGroups.length === 0) {
+        console.warn('No frequency groups found to initialize.');
+        return;
+    }
     frequencyGroups.forEach(frequencyId => {
         initializeFrequencyGroup(frequencyId);
     });
 }
 
 // Save frequency group values
-export function saveFrequencyGroups(frequencyGroups) {
+export function saveFrequencyGroups() {
+    const frequencyGroups = Array.from(document.querySelectorAll('.checkbox-button-group')).map(el => el.id);
     frequencyGroups.forEach(frequencyId => {
         const group = document.getElementById(frequencyId);
         if (group) {
             const checkedCheckbox = group.querySelector('input[type="checkbox"]:checked');
-            const value = checkedCheckbox ? checkedCheckbox.value : '';
+            const value = checkedCheckbox ? checkedCheckbox.value : 'annually';
             setLocal(`frequency_${frequencyId}`, value, 365);
         }
     });
 }
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    initializeFrequencyGroups();
+});
