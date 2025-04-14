@@ -216,10 +216,12 @@ function getFrequencyMultiplier(frequency) {
 function calculateDisposableIncome() {
     const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
     const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
-    const tax = calculateAnnualTax();
-    const obligations = calculateGovernmentObligations();
+    const regionalTax = parseFloat(getLocal('REGIONALTAXANNUAL')) || 0;
+    const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
+    const otherTax = parseFloat(getLocal('OTHERTAXANNUAL')) || 0;
+    const obligations = parseFloat(getLocal('OTHEROBLIGATIONANNUAL')) || 0;
 
-    return income - expenses - tax - obligations;
+    return income - expenses - regionalTax - subregionalTax - otherTax - obligations;
 }
 
 // Calculate Annual Tax (free)
