@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         #subscribe-sidebar:hover {
-            background-color: #FFD700; /* Matches your premium hover color */
+            background-color:#D4AF37; /* Matches your premium hover color */
         }
 
         #subscribe-sidebar #close-sidebar {
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             font-weight: bold;
             color: #ffffff;
             background: #000000;
-            border: 2px solid #caa81f;
+            border: 2px solid #D4AF37;
             border-radius: 6px;
             cursor: pointer;
             font-family: "Geist", sans-serif;
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             display: inline-block;
             margin-left: 10px;
             padding: 4px 8px;
-            background-color: #d3bc0f;
+            background-color: #D4AF37;
             color: #ffffff;
             font-size: 0.75em;
             border-radius: 2px;
