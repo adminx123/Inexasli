@@ -13,22 +13,52 @@ import { getCookie } from '/server/scripts/getcookie.js';
 function injectStyles() {
   const styles = `
     #gotosummary {
-      position: fixed; bottom: 10px; right: 10px; z-index: 1000;
-      background-color: #f5f5f5; padding: 10px; border: 2px solid #000;
-      border-radius: 8px; box-shadow: 4px 4px 0 #000; display: inline-block;
-      transition: background-color 0.3s ease;
-    }
-    #gotosummary:hover { background-color:rgb(210, 210, 210); }
-    #summary-btn {
-      padding: 8px 15px; background: #000; color: #fff; border: 2px solid #000;
-      border-radius: 5px; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease;
-    }
-    #summary-btn:hover { background: #333; transform: translateY(-2px); }
-    #summary-btn:active { transform: translateY(0); }
-    @media (max-width: 768px) {
-      #gotosummary { padding: 5px; }
-      #summary-btn { padding: 6px 12px; font-size: 11px; }
-    }
+  position: fixed;
+  top: 2.5px;         /* move to top */
+  right: 10px;       /* keep on right */
+  z-index: 1000;
+  background-color: #f5f5f5;
+  padding: 5px;
+  border: 2px solid #000;
+  border-radius: 8px;
+  box-shadow: 4px 4px 0 #000;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+#gotosummary:hover {
+  background-color: rgb(210, 210, 210);
+}
+
+#summary-btn {
+  padding: 8px 8px;
+  background: #000;
+  color: #fff;
+  border: 2px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#summary-btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+#summary-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  #gotosummary {
+    padding: 5px;
+  }
+  #summary-btn {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+}
+
   `;
   const styleSheet = document.createElement('style');
   styleSheet.type = 'text/css';
