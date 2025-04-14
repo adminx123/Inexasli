@@ -182,50 +182,59 @@
           </span>
         </summary>
 
-        <details style="margin-top:10px;">
+  
 
 
-
-<summary>
-        <p style="margin-left:21px;">
-          <span class="tooltip1" data-tooltip="Total taxes owed, calculated from taxable income (gross minus deductions like SD in USA or BPA in Canada) using regional rates (e.g., USA federal/state, Canada federal/provincial). Includes income tax and full (USA) or 50% (Canada) capital gains tax; excludes obligations like CPP/Social Security. Use: Estimate tax burden.">            
-            <u>Total Tax Payable:</u><span class="tooltip1-content"></span><span id="TOTALTAXANNUAL" ></span>
-          </span>
-        </p>
-</summary>
-
-
-          <p style="margin-left:34px;">
-            <span class="tooltip1" data-tooltip="Regional taxes based on your data.">
-              <u>Regional Tax Payable:</u><span class="tooltip1-content"></span><span id="REGIONALTAXANNUAL" ></span>
-            </span>
-          </p>
           
-          <p style="margin-left:34px;">
-            <span class="tooltip1" data-tooltip="Subregion taxes from your inputs.">
-              <u>Subregion Tax Payable:</u><span class="tooltip1-content"></span><span id="SUBREGIONTAXANNUAL"></span>
-            </span>
-          </p>
-
-          <div class="usa-hide">
-            <p style="margin-left:34px;">
-              <span class="tooltip1" data-tooltip="Tax on profit from asset sales, calculated as 100% of capital gains added to taxable income. Based on your asset sale inputs; excludes losses offsetting gains. Use: Assess tax impact of investments.">               
-                 <u>Other Tax:</u><span class="tooltip1-content"></span><span id="OTHERTAXANNUAL" ></span>
-              </span>
-            </p>
-
-          </div>
-
-        </details>
-
-        <details style="margin-top:10px;">
-<summary>
-        <p style="margin-left:21px;">
-          <span class="tooltip1" data-tooltip="Other government obligations from your inputs.">
-            <u>Total Other Obligations:</u><span class="tooltip1-content"></span><span id="TOTALOBLIGATIONSANNUAL" ></span>
-          </span>
-        </p>
-</summary>
+            <details style="margin-top:10px;">
+              <summary>
+                <p style="margin-left:21px;">
+                  <span class="tooltip1" data-tooltip="Total taxes owed, calculated from taxable income (gross minus deductions like SD in USA or BPA in Canada) using regional rates (e.g., USA federal/state, Canada federal/provincial). Includes income tax and full (USA) or 50% (Canada) capital gains tax; excludes obligations like CPP/Social Security. Use: Estimate tax burden.">
+                    <u>Total Tax Payable:</u><span class="tooltip1-content"></span><span id="TOTALTAXANNUAL"></span>
+                  </span>
+                </p>
+              </summary>
+          
+              <p style="margin-left:34px;">
+                <span class="tooltip1" data-tooltip="Regional taxes based on your data.">
+                  <u>Regional Tax Payable:</u><span class="tooltip1-content"></span>
+                  <input type="number" id="REGIONALTAXANNUAL" step="0.01" min="0" placeholder="Enter amount">
+                </span>
+              </p>
+              
+              <p style="margin-left:34px;">
+                <span class="tooltip1" data-tooltip="Subregion taxes from your inputs.">
+                  <u>Subregion Tax Payable:</u><span class="tooltip1-content"></span>
+                  <input type="number" id="SUBREGIONTAXANNUAL" step="0.01" min="0" placeholder="Enter amount">
+                </span>
+              </p>
+          
+            
+                <p style="margin-left:34px;">
+                  <span class="tooltip1" data-tooltip="Tax on profit from asset sales, calculated as 100% of capital gains added to taxable income. Based on your asset sale inputs; excludes losses offsetting gains. Use: Assess tax impact of investments.">
+                    <u>Other Tax Payable (if applicable):</u><span class="tooltip1-content"></span>
+                    <input type="number" id="OTHERTAXANNUAL" step="0.01" min="0" placeholder="Enter amount">
+                  </span>
+                </p>
+             
+            </details>
+          
+            <details style="margin-top:10px;">
+              <summary>
+                <p style="margin-left:21px;">
+                  <span class="tooltip1" data-tooltip="Other government obligations from your inputs.">
+                    <u>Total Other Obligations:</u><span class="tooltip1-content"></span>
+                    <span id="OTHEROBLIGATIONANNUAL" ></span>                  
+                  </span>
+                </p>
+              </summary>
+           
+              <p style="margin-left:34px;">
+                <span class="tooltip1" data-tooltip="input collective amout of all othe robligations payable">
+                  <u>Other Obligations Payable:</u><span class="tooltip1-content"></span>
+                  <input type="number" id="OTHEROBLIGATIONANNUAL" step="0.01" min="0" placeholder="Enter amount">
+                </span>
+              </p>
           
 
 <!--
