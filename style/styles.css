@@ -159,17 +159,19 @@ a {
   width: 100%;
 }
 
+/* Updated input and select styles to make them wider and consistent */
 input[type="number"],
 input,
 select {
+  width: 345px; /* Further increased width by 15% */
+  height: 30px; /* Adjusted height for better visibility */
+  padding: 5px; /* Added padding for better usability */
+  font-size: 16px; /* Increased font size for readability */
+  box-sizing: border-box; /* Ensures padding and border are included in width/height */
   text-align: center;
-  padding: 0px; /* Consistent padding */
   outline: none;
   border: solid 1px #7c7c7c;
   background-color: transparent;
-  width: 150px; /* Consistent width */
-  height: 25px; /* Consistent height */
-  box-sizing: border-box;
   font-size: 14px; /* Explicit font size */
   line-height: 23px; /* Fits within 25px minus borders */
   -webkit-appearance: none; /* Remove default appearance */
