@@ -280,6 +280,7 @@
 
      </details>
  
+     <button class="generate-btn" data-prompt="financial">Generate IncomeIQ™ Prompt!</button>
 
       <!-- Premium: Taxes & Obligations -->
       <details style="margin-top:10px;">
@@ -290,6 +291,9 @@
         </summary>
 
         <details style="margin-top:10px;">
+
+
+
 <summary>
         <p style="margin-left:21px;">
           <span class="tooltip1" data-tooltip="Total taxes owed, calculated from taxable income (gross minus deductions like SD in USA or BPA in Canada) using regional rates (e.g., USA federal/state, Canada federal/provincial). Includes income tax and full (USA) or 50% (Canada) capital gains tax; excludes obligations like CPP/Social Security. Use: Estimate tax burden.">            
@@ -298,7 +302,7 @@
         </p>
 </summary>
 
-       
+
           <p style="margin-left:34px;">
             <span class="tooltip1" data-tooltip="Regional taxes based on your data.">
               <u>Regional Tax Payable:</u><span class="tooltip1-content"></span><span id="region_tax_sum" ></span>
@@ -537,8 +541,10 @@
 <script src="/index.js"></script>
 <script src="/server/scripts/hideShow.js" type="module"></script>
 <script src="/server/scripts/summary.js" type="module"></script>
+<script src="/server/scripts/generate.js" type="module"></script>
+<script src="/server/scripts/modal.js" type="module"></script>
+
 <script src="/server/scripts/paymentform.js" type="module"></script> <!-- Load as module -->
-<!-- Remove this line: <script src="/server/scripts/payment.js" type="module"></script> -->
 <script src="/server/scripts/toolTip.js"></script>
 <script src="/server/scripts/tray.js"></script>
 

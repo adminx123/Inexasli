@@ -397,3 +397,4 @@ function calculateGoal(isPaid) {
 document.getElementById('close-sidebar').addEventListener('click', function() {
     document.getElementById('subscribe-sidebar').style.display = 'none';
 });
+
