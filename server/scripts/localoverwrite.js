@@ -8,11 +8,9 @@
  * jurisdictions worldwide.
  */
 
-import { setLocal } from '/server/scripts/setlocal.js';
-
 export function localOverwrite() {
     // Confirm user wants to clear data
-    if (!confirm('Are you sure you want to overwrite all saved data? This will clear all inputs and settings.')) {
+    if (!confirm('Are you sure you want to delete all saved data? This will remove all inputs and settings from storage.')) {
         return;
     }
 
@@ -260,18 +258,16 @@ export function localOverwrite() {
         'fillingStatus' // For hideShow.js partner toggle
     ];
 
-    const value = ''; // Default value to clear cookies
-
-    // Overwrite all localStorage keys
-    formElements.forEach(function (cookieName) {
-        setLocal(cookieName, value, 365); // Set with 1-year expiry
+    // Delete all localStorage keys
+    formElements.forEach(function (key) {
+        localStorage.removeItem(key);
     });
 
     // Clear input fields that exist on the current page
     formElements.forEach(function (elementId) {
         const element = document.getElementById(elementId);
         if (element && element.type !== 'checkbox' && element.tagName !== 'SELECT') {
-            element.value = value;
+            element.value = '';
         }
     });
 
@@ -287,8 +283,8 @@ export function localOverwrite() {
     if (regionDropdown) regionDropdown.value = 'NONE';
     if (subregionDropdown) subregionDropdown.value = '';
 
-    console.log("All specified localStorage keys have been overwritten, inputs and UI elements cleared.");
-    alert("All data has been cleared successfully.");
+    console.log("All specified localStorage keys have been deleted, inputs and UI elements cleared.");
+    alert("All data has been deleted successfully.");
 }
 
 // Attach event listener to the overwrite link
