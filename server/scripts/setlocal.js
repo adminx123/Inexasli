@@ -1,15 +1,22 @@
 function setLocal(name, value, days) {
-    // Skip setting localStorage if the value is empty
+    // Handle undefined, null, or empty values
     if (value === undefined || value === null || value === '') {
-        console.warn(`Skipping localStorage for ${name} because the value is empty.`);
-        return;
+        if (name.includes('_frequency')) {
+            value = 'annually';
+        } else if (name === 'RegionDropdown') {
+            value = 'NONE';
+        } else if (name === 'SubregionDropdown') {
+            value = '';
+        } else {
+            value = '0'; // General default
+        }
+    } else {
+        // Specific validation for RegionDropdown
+        if (name === 'RegionDropdown' && !['CAN', 'USA'].includes(value)) {
+            value = 'NONE';
+        }
     }
-
-    // Specific validation for RegionDropdown
-    if (name === 'RegionDropdown' && !['CAN', 'USA'].includes(value)) {
-        value = 'NONE';
-    }
-
+    
     // Store in localStorage (days ignored as localStorage doesn't expire)
     localStorage.setItem(name, encodeURIComponent(value));
 }

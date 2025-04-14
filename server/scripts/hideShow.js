@@ -1,106 +1,62 @@
-/*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
- */
-
+/* hideShow.js */
 import { getLocal } from '/server/scripts/getlocal.js';
+import { setLocal } from '/server/scripts/setlocal.js';
 
-function updateVisibility() {
-    const fillingStatus = getLocal('fillingStatus');
-    const dependants = getLocal('dependants');
-    const styleElement = document.getElementById('hide-show-styles') || document.createElement('style');
+function hideShowClass(className, task) {
+    const elements = document.getElementsByClassName(className);
+    if (elements.length === 0) {
+        console.warn(`No elements with class '${className}' found.`);
+        return;
+    }
+    Array.from(elements).forEach((element) => {
+        element.style.display = task === 'hide' ? 'none' : 'block';
+    });
+}
 
-    styleElement.id = 'hide-show-styles';
-    let styles = '';
+// Define the visibility logic as a reusable function
+function updateHideShow() {
+    const region = getLocal('RegionDropdown');
+    console.log('Region in hideShow.js:', region); // Debug
 
-    // Partner visibility for partnered filing statuses
-    if (/married|common_law|coupled|mfj|mfs/.test(fillingStatus)) {
-        styles += `
-            .partner-clone {
-                display: flex !important;
-            }
-            .rowa-l input[id$="_partner"],
-            .rowa-l input[id$="_shared"],
-            .rowa-l input[id$="_shared_p1_percent"],
-            .rowa-l input[id$="_shared_p2_percent"] {
-                display: inline-block !important;
-            }
-        `;
+    // Inject CSS to enforce hiding (optional, but ensures precedence)
+    let styleSheet = document.getElementById('hide-show-styles');
+    if (!styleSheet) {
+        styleSheet = document.createElement('style');
+        styleSheet.id = 'hide-show-styles';
+        document.head.appendChild(styleSheet);
+    }
+
+    if (region === 'CAN') {
+        hideShowClass('usa-hide', 'hide');
+        hideShowClass('can-hide', 'show');
+        styleSheet.textContent = `.usa-hide { display: none !important; } .can-hide { display: block !important; }`;
+    } else if (region === 'USA') {
+        hideShowClass('usa-hide', 'show');
+        hideShowClass('can-hide', 'hide');
+        styleSheet.textContent = `.usa-hide { display: block !important; } .can-hide { display: none !important; }`;
     } else {
-        styles += `
-            .partner-clone {
-                display: none !important;
-            }
-            .rowa-l input[id$="_partner"],
-            .rowa-l input[id$="_shared"],
-            .rowa-l input[id$="_shared_p1_percent"],
-            .rowa-l input[id$="_shared_p2_percent"] {
-                display: none !important;
-            }
-        `;
-    }
-
-    // Dependants container visibility
-    styles += `
-        .dependant-parent {
-            display: ${dependants === 'checked' ? 'block !important' : 'none !important'};
-        }
-    `;
-
-    styleElement.textContent = styles;
-    if (!document.getElementById('hide-show-styles')) {
-        document.head.appendChild(styleElement);
-    }
-
-    // Debug visibility
-    try {
-        console.log(`[hideShow.js] Debugging on ${window.location.pathname}, fillingStatus: ${fillingStatus}, dependants: ${dependants}`);
-
-        // Partner-clone rows (expense.html)
-        const partnerRows = document.querySelectorAll('.partner-clone');
-        partnerRows.forEach(row => {
-            const display = getComputedStyle(row).display;
-            const parent = row.closest('.checkboxrow-container') || row.parentElement;
-            const parentDisplay = parent ? getComputedStyle(parent).display : 'N/A';
-            console.log(`Partner-clone row: ${row.id || row.className}, display: ${display}, parent display: ${parentDisplay}`);
-            const inputs = row.querySelectorAll('input[type="number"], .checkbox-button-group');
-            inputs.forEach(input => {
-                const inputDisplay = getComputedStyle(input).display;
-                console.log(`  Partner-clone input: ${input.id || input.className}, display: ${inputDisplay}`);
-            });
-        });
-
-        // rowa-l inputs (asset.html, liability.html)
-        const rowaLRows = document.querySelectorAll('.rowa-l');
-        rowaLRows.forEach(row => {
-            const display = getComputedStyle(row).display;
-            console.log(`rowa-l row: ${row.id || row.className}, display: ${display}`);
-            const inputs = row.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => {
-                const inputDisplay = getComputedStyle(input).display;
-                console.log(`  rowa-l input: ${input.id}, display: ${inputDisplay}`);
-            });
-        });
-
-        // Dependants container
-        const dependantParent = document.querySelector('.dependant-parent');
-        if (dependantParent) {
-            console.log(`dependant-parent display: ${getComputedStyle(dependantParent).display}`);
-        }
-    } catch (error) {
-        console.error(`[hideShow.js] Debugging error: ${error.message}`);
+        hideShowClass('usa-hide', 'hide');
+        hideShowClass('can-hide', 'hide');
+        styleSheet.textContent = `.usa-hide { display: none !important; } .can-hide { display: none !important; }`;
     }
 }
 
-// Run visibility update on DOM load
-document.addEventListener('DOMContentLoaded', updateVisibility);
+const regionDropdown = document.getElementById('RegionDropdown');
 
-// Re-run if fillingStatus, dependants, or debt changes
-window.addEventListener('storage', (event) => {
-    if (event.key === 'fillingStatus' || event.key === 'dependants' || event.key === 'debt') {
-        updateVisibility();
-    }
+regionDropdown.addEventListener('change', () => {
+    const region = regionDropdown.value;
+    console.log(`Region changed to: ${region}`); // Debug log
+
+    // Update localStorage with the new region value
+    setLocal('RegionDropdown', region);
+
+    // Call updateHideShow to handle all visibility updates
+    updateHideShow();
 });
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', () => {
+    updateHideShow();
+});
+
+export { hideShowClass, updateHideShow }; // Export both functions

@@ -1,4 +1,4 @@
-<!--
+<!-- /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
@@ -6,146 +6,143 @@
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
- -->
+ */ -->
 
- <!DOCTYPE html>
- <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
+
  <head>
-     <link rel="manifest" href="/manifest.json">
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-     <title>IncomeIQ™ Intro</title>
-     <link rel="stylesheet" href="/style/styles.css">
+        <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>INTRO</title>
+
+	 <link rel="stylesheet" href="/style/styles.css"> 
      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-     <link rel="shortcut icon" href="/images/favicon.ico" />
-     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-    
- </head>
- <body>
-     <a href="/"> 
-         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 0px;">
-     </a>
-     <br>
-     
-         <div class="containerround">
-             <div class="benefit-card" style="margin-top: 15px;">
-                 <h2 style="text-align: center; font-size: 25px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">|   IncomeIQ™   |</h2>
-                 <h2 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">Ready to Unlock the Power of Financial Clarity?</h2>
-                 <p style="text-align: center; color: rgb(0, 0, 0); font-size: 14px; margin-bottom: 10px;">Save time and find relief—master your money fast with a free tool that cuts the bullshit and shows how income, expenses, and more click together.</p>       
-                 <p style="text-align: center; color: rgb(0, 0, 0); font-size: 14px; margin-bottom: 15px; font-style: italic;">Embrace the confidence of financial smarts with deeper insights into the four pillars of personal finances to play with—for education only, so you’re ready to team up with a pro for the real moves.</p>
-             </div>  
-         </div>
-     
+<!-- this is an extended list of places icon could be needed -->
+<link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+<link rel="shortcut icon" href="/images/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
 
-
-     
-       
   
 
-     
-         <div class="containerround">
-             <h2 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="Where you’re legally considered to live for tax purposes, based on factors like time spent or ties to the country.">
-                 Select Tax Residency<span class="tooltip1-content"></span>
-             </h2>
-             <label for="country" class="category-label">Country</label>
-             <select id="country">
-                 <option value="">Select Country</option>
-                 <option value="CAN">Canada</option>
-                 <option value="USA">USA</option>
-                 <option value="UK">United Kingdom</option>
-                 <option value="AUS">Australia</option>
-                 <option value="OTHER">Other</option>
-             </select>
-             <div id="subregionContainer" style="display: none;">
-                 <label for="subregion" class="category-label">Tax Subregion</label>
-                 <select id="subregion">
-                     <option value="">Select Tax Subregion</option>
-                 </select>
-             </div>
-         </div>
-
-         <div class="containerround"> 
-             <form id="websiteDesignForm">
-                
-                 <div id="filingStatusSection" style="display: none;">
-                     <h2 style="text-align: center; font-size: 18px; margin-bottom:15px">Select Your Filing Status</h2>
-                     <p style="text-align: center; font-size: 14px; margin-bottom: 10px;">This shapes your budget template for an AI financial report.</p>
-                     <div id="filingStatusContainer" class="grid-container">
-                         <div class="grid-item">Single</div>
-                         <div class="grid-item">Common Law</div>
-                         <div class="grid-item">Married</div>
-                         <div class="grid-item">Widowed</div>
-                     </div>
-                 </div>
-
-                </div>
+</head>
 
 
-<div class="specifics">
-<div class="containerround">
-                <h3 style="text-align: center; font-size: 16px; margin-top: 15px;">Personal Details (Optional)</h3>
-                     <label for="ageSelf" class="category-label tooltip" data-tooltip="Your age affects credits like Canada’s Age Amount or USA’s Elderly Credit.">
-                         Your Age<span class="tooltip-content"></span>
-                     </label>
-                     <input type="number" inputmode="numeric" id="ageSelf" min="0" style="display: block;">
-                     
-                     <div class="spouseFields">
-                         <label for="ageSpouse" class="category-label tooltip" data-tooltip="Spouse’s age, if applicable, for spousal credits or benefits.">
-                             Spouse’s Age<span class="tooltip-content"></span>
-                         </label>
-                         <input type="number" inputmode="numeric" id="ageSpouse" min="0" style="display: block;">
-                     </div>
 
-                     <label for="employmentStatus" class="category-label tooltip" data-tooltip="Your employment status affects benefits like Canada’s EI or USA’s EITC.">
-                         Employment Status<span class="tooltip-content"></span>
-                     </label>
-                     <select id="employmentStatus" style="display: block;">
-                         <option value="">Select Employment Status</option>
-                         <option value="employed">Employed</option>
-                         <option value="self_employed">Self-Employed</option>
-                         <option value="unemployed">Unemployed</option>
-                         <option value="retired">Retired</option>
-                         <option value="student">Student</option>
-                     </select>
 
-                   
-                    <div class="dependantsContainer">
-                        
-              
-                         <label for="numDependants" class="category-label tooltip" data-tooltip="Total number of dependants (children, adults, pets) for budgeting and credits.">
-                             Number of Dependants<span class="tooltip-content"></span>
-                         </label>
-                         <input type="number" inputmode="numeric" id="numDependants" min="0" style="display: block;">
-                         
-                         <label for="numDisabledDependants" class="category-label tooltip" data-tooltip="Number of dependants with disabilities, qualifying for credits like Canada’s DTC or USA’s Child Tax Credit.">
-                             Number of Disabled Dependants<span class="tooltip-content"></span>
-                         </label>
-                         <input type="number" inputmode="numeric" id="numDisabledDependants" min="0" style="display: block;">
+<body>
 
-                         <label for="numChildrenUnder19" class="category-label tooltip" data-tooltip="Number of dependants under 19, eligible for benefits like Canada Child Benefit or UK Child Benefit.">
-                             Number of Dependants Under 19<span class="tooltip-content"></span>
-                         </label>
-                         <input type="number" inputmode="numeric" id="numChildrenUnder19" min="0" style="display: block;">
-                         
-                         <label for="numAdultDependants" class="category-label tooltip" data-tooltip="Number of dependants 19 and over, for budgeting or disability credits.">
-                             Number of Dependants 19 and Over<span class="tooltip-content"></span>
-                         </label>
-                         <input type="number" inputmode="numeric" id="numAdultDependants" min="0" style="display: block;">
-                </div>
-</div>
+  <a href ="/"> 
+    <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 0px;" onclick="calculateAll();">
+  </a>
 
-</div>
+	<br>
+	
+  
 
-             </form>
+
+
       
-         <div class="containerround">
-             <button style="width: 150px; padding: 10px 20px; display: block; margin-left: auto; margin-right: auto;" onclick="nextPage()" class="disabled">Proceed</button>
-         </div>
-     </div>
-     <script src="/index.js"></script>
-     <script src="/server/scripts/tray.js"></script>
-     <script src="/server/scripts/intro.js" type="module"></script>
- </body>
- </html>
+<div class="hoead-4">
+
+<div class="containerround">
+      <div class="benefit-card" style="margin-top: 15px;">
+        <h2 style="text-align: center; font-size: 25px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">|   IncomeIQ™   |</h2>
+
+        <h2 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">Ready to Unlock the Power of Financial Clarity?</h2>
+        <p  style="text-align: center; color: rgb(0, 0, 0); font-size: 14px; margin-bottom: 10px;">Save time and find relief—master your money fast with a free tool that cuts the bullshit and shows how income, expenses, and more click together.</p>       
+         <p style="text-align: center; color: rgb(0, 0, 0); font-size: 14px; margin-bottom: 15px; font-style: italic;">Embrace the confidence of financial smarts with deeper insights into the four pillars of personal finances to play with—for education only, so you’re ready to team up with a pro for the real moves.</p>
+     </div>  
+      
+    </div>
+</div>
+
+
+
+<div class="card-overlay">
+    <div class="hoead-1">
+        <div class="containerround">
+            <div class="benefit-card"><h3>Estimate.</h3></div>
+        </div>
+    </div>
+    <div class="hoead-2">
+        <div class="containerround">
+            <div class="benefit-card"><h3>Educate.</h3></div>
+        </div>
+    </div>
+    <div class="hoead-3">
+        <div class="containerround">
+            <div class="benefit-card"><h3>Simulate.</h3></div>
+        </div>
+    </div>
+    <div class="hoead-5">
+        <div class="containerround">
+            <div class="benefit-card"><h3>Estimate. Educate. Simulate.</h3></div>
+        </div>
+    </div>
+</div>
+  
+
+<div class="hoead-4">
+    <div class = "containerround"> 
+      <form id = "websiteDesignForm">
+  
+  <h2 style="text-align: center; font-size: 18px; margin-bottom:15px">
+      Select all that apply</h2>  
+      
+  
+  
+  
+          <div class="grid-item" data-value="romanticincome" id="romanticincome" style="margin: 8.5px;">Shared Income 👫</div>
+  
+          <div class="grid-item" data-value="romanticexpense" id="romanticexpense"style="margin: 8.5px;">Shared Expenses 👫</div>
+  
+      
+
+
+          <div class="grid-item" data-value="romanticasset" id="romanticasset"style="margin: 8.5px;">Shared Assets 👫</div>
+          
+          <!-- New group -->
+          <div class="grid-item" data-value="romanticliability" id="romanticliability"style="margin: 8.5px;">Shared Liabilities 👫</div>
+      
+
+
+          <div class="grid-item" data-value="debtcheckbox" id="debtcheckbox"style="margin: 8.5px;">Debt payments excluding mortgage and auto loans.</div>
+          
+          <div class="grid-item" data-value="dependantcheckbox" id="dependantcheckbox"style="margin: 8.5px;">Dependants & / or pets.</div>
+  
+     
+  </div>
+  
+    
+
+
+
+</form>
+				   
+
+
+<div class= "containerround">
+
+<button style="width: 150px; padding: 10px 20px; display: block; margin-left: auto; margin-right: auto;" onclick="nextPage()">Proceed</button></div>
+ 
+</div>
+
+
+<script src="/index.js"></script>
+
+	  <script src="/server/scripts/tray.js"></script>
+<script src="/server/scripts/intro.js" type="module"></script>
+	
+</div>
+  
+</body>
+
+
+</html>
+
+ 
