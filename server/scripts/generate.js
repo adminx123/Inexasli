@@ -388,8 +388,13 @@ function addFrequencyItemsToPrompt(prompt) {
         const value = localStorage.getItem(key);
 
         if (key.includes('frequency')) {
-            frequencySection += `${key}: ${value}\n`;
-            hasFrequencyItems = true;
+            const correspondingKey = key.replace('frequency_', '').replace('_frequency', '');
+            const correspondingValue = localStorage.getItem(correspondingKey);
+
+            if (correspondingValue && correspondingValue.trim() !== '' && correspondingValue !== '0') {
+                frequencySection += `${key}: ${value}\n`;
+                hasFrequencyItems = true;
+            }
         }
     }
 
