@@ -344,12 +344,36 @@ Return all results in annual, monthly, and weekly frequencies where applicable, 
         prompt += `Employment Status: ${employmentStatus}\n`;
     }
 
-    prompt += formatSection(incomeFields, 'Income');
-    prompt += formatFrequencySection(incomeFrequencyFields, 'Income');
-    prompt += formatSection(expenseFields, 'Expenses');
-    prompt += formatFrequencySection(expenseFrequencyFields, 'Expenses');
-    prompt += formatSection(assetFields, 'Assets');
-    prompt += formatSection(liabilityFields, 'Liabilities');
+    // Exclude partner, shared, and percent fields from the generated prompt if filling status contains 'single'
+    if (fillingStatus && fillingStatus.includes('single')) {
+        const excludedKeys = [
+            'partner', 'shared', 'percent', 'percent'
+        ];
+
+        const filterKeys = (key) => {
+            return !excludedKeys.some(excluded => key.includes(excluded));
+        };
+
+        const filteredIncomeFields = incomeFields.filter(filterKeys);
+        const filteredExpenseFields = expenseFields.filter(filterKeys);
+        const filteredAssetFields = assetFields.filter(filterKeys);
+        const filteredLiabilityFields = liabilityFields.filter(filterKeys);
+
+        prompt += formatSection(filteredIncomeFields, 'Income');
+        prompt += formatFrequencySection(incomeFrequencyFields.filter(filterKeys), 'Income');
+        prompt += formatSection(filteredExpenseFields, 'Expenses');
+        prompt += formatFrequencySection(expenseFrequencyFields.filter(filterKeys), 'Expenses');
+        prompt += formatSection(filteredAssetFields, 'Assets');
+        prompt += formatSection(filteredLiabilityFields, 'Liabilities');
+    } else {
+        prompt += formatSection(incomeFields, 'Income');
+        prompt += formatFrequencySection(incomeFrequencyFields, 'Income');
+        prompt += formatSection(expenseFields, 'Expenses');
+        prompt += formatFrequencySection(expenseFrequencyFields, 'Expenses');
+        prompt += formatSection(assetFields, 'Assets');
+        prompt += formatSection(liabilityFields, 'Liabilities');
+    }
+
     prompt += formatSection(otherFields, 'Other Settings');
 
     prompt = addFrequencyItemsToPrompt(prompt);
