@@ -60,11 +60,10 @@ function checkLocalAndToggleButton() {
 
   const termsCheckbox = document.getElementById('termscheckbox');
   const notIntendedCheckbox = document.getElementById('notintended');
-  const regionDropdown = document.getElementById('RegionDropdown');
   const currentPage = window.location.pathname;
 
-  // Pages where only timestamp matters (no checkboxes/dropdown)
-  const timestampOnlyPages = ['/budget/expense.html', '/budget/asset.html', '/budget/liability.html'];
+  // Pages where only timestamp matters (no checkboxes)
+  const timestampOnlyPages = ['/budget/expense.html', '/budget/asset.html', '/budget/liability.html', '/budget/income.html'];
 
   if (summaryCookie) {
     const timestamp = summaryCookie.timestamp || 0;
@@ -74,7 +73,7 @@ function checkLocalAndToggleButton() {
     const isTimestampValid = timeDifference < fifteenMinutes;
 
     if (timestampOnlyPages.includes(currentPage)) {
-      // On expense.html, asset.html, liability.html: only check timestamp
+      // On timestamp-only pages: only check timestamp
       if (isTimestampValid) {
         summaryButtonContainer.style.display = 'inline-block';
         console.log('Button shown on timestamp-only page - timestamp < 15 min:', timeDifference / 1000, 'seconds');
@@ -83,20 +82,18 @@ function checkLocalAndToggleButton() {
         console.log('Button hidden on timestamp-only page - timestamp > 15 min:', timeDifference / 1000, 'seconds');
       }
     } else {
-      // On other pages: check timestamp + checkboxes + dropdown
-      if (termsCheckbox && notIntendedCheckbox && regionDropdown) {
+      // On other pages: check timestamp + checkboxes
+      if (termsCheckbox && notIntendedCheckbox) {
         const areCheckboxesChecked = termsCheckbox.checked && notIntendedCheckbox.checked;
-        const isRegionValid = regionDropdown.value !== "" && regionDropdown.value !== "NONE";
 
-        if (isTimestampValid && areCheckboxesChecked && isRegionValid) {
+        if (isTimestampValid && areCheckboxesChecked) {
           summaryButtonContainer.style.display = 'inline-block';
           console.log('Button shown - timestamp < 15 min and conditions met:', timeDifference / 1000, 'seconds');
         } else {
           summaryButtonContainer.style.display = 'none';
           console.log('Button hidden - conditions not met:', {
             timestampValid: isTimestampValid,
-            checkboxesChecked: areCheckboxesChecked,
-            regionValid: isRegionValid
+            checkboxesChecked: areCheckboxesChecked
           });
         }
       } else {
