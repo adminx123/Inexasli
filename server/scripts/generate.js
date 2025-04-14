@@ -116,6 +116,12 @@ function generateFinancialPrompt() {
         openGeneratedPromptModal();
         console.log(prompt); // Log for manual copy
     });
+
+    // Unhide the summary-container
+    const summaryContainer = document.querySelector('.summary-container');
+    if (summaryContainer) {
+        summaryContainer.style.display = 'block';
+    }
 }
 
 
