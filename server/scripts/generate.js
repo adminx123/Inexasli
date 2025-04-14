@@ -328,6 +328,16 @@ Return all results in annual, monthly, and weekly frequencies where applicable, 
         if (subregion) prompt += `Subregion: ${subregion}\n\n`;
     }
 
+    // Add ageSelf and ageSpouse to the prompt
+    const ageSelf = getLocal('ageSelf');
+    const ageSpouse = getLocal('ageSpouse');
+    if (ageSelf && ageSelf !== '0') {
+        prompt += `Age (Self): ${ageSelf}\n`;
+    }
+    if (ageSpouse && ageSpouse !== '0') {
+        prompt += `Age (Spouse): ${ageSpouse}\n`;
+    }
+
     prompt += formatSection(incomeFields, 'Income');
     prompt += formatFrequencySection(incomeFrequencyFields, 'Income');
     prompt += formatSection(expenseFields, 'Expenses');
