@@ -1279,3 +1279,7 @@ details p {
   vertical-align: top;   /* Ensures proper alignment */
   font-family: "Inter", sans-serif;
 }
+
+.summary-container {
+  display: none; /* Hidden initially */
+}

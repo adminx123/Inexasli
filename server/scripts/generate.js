@@ -2,32 +2,7 @@ import { getLocal } from '/server/scripts/getlocal.js';
 
 
 function generateFinancialPrompt() {
-    let prompt = `Analyze the following financial data to calculate and summarize the user's financial metrics. All monetary values should be in the user's currency based on their region (e.g., CAD for Canada, USD for USA). If the filling status indicates the user is filing with a partner (e.g., joint filing), account for this in tax calculations, such as combined income, shared deductions, or joint tax brackets, and present metrics for both the primary user and partner side by side. Provide the following calculations in code block format (e.g., \`\`\`text\n...\n\`\`\`), with clear headings and side-by-side columns for the primary user and partner (if applicable):
-
-1. **Taxable Income**: Gross income minus applicable deductions, accounting for capital gains inclusion based on region.
-2. **Taxes and Obligations**:
-   - Total Tax Payable: Federal, regional, and subregional taxes.
-   - Capital Gains Tax: Tax on asset sale profits.
-   - Other Obligations: Relevant government contributions (e.g., pension plans, employment insurance).
-3. **Income and Expenses**:
-   - Total Income: Sum of all income sources.
-   - Disposable Income: Income after taxes, obligations, and expenses.
-   - Total Expenses: Sum of all expense categories.
-   - Breakdown: Essential, discretionary, housing, transportation, dependant, debt expenses.
-4. **Wealth**:
-   - Total Assets: Sum of all asset values.
-   - Total Liabilities: Sum of all debts.
-   - Net Worth: Assets minus liabilities.
-5. **Financial Ratios**:
-   - Debt-to-Income: Liabilities divided by income.
-   - FIRE: Passive income divided by expenses.
-   - Housing-to-Income: Housing expenses divided by income.
-   - Savings-to-Debt: Savings divided by liabilities.
-6. **Projections**:
-   - Time to Pay Revolving Debt: Time to clear revolving debt using disposable income.
-   - Savings Goal Timeline: Time to reach a savings goal based on disposable income (use $10,000 if no goal provided).
-
-Return all results in annual, monthly, and weekly frequencies where applicable, in code block format, with side-by-side metrics for the primary user and partner (if filling status includes a partner). Ensure calculations are educational estimates, not financial advice, and suggest consulting a financial advisor for decisions.\n\n`;
+    let prompt = `Text goes here for what i want the prmpt so say`;
 
     // Check filling status
     const fillingStatus = getLocal('fillingStatus');
@@ -206,4 +181,11 @@ document.addEventListener('DOMContentLoaded', function () {
             generateFinancialPrompt();
         });
     });
+});
+
+document.querySelector('.generate-btn').addEventListener('click', function() {
+    // Existing prompt generation code
+    generateIncomeIQPrompt(); // Hypothetical function
+    // Show summary container
+    document.querySelector('.summary-container').style.display = 'block';
 });
