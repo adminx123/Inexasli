@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
@@ -11,22 +11,9 @@
 import { setLocal } from '/server/scripts/setlocal.js';
 import { getLocal } from '/server/scripts/getlocal.js';
 
-// Tab navigation handling (unchanged)
 const tabs = document.querySelectorAll('.tab');
 
-function handleTabClick(e) {
-    const dataL = e.currentTarget.getAttribute('data-location');
-    const location = document.location.pathname;
-
-    if (location.includes(dataL)) {
-        e.currentTarget.removeAttribute('href');
-        e.currentTarget.classList.add('active');
-    }
-}
-
 tabs.forEach(tab => {
-    tab.addEventListener('click', handleTabClick);
-
     const dataL = tab.getAttribute('data-location');
     const location = document.location.pathname;
 
@@ -36,169 +23,127 @@ tabs.forEach(tab => {
     }
 });
 
-// Form handling
-document.addEventListener('DOMContentLoaded', function () {
-    // List of all asset inputs
-    const assetElements = [
-        'assets_checking_accounts',
-        'assets_checking_accounts_partner',
-        'assets_checking_accounts_shared',
-        'assets_checking_accounts_shared_p1_percent',
-        'assets_checking_accounts_shared_p2_percent',
-        'assets_savings_accounts',
-        'assets_savings_accounts_partner',
-        'assets_savings_accounts_shared',
-        'assets_savings_accounts_shared_p1_percent',
-        'assets_savings_accounts_shared_p2_percent',
-        'assets_other_liquid_accounts',
-        'assets_other_liquid_accounts_partner',
-        'assets_other_liquid_accounts_shared',
-        'assets_other_liquid_accounts_shared_p1_percent',
-        'assets_other_liquid_accounts_shared_p2_percent',
-        'assets_money_lent_out',
-        'assets_money_lent_out_partner',
-        'assets_money_lent_out_shared',
-        'assets_money_lent_out_shared_p1_percent',
-        'assets_money_lent_out_shared_p2_percent',
-        'assets_long_term_investment_accounts',
-        'assets_long_term_investment_accounts_partner',
-        'assets_long_term_investment_accounts_shared',
-        'assets_long_term_investment_accounts_shared_p1_percent',
-        'assets_long_term_investment_accounts_shared_p2_percent',
-        'assets_investment_properties',
-        'assets_investment_properties_partner',
-        'assets_investment_properties_shared',
-        'assets_investment_properties_shared_p1_percent',
-        'assets_investment_properties_shared_p2_percent',
-        'assets_art_jewelry',
-        'assets_art_jewelry_partner',
-        'assets_art_jewelry_shared',
-        'assets_art_jewelry_shared_p1_percent',
-        'assets_art_jewelry_shared_p2_percent',
-        'assets_primary_residence',
-        'assets_primary_residence_partner',
-        'assets_primary_residence_shared',
-        'assets_primary_residence_shared_p1_percent',
-        'assets_primary_residence_shared_p2_percent',
-        'assets_small_business',
-        'assets_small_business_partner',
-        'assets_small_business_shared',
-        'assets_small_business_shared_p1_percent',
-        'assets_small_business_shared_p2_percent',
-        'assets_vehicles',
-        'assets_vehicles_partner',
-        'assets_vehicles_shared',
-        'assets_vehicles_shared_p1_percent',
-        'assets_vehicles_shared_p2_percent'
+var ASSETS;
+var LIQUIDASSETS;
+
+function calculateAssets() {
+    const assetFields = [
+        'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+        'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+        'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry'
     ];
 
-    // Restore saved form inputs
-    assetElements.forEach(function (elementId) {
-        const value = getLocal(elementId);
-        const element = document.getElementById(elementId);
-        if (element) {
-            element.value = value || '';
-        }
-    });
-});
+    let assets = 0;
 
-// Navigation function
-window.calculateNext = function () {
-    // List of assets for validation
-    const assets = [
-        'assets_checking_accounts',
-        'assets_savings_accounts',
-        'assets_other_liquid_accounts',
-        'assets_money_lent_out',
-        'assets_long_term_investment_accounts',
-        'assets_investment_properties',
-        'assets_art_jewelry',
-        'assets_primary_residence',
-        'assets_small_business',
-        'assets_vehicles'
-    ];
+    for (let i = 0; i < assetFields.length; i++) {
+        const fieldValue = document.getElementById(assetFields[i]).value;
+        console.log(`Field value for ${assetFields[i]}: ${fieldValue}`);
+        const parsedValue = parseFloat(fieldValue);
 
-    // Validate shared percentages
-    for (const asset of assets) {
-        const sharedInput = document.getElementById(`${asset}_shared`);
-        const p1Percent = document.getElementById(`${asset}_shared_p1_percent`);
-        const p2Percent = document.getElementById(`${asset}_shared_p2_percent`);
-
-        if (sharedInput && p1Percent && p2Percent) {
-            const sharedValue = parseFloat(sharedInput.value) || 0;
-            const p1Value = parseFloat(p1Percent.value) || 0;
-            const p2Value = parseFloat(p2Percent.value) || 0;
-
-            if (sharedValue > 0 && (p1Value + p2Value > 100)) {
-                alert(`Error: For ${asset.replace('assets_', '').replace('_', ' ')}, P1 % + P2 % cannot exceed 100%.`);
-                return false;
+        if (!isNaN(parsedValue)) {
+            let fieldPercentage = parseFloat(document.querySelector(`#${assetFields[i]}_percent`).value);
+            if (!fieldPercentage || isNaN(fieldPercentage)) {
+                fieldPercentage = 100;
             }
+            assets += (parsedValue * fieldPercentage / 100);
         }
     }
 
-    // List of all asset inputs
-    const assetElements = [
-        'assets_checking_accounts',
-        'assets_checking_accounts_partner',
-        'assets_checking_accounts_shared',
-        'assets_checking_accounts_shared_p1_percent',
-        'assets_checking_accounts_shared_p2_percent',
-        'assets_savings_accounts',
-        'assets_savings_accounts_partner',
-        'assets_savings_accounts_shared',
-        'assets_savings_accounts_shared_p1_percent',
-        'assets_savings_accounts_shared_p2_percent',
-        'assets_other_liquid_accounts',
-        'assets_other_liquid_accounts_partner',
-        'assets_other_liquid_accounts_shared',
-        'assets_other_liquid_accounts_shared_p1_percent',
-        'assets_other_liquid_accounts_shared_p2_percent',
-        'assets_money_lent_out',
-        'assets_money_lent_out_partner',
-        'assets_money_lent_out_shared',
-        'assets_money_lent_out_shared_p1_percent',
-        'assets_money_lent_out_shared_p2_percent',
-        'assets_long_term_investment_accounts',
-        'assets_long_term_investment_accounts_partner',
-        'assets_long_term_investment_accounts_shared',
-        'assets_long_term_investment_accounts_shared_p1_percent',
-        'assets_long_term_investment_accounts_shared_p2_percent',
-        'assets_investment_properties',
-        'assets_investment_properties_partner',
-        'assets_investment_properties_shared',
-        'assets_investment_properties_shared_p1_percent',
-        'assets_investment_properties_shared_p2_percent',
-        'assets_art_jewelry',
-        'assets_art_jewelry_partner',
-        'assets_art_jewelry_shared',
-        'assets_art_jewelry_shared_p1_percent',
-        'assets_art_jewelry_shared_p2_percent',
-        'assets_primary_residence',
-        'assets_primary_residence_partner',
-        'assets_primary_residence_shared',
-        'assets_primary_residence_shared_p1_percent',
-        'assets_primary_residence_shared_p2_percent',
-        'assets_small_business',
-        'assets_small_business_partner',
-        'assets_small_business_shared',
-        'assets_small_business_shared_p1_percent',
-        'assets_small_business_shared_p2_percent',
-        'assets_vehicles',
-        'assets_vehicles_partner',
-        'assets_vehicles_shared',
-        'assets_vehicles_shared_p1_percent',
-        'assets_vehicles_shared_p2_percent'
+    ASSETS = assets;
+    document.getElementById('ASSETS').textContent = '$' + ASSETS.toFixed(2);
+}
+
+function calculateLiquidAssets() {
+    const liquidAssetFields = [
+        'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+        'assets_money_lent_out'
     ];
 
-    // Save all user inputs
-    assetElements.forEach(function (elementId) {
+    let liquidAssets = 0;
+
+    for (let i = 0; i < liquidAssetFields.length; i++) {
+        const fieldValue = document.getElementById(liquidAssetFields[i]).value;
+        console.log(`Field value for ${liquidAssetFields[i]}: ${fieldValue}`);
+        const parsedValue = parseFloat(fieldValue);
+        const isPartner = getLocal('assetspousecheckbox') === 'checked';
+
+        if (!isNaN(parsedValue)) {
+            let fieldPercentage = parseFloat(document.querySelector(`#${liquidAssetFields[i]}_percent`).value);
+            if (!fieldPercentage || isNaN(fieldPercentage) || !isPartner) {
+                fieldPercentage = 100;
+            }
+            liquidAssets += (parsedValue * fieldPercentage / 100);
+        }
+    }
+
+    LIQUIDASSETS = liquidAssets;
+    document.getElementById('LIQUIDASSETS').textContent = '$' + LIQUIDASSETS.toFixed(2);
+}
+
+window.calculateNext = function () {
+    calculateAll();
+    window.location.href = '/budget/liability.html';
+};
+
+window.calculateBack = function () {
+    calculateAll();
+    window.location.href = 'expense.html';
+};
+
+window.calculateAll = function () {
+    calculateAssets();
+    calculateLiquidAssets();
+
+    setLocal("ASSETS", ASSETS, 365);
+    setLocal("LIQUIDASSETS", LIQUIDASSETS, 365);
+
+    setLocal("assets_checking_accounts", document.getElementById("assets_checking_accounts").value.trim() !== "" ? document.getElementById("assets_checking_accounts").value : "0", 365);
+    setLocal("assets_savings_accounts", document.getElementById("assets_savings_accounts").value.trim() !== "" ? document.getElementById("assets_savings_accounts").value : "0", 365);
+    setLocal("assets_other_liquid_accounts", document.getElementById("assets_other_liquid_accounts").value.trim() !== "" ? document.getElementById("assets_other_liquid_accounts").value : "0", 365);
+    setLocal("assets_money_lent_out", document.getElementById("assets_money_lent_out").value.trim() !== "" ? document.getElementById("assets_money_lent_out").value : "0", 365);
+    setLocal("assets_long_term_investment_accounts", document.getElementById("assets_long_term_investment_accounts").value.trim() !== "" ? document.getElementById("assets_long_term_investment_accounts").value : "0", 365);
+    setLocal("assets_primary_residence", document.getElementById("assets_primary_residence").value.trim() !== "" ? document.getElementById("assets_primary_residence").value : "0", 365);
+    setLocal("assets_investment_properties", document.getElementById("assets_investment_properties").value.trim() !== "" ? document.getElementById("assets_investment_properties").value : "0", 365);
+    setLocal("assets_small_business", document.getElementById("assets_small_business").value.trim() !== "" ? document.getElementById("assets_small_business").value : "0", 365);
+    setLocal("assets_vehicles", document.getElementById("assets_vehicles").value.trim() !== "" ? document.getElementById("assets_vehicles").value : "0", 365);
+    setLocal("assets_art_jewelry", document.getElementById("assets_art_jewelry").value.trim() !== "" ? document.getElementById("assets_art_jewelry").value : "0", 365);
+
+    setLocal("assets_checking_accounts_percent", document.getElementById("assets_checking_accounts_percent").value.trim() !== "" ? document.getElementById("assets_checking_accounts_percent").value : "100", 365);
+    setLocal("assets_savings_accounts_percent", document.getElementById("assets_savings_accounts_percent").value.trim() !== "" ? document.getElementById("assets_savings_accounts_percent").value : "100", 365);
+    setLocal("assets_other_liquid_accounts_percent", document.getElementById("assets_other_liquid_accounts_percent").value.trim() !== "" ? document.getElementById("assets_other_liquid_accounts_percent").value : "100", 365);
+    setLocal("assets_money_lent_out_percent", document.getElementById("assets_money_lent_out_percent").value.trim() !== "" ? document.getElementById("assets_money_lent_out_percent").value : "100", 365);
+    setLocal("assets_long_term_investment_accounts_percent", document.getElementById("assets_long_term_investment_accounts_percent").value.trim() !== "" ? document.getElementById("assets_long_term_investment_accounts_percent").value : "100", 365);
+    setLocal("assets_primary_residence_percent", document.getElementById("assets_primary_residence_percent").value.trim() !== "" ? document.getElementById("assets_primary_residence_percent").value : "100", 365);
+    setLocal("assets_investment_properties_percent", document.getElementById("assets_investment_properties_percent").value.trim() !== "" ? document.getElementById("assets_investment_properties_percent").value : "100", 365);
+    setLocal("assets_small_business_percent", document.getElementById("assets_small_business_percent").value.trim() !== "" ? document.getElementById("assets_small_business_percent").value : "100", 365);
+    setLocal("assets_vehicles_percent", document.getElementById("assets_vehicles_percent").value.trim() !== "" ? document.getElementById("assets_vehicles_percent").value : "100", 365);
+    setLocal("assets_art_jewelry_percent", document.getElementById("assets_art_jewelry_percent").value.trim() !== "" ? document.getElementById("assets_art_jewelry_percent").value : "100", 365);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const romanticassetLocal = getLocal('romanticasset');
+    const percentInputs = document.querySelectorAll('.percent-input');
+
+    if (romanticassetLocal === 'checked') {
+        percentInputs.forEach(input => input.style.display = 'block');
+    } else {
+        percentInputs.forEach(input => input.style.display = 'none');
+    }
+
+    const formElements = [
+        'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+        'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+        'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
+        'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
+        'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent', 'assets_primary_residence_percent',
+        'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
+    ];
+
+    formElements.forEach(elementId => {
+        const value = getLocal(elementId);
         const element = document.getElementById(elementId);
-        if (element) {
-            setLocal(elementId, element.value, 365);
+        if (element && value !== null) {
+            element.value = value;
         }
     });
-
-    // Navigate to the next page
-    window.location.href = './liability.html';
-    return true;
-};
+});
