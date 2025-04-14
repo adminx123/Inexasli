@@ -336,6 +336,8 @@ Return all results in annual, monthly, and weekly frequencies where applicable, 
     prompt += formatSection(liabilityFields, 'Liabilities');
     prompt += formatSection(otherFields, 'Other Settings');
 
+    prompt = addFrequencyItemsToPrompt(prompt);
+
     // Handle empty prompt case
     if (prompt.trim() === `Analyze the following financial data to calculate and summarize the user's financial metrics. All monetary values should be in the user's currency based on their region (e.g., CAD for Canada, USD for USA). If the filling status indicates the user is filing with a partner (e.g., joint filing), account for this in tax calculations, such as combined income, shared deductions, or joint tax brackets, and present metrics for both the primary user and partner side by side. Provide the following calculations in code block format (e.g., \`\`\`text\n...\n\`\`\`), with clear headings and side-by-side columns for the primary user and partner (if applicable):
 
@@ -375,4 +377,25 @@ Return all results in annual, monthly, and weekly frequencies where applicable, 
         openGeneratedPromptModal();
         console.log(prompt); // Log for manual copy
     });
+}
+
+function addFrequencyItemsToPrompt(prompt) {
+    let frequencySection = 'Frequency Items:\n';
+    let hasFrequencyItems = false;
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+
+        if (key.includes('frequency')) {
+            frequencySection += `${key}: ${value}\n`;
+            hasFrequencyItems = true;
+        }
+    }
+
+    if (hasFrequencyItems) {
+        prompt += `\n${frequencySection}`;
+    }
+
+    return prompt;
 }
