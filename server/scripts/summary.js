@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const value = input.value || '0';
                 setLocal(id, value); // Store in local storage
                 updateFreeContent(); // Update calculated fields
-                checkAndShowSummaryContainer1(); // Check and show summary-container1
+                checkAndToggleSummaryContainer1(); // Check and show summary-container1
 
                 const allInputsHaveValue = inputs.every(inputId => {
                     const value = document.getElementById(inputId)?.value;
@@ -96,6 +96,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.generate-btn').addEventListener('click', function() {
         document.querySelector('.summary-container').style.display = 'block';
     });
+
+    // Add event listener for the button to check and unhide summary-container1
+    const checkValuesButton = document.getElementById('checkValuesButton');
+    if (checkValuesButton) {
+        checkValuesButton.addEventListener('click', checkAndToggleSummaryContainer1);
+    }
 });
 
 // Free content update function
@@ -162,7 +168,7 @@ function updateFreeContent() {
 // Unlock premium content
 function unlockPremiumContent() {
     document.querySelectorAll('.premium-blur').forEach(el => el.classList.remove('premium-blur'));
-    document.querySelectorAll('.premium-notice').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.premium-notice').forEach(el.style.display = 'none');
     const goalAmount = document.getElementById('goalAmount');
     if (goalAmount) goalAmount.disabled = false;
 }
@@ -386,17 +392,22 @@ document.getElementById('close-sidebar').addEventListener('click', function() {
     document.getElementById('subscribe-sidebar').style.display = 'none';
 });
 
-function checkAndShowSummaryContainer1() {
+function checkAndToggleSummaryContainer1() {
     const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHERTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
     const allInputsHaveValue = inputs.every(id => {
-        const value = parseFloat(document.getElementById(id)?.value || '0');
-        return value >= 0;
+        const value = document.getElementById(id)?.value;
+        return value && value.trim() !== '';
     });
 
-    if (allInputsHaveValue) {
-        const summaryContainer1 = document.querySelector('.summary-container1');
-        if (summaryContainer1) {
-            summaryContainer1.style.display = 'block';
-        }
+    const summaryContainer1 = document.querySelector('.summary-container1');
+    if (summaryContainer1) {
+        summaryContainer1.style.display = allInputsHaveValue ? 'block' : 'none';
     }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const checkValuesButton = document.getElementById('checkValuesButton');
+    if (checkValuesButton) {
+        checkValuesButton.addEventListener('click', checkAndToggleSummaryContainer1);
+    }
+});
