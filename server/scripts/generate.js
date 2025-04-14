@@ -317,12 +317,12 @@ Return all results in annual, monthly, and weekly frequencies where applicable, 
     ];
 
     const otherFields = [
-        'term1', 'term2', 'RegionDropdown', 'SubregionDropdown', 'summary_reached', 'fillingStatus'
+        'term1', 'term2', 'selectedCountry', 'selectedSubregion', 'summary_reached', 'fillingStatus'
     ];
 
     // Add data to prompt
-    const region = getLocal('RegionDropdown');
-    const subregion = getLocal('SubregionDropdown');
+    const region = getLocal('selectedCountry');
+    const subregion = getLocal('selectedSubregion');
     if (region && region !== 'NONE') {
         prompt += `Region: ${region}\n`;
         if (subregion) prompt += `Subregion: ${subregion}\n\n`;
