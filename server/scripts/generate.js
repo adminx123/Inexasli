@@ -347,7 +347,7 @@ Return all results in annual, monthly, and weekly frequencies where applicable, 
     // Exclude partner, shared, and percent fields from the generated prompt if filling status contains 'single'
     if (fillingStatus && fillingStatus.includes('single')) {
         const excludedKeys = [
-            'partner', 'shared', 'percent', 'percent'
+            'partner', 'shared', 'percent'
         ];
 
         const filterKeys = (key) => {
@@ -423,6 +423,9 @@ function addFrequencyItemsToPrompt(prompt) {
     let frequencySection = 'Frequency Items:\n';
     let hasFrequencyItems = false;
 
+    const fillingStatus = getLocal('fillingStatus');
+    const excludePartnerFrequencies = fillingStatus && fillingStatus.toLowerCase().includes('single');
+
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         const value = localStorage.getItem(key);
@@ -430,6 +433,10 @@ function addFrequencyItemsToPrompt(prompt) {
         if (key.includes('frequency')) {
             const correspondingKey = key.replace('frequency_', '').replace('_frequency', '');
             const correspondingValue = localStorage.getItem(correspondingKey);
+
+            if (excludePartnerFrequencies && key.toLowerCase().includes('partner')) {
+                continue; // Skip frequencies with 'partner' if fillingStatus includes 'single'
+            }
 
             if (correspondingValue && correspondingValue.trim() !== '' && correspondingValue !== '0') {
                 frequencySection += `${key}: ${value}\n`;
