@@ -61,6 +61,12 @@ document.addEventListener('DOMContentLoaded', function () {
         goalAmountInput.addEventListener('input', () => calculateGoal(isPaid));
     }
 
+    // Ensure summary-container1 is hidden initially
+    const summaryContainer1 = document.querySelector('.summary-container1');
+    if (summaryContainer1) {
+        summaryContainer1.style.display = 'none';
+    }
+
     // Add input event listeners for Taxes & Obligations
     const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHERTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
     inputs.forEach(id => {
@@ -71,6 +77,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 setLocal(id, value); // Store in local storage
                 updateFreeContent(); // Update calculated fields
                 checkAndShowSummaryContainer1(); // Check and show summary-container1
+
+                const allInputsHaveValue = inputs.every(inputId => {
+                    const value = document.getElementById(inputId)?.value;
+                    return value && value.trim() !== '';
+                });
+
+                if (allInputsHaveValue) {
+                    summaryContainer1.style.display = 'block';
+                } else {
+                    summaryContainer1.style.display = 'none';
+                }
             });
         }
     });
@@ -104,7 +121,7 @@ function updateFreeContent() {
         if (input) {
             const value = getLocal(id);
             if (value !== '') {
-                input.value = parseFloat(value).toFixed(2);
+                input.value = value; // Display value exactly as entered
             } else {
                 input.value = ''; // Leave empty if no value is set
             }
