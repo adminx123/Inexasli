@@ -6,12 +6,11 @@
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
- */ 
+ */
 
 import { getLocal } from '/server/scripts/getlocal.js';
 import { setCookie } from '/server/scripts/setcookie.js';
-
-
+import { setLocal } from '/server/scripts/setlocal.js';
 
 // Tab highlighting
 const tabs = document.querySelectorAll('.tab');
@@ -26,7 +25,6 @@ tabs.forEach(tab => {
 
 // Core DOMContentLoaded listener
 document.addEventListener('DOMContentLoaded', function () {
-
     setCookie("summary", Date.now(), 32);
 
     const paid = getLocal("authenticated");
@@ -51,17 +49,35 @@ document.addEventListener('DOMContentLoaded', function () {
         updateFreeContent();
         if (isPaid) {
             updatePremiumContent();
-            timeToPay(true); // Update revolving debt time for paid users
+            timeToPay(true);
         } else {
-            timeToPay(false); // Update revolving debt time for free users
+            timeToPay(false);
         }
-        calculateGoal(isPaid); // Update goal calculation
+        calculateGoal(isPaid);
     });
 
     const goalAmountInput = document.getElementById('goalAmount');
     if (goalAmountInput) {
         goalAmountInput.addEventListener('input', () => calculateGoal(isPaid));
     }
+
+    // Add input event listeners for Taxes & Obligations
+    const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHERTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
+    inputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('input', () => {
+                const value = input.value || '0';
+                setLocal(id, value); // Store in local storage
+                updateFreeContent(); // Update calculated fields
+            });
+        }
+    });
+
+    // Show summary-container on generate button click
+    document.querySelector('.generate-btn').addEventListener('click', function() {
+        document.querySelector('.summary-container').style.display = 'block';
+    });
 });
 
 // Free content update function
@@ -80,30 +96,29 @@ function updateFreeContent() {
     updateElement('DEBT', 'DEBT', multiplier);
 
     // Taxes & Obligations (free)
-    updateElement('annualTax', null, multiplier, calculateAnnualTax);
-    updateElement('region_tax_sum', 'ANNUALREGIONALTAX', multiplier);
-    updateElement('subregion_tax_sum', 'ANNUALSUBREGIONALTAX', multiplier);
-    updateElement('TOTALTAXCG', 'TOTALTAXCG', multiplier, null, 'usa-hide');
-    updateElement('ANNUALGOVERNMENTOBLIGATIONS', null, multiplier, calculateGovernmentObligations);
-    updateElement('cpp_sum', 'ANNUALCPP', multiplier, null, 'can-hide');
-    updateElement('ANNUALEI', 'ANNUALEI', multiplier, null, 'can-hide');
-    updateElement('annual_cpp_seresult', 'CPPPAYABLESELFEMPLOYED', multiplier, null, 'can-hide');
-    updateElement('annual_cpp_eresult', 'CPPPAYABLEEMPLOYED', multiplier, null, 'can-hide');
-    updateElement('TOTALSOCIALSECURITY', 'TOTALSOCIALSECURITY', multiplier, null, 'usa-hide');
-    updateElement('TOTALSOCIALSECURITYE', 'TOTALSOCIALSECURITYE', multiplier, null, 'usa-hide');
-    updateElement('TOTALSOCIALSECURITYSE', 'TOTALSOCIALSECURITYSE', multiplier, null, 'usa-hide');
-    updateElement('TOTALMEDICARE', 'TOTALMEDICARE', multiplier, null, 'usa-hide');
+    // Populate input fields
+    const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHERTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
+    inputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            const value = parseFloat(getLocal(id)) || 0;
+            input.value = value.toFixed(2);
+        }
+    });
+
+    // Update calculated fields
+    updateElement('TOTALTAXANNUAL', null, multiplier, calculateAnnualTax);
+    updateElement('TOTALOBLIGATIONANNUAL', null, multiplier, calculateGovernmentObligations);
 
     // Net Worth (free) - No frequency adjustment
     updateElement('NETWORTH', null, 1, () => (parseFloat(getLocal('ASSETS')) || 0) - (parseFloat(getLocal('LIABILITIES')) || 0));
     updateElement('ASSETS', 'ASSETS', multiplier);
     updateElement('LIABILITIES', 'LIABILITIES', multiplier);
 
-    // Add these lines for your HTML elements
-    updateElement('ANNUALTAXABLEINCOME', 'ANNUALTAXABLEINCOME', multiplier); // Taxable Income
-    updateElement('SD', 'SD', multiplier, null, 'usa-hide'); // Standard Deduction (USA)
-    updateElement('BPA', 'BPA', multiplier, null, 'can-hide'); // Basic Personal Amount (Canada)
-    // Region and Subregion (no multiplier, just raw values)
+    // Other fields
+    updateElement('ANNUALTAXABLEINCOME', 'ANNUALTAXABLEINCOME', multiplier);
+    updateElement('SD', 'SD', multiplier, null, 'usa-hide');
+    updateElement('BPA', 'BPA', multiplier, null, 'can-hide');
     const regionElement = document.getElementById('RegionDropdown');
     if (regionElement) {
         regionElement.textContent = getLocal('RegionDropdown').trim() !== "" ? getLocal('RegionDropdown') : "NONE";
@@ -117,9 +132,8 @@ function updateFreeContent() {
     timeToPay(false);
     calculateGoal(false);
 
-    // Expense Pie Chart (free)
+    // Charts
     updateExpensePieChart();
-    // Income Erosion Pie Chart (premium)
     updateIncomeErosionPieChart();
 }
 
@@ -136,10 +150,8 @@ function updatePremiumContent() {
     const frequency = document.getElementById('frequency').value;
     const multiplier = getFrequencyMultiplier(frequency);
 
-    // Disposable Income (premium)
     updateElement('DISPOSABLEINCOME', null, multiplier, calculateDisposableIncome);
 
-    // Premium Subscribers (Ratios) - Only set once, not updated on frequency change
     const debtToIncome = (parseFloat(getLocal('LIABILITIES')) / parseFloat(getLocal('ANNUALINCOME')) || 0);
     document.getElementById('DEBTTOINCOME').textContent = isNaN(debtToIncome) || !isFinite(debtToIncome) ? 'Not Applicable' : debtToIncome.toFixed(2);
     colorChangeDTI();
@@ -156,11 +168,8 @@ function updatePremiumContent() {
     document.getElementById('FIRERATIO').textContent = isNaN(fireRatio) ? 'Not Applicable' : fireRatio.toFixed(2);
     colorChangeFIRE();
 
-    // Financial Projections (premium)
     timeToPay(true);
     calculateGoal(true);
-
-    
 }
 
 // Helper function to update elements
@@ -183,47 +192,26 @@ function getFrequencyMultiplier(frequency) {
 
 // Calculate Disposable Income (premium)
 function calculateDisposableIncome() {
-    const region = getLocal('RegionDropdown');
     const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
     const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
     const tax = calculateAnnualTax();
+    const obligations = calculateGovernmentObligations();
 
-    if (region === 'USA') {
-        return income - expenses - (parseFloat(getLocal('TOTALMEDICARE')) || 0) - 
-               (parseFloat(getLocal('TOTALSOCIALSECURITY')) || 0) - tax - 
-               (parseFloat(getLocal('TOTALTAXCG')) || 0);
-    } else if (region === 'CAN') {
-        return income - expenses - (parseFloat(getLocal('ANNUALEI')) || 0) - 
-               (parseFloat(getLocal('ANNUALCPP')) || 0) - tax;
-    }
-    return 0;
+    return income - expenses - tax - obligations;
 }
 
 // Calculate Annual Tax (free)
 function calculateAnnualTax() {
-    const region = getLocal('RegionDropdown') || 'NONE';
-    const regionalTax = parseFloat(getLocal('ANNUALREGIONALTAX')) || 0;
-    const subregionalTax = parseFloat(getLocal('ANNUALSUBREGIONALTAX')) || 0;
-    const cgTax = region === 'USA' ? (parseFloat(getLocal('TOTALTAXCG')) || 0) : 0;
+    const regionalTax = parseFloat(getLocal('REGIONALTAXANNUAL')) || 0;
+    const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
+    const otherTax = parseFloat(getLocal('OTHERTAXANNUAL')) || 0;
 
-    if (region === 'USA' || region === 'CAN') {
-        return regionalTax + subregionalTax + cgTax;
-    }
-    console.warn('Region not recognized for tax calculation');
-    return 0;
+    return regionalTax + subregionalTax + otherTax;
 }
 
 // Calculate Government Obligations (free)
 function calculateGovernmentObligations() {
-    const region = getLocal('RegionDropdown');
-    if (region === 'USA') {
-        return (parseFloat(getLocal('TOTALSOCIALSECURITY')) || 0) + 
-               (parseFloat(getLocal('TOTALMEDICARE')) || 0);
-    } else if (region === 'CAN') {
-        return (parseFloat(getLocal('ANNUALCPP')) || 0) + 
-               (parseFloat(getLocal('ANNUALEI')) || 0);
-    }
-    return 0;
+    return parseFloat(getLocal('OTHEROBLIGATIONANNUAL')) || 0;
 }
 
 // Expense Pie Chart (free)
@@ -258,7 +246,6 @@ function updateExpensePieChart() {
             }
         }
     };
-    // Only destroy if the chart exists
     if (window.myPieChart && typeof window.myPieChart.destroy === 'function') {
         window.myPieChart.destroy();
     }
@@ -267,30 +254,14 @@ function updateExpensePieChart() {
 
 // Income Erosion Pie Chart (premium)
 function updateIncomeErosionPieChart() {
-    const region = getLocal('RegionDropdown');
     const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
     const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
     const tax = calculateAnnualTax();
+    const obligations = calculateGovernmentObligations();
     const disposable = calculateDisposableIncome();
 
-    let data, labels;
-    if (region === 'USA') {
-        data = [
-            disposable, expenses, 
-            parseFloat(getLocal('TOTALSOCIALSECURITY')) || 0, 
-            parseFloat(getLocal('TOTALMEDICARE')) || 0, 
-            tax, parseFloat(getLocal('TOTALTAXCG')) || 0
-        ];
-        labels = ['Income After Deductions', 'Annual Expenses', 'Social Security', 'Medicare', 'Income Tax', 'Capital Gains Tax'];
-    } else {
-        data = [
-            disposable, expenses, 
-            parseFloat(getLocal('ANNUALCPP')) || 0, 
-            parseFloat(getLocal('ANNUALEI')) || 0, 
-            tax
-        ];
-        labels = ['Income After Deductions', 'Annual Expenses', 'CPP', 'EI', 'Income Tax'];
-    }
+    const data = [disposable, expenses, tax, obligations];
+    const labels = ['Income After Deductions', 'Annual Expenses', 'Taxes', 'Obligations'];
 
     const config = {
         type: 'pie',
@@ -301,13 +272,11 @@ function updateIncomeErosionPieChart() {
                 data: data,
                 backgroundColor: [
                     'rgba(143, 18, 45, 0.2)', 'rgba(17, 47, 128, 0.2)', 
-                    'rgba(14, 14, 14, 0.2)', 'rgba(14, 14, 14, 0.2)', 
                     'rgba(14, 14, 14, 0.2)', 'rgba(14, 14, 14, 0.2)'
                 ],
                 borderColor: [
                     'rgb(194, 194, 194)', 'rgb(165, 165, 165)', 
-                    'rgb(118, 118, 118)', 'rgb(101, 101, 101)', 
-                    'rgb(76, 76, 76)', 'rgb(63, 63, 63)'
+                    'rgb(118, 118, 118)', 'rgb(101, 101, 101)'
                 ],
                 borderWidth: 1
             }]
@@ -320,7 +289,6 @@ function updateIncomeErosionPieChart() {
             }
         }
     };
-    // Only destroy if the chart exists
     if (window.myPieChartTax && typeof window.myPieChartTax.destroy === 'function') {
         window.myPieChartTax.destroy();
     }
@@ -331,14 +299,12 @@ function updateIncomeErosionPieChart() {
 function colorChangeFIRE() {
     const fire = parseFloat(document.getElementById("FIRERATIO").textContent);
     if (isNaN(fire)) return;
-    // Colors reflect thresholds from Financial Planning Association for educational purposes
     document.getElementById("FIRERATIO").style.color = 
         fire >= 1.0 ? "green" : fire >= 0.25 ? "orange" : "red";
 }
 
 function colorChangeSavingsToDebt(savingsToDebt) {
     if (isNaN(savingsToDebt)) return;
-    // Colors reflect thresholds from Consumer Financial Protection Bureau for educational purposes
     document.getElementById("SAVINGSTODEBT").style.color = 
         savingsToDebt >= 2 ? "green" : savingsToDebt >= 1 ? "orange" : "red";
 }
@@ -346,7 +312,6 @@ function colorChangeSavingsToDebt(savingsToDebt) {
 function colorChangeHTI() {
     const hti = parseFloat(document.getElementById("HOUSINGTOINCOME").textContent);
     if (isNaN(hti)) return;
-    // Colors reflect thresholds from Investopedia for educational purposes
     document.getElementById("HOUSINGTOINCOME").style.color = 
         hti < 0.28 ? "green" : hti <= 0.35 ? "orange" : "red";
 }
@@ -354,7 +319,6 @@ function colorChangeHTI() {
 function colorChangeDTI() {
     const dti = parseFloat(document.getElementById("DEBTTOINCOME").textContent);
     if (isNaN(dti)) return;
-    // Colors reflect thresholds from Investopedia for educational purposes
     document.getElementById("DEBTTOINCOME").style.color = 
         dti < 0.20 ? "green" : dti <= 0.36 ? "orange" : "red";
 }
@@ -396,8 +360,4 @@ function calculateGoal(isPaid) {
 
 document.getElementById('close-sidebar').addEventListener('click', function() {
     document.getElementById('subscribe-sidebar').style.display = 'none';
-});
-
-document.querySelector('.generate-btn').addEventListener('click', function() {
-    document.querySelector('.summary-container').style.display = 'block';
 });
