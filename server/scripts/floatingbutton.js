@@ -98,7 +98,7 @@ function checkLocalAndToggleButton() {
   if (summaryCookie) {
     const timestamp = summaryCookie.timestamp || 0;
     const currentTime = Date.now();
-    const fifteenMinutes = 15 * 60 * 1000;
+    const fifteenMinutes = 5 * 60 * 1000;
     const timeDifference = currentTime - timestamp;
     const isTimestampValid = timeDifference < fifteenMinutes;
 
