@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const value = input.value || '0';
                 setLocal(id, value); // Store in local storage
                 updateFreeContent(); // Update calculated fields
+                checkAndShowSummaryContainer1(); // Check and show summary-container1
             });
         }
     });
@@ -101,8 +102,12 @@ function updateFreeContent() {
     inputs.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
-            const value = parseFloat(getLocal(id)) || 0;
-            input.value = value.toFixed(2);
+            const value = getLocal(id);
+            if (value !== '') {
+                input.value = parseFloat(value).toFixed(2);
+            } else {
+                input.value = ''; // Leave empty if no value is set
+            }
         }
     });
 
@@ -361,3 +366,18 @@ function calculateGoal(isPaid) {
 document.getElementById('close-sidebar').addEventListener('click', function() {
     document.getElementById('subscribe-sidebar').style.display = 'none';
 });
+
+function checkAndShowSummaryContainer1() {
+    const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHERTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
+    const allInputsHaveValue = inputs.every(id => {
+        const value = parseFloat(document.getElementById(id)?.value || '0');
+        return value >= 0;
+    });
+
+    if (allInputsHaveValue) {
+        const summaryContainer1 = document.querySelector('.summary-container1');
+        if (summaryContainer1) {
+            summaryContainer1.style.display = 'block';
+        }
+    }
+}
