@@ -338,6 +338,12 @@ Return all results in annual, monthly, and weekly frequencies where applicable, 
         prompt += `Age (Spouse): ${ageSpouse}\n`;
     }
 
+    // Add employmentStatus to the prompt
+    const employmentStatus = getLocal('employmentStatus');
+    if (employmentStatus && employmentStatus !== 'NONE') {
+        prompt += `Employment Status: ${employmentStatus}\n`;
+    }
+
     prompt += formatSection(incomeFields, 'Income');
     prompt += formatFrequencySection(incomeFrequencyFields, 'Income');
     prompt += formatSection(expenseFields, 'Expenses');
