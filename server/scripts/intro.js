@@ -318,35 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const filingStatusDropdown = document.getElementById('filingStatus');
         const selectedFilingStatus = filingStatusDropdown ? filingStatusDropdown.value : '';
 
-        const statusesWithDependants = [
-            'single_with_dependants',
-            'single_with_disabled_dependants',
-            'widowed_with_dependants',
-            'widowed_with_disabled_dependants',
-            'separated_with_dependants',
-            'separated_with_disabled_dependants',
-            'married_with_dependants',
-            'married_with_disabled_dependants',
-            'common_law_with_dependants',
-            'common_law_with_disabled_dependants',
-            'coupled_with_dependants',
-            'coupled_with_disabled_dependants',
-            'qualifying_widow_with_dependants',
-            'qualifying_widow_with_disabled_dependants',
-            'married_filing_jointly_with_dependants',
-            'married_filing_jointly_with_disabled_dependants',
-            'married_filing_separately_with_dependants',
-            'married_filing_separately_with_disabled_dependants',
-            'head_of_household_with_dependants',
-            'head_of_household_with_disabled_dependants'
-        ];
-
-        if (statusesWithDependants.includes(selectedFilingStatus)) {
-            dependantsContainer.style.display = 'block';
-        } else {
-            dependantsContainer.style.display = 'none';
-        }
-
         const statusesWithDisabledDependants = [
             'single_with_disabled_dependants',
             'widowed_with_disabled_dependants',
@@ -357,9 +328,27 @@ document.addEventListener('DOMContentLoaded', () => {
             'qualifying_widow_with_disabled_dependants',
             'married_filing_jointly_with_disabled_dependants',
             'married_filing_separately_with_disabled_dependants',
-            'head_of_household_with_disabled_dependants'
+            'head_of_household_with_disabled_dependants',
+            
         ];
-        document.getElementById('birthYearDisabledDependants').style.display = statusesWithDisabledDependants.includes(selectedFilingStatus) ? 'block' : 'none';
+
+        if (statusesWithDisabledDependants.includes(selectedFilingStatus)) {
+            dependantsContainer.style.display = 'block';
+            const birthYearField = document.getElementById('birthYearDisabledDependants');
+            const birthYearLabel = document.querySelector('label[for="birthYearDisabledDependants"]');
+            if (birthYearField && birthYearLabel) {
+                birthYearField.style.display = 'block';
+                birthYearLabel.style.display = 'block';
+            }
+        } else {
+            dependantsContainer.style.display = 'none';
+            const birthYearField = document.getElementById('birthYearDisabledDependants');
+            const birthYearLabel = document.querySelector('label[for="birthYearDisabledDependants"]');
+            if (birthYearField && birthYearLabel) {
+                birthYearField.style.display = 'none';
+                birthYearLabel.style.display = 'none';
+            }
+        }
     }
 
     function updateMaritalStatusVisibility() {
