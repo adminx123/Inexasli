@@ -120,14 +120,15 @@ window.calculateAll = function () {
     setLocal("assets_art_jewelry_percent", document.getElementById("assets_art_jewelry_percent").value.trim() !== "" ? document.getElementById("assets_art_jewelry_percent").value : "100", 365);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    const romanticassetLocal = getLocal('romanticasset');
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const maritalStatus = getLocal('maritalStatus'); // Fetch the marital status from local storage
     const percentInputs = document.querySelectorAll('.percent-input');
 
-    if (romanticassetLocal === 'checked') {
-        percentInputs.forEach(input => input.style.display = 'block');
-    } else {
-        percentInputs.forEach(input => input.style.display = 'none');
+    if (maritalStatus === 'married' || maritalStatus === 'common-law') {
+        percentInputs.forEach(input => input.style.display = 'block'); // Show inputs for married or common-law
+    } else if (maritalStatus === 'single') {
+        percentInputs.forEach(input => input.style.display = 'none'); // Hide inputs for single status
     }
 
     const formElements = [

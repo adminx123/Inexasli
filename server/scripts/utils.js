@@ -68,25 +68,22 @@ function displayWarning(content) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const pathname = window.location.pathname;
-    const romanticliabilityCookie = getLocal('romanticliability');
-    const romanticincomeCookie = getLocal('romanticincome');
-    const romanticexpenseCookie = getLocal('romanticexpense');
-    const romanticassetCookie = getLocal('romanticasset');
+    const maritalStatus = getLocal('maritalStatus'); // Retrieve marital status from local storage
 
-    if (romanticliabilityCookie === 'checked' && pathname.includes('liability')) {
-        displayWarning("You've indicated that you have joint liabilities with your romantic partner. Please enter the current value of the liabilities and your corresponding percentage of responsibility.");
+    if ((maritalStatus === 'married' || maritalStatus === 'common-law') && pathname.includes('liability')) {
+        displayWarning("You've indicated that you share liabilities with your spouse or partner. Please enter the current value of the liabilities and your corresponding percentage of responsibility.");
     }
 
-    if (romanticincomeCookie === 'checked' && pathname.includes('income')) {
-        displayWarning("You have indicated that you share one or more sources of income. Include only your portion of personal income here.");
+    if ((maritalStatus === 'married' || maritalStatus === 'common-law') && pathname.includes('income')) {
+        displayWarning("You have indicated that you share one or more sources of income with your spouse or partner. Include only your portion of personal income here.");
     }
 
-    if (romanticexpenseCookie === 'checked' && pathname.includes('expense')) {
-        displayWarning("You've indicated that you share expenses with your romantic partner. Include only your portion of the expenditures here.");
+    if ((maritalStatus === 'married' || maritalStatus === 'common-law') && pathname.includes('expense')) {
+        displayWarning("You've indicated that you share expenses with your spouse or partner. Include only your portion of the expenditures here.");
     }
 
-    if (romanticassetCookie === 'checked' && pathname.includes('asset')) {
-        displayWarning("You have indicated that you own one or more assets jointly with your romantic partner. Please enter the market value of the assets and your corresponding percentage of ownership.");
+    if ((maritalStatus === 'married' || maritalStatus === 'common-law') && pathname.includes('asset')) {
+        displayWarning("You have indicated that you own one or more assets jointly with your spouse or partner. Please enter the market value of the assets and your corresponding percentage of ownership.");
     }
 });
 
