@@ -49,7 +49,6 @@
              <h2 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="Where you’re legally considered to live for tax purposes, based on factors like time spent or ties to the country.">
                  Select Tax Residency<span class="tooltip1-content"></span>
              </h2>
-             <label for="country" class="category-label">Country</label>
              <select id="country">
                  <option value="">Select Country</option>
                  <option value="CAN">Canada</option>
@@ -58,20 +57,18 @@
                  <option value="AUS">Australia</option>
                  <option value="OTHER">Other</option>
              </select>
-             <div id="subregionContainer" style="display: none;">
-                 <label for="subregion" class="category-label">Tax Subregion</label>
+             <div id="subregionContainer" style="display: none; margin-top: 5px;">
                  <select id="subregion">
                      <option value="">Select Tax Subregion</option>
                  </select>
              </div>
          </div>
 
-         <div class="containerround"> 
+         <div class="containerround" > 
              <form id="websiteDesignForm">
                 
                  <div id="filingStatusSection" style="display: none;">
                      <h2 style="text-align: center; font-size: 18px; margin-bottom:15px">Select Your Filing Status</h2>
-                     <p style="text-align: center; font-size: 14px; margin-bottom: 10px;">This shapes your budget template for an AI financial report.</p>
                      <div id="filingStatusContainer" class="grid-container">
                          <div class="grid-item">Single</div>
                          <div class="grid-item">Common Law</div>
