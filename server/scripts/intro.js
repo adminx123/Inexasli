@@ -22,110 +22,110 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const filingOptions = {
         CAN: [
-            { value: 'single_no_deps', text: 'Single, No Dependants' },
-            { value: 'single_deps', text: 'Single with Dependants' },
-            { value: 'single_disabled_deps', text: 'Single with Disabled Dependants' },
+            { value: 'single_no_dependants', text: 'Single, No Dependants' },
+            { value: 'single_with_dependants', text: 'Single with Dependants' },
+            { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
             { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
             { value: 'single_caregiver', text: 'Single, Caregiver' },
-            { value: 'common_law_no_deps', text: 'Common-Law, No Dependants' },
-            { value: 'common_law_deps', text: 'Common-Law with Dependants' },
-            { value: 'common_law_disabled_deps', text: 'Common-Law with Disabled Dependants' },
+            { value: 'common_law_no_dependants', text: 'Common-Law, No Dependants' },
+            { value: 'common_law_with_dependants', text: 'Common-Law with Dependants' },
+            { value: 'common_law_with_disabled_dependants', text: 'Common-Law with Disabled Dependants' },
             { value: 'common_law_self_disabled', text: 'Common-Law, Self-Disabled' },
             { value: 'common_law_spouse_disabled', text: 'Common-Law, Spouse-Disabled' },
             { value: 'common_law_caregiver', text: 'Common-Law, Caregiver' },
-            { value: 'married_no_deps', text: 'Married, No Dependants' },
-            { value: 'married_deps', text: 'Married with Dependants' },
-            { value: 'married_disabled_deps', text: 'Married with Disabled Dependants' },
+            { value: 'married_no_dependants', text: 'Married, No Dependants' },
+            { value: 'married_with_dependants', text: 'Married with Dependants' },
+            { value: 'married_with_disabled_dependants', text: 'Married with Disabled Dependants' },
             { value: 'married_self_disabled', text: 'Married, Self-Disabled' },
             { value: 'married_spouse_disabled', text: 'Married, Spouse-Disabled' },
             { value: 'married_caregiver', text: 'Married, Caregiver' },
-            { value: 'widowed_no_deps', text: 'Widowed, No Dependants' },
-            { value: 'widowed_deps', text: 'Widowed with Dependants' },
-            { value: 'widowed_disabled_deps', text: 'Widowed with Disabled Dependants' },
-            { value: 'separated_no_deps', text: 'Separated, No Dependants' },
-            { value: 'separated_deps', text: 'Separated with Dependants' },
-            { value: 'separated_disabled_deps', text: 'Separated with Disabled Dependants' }
+            { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
+            { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
+            { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
+            { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
+            { value: 'separated_with_dependants', text: 'Separated with Dependants' },
+            { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
         ],
         USA: [
-            { value: 'single_no_deps', text: 'Single, No Dependants' },
-            { value: 'single_deps', text: 'Single with Dependants' },
-            { value: 'single_disabled_deps', text: 'Single with Disabled Dependants' },
+            { value: 'single_no_dependants', text: 'Single, No Dependants' },
+            { value: 'single_with_dependants', text: 'Single with Dependants' },
+            { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
             { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
             { value: 'single_caregiver', text: 'Single, Caregiver' },
-            { value: 'mfj_no_deps', text: 'Married Filing Jointly, No Dependants' },
-            { value: 'mfj_deps', text: 'Married Filing Jointly with Dependants' },
-            { value: 'mfj_disabled_deps', text: 'Married Filing Jointly with Disabled Dependants' },
-            { value: 'mfj_self_disabled', text: 'Married Filing Jointly, Self-Disabled' },
-            { value: 'mfj_spouse_disabled', text: 'Married Filing Jointly, Spouse-Disabled' },
-            { value: 'mfj_caregiver', text: 'Married Filing Jointly, Caregiver' },
-            { value: 'mfs_no_deps', text: 'Married Filing Separately, No Dependants' },
-            { value: 'mfs_deps', text: 'Married Filing Separately with Dependants' },
-            { value: 'mfs_disabled_deps', text: 'Married Filing Separately with Disabled Dependants' },
-            { value: 'mfs_self_disabled', text: 'Married Filing Separately, Self-Disabled' },
-            { value: 'hoh_no_deps', text: 'Head of Household, No Dependants' },
-            { value: 'hoh_deps', text: 'Head of Household with Dependants' },
-            { value: 'hoh_disabled_deps', text: 'Head of Household with Disabled Dependants' },
-            { value: 'hoh_caregiver', text: 'Head of Household, Caregiver' },
-            { value: 'widow_no_deps', text: 'Qualifying Widow(er), No Dependants' },
-            { value: 'widow_deps', text: 'Qualifying Widow(er) with Dependants' },
-            { value: 'widow_disabled_deps', text: 'Qualifying Widow(er) with Disabled Dependants' }
+            { value: 'married_filing_jointly_no_dependants', text: 'Married Filing Jointly, No Dependants' },
+            { value: 'married_filing_jointly_with_dependants', text: 'Married Filing Jointly with Dependants' },
+            { value: 'married_filing_jointly_with_disabled_dependants', text: 'Married Filing Jointly with Disabled Dependants' },
+            { value: 'married_filing_jointly_self_disabled', text: 'Married Filing Jointly, Self-Disabled' },
+            { value: 'married_filing_jointly_spouse_disabled', text: 'Married Filing Jointly, Spouse-Disabled' },
+            { value: 'married_filing_jointly_caregiver', text: 'Married Filing Jointly, Caregiver' },
+            { value: 'married_filing_separately_no_dependants', text: 'Married Filing Separately, No Dependants' },
+            { value: 'married_filing_separately_with_dependants', text: 'Married Filing Separately with Dependants' },
+            { value: 'married_filing_separately_with_disabled_dependants', text: 'Married Filing Separately with Disabled Dependants' },
+            { value: 'married_filing_separately_self_disabled', text: 'Married Filing Separately, Self-Disabled' },
+            { value: 'head_of_household_no_dependants', text: 'Head of Household, No Dependants' },
+            { value: 'head_of_household_with_dependants', text: 'Head of Household with Dependants' },
+            { value: 'head_of_household_with_disabled_dependants', text: 'Head of Household with Disabled Dependants' },
+            { value: 'head_of_household_caregiver', text: 'Head of Household, Caregiver' },
+            { value: 'qualifying_widow_no_dependants', text: 'Qualifying Widow(er), No Dependants' },
+            { value: 'qualifying_widow_with_dependants', text: 'Qualifying Widow(er) with Dependants' },
+            { value: 'qualifying_widow_with_disabled_dependants', text: 'Qualifying Widow(er) with Disabled Dependants' }
         ],
         UK: [
-            { value: 'single_no_deps', text: 'Single, No Dependants' },
-            { value: 'single_deps', text: 'Single with Dependants' },
-            { value: 'single_disabled_deps', text: 'Single with Disabled Dependants' },
+            { value: 'single_no_dependants', text: 'Single, No Dependants' },
+            { value: 'single_with_dependants', text: 'Single with Dependants' },
+            { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
             { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
             { value: 'single_caregiver', text: 'Single, Caregiver' },
-            { value: 'married_no_deps', text: 'Married or Civil Partnership, No Dependants' },
-            { value: 'married_deps', text: 'Married or Civil Partnership with Dependants' },
-            { value: 'married_disabled_deps', text: 'Married or Civil Partnership with Disabled Dependants' },
-            { value: 'married_self_disabled', text: 'Married or Civil Partnership, Self-Disabled' },
-            { value: 'married_spouse_disabled', text: 'Married or Civil Partnership, Spouse-Disabled' },
-            { value: 'married_caregiver', text: 'Married or Civil Partnership, Caregiver' },
-            { value: 'widowed_no_deps', text: 'Widowed, No Dependants' },
-            { value: 'widowed_deps', text: 'Widowed with Dependants' },
-            { value: 'widowed_disabled_deps', text: 'Widowed with Disabled Dependants' },
-            { value: 'separated_no_deps', text: 'Separated, No Dependants' },
-            { value: 'separated_deps', text: 'Separated with Dependants' },
-            { value: 'separated_disabled_deps', text: 'Separated with Disabled Dependants' }
+            { value: 'married_or_civil_partnership_no_dependants', text: 'Married or Civil Partnership, No Dependants' },
+            { value: 'married_or_civil_partnership_with_dependants', text: 'Married or Civil Partnership with Dependants' },
+            { value: 'married_or_civil_partnership_with_disabled_dependants', text: 'Married or Civil Partnership with Disabled Dependants' },
+            { value: 'married_or_civil_partnership_self_disabled', text: 'Married or Civil Partnership, Self-Disabled' },
+            { value: 'married_or_civil_partnership_spouse_disabled', text: 'Married or Civil Partnership, Spouse-Disabled' },
+            { value: 'married_or_civil_partnership_caregiver', text: 'Married or Civil Partnership, Caregiver' },
+            { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
+            { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
+            { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
+            { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
+            { value: 'separated_with_dependants', text: 'Separated with Dependants' },
+            { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
         ],
         AUS: [
-            { value: 'single_no_deps', text: 'Single, No Dependants' },
-            { value: 'single_deps', text: 'Single with Dependants' },
-            { value: 'single_disabled_deps', text: 'Single with Disabled Dependants' },
+            { value: 'single_no_dependants', text: 'Single, No Dependants' },
+            { value: 'single_with_dependants', text: 'Single with Dependants' },
+            { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
             { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
             { value: 'single_caregiver', text: 'Single, Caregiver' },
-            { value: 'married_no_deps', text: 'Married or De Facto, No Dependants' },
-            { value: 'married_deps', text: 'Married or De Facto with Dependants' },
-            { value: 'married_disabled_deps', text: 'Married or De Facto with Disabled Dependants' },
-            { value: 'married_self_disabled', text: 'Married or De Facto, Self-Disabled' },
-            { value: 'married_spouse_disabled', text: 'Married or De Facto, Spouse-Disabled' },
-            { value: 'married_caregiver', text: 'Married or De Facto, Caregiver' },
-            { value: 'widowed_no_deps', text: 'Widowed, No Dependants' },
-            { value: 'widowed_deps', text: 'Widowed with Dependants' },
-            { value: 'widowed_disabled_deps', text: 'Widowed with Disabled Dependants' },
-            { value: 'separated_no_deps', text: 'Separated, No Dependants' },
-            { value: 'separated_deps', text: 'Separated with Dependants' },
-            { value: 'separated_disabled_deps', text: 'Separated with Disabled Dependants' }
+            { value: 'married_or_de_facto_no_dependants', text: 'Married or De Facto, No Dependants' },
+            { value: 'married_or_de_facto_with_dependants', text: 'Married or De Facto with Dependants' },
+            { value: 'married_or_de_facto_with_disabled_dependants', text: 'Married or De Facto with Disabled Dependants' },
+            { value: 'married_or_de_facto_self_disabled', text: 'Married or De Facto, Self-Disabled' },
+            { value: 'married_or_de_facto_spouse_disabled', text: 'Married or De Facto, Spouse-Disabled' },
+            { value: 'married_or_de_facto_caregiver', text: 'Married or De Facto, Caregiver' },
+            { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
+            { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
+            { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
+            { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
+            { value: 'separated_with_dependants', text: 'Separated with Dependants' },
+            { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
         ],
         OTHER: [
-            { value: 'single_no_deps', text: 'Single, No Dependants' },
-            { value: 'single_deps', text: 'Single with Dependants' },
-            { value: 'single_disabled_deps', text: 'Single with Disabled Dependants' },
+            { value: 'single_no_dependants', text: 'Single, No Dependants' },
+            { value: 'single_with_dependants', text: 'Single with Dependants' },
+            { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
             { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
             { value: 'single_caregiver', text: 'Single, Caregiver' },
-            { value: 'coupled_no_deps', text: 'Coupled, No Dependants' },
-            { value: 'coupled_deps', text: 'Coupled with Dependants' },
-            { value: 'coupled_disabled_deps', text: 'Coupled with Disabled Dependants' },
+            { value: 'coupled_no_dependants', text: 'Coupled, No Dependants' },
+            { value: 'coupled_with_dependants', text: 'Coupled with Dependants' },
+            { value: 'coupled_with_disabled_dependants', text: 'Coupled with Disabled Dependants' },
             { value: 'coupled_self_disabled', text: 'Coupled, Self-Disabled' },
             { value: 'coupled_spouse_disabled', text: 'Coupled, Spouse-Disabled' },
             { value: 'coupled_caregiver', text: 'Coupled, Caregiver' },
-            { value: 'widowed_no_deps', text: 'Widowed, No Dependants' },
-            { value: 'widowed_deps', text: 'Widowed with Dependants' },
-            { value: 'widowed_disabled_deps', text: 'Widowed with Disabled Dependants' },
-            { value: 'separated_no_deps', text: 'Separated, No Dependants' },
-            { value: 'separated_deps', text: 'Separated with Dependants' },
-            { value: 'separated_disabled_deps', text: 'Separated with Disabled Dependants' }
+            { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
+            { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
+            { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
+            { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
+            { value: 'separated_with_dependants', text: 'Separated with Dependants' },
+            { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
         ]
     };
 
@@ -286,7 +286,16 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Please enter your age.');
             return;
         }
-        if (!ageSpouse && /married|common_law/.test(fillingStatus)) {
+        if (!ageSpouse && [
+            'married_with_dependants',
+            'married_with_disabled_dependants',
+            'common_law_with_dependants',
+            'common_law_with_disabled_dependants',
+            'married_filing_jointly_with_dependants',
+            'married_filing_jointly_with_disabled_dependants',
+            'married_filing_separately_with_dependants',
+            'married_filing_separately_with_disabled_dependants'
+        ].includes(fillingStatus)) {
             alert('Please enter your spouse’s age.');
             return;
         }
@@ -311,11 +320,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        if (numDisabledDependants > 0 && !/disabled_deps/.test(fillingStatus)) {
+        if (numDisabledDependants > 0 && ![
+            'single_with_disabled_dependants',
+            'widowed_with_disabled_dependants',
+            'separated_with_disabled_dependants',
+            'married_with_disabled_dependants',
+            'common_law_with_disabled_dependants',
+            'coupled_with_disabled_dependants',
+            'qualifying_widow_with_disabled_dependants',
+            'married_filing_jointly_with_disabled_dependants',
+            'married_filing_separately_with_disabled_dependants',
+            'head_of_household_with_disabled_dependants'
+        ].includes(fillingStatus)) {
             alert('You’ve indicated disabled dependants but selected a filing status without disabled dependants. Please update your filing status.');
             return;
         }
-        if (numDisabledDependants === 0 && /disabled_deps/.test(fillingStatus)) {
+        if (numDisabledDependants === 0 && [
+            'single_with_disabled_dependants',
+            'widowed_with_disabled_dependants',
+            'separated_with_disabled_dependants',
+            'married_with_disabled_dependants',
+            'common_law_with_disabled_dependants',
+            'coupled_with_disabled_dependants',
+            'qualifying_widow_with_disabled_dependants',
+            'married_filing_jointly_with_disabled_dependants',
+            'married_filing_separately_with_disabled_dependants',
+            'head_of_household_with_disabled_dependants'
+        ].includes(fillingStatus)) {
             alert('You’ve selected a filing status with disabled dependants but indicated zero disabled dependants. Please update your inputs.');
             return;
         }
@@ -327,7 +358,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const filingStatusDropdown = document.getElementById('filingStatus');
         const selectedFilingStatus = filingStatusDropdown.value;
 
-        if (selectedFilingStatus && /_deps/.test(selectedFilingStatus) && !/_no_deps/.test(selectedFilingStatus)) {
+        // Explicitly check for filing statuses that indicate dependants
+        const statusesWithDependants = [
+            'single_with_dependants',
+            'single_with_disabled_dependants',
+            'widowed_with_dependants',
+            'widowed_with_disabled_dependants',
+            'separated_with_dependants',
+            'separated_with_disabled_dependants',
+            'married_with_dependants',
+            'married_with_disabled_dependants',
+            'common_law_with_dependants',
+            'common_law_with_disabled_dependants',
+            'coupled_with_dependants',
+            'coupled_with_disabled_dependants',
+            'qualifying_widow_with_dependants',
+            'qualifying_widow_with_disabled_dependants',
+            'married_filing_jointly_with_dependants',
+            'married_filing_jointly_with_disabled_dependants',
+            'married_filing_separately_with_dependants',
+            'married_filing_separately_with_disabled_dependants',
+            'head_of_household_with_dependants',
+            'head_of_household_with_disabled_dependants'
+        ];
+
+        if (statusesWithDependants.includes(selectedFilingStatus)) {
             dependantsContainer.style.display = 'block';
         } else {
             dependantsContainer.style.display = 'none';
