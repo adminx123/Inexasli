@@ -89,3 +89,5 @@ document.addEventListener('DOMContentLoaded', () => {
         displayWarning("You have indicated that you own one or more assets jointly with your romantic partner. Please enter the market value of the assets and your corresponding percentage of ownership.");
     }
 });
+
+//
