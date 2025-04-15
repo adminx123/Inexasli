@@ -120,16 +120,34 @@ window.calculateAll = function () {
     setLocal("assets_art_jewelry_percent", document.getElementById("assets_art_jewelry_percent").value.trim() !== "" ? document.getElementById("assets_art_jewelry_percent").value : "100", 365);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    const romanticassetLocal = getLocal('romanticasset');
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const maritalStatus = getLocal('maritalStatus'); // Fetch the marital status from local storage
     const percentInputs = document.querySelectorAll('.percent-input');
 
-    if (romanticassetLocal === 'checked') {
-        percentInputs.forEach(input => input.style.display = 'block');
-    } else {
-        percentInputs.forEach(input => input.style.display = 'none');
+    if (maritalStatus === 'married' || maritalStatus === 'common-law') {
+        percentInputs.forEach(input => input.style.display = 'block'); // Show inputs for married or common-law
+    } else if (maritalStatus === 'single') {
+        percentInputs.forEach(input => input.style.display = 'none'); // Hide inputs for single status
     }
 
+    const formElements = [
+        'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+        'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+        'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
+        'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
+        'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent', 'assets_primary_residence_percent',
+        'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
+    ];
+
+    formElements.forEach(elementId => {
+        const value = getLocal(elementId);
+        const element = document.getElementById(elementId);
+        if (element && value !== null) {
+            element.value = value;
+        }
+    });
+});
     const formElements = [
         'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
         'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
