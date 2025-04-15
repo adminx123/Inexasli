@@ -1003,6 +1003,15 @@ textarea {
   font-family: "Inter", sans-serif;
 }
 
+#birthYearDisabledDependants {
+  width: 345px; /* Match the width of inputs and dropdowns */
+  height: 30px; /* Match the height of inputs and dropdowns */
+  padding: 5px; /* Consistent padding */
+  font-size: 16px; /* Consistent font size */
+  box-sizing: border-box; /* Include padding and border in dimensions */
+  resize: none; /* Prevent resizing */
+}
+
 .ai-button {
   width: 50px;
   height: 50px;
