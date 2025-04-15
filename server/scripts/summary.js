@@ -165,10 +165,14 @@ function updateFreeContent() {
     updateIncomeErosionPieChart();
 }
 
-// Unlock premium content
 function unlockPremiumContent() {
-    document.querySelectorAll('.premium-blur').forEach(el => el.classList.remove('premium-blur'));
-    document.querySelectorAll('.premium-notice').forEach(el.style.display = 'none');
+    document.querySelectorAll('.premium-blur').forEach(el => {
+        el.classList.remove('premium-blur');
+        if (el.textContent === '[Locked]') {
+            el.textContent = '';
+        }
+    });
+    document.querySelectorAll('.premium-notice').forEach(el => el.style.display = 'none');
     const goalAmount = document.getElementById('goalAmount');
     if (goalAmount) goalAmount.disabled = false;
 }
