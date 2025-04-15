@@ -203,22 +203,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (savedStatus) {
                 filingStatusDropdown.value = savedStatus;
-                filingStatusDropdown.dispatchEvent(new Event('change'));
+                updateDependantsVisibility();
+                updateMaritalStatusVisibility();
+                updateSpecificsVisibility();
             }
 
             filingStatusSection.style.display = 'block';
         } else {
             filingStatusSection.style.display = 'none';
+            updateMaritalStatusVisibility(); // Hide spouse fields if no filing status
         }
     }
 
     function updateFormVisibility() {
-        // Removed all show/hide logic for simplicity
+        // Placeholder for additional visibility logic if needed
     }
 
-    updateFormVisibility();
-
-    const numericInputs = ['numDependants', 'numDisabledDependants', 'numChildrenUnder19', 'numAdultDependants', 'ageSelf', 'ageSpouse'];
+    const numericInputs = ['ageSelf', 'ageSpouse']; // Removed unused inputs
     numericInputs.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
@@ -244,18 +245,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const checkboxes = ['dependants']; // Removed 'debt' from the list
-
-    checkboxes.forEach(id => {
-        const item = document.getElementById(id);
-        if (item) {
-            const value = getLocal(id);
-            item.checked = value === 'checked';
-            item.classList.toggle('selected', value === 'checked');
-            if (value !== 'checked') setLocal(id, 'unChecked', 365);
-            item.addEventListener('click', () => {
-                item.classList.toggle('selected');
-                setLocal(id, item.checked ? 'checked' : 'unChecked', 365);
+    const textAreas = ['birthYearDisabledDependants'];
+    textAreas.forEach(id => {
+        const textarea = document.getElementById(id);
+        if (textarea) {
+            const savedValue = getLocal(id);
+            if (savedValue) textarea.value = savedValue;
+            textarea.addEventListener('change', () => {
+                setLocal(id, textarea.value, 365);
                 updateFormVisibility();
             });
         }
@@ -294,7 +291,17 @@ document.addEventListener('DOMContentLoaded', () => {
             'married_filing_jointly_with_dependants',
             'married_filing_jointly_with_disabled_dependants',
             'married_filing_separately_with_dependants',
-            'married_filing_separately_with_disabled_dependants'
+            'married_filing_separately_with_disabled_dependants',
+            'married_no_dependants',
+            'common_law_no_dependants',
+            'married_filing_jointly_no_dependants',
+            'married_filing_separately_no_dependants',
+            'married_or_civil_partnership_no_dependants',
+            'married_or_civil_partnership_with_dependants',
+            'married_or_de_facto_no_dependants',
+            'married_or_de_facto_with_dependants',
+            'coupled_no_dependants',
+            'coupled_with_dependants'
         ].includes(fillingStatus)) {
             alert('Please enter your spouse’s age.');
             return;
@@ -304,61 +311,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const numDependants = parseInt(getLocal('numDependants') || '0');
-        const numDisabledDependants = parseInt(getLocal('numDisabledDependants') || '0');
-        const numChildrenUnder19 = parseInt(getLocal('numChildrenUnder19') || '0');
-        const numAdultDependants = parseInt(getLocal('numAdultDependants') || '0');
-
-        if (numDependants > 0) {
-            if (numDisabledDependants > numDependants) {
-                alert('Number of disabled dependants cannot exceed total dependants.');
-                return;
-            }
-            if (numChildrenUnder19 + numAdultDependants > numDependants) {
-                alert('Total of children under 19 and adult dependants cannot exceed total dependants.');
-                return;
-            }
-        }
-
-        if (numDisabledDependants > 0 && ![
-            'single_with_disabled_dependants',
-            'widowed_with_disabled_dependants',
-            'separated_with_disabled_dependants',
-            'married_with_disabled_dependants',
-            'common_law_with_disabled_dependants',
-            'coupled_with_disabled_dependants',
-            'qualifying_widow_with_disabled_dependants',
-            'married_filing_jointly_with_disabled_dependants',
-            'married_filing_separately_with_disabled_dependants',
-            'head_of_household_with_disabled_dependants'
-        ].includes(fillingStatus)) {
-            alert('You’ve indicated disabled dependants but selected a filing status without disabled dependants. Please update your filing status.');
-            return;
-        }
-        if (numDisabledDependants === 0 && [
-            'single_with_disabled_dependants',
-            'widowed_with_disabled_dependants',
-            'separated_with_disabled_dependants',
-            'married_with_disabled_dependants',
-            'common_law_with_disabled_dependants',
-            'coupled_with_disabled_dependants',
-            'qualifying_widow_with_disabled_dependants',
-            'married_filing_jointly_with_disabled_dependants',
-            'married_filing_separately_with_disabled_dependants',
-            'head_of_household_with_disabled_dependants'
-        ].includes(fillingStatus)) {
-            alert('You’ve selected a filing status with disabled dependants but indicated zero disabled dependants. Please update your inputs.');
-            return;
-        }
-
         window.location.href = './income.html';
     };
 
     function updateDependantsVisibility() {
         const filingStatusDropdown = document.getElementById('filingStatus');
-        const selectedFilingStatus = filingStatusDropdown.value;
+        const selectedFilingStatus = filingStatusDropdown ? filingStatusDropdown.value : '';
 
-        // Explicitly check for filing statuses that indicate dependants
         const statusesWithDependants = [
             'single_with_dependants',
             'single_with_disabled_dependants',
@@ -388,7 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dependantsContainer.style.display = 'none';
         }
 
-        // Hide 'Number of Disabled Dependants' field unless the selected filing status includes disabled dependants
         const statusesWithDisabledDependants = [
             'single_with_disabled_dependants',
             'widowed_with_disabled_dependants',
@@ -401,22 +359,38 @@ document.addEventListener('DOMContentLoaded', () => {
             'married_filing_separately_with_disabled_dependants',
             'head_of_household_with_disabled_dependants'
         ];
-        document.getElementById('numDisabledDependants').style.display = statusesWithDisabledDependants.includes(selectedFilingStatus) ? 'block' : 'none';
+        document.getElementById('birthYearDisabledDependants').style.display = statusesWithDisabledDependants.includes(selectedFilingStatus) ? 'block' : 'none';
     }
 
     function updateMaritalStatusVisibility() {
         const filingStatusDropdown = document.getElementById('filingStatus');
-        const selectedFilingStatus = filingStatusDropdown.value;
+        const selectedFilingStatus = filingStatusDropdown ? filingStatusDropdown.value : '';
 
-        if (selectedFilingStatus && /married|common_law/.test(selectedFilingStatus)) {
-            document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'block');
+        const singleStatuses = [
+            'single_no_dependants',
+            'single_with_dependants',
+            'single_with_disabled_dependants',
+            'single_self_disabled',
+            'single_caregiver',
+            'widowed_no_dependants',
+            'widowed_with_dependants',
+            'widowed_with_disabled_dependants',
+            'separated_no_dependants',
+            'separated_with_dependants',
+            'separated_with_disabled_dependants',
+            'head_of_household_no_dependants',
+            'head_of_household_with_dependants',
+            'head_of_household_with_disabled_dependants',
+            'head_of_household_caregiver',
+            'qualifying_widow_no_dependants',
+            'qualifying_widow_with_dependants',
+            'qualifying_widow_with_disabled_dependants'
+        ];
+
+        if (singleStatuses.includes(selectedFilingStatus) || !selectedFilingStatus) {
+            document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'none');
         } else {
-            document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'none');
-        }
-    
-        // Explicitly hide spouse fields for "Single" or "Single, No Dependants"
-        if (selectedFilingStatus === 'single' || selectedFilingStatus === 'single_no_deps') {
-            document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'none');
+            document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'block');
         }
     }
 
@@ -431,34 +405,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Attach event listener to filing status dropdown
-    const filingStatusDropdown = document.getElementById('filingStatus');
-    if (filingStatusDropdown) {
-        filingStatusDropdown.addEventListener('change', updateSpecificsVisibility);
-    }
-
-    // Initial visibility update
-    updateSpecificsVisibility();
-
-    filingStatusContainer.addEventListener('click', (event) => {
-        const clickedItem = event.target.closest('.grid-item');
-        if (clickedItem) {
-            filingStatusContainer.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
-            clickedItem.classList.add('selected');
-
-            // Set local storage based on filing status
-            if (/_deps/.test(clickedItem.dataset.value) && !/_no_deps/.test(clickedItem.dataset.value)) {
-                setLocal('dependant', 'dependant', 365);
-            } else {
-                setLocal('dependant', 'no_dependant', 365);
-            }
-
-            updateDependantsVisibility();
-            updateMaritalStatusVisibility();
-        }
-    });
-
-    // Initial visibility update
+    // Initial visibility updates
     updateDependantsVisibility();
     updateMaritalStatusVisibility();
+    updateSpecificsVisibility();
 });
