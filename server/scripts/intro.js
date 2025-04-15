@@ -387,6 +387,21 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             dependantsContainer.style.display = 'none';
         }
+
+        // Hide 'Number of Disabled Dependants' field unless the selected filing status includes disabled dependants
+        const statusesWithDisabledDependants = [
+            'single_with_disabled_dependants',
+            'widowed_with_disabled_dependants',
+            'separated_with_disabled_dependants',
+            'married_with_disabled_dependants',
+            'common_law_with_disabled_dependants',
+            'coupled_with_disabled_dependants',
+            'qualifying_widow_with_disabled_dependants',
+            'married_filing_jointly_with_disabled_dependants',
+            'married_filing_separately_with_disabled_dependants',
+            'head_of_household_with_disabled_dependants'
+        ];
+        document.getElementById('numDisabledDependants').style.display = statusesWithDisabledDependants.includes(selectedFilingStatus) ? 'block' : 'none';
     }
 
     function updateMaritalStatusVisibility() {
