@@ -21,17 +21,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const dependantsContainer = document.querySelector('.dependantsContainer');
     const residencyStatus = document.getElementById('residencyStatus');
 
-    if (residencyStatus) {
-        const savedResidencyStatus = getLocal('residencyStatus');
-        if (savedResidencyStatus) {
-            residencyStatus.value = savedResidencyStatus; // Restore saved value
+    const residency = document.getElementById('residency');
+    if (residency) {
+        const savedResidency = getLocal('residency');
+        if (savedResidency) {
+            residency.value = savedResidency; // Restore saved value
         }
 
-        residencyStatus.addEventListener('change', () => {
-            setLocal('residencyStatus', residencyStatus.value, 365); // Save to local storage
+        residency.addEventListener('change', () => {
+            setLocal('residency', residency.value, 365); // Save to local storage
         });
 
-        residencyStatus.style.display = 'block'; // Ensure visibility on page load
+        residency.style.display = 'block'; // Ensure visibility on page load
     }
 
     const filingOptions = {

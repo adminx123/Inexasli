@@ -2,111 +2,21 @@ import { getLocal } from '/server/scripts/getlocal.js';
 
 
 function generateFinancialPrompt() {
-    let prompt = `Text goes here for what i want the prmpt so say`;
+    let prompt = "";
 
-    // Check filling status
-    const fillingStatus = getLocal('fillingStatus');
-    if (fillingStatus && fillingStatus.toLowerCase().includes('partner')) {
-        prompt += `Note: The user is filing with a partner (fillingStatus: ${fillingStatus}). Ensure tax calculations reflect joint filing where applicable.\n\n`;
-    }
-
-    // Define all localStorage keys
-    const incomeFields = [
-        'income_salary_wages', 'income_salary_wages_partner', 'income_salary_wages_shared', 
-        'income_salary_wages_shared_p1_percent', 'income_salary_wages_shared_p2_percent',
-        // ... (other income fields as defined in original code)
-    ];
-
-    const incomeFrequencyFields = [
-        'income_salary_wages_frequency', 'income_salary_wages_partner_frequency',
-        // ... (other income frequency fields)
-    ];
-
-    const expenseFields = [
-        'expenses_grocery', 'expenses_grocery_partner', 'expenses_grocery_shared', 
-        'expenses_grocery_shared_p1_percent', 'expenses_grocery_shared_p2_percent',
-        // ... (other expense fields)
-    ];
-
-    const expenseFrequencyFields = [
-        'expenses_grocery_frequency', 'expenses_grocery_partner_frequency',
-        // ... (other expense frequency fields)
-    ];
-
-    const assetFields = [
-        'assets_checking_accounts', 'assets_checking_accounts_partner', 'assets_checking_accounts_shared', 
-        'assets_checking_accounts_shared_p1_percent', 'assets_checking_accounts_shared_p2_percent',
-        // ... (other asset fields)
-    ];
-
-    const liabilityFields = [
-        'liabilities_small_business_loan', 'liabilities_small_business_loan_partner', 'liabilities_small_business_loan_shared', 
-        'liabilities_small_business_loan_shared_p1_percent', 'liabilities_small_business_loan_shared_p2_percent',
-        // ... (other liability fields)
-    ];
-
-    const otherFields = [
-        'selectedCountry', 'selectedSubregion', 'summary_reached', 'fillingStatus'
+    // Define the required localStorage keys
+    const requiredFields = [
+        'ANNUALINCOME', 'ANNUALEMPLOYMENTINCOME', 'fillingStatus', 'income_sole_prop', 
+        'birthYearDisabledDependants', 'RETIREMENTCONTRIBUTION', 'residencyStatus'
     ];
 
     // Add data to prompt
-    const region = getLocal('selectedCountry');
-    const subregion = getLocal('selectedSubregion');
-    if (region && region !== 'NONE') {
-        prompt += `Region: ${region}\n`;
-        if (subregion) prompt += `Subregion: ${subregion}\n\n`;
-    }
-
-    // Add ageSelf and ageSpouse
-    const ageSelf = getLocal('ageSelf');
-    const ageSpouse = getLocal('ageSpouse');
-    if (ageSelf && ageSelf !== '0') {
-        prompt += `Age (Self): ${ageSelf}\n`;
-    }
-    if (ageSpouse && ageSpouse !== '0') {
-        prompt += `Age (Spouse): ${ageSpouse}\n`;
-    }
-
-    // Add employmentStatus
-    const employmentStatus = getLocal('employmentStatus');
-    if (employmentStatus && employmentStatus !== 'NONE') {
-        prompt += `Employment Status: ${employmentStatus}\n`;
-    }
-
-    // Handle single filing status
-    if (fillingStatus && fillingStatus.includes('single')) {
-        const excludedKeys = ['partner', 'shared', 'percent'];
-        const filterKeys = (key) => !excludedKeys.some(excluded => key.includes(excluded));
-
-        const filteredIncomeFields = incomeFields.filter(filterKeys);
-        const filteredExpenseFields = expenseFields.filter(filterKeys);
-        const filteredAssetFields = assetFields.filter(filterKeys);
-        const filteredLiabilityFields = liabilityFields.filter(filterKeys);
-
-        prompt += formatSection(filteredIncomeFields, 'Income');
-        prompt += formatFrequencySection(incomeFrequencyFields.filter(filterKeys), 'Income');
-        prompt += formatSection(filteredExpenseFields, 'Expenses');
-        prompt += formatFrequencySection(expenseFrequencyFields.filter(filterKeys), 'Expenses');
-        prompt += formatSection(filteredAssetFields, 'Assets');
-        prompt += formatSection(filteredLiabilityFields, 'Liabilities');
-    } else {
-        prompt += formatSection(incomeFields, 'Income');
-        prompt += formatFrequencySection(incomeFrequencyFields, 'Income');
-        prompt += formatSection(expenseFields, 'Expenses');
-        prompt += formatFrequencySection(expenseFrequencyFields, 'Expenses');
-        prompt += formatSection(assetFields, 'Assets');
-        prompt += formatSection(liabilityFields, 'Liabilities');
-    }
-
-    prompt += formatSection(otherFields, 'Other Settings');
-
-    prompt = addFrequencyItemsToPrompt(prompt);
-
-    // Handle empty prompt case
-    if (prompt.trim() === 'texta gasdgasgdgas8888***' ){
-        openGeneratedPromptModal();
-        return;
-    }
+    requiredFields.forEach(field => {
+        const value = getLocal(field);
+        if (value && value !== '') {
+            prompt += `${field}\t${value}\n`;
+        }
+    });
 
     // Copy to clipboard and show modal
     navigator.clipboard.writeText(prompt).then(() => {
