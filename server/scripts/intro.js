@@ -19,6 +19,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedSubregion = getLocal('selectedSubregion');
     const savedStatus = getLocal('fillingStatus');
     const dependantsContainer = document.querySelector('.dependantsContainer');
+    const residencyStatus = document.getElementById('residencyStatus');
+
+    if (residencyStatus) {
+        const savedResidencyStatus = getLocal('residencyStatus');
+        if (savedResidencyStatus) {
+            residencyStatus.value = savedResidencyStatus; // Restore saved value
+        }
+
+        residencyStatus.addEventListener('change', () => {
+            setLocal('residencyStatus', residencyStatus.value, 365); // Save to local storage
+        });
+
+        residencyStatus.style.display = 'block'; // Ensure visibility on page load
+    }
 
     const filingOptions = {
         CAN: [
@@ -150,6 +164,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSubregionDropdown(country);
         updateFilingStatus(country);
         updateFormVisibility();
+
+        if (residencyStatus) {
+            residencyStatus.style.display = 'block'; // Ensure visibility when country changes
+        }
     });
 
     subregionDropdown.addEventListener('change', () => {
