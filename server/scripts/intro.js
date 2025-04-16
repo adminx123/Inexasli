@@ -412,6 +412,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function toggleFilingStatusVisibility() {
+        const residencyDropdown = document.getElementById('residency');
+        const filingStatusDiv = document.querySelector('.filingStatus');
+
+        if (residencyDropdown && filingStatusDiv) {
+            if (residencyDropdown.value) {
+                filingStatusDiv.style.display = 'block';
+            } else {
+                filingStatusDiv.style.display = 'none';
+            }
+        }
+    }
+
+    // Add event listener to toggle visibility on change
+    const residencyDropdown = document.getElementById('residency');
+    if (residencyDropdown) {
+        residencyDropdown.addEventListener('change', toggleFilingStatusVisibility);
+    }
+
+    // Initial check on page load
+    toggleFilingStatusVisibility();
+
     // Initial visibility updates
     updateDependantsVisibility();
     updateMaritalStatusVisibility();
