@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>xAI API Test</title>
+</head>
+<body>
+  <h1>xAI API Test</h1>
+  <p>Check the browser console (F12) for the API response or errors.</p>
+  <script>
+    fetch('<your-api-endpoint>', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'grok-3-mini-beta',
+        messages: [{ role: 'user', content: 'Hello, how can you assist me today?' }],
+        max_tokens: 500
+      })
+    })
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+        return res.json();
+      })
+      .then(data => console.log('API Response:', data))
+      .catch(err => console.error('Error:', err));
+  </script>
+</body>
+</html>
