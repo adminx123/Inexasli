@@ -130,6 +130,7 @@ function calculateNormalizedSum() {
         ['expenses_cellphone_service', 'expenses_cellphone_service_frequency'],
         ['expenses_medical_dental', 'expenses_medical_dental_frequency'],
         ['expenses_perscription', 'expenses_perscription_frequency'],
+        ['expenses_retirement', 'expenses_retirement_frequency'],        
         ['expenses_dining', 'expenses_dining_frequency'],
         ['expenses_subscriptions', 'expenses_subscriptions_frequency'],
         ['expenses_vacation', 'expenses_vacation_frequency'],
@@ -168,6 +169,8 @@ function calculateNormalizedSum() {
     ];
 
     let annualExpenseSum = 0;
+    
+    // Total expenses calculation
     expenseFields.forEach(([inputId, frequencyGroupId]) => {
         const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
         const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
@@ -176,7 +179,21 @@ function calculateNormalizedSum() {
 
     ANNUALEXPENSESUM = annualExpenseSum;
     document.getElementById('ANNUALEXPENSESUM').textContent = `$${ANNUALEXPENSESUM.toFixed(2)}`;
+
+    // 🔹 Separate calculation for retirement contribution
+    const retirementCheckbox = document.querySelector(`#expenses_retirement_frequency input[type="checkbox"]:checked`);
+    const retirementFrequency = retirementCheckbox ? retirementCheckbox.value : 'annually';
+    const retirementContribution = calculateAnnual('expenses_retirement', retirementFrequency);
+
+    // Store the RETIREMENTCONTRIBUTION in localStorage
+    localStorage.setItem('RETIREMENTCONTRIBUTION', retirementContribution);
+
+    // Optionally log it for debugging
+    console.log('RETIREMENTCONTRIBUTION saved:', retirementContribution);
 }
+
+
+
 
 // Category-specific calculations
 function essentialExpenses() {
@@ -208,7 +225,9 @@ function discretionaryExpenses() {
         ['expenses_vacation', 'expenses_vacation_frequency'],
         ['expenses_beauty', 'expenses_beauty_frequency'],
         ['expenses_travel_life_insurance', 'expenses_travel_life_insurance_frequency'],
-        ['expenses_entertainment', 'expenses_entertainment_frequency']
+        ['expenses_entertainment', 'expenses_entertainment_frequency'],
+        ['expenses_retirement', 'expenses_retirement_frequency']
+        
     ];
 
     let discretionary = 0;
@@ -315,7 +334,7 @@ function debtExpenses() {
 document.addEventListener('DOMContentLoaded', () => {
     const formElements = [
         'expenses_grocery', 'expenses_dining', 'expenses_fitness', 'expenses_hygiene', 'expenses_subscriptions',
-        'expenses_entertainment', 'expenses_clothing', 'expenses_vacation', 'expenses_beauty',
+        'expenses_entertainment', 'expenses_clothing', 'expenses_vacation', 'expenses_retirement', 'expenses_beauty',
         'expenses_travel_life_insurance', 'expenses_cellphone_service', 'expenses_medical_dental',
         'expenses_perscription', 'expenses_line_of_credit_payment', 'expenses_student_loan_payment',
         'expenses_credit_card_payment', 'expenses_tax_arrears_payment', 'expenses_small_business_loan_payment',
