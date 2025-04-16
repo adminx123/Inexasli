@@ -7,7 +7,7 @@ function generateFinancialPrompt() {
     // Define the required localStorage keys
     const requiredFields = [
         'ANNUALINCOME', 'ANNUALEMPLOYMENTINCOME', 'fillingStatus', 'income_sole_prop', 
-        'birthYearDisabledDependants', 'RETIREMENTCONTRIBUTION', 'residencyStatus'
+        'birthYearDisabledDependants', 'RETIREMENTCONTRIBUTION', 'residency'
     ];
 
     // Add data to prompt
