@@ -597,6 +597,31 @@ case 'SymptomIQ™':
     prompt += formatList(document.getElementById('decisioniq-instructions')?.value || '', 'Additional instructions');
     break;
 
+    case 'WorkflowIQ™':
+        prompt += formatList(document.getElementById('workflowiq-task')?.value || '', 'Task');
+        prompt += formatList(document.getElementById('workflowiq-steps')?.value || '', 'Task Steps');
+        prompt += formatList(document.getElementById('workflowiq-tools')?.value || '', 'Tools Used');
+        prompt += formatList(
+            document.getElementById('workflowiq-automation-type')?.value?.charAt(0).toUpperCase() +
+            document.getElementById('workflowiq-automation-type')?.value?.slice(1) || '',
+            'Automation Type'
+        );
+        prompt += formatList(
+            document.getElementById('workflowiq-priority')?.value?.charAt(0).toUpperCase() +
+            document.getElementById('workflowiq-priority')?.value?.slice(1) || '',
+            'Priority Focus'
+        );
+        prompt += formatList(document.getElementById('workflowiq-goals')?.value || '', 'Goals');
+        prompt += formatList(document.getElementById('workflowiq-constraints')?.value || '', 'Constraints');
+        prompt += formatList(document.getElementById('workflowiq-instructions')?.value || '', 'Additional Instructions');
+        break;
+
+
+
+
+
+
+
     }
 
     if (prompt) {

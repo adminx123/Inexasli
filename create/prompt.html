@@ -1339,6 +1339,59 @@ Fitness level of hiking group"></textarea>
             <!-- Free: Budget Management -->
             <h2 style="text-align: center; text-decoration: underline; font-weight: 600;">WORKFLOW AUTOMATION</h2>
 
+            <!-- Premium: WorkflowIQ™ -->
+<div class="section1 premium-section">
+    <div class="section1-header" onclick="toggleSection(this)">
+        <h2>WorkflowIQ™ <span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section1-content premium-blur">
+        <div class="row1">
+            <input type="text" id="workflowiq-task" placeholder="Enter task (e.g., Invoice processing)">
+        </div>
+        <div class="row1">
+            <textarea id="workflowiq-steps" rows="2" placeholder="Task steps: (1 per line)
+e.g., Data entry, Approval, Archiving"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="workflowiq-tools" rows="2" placeholder="Tools used: (1 per line)
+e.g., Excel, ERP, Email"></textarea>
+        </div>
+        <div class="row1">
+            <label for="workflowiq-automation-type">Select automation type:</label>
+            <select id="workflowiq-automation-type">
+                <option value="scripting">Scripting</option>
+                <option value="rpa">RPA</option>
+                <option value="api">API Integration</option>
+                <option value="low-code">Low-Code Platform</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label for="workflowiq-priority">Select priority focus:</label>
+            <select id="workflowiq-priority">
+                <option value="efficiency">Efficiency</option>
+                <option value="cost">Cost</option>
+                <option value="accuracy">Accuracy</option>
+                <option value="scalability">Scalability</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="workflowiq-goals" rows="2" placeholder="Goals: (1 per line)
+e.g., Reduce time, Minimize errors"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="workflowiq-constraints" rows="2" placeholder="Constraints: (1 per line)
+e.g., Budget, Legacy systems"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="workflowiq-instructions" rows="3" placeholder="Additional instructions: (1 per line)
+e.g., Prefer open-source tools, Ensure audit trail"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="workflowiq">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
 
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
