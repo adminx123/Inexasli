@@ -190,7 +190,7 @@ function generatePrompt(promptType) {
             }
             break;
 
-        case 'InteractionIQ™':
+        case 'SocialIQ™':
             prompt += formatGrid('#incident-goal .grid-item.selected', 'Analyze the following incident details input relative to my goal');
             prompt += formatGrid('#area-goal .grid-item.selected', 'Incident Area');
             prompt += 'Purpose of analysis: Maximize the efficiency, productivity, safety and understanding of social dynamics for the workplace or personal life.\n\n';
