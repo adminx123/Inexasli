@@ -574,6 +574,29 @@ case 'SymptomIQ™':
     prompt += formatList(document.getElementById('summary-details')?.value || '', 'Additional details or constraints');
     break;
 
+    case 'decisioniq':
+    prompt += formatList(document.getElementById('decisioniq-goal')?.value || '', 'Decision Goal');
+    prompt += formatList(
+        document.getElementById('decisioniq-analysis-type')?.value?.charAt(0).toUpperCase() +
+        document.getElementById('decisioniq-analysis-type')?.value?.slice(1) || '',
+        'Analysis type'
+    );
+    prompt += formatList(
+        document.getElementById('decisioniq-priority')?.value?.charAt(0).toUpperCase() +
+        document.getElementById('decisioniq-priority')?.value?.slice(1) || '',
+        'Priority focus'
+    );
+    prompt += formatList(document.getElementById('decisioniq-criteria')?.value || '', 'Decision criteria');
+    prompt += formatList(document.getElementById('decisioniq-options')?.value || '', 'Decision options');
+    const decisioniqStakeholderCheckboxes = document.querySelectorAll('input[name="decisioniq-stakeholders"]:checked');
+    let decisioniqSelectedStakeholders = Array.from(decisioniqStakeholderCheckboxes)
+        .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
+        .join(', ') || 'Not specified';
+    prompt += formatList(decisioniqSelectedStakeholders, 'Stakeholders');
+    prompt += formatList(document.getElementById('decisioniq-constraints')?.value || '', 'Constraints');
+    prompt += formatList(document.getElementById('decisioniq-instructions')?.value || '', 'Additional instructions');
+    break;
+
     }
 
     if (prompt) {
