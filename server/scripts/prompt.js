@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Set the "prompt" cookie on page load
     setCookie("prompt", Date.now(), 32);
+
     // Attach toggleSection to section headers (free and premium)
     document.querySelectorAll('.section > h2, .section1-header').forEach(header => {
         header.addEventListener('click', () => toggleSection(header));
@@ -46,15 +47,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!this.checked) {
                 // Hide prompts and reset scope if terms are unchecked
                 const personalPrompts = document.getElementById('personal-prompts');
-                const businessPrompts = document.getElementById('business-prompts');
                 const personalBtn = document.getElementById('personal-btn');
-                const businessBtn = document.getElementById('business-btn');
                 const promptContainer = personalPrompts?.parentElement;
 
                 if (personalPrompts) personalPrompts.classList.add('hidden');
-                if (businessPrompts) businessPrompts.classList.add('hidden');
                 if (personalBtn) personalBtn.classList.remove('selected');
-                if (businessBtn) businessBtn.classList.remove('selected');
                 if (promptContainer) promptContainer.classList.add('hidden');
                 activeScope = null; // Reset active scope
             }
@@ -81,6 +78,35 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.grid-container:not(#scope-selector):not(#app-code-status) .grid-item').forEach(item => {
         item.addEventListener('click', () => item.classList.toggle('selected'));
     });
+
+    // Personal button event listener
+    const personalBtn = document.getElementById('personal-btn');
+    if (personalBtn) {
+        personalBtn.addEventListener('click', (e) => {
+            const termsChecked = document.getElementById('termscheckbox')?.checked;
+            if (!termsChecked) {
+                e.preventDefault();
+                alert("Please agree to the Terms of Service before accessing the Promptemplates™");
+                return;
+            }
+            toggleScope('personal');
+            const targetSection = document.getElementById('personal-prompts');
+            if (targetSection) {
+                const sectionHeight = targetSection.offsetHeight;
+                const windowHeight = window.innerHeight;
+                const scrollPosition = targetSection.getBoundingClientRect().top + window.scrollY - (windowHeight - sectionHeight) / 2;
+                window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+            }
+        });
+    }
+
+    // Generate prompt buttons
+    document.querySelectorAll('.generate-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const promptType = button.getAttribute('data-prompt');
+            generatePrompt(promptType);
+        });
+    });
 });
 
 window.toggleSection = function (header) {
@@ -96,39 +122,39 @@ window.toggleSection = function (header) {
 
 function toggleScope(scope) {
     const personalBtn = document.getElementById('personal-btn');
-    const businessBtn = document.getElementById('business-btn');
     const personalPrompts = document.getElementById('personal-prompts');
-    const businessPrompts = document.getElementById('business-prompts');
-    const promptContainer = document.getElementById('personal-prompts')?.parentElement;
+    const promptContainer = personalPrompts?.parentElement;
 
-    if (!personalBtn || !businessBtn || !personalPrompts || !businessPrompts || !promptContainer) {
-        console.error('Missing elements:', {
-            personalBtn, businessBtn, personalPrompts, businessPrompts, promptContainer
-        });
+    if (!personalBtn || !personalPrompts || !promptContainer) {
+        console.error('Missing elements:', { personalBtn, personalPrompts, promptContainer });
         return;
     }
 
     if (activeScope === scope) {
+        // Hide personal prompts
         personalPrompts.classList.add('hidden');
-        businessPrompts.classList.add('hidden');
         personalBtn.classList.remove('selected');
-        businessBtn.classList.remove('selected');
         promptContainer.classList.add('hidden');
         activeScope = null;
     } else {
+        // Show personal prompts
         promptContainer.classList.remove('hidden');
-        personalPrompts.classList.add('hidden');
-        businessPrompts.classList.add('hidden');
-        personalBtn.classList.remove('selected');
-        businessBtn.classList.remove('selected');
+        personalPrompts.classList.remove('hidden');
+        personalBtn.classList.add('selected');
 
-        if (scope === 'personal') {
-            personalPrompts.classList.remove('hidden');
-            personalBtn.classList.add('selected');
-        } else if (scope === 'business') {
-            businessPrompts.classList.remove('hidden');
-            businessBtn.classList.add('selected');
-        }
+        // Ensure all <details> in personal sections are closed
+        const sections = personalPrompts.querySelectorAll('.section, .section1');
+        sections.forEach(section => {
+            const type = section.getAttribute('data-type');
+            if (type === 'personal') {
+                section.classList.add('visible');
+                const details = section.querySelector('details');
+                if (details) {
+                    details.open = false; // Keep dropdown closed
+                }
+            }
+        });
+
         activeScope = scope;
     }
 }
@@ -272,23 +298,16 @@ function generatePrompt(promptType) {
                 }
                 const age = document.getElementById('fitness-age');
                 if (age?.value) prompt += formatList(age.value, 'Age');
-                
                 const height = document.getElementById('fitness-height');
                 const heightUnit = document.getElementById('fitness-height-unit');
                 if (height?.value && heightUnit?.value) {
                     prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
-                    console.log(`Height: ${height.value} ${heightUnit.value}`); // Debug
                 }
-                
                 const weight = document.getElementById('fitness-weight');
                 const weightUnit = document.getElementById('fitness-weight-unit');
                 if (weight?.value && weightUnit?.value) {
                     prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
-                    console.log(`Weight: ${weight.value} ${weightUnit.value}`); // Debug
-                } else {
-                    console.log('Weight or unit missing:', { weight: weight?.value, weightUnit: weightUnit?.value });
                 }
-                
                 prompt += formatGrid('#fitness-level .grid-item.selected', 'Fitness Level');
                 const injuries = document.getElementById('fitness-injuries');
                 if (injuries?.value) prompt += formatList(injuries.value, 'Injuries/Health Conditions');
@@ -299,42 +318,42 @@ function generatePrompt(promptType) {
             }
             break;
 
-            case 'CalorieIQ™':
-                prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal. Also analyze my height, weight, and age to compare me against the average person at my height, age, and weight. ');
-                prompt += `
+        case 'CalorieIQ™':
+            prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal. Also analyze my height, weight, and age to compare me against the average person at my height, age, and weight. ');
+            prompt += `
                 Output only a text-based table in a code block with these exact columns: Nutrient, Target Amount, Food Log Intake, Percentage Reached. Use this header format in the code block:
                 Include no text outside the code block—no comments, explanations, or recommendations unless specified below.
                 `;
-                const recommendations = document.querySelector('#calorie-recommendations .grid-item.selected');
-                if (recommendations) {
-                    prompt += `
+            const recommendations = document.querySelector('#calorie-recommendations .grid-item.selected');
+            if (recommendations) {
+                prompt += `
                     If there are deficits in calories or macronutrients based on my goal and food log, suggest meal recommendations to meet the remaining needs. Output meal suggestions in a separate text-based table in a code block with columns: Meal, Calories, Protein (g), Carbs (g), Fat (g). Use this header format:
                     Include no text outside the code blocks.
                     `;
-                }
-                prompt += `
+            }
+            prompt += `
                 Add any future amounts I provide to the running totals unless I request a new estimate.
                 `;
-                const age = document.getElementById('calorie-age');
-                if (age?.value) prompt += formatList(age.value, 'Age');
-                const height = document.getElementById('calorie-height');
-                const heightUnit = document.getElementById('calorie-height-unit');
-                if (height?.value && heightUnit?.value) {
-                    prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
-                }
-                const weight = document.getElementById('calorie-weight');
-                const weightUnit = document.getElementById('calorie-weight-unit');
-                if (weight?.value && weightUnit?.value) {
-                    prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
-                }
-                prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
-                const foodLog = document.getElementById('calorie-food-log');
-                if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
-                break;
+            const age = document.getElementById('calorie-age');
+            if (age?.value) prompt += formatList(age.value, 'Age');
+            const height = document.getElementById('calorie-height');
+            const heightUnit = document.getElementById('calorie-height-unit');
+            if (height?.value && heightUnit?.value) {
+                prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
+            }
+            const weight = document.getElementById('calorie-weight');
+            const weightUnit = document.getElementById('calorie-weight-unit');
+            if (weight?.value && weightUnit?.value) {
+                prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
+            }
+            prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
+            const foodLog = document.getElementById('calorie-food-log');
+            if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
+            break;
 
         case 'AdventureIQ™':
             prompt += formatGrid('#trip-activities .grid-item.selected', 'Review the following activities I want to do on my trip');
-            prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format code block. If available include the weather forcast for the location(s)\n\n';
+            prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format code block. If available include the weather forecast for the location(s)\n\n';
             const tripSpecifics = document.getElementById('trip-specifics');
             if (tripSpecifics?.value) {
                 prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
@@ -364,77 +383,21 @@ function generatePrompt(promptType) {
             }
             break;
 
-
-            // Add to the switch statement in the generatePrompt function
-case 'SymptomIQ™':
-    const rootoutSymptoms = document.getElementById('rootout-symptoms');
-    if (rootoutSymptoms?.value) {
-        prompt += `Analyze the following input to identify potential causes of my symptoms, with the goal of eliminating the cause to stop the effect:\n\n`;
-        prompt += formatList(rootoutSymptoms.value, 'Symptoms');
-        prompt += formatGrid('#rootout-triggers .grid-item.selected', 'Potential Triggers');
-        const rootoutDiet = document.getElementById('rootout-diet');
-        if (rootoutDiet?.value) prompt += formatList(rootoutDiet.value, 'Diet (Past 48 Hours)');
-        const rootoutTiming = document.getElementById('rootout-timing');
-        if (rootoutTiming?.value) prompt += formatList(rootoutTiming.value, 'Timing of Symptoms');
-        const rootoutPatterns = document.getElementById('rootout-patterns');
-        if (rootoutPatterns?.value) prompt += formatList(rootoutPatterns.value, 'Observed Patterns');
-        const rootoutContext = document.getElementById('rootout-context');
-        if (rootoutContext?.value) prompt += formatList(rootoutContext.value, 'Additional Context');
-        prompt += `Purpose of analysis: Identify likely causes of my symptoms by analyzing patterns, timing, and triggers. Provide a structured response in checklist format with headings like "Potential Causes" (list possible triggers with reasoning) and "Elimination Plan" (steps to test each cause, e.g., avoid specific foods for a week). Highlight any delayed correlations (e.g., symptoms 24 hours after a trigger). Suggest consulting a professional for medical concerns.`;
-    }
-    break;
-
-        case 'business':
-            const vision = document.getElementById('business-vision');
-            if (vision?.value) {
-                prompt += `Analyze the following data for starting the following new business: ${vision.value}\n\n`;
-                prompt += 'Purpose of analysis: To review the feasibility, risks, rewards, and potential of the business idea\n\n';
-                prompt += formatGrid('#business-knowledge-level .grid-item.selected', 'Experience Level');
-                prompt += formatGrid('#business-general-skills .grid-item.selected', 'Business Skills');
-                prompt += formatGrid('#business-weaknesses .grid-item.selected', 'Challenges');
-                const organization = document.getElementById('business-organization');
-                if (organization?.value) prompt += formatList(organization.value, 'Business Tools & Equipment');
-                const network = document.getElementById('business-network');
-                if (network?.value) prompt += formatList(network.value, 'Business Network');
-            }
-            break;
-
-        case 'app':
-            const appPurpose = document.getElementById('app-purpose');
-            if (appPurpose?.value) {
-                prompt += `Analyze the following input relative to the app I want to build that: ${appPurpose.value}\n\n`;
-                prompt += 'Purpose of analysis: Create code for the user to start or continue the development of their app\n\n';
-                prompt += formatGrid('#app-code-status .grid-item.selected', 'Code Status');
-                const currentCode = document.getElementById('app-current-code');
-                if (currentCode?.value) prompt += formatList(currentCode.value, 'Current Code');
-                prompt += formatGrid('#app-features .grid-item.selected', 'Features');
-                const platform = document.getElementById('app-platform');
-                if (platform?.value) prompt += formatList(platform.value, 'Platform');
-                const budget = document.getElementById('app-budget');
-                if (budget?.value) prompt += formatList(budget.value, 'Budget');
-                const timeline = document.getElementById('app-timeline');
-                if (timeline?.value) prompt += formatList(timeline.value, 'Timeline');
-            }
-            break;
-
-        case 'marketing':
-            const marketGoal = document.getElementById('market-goal');
-            if (marketGoal?.value) {
-                prompt += `I want to create a marketing campaign. The goal is: ${marketGoal.value}\n\n`;
-                prompt += formatGrid('#market-channels .grid-item.selected', 'Channels');
-                const audience = document.getElementById('market-audience');
-                if (audience?.value) prompt += formatList(audience.value, 'Audience');
-                const budget = document.getElementById('market-budget');
-                if (budget?.value) prompt += formatList(budget.value, 'Budget');
-                const metrics = document.getElementById('market-metrics');
-                if (metrics?.value) prompt += formatList(metrics.value, 'Metrics');
-                const message = document.getElementById('market-message');
-                if (message?.value) prompt += formatList(message.value, 'Key Messages');
-                const timeline = document.getElementById('market-timeline');
-                if (timeline?.value) prompt += formatList(timeline.value, 'Timeline');
-                const competitors = document.getElementById('market-competitors');
-                if (competitors?.value) prompt += formatList(competitors.value, 'Competitors');
-                prompt += formatGrid('#market-visuals .grid-item.selected', 'Visual Assets');
+        case 'SymptomIQ™':
+            const rootoutSymptoms = document.getElementById('rootout-symptoms');
+            if (rootoutSymptoms?.value) {
+                prompt += `Analyze the following input to identify potential causes of my symptoms, with the goal of eliminating the cause to stop the effect:\n\n`;
+                prompt += formatList(rootoutSymptoms.value, 'Symptoms');
+                prompt += formatGrid('#rootout-triggers .grid-item.selected', 'Potential Triggers');
+                const rootoutDiet = document.getElementById('rootout-diet');
+                if (rootoutDiet?.value) prompt += formatList(rootoutDiet.value, 'Diet (Past 48 Hours)');
+                const rootoutTiming = document.getElementById('rootout-timing');
+                if (rootoutTiming?.value) prompt += formatList(rootoutTiming.value, 'Timing of Symptoms');
+                const rootoutPatterns = document.getElementById('rootout-patterns');
+                if (rootoutPatterns?.value) prompt += formatList(rootoutPatterns.value, 'Observed Patterns');
+                const rootoutContext = document.getElementById('rootout-context');
+                if (rootoutContext?.value) prompt += formatList(rootoutContext.value, 'Additional Context');
+                prompt += `Purpose of analysis: Identify likely causes of my symptoms by analyzing patterns, timing, and triggers. Provide a structured response in checklist format with headings like "Potential Causes" (list possible triggers with reasoning) and "Elimination Plan" (steps to test each cause, e.g., avoid specific foods for a week). Highlight any delayed correlations (e.g., symptoms 24 hours after a trigger). Suggest consulting a professional for medical concerns.`;
             }
             break;
 
@@ -464,201 +427,21 @@ case 'SymptomIQ™':
                 prompt += `Please analyze this to determine my primary Enneagram type, potential wing(s), stress and growth directions, and any additional insights based on Enneagram theory output in a code block formatted chart.`;
             }
             break;
-
-        case 'expense':
-            const locationsSelected = document.querySelectorAll('#expense-location .grid-item.selected');
-            if (locationsSelected.length > 0) {
-                prompt += formatGrid('#expense-location .grid-item.selected', 'Location');
-                const selectedLocations = Array.from(locationsSelected).map(item => item.getAttribute('data-value'));
-                if (selectedLocations.includes('Canada')) {
-                    prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
-                    Advertising, Insurance, Interest, Maintenance and Repairs, Management and Administration Fees, Motor Vehicle Expenses, Office Expenses, Legal, Accounting, and Other Professional Fees, 
-                    Property Taxes, Salaries/Wages/and Benefits, Travel, Utilities, Other Expenses (for miscellaneous items)
-                    Ensure that all items on all receipts are accounted for and categorized appropriately.\n\n`;
-                } else if (selectedLocations.includes('USA')) {
-                    prompt += `I have included separate attachments of receipts. Please review all receipts and create a table for the receipts, categorizing the items into the following expense categories:
-                    Advertising, Insurance (other than health), Interest, Repairs and Maintenance, Other Expenses (for management/admin fees or miscellaneous items), 
-                    Car and Truck Expenses, Office Expense, Legal and Professional Services, Taxes and Licenses, Wages, Travel, Utilities
-                    Ensure that all items on all receipts are accounted for and categorized appropriately.\n\n`;
-                }
-            }
-            break;
-
-        case 'research':
-            prompt += formatList(document.getElementById('research-goal')?.value, 'Research Goal');
-            prompt += formatList(document.getElementById('research-purpose')?.value, 'Purpose of this research');
-            prompt += formatList(document.getElementById('research-type')?.value?.charAt(0).toUpperCase() + document.getElementById('research-type')?.value.slice(1), 'Type of research');
-            prompt += formatList(document.getElementById('research-scope')?.value, 'Scope of the research');
-            prompt += formatList(document.getElementById('data-collection-method')?.value, 'Data collection method');
-            prompt += formatList(document.getElementById('research-audience')?.value, 'Target audience for research');
-            prompt += formatList(document.getElementById('research-context')?.value, 'Context of research');
-            prompt += formatList(document.getElementById('research-deliverables')?.value, 'Expected deliverables');
-            prompt += formatList(document.getElementById('additional-details')?.value, 'Additional details');
-            break;
-
-        case 'speculation':
-            prompt += formatList(document.getElementById('speculation-goal')?.value, 'Speculation Goal');
-            prompt += formatList(document.getElementById('speculation-purpose')?.value, 'Purpose of this speculation');
-            prompt += formatList(
-                document.getElementById('speculation-type')?.value?.charAt(0).toUpperCase() +
-                document.getElementById('speculation-type')?.value.slice(1),
-                'Type of speculation'
-            );
-            prompt += formatList(document.getElementById('speculation-scope')?.value, 'Scope of the speculation');
-            prompt += formatList(document.getElementById('speculation-approach')?.value, 'Approach to speculation');
-            prompt += formatList(document.getElementById('speculation-audience')?.value, 'Focus of speculation');
-            prompt += formatList(document.getElementById('speculation-context')?.value, 'Context of speculation');
-            prompt += formatList(document.getElementById('speculation-outcomes')?.value, 'Expected outcomes');
-            prompt += formatList(document.getElementById('additional-details')?.value, 'Additional details');
-            break;
-
-            case 'quiz-generator':
-                prompt += formatList(document.getElementById('quiz-subject')?.value || '', 'Quiz Subject');
-                prompt += formatList(
-                    document.getElementById('quiz-objective')?.value?.charAt(0).toUpperCase() +
-                    document.getElementById('quiz-objective')?.value?.slice(1) || '',
-                    'Objective of the quiz'
-                );
-                prompt += formatList(
-                    document.getElementById('quiz-difficulty-tier')?.value?.charAt(0).toUpperCase() +
-                    document.getElementById('quiz-difficulty-tier')?.value?.slice(1) || '',
-                    'Difficulty tier'
-                );
-                const quizFormatCheckboxes = document.querySelectorAll('input[name="quiz-formats"]:checked');
-                let quizSelectedFormats = Array.from(quizFormatCheckboxes)
-                    .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
-                    .join(', ') || 'Not specified';
-                prompt += formatList(quizSelectedFormats, 'Question formats');
-                prompt += formatList(
-                    document.getElementById('quiz-question-count')?.value?.charAt(0).toUpperCase() +
-                    document.getElementById('quiz-question-count')?.value?.slice(1) || '',
-                    'Number of questions'
-                );
-                prompt += formatList(document.getElementById('quiz-focus-areas')?.value || '', 'Focus areas');
-                const quizParticipantCheckboxes = document.querySelectorAll('input[name="quiz-participants"]:checked');
-                let quizSelectedParticipants = Array.from(quizParticipantCheckboxes)
-                    .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
-                    .join(', ') || 'Not specified';
-                prompt += formatList(quizSelectedParticipants, 'Quiz participants');
-                prompt += formatList(document.getElementById('quiz-extra-instructions')?.value || '', 'Extra instructions or constraints');
-                break;
-
-                case 'BookIQ™':
-    prompt += formatList(document.getElementById('book-title-author')?.value || '', 'Book Title and Author');
-    prompt += formatList(
-        document.getElementById('summary-purpose')?.value?.charAt(0).toUpperCase() +
-        document.getElementById('summary-purpose')?.value?.slice(1) || '',
-        'Purpose of the summary'
-    );
-    prompt += formatList(
-        document.getElementById('summary-length')?.value?.charAt(0).toUpperCase() +
-        document.getElementById('summary-length')?.value?.slice(1) || '',
-        'Summary length'
-    );
-    prompt += formatList(document.getElementById('summary-themes')?.value || '', 'Key themes or topics');
-    const audienceCheckboxes = document.querySelectorAll('input[name="summary-audience"]:checked');
-    let audiences = Array.from(audienceCheckboxes)
-        .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
-        .join(', ') || 'Not specified';
-    prompt += formatList(audiences, 'Target audience');
-    const elementsCheckboxes = document.querySelectorAll('input[name="summary-elements"]:checked');
-    let elements = Array.from(elementsCheckboxes)
-        .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
-        .join(', ') || 'Not specified';
-    prompt += formatList(elements, 'Specific elements to include');
-    prompt += formatList(
-        document.getElementById('summary-tone')?.value?.charAt(0).toUpperCase() +
-        document.getElementById('summary-tone')?.value?.slice(1) || '',
-        'Tone or style'
-    );
-    prompt += formatList(document.getElementById('summary-details')?.value || '', 'Additional details or constraints');
-    break;
-
-    case 'decisioniq':
-    prompt += formatList(document.getElementById('decisioniq-goal')?.value || '', 'Decision Goal');
-    prompt += formatList(
-        document.getElementById('decisioniq-analysis-type')?.value?.charAt(0).toUpperCase() +
-        document.getElementById('decisioniq-analysis-type')?.value?.slice(1) || '',
-        'Analysis type'
-    );
-    prompt += formatList(
-        document.getElementById('decisioniq-priority')?.value?.charAt(0).toUpperCase() +
-        document.getElementById('decisioniq-priority')?.value?.slice(1) || '',
-        'Priority focus'
-    );
-    prompt += formatList(document.getElementById('decisioniq-criteria')?.value || '', 'Decision criteria');
-    prompt += formatList(document.getElementById('decisioniq-options')?.value || '', 'Decision options');
-    const decisioniqStakeholderCheckboxes = document.querySelectorAll('input[name="decisioniq-stakeholders"]:checked');
-    let decisioniqSelectedStakeholders = Array.from(decisioniqStakeholderCheckboxes)
-        .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
-        .join(', ') || 'Not specified';
-    prompt += formatList(decisioniqSelectedStakeholders, 'Stakeholders');
-    prompt += formatList(document.getElementById('decisioniq-constraints')?.value || '', 'Constraints');
-    prompt += formatList(document.getElementById('decisioniq-instructions')?.value || '', 'Additional instructions');
-    break;
-
-    case 'WorkflowIQ™':
-        prompt += formatList(document.getElementById('workflowiq-task')?.value || '', 'Task');
-        prompt += formatList(document.getElementById('workflowiq-steps')?.value || '', 'Task Steps');
-        prompt += formatList(document.getElementById('workflowiq-tools')?.value || '', 'Tools Used');
-        prompt += formatList(
-            document.getElementById('workflowiq-automation-type')?.value?.charAt(0).toUpperCase() +
-            document.getElementById('workflowiq-automation-type')?.value?.slice(1) || '',
-            'Automation Type'
-        );
-        prompt += formatList(
-            document.getElementById('workflowiq-priority')?.value?.charAt(0).toUpperCase() +
-            document.getElementById('workflowiq-priority')?.value?.slice(1) || '',
-            'Priority Focus'
-        );
-        prompt += formatList(document.getElementById('workflowiq-goals')?.value || '', 'Goals');
-        prompt += formatList(document.getElementById('workflowiq-constraints')?.value || '', 'Constraints');
-        prompt += formatList(document.getElementById('workflowiq-instructions')?.value || '', 'Additional Instructions');
-        break;
-
-        case 'ReportIQ™':
-            prompt += formatList(document.getElementById('reportiq-topic')?.value || '', 'Report Topic');
-            prompt += formatList(
-                document.getElementById('reportiq-type')?.value?.charAt(0).toUpperCase() +
-                document.getElementById('reportiq-type')?.value?.slice(1) || '',
-                'Report Type'
-            );
-            prompt += formatList(
-                document.getElementById('reportiq-audience')?.value?.charAt(0).toUpperCase() +
-                document.getElementById('reportiq-audience')?.value?.slice(1) || '',
-                'Audience'
-            );
-            prompt += formatList(document.getElementById('reportiq-data-sources')?.value || '', 'Data Sources');
-            prompt += formatList(document.getElementById('reportiq-key-metrics')?.value || '', 'Key Metrics');
-            prompt += formatList(
-                document.getElementById('reportiq-priority')?.value?.charAt(0).toUpperCase() +
-                document.getElementById('reportiq-priority')?.value?.slice(1) || '',
-                'Priority Focus'
-            );
-            prompt += formatList(document.getElementById('reportiq-constraints')?.value || '', 'Constraints');
-            prompt += formatList(document.getElementById('reportiq-instructions')?.value || '', 'Additional Instructions');
-            break;
-
-
-
-
-
     }
 
     if (prompt) {
         document.getElementById('result').textContent = prompt;
         navigator.clipboard.writeText(prompt).then(() => {
-            openGeneratedPromptModal(); // Use modal.js to show confirmation and AI links
+            openGeneratedPromptModal();
         }).catch(err => {
             console.error('Failed to copy prompt:', err);
-            openGeneratedPromptModal(); // Show modal even if clipboard fails
+            openGeneratedPromptModal();
         });
     } else {
-        openGeneratedPromptModal(); // Show modal for empty prompt
+        openGeneratedPromptModal();
     }
 }
 
-// Function to open the custom modal with dynamic content
 function openCustomModal(content) {
     const modal = document.createElement('div');
     modal.className = 'prompt-modal';
@@ -669,39 +452,7 @@ function openCustomModal(content) {
     document.body.appendChild(modal);
 }
 
-// Make openCustomModal globally accessible
 window.openCustomModal = openCustomModal;
-
-document.querySelectorAll('#personal-btn, #business-btn').forEach(button => {
-    button.addEventListener('click', (e) => {
-        const termsChecked = document.getElementById('termscheckbox')?.checked;
-        const scope = button.getAttribute('data-scope');
-
-        if (!termsChecked) {
-            e.preventDefault();
-            alert("Please agree to the Terms of Service before accessing the Promptemplates™");
-            return;
-        }
-
-        toggleScope(scope);
-        const targetSection = document.getElementById(`${scope}-prompts`);
-        if (targetSection) {
-            const sectionHeight = targetSection.offsetHeight;
-            const windowHeight = window.innerHeight;
-            const scrollPosition = targetSection.getBoundingClientRect().top + window.scrollY - (windowHeight - sectionHeight) / 2;
-            window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
-        }
-    });
-});
-
-
-
-document.querySelectorAll('.generate-btn').forEach(button => {
-    button.addEventListener('click', () => {
-        const promptType = button.getAttribute('data-prompt');
-        generatePrompt(promptType);
-    });
-});
 
 function openApp(appScheme, fallbackUrl) {
     var userAgent = navigator.userAgent || navigator.vendor || window.opera;

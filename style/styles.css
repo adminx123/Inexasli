@@ -949,7 +949,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 
 .section {
   margin-bottom: 2px;
-  padding: 1px;
+  padding: 0px;
 }
 
 .section-header {
@@ -957,7 +957,7 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  padding: 5px;
+  padding: 1px;
   background-color: #f5f5f5;
   border-radius: 4px;
   font-size: 12px;

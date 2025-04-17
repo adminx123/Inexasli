@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         .premium-notice {
             display: inline-block;
             margin-left: 10px;
+            margin-bottom: 5px;
             padding: 4px 8px;
             background-color: #D4AF37;
             color: #ffffff;
@@ -162,14 +163,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            padding: 5px;
+            padding: 1px;
             background-color: #f5f5f5;
             border-radius: 4px;
             font-size: 12px;
             font-weight: bold;
             color: #000000;
             transition: background-color 0.3s ease;
-            padding-top: 2px; /* Reduce top padding */
+            padding-top: 0px; /* Reduce top padding */
             font-family: "Geist", sans-serif;
         }
         .section1-header:hover {
