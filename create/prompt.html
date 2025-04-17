@@ -359,13 +359,168 @@ Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
             </div>
 
             <h2 style="text-align: center; text-decoration: underline; font-weight: 600;">CREATIVE OUTPUT</h2>
-            <!-- Free: Budget Management -->
+            
+<!-- Premium: Book Summary -->
+<div class="section1 premium-section">
+    <div class="section1-header" onclick="toggleSection(this)">
+        <h2>BookIQ™ <span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section1-content premium-blur">
+        <div class="row1">
+            <input type="text" id="book-title-author" placeholder="Enter book title and author (e.g., 'Pride and Prejudice by Jane Austen')">
+        </div>
+        <div class="row1">
+            <label for="summary-purpose">Select the purpose of the summary:</label>
+            <select id="summary-purpose">
+                <option value="personal">Personal Understanding</option>
+                <option value="book-club">Book Club Discussion</option>
+                <option value="academic">Academic Analysis</option>
+                <option value="teaching">Teaching</option>
+                <option value="social-media">Social Media Post</option>
+                <option value="review">Professional Review</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label for="summary-length">Select the summary length:</label>
+            <select id="summary-length">
+                <option value="short">Short (1 paragraph)</option>
+                <option value="medium">Medium (2-3 paragraphs)</option>
+                <option value="detailed">Detailed (4+ paragraphs)</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="summary-themes" rows="2" placeholder="Key themes or topics to highlight: (1 per line)
+e.g., love, leadership, identity"></textarea>
+        </div>
+        <div class="row1">
+            <label>Select the target audience(s):</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="summary-audience" value="general"> General Readers</label>
+                <label><input type="checkbox" name="summary-audience" value="students"> Students</label>
+                <label><input type="checkbox" name="summary-audience" value="professionals"> Professionals</label>
+                <label><input type="checkbox" name="summary-audience" value="book-club"> Book Club Members</label>
+                <label><input type="checkbox" name="summary-audience" value="children"> Children</label>
+                <label><input type="checkbox" name="summary-audience" value="researchers"> Academic Researchers</label>
+                <label><input type="checkbox" name="summary-audience" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <label>Select specific elements to include:</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="summary-elements" value="plot"> Plot</label>
+                <label><input type="checkbox" name="summary-elements" value="characters"> Characters</label>
+                <label><input type="checkbox" name="summary-elements" value="themes"> Themes</label>
+                <label><input type="checkbox" name="summary-elements" value="setting"> Setting</label>
+                <label><input type="checkbox" name="summary-elements" value="arguments"> Key Arguments</label>
+                <label><input type="checkbox" name="summary-elements" value="lessons"> Lessons/Insights</label>
+                <label><input type="checkbox" name="summary-elements" value="style"> Style/Writing</label>
+                <label><input type="checkbox" name="summary-elements" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <label for="summary-tone">Select the tone or style:</label>
+            <select id="summary-tone">
+                <option value="formal">Formal</option>
+                <option value="casual">Casual</option>
+                <option value="analytical">Analytical</option>
+                <option value="engaging">Engaging</option>
+                <option value="objective">Objective</option>
+                <option value="narrative">Narrative</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="summary-details" rows="3" placeholder="Additional details or constraints: (1 per line)
+e.g., avoid spoilers, focus on chapter 5"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="BookIQ™">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
             <h2 style="text-align: center; text-decoration: underline; font-weight: 600;">DECISION SUPPORT</h2>
             <!-- Free: Budget Management -->
             <h2 style="text-align: center; text-decoration: underline; font-weight: 600;">WORKFLOW AUTOMATION</h2>
             <!-- Free: Budget Management -->
             <h2 style="text-align: center; text-decoration: underline; font-weight: 600;">EDUCATIONAL AND TRAINING</h2>
-            <!-- Free: Budget Management -->
+
+<!-- Premium: Quiz Generator -->
+<div class="section1 premium-section">
+    <div class="section1-header" onclick="toggleSection(this)">
+        <h2>QuizIQ™<span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section1-content premium-blur">
+        <div class="row1">
+            <input type="text" id="quiz-subject" placeholder="Enter quiz subject (e.g., World War II, Python Programming)">
+        </div>
+        <div class="row1">
+            <label for="quiz-objective">Select the objective of the quiz:</label>
+            <select id="quiz-objective">
+                <option value="self-study">Self-Study</option>
+                <option value="classroom-assessment">Classroom Assessment</option>
+                <option value="exam-practice">Exam Practice</option>
+                <option value="knowledge-review">Knowledge Review</option>
+                <option value="certification-prep">Certification Prep</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label for="quiz-difficulty-tier">Select the difficulty tier:</label>
+            <select id="quiz-difficulty-tier">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label>Select question format(s):</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="quiz-formats" value="multiple-choice"> Multiple Choice</label>
+                <label><input type="checkbox" name="quiz-formats" value="true-false"> True/False</label>
+                <label><input type="checkbox" name="quiz-formats" value="short-answer"> Short Answer</label>
+                <label><input type="checkbox" name="quiz-formats" value="matching"> Matching</label>
+                <label><input type="checkbox" name="quiz-formats" value="fill-in-the-blank"> Fill-in-the-Blank</label>
+                <label><input type="checkbox" name="quiz-formats" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <label for="quiz-question-count">Select the number of questions:</label>
+            <select id="quiz-question-count">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="quiz-focus-areas" rows="2" placeholder="Focus areas to cover: (1 per line)
+e.g., Causes of WWI, Key Battles"></textarea>
+        </div>
+        <div class="row1">
+            <label>Select quiz participant(s):</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="quiz-participants" value="students"> Students</label>
+                <label><input type="checkbox" name="quiz-participants" value="professionals"> Professionals</label>
+                <label><input type="checkbox" name="quiz-participants" value="enthusiasts"> Enthusiasts</label>
+                <label><input type="checkbox" name="quiz-participants" value="general-learners"> General Learners</label>
+                <label><input type="checkbox" name="quiz-participants" value="kids"> Kids</label>
+                <label><input type="checkbox" name="quiz-participants" value="certification-trainees"> Certification Trainees</label>
+                <label><input type="checkbox" name="quiz-participants" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <textarea id="quiz-extra-instructions" rows="3" placeholder="Extra instructions or constraints: (1 per line)
+e.g., include answers, focus on recent events"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="QuizIQ™">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
+
             <h2 style="text-align: center; text-decoration: underline; font-weight: 600;">PERSONALIZED EXPERIENCE</h2>
 
             <!-- Free: Calorie Counter -->
@@ -951,7 +1106,9 @@ Business mentor"></textarea>
 
             <!-- Free: Budget Management -->
             <h2 style="text-align: center; text-decoration: underline; font-weight: 600;">CREATIVE OUTPUT</h2>
-            <!-- Free: app Plan -->
+           
+
+
             <div class="section1 premium-section">
                 <div class="section1-header" onclick="toggleSection(this)">
                     <h2>App<span class="premium-notice">Premium</span></h2>
