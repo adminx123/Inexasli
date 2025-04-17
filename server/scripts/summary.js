@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Add input event listeners for Taxes & Obligations
-    const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHERTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
+    const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
     inputs.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
@@ -70,20 +70,131 @@ document.addEventListener('DOMContentLoaded', function () {
                 const value = input.value || '0';
                 setLocal(id, value); // Store in local storage
                 updateFreeContent(); // Update calculated fields
-
-                const allInputsHaveValue = inputs.every(inputId => {
-                    const value = document.getElementById(inputId)?.value;
-                    return value && value.trim() !== '';
-                });
+                if (isPaid) {
+                    updatePremiumContent(); // Update premium features
+                }
+                updateIncomeErosionPieChart(); // Update chart
             });
         }
     });
 
-    // Show summary-container on generate button click
-    document.querySelector('.generate-btn').addEventListener('click', function() {
-        document.querySelector('.summary-container').style.display = 'block';
+    // Show summary-container and trigger tax calculation on generate button click
+    const generateBtn = document.querySelector('.generate-btn');
+    if (generateBtn) {
+        generateBtn.addEventListener('click', function() {
+            document.querySelector('.summary-container').style.display = 'block';
+            calculateTaxes(); // Trigger xAI tax calculation
+        });
+    }
+
+  
+
+    document.getElementById('close-sidebar')?.addEventListener('click', function() {
+        document.getElementById('subscribe-sidebar').style.display = 'none';
     });
 });
+
+// New function to calculate taxes via xAI API
+function calculateTaxes() {
+    const requiredFields = [
+        'ANNUALINCOME', 'ANNUALEMPLOYMENTINCOME', 'fillingStatus', 'income_sole_prop',
+        'birthYearDisabledDependants', 'RETIREMENTCONTRIBUTION', 'residency'
+    ];
+
+    // Collect data from localStorage
+    const data = {};
+    let missingFields = [];
+    requiredFields.forEach(field => {
+        const value = getLocal(field);
+        if (value === null || value === '') {
+            missingFields.push(field);
+        } else {
+            data[field] = value;
+        }
+    });
+
+    // Display error if fields are missing
+    let errorDiv = document.getElementById('error');
+    if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'error';
+        errorDiv.style.color = 'red';
+        document.querySelector('.summary-container').prepend(errorDiv);
+    }
+
+    if (missingFields.length > 0) {
+        errorDiv.textContent = `Missing fields: ${missingFields.join(', ')}`;
+        console.error('Missing fields:', missingFields);
+        return;
+    }
+
+    // Clear previous error
+    errorDiv.textContent = '';
+
+    // Add loading state
+    const generateBtn = document.querySelector('.generate-btn');
+    const originalText = generateBtn.textContent;
+    generateBtn.disabled = true;
+    generateBtn.textContent = 'Calculating...';
+
+    // Check cache
+    const cacheKey = JSON.stringify(data);
+    const cached = getLocal('taxCache');
+    if (cached && cached.key === cacheKey) {
+        const taxResults = JSON.parse(cached.results);
+        setLocal('REGIONALTAXANNUAL', taxResults.regionalTax.toString());
+        setLocal('SUBREGIONTAXANNUAL', taxResults.subregionalTax.toString());
+        setLocal('OTHEROBLIGATIONANNUAL', taxResults.otherObligations.toString());
+        updateFreeContent();
+        updateIncomeErosionPieChart();
+        if (getLocal('authenticated') === 'paid') updatePremiumContent();
+        generateBtn.disabled = false;
+        generateBtn.textContent = originalText;
+        return;
+    }
+
+    // Send data to Lambda via API Gateway
+    fetch('https://j5w0hp8nw5.execute-api.us-east-1.amazonaws.com/prod', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+            return res.json();
+        })
+        .then(data => {
+            console.log('xAI Tax Response:', data);
+            // Validate response
+            if (!data.regionalTax || !data.subregionalTax || !data.otherObligations) {
+                throw new Error('Invalid response format');
+            }
+
+            // Update localStorage
+            setLocal('REGIONALTAXANNUAL', data.regionalTax.toString());
+            setLocal('SUBREGIONTAXANNUAL', data.subregionalTax.toString());
+            setLocal('OTHEROBLIGATIONANNUAL', data.otherObligations.toString());
+
+            // Cache results
+            setLocal('taxCache', JSON.stringify({ key: cacheKey, results: JSON.stringify(data) }));
+
+            // Update UI
+            updateFreeContent(); // Updates TOTALTAXANNUAL, etc.
+            updateIncomeErosionPieChart(); // Update chart
+            if (getLocal('authenticated') === 'paid') {
+                updatePremiumContent(); // Update DISPOSABLEINCOME
+            }
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            errorDiv.textContent = `Error: ${err.message}`;
+        })
+        .finally(() => {
+            // Restore button state
+            generateBtn.disabled = false;
+            generateBtn.textContent = originalText;
+        });
+}
 
 // Free content update function
 function updateFreeContent() {
@@ -99,8 +210,6 @@ function updateFreeContent() {
     updateElement('TRANSPORTATION', 'TRANSPORTATION', multiplier);
     updateElement('DEPENDANT', 'DEPENDANT', multiplier);
     updateElement('DEBT', 'DEBT', multiplier);
-
-
 
     // Update calculated fields
     updateElement('TOTALTAXANNUAL', null, multiplier, calculateAnnualTax);
@@ -195,19 +304,16 @@ function calculateDisposableIncome() {
     const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
     const regionalTax = parseFloat(getLocal('REGIONALTAXANNUAL')) || 0;
     const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
-    const otherTax = parseFloat(getLocal('OTHERTAXANNUAL')) || 0;
     const obligations = parseFloat(getLocal('OTHEROBLIGATIONANNUAL')) || 0;
 
-    return income - expenses - regionalTax - subregionalTax - otherTax - obligations;
+    return income - expenses - regionalTax - subregionalTax - obligations;
 }
 
 // Calculate Annual Tax (free)
 function calculateAnnualTax() {
     const regionalTax = parseFloat(getLocal('REGIONALTAXANNUAL')) || 0;
     const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
-    const otherTax = parseFloat(getLocal('OTHERTAXANNUAL')) || 0;
-
-    return regionalTax + subregionalTax + otherTax;
+    return regionalTax + subregionalTax;
 }
 
 // Calculate Government Obligations (free)
@@ -359,6 +465,4 @@ function calculateGoal(isPaid) {
     document.getElementById('goalResult').textContent = `${unit} needed: ${time.toFixed(2)}`;
 }
 
-document.getElementById('close-sidebar').addEventListener('click', function() {
-    document.getElementById('subscribe-sidebar').style.display = 'none';
-});
+// https://j5w0hp8nw5.execute-api.us-east-1.amazonaws.com/prod
