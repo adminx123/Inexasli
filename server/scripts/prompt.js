@@ -616,7 +616,28 @@ case 'SymptomIQ™':
         prompt += formatList(document.getElementById('workflowiq-instructions')?.value || '', 'Additional Instructions');
         break;
 
-
+        case 'ReportIQ™':
+            prompt += formatList(document.getElementById('reportiq-topic')?.value || '', 'Report Topic');
+            prompt += formatList(
+                document.getElementById('reportiq-type')?.value?.charAt(0).toUpperCase() +
+                document.getElementById('reportiq-type')?.value?.slice(1) || '',
+                'Report Type'
+            );
+            prompt += formatList(
+                document.getElementById('reportiq-audience')?.value?.charAt(0).toUpperCase() +
+                document.getElementById('reportiq-audience')?.value?.slice(1) || '',
+                'Audience'
+            );
+            prompt += formatList(document.getElementById('reportiq-data-sources')?.value || '', 'Data Sources');
+            prompt += formatList(document.getElementById('reportiq-key-metrics')?.value || '', 'Key Metrics');
+            prompt += formatList(
+                document.getElementById('reportiq-priority')?.value?.charAt(0).toUpperCase() +
+                document.getElementById('reportiq-priority')?.value?.slice(1) || '',
+                'Priority Focus'
+            );
+            prompt += formatList(document.getElementById('reportiq-constraints')?.value || '', 'Constraints');
+            prompt += formatList(document.getElementById('reportiq-instructions')?.value || '', 'Additional Instructions');
+            break;
 
 
 
