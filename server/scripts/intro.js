@@ -264,6 +264,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    const employmentStatusSpouse = document.getElementById('employmentStatusSpouse');
+    if (employmentStatusSpouse) {
+        const savedEmploymentStatusSpouse = getLocal('employmentStatusSpouse');
+        if (savedEmploymentStatusSpouse) {
+            employmentStatusSpouse.value = savedEmploymentStatusSpouse; // Restore saved value
+        }
+
+        employmentStatusSpouse.addEventListener('change', () => {
+            setLocal('employmentStatusSpouse', employmentStatusSpouse.value, 365); // Save to local storage
+        });
+    }
+
     const textAreas = ['birthYearDisabledDependants'];
     textAreas.forEach(id => {
         const textarea = document.getElementById(id);
