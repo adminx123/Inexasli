@@ -61,12 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
         goalAmountInput.addEventListener('input', () => calculateGoal(isPaid));
     }
 
-    // Ensure summary-container1 is hidden initially
-    const summaryContainer1 = document.querySelector('.summary-container1');
-    if (summaryContainer1) {
-        summaryContainer1.style.display = 'none';
-    }
-
     // Add input event listeners for Taxes & Obligations
     const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHERTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
     inputs.forEach(id => {
@@ -76,18 +70,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const value = input.value || '0';
                 setLocal(id, value); // Store in local storage
                 updateFreeContent(); // Update calculated fields
-                checkAndToggleSummaryContainer1(); // Check and show summary-container1
 
                 const allInputsHaveValue = inputs.every(inputId => {
                     const value = document.getElementById(inputId)?.value;
                     return value && value.trim() !== '';
                 });
-
-                if (allInputsHaveValue) {
-                    summaryContainer1.style.display = 'block';
-                } else {
-                    summaryContainer1.style.display = 'none';
-                }
             });
         }
     });
@@ -96,12 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.generate-btn').addEventListener('click', function() {
         document.querySelector('.summary-container').style.display = 'block';
     });
-
-    // Add event listener for the button to check and unhide summary-container1
-    const checkValuesButton = document.getElementById('checkValuesButton');
-    if (checkValuesButton) {
-        checkValuesButton.addEventListener('click', checkAndToggleSummaryContainer1);
-    }
 });
 
 // Free content update function
@@ -394,24 +375,4 @@ function calculateGoal(isPaid) {
 
 document.getElementById('close-sidebar').addEventListener('click', function() {
     document.getElementById('subscribe-sidebar').style.display = 'none';
-});
-
-function checkAndToggleSummaryContainer1() {
-    const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHERTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
-    const allInputsHaveValue = inputs.every(id => {
-        const value = document.getElementById(id)?.value;
-        return value && value.trim() !== '';
-    });
-
-    const summaryContainer1 = document.querySelector('.summary-container1');
-    if (summaryContainer1) {
-        summaryContainer1.style.display = allInputsHaveValue ? 'block' : 'none';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    const checkValuesButton = document.getElementById('checkValuesButton');
-    if (checkValuesButton) {
-        checkValuesButton.addEventListener('click', checkAndToggleSummaryContainer1);
-    }
 });

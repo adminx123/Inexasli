@@ -1292,7 +1292,7 @@ details p {
 }
 
 .summary-container {
-  display: none; /* Hidden initially */
+  display: block; /* Ensure it is visible by default */
 }
 
 
