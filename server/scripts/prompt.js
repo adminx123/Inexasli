@@ -332,7 +332,7 @@ function generatePrompt(promptType) {
                 if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
                 break;
 
-        case 'trip':
+        case 'AdventureIQ™':
             prompt += formatGrid('#trip-activities .grid-item.selected', 'Review the following activities I want to do on my trip');
             prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format code block. If available include the weather forcast for the location(s)\n\n';
             const tripSpecifics = document.getElementById('trip-specifics');
@@ -438,7 +438,7 @@ case 'SymptomIQ™':
             }
             break;
 
-        case 'enneagram-questionnaire':
+        case 'EnneagramIQ™':
             const enneagramSelf = document.getElementById('enneagram-self');
             if (enneagramSelf?.value) {
                 prompt += `Here’s my completed Enneagram questionnaire:\n\n`;
