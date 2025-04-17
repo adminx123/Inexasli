@@ -100,24 +100,10 @@ function updateFreeContent() {
     updateElement('DEPENDANT', 'DEPENDANT', multiplier);
     updateElement('DEBT', 'DEBT', multiplier);
 
-    // Taxes & Obligations (free)
-    // Populate input fields
-    const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHERTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
-    inputs.forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-            const value = getLocal(id);
-            if (value !== '') {
-                input.value = value; // Display value exactly as entered
-            } else {
-                input.value = ''; // Leave empty if no value is set
-            }
-        }
-    });
+
 
     // Update calculated fields
     updateElement('TOTALTAXANNUAL', null, multiplier, calculateAnnualTax);
-    updateElement('TOTALOBLIGATIONANNUAL', null, multiplier, calculateGovernmentObligations);
 
     // Net Worth (free) - No frequency adjustment
     updateElement('NETWORTH', null, 1, () => (parseFloat(getLocal('ASSETS')) || 0) - (parseFloat(getLocal('LIABILITIES')) || 0));
