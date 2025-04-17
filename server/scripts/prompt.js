@@ -511,6 +511,69 @@ case 'SymptomIQ™':
             prompt += formatList(document.getElementById('speculation-outcomes')?.value, 'Expected outcomes');
             prompt += formatList(document.getElementById('additional-details')?.value, 'Additional details');
             break;
+
+            case 'quiz-generator':
+                prompt += formatList(document.getElementById('quiz-subject')?.value || '', 'Quiz Subject');
+                prompt += formatList(
+                    document.getElementById('quiz-objective')?.value?.charAt(0).toUpperCase() +
+                    document.getElementById('quiz-objective')?.value?.slice(1) || '',
+                    'Objective of the quiz'
+                );
+                prompt += formatList(
+                    document.getElementById('quiz-difficulty-tier')?.value?.charAt(0).toUpperCase() +
+                    document.getElementById('quiz-difficulty-tier')?.value?.slice(1) || '',
+                    'Difficulty tier'
+                );
+                const quizFormatCheckboxes = document.querySelectorAll('input[name="quiz-formats"]:checked');
+                let quizSelectedFormats = Array.from(quizFormatCheckboxes)
+                    .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
+                    .join(', ') || 'Not specified';
+                prompt += formatList(quizSelectedFormats, 'Question formats');
+                prompt += formatList(
+                    document.getElementById('quiz-question-count')?.value?.charAt(0).toUpperCase() +
+                    document.getElementById('quiz-question-count')?.value?.slice(1) || '',
+                    'Number of questions'
+                );
+                prompt += formatList(document.getElementById('quiz-focus-areas')?.value || '', 'Focus areas');
+                const quizParticipantCheckboxes = document.querySelectorAll('input[name="quiz-participants"]:checked');
+                let quizSelectedParticipants = Array.from(quizParticipantCheckboxes)
+                    .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
+                    .join(', ') || 'Not specified';
+                prompt += formatList(quizSelectedParticipants, 'Quiz participants');
+                prompt += formatList(document.getElementById('quiz-extra-instructions')?.value || '', 'Extra instructions or constraints');
+                break;
+
+                case 'BookIQ™':
+    prompt += formatList(document.getElementById('book-title-author')?.value || '', 'Book Title and Author');
+    prompt += formatList(
+        document.getElementById('summary-purpose')?.value?.charAt(0).toUpperCase() +
+        document.getElementById('summary-purpose')?.value?.slice(1) || '',
+        'Purpose of the summary'
+    );
+    prompt += formatList(
+        document.getElementById('summary-length')?.value?.charAt(0).toUpperCase() +
+        document.getElementById('summary-length')?.value?.slice(1) || '',
+        'Summary length'
+    );
+    prompt += formatList(document.getElementById('summary-themes')?.value || '', 'Key themes or topics');
+    const audienceCheckboxes = document.querySelectorAll('input[name="summary-audience"]:checked');
+    let audiences = Array.from(audienceCheckboxes)
+        .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
+        .join(', ') || 'Not specified';
+    prompt += formatList(audiences, 'Target audience');
+    const elementsCheckboxes = document.querySelectorAll('input[name="summary-elements"]:checked');
+    let elements = Array.from(elementsCheckboxes)
+        .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
+        .join(', ') || 'Not specified';
+    prompt += formatList(elements, 'Specific elements to include');
+    prompt += formatList(
+        document.getElementById('summary-tone')?.value?.charAt(0).toUpperCase() +
+        document.getElementById('summary-tone')?.value?.slice(1) || '',
+        'Tone or style'
+    );
+    prompt += formatList(document.getElementById('summary-details')?.value || '', 'Additional details or constraints');
+    break;
+
     }
 
     if (prompt) {
