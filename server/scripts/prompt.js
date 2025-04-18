@@ -13,9 +13,28 @@ import { setCookie } from '/server/scripts/setcookie.js';
 let activeScope = null;
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Function to get authenticated status from localStorage and check expiration
+    function getAuthStatus(name) {
+        const now = Date.now();
+        const status = JSON.parse(window.localStorage.getItem(name));
+        if (status && now > status.time) {
+            localStorage.removeItem(name); // Remove expired item
+            return false;
+        }
+        return status ? status.isPaid : false;
+    }
+
+    // Function to set authenticated status in localStorage with expiration
+    function setAuthStatus(name, value) {
+        const date = new Date();
+        window.localStorage.setItem(name, JSON.stringify({
+            isPaid: value,
+            time: date.setTime(date.getTime() + 30 * 60 * 1000) // 30 minutes expiration
+        }));
+    }
+
     // Check if user is authenticated
-    const paid = localStorage.getItem("authenticated");
-    const isPaid = paid === "paid";
+    const isPaid = getAuthStatus("authenticated");
 
     // If user is authenticated, unblur premium content
     if (isPaid) {
@@ -32,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Set the "prompt" cookie on page load
+    // Set the "prompt" cookie on page load (unchanged)
     setCookie("prompt", Date.now(), 32);
 
     // Attach toggleSection to section headers (free and premium)
@@ -42,19 +61,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Monitor terms checkbox state
     const termsCheckbox = document.getElementById('termscheckbox');
+    const introDiv = document.getElementById('intro');
     if (termsCheckbox) {
         termsCheckbox.addEventListener('change', function () {
-            if (!this.checked) {
-                // Hide prompts and reset scope if terms are unchecked
-                const personalPrompts = document.getElementById('personal-prompts');
-                const personalBtn = document.getElementById('personal-btn');
-                const promptContainer = personalPrompts?.parentElement;
+            const personalPrompts = document.getElementById('personal-prompts');
+            const personalBtn = document.getElementById('personal-btn');
+            const promptContainer = personalPrompts?.parentElement;
 
+            if (!this.checked) {
+                // When terms are unchecked, hide personal prompts and show intro
                 if (personalPrompts) personalPrompts.classList.add('hidden');
                 if (personalBtn) personalBtn.classList.remove('selected');
                 if (promptContainer) promptContainer.classList.add('hidden');
+                if (introDiv) introDiv.classList.remove('hidden');
                 activeScope = null; // Reset active scope
             }
+            // No action when terms are checked; wait for personal-btn click
         });
     }
 
@@ -89,7 +111,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert("Please agree to the Terms of Service before accessing the Promptemplates™");
                 return;
             }
+            // Show personal prompts, hide intro, and set button state
             toggleScope('personal');
+            const personalPrompts = document.getElementById('personal-prompts');
+            const promptContainer = personalPrompts?.parentElement;
+            if (personalPrompts) personalPrompts.classList.remove('hidden');
+            if (promptContainer) promptContainer.classList.remove('hidden');
+            if (introDiv) introDiv.classList.add('hidden');
+            personalBtn.classList.add('selected');
+
+            // Scroll to personal prompts
             const targetSection = document.getElementById('personal-prompts');
             if (targetSection) {
                 const sectionHeight = targetSection.offsetHeight;
