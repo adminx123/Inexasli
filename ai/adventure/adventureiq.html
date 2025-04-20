@@ -10,152 +10,94 @@
 
  <!DOCTYPE html>
  <html lang="en">
- 
  <head>
- 
      <link rel="manifest" href="/manifest.json">
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
      <title>ASSET</title>
      <link rel="icon" type="image/x-icon" href="newLogo.jpg">
      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
- 
-     <!-- this is an extended list of places icon could be needed -->
      <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
- <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
- <link rel="shortcut icon" href="/images/favicon.ico" />
- <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
- 
- 
+     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+     <link rel="shortcut icon" href="/images/favicon.ico" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
      <link rel="manifest" href="/manifest.json">
- 
- 
- 
      <link rel="stylesheet" href="/style/styles.css">
- 
- 
  </head>
- 
  <body>
- 
- 
- 
- 
-     <a href="./intro.html">
-         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 0px;" onclick="calculateAll();">
- 
+     <a href="/ai/landing/landing.html">
+         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
      </a>
-     <!-- <h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2> -->
- 
- 
  
      <div class="container">
- 
- 
-        <div class="section1 premium-section">
-            <div class="section1-header" onclick="toggleSection(this)">
-                <h2>AdventureIQ™<span class="premium-notice">Premium</span></h2>
-                <span class="toggle-icon">+</span>
-            </div>
-            <div class="section1-content premium-blur">
-                <div class="row1">
-                    <div class="grid-container" id="trip-activities">
-                        <div class="grid-item" data-value="Hiking">Hiking</div>
-                        <div class="grid-item" data-value="Sightseeing">Sightseeing</div>
-                        <div class="grid-item" data-value="Relaxation">Relaxation</div>
-                        <div class="grid-item" data-value="Attractions">Attractions</div>
-                        <div class="grid-item" data-value="Event">Event</div>
-                        <div class="grid-item" data-value="Cultural Tours">Cultural Tours</div>
-                        <div class="grid-item" data-value="Shopping">Shopping</div>
-                        <div class="grid-item" data-value="Adventure">Adventure</div>
-                        <div class="grid-item" data-value="Wildlife Watching">Wildlife Watching</div>
-                        <div class="grid-item" data-value="Water Sports">Water Sports</div>
-                        <div class="grid-item" data-value="Food Tours">Food Tours</div>
-                        <div class="grid-item" data-value="Museums">Museums</div>
-                        <div class="grid-item" data-value="Nightlife">Nightlife</div>
-                        <div class="grid-item" data-value="Wellness">Wellness</div>
-                        <div class="grid-item" data-value="Beach Time">Beach Time</div>
-                        <div class="grid-item" data-value="Skiing">Skiing</div>
-                        <div class="grid-item" data-value="Road Trips">Road Trips</div>
-                        <div class="grid-item" data-value="Camping">Camping</div>
-                        <div class="grid-item" data-value="Photography">Photography</div>
-                        <div class="grid-item" data-value="Historical Sites">Historical Sites</div>
-                    </div>
-                </div>
-                <div class="row1">
-                    <div class="grid-container" id="trip-relationship">
-                        <div class="grid-item" data-value="Parents">With Parents</div>
-                        <div class="grid-item" data-value="Siblings">With Siblings</div>
-                        <div class="grid-item" data-value="Friends">With Friends</div>
-                        <div class="grid-item" data-value="Intimate Partner">With Intimate Partner</div>
-                        <div class="grid-item" data-value="Business Partner">With Business Partner</div>
-                        <div class="grid-item" data-value="Co-Worker">With Co-Worker</div>
-                        <div class="grid-item" data-value="Client">With Client</div>
-                    </div>
-                </div>
-                <textarea id="trip-location" rows="3" placeholder="Trip Locations (one per line):
-New York
-New Jersey
-Hampton's"></textarea>
-                <div class="row1">
-                    <textarea id="trip-specifics" rows="4" placeholder="Specifics Needed (one per line):
-Top rated hiking trails
-Hikes under 5km
-Best ice cream shops within 5km from city centre"></textarea>
-                    <textarea id="trip-plans" rows="3" placeholder="Trip Schedule (one per line):
-Monday - 6am hike, 8pm dinner
-Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
-                </div>
-                <div class="row1">
-                    <select id="trip-packing">
-                        <option value="YM">Packing tips needed for male</option>
-                        <option value="YF">Packing tips needed for female</option>
-                        <option value="YMF">Packing tips needed for male & female</option>
-                        <option value="NN">Packing tips not needed</option>
-                    </select>
-                </div>
-                <div class="row1">
-                    <input type="number" id="trip-people" rows="1" placeholder="Amount of people on trip:"></input>
-                </div>
-                <div class="row1">
-                    <input type="number" id="trip-days" rows="1" placeholder="Trip Length:"></input>
-                </div>
-                <div class="row1">
-                    <a href="/budget/vacation.html"> Use Vacation Cost Estimator & then Input Results Below!</a>
-                    <textarea id="trip-cost" rows="16" placeholder="Vacation Cost Estimator Results:"></textarea>
-                </div>
-                <button class="generate-btn" data-prompt="AdventureIQ™">Generate Promptemplate™ Now!</button>
-            </div>
-        </div>
-       
- 
+         <div class="row1">
+             <div class="grid-container" id="trip-activities">
+                 <div class="grid-item" data-value="Hiking">Hiking</div>
+                 <div class="grid-item" data-value="Sightseeing">Sightseeing</div>
+                 <div class="grid-item" data-value="Relaxation">Relaxation</div>
+                 <div class="grid-item" data-value="Attractions">Attractions</div>
+                 <div class="grid-item" data-value="Event">Event</div>
+                 <div class="grid-item" data-value="Cultural Tours">Cultural Tours</div>
+                 <div class="grid-item" data-value="Shopping">Shopping</div>
+                 <div class="grid-item" data-value="Adventure">Adventure</div>
+                 <div class="grid-item" data-value="Wildlife Watching">Wildlife Watching</div>
+                 <div class="grid-item" data-value="Water Sports">Water Sports</div>
+                 <div class="grid-item" data-value="Food Tours">Food Tours</div>
+                 <div class="grid-item" data-value="Museums">Museums</div>
+                 <div class="grid-item" data-value="Nightlife">Nightlife</div>
+                 <div class="grid-item" data-value="Wellness">Wellness</div>
+                 <div class="grid-item" data-value="Beach Time">Beach Time</div>
+                 <div class="grid-item" data-value="Skiing">Skiing</div>
+                 <div class="grid-item" data-value="Road Trips">Road Trips</div>
+                 <div class="grid-item" data-value="Camping">Camping</div>
+                 <div class="grid-item" data-value="Photography">Photography</div>
+                 <div class="grid-item" data-value="Historical Sites">Historical Sites</div>
+             </div>
+         </div>
+         <div class="row1">
+             <div class="grid-container" id="trip-relationship">
+                 <div class="grid-item" data-value="Parents">With Parents</div>
+                 <div class="grid-item" data-value="Siblings">With Siblings</div>
+                 <div class="grid-item" data-value="Friends">With Friends</div>
+                 <div class="grid-item" data-value="Intimate Partner">With Intimate Partner</div>
+                 <div class="grid-item" data-value="Business Partner">With Business Partner</div>
+                 <div class="grid-item" data-value="Co-Worker">With Co-Worker</div>
+                 <div class="grid-item" data-value="Client">With Client</div>
+             </div>
+         </div>
+         <div class="row1">
+             <textarea id="trip-location" rows="3" placeholder="Trip Locations (one per line):\nNew York\nNew Jersey\nHampton's"></textarea>
+         </div>
+         <div class="row1">
+             <textarea id="trip-specifics" rows="4" placeholder="Specifics Needed (one per line):\nTop rated hiking trails\nHikes under 5km\nBest ice cream shops within 5km from city centre"></textarea>
+             <textarea id="trip-plans" rows="3" placeholder="Trip Schedule (one per line):\nMonday - 6am hike, 8pm dinner\nTuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
+         </div>
+         <div class="row1">
+             <select id="trip-packing">
+                 <option value="YM">Packing tips needed for male</option>
+                 <option value="YF">Packing tips needed for female</option>
+                 <option value="YMF">Packing tips needed for male & female</option>
+                 <option value="NN">Packing tips not needed</option>
+             </select>
+         </div>
+         <div class="row1">
+             <input type="number" id="trip-people" placeholder="Amount of people on trip" min="1">
+         </div>
+         <div class="row1">
+             <input type="number" id="trip-days" placeholder="Trip Length (days)" min="1">
+         </div>
+         <div class="row1">
+             <a href="/budget/vacation.html">Use Vacation Cost Estimator & then Input Results Below!</a>
+             <textarea id="trip-cost" rows="4" placeholder="Vacation Cost Estimator Results:"></textarea>
+         </div>
+         <button class="generate-btn" data-prompt="AdventureIQ™" onclick="generatePrompt('AdventureIQ™')">Generate Promptemplate™ Now!</button>
      </div>
  
-
- 
-    
- 
-     <div class="containerround">
-         <button onclick="calculateNext()" class="nav-btn nav-right"><i
-                 class='bx nav-inner bx-right-arrow-alt'></i></button>
-     </div>
- 
- 
- 
-    
-
-
-     </div>
- 
- 
+     <script src="/ai/adventure/adventureiq.js"></script>
+     <script src="/server/scripts/modal.js"></script>
+     <script src="/server/scripts/paymentform.js"></script>
      <script src="/index.js"></script>
- 
-     <script type="module" src="../../server/scripts/asset.js"></script>
- 
-     <script src="/server/scripts/toolTip.js"></script>
-     <script src="/server/scripts/tray.js"></script>
- 
- 
+     <script src="/server/scripts/utility/tray.js"></script>
+     <script src="https://js.stripe.com/v3/" async></script>
  </body>
- 
  </html>
