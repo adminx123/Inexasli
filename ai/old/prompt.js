@@ -8,7 +8,7 @@
  * jurisdictions worldwide.
  */
 
-import { setCookie } from '/server/scripts/setcookie.js';
+import { setCookie } from '/server/scripts/utility/setcookie.js';
 
 let activeScope = null;
 
