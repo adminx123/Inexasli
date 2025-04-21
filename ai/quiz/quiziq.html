@@ -1,0 +1,103 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QuizIQ™</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style/styles.css">
+</head>
+<body>
+    <a href="/ai/landing/landing.html">
+        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
+    </a>
+
+    <div class="container premium-section premium-blur">
+        <div class="row1">
+            <input type="text" id="quiz-subject" placeholder="Enter quiz subject (e.g., World War II, Python Programming)">
+        </div>
+        <div class="row1">
+            <label for="quiz-objective">Select the objective of the quiz:</label>
+            <select id="quiz-objective">
+                <option value="self-study">Self-Study</option>
+                <option value="classroom-assessment">Classroom Assessment</option>
+                <option value="exam-practice">Exam Practice</option>
+                <option value="knowledge-review">Knowledge Review</option>
+                <option value="certification-prep">Certification Prep</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label for="quiz-difficulty-tier.">Select the difficulty tier:</label>
+            <select id="quiz-difficulty-tier">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label>Select question format(s):</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="quiz-formats" value="multiple-choice"> Multiple Choice</label>
+                <label><input type="checkbox" name="quiz-formats" value="true-false"> True/False</label>
+                <label><input type="checkbox" name="quiz-formats" value="short-answer"> Short Answer</label>
+                <label><input type="checkbox" name="quiz-formats" value="matching"> Matching</label>
+                <label><input type="checkbox" name="quiz-formats" value="fill-in-the-blank"> Fill-in-the-Blank</label>
+                <label><input type="checkbox" name="quiz-formats" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <label for="quiz-question-count">Select the number of questions:</label>
+            <select id="quiz-question-count">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="quiz-focus-areas" rows="2" placeholder="Focus areas to cover: (1 per line)\ne.g., Causes of WWI, Key Battles"></textarea>
+        </div>
+        <div class="row1">
+            <label>Select quiz participant(s):</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="quiz-participants" value="students"> Students</label>
+                <label><input type="checkbox" name="quiz-participants" value="professionals"> Professionals</label>
+                <label><input type="checkbox" name="quiz-participants" value="enthusiasts"> Enthusiasts</label>
+                <label><input type="checkbox" name="quiz-participants" value="general-learners"> General Learners</label>
+                <label><input type="checkbox" name="quiz-participants" value="kids"> Kids</label>
+                <label><input type="checkbox" name="quiz-participants" value="certification-trainees"> Certification Trainees</label>
+                <label><input type="checkbox" name="quiz-participants" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <textarea id="quiz-extra-instructions" rows="3" placeholder="Extra instructions or constraints: (1 per line)\ne.g., include answers, focus on recent events"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="QuizIQ™" onclick="generatePrompt('QuizIQ™')">Generate Promptemplate™ Now!</button>
+    </div>
+
+    <script src="/utility/modal.js"></script>
+    <script src="/payment/paymentform.js"></script>
+    <script src="/utility/tray.js"></script>
+    <script src="https://js.stripe.com/v3/" async></script>
+    <script src="quiziq.js"></script>
+</body>
+</html>
