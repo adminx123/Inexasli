@@ -1,0 +1,83 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ResearchIQ™</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style/styles.css">
+</head>
+<body>
+    <a href="/ai/landing/landing.html">
+        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
+    </a>
+
+    <div class="container premium-section premium-blur">
+        <div class="row1">
+            <textarea id="research-goal" rows="2" placeholder="What is the goal of your research? (e.g., understand market trends, analyze customer behavior, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="research-purpose" rows="2" placeholder="What is the purpose of this research? (e.g., inform a business decision, identify new opportunities, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="research-type">Select the type of research:</label>
+            <select id="research-type">
+                <option value="qualitative">Qualitative Research</option>
+                <option value="quantitative">Quantitative Research</option>
+                <option value="mixed-methods">Mixed Methods</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="research-scope" rows="2" placeholder="What is the scope of your research? (e.g., specific region, target demographic, timeframe, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="data-collection-method">How will the data be collected?</label>
+            <select id="data-collection-method">
+                <option value="survey">Survey</option>
+                <option value="interview">Interview</option>
+                <option value="focus-group">Focus Group</option>
+                <option value="observational">Observational Research</option>
+                <option value="secondary-data">Secondary Data Analysis</option>
+                <option value="experiment">Experiment</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="research-audience" rows="2" placeholder="Who is the target audience for your research? (e.g., age group, professional background, geographic location, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="research-context" rows="3" placeholder="Provide any context or background information that will help the research. (e.g., historical background, previous research, external factors, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="research-deliverables" rows="2" placeholder="What are the expected deliverables from this research? (e.g., report, presentation, data analysis, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="additional-details" rows="3" placeholder="Is there any other relevant detail or information to consider for your research? (e.g., ethical concerns, special requirements, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <button class="generate-btn" data-prompt="ResearchIQ™" onclick="generatePrompt('ResearchIQ™')">Generate Promptemplate™ Now!</button>
+        </div>
+    </div>
+
+    <script src="/utility/modal.js"></script>
+    <script src="/payment/paymentform.js"></script>
+    <script src="/utility/tray.js"></script>
+    <script src="https://js.stripe.com/v3/" async></script>
+    <script src="researchiq.js"></script>
+</body>
+</html>

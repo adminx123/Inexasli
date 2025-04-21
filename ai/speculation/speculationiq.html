@@ -1,0 +1,82 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SpeculationIQ™</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style/styles.css">
+</head>
+<body>
+    <a href="/ai/landing/landing.html">
+        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
+    </a>
+
+    <div class="container premium-section premium-blur">
+        <div class="row1">
+            <textarea id="speculation-goal" rows="2" placeholder="What is the goal of your speculation? (e.g., imagine future trends, explore 'what if' scenarios, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="speculation-purpose" rows="2" placeholder="Why are you speculating: (1 per line)\nInspire new ideas\nPrepare for uncertainty\nChallenge assumptions, etc."></textarea>
+        </div>
+        <div class="row1">
+            <label for="speculation-type">Select the type of speculation:</label>
+            <select id="speculation-type">
+                <option value="futuristic">Futuristic (e.g., predicting long-term outcomes)</option>
+                <option value="alternative">Alternative Scenarios (e.g., 'what if' possibilities)</option>
+                <option value="creative">Creative Exploration (e.g., wild ideas, no limits)</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="speculation-scope" rows="2" placeholder="What is the scope of your speculation: (1 per line)\nSpecific industry\nTime period\nHypothetical event"></textarea>
+        </div>
+        <div class="row1">
+            <label for="speculation-approach">How will you approach this speculation?</label>
+            <select id="speculation-approach">
+                <option value="brainstorming">Brainstorming</option>
+                <option value="thought-experiment">Thought Experiment</option>
+                <option value="storytelling">Storytelling/Narrative Building</option>
+                <option value="trend-extrapolation">Trend Extrapolation</option>
+                <option value="random-association">Random Idea Association</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="speculation-audience" rows="2" placeholder="Who or what is the focus of your speculation: (1 per line)\nGroup of people\nTechnology\nCancer drugs"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="speculation-context" rows="3" placeholder="Provide any context or starting point for your speculation: e.g. current trends, recent events, a specific problem, etc."></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="speculation-outcomes" rows="2" placeholder="What kinds of outcomes or ideas do you hope to generate: (1 per line)\nNew concepts\nScenarios\nHypotheses"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="additional-details" rows="3" placeholder="Any additional details or constraints to guide your speculation: (1 per line)\nTone\nWildness level\nspecific inspirations"></textarea>
+        </div>
+        <div class="row1">
+            <button class="generate-btn" data-prompt="SpeculationIQ™" onclick="generatePrompt('SpeculationIQ™')">Generate Promptemplate™ Now!</button>
+        </div>
+    </div>
+
+    <script src="/utility/modal.js"></script>
+    <script src="/payment/paymentform.js"></script>
+    <script src="/utility/tray.js"></script>
+    <script src="https://js.stripe.com/v3/" async></script>
+    <script src="speculationiq.js"></script>
+</body>
+</html>

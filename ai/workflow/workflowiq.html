@@ -1,0 +1,79 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WorkflowIQ™</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style/styles.css">
+</head>
+<body>
+    <a href="/ai/landing/landing.html">
+        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
+    </a>
+
+    <div class="container premium-section premium-blur">
+        <div class="row1">
+            <input type="text" id="workflowiq-task" placeholder="Enter task (e.g., Invoice processing)">
+        </div>
+        <div class="row1">
+            <textarea id="workflowiq-steps" rows="2" placeholder="Task steps: (1 per line)\ne.g., Data entry, Approval, Archiving"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="workflowiq-tools" rows="2" placeholder="Tools used: (1 per line)\ne.g., Excel, ERP, Email"></textarea>
+        </div>
+        <div class="row1">
+            <label for="workflowiq-automation-type">Select automation type:</label>
+            <select id="workflowiq-automation-type">
+                <option value="scripting">Scripting</option>
+                <option value="rpa">RPA</option>
+                <option value="api">API Integration</option>
+                <option value="low-code">Low-Code Platform</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label for="workflowiq-priority">Select priority focus:</label>
+            <select id="workflowiq-priority">
+                <option value="efficiency">Efficiency</option>
+                <option value="cost">Cost</option>
+                <option value="accuracy">Accuracy</option>
+                <option value="scalability">Scalability</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="workflowiq-goals" rows="2" placeholder="Goals: (1 per line)\ne.g., Reduce time, Minimize errors"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="workflowiq-constraints" rows="2" placeholder="Constraints: (1 per line)\ne.g., Budget, Legacy systems"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="workflowiq-instructions" rows="3" placeholder="Additional instructions: (1 per line)\ne.g., Prefer open-source tools, Ensure audit trail"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="WorkflowIQ™" onclick="generatePrompt('WorkflowIQ™')">Generate Promptemplate™ Now!</button>
+    </div>
+
+    <script src="/utility/modal.js"></script>
+    <script src="/payment/paymentform.js"></script>
+    <script src="/utility/tray.js"></script>
+    <script src="https://js.stripe.com/v3/" async></script>
+    <script src="workflowiq.js"></script>
+</body>
+</html>
