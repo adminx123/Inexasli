@@ -791,6 +791,15 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   font-family: "Inter", sans-serif;
 }
 
+
+/* Hover effect */
+.grid-item:hover {
+  background-color: #e0e0e0; /* Slightly darker gray for hover */
+  color: #000; /* Maintain black text for contrast */
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3), -3px -3px 6px rgba(255, 255, 255, 0.8); /* Deeper 3D effect */
+  transform: scale(1.02); /* Subtle scale for "pop" */
+}
+
 .grid-item.selected {
   background-color: #000;
   color: #fff;
