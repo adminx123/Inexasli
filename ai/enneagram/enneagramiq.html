@@ -1,0 +1,111 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EnneagramIQ™</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style/styles.css">
+</head>
+<body>
+    <a href="/ai/landing/landing.html">
+        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
+    </a>
+
+    <div class="container premium-section premium-blur">
+        <div class="row1">
+            <label for="enneagram-self">Describe Yourself:</label>
+            <textarea id="enneagram-self" rows="4" placeholder="Tell us about yourself (e.g., I’m creative, impatient, and value efficiency. I’m ADHD and hate inefficiency)."></textarea>
+        </div>
+        <div class="row1">
+            <label>Core Traits You Identify With (select all that apply):</label>
+            <div class="grid-container" id="enneagram-traits">
+                <div class="grid-item" data-value="1-Perfection">I must be perfect and avoid mistakes</div>
+                <div class="grid-item" data-value="2-Help">I feel fulfilled by helping others</div>
+                <div class="grid-item" data-value="3-Success">I’m driven to succeed and be recognized</div>
+                <div class="grid-item" data-value="4-Unique">I need to be unique and authentic</div>
+                <div class="grid-item" data-value="5-Knowledge">I seek knowledge and conserve energy</div>
+                <div class="grid-item" data-value="6-Security">I crave security and question everything</div>
+                <div class="grid-item" data-value="7-Fun">I chase excitement and avoid pain</div>
+                <div class="grid-item" data-value="8-Control">I take charge and protect what’s mine</div>
+                <div class="grid-item" data-value="9-Peace">I seek peace and avoid conflict</div>
+            </div>
+        </div>
+        <div class="row1">
+            <label>Behavioral Responses (select all that apply):</label>
+            <div class="grid-container" id="enneagram-behaviors">
+                <div class="grid-item" data-value="Conflict-1">In conflict, I focus on right/wrong</div>
+                <div class="grid-item" data-value="Conflict-2">In conflict, I mediate or please</div>
+                <div class="grid-item" data-value="Conflict-3">In conflict, I defend my image</div>
+                <div class="grid-item" data-value="Conflict-4">In conflict, I feel misunderstood</div>
+                <div class="grid-item" data-value="Conflict-5">In conflict, I withdraw to think</div>
+                <div class="grid-item" data-value="Conflict-6">In conflict, I get anxious and defensive</div>
+                <div class="grid-item" data-value="Conflict-7">In conflict, I deflect with humor</div>
+                <div class="grid-item" data-value="Conflict-8">In conflict, I assert dominance</div>
+                <div class="grid-item" data-value="Conflict-9">In conflict, I shut down or agree</div>
+                <div class="grid-item" data-value="Stress-1">Under stress, I get rigid and critical</div>
+                <div class="grid-item" data-value="Stress-2">Under stress, I cling to others</div>
+                <div class="grid-item" data-value="Stress-3">Under stress, I push harder</div>
+                <div class="grid-item" data-value="Stress-4">Under stress, I feel isolated</div>
+                <div class="grid-item" data-value="Stress-5">Under stress, I retreat completely</div>
+                <div class="grid-item" data-value="Stress-6">Under stress, I panic or overthink</div>
+                <div class="grid-item" data-value="Stress-7">Under stress, I distract myself</div>
+                <div class="grid-item" data-value="Stress-8">Under stress, I lash out</div>
+                <div class="grid-item" data-value="Stress-9">Under stress, I numb out</div>
+                <div class="grid-item" data-value="Growth-1">At my best, I’m calm and accepting</div>
+                <div class="grid-item" data-value="Growth-2">At my best, I’m independent</div>
+                <div class="grid-item" data-value="Growth-3">At my best, I’m genuine</div>
+                <div class="grid-item" data-value="Growth-4">At my best, I inspire others</div>
+                <div class="grid-item" data-value="Growth-5">At my best, I’m focused and insightful</div>
+                <div class="grid-item" data-value="Growth-6">At my best, I’m brave and reliable</div>
+                <div class="grid-item" data-value="Growth-7">At my best, I’m steady and productive</div>
+                <div class="grid-item" data-value="Growth-8">At my best, I’m generous and open</div>
+                <div class="grid-item" data-value="Growth-9">At my best, I’m engaged and assertive</div>
+            </div>
+        </div>
+        <div class="row1">
+            <label for="enneagram-motivations">Core Motivations:</label>
+            <textarea id="enneagram-motivations" rows="3" placeholder="What drives you deep down? (e.g., being perfect, avoiding pain)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="enneagram-fears">Core Fears:</label>
+            <textarea id="enneagram-fears" rows="3" placeholder="What do you fear most? (e.g., being corrupt, being abandoned)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="enneagram-stress">Behavior Under Stress:</label>
+            <textarea id="enneagram-stress" rows="3" placeholder="How do you act when stressed? (e.g., I criticize everything or distract myself)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="enneagram-growth">Behavior at Your Best:</label>
+            <textarea id="enneagram-growth" rows="3" placeholder="How do you act at your peak? (e.g., I’m focused and inspire others)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="enneagram-childhood">Influential Childhood Memory:</label>
+            <textarea id="enneagram-childhood" rows="3" placeholder="A memory that shaped you (e.g., I was praised for being good)"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="EnneagramIQ™" onclick="generatePrompt('EnneagramIQ™')">Generate Promptemplate™ Now!</button>
+    </div>
+
+    <script src="/utility/modal.js"></script>
+    <script src="/payment/paymentform.js"></script>
+    <script src="/utility/tray.js"></script>
+    <script src="https://js.stripe.com/v3/" async></script>
+    <script src="enneagramiq.js"></script>
+</body>
+</html>

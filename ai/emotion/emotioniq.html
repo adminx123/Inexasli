@@ -1,0 +1,100 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EmotionIQ™</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style/styles.css">
+</head>
+<body>
+    <a href="/ai/landing/landing.html">
+        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
+    </a>
+
+    <div class="container premium-section premium-blur">
+        <div class="row1">
+            <label for="therapy-goal">What’s Your Therapy Goal?</label>
+            <textarea id="therapy-goal" rows="3" placeholder="e.g., Manage anxiety, process grief, improve self-esteem"></textarea>
+        </div>
+        <div class="row1">
+            <label>Current Emotional State (select all that apply):</label>
+            <div class="grid-container" id="therapy-emotions">
+                <div class="grid-item" data-value="Anxious">Anxious</div>
+                <div class="grid-item" data-value="Sad">Sad</div>
+                <div class="grid-item" data-value="Angry">Angry</div>
+                <div class="grid-item" data-value="Overwhelmed">Overwhelmed</div>
+                <div class="grid-item" data-value="Numb">Numb</div>
+                <div class="grid-item" data-value="Hopeful">Hopeful</div>
+                <div class="grid-item" data-value="Confused">Confused</div>
+                <div class="grid-item" data-value="Guilty">Guilty</div>
+                <div class="grid-item" data-value="Excited">Excited</div>
+                <div class="grid-item" data-value="Lonely">Lonely</div>
+            </div>
+        </div>
+        <div class="row1">
+            <label>Triggers or Stressors (select all that apply):</label>
+            <div class="grid-container" id="therapy-triggers">
+                <div class="grid-item" data-value="Work">Work Stress</div>
+                <div class="grid-item" data-value="Relationships">Relationships</div>
+                <div class="grid-item" data-value="Family">Family Issues</div>
+                <div class="grid-item" data-value="Finances">Finances</div>
+                <div class="grid-item" data-value="Health">Health Concerns</div>
+                <div class="grid-item" data-value="Past Trauma">Past Trauma</div>
+                <div class="grid-item" data-value="Social Pressure">Social Pressure</div>
+                <div class="grid-item" data-value="Lack of Sleep">Lack of Sleep</div>
+                <div class="grid-item" data-value="Change">Recent Changes</div>
+            </div>
+        </div>
+        <div class="row1">
+            <label for="therapy-recent">Recent Events or Feelings:</label>
+            <textarea id="therapy-recent" rows="4" placeholder="What’s been on your mind lately? (1 per line):\nHad a fight with my partner\nFelt overwhelmed at work\nCouldn’t sleep last night"></textarea>
+        </div>
+        <div class="row1">
+            <label>Coping Strategies You’ve Tried (select all that apply):</label>
+            <div class="grid-container" id="therapy-coping">
+                <div class="grid-item" data-value="Talking">Talking to Someone</div>
+                <div class="grid-item" data-value="Exercise">Exercise</div>
+                <div class="grid-item" data-value="Meditation">Meditation</div>
+                <div class="grid-item" data-value="Journalizing">Journalizing</div>
+                <div class="grid-item" data-value="Distraction">Distraction (e.g., TV, games)</div>
+                <div class="grid-item" data-value="Avoidance">Avoidance</div>
+                <div class="grid-item" data-value="Sleep">Sleeping More</div>
+                <div class="grid-item" data-value="Hobbies">Hobbies</div>
+                <div class="grid-item" data-value="Therapy">Therapy/Counseling</div>
+            </div>
+        </div>
+        <div class="row1">
+            <label for="therapy-history">Therapy History or Context:</label>
+            <textarea id="therapy-history" rows="3" placeholder="e.g., I’ve been in therapy for 6 months, I had a tough childhood, etc."></textarea>
+        </div>
+        <div class="row1">
+            <label for="therapy-context">Context Dump (Past or Future Details):</label>
+            <textarea id="therapy-context" rows="4" placeholder="Anything from your past or future that might relate (1 per line):\nHad a tough breakup last year\nWorried about a big presentation next week\nChildhood memory of being ignored"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="EmotionIQ™" onclick="generatePrompt('EmotionIQ™')">Generate Promptemplate™ Now!</button>
+    </div>
+
+    <script src="/utility/modal.js"></script>
+    <script src="/payment/paymentform.js"></script>
+    <script src="/utility/tray.js"></script>
+    <script src="https://js.stripe.com/v3/" async></script>
+    <script src="emotioniq.js"></script>
+</body>
+</html>
