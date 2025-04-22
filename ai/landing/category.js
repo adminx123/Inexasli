@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 #category-sidebar:hover {
-    background-color:rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
 }
 
 #category-sidebar #close-sidebar {
@@ -60,55 +60,47 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-family: "Geist", sans-serif;
 }
 
-.tab-container {
-    margin: 20px auto 0;
-    max-width: 260px;
-    display: none;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 5px;
-    background: #ffffff;
-    border: 2px solid #000000;
-    border-radius: 10px;
-    box-shadow: 4px 4px 0 #000000;
-    font-family: "Inter", sans-serif;
-}
-
-#category-sidebar.expanded .tab-container {
-    display: flex;
-}
-
-.tab-container .tab {
+#category-sidebar .tab {
     width: 100%;
     padding: 8px;
     font-size: 12px;
     color: #000000;
     text-decoration: none;
-    background:rgb(231, 231, 231);
-    border: 2px solidrgb(0, 0, 0);
+    background: linear-gradient(145deg, #ffffff, #f0f0f0); /* 3D gradient from container */
+    border: 1px solid #d0d0d0; /* Border from container */
     border-radius: 6px;
+    box-shadow: 3px 3px 5px rgba(80, 80, 80, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* 3D shadows from container */
     text-align: center;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: all 0.3s ease; /* Match container transition */
     font-family: "Geist", sans-serif;
+    margin: 5px 0; /* Spacing between tabs */
+    display: none; /* Hidden by default */
 }
 
-.tab-container .tab:hover {
-    background-color:rgb(255, 255, 255);
-    color: #ffffff;
+#category-sidebar.expanded .tab {
+    display: block; /* Show tabs when expanded */
 }
 
-.tab-container .tab.active {
-    background-color:rgb(255, 255, 255);
-    color: #ffffff;
-    border-color: #000000;
+#category-sidebar .tab:hover {
+    transform: translateY(-5px); /* Lift effect from container */
+    box-shadow: 0 8px 15px rgba(80, 80, 80, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Hover shadow from container */
+    background: linear-gradient(145deg, #f8f8f8, #e8e8e8); /* Hover gradient from container */
+    color: #000000; /* Ensure readable text */
 }
 
-.tab-container .tooltip {
+#category-sidebar .tab.active {
+    transform: translateY(1px); /* Pressed effect from container */
+    box-shadow: 0 2px 5px rgba(80, 80, 80, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Active shadow from container */
+    background: linear-gradient(145deg, #f0f0f0, #e0e0e0); /* Active gradient from container */
+    color: #000000; /* Ensure readable text */
+    border-color: #d0d0d0;
+}
+
+#category-sidebar .tooltip {
     position: relative;
 }
 
-.tab-container .tooltip1-content {
+#category-sidebar .tooltip1-content {
     visibility: hidden;
     position: absolute;
     top: 100%;
@@ -123,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     z-index: 1001;
 }
 
-.tab-container .tooltip:hover .tooltip1-content {
+#category-sidebar .tooltip:hover .tooltip1-content {
     visibility: visible;
 }
 
@@ -138,16 +130,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     #category-sidebar.expanded {
         height: auto;
     }
-    .tab-container {
-        max-width: 140px;
-    }
     #category-sidebar a.category-link {
         font-size: 11px;
         padding: 6px;
     }
-    .tab-container .tab {
+    #category-sidebar .tab {
         font-size: 11px;
         padding: 6px;
+        margin: 3px 0;
     }
 }
     `;
@@ -159,7 +149,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             'BookIQ',
             'CalorieIQ',
             'ReceiptsIQ',
-            'ResearchIQ'
+            'ResearchIQ',
+            'EmotionIQ'
         ],
         'reportgeneration': [
             'EnneagramIQ',
@@ -170,6 +161,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         'planningandforecasting': [
             'AdventureIQ',
             'EventIQ',
+            'FitnessIQ',
             'IncomeIQ',
             'NewBusinessIQ',
             'SpeculationIQ'
@@ -179,8 +171,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             'QuizIQ'
         ],
         'decision': [
-            'DecisionIQ',
-            'EmotionIQ'
+            'DecisionIQ'
         ],
         'workflow': [
             'App',
@@ -188,9 +179,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         ],
         'educational': [
             'General'
-        ],
-        'personalized': [
-            'FitnessIQ'
         ]
     };
 
@@ -226,18 +214,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         sidebar.dataset.state = 'initial';
         sidebar.innerHTML = `
             <span id="close-sidebar">+</span>
-            <a class="category-link">EXPLORE CATEGORIES</a>
-            <div class="tab-container" id="category-tabs">
-                <a href="#" class="tab" data-location="all">ALL</a>
-                <a href="./dataanalysis.html" class="tab" data-location="dataanalysis">DATA</a>
-                <a href="./reportgeneration.html" class="tooltip tab" data-location="reportgeneration" data-tooltip="Generate detailed reports based on your data, including visualizations and insights.">REPORT<span class="tooltip1-content"></span></a>
-                <a href="./planningandforecasting.html" class="tab" data-location="planningandforecasting">PLANNING</a>
-                <a href="./creativeoutput.html" class="tab" data-location="creative">CREATIVE</a>
-                <a href="./decisionsupport.html" class="tab" data-location="decision">DECISION</a>
-                <a href="./workflowautomation.html" class="tab" data-location="workflow">WORKFLOW</a>
-                <a href="./educationaltraining.html" class="tab" data-location="educational">EDUCATIONAL</a>
-                <a href="./personalizedexperience.html" class="tab" data-location="personalized">PERSONALIZED</a>
-            </div>
+            <a class="category-link">ALL</a>
+            <a href="#" class="tab" data-location="all">ALL</a>
+            <a href="./dataanalysis.html" class="tab" data-location="dataanalysis">DATA</a>
+            <a href="./reportgeneration.html" class="tooltip tab" data-location="reportgeneration">REPORT<span class="tooltip1-content"></span></a>
+            <a href="./planningandforecasting.html" class="tab" data-location="planningandforecasting">PLANNING</a>
+            <a href="./creativeoutput.html" class="tab" data-location="creative">CREATIVE</a>
+            <a href="./decisionsupport.html" class="tab" data-location="decision">DECISION</a>
+            <a href="./workflowautomation.html" class="tab" data-location="workflow">WORKFLOW</a>
+            <a href="./educationaltraining.html" class="tab" data-location="educational">EDUCATIONAL</a>
         `;
         document.body.appendChild(sidebar);
 
@@ -255,7 +240,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Function to toggle the sidebar state
         const toggleSidebar = () => {
-            const tabContainer = document.querySelector('.tab-container');
+            const tabs = document.querySelectorAll('#category-sidebar .tab');
             if (sidebarElement.dataset.state === 'initial') {
                 // Expand the sidebar downwards
                 sidebarElement.classList.remove('initial');
@@ -263,9 +248,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 sidebarElement.dataset.state = 'expanded';
                 closeButton.textContent = '-';
 
-                const formHeight = tabContainer.scrollHeight;
+                const tabHeight = Array.from(tabs).reduce((sum, tab) => sum + tab.offsetHeight + 5, 0); // Sum tab heights + margins
                 const viewportHeight = window.innerHeight;
-                const topOffset = Math.min(viewportHeight - formHeight - 20, 10);
+                const topOffset = Math.min(viewportHeight - tabHeight - 20, 10);
                 sidebarElement.style.top = `${topOffset}px`;
 
                 console.log('Sidebar expanded downwards');
@@ -330,11 +315,17 @@ document.addEventListener('DOMContentLoaded', async function() {
                 e.preventDefault(); // Prevent navigation
                 e.stopPropagation(); // Stop event bubbling
                 const category = tab.getAttribute('data-location');
+                const categoryText = tab.textContent.toUpperCase(); // Get the tab text (e.g., "DATA", "REPORT")
                 console.log(`Tab clicked: ${category}`);
 
                 // Update active tab styling
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
+
+                // Update category-link text to the selected category
+                if (categoryLink) {
+                    categoryLink.textContent = categoryText;
+                }
 
                 // Filter grid items
                 filterGridItems(category);
