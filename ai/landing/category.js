@@ -1,8 +1,28 @@
-// categoryform.js
 document.addEventListener('DOMContentLoaded', async function() {
-    // Inject CSS styles
-    const style = document.createElement('style');
-    style.textContent = `/* Category Sidebar */
+    // Function to check if sidebar should be shown
+    function canShowSidebar() {
+        const termsCheckbox = document.getElementById('termscheckbox');
+        const gridContainer = document.querySelector('.containerround:not(#intro .containerround)');
+        const result = termsCheckbox?.checked && gridContainer && !gridContainer.classList.contains('hidden');
+        console.log('canShowSidebar:', {
+            termsChecked: termsCheckbox?.checked,
+            gridContainerExists: !!gridContainer,
+            gridHidden: gridContainer?.classList.contains('hidden'),
+            result
+        });
+        return result;
+    }
+
+    // Function to initialize the sidebar
+    function initializeSidebar() {
+        if (document.getElementById('category-sidebar')) {
+            console.log('Sidebar already exists, skipping initialization');
+            return;
+        }
+
+        // Inject CSS styles
+        const style = document.createElement('style');
+        style.textContent = `/* Category Sidebar */
 #category-sidebar {
     position: fixed;
     top: 10px;
@@ -66,33 +86,33 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-size: 12px;
     color: #000000;
     text-decoration: none;
-    background: linear-gradient(145deg, #ffffff, #f0f0f0); /* 3D gradient from container */
-    border: 1px solid #d0d0d0; /* Border from container */
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    border: 1px solid #d0d0d0;
     border-radius: 6px;
-    box-shadow: 3px 3px 5px rgba(80, 80, 80, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* 3D shadows from container */
+    box-shadow: 3px 3px 5px rgba(80, 80, 80, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
-    transition: all 0.3s ease; /* Match container transition */
+    transition: all 0.3s ease;
     font-family: "Geist", sans-serif;
-    margin: 5px 0; /* Spacing between tabs */
-    display: none; /* Hidden by default */
+    margin: 5px 0;
+    display: none;
 }
 
 #category-sidebar.expanded .tab {
-    display: block; /* Show tabs when expanded */
+    display: block;
 }
 
 #category-sidebar .tab:hover {
-    transform: translateY(-5px); /* Lift effect from container */
-    box-shadow: 0 8px 15px rgba(80, 80, 80, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Hover shadow from container */
-    background: linear-gradient(145deg, #f8f8f8, #e8e8e8); /* Hover gradient from container */
-    color: #000000; /* Ensure readable text */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(80, 80, 80, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(145deg, #f8f8f8, #e8e8e8);
+    color: #000000;
 }
 
 #category-sidebar .tab.active {
-    transform: translateY(1px); /* Pressed effect from container */
-    box-shadow: 0 2px 5px rgba(80, 80, 80, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Active shadow from container */
-    background: linear-gradient(145deg, #f0f0f0, #e0e0e0); /* Active gradient from container */
-    color: #000000; /* Ensure readable text */
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(80, 80, 80, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+    color: #000000;
     border-color: #d0d0d0;
 }
 
@@ -140,74 +160,71 @@ document.addEventListener('DOMContentLoaded', async function() {
         margin: 3px 0;
     }
 }
-    `;
-    document.head.appendChild(style);
+        `;
+        document.head.appendChild(style);
 
-    // Categorization of grid items by tab
-    const itemCategories = {
-        'dataanalysis': [
-            'BookIQ',
-            'CalorieIQ',
-            'ReceiptsIQ',
-            'ResearchIQ',
-            'EmotionIQ'
-        ],
-        'reportgeneration': [
-            'EnneagramIQ',
-            'SocialIQ',
-            'ReportIQ',
-            'SymptomIQ'
-        ],
-        'planningandforecasting': [
-            'AdventureIQ',
-            'EventIQ',
-            'FitnessIQ',
-            'IncomeIQ',
-            'NewBusinessIQ',
-            'SpeculationIQ'
-        ],
-        'creative': [
-            'AdAgencyIQ',
-            'QuizIQ'
-        ],
-        'decision': [
-            'DecisionIQ'
-        ],
-        'workflow': [
-            'App',
-            'WorkflowIQ'
-        ],
-        'educational': [
-            'General'
-        ]
-    };
+        // Categorization of grid items by tab
+        const itemCategories = {
+            'dataanalysis': [
+                'BookIQ',
+                'CalorieIQ',
+                'ReceiptsIQ',
+                'ResearchIQ',
+                'EmotionIQ'
+            ],
+            'reportgeneration': [
+                'EnneagramIQ',
+                'SocialIQ',
+                'ReportIQ',
+                'SymptomIQ'
+            ],
+            'planningandforecasting': [
+                'AdventureIQ',
+                'EventIQ',
+                'FitnessIQ',
+                'IncomeIQ',
+                'NewBusinessIQ',
+                'SpeculationIQ'
+            ],
+            'creative': [
+                'AdAgencyIQ',
+                'QuizIQ'
+            ],
+            'decision': [
+                'DecisionIQ'
+            ],
+            'workflow': [
+                'App',
+                'WorkflowIQ'
+            ],
+            'educational': [
+                'General'
+            ]
+        };
 
-    // Function to filter grid items by category
-    function filterGridItems(category) {
-        const gridItems = document.querySelectorAll('.grid-item');
-        
-        gridItems.forEach(item => {
-            // Extract item name from text content, removing <hr>, Premium, and ™
-            let itemText = item.textContent.split(/<hr>|Premium/)[0].trim().replace(/™/g, '');
-            console.log(`Checking item: ${itemText}, Category: ${category}, Included: ${itemCategories[category]?.includes(itemText)}`);
-            if (category === 'all' || itemCategories[category]?.includes(itemText)) {
+        // Function to filter grid items by category
+        function filterGridItems(category) {
+            const gridItems = document.querySelectorAll('.grid-item');
+            gridItems.forEach(item => {
+                let itemText = item.textContent.split(/<hr>|Premium/)[0].trim().replace(/™/g, '');
+                console.log(`Checking item: ${itemText}, Category: ${category}, Included: ${itemCategories[category]?.includes(itemText)}`);
+                if (category === 'all' || itemCategories[category]?.includes(itemText)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Function to show all grid items
+        function showAllItems() {
+            const gridItems = document.querySelectorAll('.grid-item');
+            gridItems.forEach(item => {
                 item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    }
+            });
+        }
 
-    // Function to show all grid items
-    function showAllItems() {
-        const gridItems = document.querySelectorAll('.grid-item');
-        gridItems.forEach(item => {
-            item.style.display = 'block';
-        });
-    }
-
-    // Create sidebar HTML
-    if (!document.getElementById('category-sidebar')) {
+        // Create sidebar HTML
         const sidebar = document.createElement('div');
         sidebar.id = 'category-sidebar';
         sidebar.classList.add('initial');
@@ -242,26 +259,21 @@ document.addEventListener('DOMContentLoaded', async function() {
         const toggleSidebar = () => {
             const tabs = document.querySelectorAll('#category-sidebar .tab');
             if (sidebarElement.dataset.state === 'initial') {
-                // Expand the sidebar downwards
                 sidebarElement.classList.remove('initial');
                 sidebarElement.classList.add('expanded');
                 sidebarElement.dataset.state = 'expanded';
                 closeButton.textContent = '-';
-
-                const tabHeight = Array.from(tabs).reduce((sum, tab) => sum + tab.offsetHeight + 5, 0); // Sum tab heights + margins
+                const tabHeight = Array.from(tabs).reduce((sum, tab) => sum + tab.offsetHeight + 5, 0);
                 const viewportHeight = window.innerHeight;
                 const topOffset = Math.min(viewportHeight - tabHeight - 20, 10);
                 sidebarElement.style.top = `${topOffset}px`;
-
                 console.log('Sidebar expanded downwards');
             } else {
-                // Collapse the sidebar
                 sidebarElement.classList.remove('expanded');
                 sidebarElement.classList.add('initial');
                 sidebarElement.dataset.state = 'initial';
                 closeButton.textContent = '+';
                 sidebarElement.style.top = '10px';
-
                 console.log('Sidebar returned to initial state');
             }
         };
@@ -312,25 +324,21 @@ document.addEventListener('DOMContentLoaded', async function() {
         tabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
                 console.log('Tab event listener triggered:', tab.getAttribute('data-location'));
-                e.preventDefault(); // Prevent navigation
-                e.stopPropagation(); // Stop event bubbling
+                e.preventDefault();
+                e.stopPropagation();
                 const category = tab.getAttribute('data-location');
-                const categoryText = tab.textContent.toUpperCase(); // Get the tab text (e.g., "DATA", "REPORT")
+                const categoryText = tab.textContent.toUpperCase();
                 console.log(`Tab clicked: ${category}`);
 
-                // Update active tab styling
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
 
-                // Update category-link text to the selected category
                 if (categoryLink) {
                     categoryLink.textContent = categoryText;
                 }
 
-                // Filter grid items
                 filterGridItems(category);
 
-                // Close the sidebar
                 if (sidebarElement.dataset.state === 'expanded') {
                     toggleSidebar();
                     console.log('Sidebar closed after category selection');
@@ -340,5 +348,40 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Initialize with all items shown
         showAllItems();
+    }
+
+    // Skip initial check on load to avoid premature initialization
+    // console.log('Skipping initial canShowSidebar check on load');
+
+    // Listen for personal-btn click to initialize sidebar
+    const personalBtn = document.getElementById('personal-btn');
+    if (personalBtn) {
+        personalBtn.addEventListener('click', () => {
+            // Delay slightly to ensure DOM updates from second script
+            setTimeout(() => {
+                if (canShowSidebar()) {
+                    initializeSidebar();
+                    console.log('Sidebar initialized after personal-btn click');
+                } else {
+                    console.error('Cannot show sidebar after personal-btn click');
+                }
+            }, 100); // 100ms delay to allow DOM updates
+        });
+    } else {
+        console.error('personal-btn not found');
+    }
+
+    // Monitor terms checkbox changes
+    const termsCheckbox = document.getElementById('termscheckbox');
+    if (termsCheckbox) {
+        termsCheckbox.addEventListener('change', () => {
+            const sidebar = document.getElementById('category-sidebar');
+            if (!termsCheckbox.checked && sidebar) {
+                sidebar.remove();
+                console.log('Sidebar removed due to terms unchecked');
+            }
+        });
+    } else {
+        console.error('termscheckbox not found');
     }
 });
