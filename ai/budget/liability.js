@@ -10,9 +10,9 @@
 
 console.log('Script loaded');
 
-import { setLocal } from '/server/scripts/setlocal.js';
-import { getLocal } from '/server/scripts/getlocal.js';
-import { setCookie } from '/server/scripts/setcookie.js';
+import { setLocal } from '/utility/setlocal.js';
+import { getLocal } from '/utility/getlocal.js';
+import { setCookie } from '/utility/setcookie.js';
 
 const tabs = document.querySelectorAll('.tab');
 tabs.forEach(tab => {
@@ -98,7 +98,7 @@ window.calculateAll = function () {
 window.calculateNext = function () {
     window.calculateAll();
     setCookie('summary_reached', Date.now(), 365);
-    window.location.href = '/budget/summary.html';
+    window.location.href = './summary.html';
   };
 
 window.calculateBack = function () {

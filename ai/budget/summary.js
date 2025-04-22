@@ -8,9 +8,9 @@
  * jurisdictions worldwide.
  */
 
-import { getLocal } from '/server/scripts/getlocal.js';
-import { setCookie } from '/server/scripts/setcookie.js';
-import { setLocal } from '/server/scripts/setlocal.js';
+import { getLocal } from '/utility/getlocal.js';
+import { setCookie } from '/utility/setcookie.js';
+import { setLocal } from '/utility/setlocal.js';
 
 // Tab highlighting
 const tabs = document.querySelectorAll('.tab');
@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const isPaid = paid === "paid";
     const currentPath = window.location.pathname;
 
-    if (isPaid && currentPath !== "/budget/summary.html") {
-        window.location.href = "/budget/summary.html";
+    if (isPaid && currentPath !== "/ai/budget/summary.html") {
+        window.location.href = "/ai/budget/summary.html";
         return;
     } else {
         document.body.style.display = 'block';
