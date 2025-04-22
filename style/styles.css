@@ -783,39 +783,52 @@ input[type="checkbox"]:checked ~ .box-checkbox {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.5rem;
 }
-
 .grid-item {
   background-color: #f5f5f5; /* Solid background from #category-sidebar */
   color: #000;
   padding: 1rem;
   border-radius: 5px;
   border: 1.5px solid #000; /* Reduced ~25% from 2px */
-  box-shadow: 3px 3px 0.5px #000; /* Reduced ~25% from 4px 4px, slight blur for softness */
+  box-shadow: 3px 3px 0.5px #000; /* Reduced ~25% from 4px 4px, slight blur */
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease; /* Match container transition */
+  transition: all 0.3s ease;
   font-family: "Inter", sans-serif;
+  box-sizing: border-box; /* Ensure padding/border included in width */
+  overflow-wrap: break-word; /* Allow long words to break and wrap */
+  white-space: normal; /* Allow text wrapping */
+  width: 100%; /* Ensure full width within parent */
 }
 
 .grid-item:hover {
-  transform: translateY(-5px); /* Keep lift effect */
-  background-color: rgb(255, 255, 255); /* White background on hover, like #category-sidebar */
-  box-shadow: 3px 3px 0.5px #000; /* Maintain reduced shadow */
-  color: #000; /* Maintain black text for contrast */
+  transform: translateY(-5px);
+  background-color: rgb(255, 255, 255);
+  box-shadow: 3px 3px 0.5px #000;
+  color: #000;
 }
 
 .grid-item:active {
-  transform: translateY(1px); /* Keep press effect */
-  background-color: #f5f5f5; /* Revert to base background */
-  box-shadow: 1.5px 1.5px 0.5px #000; /* Reduced ~25% from 2px 2px */
+  transform: translateY(1px);
+  background-color: #f5f5f5;
+  box-shadow: 1.5px 1.5px 0.5px #000;
 }
 
 .grid-item.selected {
-  background-color: #000; /* Keep original selected style */
+  background-color: #000;
   color: #fff;
-  box-shadow: 3px 3px 0.5px #000; /* Maintain reduced shadow for consistency */
-  border: 1.5px solid #000; /* Ensure border consistency */
+  box-shadow: 3px 3px 0.5px #000;
+  border: 1.5px solid #000;
 }
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .grid-item {
+    font-size: 11px; /* Reduce font size for better fit */
+    padding: 0.75rem; /* Slightly less padding to save space */
+    min-width: 100px; /* Ensure minimum width to prevent collapse */
+  }
+}
+
 
 .benefits {
   display: grid;
