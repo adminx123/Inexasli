@@ -427,12 +427,13 @@ button {
 }
 
 .container {
-  background: linear-gradient(145deg, #ffffff, #f0f0f0); /* Subtle gradient for depth */
+  background-color: #f5f5f5; /* Solid background from #category-sidebar */
   color: #000;
   max-width: 800px;
   margin: 0 auto;
   border-radius: 0 0 5px 5px;
-  box-shadow: 3px 3px 5px rgba(80, 80, 80, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Outer + inner shadow */
+  border: 2px solid #000; /* Bold border from #category-sidebar */
+  box-shadow: 4px 4px 0 #000; /* Sharp shadow from #category-sidebar */
   text-align: left;
   display: flex;
   padding: 0 15px;
@@ -441,29 +442,29 @@ button {
   flex-direction: column;
   align-items: stretch;
   box-sizing: border-box;
-  border: 1px solid #d0d0d0; /* Slightly darker border for definition */
   transition: all 0.3s ease;
 }
 
 .container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(80, 80, 80, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Maintain inner shadow */
-  background: linear-gradient(145deg, #f8f8f8, #e8e8e8); /* Slightly brighter gradient on hover */
+  transform: translateY(-5px); /* Keep lift effect */
+  background-color: rgb(255, 255, 255); /* White background on hover, like #category-sidebar */
+  box-shadow: 4px 4px 0 #000; /* Maintain sharp shadow */
 }
 
 .container:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 5px rgba(80, 80, 80, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Maintain inner shadow */
-  background: linear-gradient(145deg, #f0f0f0, #e0e0e0); /* Slightly darker gradient on active */
+  transform: translateY(1px); /* Keep press effect */
+  background-color: #f5f5f5; /* Revert to base background */
+  box-shadow: 2px 2px 0 #000; /* Slightly reduced shadow for pressed effect */
 }
 
 .containerround {
-  background: linear-gradient(145deg, #ffffff, #f0f0f0); /* Subtle gradient for depth */
+  background-color: #f5f5f5; /* Solid background from #category-sidebar */
   color: #000;
   max-width: 800px;
   margin: 10px auto;
   border-radius: 5px;
-  box-shadow: 3px 3px 5px rgba(174, 173, 173, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Outer + inner shadow */
+  border: 2px solid #000; /* Bold border from #category-sidebar */
+  box-shadow: 4px 4px 0 #000; /* Sharp shadow from #category-sidebar */
   text-align: left;
   display: flex;
   padding: 0 15px;
@@ -472,20 +473,19 @@ button {
   flex-direction: column;
   align-items: stretch;
   box-sizing: border-box;
-  border: 1px solid #d0d0d0; /* Slightly darker border for definition */
   transition: all 0.3s ease;
 }
 
 .containerround:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(174, 173, 173, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Maintain inner shadow */
-  background: linear-gradient(145deg, #f8f8f8, #e8e8e8); /* Slightly brighter gradient on hover */
+  transform: translateY(-5px); /* Keep lift effect */
+  background-color: rgb(255, 255, 255); /* White background on hover, like #category-sidebar */
+  box-shadow: 4px 4px 0 #000; /* Maintain sharp shadow */
 }
 
 .containerround:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 5px rgba(174, 173, 173, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Maintain inner shadow */
-  background: linear-gradient(145deg, #f0f0f0, #e0e0e0); /* Slightly darker gradient on active */
+  transform: translateY(1px); /* Keep press effect */
+  background-color: #f5f5f5; /* Revert to base background */
+  box-shadow: 2px 2px 0 #000; /* Slightly reduced shadow for pressed effect */
 }
 
 .hidden {
@@ -785,29 +785,36 @@ input[type="checkbox"]:checked ~ .box-checkbox {
 }
 
 .grid-item {
-  background-color: #f0f0f0;
+  background-color: #f5f5f5; /* Solid background from #category-sidebar */
   color: #000;
   padding: 1rem;
   border-radius: 5px;
+  border: 1.5px solid #000; /* Reduced ~25% from 2px */
+  box-shadow: 3px 3px 0.5px #000; /* Reduced ~25% from 4px 4px, slight blur for softness */
   text-align: center;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
-  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease; /* Match container transition */
   font-family: "Inter", sans-serif;
 }
 
-
-/* Hover effect */
 .grid-item:hover {
-  background-color: #e0e0e0; /* Slightly darker gray for hover */
+  transform: translateY(-5px); /* Keep lift effect */
+  background-color: rgb(255, 255, 255); /* White background on hover, like #category-sidebar */
+  box-shadow: 3px 3px 0.5px #000; /* Maintain reduced shadow */
   color: #000; /* Maintain black text for contrast */
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3), -3px -3px 6px rgba(255, 255, 255, 0.8); /* Deeper 3D effect */
-  transform: scale(1.02); /* Subtle scale for "pop" */
+}
+
+.grid-item:active {
+  transform: translateY(1px); /* Keep press effect */
+  background-color: #f5f5f5; /* Revert to base background */
+  box-shadow: 1.5px 1.5px 0.5px #000; /* Reduced ~25% from 2px 2px */
 }
 
 .grid-item.selected {
-  background-color: #000;
+  background-color: #000; /* Keep original selected style */
   color: #fff;
+  box-shadow: 3px 3px 0.5px #000; /* Maintain reduced shadow for consistency */
+  border: 1.5px solid #000; /* Ensure border consistency */
 }
 
 .benefits {
