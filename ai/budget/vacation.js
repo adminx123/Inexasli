@@ -7,8 +7,8 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
  */
-import { setLocal } from '/server/scripts/setlocal.js';
-import { getLocal } from '/server/scripts/getLocal.js';
+import { setLocal } from '/utility/setlocal.js';
+import { getLocal } from '/utility/getLocal.js';
 
 // Define expenseCategories and totalOnlyCategories FIRST
 const expenseCategories = [

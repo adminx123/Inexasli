@@ -8,9 +8,9 @@
  * jurisdictions worldwide.
  */
 
-import { setLocal } from '/server/scripts/setlocal.js';
-import { getLocal } from '/server/scripts/getlocal.js';
-import { getCookie } from '/server/scripts/getcookie.js';
+import { setLocal } from '/utility/setlocal.js';
+import { getLocal } from '/utility/getlocal.js';
+import { getCookie } from '/utility/getcookie.js';
 
 const urlParams = new URLSearchParams(window.location.search);
 const sessionId = urlParams.get("session_id");

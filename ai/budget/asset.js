@@ -8,8 +8,8 @@
  * jurisdictions worldwide.
  */
 
-import { setLocal } from '/server/scripts/setlocal.js';
-import { getLocal } from '/server/scripts/getlocal.js';
+import { setLocal } from '/utility/setlocal.js';
+import { getLocal } from '/utility/getlocal.js';
 
 const tabs = document.querySelectorAll('.tab');
 

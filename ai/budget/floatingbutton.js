@@ -8,7 +8,7 @@
  * jurisdictions worldwide.
  */
 
-import { getCookie } from '/server/scripts/getcookie.js';
+import { getCookie } from '/utility/getcookie.js';
 
 function injectStyles() {
   const styles = `

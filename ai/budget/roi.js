@@ -1,5 +1,5 @@
-import { setLocal } from '/server/scripts/setlocal.js';
-import { getLocal } from '/server/scripts/getLocal.js';
+import { setLocal } from '/utility/setlocal.js';
+import { getLocal } from '/utility/getLocal.js';
 
 // Expose functions to global scope for inline HTML events
 window.toggleCogs = function () {

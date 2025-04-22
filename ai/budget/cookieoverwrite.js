@@ -10,7 +10,7 @@
 
 
 
-import { setLocal } from '/server/scripts/setlocal.js'; // Adjust path as needed
+import { setLocal } from '/utility/setlocal.js'; // Adjust path as needed
 
 // Add a confirmation prompt before overwriting cookies
 export function overwriteCookies() {
