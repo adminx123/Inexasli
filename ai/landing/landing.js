@@ -1,27 +1,26 @@
-// Categorization of grid items by tab (each item belongs to exactly one category)
 const itemCategories = {
     'dataanalysis': [
         'BookIQ™',
-        'CalorieIQ™',
+        
         'ReceiptsIQ™',
-        'ReportIQ™',
-        'Research'
+        
+        'ResearchIQ™'
     ],
     'reportgeneration': [
         'EnneagramIQ™',
         'SocialIQ™',
-        'SymptomIQ™'
+        'ReportIQ™'
     ],
     'planningandforecasting': [
         'AdventureIQ™',
         'EventIQ™',
         'IncomeIQ™',
-        'New Business',
+        'NewBusinessIQ™',
         'SpeculationIQ™'
     ],
     'creativeoutput': [
-        'PromotionIQ™',
-        'QuizIQ™'
+        'AdAgencyIQ™'
+        
     ],
     'decisionsupport': [
         'DecisionIQ™',
@@ -32,10 +31,14 @@ const itemCategories = {
         'WorkflowIQ™'
     ],
     'educationaltraining': [
-        'General'
+        'General',
+        'QuizIQ™'
     ],
     'personalizedexperience': [
-        'FitnessIQ™'
+        'FitnessIQ™',
+        'CalorieIQ™',
+        'SymptomIQ™'
+
     ]
 };
 
@@ -44,7 +47,7 @@ function filterGridItems(category) {
     const gridItems = document.querySelectorAll('.grid-item');
     
     gridItems.forEach(item => {
-        const itemText = item.textContent.split('\n')[0].trim();
+        const itemText = item.textContent.split('\n')[0].trim(); // Get text (e.g., "AdventureIQ™")
         console.log(`Checking item: ${itemText}, Category: ${category}, Included: ${itemCategories[category]?.includes(itemText)}`);
         if (category === 'all' || itemCategories[category]?.includes(itemText)) {
             item.style.display = 'block';
