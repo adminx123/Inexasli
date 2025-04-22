@@ -1,53 +1,50 @@
+// Categorization of grid items by tab
 const itemCategories = {
     'dataanalysis': [
-        'BookIQ™',
-        
-        'ReceiptsIQ™',
-        
-        'ResearchIQ™'
+        'BookIQ',
+        'CalorieIQ',
+        'ReceiptsIQ',
+        'ResearchIQ'
     ],
     'reportgeneration': [
-        'EnneagramIQ™',
-        'SocialIQ™',
-        'ReportIQ™'
+        'EnneagramIQ',
+        'SocialIQ',
+        'ReportIQ',
+        'SymptomIQ'
     ],
     'planningandforecasting': [
-        'AdventureIQ™',
-        'EventIQ™',
-        'IncomeIQ™',
-        'NewBusinessIQ™',
-        'SpeculationIQ™'
+        'AdventureIQ',
+        'EventIQ',
+        'IncomeIQ',
+        'NewBusinessIQ',
+        'SpeculationIQ'
     ],
-    'creativeoutput': [
-        'AdAgencyIQ™'
-        
+    'creative': [
+        'AdAgencyIQ',
+        'QuizIQ'
     ],
-    'decisionsupport': [
-        'DecisionIQ™',
-        'EmotionIQ™'
+    'decision': [
+        'DecisionIQ',
+        'EmotionIQ'
     ],
-    'workflowautomation': [
+    'workflow': [
         'App',
-        'WorkflowIQ™'
+        'WorkflowIQ'
     ],
-    'educationaltraining': [
-        'General',
-        'QuizIQ™'
+    'educational': [
+        'General'
     ],
-    'personalizedexperience': [
-        'FitnessIQ™',
-        'CalorieIQ™',
-        'SymptomIQ™'
-
+    'personalized': [
+        'FitnessIQ'
     ]
 };
 
-// Function to filter grid items based on the selected tab
 function filterGridItems(category) {
     const gridItems = document.querySelectorAll('.grid-item');
     
     gridItems.forEach(item => {
-        const itemText = item.textContent.split('\n')[0].trim(); // Get text (e.g., "AdventureIQ™")
+        // Split by <hr> or Premium to isolate the item name
+        let itemText = item.textContent.split(/<hr>|Premium/)[0].trim().replace(/™/g, '');
         console.log(`Checking item: ${itemText}, Category: ${category}, Included: ${itemCategories[category]?.includes(itemText)}`);
         if (category === 'all' || itemCategories[category]?.includes(itemText)) {
             item.style.display = 'block';
@@ -70,17 +67,10 @@ document.querySelectorAll('.tab').forEach(tab => {
         tab.classList.add('active');
         
         filterGridItems(category);
-        
-        if (typeof sortAll === 'function') {
-            console.log('Calling sortAll()');
-            sortAll();
-        } else {
-            console.warn('sortAll() is not defined');
-        }
     });
 });
 
-// Function to show all items (for initial view and "ALL" tab)
+// Function to show all items
 function showAllItems() {
     const gridItems = document.querySelectorAll('.grid-item');
     gridItems.forEach(item => {
