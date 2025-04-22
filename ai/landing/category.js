@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 #category-sidebar:hover {
-    background-color: #D4AF37;
+    background-color:rgb(255, 255, 255);
 }
 
 #category-sidebar #close-sidebar {
@@ -85,8 +85,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-size: 12px;
     color: #000000;
     text-decoration: none;
-    background: #f9f9f9;
-    border: 2px solid #7b7b7b;
+    background:rgb(231, 231, 231);
+    border: 2px solidrgb(0, 0, 0);
     border-radius: 6px;
     text-align: center;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -94,12 +94,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .tab-container .tab:hover {
-    background-color: #D4AF37;
+    background-color:rgb(255, 255, 255);
     color: #ffffff;
 }
 
 .tab-container .tab.active {
-    background-color: #D4AF37;
+    background-color:rgb(255, 255, 255);
     color: #ffffff;
     border-color: #000000;
 }
@@ -338,6 +338,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 // Filter grid items
                 filterGridItems(category);
+
+                // Close the sidebar
+                if (sidebarElement.dataset.state === 'expanded') {
+                    toggleSidebar();
+                    console.log('Sidebar closed after category selection');
+                }
             });
         });
 
