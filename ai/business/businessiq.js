@@ -45,7 +45,7 @@ function generatePrompt(promptType) {
 
     let prompt = '';
 
-    if (promptType === 'BusinessIQ™') {
+    if (promptType === 'newbiziq™') {
         const businessVision = document.getElementById('business-vision');
         if (businessVision?.value) {
             prompt += formatList(businessVision.value, 'Business Idea');

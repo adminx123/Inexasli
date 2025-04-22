@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
 
       <div class="tray-menu-item-container">
-        <a href="/ai/old/prompt.html" id="website" class="tray-menu-item">Promptemplate<span class="tm">™</span></a>
+        <a href="/ai/landing/landing.html" id="website" class="tray-menu-item">Promptemplate<span class="tm">™</span></a>
       </div>
       
       <div class="tray-menu-item-container">
