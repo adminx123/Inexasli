@@ -6,8 +6,8 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { setLocal } from '/server/scripts/setlocal.js';
-import { getLocal } from '/server/scripts/getlocal.js';
+import { setLocal } from '/utility/setlocal.js';
+import { getLocal } from '/utility/getlocal.js';
 
 // Tab highlighting
 const tabs = document.querySelectorAll('.tab');

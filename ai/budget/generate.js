@@ -1,4 +1,4 @@
-import { getLocal } from '/server/scripts/getlocal.js';
+import { getLocal } from '/utility/getlocal.js';
 
 
 function generateFinancialPrompt() {

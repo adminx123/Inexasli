@@ -8,9 +8,9 @@
  * jurisdictions worldwide.
  */
 
-import { setLocal } from '/server/scripts/setlocal.js';
-import { getLocal } from '/server/scripts/getlocal.js';
-import { overwriteCookies } from '/server/scripts/cookieoverwrite.js';
+import { setLocal } from '/utility/setlocal.js';
+import { getLocal } from '/utility/getlocal.js';
+import { overwriteCookies } from '/utility/cookieoverwrite.js';
 
 function getTermsCookie(name) {
     const now = Date.now();
