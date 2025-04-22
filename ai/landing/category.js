@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 'EventIQ',
                 'FitnessIQ',
                 'IncomeIQ',
-                'NewBusinessIQ',
+                'Newnewbiziq',
                 'SpeculationIQ'
             ],
             'creative': [
