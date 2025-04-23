@@ -28,22 +28,23 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         const style = document.createElement('style');
-        style.textContent = `/* Left Data Container */
+        style.textContent = `
+       /* Left Data Container */
 .data-container-left {
     position: fixed;
     top: 50%;
     left: 0;
     transform: translateY(-50%);
     background-color: #f5f5f5;
-    padding: 8px;
+    padding: 4px;
     border: 2px solid #000;
     border-left: none;
     border-radius: 0 8px 8px 0;
     box-shadow: 4px 4px 0 #000;
     z-index: 10000;
-    width: 200px;
-    min-height: 50px;
-    transition: height 0.3s ease-in-out;
+    width: 30px; /* Narrow for vertical text */
+    min-height: 30px;
+    transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
     overflow: hidden;
     font-family: "Inter", sans-serif;
     visibility: visible;
@@ -51,11 +52,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .data-container-left.initial {
-    height: auto;
+    height: 100px; /* Proportionate for vertical text */
 }
 
 .data-container-left.expanded {
-    height: auto;
+    width: 200px; /* Expand for content */
+    height: auto; /* Fit content */
 }
 
 .data-container-left:hover {
@@ -64,9 +66,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .data-container-left .close-data-container {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    font-size: 18px;
+    bottom: 4px; /* Near bottom for vertical layout */
+    right: 4px;
+    font-size: 14px; /* Proportionate to text */
     color: #000;
     cursor: pointer;
     font-weight: bold;
@@ -74,29 +76,45 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-family: "Inter", sans-serif;
 }
 
+.data-container-left.expanded .close-data-container {
+    top: 4px; /* Top-right when expanded */
+    bottom: auto;
+}
+
 .data-container-left .data-label {
     text-decoration: none;
     color: #000;
-    font-size: 12px;
+    font-size: 12px; /* Specified size */
     display: block;
     text-align: center;
-    padding: 8px;
+    padding: 4px;
     cursor: default;
     transition: color 0.2s ease;
     line-height: 1.2;
     font-family: "Geist", sans-serif;
+    writing-mode: vertical-rl; /* Vertical text */
+    text-orientation: mixed; /* Top-to-bottom */
 }
 
 @media (max-width: 480px) {
     .data-container-left {
+        width: 25px; /* Narrower on mobile */
+        padding: 3px;
+    }
+    .data-container-left.initial {
+        height: 80px; /* Shorter for mobile */
+    }
+    .data-container-left.expanded {
         width: 150px;
     }
     .data-container-left .data-label {
-        font-size: 11px;
-        padding: 6px;
+        font-size: 12px; /* Maintain 12px */
+        padding: 3px;
     }
-}
-        `;
+    .data-container-left .close-data-container {
+        font-size: 12px; /* Smaller for mobile */
+    }
+}`;
         document.head.appendChild(style);
 
         const dataContainer = document.createElement('div');

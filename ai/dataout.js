@@ -27,22 +27,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         const style = document.createElement('style');
-        style.textContent = `/* Right Data Container */
+        style.textContent = `
+        
+        /* Right Data Container */
 .data-container-right {
     position: fixed;
     top: 50%;
     right: 0;
     transform: translateY(-50%);
     background-color: #f5f5f5;
-    padding: 8px;
+    padding: 4px;
     border: 2px solid #000;
     border-right: none;
     border-radius: 8px 0 0 8px;
     box-shadow: -4px 4px 0 #000;
     z-index: 10000;
-    width: 200px;
-    min-height: 50px;
-    transition: height 0.3s ease-in-out;
+    width: 34px;
+    min-height: 30px;
+    transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
     overflow: hidden;
     font-family: "Inter", sans-serif;
     visibility: visible;
@@ -50,10 +52,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .data-container-right.initial {
-    height: auto;
+    height: 120px; /* Space for vertical text */
 }
 
 .data-container-right.expanded {
+    width: 200px;
     height: auto;
 }
 
@@ -63,9 +66,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .data-container-right .close-data-container {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    font-size: 18px;
+    top: 4px;
+    left: 10px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 1;
     color: #000;
     cursor: pointer;
     font-weight: bold;
@@ -73,28 +78,57 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-family: "Inter", sans-serif;
 }
 
+.data-container-right.expanded .close-data-container {
+    top: 4px;
+    left: 10px;
+}
+
 .data-container-right .data-label {
     text-decoration: none;
     color: #000;
     font-size: 12px;
-    display: block;
+    display: flex;
+    flex-direction: column-reverse; /* Reverse order for bottom-to-top */
+    justify-content: center;
     text-align: center;
-    padding: 8px;
+    padding: 4px;
     cursor: default;
     transition: color 0.2s ease;
     line-height: 1.2;
     font-family: "Geist", sans-serif;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg); /* Flip for correct bottom-to-top */
+}
+
+.data-container-right.initial .data-label {
+    margin-top: 20px; /* Avoid overlap with close button */
+}
+
+.data-container-right.expanded .data-label {
+    margin-top: 0; /* Normal flow when expanded */
 }
 
 @media (max-width: 480px) {
     .data-container-right {
+        width: 28px;
+        padding: 3px;
+    }
+    .data-container-right.initial {
+        height: 100px;
+    }
+    .data-container-right.expanded {
         width: 150px;
     }
     .data-container-right .data-label {
-        font-size: 11px;
-        padding: 6px;
+        font-size: 12px;
+        padding: 3px;
+    }
+    .data-container-right .close-data-container {
+        font-size: 12px;
+        padding: 4px;
     }
 }
+        
         `;
         document.head.appendChild(style);
 
