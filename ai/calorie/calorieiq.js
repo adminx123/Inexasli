@@ -136,6 +136,15 @@ const formatGrid = (selector, prefix) => {
     return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
 };
 
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        console.log('Prompt copied to clipboard successfully!');
+    }).catch(err => {
+        console.error('Failed to copy prompt to clipboard:', err);
+    });
+}
+
+// Update generatePrompt to copy the prompt to clipboard
 function generatePrompt(promptType) {
     console.log('Debug: generatePrompt function called with argument:', promptType);
 
@@ -176,6 +185,7 @@ function generatePrompt(promptType) {
 
     if (prompt) {
         console.log('Debug: Generated prompt content:', prompt);
+        copyToClipboard(prompt); // Copy the generated prompt to clipboard
         openCustomModal(prompt);
     }
 }
@@ -186,3 +196,4 @@ function openCustomModal(content) {
 }
 
 window.openCustomModal = openCustomModal;
+window.generatePrompt = generatePrompt;
