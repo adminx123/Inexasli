@@ -3,15 +3,26 @@
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
+ * is strictly prohibited. Violators will be prosecuted to the fullest extent 
+ * of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
 document.addEventListener('DOMContentLoaded', async function() {
+    function canShowContainer() {
+        const introDiv = document.getElementById('intro');
+        const isIntroHidden = introDiv && introDiv.classList.contains('hidden');
+        console.log('canShowContainer (dataout.js):', { isIntroHidden });
+        return isIntroHidden;
+    }
+
     function initializeDataContainer() {
         if (document.querySelector('.data-container-right')) {
-            console.log('Right data container already exists, skipping initialization');
+            console.log('Right data container already exists, skipping initialization (dataout.js)');
+            return;
+        }
+
+        if (!canShowContainer()) {
+            console.log('Intro div is not hidden, skipping initialization (dataout.js)');
             return;
         }
 
@@ -138,8 +149,31 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
+    // Monitor intro div changes
+    const introDiv = document.getElementById('intro');
+    if (introDiv) {
+        const observer = new MutationObserver(() => {
+            const dataContainer = document.querySelector('.data-container-right');
+            if (canShowContainer()) {
+                if (!dataContainer) {
+                    initializeDataContainer();
+                    console.log('Intro div hidden, initialized right container (dataout.js)');
+                }
+            } else if (dataContainer) {
+                dataContainer.remove();
+                console.log('Intro div visible, removed right container (dataout.js)');
+            }
+        });
+        observer.observe(introDiv, { attributes: true, attributeFilter: ['class'] });
+    } else {
+        console.error('Intro div not found (dataout.js)');
+    }
+
+    // Initial check
     try {
-        initializeDataContainer();
+        if (canShowContainer()) {
+            initializeDataContainer();
+        }
     } catch (error) {
         console.error('Error initializing right data container (dataout.js):', error);
     }
