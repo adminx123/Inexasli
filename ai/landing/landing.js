@@ -3,9 +3,8 @@
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
+ * is strictly prohibited. Violators will be prosecuted to the fullest extent 
+ * of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
 import { setCookie } from '/utility/setcookie.js';
@@ -21,28 +20,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const introDiv = document.getElementById('intro');
     const personalBtn = document.getElementById('personal-btn');
     const termsCheckbox = document.getElementById('termscheckbox');
-    const gridContainer = document.querySelector('.container:not(#intro .container)');
 
     // Debugging: Log cookie and element status
     console.log('Cookie check:', { promptCookie, isCookieExpired, currentTime });
-    console.log('Initial DOM check:', { introDiv, personalBtn, termsCheckbox, gridContainer });
+    console.log('Initial DOM check:', { introDiv, personalBtn, termsCheckbox });
 
     if (!isCookieExpired) {
-        // Cookie is less than 10 minutes old: skip sales page, show grid container
-        if (introDiv && gridContainer) {
+        // Cookie is less than 10 minutes old: hide intro div
+        if (introDiv) {
             introDiv.classList.add('hidden');
-            gridContainer.classList.remove('hidden');
             if (personalBtn) personalBtn.classList.add('selected');
-
-            // Scroll to grid container
-            if (gridContainer) {
-                const sectionHeight = gridContainer.offsetHeight;
-                const windowHeight = window.innerHeight;
-                const scrollPosition = gridContainer.getBoundingClientRect().top + window.scrollY - (windowHeight - sectionHeight) / 2;
-                window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
-            }
         } else {
-            console.error('Missing elements for non-expired cookie:', { introDiv, gridContainer });
+            console.error('Missing intro div for non-expired cookie');
         }
         return; // Exit early
     }
@@ -50,17 +39,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Cookie is expired or missing: show sales page
     if (termsCheckbox) {
         termsCheckbox.addEventListener('change', function () {
-            console.log('Checkbox state changed:', { checked: this.checked, introDiv, gridContainer });
+            console.log('Checkbox state changed:', { checked: this.checked, introDiv });
 
-            if (!introDiv || !gridContainer) {
-                console.error('Missing elements:', { introDiv, gridContainer });
+            if (!introDiv) {
+                console.error('Missing intro div');
                 return;
             }
 
             if (!this.checked) {
-                // When unchecked, show intro, hide grid, remove selected state
+                // When unchecked, show intro
                 introDiv.classList.remove('hidden');
-                gridContainer.classList.add('hidden');
                 if (personalBtn) personalBtn.classList.remove('selected');
             }
         });
@@ -84,26 +72,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            if (!introDiv || !gridContainer) {
-                console.error('Missing elements:', { introDiv, gridContainer });
+            if (!introDiv) {
+                console.error('Missing intro div');
                 return;
             }
 
             // Set new cookie when terms are accepted
             setCookie("prompt", Date.now(), 32);
 
-            // Hide intro and show grid container
+            // Hide intro div
             introDiv.classList.add('hidden');
-            gridContainer.classList.remove('hidden');
             personalBtn.classList.add('selected');
-
-            // Scroll to grid container
-            if (gridContainer) {
-                const sectionHeight = gridContainer.offsetHeight;
-                const windowHeight = window.innerHeight;
-                const scrollPosition = gridContainer.getBoundingClientRect().top + window.scrollY - (windowHeight - sectionHeight) / 2;
-                window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
-            }
         });
     } else {
         console.error('Personal button not found');
