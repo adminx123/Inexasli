@@ -1,13 +1,41 @@
-document.addEventListener('DOMContentLoaded', async function() {
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */
+
+import { getCookie } from '/utility/getcookie.js';
+
+document.addEventListener('DOMContentLoaded', async function () {
     // Function to check if sidebar should be shown
     function canShowSidebar() {
         const termsCheckbox = document.getElementById('termscheckbox');
         const gridContainer = document.querySelector('.containerround:not(#intro .containerround)');
-        const result = termsCheckbox?.checked && gridContainer && !gridContainer.classList.contains('hidden');
+        
+        // Check cookie status
+        const promptCookie = getCookie("prompt");
+        const currentTime = Date.now();
+        const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
+        const isCookieValid = promptCookie && parseInt(promptCookie) + cookieDuration >= currentTime;
+
+        let result;
+        if (isCookieValid) {
+            // Cookie is less than 10 minutes old, bypass terms checkbox
+            result = gridContainer && !gridContainer.classList.contains('hidden');
+        } else {
+            // Cookie is expired or missing, require terms checkbox
+            result = termsCheckbox?.checked && gridContainer && !gridContainer.classList.contains('hidden');
+        }
+
         console.log('canShowSidebar:', {
             termsChecked: termsCheckbox?.checked,
             gridContainerExists: !!gridContainer,
             gridHidden: gridContainer?.classList.contains('hidden'),
+            isCookieValid,
             result
         });
         return result;
@@ -183,8 +211,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 'EventIQ',
                 'FitnessIQ',
                 'IncomeIQ',
-                'Newnewbiziq',
-                'SpeculationIQ'
+                'NewBizIQ' // Fixed typo from 'Newnewbiziq'
             ],
             'creative': [
                 'AdAgencyIQ',
@@ -280,7 +307,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Click handlers for category link and close button
         if (categoryLink) {
-            categoryLink.addEventListener('click', function(e) {
+            categoryLink.addEventListener('click', function (e) {
                 e.preventDefault();
                 console.log('Category link clicked. Current state:', sidebarElement.dataset.state);
                 toggleSidebar();
@@ -290,7 +317,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         if (closeButton) {
-            closeButton.addEventListener('click', function(e) {
+            closeButton.addEventListener('click', function (e) {
                 e.preventDefault();
                 console.log('Close button clicked. Current state:', sidebarElement.dataset.state);
                 toggleSidebar();
@@ -300,7 +327,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         // Collapse sidebar when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const isClickInsideSidebar = sidebarElement.contains(e.target);
             if (!isClickInsideSidebar && sidebarElement.dataset.state === 'expanded') {
                 console.log('Clicked outside sidebar, collapsing it');
@@ -350,14 +377,37 @@ document.addEventListener('DOMContentLoaded', async function() {
         showAllItems();
     }
 
-    // Skip initial check on load to avoid premature initialization
-    // console.log('Skipping initial canShowSidebar check on load');
+    // Monitor grid container visibility with MutationObserver
+    const gridContainer = document.querySelector('.containerround:not(#intro .containerround)');
+    if (gridContainer) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    if (!gridContainer.classList.contains('hidden') && canShowSidebar()) {
+                        initializeSidebar();
+                        console.log('Sidebar initialized due to grid container visibility change');
+                        observer.disconnect(); // Stop observing once initialized
+                    }
+                }
+            });
+        });
+        observer.observe(gridContainer, { attributes: true });
+    } else {
+        console.error('Grid container not found for MutationObserver');
+    }
+
+    // Check cookie status on load with delay to initialize sidebar
+    setTimeout(() => {
+        if (canShowSidebar()) {
+            initializeSidebar();
+            console.log('Sidebar initialized on load');
+        }
+    }, 100); // 100ms delay to allow landing.js to update DOM
 
     // Listen for personal-btn click to initialize sidebar
     const personalBtn = document.getElementById('personal-btn');
     if (personalBtn) {
         personalBtn.addEventListener('click', () => {
-            // Delay slightly to ensure DOM updates from second script
             setTimeout(() => {
                 if (canShowSidebar()) {
                     initializeSidebar();
@@ -376,9 +426,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (termsCheckbox) {
         termsCheckbox.addEventListener('change', () => {
             const sidebar = document.getElementById('category-sidebar');
-            if (!termsCheckbox.checked && sidebar) {
+            const promptCookie = getCookie("prompt");
+            const currentTime = Date.now();
+            const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
+            const isCookieValid = promptCookie && parseInt(promptCookie) + cookieDuration >= currentTime;
+
+            if (!termsCheckbox.checked && !isCookieValid && sidebar) {
                 sidebar.remove();
-                console.log('Sidebar removed due to terms unchecked');
+                console.log('Sidebar removed due to terms unchecked and invalid cookie');
             }
         });
     } else {
