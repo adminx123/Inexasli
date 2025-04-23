@@ -122,8 +122,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .premium-notice {
     padding: 4px 8px;
-    background-color: #D4AF37;
-    color: #ffffff;
+    background-color:rgb(0, 0, 0);
+    color: #D4AF37;
     font-size: 0.75em;
     border-radius: 2px;
     font-weight: bold;
