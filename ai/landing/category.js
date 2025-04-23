@@ -22,14 +22,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
         const isCookieValid = promptCookie && parseInt(promptCookie) + cookieDuration >= currentTime;
 
-        let result;
-        if (isCookieValid) {
-            // Cookie is less than 10 minutes old, bypass terms checkbox
-            result = gridContainer && !gridContainer.classList.contains('hidden');
-        } else {
-            // Cookie is expired or missing, require terms checkbox
-            result = termsCheckbox?.checked && gridContainer && !gridContainer.classList.contains('hidden');
-        }
+        // Sidebar can show if grid container is visible and either cookie is valid or terms are checked
+        const result = gridContainer && !gridContainer.classList.contains('hidden') && (isCookieValid || termsCheckbox?.checked);
 
         console.log('canShowSidebar:', {
             termsChecked: termsCheckbox?.checked,
@@ -396,7 +390,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error('Grid container not found for MutationObserver');
     }
 
-    // Check cookie status on load with delay to initialize sidebar
+    // Check on load with delay to initialize sidebar
     setTimeout(() => {
         if (canShowSidebar()) {
             initializeSidebar();

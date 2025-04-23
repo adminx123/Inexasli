@@ -9,23 +9,47 @@
  */
 
 import { setCookie } from '/utility/setcookie.js';
+import { getCookie } from '/utility/getcookie.js';
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Set the "prompt" cookie on page load
-    setCookie("prompt", Date.now(), 32);
+    // Check if the "prompt" cookie is more than 10 minutes old
+    const promptCookie = getCookie("prompt");
+    const currentTime = Date.now();
+    const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
+    const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
 
-    // Monitor terms checkbox state
-    const termsCheckbox = document.getElementById('termscheckbox');
     const introDiv = document.getElementById('intro');
     const personalBtn = document.getElementById('personal-btn');
-    const getGridContainer = () => document.querySelector('.containerround:not(#intro .containerround)');
+    const termsCheckbox = document.getElementById('termscheckbox');
+    const gridContainer = document.querySelector('.containerround:not(#intro .containerround)');
 
-    // Debugging: Log element availability
-    console.log('Initial DOM check:', { termsCheckbox, introDiv, personalBtn, gridContainer: getGridContainer() });
+    // Debugging: Log cookie and element status
+    console.log('Cookie check:', { promptCookie, isCookieExpired, currentTime });
+    console.log('Initial DOM check:', { introDiv, personalBtn, termsCheckbox, gridContainer });
 
+    if (!isCookieExpired) {
+        // Cookie is less than 10 minutes old: skip sales page, show grid container
+        if (introDiv && gridContainer) {
+            introDiv.classList.add('hidden');
+            gridContainer.classList.remove('hidden');
+            if (personalBtn) personalBtn.classList.add('selected');
+
+            // Scroll to grid container
+            if (gridContainer) {
+                const sectionHeight = gridContainer.offsetHeight;
+                const windowHeight = window.innerHeight;
+                const scrollPosition = gridContainer.getBoundingClientRect().top + window.scrollY - (windowHeight - sectionHeight) / 2;
+                window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+            }
+        } else {
+            console.error('Missing elements for non-expired cookie:', { introDiv, gridContainer });
+        }
+        return; // Exit early
+    }
+
+    // Cookie is expired or missing: show sales page
     if (termsCheckbox) {
         termsCheckbox.addEventListener('change', function () {
-            const gridContainer = getGridContainer();
             console.log('Checkbox state changed:', { checked: this.checked, introDiv, gridContainer });
 
             if (!introDiv || !gridContainer) {
@@ -34,18 +58,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (!this.checked) {
-                // When unchecked, show intro, hide grid, and remove selected state
+                // When unchecked, show intro, hide grid, remove selected state
                 introDiv.classList.remove('hidden');
                 gridContainer.classList.add('hidden');
                 if (personalBtn) personalBtn.classList.remove('selected');
             }
-            // No action when checked; wait for personal-btn click
         });
     } else {
         console.error('Terms checkbox not found');
     }
 
-    // Personal button event listener
     if (personalBtn) {
         personalBtn.addEventListener('click', (e) => {
             console.log('Personal button clicked, checkbox state:', termsCheckbox?.checked);
@@ -62,11 +84,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            const gridContainer = getGridContainer();
             if (!introDiv || !gridContainer) {
                 console.error('Missing elements:', { introDiv, gridContainer });
                 return;
             }
+
+            // Set new cookie when terms are accepted
+            setCookie("prompt", Date.now(), 32);
 
             // Hide intro and show grid container
             introDiv.classList.add('hidden');
@@ -74,11 +98,10 @@ document.addEventListener('DOMContentLoaded', function () {
             personalBtn.classList.add('selected');
 
             // Scroll to grid container
-            const targetSection = gridContainer;
-            if (targetSection) {
-                const sectionHeight = targetSection.offsetHeight;
+            if (gridContainer) {
+                const sectionHeight = gridContainer.offsetHeight;
                 const windowHeight = window.innerHeight;
-                const scrollPosition = targetSection.getBoundingClientRect().top + window.scrollY - (windowHeight - sectionHeight) / 2;
+                const scrollPosition = gridContainer.getBoundingClientRect().top + window.scrollY - (windowHeight - sectionHeight) / 2;
                 window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
             }
         });
