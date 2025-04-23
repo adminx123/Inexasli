@@ -8,106 +8,136 @@
  * jurisdictions worldwide.
  */ -->
 
- <!DOCTYPE html>
- <html lang="en">
- 
- <head>
- 
-     <link rel="manifest" href="/manifest.json">
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-     <title>ASSET</title>
-     <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
- 
-     <!-- this is an extended list of places icon could be needed -->
-     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
- <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
- <link rel="shortcut icon" href="/images/favicon.ico" />
- <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
- 
- 
-     <link rel="manifest" href="/manifest.json">
- 
- 
- 
-     <link rel="stylesheet" href="/ai/styles/prompt.css">
- 
- 
- </head>
- 
- <body>
- 
- 
- 
- 
-     <a href="/ai/landing/landing.html">
-         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;" onclick="calculateAll();">
- 
-     </a>
-     <!-- <h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2> -->
- 
- 
- 
-     <div class="container">
- 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ASSET</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- this is an extended list of places icon could be needed -->
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+
+
+    <link rel="manifest" href="/manifest.json">
+
+
+
+    <link rel="stylesheet" href="/ai/styles/prompt.css">
+
+
+</head>
+
+<body>
+
+
+
+
+    <a href="/ai/landing/landing.html">
+        <img src="/images/apple-touch-icon.png" alt="Logo"
+            style="width: 25px; height: auto; display: block; margin: 15px;" onclick="calculateAll();">
+
+    </a>
+    <!-- <h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2> -->
+
+
+
+
+    <div class="container">
+        <div class="row1">
+            <div class="grid-container" id="calorie-goal">
+                <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
+                <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
+                <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
+                <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="calorie-activity">
+                <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
+                <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
+                <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5
+                    days/week)</div>
+                <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
+                <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="calorie-recommendations">
+                <div class="grid-item" data-value="Meal Recommendations">Need meal recommendations to make up deficit
+                </div>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="calorie-diet-type">
+                <div class="grid-item" data-value="None">No Restrictions</div>
+                <div class="grid-item" data-value="Vegetarian">Vegetarian</div>
+                <div class="grid-item" data-value="Vegan">Vegan</div>
+                <div class="grid-item" data-value="Gluten-Free">Gluten-Free</div>
+                <div class="grid-item" data-value="Keto">Keto</div>
+                <div class="grid-item" data-value="Paleo">Paleo</div>
+                <div class="grid-item" data-value="Low-Carb">Low-Carb</div>
+                <div class="grid-item" data-value="Mediterranean">Mediterranean</div>
+            </div>
+
+
+        </div>
+        <div class="row1">
+            <input type="number" inputmode="numeric" id="calorie-age" placeholder="Age" min="0">
+            <div class="height-input-group">
+                <input type="number" id="calorie-height" placeholder="Height" step="0.1" min="0">
+            </div>
+            <div class="rowuom">
+                <input type="number" inputmode="numeric" id="calorie-weight" placeholder="Weight" step="0.1" min="0">
+                <select id="calorie-weight-unit">
+                    <option value="lbs" selected>lbs</option>
+                    <option value="kg">kg</option>
+                </select>
+            </div>
+            <select id="calorie-measure">
+                <option value="man" selected>Man</option>
+                <option value="woman">Woman</option>
+            </select>
+        </div>
+
+
        
-                <div class="row1">
-                    <div class="grid-container" id="calorie-goal">
-                        <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
-                        <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
-                        <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
-                        <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
-                    </div>
-                </div>
-                <div class="row1">
-                    <div class="grid-container" id="calorie-activity">
-                        <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
-                        <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
-                        <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5 days/week)</div>
-                        <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
-                        <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
-                    </div>
-                </div>
 
-                <div class="row1">
-                    <div class="grid-container" id="calorie-recommendations">
-                        <div class="grid-item" data-value="Meal Recommendations">Need meal recommendations to make up deficit</div>
-                    </div>
-                </div>
+        <div class="row1">
 
-                <div class="row1">
-                    <input type="number" inputmode="numeric"id="calorie-age" placeholder="Age" min="0">
-                    <div class="height-input-group">
-                        <input type="number" id="calorie-height" placeholder="Height" step="0.1" min="0">
-                        
-                    </div>
-                    <div class="weight-input-group">
-                        <input type="number" inputmode="numeric"id="calorie-weight" placeholder="Weight" step="0.1" min="0">
-                        <select id="calorie-weight-unit">
-                            <option value="lbs" selected>lbs</option>
-                            <option value="kg">kg</option>
-                        </select>
-                    </div>
+            <input type="number" inputmode="numeric" id="calorie-waist" placeholder="Waist" step="0.1" min="0">
+            <input type="number" inputmode="numeric" id="calorie-hip" placeholder="Hip" step="0.1" min="0">
+       
 
-                    <select id="calorie-sex">
-                        <option value="man" selected>Man</option>
-                        <option value="woman">Woman</option>
-                    </select>
+       
+            <input type="number" inputmode="numeric" id="calorie-chest" placeholder="Chest" step="0.1" min="0">
+            <input type="number" inputmode="numeric" id="calorie-arm" placeholder="Arm" step="0.1" min="0">
 
-                </div>
-                <textarea id="calorie-food-log" rows="3" placeholder="Meals:
-    Chicken breast 200g with rice 1cup
-    Potato 100g with broccoli 150g"></textarea>
-               
-                <button class="generate-btn" data-prompt="CalorieIQ™" onclick="generatePrompt('CalorieIQ™')">Generate Promptemplate™ Now!</button>
-        
-                <button class="clear-btn">Clear All</button>
-    
- 
-     </div>
- 
-     <div class="container ">
+            <select id="calorie-weight-unit">
+                <option value="cm" selected>Centimeter</option>
+                <option value="in">Inch</option>
+            </select>
+
+        </div>
+        <textarea id="calorie-food-log" rows="3" placeholder="Meals:
+        Chicken breast 200g with rice 1cup
+        Potato 100g with broccoli 150g"></textarea>
+        <button class="generate-btn" data-prompt="CalorieIQ™" onclick="generatePrompt('CalorieIQ™')">Generate
+            Promptemplate™ Now!</button>
+        <button class="clear-btn">Clear All</button>
+    </div>
+
+
+
+    <div class="container ">
         <table class="nutrition-table">
             <thead>
                 <tr>
@@ -169,28 +199,28 @@
             </tbody>
         </table>
 
-       
+
         <span id="meal-recommendation"></span>
 
-<span id="BMI">BMI</span>
+        <span id="BMI">BMI</span>
 
 
 
 
     </div>
-    
 
- 
-     <script src="/ai/calorie/calorieiq.js" type="module"></script>
- 
-     <script src="/utility/modal.js"></script>
-     <script src="/payment/paymentform.js"></script>
-     <script src="/index.js"></script>
-     <script src="/utility/tray.js"></script>
 
-     <script src="https://js.stripe.com/v3/" async></script>
- 
- 
- </body>
- 
- </html>
+
+    <script src="/ai/calorie/calorieiq.js" type="module"></script>
+
+    <script src="/utility/modal.js"></script>
+    <script src="/payment/paymentform.js"></script>
+    <script src="/index.js"></script>
+    <script src="/utility/tray.js"></script>
+
+    <script src="https://js.stripe.com/v3/" async></script>
+
+
+</body>
+
+</html>
