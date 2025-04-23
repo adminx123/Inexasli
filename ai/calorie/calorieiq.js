@@ -79,7 +79,8 @@ function repopulateForm() {
             console.log(`Restored ${key}: false`);
         }
     });
-    document.querySelectorAll('input, textarea, select').forEach(input => {
+
+    document.querySelectorAll('input, textarea').forEach(input => {
         const key = `input_${input.id}`;
         const value = localStorage.getItem(key);
         if (value !== null) {
@@ -87,7 +88,23 @@ function repopulateForm() {
             console.log(`Restored ${key}: ${value}`);
         }
     });
+
+    // ✅ Handle select elements separately
+    document.querySelectorAll('select').forEach(select => {
+        const key = `input_${select.id}`;
+        const value = localStorage.getItem(key);
+        if (value !== null) {
+            const optionExists = Array.from(select.options).some(opt => opt.value === value);
+            if (optionExists) {
+                select.value = value;
+                console.log(`Restored ${key}: ${value}`);
+            } else {
+                console.warn(`Skipped restoring ${key}: value "${value}" not found in options`);
+            }
+        }
+    });
 }
+
 
 function clearLocalStorage() {
     if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {

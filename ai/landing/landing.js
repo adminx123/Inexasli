@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const introDiv = document.getElementById('intro');
     const personalBtn = document.getElementById('personal-btn');
     const termsCheckbox = document.getElementById('termscheckbox');
-    const gridContainer = document.querySelector('.containerround:not(#intro .containerround)');
+    const gridContainer = document.querySelector('.container:not(#intro .container)');
 
     // Debugging: Log cookie and element status
     console.log('Cookie check:', { promptCookie, isCookieExpired, currentTime });
