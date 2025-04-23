@@ -7,32 +7,23 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Repopulate saved data
     repopulateForm();
-
-    // Grid item selection with save
     document.querySelectorAll('.grid-container .grid-item').forEach(item => {
         item.addEventListener('click', () => {
             item.classList.toggle('selected');
             saveGridItem(item);
         });
     });
-
-    // Input, textarea, and select change listeners for saving
     document.querySelectorAll('input, textarea, select').forEach(input => {
         input.addEventListener('change', () => saveInput(input));
     });
-
-    // Generate prompt button with save
     document.querySelectorAll('.generate-btn').forEach(button => {
         button.addEventListener('click', () => {
-            saveFormData(); // Save all data on generate button click
+            saveFormData();
             const promptType = button.getAttribute('data-prompt');
             generatePrompt(promptType);
         });
     });
-
-    // Clear button
     document.querySelectorAll('.clear-btn').forEach(button => {
         button.addEventListener('click', clearLocalStorage);
     });
@@ -77,7 +68,6 @@ function repopulateForm() {
             console.log(`Restored ${key}: false`);
         }
     });
-
     document.querySelectorAll('input, textarea, select').forEach(input => {
         const key = `input_${input.id}`;
         const value = localStorage.getItem(key);
@@ -93,8 +83,6 @@ function clearLocalStorage() {
         console.log("User canceled the clear action.");
         return;
     }
-
-    // Clear grid items
     document.querySelectorAll('.grid-container .grid-item').forEach(item => {
         const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
         try {
@@ -105,8 +93,6 @@ function clearLocalStorage() {
             console.error(`Error clearing ${key}:`, error);
         }
     });
-
-    // Clear inputs, textarea, and selects
     document.querySelectorAll('input, textarea, select').forEach(input => {
         const key = `input_${input.id}`;
         try {
@@ -117,13 +103,8 @@ function clearLocalStorage() {
             console.error(`Error clearing ${key}:`, error);
         }
     });
-
-    // Reset selects to default
-    const heightUnit = document.getElementById('calorie-height-unit');
     const weightUnit = document.getElementById('calorie-weight-unit');
-    if (heightUnit) heightUnit.value = 'ft';
     if (weightUnit) weightUnit.value = 'lbs';
-
     console.log("All saved data cleared and form reset.");
 }
 
@@ -144,12 +125,9 @@ function copyToClipboard(text) {
     });
 }
 
-// Update generatePrompt to copy the prompt to clipboard
 function generatePrompt(promptType) {
     console.log('Debug: generatePrompt function called with argument:', promptType);
-
     let prompt = '';
-
     if (promptType === 'CalorieIQ™') {
         prompt += formatGrid('#calorie-goal .grid-item.selected', 'Estimate calories and macronutrients for the following input as a percentage of daily requirements relative to my goal. Also analyze my height, weight, and age to compare me against the average person at my height, age, and weight. ');
         prompt += `
@@ -169,23 +147,23 @@ function generatePrompt(promptType) {
         const age = document.getElementById('calorie-age');
         if (age?.value) prompt += formatList(age.value, 'Age');
         const height = document.getElementById('calorie-height');
-        const heightUnit = document.getElementById('calorie-height-unit');
-        if (height?.value && heightUnit?.value) {
-            prompt += formatList(`${height.value} ${heightUnit.value}`, 'Height');
+        if (height?.value) {
+            prompt += formatList(`${height.value} ft`, 'Height');
         }
         const weight = document.getElementById('calorie-weight');
         const weightUnit = document.getElementById('calorie-weight-unit');
         if (weight?.value && weightUnit?.value) {
             prompt += formatList(`${weight.value} ${weightUnit.value}`, 'Weight');
         }
+        const sex = document.getElementById('calorie-sex');
+        if (sex?.value) prompt += formatList(sex.value, 'Sex');
         prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
         const foodLog = document.getElementById('calorie-food-log');
         if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
     }
-
     if (prompt) {
         console.log('Debug: Generated prompt content:', prompt);
-        copyToClipboard(prompt); // Copy the generated prompt to clipboard
+        copyToClipboard(prompt);
         openCustomModal(prompt);
     }
 }
@@ -197,10 +175,10 @@ function openCustomModal(content) {
 
 document.querySelectorAll('textarea').forEach(textarea => {
     textarea.addEventListener('input', function () {
-      this.style.height = '100px'; // Reset to initial height
-      this.style.height = `${this.scrollHeight}px`; // Adjust to content height
+      this.style.height = '100px';
+      this.style.height = `${this.scrollHeight}px`;
     });
-  });
+});
 
 window.openCustomModal = openCustomModal;
 window.generatePrompt = generatePrompt;
