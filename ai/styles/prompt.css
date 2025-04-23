@@ -367,3 +367,154 @@ button:hover {
     background-color: #000000;
   }
   
+
+  /* Generic Table Styles */
+table {
+  width: 100%;
+  max-width: 800px; /* Matches container max-width */
+  margin: 20px auto; /* Centered with spacing */
+  border-collapse: separate; /* Allows individual cell borders */
+  border-spacing: 0; /* Removes gaps between cells */
+  background-color: transparent; /* Background handled by cells */
+  font-family: "Inter", sans-serif;
+  transition: all 0.3s ease;
+}
+
+/* Table Header and Body Cells */
+table th,
+table td {
+  background-color: #f5f5f5; /* Matches grid-item background */
+  color: #000;
+  padding: 12px; /* Comfortable padding */
+  border: 1.5px solid #000; /* Matches grid-item border */
+  box-shadow: 3px 3px 0.5px #000; /* Matches grid-item shadow */
+  border-radius: 5px; /* Matches grid-item rounded corners */
+  text-align: left;
+  transition: all 0.3s ease;
+  position: relative; /* For transform effects */
+  overflow-wrap: break-word; /* Handle long content */
+  min-width: 100px; /* Minimum width for readability */
+  max-width: 250px; /* Prevent overly wide columns */
+  width: auto; /* Adjust width based on content */
+  box-sizing: border-box;
+}
+
+/* Table Header Specifics */
+table th {
+  font-size: 16px;
+  text-align: center;
+  font-weight: 600;
+  background-color: #ffffff; /* Dark background for headers, like selected grid-item */
+  color: #000000; /* White text for contrast */
+}
+
+/* Table Body Specifics */
+table td {
+  font-size: 14px; /* Slightly smaller for data */
+}
+
+/* Hover Effect for Cells */
+table th:hover,
+table td:hover {
+  transform: translateY(-5px); /* Matches grid-item hover */
+  background-color: #fff; /* Matches grid-item hover */
+  box-shadow: 3px 3px 0.5px #000; /* Matches grid-item hover */
+}
+
+/* Active Effect for Cells */
+table th:active,
+table td:active {
+  transform: translateY(1px); /* Matches grid-item active */
+  background-color: #f5f5f5; /* Matches grid-item active */
+  box-shadow: 1.5px 1.5px 0.5px #000; /* Matches grid-item active */
+}
+
+/* Alternating Row Backgrounds */
+table tbody tr:nth-child(even) td {
+  background-color: #fafafa; /* Slight contrast, like grid-item */
+}
+
+/* Row Hover Effect */
+table tbody tr:hover td {
+  background-color: #e0e0e0; /* Subtle()( row hover, like grid-item */
+}
+
+/* Ensure Table Fits Content */
+table {
+  table-layout: auto; /* Let columns size based on content */
+}
+
+/* Mobile Adjustments */
+@media (max-width: 480px) {
+  table {
+    margin: 10px auto; /* Reduced margin */
+    padding: 8px; /* Reduced padding */
+  }
+
+  table th,
+  table td {
+    font-size: 12px; /* Smaller text */
+    padding: 8px; /* Reduced padding */
+    min-width: 80px; /* Tighter minimum width */
+    border-radius: 3px; /* Slightly smaller radius */
+  }
+
+  /* Stack Table for Small Screens */
+  table {
+    display: block; /* Enable stacking */
+  }
+
+  table thead,
+  table tbody,
+  table tr {
+    display: block;
+  }
+
+  table th,
+  table td {
+    display: block;
+    width: 100% !important; /* Full width for stacked cells */
+    text-align: left;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    margin-bottom: 8px; /* Space between stacked cells */
+  }
+
+  table th {
+    background-color: #000;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  table td {
+    background-color: #f5f5f5; /* Reset for body cells */
+  }
+
+  /* Hover and Active for Stacked Cells */
+  table th:hover,
+  table td:hover {
+    transform: translateY(-5px);
+    background-color: #fff;
+    box-shadow: 3px 3px 0.5px #000;
+  }
+
+  table th:active,
+  table td:active {
+    transform: translateY(1px);
+    background-color: #f5f5f5;
+    box-shadow: 1.5px 1.5px 0.5px #000;
+  }
+
+  /* Stronger Separator for Last Cell in "Row" */
+  table td:last-child {
+    margin-bottom: 12px; /* Extra space after each "row" */
+  }
+}
+
+@media (max-width: 375px) {
+  table th,
+  table td {
+    font-size: 11px; /* Even smaller text */
+    padding: 6px 10px;
+  }
+}
