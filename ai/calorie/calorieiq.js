@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.grid-container').forEach(container => {
         container.querySelectorAll('.grid-item').forEach(item => {
             item.addEventListener('click', () => {
-                // Enforce single selection for #calorie-activity
-                if (container.id === 'calorie-activity') {
+                // Enforce single selection for #calorie-activity and #calorie-diet-type
+                if (container.id === 'calorie-activity' || container.id === 'calorie-diet-type') {
                     container.querySelectorAll('.grid-item').forEach(otherItem => {
                         otherItem.classList.remove('selected');
                     });
@@ -168,7 +168,16 @@ function generatePrompt(promptType) {
         }
         const sex = document.getElementById('calorie-sex');
         if (sex?.value) prompt += formatList(sex.value, 'Sex');
+        const waist = document.getElementById('calorie-waist');
+        if (waist?.value) prompt += formatList(`${waist.value} cm`, 'Waist Circumference');
+        const hip = document.getElementById('calorie-hip');
+        if (hip?.value) prompt += formatList(`${hip.value} cm`, 'Hip Circumference');
+        const chest = document.getElementById('calorie-chest');
+        if (chest?.value) prompt += formatList(`${chest.value} cm`, 'Chest Circumference');
+        const arm = document.getElementById('calorie-arm');
+        if (arm?.value) prompt += formatList(`${arm.value} cm`, 'Arm Circumference');
         prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
+        prompt += formatGrid('#calorie-diet-type .grid-item.selected', 'Diet Type');
         const foodLog = document.getElementById('calorie-food-log');
         if (foodLog?.value) prompt += `Day's Food Log (do not break down in summary):\n${foodLog.value}\n\n`;
     }
