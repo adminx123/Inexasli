@@ -195,5 +195,12 @@ function openCustomModal(content) {
     openGeneratedPromptModal();
 }
 
+document.querySelectorAll('textarea').forEach(textarea => {
+    textarea.addEventListener('input', function () {
+      this.style.height = '100px'; // Reset to initial height
+      this.style.height = `${this.scrollHeight}px`; // Adjust to content height
+    });
+  });
+
 window.openCustomModal = openCustomModal;
 window.generatePrompt = generatePrompt;

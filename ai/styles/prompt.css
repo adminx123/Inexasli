@@ -267,7 +267,12 @@ button:hover {
   }
 
   textarea {
-    height: 80px; /* Slightly shorter on mobile */
+    height: 100px; /* Initial height */
+    max-width: 400px; /* Match inputs/selects */
+    padding: 12px;
+    resize: none; /* Disable manual resizing */
+    overflow-y: auto; /* Allow scrolling if needed */
+    line-height: 1.5; /* Consistent line spacing */
   }
 
   .height-input-group,
