@@ -9,46 +9,48 @@
  */
 
 document.addEventListener('DOMContentLoaded', async function() {
-    // Function to initialize the data-container
     function initializeDataContainer() {
-        if (document.querySelector('.data-container')) {
-            console.log('Data container already exists, skipping initialization');
+        if (document.querySelector('.data-container-left')) {
+            console.log('Left data container already exists, skipping initialization');
             return;
         }
 
-        // Inject CSS styles
         const style = document.createElement('style');
-        style.textContent = `/* Data Container */
-.data-container {
+        style.textContent = `/* Left Data Container */
+.data-container-left {
     position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
     background-color: #f5f5f5;
     padding: 8px;
     border: 2px solid #000;
-    border-radius: 8px;
+    border-left: none;
+    border-radius: 0 8px 8px 0;
     box-shadow: 4px 4px 0 #000;
-    z-index: 1000;
+    z-index: 10000;
     width: 200px;
+    min-height: 50px;
     transition: height 0.3s ease-in-out;
     overflow: hidden;
     font-family: "Inter", sans-serif;
+    visibility: visible;
+    opacity: 1;
 }
 
-.data-container.initial {
+.data-container-left.initial {
     height: auto;
 }
 
-.data-container.expanded {
+.data-container-left.expanded {
     height: auto;
 }
 
-.data-container:hover {
+.data-container-left:hover {
     background-color: rgb(255, 255, 255);
 }
 
-.data-container .close-data-container {
+.data-container-left .close-data-container {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -60,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-family: "Inter", sans-serif;
 }
 
-.data-container .data-label {
+.data-container-left .data-label {
     text-decoration: none;
     color: #000;
     font-size: 12px;
@@ -73,12 +75,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-family: "Geist", sans-serif;
 }
 
-/* Responsive Design */
 @media (max-width: 480px) {
-    .data-container {
+    .data-container-left {
         width: 150px;
     }
-    .data-container .data-label {
+    .data-container-left .data-label {
         font-size: 11px;
         padding: 6px;
     }
@@ -86,20 +87,22 @@ document.addEventListener('DOMContentLoaded', async function() {
         `;
         document.head.appendChild(style);
 
-        // Create data-container
         const dataContainer = document.createElement('div');
-        dataContainer.className = 'data-container initial';
+        dataContainer.className = 'data-container-left initial';
         dataContainer.dataset.state = 'initial';
         dataContainer.innerHTML = `
             <span class="close-data-container">+</span>
-            <span class="data-label">DATA</span>
+            <span class="data-label">DATA IN</span>
         `;
 
-        // Append directly to body
         document.body.appendChild(dataContainer);
-        console.log('Data container injected');
+        console.log('Left data container injected (detain.js)');
 
-        // Set up close button functionality
+        console.log('Left data container styles:', 
+                    window.getComputedStyle(dataContainer).getPropertyValue('left'), 
+                    window.getComputedStyle(dataContainer).getPropertyValue('top'),
+                    window.getComputedStyle(dataContainer).getPropertyValue('transform'));
+
         const closeButton = dataContainer.querySelector('.close-data-container');
         if (closeButton) {
             closeButton.addEventListener('click', function(e) {
@@ -107,36 +110,37 @@ document.addEventListener('DOMContentLoaded', async function() {
                 toggleDataContainer();
             });
         } else {
-            console.error('Close button not found');
+            console.error('Left close button not found (detain.js)');
         }
 
-        // Function to toggle the data-container state
-        const toggleDataContainer = () => {
+        function toggleDataContainer() {
             if (dataContainer.dataset.state === 'initial') {
                 dataContainer.classList.remove('initial');
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
                 closeButton.textContent = '-';
-                console.log('Data container expanded');
+                console.log('Left data container expanded (detain.js)');
             } else {
                 dataContainer.classList.remove('expanded');
                 dataContainer.classList.add('initial');
                 dataContainer.dataset.state = 'initial';
                 closeButton.textContent = '+';
-                console.log('Data container returned to initial state');
+                console.log('Left data container returned to initial state (detain.js)');
             }
-        };
+        }
 
-        // Collapse data-container when clicking outside
         document.addEventListener('click', function(e) {
             const isClickInsideDataContainer = dataContainer.contains(e.target);
             if (!isClickInsideDataContainer && dataContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside data container, collapsing it');
+                console.log('Clicked outside left data container, collapsing it (detain.js)');
                 toggleDataContainer();
             }
         });
     }
 
-    // Initialize data-container immediately
-    initializeDataContainer();
+    try {
+        initializeDataContainer();
+    } catch (error) {
+        console.error('Error initializing left data container (detain.js):', error);
+    }
 });
