@@ -111,19 +111,18 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-/* Row unit of measurement (for measurement inputs with units) */
 .rowuom {
   display: flex;
-  align-items: center;
   gap: 8px;
   width: 100%;
-  max-width: 400px; /* Match other input groups */
-  margin: 8px auto; /* Centered */
+  max-width: 400px;
+  margin: 8px auto;
 }
 
-.rowuom input {
-  flex: 1; /* Input takes remaining space */
-  width: 100%;
+.rowuom input,
+.rowuom select {
+  flex: 1 1 0;
+  min-width: 0;
   height: 40px;
   padding: 8px 12px;
   font-size: 16px;
@@ -134,37 +133,17 @@ input[type="number"]::-webkit-outer-spin-button {
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   font-family: "Inter", sans-serif;
+  box-sizing: border-box;
 }
 
 .rowuom select {
-  width: 80px; /* Smaller fixed width for unit dropdowns */
-  height: 40px;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #7c7c7c;
-  border-radius: 6px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  font-family: "Inter", sans-serif;
+  appearance: none; /* Remove browser default styling */
   text-align: center;
+  padding-left: 12px; /* Match input padding */
+  padding-right: 12px;
 }
 
-@media (max-width: 480px) {
-  .rowuom {
-    flex-direction: row; /* Maintain row layout on mobile */
-    align-items: center;
-  }
 
-  .rowuom input {
-    flex: 1;
-  }
-
-  .rowuom select {
-    width: 60px; /* Smaller width on mobile */
-  }
-}
 
 /* Container */
 .container {
@@ -309,18 +288,7 @@ button:hover {
     line-height: 1.5; /* Consistent line spacing */
   }
 
-  .height-input-group,
-  .weight-input-group {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  .height-input-group select,
-  .weight-input-group select {
-    width: 100%;
-    max-width: 100%;
-  }
+  
 
   .row1 {
     padding: 8px;
@@ -551,4 +519,14 @@ table {
     font-size: 11px; /* Even smaller text */
     padding: 6px 10px;
   }
+}
+
+
+/* two per row */
+.twoperrow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
+  gap: 10px; /* Space between items */
+  max-width: 400px; /* Optional: adjust to fit your layout */
+  margin: auto; /* Optional: center the row */
 }
