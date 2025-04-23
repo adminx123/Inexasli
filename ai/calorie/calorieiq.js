@@ -8,10 +8,21 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     repopulateForm();
-    document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-        item.addEventListener('click', () => {
-            item.classList.toggle('selected');
-            saveGridItem(item);
+    document.querySelectorAll('.grid-container').forEach(container => {
+        container.querySelectorAll('.grid-item').forEach(item => {
+            item.addEventListener('click', () => {
+                // Enforce single selection for #calorie-activity
+                if (container.id === 'calorie-activity') {
+                    container.querySelectorAll('.grid-item').forEach(otherItem => {
+                        otherItem.classList.remove('selected');
+                    });
+                    item.classList.add('selected');
+                } else {
+                    // Allow multiple selections for other grids (e.g., #calorie-goal)
+                    item.classList.toggle('selected');
+                }
+                saveGridItem(item);
+            });
         });
     });
     document.querySelectorAll('input, textarea, select').forEach(input => {
@@ -175,8 +186,8 @@ function openCustomModal(content) {
 
 document.querySelectorAll('textarea').forEach(textarea => {
     textarea.addEventListener('input', function () {
-      this.style.height = '100px';
-      this.style.height = `${this.scrollHeight}px`;
+        this.style.height = '100px';
+        this.style.height = `${this.scrollHeight}px`;
     });
 });
 
