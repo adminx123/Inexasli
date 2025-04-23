@@ -9,9 +9,21 @@
  */
 
 document.addEventListener('DOMContentLoaded', async function() {
+    function canShowContainer() {
+        const introDiv = document.getElementById('intro');
+        const isIntroHidden = introDiv && introDiv.classList.contains('hidden');
+        console.log('canShowContainer (detain.js):', { isIntroHidden });
+        return isIntroHidden;
+    }
+
     function initializeDataContainer() {
         if (document.querySelector('.data-container-left')) {
-            console.log('Left data container already exists, skipping initialization');
+            console.log('Left data container already exists, skipping initialization (detain.js)');
+            return;
+        }
+
+        if (!canShowContainer()) {
+            console.log('Intro div is not hidden, skipping initialization (detain.js)');
             return;
         }
 
@@ -138,8 +150,31 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
+    // Monitor intro div changes
+    const introDiv = document.getElementById('intro');
+    if (introDiv) {
+        const observer = new MutationObserver(() => {
+            const dataContainer = document.querySelector('.data-container-left');
+            if (canShowContainer()) {
+                if (!dataContainer) {
+                    initializeDataContainer();
+                    console.log('Intro div hidden, initialized left container (detain.js)');
+                }
+            } else if (dataContainer) {
+                dataContainer.remove();
+                console.log('Intro div visible, removed left container (detain.js)');
+            }
+        });
+        observer.observe(introDiv, { attributes: true, attributeFilter: ['class'] });
+    } else {
+        console.error('Intro div not found (detain.js)');
+    }
+
+    // Initial check
     try {
-        initializeDataContainer();
+        if (canShowContainer()) {
+            initializeDataContainer();
+        }
     } catch (error) {
         console.error('Error initializing left data container (detain.js):', error);
     }
