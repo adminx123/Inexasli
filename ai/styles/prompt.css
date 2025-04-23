@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Geist:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Global Reset and Base Styles */
+* {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #ffffff;
+  color: #000;
+  text-align: left;
+  margin-bottom: 75px;
+  padding-bottom: 25px;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: -48px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 96px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 50%);
+  animation: smallPulse 4s infinite ease-in-out;
+  z-index: -1;
+}
+
+@keyframes smallPulse {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Headings */
+h2 {
+  font-family: "Geist", sans-serif;
+  margin: 0;
+  margin-top: 10px;
+}
+
+/* Links (for logo link) */
+a {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+/* Input, Select, and Textarea Styles */
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  max-width: 400px; /* Consistent width for symmetry */
+  height: 40px; /* Uniform height for inputs/selects */
+  padding: 8px 12px; /* Comfortable padding */
+  margin: 8px auto; /* Centered with vertical spacing */
+  font-size: 16px; /* Readable font size */
+  line-height: 1.5; /* Improved readability */
+  border: 1px solid #7c7c7c;
+  border-radius: 6px; /* Modern rounded corners */
+  background-color: #f9f9f9; /* Subtle off-white background */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle depth */
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: "Inter", sans-serif;
+  display: block; /* Ensure block-level for centering */
+}
+
+input[type="number"] {
+  text-align: left; /* Left-align for number inputs */
+}
+
+select {
+  text-align: center; /* Center dropdown text */
+  -webkit-appearance: menulist-button;
+  -moz-appearance: menulist-button;
+  appearance: menulist-button;
+  text-align-last: center;
+}
+
+select option {
+  color: #333;
+  background-color: #fff;
+  font-size: 16px;
+  padding: 8px;
+  font-family: "Inter", sans-serif;
+}
+
+textarea {
+  height: 100px; /* Taller for usability */
+  max-width: 400px; /* Match inputs/selects */
+  resize: vertical; /* Allow vertical resize only */
+  padding: 12px;
+}
+
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #000;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+/* Input Group Adjustments (for height and weight inputs with units) */
+.height-input-group,
+.weight-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 400px; /* Match other elements */
+  margin: 8px auto; /* Centered */
+}
+
+.height-input-group input,
+.weight-input-group input {
+  flex: 1;
+}
+
+.height-input-group select,
+.weight-input-group select {
+  width: 100px; /* Fixed width for unit dropdowns */
+}
+
+/* Container */
+.container {
+  background-color: #f5f5f5;
+  color: #000;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 0 0 5px 5px;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0 #000;
+  text-align: left;
+  display: flex;
+  padding: 15px;
+  flex-direction: column;
+  align-items: center; /* Center all contents */
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.container:hover {
+  transform: translateY(-5px);
+  background-color: rgb(255, 255, 255);
+  box-shadow: 4px 4px 0 #000;
+}
+
+.container:active {
+  transform: translateY(1px);
+  background-color: #f5f5f5;
+  box-shadow: 2px 2px 0 #000;
+}
+
+/* Row1 (Container for Inputs and Grids) */
+.row1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 100%; /* Ensure full width */
+}
+
+/* Grid Container and Items */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.grid-item {
+  background-color: #f5f5f5;
+  color: #000;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1.5px solid #000;
+  box-shadow: 3px 3px 0.5px #000;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  white-space: normal;
+  width: 100%;
+}
+
+.grid-item:hover {
+  transform: translateY(-5px);
+  background-color: rgb(255, 255, 255);
+  box-shadow: 3px 3px 0.5px #000;
+  color: #000;
+}
+
+.grid-item:active {
+  transform: translateY(1px);
+  background-color: #f5f5f5;
+  box-shadow: 1.5px 1.5px 0.5px #000;
+}
+
+.grid-item.selected {
+  background-color: #000;
+  color: #fff;
+  box-shadow: 3px 3px 0.5px #000;
+  border: 1.5px solid #000;
+}
+
+/* Button */
+button {
+  background-color: #000000;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 12px 24px;
+  margin: 8px auto;
+  transition: background-color 0.2s ease;
+  font-family: "Geist", sans-serif;
+  width: 100%;
+  max-width: 400px; /* Match inputs/selects/textarea */
+  display: block;
+}
+
+button:hover {
+  background-color: #333;
+}
+
+/* Generate Button */
+.generate-btn {
+  align-self: center;
+}
+
+/* Hidden Class */
+.hidden {
+  display: none;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 480px) {
+  .grid-item {
+    font-size: 11px;
+    padding: 0.75rem;
+    min-width: 100px;
+  }
+
+  input[type="number"],
+  select,
+  textarea,
+  button {
+    max-width: 100%;
+    font-size: 14px;
+    height: 36px;
+  }
+
+  textarea {
+    height: 80px; /* Slightly shorter on mobile */
+  }
+
+  .height-input-group,
+  .weight-input-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .height-input-group select,
+  .weight-input-group select {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .row1 {
+    padding: 8px;
+    gap: 8px;
+    margin-bottom: 15px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 375px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
