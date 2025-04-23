@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         const style = document.createElement('style');
         style.textContent = `
-       /* Left Data Container */
+      /* Left Data Container */
 .data-container-left {
     position: fixed;
     top: 50%;
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     border-radius: 0 8px 8px 0;
     box-shadow: 4px 4px 0 #000;
     z-index: 10000;
-    width: 30px; /* Narrow for vertical text */
+    width: 34px; /* Match Data Out */
     min-height: 30px;
     transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
     overflow: hidden;
@@ -52,12 +52,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .data-container-left.initial {
-    height: 100px; /* Proportionate for vertical text */
+    height: 120px; /* Match Data Out */
 }
 
 .data-container-left.expanded {
-    width: 200px; /* Expand for content */
-    height: auto; /* Fit content */
+    width: 200px; /* Match Data Out */
+    height: auto;
 }
 
 .data-container-left:hover {
@@ -66,9 +66,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .data-container-left .close-data-container {
     position: absolute;
-    bottom: 4px; /* Near bottom for vertical layout */
-    right: 4px;
-    font-size: 14px; /* Proportionate to text */
+    top: 4px; /* Match Data Out */
+    left: 10px; /* Match Data Out */
+    padding: 5px; /* Match Data Out */
+    font-size: 14px;
+    line-height: 1;
     color: #000;
     cursor: pointer;
     font-weight: bold;
@@ -77,42 +79,53 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .data-container-left.expanded .close-data-container {
-    top: 4px; /* Top-right when expanded */
-    bottom: auto;
+    top: 4px;
+    right: 10px; /* Adjusted for left container */
+    left: auto;
 }
 
 .data-container-left .data-label {
     text-decoration: none;
     color: #000;
-    font-size: 12px; /* Specified size */
-    display: block;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
     text-align: center;
     padding: 4px;
     cursor: default;
     transition: color 0.2s ease;
     line-height: 1.2;
     font-family: "Geist", sans-serif;
-    writing-mode: vertical-rl; /* Vertical text */
+    writing-mode: vertical-rl;
     text-orientation: mixed; /* Top-to-bottom */
+}
+
+.data-container-left.initial .data-label {
+    margin-top: 20px; /* Match Data Out to avoid overlap */
+}
+
+.data-container-left.expanded .data-label {
+    margin-top: 0; /* Match Data Out */
 }
 
 @media (max-width: 480px) {
     .data-container-left {
-        width: 25px; /* Narrower on mobile */
+        width: 28px; /* Match Data Out */
         padding: 3px;
     }
     .data-container-left.initial {
-        height: 80px; /* Shorter for mobile */
+        height: 100px; /* Match Data Out */
     }
     .data-container-left.expanded {
-        width: 150px;
+        width: 150px; /* Match Data Out */
     }
     .data-container-left .data-label {
-        font-size: 12px; /* Maintain 12px */
+        font-size: 14px;
         padding: 3px;
     }
     .data-container-left .close-data-container {
-        font-size: 12px; /* Smaller for mobile */
+        font-size: 12px;
+        padding: 4px; /* Match Data Out */
     }
 }`;
         document.head.appendChild(style);
