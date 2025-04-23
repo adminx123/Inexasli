@@ -56,8 +56,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .prompt-container.expanded {
     width: 90vw;
+    max-height: 90vh; /* Limit to viewport height */
     height: auto;
-    overflow: visible;
+    overflow-y: auto; /* Scroll if content overflows */
 }
 
 .prompt-container:hover {
@@ -70,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-size: 14px;
     display: block;
     text-align: center;
-    padding: 12px 20px; /* Larger tap area */
+    padding: 12px 20px;
     cursor: pointer;
     transition: color 0.2s ease;
     line-height: 1.2;
@@ -82,10 +83,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .prompt-container.expanded .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap */
     gap: 10px;
     padding: 10px;
+    justify-content: center; /* Center items */
 }
 
 .prompt-container .grid-item {
@@ -96,6 +98,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     cursor: pointer;
     font-size: 12px;
     font-family: "Geist", sans-serif;
+    flex: 1 1 150px; /* Flexible width, min 150px */
+    max-width: 200px; /* Cap item width */
 }
 
 .prompt-container .grid-item:hover {
@@ -120,6 +124,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     .prompt-container.expanded {
         width: 95vw;
+        max-height: 85vh; /* Slightly smaller for mobile */
     }
     .prompt-container .prompt-label {
         font-size: 12px;
@@ -128,6 +133,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     .prompt-container .grid-item {
         font-size: 11px;
         padding: 8px;
+        flex: 1 1 120px; /* Smaller min width for mobile */
+        max-width: 160px;
     }
 }
         `;
