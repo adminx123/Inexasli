@@ -13,25 +13,26 @@ import { getCookie } from '/utility/getcookie.js';
 document.addEventListener('DOMContentLoaded', async function () {
     // Function to check if sidebar should be shown
     function canShowSidebar() {
-        const termsCheckbox = document.getElementById('termscheckbox');
-        const gridContainer = document.querySelector('.containerround:not(#intro .containerround)');
-        
-        // Check cookie status
-        const promptCookie = getCookie("prompt");
-        const currentTime = Date.now();
-        const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
-        const isCookieValid = promptCookie && parseInt(promptCookie) + cookieDuration >= currentTime;
+        const gridContainer = document.querySelector('.container:not(#intro .container)');
+        const introDiv = document.getElementById('intro');
 
-        // Sidebar can show if grid container is visible and either cookie is valid or terms are checked
-        const result = gridContainer && !gridContainer.classList.contains('hidden') && (isCookieValid || termsCheckbox?.checked);
+        // Check if the intro div is hidden
+        const isIntroHidden = introDiv && introDiv.classList.contains('hidden');
+
+        // Sidebar can show if grid container is visible and intro div is hidden
+        const result = gridContainer && !gridContainer.classList.contains('hidden') && isIntroHidden;
 
         console.log('canShowSidebar:', {
-            termsChecked: termsCheckbox?.checked,
             gridContainerExists: !!gridContainer,
             gridHidden: gridContainer?.classList.contains('hidden'),
-            isCookieValid,
+            isIntroHidden,
             result
         });
+
+        if (isIntroHidden && gridContainer) {
+            gridContainer.classList.remove('hidden');
+        }
+
         return result;
     }
 
@@ -372,7 +373,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Monitor grid container visibility with MutationObserver
-    const gridContainer = document.querySelector('.containerround:not(#intro .containerround)');
+    const gridContainer = document.querySelector('.container:not(#intro .container)');
     if (gridContainer) {
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
