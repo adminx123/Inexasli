@@ -81,14 +81,14 @@
                     <div class="height-input-group">
                         <input type="number" id="calorie-height" placeholder="Height" step="0.1" min="0">
                         <select id="calorie-height-unit">
-                            <option value="ft">ft</option>
+                            <option value="ft" selected>ft</option>
                             <option value="cm">cm</option>
                         </select>
                     </div>
                     <div class="weight-input-group">
                         <input type="number" id="calorie-weight" placeholder="Weight" step="0.1" min="0">
                         <select id="calorie-weight-unit">
-                            <option value="lbs">lbs</option>
+                            <option value="lbs" selected>lbs</option>
                             <option value="kg">kg</option>
                         </select>
                     </div>
@@ -99,7 +99,7 @@
                
                 <button class="generate-btn" data-prompt="CalorieIQ™" onclick="generatePrompt('CalorieIQ™')">Generate Promptemplate™ Now!</button>
         
-      
+                <button class="clear-btn">Clear All</button>
     
  
         
@@ -118,12 +118,12 @@
  
     
  
-     <script src="/ai/calorie/calorieiq.js"></script>
+     <script src="/ai/calorie/calorieiq.js" type="module"></script>
  
      <script src="/utility/modal.js"></script>
      <script src="/payment/paymentform.js"></script>
      <script src="/index.js"></script>
-     <script src="/utility/utility/tray.js"></script>
+     <script src="/utility/tray.js"></script>
      <script src="https://js.stripe.com/v3/" async></script>
  
  
