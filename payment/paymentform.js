@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .payment-form .contact-support {
     font-size: 12px;
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     text-decoration: none;
     font-family: "Geist", sans-serif;
 }
@@ -224,12 +224,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         sidebar.dataset.state = 'initial';
         sidebar.innerHTML = `
             <span id="close-sidebar">+</span>
-            <a class="subscribe-link">SUBSCRIBE $2.99</a>
+            <a class="subscribe-link">SUBSCRIBE</a>
             <div id="status"></div>
             <form class="payment-form" id="payment-form">
                 <input type="text" class="payment-input" id="username" placeholder="input your name" required>
                 <input type="email" class="payment-input" id="useremail" placeholder="input your email" required>
-                <button class="pay-button" id="pay-button">Subscribe for Premium Educational Insights!</button>
+                <button class="pay-button" id="pay-button">$2.99</button>
                 <a href="mailto:support@inexasli.com" class="contact-support">I have paid</a>
                 <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support" style="margin-bottom: 20px;">Customer portal</a>
             </form>
