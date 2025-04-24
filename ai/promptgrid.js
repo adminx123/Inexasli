@@ -23,10 +23,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     function filterGridItems(category) {
         const gridItems = document.querySelectorAll('.grid-item');
         gridItems.forEach(item => {
-            // Get item text and clean it
             let itemText = item.textContent.split(/<hr>|Premium/)[0].trim().replace(/™/g, '');
-            
-            // Check if the item belongs to the selected category or show all
             if (category === 'all' || itemCategories[category]?.includes(itemText)) {
                 item.style.display = 'block';
             } else {
@@ -38,23 +35,111 @@ document.addEventListener('DOMContentLoaded', async function() {
     function canShowContainer() {
         const introDiv = document.getElementById('intro');
         const isIntroHidden = introDiv && introDiv.classList.contains('hidden');
-        console.log('canShowContainer (prompt.js):', { isIntroHidden });
+        console.log('canShowContainer (promptgrid.js):', { isIntroHidden });
         return isIntroHidden;
+    }
+
+    // Define togglePromptContainer before loadContent
+    function togglePromptContainer() {
+        const promptContainer = document.querySelector('.prompt-container');
+        if (!promptContainer) return;
+        if (promptContainer.dataset.state === 'initial') {
+            promptContainer.className = 'prompt-container expanded';
+            promptContainer.dataset.state = 'expanded';
+            console.log('Prompt container expanded (promptgrid.js)');
+        } else {
+            promptContainer.className = 'prompt-container initial';
+            promptContainer.dataset.state = 'initial';
+            console.log('Prompt container returned to initial state (promptgrid.js)');
+        }
+    }
+
+    // Function to load content into datain container
+    async function loadContent(url) {
+        try {
+            console.log(`Attempting to load content from ${url} (promptgrid.js)`);
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
+
+            const content = await response.text();
+            console.log('Content fetched successfully (promptgrid.js)');
+
+            const dataContainer = document.querySelector('.data-container-left');
+            if (!dataContainer) {
+                console.error('Data container (.data-container-left) not found. Ensure datain.js is loaded and initialized (promptgrid.js)');
+                return;
+            }
+
+            // Collapse the prompt container if expanded
+            const promptContainer = document.querySelector('.prompt-container');
+            if (promptContainer && promptContainer.dataset.state === 'expanded') {
+                togglePromptContainer();
+                console.log('Prompt container collapsed (promptgrid.js)');
+                // Wait for collapse animation (300ms matches CSS transition)
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+
+            // Force reinitialization of datain container if needed
+            if (!dataContainer.classList.contains('initial') && !dataContainer.classList.contains('expanded')) {
+                console.warn('Data container in unknown state, reinitializing (promptgrid.js)');
+                dataContainer.className = 'data-container-left initial';
+                dataContainer.dataset.state = 'initial';
+            }
+
+            // Expand the datain container
+            if (dataContainer.dataset.state !== 'expanded') {
+                dataContainer.classList.remove('initial');
+                dataContainer.classList.add('expanded');
+                dataContainer.dataset.state = 'expanded';
+                const closeButton = dataContainer.querySelector('.close-data-container');
+                if (closeButton) {
+                    closeButton.textContent = '-';
+                } else {
+                    console.error('Close button not found in data container (promptgrid.js)');
+                }
+                console.log('Left data container expanded (promptgrid.js)');
+            } else {
+                console.log('Left data container already expanded (promptgrid.js)');
+            }
+
+            // Inject content into the datain container
+            dataContainer.innerHTML = `
+                <span class="close-data-container">-</span>
+                <span class="data-label">DATA IN</span>
+                <div class="data-content">${content}</div>
+            `;
+            console.log(`Content loaded from ${url} into datain container (promptgrid.js)`);
+
+            // Optionally load corresponding JS file
+            const scriptUrl = url.replace('.html', '.js');
+            try {
+                const script = document.createElement('script');
+                script.src = scriptUrl;
+                script.async = true;
+                document.body.appendChild(script);
+                console.log(`Loaded script: ${scriptUrl}`);
+            } catch (error) {
+                console.log(`No script found for ${scriptUrl}, skipping`);
+            }
+        } catch (error) {
+            console.error('Error loading content (promptgrid.js):', error);
+        }
     }
 
     function initializePromptContainer() {
         if (document.querySelector('.prompt-container')) {
-            console.log('Prompt container already exists, skipping initialization (prompt.js)');
+            console.log('Prompt container already exists, skipping initialization (promptgrid.js)');
             return;
         }
 
         if (!canShowContainer()) {
-            console.log('Intro div is not hidden, skipping initialization (prompt.js)');
+            console.log('Intro div is not hidden, skipping initialization (promptgrid.js)');
             return;
         }
 
         const style = document.createElement('style');
-        style.textContent = `/* Prompt Container */
+        style.textContent = `
+/* Prompt Container */
 .prompt-container {
     position: fixed;
     top: 0;
@@ -83,9 +168,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .prompt-container.expanded {
     width: 90vw;
-    max-height: 90vh; /* Limit to viewport height */
+    max-height: 90vh;
     height: auto;
-    overflow-y: auto; /* Scroll if content overflows */
+    overflow-y: auto;
 }
 
 .prompt-container:hover {
@@ -111,10 +196,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .prompt-container.expanded .grid-container {
     display: flex;
-    flex-wrap: wrap; /* Allow items to wrap */
+    flex-wrap: wrap;
     gap: 10px;
     padding: 10px;
-    justify-content: center; /* Center items */
+    justify-content: center;
 }
 
 .prompt-container .grid-item {
@@ -125,8 +210,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     cursor: pointer;
     font-size: 12px;
     font-family: "Geist", sans-serif;
-    flex: 1 1 150px; /* Flexible width, min 150px */
-    max-width: 200px; /* Cap item width */
+    flex: 1 1 150px;
+    max-width: 200px;
 }
 
 .prompt-container .grid-item:hover {
@@ -151,7 +236,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     .prompt-container.expanded {
         width: 95vw;
-        max-height: 85vh; /* Slightly smaller for mobile */
+        max-height: 85vh;
     }
     .prompt-container .prompt-label {
         font-size: 12px;
@@ -160,7 +245,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     .prompt-container .grid-item {
         font-size: 11px;
         padding: 8px;
-        flex: 1 1 120px; /* Smaller min width for mobile */
+        flex: 1 1 120px;
         max-width: 160px;
     }
 }
@@ -172,52 +257,45 @@ document.addEventListener('DOMContentLoaded', async function() {
         promptContainer.dataset.state = 'initial';
         promptContainer.innerHTML = `
             <span class="prompt-label">PROMPT</span>
-
-<div>
-    <select id="category-select">
-        <option value="all">ALL</option>
-        <option value="dataanalysis">DATA</option>
-        <option value="reportgeneration">REPORT</option>
-        <option value="planningandforecasting">PLANNING</option>
-        <option value="creative">CREATIVE</option>
-        <option value="decision">DECISION</option>
-        <option value="workflow">WORKFLOW</option>
-        <option value="educational">EDUCATIONAL</option>
-    </select>
-</div>
-
+            <div>
+                <select id="category-select">
+                    <option value="all">ALL</option>
+                    <option value="dataanalysis">DATA</option>
+                    <option value="reportgeneration">REPORT</option>
+                    <option value="planningandforecasting">PLANNING</option>
+                    <option value="creative">CREATIVE</option>
+                    <option value="decision">DECISION</option>
+                    <option value="workflow">WORKFLOW</option>
+                    <option value="educational">EDUCATIONAL</option>
+                </select>
+            </div>
             <div class="grid-container">
-                <div class="grid-item" onclick="navigateTo('/ai/marketing/adagencyiq.html')">AdAgencyIQ™ <hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/adventure/adventureiq.html')">AdventureIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/app/appiq.html')">App<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/book/bookiq.html')">BookIQ™<hr></div>
-                <div class="grid-item" onclick="navigateTo('/ai/calorie/calorieiq.html')">CalorieIQ™<hr></div>
-                <div class="grid-item" onclick="navigateTo('/ai/decision/decisioniq.html')">DecisionIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/emotion/emotioniq.html')">EmotionIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/enneagram/enneagramiq.html')">EnneagramIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/event/eventiq.html')">EventIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/fitness/fitnessiq.html')">FitnessIQ™<hr></div>
-                <div class="grid-item" onclick="navigateTo('/ai/general/general.html')">General<hr></div>
-                <div class="grid-item" onclick="navigateTo('/ai/budget/incomeiq.html')">IncomeIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/business/newbiziq.html')">NewBizIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/quiz/quiziq.html')">QuizIQ™<hr></div>
-                <div class="grid-item" onclick="navigateTo('/ai/receipts/receiptsiq.html')">ReceiptsIQ™<hr></div>
-                <div class="grid-item" onclick="navigateTo('/ai/report/reportiq.html')">ReportIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/research/researchiq.html')">ResearchIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/social/socialiq.html')">SocialIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/speculation/speculationiq.html')">SpeculationIQ™<hr><span class="premium-notice">Premium</span></div>
-                <div class="grid-item" onclick="navigateTo('/ai/symptom/symptomiq.html')">SymptomIQ™<hr></div>
-                <div class="grid-item" onclick="navigateTo('/ai/workflow/workflowiq.html')">WorkflowIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">AdAgencyIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">AdventureIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">App<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">BookIQ™<hr></div>
+                <div class="grid-item">CalorieIQ™<hr></div>
+                <div class="grid-item">DecisionIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">EmotionIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">EnneagramIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">EventIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">FitnessIQ™<hr></div>
+                <div class="grid-item">General<hr></div>
+                <div class="grid-item">IncomeIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">NewBizIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">QuizIQ™<hr></div>
+                <div class="grid-item">ReceiptsIQ™<hr></div>
+                <div class="grid-item">ReportIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">ResearchIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">SocialIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">SpeculationIQ™<hr><span class="premium-notice">Premium</span></div>
+                <div class="grid-item">SymptomIQ™<hr></div>
+                <div class="grid-item">WorkflowIQ™<hr><span class="premium-notice">Premium</span></div>
             </div>
         `;
 
         document.body.appendChild(promptContainer);
-        console.log('Prompt container injected with grid items (prompt.js)');
-
-        console.log('Prompt container styles:', 
-                    window.getComputedStyle(promptContainer).getPropertyValue('left'), 
-                    window.getComputedStyle(promptContainer).getPropertyValue('top'),
-                    window.getComputedStyle(promptContainer).getPropertyValue('transform'));
+        console.log('Prompt container injected with grid items (promptgrid.js)');
 
         const promptLabel = promptContainer.querySelector('.prompt-label');
         if (promptLabel) {
@@ -226,26 +304,48 @@ document.addEventListener('DOMContentLoaded', async function() {
                 togglePromptContainer();
             });
         } else {
-            console.error('Prompt label not found (prompt.js)');
+            console.error('Prompt label not found (promptgrid.js)');
         }
 
-        function togglePromptContainer() {
-            if (promptContainer.dataset.state === 'initial') {
-                promptContainer.className = 'prompt-container expanded';
-                promptContainer.dataset.state = 'expanded';
-                console.log('Prompt container expanded (prompt.js)');
-            } else {
-                promptContainer.className = 'prompt-container initial';
-                promptContainer.dataset.state = 'initial';
-                console.log('Prompt container returned to initial state (prompt.js)');
-            }
-        }
+        // Add click handlers for grid items
+        const gridItems = promptContainer.querySelectorAll('.grid-item');
+        gridItems.forEach((item, index) => {
+            const urls = [
+                '/ai/marketing/adagencyiq.html',
+                '/ai/adventure/adventureiq.html',
+                '/ai/app/appiq.html',
+                '/ai/book/bookiq.html',
+                '/ai/calorie/calorieiq.html',
+                '/ai/decision/decisioniq.html',
+                '/ai/emotion/emotioniq.html',
+                '/ai/enneagram/enneagramiq.html',
+                '/ai/event/eventiq.html',
+                '/ai/fitness/fitnessiq.html',
+                '/ai/general/general.html',
+                '/ai/budget/incomeiq.html',
+                '/ai/business/newbiziq.html',
+                '/ai/quiz/quiziq.html',
+                '/ai/receipts/receiptsiq.html',
+                '/ai/report/reportiq.html',
+                '/ai/research/researchiq.html',
+                '/ai/social/socialiq.html',
+                '/ai/speculation/speculationiq.html',
+                '/ai/symptom/symptomiq.html',
+                '/ai/workflow/workflowiq.html'
+            ];
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                loadContent(urls[index]);
+            });
+        });
 
         // Collapse when clicking outside
         document.addEventListener('click', function(e) {
+            const promptContainer = document.querySelector('.prompt-container');
+            if (!promptContainer) return;
             const isClickInsidePromptContainer = promptContainer.contains(e.target);
             if (!isClickInsidePromptContainer && promptContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside prompt container, collapsing it (prompt.js)');
+                console.log('Clicked outside prompt container, collapsing it (promptgrid.js)');
                 togglePromptContainer();
             }
         });
@@ -254,7 +354,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const categorySelect = document.getElementById('category-select');
         categorySelect.addEventListener('change', (e) => {
             const category = e.target.value;
-            filterGridItems(category); // Call the filter function
+            filterGridItems(category);
         });
     }
 
@@ -266,16 +366,16 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (canShowContainer()) {
                 if (!promptContainer) {
                     initializePromptContainer();
-                    console.log('Intro div hidden, initialized prompt container (prompt.js)');
+                    console.log('Intro div hidden, initialized prompt container (promptgrid.js)');
                 }
             } else if (promptContainer) {
                 promptContainer.remove();
-                console.log('Intro div visible, removed prompt container (prompt.js)');
+                console.log('Intro div visible, removed prompt container (promptgrid.js)');
             }
         });
         observer.observe(introDiv, { attributes: true, attributeFilter: ['class'] });
     } else {
-        console.error('Intro div not found (prompt.js)');
+        console.error('Intro div not found (promptgrid.js)');
     }
 
     // Initial check
@@ -284,6 +384,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             initializePromptContainer();
         }
     } catch (error) {
-        console.error('Error initializing prompt container (prompt.js):', error);
+        console.error('Error initializing prompt container (promptgrid.js):', error);
     }
 });
