@@ -217,34 +217,57 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         function toggleDataContainer() {
-            if (dataContainer.dataset.state === 'initial') {
-                dataContainer.classList.remove('initial');
-                dataContainer.classList.add('expanded');
-                dataContainer.dataset.state = 'expanded';
-                closeButton.textContent = '-';
-                setLocal('dataContainerState', 'expanded');
-                console.log('Left data container expanded, state saved (datain.js)');
-
-                // Load stored content if available
-                const storedUrl = getLocal('lastGridItemUrl');
-                if (storedUrl) {
-                    loadStoredContent(dataContainer, storedUrl);
-                }
-            } else {
+            if (!dataContainer) return;
+        
+            const isExpanded = dataContainer.dataset.state === 'expanded';
+        
+            if (isExpanded) {
                 dataContainer.classList.remove('expanded');
                 dataContainer.classList.add('initial');
                 dataContainer.dataset.state = 'initial';
-                closeButton.textContent = '+';
                 setLocal('dataContainerState', 'initial');
-                console.log('Left data container collapsed, state saved (datain.js)');
-
-                // Clear content when collapsing
+        
+                // Re-render collapsed version
                 dataContainer.innerHTML = `
                     <span class="close-data-container">+</span>
                     <span class="data-label">DATA IN</span>
                 `;
+        
+                console.log('Left data container collapsed and reset (datain.js)');
+            } else {
+                dataContainer.classList.remove('initial');
+                dataContainer.classList.add('expanded');
+                dataContainer.dataset.state = 'expanded';
+                setLocal('dataContainerState', 'expanded');
+        
+                console.log('Left data container expanded (datain.js)');
+        
+                // Load last content
+                const storedUrl = getLocal('lastGridItemUrl');
+                if (storedUrl) {
+                    loadStoredContent(dataContainer, storedUrl);
+                }
+            }
+        
+            // Re-bind toggle listeners
+            const newClose = dataContainer.querySelector('.close-data-container');
+            const newLabel = dataContainer.querySelector('.data-label');
+        
+            if (newClose) {
+                newClose.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleDataContainer();
+                });
+            }
+        
+            if (newLabel) {
+                newLabel.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleDataContainer();
+                });
             }
         }
+        
 
         document.addEventListener('click', function(e) {
             const isClickInside = dataContainer.contains(e.target);
