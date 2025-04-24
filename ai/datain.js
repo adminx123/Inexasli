@@ -8,6 +8,8 @@
  */
 
 import { getCookie } from '/utility/getcookie.js';
+import { getLocal } from '/utility/getlocal.js';
+import { setLocal } from '/utility/setlocal.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
     // Check if the "prompt" cookie is more than 10 minutes old
@@ -15,6 +17,42 @@ document.addEventListener('DOMContentLoaded', async function() {
     const currentTime = Date.now();
     const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
     const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
+
+    async function loadStoredContent(dataContainer, url) {
+        try {
+            console.log(`Attempting to load stored content from ${url} (datain.js)`);
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
+
+            const content = await response.text();
+            console.log('Stored content fetched successfully (datain.js)');
+
+            // Expand the container and inject content
+            dataContainer.classList.remove('initial');
+            dataContainer.classList.add('expanded');
+            dataContainer.dataset.state = 'expanded';
+            dataContainer.innerHTML = `
+                <span class="close-data-container">-</span>
+                <span class="data-label">DATA IN</span>
+                <div class="data-content">${content}</div>
+            `;
+            console.log(`Stored content loaded from ${url} into datain container (datain.js)`);
+
+            // Optionally load corresponding JS file
+            const scriptUrl = url.replace('.html', '.js');
+            try {
+                const script = document.createElement('script');
+                script.src = scriptUrl;
+                script.async = true;
+                document.body.appendChild(script);
+                console.log(`Loaded script: ${scriptUrl} (datain.js)`);
+            } catch (error) {
+                console.log(`No script found for ${scriptUrl}, skipping (datain.js)`);
+            }
+        } catch (error) {
+            console.error('Error loading stored content (datain.js):', error);
+        }
+    }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-left')) {
@@ -143,16 +181,19 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         document.head.appendChild(style);
 
+        // Get the last known state from localStorage, default to 'initial'
+        const lastState = getLocal('dataContainerState') || 'initial';
+
         const dataContainer = document.createElement('div');
-        dataContainer.className = 'data-container-left initial';
-        dataContainer.dataset.state = 'initial';
+        dataContainer.className = `data-container-left ${lastState}`;
+        dataContainer.dataset.state = lastState;
         dataContainer.innerHTML = `
-            <span class="close-data-container">+</span>
+            <span class="close-data-container">${lastState === 'expanded' ? '-' : '+'}</span>
             <span class="data-label">DATA IN</span>
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Left data container injected (datain.js)');
+        console.log('Left data container injected with state:', lastState, '(datain.js)');
 
         const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
@@ -181,13 +222,27 @@ document.addEventListener('DOMContentLoaded', async function() {
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
                 closeButton.textContent = '-';
-                console.log('Left data container expanded (datain.js)');
+                setLocal('dataContainerState', 'expanded');
+                console.log('Left data container expanded, state saved (datain.js)');
+
+                // Load stored content if available
+                const storedUrl = getLocal('lastGridItemUrl');
+                if (storedUrl) {
+                    loadStoredContent(dataContainer, storedUrl);
+                }
             } else {
                 dataContainer.classList.remove('expanded');
                 dataContainer.classList.add('initial');
                 dataContainer.dataset.state = 'initial';
                 closeButton.textContent = '+';
-                console.log('Left data container collapsed (datain.js)');
+                setLocal('dataContainerState', 'initial');
+                console.log('Left data container collapsed, state saved (datain.js)');
+
+                // Clear content when collapsing
+                dataContainer.innerHTML = `
+                    <span class="close-data-container">+</span>
+                    <span class="data-label">DATA IN</span>
+                `;
             }
         }
 
@@ -198,6 +253,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                 toggleDataContainer();
             }
         });
+
+        // Load stored content on initialization if the container is expanded
+        if (lastState === 'expanded') {
+            const storedUrl = getLocal('lastGridItemUrl');
+            if (storedUrl) {
+                loadStoredContent(dataContainer, storedUrl);
+            }
+        }
     }
 
     try {

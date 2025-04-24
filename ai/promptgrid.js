@@ -8,6 +8,7 @@
  */
 
 import { getCookie } from '/utility/getcookie.js';
+import { setLocal } from '/utility/setlocal.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
     // Check if the "prompt" cookie is more than 10 minutes old
@@ -55,77 +56,99 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // Function to load content into datain container
-    async function loadContent(url) {
-        try {
-            console.log(`Attempting to load content from ${url} (promptgrid.js)`);
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
+  // Function to load content into datain container
+async function loadContent(url) {
+    try {
+        console.log(`Attempting to load content from ${url} (promptgrid.js)`);
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
-            const content = await response.text();
-            console.log('Content fetched successfully (promptgrid.js)');
+        const content = await response.text();
+        console.log('Content fetched successfully (promptgrid.js)');
 
-            const dataContainer = document.querySelector('.data-container-left');
-            if (!dataContainer) {
-                console.error('Data container (.data-container-left) not found. Ensure datain.js is loaded and initialized (promptgrid.js)');
-                return;
-            }
+        const dataContainer = document.querySelector('.data-container-left');
+        if (!dataContainer) {
+            console.error('Data container (.data-container-left) not found. Ensure datain.js is loaded and initialized (promptgrid.js)');
+            return;
+        }
 
-            // Collapse the prompt container if expanded
-            const promptContainer = document.querySelector('.prompt-container');
-            if (promptContainer && promptContainer.dataset.state === 'expanded') {
-                togglePromptContainer();
-                console.log('Prompt container collapsed (promptgrid.js)');
-                // Wait for collapse animation (300ms matches CSS transition)
-                await new Promise(resolve => setTimeout(resolve, 300));
-            }
+        // Collapse the prompt container if expanded
+        const promptContainer = document.querySelector('.prompt-container');
+        if (promptContainer && promptContainer.dataset.state === 'expanded') {
+            togglePromptContainer();
+            console.log('Prompt container collapsed (promptgrid.js)');
+            await new Promise(resolve => setTimeout(resolve, 300));
+        }
 
-            // Force reinitialization of datain container if needed
-            if (!dataContainer.classList.contains('initial') && !dataContainer.classList.contains('expanded')) {
-                console.warn('Data container in unknown state, reinitializing (promptgrid.js)');
-                dataContainer.className = 'data-container-left initial';
+        // Expand and inject content
+        dataContainer.classList.remove('initial');
+        dataContainer.classList.add('expanded');
+        dataContainer.dataset.state = 'expanded';
+        setLocal('dataContainerState', 'expanded');
+        console.log('Left data container expanded and content being injected (promptgrid.js)');
+
+        // Inject content
+        dataContainer.innerHTML = `
+            <span class="close-data-container">-</span>
+            <span class="data-label">DATA IN</span>
+            <div class="data-content">${content}</div>
+        `;
+
+        // ✅ Re-bind toggle event listeners after innerHTML update
+        const closeButton = dataContainer.querySelector('.close-data-container');
+        const dataLabel = dataContainer.querySelector('.data-label');
+
+        const toggleDataContainer = () => {
+            const currentState = dataContainer.dataset.state;
+            if (currentState === 'expanded') {
+                dataContainer.classList.remove('expanded');
+                dataContainer.classList.add('initial');
                 dataContainer.dataset.state = 'initial';
-            }
+                closeButton.textContent = '+';
+                dataContainer.innerHTML = `
+                    <span class="close-data-container">+</span>
+                    <span class="data-label">DATA IN</span>
+                `;
+                setLocal('dataContainerState', 'initial');
 
-            // Expand the datain container
-            if (dataContainer.dataset.state !== 'expanded') {
+                // 🔁 Re-bind toggle listeners again after collapsing
+                const newCloseButton = dataContainer.querySelector('.close-data-container');
+                const newLabel = dataContainer.querySelector('.data-label');
+                newCloseButton?.addEventListener('click', toggleDataContainer);
+                newLabel?.addEventListener('click', toggleDataContainer);
+            } else {
                 dataContainer.classList.remove('initial');
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
-                const closeButton = dataContainer.querySelector('.close-data-container');
-                if (closeButton) {
-                    closeButton.textContent = '-';
-                } else {
-                    console.error('Close button not found in data container (promptgrid.js)');
-                }
-                console.log('Left data container expanded (promptgrid.js)');
-            } else {
-                console.log('Left data container already expanded (promptgrid.js)');
+                closeButton.textContent = '-';
+                setLocal('dataContainerState', 'expanded');
+                loadContent(url); // reload the current content
             }
+        };
 
-            // Inject content into the datain container
-            dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
-                <span class="data-label">DATA IN</span>
-                <div class="data-content">${content}</div>
-            `;
-            console.log(`Content loaded from ${url} into datain container (promptgrid.js)`);
+        closeButton?.addEventListener('click', toggleDataContainer);
+        dataLabel?.addEventListener('click', toggleDataContainer);
 
-            // Optionally load corresponding JS file
-            const scriptUrl = url.replace('.html', '.js');
-            try {
-                const script = document.createElement('script');
-                script.src = scriptUrl;
-                script.async = true;
-                document.body.appendChild(script);
-                console.log(`Loaded script: ${scriptUrl}`);
-            } catch (error) {
-                console.log(`No script found for ${scriptUrl}, skipping`);
-            }
+        // Store the URL
+        setLocal('lastGridItemUrl', url);
+        console.log(`Stored last grid item URL in localStorage: ${url} (promptgrid.js)`);
+
+        // Load corresponding JS
+        const scriptUrl = url.replace('.html', '.js');
+        try {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.async = true;
+            document.body.appendChild(script);
+            console.log(`Loaded script: ${scriptUrl}`);
         } catch (error) {
-            console.error('Error loading content (promptgrid.js):', error);
+            console.log(`No script found for ${scriptUrl}, skipping`);
         }
+    } catch (error) {
+        console.error('Error loading content (promptgrid.js):', error);
     }
+}
+
 
     function initializePromptContainer() {
         if (document.querySelector('.prompt-container')) {
