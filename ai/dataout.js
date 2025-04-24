@@ -148,20 +148,49 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         function toggleDataContainer() {
-            if (dataContainer.dataset.state === 'initial') {
-                dataContainer.classList.remove('initial');
-                dataContainer.classList.add('expanded');
-                dataContainer.dataset.state = 'expanded';
-                closeButton.textContent = '-';
-                console.log('Right data container expanded (dataout.js)');
-            } else {
+            const isExpanded = dataContainer.dataset.state === 'expanded';
+        
+            if (isExpanded) {
                 dataContainer.classList.remove('expanded');
                 dataContainer.classList.add('initial');
                 dataContainer.dataset.state = 'initial';
-                closeButton.textContent = '+';
                 console.log('Right data container collapsed (dataout.js)');
+        
+                dataContainer.innerHTML = `
+                    <span class="close-data-container">+</span>
+                    <span class="data-label">DATA OUT</span>
+                `;
+            } else {
+                dataContainer.classList.remove('initial');
+                dataContainer.classList.add('expanded');
+                dataContainer.dataset.state = 'expanded';
+                console.log('Right data container expanded (dataout.js)');
+        
+                dataContainer.innerHTML = `
+                    <span class="close-data-container">-</span>
+                    <span class="data-label">DATA OUT</span>
+                `;
+            }
+        
+            // ✅ Re-bind event listeners after DOM replacement
+            const closeButton = dataContainer.querySelector('.close-data-container');
+            const dataLabel = dataContainer.querySelector('.data-label');
+        
+            if (closeButton) {
+                closeButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    toggleDataContainer();
+                });
+            }
+        
+            if (dataLabel) {
+                dataLabel.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    toggleDataContainer();
+                });
             }
         }
+        
 
         document.addEventListener('click', function(e) {
             const isClickInside = dataContainer.contains(e.target);
