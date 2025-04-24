@@ -8,6 +8,33 @@
  */
 
 document.addEventListener('DOMContentLoaded', async function() {
+    // Categorization of grid items by tab
+    const itemCategories = {
+        'dataanalysis': ['BookIQ', 'CalorieIQ', 'ReceiptsIQ', 'ResearchIQ', 'EmotionIQ'],
+        'reportgeneration': ['EnneagramIQ', 'SocialIQ', 'ReportIQ', 'SymptomIQ'],
+        'planningandforecasting': ['AdventureIQ', 'EventIQ', 'FitnessIQ', 'IncomeIQ', 'NewBizIQ'],
+        'creative': ['AdAgencyIQ', 'QuizIQ'],
+        'decision': ['DecisionIQ'],
+        'workflow': ['App', 'WorkflowIQ'],
+        'educational': ['General']
+    };
+
+    // Function to filter grid items by category
+    function filterGridItems(category) {
+        const gridItems = document.querySelectorAll('.grid-item');
+        gridItems.forEach(item => {
+            // Get item text and clean it
+            let itemText = item.textContent.split(/<hr>|Premium/)[0].trim().replace(/™/g, '');
+            
+            // Check if the item belongs to the selected category or show all
+            if (category === 'all' || itemCategories[category]?.includes(itemText)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
     function canShowContainer() {
         const introDiv = document.getElementById('intro');
         const isIntroHidden = introDiv && introDiv.classList.contains('hidden');
@@ -145,6 +172,20 @@ document.addEventListener('DOMContentLoaded', async function() {
         promptContainer.dataset.state = 'initial';
         promptContainer.innerHTML = `
             <span class="prompt-label">PROMPT</span>
+
+<div>
+    <select id="category-select">
+        <option value="all">ALL</option>
+        <option value="dataanalysis">DATA</option>
+        <option value="reportgeneration">REPORT</option>
+        <option value="planningandforecasting">PLANNING</option>
+        <option value="creative">CREATIVE</option>
+        <option value="decision">DECISION</option>
+        <option value="workflow">WORKFLOW</option>
+        <option value="educational">EDUCATIONAL</option>
+    </select>
+</div>
+
             <div class="grid-container">
                 <div class="grid-item" onclick="navigateTo('/ai/marketing/adagencyiq.html')">AdAgencyIQ™ <hr><span class="premium-notice">Premium</span></div>
                 <div class="grid-item" onclick="navigateTo('/ai/adventure/adventureiq.html')">AdventureIQ™<hr><span class="premium-notice">Premium</span></div>
@@ -207,6 +248,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                 console.log('Clicked outside prompt container, collapsing it (prompt.js)');
                 togglePromptContainer();
             }
+        });
+
+        // Event listener for category selection dropdown
+        const categorySelect = document.getElementById('category-select');
+        categorySelect.addEventListener('change', (e) => {
+            const category = e.target.value;
+            filterGridItems(category); // Call the filter function
         });
     }
 
