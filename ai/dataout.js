@@ -28,8 +28,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         const style = document.createElement('style');
         style.textContent = `
-        
-        /* Right Data Container */
 .data-container-right {
     position: fixed;
     top: 50%;
@@ -52,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .data-container-right.initial {
-    height: 120px; /* Space for vertical text */
+    height: 120px;
 }
 
 .data-container-right.expanded {
@@ -78,34 +76,29 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-family: "Inter", sans-serif;
 }
 
-.data-container-right.expanded .close-data-container {
-    top: 4px;
-    left: 10px;
-}
-
 .data-container-right .data-label {
     text-decoration: none;
     color: #000;
     font-size: 12px;
     display: flex;
-    flex-direction: column-reverse; /* Reverse order for bottom-to-top */
+    flex-direction: column-reverse;
     justify-content: center;
     text-align: center;
     padding: 4px;
-    cursor: default;
+    cursor: pointer;
     transition: color 0.2s ease;
     line-height: 1.2;
     font-family: "Geist", sans-serif;
     writing-mode: vertical-rl;
-    transform: rotate(180deg); /* Flip for correct bottom-to-top */
+    transform: rotate(180deg);
 }
 
 .data-container-right.initial .data-label {
-    margin-top: 20px; /* Avoid overlap with close button */
+    margin-top: 20px;
 }
 
 .data-container-right.expanded .data-label {
-    margin-top: 0; /* Normal flow when expanded */
+    margin-top: 0;
 }
 
 @media (max-width: 480px) {
@@ -127,9 +120,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         font-size: 12px;
         padding: 4px;
     }
-}
-        
-        `;
+}`;
         document.head.appendChild(style);
 
         const dataContainer = document.createElement('div');
@@ -143,19 +134,21 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.body.appendChild(dataContainer);
         console.log('Right data container injected (dataout.js)');
 
-        console.log('Right data container styles:', 
-                    window.getComputedStyle(dataContainer).getPropertyValue('right'), 
-                    window.getComputedStyle(dataContainer).getPropertyValue('top'),
-                    window.getComputedStyle(dataContainer).getPropertyValue('transform'));
-
         const closeButton = dataContainer.querySelector('.close-data-container');
+        const dataLabel = dataContainer.querySelector('.data-label');
+
         if (closeButton) {
             closeButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 toggleDataContainer();
             });
-        } else {
-            console.error('Right close button not found (dataout.js)');
+        }
+
+        if (dataLabel) {
+            dataLabel.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleDataContainer();
+            });
         }
 
         function toggleDataContainer() {
@@ -170,20 +163,19 @@ document.addEventListener('DOMContentLoaded', async function() {
                 dataContainer.classList.add('initial');
                 dataContainer.dataset.state = 'initial';
                 closeButton.textContent = '+';
-                console.log('Right data container returned to initial state (dataout.js)');
+                console.log('Right data container collapsed (dataout.js)');
             }
         }
 
         document.addEventListener('click', function(e) {
-            const isClickInsideDataContainer = dataContainer.contains(e.target);
-            if (!isClickInsideDataContainer && dataContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside right data container, collapsing it (dataout.js)');
+            const isClickInside = dataContainer.contains(e.target);
+            if (!isClickInside && dataContainer.dataset.state === 'expanded') {
+                console.log('Clicked outside right data container, collapsing (dataout.js)');
                 toggleDataContainer();
             }
         });
     }
 
-    // Monitor intro div changes
     const introDiv = document.getElementById('intro');
     if (introDiv) {
         const observer = new MutationObserver(() => {
@@ -191,11 +183,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (canShowContainer()) {
                 if (!dataContainer) {
                     initializeDataContainer();
-                    console.log('Intro div hidden, initialized right container (dataout.js)');
+                    console.log('Intro hidden, initialized right container (dataout.js)');
                 }
             } else if (dataContainer) {
                 dataContainer.remove();
-                console.log('Intro div visible, removed right container (dataout.js)');
+                console.log('Intro visible, removed right container (dataout.js)');
             }
         });
         observer.observe(introDiv, { attributes: true, attributeFilter: ['class'] });
@@ -203,7 +195,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Intro div not found (dataout.js)');
     }
 
-    // Initial check
     try {
         if (canShowContainer()) {
             initializeDataContainer();
