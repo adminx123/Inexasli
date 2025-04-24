@@ -29,105 +29,105 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         const style = document.createElement('style');
         style.textContent = `
-      /* Left Data Container */
-.data-container-left {
-    position: fixed;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    background-color: #f5f5f5;
-    padding: 4px;
-    border: 2px solid #000;
-    border-left: none;
-    border-radius: 0 8px 8px 0;
-    box-shadow: 4px 4px 0 #000;
-    z-index: 10000;
-    width: 34px; /* Match Data Out */
-    min-height: 30px;
-    transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
-    overflow: hidden;
-    font-family: "Inter", sans-serif;
-    visibility: visible;
-    opacity: 1;
-}
+        .data-container-left {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background-color: #f5f5f5;
+            padding: 4px;
+            border: 2px solid #000;
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 4px 4px 0 #000;
+            z-index: 10000;
+            width: 34px;
+            min-height: 30px;
+            transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
+            overflow: hidden;
+            font-family: "Inter", sans-serif;
+            visibility: visible;
+            opacity: 1;
+        }
 
-.data-container-left.initial {
-    height: 120px; /* Match Data Out */
-}
+        .data-container-left.initial {
+            height: 120px;
+        }
 
-.data-container-left.expanded {
-    width: 200px; /* Match Data Out */
-    height: auto;
-}
+        .data-container-left.expanded {
+            width: 200px;
+            height: auto;
+        }
 
-.data-container-left:hover {
-    background-color: rgb(255, 255, 255);
-}
+        .data-container-left:hover {
+            background-color: rgb(255, 255, 255);
+        }
 
-.data-container-left .close-data-container {
-    position: absolute;
-    top: 4px; /* Match Data Out */
-    left: 10px; /* Match Data Out */
-    padding: 5px; /* Match Data Out */
-    font-size: 14px;
-    line-height: 1;
-    color: #000;
-    cursor: pointer;
-    font-weight: bold;
-    display: block;
-    font-family: "Inter", sans-serif;
-}
+        .data-container-left .close-data-container {
+            position: absolute;
+            top: 4px;
+            left: 10px;
+            padding: 5px;
+            font-size: 14px;
+            line-height: 1;
+            color: #000;
+            cursor: pointer;
+            font-weight: bold;
+            display: block;
+            font-family: "Inter", sans-serif;
+        }
 
-.data-container-left.expanded .close-data-container {
-    top: 4px;
-    right: 10px; /* Adjusted for left container */
-    left: auto;
-}
+        .data-container-left.expanded .close-data-container {
+            top: 4px;
+            right: 10px;
+            left: auto;
+        }
 
-.data-container-left .data-label {
-    text-decoration: none;
-    color: #000;
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    padding: 4px;
-    cursor: default;
-    transition: color 0.2s ease;
-    line-height: 1.2;
-    font-family: "Geist", sans-serif;
-    writing-mode: vertical-rl;
-    text-orientation: mixed; /* Top-to-bottom */
-}
+        .data-container-left .data-label {
+            text-decoration: none;
+            color: #000;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            padding: 4px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            line-height: 1.2;
+            font-family: "Geist", sans-serif;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
 
-.data-container-left.initial .data-label {
-    margin-top: 20px; /* Match Data Out to avoid overlap */
-}
+        .data-container-left.initial .data-label {
+            margin-top: 20px;
+        }
 
-.data-container-left.expanded .data-label {
-    margin-top: 0; /* Match Data Out */
-}
+        .data-container-left.expanded .data-label {
+            margin-top: 0;
+        }
 
-@media (max-width: 480px) {
-    .data-container-left {
-        width: 28px; /* Match Data Out */
-        padding: 3px;
-    }
-    .data-container-left.initial {
-        height: 100px; /* Match Data Out */
-    }
-    .data-container-left.expanded {
-        width: 150px; /* Match Data Out */
-    }
-    .data-container-left .data-label {
-        font-size: 14px;
-        padding: 3px;
-    }
-    .data-container-left .close-data-container {
-        font-size: 12px;
-        padding: 4px; /* Match Data Out */
-    }
-}`;
+        @media (max-width: 480px) {
+            .data-container-left {
+                width: 28px;
+                padding: 3px;
+            }
+            .data-container-left.initial {
+                height: 100px;
+            }
+            .data-container-left.expanded {
+                width: 150px;
+            }
+            .data-container-left .data-label {
+                font-size: 14px;
+                padding: 3px;
+            }
+            .data-container-left .close-data-container {
+                font-size: 12px;
+                padding: 4px;
+            }
+        }`;
+
         document.head.appendChild(style);
 
         const dataContainer = document.createElement('div');
@@ -141,12 +141,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.body.appendChild(dataContainer);
         console.log('Left data container injected (detain.js)');
 
-        console.log('Left data container styles:', 
-                    window.getComputedStyle(dataContainer).getPropertyValue('left'), 
-                    window.getComputedStyle(dataContainer).getPropertyValue('top'),
-                    window.getComputedStyle(dataContainer).getPropertyValue('transform'));
-
         const closeButton = dataContainer.querySelector('.close-data-container');
+        const dataLabel = dataContainer.querySelector('.data-label');
+
         if (closeButton) {
             closeButton.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -154,6 +151,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         } else {
             console.error('Left close button not found (detain.js)');
+        }
+
+        if (dataLabel) {
+            dataLabel.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleDataContainer();
+            });
+        } else {
+            console.error('Left data label not found (detain.js)');
         }
 
         function toggleDataContainer() {
@@ -168,20 +174,19 @@ document.addEventListener('DOMContentLoaded', async function() {
                 dataContainer.classList.add('initial');
                 dataContainer.dataset.state = 'initial';
                 closeButton.textContent = '+';
-                console.log('Left data container returned to initial state (detain.js)');
+                console.log('Left data container collapsed (detain.js)');
             }
         }
 
         document.addEventListener('click', function(e) {
-            const isClickInsideDataContainer = dataContainer.contains(e.target);
-            if (!isClickInsideDataContainer && dataContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside left data container, collapsing it (detain.js)');
+            const isClickInside = dataContainer.contains(e.target);
+            if (!isClickInside && dataContainer.dataset.state === 'expanded') {
+                console.log('Clicked outside left data container, collapsing (detain.js)');
                 toggleDataContainer();
             }
         });
     }
 
-    // Monitor intro div changes
     const introDiv = document.getElementById('intro');
     if (introDiv) {
         const observer = new MutationObserver(() => {
@@ -189,11 +194,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (canShowContainer()) {
                 if (!dataContainer) {
                     initializeDataContainer();
-                    console.log('Intro div hidden, initialized left container (detain.js)');
+                    console.log('Intro hidden, initialized left container (detain.js)');
                 }
             } else if (dataContainer) {
                 dataContainer.remove();
-                console.log('Intro div visible, removed left container (detain.js)');
+                console.log('Intro visible, removed left container (detain.js)');
             }
         });
         observer.observe(introDiv, { attributes: true, attributeFilter: ['class'] });
@@ -201,7 +206,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Intro div not found (detain.js)');
     }
 
-    // Initial check
     try {
         if (canShowContainer()) {
             initializeDataContainer();
