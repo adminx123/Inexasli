@@ -7,7 +7,15 @@
  * of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
+import { getCookie } from '/utility/getcookie.js';
+
 document.addEventListener('DOMContentLoaded', async function() {
+    // Check if the "prompt" cookie is more than 10 minutes old
+    const promptCookie = getCookie("prompt");
+    const currentTime = Date.now();
+    const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
+    const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
+
     // Categorization of grid items by tab
     const itemCategories = {
         'dataanalysis': ['BookIQ', 'CalorieIQ', 'ReceiptsIQ', 'ResearchIQ', 'EmotionIQ'],
@@ -30,13 +38,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                 item.style.display = 'none';
             }
         });
-    }
-
-    function canShowContainer() {
-        const introDiv = document.getElementById('intro');
-        const isIntroHidden = introDiv && introDiv.classList.contains('hidden');
-        console.log('canShowContainer (promptgrid.js):', { isIntroHidden });
-        return isIntroHidden;
     }
 
     // Define togglePromptContainer before loadContent
@@ -129,11 +130,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     function initializePromptContainer() {
         if (document.querySelector('.prompt-container')) {
             console.log('Prompt container already exists, skipping initialization (promptgrid.js)');
-            return;
-        }
-
-        if (!canShowContainer()) {
-            console.log('Intro div is not hidden, skipping initialization (promptgrid.js)');
             return;
         }
 
@@ -358,29 +354,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
-    // Monitor intro div changes
-    const introDiv = document.getElementById('intro');
-    if (introDiv) {
-        const observer = new MutationObserver(() => {
-            const promptContainer = document.querySelector('.prompt-container');
-            if (canShowContainer()) {
-                if (!promptContainer) {
-                    initializePromptContainer();
-                    console.log('Intro div hidden, initialized prompt container (promptgrid.js)');
-                }
-            } else if (promptContainer) {
-                promptContainer.remove();
-                console.log('Intro div visible, removed prompt container (promptgrid.js)');
-            }
-        });
-        observer.observe(introDiv, { attributes: true, attributeFilter: ['class'] });
-    } else {
-        console.error('Intro div not found (promptgrid.js)');
-    }
-
     // Initial check
     try {
-        if (canShowContainer()) {
+        if (!isCookieExpired) {
             initializePromptContainer();
         }
     } catch (error) {

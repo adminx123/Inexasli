@@ -7,22 +7,18 @@
  * of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
+import { getCookie } from '/utility/getcookie.js';
+
 document.addEventListener('DOMContentLoaded', async function() {
-    function canShowContainer() {
-        const introDiv = document.getElementById('intro');
-        const isIntroHidden = introDiv && introDiv.classList.contains('hidden');
-        console.log('canShowContainer (dataout.js):', { isIntroHidden });
-        return isIntroHidden;
-    }
+    // Check if the "prompt" cookie is more than 10 minutes old
+    const promptCookie = getCookie("prompt");
+    const currentTime = Date.now();
+    const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
+    const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-right')) {
             console.log('Right data container already exists, skipping initialization (dataout.js)');
-            return;
-        }
-
-        if (!canShowContainer()) {
-            console.log('Intro div is not hidden, skipping initialization (dataout.js)');
             return;
         }
 
@@ -176,27 +172,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
-    const introDiv = document.getElementById('intro');
-    if (introDiv) {
-        const observer = new MutationObserver(() => {
-            const dataContainer = document.querySelector('.data-container-right');
-            if (canShowContainer()) {
-                if (!dataContainer) {
-                    initializeDataContainer();
-                    console.log('Intro hidden, initialized right container (dataout.js)');
-                }
-            } else if (dataContainer) {
-                dataContainer.remove();
-                console.log('Intro visible, removed right container (dataout.js)');
-            }
-        });
-        observer.observe(introDiv, { attributes: true, attributeFilter: ['class'] });
-    } else {
-        console.error('Intro div not found (dataout.js)');
-    }
-
     try {
-        if (canShowContainer()) {
+        if (!isCookieExpired) {
             initializeDataContainer();
         }
     } catch (error) {
