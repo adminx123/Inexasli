@@ -246,14 +246,3 @@
     window.openCustomModal = openCustomModal;
     window.generatePrompt = generatePrompt;
 })();
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('#calorie-goal').addEventListener('click', (e) => {
-        if (e.target.classList.contains('grid-item')) {
-            document.querySelectorAll('.grid-item').forEach(item => item.classList.remove('active'));
-            e.target.classList.add('active');
-            console.log('Clicked:', e.target.dataset.value);
-        }
-    });
-});
