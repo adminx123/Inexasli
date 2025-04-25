@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         style.textContent = `
             .data-container-income {
                 position: fixed;
-                top: calc(20% + 36px);
+                top: 16.67%;
                 left: 0;
                 background-color: #f5f5f5;
                 padding: 4px;
