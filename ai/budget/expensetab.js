@@ -6,16 +6,7 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { getCookie } from '/utility/getcookie.js';
-import { getLocal } from '/utility/getlocal.js';
-import { setLocal } from '/utility/setlocal.js';
-
-document.addEventListener('DOMContentLoaded', async function () {
-    const promptCookie = getCookie("prompt");
-    const currentTime = Date.now();
-    const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
-
+document.addEventListener('DOMContentLoaded', function () {
     async function loadStoredContent(dataContainer, url) {
         try {
             console.log(`Attempting to load stored content from ${url} (expense.js)`);
@@ -25,33 +16,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             const content = await response.text();
             console.log('Stored content fetched successfully (expense.js)');
 
-            dataContainer.classList.remove('initial');
-            dataContainer.classList.add('expanded');
-            dataContainer.dataset.state = 'expanded';
+            // Update container with content
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">EXPENSE</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded from ${url} into expense container (expense.js)`);
-
-            const scriptUrl = url.replace('.html', '.js');
-            try {
-                const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
-                existingScripts.forEach(script => script.remove());
-
-                const scriptResponse = await fetch(scriptUrl);
-                if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
-
-                const scriptContent = await scriptResponse.text();
-                const script = document.createElement('script');
-                script.textContent = scriptContent;
-                script.dataset.source = scriptUrl;
-                document.body.appendChild(script);
-                console.log(`Loaded and executed script: ${scriptUrl} (expense.js)`);
-            } catch (error) {
-                console.log(`No script found or error loading ${scriptUrl}, skipping (expense.js):`, error);
-            }
+            console.log(`Stored content loaded into expense container (expense.js)`);
         } catch (error) {
             console.error(`Error loading stored content (expense.js):`, error);
         }
@@ -67,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         style.textContent = `
             .data-container-expense {
                 position: fixed;
-                top: calc(50% + 24px); /* Below Income, 120px height + 24px gap */
+                top: 168px; /* 24px (Income top) + 120px (Income height) + 24px (gap) */
                 left: 0;
                 background-color: #f5f5f5;
                 padding: 4px;
@@ -78,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 z-index: 10000;
                 max-width: 34px;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
@@ -86,13 +57,19 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-expense.collapsed {
+                width: 34px;
                 height: 120px;
             }
 
             .data-container-expense.expanded {
-                max-width: 85%;
+                width: 85vw; /* Expand to 85% of viewport width */
+                max-width: calc(85vw - 20px); /* Account for right margin */
                 min-width: 25%;
-                height: auto;
+                height: calc(100vh - 40px); /* Nearly full height, 20px top/bottom margins */
+                top: 20px; /* 20px from top */
+                margin-right: -webkit-calc(85vw - 20px); /* Expand rightward, leave 20px gap */
+                margin-right: -moz-calc(85vw - 20px);
+                margin-right: calc(85vw - 20px);
             }
 
             .data-container-expense:hover {
@@ -102,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-expense .close-data-container {
                 position: absolute;
                 top: 4px;
-                left: 10px;
+                left: 10px; /* Adjusted for left-side anchoring */
                 padding: 5px;
                 font-size: 14px;
                 line-height: 1;
@@ -145,12 +122,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
 
                 .data-container-expense.collapsed {
+                    width: 28px;
                     height: 100px;
                 }
 
                 .data-container-expense.expanded {
-                    max-width: 85%;
-                    min-width: 25%;
+                    width: 85vw;
+                    max-width: calc(85vw - 10px); /* Smaller right margin on mobile */
+                    height: calc(100vh - 20px); /* Adjust for smaller margins on mobile */
+                    top: 10px; /* Smaller top margin on mobile */
+                    margin-right: -webkit-calc(85vw - 10px);
+                    margin-right: -moz-calc(85vw - 10px);
+                    margin-right: calc(85vw - 10px);
                 }
 
                 .data-container-expense .data-label {
@@ -172,18 +155,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         `;
         document.head.appendChild(style);
 
-        const lastState = getLocal('dataContainerState_expense') || 'initial';
         const dataContainer = document.createElement('div');
-        dataContainer.className = `data-container-expense ${lastState}`;
-        dataContainer.dataset.state = lastState;
-        dataContainer.dataset.name = 'expense';
+        dataContainer.className = `data-container-expense collapsed`;
+        dataContainer.dataset.state = 'collapsed';
         dataContainer.innerHTML = `
-            <span class="close-data-container">${lastState === 'expanded' ? '-' : '+'}</span>
+            <span class="close-data-container">+</span>
             <span class="data-label">EXPENSE</span>
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Expense data container injected with state:', lastState, '(expense.js)');
+        console.log('Expense data container injected with state: collapsed (expense.js)');
 
         const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
@@ -206,20 +187,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Expense data label not found (expense.js)');
         }
 
-        function initializeGridItems() {
-            document.querySelectorAll('.data-container-expense .grid-container .grid-item').forEach(item => {
-                const key = `grid_expense_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-                const value = localStorage.getItem(key);
-                if (value === 'true') {
-                    item.classList.add('selected');
-                    console.log(`Restored ${key}: true`);
-                } else if (value === 'false') {
-                    item.classList.remove('selected');
-                    console.log(`Restored ${key}: false`);
-                }
-            });
-        }
-
         function toggleDataContainer() {
             if (!dataContainer) return;
 
@@ -227,31 +194,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (isExpanded) {
                 dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('initial');
-                dataContainer.dataset.state = 'initial';
-                setLocal('dataContainerState_expense', 'initial');
-
+                dataContainer.classList.add('collapsed');
+                dataContainer.dataset.state = 'collapsed';
                 dataContainer.innerHTML = `
                     <span class="close-data-container">+</span>
                     <span class="data-label">EXPENSE</span>
                 `;
-                console.log('Expense data container collapsed and reset (expense.js)');
+                console.log('Expense data container collapsed (expense.js)');
             } else {
-                dataContainer.classList.remove('initial');
+                dataContainer.classList.remove('collapsed');
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
-                setLocal('dataContainerState_expense', 'expanded');
-
-                console.log('Expense data container expanded (expense.js)');
-
-                const storedUrl = getLocal('lastGridItemUrl_expense') || '/expense.html';
-                if (storedUrl) {
-                    loadStoredContent(dataContainer, storedUrl);
-                }
-
-                initializeGridItems();
+                loadStoredContent(dataContainer, '/ai/budget/expense.html');
             }
 
+            // Re-bind event listeners
             const newClose = dataContainer.querySelector('.close-data-container');
             const newLabel = dataContainer.querySelector('.data-label');
 
@@ -270,26 +227,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
 
+        // Add outside click listener to collapse when expanded
         document.addEventListener('click', function (e) {
-            const isClickInside = dataContainer.contains(e.target);
-            if (!isClickInside && dataContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside expense data container, collapsing (expense.js)');
-                toggleDataContainer();
+            if (dataContainer && dataContainer.dataset.state === 'expanded') {
+                const isClickInside = dataContainer.contains(e.target);
+                if (!isClickInside) {
+                    console.log('Clicked outside expense data container, collapsing (expense.js)');
+                    toggleDataContainer();
+                }
             }
         });
-
-        if (lastState === 'expanded') {
-            const storedUrl = getLocal('lastGridItemUrl_expense') || '/expense.html';
-            if (storedUrl) {
-                loadStoredContent(dataContainer, storedUrl);
-            }
-        }
     }
 
     try {
-        if (!isCookieExpired) {
-            initializeDataContainer();
-        }
+        initializeDataContainer();
     } catch (error) {
         console.error('Error initializing expense data container (expense.js):', error);
     }
