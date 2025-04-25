@@ -34,50 +34,14 @@
 <body>
 
 
-    <a href="./intro.html">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 0px;" onclick="calculateAll();">
+ 
 
-    </a>
-
-    <!-- <h2 style="text-align: center;font-size: 16px; color: white;">IncomeIQ™</h2> -->
+    
 
 
-    <div class="tab-container">
-
-        <a href="./intro.html" class="tab" data-location="intro" onclick="calculateAll();">#</a>
-
-        <a href="./income.html" class="tooltip tab " data-location="income"
-            data-tooltip="Money you receive regularly, like from your job, a business, or investments. Think of it as money coming into your pocket."
-            onclick="calculateAll();">
-            Income
-            <span class="tooltip1-content"></span>
-        </a>
-
-        <a href="./expense.html" class="tooltip tab " data-location="expense"
-            data-tooltip="Money you spend to live your life, like rent, food, or buying things you need or want. Basically, anything you pay for with the money you earn."
-            onclick="calculateAll();">
-            Expense
-            <span class="tooltip1-content"></span>
-        </a>
-
-        <a href="./asset.html" class="tooltip tab " data-location="asset"
-            data-tooltip="Something you own that can provide future benefit or that you can sell for money. This could be your savings, a house, a car, or even a valuable collection."
-            onclick="calculateAll();">
-            Asset
-            <span class="tooltip1-content"></span>
-        </a>
-
-        <a href="./liability.html" class="tooltip tab active" data-location="liability"
-            data-tooltip="Money owed to others, which needs to be paid back. Examples: loans, mortgages, or credit card debts."
-            onclick="calculateAll();">
-            Liability
-            <span class="tooltip-content"></span>
-        </a>
-
-    </div>
 
 
-    <div class="container">
+
 
         <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1"
             data-tooltip="A type of debt where the borrower receives a fixed amount of money upfront, which they repay over time through regular payments until the loan is fully paid off. Once the loan is settled, the account is closed, and the borrower must apply for a new loan if they need more funds.">
@@ -124,10 +88,10 @@
             <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
                 id="liabilities_personal_debt_percent" inputmode="numeric">
         </div>
-    </div>
 
 
-    <div class="containerround">
+
+   
 
         <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1"
             data-tooltip="Debts where you can borrow money up to a certain limit, pay it back, and borrow again. The amount you can borrow revolves as you pay off what you owe.">
@@ -168,13 +132,8 @@
         </div>
 
 
-        <!-- <div class="nav-div">
 
-    <button onclick="calculateBack()" class="nav-btn nav-left"><i class='bx nav-inner bx-left-arrow-alt' ></i></button>
--->
-
-
-    </div>
+   
 
     <div class="containerround">
         <button id="nextButton" class="nav-btn nav-right"><i
@@ -197,8 +156,6 @@
 
     <script src="/ai/budget/liability.js" type="module"></script>
     <script src="/utility/toolTip.js"></script>
-    <script src="/utility/tray.js"></script>
-    <script type="module" src="/ai/budget/floatingbutton.js"></script>
     <script src="/utility/utils.js" type="module"></script>
 
 
