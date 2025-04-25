@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         style.textContent = `
             .data-container-asset {
                 position: fixed;
-                top: 50.01%;
+                top: calc(50% + 36px);
                 left: 0;
                 background-color: #f5f5f5;
                 padding: 4px;
