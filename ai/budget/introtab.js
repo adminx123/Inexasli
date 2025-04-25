@@ -58,7 +58,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             .data-container-intro.collapsed {
-                height: 120px;
+                max-height: 34px;
+                max-width: 150px;
             }
 
             .data-container-intro.expanded {
