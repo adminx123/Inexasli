@@ -37,48 +37,49 @@ document.addEventListener('DOMContentLoaded', function () {
         const style = document.createElement('style');
         style.textContent = `
             .data-container-liability {
-    position: fixed;
-    top: calc(70% + 36px); /* Shifted down 96px */
-    left: 0;
-    background-color: #f5f5f5;
-    padding: 4px;
-    border: 2px solid #000;
-    border-left: none;
-    border-radius: 0 8px 8px 0;
-    box-shadow: 4px 4px 0 #000;
-    z-index: 10000;
-    max-width: 34px;
-    min-height: 30px;
-    transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
-    overflow: hidden;
-    font-family: "Inter", sans-serif;
-    visibility: visible;
-    opacity: 1;
-}
-
+                position: fixed;
+                top: calc(65% + 36px);
+                left: 0;
+                background-color: #f5f5f5;
+                padding: 4px;
+                border: 2px solid #000;
+                border-left: none;
+                border-radius: 0 8px 8px 0;
+                box-shadow: 4px 4px 0 #000;
+                z-index: 10000;
+                max-width: 34px;
+                min-height: 30px;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+                overflow: hidden;
+                font-family: "Inter", sans-serif;
+                visibility: visible;
+                opacity: 1;
+            }
+        
             .data-container-liability.collapsed {
                 width: 34px;
                 height: 120px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                z-index: 10001;
             }
-
+        
             .data-container-liability.expanded {
                 width: 85vw;
                 max-width: calc(85vw - 20px);
                 min-width: 25%;
-                height: calc(100vh - 40px);
+                max-height: 95%;
                 top: 20px;
                 margin-right: -webkit-calc(85vw - 20px);
                 margin-right: -moz-calc(85vw - 20px);
                 margin-right: calc(85vw - 20px);
             }
-
+        
             .data-container-liability:hover {
                 background-color: rgb(255, 255, 255);
             }
-
+        
             .data-container-liability .close-data-container {
                 position: absolute;
                 top: 4px;
@@ -91,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 font-weight: bold;
                 font-family: "Inter", sans-serif;
             }
-
+        
             .data-container-liability .data-label {
                 text-decoration: none;
                 color: #000;
@@ -107,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 writing-mode: vertical-rl;
                 text-orientation: mixed;
             }
-
+        
             .data-container-liability.expanded .data-label {
                 writing-mode: horizontal-tb;
                 position: absolute;
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 font-size: 16px;
                 padding: 5px;
             }
-
+        
             .data-container-liability .data-content {
                 padding: 10px;
                 font-size: 14px;
@@ -128,43 +129,44 @@ document.addEventListener('DOMContentLoaded', function () {
                 max-width: 100%;
                 margin-top: 30px;
             }
-
+        
             @media (max-width: 480px) {
                 .data-container-liability {
                     max-width: 28px;
                     padding: 3px;
                 }
-
+        
                 .data-container-liability.collapsed {
                     width: 28px;
                     height: 100px;
+                    z-index: 10001;
                 }
-
+        
                 .data-container-liability.expanded {
                     width: 85vw;
                     max-width: calc(85vw - 10px);
-                    height: calc(100vh - 20px);
+                    max-height: 95%;
                     top: 10px;
                     margin-right: -webkit-calc(85vw - 10px);
                     margin-right: -moz-calc(85vw - 10px);
                     margin-right: calc(85vw - 10px);
                 }
-
+        
                 .data-container-liability .data-label {
                     font-size: 10px;
                     padding: 3px;
                 }
-
+        
                 .data-container-liability.expanded .data-label {
                     font-size: 14px;
                     padding: 4px;
                 }
-
+        
                 .data-container-liability .close-data-container {
                     font-size: 12px;
                     padding: 4px;
                 }
-
+        
                 .data-container-liability .data-content {
                     font-size: 12px;
                     padding: 8px;
