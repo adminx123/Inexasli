@@ -69,121 +69,116 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const style = document.createElement('style');
         style.textContent = `
-            .data-container-left {
-                position: fixed;
-                top: 50%;
-                left: 0;
-                transform: translateY(-50%);
-                background-color: #f5f5f5;
-                padding: 4px;
-                border: 2px solid #000;
-                border-left: none;
-                border-radius: 0 8px 8px 0;
-                box-shadow: 4px 4px 0 #000;
-                z-index: 10001;
-                width: 85%;
-                min-height: 30px;
-                transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
-                overflow: hidden;
-                font-family: "Inter", sans-serif;
-                visibility: visible;
-                opacity: 1;
-            }
 
-            .data-container-left.initial {
-                height: 120px;
-            }
+        /* Left container specific styling */
+.data-container-left {
+    position: fixed;
+    top: 50%;
+    left: 0; /* Align to the left side */
+    transform: translateY(-50%);
+    background-color: #f5f5f5;
+    padding: 4px;
+    border: 2px solid #000;
+    border-left: none;
+    border-radius: 0 8px 8px 0; /* Left-specific radius */
+    box-shadow: 4px 4px 0 #000; /* Left-side shadow */
+    z-index: 10000;
+    max-width: 34px;
+    min-height: 30px;
+    transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
+    overflow: hidden;
+    font-family: "Inter", sans-serif;
+    visibility: visible;
+    opacity: 1;
+}
 
-            .data-container-left.expanded {
-                max-width: 85%; /* Allows full content expansion */
-                min-width: 300px; /* Minimum width to ensure usability */
-                height: auto;
-            }
+.data-container-left.collapsed {
+    height: 120px;
+}
 
-            .data-container-left:hover {
-                background-color: rgb(255, 255, 255);
-            }
+.data-container-left.expanded {
+    max-width: 85%; /* Full width expansion */
+    min-width: 25%; /* Minimum width for usability */
+    height: auto;
+}
 
-            .data-container-left .close-data-container {
-                position: absolute;
-                top: 4px;
-                left: 10px;
-                padding: 5px;
-                font-size: 14px;
-                line-height: 1;
-                color: #000;
-                cursor: pointer;
-                font-weight: bold;
-                display: block;
-                font-family: "Inter", sans-serif;
-            }
+.data-container-left:hover {
+    background-color: rgb(255, 255, 255);
+}
 
-            .data-container-left.expanded .close-data-container {
-                top: 4px;
-                right: 10px;
-                left: auto;
-            }
+.data-container-left .close-data-container {
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 1;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: "Inter", sans-serif;
+}
 
-            .data-container-left .data-label {
-                text-decoration: none;
-                color: #000;
-                font-size: 12px;
-                display: flex;
-                justify-content: center;
-                text-align: center;
-                padding: 4px;
-                cursor: pointer;
-                transition: color 0.2s ease;
-                line-height: 1.2;
-                font-family: "Geist", sans-serif;
-                writing-mode: vertical-rl;
-                text-orientation: mixed;
-            }
+.data-container-left .data-label {
+    text-decoration: none;
+    color: #000;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 4px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    line-height: 1.2;
+    font-family: "Geist", sans-serif;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
 
-            .data-container-left.initial .data-label {
-                margin-top: 20px;
-            }
+.data-container-left .data-content {
+    padding: 10px;
+    font-size: 14px;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: auto;
+    font-family: "Inter", sans-serif;
+    max-width: 100%;
+}
 
-            .data-container-left.expanded .data-label {
-                margin-top: 0;
-            }
+/* Mobile responsiveness for left container */
+@media (max-width: 480px) {
+    .data-container-left {
+        max-width: 28px; /* Initial collapsed state for mobile */
+        padding: 3px;
+    }
 
-            .data-container-left .data-content {
-                padding: 10px;
-                font-size: 14px;
-                max-height: 80vh;
-                overflow-y: auto;
-                overflow-x: auto; /* Handles wide content */
-                font-family: "Inter", sans-serif;
-                max-width: 100%; /* Prevents content from overflowing container */
-            }
+    .data-container-left.collapsed {
+        height: 100px;
+    }
 
-            @media (max-width: 480px) {
-                .data-container-left {
-                    max-width: 28px; /* Initial collapsed state for mobile */
-                    padding: 3px;
-                }
-                .data-container-left.initial {
-                    height: 100px;
-                }
-                .data-container-left.expanded {
-                    max-width: 100vw; /* Allows full content expansion on mobile */
-                    min-width: 200px; /* Minimum width for mobile */
-                }
-                .data-container-left .data-label {
-                    font-size: 14px;
-                    padding: 3px;
-                }
-                .data-container-left .close-data-container {
-                    font-size: 12px;
-                    padding: 4px;
-                }
-                .data-container-left .data-content {
-                    font-size: 12px;
-                    padding: 8px;
-                    overflow-x: auto;
-                }
-            }
+    .data-container-left.expanded {
+         max-width: 85%;
+        min-width: 25%; /* Minimum width for mobile */
+    }
+
+    .data-container-left .data-label {
+        font-size: 14px;
+        padding: 3px;
+    }
+
+    .data-container-left .close-data-container {
+        font-size: 12px;
+        padding: 4px;
+    }
+
+    .data-container-left .data-content {
+        font-size: 12px;
+        padding: 8px;
+        overflow-x: auto;
+    }
+}
+
+        
         `;
         document.head.appendChild(style);
 
