@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         style.textContent = `
             .data-container-expense {
                 position: fixed;
-                top: calc(35% + 36px);
+                top: 33.34%;
                 left: 0;
                 background-color: #f5f5f5;
                 padding: 4px;
