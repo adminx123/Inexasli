@@ -18,23 +18,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Update container with content
             dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
+                <span class="close-data-container"></span>
                 <span class="data-label">INCOME</span>
                 <div class="data-content">${content}</div>
             `;
             console.log(`Stored content loaded into income container (income.js)`);
         } catch (error) {
             console.error(`Error loading stored content (income.js):`, error);
-        }
-    }
-
-    async function loadFrequencyScript() {
-        if (!document.querySelector('script[src="/ai/budget/frequency.js"]')) {
-            const script = document.createElement('script');
-            script.src = '/ai/budget/frequency.js';
-            script.type = 'module';
-            document.body.appendChild(script);
-            console.log('frequency.js dynamically loaded');
         }
     }
 
@@ -48,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         style.textContent = `
             .data-container-income {
                 position: fixed;
-                top: 24px; /* 24px from top for top left corner */
+                top: calc(10% - 60px);
                 left: 0;
                 background-color: #f5f5f5;
                 padding: 4px;
@@ -69,15 +59,18 @@ document.addEventListener('DOMContentLoaded', function () {
             .data-container-income.collapsed {
                 width: 34px;
                 height: 120px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
             .data-container-income.expanded {
-                width: 85vw; /* Expand to 85% of viewport width */
-                max-width: calc(85vw - 20px); /* Account for right margin */
+                width: 85vw;
+                max-width: calc(85vw - 20px);
                 min-width: 25%;
-                height: calc(100vh - 40px); /* Nearly full height, 20px top/bottom margins */
-                top: 20px; /* 20px from top */
-                margin-right: -webkit-calc(85vw - 20px); /* Expand rightward, leave 20px gap */
+                height: calc(100vh - 40px);
+                top: 20px;
+                margin-right: -webkit-calc(85vw - 20px);
                 margin-right: -moz-calc(85vw - 20px);
                 margin-right: calc(85vw - 20px);
             }
@@ -89,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .data-container-income .close-data-container {
                 position: absolute;
                 top: 4px;
-                left: 10px; /* Adjusted for left-side anchoring */
+                left: 10px;
                 padding: 5px;
                 font-size: 14px;
                 line-height: 1;
@@ -115,14 +108,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 text-orientation: mixed;
             }
 
+            .data-container-income.expanded .data-label {
+                writing-mode: horizontal-tb;
+                position: absolute;
+                top: 4px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 16px;
+                padding: 5px;
+            }
+
             .data-container-income .data-content {
                 padding: 10px;
                 font-size: 14px;
-                max-height: 80vh;
+                max-height: calc(100vh - 80px);
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
                 max-width: 100%;
+                margin-top: 30px;
             }
 
             @media (max-width: 480px) {
@@ -138,17 +142,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 .data-container-income.expanded {
                     width: 85vw;
-                    max-width: calc(85vw - 10px); /* Smaller right margin on mobile */
-                    height: calc(100vh - 20px); /* Adjust for smaller margins on mobile */
-                    top: 10px; /* Smaller top margin on mobile */
+                    max-width: calc(85vw - 10px);
+                    height: calc(100vh - 20px);
+                    top: 10px;
                     margin-right: -webkit-calc(85vw - 10px);
                     margin-right: -moz-calc(85vw - 10px);
                     margin-right: calc(85vw - 10px);
                 }
 
                 .data-container-income .data-label {
-                    font-size: 14px;
+                    font-size: 10px;
                     padding: 3px;
+                }
+
+                .data-container-income.expanded .data-label {
+                    font-size: 14px;
+                    padding: 4px;
                 }
 
                 .data-container-income .close-data-container {
@@ -159,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .data-container-income .data-content {
                     font-size: 12px;
                     padding: 8px;
-                    overflow-x: auto;
+                    margin-top: 25px;
                 }
             }
         `;
@@ -169,24 +178,13 @@ document.addEventListener('DOMContentLoaded', function () {
         dataContainer.className = `data-container-income collapsed`;
         dataContainer.dataset.state = 'collapsed';
         dataContainer.innerHTML = `
-            <span class="close-data-container">+</span>
             <span class="data-label">INCOME</span>
         `;
 
         document.body.appendChild(dataContainer);
         console.log('Income data container injected with state: collapsed (income.js)');
 
-        const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
-
-        if (closeButton) {
-            closeButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                toggleDataContainer();
-            });
-        } else {
-            console.error('Income close button not found (income.js)');
-        }
 
         if (dataLabel) {
             dataLabel.addEventListener('click', function (e) {
@@ -207,33 +205,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.classList.add('collapsed');
                 dataContainer.dataset.state = 'collapsed';
                 dataContainer.innerHTML = `
-                    <span class="close-data-container">+</span>
                     <span class="data-label">INCOME</span>
                 `;
                 console.log('Income data container collapsed (income.js)');
             } else {
                 dataContainer.classList.remove('collapsed');
-                dataContainer.className = `data-container-income expanded`;
+                dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/budget/income.html');
-
-                // Dynamically load frequency.js when expanded
-                loadFrequencyScript();
             }
 
             // Re-bind event listeners
-            const newClose = dataContainer.querySelector('.close-data-container');
             const newLabel = dataContainer.querySelector('.data-label');
+            const newClose = dataContainer.querySelector('.close-data-container');
 
-            if (newClose) {
-                newClose.addEventListener('click', function (e) {
+            if (newLabel) {
+                newLabel.addEventListener('click', function (e) {
                     e.preventDefault();
                     toggleDataContainer();
                 });
             }
 
-            if (newLabel) {
-                newLabel.addEventListener('click', function (e) {
+            if (newClose) {
+                newClose.addEventListener('click', function (e) {
                     e.preventDefault();
                     toggleDataContainer();
                 });
