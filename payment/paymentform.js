@@ -286,29 +286,23 @@ document.addEventListener('DOMContentLoaded', async function() {
         const toggleSidebar = () => {
             const paymentForm = document.querySelector('.payment-form');
             if (sidebarElement.dataset.state === 'initial') {
-                // Expand the sidebar upwards
                 sidebarElement.classList.remove('initial');
                 sidebarElement.classList.add('expanded');
                 sidebarElement.dataset.state = 'expanded';
                 closeButton.textContent = '-';
-
-                const formHeight = paymentForm.scrollHeight;
-                const viewportHeight = window.innerHeight;
-                const bottomOffset = Math.min(viewportHeight - formHeight - 20, 10);
-                sidebarElement.style.bottom = `${bottomOffset}px`;
-
-                console.log('Sidebar expanded upwards');
+        
+                // No need for positioning logic since top is fixed
+                console.log('Sidebar expanded downwards from top');
             } else {
-                // Collapse the sidebar
                 sidebarElement.classList.remove('expanded');
                 sidebarElement.classList.add('initial');
                 sidebarElement.dataset.state = 'initial';
                 closeButton.textContent = '+';
-                sidebarElement.style.bottom = '10px';
-
+        
                 console.log('Sidebar returned to initial state');
             }
         };
+        
 
         // Click handlers for subscribe link and close button
         if (subscribeLink) {
