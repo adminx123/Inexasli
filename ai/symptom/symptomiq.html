@@ -7,62 +7,36 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SymptomIQ™</title>
-    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/ai/styles/prompt.css">
-</head>
-<body>
- 
 
-    
-        <div class="row1">
-            <textarea id="rootout-symptoms" rows="4" placeholder="Symptoms (one per line):\nHeadache lasting 6 hours\nFatigue\nNausea"></textarea>
+    <div class="row1">
+        <textarea id="rootout-symptoms" rows="4" placeholder="Headache lasting 6 hours&#10;Fatigue&#10;Nausea"></textarea>
+    </div>
+    <div class="row1">
+        <div class="grid-container" id="rootout-triggers">
+            <div class="grid-item" data-value="Diet">Diet (specific foods/drinks)</div>
+            <div class="grid-item" data-value="Sleep">Lack of Sleep</div>
+            <div class="grid-item" data-value="Stress">Stress</div>
+            <div class="grid-item" data-value="Environment">Environment (e.g., pollen, noise)</div>
+            <div class="grid-item" data-value="Exercise">Exercise (or lack of)</div>
+            <div class="grid-item" data-value="Medications">Medications</div>
+            <div class="grid-item" data-value="Hydration">Dehydration</div>
+            <div class="grid-item" data-value="Screen Time">Screen Time</div>
+            <div class="grid-item" data-value="Weather">Weather Changes</div>
+            <div class="grid-item" data-value="Caffeine">Caffeine</div>
         </div>
-        <div class="row1">
-            <div class="grid-container" id="rootout-triggers">
-                <div class="grid-item" data-value="Diet">Diet (specific foods/drinks)</div>
-                <div class="grid-item" data-value="Sleep">Lack of Sleep</div>
-                <div class="grid-item" data-value="Stress">Stress</div>
-                <div class="grid-item" data-value="Environment">Environment (e.g., pollen, noise)</div>
-                <div class="grid-item" data-value="Exercise">Exercise (or lack of)</div>
-                <div class="grid-item" data-value="Medications">Medications</div>
-                <div class="grid-item" data-value="Hydration">Dehydration</div>
-                <div class="grid-item" data-value="Screen Time">Screen Time</div>
-                <div class="grid-item" data-value="Weather">Weather Changes</div>
-                <div class="grid-item" data-value="Caffeine">Caffeine</div>
-            </div>
-        </div>
-        <div class="row1">
-            <textarea id="rootout-diet" rows="3" placeholder="Diet in the past 48 hours (one per line):\nDiet soda (Sucralose)\nWalnut muffin\nChicken salad"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="rootout-timing" rows="3" placeholder="Timing of symptoms (one per line):\nHeadache started 3 PM Monday\nFatigue worse in evenings\nNausea after meals"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="rootout-patterns" rows="3" placeholder="Any patterns you’ve noticed (one per line):\nSymptoms worse after breakfast\nHeadaches often on Tuesdays"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="rootout-context" rows="3" placeholder="Other context (one per line):\nHigh stress this week\nNew detergent used\nSkipped gym last 3 days"></textarea>
-        </div>
-        <button class="generate-btn" data-prompt="SymptomIQ™" onclick="generatePrompt('SymptomIQ™')">Generate Promptemplate™ Now!</button>
-    
+    </div>
+    <div class="row1">
+        <textarea id="rootout-diet" rows="3" placeholder="Diet soda (Sucralose)&#10;Walnut muffin&#10;Chicken salad"></textarea>
+    </div>
+    <div class="row1">
+        <textarea id="rootout-timing" rows="3" placeholder="Headache started 3pm Mon&#10;Fatigue worse in evenings&#10;Nausea after meals"></textarea>
+    </div>
+    <div class="row1">
+        <textarea id="rootout-patterns" rows="3" placeholder="Symptoms worse after breakfast&#10;Headaches often on Tuesdays"></textarea>
+    </div>
+    <div class="row1">
+        <textarea id="rootout-context" rows="3" placeholder="High stress this week&#10;New detergent used&#10;Skipped gym last 3 days"></textarea>
+    </div>
+    <button class="generate-btn" data-prompt="SymptomIQ™" onclick="generatePrompt('SymptomIQ™')">Generate Promptemplate™ Now!</button>
 
-    <script src="/utility/modal.js"></script>
-    <script src="/payment/paymentform.js"></script>
-    <script src="/utility/tray.js"></script>
-    <script src="https://js.stripe.com/v3/" async></script>
-    <script src="/ai/symptom/symptomiq.html"></script>
-</body>
-</html>
+    <script src="/ai/symptom/symptomiq.js"></script>
