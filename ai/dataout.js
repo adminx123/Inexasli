@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-radius: 8px 0 0 8px;
                 box-shadow: -4px 4px 0 #000;
                 z-index: 10000;
-                width: auto;
+                width: 85%;
                 max-width: 34px; /* Initial collapsed state */
                 min-height: 30px;
                 transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
