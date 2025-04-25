@@ -6,16 +6,7 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { getCookie } from '/utility/getcookie.js';
-import { getLocal } from '/utility/getlocal.js';
-import { setLocal } from '/utility/setlocal.js';
-
-document.addEventListener('DOMContentLoaded', async function () {
-    const promptCookie = getCookie("prompt");
-    const currentTime = Date.now();
-    const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
-
+document.addEventListener('DOMContentLoaded', function () {
     async function loadStoredContent(dataContainer, url) {
         try {
             console.log(`Attempting to load stored content from ${url} (intro.js)`);
@@ -25,33 +16,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             const content = await response.text();
             console.log('Stored content fetched successfully (intro.js)');
 
-            dataContainer.classList.remove('initial');
-            dataContainer.classList.add('expanded');
-            dataContainer.dataset.state = 'expanded';
+            // Update container with content
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">INTRO</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded from ${url} into intro container (intro.js)`);
-
-            const scriptUrl = url.replace('.html', '.js');
-            try {
-                const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
-                existingScripts.forEach(script => script.remove());
-
-                const scriptResponse = await fetch(scriptUrl);
-                if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
-
-                const scriptContent = await scriptResponse.text();
-                const script = document.createElement('script');
-                script.textContent = scriptContent;
-                script.dataset.source = scriptUrl;
-                document.body.appendChild(script);
-                console.log(`Loaded and executed script: ${scriptUrl} (intro.js)`);
-            } catch (error) {
-                console.log(`No script found or error loading ${scriptUrl}, skipping (intro.js):`, error);
-            }
+            console.log(`Stored content loaded into intro container (intro.js)`);
         } catch (error) {
             console.error(`Error loading stored content (intro.js):`, error);
         }
@@ -173,18 +144,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         `;
         document.head.appendChild(style);
 
-        const lastState = getLocal('dataContainerState_intro') || 'initial';
         const dataContainer = document.createElement('div');
-        dataContainer.className = `data-container-intro ${lastState}`;
-        dataContainer.dataset.state = lastState;
-        dataContainer.dataset.name = 'intro';
+        dataContainer.className = `data-container-intro collapsed`;
+        dataContainer.dataset.state = 'collapsed';
         dataContainer.innerHTML = `
-            <span class="close-data-container">${lastState === 'expanded' ? '-' : '+'}</span>
+            <span class="close-data-container">+</span>
             <span class="data-label">INTRO</span>
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Intro data container injected with state:', lastState, '(intro.js)');
+        console.log('Intro data container injected with state: collapsed (intro.js)');
 
         const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
@@ -207,20 +176,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Intro data label not found (intro.js)');
         }
 
-        function initializeGridItems() {
-            document.querySelectorAll('.data-container-intro .grid-container .grid-item').forEach(item => {
-                const key = `grid_intro_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-                const value = localStorage.getItem(key);
-                if (value === 'true') {
-                    item.classList.add('selected');
-                    console.log(`Restored ${key}: true`);
-                } else if (value === 'false') {
-                    item.classList.remove('selected');
-                    console.log(`Restored ${key}: false`);
-                }
-            });
-        }
-
         function toggleDataContainer() {
             if (!dataContainer) return;
 
@@ -228,31 +183,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (isExpanded) {
                 dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('initial');
-                dataContainer.dataset.state = 'initial';
-                setLocal('dataContainerState_intro', 'initial');
-
+                dataContainer.classList.add('collapsed');
+                dataContainer.dataset.state = 'collapsed';
                 dataContainer.innerHTML = `
                     <span class="close-data-container">+</span>
                     <span class="data-label">INTRO</span>
                 `;
-                console.log('Intro data container collapsed and reset (intro.js)');
+                console.log('Intro data container collapsed (intro.js)');
             } else {
-                dataContainer.classList.remove('initial');
+                dataContainer.classList.remove('collapsed');
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
-                setLocal('dataContainerState_intro', 'expanded');
-
-                console.log('Intro data container expanded (intro.js)');
-
-                const storedUrl = getLocal('lastGridItemUrl_intro') || '/intro.html';
-                if (storedUrl) {
-                    loadStoredContent(dataContainer, storedUrl);
-                }
-
-                initializeGridItems();
+                loadStoredContent(dataContainer, '/ai/budget/intro.html');
             }
 
+            // Re-bind event listeners
             const newClose = dataContainer.querySelector('.close-data-container');
             const newLabel = dataContainer.querySelector('.data-label');
 
@@ -271,26 +216,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
 
+        // Add outside click listener to collapse when expanded
         document.addEventListener('click', function (e) {
-            const isClickInside = dataContainer.contains(e.target);
-            if (!isClickInside && dataContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside intro data container, collapsing (intro.js)');
-                toggleDataContainer();
+            if (dataContainer && dataContainer.dataset.state === 'expanded') {
+                const isClickInside = dataContainer.contains(e.target);
+                if (!isClickInside) {
+                    console.log('Clicked outside intro data container, collapsing (intro.js)');
+                    toggleDataContainer();
+                }
             }
         });
-
-        if (lastState === 'expanded') {
-            const storedUrl = getLocal('lastGridItemUrl_intro') || '/intro.html';
-            if (storedUrl) {
-                loadStoredContent(dataContainer, storedUrl);
-            }
-        }
     }
 
     try {
-        if (!isCookieExpired) {
-            initializeDataContainer();
-        }
+        initializeDataContainer();
     } catch (error) {
         console.error('Error initializing intro data container (intro.js):', error);
     }
