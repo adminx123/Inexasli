@@ -57,6 +57,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         } catch (error) {
             console.error(`Error loading stored content (dataout.js):`, error);
+            // Fallback content on error
+            dataContainer.innerHTML = `
+                <span class="close-data-container">-</span>
+                <span class="data-label">DATA OUT</span>
+                <div class="data-content">Error loading content</div>
+            `;
         }
     }
 
@@ -80,9 +86,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-radius: 8px 0 0 8px;
                 box-shadow: -4px 4px 0 #000;
                 z-index: 10000;
-                width: 34px;
+                width: auto;
+                max-width: 34px; /* Initial collapsed state */
                 min-height: 30px;
-                transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
+                transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
@@ -94,7 +101,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-right.expanded {
-                width: 200px;
+                max-width: 100vw; /* Allows full content expansion */
+                min-width: 300px; /* Minimum width to ensure usability */
                 height: auto;
             }
 
@@ -159,17 +167,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             @media (max-width: 480px) {
                 .data-container-right {
-                    width: 28px;
+                    max-width: 28px; /* Initial collapsed state for mobile */
                     padding: 3px;
                 }
                 .data-container-right.initial {
                     height: 100px;
                 }
                 .data-container-right.expanded {
-                    width: 150px;
+                    max-width: 100vw; /* Allows full content expansion on mobile */
+                    min-width: 200px; /* Minimum width for mobile */
                 }
                 .data-container-right .data-label {
-                    font-size: 12px;
+                    font-size: 14px;
                     padding: 3px;
                 }
                 .data-container-right .close-data-container {
@@ -243,16 +252,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dataContainer.dataset.state = 'expanded';
                 setLocal('dataOutContainerState', 'expanded');
 
-                // Load last content (placeholder for future content)
-                const storedUrl = getLocal('lastDataOutUrl');
-                if (storedUrl) {
-                    loadStoredContent(dataContainer, storedUrl);
+                // Check lastGridItemUrl to determine content
+                const lastGridItemUrl = getLocal('lastGridItemUrl');
+                if (lastGridItemUrl === '/ai/calorie/calorieiq.html') {
+                    const outUrl = '/ai/calorie/calorieiqout.html';
+                    setLocal('lastDataOutUrl', outUrl);
+                    loadStoredContent(dataContainer, outUrl);
                 } else {
-                    // Default content if no URL is stored
+                    // Default content if no matching URL
                     dataContainer.innerHTML = `
                         <span class="close-data-container">-</span>
                         <span class="data-label">DATA OUT</span>
-                        <div class="data-content">No content loaded</div>
+                        <div class="data-content">No relevant content available</div>
                     `;
                 }
                 console.log('Right data container expanded (dataout.js)');
@@ -287,14 +298,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Load stored content on initialization if the container is expanded
         if (lastState === 'expanded') {
-            const storedUrl = getLocal('lastDataOutUrl');
-            if (storedUrl) {
-                loadStoredContent(dataContainer, storedUrl);
+            const lastGridItemUrl = getLocal('lastGridItemUrl');
+            if (lastGridItemUrl === '/ai/calorie/calorieiq.html') {
+                const outUrl = '/ai/calorie/calorieiqout.html';
+                setLocal('lastDataOutUrl', outUrl);
+                loadStoredContent(dataContainer, outUrl);
             } else {
                 dataContainer.innerHTML = `
                     <span class="close-data-container">-</span>
                     <span class="data-label">DATA OUT</span>
-                    <div class="data-content">No content loaded</div>
+                    <div class="data-content">No relevant content available</div>
                 `;
             }
         }
