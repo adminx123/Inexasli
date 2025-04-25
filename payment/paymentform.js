@@ -105,10 +105,17 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .payment-form .contact-support {
+     width: 100%;
+    padding: 8px 8px;
     font-size: 12px;
-    color: rgb(0, 0, 0);
-    text-decoration: none;
+    font-weight: bold;
+    color: #ffffff;
+    background: #000000;
+    border: 2px solid #D4AF37;
+    border-radius: 6px;
+    cursor: pointer;
     font-family: "Geist", sans-serif;
+    text-align: center;
 }
 
 /* Premium Section Styling */
@@ -120,16 +127,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-family: "Inter", sans-serif;
 }
 
-.premium-notice {
-    padding: 4px 8px;
-    background-color:rgb(0, 0, 0);
-    color: #D4AF37;
-    font-size: 0.75em;
-    border-radius: 2px;
-    font-weight: bold;
-    font-family: "Geist", sans-serif;
-    margin-left: auto; /* Push to right in flex context */
-}
+
 
 /* Section1 Styling (Premium-specific) */
 .section1 {
@@ -199,12 +197,46 @@ document.addEventListener('DOMContentLoaded', async function() {
         padding: 8px 8px;
         font-family: "Geist", sans-serif;
     }
+
+.premium-notice {
+    padding: 4px 8px;
+    background-color:rgb(0, 0, 0);
+    color: #D4AF37;
+    font-size: 0.75em;
+    border-radius: 2px;
+    font-weight: bold;
+    font-family: "Geist", sans-serif;
+    margin-left: auto; /* Push to right in flex context */
+}
+
+
+
     .premium-notice {
         font-size: 0.65em;
         padding: 3px 6px;
 
 
     }
+
+
+.premium-notice1 {
+    padding: 4px 8px;
+    background-color:rgb(0, 0, 0);
+    color: #D4AF37;
+    font-size: 0.75em;
+    border-radius: 2px;
+    font-weight: bold;
+    font-family: "Geist", sans-serif;
+    margin-left: auto; /* Push to right in flex context */
+}
+
+ .premium-notice1 {
+        font-size: 12px;
+        padding: 3px 6px;
+
+
+    }
+
     .section1-header {
         padding: 2px;
         font-size: 11px;
@@ -224,14 +256,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         sidebar.dataset.state = 'initial';
         sidebar.innerHTML = `
             <span id="close-sidebar">+</span>
-            <a class="subscribe-link">SUBSCRIBE</a>
+            <a class="subscribe-link"><span class="premium-notice1">Premium</span></a>
             <div id="status"></div>
             <form class="payment-form" id="payment-form">
                 <input type="text" class="payment-input" id="username" placeholder="input your name" required>
                 <input type="email" class="payment-input" id="useremail" placeholder="input your email" required>
                 <button class="pay-button" id="pay-button">$2.99</button>
                 <a href="mailto:support@inexasli.com" class="contact-support">I have paid</a>
-                <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support" style="margin-bottom: 20px;">Customer portal</a>
+                <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support";">Customer Portal</a>
             </form>
         `;
         document.body.appendChild(sidebar);
