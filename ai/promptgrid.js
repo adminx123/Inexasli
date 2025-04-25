@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .prompt-container .premium-notice {
     font-size: 10px;
-    color: #b8860b;
+    color:rgb(255, 255, 255);
     display: block;
 }
 
