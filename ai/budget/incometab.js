@@ -6,16 +6,7 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { getCookie } from '/utility/getcookie.js';
-import { getLocal } from '/utility/getlocal.js';
-import { setLocal } from '/utility/setlocal.js';
-
-document.addEventListener('DOMContentLoaded', async function () {
-    const promptCookie = getCookie("prompt");
-    const currentTime = Date.now();
-    const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
-
+document.addEventListener('DOMContentLoaded', function () {
     async function loadStoredContent(dataContainer, url) {
         try {
             console.log(`Attempting to load stored content from ${url} (income.js)`);
@@ -25,33 +16,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             const content = await response.text();
             console.log('Stored content fetched successfully (income.js)');
 
-            dataContainer.classList.remove('initial');
-            dataContainer.classList.add('expanded');
-            dataContainer.dataset.state = 'expanded';
+            // Update container with content
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">INCOME</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded from ${url} into income container (income.js)`);
-
-            const scriptUrl = url.replace('.html', '.js');
-            try {
-                const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
-                existingScripts.forEach(script => script.remove());
-
-                const scriptResponse = await fetch(scriptUrl);
-                if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
-
-                const scriptContent = await scriptResponse.text();
-                const script = document.createElement('script');
-                script.textContent = scriptContent;
-                script.dataset.source = scriptUrl;
-                document.body.appendChild(script);
-                console.log(`Loaded and executed script: ${scriptUrl} (income.js)`);
-            } catch (error) {
-                console.log(`No script found or error loading ${scriptUrl}, skipping (income.js):`, error);
-            }
+            console.log(`Stored content loaded into income container (income.js)`);
         } catch (error) {
             console.error(`Error loading stored content (income.js):`, error);
         }
@@ -67,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         style.textContent = `
             .data-container-income {
                 position: fixed;
-                top: calc(50% - 96px); /* 1 inch = 96px above center */
+                top: 24px; /* 24px from top for top left corner */
                 left: 0;
                 background-color: #f5f5f5;
                 padding: 4px;
@@ -78,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 z-index: 10000;
                 max-width: 34px;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
@@ -86,13 +57,19 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-income.collapsed {
+                width: 34px;
                 height: 120px;
             }
 
             .data-container-income.expanded {
-                max-width: 85%;
+                width: 85vw; /* Expand to 85% of viewport width */
+                max-width: calc(85vw - 20px); /* Account for right margin */
                 min-width: 25%;
-                height: auto;
+                height: calc(100vh - 40px); /* Nearly full height, 20px top/bottom margins */
+                top: 20px; /* 20px from top */
+                margin-right: -webkit-calc(85vw - 20px); /* Expand rightward, leave 20px gap */
+                margin-right: -moz-calc(85vw - 20px);
+                margin-right: calc(85vw - 20px);
             }
 
             .data-container-income:hover {
@@ -102,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-income .close-data-container {
                 position: absolute;
                 top: 4px;
-                left: 10px;
+                left: 10px; /* Adjusted for left-side anchoring */
                 padding: 5px;
                 font-size: 14px;
                 line-height: 1;
@@ -145,12 +122,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
 
                 .data-container-income.collapsed {
+                    width: 28px;
                     height: 100px;
                 }
 
                 .data-container-income.expanded {
-                    max-width: 85%;
-                    min-width: 25%;
+                    width: 85vw;
+                    max-width: calc(85vw - 10px); /* Smaller right margin on mobile */
+                    height: calc(100vh - 20px); /* Adjust for smaller margins on mobile */
+                    top: 10px; /* Smaller top margin on mobile */
+                    margin-right: -webkit-calc(85vw - 10px);
+                    margin-right: -moz-calc(85vw - 10px);
+                    margin-right: calc(85vw - 10px);
                 }
 
                 .data-container-income .data-label {
@@ -172,18 +155,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         `;
         document.head.appendChild(style);
 
-        const lastState = getLocal('dataContainerState_income') || 'initial';
         const dataContainer = document.createElement('div');
-        dataContainer.className = `data-container-income ${lastState}`;
-        dataContainer.dataset.state = lastState;
-        dataContainer.dataset.name = 'income';
+        dataContainer.className = `data-container-income collapsed`;
+        dataContainer.dataset.state = 'collapsed';
         dataContainer.innerHTML = `
-            <span class="close-data-container">${lastState === 'expanded' ? '-' : '+'}</span>
+            <span class="close-data-container">+</span>
             <span class="data-label">INCOME</span>
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Income data container injected with state:', lastState, '(income.js)');
+        console.log('Income data container injected with state: collapsed (income.js)');
 
         const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
@@ -206,20 +187,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Income data label not found (income.js)');
         }
 
-        function initializeGridItems() {
-            document.querySelectorAll('.data-container-income .grid-container .grid-item').forEach(item => {
-                const key = `grid_income_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-                const value = localStorage.getItem(key);
-                if (value === 'true') {
-                    item.classList.add('selected');
-                    console.log(`Restored ${key}: true`);
-                } else if (value === 'false') {
-                    item.classList.remove('selected');
-                    console.log(`Restored ${key}: false`);
-                }
-            });
-        }
-
         function toggleDataContainer() {
             if (!dataContainer) return;
 
@@ -227,31 +194,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (isExpanded) {
                 dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('initial');
-                dataContainer.dataset.state = 'initial';
-                setLocal('dataContainerState_income', 'initial');
-
+                dataContainer.classList.add('collapsed');
+                dataContainer.dataset.state = 'collapsed';
                 dataContainer.innerHTML = `
                     <span class="close-data-container">+</span>
                     <span class="data-label">INCOME</span>
                 `;
-                console.log('Income data container collapsed and reset (income.js)');
+                console.log('Income data container collapsed (income.js)');
             } else {
-                dataContainer.classList.remove('initial');
-                dataContainer.classList.add('expanded');
+                dataContainer.classList.remove('collapsed');
+                dataContainer.className = `data-container-income expanded`;
                 dataContainer.dataset.state = 'expanded';
-                setLocal('dataContainerState_income', 'expanded');
-
-                console.log('Income data container expanded (income.js)');
-
-                const storedUrl = getLocal('lastGridItemUrl_income') || '/income.html';
-                if (storedUrl) {
-                    loadStoredContent(dataContainer, storedUrl);
-                }
-
-                initializeGridItems();
+                loadStoredContent(dataContainer, '/ai/budget/income.html');
             }
 
+            // Re-bind event listeners
             const newClose = dataContainer.querySelector('.close-data-container');
             const newLabel = dataContainer.querySelector('.data-label');
 
@@ -270,26 +227,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
 
+        // Add outside click listener to collapse when expanded
         document.addEventListener('click', function (e) {
-            const isClickInside = dataContainer.contains(e.target);
-            if (!isClickInside && dataContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside income data container, collapsing (income.js)');
-                toggleDataContainer();
+            if (dataContainer && dataContainer.dataset.state === 'expanded') {
+                const isClickInside = dataContainer.contains(e.target);
+                if (!isClickInside) {
+                    console.log('Clicked outside income data container, collapsing (income.js)');
+                    toggleDataContainer();
+                }
             }
         });
-
-        if (lastState === 'expanded') {
-            const storedUrl = getLocal('lastGridItemUrl_income') || '/income.html';
-            if (storedUrl) {
-                loadStoredContent(dataContainer, storedUrl);
-            }
-        }
     }
 
     try {
-        if (!isCookieExpired) {
-            initializeDataContainer();
-        }
+        initializeDataContainer();
     } catch (error) {
         console.error('Error initializing income data container (income.js):', error);
     }
