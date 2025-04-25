@@ -35,112 +35,124 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const style = document.createElement('style');
-        style.textContent = `
-            .data-container-liability {
-                position: fixed;
-                top: calc(50% + 24px); /* Below Asset, same as Expense */
-                right: 0;
-                background-color: #f5f5f5;
-                padding: 4px;
-                border: 2px solid #000;
-                border-right: none;
-                border-radius: 8px 0 0 8px;
-                box-shadow: -4px 4px 0 #000;
-                z-index: 10000;
-                max-width: 34px;
-                min-height: 30px;
-                transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
-                overflow: hidden;
-                font-family: "Inter", sans-serif;
-                visibility: visible;
-                opacity: 1;
-            }
+style.textContent = `
+    .data-container-liability {
+        position: fixed;
+        top: calc(100vh - 144px); /* 120px height + 24px from bottom */
+        left: 0;
+        background-color: #f5f5f5;
+        padding: 4px;
+        border: 2px solid #000;
+        border-left: none;
+        border-radius: 0 8px 8px 0;
+        box-shadow: 4px 4px 0 #000;
+        z-index: 10000;
+        max-width: 34px;
+        min-height: 30px;
+        transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        visibility: visible;
+        opacity: 1;
+    }
 
-            .data-container-liability.collapsed {
-                height: 120px;
-            }
+    .data-container-liability.collapsed {
+        width: 34px;
+        height: 120px;
+    }
 
-            .data-container-liability.expanded {
-                max-width: 85%;
-                min-width: 25%;
-                height: auto;
-            }
+    .data-container-liability.expanded {
+        width: 85vw; /* Expand to 85% of viewport width */
+        max-width: calc(85vw - 20px); /* Account for right margin */
+        min-width: 25%;
+        height: calc(100vh - 40px); /* Nearly full height, 20px top/bottom margins */
+        top: 20px; /* Move to 20px from top for upward expansion */
+        margin-right: -webkit-calc(85vw - 20px); /* Expand rightward, leave 20px gap */
+        margin-right: -moz-calc(85vw - 20px);
+        margin-right: calc(85vw - 20px);
+    }
 
-            .data-container-liability:hover {
-                background-color: rgb(255, 255, 255);
-            }
+    .data-container-liability:hover {
+        background-color: rgb(255, 255, 255);
+    }
 
-            .data-container-liability .close-data-container {
-                position: absolute;
-                top: 4px;
-                right: 10px;
-                padding: 5px;
-                font-size: 14px;
-                line-height: 1;
-                color: #000;
-                cursor: pointer;
-                font-weight: bold;
-                font-family: "Inter", sans-serif;
-            }
+    .data-container-liability .close-data-container {
+        position: absolute;
+        top: 4px;
+        left: 10px; /* Adjusted for left-side anchoring */
+        padding: 5px;
+        font-size: 14px;
+        line-height: 1;
+        color: #000;
+        cursor: pointer;
+        font-weight: bold;
+        font-family: "Inter", sans-serif;
+    }
 
-            .data-container-liability .data-label {
-                text-decoration: none;
-                color: #000;
-                font-size: 12px;
-                display: flex;
-                justify-content: center;
-                text-align: center;
-                padding: 4px;
-                cursor: pointer;
-                transition: color 0.2s ease;
-                line-height: 1.2;
-                font-family: "Geist", sans-serif;
-                writing-mode: vertical-rl;
-                text-orientation: mixed;
-            }
+    .data-container-liability .data-label {
+        text-decoration: none;
+        color: #000;
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        padding: 4px;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        line-height: 1.2;
+        font-family: "Geist", sans-serif;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+    }
 
-            .data-container-liability .data-content {
-                padding: 10px;
-                font-size: 14px;
-                max-height: 80vh;
-                overflow-y: auto;
-                overflow-x: auto;
-                font-family: "Inter", sans-serif;
-                max-width: 100%;
-            }
+    .data-container-liability .data-content {
+        padding: 10px;
+        font-size: 14px;
+        max-height: 80vh;
+        overflow-y: auto;
+        overflow-x: auto;
+        font-family: "Inter", sans-serif;
+        max-width: 100%;
+    }
 
-            @media (max-width: 480px) {
-                .data-container-liability {
-                    max-width: 28px;
-                    padding: 3px;
-                }
+    @media (max-width: 480px) {
+        .data-container-liability {
+            max-width: 28px;
+            padding: 3px;
+        }
 
-                .data-container-liability.collapsed {
-                    height: 100px;
-                }
+        .data-container-liability.collapsed {
+            width: 28px;
+            height: 100px;
+        }
 
-                .data-container-liability.expanded {
-                    max-width: 85%;
-                    min-width: 25%;
-                }
+        .data-container-liability.expanded {
+            width: 85vw;
+            max-width: calc(85vw - 10px); /* Smaller right margin on mobile */
+            height: calc(100vh - 20px); /* Adjust for smaller margins on mobile */
+            top: 10px; /* Smaller top margin on mobile */
+            margin-right: -webkit-calc(85vw - 10px);
+            margin-right: -moz-calc(85vw - 10px);
+            margin-right: calc(85vw - 10px);
+        }
 
-                .data-container-liability .data-label {
-                    font-size: 14px;
-                    padding: 3px;
-                }
+        .data-container-liability .data-label {
+            font-size: 14px;
+            padding: 3px;
+        }
 
-                .data-container-liability .close-data-container {
-                    font-size: 12px;
-                    padding: 4px;
-                }
+        .data-container-liability .close-data-container {
+            font-size: 12px;
+            padding: 4px;
+        }
 
-                .data-container-liability .data-content {
-                    font-size: 12px;
-                    padding: 8px;
-                    overflow-x: auto;
-                }
-            }
-        `;
+        .data-container-liability .data-content {
+            font-size: 12px;
+            padding: 8px;
+            overflow-x: auto;
+        }
+    }
+`;
         document.head.appendChild(style);
 
         const dataContainer = document.createElement('div');
@@ -214,6 +226,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
         }
+
+        // Add outside click listener to collapse when expanded
+        document.addEventListener('click', function (e) {
+            if (dataContainer && dataContainer.dataset.state === 'expanded') {
+                const isClickInside = dataContainer.contains(e.target);
+                if (!isClickInside) {
+                    console.log('Clicked outside liability data container, collapsing (liability.js)');
+                    toggleDataContainer();
+                }
+            }
+        });
     }
 
     try {

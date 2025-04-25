@@ -6,16 +6,7 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { getCookie } from '/utility/getcookie.js';
-import { getLocal } from '/utility/getlocal.js';
-import { setLocal } from '/utility/setlocal.js';
-
-document.addEventListener('DOMContentLoaded', async function () {
-    const promptCookie = getCookie("prompt");
-    const currentTime = Date.now();
-    const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
-
+document.addEventListener('DOMContentLoaded', function () {
     async function loadStoredContent(dataContainer, url) {
         try {
             console.log(`Attempting to load stored content from ${url} (asset.js)`);
@@ -25,33 +16,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             const content = await response.text();
             console.log('Stored content fetched successfully (asset.js)');
 
-            dataContainer.classList.remove('initial');
-            dataContainer.classList.add('expanded');
-            dataContainer.dataset.state = 'expanded';
+            // Update container with content
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">ASSET</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded from ${url} into asset container (asset.js)`);
-
-            const scriptUrl = url.replace('.html', '.js');
-            try {
-                const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
-                existingScripts.forEach(script => script.remove());
-
-                const scriptResponse = await fetch(scriptUrl);
-                if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
-
-                const scriptContent = await scriptResponse.text();
-                const script = document.createElement('script');
-                script.textContent = scriptContent;
-                script.dataset.source = scriptUrl;
-                document.body.appendChild(script);
-                console.log(`Loaded and executed script: ${scriptUrl} (asset.js)`);
-            } catch (error) {
-                console.log(`No script found or error loading ${scriptUrl}, skipping (asset.js):`, error);
-            }
+            console.log(`Stored content loaded into asset container (asset.js)`);
         } catch (error) {
             console.error(`Error loading stored content (asset.js):`, error);
         }
@@ -67,42 +38,48 @@ document.addEventListener('DOMContentLoaded', async function () {
         style.textContent = `
             .data-container-asset {
                 position: fixed;
-                top: calc(50% - 96px); /* Same height as Income */
-                right: 0;
+                top: 96px; /* ~1 inch from top */
+                left: 0;
                 background-color: #f5f5f5;
                 padding: 4px;
                 border: 2px solid #000;
-                border-right: none;
-                border-radius: 8px 0 0 8px;
-                box-shadow: -4px 4px 0 #000;
+                border-left: none;
+                border-radius: 0 8px 8px 0;
+                box-shadow: 4px 4px 0 #000;
                 z-index: 10000;
                 max-width: 34px;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
                 opacity: 1;
             }
-
+        
             .data-container-asset.collapsed {
+                width: 34px;
                 height: 120px;
             }
-
+        
             .data-container-asset.expanded {
-                max-width: 85%;
+                width: 85vw; /* Expand to 85% of viewport width */
+                max-width: calc(85vw - 20px); /* Account for right margin */
                 min-width: 25%;
-                height: auto;
+                height: calc(100vh - 40px); /* Nearly full height, 20px top/bottom margins */
+                top: 20px; /* 20px from top */
+                margin-right: -webkit-calc(85vw - 20px); /* Expand rightward, leave 20px gap */
+                margin-right: -moz-calc(85vw - 20px);
+                margin-right: calc(85vw - 20px);
             }
-
+        
             .data-container-asset:hover {
                 background-color: rgb(255, 255, 255);
             }
-
+        
             .data-container-asset .close-data-container {
                 position: absolute;
                 top: 4px;
-                right: 10px;
+                left: 10px; /* Adjusted for left-side anchoring */
                 padding: 5px;
                 font-size: 14px;
                 line-height: 1;
@@ -111,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-weight: bold;
                 font-family: "Inter", sans-serif;
             }
-
+        
             .data-container-asset .data-label {
                 text-decoration: none;
                 color: #000;
@@ -127,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 writing-mode: vertical-rl;
                 text-orientation: mixed;
             }
-
+        
             .data-container-asset .data-content {
                 padding: 10px;
                 font-size: 14px;
@@ -137,32 +114,38 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-family: "Inter", sans-serif;
                 max-width: 100%;
             }
-
+        
             @media (max-width: 480px) {
                 .data-container-asset {
                     max-width: 28px;
                     padding: 3px;
                 }
-
+        
                 .data-container-asset.collapsed {
+                    width: 28px;
                     height: 100px;
                 }
-
+        
                 .data-container-asset.expanded {
-                    max-width: 85%;
-                    min-width: 25%;
+                    width: 85vw;
+                    max-width: calc(85vw - 10px); /* Smaller right margin on mobile */
+                    height: calc(100vh - 20px); /* Adjust for smaller margins on mobile */
+                    top: 10px; /* Smaller top margin on mobile */
+                    margin-right: -webkit-calc(85vw - 10px);
+                    margin-right: -moz-calc(85vw - 10px);
+                    margin-right: calc(85vw - 10px);
                 }
-
+        
                 .data-container-asset .data-label {
                     font-size: 14px;
                     padding: 3px;
                 }
-
+        
                 .data-container-asset .close-data-container {
                     font-size: 12px;
                     padding: 4px;
                 }
-
+        
                 .data-container-asset .data-content {
                     font-size: 12px;
                     padding: 8px;
@@ -172,18 +155,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         `;
         document.head.appendChild(style);
 
-        const lastState = getLocal('dataContainerState_asset') || 'initial';
         const dataContainer = document.createElement('div');
-        dataContainer.className = `data-container-asset ${lastState}`;
-        dataContainer.dataset.state = lastState;
-        dataContainer.dataset.name = 'asset';
+        dataContainer.className = `data-container-asset collapsed`;
+        dataContainer.dataset.state = 'collapsed';
         dataContainer.innerHTML = `
-            <span class="close-data-container">${lastState === 'expanded' ? '-' : '+'}</span>
+            <span class="close-data-container">+</span>
             <span class="data-label">ASSET</span>
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Asset data container injected with state:', lastState, '(asset.js)');
+        console.log('Asset data container injected with state: collapsed (asset.js)');
 
         const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
@@ -206,20 +187,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Asset data label not found (asset.js)');
         }
 
-        function initializeGridItems() {
-            document.querySelectorAll('.data-container-asset .grid-container .grid-item').forEach(item => {
-                const key = `grid_asset_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-                const value = localStorage.getItem(key);
-                if (value === 'true') {
-                    item.classList.add('selected');
-                    console.log(`Restored ${key}: true`);
-                } else if (value === 'false') {
-                    item.classList.remove('selected');
-                    console.log(`Restored ${key}: false`);
-                }
-            });
-        }
-
         function toggleDataContainer() {
             if (!dataContainer) return;
 
@@ -227,31 +194,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (isExpanded) {
                 dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('initial');
-                dataContainer.dataset.state = 'initial';
-                setLocal('dataContainerState_asset', 'initial');
-
+                dataContainer.classList.add('collapsed');
+                dataContainer.dataset.state = 'collapsed';
                 dataContainer.innerHTML = `
                     <span class="close-data-container">+</span>
                     <span class="data-label">ASSET</span>
                 `;
-                console.log('Asset data container collapsed and reset (asset.js)');
+                console.log('Asset data container collapsed (asset.js)');
             } else {
-                dataContainer.classList.remove('initial');
+                dataContainer.classList.remove('collapsed');
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
-                setLocal('dataContainerState_asset', 'expanded');
-
-                console.log('Asset data container expanded (asset.js)');
-
-                const storedUrl = getLocal('lastGridItemUrl_asset') || '/asset.html';
-                if (storedUrl) {
-                    loadStoredContent(dataContainer, storedUrl);
-                }
-
-                initializeGridItems();
+                loadStoredContent(dataContainer, '/ai/budget/asset.html');
             }
 
+            // Re-bind event listeners
             const newClose = dataContainer.querySelector('.close-data-container');
             const newLabel = dataContainer.querySelector('.data-label');
 
@@ -270,26 +227,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
 
+        // Add outside click listener to collapse when expanded
         document.addEventListener('click', function (e) {
-            const isClickInside = dataContainer.contains(e.target);
-            if (!isClickInside && dataContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside asset data container, collapsing (asset.js)');
-                toggleDataContainer();
+            if (dataContainer && dataContainer.dataset.state === 'expanded') {
+                const isClickInside = dataContainer.contains(e.target);
+                if (!isClickInside) {
+                    console.log('Clicked outside asset data container, collapsing (asset.js)');
+                    toggleDataContainer();
+                }
             }
         });
-
-        if (lastState === 'expanded') {
-            const storedUrl = getLocal('lastGridItemUrl_asset') || '/asset.html';
-            if (storedUrl) {
-                loadStoredContent(dataContainer, storedUrl);
-            }
-        }
     }
 
     try {
-        if (!isCookieExpired) {
-            initializeDataContainer();
-        }
+        initializeDataContainer();
     } catch (error) {
         console.error('Error initializing asset data container (asset.js):', error);
     }
