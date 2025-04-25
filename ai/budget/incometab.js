@@ -28,6 +28,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    async function loadFrequencyScript() {
+        if (!document.querySelector('script[src="/ai/budget/frequency.js"]')) {
+            const script = document.createElement('script');
+            script.src = '/ai/budget/frequency.js';
+            script.type = 'module';
+            document.body.appendChild(script);
+            console.log('frequency.js dynamically loaded');
+        }
+    }
+
     function initializeDataContainer() {
         if (document.querySelector('.data-container-income')) {
             console.log('Income data container already exists, skipping initialization (income.js)');
@@ -206,6 +216,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.className = `data-container-income expanded`;
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/budget/income.html');
+
+                // Dynamically load frequency.js when expanded
+                loadFrequencyScript();
             }
 
             // Re-bind event listeners

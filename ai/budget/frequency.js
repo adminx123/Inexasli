@@ -140,4 +140,13 @@ export function saveFrequencyGroups() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     initializeFrequencyGroups();
+    observeDOMChanges();
 });
+
+function observeDOMChanges() {
+    const observer = new MutationObserver(() => {
+        initializeFrequencyGroups();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+}
