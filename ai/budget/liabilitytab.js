@@ -37,24 +37,24 @@ document.addEventListener('DOMContentLoaded', function () {
         const style = document.createElement('style');
         style.textContent = `
             .data-container-liability {
-                position: fixed;
-                top: calc(70% - 60px);
-                left: 0;
-                background-color: #f5f5f5;
-                padding: 4px;
-                border: 2px solid #000;
-                border-left: none;
-                border-radius: 0 8px 8px 0;
-                box-shadow: 4px 4px 0 #000;
-                z-index: 10000;
-                max-width: 34px;
-                min-height: 30px;
-                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
-                overflow: hidden;
-                font-family: "Inter", sans-serif;
-                visibility: visible;
-                opacity: 1;
-            }
+    position: fixed;
+    top: calc(70% + 36px); /* Shifted down 96px */
+    left: 0;
+    background-color: #f5f5f5;
+    padding: 4px;
+    border: 2px solid #000;
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 4px 4px 0 #000;
+    z-index: 10000;
+    max-width: 34px;
+    min-height: 30px;
+    transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+    overflow: hidden;
+    font-family: "Inter", sans-serif;
+    visibility: visible;
+    opacity: 1;
+}
 
             .data-container-liability.collapsed {
                 width: 34px;
