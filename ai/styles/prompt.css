@@ -476,3 +476,39 @@ table tbody tr:hover td {
   max-width: 400px; /* Optional: adjust to fit your layout */
   margin: auto; /* Optional: center the row */
 }
+
+.api-output-container {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.api-output {
+  display: block;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  white-space: pre-wrap; /* Handles large or small text */
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: "Geist", sans-serif;
+}
+
+.copy-btn:hover {
+  background-color: #d0d0d0;
+}
