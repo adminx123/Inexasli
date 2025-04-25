@@ -217,6 +217,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Left data label not found (datain.js)');
         }
 
+        function initializeGridItems() {
+            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+                const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+                const value = localStorage.getItem(key);
+                if (value === 'true') {
+                    item.classList.add('selected');
+                    console.log(`Restored ${key}: true`);
+                } else if (value === 'false') {
+                    item.classList.remove('selected');
+                    console.log(`Restored ${key}: false`);
+                }
+            });
+        }
+
         function toggleDataContainer() {
             if (!dataContainer) return;
 
@@ -248,6 +262,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (storedUrl) {
                     loadStoredContent(dataContainer, storedUrl);
                 }
+
+                // Initialize grid items after expansion
+                initializeGridItems();
             }
 
             // Re-bind toggle listeners
