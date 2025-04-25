@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-radius: 0 8px 8px 0;
                 box-shadow: 4px 4px 0 #000;
                 z-index: 10001;
-                width: 34px;
+                width: 85%;
                 min-height: 30px;
                 transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
                 overflow: hidden;
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-left.expanded {
-                max-width: 100vw; /* Allows full content expansion */
+                max-width: 85%; /* Allows full content expansion */
                 min-width: 300px; /* Minimum width to ensure usability */
                 height: auto;
             }
