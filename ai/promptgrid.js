@@ -8,6 +8,7 @@
  */
 
 import { getCookie } from '/utility/getcookie.js';
+import { setLocal } from '/utility/setlocal.js'; // Added import for setLocal
 
 document.addEventListener('DOMContentLoaded', async function() {
     // Check if the "prompt" cookie is more than 10 minutes old
@@ -111,16 +112,27 @@ document.addEventListener('DOMContentLoaded', async function() {
             `;
             console.log(`Content loaded from ${url} into datain container (promptgrid.js)`);
 
+            // Store the URL in localStorage
+            setLocal('lastGridItemUrl', url); // Added to store lastGridItemUrl
+            console.log(`Stored lastGridItemUrl: ${url} (promptgrid.js)`);
+
             // Optionally load corresponding JS file
             const scriptUrl = url.replace('.html', '.js');
             try {
+                const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
+                existingScripts.forEach(script => script.remove());
+
+                const scriptResponse = await fetch(scriptUrl);
+                if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
+
+                const scriptContent = await scriptResponse.text();
                 const script = document.createElement('script');
-                script.src = scriptUrl;
-                script.async = true;
+                script.textContent = scriptContent;
+                script.dataset.source = scriptUrl;
                 document.body.appendChild(script);
-                console.log(`Loaded script: ${scriptUrl}`);
+                console.log(`Loaded script: ${scriptUrl} (promptgrid.js)`);
             } catch (error) {
-                console.log(`No script found for ${scriptUrl}, skipping`);
+                console.log(`No script found for ${scriptUrl}, skipping (promptgrid.js)`);
             }
         } catch (error) {
             console.error('Error loading content (promptgrid.js):', error);
@@ -222,7 +234,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .prompt-container .premium-notice {
     font-size: 10px;
-    color:rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
     display: block;
 }
 
@@ -331,6 +343,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             ];
             item.addEventListener('click', (e) => {
                 e.stopPropagation();
+                console.log(`Grid item clicked: ${urls[index]} (promptgrid.js)`);
                 loadContent(urls[index]);
             });
         });
