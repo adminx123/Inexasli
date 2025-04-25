@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Update container with content
             dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
+                <span class="close-data-container"></span>
                 <span class="data-label">SUMMARY</span>
                 <div class="data-content">${content}</div>
             `;
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         style.textContent = `
             .data-container-summary {
                 position: fixed;
-                top: calc(50% - 60px); /* Center vertically (120px height / 2) */
+                top: calc(50% - 60px);
                 right: 0;
                 background-color: #f5f5f5;
                 padding: 4px;
@@ -59,15 +59,18 @@ document.addEventListener('DOMContentLoaded', function () {
             .data-container-summary.collapsed {
                 width: 34px;
                 height: 120px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
             .data-container-summary.expanded {
-                width: 85vw; /* Expand to 85% of viewport width */
-                max-width: calc(85vw - 20px); /* Account for left margin */
+                width: 85vw;
+                max-width: calc(85vw - 20px);
                 min-width: 25%;
-                height: calc(100vh - 40px); /* Nearly full height, 20px top/bottom margins */
-                top: 20px; /* 20px from top */
-                margin-left: -webkit-calc(85vw - 20px); /* Expand leftward, leave 20px gap */
+                height: calc(100vh - 40px);
+                top: 20px;
+                margin-left: -webkit-calc(85vw - 20px);
                 margin-left: -moz-calc(85vw - 20px);
                 margin-left: calc(85vw - 20px);
             }
@@ -79,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .data-container-summary .close-data-container {
                 position: absolute;
                 top: 4px;
-                right: 10px; /* Adjusted for right-side anchoring */
+                right: 10px;
                 padding: 5px;
                 font-size: 14px;
                 line-height: 1;
@@ -105,14 +108,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 text-orientation: mixed;
             }
 
+            .data-container-summary.expanded .data-label {
+                writing-mode: horizontal-tb;
+                position: absolute;
+                top: 4px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 16px;
+                padding: 5px;
+            }
+
             .data-container-summary .data-content {
                 padding: 10px;
                 font-size: 14px;
-                max-height: 80vh;
+                max-height: calc(100vh - 80px);
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
                 max-width: 100%;
+                margin-top: 30px; /* Space for label at top */
             }
 
             @media (max-width: 480px) {
@@ -128,17 +142,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 .data-container-summary.expanded {
                     width: 85vw;
-                    max-width: calc(85vw - 10px); /* Smaller left margin on mobile */
-                    height: calc(100vh - 20px); /* Adjust for smaller margins on mobile */
-                    top: 10px; /* Smaller top margin on mobile */
+                    max-width: calc(85vw - 10px);
+                    height: calc(100vh - 20px);
+                    top: 10px;
                     margin-left: -webkit-calc(85vw - 10px);
                     margin-left: -moz-calc(85vw - 10px);
                     margin-left: calc(85vw - 10px);
                 }
 
                 .data-container-summary .data-label {
-                    font-size: 14px;
+                    font-size: 10px;
                     padding: 3px;
+                }
+
+                .data-container-summary.expanded .data-label {
+                    font-size: 14px;
+                    padding: 4px;
                 }
 
                 .data-container-summary .close-data-container {
@@ -149,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .data-container-summary .data-content {
                     font-size: 12px;
                     padding: 8px;
-                    overflow-x: auto;
+                    margin-top: 25px;
                 }
             }
         `;
@@ -159,24 +178,13 @@ document.addEventListener('DOMContentLoaded', function () {
         dataContainer.className = `data-container-summary collapsed`;
         dataContainer.dataset.state = 'collapsed';
         dataContainer.innerHTML = `
-            <span class="close-data-container">+</span>
             <span class="data-label">SUMMARY</span>
         `;
 
         document.body.appendChild(dataContainer);
         console.log('Summary data container injected with state: collapsed (summary.js)');
 
-        const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
-
-        if (closeButton) {
-            closeButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                toggleDataContainer();
-            });
-        } else {
-            console.error('Summary close button not found (summary.js)');
-        }
 
         if (dataLabel) {
             dataLabel.addEventListener('click', function (e) {
@@ -197,7 +205,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.classList.add('collapsed');
                 dataContainer.dataset.state = 'collapsed';
                 dataContainer.innerHTML = `
-                    <span class="close-data-container">+</span>
                     <span class="data-label">SUMMARY</span>
                 `;
                 console.log('Summary data container collapsed (summary.js)');
@@ -209,18 +216,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Re-bind event listeners
-            const newClose = dataContainer.querySelector('.close-data-container');
             const newLabel = dataContainer.querySelector('.data-label');
+            const newClose = dataContainer.querySelector('.close-data-container');
 
-            if (newClose) {
-                newClose.addEventListener('click', function (e) {
+            if (newLabel) {
+                newLabel.addEventListener('click', function (e) {
                     e.preventDefault();
                     toggleDataContainer();
                 });
             }
 
-            if (newLabel) {
-                newLabel.addEventListener('click', function (e) {
+            if (newClose) {
+                newClose.addEventListener('click', function (e) {
                     e.preventDefault();
                     toggleDataContainer();
                 });
