@@ -16,13 +16,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const content = await response.text();
             console.log('Stored content fetched successfully (intro.js)');
 
-            // Update container with content
+            // Update container with content, including close button and label
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">INTRO</span>
                 <div class="data-content">${content}</div>
             `;
             console.log(`Stored content loaded into intro container (intro.js)`);
+
+            // Execute any scripts in the loaded content
+            const scripts = dataContainer.querySelectorAll('script');
+            scripts.forEach(script => {
+                const newScript = document.createElement('script');
+                if (script.src) {
+                    newScript.src = script.src;
+                } else {
+                    newScript.textContent = script.textContent;
+                }
+                document.body.appendChild(newScript);
+            });
         } catch (error) {
             console.error(`Error loading stored content (intro.js):`, error);
         }
@@ -38,50 +50,51 @@ document.addEventListener('DOMContentLoaded', function () {
         style.textContent = `
             .data-container-intro {
                 position: fixed;
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%);
+                top: calc(5% + 36px);
+                left: 0;
                 background-color: #f5f5f5;
                 padding: 4px;
                 border: 2px solid #000;
-                border-top: none;
-                border-radius: 0 0 8px 8px;
-                box-shadow: 0 4px 0 #000;
+                border-left: none;
+                border-radius: 0 8px 8px 0;
+                box-shadow: 4px 4px 0 #000;
                 z-index: 10000;
-                max-height: 34px;
-                min-width: 30px;
-                transition: max-height 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, left 0.3s ease-in-out;
+                max-width: 34px;
+                min-height: 30px;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
                 opacity: 1;
             }
-
+        
             .data-container-intro.collapsed {
-                width: 120px;
-                height: 34px;
+                width: 34px;
+                height: 120px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                z-index: 10001;
             }
-
+        
             .data-container-intro.expanded {
                 width: 85vw;
                 max-width: calc(85vw - 20px);
                 min-width: 25%;
-                height: calc(100vh - 20px);
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%);
+                max-height: 95%;
+                top: 20px;
+                margin-right: -webkit-calc(85vw - 20px);
+                margin-right: -moz-calc(85vw - 20px);
+                margin-right: calc(85vw - 20px);
             }
-
+        
             .data-container-intro:hover {
                 background-color: rgb(255, 255, 255);
             }
-
+        
             .data-container-intro .close-data-container {
                 position: absolute;
-                top: 10px;
+                top: 4px;
                 left: 10px;
                 padding: 5px;
                 font-size: 14px;
@@ -91,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 font-weight: bold;
                 font-family: "Inter", sans-serif;
             }
-
+        
             .data-container-intro .data-label {
                 text-decoration: none;
                 color: #000;
@@ -104,10 +117,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 transition: color 0.2s ease;
                 line-height: 1.2;
                 font-family: "Geist", sans-serif;
-                writing-mode: horizontal-tb;
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
             }
-
+        
             .data-container-intro.expanded .data-label {
+                writing-mode: horizontal-tb;
                 position: absolute;
                 top: 4px;
                 left: 50%;
@@ -115,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 font-size: 16px;
                 padding: 5px;
             }
-
+        
             .data-container-intro .data-content {
                 padding: 10px;
                 font-size: 14px;
@@ -126,42 +141,44 @@ document.addEventListener('DOMContentLoaded', function () {
                 max-width: 100%;
                 margin-top: 30px;
             }
-
+        
             @media (max-width: 480px) {
                 .data-container-intro {
-                    max-height: 28px;
+                    max-width: 28px;
                     padding: 3px;
                 }
-
+        
                 .data-container-intro.collapsed {
-                    width: 100px;
-                    height: 28px;
+                    width: 28px;
+                    height: 100px;
+                    z-index: 10001;
                 }
-
+        
                 .data-container-intro.expanded {
                     width: 85vw;
                     max-width: calc(85vw - 10px);
-                    height: calc(100vh - 10px);
-                    top: 0;
-                    left: 50%;
-                    transform: translateX(-50%);
+                    max-height: 95%;
+                    top: 10px;
+                    margin-right: -webkit-calc(85vw - 10px);
+                    margin-right: -moz-calc(85vw - 10px);
+                    margin-right: calc(85vw - 10px);
                 }
-
+        
                 .data-container-intro .data-label {
                     font-size: 10px;
                     padding: 3px;
                 }
-
+        
                 .data-container-intro.expanded .data-label {
                     font-size: 14px;
                     padding: 4px;
                 }
-
+        
                 .data-container-intro .close-data-container {
                     font-size: 12px;
                     padding: 4px;
                 }
-
+        
                 .data-container-intro .data-content {
                     font-size: 12px;
                     padding: 8px;
