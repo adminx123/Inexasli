@@ -5,20 +5,22 @@ document.addEventListener('DOMContentLoaded', async function() {
     style.textContent = `/* Subscribe Sidebar */
 #subscribe-sidebar {
     position: fixed;
-    bottom: 10px;
-    right: 0;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: #f5f5f5;
     padding: 8px;
     border: 2px solid #000;
-    border-right: none;
-    border-radius: 8px 0 0 8px;
-    box-shadow: -4px 4px 0 #000;
-    z-index: 1000;
-    width: 150px;
-    transition: bottom 0.3s ease-in-out, height 0.3s ease-in-out;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 0 #000;
+    z-index: 10001;
+    width: 200px;
+    transition: top 0.3s ease-in-out, height 0.3s ease-in-out;
     overflow: hidden;
     font-family: "Inter", sans-serif;
 }
+
 
 #subscribe-sidebar.initial {
     height: auto;
@@ -26,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 #subscribe-sidebar.expanded {
     height: auto;
-    bottom: calc(100% + 10px);
+    top: 0;
 }
 
 #subscribe-sidebar a.subscribe-link {
