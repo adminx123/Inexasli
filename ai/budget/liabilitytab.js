@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         style.textContent = `
             .data-container-liability {
                 position: fixed;
-                top: 66.68%;
+                top: calc(65% + 36px);
                 left: 0;
                 background-color: #f5f5f5;
                 padding: 4px;

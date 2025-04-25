@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         style.textContent = `
             .data-container-intro {
                 position: fixed;
-                top: 0;
+                top: calc(5% + 36px);
                 left: 0;
                 background-color: #f5f5f5;
                 padding: 4px;
