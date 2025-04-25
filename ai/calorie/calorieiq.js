@@ -205,14 +205,6 @@
             }
             const sex = document.getElementById('calorie-measure');
             if (sex?.value) prompt += formatList(sex.value, 'Sex');
-            const waist = document.getElementById('calorie-waist');
-            if (waist?.value) prompt += formatList(`${waist.value} cm`, 'Waist Circumference');
-            const hip = document.getElementById('calorie-hip');
-            if (hip?.value) prompt += formatList(`${hip.value} cm`, 'Hip Circumference');
-            const chest = document.getElementById('calorie-chest');
-            if (chest?.value) prompt += formatList(`${chest.value} cm`, 'Chest Circumference');
-            const arm = document.getElementById('calorie-arm');
-            if (arm?.value) prompt += formatList(`${arm.value} cm`, 'Arm Circumference');
             prompt += formatGrid('#calorie-activity .grid-item.selected', 'Activity Level');
             prompt += formatGrid('#calorie-diet-type .grid-item.selected', 'Diet Type');
             const foodLog = document.getElementById('calorie-food-log');
