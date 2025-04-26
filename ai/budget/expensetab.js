@@ -154,9 +154,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         ANNUALEXPENSESUM = annualExpenseSum;
-        const sumElement = document.getElementById('ANNUALEXPENSESUM');
-        if (sumElement) sumElement.textContent = `$${ANNUALEXPENSESUM.toFixed(2)}`;
-
         const retirementCheckbox = document.querySelector(`#expenses_retirement_frequency input[type="checkbox"]:checked`);
         const retirementFrequency = retirementCheckbox ? retirementCheckbox.value : 'annually';
         const retirementContribution = calculateAnnual('expenses_retirement', retirementFrequency);
@@ -183,8 +180,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         ESSENTIAL = essential;
-        const essentialElement = document.getElementById('ESSENTIAL');
-        if (essentialElement) essentialElement.textContent = `$${ESSENTIAL.toFixed(2)}`;
     }
 
     function discretionaryExpenses() {
@@ -206,8 +201,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         DISCRETIONARY = discretionary;
-        const discretionaryElement = document.getElementById('DISCRETIONARY');
-        if (discretionaryElement) discretionaryElement.textContent = `$${DISCRETIONARY.toFixed(2)}`;
     }
 
     function housingExpenses() {
@@ -232,8 +225,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         HOUSING = housing;
-        const housingElement = document.getElementById('HOUSING');
-        if (housingElement) housingElement.textContent = `$${HOUSING.toFixed(2)}`;
     }
 
     function transportationExpenses() {
@@ -254,8 +245,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         TRANSPORTATION = transportation;
-        const transportationElement = document.getElementById('TRANSPORTATION');
-        if (transportationElement) transportationElement.textContent = `$${TRANSPORTATION.toFixed(2)}`;
     }
 
     function dependantExpenses() {
@@ -278,8 +267,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         DEPENDANT = dependant;
-        const dependantElement = document.getElementById('DEPENDANT');
-        if (dependantElement) dependantElement.textContent = `$${DEPENDANT.toFixed(2)}`;
     }
 
     function debtExpenses() {
@@ -299,8 +286,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         DEBT = debt;
-        const debtElement = document.getElementById('DEBT');
-        if (debtElement) debtElement.textContent = `$${DEBT.toFixed(2)}`;
     }
 
     function calculateAll() {
@@ -347,7 +332,38 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Asset data label not found');
             }
         } else {
-            console.error('Asset data container not found. Ensure asset.js is loaded');
+            console.error('Asset data container not found. Ensure assettab.js is loaded');
+        }
+    }
+
+    function calculateBack() {
+        calculateAll();
+        const originalQuerySelector = document.querySelector.bind(document);
+        const expenseContainer = originalQuerySelector('.data-container-expense');
+        if (expenseContainer && expenseContainer.dataset.state === 'expanded') {
+            const expenseClose = expenseContainer.querySelector('.close-data-container');
+            if (expenseClose) {
+                expenseClose.click();
+                console.log('Expense tab closed');
+            } else {
+                console.error('Expense close button not found');
+            }
+        } else {
+            console.log('Expense tab already closed or not found');
+        }
+        const incomeContainer = originalQuerySelector('.data-container-income');
+        if (incomeContainer) {
+            const incomeLabel = incomeContainer.querySelector('.data-label');
+            if (incomeLabel) {
+                setTimeout(() => {
+                    incomeLabel.click();
+                    console.log('Income tab triggered to open');
+                }, 300);
+            } else {
+                console.error('Income data label not found');
+            }
+        } else {
+            console.error('Income data container not found. Ensure incometab.js is loaded');
         }
     }
 
@@ -447,13 +463,20 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSingleOrNotVisibility();
         calculateAll();
 
-        const nextButton = container.querySelector('.nav-btn');
+        const nextButton = container.querySelector('.nav-btn.nav-right');
         if (nextButton) {
             nextButton.removeEventListener('click', calculateNext);
             nextButton.addEventListener('click', calculateNext);
-            console.log('calculateNext bound to nav-btn');
+            console.log('calculateNext bound to nav-btn.nav-right');
         } else {
-            console.error('nav-btn not found');
+            console.error('nav-btn.nav-right not found');
+        }
+
+        const backButton = container.querySelector('.nav-btn.nav-left');
+        if (backButton) {
+            backButton.removeEventListener('click', calculateBack);
+            backButton.addEventListener('click', calculateBack);
+            console.log('calculateBack bound to nav-btn.nav-left');
         }
     }
 
@@ -476,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
                 if (script.src && ![
-                    'budget.expense.js', 'setlocal.js', 'getlocal.js'
+                    'expensetab.js', 'setlocal.js', 'getlocal.js'
                 ].some(exclude => script.src.includes(exclude))) {
                     const newScript = document.createElement('script');
                     newScript.src = script.src;
@@ -694,8 +717,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.addEventListener('click', function (e) {
             if (dataContainer && dataContainer.dataset.state === 'expanded') {
                 const isClickInside = dataContainer.contains(e.target);
-                const isNextButton = e.target.closest('.nav-btn');
-                if (!isClickInside && !isNextButton) {
+                const isNavButton = e.target.closest('.nav-btn');
+                if (!isClickInside && !isNavButton) {
                     console.log('Clicked outside expense data container, collapsing');
                     toggleDataContainer();
                 }
