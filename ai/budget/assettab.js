@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Asset logic
-    console.log('Asset logic initialized in assettab.js');
+    console.log('Asset logic initialized in assettab.js at:', new Date().toISOString());
     let assetInitialized = false;
     let ASSETS = 0;
     let LIQUIDASSETS = 0;
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const assetClose = assetContainer.querySelector('.close-data-container');
             if (assetClose) {
                 assetClose.click();
-                console.log('Asset tab closed');
+                console.log('Asset tab closed at:', new Date().toISOString());
             } else {
                 console.error('Asset close button not found');
             }
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (liabilityLabel) {
                 setTimeout(() => {
                     liabilityLabel.click();
-                    console.log('Liability tab triggered to open');
+                    console.log('Liability tab triggered to open at:', new Date().toISOString());
                 }, 300);
             } else {
                 console.error('Liability data label not found');
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const assetClose = assetContainer.querySelector('.close-data-container');
             if (assetClose) {
                 assetClose.click();
-                console.log('Asset tab closed');
+                console.log('Asset tab closed at:', new Date().toISOString());
             } else {
                 console.error('Asset close button not found');
             }
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (expenseLabel) {
                 setTimeout(() => {
                     expenseLabel.click();
-                    console.log('Expense tab triggered to open');
+                    console.log('Expense tab triggered to open at:', new Date().toISOString());
                 }, 300);
             } else {
                 console.error('Expense data label not found');
@@ -193,126 +193,156 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function initializeAssetForm(container) {
-        const observer = new MutationObserver((mutations, obs) => {
+        if (assetInitialized) {
+            console.log('Asset form already initialized, skipping at:', new Date().toISOString());
+            return;
+        }
+        assetInitialized = true;
+        console.log('Asset form initialized at:', new Date().toISOString());
+
+        // Bind navigation button
+        function bindNavButton() {
             const navButton = container.querySelector('.nav-btn.nav-right');
-            if (container.querySelector('.data-content') && navButton) {
-                obs.disconnect(); // Stop observing once content and nav button are loaded
-                if (assetInitialized) {
-                    console.log('Asset form already initialized, skipping');
-                    return;
+            if (navButton) {
+                navButton.removeAttribute('onclick'); // Remove any inline onclick
+                navButton.removeEventListener('click', calculateNext);
+                navButton.addEventListener('click', calculateNext);
+                console.log('calculateNext bound to nav-btn.nav-right at:', new Date().toISOString());
+                return true;
+            } else {
+                console.warn('nav-btn.nav-right not found at:', new Date().toISOString());
+                return false;
+            }
+        }
+
+        // Initial attempt to bind
+        bindNavButton();
+
+        // Persistent observer for nav button
+        const observer = new MutationObserver((mutations, obs) => {
+            if (container.querySelector('.nav-btn.nav-right') && !assetInitialized) {
+                console.log('Nav button detected by observer, binding at:', new Date().toISOString());
+                if (bindNavButton()) {
+                    // Only disconnect if binding succeeds
+                    obs.disconnect();
                 }
-                assetInitialized = true;
-                console.log('Asset form initialized');
-
-                const tabs = container.querySelectorAll('.tab');
-                tabs.forEach(tab => {
-                    tab.removeEventListener('click', handleTabClick);
-                    tab.addEventListener('click', handleTabClick);
-                    function handleTabClick() {
-                        const dataL = tab.getAttribute('data-location');
-                        const location = document.location.pathname;
-                        if (location.includes(dataL)) {
-                            tab.removeAttribute('href');
-                            tab.classList.add('active');
-                        }
-                    }
-                });
-
-                const formElements = [
-                    'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
-                    'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
-                    'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
-                    'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
-                    'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent', 'assets_primary_residence_percent',
-                    'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
-                ];
-
-                formElements.forEach(elementId => {
-                    const element = container.querySelector(`#${elementId}`);
-                    if (element) {
-                        const savedValue = getLocal(elementId);
-                        if (savedValue !== null) {
-                            element.value = savedValue;
-                            console.log(`Set ${elementId} to saved value: ${savedValue}`);
-                        } else {
-                            console.log(`No saved value for ${elementId}`);
-                        }
-                        element.removeEventListener('input', handleInputChange);
-                        element.addEventListener('input', handleInputChange);
-                        function handleInputChange() {
-                            setLocal(elementId, element.value.trim() !== "" ? element.value : elementId.includes('_percent') ? "100" : "0", 365);
-                            console.log(`Saved ${elementId}: ${element.value}`);
-                            calculateAll();
-                        }
-                    } else {
-                        console.error(`Element #${elementId} not found`);
-                    }
-                });
-
-                const maritalStatus = getLocal('maritalStatus');
-                const percentInputs = container.querySelectorAll('.percent-input');
-                if (maritalStatus === 'married' || maritalStatus === 'common-law') {
-                    percentInputs.forEach(input => input.style.display = 'block');
-                    console.log('Showing percent inputs for maritalStatus:', maritalStatus);
-                } else {
-                    percentInputs.forEach(input => input.style.display = 'none');
-                    console.log('Hiding percent inputs for maritalStatus:', maritalStatus);
-                }
-
-                const spouseCheckbox = container.querySelector('#assetspousecheckbox');
-                if (spouseCheckbox) {
-                    const spouseValue = getLocal('assetspousecheckbox');
-                    spouseCheckbox.checked = spouseValue === 'checked';
-                    spouseCheckbox.removeEventListener('change', handleSpouseChange);
-                    spouseCheckbox.addEventListener('change', handleSpouseChange);
-                    function handleSpouseChange() {
-                        setLocal('assetspousecheckbox', this.checked ? 'checked' : 'unchecked', 365);
-                        percentInputs.forEach(input => {
-                            input.style.display = this.checked ? 'block' : 'none';
-                        });
-                        console.log(`Asset spouse checkbox set to: ${this.checked ? 'checked' : 'unchecked'}`);
-                        calculateAll();
-                    }
-                } else {
-                    console.error('assetspousecheckbox not found');
-                }
-
-                if (navButton) {
-                    navButton.removeEventListener('click', calculateNext);
-                    navButton.addEventListener('click', calculateNext);
-                    console.log('calculateNext bound to nav-btn.nav-right');
-                } else {
-                    console.error('nav-btn.nav-right not found');
-                }
-
-                const backButton = container.querySelector('.nav-btn.nav-left');
-                if (backButton) {
-                    backButton.removeEventListener('click', calculateBack);
-                    backButton.addEventListener('click', calculateBack);
-                    console.log('calculateBack bound to nav-btn.nav-left');
-                }
-
-                calculateAll();
             }
         });
         observer.observe(container, { childList: true, subtree: true });
+
+        // Fallback binding after delay
+        setTimeout(() => {
+            if (!container.querySelector('.nav-btn.nav-right').onclick) {
+                console.log('Fallback binding attempt for nav-btn.nav-right at:', new Date().toISOString());
+                if (bindNavButton()) {
+                    console.log('Fallback binding succeeded');
+                } else {
+                    console.error('Fallback binding failed, nav-btn.nav-right not found. DOM state:', container.innerHTML);
+                }
+            }
+        }, 3000);
+
+        // Initialize form elements
+        const tabs = container.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.removeEventListener('click', handleTabClick);
+            tab.addEventListener('click', handleTabClick);
+            function handleTabClick() {
+                const dataL = tab.getAttribute('data-location');
+                const location = document.location.pathname;
+                if (location.includes(dataL)) {
+                    tab.removeAttribute('href');
+                    tab.classList.add('active');
+                }
+            }
+        });
+
+        const formElements = [
+            'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+            'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+            'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
+            'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
+            'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent', 'assets_primary_residence_percent',
+            'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
+        ];
+
+        formElements.forEach(elementId => {
+            const element = container.querySelector(`#${elementId}`);
+            if (element) {
+                const savedValue = getLocal(elementId);
+                if (savedValue !== null) {
+                    element.value = savedValue;
+                    console.log(`Set ${elementId} to saved value: ${savedValue}`);
+                } else {
+                    console.log(`No saved value for ${elementId}`);
+                }
+                element.removeEventListener('input', handleInputChange);
+                element.addEventListener('input', handleInputChange);
+                function handleInputChange() {
+                    setLocal(elementId, element.value.trim() !== "" ? element.value : elementId.includes('_percent') ? "100" : "0", 365);
+                    console.log(`Saved ${elementId}: ${element.value}`);
+                    calculateAll();
+                }
+            } else {
+                console.error(`Element #${elementId} not found`);
+            }
+        });
+
+        const maritalStatus = getLocal('maritalStatus');
+        const percentInputs = container.querySelectorAll('.percent-input');
+        if (maritalStatus === 'married' || maritalStatus === 'common-law') {
+            percentInputs.forEach(input => input.style.display = 'block');
+            console.log('Showing percent inputs for maritalStatus:', maritalStatus);
+        } else {
+            percentInputs.forEach(input => input.style.display = 'none');
+            console.log('Hiding percent inputs for maritalStatus:', maritalStatus);
+        }
+
+        const spouseCheckbox = container.querySelector('#assetspousecheckbox');
+        if (spouseCheckbox) {
+            const spouseValue = getLocal('assetspousecheckbox');
+            spouseCheckbox.checked = spouseValue === 'checked';
+            spouseCheckbox.removeEventListener('change', handleSpouseChange);
+            spouseCheckbox.addEventListener('change', handleSpouseChange);
+            function handleSpouseChange() {
+                setLocal('assetspousecheckbox', this.checked ? 'checked' : 'unchecked', 365);
+                percentInputs.forEach(input => {
+                    input.style.display = this.checked ? 'block' : 'none';
+                });
+                console.log(`Asset spouse checkbox set to: ${this.checked ? 'checked' : 'unchecked'}`);
+                calculateAll();
+            }
+        } else {
+            console.error('assetspousecheckbox not found');
+        }
+
+        const backButton = container.querySelector('.nav-btn.nav-left');
+        if (backButton) {
+            backButton.removeEventListener('click', calculateBack);
+            backButton.addEventListener('click', calculateBack);
+            console.log('calculateBack bound to nav-btn.nav-left at:', new Date().toISOString());
+        }
+
+        calculateAll();
     }
 
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url}`);
+            console.log(`Attempting to load stored content from ${url} at:`, new Date().toISOString());
+            const startTime = performance.now();
             const response = await fetch(url);
+            const fetchTime = performance.now() - startTime;
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully');
+            console.log(`Stored content fetched in ${fetchTime.toFixed(2)}ms at:`, new Date().toISOString());
 
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">ASSET</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into asset container`);
+            console.log(`Stored content loaded into asset container at:`, new Date().toISOString());
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
@@ -320,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     'assettab.js', 'setlocal.js', 'getlocal.js'
                 ].some(exclude => script.src.includes(exclude))) {
                     const newScript = document.createElement('script');
-                    newScript.src = script.src + '?v=' + new Date().getTime(); // Prevent caching
+                    newScript.src = script.src + '?v=' + new Date().getTime();
                     if (
                         script.src.includes('utils.js') ||
                         script.src.includes('hideShow.js')
@@ -338,13 +368,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             initializeAssetForm(dataContainer);
         } catch (error) {
-            console.error(`Error loading stored content:`, error);
+            console.error(`Error loading stored content at:`, new Date().toISOString(), error);
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-asset')) {
-            console.log('Asset data container already exists, skipping initialization');
+            console.log('Asset data container already exists, skipping initialization at:', new Date().toISOString());
             return;
         }
 
@@ -480,7 +510,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Asset data container injected with state: collapsed');
+        console.log('Asset data container injected with state: collapsed at:', new Date().toISOString());
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -499,8 +529,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const isExpanded = dataContainer.dataset.state === 'expanded';
 
             if (isExpanded) {
-                dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('collapsed');
+                dataContainer.className = 'data-container-asset collapsed';
                 dataContainer.dataset.state = 'collapsed';
                 dataContainer.innerHTML = `
                     <span class="data-label">ASSET</span>
@@ -508,10 +537,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 assetInitialized = false; // Reset initialization flag
                 ASSETS = 0; // Reset global variables
                 LIQUIDASSETS = 0;
-                console.log('Asset data container collapsed, state and globals reset');
+                console.log('Asset data container collapsed, state and globals reset at:', new Date().toISOString());
             } else {
-                dataContainer.classList.remove('collapsed');
-                dataContainer.classList.add('expanded');
+                dataContainer.className = 'data-container-asset expanded';
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/budget/asset.html');
             }
@@ -539,7 +567,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isClickInside = dataContainer.contains(e.target);
                 const isNavButton = e.target.closest('.nav-btn');
                 if (!isClickInside && !isNavButton) {
-                    console.log('Clicked outside asset data container, collapsing');
+                    console.log('Clicked outside asset data container, collapsing at:', new Date().toISOString());
                     toggleDataContainer();
                 }
             }
@@ -549,6 +577,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing asset data container:', error);
+        console.error('Error initializing asset data container at:', new Date().toISOString(), error);
     }
 });
