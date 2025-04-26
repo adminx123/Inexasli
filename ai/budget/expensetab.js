@@ -9,42 +9,173 @@
 document.addEventListener('DOMContentLoaded', function () {
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url}`);
+            console.log(`Attempting to load stored content from ${url} (expense.js)`);
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully');
+            console.log('Stored content fetched successfully (expense.js)');
 
             // Update container with content
             dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
+                <span class="close-data-container"></span>
                 <span class="data-label">EXPENSE</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into expense container`);
-
-            // Execute scripts in the loaded content
-            const scripts = dataContainer.querySelectorAll('script');
-            scripts.forEach(script => {
-                const newScript = document.createElement('script');
-                if (script.src) {
-                    newScript.src = script.src;
-                } else {
-                    newScript.textContent = script.textContent;
-                }
-                document.body.appendChild(newScript);
-            });
+            console.log(`Stored content loaded into expense container (expense.js)`);
         } catch (error) {
-            console.error(`Error loading stored content:`, error);
+            console.error(`Error loading stored content (expense.js):`, error);
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-expense')) {
-            console.log('Expense data container already exists, skipping initialization');
+            console.log('Expense data container already exists, skipping initialization (expense.js)');
             return;
         }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            .data-container-expense {
+                position: fixed;
+                top: calc(35% + 36px);
+                left: 0;
+                background-color: #f5f5f5;
+                padding: 4px;
+                border: 2px solid #000;
+                border-left: none;
+                border-radius: 0 8px 8px 0;
+                box-shadow: 4px 4px 0 #000;
+                z-index: 10000;
+                max-width: 34px;
+                min-height: 30px;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+                overflow: hidden;
+                font-family: "Inter", sans-serif;
+                visibility: visible;
+                opacity: 1;
+            }
+        
+            .data-container-expense.collapsed {
+                max-width: 18px;
+                height: 120px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10001;
+            }
+        
+            .data-container-expense.expanded {
+                width: 90vw;
+                max-width: calc(90vw - 20px);
+                min-width: 25%;
+                max-height: 95%;
+                top: 20px;
+                margin-right: -webkit-calc(85vw - 20px);
+                margin-right: -moz-calc(85vw - 20px);
+                margin-right: calc(85vw - 20px);
+            }
+        
+            .data-container-expense:hover {
+                background-color: rgb(255, 255, 255);
+            }
+        
+            .data-container-expense .close-data-container {
+                position: absolute;
+                top: 4px;
+                left: 10px;
+                padding: 5px;
+                font-size: 14px;
+                line-height: 1;
+                color: #000;
+                cursor: pointer;
+                font-weight: bold;
+                font-family: "Inter", sans-serif;
+            }
+        
+            .data-container-expense .data-label {
+                text-decoration: none;
+                color: #000;
+                font-size: 12px;
+                display: flex;
+                justify-content: center;
+                text-align: center;
+                padding: 4px;
+                cursor: pointer;
+                transition: color 0.2s ease;
+                line-height: 1.2;
+                font-family: "Geist", sans-serif;
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+            }
+        
+            .data-container-expense.expanded .data-label {
+                writing-mode: horizontal-tb;
+                position: absolute;
+                top: 4px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 16px;
+                padding: 5px;
+            }
+        
+            .data-container-expense .data-content {
+                padding: 10px;
+                font-size: 14px;
+                max-height: calc(100vh - 80px);
+                overflow-y: auto;
+                overflow-x: auto;
+                font-family: "Inter", sans-serif;
+                max-width: 100%;
+                margin-top: 30px;
+            }
+        
+            @media (max-width: 480px) {
+                .data-container-expense {
+                    max-width: 28px;
+                    padding: 3px;
+                }
+        
+                .data-container-expense.collapsed {
+                    width: 28px;
+                    height: 100px;
+                    z-index: 10001;
+                }
+        
+                .data-container-expense.expanded {
+                    width: 90vw;
+                    max-width: calc(90vw - 10px);
+                    max-height: 95%;
+                    top: 10px;
+                    margin-right: -webkit-calc(85vw - 10px);
+                    margin-right: -moz-calc(85vw - 10px);
+                    margin-right: calc(85vw - 10px);
+                }
+        
+                .data-container-expense .data-label {
+                    font-size: 10px;
+                    padding: 3px;
+                }
+        
+                .data-container-expense.expanded .data-label {
+                    font-size: 14px;
+                    padding: 4px;
+                }
+        
+                .data-container-expense .close-data-container {
+                    font-size: 12px;
+                    padding: 4px;
+                }
+        
+                .data-container-expense .data-content {
+                    font-size: 12px;
+                    padding: 8px;
+                    margin-top: 25px;
+                }
+            }
+        `;
+
+        document.head.appendChild(style);
 
         const dataContainer = document.createElement('div');
         dataContainer.className = `data-container-expense collapsed`;
@@ -54,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Expense data container injected with state: collapsed');
+        console.log('Expense data container injected with state: collapsed (expense.js)');
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -64,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 toggleDataContainer();
             });
         } else {
-            console.error('Expense data label not found');
+            console.error('Expense data label not found (expense.js)');
         }
 
         function toggleDataContainer() {
@@ -79,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.innerHTML = `
                     <span class="data-label">EXPENSE</span>
                 `;
-                console.log('Expense data container collapsed');
+                console.log('Expense data container collapsed (expense.js)');
             } else {
                 dataContainer.classList.remove('collapsed');
                 dataContainer.classList.add('expanded');
@@ -111,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (dataContainer && dataContainer.dataset.state === 'expanded') {
                 const isClickInside = dataContainer.contains(e.target);
                 if (!isClickInside) {
-                    console.log('Clicked outside expense data container, collapsing');
+                    console.log('Clicked outside expense data container, collapsing (expense.js)');
                     toggleDataContainer();
                 }
             }
@@ -121,6 +252,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing expense data container:', error);
+        console.error('Error initializing expense data container (expense.js):', error);
     }
 });
