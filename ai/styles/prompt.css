@@ -511,3 +511,7 @@ table tbody tr:hover td {
 .copy-btn:hover {
   background-color: #d0d0d0;
 }
+
+.containerinter {
+  padding-left: 38px; /* Ensures contents are at least 38px from the left edge */
+}
