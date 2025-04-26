@@ -200,30 +200,44 @@ document.addEventListener('DOMContentLoaded', function () {
         assetInitialized = true;
         console.log('Asset form initialized at:', new Date().toISOString());
 
-        // Bind navigation button
-        function bindNavButton() {
-            const navButton = container.querySelector('.nav-btn.nav-right');
-            if (navButton) {
-                navButton.removeAttribute('onclick'); // Remove any inline onclick
-                navButton.removeEventListener('click', calculateNext);
-                navButton.addEventListener('click', calculateNext);
+        // Bind navigation buttons
+        function bindNavButtons() {
+            const nextButton = container.querySelector('.nav-btn.nav-right');
+            const backButton = container.querySelector('.nav-btn.nav-left');
+            let success = true;
+
+            if (nextButton) {
+                nextButton.removeAttribute('onclick');
+                nextButton.removeEventListener('click', calculateNext);
+                nextButton.addEventListener('click', calculateNext);
                 console.log('calculateNext bound to nav-btn.nav-right at:', new Date().toISOString());
-                return true;
             } else {
                 console.warn('nav-btn.nav-right not found at:', new Date().toISOString());
-                return false;
+                success = false;
             }
+
+            if (backButton) {
+                backButton.removeAttribute('onclick');
+                backButton.removeEventListener('click', calculateBack);
+                backButton.addEventListener('click', calculateBack);
+                console.log('calculateBack bound to nav-btn.nav-left at:', new Date().toISOString());
+            } else {
+                console.warn('nav-btn.nav-left not found at:', new Date().toISOString());
+                success = false;
+            }
+
+            return success;
         }
 
         // Initial attempt to bind
-        bindNavButton();
+        bindNavButtons();
 
-        // Persistent observer for nav button
+        // Persistent observer for nav buttons
         const observer = new MutationObserver((mutations, obs) => {
-            if (container.querySelector('.nav-btn.nav-right') && !assetInitialized) {
-                console.log('Nav button detected by observer, binding at:', new Date().toISOString());
-                if (bindNavButton()) {
-                    // Only disconnect if binding succeeds
+            if ((container.querySelector('.nav-btn.nav-right') && !container.querySelector('.nav-btn.nav-right').onclick) ||
+                (container.querySelector('.nav-btn.nav-left') && !container.querySelector('.nav-btn.nav-left').onclick)) {
+                console.log('Nav button(s) detected by observer, binding at:', new Date().toISOString());
+                if (bindNavButtons()) {
                     obs.disconnect();
                 }
             }
@@ -232,12 +246,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Fallback binding after delay
         setTimeout(() => {
-            if (!container.querySelector('.nav-btn.nav-right').onclick) {
-                console.log('Fallback binding attempt for nav-btn.nav-right at:', new Date().toISOString());
-                if (bindNavButton()) {
+            if (!container.querySelector('.nav-btn.nav-right')?.onclick || !container.querySelector('.nav-btn.nav-left')?.onclick) {
+                console.log('Fallback binding attempt for nav buttons at:', new Date().toISOString());
+                if (bindNavButtons()) {
                     console.log('Fallback binding succeeded');
                 } else {
-                    console.error('Fallback binding failed, nav-btn.nav-right not found. DOM state:', container.innerHTML);
+                    console.error('Fallback binding failed, nav buttons not found. DOM state:', container.innerHTML);
                 }
             }
         }, 3000);
@@ -314,13 +328,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } else {
             console.error('assetspousecheckbox not found');
-        }
-
-        const backButton = container.querySelector('.nav-btn.nav-left');
-        if (backButton) {
-            backButton.removeEventListener('click', calculateBack);
-            backButton.addEventListener('click', calculateBack);
-            console.log('calculateBack bound to nav-btn.nav-left at:', new Date().toISOString());
         }
 
         calculateAll();
@@ -413,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 min-width: 25%;
                 max-height: 95%;
                 top: 20px;
-                margin-right: calc(90vw - 20px);
+                margin-right: calc(85vw - 20px);
             }
             .data-container-asset:hover {
                 background-color: rgb(255, 255, 255);
@@ -479,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     max-width: calc(90vw - 10px);
                     max-height: 95%;
                     top: 10px;
-                    margin-right: calc(90vw - 10px);
+                    margin-right: calc(85vw - 10px);
                 }
                 .data-container-asset .data-label {
                     font-size: 10px;
@@ -534,8 +541,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.innerHTML = `
                     <span class="data-label">ASSET</span>
                 `;
-                assetInitialized = false; // Reset initialization flag
-                ASSETS = 0; // Reset global variables
+                assetInitialized = false;
+                ASSETS = 0;
                 LIQUIDASSETS = 0;
                 console.log('Asset data container collapsed, state and globals reset at:', new Date().toISOString());
             } else {
