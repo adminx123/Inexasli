@@ -78,7 +78,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         
             .data-container-income.expanded {
-                max-width:90%;
+              width: 90vw;
+                max-width: calc(90vw - 20px);
                 min-width: 25%;
                 max-height: 95%;
                 top: 20px;
