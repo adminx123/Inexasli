@@ -153,7 +153,6 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0 auto;
   border-radius: 0 0 5px 5px;
   border: 2px solid #000;
-  box-shadow: 4px 4px 0 #000;
   text-align: left;
   display: flex;
   padding: 15px;
@@ -512,3 +511,281 @@ table tbody tr:hover td {
 .copy-btn:hover {
   background-color: #d0d0d0;
 }
+
+.containerinter {
+  padding-left: 38px; /* Ensures contents are at least 38px from the left edge */
+}
+
+.data-container-liability {
+    position: fixed;
+    top: calc(65% + 36px);
+    left: 0;
+    background-color: #f5f5f5;
+    padding: 4px;
+    border: 2px solid #000;
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 4px 4px 0 #000;
+    z-index: 10000;
+    max-width: 34px;
+    min-height: 30px;
+    transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+    overflow: hidden;
+    font-family: "Inter", sans-serif;
+    visibility: visible;
+    opacity: 1;
+}
+
+.data-container-liability.collapsed {
+    max-width: 18px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+}
+
+.data-container-liability.expanded {
+    width: 90vw;
+    max-width: calc(90vw - 20px);
+    min-width: 25%;
+    max-height: 95%;
+    top: 20px;
+    margin-right: -webkit-calc(85vw - 20px);
+    margin-right: -moz-calc(85vw - 20px);
+    margin-right: calc(85vw - 20px);
+}
+
+.data-container-liability:hover {
+    background-color: rgb(255, 255, 255);
+}
+
+.data-container-liability .close-data-container {
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 1;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: "Inter", sans-serif;
+}
+
+.data-container-liability .data-label {
+    text-decoration: none;
+    color: #000;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 4px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    line-height: 1.2;
+    font-family: "Geist", sans-serif;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.data-container-liability.expanded .data-label {
+    writing-mode: horizontal-tb;
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    padding: 5px;
+}
+
+.data-container-liability .data-content {
+    padding: 10px;
+    font-size: 14px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    overflow-x: auto;
+    font-family: "Inter", sans-serif;
+    max-width: 100%;
+    margin-top: 30px;
+}
+
+@media (max-width: 480px) {
+    .data-container-liability {
+        max-width: 28px;
+        padding: 3px;
+    }
+
+    .data-container-liability.collapsed {
+        width: 28px;
+        height: 100px;
+        z-index: 10001;
+    }
+
+    .data-container-liability.expanded {
+        width: 90vw;
+        max-width: calc(90vw - 10px);
+        max-height: 95%;
+        top: 10px;
+        margin-right: -webkit-calc(85vw - 10px);
+        margin-right: -moz-calc(85vw - 10px);
+        margin-right: calc(85vw - 10px);
+    }
+
+    .data-container-liability .data-label {
+        font-size: 10px;
+        padding: 3px;
+    }
+
+    .data-container-liability.expanded .data-label {
+        font-size: 14px;
+        padding: 4px;
+    }
+
+    .data-container-liability .close-data-container {
+        font-size: 12px;
+        padding: 4px;
+    }
+
+    .data-container-liability .data-content {
+        font-size: 12px;
+        padding: 8px;
+        margin-top: 25px;
+    }
+}
+
+/* Styles for .data-container */
+.data-container {
+    position: fixed;
+    top: calc(50% + 36px);
+    left: 0;
+    background-color: #f5f5f5;
+    padding: 4px;
+    border: 2px solid #000;
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 4px 4px 0 #000;
+    z-index: 10000;
+    max-width: 34px;
+    min-height: 30px;
+    transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+    overflow: hidden;
+    font-family: "Inter", sans-serif;
+    visibility: visible;
+    opacity: 1;
+}
+
+.data-container.collapsed {
+    max-width: 18px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+}
+
+.data-container.expanded {
+    width: 90vw; /* Adjusted to 90% of viewport width */
+    max-width: calc(90vw - 20px); /* Ensure it respects padding/margins */
+    min-width: 25%;
+    max-height: 95%;
+    top: 20px;
+    margin-right: calc(90vw - 20px); /* Adjusted to match new width */
+}
+
+.data-container:hover {
+    background-color: rgb(255, 255, 255);
+}
+
+.data-container .close-data-container {
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 1;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: "Inter", sans-serif;
+}
+
+.data-container .data-label {
+    text-decoration: none;
+    color: #000;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 4px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    line-height: 1.2;
+    font-family: "Geist", sans-serif;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.data-container.expanded .data-label {
+    writing-mode: horizontal-tb;
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    padding: 5px;
+}
+
+.data-container .data-content {
+    padding: 10px;
+    font-size: 14px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    overflow-x: auto;
+    font-family: "Inter", sans-serif;
+    max-width: 100%;
+    margin-top: 30px;
+}
+
+@media (max-width: 480px) {
+    .data-container {
+        max-width: 28px;
+        padding: 3px;
+    }
+
+    .data-container.collapsed {
+        width: 28px;
+        height: 100px;
+        z-index: 10001;
+    }
+
+    .data-container.expanded {
+        width: 90vw; /* Adjusted to 90% for small screens */
+        max-width: calc(90vw - 10px); /* Adjusted for smaller padding */
+        max-height: 95%;
+        top: 10px;
+        margin-right: calc(90vw - 10px); /* Adjusted to match new width */
+    }
+
+    .data-container .data-label {
+        font-size: 10px;
+        padding: 3px;
+    }
+
+    .data-container.expanded .data-label {
+        font-size: 14px;
+        padding: 4px;
+    }
+
+    .data-container .close-data-container {
+        font-size: 12px;
+        padding: 4px;
+    }
+
+    .data-container .data-content {
+        font-size: 12px;
+        padding: 8px;
+        margin-top: 25px;
+    }
+}
+

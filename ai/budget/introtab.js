@@ -9,40 +9,79 @@
 document.addEventListener('DOMContentLoaded', function () {
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url} (intro.js)`);
+            console.log(`Attempting to load stored content from ${url}`);
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully (intro.js)');
+            console.log('Stored content fetched successfully');
 
-            // Update container with content, including close button and label
+            // Update container with content
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">INTRO</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into intro container (intro.js)`);
+            console.log(`Stored content loaded into intro container`);
 
-            // Execute any scripts in the loaded content
+            // Execute scripts in the loaded content
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
                 const newScript = document.createElement('script');
                 if (script.src) {
                     newScript.src = script.src;
+                    // Set type="module" for scripts that are likely modules
+                    if (script.src.includes('intro.js') || script.src.includes('setlocal.js') || script.src.includes('getlocal.js') || script.src.includes('tray.js')) {
+                        newScript.type = 'module';
+                    }
+                    newScript.onload = () => {
+                        if (script.src.includes('intro.js')) {
+                            initializeIntroLogic(dataContainer);
+                        }
+                    };
+                    newScript.onerror = () => console.error(`Failed to load script: ${script.src}`);
                 } else {
                     newScript.textContent = script.textContent;
                 }
                 document.body.appendChild(newScript);
             });
+
+            // Initialize inline scripts immediately
+            initializeIntroLogic(dataContainer);
         } catch (error) {
-            console.error(`Error loading stored content (intro.js):`, error);
+            console.error(`Error loading stored content:`, error);
         }
+    }
+
+    // Function to initialize the logic from intro.js for the loaded content
+    function initializeIntroLogic(container) {
+        // Preserve original DOM methods
+        const originalQuerySelector = document.querySelector.bind(document);
+        const originalQuerySelectorAll = document.querySelectorAll.bind(document);
+        const originalGetElementById = document.getElementById.bind(document);
+
+        // Override DOM methods to prioritize container
+        document.querySelector = (selector) => container.querySelector(selector) || originalQuerySelector(selector);
+        document.querySelectorAll = (selector) => container.querySelectorAll(selector).length > 0 ? container.querySelectorAll(selector) : originalQuerySelectorAll(selector);
+        document.getElementById = (id) => container.querySelector(`#${id}`) || originalGetElementById(id);
+
+        try {
+            // Trigger the DOMContentLoaded logic from intro.js
+            const event = new Event('DOMContentLoaded');
+            document.dispatchEvent(event);
+        } catch (error) {
+            console.error('Error triggering DOMContentLoaded:', error);
+        }
+
+        // Restore original methods
+        document.querySelector = originalQuerySelector;
+        document.querySelectorAll = originalQuerySelectorAll;
+        document.getElementById = originalGetElementById;
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-intro')) {
-            console.log('Intro data container already exists, skipping initialization (intro.js)');
+            console.log('Intro data container already exists, skipping initialization');
             return;
         }
 
@@ -78,13 +117,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         
             .data-container-intro.expanded {
-                width: 85vw;
-                max-width: calc(85vw - 20px);
+                width: 90vw;
+                max-width: calc(90vw - 20px);
                 min-width: 25%;
                 max-height: 95%;
                 top: 20px;
-                margin-right: -webkit-calc(85vw - 20px);
-                margin-right: -moz-calc(85vw - 20px);
                 margin-right: calc(85vw - 20px);
             }
         
@@ -155,12 +192,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
         
                 .data-container-intro.expanded {
-                    width: 85vw;
-                    max-width: calc(85vw - 10px);
+                    width: 90vw;
+                    max-width: calc(90vw - 10px);
                     max-height: 95%;
                     top: 10px;
-                    margin-right: -webkit-calc(85vw - 10px);
-                    margin-right: -moz-calc(85vw - 10px);
                     margin-right: calc(85vw - 10px);
                 }
         
@@ -196,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Intro data container injected with state: collapsed (intro.js)');
+        console.log('Intro data container injected with state: collapsed');
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -206,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 toggleDataContainer();
             });
         } else {
-            console.error('Intro data label not found (intro.js)');
+            console.error('Intro data label not found');
         }
 
         function toggleDataContainer() {
@@ -221,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.innerHTML = `
                     <span class="data-label">INTRO</span>
                 `;
-                console.log('Intro data container collapsed (intro.js)');
+                console.log('Intro data container collapsed');
             } else {
                 dataContainer.classList.remove('collapsed');
                 dataContainer.classList.add('expanded');
@@ -253,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (dataContainer && dataContainer.dataset.state === 'expanded') {
                 const isClickInside = dataContainer.contains(e.target);
                 if (!isClickInside) {
-                    console.log('Clicked outside intro data container, collapsing (intro.js)');
+                    console.log('Clicked outside intro data container, collapsing');
                     toggleDataContainer();
                 }
             }
@@ -263,6 +298,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing intro data container (intro.js):', error);
+        console.error('Error initializing intro data container:', error);
     }
 });

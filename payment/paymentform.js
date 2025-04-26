@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     #subscribe-sidebar a.subscribe-link {
         font-size: 12px;
-        padding: 8px 8px;
+        padding: 3px;
         font-family: "Geist", sans-serif;
     }
 
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         sidebar.dataset.state = 'initial';
         sidebar.innerHTML = `
             <span id="close-sidebar">+</span>
-            <a class="subscribe-link"><span class="premium-notice1">Premium</span></a>
+            <a class="subscribe-link">Premium</a>
             <div id="status"></div>
             <form class="payment-form" id="payment-form">
                 <input type="text" class="payment-input" id="username" placeholder="input your name" required>
