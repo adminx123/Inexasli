@@ -65,8 +65,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             .data-container-summary.expanded {
-                width: 85vw;
-                max-width: calc(85vw - 20px);
+                width: 90vw;
+                max-width: calc(90vw - 20px);
                 min-width: 25%;
                 height: calc(100vh - 40px);
                 top: 20px;
@@ -141,8 +141,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 .data-container-summary.expanded {
-                    width: 85vw;
-                    max-width: calc(85vw - 10px);
+                    width: 90vw;
+                    max-width: calc(90vw - 10px);
                     height: calc(100vh - 20px);
                     top: 10px;
                     margin-left: -webkit-calc(85vw - 10px);

@@ -432,8 +432,7 @@ button {
   max-width: 800px;
   margin: 0 auto;
   border-radius: 0 0 5px 5px;
-  border: 2px solid #000; /* Bold border from #category-sidebar */
-  box-shadow: 4px 4px 0 #000; /* Sharp shadow from #category-sidebar */
+  border: 1px solid #000; /* Bold border from #category-sidebar */
   text-align: left;
   display: flex;
   padding: 0 15px;

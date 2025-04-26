@@ -7,30 +7,340 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Dependency fallbacks
+    const setLocal = window.setLocal || function (key, value, days) {
+        console.warn('setLocal not defined, using localStorage directly');
+        try {
+            localStorage.setItem(key, encodeURIComponent(value));
+        } catch (error) {
+            console.error('Error in setLocal:', error);
+        }
+    };
+    const getLocal = window.getLocal || function (key) {
+        console.warn('getLocal not defined, using localStorage directly');
+        try {
+            const value = localStorage.getItem(key);
+            return value ? decodeURIComponent(value) : null;
+        } catch (error) {
+            console.error('Error in getLocal:', error);
+            return null;
+        }
+    };
+
+    // Asset logic
+    console.log('Asset logic initialized in assettab.js');
+    let assetInitialized = false;
+    let ASSETS = 0;
+    let LIQUIDASSETS = 0;
+
+    function calculateAssets() {
+        const assetFields = [
+            'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+            'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+            'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry'
+        ];
+
+        let assets = 0;
+
+        for (let i = 0; i < assetFields.length; i++) {
+            const field = assetFields[i];
+            const element = document.getElementById(field);
+            if (!element) {
+                console.error(`Element #${field} not found`);
+                continue;
+            }
+            const fieldValue = element.value;
+            console.log(`Field value for ${field}: ${fieldValue}`);
+            const parsedValue = parseFloat(fieldValue);
+            if (!isNaN(parsedValue)) {
+                let fieldPercentage = parseFloat(document.querySelector(`#${field}_percent`)?.value);
+                if (isNaN(fieldPercentage)) {
+                    fieldPercentage = 100;
+                }
+                assets += (parsedValue * fieldPercentage / 100);
+            }
+        }
+
+        ASSETS = assets;
+        const assetsElement = document.getElementById('ASSETS');
+        if (assetsElement) {
+            assetsElement.textContent = `$${ASSETS.toFixed(2)}`;
+        } else {
+            console.error('ASSETS element not found');
+        }
+    }
+
+    function calculateLiquidAssets() {
+        const liquidAssetFields = [
+            'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+            'assets_money_lent_out'
+        ];
+
+        let liquidAssets = 0;
+        const isPartner = getLocal('assetspousecheckbox') === 'checked';
+
+        for (let i = 0; i < liquidAssetFields.length; i++) {
+            const field = liquidAssetFields[i];
+            const element = document.getElementById(field);
+            if (!element) {
+                console.error(`Element #${field} not found`);
+                continue;
+            }
+            const fieldValue = element.value;
+            console.log(`Field value for ${field}: ${fieldValue}`);
+            const parsedValue = parseFloat(fieldValue);
+            if (!isNaN(parsedValue)) {
+                let fieldPercentage = parseFloat(document.querySelector(`#${field}_percent`)?.value);
+                if (isNaN(fieldPercentage) || !isPartner) {
+                    fieldPercentage = 100;
+                }
+                liquidAssets += (parsedValue * fieldPercentage / 100);
+            }
+        }
+
+        LIQUIDASSETS = liquidAssets;
+        const liquidAssetsElement = document.getElementById('LIQUIDASSETS');
+        if (liquidAssetsElement) {
+            liquidAssetsElement.textContent = `$${LIQUIDASSETS.toFixed(2)}`;
+        } else {
+            console.error('LIQUIDASSETS element not found');
+        }
+    }
+
+    function calculateAll() {
+        calculateAssets();
+        calculateLiquidAssets();
+        setLocal("ASSETS", ASSETS, 365);
+        setLocal("LIQUIDASSETS", LIQUIDASSETS, 365);
+
+        const fields = [
+            'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+            'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+            'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
+            'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
+            'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent', 'assets_primary_residence_percent',
+            'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
+        ];
+
+        fields.forEach(field => {
+            const element = document.getElementById(field);
+            if (element) {
+                setLocal(field, element.value.trim() !== "" ? element.value : field.includes('_percent') ? "100" : "0", 365);
+            }
+        });
+    }
+
+    function calculateNext() {
+        calculateAll();
+        const originalQuerySelector = document.querySelector.bind(document);
+        const assetContainer = originalQuerySelector('.data-container-asset');
+        if (assetContainer && assetContainer.dataset.state === 'expanded') {
+            const assetClose = assetContainer.querySelector('.close-data-container');
+            if (assetClose) {
+                assetClose.click();
+                console.log('Asset tab closed');
+            } else {
+                console.error('Asset close button not found');
+            }
+        } else {
+            console.log('Asset tab already closed or not found');
+        }
+        const liabilityContainer = originalQuerySelector('.data-container-liability');
+        if (liabilityContainer) {
+            const liabilityLabel = liabilityContainer.querySelector('.data-label');
+            if (liabilityLabel) {
+                setTimeout(() => {
+                    liabilityLabel.click();
+                    console.log('Liability tab triggered to open');
+                }, 300);
+            } else {
+                console.error('Liability data label not found');
+            }
+        } else {
+            console.error('Liability data container not found. Ensure liabilitytab.js is loaded');
+        }
+    }
+
+    function calculateBack() {
+        calculateAll();
+        const originalQuerySelector = document.querySelector.bind(document);
+        const assetContainer = originalQuerySelector('.data-container-asset');
+        if (assetContainer && assetContainer.dataset.state === 'expanded') {
+            const assetClose = assetContainer.querySelector('.close-data-container');
+            if (assetClose) {
+                assetClose.click();
+                console.log('Asset tab closed');
+            } else {
+                console.error('Asset close button not found');
+            }
+        } else {
+            console.log('Asset tab already closed or not found');
+        }
+        const expenseContainer = originalQuerySelector('.data-container-expense');
+        if (expenseContainer) {
+            const expenseLabel = expenseContainer.querySelector('.data-label');
+            if (expenseLabel) {
+                setTimeout(() => {
+                    expenseLabel.click();
+                    console.log('Expense tab triggered to open');
+                }, 300);
+            } else {
+                console.error('Expense data label not found');
+            }
+        } else {
+            console.error('Expense data container not found. Ensure expensetab.js is loaded');
+        }
+    }
+
+    function initializeAssetForm(container) {
+        if (assetInitialized) {
+            console.log('Asset form already initialized, skipping');
+            return;
+        }
+        assetInitialized = true;
+        console.log('Asset form initialized');
+
+        const tabs = container.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.removeEventListener('click', handleTabClick);
+            tab.addEventListener('click', handleTabClick);
+            function handleTabClick() {
+                const dataL = tab.getAttribute('data-location');
+                const location = document.location.pathname;
+                if (location.includes(dataL)) {
+                    tab.removeAttribute('href');
+                    tab.classList.add('active');
+                }
+            }
+        });
+
+        const formElements = [
+            'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+            'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+            'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
+            'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
+            'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent', 'assets_primary_residence_percent',
+            'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
+        ];
+
+        formElements.forEach(elementId => {
+            const element = container.querySelector(`#${elementId}`);
+            if (element) {
+                const savedValue = getLocal(elementId);
+                if (savedValue !== null) {
+                    element.value = savedValue;
+                    console.log(`Set ${elementId} to saved value: ${savedValue}`);
+                } else {
+                    console.log(`No saved value for ${elementId}`);
+                }
+                element.removeEventListener('input', handleInputChange);
+                element.addEventListener('input', handleInputChange);
+                function handleInputChange() {
+                    setLocal(elementId, element.value.trim() !== "" ? element.value : elementId.includes('_percent') ? "100" : "0", 365);
+                    console.log(`Saved ${elementId}: ${element.value}`);
+                    calculateAll();
+                }
+            } else {
+                console.error(`Element #${elementId} not found`);
+            }
+        });
+
+        const maritalStatus = getLocal('maritalStatus');
+        const percentInputs = container.querySelectorAll('.percent-input');
+        if (maritalStatus === 'married' || maritalStatus === 'common-law') {
+            percentInputs.forEach(input => input.style.display = 'block');
+            console.log('Showing percent inputs for maritalStatus:', maritalStatus);
+        } else {
+            percentInputs.forEach(input => input.style.display = 'none');
+            console.log('Hiding percent inputs for maritalStatus:', maritalStatus);
+        }
+
+        const spouseCheckbox = container.querySelector('#assetspousecheckbox');
+        if (spouseCheckbox) {
+            const spouseValue = getLocal('assetspousecheckbox');
+            spouseCheckbox.checked = spouseValue === 'checked';
+            spouseCheckbox.removeEventListener('change', handleSpouseChange);
+            spouseCheckbox.addEventListener('change', handleSpouseChange);
+            function handleSpouseChange() {
+                setLocal('assetspousecheckbox', this.checked ? 'checked' : 'unchecked', 365);
+                percentInputs.forEach(input => {
+                    input.style.display = this.checked ? 'block' : 'none';
+                });
+                console.log(`Asset spouse checkbox set to: ${this.checked ? 'checked' : 'unchecked'}`);
+                calculateAll();
+            }
+        } else {
+            console.error('assetspousecheckbox not found');
+        }
+
+        const nextButton = container.querySelector('#nextButton');
+        if (nextButton) {
+            nextButton.removeEventListener('click', calculateNext);
+            nextButton.addEventListener('click', calculateNext);
+            console.log('calculateNext bound to nextButton');
+        } else {
+            console.error('nextButton not found');
+        }
+
+        const backButton = container.querySelector('#backButton');
+        if (backButton) {
+            backButton.removeEventListener('click', calculateBack);
+            backButton.addEventListener('click', calculateBack);
+            console.log('calculateBack bound to backButton');
+        } else {
+            console.error('backButton not found');
+        }
+
+        calculateAll();
+    }
+
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url} (asset.js)`);
+            console.log(`Attempting to load stored content from ${url}`);
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully (asset.js)');
+            console.log('Stored content fetched successfully');
 
-            // Update container with content
             dataContainer.innerHTML = `
-                <span class="close-data-container"></span>
+                <span class="close-data-container">-</span>
                 <span class="data-label">ASSET</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into asset container (asset.js)`);
+            console.log(`Stored content loaded into asset container`);
+
+            const scripts = dataContainer.querySelectorAll('script');
+            scripts.forEach(script => {
+                if (script.src && ![
+                    'asset.js', 'setlocal.js', 'getlocal.js'
+                ].some(exclude => script.src.includes(exclude))) {
+                    const newScript = document.createElement('script');
+                    newScript.src = script.src;
+                    if (
+                        script.src.includes('utils.js') ||
+                        script.src.includes('hideShow.js')
+                    ) {
+                        newScript.type = 'module';
+                    }
+                    newScript.onerror = () => console.error(`Failed to load script: ${script.src}`);
+                    document.body.appendChild(newScript);
+                } else if (!script.src) {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript);
+                }
+            });
+
+            initializeAssetForm(dataContainer);
         } catch (error) {
-            console.error(`Error loading stored content (asset.js):`, error);
+            console.error(`Error loading stored content:`, error);
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-asset')) {
-            console.log('Asset data container already exists, skipping initialization (asset.js)');
+            console.log('Asset data container already exists, skipping initialization');
             return;
         }
 
@@ -55,7 +365,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 visibility: visible;
                 opacity: 1;
             }
-        
             .data-container-asset.collapsed {
                 max-width: 18px;
                 height: 120px;
@@ -64,22 +373,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 align-items: center;
                 z-index: 10001;
             }
-        
             .data-container-asset.expanded {
-                width: 85vw;
-                max-width: calc(85vw - 20px);
+                width: 90vw;
+                max-width: calc(90vw - 20px);
                 min-width: 25%;
                 max-height: 95%;
                 top: 20px;
-                margin-right: -webkit-calc(85vw - 20px);
-                margin-right: -moz-calc(85vw - 20px);
-                margin-right: calc(85vw - 20px);
+                margin-right: calc(90vw - 20px);
             }
-        
             .data-container-asset:hover {
                 background-color: rgb(255, 255, 255);
             }
-        
             .data-container-asset .close-data-container {
                 position: absolute;
                 top: 4px;
@@ -92,7 +396,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 font-weight: bold;
                 font-family: "Inter", sans-serif;
             }
-        
             .data-container-asset .data-label {
                 text-decoration: none;
                 color: #000;
@@ -108,7 +411,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 writing-mode: vertical-rl;
                 text-orientation: mixed;
             }
-        
             .data-container-asset.expanded .data-label {
                 writing-mode: horizontal-tb;
                 position: absolute;
@@ -118,7 +420,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 font-size: 16px;
                 padding: 5px;
             }
-        
             .data-container-asset .data-content {
                 padding: 10px;
                 font-size: 14px;
@@ -129,44 +430,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 max-width: 100%;
                 margin-top: 30px;
             }
-        
             @media (max-width: 480px) {
                 .data-container-asset {
                     max-width: 28px;
                     padding: 3px;
                 }
-        
                 .data-container-asset.collapsed {
                     width: 28px;
                     height: 100px;
                     z-index: 10001;
                 }
-        
                 .data-container-asset.expanded {
-                    width: 85vw;
-                    max-width: calc(85vw - 10px);
+                    width: 90vw;
+                    max-width: calc(90vw - 10px);
                     max-height: 95%;
                     top: 10px;
-                    margin-right: -webkit-calc(85vw - 10px);
-                    margin-right: -moz-calc(85vw - 10px);
-                    margin-right: calc(85vw - 10px);
+                    margin-right: calc(90vw - 10px);
                 }
-        
                 .data-container-asset .data-label {
                     font-size: 10px;
                     padding: 3px;
                 }
-        
                 .data-container-asset.expanded .data-label {
                     font-size: 14px;
                     padding: 4px;
                 }
-        
                 .data-container-asset .close-data-container {
                     font-size: 12px;
                     padding: 4px;
                 }
-        
                 .data-container-asset .data-content {
                     font-size: 12px;
                     padding: 8px;
@@ -184,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Asset data container injected with state: collapsed (asset.js)');
+        console.log('Asset data container injected with state: collapsed');
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -194,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 toggleDataContainer();
             });
         } else {
-            console.error('Asset data label not found (asset.js)');
+            console.error('Asset data label not found');
         }
 
         function toggleDataContainer() {
@@ -209,7 +501,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.innerHTML = `
                     <span class="data-label">ASSET</span>
                 `;
-                console.log('Asset data container collapsed (asset.js)');
+                console.log('Asset data container collapsed');
             } else {
                 dataContainer.classList.remove('collapsed');
                 dataContainer.classList.add('expanded');
@@ -217,7 +509,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 loadStoredContent(dataContainer, '/ai/budget/asset.html');
             }
 
-            // Re-bind event listeners
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');
 
@@ -236,12 +527,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Add outside click listener to collapse when expanded
         document.addEventListener('click', function (e) {
             if (dataContainer && dataContainer.dataset.state === 'expanded') {
                 const isClickInside = dataContainer.contains(e.target);
-                if (!isClickInside) {
-                    console.log('Clicked outside asset data container, collapsing (asset.js)');
+                const isNavButton = e.target.closest('#nextButton, #backButton');
+                if (!isClickInside && !isNavButton) {
+                    console.log('Clicked outside asset data container, collapsing');
                     toggleDataContainer();
                 }
             }
@@ -251,6 +542,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing asset data container (asset.js):', error);
+        console.error('Error initializing asset data container:', error);
     }
 });

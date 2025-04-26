@@ -7,30 +7,339 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Dependency fallbacks
+    const setLocal = window.setLocal || function (key, value, days) {
+        console.warn('setLocal not defined, using localStorage directly');
+        try {
+            localStorage.setItem(key, encodeURIComponent(value));
+        } catch (error) {
+            console.error('Error in setLocal:', error);
+        }
+    };
+    const getLocal = window.getLocal || function (key) {
+        console.warn('getLocal not defined, using localStorage directly');
+        try {
+            const value = localStorage.getItem(key);
+            return value ? decodeURIComponent(value) : null;
+        } catch (error) {
+            console.error('Error in getLocal:', error);
+            return null;
+        }
+    };
+    const setCookie = window.setCookie || function (name, value, days) {
+        console.warn('setCookie not defined, using document.cookie directly');
+        try {
+            let expires = '';
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = `; expires=${date.toUTCString()}`;
+            }
+            document.cookie = `${name}=${encodeURIComponent(value)}${expires}; path=/`;
+        } catch (error) {
+            console.error('Error in setCookie:', error);
+        }
+    };
+
+    // Liability logic
+    console.log('Liability logic initialized in liabilitytab.js');
+    let liabilityInitialized = false;
+    let LIABILITIES = 0;
+    let LIABILITIESNA = 0;
+
+    function calculateLiabilities() {
+        const liabilitiesFields = [
+            'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
+            'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan',
+            'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears'
+        ];
+
+        let liabilities = 0;
+
+        for (let i = 0; i < liabilitiesFields.length; i++) {
+            const field = liabilitiesFields[i];
+            const element = document.getElementById(field);
+            if (!element) {
+                console.error(`Element #${field} not found`);
+                continue;
+            }
+            const fieldValue = element.value;
+            console.log(`Field value for ${field}: ${fieldValue}`);
+            const parsedValue = parseFloat(fieldValue);
+            if (!isNaN(parsedValue)) {
+                let fieldPercentage = parseFloat(document.querySelector(`#${field}_percent`)?.value);
+                if (isNaN(fieldPercentage)) {
+                    fieldPercentage = 100;
+                }
+                liabilities += (parsedValue * fieldPercentage / 100);
+            }
+        }
+
+        LIABILITIES = liabilities;
+        const liabilitiesElement = document.getElementById('LIABILITIES');
+        if (liabilitiesElement) {
+            liabilitiesElement.textContent = `$${LIABILITIES.toFixed(2)}`;
+        } else {
+            console.error('LIABILITIES element not found');
+        }
+    }
+
+    function setDebtData2() {
+        const isPartner = getLocal('liabilityspousecheckbox') === 'checked';
+        const liabilitiesFields = [
+            'liabilities_personal_debt', 'liabilities_student_loan', 'liabilities_line_of_credit',
+            'liabilities_credit_card', 'liabilities_tax_arrears'
+        ];
+
+        let totalDebt = 0;
+
+        liabilitiesFields.forEach(field => {
+            const element = document.getElementById(field);
+            if (!element) {
+                console.error(`Element #${field} not found`);
+                return;
+            }
+            const fieldValue = parseFloat(element.value) || 0;
+            let fieldValuePercent = parseFloat(document.getElementById(`${field}_percent`)?.value);
+            if (isNaN(fieldValuePercent) || !isPartner) {
+                fieldValuePercent = 100;
+            }
+            totalDebt += (fieldValue * fieldValuePercent / 100);
+        });
+
+        LIABILITIESNA = totalDebt;
+    }
+
+    function calculateAll() {
+        calculateLiabilities();
+        setLocal("LIABILITIES", LIABILITIES, 365);
+        setDebtData2();
+        setLocal("LIABILITIESNA", LIABILITIESNA, 365);
+
+        const fields = [
+            'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
+            'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan',
+            'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears'
+        ];
+
+        fields.forEach(field => {
+            const element = document.getElementById(field);
+            const percentElement = document.getElementById(`${field}_percent`);
+            if (element) {
+                setLocal(field, element.value.trim() !== "" ? element.value : "0", 365);
+            }
+            if (percentElement) {
+                setLocal(`${field}_percent`, percentElement.value.trim() !== "" ? percentElement.value : "100", 365);
+            }
+        });
+    }
+
+    function calculateNext() {
+        calculateAll();
+        setCookie('summary_reached', Date.now(), 365);
+        const originalQuerySelector = document.querySelector.bind(document);
+        const liabilityContainer = originalQuerySelector('.data-container-liability');
+        if (liabilityContainer && liabilityContainer.dataset.state === 'expanded') {
+            const liabilityClose = liabilityContainer.querySelector('.close-data-container');
+            if (liabilityClose) {
+                liabilityClose.click();
+                console.log('Liability tab closed');
+            } else {
+                console.error('Liability close button not found');
+            }
+        } else {
+            console.log('Liability tab already closed or not found');
+        }
+        const summaryContainer = originalQuerySelector('.data-container-summary');
+        if (summaryContainer) {
+            const summaryLabel = summaryContainer.querySelector('.data-label');
+            if (summaryLabel) {
+                setTimeout(() => {
+                    summaryLabel.click();
+                    console.log('Summary tab triggered to open');
+                }, 300);
+            } else {
+                console.error('Summary data label not found');
+            }
+        } else {
+            console.error('Summary data container not found. Ensure summary.js is loaded');
+        }
+    }
+
+    function calculateBack() {
+        calculateAll();
+        const originalQuerySelector = document.querySelector.bind(document);
+        const liabilityContainer = originalQuerySelector('.data-container-liability');
+        if (liabilityContainer && liabilityContainer.dataset.state === 'expanded') {
+            const liabilityClose = liabilityContainer.querySelector('.close-data-container');
+            if (liabilityClose) {
+                liabilityClose.click();
+                console.log('Liability tab closed');
+            } else {
+                console.error('Liability close button not found');
+            }
+        } else {
+            console.log('Liability tab already closed or not found');
+        }
+        const assetContainer = originalQuerySelector('.data-container-asset');
+        if (assetContainer) {
+            const assetLabel = assetContainer.querySelector('.data-label');
+            if (assetLabel) {
+                setTimeout(() => {
+                    assetLabel.click();
+                    console.log('Asset tab triggered to open');
+                }, 300);
+            } else {
+                console.error('Asset data label not found');
+            }
+        } else {
+            console.error('Asset data container not found. Ensure asset.js is loaded');
+        }
+    }
+
+    function initializeLiabilityForm(container) {
+        if (liabilityInitialized) {
+            console.log('Liability form already initialized, skipping');
+            return;
+        }
+        liabilityInitialized = true;
+        console.log('Liability form initialized');
+
+        const tabs = container.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.removeEventListener('click', handleTabClick);
+            tab.addEventListener('click', handleTabClick);
+            function handleTabClick() {
+                const dataL = tab.getAttribute('data-location');
+                const location = document.location.pathname;
+                if (location.includes(dataL)) {
+                    tab.removeAttribute('href');
+                    tab.classList.add('active');
+                }
+            }
+        });
+
+        const formElements = [
+            'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
+            'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan',
+            'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears',
+            'liabilities_small_business_loan_percent', 'liabilities_primary_residence_percent', 'liabilities_investment_properties_percent',
+            'liabilities_vehicle_loan_percent', 'liabilities_personal_debt_percent', 'liabilities_student_loan_percent',
+            'liabilities_line_of_credit_percent', 'liabilities_credit_card_percent', 'liabilities_tax_arrears_percent'
+        ];
+
+        formElements.forEach(elementId => {
+            const element = container.querySelector(`#${elementId}`);
+            if (element) {
+                const savedValue = getLocal(elementId);
+                if (savedValue !== null) {
+                    element.value = savedValue;
+                    console.log(`Set ${elementId} to saved value: ${savedValue}`);
+                } else {
+                    console.log(`No saved value for ${elementId}`);
+                }
+                element.removeEventListener('input', handleInputChange);
+                element.addEventListener('input', handleInputChange);
+                function handleInputChange() {
+                    setLocal(elementId, element.value.trim() !== "" ? element.value : elementId.includes('_percent') ? "100" : "0", 365);
+                    console.log(`Saved ${elementId}: ${element.value}`);
+                    calculateAll();
+                }
+            } else {
+                console.error(`Element #${elementId} not found`);
+            }
+        });
+
+        const romanticliabilityCheckbox = container.querySelector('#liabilityspousecheckbox');
+        if (romanticliabilityCheckbox) {
+            const romanticliabilityValue = getLocal('romanticliability');
+            romanticliabilityCheckbox.checked = romanticliabilityValue === 'checked';
+            romanticliabilityCheckbox.removeEventListener('change', handleRomanticChange);
+            romanticliabilityCheckbox.addEventListener('change', handleRomanticChange);
+            function handleRomanticChange() {
+                setLocal('romanticliability', this.checked ? 'checked' : 'unchecked', 365);
+                const percentInputs = container.querySelectorAll('.percent-input');
+                percentInputs.forEach(input => {
+                    input.style.display = this.checked ? 'block' : 'none';
+                });
+                console.log(`Romantic liability set to: ${this.checked ? 'checked' : 'unchecked'}`);
+            }
+            const percentInputs = container.querySelectorAll('.percent-input');
+            percentInputs.forEach(input => {
+                input.style.display = romanticliabilityCheckbox.checked ? 'block' : 'none';
+            });
+        } else {
+            console.error('liabilityspousecheckbox not found');
+        }
+
+        const nextButton = container.querySelector('#nextButton');
+        if (nextButton) {
+            nextButton.removeEventListener('click', calculateNext);
+            nextButton.addEventListener('click', calculateNext);
+            console.log('calculateNext bound to nextButton');
+        } else {
+            console.error('nextButton not found');
+        }
+
+        const backButton = container.querySelector('#backButton');
+        if (backButton) {
+            backButton.removeEventListener('click', calculateBack);
+            backButton.addEventListener('click', calculateBack);
+            console.log('calculateBack bound to backButton');
+        } else {
+            console.error('backButton not found');
+        }
+
+        calculateAll();
+    }
+
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url} (liability.js)`);
+            console.log(`Attempting to load stored content from ${url}`);
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully (liability.js)');
+            console.log('Stored content fetched successfully');
 
-            // Update container with content
             dataContainer.innerHTML = `
-                <span class="close-data-container"></span>
+                <span class="close-data-container">-</span>
                 <span class="data-label">LIABILITY</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into liability container (liability.js)`);
+            console.log(`Stored content loaded into liability container`);
+
+            const scripts = dataContainer.querySelectorAll('script');
+            scripts.forEach(script => {
+                if (script.src && ![
+                    'liability.js', 'setlocal.js', 'getlocal.js', 'setcookie.js'
+                ].some(exclude => script.src.includes(exclude))) {
+                    const newScript = document.createElement('script');
+                    newScript.src = script.src;
+                    if (
+                        script.src.includes('utils.js') ||
+                        script.src.includes('hideShow.js')
+                    ) {
+                        newScript.type = 'module';
+                    }
+                    newScript.onerror = () => console.error(`Failed to load script: ${script.src}`);
+                    document.body.appendChild(newScript);
+                } else if (!script.src) {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript);
+                }
+            });
+
+            initializeLiabilityForm(dataContainer);
         } catch (error) {
-            console.error(`Error loading stored content (liability.js):`, error);
+            console.error(`Error loading stored content:`, error);
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-liability')) {
-            console.log('Liability data container already exists, skipping initialization (liability.js)');
+            console.log('Liability data container already exists, skipping initialization');
             return;
         }
 
@@ -55,7 +364,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 visibility: visible;
                 opacity: 1;
             }
-        
             .data-container-liability.collapsed {
                 max-width: 18px;
                 height: 120px;
@@ -64,22 +372,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 align-items: center;
                 z-index: 10001;
             }
-        
             .data-container-liability.expanded {
-                width: 85vw;
-                max-width: calc(85vw - 20px);
+                width: 90vw;
+                max-width: calc(90vw - 20px);
                 min-width: 25%;
                 max-height: 95%;
                 top: 20px;
-                margin-right: -webkit-calc(85vw - 20px);
-                margin-right: -moz-calc(85vw - 20px);
                 margin-right: calc(85vw - 20px);
             }
-        
             .data-container-liability:hover {
                 background-color: rgb(255, 255, 255);
             }
-        
             .data-container-liability .close-data-container {
                 position: absolute;
                 top: 4px;
@@ -92,7 +395,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 font-weight: bold;
                 font-family: "Inter", sans-serif;
             }
-        
             .data-container-liability .data-label {
                 text-decoration: none;
                 color: #000;
@@ -108,7 +410,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 writing-mode: vertical-rl;
                 text-orientation: mixed;
             }
-        
             .data-container-liability.expanded .data-label {
                 writing-mode: horizontal-tb;
                 position: absolute;
@@ -118,7 +419,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 font-size: 16px;
                 padding: 5px;
             }
-        
             .data-container-liability .data-content {
                 padding: 10px;
                 font-size: 14px;
@@ -129,44 +429,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 max-width: 100%;
                 margin-top: 30px;
             }
-        
             @media (max-width: 480px) {
                 .data-container-liability {
                     max-width: 28px;
                     padding: 3px;
                 }
-        
                 .data-container-liability.collapsed {
                     width: 28px;
                     height: 100px;
                     z-index: 10001;
                 }
-        
                 .data-container-liability.expanded {
-                    width: 85vw;
-                    max-width: calc(85vw - 10px);
+                    width: 90vw;
+                    max-width: calc(90vw - 10px);
                     max-height: 95%;
                     top: 10px;
-                    margin-right: -webkit-calc(85vw - 10px);
-                    margin-right: -moz-calc(85vw - 10px);
                     margin-right: calc(85vw - 10px);
                 }
-        
                 .data-container-liability .data-label {
                     font-size: 10px;
                     padding: 3px;
                 }
-        
                 .data-container-liability.expanded .data-label {
                     font-size: 14px;
                     padding: 4px;
                 }
-        
                 .data-container-liability .close-data-container {
                     font-size: 12px;
                     padding: 4px;
                 }
-        
                 .data-container-liability .data-content {
                     font-size: 12px;
                     padding: 8px;
@@ -184,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Liability data container injected with state: collapsed (liability.js)');
+        console.log('Liability data container injected with state: collapsed');
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -194,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 toggleDataContainer();
             });
         } else {
-            console.error('Liability data label not found (liability.js)');
+            console.error('Liability data label not found');
         }
 
         function toggleDataContainer() {
@@ -209,7 +500,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.innerHTML = `
                     <span class="data-label">LIABILITY</span>
                 `;
-                console.log('Liability data container collapsed (liability.js)');
+                console.log('Liability data container collapsed');
             } else {
                 dataContainer.classList.remove('collapsed');
                 dataContainer.classList.add('expanded');
@@ -217,7 +508,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 loadStoredContent(dataContainer, '/ai/budget/liability.html');
             }
 
-            // Re-bind event listeners
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');
 
@@ -236,12 +526,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Add outside click listener to collapse when expanded
         document.addEventListener('click', function (e) {
             if (dataContainer && dataContainer.dataset.state === 'expanded') {
                 const isClickInside = dataContainer.contains(e.target);
-                if (!isClickInside) {
-                    console.log('Clicked outside liability data container, collapsing (liability.js)');
+                const isNavButton = e.target.closest('#nextButton, #backButton');
+                if (!isClickInside && !isNavButton) {
+                    console.log('Clicked outside liability data container, collapsing');
                     toggleDataContainer();
                 }
             }
@@ -251,6 +541,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing liability data container (liability.js):', error);
+        console.error('Error initializing liability data container:', error);
     }
 });

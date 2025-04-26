@@ -26,7 +26,6 @@
      <link rel="shortcut icon" href="/images/favicon.ico" />
      <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
  
-     <link rel="manifest" href="/manifest.json">
  </head>
  
  <body>
@@ -35,7 +34,7 @@
     
 
  
-     <div class="container">
+     <div class="containerinter">
          <h2 style="text-align: center; font-size: 18px; margin-bottom:15px;" class="tooltip1" data-tooltip="Employment involves working under a contract for an employer, receiving a regular salary or wage, and generally includes benefits like health insurance. Self-employment means working for oneself, where income might fluctuate based on work volume, with the individual handling their own taxes, benefits, and business expenses.">
              Input Employment - Self Employment Income<span class="tooltip1-content"></span>
          </h2>
@@ -85,9 +84,8 @@
                  Optional - Self Employed Worksheet *Payment Required*
              </span>
          </div>
-     </div>
+   
      
-     <div class="containerround">
          <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1" data-tooltip="Retirement income refers to the money received by individuals after they stop working, sourced from personal savings, pensions, or investment plans. Social benefit income encompasses payments from government welfare programs providing financial assistance based on criteria like age, unemployment, or disability, aimed at supporting those in need when they cannot earn through regular employment.">
              Input Retirement - Social Benefit Income<span class="tooltip1-content"></span>
          </h2>
@@ -131,9 +129,8 @@
              <div data-frequency-id="income_employment_insurance_frequency"></div>
              <span id="income_employment_insurance_annual"></span>
          </div>
-     </div>
+    
  
-     <div class="containerround">
          <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1" data-tooltip="Passive income is earnings derived from ventures in which an individual is not actively involved, such as rental properties, royalties from creative works, or income from investments like dividends from stocks, interest from savings, or capital gains from asset sales. It contrasts with active income from employment or business operations where direct labor is exchanged for money.">
              Input Passive Income<span class="tooltip1-content"></span>
          </h2>
@@ -227,9 +224,8 @@
              <div data-frequency-id="income_trust_frequency"></div>
              <span id="income_trust_annual"></span>
          </div>
-     </div>
+     
  
-     <div class="containerround">
          <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1" data-tooltip="Refers to any income that doesn't fit neatly into the categories of employment, self-employment, investment, or social benefits. This can include earnings from side gigs not considered a primary job, child support or alimony, lottery winnings, inheritances, or any other miscellaneous sources of revenue not derived from regular work or investments.">
              Input Other Income<span class="tooltip1-content"></span>
          </h2>
@@ -273,9 +269,8 @@
              <div data-frequency-id="income_gambling_winnings_frequency"></div>
              <span id="income_gambling_winnings_annual"></span>
          </div>
-     </div>
+     
  
-     <div class="containerround">
          <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
              <div class="checkbox-wrapper-2">
                  <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
@@ -330,15 +325,9 @@
          </div>  
      </div>
  
-     <script src="/utility/hideShow.js" type="module"></script>
+     
      <script src="/index.js"></script>
-     <script src="/ai/budget/income.js" type="module"></script>
-     <script src="/utility/toolTip.js"></script>
-     <script type="module" src="/ai/budget/floatingbutton.js"></script>
-     <script type="module" src="/utility/utils.js"></script>
-     <script type="module" src="/utility/cookieoverwrite.js"></script>
-     <script src="/utility/modal.js"></script>
-     <script src="/ai/budget/frequency.js" type="module"></script>
+   
  </body>
  
  </html>

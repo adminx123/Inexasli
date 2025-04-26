@@ -78,17 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Show summary-container and trigger tax calculation on generate button click
-    const generateBtn = document.querySelector('.generate-btn');
-    if (generateBtn) {
-        generateBtn.addEventListener('click', function() {
-            document.querySelector('.summary-container').style.display = 'block';
-            calculateTaxes(); // Trigger xAI tax calculation
-        });
-    }
-
-  
-
     document.getElementById('close-sidebar')?.addEventListener('click', function() {
         document.getElementById('subscribe-sidebar').style.display = 'none';
     });
