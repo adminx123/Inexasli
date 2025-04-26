@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         
             .data-container-income.expanded {
-                max-width:95%;
+                max-width:90%;
                 min-width: 25%;
                 max-height: 95%;
                 top: 20px;
@@ -154,8 +154,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
         
                 .data-container-income.expanded {
-                    width: 85vw;
-                    max-width: calc(85vw - 10px);
+                    width: 90vw;
+                    max-width: calc(90vw - 10px);
                     max-height: 95%;
                     top: 10px;
                     margin-right: -webkit-calc(85vw - 10px);
