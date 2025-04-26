@@ -193,8 +193,40 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.calculateNext = function () {
-    calculateAll();
-    window.location.href = './expense.html';
+    calculateAll(); // Perform calculations as before
+
+    // Use global DOM context to avoid potential overrides
+    const originalQuerySelector = document.querySelector.bind(document);
+
+    // Close the income tab
+    const incomeContainer = originalQuerySelector('.data-container-income');
+    if (incomeContainer && incomeContainer.dataset.state === 'expanded') {
+        const incomeClose = incomeContainer.querySelector('.close-data-container');
+        if (incomeClose) {
+            incomeClose.click(); // Simulate click to close the income tab
+            console.log('Income tab closed (income.js)');
+        } else {
+            console.error('Income close button not found (income.js)');
+        }
+    } else {
+        console.log('Income tab already closed or not found (income.js)');
+    }
+
+    // Open the expense tab
+    const expenseContainer = originalQuerySelector('.data-container-expense');
+    if (expenseContainer) {
+        const expenseLabel = expenseContainer.querySelector('.data-label');
+        if (expenseLabel) {
+            setTimeout(() => {
+                expenseLabel.click(); // Simulate click to open the expense tab
+                console.log('Expense tab triggered to open (income.js)');
+            }, 300); // Delay to ensure income tab closes first
+        } else {
+            console.error('Expense data label not found (income.js)');
+        }
+    } else {
+        console.error('Expense data container not found. Ensure budget.expense.js is loaded (income.js)');
+    }
 };
 
 window.calculateAll = function () {

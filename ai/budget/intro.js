@@ -293,11 +293,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const country = getLocal('selectedCountry');
         const subregion = getLocal('selectedSubregion');
         const fillingStatus = getLocal('fillingStatus');
-
+    
         const ageSelf = document.getElementById('ageSelf').value;
         const ageSpouse = document.getElementById('ageSpouse').value;
         const employmentStatus = document.getElementById('employmentStatus').value;
-
+    
         if (!country) {
             alert('Please select a country.');
             return;
@@ -341,10 +341,40 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Please select an employment status.');
             return;
         }
-
-        window.location.href = './income.html';
+    
+        // Use global DOM context to avoid intro tab overrides
+        const originalQuerySelector = document.querySelector.bind(document);
+    
+        // Close the intro tab
+        const introContainer = originalQuerySelector('.data-container-intro');
+        if (introContainer && introContainer.dataset.state === 'expanded') {
+            const introClose = introContainer.querySelector('.close-data-container');
+            if (introClose) {
+                introClose.click(); // Simulate click to close the intro tab
+                console.log('Intro tab closed (intro.js)');
+            } else {
+                console.error('Intro close button not found (intro.js)');
+            }
+        } else {
+            console.log('Intro tab already closed or not found (intro.js)');
+        }
+    
+        // Open the income tab
+        const incomeContainer = originalQuerySelector('.data-container-income');
+        if (incomeContainer) {
+            const incomeLabel = incomeContainer.querySelector('.data-label');
+            if (incomeLabel) {
+                setTimeout(() => {
+                    incomeLabel.click(); // Simulate click to open the income tab
+                    console.log('Income tab triggered to open (intro.js)');
+                }, 300); // Delay to ensure intro tab closes first
+            } else {
+                console.error('Income data label not found (intro.js)');
+            }
+        } else {
+            console.error('Income data container not found. Ensure income.js is loaded (intro.js)');
+        }
     };
-
     function updateDependantsVisibility() {
         const filingStatusDropdown = document.getElementById('filingStatus');
         const selectedFilingStatus = filingStatusDropdown ? filingStatusDropdown.value : '';
