@@ -7,54 +7,135 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Track initialization state
+    let introInitialized = false;
+
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url}`);
+            console.log(`Attempting to load stored content from ${url} at:`, new Date().toISOString());
+            const startTime = performance.now();
             const response = await fetch(url);
+            const fetchTime = performance.now() - startTime;
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully');
+            console.log(`Stored content fetched in ${fetchTime.toFixed(2)}ms at:`, new Date().toISOString());
 
-            // Update container with content
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">INTRO</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into intro container`);
+            console.log(`Stored content loaded into intro container at:`, new Date().toISOString());
 
-            // Execute scripts in the loaded content
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
                 const newScript = document.createElement('script');
                 if (script.src) {
-                    newScript.src = script.src;
-                    // Set type="module" for scripts that are likely modules
-                    if (script.src.includes('intro.js') || script.src.includes('setlocal.js') || script.src.includes('getlocal.js') || script.src.includes('tray.js')) {
+                    newScript.src = script.src + '?v=' + new Date().getTime();
+                    if (
+                        script.src.includes('introtab.js') ||
+                        script.src.includes('setlocal.js') ||
+                        script.src.includes('getlocal.js') ||
+                        script.src.includes('tray.js') ||
+                        script.src.includes('utils.js') ||
+                        script.src.includes('hideShow.js')
+                    ) {
                         newScript.type = 'module';
                     }
-                    newScript.onload = () => {
-                        if (script.src.includes('intro.js')) {
-                            initializeIntroLogic(dataContainer);
-                        }
-                    };
                     newScript.onerror = () => console.error(`Failed to load script: ${script.src}`);
+                    document.body.appendChild(newScript);
                 } else {
                     newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript);
                 }
-                document.body.appendChild(newScript);
             });
 
-            // Initialize inline scripts immediately
             initializeIntroLogic(dataContainer);
         } catch (error) {
-            console.error(`Error loading stored content:`, error);
+            console.error(`Error loading stored content at:`, new Date().toISOString(), error);
         }
     }
 
-    // Function to initialize the logic from intro.js for the loaded content
+    function calculateNext() {
+        const originalQuerySelector = document.querySelector.bind(document);
+        const introContainer = originalQuerySelector('.data-container-intro');
+        if (introContainer && introContainer.dataset.state === 'expanded') {
+            const introClose = introContainer.querySelector('.close-data-container');
+            if (introClose) {
+                introClose.click();
+                console.log('Intro tab closed at:', new Date().toISOString());
+            } else {
+                console.error('Intro close button not found');
+            }
+        } else {
+            console.log('Intro tab already closed or not found');
+        }
+        const incomeContainer = originalQuerySelector('.data-container-income');
+        if (incomeContainer) {
+            const incomeLabel = incomeContainer.querySelector('.data-label');
+            if (incomeLabel) {
+                setTimeout(() => {
+                    incomeLabel.click();
+                    console.log('Income tab triggered to open at:', new Date().toISOString());
+                }, 300);
+            } else {
+                console.error('Income data label not found');
+            }
+        } else {
+            console.error('Income data container not found. Ensure incometab.js is loaded');
+        }
+    }
+
     function initializeIntroLogic(container) {
+        if (introInitialized) {
+            console.log('Intro form already initialized, skipping at:', new Date().toISOString());
+            return;
+        }
+        introInitialized = true;
+        console.log('Intro form initialized at:', new Date().toISOString());
+
+        // Bind navigation button
+        function bindNavButton() {
+            const navButton = container.querySelector('.nav-btn');
+            if (navButton) {
+                navButton.removeAttribute('onclick');
+                navButton.removeEventListener('click', calculateNext);
+                navButton.addEventListener('click', calculateNext);
+                console.log('calculateNext bound to nav-btn at:', new Date().toISOString());
+                return true;
+            } else {
+                console.warn('nav-btn not found at:', new Date().toISOString());
+                return false;
+            }
+        }
+
+        // Initial attempt to bind
+        bindNavButton();
+
+        // Persistent observer for nav button
+        const observer = new MutationObserver((mutations, obs) => {
+            if (container.querySelector('.nav-btn') && !container.querySelector('.nav-btn').onclick) {
+                console.log('Nav button detected by observer, binding at:', new Date().toISOString());
+                if (bindNavButton()) {
+                    obs.disconnect();
+                }
+            }
+        });
+        observer.observe(container, { childList: true, subtree: true });
+
+        // Fallback binding after delay
+        setTimeout(() => {
+            if (!container.querySelector('.nav-btn')?.onclick) {
+                console.log('Fallback binding attempt for nav-btn at:', new Date().toISOString());
+                if (bindNavButton()) {
+                    console.log('Fallback binding succeeded');
+                } else {
+                    console.error('Fallback binding failed, nav-btn not found. DOM state:', container.innerHTML);
+                }
+            }
+        }, 3000);
+
         // Preserve original DOM methods
         const originalQuerySelector = document.querySelector.bind(document);
         const originalQuerySelectorAll = document.querySelectorAll.bind(document);
@@ -66,9 +147,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById = (id) => container.querySelector(`#${id}`) || originalGetElementById(id);
 
         try {
-            // Trigger the DOMContentLoaded logic from intro.js
             const event = new Event('DOMContentLoaded');
             document.dispatchEvent(event);
+            console.log('Triggered DOMContentLoaded for intro scripts at:', new Date().toISOString());
         } catch (error) {
             console.error('Error triggering DOMContentLoaded:', error);
         }
@@ -81,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-intro')) {
-            console.log('Intro data container already exists, skipping initialization');
+            console.log('Intro data container already exists, skipping initialization at:', new Date().toISOString());
             return;
         }
 
@@ -106,7 +187,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 visibility: visible;
                 opacity: 1;
             }
-        
             .data-container-intro.collapsed {
                 max-width: 18px;
                 height: 120px;
@@ -115,7 +195,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 align-items: center;
                 z-index: 10001;
             }
-        
             .data-container-intro.expanded {
                 width: 90vw;
                 max-width: calc(90vw - 20px);
@@ -124,11 +203,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 top: 20px;
                 margin-right: calc(85vw - 20px);
             }
-        
             .data-container-intro:hover {
                 background-color: rgb(255, 255, 255);
             }
-        
             .data-container-intro .close-data-container {
                 position: absolute;
                 top: 4px;
@@ -141,7 +218,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 font-weight: bold;
                 font-family: "Inter", sans-serif;
             }
-        
             .data-container-intro .data-label {
                 text-decoration: none;
                 color: #000;
@@ -157,7 +233,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 writing-mode: vertical-rl;
                 text-orientation: mixed;
             }
-        
             .data-container-intro.expanded .data-label {
                 writing-mode: horizontal-tb;
                 position: absolute;
@@ -167,7 +242,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 font-size: 16px;
                 padding: 5px;
             }
-        
             .data-container-intro .data-content {
                 padding: 10px;
                 font-size: 14px;
@@ -178,19 +252,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 max-width: 100%;
                 margin-top: 30px;
             }
-        
             @media (max-width: 480px) {
                 .data-container-intro {
                     max-width: 28px;
                     padding: 3px;
                 }
-        
                 .data-container-intro.collapsed {
                     width: 28px;
                     height: 100px;
                     z-index: 10001;
                 }
-        
                 .data-container-intro.expanded {
                     width: 90vw;
                     max-width: calc(90vw - 10px);
@@ -198,22 +269,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     top: 10px;
                     margin-right: calc(85vw - 10px);
                 }
-        
                 .data-container-intro .data-label {
                     font-size: 10px;
                     padding: 3px;
                 }
-        
                 .data-container-intro.expanded .data-label {
                     font-size: 14px;
                     padding: 4px;
                 }
-        
                 .data-container-intro .close-data-container {
                     font-size: 12px;
                     padding: 4px;
                 }
-        
                 .data-container-intro .data-content {
                     font-size: 12px;
                     padding: 8px;
@@ -231,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Intro data container injected with state: collapsed');
+        console.log('Intro data container injected with state: collapsed at:', new Date().toISOString());
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -250,21 +317,19 @@ document.addEventListener('DOMContentLoaded', function () {
             const isExpanded = dataContainer.dataset.state === 'expanded';
 
             if (isExpanded) {
-                dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('collapsed');
+                dataContainer.className = 'data-container-intro collapsed';
                 dataContainer.dataset.state = 'collapsed';
                 dataContainer.innerHTML = `
                     <span class="data-label">INTRO</span>
                 `;
-                console.log('Intro data container collapsed');
+                introInitialized = false;
+                console.log('Intro data container collapsed, state reset at:', new Date().toISOString());
             } else {
-                dataContainer.classList.remove('collapsed');
-                dataContainer.classList.add('expanded');
+                dataContainer.className = 'data-container-intro expanded';
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/budget/intro.html');
             }
 
-            // Re-bind event listeners
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');
 
@@ -283,12 +348,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Add outside click listener to collapse when expanded
         document.addEventListener('click', function (e) {
             if (dataContainer && dataContainer.dataset.state === 'expanded') {
                 const isClickInside = dataContainer.contains(e.target);
-                if (!isClickInside) {
-                    console.log('Clicked outside intro data container, collapsing');
+                const isNavButton = e.target.closest('.nav-btn');
+                if (!isClickInside && !isNavButton) {
+                    console.log('Clicked outside intro data container, collapsing at:', new Date().toISOString());
                     toggleDataContainer();
                 }
             }
@@ -298,6 +363,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing intro data container:', error);
+        console.error('Error initializing intro data container at:', new Date().toISOString(), error);
     }
 });
