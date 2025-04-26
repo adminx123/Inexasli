@@ -1340,3 +1340,7 @@ details p {
 }
 
 
+
+.generate-btn:disabled {
+  background-color: #333;
+}
