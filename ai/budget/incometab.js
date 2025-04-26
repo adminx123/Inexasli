@@ -7,21 +7,30 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Import dependencies (assumed to be globally available or bundled)
-    // If setLocal, getLocal, overwriteCookies are not global, include their logic here or ensure they're loaded in budget.html
+    // Dependency fallbacks
     const setLocal = window.setLocal || function (key, value, days) {
         console.warn('setLocal not defined, using localStorage directly');
-        localStorage.setItem(key, value);
+        try {
+            localStorage.setItem(key, encodeURIComponent(value));
+        } catch (error) {
+            console.error('Error in setLocal:', error);
+        }
     };
     const getLocal = window.getLocal || function (key) {
         console.warn('getLocal not defined, using localStorage directly');
-        return localStorage.getItem(key);
+        try {
+            const value = localStorage.getItem(key);
+            return value ? decodeURIComponent(value) : null;
+        } catch (error) {
+            console.error('Error in getLocal:', error);
+            return null;
+        }
     };
     const overwriteCookies = window.overwriteCookies || function () {
         console.warn('overwriteCookies not defined');
     };
 
-    // Income.js logic
+    // Income logic
     console.log('Income logic initialized in incometab.js');
     let incomeInitialized = false;
     var ANNUALEMPLOYMENTINCOME = 0;
@@ -210,7 +219,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function initializeIncomeForm(container) {
-        if (incomeInitialized) return;
+        if (incomeInitialized) {
+            console.log('Income form already initialized, skipping');
+            return;
+        }
         incomeInitialized = true;
         console.log('Income form initialized');
 
@@ -233,32 +245,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (checkbox1) {
-            const newCheckbox1 = checkbox1.cloneNode(true);
-            checkbox1.parentNode.replaceChild(newCheckbox1, checkbox1);
-            newCheckbox1.addEventListener('click', handleCheckboxChange);
+            checkbox1.checked = getTermsCookie('term1');
+            // Remove existing listeners to prevent duplicates
+            checkbox1.removeEventListener('click', handleCheckboxChange);
+            checkbox1.addEventListener('click', handleCheckboxChange);
+            console.log('termscheckbox initialized, checked:', checkbox1.checked);
+        } else {
+            console.error('termscheckbox not found');
         }
         if (checkbox2) {
-            const newCheckbox2 = checkbox2.cloneNode(true);
-            checkbox2.parentNode.replaceChild(newCheckbox2, checkbox2);
-            newCheckbox2.addEventListener('click', handleCheckboxChange);
+            checkbox2.checked = getTermsCookie('term2');
+            checkbox2.removeEventListener('click', handleCheckboxChange);
+            checkbox2.addEventListener('click', handleCheckboxChange);
+            console.log('notintended initialized, checked:', checkbox2.checked);
+        } else {
+            console.error('notintended not found');
         }
 
         tabs.forEach(tab => {
-            const newTab = tab.cloneNode(true);
-            tab.parentNode.replaceChild(newTab, tab);
-            const dataL = newTab.getAttribute('data-location');
+            tab.removeEventListener('click', handleTabClick);
+            tab.addEventListener('click', handleTabClick);
+            const dataL = tab.getAttribute('data-location');
             const location = document.location.pathname;
-            newTab.addEventListener('click', handleTabClick);
             if (location.includes(dataL)) {
-                newTab.removeAttribute('href');
-                newTab.classList.add('active');
+                tab.removeAttribute('href');
+                tab.classList.add('active');
             }
         });
-
-        const isChecked1 = getTermsCookie('term1');
-        const isChecked2 = getTermsCookie('term2');
-        if (checkbox1) checkbox1.checked = isChecked1;
-        if (checkbox2) checkbox2.checked = isChecked2;
 
         const formElements = [
             'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop',
@@ -272,28 +285,37 @@ document.addEventListener('DOMContentLoaded', function () {
             const element = container.querySelector(`#${elementId}`);
             if (element) {
                 const savedValue = getLocal(elementId);
-                if (savedValue) element.value = savedValue;
-                const newElement = element.cloneNode(true);
-                element.parentNode.replaceChild(newElement, element);
-                newElement.addEventListener('input', () => {
-                    setLocal(elementId, newElement.value.trim() !== "" ? newElement.value : "0", 365);
-                });
+                if (savedValue !== null) {
+                    element.value = savedValue;
+                    console.log(`Set ${elementId} to saved value: ${savedValue}`);
+                } else {
+                    console.log(`No saved value for ${elementId}`);
+                }
+                // Remove existing input listeners to prevent duplicates
+                element.removeEventListener('input', handleInputChange);
+                element.addEventListener('input', handleInputChange);
+                function handleInputChange() {
+                    setLocal(elementId, element.value.trim() !== "" ? element.value : "0", 365);
+                    console.log(`Saved ${elementId}: ${element.value}`);
+                }
+            } else {
+                console.error(`Element #${elementId} not found`);
             }
         });
 
         const overwriteLink = container.querySelector('#cookie-overwrite-link');
         if (overwriteLink) {
-            const newOverwriteLink = overwriteLink.cloneNode(true);
-            overwriteLink.parentNode.replaceChild(newOverwriteLink, overwriteLink);
-            newOverwriteLink.addEventListener('click', e => {
+            overwriteLink.removeEventListener('click', handleOverwriteClick);
+            overwriteLink.addEventListener('click', handleOverwriteClick);
+            function handleOverwriteClick(e) {
                 e.preventDefault();
                 overwriteCookies();
-            });
+            }
         }
 
-        const paid = getLocal("authenticated") == "paid";
+        const paid = getLocal("authenticated") === "paid";
         const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
-        if (calculatedFromWorksheet == 'true' && paid) {
+        if (calculatedFromWorksheet === 'true' && paid) {
             const totalRevenue = getLocal("totalRevenue");
             const selfEmploymentIncomeField = container.querySelector("#income_sole_prop");
             if (selfEmploymentIncomeField) {
@@ -301,8 +323,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 setLocal("income_sole_prop", totalRevenue, 365);
                 setLocal('calculated_from_worksheet', 'resolved', 365);
                 selfEmploymentIncomeField.placeholder = "";
+                console.log(`Set income_sole_prop to totalRevenue: ${totalRevenue}`);
             }
-        } else if (calculatedFromWorksheet == 'true' && !paid) {
+        } else if (calculatedFromWorksheet === 'true' && !paid) {
             const selfEmploymentIncomeField = container.querySelector("#income_sole_prop");
             if (selfEmploymentIncomeField) {
                 selfEmploymentIncomeField.placeholder = "payment required";
@@ -319,9 +342,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
                 checkboxes.forEach(checkbox => {
-                    const newCheckbox = checkbox.cloneNode(true);
-                    checkbox.parentNode.replaceChild(newCheckbox, checkbox);
-                    newCheckbox.addEventListener('change', function () {
+                    checkbox.removeEventListener('change', handleCheckboxGroupChange);
+                    checkbox.addEventListener('change', handleCheckboxGroupChange);
+                    function handleCheckboxGroupChange() {
                         try {
                             if (this.checked) {
                                 checkboxes.forEach(cb => {
@@ -338,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         } catch (error) {
                             console.error(`Error in checkbox change for ${group.id}:`, error);
                         }
-                    });
+                    }
                 });
                 const savedFrequency = getLocal(`frequency_${group.id}`);
                 const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) ||
@@ -372,10 +395,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (content && message) content.textContent = message;
         });
         interactiveElements.forEach(element => {
-            const newElement = element.cloneNode(true);
-            element.parentNode.replaceChild(newElement, element);
-            newElement.addEventListener("click", e => {
-                const row = newElement.closest(".checkboxrow");
+            element.removeEventListener('click', handleTooltipClick);
+            element.addEventListener('click', handleTooltipClick);
+            function handleTooltipClick(e) {
+                const row = element.closest(".checkboxrow");
                 const tooltip = row.querySelector(".tooltip");
                 const content = tooltip ? tooltip.querySelector(".tooltip-content") : null;
                 container.querySelectorAll(".checkboxrow").forEach(r => {
@@ -400,9 +423,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
                 e.stopPropagation();
-            });
+            }
         });
-        document.addEventListener("click", e => {
+        document.removeEventListener('click', handleOutsideClick);
+        document.addEventListener('click', handleOutsideClick);
+        function handleOutsideClick(e) {
             if (!e.target.closest(".checkboxrow")) {
                 container.querySelectorAll(".checkboxrow").forEach(r => {
                     r.classList.remove("active");
@@ -410,10 +435,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (tooltip) tooltip.classList.remove("show");
                 });
             }
-        });
+        }
     }
 
-    // Tab container logic
     async function loadStoredContent(dataContainer, url) {
         try {
             console.log(`Attempting to load stored content from ${url}`);
@@ -457,7 +481,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const validateButton = dataContainer.querySelector('.nav-btn');
             if (validateButton) {
-                validateButton.onclick = validatecheckbox;
+                validateButton.removeEventListener('click', validatecheckbox);
+                validateButton.addEventListener('click', validatecheckbox);
                 console.log('validatecheckbox bound to button');
             } else {
                 console.error('validateButton not found');
