@@ -375,109 +375,117 @@ document.addEventListener('DOMContentLoaded', function () {
         expenseInitialized = true;
         console.log('Expense form initialized');
 
-        const tabs = container.querySelectorAll('.tab');
-        tabs.forEach(tab => {
-            tab.removeEventListener('click', handleTabClick);
-            tab.addEventListener('click', handleTabClick);
-            function handleTabClick() {
-                const dataL = tab.getAttribute('data-location');
-                const location = document.location.pathname;
-                if (location.includes(dataL)) {
-                    tab.removeAttribute('href');
-                    tab.classList.add('active');
-                }
-            }
-        });
+        const observer = new MutationObserver(() => {
+            if (container.querySelector('.data-content')) {
+                observer.disconnect(); // Stop observing once content is loaded
+                console.log('Data content loaded, proceeding with initialization');
 
-        const formElements = [
-            'expenses_grocery', 'expenses_dining', 'expenses_fitness', 'expenses_hygiene', 'expenses_subscriptions',
-            'expenses_entertainment', 'expenses_clothing', 'expenses_vacation', 'expenses_retirement', 'expenses_beauty',
-            'expenses_travel_life_insurance', 'expenses_cellphone_service', 'expenses_medical_dental',
-            'expenses_perscription', 'expenses_line_of_credit_payment', 'expenses_student_loan_payment',
-            'expenses_credit_card_payment', 'expenses_tax_arrears_payment', 'expenses_small_business_loan_payment',
-            'housing_mortgage_payment', 'housing_rent_payment', 'housing_property_tax', 'housing_condo_fee',
-            'housing_hydro', 'housing_insurance', 'housing_repairs', 'housing_water', 'housing_gas',
-            'housing_internet', 'transportation_car_loan_payment', 'transportation_insurance', 'transportation_fuel',
-            'transportation_maintenance', 'transportation_public_transit', 'transportation_ride_hailing',
-            'dependant_day_care', 'dependant_medical_dental', 'dependant_clothing', 'dependant_sports_recreation',
-            'dependant_transportation', 'dependant_tuition', 'dependant_housing', 'dependant_cellular_service'
-        ];
-
-        formElements.forEach(elementId => {
-            const element = container.querySelector(`#${elementId}`);
-            if (element) {
-                const savedValue = getLocal(elementId);
-                if (savedValue !== null) {
-                    element.value = savedValue;
-                    console.log(`Set ${elementId} to saved value: ${savedValue}`);
-                } else {
-                    console.log(`No saved value for ${elementId}`);
-                }
-                element.removeEventListener('input', handleInputChange);
-                element.addEventListener('input', handleInputChange);
-                function handleInputChange() {
-                    setLocal(elementId, element.value.trim() !== "" ? element.value : "0", 365);
-                    console.log(`Saved ${elementId}: ${element.value}`);
-                    calculateAll();
-                }
-            } else {
-                console.error(`Element #${elementId} not found`);
-            }
-        });
-
-        container.querySelectorAll('.checkbox-button-group').forEach(group => {
-            const checkboxes = group.querySelectorAll('input[type="checkbox"]');
-            if (!checkboxes.length) {
-                console.warn(`No checkboxes found in group ${group.id || 'no-id'}`);
-                return;
-            }
-            checkboxes.forEach(checkbox => {
-                checkbox.removeEventListener('change', handleCheckboxChange);
-                checkbox.addEventListener('change', handleCheckboxChange);
-                function handleCheckboxChange() {
-                    if (this.checked) {
-                        checkboxes.forEach(cb => {
-                            if (cb !== this) cb.checked = false;
-                        });
-                        setLocal(`frequency_${group.id}`, this.value, 365);
-                        console.log(`Saved frequency_${group.id}: ${this.value}`);
-                        calculateAll();
+                const tabs = container.querySelectorAll('.tab');
+                tabs.forEach(tab => {
+                    tab.removeEventListener('click', handleTabClick);
+                    tab.addEventListener('click', handleTabClick);
+                    function handleTabClick() {
+                        const dataL = tab.getAttribute('data-location');
+                        const location = document.location.pathname;
+                        if (location.includes(dataL)) {
+                            tab.removeAttribute('href');
+                            tab.classList.add('active');
+                        }
                     }
-                }
-            });
-            const savedFrequency = getLocal(`frequency_${group.id}`);
-            const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) ||
-                                   group.querySelector('input[value="annually"]');
-            if (checkboxToCheck) {
-                checkboxes.forEach(cb => {
-                    if (cb !== checkboxToCheck) cb.checked = false;
                 });
-                checkboxToCheck.checked = true;
-                console.log(`Set ${checkboxToCheck.value} as checked for ${group.id} (saved: ${savedFrequency})`);
-            } else {
-                console.warn(`No valid checkbox for saved value '${savedFrequency}' in ${group.id}`);
+
+                const formElements = [
+                    'expenses_grocery', 'expenses_dining', 'expenses_fitness', 'expenses_hygiene', 'expenses_subscriptions',
+                    'expenses_entertainment', 'expenses_clothing', 'expenses_vacation', 'expenses_retirement', 'expenses_beauty',
+                    'expenses_travel_life_insurance', 'expenses_cellphone_service', 'expenses_medical_dental',
+                    'expenses_perscription', 'expenses_line_of_credit_payment', 'expenses_student_loan_payment',
+                    'expenses_credit_card_payment', 'expenses_tax_arrears_payment', 'expenses_small_business_loan_payment',
+                    'housing_mortgage_payment', 'housing_rent_payment', 'housing_property_tax', 'housing_condo_fee',
+                    'housing_hydro', 'housing_insurance', 'housing_repairs', 'housing_water', 'housing_gas',
+                    'housing_internet', 'transportation_car_loan_payment', 'transportation_insurance', 'transportation_fuel',
+                    'transportation_maintenance', 'transportation_public_transit', 'transportation_ride_hailing',
+                    'dependant_day_care', 'dependant_medical_dental', 'dependant_clothing', 'dependant_sports_recreation',
+                    'dependant_transportation', 'dependant_tuition', 'dependant_housing', 'dependant_cellular_service'
+                ];
+
+                formElements.forEach(elementId => {
+                    const element = container.querySelector(`#${elementId}`);
+                    if (element) {
+                        const savedValue = getLocal(elementId);
+                        if (savedValue !== null) {
+                            element.value = savedValue;
+                            console.log(`Set ${elementId} to saved value: ${savedValue}`);
+                        } else {
+                            console.log(`No saved value for ${elementId}`);
+                        }
+                        element.removeEventListener('input', handleInputChange);
+                        element.addEventListener('input', handleInputChange);
+                        function handleInputChange() {
+                            setLocal(elementId, element.value.trim() !== "" ? element.value : "0", 365);
+                            console.log(`Saved ${elementId}: ${element.value}`);
+                            calculateAll();
+                        }
+                    } else {
+                        console.error(`Element #${elementId} not found`);
+                    }
+                });
+
+                container.querySelectorAll('.checkbox-button-group').forEach(group => {
+                    const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+                    if (!checkboxes.length) {
+                        console.warn(`No checkboxes found in group ${group.id || 'no-id'}`);
+                        return;
+                    }
+                    checkboxes.forEach(checkbox => {
+                        checkbox.removeEventListener('change', handleCheckboxChange);
+                        checkbox.addEventListener('change', handleCheckboxChange);
+                        function handleCheckboxChange() {
+                            if (this.checked) {
+                                checkboxes.forEach(cb => {
+                                    if (cb !== this) cb.checked = false;
+                                });
+                                setLocal(`frequency_${group.id}`, this.value, 365);
+                                console.log(`Saved frequency_${group.id}: ${this.value}`);
+                                calculateAll();
+                            }
+                        }
+                    });
+                    const savedFrequency = getLocal(`frequency_${group.id}`);
+                    const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`) ||
+                                           group.querySelector('input[value="annually"]');
+                    if (checkboxToCheck) {
+                        checkboxes.forEach(cb => {
+                            if (cb !== checkboxToCheck) cb.checked = false;
+                        });
+                        checkboxToCheck.checked = true;
+                        console.log(`Set ${checkboxToCheck.value} as checked for ${group.id} (saved: ${savedFrequency})`);
+                    } else {
+                        console.warn(`No valid checkbox for saved value '${savedFrequency}' in ${group.id}`);
+                    }
+                });
+
+                updateDependantVisibility();
+                updateSingleOrNotVisibility();
+                calculateAll();
+
+                const nextButton = container.querySelector('.nav-btn.nav-right');
+                if (nextButton) {
+                    nextButton.removeEventListener('click', calculateNext);
+                    nextButton.addEventListener('click', calculateNext);
+                    console.log('calculateNext bound to nav-btn.nav-right');
+                } else {
+                    console.error('nav-btn.nav-right not found');
+                }
+
+                const backButton = container.querySelector('.nav-btn.nav-left');
+                if (backButton) {
+                    backButton.removeEventListener('click', calculateBack);
+                    backButton.addEventListener('click', calculateBack);
+                    console.log('calculateBack bound to nav-btn.nav-left');
+                }
             }
         });
-
-        updateDependantVisibility();
-        updateSingleOrNotVisibility();
-        calculateAll();
-
-        const nextButton = container.querySelector('.nav-btn.nav-right');
-        if (nextButton) {
-            nextButton.removeEventListener('click', calculateNext);
-            nextButton.addEventListener('click', calculateNext);
-            console.log('calculateNext bound to nav-btn.nav-right');
-        } else {
-            console.error('nav-btn.nav-right not found');
-        }
-
-        const backButton = container.querySelector('.nav-btn.nav-left');
-        if (backButton) {
-            backButton.removeEventListener('click', calculateBack);
-            backButton.addEventListener('click', calculateBack);
-            console.log('calculateBack bound to nav-btn.nav-left');
-        }
+        observer.observe(container, { childList: true, subtree: true });
     }
 
     async function loadStoredContent(dataContainer, url) {
@@ -502,7 +510,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     'expensetab.js', 'setlocal.js', 'getlocal.js'
                 ].some(exclude => script.src.includes(exclude))) {
                     const newScript = document.createElement('script');
-                    newScript.src = script.src;
+                    newScript.src = script.src + '?v=' + new Date().getTime(); // Prevent caching
                     if (
                         script.src.includes('frequency.js') ||
                         script.src.includes('utils.js') ||
@@ -688,7 +696,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.innerHTML = `
                     <span class="data-label">EXPENSE</span>
                 `;
-                console.log('Expense data container collapsed');
+                expenseInitialized = false; // Reset initialization flag
+                ANNUALEXPENSESUM = 0; // Reset global variables
+                HOUSING = 0;
+                TRANSPORTATION = 0;
+                ESSENTIAL = 0;
+                DISCRETIONARY = 0;
+                DEBT = 0;
+                DEPENDANT = 0;
+                console.log('Expense data container collapsed, state and globals reset');
             } else {
                 dataContainer.classList.remove('collapsed');
                 dataContainer.classList.add('expanded');
