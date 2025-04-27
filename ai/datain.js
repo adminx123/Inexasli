@@ -9,6 +9,7 @@
 import { getCookie } from '/utility/getcookie.js';
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
+const storedFormData = JSON.parse(localStorage.getItem("calorieIqFormData"));
 
 document.addEventListener('DOMContentLoaded', async function () {
     // Check if the "prompt" cookie is more than 10 minutes old
@@ -219,6 +220,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         function initializeGridItems() {
             document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+                if (!item.dataset.value) {
+                    console.warn('Grid item is missing data-value attribute:', item);
+                    return; 
+                }
+        
                 const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
                 const value = localStorage.getItem(key);
                 if (value === 'true') {
@@ -265,6 +271,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 // Initialize grid items after expansion
                 initializeGridItems();
+        
+                if (storedFormData) {
+                    populateIn(storedFormData);
+                }
             }
 
             // Re-bind toggle listeners
@@ -310,4 +320,133 @@ document.addEventListener('DOMContentLoaded', async function () {
     } catch (error) {
         console.error('Error initializing left data container (datain.js):', error);
     }
+    if (storedFormData) {
+        // console.log('stored formdata ', storedFormData)
+        populateIn(storedFormData);
+        
+    } else {
+        // console.log('no stored formdata ')
+        
+    }
 });
+        async function populateIn(storedFormData) {
+            // console.log("Propagating stored form data into input fields, selects, and grid items.");
+        
+            async function waitForElement(selector) {
+                let tries = 0;
+                return new Promise((resolve, reject) => {
+                    const attempt = () => {
+                        const el = document.querySelector(selector);
+                        if (el) {
+                            resolve(el);
+                        } else {
+                            tries++;
+                            if (tries > 50) {
+                                reject(new Error(`Element not found after waiting: ${selector}`));
+                                return;
+                            }
+                            setTimeout(attempt, 100);
+                        }
+                    };
+                    attempt();
+                });
+            }
+        
+            if (storedFormData.goals && Array.isArray(storedFormData.goals)) {
+                for (const goal of storedFormData.goals) {
+                    try {
+                        const goalElement = await waitForElement(`#calorie-goal .grid-item[data-value="${goal}"]`);
+                        goalElement.classList.add('selected');
+                        // console.log(`Goal selected: ${goal}`);
+                    } catch (error) {
+                        console.warn(`Goal element not found for value: ${goal}`);
+                    }
+                }
+            }
+        
+            if (storedFormData.activityLevel) {
+                try {
+                    const activityElement = await waitForElement(`#calorie-activity .grid-item[data-value="${storedFormData.activityLevel}"]`);
+                    activityElement.classList.add('selected');
+                    // console.log(`Activity level selected: ${storedFormData.activityLevel}`);
+                } catch (error) {
+                    console.warn(`Activity level element not found for value: ${storedFormData.activityLevel}`);
+                }
+            }
+        
+            if (storedFormData.needMealRecommendation) {
+                try {
+                    const mealRecommendationElement = await waitForElement(`#calorie-recommendations .grid-item[data-value="Meal Recommendations"]`);
+                    mealRecommendationElement.classList.add('selected');
+                    // console.log("Meal recommendation selected.");
+                } catch (error) {
+                    console.warn("Meal recommendation element not found.");
+                }
+            }
+        
+            // Populate diet restriction (single grid item)
+            if (storedFormData.dietRestriction) {
+                try {
+                    const dietElement = await waitForElement(`#calorie-diet-type .grid-item[data-value="${storedFormData.dietRestriction}"]`);
+                    dietElement.classList.add('selected');
+                    // console.log(`Diet restriction selected: ${storedFormData.dietRestriction}`);
+                } catch (error) {
+                    console.warn(`Diet restriction element not found for value: ${storedFormData.dietRestriction}`);
+                }
+            }
+        
+            // Populate age
+            if (storedFormData.age) {
+                try {
+                    const ageInput = await waitForElement('#calorie-age');
+                    ageInput.value = storedFormData.age;
+                    // console.log(`Age populated: ${storedFormData.age}`);
+                } catch (error) {
+                    console.warn("Age input element not found.");
+                }
+            }
+        
+            if (storedFormData.height) {
+                try {
+                    const heightInput = await waitForElement('#calorie-height');
+                    heightInput.value = storedFormData.height;
+                    // console.log(`Height populated: ${storedFormData.height}`);
+                } catch (error) {
+                    console.warn("Height input element not found.");
+                }
+            }
+        
+            if (storedFormData.weight) {
+                try {
+                    const weightInput = await waitForElement('#calorie-weight');
+                    const weightUnitInput = await waitForElement('#calorie-weight-unit');
+                    weightInput.value = storedFormData.weight.weight;
+                    weightUnitInput.value = storedFormData.weight.unit;
+                    // console.log(`Weight populated: ${storedFormData.weight.weight} ${storedFormData.weight.unit}`);
+                } catch (error) {
+                    console.warn("Weight input or unit element not found.");
+                }
+            }
+        
+            if (storedFormData.sex) {
+                try {
+                    const sexInput = await waitForElement('#calorie-measure');
+                    sexInput.value = storedFormData.sex;
+                    // console.log(`Sex populated: ${storedFormData.sex}`);
+                } catch (error) {
+                    console.warn("Sex input element not found.");
+                }
+            }
+        
+            if (storedFormData.foodLog) {
+                try {
+                    const foodLogInput = await waitForElement('#calorie-food-log');
+                    foodLogInput.value = storedFormData.foodLog;
+                    // console.log(`Food log populated: ${storedFormData.foodLog}`);
+                } catch (error) {
+                    console.warn("Food log input element not found.");
+                }
+            }
+        
+            console.log("Form data propagation completed.");
+        }

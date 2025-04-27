@@ -101,6 +101,7 @@
         }
 
         console.log('Processed form data:', formData);
+        localStorage.setItem("calorieIqFormData", JSON.stringify(formData))
 
         const apiUrl = 'https://ocejuhqqla5zdps4uaiogwswki0vaclp.lambda-url.us-east-1.on.aws/';
 
@@ -127,73 +128,13 @@
             console.log('API response:', data);
             btn.innerText = "success";
             
-            // localStorage.setItem('calorieIqResponse', JSON.stringify(data));
+            localStorage.setItem('calorieIqResponse', JSON.stringify(data));
 
             
             toggleDataOutcontainer()
             toggleDatainContainer()
 
-            function waitForElement(selector) {
-                let tries = 0;
-                return new Promise((resolve, reject) => {
-                  const attempt = () => {
-                    const el = document.querySelector(selector);
-                    if (el) {
-                    //   console.log(`Element found: ${selector}`);
-                      resolve(el);
-                    } else {
-                      tries++;
-                      if (tries > 50) {
-                        reject(new Error(`Element not found after waiting: ${selector}`));
-                        return;
-                      }
-                      setTimeout(attempt, 100);
-                    }
-                  };
-                  attempt();
-                });
-              }
-              
-              async function findAllElements() {
-                const selectors = {
-                  caloriesTarget: '#calories-target',
-                  caloriesIntake: '#calories-intake',
-                  caloriesPercent: '#calories-percent',
-                  proteinTarget: '#protein-target',
-                  proteinIntake: '#protein-intake',
-                  proteinPercent: '#protein-percent',
-                  carbsTarget: '#carbs-target',
-                  carbsIntake: '#carbs-intake',
-                  carbsPercent: '#carbs-percent',
-                  fatTarget: '#fat-target',
-                  fatIntake: '#fat-intake',
-                  fatPercent: '#fat-percent',
-                  fiberTarget: '#fiber-target',
-                  fiberIntake: '#fiber-intake',
-                  fiberPercent: '#fiber-percent',
-                  vitaminDTarget: '#vitaminD-target',
-                  vitaminDIntake: '#vitaminD-intake',
-                  vitaminDPercent: '#vitaminD-percent',
-                  ironTarget: '#iron-target',
-                  ironIntake: '#iron-intake',
-                  ironPercent: '#iron-percent',
-                  calciumTarget: '#calcium-target',
-                  calciumIntake: '#calcium-intake',
-                  calciumPercent: '#calcium-percent',
-                  mealRecommendation: '#meal-recommendation',
-                  bmi: '#BMI'
-                };
-              
-                const entries = await Promise.all(
-                  Object.entries(selectors).map(async ([key, selector]) => {
-                    const element = await waitForElement(selector);
-                    return [key, element];
-                  })
-                );
-              
-                const elements = Object.fromEntries(entries);
-                return elements;
-              }
+
 
 
 
@@ -725,3 +666,69 @@ async function loadStoredContent(dataContainer, url) {
         `;
     }
 }
+
+
+function waitForElement(selector) {
+    let tries = 0;
+    return new Promise((resolve, reject) => {
+      const attempt = () => {
+        const el = document.querySelector(selector);
+        if (el) {
+        //   console.log(`Element found: ${selector}`);
+          resolve(el);
+        } else {
+          tries++;
+          if (tries > 50) {
+            reject(new Error(`Element not found after waiting: ${selector}`));
+            return;
+          }
+          setTimeout(attempt, 100);
+        }
+      };
+      attempt();
+    });
+  }
+  
+  async function findAllElements() {
+   
+  
+    const entries = await Promise.all(
+      Object.entries(spanSelectors).map(async ([key, selector]) => {
+        const element = await waitForElement(selector);
+        return [key, element];
+      })
+    );
+  
+    const elements = Object.fromEntries(entries);
+    return elements;
+  }
+
+
+  var spanSelectors = {
+    caloriesTarget: '#calories-target',
+    caloriesIntake: '#calories-intake',
+    caloriesPercent: '#calories-percent',
+    proteinTarget: '#protein-target',
+    proteinIntake: '#protein-intake',
+    proteinPercent: '#protein-percent',
+    carbsTarget: '#carbs-target',
+    carbsIntake: '#carbs-intake',
+    carbsPercent: '#carbs-percent',
+    fatTarget: '#fat-target',
+    fatIntake: '#fat-intake',
+    fatPercent: '#fat-percent',
+    fiberTarget: '#fiber-target',
+    fiberIntake: '#fiber-intake',
+    fiberPercent: '#fiber-percent',
+    vitaminDTarget: '#vitaminD-target',
+    vitaminDIntake: '#vitaminD-intake',
+    vitaminDPercent: '#vitaminD-percent',
+    ironTarget: '#iron-target',
+    ironIntake: '#iron-intake',
+    ironPercent: '#iron-percent',
+    calciumTarget: '#calcium-target',
+    calciumIntake: '#calcium-intake',
+    calciumPercent: '#calcium-percent',
+    mealRecommendation: '#meal-recommendation',
+    bmi: '#BMI'
+  };
