@@ -14,7 +14,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ASSET</title>
+    <title>Adventure</title>
     <link rel="icon" type="image/x-icon" href="newLogo.jpg">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
@@ -66,11 +66,19 @@
             </div>
         </div>
         <div class="row1">
-            <textarea id="trip-location" rows="3" placeholder="Trip Locations (one per line):&#10;New York&#10;New Jersey&#10;Hampton's"></textarea>
+            <textarea id="trip-location" rows="3" placeholder="Trip Locations (one per line):
+New York
+New Jersey
+Hampton's"></textarea>
         </div>
         <div class="row1">
-            <textarea id="trip-specifics" rows="4" placeholder="Specifics Needed (one per line):&#10;Top rated hiking trails&#10;Hikes under 5km&#10;Best ice cream shops within 5km from city centre"></textarea>
-            <textarea id="trip-plans" rows="3" placeholder="Trip Schedule (one per line):&#10;Monday - 6am hike, 8pm dinner&#10;Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
+            <textarea id="trip-specifics" rows="4" placeholder="Specifics Needed (one per line):
+Top rated hiking trails
+Hikes under 5km
+Best ice cream shops within 5km from city centre"></textarea>
+            <textarea id="trip-plans" rows="3" placeholder="Trip Schedule (one per line):
+Monday - 6am hike, 8pm dinner
+Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
         </div>
         <div class="row1">
             <select id="trip-packing">
@@ -87,11 +95,17 @@
             <input type="number" id="trip-days" placeholder="Trip Length (days)" min="1">
         </div>
         <div class="row1">
-            <a href="/budget/vacation.html">Use Trip Budget Estimator & then Input Results Below!</a>
+            <label for="trip-budget">Trip Budget</label>
             <textarea id="trip-budget" rows="4" placeholder="Budget: $3000 usd"></textarea>
         </div>
         <button class="generate-btn" data-prompt="AdventureIQ™">Generate Promptemplate™ Now!</button>
+        <button class="clear-btn">Clear All</button>
     </div>
+
+
+
+
+    <script src="/ai/adventure/adventureiq.js"></script>
 
 </body>
 </html>
