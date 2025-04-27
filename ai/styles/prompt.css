@@ -50,7 +50,7 @@ a {
 }
 
 /* Input, Select, and Textarea Styles */
-input[type="number"],
+input[type="number"],.calorie-height,
 select,
 textarea {
   width: 100%;
