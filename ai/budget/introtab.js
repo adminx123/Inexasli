@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(`Stored content fetched in ${fetchTime.toFixed(2)}ms at:`, new Date().toISOString());
 
             dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
+                <span class="close-data-container"></span>
                 <span class="data-label">INTRO</span>
                 <div class="data-content">${content}</div>
             `;
