@@ -9,7 +9,6 @@
 import { getCookie } from '/utility/getcookie.js';
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
-const storedFormData = JSON.parse(localStorage.getItem("calorieIqFormData"));
 
 document.addEventListener('DOMContentLoaded', async function () {
     // Check if the "prompt" cookie is more than 10 minutes old
@@ -19,6 +18,54 @@ document.addEventListener('DOMContentLoaded', async function () {
     const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
 
     let dataContainer = null;
+
+    function initializeGridItems() {
+        const gridItems = document.querySelectorAll('.grid-container .grid-item');
+        gridItems.forEach(item => {
+            if (!item.dataset.value) {
+                console.warn('Grid item is missing data-value attribute:', item);
+                return;
+            }
+
+            const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+            const value = localStorage.getItem(key);
+            if (value === 'true') {
+                item.classList.add('selected');
+                console.log(`Restored ${key}: true (datain.js)`);
+            } else if (value === 'false') {
+                item.classList.remove('selected');
+                console.log(`Restored ${key}: false (datain.js)`);
+            }
+
+            // Remove existing listeners to prevent duplicates
+            item.removeEventListener('click', toggleGridItem);
+            item.addEventListener('click', toggleGridItem);
+        });
+
+        function toggleGridItem() {
+            const container = this.closest('.grid-container');
+            if (container.id === 'calorie-goal' || container.id === 'calorie-activity' || container.id === 'calorie-diet-type') {
+                // Single-selection: deselect others
+                container.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
+                this.classList.add('selected');
+            } else {
+                // Multi-selection: toggle
+                this.classList.toggle('selected');
+            }
+            saveGridItem(this);
+        }
+
+        function saveGridItem(item) {
+            const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+            const value = item.classList.contains('selected') ? 'true' : 'false';
+            try {
+                localStorage.setItem(key, value);
+                console.log(`Saved ${key}: ${value} (datain.js)`);
+            } catch (error) {
+                console.error(`Error saving grid item ${key}:`, error);
+            }
+        }
+    }
 
     async function loadStoredContent(url) {
         try {
@@ -34,38 +81,18 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.classList.add('expanded');
             dataContainer.dataset.state = 'expanded';
             dataContainer.innerHTML = `
-                <span class="close-data-container"></span>
+                <span class="close-data-container">-</span>
                 <span class="data-label">DATA IN</span>
                 <div class="data-content">${content}</div>
             `;
             console.log(`Stored content loaded from ${url} into datain container (datain.js)`);
 
-            // Load and execute corresponding JS file
-            const scriptUrl = url.replace('.html', '.js');
-            try {
-                // Remove existing script to prevent duplicates
-                const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
-                existingScripts.forEach(script => script.remove());
-
-                const scriptResponse = await fetch(scriptUrl);
-                if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
-
-                const scriptContent = await scriptResponse.text();
-                const script = document.createElement('script');
-                script.textContent = scriptContent;
-                script.dataset.source = scriptUrl; // Tag script for identification
-                document.body.appendChild(script);
-                console.log(`Loaded and executed script: ${scriptUrl} (datain.js)`);
-
-                // Re-initialize grid items after content load
-                initializeGridItems();
-            } catch (error) {
-                console.error(`Error loading script ${scriptUrl}, skipping (datain.js):`, error);
-            }
+            // Initialize grid items directly
+            initializeGridItems();
         } catch (error) {
             console.error(`Error loading stored content (datain.js):`, error);
             dataContainer.innerHTML = `
-                <span class="close-data-container"></span>
+                <span class="close-data-container">-</span>
                 <span class="data-label">DATA IN</span>
                 <div class="data-content">Error loading content: ${error.message}</div>
             `;
@@ -194,7 +221,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.className = `data-container-left initial`;
         dataContainer.dataset.state = 'initial';
         dataContainer.innerHTML = `
-            <span class="close-data-container"></span>
+            <span class="close-data-container">+</span>
             <span class="data-label">DATA IN</span>
         `;
 
@@ -220,34 +247,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
         } else {
             console.error('Left data label not found (datain.js)');
-        }
-
-        function initializeGridItems() {
-            const gridItems = document.querySelectorAll('.grid-container .grid-item');
-            gridItems.forEach(item => {
-                if (!item.dataset.value) {
-                    console.warn('Grid item is missing data-value attribute:', item);
-                    return;
-                }
-
-                const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-                const value = localStorage.getItem(key);
-                if (value === 'true') {
-                    item.classList.add('selected');
-                    console.log(`Restored ${key}: true`);
-                } else if (value === 'false') {
-                    item.classList.remove('selected');
-                    console.log(`Restored ${key}: false`);
-                }
-                item.removeEventListener('click', toggleGridItem);
-                item.addEventListener('click', toggleGridItem);
-            });
-
-            function toggleGridItem() {
-                this.classList.toggle('selected');
-                const key = `grid_${this.parentElement.id}_${this.dataset.value.replace(/\s+/g, '_')}`;
-                localStorage.setItem(key, this.classList.contains('selected') ? 'true' : 'false');
-            }
         }
 
         function toggleDataContainer() {
@@ -281,14 +280,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <span class="data-label">DATA IN</span>
                         <div class="data-content">No content selected. Please select a grid item.</div>
                     `;
-                }
-
-                // Initialize grid items after expansion
-                initializeGridItems();
-
-                // Populate form data if available
-                if (storedFormData) {
-                    populateIn(storedFormData);
                 }
             }
 
@@ -335,6 +326,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         });
 
+        // Collapse container when clicking outside
         document.addEventListener('click', function (e) {
             const isClickInside = dataContainer.contains(e.target);
             if (!isClickInside && dataContainer.dataset.state === 'expanded') {
@@ -342,6 +334,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 toggleDataContainer();
             }
         });
+
+        // Restore last state
+        const lastState = getLocal('dataContainerState') || 'initial';
+        if (lastState === 'expanded') {
+            toggleDataContainer();
+        }
     }
 
     try {
@@ -351,117 +349,4 @@ document.addEventListener('DOMContentLoaded', async function () {
     } catch (error) {
         console.error('Error initializing left data container (datain.js):', error);
     }
-
-    if (storedFormData) {
-        populateIn(storedFormData);
-    }
 });
-
-async function populateIn(storedFormData) {
-    async function waitForElement(selector) {
-        let tries = 0;
-        return new Promise((resolve, reject) => {
-            const attempt = () => {
-                const el = document.querySelector(selector);
-                if (el) {
-                    resolve(el);
-                } else {
-                    tries++;
-                    if (tries > 50) {
-                        reject(new Error(`Element not found after waiting: ${selector}`));
-                        return;
-                    }
-                    setTimeout(attempt, 100);
-                }
-            };
-            attempt();
-        });
-    }
-
-    if (storedFormData.goals && Array.isArray(storedFormData.goals)) {
-        for (const goal of storedFormData.goals) {
-            try {
-                const goalElement = await waitForElement(`#calorie-goal .grid-item[data-value="${goal}"]`);
-                goalElement.classList.add('selected');
-            } catch (error) {
-                console.warn(`Goal element not found for value: ${goal}`);
-            }
-        }
-    }
-
-    if (storedFormData.activityLevel) {
-        try {
-            const activityElement = await waitForElement(`#calorie-activity .grid-item[data-value="${storedFormData.activityLevel}"]`);
-            activityElement.classList.add('selected');
-        } catch (error) {
-            console.warn(`Activity level element not found for value: ${storedFormData.activityLevel}`);
-        }
-    }
-
-    if (storedFormData.needMealRecommendation) {
-        try {
-            const mealRecommendationElement = await waitForElement(`#calorie-recommendations .grid-item[data-value="Meal Recommendations"]`);
-            mealRecommendationElement.classList.add('selected');
-        } catch (error) {
-            console.warn("Meal recommendation element not found.");
-        }
-    }
-
-    if (storedFormData.dietRestriction) {
-        try {
-            const dietElement = await waitForElement(`#calorie-diet-type .grid-item[data-value="${storedFormData.dietRestriction}"]`);
-            dietElement.classList.add('selected');
-        } catch (error) {
-            console.warn(`Diet restriction element not found for value: ${storedFormData.dietRestriction}`);
-        }
-    }
-
-    if (storedFormData.age) {
-        try {
-            const ageInput = await waitForElement('#calorie-age');
-            ageInput.value = storedFormData.age;
-        } catch (error) {
-            console.warn("Age input element not found.");
-        }
-    }
-
-    if (storedFormData.height) {
-        try {
-            const heightInput = await waitForElement('#calorie-height');
-            heightInput.value = storedFormData.height;
-        } catch (error) {
-            console.warn("Height input element not found.");
-        }
-    }
-
-    if (storedFormData.weight) {
-        try {
-            const weightInput = await waitForElement('#calorie-weight');
-            const weightUnitInput = await waitForElement('#calorie-weight-unit');
-            weightInput.value = storedFormData.weight.weight;
-            weightUnitInput.value = storedFormData.weight.unit;
-        } catch (error) {
-            console.warn("Weight input or unit element not found.");
-        }
-    }
-
-    if (storedFormData.sex) {
-        try {
-            const sexInput = await waitForElement('#calorie-measure');
-            sexInput.value = storedFormData.sex;
-        } catch (error) {
-            console.warn("Sex input element not found.");
-        }
-    }
-
-    if (storedFormData.foodLog) {
-        try {
-            const foodLogInput = await waitForElement('#calorie-food-log');
-            foodLogInput.value = storedFormData.foodLog;
-        } catch (error) {
-            console.warn("Food log input element not found.");
-        }
-    }
-
-    console.log("Form data propagation completed.");
-}
