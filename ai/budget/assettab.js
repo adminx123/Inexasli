@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Asset logic
-    console.log('Asset logic initialized in assettab.js');
+    console.log('Asset logic initialized in assettab.js at:', new Date().toISOString());
     let assetInitialized = false;
     let ASSETS = 0;
     let LIQUIDASSETS = 0;
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const assetClose = assetContainer.querySelector('.close-data-container');
             if (assetClose) {
                 assetClose.click();
-                console.log('Asset tab closed');
+                console.log('Asset tab closed at:', new Date().toISOString());
             } else {
                 console.error('Asset close button not found');
             }
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (liabilityLabel) {
                 setTimeout(() => {
                     liabilityLabel.click();
-                    console.log('Liability tab triggered to open');
+                    console.log('Liability tab triggered to open at:', new Date().toISOString());
                 }, 300);
             } else {
                 console.error('Liability data label not found');
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const assetClose = assetContainer.querySelector('.close-data-container');
             if (assetClose) {
                 assetClose.click();
-                console.log('Asset tab closed');
+                console.log('Asset tab closed at:', new Date().toISOString());
             } else {
                 console.error('Asset close button not found');
             }
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (expenseLabel) {
                 setTimeout(() => {
                     expenseLabel.click();
-                    console.log('Expense tab triggered to open');
+                    console.log('Expense tab triggered to open at:', new Date().toISOString());
                 }, 300);
             } else {
                 console.error('Expense data label not found');
@@ -194,12 +194,69 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initializeAssetForm(container) {
         if (assetInitialized) {
-            console.log('Asset form already initialized, skipping');
+            console.log('Asset form already initialized, skipping at:', new Date().toISOString());
             return;
         }
         assetInitialized = true;
-        console.log('Asset form initialized');
+        console.log('Asset form initialized at:', new Date().toISOString());
 
+        // Bind navigation buttons
+        function bindNavButtons() {
+            const nextButton = container.querySelector('.nav-btn.nav-right');
+            const backButton = container.querySelector('.nav-btn.nav-left');
+            let success = true;
+
+            if (nextButton) {
+                nextButton.removeAttribute('onclick');
+                nextButton.removeEventListener('click', calculateNext);
+                nextButton.addEventListener('click', calculateNext);
+                console.log('calculateNext bound to nav-btn.nav-right at:', new Date().toISOString());
+            } else {
+                console.warn('nav-btn.nav-right not found at:', new Date().toISOString());
+                success = false;
+            }
+
+            if (backButton) {
+                backButton.removeAttribute('onclick');
+                backButton.removeEventListener('click', calculateBack);
+                backButton.addEventListener('click', calculateBack);
+                console.log('calculateBack bound to nav-btn.nav-left at:', new Date().toISOString());
+            } else {
+                console.warn('nav-btn.nav-left not found at:', new Date().toISOString());
+                success = false;
+            }
+
+            return success;
+        }
+
+        // Initial attempt to bind
+        bindNavButtons();
+
+        // Persistent observer for nav buttons
+        const observer = new MutationObserver((mutations, obs) => {
+            if ((container.querySelector('.nav-btn.nav-right') && !container.querySelector('.nav-btn.nav-right').onclick) ||
+                (container.querySelector('.nav-btn.nav-left') && !container.querySelector('.nav-btn.nav-left').onclick)) {
+                console.log('Nav button(s) detected by observer, binding at:', new Date().toISOString());
+                if (bindNavButtons()) {
+                    obs.disconnect();
+                }
+            }
+        });
+        observer.observe(container, { childList: true, subtree: true });
+
+        // Fallback binding after delay
+        setTimeout(() => {
+            if (!container.querySelector('.nav-btn.nav-right')?.onclick || !container.querySelector('.nav-btn.nav-left')?.onclick) {
+                console.log('Fallback binding attempt for nav buttons at:', new Date().toISOString());
+                if (bindNavButtons()) {
+                    console.log('Fallback binding succeeded');
+                } else {
+                    console.error('Fallback binding failed, nav buttons not found. DOM state:', container.innerHTML);
+                }
+            }
+        }, 3000);
+
+        // Initialize form elements
         const tabs = container.querySelectorAll('.tab');
         tabs.forEach(tab => {
             tab.removeEventListener('click', handleTabClick);
@@ -273,50 +330,34 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('assetspousecheckbox not found');
         }
 
-        const nextButton = container.querySelector('#nextButton');
-        if (nextButton) {
-            nextButton.removeEventListener('click', calculateNext);
-            nextButton.addEventListener('click', calculateNext);
-            console.log('calculateNext bound to nextButton');
-        } else {
-            console.error('nextButton not found');
-        }
-
-        const backButton = container.querySelector('#backButton');
-        if (backButton) {
-            backButton.removeEventListener('click', calculateBack);
-            backButton.addEventListener('click', calculateBack);
-            console.log('calculateBack bound to backButton');
-        } else {
-            console.error('backButton not found');
-        }
-
         calculateAll();
     }
 
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url}`);
+            console.log(`Attempting to load stored content from ${url} at:`, new Date().toISOString());
+            const startTime = performance.now();
             const response = await fetch(url);
+            const fetchTime = performance.now() - startTime;
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully');
+            console.log(`Stored content fetched in ${fetchTime.toFixed(2)}ms at:`, new Date().toISOString());
 
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">ASSET</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into asset container`);
+            console.log(`Stored content loaded into asset container at:`, new Date().toISOString());
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
                 if (script.src && ![
-                    'asset.js', 'setlocal.js', 'getlocal.js'
+                    'assettab.js', 'setlocal.js', 'getlocal.js'
                 ].some(exclude => script.src.includes(exclude))) {
                     const newScript = document.createElement('script');
-                    newScript.src = script.src;
+                    newScript.src = script.src + '?v=' + new Date().getTime();
                     if (
                         script.src.includes('utils.js') ||
                         script.src.includes('hideShow.js')
@@ -334,13 +375,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             initializeAssetForm(dataContainer);
         } catch (error) {
-            console.error(`Error loading stored content:`, error);
+            console.error(`Error loading stored content at:`, new Date().toISOString(), error);
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-asset')) {
-            console.log('Asset data container already exists, skipping initialization');
+            console.log('Asset data container already exists, skipping initialization at:', new Date().toISOString());
             return;
         }
 
@@ -379,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 min-width: 25%;
                 max-height: 95%;
                 top: 20px;
-                margin-right: calc(90vw - 20px);
+                margin-right: calc(85vw - 20px);
             }
             .data-container-asset:hover {
                 background-color: rgb(255, 255, 255);
@@ -445,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     max-width: calc(90vw - 10px);
                     max-height: 95%;
                     top: 10px;
-                    margin-right: calc(90vw - 10px);
+                    margin-right: calc(85vw - 10px);
                 }
                 .data-container-asset .data-label {
                     font-size: 10px;
@@ -476,7 +517,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Asset data container injected with state: collapsed');
+        console.log('Asset data container injected with state: collapsed at:', new Date().toISOString());
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -495,16 +536,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const isExpanded = dataContainer.dataset.state === 'expanded';
 
             if (isExpanded) {
-                dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('collapsed');
+                dataContainer.className = 'data-container-asset collapsed';
                 dataContainer.dataset.state = 'collapsed';
                 dataContainer.innerHTML = `
                     <span class="data-label">ASSET</span>
                 `;
-                console.log('Asset data container collapsed');
+                assetInitialized = false;
+                ASSETS = 0;
+                LIQUIDASSETS = 0;
+                console.log('Asset data container collapsed, state and globals reset at:', new Date().toISOString());
             } else {
-                dataContainer.classList.remove('collapsed');
-                dataContainer.classList.add('expanded');
+                dataContainer.className = 'data-container-asset expanded';
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/budget/asset.html');
             }
@@ -530,9 +572,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.addEventListener('click', function (e) {
             if (dataContainer && dataContainer.dataset.state === 'expanded') {
                 const isClickInside = dataContainer.contains(e.target);
-                const isNavButton = e.target.closest('#nextButton, #backButton');
+                const isNavButton = e.target.closest('.nav-btn');
                 if (!isClickInside && !isNavButton) {
-                    console.log('Clicked outside asset data container, collapsing');
+                    console.log('Clicked outside asset data container, collapsing at:', new Date().toISOString());
                     toggleDataContainer();
                 }
             }
@@ -542,6 +584,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing asset data container:', error);
+        console.error('Error initializing asset data container at:', new Date().toISOString(), error);
     }
 });

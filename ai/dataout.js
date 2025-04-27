@@ -11,12 +11,15 @@ import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
+    // Check if the "prompt" cookie is more than 10 minutes old
     const promptCookie = getCookie("prompt");
     const currentTime = Date.now();
-    const cookieDuration = 10 * 60 * 1000;
+    const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
     const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
 
-    async function loadStoredContent(dataContainer, url) {
+    let dataContainer = null;
+
+    async function loadStoredContent(url) {
         try {
             console.log(`Attempting to load stored content from ${url} (dataout.js)`);
             const response = await fetch(url);
@@ -28,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.classList.add('expanded');
             dataContainer.dataset.state = 'expanded';
             dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
+                <span class="close-data-container"></span>
                 <span class="data-label">DATA OUT</span>
                 <div class="data-content">${content}</div>
             `;
@@ -46,6 +49,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     script.dataset.source = scriptUrl;
                     document.body.appendChild(script);
                     console.log(`Loaded and executed script: ${scriptUrl} (dataout.js)`);
+
+                    // Re-initialize grid items after content load
+                    initializeGridItems();
                 }
             } catch (error) {
                 console.log(`No script found or error loading ${scriptUrl}, skipping (dataout.js):`, error);
@@ -53,9 +59,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (error) {
             console.error(`Error loading stored content (dataout.js):`, error);
             dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
+                <span class="close-data-container"></span>
                 <span class="data-label">DATA OUT</span>
-                <div class="data-content">Error loading content</div>
+                <div class="data-content">Error loading content: ${error.message}</div>
             `;
         }
     }
@@ -68,6 +74,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const style = document.createElement('style');
         style.textContent = `
+            /* Right container specific styling */
             .data-container-right {
                 position: fixed;
                 top: 50%;
@@ -88,14 +95,25 @@ document.addEventListener('DOMContentLoaded', async function () {
                 visibility: visible;
                 opacity: 1;
             }
-            .data-container-right.collapsed { height: 120px; }
-            .data-container-right.expanded { max-width: 85%; min-width: 25%; height: auto; }
-            .data-container-right:hover { background-color: rgb(255, 255, 255); }
+
+            .data-container-right.collapsed {
+                height: 150px !important;
+            }
+
+            .data-container-right.expanded {
+                max-width: 85%;
+                min-width: 25%;
+                height: auto;
+            }
+
+            .data-container-right:hover {
+                background-color: rgb(255, 255, 255);
+            }
+
             .data-container-right .close-data-container {
                 position: absolute;
                 top: 4px;
                 right: 10px;
-                left: auto;
                 padding: 5px;
                 font-size: 14px;
                 line-height: 1;
@@ -104,6 +122,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-weight: bold;
                 font-family: "Inter", sans-serif;
             }
+
             .data-container-right .data-label {
                 text-decoration: none;
                 color: #000;
@@ -119,6 +138,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 writing-mode: vertical-rl;
                 text-orientation: mixed;
             }
+
             .data-container-right .data-content {
                 padding: 10px;
                 font-size: 14px;
@@ -128,57 +148,51 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-family: "Inter", sans-serif;
                 max-width: 100%;
             }
-            .api-output-container {
-                position: relative;
-                display: inline-block;
-                max-width: 100%;
-            }
-            .api-output {
-                display: block;
-                background-color: #f5f5f5;
-                padding: 10px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                white-space: pre-wrap;
-                max-height: 300px;
-                overflow-y: auto;
-                font-family: "Inter", sans-serif;
-                font-size: 14px;
-            }
-            .copy-btn {
-                position: absolute;
-                top: 5px;
-                right: 5px;
-                background-color: #e0e0e0;
-                border: none;
-                border-radius: 4px;
-                padding: 5px 10px;
-                cursor: pointer;
-                font-size: 12px;
-                font-family: "Geist", sans-serif;
-            }
-            .copy-btn:hover { background-color: #d0d0d0; }
+
+            /* Mobile responsiveness for right container */
             @media (max-width: 480px) {
-                .data-container-right { max-width: 28px; padding: 3px; }
-                .data-container-right.collapsed { height: 100px; }
-                .data-container-right.expanded { max-width: 85%; min-width: 25%; }
-                .data-container-right .data-label { font-size: 14px; padding: 3px; }
-                .data-container-right .close-data-container { font-size: 12px; padding: 4px; }
-                .data-container-right .data-content { font-size: 12px; padding: 8px; overflow-x: auto; }
+                .data-container-right {
+                    max-width: 28px;
+                    padding: 3px;
+                }
+
+                .data-container-right.collapsed {
+                    height: 125px !important;
+                }
+
+                .data-container-right.expanded {
+                    max-width: 85%;
+                    min-width: 25%;
+                }
+
+                .data-container-right .data-label {
+                    font-size: 14px;
+                    padding: 3px;
+                }
+
+                .data-container-right .close-data-container {
+                    font-size: 12px;
+                    padding: 4px;
+                }
+
+                .data-container-right .data-content {
+                    font-size: 12px;
+                    padding: 8px;
+                    overflow-x: auto;
+                }
             }
         `;
         document.head.appendChild(style);
 
-        const lastState = getLocal('dataOutContainerState') || 'initial';
-        const dataContainer = document.createElement('div');
-        dataContainer.className = `data-container-right ${lastState}`;
-        dataContainer.dataset.state = lastState;
+        dataContainer = document.createElement('div');
+        dataContainer.className = `data-container-right initial`;
+        dataContainer.dataset.state = 'initial';
         dataContainer.innerHTML = `
-            <span class="close-data-container">${lastState === 'expanded' ? '-' : '+'}</span>
+            <span class="close-data-container"></span>
             <span class="data-label">DATA OUT</span>
         `;
         document.body.appendChild(dataContainer);
-        console.log('Right data container injected with state:', lastState, '(dataout.js)');
+        console.log('Right data container injected with state: initial (dataout.js)');
 
         const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
@@ -201,6 +215,29 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Right data label not found (dataout.js)');
         }
 
+        function initializeGridItems() {
+            const gridItems = document.querySelectorAll('.grid-container .grid-item');
+            gridItems.forEach(item => {
+                const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+                const value = localStorage.getItem(key);
+                if (value === 'true') {
+                    item.classList.add('selected');
+                    console.log(`Restored ${key}: true`);
+                } else if (value === 'false') {
+                    item.classList.remove('selected');
+                    console.log(`Restored ${key}: false`);
+                }
+                item.removeEventListener('click', toggleGridItem);
+                item.addEventListener('click', toggleGridItem);
+            });
+
+            function toggleGridItem() {
+                this.classList.toggle('selected');
+                const key = `grid_${this.parentElement.id}_${this.dataset.value.replace(/\s+/g, '_')}`;
+                localStorage.setItem(key, this.classList.contains('selected') ? 'true' : 'false');
+            }
+        }
+
         function toggleDataContainer() {
             if (!dataContainer) return;
             const isExpanded = dataContainer.dataset.state === 'expanded';
@@ -220,23 +257,20 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
                 setLocal('dataOutContainerState', 'expanded');
+                console.log('Right data container expanded (dataout.js)');
 
                 const lastGridItemUrl = getLocal('lastGridItemUrl');
-                let outUrl;
-                
-                // Map grid item URLs to output URLs
                 const outputMap = {
                     '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
                     '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
-                    '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq' // Example for future grid item
-                    // Add more mappings as needed
+                    '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
+                    '/ai/adventure/adventure.html': '/ai/adventure/adventureiqout.html'
                 };
+                const outUrl = outputMap[lastGridItemUrl];
 
-                outUrl = outputMap[lastGridItemUrl];
-                
                 if (outUrl) {
                     setLocal('lastDataOutUrl', outUrl);
-                    loadStoredContent(dataContainer, outUrl);
+                    loadStoredContent(outUrl);
                 } else {
                     dataContainer.innerHTML = `
                         <span class="close-data-container">-</span>
@@ -244,18 +278,23 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <div class="data-content">No relevant content available</div>
                     `;
                 }
+<<<<<<< HEAD
                 console.log('Right data container expanded (dataout.js)');
                 populate()
+=======
+>>>>>>> 69f2bb524407a481d10773e5405155eb3a41ec95
             }
 
             const newClose = dataContainer.querySelector('.close-data-container');
             const newLabel = dataContainer.querySelector('.data-label');
+
             if (newClose) {
                 newClose.addEventListener('click', function (e) {
                     e.preventDefault();
                     toggleDataContainer();
                 });
             }
+
             if (newLabel) {
                 newLabel.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -263,6 +302,39 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
             }
         }
+
+        // Listen for grid item selection or output events
+        document.addEventListener('promptGridItemSelected', function (e) {
+            const url = e.detail.url;
+            console.log(`Received promptGridItemSelected event with URL: ${url} (dataout.js)`);
+            const outputMap = {
+                '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
+                '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
+                '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
+                '/ai/adventure/adventure.html': '/ai/adventure/adventureiqout.html'
+            };
+            const outUrl = outputMap[url];
+            if (outUrl) {
+                setLocal('lastDataOutUrl', outUrl);
+                if (dataContainer.dataset.state !== 'expanded') {
+                    toggleDataContainer();
+                } else {
+                    loadStoredContent(outUrl);
+                }
+            }
+        });
+
+        // Fallback: Monitor localStorage changes for lastDataOutUrl
+        window.addEventListener('storage', function (e) {
+            if (e.key === 'lastDataOutUrl' && e.newValue) {
+                console.log(`Detected lastDataOutUrl change to: ${e.newValue} (dataout.js)`);
+                if (dataContainer.dataset.state !== 'expanded') {
+                    toggleDataContainer();
+                } else {
+                    loadStoredContent(e.newValue);
+                }
+            }
+        });
 
         document.addEventListener('click', function (e) {
             const isClickInside = dataContainer.contains(e.target);
@@ -272,24 +344,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         });
 
+        // Restore last state
+        const lastState = getLocal('dataOutContainerState') || 'initial';
         if (lastState === 'expanded') {
-            const lastGridItemUrl = getLocal('lastGridItemUrl');
-            const outputMap = {
-                '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
-                '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
-                '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq'
-            };
-            const outUrl = outputMap[lastGridItemUrl];
-            if (outUrl) {
-                setLocal('lastDataOutUrl', outUrl);
-                loadStoredContent(dataContainer, outUrl);
-            } else {
-                dataContainer.innerHTML = `
-                    <span class="close-data-container">-</span>
-                    <span class="data-label">DATA OUT</span>
-                    <div class="data-content">No relevant content available</div>
-                `;
-            }
+            toggleDataContainer();
         }
     }
 
