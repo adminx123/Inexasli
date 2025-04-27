@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Liability logic
-    console.log('Liability logic initialized in liabilitytab.js');
+    console.log('Liability logic initialized in liabilitytab.js at:', new Date().toISOString());
     let liabilityInitialized = false;
     let LIABILITIES = 0;
     let LIABILITIESNA = 0;
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const liabilityClose = liabilityContainer.querySelector('.close-data-container');
             if (liabilityClose) {
                 liabilityClose.click();
-                console.log('Liability tab closed');
+                console.log('Liability tab closed at:', new Date().toISOString());
             } else {
                 console.error('Liability close button not found');
             }
@@ -156,13 +156,13 @@ document.addEventListener('DOMContentLoaded', function () {
             if (summaryLabel) {
                 setTimeout(() => {
                     summaryLabel.click();
-                    console.log('Summary tab triggered to open');
+                    console.log('Summary tab triggered to open at:', new Date().toISOString());
                 }, 300);
             } else {
                 console.error('Summary data label not found');
             }
         } else {
-            console.error('Summary data container not found. Ensure summary.js is loaded');
+            console.error('Summary data container not found. Ensure summarytab.js is loaded');
         }
     }
 
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const liabilityClose = liabilityContainer.querySelector('.close-data-container');
             if (liabilityClose) {
                 liabilityClose.click();
-                console.log('Liability tab closed');
+                console.log('Liability tab closed at:', new Date().toISOString());
             } else {
                 console.error('Liability close button not found');
             }
@@ -187,24 +187,81 @@ document.addEventListener('DOMContentLoaded', function () {
             if (assetLabel) {
                 setTimeout(() => {
                     assetLabel.click();
-                    console.log('Asset tab triggered to open');
+                    console.log('Asset tab triggered to open at:', new Date().toISOString());
                 }, 300);
             } else {
                 console.error('Asset data label not found');
             }
         } else {
-            console.error('Asset data container not found. Ensure asset.js is loaded');
+            console.error('Asset data container not found. Ensure assettab.js is loaded');
         }
     }
 
     function initializeLiabilityForm(container) {
         if (liabilityInitialized) {
-            console.log('Liability form already initialized, skipping');
+            console.log('Liability form already initialized, skipping at:', new Date().toISOString());
             return;
         }
         liabilityInitialized = true;
-        console.log('Liability form initialized');
+        console.log('Liability form initialized at:', new Date().toISOString());
 
+        // Bind navigation buttons
+        function bindNavButtons() {
+            const nextButton = container.querySelector('#nextButton');
+            const backButton = container.querySelector('#backButton');
+            let success = true;
+
+            if (nextButton) {
+                nextButton.removeAttribute('onclick');
+                nextButton.removeEventListener('click', calculateNext);
+                nextButton.addEventListener('click', calculateNext);
+                console.log('calculateNext bound to nextButton at:', new Date().toISOString());
+            } else {
+                console.warn('nextButton not found at:', new Date().toISOString());
+                success = false;
+            }
+
+            if (backButton) {
+                backButton.removeAttribute('onclick');
+                backButton.removeEventListener('click', calculateBack);
+                backButton.addEventListener('click', calculateBack);
+                console.log('calculateBack bound to backButton at:', new Date().toISOString());
+            } else {
+                console.warn('backButton not found at:', new Date().toISOString());
+                success = false;
+            }
+
+            return success;
+        }
+
+        // Initial attempt to bind
+        bindNavButtons();
+
+        // Persistent observer for nav buttons
+        const observer = new MutationObserver((mutations, obs) => {
+            if ((container.querySelector('#nextButton') && !container.querySelector('#nextButton').onclick) ||
+                (container.querySelector('#backButton') && !container.querySelector('#backButton').onclick)) {
+                console.log('Nav button(s) detected by observer, binding at:', new Date().toISOString());
+                if (bindNavButtons()) {
+                    obs.disconnect();
+                }
+            }
+        });
+        observer.observe(container, { childList: true, subtree: true });
+
+        // Fallback binding after delay
+        setTimeout(() => {
+            if (!container.querySelector('#nextButton')?.onclick || !container.querySelector('#backButton')?.onclick) {
+                console.log('Fallback binding attempt for nav buttons at:', new Date().toISOString());
+                if (bindNavButtons()) {
+                    console.log('Fallback binding succeeded');
+                } else {
+                    console.error('Fallback binding failed, nav buttons not found. DOM state:', container.innerHTML);
+                }
+            }
+        }, 3000);
+
+        // Initialize form elements
         const tabs = container.querySelectorAll('.tab');
         tabs.forEach(tab => {
             tab.removeEventListener('click', handleTabClick);
@@ -272,50 +329,34 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('liabilityspousecheckbox not found');
         }
 
-        const nextButton = container.querySelector('#nextButton');
-        if (nextButton) {
-            nextButton.removeEventListener('click', calculateNext);
-            nextButton.addEventListener('click', calculateNext);
-            console.log('calculateNext bound to nextButton');
-        } else {
-            console.error('nextButton not found');
-        }
-
-        const backButton = container.querySelector('#backButton');
-        if (backButton) {
-            backButton.removeEventListener('click', calculateBack);
-            backButton.addEventListener('click', calculateBack);
-            console.log('calculateBack bound to backButton');
-        } else {
-            console.error('backButton not found');
-        }
-
         calculateAll();
     }
 
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url}`);
+            console.log(`Attempting to load stored content from ${url} at:`, new Date().toISOString());
+            const startTime = performance.now();
             const response = await fetch(url);
+            const fetchTime = performance.now() - startTime;
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully');
+            console.log(`Stored content fetched in ${fetchTime.toFixed(2)}ms at:`, new Date().toISOString());
 
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">LIABILITY</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into liability container`);
+            console.log(`Stored content loaded into liability container at:`, new Date().toISOString());
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
                 if (script.src && ![
-                    'liability.js', 'setlocal.js', 'getlocal.js', 'setcookie.js'
+                    'liabilitytab.js', 'setlocal.js', 'getlocal.js', 'setcookie.js'
                 ].some(exclude => script.src.includes(exclude))) {
                     const newScript = document.createElement('script');
-                    newScript.src = script.src;
+                    newScript.src = script.src + '?v=' + new Date().getTime();
                     if (
                         script.src.includes('utils.js') ||
                         script.src.includes('hideShow.js')
@@ -331,15 +372,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
+            // Trigger JavaScript for liability.html only when container is expanded
             initializeLiabilityForm(dataContainer);
         } catch (error) {
-            console.error(`Error loading stored content:`, error);
+            console.error(`Error loading stored content at:`, new Date().toISOString(), error);
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-liability')) {
-            console.log('Liability data container already exists, skipping initialization');
+            console.log('Liability data container already exists, skipping initialization at:', new Date().toISOString());
             return;
         }
 
@@ -475,7 +517,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Liability data container injected with state: collapsed');
+        console.log('Liability data container injected with state: collapsed at:', new Date().toISOString());
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -494,16 +536,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const isExpanded = dataContainer.dataset.state === 'expanded';
 
             if (isExpanded) {
-                dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('collapsed');
+                dataContainer.className = 'data-container-liability collapsed';
                 dataContainer.dataset.state = 'collapsed';
                 dataContainer.innerHTML = `
                     <span class="data-label">LIABILITY</span>
                 `;
-                console.log('Liability data container collapsed');
+                liabilityInitialized = false; // Reset initialization flag
+                LIABILITIES = 0; // Reset global variables
+                LIABILITIESNA = 0;
+                console.log('Liability data container collapsed, state and globals reset at:', new Date().toISOString());
             } else {
-                dataContainer.classList.remove('collapsed');
-                dataContainer.classList.add('expanded');
+                dataContainer.className = 'data-container-liability expanded';
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/budget/liability.html');
             }
@@ -531,7 +574,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isClickInside = dataContainer.contains(e.target);
                 const isNavButton = e.target.closest('#nextButton, #backButton');
                 if (!isClickInside && !isNavButton) {
-                    console.log('Clicked outside liability data container, collapsing');
+                    console.log('Clicked outside liability data container, collapsing at:', new Date().toISOString());
                     toggleDataContainer();
                 }
             }
@@ -541,6 +584,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing liability data container:', error);
+        console.error('Error initializing liability data container at:', new Date().toISOString(), error);
     }
 });
