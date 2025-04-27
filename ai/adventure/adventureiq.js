@@ -8,20 +8,48 @@
  * jurisdictions worldwide.
  */
 
-document.addEventListener('DOMContentLoaded', function () {
+function initializeAdventureIQ() {
     // Grid item selection
-    document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-        item.addEventListener('click', () => item.classList.toggle('selected'));
+    const gridItems = document.querySelectorAll('.grid-container .grid-item');
+    gridItems.forEach(item => {
+        // Remove existing listeners to prevent duplicates
+        item.removeEventListener('click', toggleGridItem);
+        item.addEventListener('click', toggleGridItem);
     });
 
+    function toggleGridItem() {
+        this.classList.toggle('selected');
+    }
+
     // Generate prompt button
-    document.querySelectorAll('.generate-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            const promptType = button.getAttribute('data-prompt');
-            generatePrompt(promptType);
-        });
+    const generateButtons = document.querySelectorAll('.generate-btn');
+    generateButtons.forEach(button => {
+        button.removeEventListener('click', handleGenerateClick);
+        button.addEventListener('click', handleGenerateClick);
     });
-});
+
+    function handleGenerateClick() {
+        const promptType = this.getAttribute('data-prompt');
+        generatePrompt(promptType);
+    }
+
+    // Set placeholders with actual line breaks for text areas
+    const textAreas = [
+        { id: 'trip-specifics', placeholder: ['Hiking duration: 3 hours', 'Kayaking: Beginner level', 'Camping: 2 nights'] },
+        { id: 'trip-plans', placeholder: ['Day 1: Arrive at destination', 'Day 2: Hiking', 'Day 3: Kayaking'] },
+        { id: 'trip-location', placeholder: ['New York', 'New Jersey', "Hampton's"] },
+        { id: 'trip-budget', placeholder: ['Budget: $3000 usd'] }
+    ];
+
+    textAreas.forEach(textArea => {
+        const element = document.getElementById(textArea.id);
+        if (element) {
+            element.placeholder = textArea.placeholder.join('\n');
+        } else {
+            console.warn(`Text area with ID ${textArea.id} not found`);
+        }
+    });
+}
 
 const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
 const formatGrid = (selector, prefix) => {
@@ -65,8 +93,8 @@ function generatePrompt(promptType) {
         const location = document.getElementById('trip-location');
         if (location?.value) prompt += formatList(location.value, 'Trip Location');
         prompt += formatGrid('#trip-relationship .grid-item.selected', 'Relationship to People on Trip');
-        const cost = document.getElementById('trip-cost');
-        if (cost?.value) prompt += formatList(cost.value, 'Budget');
+        const budget = document.getElementById('trip-budget');
+        if (budget?.value) prompt += formatList(budget.value, 'Trip Budget');
         prompt += `
             Output the trip timeline in a text-based checklist format in a code block with the following columns: Day, Time, Activity, Location, Notes. Use this header format:
             \`\`\`
@@ -97,7 +125,18 @@ function generatePrompt(promptType) {
 
 function openCustomModal(content) {
     console.log('Debug: openCustomModal called with content:', content);
-    openGeneratedPromptModal();
+    if (typeof openGeneratedPromptModal === 'function') {
+        openGeneratedPromptModal();
+    } else {
+        console.warn('openGeneratedPromptModal is not defined');
+    }
 }
 
 window.openCustomModal = openCustomModal;
+
+// Initialize when DOM is loaded or when script is dynamically loaded
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initializeAdventureIQ();
+} else {
+    document.addEventListener('DOMContentLoaded', initializeAdventureIQ);
+}
