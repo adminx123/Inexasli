@@ -554,13 +554,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 opacity: 1;
             }
             .data-container-income.collapsed {
-                max-width: 72px; /* Double the current width */
-                height: 120px; /* Maintain current height */
-                margin-bottom: 15px; /* Add spacing between tabs */
-                left: 0; /* Align to the left side of the screen */
+                max-width: 18px;
+                height: 120px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                z-index: 10001;
             }
             .data-container-income.expanded {
                 width: 90vw;
