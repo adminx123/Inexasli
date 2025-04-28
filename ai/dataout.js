@@ -37,24 +37,36 @@ document.addEventListener('DOMContentLoaded', async function () {
             `;
             console.log(`Stored content loaded from ${url} into dataout container (dataout.js)`);
 
-            const scriptUrl = url.replace('.html', '.js');
-            try {
-                const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
-                existingScripts.forEach(script => script.remove());
-                const scriptResponse = await fetch(scriptUrl);
-                if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
-                const scriptContent = await scriptResponse.text();
-                const script = document.createElement('script');
-                script.textContent = scriptContent;
-                script.dataset.source = scriptUrl;
-                document.body.appendChild(script);
-                console.log(`Loaded and executed script: ${scriptUrl} (dataout.js)`);
+            dataContainer.querySelectorAll('script').forEach(oldScript => {
+                const newScript = document.createElement('script');
+                if (oldScript.src) {
+                    newScript.src = oldScript.src;
+                } else {
+                    newScript.textContent = oldScript.textContent;
+                }
 
-                // Re-initialize grid items after content load
-                initializeGridItems();
-            } catch (error) {
-                console.error(`Error loading script ${scriptUrl}, skipping (dataout.js):`, error);
-            }
+                oldScript.replaceWith(newScript);
+                console.log("has replaced the old script with the new", newScript)
+            });
+
+            // const scriptUrl = url.replace('.html', '.js');
+            // try {
+            //     const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
+            //     existingScripts.forEach(script => script.remove());
+            //     const scriptResponse = await fetch(scriptUrl);
+            //     if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
+            //     const scriptContent = await scriptResponse.text();
+            //     const script = document.createElement('script');
+            //     script.textContent = scriptContent;
+            //     script.dataset.source = scriptUrl;
+            //     document.body.appendChild(script);
+            //     console.log(`Loaded and executed script: ${scriptUrl} (dataout.js)`);
+
+            //     // Re-initialize grid items after content load
+            //     initializeGridItems();
+            // } catch (error) {
+            //     console.error(`Error loading script ${scriptUrl}, skipping (dataout.js):`, error);
+            // }
         } catch (error) {
             console.error(`Error loading stored content (dataout.js):`, error);
             dataContainer.innerHTML = `
@@ -283,10 +295,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     `;
                 }
 
-                // Populate data if available
-                if (localStorage.getItem('calorieIqResponse')) {
-                    populate();
-                }
+
             }
 
             const newClose = dataContainer.querySelector('.close-data-container');
@@ -363,174 +372,3 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error('Error initializing right data container (dataout.js):', error);
     }
 });
-
-function waitForElement(selector) {
-    let tries = 0;
-    return new Promise((resolve, reject) => {
-        const attempt = () => {
-            const el = document.querySelector(selector);
-            if (el) {
-                resolve(el);
-            } else {
-                tries++;
-                if (tries > 50) {
-                    reject(new Error(`Element not found after waiting: ${selector}`));
-                    return;
-                }
-                setTimeout(attempt, 100);
-            }
-        };
-        attempt();
-    });
-}
-
-async function findAllElements() {
-    const entries = await Promise.all(
-        Object.entries(spanSelectors2).map(async ([key, selector]) => {
-            try {
-                const element = await waitForElement(selector);
-                return [key, element];
-            } catch (error) {
-                console.warn(`Element not found: ${selector}`);
-                return [key, null];
-            }
-        })
-    );
-
-    const elements = Object.fromEntries(entries);
-    return elements;
-}
-
-const spanSelectors2 = {
-    caloriesTarget: '#calories-target',
-    caloriesIntake: '#calories-intake',
-    caloriesPercent: '#calories-percent',
-    proteinTarget: '#protein-target',
-    proteinIntake: '#protein-intake',
-    proteinPercent: '#protein-percent',
-    carbsTarget: '#carbs-target',
-    carbsIntake: '#carbs-intake',
-    carbsPercent: '#carbs-percent',
-    fatTarget: '#fat-target',
-    fatIntake: '#fat-intake',
-    fatPercent: '#fat-percent',
-    fiberTarget: '#fiber-target',
-    fiberIntake: '#fiber-intake',
-    fiberPercent: '#fiber-percent',
-    vitaminDTarget: '#vitaminD-target',
-    vitaminDIntake: '#vitaminD-intake',
-    vitaminDPercent: '#vitaminD-percent',
-    ironTarget: '#iron-target',
-    ironIntake: '#iron-intake',
-    ironPercent: '#iron-percent',
-    calciumTarget: '#calcium-target',
-    calciumIntake: '#calcium-intake',
-    calciumPercent: '#calcium-percent',
-    mealRecommendation: '#meal-recommendation',
-    bmi: '#BMI'
-};
-
-async function populate() {
-    console.log('Trying to load saved data');
-
-    if (!localStorage.getItem('calorieIqResponse')) {
-        console.log('No saved data found');
-        return;
-    }
-
-    try {
-        const data = JSON.parse(localStorage.getItem('calorieIqResponse'));
-        console.log('Data retrieved:', data);
-
-        if (!data?.data?.nutritionTable || !Array.isArray(data.data.nutritionTable)) {
-            console.error('Invalid or missing nutritionTable data');
-            return;
-        }
-
-        const spans = await findAllElements();
-
-        // Populate the spans with data, with null checks
-        if (spans.caloriesTarget && data.data.nutritionTable[0]) {
-            spans.caloriesTarget.innerText = data.data.nutritionTable[0].targetAmount?.trim() || '';
-        }
-        if (spans.caloriesIntake && data.data.nutritionTable[0]) {
-            spans.caloriesIntake.innerText = data.data.nutritionTable[0].intake?.trim() || '';
-        }
-        if (spans.caloriesPercent && data.data.nutritionTable[0]) {
-            spans.caloriesPercent.innerText = data.data.nutritionTable[0].percentReached?.trim() || '';
-        }
-        if (spans.proteinTarget && data.data.nutritionTable[1]) {
-            spans.proteinTarget.innerText = data.data.nutritionTable[1].targetAmount?.trim() || '';
-        }
-        if (spans.proteinIntake && data.data.nutritionTable[1]) {
-            spans.proteinIntake.innerText = data.data.nutritionTable[1].intake?.trim() || '';
-        }
-        if (spans.proteinPercent && data.data.nutritionTable[1]) {
-            spans.proteinPercent.innerText = data.data.nutritionTable[1].percentReached?.trim() || '';
-        }
-        if (spans.carbsTarget && data.data.nutritionTable[2]) {
-            spans.carbsTarget.innerText = data.data.nutritionTable[2].targetAmount?.trim() || '';
-        }
-        if (spans.carbsIntake && data.data.nutritionTable[2]) {
-            spans.carbsIntake.innerText = data.data.nutritionTable[2].intake?.trim() || '';
-        }
-        if (spans.carbsPercent && data.data.nutritionTable[2]) {
-            spans.carbsPercent.innerText = data.data.nutritionTable[2].percentReached?.trim() || '';
-        }
-        if (spans.fatTarget && data.data.nutritionTable[3]) {
-            spans.fatTarget.innerText = data.data.nutritionTable[3].targetAmount?.trim() || '';
-        }
-        if (spans.fatIntake && data.data.nutritionTable[3]) {
-            spans.fatIntake.innerText = data.data.nutritionTable[3].intake?.trim() || '';
-        }
-        if (spans.fatPercent && data.data.nutritionTable[3]) {
-            spans.fatPercent.innerText = data.data.nutritionTable[3].percentReached?.trim() || '';
-        }
-        if (spans.fiberTarget && data.data.nutritionTable[4]) {
-            spans.fiberTarget.innerText = data.data.nutritionTable[4].targetAmount?.trim() || '';
-        }
-        if (spans.fiberIntake && data.data.nutritionTable[4]) {
-            spans.fiberIntake.innerText = data.data.nutritionTable[4].intake?.trim() || '';
-        }
-        if (spans.fiberPercent && data.data.nutritionTable[4]) {
-            spans.fiberPercent.innerText = data.data.nutritionTable[4].percentReached?.trim() || '';
-        }
-        if (spans.vitaminDTarget && data.data.nutritionTable[5]) {
-            spans.vitaminDTarget.innerText = data.data.nutritionTable[5].targetAmount?.trim() || '';
-        }
-        if (spans.vitaminDIntake && data.data.nutritionTable[5]) {
-            spans.vitaminDIntake.innerText = data.data.nutritionTable[5].intake?.trim() || '';
-        }
-        if (spans.vitaminDPercent && data.data.nutritionTable[5]) {
-            spans.vitaminDPercent.innerText = data.data.nutritionTable[5].percentReached?.trim() || '';
-        }
-        if (spans.ironTarget && data.data.nutritionTable[6]) {
-            spans.ironTarget.innerText = data.data.nutritionTable[6].targetAmount?.trim() || '';
-        }
-        if (spans.ironIntake && data.data.nutritionTable[6]) {
-            spans.ironIntake.innerText = data.data.nutritionTable[6].intake?.trim() || '';
-        }
-        if (spans.ironPercent && data.data.nutritionTable[6]) {
-            spans.ironPercent.innerText = data.data.nutritionTable[6].percentReached?.trim() || '';
-        }
-        if (spans.calciumTarget && data.data.nutritionTable[7]) {
-            spans.calciumTarget.innerText = data.data.nutritionTable[7].targetAmount?.trim() || '';
-        }
-        if (spans.calciumIntake && data.data.nutritionTable[7]) {
-            spans.calciumIntake.innerText = data.data.nutritionTable[7].intake?.trim() || '';
-        }
-        if (spans.calciumPercent && data.data.nutritionTable[7]) {
-            spans.calciumPercent.innerText = data.data.nutritionTable[7].percentReached?.trim() || '';
-        }
-        if (spans.mealRecommendation) {
-            spans.mealRecommendation.innerText = data?.data?.mealRecommendations?.trim() || '';
-        }
-        if (spans.bmi && data.data.metrics) {
-            spans.bmi.innerText = data.data.metrics.bmi?.trim() || '';
-        }
-
-        console.log('Data population successful');
-    } catch (error) {
-        console.error('Error populating data:', error);
-    }
-}

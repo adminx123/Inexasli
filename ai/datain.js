@@ -10,6 +10,64 @@ import { getCookie } from '/utility/getcookie.js';
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 
+
+function initializeGridItems() {
+    const gridItems = document.querySelectorAll('.grid-container .grid-item');
+    gridItems.forEach(item => {
+        if (!item.dataset.value) {
+            console.warn('Grid item is missing data-value attribute:', item);
+            return;
+        }
+
+        // const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+        // const value = localStorage.getItem(key);
+        // console.log('item: ', key, 'value: ', value);
+        // if (value === 'true') {
+        //     item.classList.add('selected');
+        //     console.log(`Restored ${key}: true (datain.js)`);
+        // } else if (value === 'false') {
+        //     item.classList.remove('selected');
+        //     console.log(`Restored ${key}: false (datain.js)`);
+        // }
+
+        // Remove existing listeners to prevent duplicates
+        item.removeEventListener('click', toggleGridItem);
+        item.addEventListener('click', toggleGridItem);
+    });
+    console.log('Added click event listener to grid items (datain.js)');
+
+    function toggleGridItem() {
+        const container = this.closest('.grid-container');
+        if ( container.id === 'calorie-activity' || container.id === 'calorie-diet-type') {
+            // Single-selection: deselect others
+            container.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
+            this.classList.add('selected');
+        } else {
+            // Multi-selection: toggle
+            this.classList.toggle('selected');
+        }
+        // saveGridItem(this);
+    }
+
+    // function saveGridItem(item) {
+    //     const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+    //     const value = item.classList.contains('selected') ? 'true' : 'false';
+    //     try {
+    //         localStorage.setItem(key, value);
+    //         console.log(`Saved ${key}: ${value} (datain.js)`);
+    //     } catch (error) {
+    //         console.error(`Error saving grid item ${key}:`, error);
+    //     }
+    // }
+}
+
+setTimeout(() => {
+    document.addEventListener('data-in-opened', () => {
+        initializeGridItems();
+        console.log('Data-in opened event triggered, initializing grid items (datain.js)');
+    })
+}, 300);
+
 document.addEventListener('DOMContentLoaded', async function () {
     // Check if the "prompt" cookie is more than 10 minutes old
     const promptCookie = getCookie("prompt");
@@ -19,53 +77,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let dataContainer = null;
 
-    function initializeGridItems() {
-        const gridItems = document.querySelectorAll('.grid-container .grid-item');
-        gridItems.forEach(item => {
-            if (!item.dataset.value) {
-                console.warn('Grid item is missing data-value attribute:', item);
-                return;
-            }
 
-            const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-            const value = localStorage.getItem(key);
-            if (value === 'true') {
-                item.classList.add('selected');
-                console.log(`Restored ${key}: true (datain.js)`);
-            } else if (value === 'false') {
-                item.classList.remove('selected');
-                console.log(`Restored ${key}: false (datain.js)`);
-            }
-
-            // Remove existing listeners to prevent duplicates
-            item.removeEventListener('click', toggleGridItem);
-            item.addEventListener('click', toggleGridItem);
-        });
-
-        function toggleGridItem() {
-            const container = this.closest('.grid-container');
-            if (container.id === 'calorie-goal' || container.id === 'calorie-activity' || container.id === 'calorie-diet-type') {
-                // Single-selection: deselect others
-                container.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
-                this.classList.add('selected');
-            } else {
-                // Multi-selection: toggle
-                this.classList.toggle('selected');
-            }
-            saveGridItem(this);
-        }
-
-        function saveGridItem(item) {
-            const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-            const value = item.classList.contains('selected') ? 'true' : 'false';
-            try {
-                localStorage.setItem(key, value);
-                console.log(`Saved ${key}: ${value} (datain.js)`);
-            } catch (error) {
-                console.error(`Error saving grid item ${key}:`, error);
-            }
-        }
-    }
 
     async function loadStoredContent(url) {
         try {
@@ -89,6 +101,19 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             // Initialize grid items directly
             initializeGridItems();
+
+
+            dataContainer.querySelectorAll('script').forEach(oldScript => {
+                const newScript = document.createElement('script');
+                if (oldScript.src) {
+                    newScript.src = oldScript.src;
+                } else {
+                    newScript.textContent = oldScript.textContent;
+                }
+
+                oldScript.replaceWith(newScript);
+                console.log("has replaced the old script with the new", newScript)
+            });
         } catch (error) {
             console.error(`Error loading stored content (datain.js):`, error);
             dataContainer.innerHTML = `
@@ -271,6 +296,15 @@ document.addEventListener('DOMContentLoaded', async function () {
                 setLocal('dataContainerState', 'expanded');
                 console.log('Left data container expanded (datain.js)');
 
+                const leftSideBarOpen = new CustomEvent('left-sidebar-open', {
+                    detail: {
+                        state: 'expanded'
+                    }
+                });
+
+                document.dispatchEvent(leftSideBarOpen);
+                console.log('Dispatched left-side-bar-open event (datain.js)', leftSideBarOpen);
+                initializeGridItems();
                 const storedUrl = getLocal('lastGridItemUrl');
                 if (storedUrl) {
                     loadStoredContent(storedUrl);
