@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fields.forEach(field => {
             const element = document.getElementById(field);
             if (element) {
-                setLocal(field, element.value.trim() !== "" ? element.value : field.includes('_percent') ? "100" : "0", 365);
+                setLocal(field, element.value.trim() !== "" ? element.value : field.includes('_percent') ? "100" : "", 365);
             }
         });
     }
@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 element.removeEventListener('input', handleInputChange);
                 element.addEventListener('input', handleInputChange);
                 function handleInputChange() {
-                    setLocal(elementId, element.value.trim() !== "" ? element.value : elementId.includes('_percent') ? "100" : "0", 365);
+                    setLocal(elementId, element.value.trim() !== "" ? element.value : elementId.includes('_percent') ? "100" : "", 365);
                     console.log(`Saved ${elementId}: ${element.value}`);
                     calculateAll();
                 }
