@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const element = document.getElementById(field);
             if (element) {
                 const value = element.value.trim();
-                setLocal(field, value !== "" ? value : "0", 365);
+                setLocal(field, value !== "" ? value : "", 365); // Save empty string instead of 0
             }
         });
         setLocal("ANNUALINCOME", ANNUALINCOME, 365);
@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 element.removeEventListener('input', handleInputChange);
                 element.addEventListener('input', handleInputChange);
                 function handleInputChange() {
-                    setLocal(elementId, element.value.trim() !== "" ? element.value : "0", 365);
+                    setLocal(elementId, element.value.trim() !== "" ? element.value : "", 365); // Save empty string instead of 0
                     console.log(`Saved ${elementId}: ${element.value}`);
                 }
             } else {
