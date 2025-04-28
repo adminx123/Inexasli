@@ -586,4 +586,12 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (error) {
         console.error('Error initializing asset data container at:', new Date().toISOString(), error);
     }
+
+    const calculateButton = document.getElementById('calculateButton');
+    if (calculateButton) {
+        calculateButton.addEventListener('click', calculateNext);
+        console.log('calculateNext dynamically bound to calculateButton');
+    } else {
+        console.error('calculateButton not found');
+    }
 });

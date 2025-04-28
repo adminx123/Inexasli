@@ -808,3 +808,13 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Error initializing intro data container at:', new Date().toISOString(), error);
     }
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const proceedButton = document.getElementById('proceedButton');
+    if (proceedButton) {
+        proceedButton.addEventListener('click', nextPage);
+        console.log('nextPage dynamically bound to proceedButton');
+    } else {
+        console.error('proceedButton not found');
+    }
+});

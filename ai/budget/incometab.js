@@ -731,4 +731,12 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (error) {
         console.error('Error initializing income data container at:', new Date().toISOString(), error);
     }
+
+    const validateButton = document.getElementById('validateButton');
+    if (validateButton) {
+        validateButton.addEventListener('click', validatecheckbox);
+        console.log('validatecheckbox dynamically bound to validateButton');
+    } else {
+        console.error('validateButton not found');
+    }
 });
