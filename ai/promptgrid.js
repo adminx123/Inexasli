@@ -116,24 +116,46 @@ document.addEventListener('DOMContentLoaded', async function() {
             setLocal('lastGridItemUrl', url); // Added to store lastGridItemUrl
             console.log(`Stored lastGridItemUrl: ${url} (promptgrid.js)`);
 
+
+            dataContainer.querySelectorAll('script').forEach(oldScript => {
+                const newScript = document.createElement('script');
+                if (oldScript.src) {
+                    newScript.src = oldScript.src;
+                } else {
+                    newScript.textContent = oldScript.textContent;
+                }
+
+                oldScript.replaceWith(newScript);
+                console.log("has replaced the old script with the new", newScript)
+            });
+
+            const openedEvent = new CustomEvent('data-in-opened', {
+                detail: {
+                    state: 'expanded'
+                }
+            });
+
+            document.dispatchEvent(openedEvent);
+            console.log('Data-in container opened event dispatched (promptgrid.js)');
+
             // Optionally load corresponding JS file
-            const scriptUrl = url.replace('.html', '.js');
-            try {
-                const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
-                existingScripts.forEach(script => script.remove());
+            // const scriptUrl = url.replace('.html', '.js');
+            // try {
+            //     const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
+            //     existingScripts.forEach(script => script.remove());
 
-                const scriptResponse = await fetch(scriptUrl);
-                if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
+            //     const scriptResponse = await fetch(scriptUrl);
+            //     if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
 
-                const scriptContent = await scriptResponse.text();
-                const script = document.createElement('script');
-                script.textContent = scriptContent;
-                script.dataset.source = scriptUrl;
-                document.body.appendChild(script);
-                console.log(`Loaded script: ${scriptUrl} (promptgrid.js)`);
-            } catch (error) {
-                console.log(`No script found for ${scriptUrl}, skipping (promptgrid.js)`);
-            }
+            //     const scriptContent = await scriptResponse.text();
+            //     const script = document.createElement('script');
+            //     script.textContent = scriptContent;
+            //     script.dataset.source = scriptUrl;
+            //     document.body.appendChild(script);
+            //     console.log(`Loaded script: ${scriptUrl} (promptgrid.js)`);
+            // } catch (error) {
+            //     console.log(`No script found for ${scriptUrl}, skipping (promptgrid.js)`);
+            // }
         } catch (error) {
             console.error('Error loading content (promptgrid.js):', error);
         }
