@@ -561,7 +561,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 opacity: 1;
             }
             .data-container-expense.collapsed {
-                max-width: 18px;
+                max-width: 36px; /* Doubled from 18px */
                 height: 120px;
                 display: flex;
                 justify-content: center;
