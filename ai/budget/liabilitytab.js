@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const element = document.getElementById(field);
             const percentElement = document.getElementById(`${field}_percent`);
             if (element) {
-                setLocal(field, element.value.trim() !== "" ? element.value : "0", 365);
+                setLocal(field, element.value.trim() !== "" ? element.value : "", 365);
             }
             if (percentElement) {
                 setLocal(`${field}_percent`, percentElement.value.trim() !== "" ? percentElement.value : "100", 365);
@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 element.removeEventListener('input', handleInputChange);
                 element.addEventListener('input', handleInputChange);
                 function handleInputChange() {
-                    setLocal(elementId, element.value.trim() !== "" ? element.value : elementId.includes('_percent') ? "100" : "0", 365);
+                    setLocal(elementId, element.value.trim() !== "" ? element.value : elementId.includes('_percent') ? "100" : "", 365);
                     console.log(`Saved ${elementId}: ${element.value}`);
                     calculateAll();
                 }
