@@ -149,5 +149,47 @@
          <button id="proceedButton" class="disabled"><i class='bx nav-inner bx-right-arrow-alt'></i>Proceed</button>
      </div>
  
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the proceed button
+            const proceedButton = document.getElementById('proceedButton');
+            
+            if (proceedButton) {
+                // Add click event listener to the proceed button
+                proceedButton.addEventListener('click', function() {
+                    // Check if button is disabled
+                    if (proceedButton.classList.contains('disabled')) {
+                        return; // Don't proceed if the button is disabled
+                    }
+                    
+                    // Get parent window (since this is loaded inside a container)
+                    const parentWindow = window.parent || window;
+                    
+                    // First, close the intro container
+                    const introContainer = parentWindow.document.querySelector('.data-container-intro');
+                    if (introContainer && introContainer.dataset.state === 'expanded') {
+                        const introClose = introContainer.querySelector('.close-data-container');
+                        if (introClose) {
+                            introClose.click(); // Click the close button
+                            console.log('Intro tab closed');
+                        }
+                    }
+                    
+                    // Wait a brief moment to ensure intro is closed
+                    setTimeout(() => {
+                        // Next, open the income container
+                        const incomeContainer = parentWindow.document.querySelector('.data-container-income');
+                        if (incomeContainer && incomeContainer.dataset.state === 'collapsed') {
+                            const incomeLabel = incomeContainer.querySelector('.data-label');
+                            if (incomeLabel) {
+                                incomeLabel.click(); // Click the income label to expand
+                                console.log('Income tab expanded');
+                            }
+                        }
+                    }, 300);
+                });
+            }
+        });
+    </script>
  </body>
  </html>
