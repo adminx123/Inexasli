@@ -48,13 +48,13 @@
 
 <div class="twoperrow">
     <input type="number" inputmode="numeric" id="calorie-age" placeholder="Age" min="0">
-    <div class="rowuom">
+    <!-- <div class="rowuom"> -->
         <input id="calorie-height" placeholder="Height eg. 2 meters">
         <!-- <select id="calorie-height-unit">
             <option value="ft" selected>FT</option>
             <option value="cm">CM</option>
         </select> -->
-    </div>
+    <!-- </div> -->
 </div>
 <div class="rowuom">
     <input id="calorie-weight" placeholder="Weight eg. 100 lbs">
@@ -84,40 +84,13 @@ Potato 100g with broccoli 150g"></textarea>
  */
 (function () {
      console.log("new script is in action (calorieiq.html)")
-     const storedFormData = JSON.parse(localStorage.getItem("calorieIqFormData"));
+    //  const storedFormData = JSON.parse(localStorage.getItem("calorieIqFormData"));
     // Wait for DOM to be ready and handle dynamic content
     document.addEventListener('DOMContentLoaded', function () {
         initializeForm();
     });
 
-
-    if (storedFormData) {
-                    populateIn(storedFormData);
-                }
-
-    //  add event listener for custom event (left-sidebar-open)
-
-    setTimeout(() => {
-
-        document.addEventListener('left-sidebar-open', function (e) {
-            // console.log('Custom event "left-sidebar-open" triggered:', e.detail);
-    
-            if (e.detail.state == "expanded" && storedFormData) {
-                console.log("Left sidebar is expanded and storedFormData is available.");
-                populateIn(storedFormData);
-            } else {
-                console.log("Left sidebar is not expanded or storedFormData is not available.");
-
-            }
-        });
-    }, 300);
-    
-
-
-
-
-    // Use event delegation to handle dynamic elements
-    document.addEventListener('click', function (e) {
+    function handleDocumentClick(e) {
         const target = e.target;
 
         // Handle grid item clicks
@@ -147,7 +120,156 @@ Potato 100g with broccoli 150g"></textarea>
             console.log("clear button has been clicked")
             clearLocalStorage();
         }
-    });
+    }
+
+    function handleGridItemToggled (e) {
+try {
+    // Slimmed down silent version inside listener
+    function getSilentFormData() {
+        const formData = {
+            goals: [],
+            activityLevel: null,
+            needMealRecommendation: false,
+            dietRestriction: null
+        };
+
+        const selectedGoals = document.querySelectorAll('#calorie-goal .grid-item.selected');
+        selectedGoals.forEach(item => {
+            formData.goals.push(item.dataset.value);
+        });
+
+        const activityLevel = document.querySelector('#calorie-activity .grid-item.selected');
+        if (activityLevel) {
+            formData.activityLevel = activityLevel.dataset.value;
+        }
+
+        const mealRecommendation = document.querySelector('#calorie-recommendations .grid-item.selected');
+        if (mealRecommendation) {
+            formData.needMealRecommendation = true;
+        }
+
+        const dietRestriction = document.querySelector('#calorie-diet-type .grid-item.selected');
+        if (dietRestriction) {
+            formData.dietRestriction = dietRestriction.dataset.value;
+        }
+
+        return formData;
+    }
+
+    const partialFormData = getSilentFormData();
+    if (partialFormData) {
+        // Get full current stored form data
+        const existingData = JSON.parse(localStorage.getItem('calorieIqFormData')) || {};
+
+        // Merge the updated parts into existing data
+        const updatedFormData = { ...existingData, ...partialFormData };
+
+        // Save back to localStorage
+        localStorage.setItem('calorieIqFormData', JSON.stringify(updatedFormData));
+        console.log('Updated formData after toggle (silent, grid only)');
+    }
+} catch (error) {
+    console.error('Error saving partial formData after toggle:', error);
+}
+}
+
+function handleInputChange (e) {
+    const target = e.target;
+
+    if (target.matches('input, textarea, select')) {
+        try {
+            function getSilentInputFormData() {
+                const formData = {};
+
+                const ageInput = document.getElementById('calorie-age');
+                if (ageInput?.value && !isNaN(ageInput.value) && parseInt(ageInput.value, 10) > 0) {
+                    formData.age = parseInt(ageInput.value, 10);
+                }
+
+                const heightInput = document.getElementById('calorie-height');
+                if (heightInput?.value) {
+                    formData.height = heightInput.value;
+                }
+
+                const weightInput = document.getElementById('calorie-weight');
+                if (weightInput?.value) {
+                    formData.weight = weightInput.value;
+                }
+
+                const sexInput = document.getElementById('calorie-sex');
+                if (sexInput?.value) {
+                    formData.sex = sexInput.value;
+                }
+
+                const foodLogInput = document.getElementById('calorie-food-log');
+                if (foodLogInput?.value.trim()) {
+                    formData.foodLog = foodLogInput.value.trim();
+                } else {
+                    formData.foodLog = '';
+                }
+
+                return formData;
+            }
+
+            const partialFormData = getSilentInputFormData();
+            if (partialFormData) {
+                const existingData = JSON.parse(localStorage.getItem('calorieIqFormData')) || {};
+                const updatedFormData = { ...existingData, ...partialFormData };
+                localStorage.setItem('calorieIqFormData', JSON.stringify(updatedFormData));
+                console.log('Updated formData after input/select change (silent)');
+            }
+        } catch (error) {
+            console.error('Error saving formData after input/select change:', error);
+        }
+    }
+}
+
+function handleLeftSidebarOpen (e) {
+            // console.log('Custom event "left-sidebar-open" triggered:', e.detail);
+            const storedFormData = JSON.parse(localStorage.getItem("calorieIqFormData"));
+            if (e.detail.state == "expanded" && storedFormData) {
+                console.log("Left sidebar is expanded and storedFormData is available.");
+                populateIn(storedFormData);
+            } else {
+                console.log("Left sidebar is not expanded or storedFormData is not available.");
+
+            }
+        }
+
+
+
+    setTimeout(() => {
+        // Handle grid item toggles
+        document.removeEventListener('grid-item-toggled',handleGridItemToggled);
+        document.addEventListener('grid-item-toggled', handleGridItemToggled);
+        
+        
+        
+        
+        // Handle input changes
+        document.removeEventListener('change', handleInputChange);
+        document.addEventListener('change', handleInputChange);
+
+    }, 300)
+    const storedFormData = JSON.parse(localStorage.getItem("calorieIqFormData"));
+
+    if (storedFormData) {
+                    populateIn(storedFormData);
+                }
+
+    //  add event listener for custom event (left-sidebar-open)
+
+    setTimeout(() => {
+
+
+        document.removeEventListener('left-sidebar-open', handleLeftSidebarOpen);
+        document.addEventListener('left-sidebar-open', handleLeftSidebarOpen)}, 300);
+    
+
+        document.removeEventListener('click', handleDocumentClick);
+        document.addEventListener('click', handleDocumentClick );
+
+    
 
     // Handle input changes
     document.addEventListener('change', function (e) {
@@ -446,34 +568,39 @@ Potato 100g with broccoli 150g"></textarea>
     }
 
     function clearLocalStorage() {
-        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
-            console.log("User canceled the clear action.");
-            return;
+        const storedFormData = JSON.parse(localStorage.getItem("calorieIqFormData"));
+
+
+        if (storedFormData) {
+            if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
+                console.log("User canceled the clear action.");
+                return;
+            }
+            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+                // const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+                try {
+                    localStorage.removeItem('calorieIqFormData');
+                    
+                    item.classList.remove('selected');
+                    // console.log(`Cleared ${key}`);
+                } catch (error) {
+                    // console.error(`Error clearing ${key}:`, error);
+                }
+            });
+            document.querySelectorAll('input, textarea, select').forEach(input => {
+                // const key = `input_${input.id}`;
+                try {
+                    // localStorage.removeItem(key);
+                    input.value = '';
+                    // console.log(`Cleared ${key}`);
+                } catch (error) {
+                    // console.error(`Error clearing ${key}:`, error);
+                }
+            });
+            // const weightUnit = document.getElementById('calorie-weight-unit');
+            // if (weightUnit) weightUnit.value = 'lbs';
+            console.log("All saved data cleared and form reset.");
         }
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            // const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-            try {
-                localStorage.removeItem('calorieIqFormData');
-                
-                item.classList.remove('selected');
-                // console.log(`Cleared ${key}`);
-            } catch (error) {
-                // console.error(`Error clearing ${key}:`, error);
-            }
-        });
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            // const key = `input_${input.id}`;
-            try {
-                // localStorage.removeItem(key);
-                input.value = '';
-                // console.log(`Cleared ${key}`);
-            } catch (error) {
-                // console.error(`Error clearing ${key}:`, error);
-            }
-        });
-        // const weightUnit = document.getElementById('calorie-weight-unit');
-        // if (weightUnit) weightUnit.value = 'lbs';
-        console.log("All saved data cleared and form reset.");
     }
 
     const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';

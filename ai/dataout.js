@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 .data-container-right .data-content {
                     font-size: 12px;
-                    padding: 8px;
+                    padding: 0;
                     overflow-x: auto;
                 }
             }

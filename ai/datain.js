@@ -46,6 +46,10 @@ function initializeGridItems() {
             // Multi-selection: toggle
             this.classList.toggle('selected');
         }
+
+        const toggleEvent = new CustomEvent('grid-item-toggled', { detail: { item: this } });
+        console.log('Dispatched grid-item-toggled event (datain.js)', toggleEvent);
+document.dispatchEvent(toggleEvent);
         // saveGridItem(this);
     }
 
