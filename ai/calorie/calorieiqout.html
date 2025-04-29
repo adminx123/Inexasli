@@ -228,7 +228,7 @@ async function populate() {
             spans.mealRecommendation.innerText = data?.data?.mealRecommendations != 'null' ? data?.data?.mealRecommendations?.trim() : '';
         }
         if (spans.bmi && data.data.metrics) {
-            spans.bmi.innerText = data.data.metrics.bmi?.trim() || '';
+            spans.bmi.innerText += " " + data.data.metrics.bmi?.trim() || '';
         }
 
         console.log('Data population successful');
