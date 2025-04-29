@@ -50,7 +50,7 @@ a {
 }
 
 /* Input, Select, and Textarea Styles */
-input[type="number"],.calorie-height,
+input[type="number"],#calorie-height,
 select,
 textarea {
   width: 100%;
@@ -272,10 +272,11 @@ button:hover {
   input[type="number"],
   select,
   textarea,
-  button {
+  button, 
+  #calorie-height {
     max-width: 100%;
     font-size: 14px;
-    height: 36px;
+    height: 40px;
   }
 
   textarea {
@@ -451,8 +452,8 @@ table tbody tr:hover td {
   table th,
   table td {
     font-size: 12px;
-    padding: 8px;
-    min-width: 80px;
+    padding: 8px 4px;
+    min-width: 25px;
     border-radius: 3px;
   }
 }
@@ -461,7 +462,7 @@ table tbody tr:hover td {
   table th,
   table td {
     font-size: 11px;
-    padding: 6px 10px;
+    padding: 6px 5px;
   }
 }
 
