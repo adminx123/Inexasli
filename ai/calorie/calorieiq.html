@@ -397,7 +397,7 @@ function handleLeftSidebarOpen (e) {
             spans.calciumTarget.innerText = data.data.nutritionTable[7].targetAmount.trim();
             spans.calciumIntake.innerText = data.data.nutritionTable[7].intake.trim();
             spans.calciumPercent.innerText = data.data.nutritionTable[7].percentReached.trim();
-            spans.mealRecommendation.innerText = data?.data?.mealRecommendations?.trim() ?? '';
+            spans.mealRecommendation.innerText = data?.data?.mealRecommendations ? data.data.mealRecommendations.trim() : '';
             spans.bmi.innerText = data.data.metrics.bmi.trim();
 
 
