@@ -37,10 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (script.src) {
                     newScript.src = script.src + '?v=' + new Date().getTime();
                     if (
-                        script.src.includes('introtab.js') ||
                         script.src.includes('setlocal.js') ||
                         script.src.includes('getlocal.js') ||
-                        script.src.includes('tray.js') ||
                         script.src.includes('utils.js') ||
                         script.src.includes('hideShow.js')
                     ) {
@@ -60,89 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function calculateNext() {
-        const originalQuerySelector = document.querySelector.bind(document);
-        const introContainer = originalQuerySelector('.data-container-intro');
-        if (introContainer && introContainer.dataset.state === 'expanded') {
-            const introClose = introContainer.querySelector('.close-data-container');
-            if (introClose) {
-                introClose.click();
-                console.log('Intro tab closed at:', new Date().toISOString());
-            } else {
-                console.error('Intro close button not found');
-            }
-        } else {
-            console.log('Intro tab already closed or not found');
-        }
-        const incomeContainer = originalQuerySelector('.data-container-income');
-        if (incomeContainer) {
-            const incomeLabel = incomeContainer.querySelector('.data-label');
-            if (incomeLabel) {
-                setTimeout(() => {
-                    incomeLabel.click();
-                    console.log('Income tab triggered to open at:', new Date().toISOString());
-                }, 300);
-            } else {
-                console.error('Income data label not found');
-            }
-        } else {
-            console.error('Income data container not found. Ensure incometab.js is loaded');
-        }
-    }
-
-    function initializeIntroLogic(container) {
-        if (introInitialized) {
-            console.log('Intro form already initialized, skipping at:', new Date().toISOString());
-            return;
-        }
-        introInitialized = true;
-        console.log('Intro form initialized at:', new Date().toISOString());
-
-        // Bind navigation button
-        function bindNavButton() {
-            const navButton = container.querySelector('.nav-btn') || container.querySelector('#proceedButton');
-            if (navButton) {
-                navButton.removeAttribute('onclick');
-                navButton.removeEventListener('click', calculateNext);
-                navButton.addEventListener('click', calculateNext);
-                console.log('calculateNext bound to nav-btn/proceedButton at:', new Date().toISOString());
-                return true;
-            } else {
-                console.warn('nav-btn/proceedButton not found at:', new Date().toISOString());
-                return false;
-            }
-        }
-
-        // Initial attempt to bind
-        bindNavButton();
-
-        // Persistent observer for nav button
-        const observer = new MutationObserver((mutations, obs) => {
-            if (container.querySelector('.nav-btn') || container.querySelector('#proceedButton')) {
-                console.log('Nav button detected by observer, binding at:', new Date().toISOString());
-                if (bindNavButton()) {
-                    obs.disconnect();
-                }
-            }
-        });
-        observer.observe(container, { childList: true, subtree: true });
-
-        // Fallback binding after delay
-        setTimeout(() => {
-            if (!container.querySelector('.nav-btn')?.onclick && !container.querySelector('#proceedButton')?.onclick) {
-                console.log('Fallback binding attempt for nav-btn/proceedButton at:', new Date().toISOString());
-                if (bindNavButton()) {
-                    console.log('Fallback binding succeeded');
-                } else {
-                    console.error('Fallback binding failed, nav-btn/proceedButton not found. DOM state:', container.innerHTML);
-                }
-            }
-        }, 3000);
-
-        // Initialize intro form logic (originally from intro.js)
-        initializeIntroForm(container);
-    }
-
     function initializeIntroForm(container) {
         // Preserve original DOM methods
         const originalQuerySelector = document.querySelector.bind(document);
@@ -154,8 +69,12 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll = (selector) => container.querySelectorAll(selector).length > 0 ? container.querySelectorAll(selector) : originalQuerySelectorAll(selector);
         document.getElementById = (id) => container.querySelector(`#${id}`) || originalGetElementById(id);
 
-        const countryDropdown = document.getElementById('country');
-        const subregionDropdown = document.getElementById('subregion');
+        // Declare `countryDropdown` only once at the top of the file
+        let countryDropdown = document.getElementById('country');
+
+        // Ensure `countryDropdown` is declared only once and reused
+        let subregionDropdown = document.getElementById('subregion');
+
         const filingStatusContainer = document.getElementById('filingStatusContainer');
         const subregionContainer = document.getElementById('subregionContainer');
         const filingStatusSection = document.getElementById('filingStatusSection');
@@ -302,13 +221,23 @@ document.addEventListener('DOMContentLoaded', function () {
             updateFilingStatus(savedCountry, savedStatus);
         }
 
-        countryDropdown.addEventListener('change', () => {
-            const country = countryDropdown.value;
-            setLocal('selectedCountry', country, 365);
+        // Add a debug log in the country dropdown change event to help troubleshoot
+        countryDropdown.addEventListener('change', function() {
+            const selectedCountry = this.value;
+            console.log("Country selected:", selectedCountry);
+            setLocal('selectedCountry', selectedCountry, 365);
+            
+            // Clear any previously selected subregion
             setLocal('selectedSubregion', '', 365);
-            updateSubregionDropdown(country);
-            updateFilingStatus(country);
+            
+            // Always call updateSubregionDropdown when country changes
+            console.log("Updating subregion dropdown for country:", selectedCountry);
+            updateSubregionDropdown(selectedCountry);
+            
+            // Update other UI elements
+            updateFilingStatus(selectedCountry);
             updateFormVisibility();
+            
             if (residencyStatus) {
                 residencyStatus.style.display = 'block';
             }
@@ -317,13 +246,36 @@ document.addEventListener('DOMContentLoaded', function () {
         subregionDropdown.addEventListener('change', () => {
             const subregion = subregionDropdown.value;
             setLocal('selectedSubregion', subregion, 365);
-            updateFormVisibility();
+            
+            // Only update the filing status section visibility, not the personal details
             const country = countryDropdown.value;
-            updateFilingStatus(country);
+            const residencyValue = getLocal('residency');
+            
+            // Only show filing status if all three tax residency fields are selected
+            const filingStatusDiv = document.querySelector('.filingStatus');
+            if (country && residencyValue && (subregion || country === 'OTHER')) {
+                if (filingStatusDiv) filingStatusDiv.style.display = 'block';
+                updateFilingStatus(country);
+            } else {
+                if (filingStatusDiv) filingStatusDiv.style.display = 'none';
+            }
+            
+            // Ensure personal details remain hidden unless filing status is selected
+            const specificsDiv = document.querySelector('.specifics');
+            const filingStatus = getLocal('fillingStatus');
+            if (!filingStatus && specificsDiv) {
+                specificsDiv.style.display = 'none';
+            }
         });
 
         function updateSubregionDropdown(country, savedSubregion) {
+            const subregionDropdown = document.getElementById('subregion');
+            const subregionContainer = document.getElementById('subregionContainer');
+        
+            // Clear existing options
             subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
+        
+            // Populate subregion dropdown based on the selected country
             if (country && subregionMap[country]) {
                 subregionMap[country].forEach(subregionCode => {
                     const option = document.createElement('option');
@@ -339,48 +291,151 @@ document.addEventListener('DOMContentLoaded', function () {
                 subregionDropdown.style.display = 'none';
             }
         }
+        
+        // Ensure the function is called when the country changes
+        if (countryDropdown) {
+            countryDropdown.addEventListener('change', () => {
+                const country = countryDropdown.value;
+                const savedSubregion = getLocal('selectedSubregion');
+                updateSubregionDropdown(country, savedSubregion);
+            });
+        }
 
         function updateFilingStatus(country, savedStatus) {
+            // Get the required elements
+            const filingStatusContainer = document.getElementById('filingStatusContainer');
+            const filingStatusSection = document.getElementById('filingStatusSection');
+            const filingStatusDiv = document.querySelector('.filingStatus');
+            
+            // Only proceed if we have all required fields
+            const subregion = getLocal('selectedSubregion');
+            const residencyValue = getLocal('residency');
+            
+            // Clear the container first
             filingStatusContainer.innerHTML = '';
-            if (country && (getLocal('selectedSubregion') || country === 'OTHER') && filingOptions[country]) {
+            
+            // Check if we have all the required tax residency elements selected
+            if (country && residencyValue && (subregion || country === 'OTHER') && filingOptions[country]) {
+                // Create the select element with proper styling
                 const filingStatusDropdown = document.createElement('select');
                 filingStatusDropdown.id = 'filingStatus';
-                filingStatusDropdown.innerHTML = '<option value="">Select Filing Status</option>';
-                filingStatusContainer.appendChild(filingStatusDropdown);
-
+                filingStatusDropdown.style.width = "345px";
+                filingStatusDropdown.style.maxWidth = "100%";
+                filingStatusDropdown.style.margin = "0 auto";
+                filingStatusDropdown.style.display = "block"; 
+                filingStatusDropdown.style.padding = "8px";
+                
+                // Add the default option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = "";
+                defaultOption.text = "Select Filing Status";
+                filingStatusDropdown.appendChild(defaultOption);
+                
+                // Add all the options for the selected country
                 filingOptions[country].forEach(option => {
                     const statusOption = document.createElement('option');
                     statusOption.value = option.value;
                     statusOption.text = option.text;
+                    if (savedStatus === option.value) {
+                        statusOption.selected = true;
+                    }
                     filingStatusDropdown.appendChild(statusOption);
                 });
-
+                
+                // Add event listener to handle changes
                 filingStatusDropdown.addEventListener('change', () => {
                     const selectedStatus = filingStatusDropdown.value;
                     setLocal('fillingStatus', selectedStatus, 365);
                     updateDependantsVisibility();
                     updateMaritalStatusVisibility();
                     updateSpecificsVisibility();
+                    updateFormVisibility();
                 });
-
+                
+                // Add the dropdown to the container
+                filingStatusContainer.appendChild(filingStatusDropdown);
+                
+                // If a saved status exists, set it and update relevant UI
                 if (savedStatus) {
                     filingStatusDropdown.value = savedStatus;
                     updateDependantsVisibility();
                     updateMaritalStatusVisibility();
                     updateSpecificsVisibility();
                 }
-
-                filingStatusSection.style.display = 'block';
+                
+                // Show both the filing status div and section
+                if (filingStatusDiv) filingStatusDiv.style.display = 'block';
+                if (filingStatusSection) filingStatusSection.style.display = 'block';
             } else {
-                filingStatusSection.style.display = 'none';
-                updateMaritalStatusVisibility();
+                // Hide if conditions aren't met
+                if (filingStatusDiv) filingStatusDiv.style.display = 'none';
+                if (filingStatusSection) filingStatusSection.style.display = 'none';
             }
         }
 
         function updateFormVisibility() {
-            // Placeholder for additional visibility logic if needed
+            // Get all required stored values
+            const country = getLocal('selectedCountry');
+            const subregion = getLocal('selectedSubregion');
+            const residencyValue = getLocal('residency');
+            const filingStatus = getLocal('fillingStatus');
+            
+            // Get all relevant DOM elements
+            const residencyStatus = document.getElementById('residencyStatus');
+            const subregionContainer = document.getElementById('subregionContainer');
+            const filingStatusSection = document.getElementById('filingStatusSection');
+            const filingStatusDiv = document.querySelector('.filingStatus');
+            const specificsDiv = document.querySelector('.specifics');
+        
+            // Step 1: Always show all tax residency elements (these should always be visible)
+            if (residencyStatus) residencyStatus.style.display = 'block';
+            if (subregionContainer) subregionContainer.style.display = 'block';
+            
+            // Step 2: Show filing status only when all three tax residency fields have values
+            if (country && residencyValue && (subregion || country === 'OTHER')) {
+                if (filingStatusDiv) filingStatusDiv.style.display = 'block';
+            } else {
+                if (filingStatusDiv) filingStatusDiv.style.display = 'none';
+            }
+            
+            // Step 3: Show personal details ONLY when ALL requirements are met:
+            // - All tax residency fields must have selections
+            // - Filing status must be selected
+            const allResidencyFieldsSelected = country && residencyValue && (subregion || country === 'OTHER');
+            if (allResidencyFieldsSelected && filingStatus) {
+                if (specificsDiv) specificsDiv.style.display = 'block';
+            } else {
+                if (specificsDiv) specificsDiv.style.display = 'none';
+            }
+            
+            // Enable the proceed button only when all required fields are filled
+            const proceedButton = document.getElementById('proceedButton');
+            if (proceedButton) {
+                if (country && (subregion || country === 'OTHER') && residencyValue && filingStatus) {
+                    proceedButton.classList.remove('disabled');
+                } else {
+                    proceedButton.classList.add('disabled');
+                }
+            }
         }
-
+        
+        // Update visibility on page load
+        updateFormVisibility();
+        
+        // Attach event listeners to update visibility dynamically
+        if (countryDropdown) {
+            countryDropdown.addEventListener('change', updateFormVisibility);
+        }
+        if (subregionDropdown) {
+            subregionDropdown.addEventListener('change', updateFormVisibility);
+        }
+        if (residency) {
+            residency.addEventListener('change', updateFormVisibility);
+        }
+        const filingStatusDropdown = document.getElementById('filingStatus');
+        if (filingStatusDropdown) {
+            filingStatusDropdown.addEventListener('change', updateFormVisibility);
+        }
         const numericInputs = ['ageSelf', 'ageSpouse'];
         numericInputs.forEach(id => {
             const input = document.getElementById(id);
@@ -602,6 +657,18 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById = originalGetElementById;
     }
 
+    function initializeIntroLogic(container) {
+        if (introInitialized) {
+            console.log('Intro logic already initialized, skipping at:', new Date().toISOString());
+            return;
+        }
+
+        console.log('Initializing intro logic at:', new Date().toISOString());
+        initializeIntroForm(container);
+        introInitialized = true;
+        console.log('Intro initialization complete at:', new Date().toISOString());
+    }
+
     function initializeDataContainer() {
         if (document.querySelector('.data-container-intro')) {
             console.log('Intro data container already exists, skipping initialization at:', new Date().toISOString());
@@ -809,12 +876,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    const proceedButton = document.getElementById('proceedButton');
-    if (proceedButton) {
-        proceedButton.addEventListener('click', nextPage);
-        console.log('nextPage dynamically bound to proceedButton');
-    } else {
-        console.error('proceedButton not found');
-    }
-});
