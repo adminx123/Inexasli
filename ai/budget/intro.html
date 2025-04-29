@@ -15,7 +15,7 @@
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
      <title>IncomeIQ™ Intro</title>
-     <link rel="stylesheet" href="/ai/styles/prompt.css">
+     <link rel="stylesheet" href="/style/styles.css">
      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
      <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
      <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
@@ -51,7 +51,7 @@
              </select>
          </div>
 
-         <div id="subregionContainer" style="display: none; ">
+         <div id="subregionContainer" style="display: block;">
              <div class="form-field">
                  <select id="subregion" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
                      <option value="">Select Tax Subregion</option>
@@ -77,25 +77,21 @@
      </div>
  
 
-     <div class="filingStatus">
-  
+     <div class="filingStatus" style="display: none;">
         <form id="websiteDesignForm">
-
             <h2 class="tooltip1" data-tooltip="What your legally status is for tax purposes">
                 Select Filing Status<span class="tooltip1-content"></span>
             </h2>
-
-            <div style="display: none;width: 345px; max-width: 100%; margin: 0 auto; display: block;" id="filingStatusSection">
-               
+            <div style="width: 345px; max-width: 100%; margin: 0 auto; display: block;" id="filingStatusSection">
                 <div id="filingStatusContainer" class="form-field" style="max-width: 345px; margin: 0 auto; text-align: center;">
-                    <select id="filingStatus" ></select>
+                    <!-- The select element will be created and populated by JavaScript -->
                 </div>
             </div>
         </form>
     </div>
      
  
-     <div class="specifics">
+     <div class="specifics" style="display: none;">
          
 
             <h2 class="tooltip1" data-tooltip="Relevant personal information.">
