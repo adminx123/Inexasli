@@ -494,6 +494,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const ageSpouse = document.getElementById('ageSpouse').value;
             const employmentStatus = document.getElementById('employmentStatus').value;
 
+            // Validation checks - keep all of these
             if (!country) {
                 alert('Please select a country.');
                 return;
@@ -530,7 +531,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 'coupled_no_dependants',
                 'coupled_with_dependants'
             ].includes(fillingStatus)) {
-                alert('Please enter your spouse’s age.');
+                alert('Please enter your spouse\'s age.');
                 return;
             }
             if (!employmentStatus) {
@@ -538,7 +539,50 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            calculateNext();
+            // First close the intro container
+            const introContainer = document.querySelector('.data-container-intro');
+            if (introContainer && introContainer.dataset.state === 'expanded') {
+                const introClose = introContainer.querySelector('.close-data-container');
+                if (introClose) {
+                    introClose.click();
+                    console.log('Intro tab closed at:', new Date().toISOString());
+                } else {
+                    console.error('Intro close button not found');
+                    // Try to collapse it manually
+                    introContainer.className = 'data-container-intro collapsed';
+                    introContainer.dataset.state = 'collapsed';
+                    introContainer.innerHTML = `<span class="data-label">INTRO</span>`;
+                    console.log('Intro tab manually collapsed at:', new Date().toISOString());
+                }
+            } else {
+                console.log('Intro tab already closed or not found');
+            }
+
+            // Then expand the income container
+            const incomeContainer = document.querySelector('.data-container-income');
+            if (incomeContainer) {
+                // If the income tab is collapsed, expand it
+                if (incomeContainer.dataset.state === 'collapsed') {
+                    // Simply click the label to trigger the expansion
+                    const incomeLabel = incomeContainer.querySelector('.data-label');
+                    if (incomeLabel) {
+                        setTimeout(() => {
+                            incomeLabel.click();
+                            console.log('Income tab triggered to expand at:', new Date().toISOString());
+                        }, 300);
+                    } else {
+                        console.error('Income tab label not found');
+                        // Try to expand it manually if needed
+                        if (typeof window.expandIncomeTab === 'function') {
+                            window.expandIncomeTab();
+                        }
+                    }
+                } else {
+                    console.log('Income tab already expanded');
+                }
+            } else {
+                console.error('Income tab container not found in the DOM');
+            }
         };
 
         function updateDependantsVisibility() {
