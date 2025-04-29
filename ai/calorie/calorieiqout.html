@@ -225,7 +225,7 @@ async function populate() {
             spans.calciumPercent.innerText = data.data.nutritionTable[7].percentReached?.trim() || '';
         }
         if (spans.mealRecommendation) {
-            spans.mealRecommendation.innerText = data?.data?.mealRecommendations?.trim() || '';
+            spans.mealRecommendation.innerText = data?.data?.mealRecommendations != 'null' ? data?.data?.mealRecommendations?.trim() : '';
         }
         if (spans.bmi && data.data.metrics) {
             spans.bmi.innerText = data.data.metrics.bmi?.trim() || '';
