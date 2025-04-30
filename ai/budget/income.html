@@ -261,7 +261,7 @@
          </div>
  
          <div class="checkboxrow">
-             <label for="income_gambling_winnings" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax. Note: Canadians don’t pay tax on winnings unless professional; US residents do;">
+             <label for="income_gambling_winnings" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax. Note: Canadians don't pay tax on winnings unless professional; US residents do;">
                  <span class="tooltip-content"></span>
                  Gambling:
              </label>
@@ -269,24 +269,10 @@
              <div data-frequency-id="income_gambling_winnings_frequency"></div>
              <span id="income_gambling_winnings_annual"></span>
          </div>
-     
- 
-         <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
-             <div class="checkbox-wrapper-2">
-                 <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
-             </div>
-             <label for="termscheckbox" style="font-size: 11px;">
-                 I have read, understand, and agree to the Terms of Service.(last updated: 6/Apr/2025). By proceeding, I acknowledge that I use IncomeIQ™ at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
-            
-                 <span class="modal-trigger inline-link" data-modal-src="/budget/legal.txt" title="terms">Read Terms of Service</span>
-             </label>
-         </div>
-
-         <!-- Data storage consent checkbox removed as it's now handled by dataConsentManager.js -->
      </div>
  
-     
-         <button class="nav-btn" id="validateButton"><i class='bx nav-inner bx-right-arrow-alt'></i></button>
+     <!-- Navigation button, renamed from validateButton since terms validation now happens in termsManager.js -->
+     <button class="nav-btn" id="nextButton"><i class='bx nav-inner bx-right-arrow-alt'></i></button>
   
  
      <script>
@@ -300,24 +286,6 @@
             try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
         };
         const overwriteCookies = window.overwriteCookies || function () { console.warn('overwriteCookies not defined'); };
-
-        // Terms cookie helpers
-        function getTermsCookie(name) {
-            const now = Date.now();
-            const status = JSON.parse(localStorage.getItem(name));
-            if (status && now > status.time) {
-                localStorage.removeItem(name);
-                return false;
-            }
-            return status ? status.accepted : false;
-        }
-        function setTermsCookie(name, value) {
-            const date = new Date();
-            localStorage.setItem(name, JSON.stringify({
-                accepted: value,
-                time: date.setTime(date.getTime() + 30 * 60 * 1000)
-            }));
-        }
 
         // Calculation helpers
         function calculateAnnual(inputId, frequencyGroupId) {
@@ -437,15 +405,6 @@
         // Make calculateAll function accessible outside this scope
         window.calculateAll = calculateAll;
         
-        function validatecheckbox() {
-            const termscheckbox = document.getElementById("termscheckbox");
-            // Only check terms checkbox now that data consent is handled by dataConsentManager
-            if (termscheckbox && termscheckbox.checked) {
-                calculateNext();
-            } else {
-                alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
-            }
-        }
         function calculateNext() {
             calculateAll();
             const parentWindow = window.parent || window;
@@ -462,6 +421,7 @@
                 }
             }, 300);
         }
+        
         // Setup all event listeners and initialize calculations
         function setupPageFunctionality() {
             // Form elements event listeners
@@ -498,35 +458,11 @@
                 }
             });
             
-            // Terms checkboxes
-            const checkbox1 = document.getElementById('termscheckbox');
-            
-            function checkTermsAndNavigate() {
-                if (checkbox1 && checkbox1.checked) {
-                    calculateNext();
-                }
+            // Next button - proceed to next tab directly, as terms are now handled by termsManager.js
+            const nextButton = document.getElementById('nextButton');
+            if (nextButton) {
+                nextButton.addEventListener('click', calculateNext);
             }
-            
-            if (checkbox1) {
-                checkbox1.checked = getTermsCookie('term1');
-                checkbox1.addEventListener('change', function() {
-                    setTermsCookie('term1', checkbox1.checked);
-                    checkTermsAndNavigate();
-                });
-            }
-            
-            // Validate button (if it exists)
-            const validateButton = document.getElementById('validateButton');
-            if (validateButton) {
-                validateButton.addEventListener('click', validatecheckbox);
-            }
-            
-            // No need to manually create frequency checkboxes - this is now handled by frequency.js
-            // The frequency.js module will:
-            // 1. Find all [data-frequency-id] elements
-            // 2. Create the frequency checkbox groups
-            // 3. Handle saving frequencies to localStorage
-            // 4. Manage checkbox state based on saved values
             
             // Initialize calculations
             calculateNormalizedSum();
@@ -592,9 +528,6 @@
         }
     })();
     </script>
-
-    <!-- Include the dataConsentManager.js script -->
-    <script src="/utility/dataConsentManager.js"></script>
    
  </body>
  
