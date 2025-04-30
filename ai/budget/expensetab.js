@@ -113,7 +113,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="data-label">EXPENSE</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into expense container`);
+            console.log(`Stored content loaded into expense container at:`, new Date().toISOString());
+            
+            // Mark expense page as visited when loaded
+            setLocal('expenseVisited', 'visited', 365);
+            console.log('Expense page marked as visited');
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {

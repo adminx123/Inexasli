@@ -10,6 +10,16 @@ import { setLocal } from '/utility/setlocal.js';
 import { getLocal } from '/utility/getlocal.js';
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Dependency fallbacks
+    const setLocal = window.setLocal || function (key, value, days) {
+        console.warn('setLocal not defined, using localStorage directly');
+        try {
+            localStorage.setItem(key, encodeURIComponent(value));
+        } catch (error) {
+            console.error('Error in setLocal:', error);
+        }
+    };
+
     // Track initialization state for intro form
     let introInitialized = false;
 
@@ -25,11 +35,15 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(`Stored content fetched in ${fetchTime.toFixed(2)}ms at:`, new Date().toISOString());
 
             dataContainer.innerHTML = `
-                <span class="close-data-container"></span>
+                <span class="close-data-container">-</span>
                 <span class="data-label">INTRO</span>
                 <div class="data-content">${content}</div>
             `;
             console.log(`Stored content loaded into intro container at:`, new Date().toISOString());
+            
+            // Mark intro page as visited when loaded
+            setLocal('introVisited', 'visited', 365);
+            console.log('Intro page marked as visited');
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {

@@ -61,6 +61,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="data-content">${content}</div>
             `;
             console.log(`Stored content loaded into liability container at:`, new Date().toISOString());
+            
+            // Mark liability page as visited when loaded
+            setLocal('liabilityVisited', 'visited', 365);
+            console.log('Liability page marked as visited');
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {

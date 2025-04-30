@@ -7,6 +7,29 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Dependency fallbacks
+    const setLocal = window.setLocal || function (key, value, days) {
+        console.warn('setLocal not defined, using localStorage directly');
+        try {
+            localStorage.setItem(key, encodeURIComponent(value));
+        } catch (error) {
+            console.error('Error in setLocal:', error);
+        }
+    };
+    const getLocal = window.getLocal || function (key) {
+        console.warn('getLocal not defined, using localStorage directly');
+        try {
+            const value = localStorage.getItem(key);
+            return value ? decodeURIComponent(value) : null;
+        } catch (error) {
+            console.error('Error in getLocal:', error);
+            return null;
+        }
+    };
+    
+    // Summary container management
+    console.log('Summary tab manager initialized in summarytab.js');
+    
     async function loadStoredContent(dataContainer, url) {
         try {
             console.log(`Attempting to load stored content from ${url} (summary.js)`);
@@ -23,6 +46,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="data-content">${content}</div>
             `;
             console.log(`Stored content loaded into summary container (summary.js)`);
+
+            // Mark summary page as visited when loaded
+            setLocal('summaryVisited', 'visited', 365);
+            console.log('Summary page marked as visited');
+
+            // Now check if all pages have been visited and set a flag
+            const introVisited = getLocal('introVisited');
+            const incomeVisited = getLocal('incomeVisited');
+            const expenseVisited = getLocal('expenseVisited');
+            const assetVisited = getLocal('assetVisited');
+            const liabilityVisited = getLocal('liabilityVisited');
+            const summaryVisited = getLocal('summaryVisited');
+
+            if (introVisited === 'visited' && 
+                incomeVisited === 'visited' && 
+                expenseVisited === 'visited' && 
+                assetVisited === 'visited' && 
+                liabilityVisited === 'visited' &&
+                summaryVisited === 'visited') {
+                // All pages have been visited, set a combined flag
+                setLocal('allPagesVisited', 'true', 365);
+                console.log('All budget pages have been visited, setting allPagesVisited flag');
+            }
         } catch (error) {
             console.error(`Error loading stored content (summary.js):`, error);
         }
