@@ -25,7 +25,7 @@
         
         @keyframes pulse-color {
             0%, 100% { color: inherit; }
-            50% { color: #2196F3; }
+            50% { color:rgb(255, 255, 255); }
         }
         
         /* Applied to the next tab in sequence to draw attention - left side tabs */
