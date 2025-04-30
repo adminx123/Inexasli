@@ -38,30 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let DEBT = 0;
     let DEPENDANT = 0;
 
-    const statusesWithDependants = [
-        'single_with_dependants', 'single_with_disabled_dependants', 'common_law_with_dependants',
-        'common_law_with_disabled_dependants', 'married_with_dependants', 'married_with_disabled_dependants',
-        'widowed_with_dependants', 'widowed_with_disabled_dependants', 'separated_with_dependants',
-        'separated_with_disabled_dependants', 'married_filing_jointly_with_dependants',
-        'married_filing_jointly_with_disabled_dependants', 'married_filing_separately_with_dependants',
-        'married_filing_separately_with_disabled_dependants', 'head_of_household_with_dependants',
-        'head_of_household_with_disabled_dependants', 'qualifying_widow_with_dependants',
-        'qualifying_widow_with_disabled_dependants', 'married_or_civil_partnership_with_dependants',
-        'married_or_civil_partnership_with_disabled_dependants', 'married_or_de_facto_with_dependants',
-        'married_or_de_facto_with_disabled_dependants', 'coupled_with_dependants',
-        'coupled_with_disabled_dependants'
-    ];
-
-    const singleStatuses = [
-        'single_no_dependants', 'single_with_dependants', 'single_with_disabled_dependants',
-        'single_self_disabled', 'single_caregiver', 'widowed_no_dependants', 'widowed_with_dependants',
-        'widowed_with_disabled_dependants', 'separated_no_dependants', 'separated_with_dependants',
-        'separated_with_disabled_dependants', 'head_of_household_no_dependants',
-        'head_of_household_with_dependants', 'head_of_household_with_disabled_dependants',
-        'head_of_household_caregiver', 'qualifying_widow_no_dependants', 'qualifying_widow_with_dependants',
-        'qualifying_widow_with_disabled_dependants'
-    ];
-
     function hideShowClass(className, action) {
         document.querySelectorAll(`.${className}`).forEach(el => {
             el.style.display = action === 'show' ? 'block' : 'none';
