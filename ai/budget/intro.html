@@ -388,7 +388,7 @@
                 updateDependantsVisibility();
                 updateMaritalStatusVisibility();
                 updateSpecificsVisibility();
-                updateFormVisibility();
+                checkFormProgress();
             });
             filingStatusContainer.appendChild(filingStatusDropdown);
         }
@@ -433,59 +433,83 @@
                 specificsDiv.style.display = 'none';
             }
         }
-        function updateFormVisibility() {
+
+        // New direct visibility management function - replaces updateFormVisibility
+        function checkFormProgress() {
+            // Step 1: Check country and show/hide subregion accordingly
             const country = countryDropdown.value;
+            if (country && subregionMap[country]) {
+                subregionContainer.style.display = 'block';
+            } else {
+                subregionContainer.style.display = 'none';
+            }
+            
+            // Step 2: Check criteria for showing filing status
             const subregion = subregionDropdown.value;
             const residencyValue = residency.value;
-            const filingStatus = document.getElementById('filingStatus')?.value;
-            if (residencyStatus) residencyStatus.style.display = 'block';
-            if (subregionContainer) subregionContainer.style.display = 'block';
-            if (country && residencyValue && (subregion || country === 'OTHER')) {
-                if (filingStatusDiv) filingStatusDiv.style.display = 'block';
-                updateFilingStatus(country, getLocal('fillingStatus'));
-            } else {
-                if (filingStatusDiv) filingStatusDiv.style.display = 'none';
-            }
-            if (country && residencyValue && (subregion || country === 'OTHER') && filingStatus) {
-                specificsDiv.style.display = 'block';
-            } else {
-                specificsDiv.style.display = 'none';
-            }
-            if (proceedButton) {
-                if (country && (subregion || country === 'OTHER') && residencyValue && filingStatus) {
-                    proceedButton.classList.remove('disabled');
-                } else {
-                    proceedButton.classList.add('disabled');
+            const hasValidResidency = country && residencyValue && (subregion || country === 'OTHER');
+            
+            if (hasValidResidency) {
+                // Create filing status dropdown if needed
+                if (filingStatusContainer.children.length === 0) {
+                    updateFilingStatus(country, getLocal('fillingStatus'));
                 }
+                filingStatusDiv.style.display = 'block';
+            } else {
+                filingStatusDiv.style.display = 'none';
             }
+            
+            // Step 3: Update specific fields visibility based on filing status
+            updateDependantsVisibility();
+            updateMaritalStatusVisibility();
+            updateSpecificsVisibility();
+            
+            // Step 4: Update proceed button state
+            const filingStatus = document.getElementById('filingStatus')?.value;
+            if (country && (subregion || country === 'OTHER') && residencyValue && filingStatus) {
+                proceedButton.classList.remove('disabled');
+            } else {
+                proceedButton.classList.add('disabled');
+            }
+            
+            console.log('Form progress updated:', {
+                country,
+                subregion,
+                residency: residencyValue,
+                filingStatus,
+                showFilingStatus: hasValidResidency,
+                proceedEnabled: !proceedButton.classList.contains('disabled')
+            });
         }
+
         // Event listeners for dropdowns and inputs
         if (countryDropdown) {
             countryDropdown.addEventListener('change', function() {
                 setLocal('selectedCountry', countryDropdown.value, 365);
                 updateSubregionDropdown(countryDropdown.value, getLocal('selectedSubregion'));
-                updateFilingStatus(countryDropdown.value, getLocal('fillingStatus'));
-                updateFormVisibility();
+                checkFormProgress();
             });
         }
+        
         if (subregionDropdown) {
             subregionDropdown.addEventListener('change', function() {
                 setLocal('selectedSubregion', subregionDropdown.value, 365);
-                updateFilingStatus(countryDropdown.value, getLocal('fillingStatus'));
-                updateFormVisibility();
+                checkFormProgress();
             });
         }
+        
         if (residency) {
             residency.addEventListener('change', function() {
                 setLocal('residency', residency.value, 365);
-                updateFilingStatus(countryDropdown.value, getLocal('fillingStatus'));
-                updateFormVisibility();
+                checkFormProgress();
             });
         }
+
         // Restore saved values and update UI on load
         updateSubregionDropdown(countryDropdown.value, getLocal('selectedSubregion'));
         updateFilingStatus(countryDropdown.value, getLocal('fillingStatus'));
-        updateFormVisibility();
+        checkFormProgress();
+        
         // Save and restore personal details
         ['ageSelf', 'ageSpouse'].forEach(id => {
             const input = document.getElementById(id);
