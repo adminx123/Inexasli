@@ -542,73 +542,12 @@
                 validateButton.addEventListener('click', validatecheckbox);
             }
             
-            // Setup frequency checkboxes to trigger recalculations
-            document.querySelectorAll('[data-frequency-id]').forEach(freqContainer => {
-                const freqId = freqContainer.getAttribute('data-frequency-id');
-                
-                // Create frequency options if not already present
-                if (freqContainer.children.length === 0) {
-                    const frequencies = ['annually', 'quarterly', 'monthly', 'weekly'];
-                    frequencies.forEach(freq => {
-                        const label = document.createElement('label');
-                        label.className = 'freqlabel';
-                        
-                        const checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.value = freq;
-                        checkbox.className = 'freq-checkbox';
-                        checkbox.name = freqId;
-                        
-                        // Set default frequency from localStorage or use 'annually'
-                        const savedFreq = getLocal(`frequency_${freqId}`);
-                        if ((savedFreq && savedFreq === freq) || (!savedFreq && freq === 'annually')) {
-                            checkbox.checked = true;
-                        }
-                        
-                        // Add event listener to recalculate when frequency changes
-                        checkbox.addEventListener('change', function() {
-                            if (this.checked) {
-                                // Uncheck other checkboxes in the same group
-                                document.querySelectorAll(`input[name="${freqId}"]`).forEach(cb => {
-                                    if (cb !== this) cb.checked = false;
-                                });
-                                
-                                // Save frequency to localStorage
-                                setLocal(`frequency_${freqId}`, freq, 365);
-                                
-                                // Recalculate everything
-                                calculateNormalizedSum();
-                                calculateEmploymentIncome();
-                                passiveincome();
-                            }
-                        });
-                        
-                        label.appendChild(checkbox);
-                        label.appendChild(document.createTextNode(freq.charAt(0).toUpperCase() + freq.slice(1)));
-                        freqContainer.appendChild(label);
-                    });
-                } else {
-                    // Add event listeners to existing frequency checkboxes
-                    freqContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                        checkbox.addEventListener('change', function() {
-                            if (this.checked) {
-                                // Uncheck other checkboxes in same group
-                                freqContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                                    if (cb !== this) cb.checked = false;
-                                });
-                                
-                                // Save frequency to localStorage
-                                setLocal(`frequency_${freqId}`, this.value, 365);
-                                
-                                // Recalculate everything
-                                calculateNormalizedSum();
-                                calculateEmploymentIncome();
-                                passiveincome();
-                            }
-                        });
-                    });
-                }
-            });
+            // No need to manually create frequency checkboxes - this is now handled by frequency.js
+            // The frequency.js module will:
+            // 1. Find all [data-frequency-id] elements
+            // 2. Create the frequency checkbox groups
+            // 3. Handle saving frequencies to localStorage
+            // 4. Manage checkbox state based on saved values
             
             // Initialize calculations
             calculateNormalizedSum();
