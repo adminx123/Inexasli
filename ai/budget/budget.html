@@ -15,7 +15,7 @@
      <link rel="manifest" href="/manifest.json">
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-     <title>ASSET</title>
+     <title>BUDGET PLANNER</title>
      <link rel="icon" type="image/x-icon" href="newLogo.jpg">
      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
  
@@ -31,47 +31,31 @@
  
  <body>
 
-
-
-
- 
-    
- 
-
     <script src="/ai/budget/frequency.js" type="module"></script>
-
-     <script src="/utility/toolTip.js"></script>
-     <script src="/utility/tray.js"></script>
-     <script src="/ai/budget/budget.js" type="module"></script>
+    <script src="/utility/toolTip.js"></script>
+    <script src="/utility/tray.js"></script>
+    <script src="/ai/budget/budget.js" type="module"></script>
      
-     
-     <!-- <script src="/payment/paymentform.js"></script> -->
-          <script src="/ai/budget/introtab.js" type="module"></script>
-     <script src="/ai/budget/incometab.js" type="module"></script>
-     <script src="/ai/budget/expensetab.js" type="module"></script>
-     <script src="/ai/budget/assettab.js" type="module"></script>
-     <script src="/ai/budget/liabilitytab.js" type="module"></script>
-     <script src="/ai/budget/summarytab.js" type="module"></script>
+    <!-- Tab scripts -->
+    <script src="/ai/budget/introtab.js" type="module"></script>
+    <script src="/ai/budget/incometab.js" type="module"></script>
+    <script src="/ai/budget/expensetab.js" type="module"></script>
+    <script src="/ai/budget/assettab.js" type="module"></script>
+    <script src="/ai/budget/liabilitytab.js" type="module"></script>
+    <script src="/ai/budget/summarytab.js" type="module"></script>
+    
+    <!-- Budget tab flow controller -->
+    <script src="/ai/budget/budgetTabFlow.js"></script>
 
-
-
-     <script src="/utility/dataConsentManager.js"></script>
-     <script src="/utility/termsManager.js"></script>
-     <script src="/utility/dataOverwrite.js"></script>
-     <script>
-         // Initialize the data overwrite button in the center of the screen
-         document.addEventListener('DOMContentLoaded', function() {
-             window.dataOverwrite.initButton(true);
-         });
-     </script>
-
-
-
-
-
-
- 
-     
+    <script src="/utility/dataConsentManager.js"></script>
+    <script src="/utility/termsManager.js"></script>
+    <script src="/utility/dataOverwrite.js"></script>
+    <script>
+        // Initialize the data overwrite button in the center of the screen
+        document.addEventListener('DOMContentLoaded', function() {
+            window.dataOverwrite.initButton(true);
+        });
+    </script>
  </body>
  
  </html>
