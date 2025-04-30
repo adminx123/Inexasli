@@ -9,25 +9,22 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Dependency fallbacks
     const setLocal = window.setLocal || function (key, value, days) {
-        console.warn('setLocal not defined, using localStorage directly');
         try {
             localStorage.setItem(key, encodeURIComponent(value));
         } catch (error) {
-            console.error('Error in setLocal:', error);
+            // Error handling without console logging
         }
     };
     const getLocal = window.getLocal || function (key) {
-        console.warn('getLocal not defined, using localStorage directly');
         try {
             const value = localStorage.getItem(key);
             return value ? decodeURIComponent(value) : null;
         } catch (error) {
-            console.error('Error in getLocal:', error);
+            // Error handling without console logging
             return null;
         }
     };
     const setCookie = window.setCookie || function (name, value, days) {
-        console.warn('setCookie not defined, using document.cookie directly');
         try {
             let expires = '';
             if (days) {
@@ -37,34 +34,27 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             document.cookie = `${name}=${encodeURIComponent(value)}${expires}; path=/`;
         } catch (error) {
-            console.error('Error in setCookie:', error);
+            // Error handling without console logging
         }
     };
 
     // Liability tab container logic
-    console.log('Liability tab container initialized in liabilitytab.js at:', new Date().toISOString());
 
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url} at:`, new Date().toISOString());
-            const startTime = performance.now();
             const response = await fetch(url);
-            const fetchTime = performance.now() - startTime;
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log(`Stored content fetched in ${fetchTime.toFixed(2)}ms at:`, new Date().toISOString());
 
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">LIABILITY</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into liability container at:`, new Date().toISOString());
             
             // Mark liability page as visited when loaded
             setLocal('liabilityVisited', 'visited', 365);
-            console.log('Liability page marked as visited');
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
@@ -79,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     ) {
                         newScript.type = 'module';
                     }
-                    newScript.onerror = () => console.error(`Failed to load script: ${script.src}`);
+                    newScript.onerror = () => {};
                     document.body.appendChild(newScript);
                 } else if (!script.src) {
                     const newScript = document.createElement('script');
@@ -88,13 +78,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         } catch (error) {
-            console.error(`Error loading stored content at:`, new Date().toISOString(), error);
+            // Error handling without console logging
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-liability')) {
-            console.log('Liability data container already exists, skipping initialization at:', new Date().toISOString());
             return;
         }
 
@@ -230,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Liability data container injected with state: collapsed at:', new Date().toISOString());
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -239,8 +227,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
                 toggleDataContainer();
             });
-        } else {
-            console.error('Liability data label not found');
         }
 
         function toggleDataContainer() {
@@ -266,7 +252,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isClickInside = dataContainer.contains(e.target);
                 const isNavButton = e.target.closest('#nextButton, #backButton');
                 if (!isClickInside && !isNavButton) {
-                    console.log('Clicked outside liability data container, collapsing at:', new Date().toISOString());
                     toggleDataContainer();
                 }
             }
@@ -276,6 +261,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing liability data container at:', new Date().toISOString(), error);
+        // Error handling without console logging
     }
 });
