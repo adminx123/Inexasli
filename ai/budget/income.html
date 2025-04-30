@@ -379,7 +379,12 @@
             incomeFields.forEach(field => {
                 annualIncomeSum += calculateAnnual(field[0], field[1]);
             });
-            // Optionally update a summary element
+            
+            // Store the calculated value in local storage and global window object
+            window.ANNUALINCOME = annualIncomeSum;
+            setLocal("ANNUALINCOME", annualIncomeSum.toString(), 365);
+            
+            // Optional UI update (commented out as not needed)
             // const sumElement = document.getElementById('annual_income_sum');
             // if (sumElement) sumElement.textContent = `$${annualIncomeSum.toFixed(2)}`;
         }
@@ -394,8 +399,12 @@
                 annualEmploymentIncome += calculateAnnual(field[0], field[1]);
             });
             // Optionally update a summary element
-            // const empElement = document.getElementById('ANNUALEMPLOYMENTINCOME');
-            // if (empElement) empElement.textContent = `$${annualEmploymentIncome.toFixed(2)}`;
+            const empElement = document.getElementById('ANNUALEMPLOYMENTINCOME');
+            if (empElement) empElement.textContent = `$${annualEmploymentIncome.toFixed(2)}`;
+            
+            // Store the calculated value in local storage
+            window.ANNUALEMPLOYMENTINCOME = annualEmploymentIncome;
+            setLocal("ANNUALEMPLOYMENTINCOME", annualEmploymentIncome.toString(), 365);
         }
         function passiveincome() {
             const fireFields = [
