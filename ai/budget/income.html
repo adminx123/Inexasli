@@ -281,16 +281,8 @@
                  <span class="modal-trigger inline-link" data-modal-src="/budget/legal.txt" title="terms">Read Terms of Service</span>
              </label>
          </div>
- 
-         <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">    
-             <div class="checkbox-wrapper-2">
-                 <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
-             </div>
-             <label for="notintended" style="font-size: 11px;">
-                 I consent to the use and storage of data in my browser’s local storage for essential website functionality, including but not limited to, calculations for my financial educational reports. Minimal cookies may be used for payment verification for premium access. These are necessary for the services I request.
-                 <a href="#" id="cookie-overwrite-link" style="text-decoration: none; color: #007bff;" class="inline-link">Click here to overwrite cookies</a>
-             </label>
-         </div>
+
+         <!-- Data storage consent checkbox removed as it's now handled by dataConsentManager.js -->
      </div>
  
      
@@ -447,8 +439,8 @@
         
         function validatecheckbox() {
             const termscheckbox = document.getElementById("termscheckbox");
-            const notintended = document.getElementById("notintended");
-            if (termscheckbox && notintended && termscheckbox.checked && notintended.checked) {
+            // Only check terms checkbox now that data consent is handled by dataConsentManager
+            if (termscheckbox && termscheckbox.checked) {
                 calculateNext();
             } else {
                 alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
@@ -508,10 +500,9 @@
             
             // Terms checkboxes
             const checkbox1 = document.getElementById('termscheckbox');
-            const checkbox2 = document.getElementById('notintended');
             
-            function checkBothTermsAndNavigate() {
-                if (checkbox1 && checkbox2 && checkbox1.checked && checkbox2.checked) {
+            function checkTermsAndNavigate() {
+                if (checkbox1 && checkbox1.checked) {
                     calculateNext();
                 }
             }
@@ -520,23 +511,7 @@
                 checkbox1.checked = getTermsCookie('term1');
                 checkbox1.addEventListener('change', function() {
                     setTermsCookie('term1', checkbox1.checked);
-                    checkBothTermsAndNavigate();
-                });
-            }
-            if (checkbox2) {
-                checkbox2.checked = getTermsCookie('term2');
-                checkbox2.addEventListener('change', function() {
-                    setTermsCookie('term2', checkbox2.checked);
-                    checkBothTermsAndNavigate();
-                });
-            }
-            
-            // Cookie overwrite link
-            const overwriteLink = document.getElementById('cookie-overwrite-link');
-            if (overwriteLink) {
-                overwriteLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    overwriteCookies();
+                    checkTermsAndNavigate();
                 });
             }
             
@@ -617,6 +592,9 @@
         }
     })();
     </script>
+
+    <!-- Include the dataConsentManager.js script -->
+    <script src="/utility/dataConsentManager.js"></script>
    
  </body>
  
