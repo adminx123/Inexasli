@@ -91,37 +91,50 @@ function createOverwriteButton() {
     buttonContainer.style.justifyContent = 'center';
     buttonContainer.style.alignItems = 'center';
     
-    // Create the button
+    // Create the button with the 3D tab styling
     const button = document.createElement('button');
     button.id = 'overwriteButton';
-    button.textContent = 'Clear All Data';
-    button.style.backgroundColor = '#f44336';
-    button.style.color = 'white';
-    button.style.border = 'none';
-    button.style.borderRadius = '4px';
-    button.style.padding = '10px 15px';
-    button.style.fontSize = '14px';
+    button.title = 'Clear All Data'; // Add title for accessibility
+    
+    // Apply 3D tab styling - matching the incometab.js style
+    button.style.backgroundColor = '#f5f5f5';
+    button.style.color = '#000';
+    button.style.border = '2px solid #000';
+    button.style.borderRadius = '8px';
+    button.style.boxShadow = '4px 4px 0 #000';
+    button.style.padding = '10px';
+    button.style.width = '50px';
+    button.style.height = '50px';
+    button.style.display = 'flex';
+    button.style.justifyContent = 'center';
+    button.style.alignItems = 'center';
     button.style.cursor = 'pointer';
-    button.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
-    button.style.transition = 'all 0.3s';
+    button.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease';
     
-    // Add icon if boxicons is available
-    if (typeof window.boxicons !== 'undefined' || document.querySelector('link[href*="boxicons"]')) {
-        const icon = document.createElement('i');
-        icon.className = 'bx bx-trash';
-        icon.style.marginRight = '5px';
-        button.prepend(icon);
-    }
+    // Create just an icon (no text)
+    const icon = document.createElement('i');
+    icon.className = 'bx bx-trash';
+    icon.style.fontSize = '24px';
+    button.appendChild(icon);
     
-    // Add hover effect
+    // Add hover effect matching the tab style
     button.addEventListener('mouseover', function() {
-        button.style.backgroundColor = '#d32f2f';
-        button.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
+        button.style.backgroundColor = '#FFFFFF';
     });
     
     button.addEventListener('mouseout', function() {
-        button.style.backgroundColor = '#f44336';
-        button.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
+        button.style.backgroundColor = '#f5f5f5';
+    });
+    
+    // Add active/click effect
+    button.addEventListener('mousedown', function() {
+        button.style.transform = 'translate(2px, 2px)';
+        button.style.boxShadow = '2px 2px 0 #000';
+    });
+    
+    button.addEventListener('mouseup', function() {
+        button.style.transform = 'translate(0, 0)';
+        button.style.boxShadow = '4px 4px 0 #000';
     });
     
     // Add click event
