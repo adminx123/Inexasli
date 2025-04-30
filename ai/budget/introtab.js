@@ -889,39 +889,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function toggleDataContainer() {
             if (!dataContainer) return;
-
             const isExpanded = dataContainer.dataset.state === 'expanded';
-
             if (isExpanded) {
                 dataContainer.className = 'data-container-intro collapsed';
                 dataContainer.dataset.state = 'collapsed';
-                dataContainer.innerHTML = `
-                    <span class="data-label">INTRO</span>
-                `;
-                introInitialized = false;
-                console.log('Intro data container collapsed, state reset at:', new Date().toISOString());
+                dataContainer.innerHTML = `<span class="data-label">INTRO</span>`;
             } else {
                 dataContainer.className = 'data-container-intro expanded';
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/budget/intro.html');
             }
-
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');
-
-            if (newLabel) {
-                newLabel.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
-
-            if (newClose) {
-                newClose.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
+            if (newLabel) newLabel.addEventListener('click', function (e) { e.preventDefault(); toggleDataContainer(); });
+            if (newClose) newClose.addEventListener('click', function (e) { e.preventDefault(); toggleDataContainer(); });
         }
 
         document.addEventListener('click', function (e) {
