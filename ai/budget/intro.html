@@ -191,5 +191,361 @@
             }
         });
     </script>
+    <script>
+    // Inline all intro logic from introtab.js
+    (function() {
+        // Polyfill for setLocal/getLocal if not present
+        const setLocal = window.setLocal || function (key, value, days) {
+            try { localStorage.setItem(key, encodeURIComponent(value)); } catch (e) { console.error(e); }
+        };
+        const getLocal = window.getLocal || function (key) {
+            try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
+        };
+
+        // DOM references
+        const countryDropdown = document.getElementById('country');
+        const subregionDropdown = document.getElementById('subregion');
+        const residency = document.getElementById('residency');
+        const filingStatusContainer = document.getElementById('filingStatusContainer');
+        const filingStatusDiv = document.querySelector('.filingStatus');
+        const specificsDiv = document.querySelector('.specifics');
+        const proceedButton = document.getElementById('proceedButton');
+        const subregionContainer = document.getElementById('subregionContainer');
+        const residencyStatus = document.getElementById('residencyStatus');
+        const dependantsContainer = document.querySelector('.dependantsContainer');
+
+        // Filing options and subregion maps (from introtab.js)
+        const filingOptions = {
+            CAN: [
+                { value: 'single_no_dependants', text: 'Single, No Dependants' },
+                { value: 'single_with_dependants', text: 'Single with Dependants' },
+                { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
+                { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
+                { value: 'single_caregiver', text: 'Single, Caregiver' },
+                { value: 'common_law_no_dependants', text: 'Common-Law, No Dependants' },
+                { value: 'common_law_with_dependants', text: 'Common-Law with Dependants' },
+                { value: 'common_law_with_disabled_dependants', text: 'Common-Law with Disabled Dependants' },
+                { value: 'common_law_self_disabled', text: 'Common-Law, Self-Disabled' },
+                { value: 'common_law_spouse_disabled', text: 'Common-Law, Spouse-Disabled' },
+                { value: 'common_law_caregiver', text: 'Common-Law, Caregiver' },
+                { value: 'married_no_dependants', text: 'Married, No Dependants' },
+                { value: 'married_with_dependants', text: 'Married with Dependants' },
+                { value: 'married_with_disabled_dependants', text: 'Married with Disabled Dependants' },
+                { value: 'married_self_disabled', text: 'Married, Self-Disabled' },
+                { value: 'married_spouse_disabled', text: 'Married, Spouse-Disabled' },
+                { value: 'married_caregiver', text: 'Married, Caregiver' },
+                { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
+                { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
+                { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
+                { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
+                { value: 'separated_with_dependants', text: 'Separated with Dependants' },
+                { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
+            ],
+            USA: [
+                { value: 'single_no_dependants', text: 'Single, No Dependants' },
+                { value: 'single_with_dependants', text: 'Single with Dependants' },
+                { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
+                { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
+                { value: 'single_caregiver', text: 'Single, Caregiver' },
+                { value: 'married_filing_jointly_no_dependants', text: 'Married Filing Jointly, No Dependants' },
+                { value: 'married_filing_jointly_with_dependants', text: 'Married Filing Jointly with Dependants' },
+                { value: 'married_filing_jointly_with_disabled_dependants', text: 'Married Filing Jointly with Disabled Dependants' },
+                { value: 'married_filing_jointly_self_disabled', text: 'Married Filing Jointly, Self-Disabled' },
+                { value: 'married_filing_jointly_spouse_disabled', text: 'Married Filing Jointly, Spouse-Disabled' },
+                { value: 'married_filing_jointly_caregiver', text: 'Married Filing Jointly, Caregiver' },
+                { value: 'married_filing_separately_no_dependants', text: 'Married Filing Separately, No Dependants' },
+                { value: 'married_filing_separately_with_dependants', text: 'Married Filing Separately with Dependants' },
+                { value: 'married_filing_separately_with_disabled_dependants', text: 'Married Filing Separately with Disabled Dependants' },
+                { value: 'married_filing_separately_self_disabled', text: 'Married Filing Separately, Self-Disabled' },
+                { value: 'head_of_household_no_dependants', text: 'Head of Household, No Dependants' },
+                { value: 'head_of_household_with_dependants', text: 'Head of Household with Dependants' },
+                { value: 'head_of_household_with_disabled_dependants', text: 'Head of Household with Disabled Dependants' },
+                { value: 'head_of_household_caregiver', text: 'Head of Household, Caregiver' },
+                { value: 'qualifying_widow_no_dependants', text: 'Qualifying Widow(er), No Dependants' },
+                { value: 'qualifying_widow_with_dependants', text: 'Qualifying Widow(er) with Dependants' },
+                { value: 'qualifying_widow_with_disabled_dependants', text: 'Qualifying Widow(er) with Disabled Dependants' }
+            ],
+            UK: [
+                { value: 'single_no_dependants', text: 'Single, No Dependants' },
+                { value: 'single_with_dependants', text: 'Single with Dependants' },
+                { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
+                { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
+                { value: 'single_caregiver', text: 'Single, Caregiver' },
+                { value: 'married_or_civil_partnership_no_dependants', text: 'Married or Civil Partnership, No Dependants' },
+                { value: 'married_or_civil_partnership_with_dependants', text: 'Married or Civil Partnership with Dependants' },
+                { value: 'married_or_civil_partnership_with_disabled_dependants', text: 'Married or Civil Partnership with Disabled Dependants' },
+                { value: 'married_or_civil_partnership_self_disabled', text: 'Married or Civil Partnership, Self-Disabled' },
+                { value: 'married_or_civil_partnership_spouse_disabled', text: 'Married or Civil Partnership, Spouse-Disabled' },
+                { value: 'married_or_civil_partnership_caregiver', text: 'Married or Civil Partnership, Caregiver' },
+                { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
+                { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
+                { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
+                { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
+                { value: 'separated_with_dependants', text: 'Separated with Dependants' },
+                { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
+            ],
+            AUS: [
+                { value: 'single_no_dependants', text: 'Single, No Dependants' },
+                { value: 'single_with_dependants', text: 'Single with Dependants' },
+                { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
+                { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
+                { value: 'single_caregiver', text: 'Single, Caregiver' },
+                { value: 'married_or_de_facto_no_dependants', text: 'Married or De Facto, No Dependants' },
+                { value: 'married_or_de_facto_with_dependants', text: 'Married or De Facto with Dependants' },
+                { value: 'married_or_de_facto_with_disabled_dependants', text: 'Married or De Facto with Disabled Dependants' },
+                { value: 'married_or_de_facto_self_disabled', text: 'Married or De Facto, Self-Disabled' },
+                { value: 'married_or_de_facto_spouse_disabled', text: 'Married or De Facto, Spouse-Disabled' },
+                { value: 'married_or_de_facto_caregiver', text: 'Married or De Facto, Caregiver' },
+                { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
+                { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
+                { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
+                { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
+                { value: 'separated_with_dependants', text: 'Separated with Dependants' },
+                { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
+            ],
+            OTHER: [
+                { value: 'single_no_dependants', text: 'Single, No Dependants' },
+                { value: 'single_with_dependants', text: 'Single with Dependants' },
+                { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
+                { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
+                { value: 'single_caregiver', text: 'Single, Caregiver' },
+                { value: 'coupled_no_dependants', text: 'Coupled, No Dependants' },
+                { value: 'coupled_with_dependants', text: 'Coupled with Dependants' },
+                { value: 'coupled_with_disabled_dependants', text: 'Coupled with Disabled Dependants' },
+                { value: 'coupled_self_disabled', text: 'Coupled, Self-Disabled' },
+                { value: 'coupled_spouse_disabled', text: 'Coupled, Spouse-Disabled' },
+                { value: 'coupled_caregiver', text: 'Coupled, Caregiver' },
+                { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
+                { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
+                { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
+                { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
+                { value: 'separated_with_dependants', text: 'Separated with Dependants' },
+                { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
+            ]
+        };
+        const subregionMap = {
+            CAN: ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Northwest Territories", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"],
+            USA: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
+            UK: ["England", "Scotland", "Wales", "Northern Ireland", "Greater London", "West Midlands", "South East", "North West", "East of England", "Yorkshire and The Humber", "South West", "East Midlands", "North East"],
+            AUS: ["New South Wales", "Victoria", "Queensland", "South Australia", "Western Australia", "Tasmania", "Australian Capital Territory", "Northern Territory"],
+            OTHER: ["Province", "State", "Region", "District", "Territory", "Prefecture", "County", "Municipality"]
+        };
+
+        // Restore saved values
+        if (countryDropdown && getLocal('selectedCountry')) {
+            countryDropdown.value = getLocal('selectedCountry');
+        }
+        if (subregionDropdown && getLocal('selectedSubregion')) {
+            subregionDropdown.value = getLocal('selectedSubregion');
+        }
+        if (residency && getLocal('residency')) {
+            residency.value = getLocal('residency');
+        }
+
+        // Populate subregion dropdown
+        function updateSubregionDropdown(country, savedSubregion) {
+            subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
+            if (country && subregionMap[country]) {
+                subregionMap[country].forEach(subregionCode => {
+                    const option = document.createElement('option');
+                    option.text = subregionCode;
+                    option.value = subregionCode;
+                    if (savedSubregion === subregionCode) option.selected = true;
+                    subregionDropdown.appendChild(option);
+                });
+                subregionContainer.style.display = 'block';
+                subregionDropdown.style.display = 'block';
+            } else {
+                subregionContainer.style.display = 'none';
+                subregionDropdown.style.display = 'none';
+            }
+        }
+
+        // Populate filing status dropdown
+        function updateFilingStatus(country, savedStatus) {
+            filingStatusContainer.innerHTML = '';
+            if (!country || !filingOptions[country]) return;
+            const filingStatusDropdown = document.createElement('select');
+            filingStatusDropdown.id = 'filingStatus';
+            filingStatusDropdown.style.width = "345px";
+            filingStatusDropdown.style.maxWidth = "100%";
+            filingStatusDropdown.style.margin = "0 auto";
+            filingStatusDropdown.style.display = "block";
+            filingStatusDropdown.style.padding = "8px";
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.text = "Select Filing Status";
+            filingStatusDropdown.appendChild(defaultOption);
+            filingOptions[country].forEach(option => {
+                const statusOption = document.createElement('option');
+                statusOption.value = option.value;
+                statusOption.text = option.text;
+                if (savedStatus === option.value) statusOption.selected = true;
+                filingStatusDropdown.appendChild(statusOption);
+            });
+            filingStatusDropdown.addEventListener('change', () => {
+                setLocal('fillingStatus', filingStatusDropdown.value, 365);
+                updateDependantsVisibility();
+                updateMaritalStatusVisibility();
+                updateSpecificsVisibility();
+                updateFormVisibility();
+            });
+            filingStatusContainer.appendChild(filingStatusDropdown);
+        }
+
+        // Show/hide dependants and spouse fields
+        function updateDependantsVisibility() {
+            const filingStatusDropdown = document.getElementById('filingStatus');
+            const selectedFilingStatus = filingStatusDropdown ? filingStatusDropdown.value : '';
+            const statusesWithDisabledDependants = [
+                'single_with_disabled_dependants', 'widowed_with_disabled_dependants', 'separated_with_disabled_dependants',
+                'married_with_disabled_dependants', 'common_law_with_disabled_dependants', 'coupled_with_disabled_dependants',
+                'qualifying_widow_with_disabled_dependants', 'married_filing_jointly_with_disabled_dependants',
+                'married_filing_separately_with_disabled_dependants', 'head_of_household_with_disabled_dependants'
+            ];
+            if (statusesWithDisabledDependants.includes(selectedFilingStatus)) {
+                dependantsContainer.style.display = 'block';
+            } else {
+                dependantsContainer.style.display = 'none';
+            }
+        }
+        function updateMaritalStatusVisibility() {
+            const filingStatusDropdown = document.getElementById('filingStatus');
+            const selectedFilingStatus = filingStatusDropdown ? filingStatusDropdown.value : '';
+            const singleStatuses = [
+                'single_no_dependants', 'single_with_dependants', 'single_with_disabled_dependants', 'single_self_disabled', 'single_caregiver',
+                'widowed_no_dependants', 'widowed_with_dependants', 'widowed_with_disabled_dependants', 'separated_no_dependants',
+                'separated_with_dependants', 'separated_with_disabled_dependants', 'head_of_household_no_dependants',
+                'head_of_household_with_dependants', 'head_of_household_with_disabled_dependants', 'head_of_household_caregiver',
+                'qualifying_widow_no_dependants', 'qualifying_widow_with_dependants', 'qualifying_widow_with_disabled_dependants'
+            ];
+            if (singleStatuses.includes(selectedFilingStatus) || !selectedFilingStatus) {
+                document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'none');
+            } else {
+                document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'block');
+            }
+        }
+        function updateSpecificsVisibility() {
+            const filingStatusDropdown = document.getElementById('filingStatus');
+            if (filingStatusDropdown && filingStatusDropdown.value) {
+                specificsDiv.style.display = 'block';
+            } else {
+                specificsDiv.style.display = 'none';
+            }
+        }
+        function updateFormVisibility() {
+            const country = countryDropdown.value;
+            const subregion = subregionDropdown.value;
+            const residencyValue = residency.value;
+            const filingStatus = document.getElementById('filingStatus')?.value;
+            if (residencyStatus) residencyStatus.style.display = 'block';
+            if (subregionContainer) subregionContainer.style.display = 'block';
+            if (country && residencyValue && (subregion || country === 'OTHER')) {
+                if (filingStatusDiv) filingStatusDiv.style.display = 'block';
+                updateFilingStatus(country, getLocal('fillingStatus'));
+            } else {
+                if (filingStatusDiv) filingStatusDiv.style.display = 'none';
+            }
+            if (country && residencyValue && (subregion || country === 'OTHER') && filingStatus) {
+                specificsDiv.style.display = 'block';
+            } else {
+                specificsDiv.style.display = 'none';
+            }
+            if (proceedButton) {
+                if (country && (subregion || country === 'OTHER') && residencyValue && filingStatus) {
+                    proceedButton.classList.remove('disabled');
+                } else {
+                    proceedButton.classList.add('disabled');
+                }
+            }
+        }
+        // Event listeners for dropdowns and inputs
+        if (countryDropdown) {
+            countryDropdown.addEventListener('change', function() {
+                setLocal('selectedCountry', countryDropdown.value, 365);
+                updateSubregionDropdown(countryDropdown.value, getLocal('selectedSubregion'));
+                updateFilingStatus(countryDropdown.value, getLocal('fillingStatus'));
+                updateFormVisibility();
+            });
+        }
+        if (subregionDropdown) {
+            subregionDropdown.addEventListener('change', function() {
+                setLocal('selectedSubregion', subregionDropdown.value, 365);
+                updateFilingStatus(countryDropdown.value, getLocal('fillingStatus'));
+                updateFormVisibility();
+            });
+        }
+        if (residency) {
+            residency.addEventListener('change', function() {
+                setLocal('residency', residency.value, 365);
+                updateFilingStatus(countryDropdown.value, getLocal('fillingStatus'));
+                updateFormVisibility();
+            });
+        }
+        // Restore saved values and update UI on load
+        updateSubregionDropdown(countryDropdown.value, getLocal('selectedSubregion'));
+        updateFilingStatus(countryDropdown.value, getLocal('fillingStatus'));
+        updateFormVisibility();
+        // Save and restore personal details
+        ['ageSelf', 'ageSpouse'].forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                const saved = getLocal(id);
+                if (saved) input.value = saved;
+                input.addEventListener('change', () => setLocal(id, input.value, 365));
+            }
+        });
+        ['employmentStatus', 'employmentStatusSpouse'].forEach(id => {
+            const select = document.getElementById(id);
+            if (select) {
+                const saved = getLocal(id);
+                if (saved) select.value = saved;
+                select.addEventListener('change', () => setLocal(id, select.value, 365));
+            }
+        });
+        const textarea = document.getElementById('birthYearDisabledDependants');
+        if (textarea) {
+            const saved = getLocal('birthYearDisabledDependants');
+            if (saved) textarea.value = saved;
+            textarea.addEventListener('change', () => setLocal('birthYearDisabledDependants', textarea.value, 365));
+        }
+        // Proceed button logic (already present, but ensure validation)
+        if (proceedButton) {
+            proceedButton.addEventListener('click', function() {
+                if (proceedButton.classList.contains('disabled')) return;
+                // Validation (repeat from introtab.js)
+                const country = countryDropdown.value;
+                const subregion = subregionDropdown.value;
+                const residencyValue = residency.value;
+                const filingStatus = document.getElementById('filingStatus')?.value;
+                const ageSelf = document.getElementById('ageSelf').value;
+                const ageSpouse = document.getElementById('ageSpouse').value;
+                const employmentStatus = document.getElementById('employmentStatus').value;
+                if (!country) { alert('Please select a country.'); return; }
+                if (!subregion && country !== 'OTHER') { alert('Please select a tax subregion.'); return; }
+                if (!filingStatus) { alert('Please select a filing status.'); return; }
+                if (!ageSelf) { alert('Please enter your age.'); return; }
+                if (!ageSpouse && [
+                    'married_with_dependants','married_with_disabled_dependants','common_law_with_dependants','common_law_with_disabled_dependants','married_filing_jointly_with_dependants','married_filing_jointly_with_disabled_dependants','married_filing_separately_with_dependants','married_filing_separately_with_disabled_dependants','married_no_dependants','common_law_no_dependants','married_filing_jointly_no_dependants','married_filing_separately_no_dependants','married_or_civil_partnership_no_dependants','married_or_civil_partnership_with_dependants','married_or_de_facto_no_dependants','married_or_de_facto_with_dependants','coupled_no_dependants','coupled_with_dependants'
+                ].includes(filingStatus)) { alert('Please enter your spouse\'s age.'); return; }
+                if (!employmentStatus) { alert('Please select an employment status.'); return; }
+                // Tab navigation logic (close intro, open income)
+                const parentWindow = window.parent || window;
+                const introContainer = parentWindow.document.querySelector('.data-container-intro');
+                if (introContainer && introContainer.dataset.state === 'expanded') {
+                    const introClose = introContainer.querySelector('.close-data-container');
+                    if (introClose) { introClose.click(); }
+                }
+                setTimeout(() => {
+                    const incomeContainer = parentWindow.document.querySelector('.data-container-income');
+                    if (incomeContainer && incomeContainer.dataset.state === 'collapsed') {
+                        const incomeLabel = incomeContainer.querySelector('.data-label');
+                        if (incomeLabel) incomeLabel.click();
+                    }
+                }, 300);
+            });
+        }
+    })();
+    </script>
  </body>
  </html>

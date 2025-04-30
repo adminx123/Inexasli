@@ -532,41 +532,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function toggleDataContainer() {
             if (!dataContainer) return;
-
             const isExpanded = dataContainer.dataset.state === 'expanded';
-
             if (isExpanded) {
                 dataContainer.className = 'data-container-asset collapsed';
                 dataContainer.dataset.state = 'collapsed';
-                dataContainer.innerHTML = `
-                    <span class="data-label">ASSET</span>
-                `;
-                assetInitialized = false;
-                ASSETS = 0;
-                LIQUIDASSETS = 0;
-                console.log('Asset data container collapsed, state and globals reset at:', new Date().toISOString());
+                dataContainer.innerHTML = `<span class="data-label">ASSET</span>`;
             } else {
                 dataContainer.className = 'data-container-asset expanded';
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/budget/asset.html');
             }
-
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');
-
-            if (newLabel) {
-                newLabel.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
-
-            if (newClose) {
-                newClose.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
+            if (newLabel) newLabel.addEventListener('click', function (e) { e.preventDefault(); toggleDataContainer(); });
+            if (newClose) newClose.addEventListener('click', function (e) { e.preventDefault(); toggleDataContainer(); });
         }
 
         document.addEventListener('click', function (e) {

@@ -679,48 +679,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function toggleDataContainer() {
             if (!dataContainer) return;
-
             const isExpanded = dataContainer.dataset.state === 'expanded';
-
             if (isExpanded) {
-                dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('collapsed');
+                dataContainer.className = 'data-container-expense collapsed';
                 dataContainer.dataset.state = 'collapsed';
-                dataContainer.innerHTML = `
-                    <span class="data-label">EXPENSE</span>
-                `;
-                expenseInitialized = false; // Reset initialization flag
-                ANNUALEXPENSESUM = 0; // Reset global variables
-                HOUSING = 0;
-                TRANSPORTATION = 0;
-                ESSENTIAL = 0;
-                DISCRETIONARY = 0;
-                DEBT = 0;
-                DEPENDANT = 0;
-                console.log('Expense data container collapsed, state and globals reset');
+                dataContainer.innerHTML = `<span class="data-label">EXPENSE</span>`;
             } else {
-                dataContainer.classList.remove('collapsed');
-                dataContainer.classList.add('expanded');
+                dataContainer.className = 'data-container-expense expanded';
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/budget/expense.html');
             }
-
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');
-
-            if (newLabel) {
-                newLabel.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
-
-            if (newClose) {
-                newClose.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
+            if (newLabel) newLabel.addEventListener('click', function (e) { e.preventDefault(); toggleDataContainer(); });
+            if (newClose) newClose.addEventListener('click', function (e) { e.preventDefault(); toggleDataContainer(); });
         }
 
         document.addEventListener('click', function (e) {
