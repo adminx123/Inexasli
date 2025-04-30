@@ -466,52 +466,211 @@
                 }
             }, 300);
         }
-        // Restore saved values for form fields
-        const formElements = [
-            'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop',
-            'income_investment_property', 'income_capital_gains_losses', 'income_interest',
-            'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension',
-            'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony',
-            'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending',
-            'income_venture_capital', 'income_tax_free_income'
-        ];
-        formElements.forEach(elementId => {
-            const element = document.getElementById(elementId);
-            if (element) {
-                const savedValue = getLocal(elementId);
-                if (savedValue !== null) element.value = savedValue;
-                element.addEventListener('input', function() {
-                    setLocal(elementId, element.value.trim() !== "" ? element.value : "", 365);
+        // Setup all event listeners and initialize calculations
+        function setupPageFunctionality() {
+            // Form elements event listeners
+            const formElements = [
+                'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop',
+                'income_investment_property', 'income_capital_gains_losses', 'income_interest',
+                'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension',
+                'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony',
+                'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending',
+                'income_venture_capital', 'income_tax_free_income'
+            ];
+            
+            formElements.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const savedValue = getLocal(elementId);
+                    if (savedValue !== null) element.value = savedValue;
+                    
+                    // Add input event listener to trigger calculations
+                    element.addEventListener('input', function() {
+                        setLocal(elementId, element.value.trim() !== "" ? element.value : "", 365);
+                        // Recalculate and update all totals when any input changes
+                        calculateNormalizedSum();
+                        calculateEmploymentIncome();
+                        passiveincome();
+                    });
+                    
+                    // Also add blur event to ensure calculations happen even if focus leaves without input event
+                    element.addEventListener('blur', function() {
+                        calculateNormalizedSum();
+                        calculateEmploymentIncome();
+                        passiveincome();
+                    });
+                }
+            });
+            
+            // Terms checkboxes
+            const checkbox1 = document.getElementById('termscheckbox');
+            const checkbox2 = document.getElementById('notintended');
+            
+            function checkBothTermsAndNavigate() {
+                if (checkbox1 && checkbox2 && checkbox1.checked && checkbox2.checked) {
+                    calculateNext();
+                }
+            }
+            
+            if (checkbox1) {
+                checkbox1.checked = getTermsCookie('term1');
+                checkbox1.addEventListener('change', function() {
+                    setTermsCookie('term1', checkbox1.checked);
+                    checkBothTermsAndNavigate();
                 });
             }
+            if (checkbox2) {
+                checkbox2.checked = getTermsCookie('term2');
+                checkbox2.addEventListener('change', function() {
+                    setTermsCookie('term2', checkbox2.checked);
+                    checkBothTermsAndNavigate();
+                });
+            }
+            
+            // Cookie overwrite link
+            const overwriteLink = document.getElementById('cookie-overwrite-link');
+            if (overwriteLink) {
+                overwriteLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    overwriteCookies();
+                });
+            }
+            
+            // Validate button (if it exists)
+            const validateButton = document.getElementById('validateButton');
+            if (validateButton) {
+                validateButton.addEventListener('click', validatecheckbox);
+            }
+            
+            // Setup frequency checkboxes to trigger recalculations
+            document.querySelectorAll('[data-frequency-id]').forEach(freqContainer => {
+                const freqId = freqContainer.getAttribute('data-frequency-id');
+                
+                // Create frequency options if not already present
+                if (freqContainer.children.length === 0) {
+                    const frequencies = ['annually', 'quarterly', 'monthly', 'weekly'];
+                    frequencies.forEach(freq => {
+                        const label = document.createElement('label');
+                        label.className = 'freqlabel';
+                        
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.value = freq;
+                        checkbox.className = 'freq-checkbox';
+                        checkbox.name = freqId;
+                        
+                        // Set default frequency from localStorage or use 'annually'
+                        const savedFreq = getLocal(`frequency_${freqId}`);
+                        if ((savedFreq && savedFreq === freq) || (!savedFreq && freq === 'annually')) {
+                            checkbox.checked = true;
+                        }
+                        
+                        // Add event listener to recalculate when frequency changes
+                        checkbox.addEventListener('change', function() {
+                            if (this.checked) {
+                                // Uncheck other checkboxes in the same group
+                                document.querySelectorAll(`input[name="${freqId}"]`).forEach(cb => {
+                                    if (cb !== this) cb.checked = false;
+                                });
+                                
+                                // Save frequency to localStorage
+                                setLocal(`frequency_${freqId}`, freq, 365);
+                                
+                                // Recalculate everything
+                                calculateNormalizedSum();
+                                calculateEmploymentIncome();
+                                passiveincome();
+                            }
+                        });
+                        
+                        label.appendChild(checkbox);
+                        label.appendChild(document.createTextNode(freq.charAt(0).toUpperCase() + freq.slice(1)));
+                        freqContainer.appendChild(label);
+                    });
+                } else {
+                    // Add event listeners to existing frequency checkboxes
+                    freqContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.addEventListener('change', function() {
+                            if (this.checked) {
+                                // Uncheck other checkboxes in same group
+                                freqContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                                    if (cb !== this) cb.checked = false;
+                                });
+                                
+                                // Save frequency to localStorage
+                                setLocal(`frequency_${freqId}`, this.value, 365);
+                                
+                                // Recalculate everything
+                                calculateNormalizedSum();
+                                calculateEmploymentIncome();
+                                passiveincome();
+                            }
+                        });
+                    });
+                }
+            });
+            
+            // Initialize calculations
+            calculateNormalizedSum();
+            calculateEmploymentIncome();
+            passiveincome();
+        }
+        
+        // Run setup on DOMContentLoaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupPageFunctionality);
+        } else {
+            // DOM already loaded, run setup immediately
+            setupPageFunctionality();
+        }
+        
+        // Also ensure calculations run on window load as a backup
+        window.addEventListener('load', function() {
+            calculateNormalizedSum();
+            calculateEmploymentIncome();
+            passiveincome();
         });
-        // Terms checkboxes
-        const checkbox1 = document.getElementById('termscheckbox');
-        const checkbox2 = document.getElementById('notintended');
-        if (checkbox1) {
-            checkbox1.checked = getTermsCookie('term1');
-            checkbox1.addEventListener('click', function() {
-                setTermsCookie('term1', checkbox1.checked);
+        
+        // Trigger recalculation when the tab becomes visible (e.g., switching back to tab)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                calculateNormalizedSum();
+                calculateEmploymentIncome();
+                passiveincome();
+            }
+        });
+        
+        // MutationObserver to detect dynamically added elements
+        const observer = new MutationObserver(function(mutations) {
+            let needsRecalculation = false;
+            
+            mutations.forEach(function(mutation) {
+                if (mutation.addedNodes.length > 0 || mutation.attributeName === 'value') {
+                    needsRecalculation = true;
+                }
+            });
+            
+            if (needsRecalculation) {
+                calculateNormalizedSum();
+                calculateEmploymentIncome();
+                passiveincome();
+            }
+        });
+        
+        // Start observing once DOM is ready
+        function startObserver() {
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['value', 'checked']
             });
         }
-        if (checkbox2) {
-            checkbox2.checked = getTermsCookie('term2');
-            checkbox2.addEventListener('click', function() {
-                setTermsCookie('term2', checkbox2.checked);
-            });
-        }
-        // Cookie overwrite link
-        const overwriteLink = document.getElementById('cookie-overwrite-link');
-        if (overwriteLink) {
-            overwriteLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                overwriteCookies();
-            });
-        }
-        // Validate button
-        const validateButton = document.getElementById('validateButton');
-        if (validateButton) {
-            validateButton.addEventListener('click', validatecheckbox);
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startObserver);
+        } else {
+            startObserver();
         }
     })();
     </script>
