@@ -9,26 +9,23 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Dependency fallbacks
     const setLocal = window.setLocal || function (key, value, days) {
-        console.warn('setLocal not defined, using localStorage directly');
         try {
             localStorage.setItem(key, encodeURIComponent(value));
         } catch (error) {
-            console.error('Error in setLocal:', error);
+            // Error handling without console logging
         }
     };
     const getLocal = window.getLocal || function (key) {
-        console.warn('getLocal not defined, using localStorage directly');
         try {
             const value = localStorage.getItem(key);
             return value ? decodeURIComponent(value) : null;
         } catch (error) {
-            console.error('Error in getLocal:', error);
+            // Error handling without console logging
             return null;
         }
     };
 
     // Expense container management
-    console.log('Expense tab manager initialized in expensetab.js');
     let expenseInitialized = false;
     
     function hideShowClass(className, action) {
@@ -39,11 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initializeExpenseForm(container) {
         if (expenseInitialized) {
-            console.log('Expense form already initialized, skipping');
             return;
         }
         expenseInitialized = true;
-        console.log('Expense form initialized');
 
         // Initialize tooltips
         const interactiveElements = container.querySelectorAll(
@@ -101,23 +96,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url}`);
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully');
 
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">EXPENSE</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into expense container at:`, new Date().toISOString());
             
             // Mark expense page as visited when loaded
             setLocal('expenseVisited', 'visited', 365);
-            console.log('Expense page marked as visited');
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
@@ -133,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     ) {
                         newScript.type = 'module';
                     }
-                    newScript.onerror = () => console.error(`Failed to load script: ${script.src}`);
+                    newScript.onerror = () => {};
                     document.body.appendChild(newScript);
                 } else if (!script.src) {
                     const newScript = document.createElement('script');
@@ -144,13 +135,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             initializeExpenseForm(dataContainer);
         } catch (error) {
-            console.error(`Error loading stored content:`, error);
+            // Error handling without console logging
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-expense')) {
-            console.log('Expense data container already exists, skipping initialization');
             return;
         }
 
@@ -286,7 +276,6 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Expense data container injected with state: collapsed');
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -295,8 +284,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
                 toggleDataContainer();
             });
-        } else {
-            console.error('Expense data label not found');
         }
 
         function toggleDataContainer() {
@@ -322,7 +309,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isClickInside = dataContainer.contains(e.target);
                 const isNavButton = e.target.closest('.nav-btn');
                 if (!isClickInside && !isNavButton) {
-                    console.log('Clicked outside expense data container, collapsing');
                     toggleDataContainer();
                 }
             }
@@ -332,6 +318,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing expense data container:', error);
+        // Error handling without console logging
     }
 });

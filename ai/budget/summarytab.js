@@ -9,35 +9,30 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Dependency fallbacks
     const setLocal = window.setLocal || function (key, value, days) {
-        console.warn('setLocal not defined, using localStorage directly');
         try {
             localStorage.setItem(key, encodeURIComponent(value));
         } catch (error) {
-            console.error('Error in setLocal:', error);
+            // Error handling without console logging
         }
     };
     const getLocal = window.getLocal || function (key) {
-        console.warn('getLocal not defined, using localStorage directly');
         try {
             const value = localStorage.getItem(key);
             return value ? decodeURIComponent(value) : null;
         } catch (error) {
-            console.error('Error in getLocal:', error);
+            // Error handling without console logging
             return null;
         }
     };
     
     // Summary container management
-    console.log('Summary tab manager initialized in summarytab.js');
     
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url} (summary.js)`);
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully (summary.js)');
 
             // Update container with content
             dataContainer.innerHTML = `
@@ -45,11 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="data-label">SUMMARY</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into summary container (summary.js)`);
 
             // Mark summary page as visited when loaded
             setLocal('summaryVisited', 'visited', 365);
-            console.log('Summary page marked as visited');
 
             // Now check if all pages have been visited and set a flag
             const introVisited = getLocal('introVisited');
@@ -67,16 +60,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 summaryVisited === 'visited') {
                 // All pages have been visited, set a combined flag
                 setLocal('allPagesVisited', 'true', 365);
-                console.log('All budget pages have been visited, setting allPagesVisited flag');
             }
         } catch (error) {
-            console.error(`Error loading stored content (summary.js):`, error);
+            // Error handling without console logging
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-summary')) {
-            console.log('Summary data container already exists, skipping initialization (summary.js)');
             return;
         }
 
@@ -228,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Summary data container injected with state: collapsed (summary.js)');
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -237,8 +227,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
                 toggleDataContainer();
             });
-        } else {
-            console.error('Summary data label not found (summary.js)');
         }
 
         function toggleDataContainer() {
@@ -253,7 +241,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.innerHTML = `
                     <span class="data-label">SUMMARY</span>
                 `;
-                console.log('Summary data container collapsed (summary.js)');
             } else {
                 dataContainer.classList.remove('collapsed');
                 dataContainer.classList.add('expanded');
@@ -285,7 +272,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (dataContainer && dataContainer.dataset.state === 'expanded') {
                 const isClickInside = dataContainer.contains(e.target);
                 if (!isClickInside) {
-                    console.log('Clicked outside summary data container, collapsing (summary.js)');
                     toggleDataContainer();
                 }
             }
@@ -295,6 +281,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing summary data container (summary.js):', error);
+        // Error handling without console logging
     }
 });

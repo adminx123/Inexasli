@@ -9,11 +9,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Import setLocal if not available from global scope
     const setLocal = window.setLocal || function (key, value, days) {
-        console.warn('setLocal not defined, using localStorage directly');
         try {
             localStorage.setItem(key, encodeURIComponent(value));
         } catch (error) {
-            console.error('Error in setLocal:', error);
+            // Error handling without console.error
         }
     };
 
@@ -21,25 +20,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url} at:`, new Date().toISOString());
             const startTime = performance.now();
             const response = await fetch(url);
-            const fetchTime = performance.now() - startTime;
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log(`Stored content fetched in ${fetchTime.toFixed(2)}ms at:`, new Date().toISOString());
 
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">INCOME</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into income container at:`, new Date().toISOString());
             
             // Mark income page as visited when loaded
             setLocal('incomeVisited', 'visited', 365);
-            console.log('Income page marked as visited');
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
@@ -55,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     ) {
                         newScript.type = 'module';
                     }
-                    newScript.onerror = () => console.error(`Failed to load script: ${script.src}`);
+                    newScript.onerror = () => {}; // Empty error handler
                     document.body.appendChild(newScript);
                 } else if (!script.src) {
                     const newScript = document.createElement('script');
@@ -64,13 +58,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         } catch (error) {
-            console.error(`Error loading stored content at:`, new Date().toISOString(), error);
+            // Error handling without console.error
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-income')) {
-            console.log('Income data container already exists, skipping initialization at:', new Date().toISOString());
             return;
         }
 
@@ -206,7 +199,6 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Income data container injected with state: collapsed at:', new Date().toISOString());
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -215,8 +207,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
                 toggleDataContainer();
             });
-        } else {
-            console.error('Income data label not found');
         }
 
         function toggleDataContainer() {
@@ -242,7 +232,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isClickInside = dataContainer.contains(e.target);
                 const isValidateButton = e.target.closest('.nav-btn');
                 if (!isClickInside && !isValidateButton) {
-                    console.log('Clicked outside income data container, collapsing at:', new Date().toISOString());
                     toggleDataContainer();
                 }
             }
@@ -252,6 +241,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing income data container at:', new Date().toISOString(), error);
+        // Error handling without console.error
     }
 });

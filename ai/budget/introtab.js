@@ -12,11 +12,10 @@ import { getLocal } from '/utility/getlocal.js';
 document.addEventListener('DOMContentLoaded', function () {
     // Dependency fallbacks
     const setLocal = window.setLocal || function (key, value, days) {
-        console.warn('setLocal not defined, using localStorage directly');
         try {
             localStorage.setItem(key, encodeURIComponent(value));
         } catch (error) {
-            console.error('Error in setLocal:', error);
+            // Error handling without console logging
         }
     };
 
@@ -25,25 +24,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log(`Attempting to load stored content from ${url} at:`, new Date().toISOString());
-            const startTime = performance.now();
             const response = await fetch(url);
-            const fetchTime = performance.now() - startTime;
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log(`Stored content fetched in ${fetchTime.toFixed(2)}ms at:`, new Date().toISOString());
 
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">INTRO</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded into intro container at:`, new Date().toISOString());
             
             // Mark intro page as visited when loaded
             setLocal('introVisited', 'visited', 365);
-            console.log('Intro page marked as visited');
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
@@ -58,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     ) {
                         newScript.type = 'module';
                     }
-                    newScript.onerror = () => console.error(`Failed to load script: ${script.src}`);
+                    newScript.onerror = () => {}; // Error handling without console logging
                     document.body.appendChild(newScript);
                 } else {
                     newScript.textContent = script.textContent;
@@ -68,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             initializeIntroLogic(dataContainer);
         } catch (error) {
-            console.error(`Error loading stored content at:`, new Date().toISOString(), error);
+            // Error handling without console logging
         }
     }
 
@@ -238,14 +231,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Add a debug log in the country dropdown change event to help troubleshoot
         countryDropdown.addEventListener('change', function() {
             const selectedCountry = this.value;
-            console.log("Country selected:", selectedCountry);
             setLocal('selectedCountry', selectedCountry, 365);
             
             // Clear any previously selected subregion
             setLocal('selectedSubregion', '', 365);
             
             // Always call updateSubregionDropdown when country changes
-            console.log("Updating subregion dropdown for country:", selectedCountry);
             updateSubregionDropdown(selectedCountry);
             
             // Update other UI elements
@@ -329,18 +320,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (filingStatusContainer) {
                 filingStatusContainer.innerHTML = '';
             } else {
-                console.error('filingStatusContainer not found');
                 return;
             }
-            
-            // Add debug logging
-            console.log('updateFilingStatus called with:', { 
-                country, 
-                savedStatus, 
-                subregion, 
-                residencyValue,
-                hasFilingOptions: country && filingOptions[country] ? true : false 
-            });
             
             // Check if we have all the required tax residency elements selected
             if (country && residencyValue && (subregion || country === 'OTHER') && filingOptions[country]) {
@@ -373,7 +354,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Add event listener to handle changes
                 filingStatusDropdown.addEventListener('change', () => {
                     const selectedStatus = filingStatusDropdown.value;
-                    console.log('Filing status selected:', selectedStatus);
                     setLocal('fillingStatus', selectedStatus, 365);
                     updateDependantsVisibility();
                     updateMaritalStatusVisibility();
@@ -383,7 +363,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 // Add the dropdown to the container
                 filingStatusContainer.appendChild(filingStatusDropdown);
-                console.log('Filing status dropdown created and appended to container');
                 
                 // If a saved status exists, set it and update relevant UI
                 if (savedStatus) {
@@ -400,13 +379,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Hide if conditions aren't met
                 if (filingStatusDiv) filingStatusDiv.style.display = 'none';
                 if (filingStatusSection) filingStatusSection.style.display = 'none';
-                console.log('Filing status container hidden. Missing requirements:', {
-                    country: !!country,
-                    residencyValue: !!residencyValue,
-                    subregion: !!subregion,
-                    isOther: country === 'OTHER',
-                    hasFilingOptions: country && filingOptions[country] ? true : false
-                });
             }
         }
 
@@ -582,17 +554,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 const introClose = introContainer.querySelector('.close-data-container');
                 if (introClose) {
                     introClose.click();
-                    console.log('Intro tab closed at:', new Date().toISOString());
                 } else {
-                    console.error('Intro close button not found');
                     // Try to collapse it manually
                     introContainer.className = 'data-container-intro collapsed';
                     introContainer.dataset.state = 'collapsed';
                     introContainer.innerHTML = `<span class="data-label">INTRO</span>`;
-                    console.log('Intro tab manually collapsed at:', new Date().toISOString());
                 }
-            } else {
-                console.log('Intro tab already closed or not found');
             }
 
             // Then expand the income container
@@ -605,20 +572,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (incomeLabel) {
                         setTimeout(() => {
                             incomeLabel.click();
-                            console.log('Income tab triggered to expand at:', new Date().toISOString());
                         }, 300);
                     } else {
-                        console.error('Income tab label not found');
                         // Try to expand it manually if needed
                         if (typeof window.expandIncomeTab === 'function') {
                             window.expandIncomeTab();
                         }
                     }
-                } else {
-                    console.log('Income tab already expanded');
                 }
-            } else {
-                console.error('Income tab container not found in the DOM');
             }
         };
 
@@ -727,9 +688,8 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const event = new Event('DOMContentLoaded');
             document.dispatchEvent(event);
-            console.log('Triggered DOMContentLoaded for intro scripts at:', new Date().toISOString());
         } catch (error) {
-            console.error('Error triggering DOMContentLoaded:', error);
+            // Error handling without console logging
         }
 
         // Restore original DOM methods
@@ -740,19 +700,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initializeIntroLogic(container) {
         if (introInitialized) {
-            console.log('Intro logic already initialized, skipping at:', new Date().toISOString());
             return;
         }
 
-        console.log('Initializing intro logic at:', new Date().toISOString());
         initializeIntroForm(container);
         introInitialized = true;
-        console.log('Intro initialization complete at:', new Date().toISOString());
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-intro')) {
-            console.log('Intro data container already exists, skipping initialization at:', new Date().toISOString());
             return;
         }
 
@@ -888,7 +844,6 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Intro data container injected with state: collapsed at:', new Date().toISOString());
 
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -897,8 +852,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
                 toggleDataContainer();
             });
-        } else {
-            console.error('Intro data label not found');
         }
 
         function toggleDataContainer() {
@@ -924,7 +877,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isClickInside = dataContainer.contains(e.target);
                 const isNavButton = e.target.closest('.nav-btn') || e.target.closest('#proceedButton');
                 if (!isClickInside && !isNavButton) {
-                    console.log('Clicked outside intro data container, collapsing at:', new Date().toISOString());
                     toggleDataContainer();
                 }
             }
@@ -934,7 +886,7 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        console.error('Error initializing intro data container at:', new Date().toISOString(), error);
+        // Error handling without console logging
     }
 });
 
