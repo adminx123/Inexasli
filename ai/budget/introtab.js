@@ -312,7 +312,21 @@ document.addEventListener('DOMContentLoaded', function () {
             const residencyValue = getLocal('residency');
             
             // Clear the container first
-            filingStatusContainer.innerHTML = '';
+            if (filingStatusContainer) {
+                filingStatusContainer.innerHTML = '';
+            } else {
+                console.error('filingStatusContainer not found');
+                return;
+            }
+            
+            // Add debug logging
+            console.log('updateFilingStatus called with:', { 
+                country, 
+                savedStatus, 
+                subregion, 
+                residencyValue,
+                hasFilingOptions: country && filingOptions[country] ? true : false 
+            });
             
             // Check if we have all the required tax residency elements selected
             if (country && residencyValue && (subregion || country === 'OTHER') && filingOptions[country]) {
@@ -345,6 +359,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Add event listener to handle changes
                 filingStatusDropdown.addEventListener('change', () => {
                     const selectedStatus = filingStatusDropdown.value;
+                    console.log('Filing status selected:', selectedStatus);
                     setLocal('fillingStatus', selectedStatus, 365);
                     updateDependantsVisibility();
                     updateMaritalStatusVisibility();
@@ -354,6 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 // Add the dropdown to the container
                 filingStatusContainer.appendChild(filingStatusDropdown);
+                console.log('Filing status dropdown created and appended to container');
                 
                 // If a saved status exists, set it and update relevant UI
                 if (savedStatus) {
@@ -370,6 +386,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Hide if conditions aren't met
                 if (filingStatusDiv) filingStatusDiv.style.display = 'none';
                 if (filingStatusSection) filingStatusSection.style.display = 'none';
+                console.log('Filing status container hidden. Missing requirements:', {
+                    country: !!country,
+                    residencyValue: !!residencyValue,
+                    subregion: !!subregion,
+                    isOther: country === 'OTHER',
+                    hasFilingOptions: country && filingOptions[country] ? true : false
+                });
             }
         }
 
