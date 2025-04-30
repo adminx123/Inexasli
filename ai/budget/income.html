@@ -441,6 +441,10 @@
                 }
             });
         }
+        
+        // Make calculateAll function accessible outside this scope
+        window.calculateAll = calculateAll;
+        
         function validatecheckbox() {
             const termscheckbox = document.getElementById("termscheckbox");
             const notintended = document.getElementById("notintended");
