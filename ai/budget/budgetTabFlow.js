@@ -52,7 +52,7 @@
         
         /* Applied to the current active tab container */
         .active-tab {
-            box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
         }
     `;
     document.head.appendChild(styleElement);
