@@ -7,6 +7,16 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Import setLocal if not available from global scope
+    const setLocal = window.setLocal || function (key, value, days) {
+        console.warn('setLocal not defined, using localStorage directly');
+        try {
+            localStorage.setItem(key, encodeURIComponent(value));
+        } catch (error) {
+            console.error('Error in setLocal:', error);
+        }
+    };
+
     // Only handles toggling open/close and loading the HTML now
 
     async function loadStoredContent(dataContainer, url) {
@@ -26,6 +36,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="data-content">${content}</div>
             `;
             console.log(`Stored content loaded into income container at:`, new Date().toISOString());
+            
+            // Mark income page as visited when loaded
+            setLocal('incomeVisited', 'visited', 365);
+            console.log('Income page marked as visited');
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {

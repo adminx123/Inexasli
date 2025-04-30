@@ -48,6 +48,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="data-content">${content}</div>
             `;
             console.log(`Stored content loaded into asset container at:`, new Date().toISOString());
+            
+            // Mark asset page as visited when loaded
+            setLocal('assetVisited', 'visited', 365);
+            console.log('Asset page marked as visited');
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
