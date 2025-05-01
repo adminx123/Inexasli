@@ -640,7 +640,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// New function to calculate taxes via xAI API
+/* New function to calculate taxes via xAI API
 function calculateTaxes() {
     // Core required fields - these must exist
     const coreRequiredFields = [
@@ -714,7 +714,7 @@ function calculateTaxes() {
     updateIncomeErosionPieChart();
     if (getLocal('authenticated') === 'paid') updatePremiumContent();
     
-    /* 
+    
     // COMMENTED OUT: Original API call code
     // Add loading state
     const generateBtn = document.querySelector('.generate-btn');
@@ -779,8 +779,12 @@ function calculateTaxes() {
             generateBtn.disabled = false;
             generateBtn.textContent = originalText;
         });
-    */
+    
 }
+
+
+*/
+
 
 // Free content update function
 function updateFreeContent() {
@@ -884,7 +888,7 @@ function getFrequencyMultiplier(frequency) {
     }
 }
 
-// Calculate Disposable Income (premium)
+/* Calculate Disposable Income (premium)
 function calculateDisposableIncome() {
     const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
     const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
@@ -901,6 +905,7 @@ function calculateAnnualTax() {
     const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
     return regionalTax + subregionalTax;
 }
+*/
 
 // Calculate Government Obligations (free)
 function calculateGovernmentObligations() {
