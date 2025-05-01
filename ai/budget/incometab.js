@@ -128,6 +128,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             
             initializeIncomeForm(dataContainer);
+            
+            // Initialize modal triggers after loading the content
+            if (typeof window.setupModalTriggers === 'function') {
+                window.setupModalTriggers();
+            }
         } catch (error) {
             // Error handling without console.error
         }
