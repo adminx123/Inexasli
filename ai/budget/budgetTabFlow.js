@@ -146,12 +146,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     
                     // Also open this tab if it's the intro and first time visiting
+                    // Removed auto-opening functionality as requested
+                    /*
                     if (step.id === 'intro' && !visited) {
                         setTimeout(() => {
                             const label = tabElement.querySelector('.data-label');
                             if (label) label.click();
                         }, 1000);
                     }
+                    */
                 } 
                 else if (visited) {
                     // This tab has been visited
