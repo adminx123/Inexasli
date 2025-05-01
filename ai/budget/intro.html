@@ -146,54 +146,104 @@
      </div>
  
     
-         <button id="proceedButton" class="nav btn"><i class='bx nav-inner bx-right-arrow-alt'></i>Proceed</button>
-   
- 
-    <script>
- document.addEventListener('DOMContentLoaded', function() {
-            // Get the proceed button
-            const proceedButton = document.getElementById('proceedButton');
-            
-            if (proceedButton) {
-                // Add click event listener to the proceed button
-                proceedButton.addEventListener('click', function() {
-                    // Check if button is disabled
-                    if (proceedButton.classList.contains('disabled')) {
-                        return; // Don't proceed if the button is disabled
-                    }
-                    
-                    // Get parent window (since this is loaded inside a container)
-                    const parentWindow = window.parent || window;
-                    
-                    // First, close the intro container
-                    const introContainer = parentWindow.document.querySelector('.data-container-intro');
-                    if (introContainer && introContainer.dataset.state === 'expanded') {
-                        const introClose = introContainer.querySelector('.close-data-container');
-                        if (introClose) {
-                            introClose.click(); // Click the close button
-                            console.log('Intro tab closed');
-                        }
-                    }
-                    
-                    // Wait a brief moment to ensure intro is closed
-                    setTimeout(() => {
-                        // Next, open the income container
-                        const incomeContainer = parentWindow.document.querySelector('.data-container-income');
-                        if (incomeContainer && incomeContainer.dataset.state === 'collapsed') {
-                            const incomeLabel = incomeContainer.querySelector('.data-label');
-                            if (incomeLabel) {
-                                incomeLabel.click(); // Click the income label to expand
-                                console.log('Income tab expanded');
-                            }
-                        }
-                    }, 300);
-                });
+</div>
+</div>
+
+<!-- Removed the redundant "Proceed" button -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set up auto-transition when all required fields are filled
+    // This replaces the old button click handler with automatic field change detection
+    const setupAutoTransition = function() {
+        const requiredSelectors = ['#country', '#subregion', '#residency', '#filingStatus', '#ageSelf', '#employmentStatus'];
+        const requiredElements = {};
+        
+        // Get all the required form elements
+        requiredSelectors.forEach(selector => {
+            requiredElements[selector] = document.querySelector(selector);
+        });
+        
+        // Add change event listeners to trigger validation and auto-transition
+        Object.values(requiredElements).forEach(element => {
+            if (element) {
+                element.addEventListener('change', validateAndTransition);
             }
         });
-    </script>
-    <script>
-    // Inline all intro logic from introtab.js
-    (function() {
+        
+        // Special handling for spouse fields which are conditionally required
+        const spouseFields = document.querySelectorAll('.spouseFields input, .spouseFields select');
+        spouseFields.forEach(field => {
+            if (field) {
+                field.addEventListener('change', validateAndTransition);
+            }
+        });
+        
+        function validateAndTransition() {
+            // Get all required values
+            const country = document.getElementById('country').value;
+            const subregion = document.getElementById('subregion').value;
+            const residencyValue = document.getElementById('residency').value;
+            const filingStatus = document.getElementById('filingStatus')?.value;
+            const ageSelf = document.getElementById('ageSelf').value;
+            const ageSpouse = document.getElementById('ageSpouse').value;
+            const employmentStatus = document.getElementById('employmentStatus').value;
+            
+            // Check if spouse fields are required based on filing status
+            const spouseRequired = [
+                'married_with_dependants','married_with_disabled_dependants','common_law_with_dependants',
+                'common_law_with_disabled_dependants','married_filing_jointly_with_dependants',
+                'married_filing_jointly_with_disabled_dependants','married_filing_separately_with_dependants',
+                'married_filing_separately_with_disabled_dependants','married_no_dependants',
+                'common_law_no_dependants','married_filing_jointly_no_dependants',
+                'married_filing_separately_no_dependants','married_or_civil_partnership_no_dependants',
+                'married_or_civil_partnership_with_dependants','married_or_de_facto_no_dependants',
+                'married_or_de_facto_with_dependants','coupled_no_dependants','coupled_with_dependants'
+            ].includes(filingStatus);
+            
+            // Perform validation checks
+            if (!country || (!subregion && country !== 'OTHER') || !residencyValue || !filingStatus || 
+                !ageSelf || !employmentStatus || (spouseRequired && !ageSpouse)) {
+                return; // Not all required fields are filled
+            }
+            
+            // All fields are valid, proceed to income tab
+            // Get parent window (since this is loaded inside a container)
+            const parentWindow = window.parent || window;
+            
+            // First, close the intro container
+            const introContainer = parentWindow.document.querySelector('.data-container-intro');
+            if (introContainer && introContainer.dataset.state === 'expanded') {
+                const introClose = introContainer.querySelector('.close-data-container');
+                if (introClose) {
+                    introClose.click(); 
+                }
+            }
+            
+            // Wait a brief moment to ensure intro is closed
+            setTimeout(() => {
+                // Next, open the income container
+                const incomeContainer = parentWindow.document.querySelector('.data-container-income');
+                if (incomeContainer && incomeContainer.dataset.state === 'collapsed') {
+                    const incomeLabel = incomeContainer.querySelector('.data-label');
+                    if (incomeLabel) {
+                        incomeLabel.click();
+                    }
+                }
+            }, 300);
+        }
+        
+        // Check immediately in case all fields are already filled
+        setTimeout(validateAndTransition, 500);
+    };
+    
+    // Run the setup once DOM is loaded
+    setupAutoTransition();
+});
+</script>
+<script>
+// Inline all intro logic from introtab.js
+(function() {
         // Polyfill for setLocal/getLocal if not present
         const setLocal = window.setLocal || function (key, value, days) {
             try { localStorage.setItem(key, encodeURIComponent(value)); } catch (e) { console.error(e); }
