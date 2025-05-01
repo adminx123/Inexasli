@@ -651,15 +651,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // New function to calculate taxes via xAI API
 function calculateTaxes() {
-    const requiredFields = [
-        'ANNUALINCOME', 'ANNUALEMPLOYMENTINCOME', 'fillingStatus', 'income_sole_prop',
-        'birthYearDisabledDependants', 'RETIREMENTCONTRIBUTION', 'residency'
+    // Core required fields - these must exist
+    const coreRequiredFields = [
+        'ANNUALINCOME', 'ANNUALEMPLOYMENTINCOME', 'fillingStatus', 'residency'
     ];
-
-    // Collect data from localStorage
-    const data = {};
+    
+    // Optional fields from intro - only include if they exist in localStorage
+    const optionalIntroFields = [
+        'selectedCountry', 'selectedSubregion', 'ageSelf', 'ageSpouse',
+        'employmentStatus', 'employmentStatusSpouse', 'RegionDropdown', 
+        'SubregionDropdown', 'birthYearDisabledDependants', 'income_sole_prop',
+        'RETIREMENTCONTRIBUTION'
+    ];
+    
+    // Collect required fields data
     let missingFields = [];
-    requiredFields.forEach(field => {
+    let data = {};
+    
+    // Check core required fields - these must exist
+    coreRequiredFields.forEach(field => {
         const value = getLocal(field);
         if (value === null || value === '') {
             missingFields.push(field);
@@ -667,8 +677,16 @@ function calculateTaxes() {
             data[field] = value;
         }
     });
+    
+    // Check optional fields - only include if they exist
+    optionalIntroFields.forEach(field => {
+        const value = getLocal(field);
+        if (value !== null && value !== '') {
+            data[field] = value;
+        }
+    });
 
-    // Display error if fields are missing
+    // Display error if core fields are missing
     let errorDiv = document.getElementById('error');
     if (!errorDiv) {
         errorDiv = document.createElement('div');
@@ -678,14 +696,35 @@ function calculateTaxes() {
     }
 
     if (missingFields.length > 0) {
-        errorDiv.textContent = `Missing fields: ${missingFields.join(', ')}`;
-        console.error('Missing fields:', missingFields);
+        errorDiv.textContent = `Missing required fields: ${missingFields.join(', ')}`;
+        console.error('Missing required fields:', missingFields);
         return;
     }
 
     // Clear previous error
     errorDiv.textContent = '';
 
+    // TEMPORARY: Use placeholder values instead of API call
+    console.log('Using placeholder tax values for development (API call commented out)');
+    
+    // Calculate placeholder values based on income for realistic testing
+    const annualIncome = parseFloat(getLocal('ANNUALINCOME')) || 0;
+    const regionalTax = annualIncome * 0.15; // Placeholder: 15% of income
+    const subregionalTax = annualIncome * 0.05; // Placeholder: 5% of income
+    const otherObligations = annualIncome * 0.07; // Placeholder: 7% of income
+    
+    // Store placeholder values in localStorage
+    setLocal('REGIONALTAXANNUAL', regionalTax.toString());
+    setLocal('SUBREGIONTAXANNUAL', subregionalTax.toString());
+    setLocal('OTHEROBLIGATIONANNUAL', otherObligations.toString());
+    
+    // Update UI with placeholder values
+    updateFreeContent();
+    updateIncomeErosionPieChart();
+    if (getLocal('authenticated') === 'paid') updatePremiumContent();
+    
+    /* 
+    // COMMENTED OUT: Original API call code
     // Add loading state
     const generateBtn = document.querySelector('.generate-btn');
     const originalText = generateBtn.textContent;
@@ -749,6 +788,7 @@ function calculateTaxes() {
             generateBtn.disabled = false;
             generateBtn.textContent = originalText;
         });
+    */
 }
 
 // Free content update function
