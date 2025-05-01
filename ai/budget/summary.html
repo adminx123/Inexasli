@@ -582,24 +582,46 @@ tabs.forEach(tab => {
 
 // Core DOMContentLoaded listener
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('Summary HTML - DOMContentLoaded event fired');
     setCookie("summary", Date.now(), 32);
 
     const paid = getLocal("authenticated");
     const isPaid = paid === "paid";
     const currentPath = window.location.pathname;
+    console.log('Summary HTML - Current path:', currentPath, 'isPaid:', isPaid);
 
     if (isPaid && currentPath !== "/ai/budget/summary.html") {
         window.location.href = "/ai/budget/summary.html";
         return;
     } else {
         document.body.style.display = 'block';
+        console.log('Summary HTML - Body display set to block');
     }
 
+    // Debug log localStorage values
+    console.log('Summary HTML - Current values in localStorage:');
+    console.log('ASSETS:', getLocal('ASSETS'));
+    console.log('LIABILITIES:', getLocal('LIABILITIES'));
+    console.log('ANNUALINCOME:', getLocal('ANNUALINCOME'));
+    console.log('ANNUALEXPENSESUM:', getLocal('ANNUALEXPENSESUM'));
+
+    console.log('Summary HTML - About to call updateFreeContent()');
     updateFreeContent();
+    console.log('Summary HTML - updateFreeContent() completed');
+    
     if (isPaid) {
+        console.log('Summary HTML - About to call unlockPremiumContent()');
         unlockPremiumContent();
+        console.log('Summary HTML - About to call updatePremiumContent()');
         updatePremiumContent();
+        console.log('Summary HTML - Premium content updated');
     }
+
+    // Make update functions available globally for external calls (e.g., from summarytab.js)
+    console.log('Summary HTML - Making update functions available globally');
+    window.updateFreeContent = updateFreeContent;
+    window.updatePremiumContent = updatePremiumContent;
+    window.unlockPremiumContent = unlockPremiumContent;
 
     const frequencyDropdown = document.getElementById('frequency');
     frequencyDropdown.addEventListener('change', () => {
@@ -638,6 +660,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('close-sidebar')?.addEventListener('click', function() {
         document.getElementById('subscribe-sidebar').style.display = 'none';
     });
+    
+    console.log('Summary HTML - DOMContentLoaded event handler completed');
 });
 
 /* New function to calculate taxes via xAI API
@@ -888,10 +912,11 @@ function getFrequencyMultiplier(frequency) {
     }
 }
 
-/* Calculate Disposable Income (premium)
+// Calculate Disposable Income (premium)
 function calculateDisposableIncome() {
     const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
     const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
+    // Default tax and obligation values to 0 if not set
     const regionalTax = parseFloat(getLocal('REGIONALTAXANNUAL')) || 0;
     const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
     const obligations = parseFloat(getLocal('OTHEROBLIGATIONANNUAL')) || 0;
@@ -901,11 +926,11 @@ function calculateDisposableIncome() {
 
 // Calculate Annual Tax (free)
 function calculateAnnualTax() {
+    // Default tax values to 0 if not set
     const regionalTax = parseFloat(getLocal('REGIONALTAXANNUAL')) || 0;
     const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
     return regionalTax + subregionalTax;
 }
-*/
 
 // Calculate Government Obligations (free)
 function calculateGovernmentObligations() {
