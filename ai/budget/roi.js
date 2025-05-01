@@ -27,9 +27,21 @@ window.toggleRevenueType = function () {
 
 // Updated calculateAnnual to use checked checkbox
 function calculateAnnual(inputId, frequencyGroupId) {
-    const input = parseFloat(document.getElementById(inputId).value) || 0;
-    const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
-    const frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
+    const element = document.getElementById(inputId);
+    if (!element) return 0; // Return 0 if element doesn't exist
+    
+    const input = parseFloat(element.value) || 0;
+    const frequencyGroup = document.getElementById(frequencyGroupId);
+    
+    let frequency = 'annually'; // Default to annual
+    if (frequencyGroup) {
+        const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
+        frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
+    } else {
+        // Fallback to document-wide search
+        const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+        frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
+    }
 
     switch (frequency) {
         case 'annually': return input * 1;
