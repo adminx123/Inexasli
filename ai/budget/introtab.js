@@ -312,10 +312,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const filingStatusSection = document.getElementById('filingStatusSection');
             const filingStatusDiv = document.querySelector('.filingStatus');
             
-            // Only proceed if we have all required fields
-            const subregion = getLocal('selectedSubregion');
-            const residencyValue = getLocal('residency');
-            
             // Clear the container first
             if (filingStatusContainer) {
                 filingStatusContainer.innerHTML = '';
@@ -323,63 +319,60 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
             
-            // Check if we have all the required tax residency elements selected
-            if (country && residencyValue && (subregion || country === 'OTHER') && filingOptions[country]) {
-                // Create the select element with proper styling
-                const filingStatusDropdown = document.createElement('select');
-                filingStatusDropdown.id = 'filingStatus';
-                filingStatusDropdown.style.width = "345px";
-                filingStatusDropdown.style.maxWidth = "100%";
-                filingStatusDropdown.style.margin = "0 auto";
-                filingStatusDropdown.style.display = "block"; 
-                filingStatusDropdown.style.padding = "8px";
-                
-                // Add the default option
-                const defaultOption = document.createElement('option');
-                defaultOption.value = "";
-                defaultOption.text = "Select Filing Status";
-                filingStatusDropdown.appendChild(defaultOption);
-                
-                // Add all the options for the selected country
-                filingOptions[country].forEach(option => {
-                    const statusOption = document.createElement('option');
-                    statusOption.value = option.value;
-                    statusOption.text = option.text;
-                    if (savedStatus === option.value) {
-                        statusOption.selected = true;
-                    }
-                    filingStatusDropdown.appendChild(statusOption);
-                });
-                
-                // Add event listener to handle changes
-                filingStatusDropdown.addEventListener('change', () => {
-                    const selectedStatus = filingStatusDropdown.value;
-                    setLocal('fillingStatus', selectedStatus, 365);
-                    updateDependantsVisibility();
-                    updateMaritalStatusVisibility();
-                    updateSpecificsVisibility();
-                    updateFormVisibility();
-                });
-                
-                // Add the dropdown to the container
-                filingStatusContainer.appendChild(filingStatusDropdown);
-                
-                // If a saved status exists, set it and update relevant UI
-                if (savedStatus) {
-                    filingStatusDropdown.value = savedStatus;
-                    updateDependantsVisibility();
-                    updateMaritalStatusVisibility();
-                    updateSpecificsVisibility();
+            // CHANGED: Always create the dropdown, even if fields aren't filled
+            // Choose which country options to display
+            const optionsToUse = country && filingOptions[country] ? filingOptions[country] : filingOptions['OTHER'];
+            
+            // Create the select element with proper styling
+            const filingStatusDropdown = document.createElement('select');
+            filingStatusDropdown.id = 'filingStatus';
+            filingStatusDropdown.style.width = "345px";
+            filingStatusDropdown.style.maxWidth = "100%";
+            filingStatusDropdown.style.margin = "0 auto";
+            filingStatusDropdown.style.display = "block"; 
+            filingStatusDropdown.style.padding = "8px";
+            
+            // Add the default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.text = "Select Filing Status";
+            filingStatusDropdown.appendChild(defaultOption);
+            
+            // Add all the options for the selected country
+            optionsToUse.forEach(option => {
+                const statusOption = document.createElement('option');
+                statusOption.value = option.value;
+                statusOption.text = option.text;
+                if (savedStatus === option.value) {
+                    statusOption.selected = true;
                 }
-                
-                // Show both the filing status div and section
-                if (filingStatusDiv) filingStatusDiv.style.display = 'block';
-                if (filingStatusSection) filingStatusSection.style.display = 'block';
-            } else {
-                // Hide if conditions aren't met
-                if (filingStatusDiv) filingStatusDiv.style.display = 'none';
-                if (filingStatusSection) filingStatusSection.style.display = 'none';
+                filingStatusDropdown.appendChild(statusOption);
+            });
+            
+            // Add event listener to handle changes
+            filingStatusDropdown.addEventListener('change', () => {
+                const selectedStatus = filingStatusDropdown.value;
+                setLocal('fillingStatus', selectedStatus, 365);
+                updateDependantsVisibility();
+                updateMaritalStatusVisibility();
+                updateSpecificsVisibility();
+                updateFormVisibility();
+            });
+            
+            // Add the dropdown to the container
+            filingStatusContainer.appendChild(filingStatusDropdown);
+            
+            // If a saved status exists, set it and update relevant UI
+            if (savedStatus) {
+                filingStatusDropdown.value = savedStatus;
+                updateDependantsVisibility();
+                updateMaritalStatusVisibility();
+                updateSpecificsVisibility();
             }
+            
+            // CHANGED: Always show the filing status section
+            if (filingStatusDiv) filingStatusDiv.style.display = 'block';
+            if (filingStatusSection) filingStatusSection.style.display = 'block';
         }
 
         function updateFormVisibility() {
