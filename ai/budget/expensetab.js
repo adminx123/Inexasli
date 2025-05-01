@@ -35,21 +35,28 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function initializeExpenseForm(container) {
-        if (expenseInitialized) {
-            return;
-        }
+        // Remove the check for expenseInitialized to allow reinitializing
+        // when container is reopened
+        
         expenseInitialized = true;
 
         // Initialize tooltips using the centralized implementation
         if (window.initializeTooltips) {
-            window.initializeTooltips(container);
+            const cleanup = window.initializeTooltips(container);
+            // Store cleanup function on container for later use
+            if (cleanup && cleanup.cleanup) {
+                container._tooltipCleanup = cleanup.cleanup;
+            }
         } else {
             // Fallback script loading if toolTip.js hasn't been loaded yet
             const tooltipScript = document.createElement('script');
             tooltipScript.src = '/utility/toolTip.js?v=' + new Date().getTime();
             tooltipScript.onload = function() {
                 if (window.initializeTooltips) {
-                    window.initializeTooltips(container);
+                    const cleanup = window.initializeTooltips(container);
+                    if (cleanup && cleanup.cleanup) {
+                        container._tooltipCleanup = cleanup.cleanup;
+                    }
                 }
             };
             document.head.appendChild(tooltipScript);
