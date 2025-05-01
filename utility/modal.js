@@ -16,7 +16,7 @@ function injectModalCSS() {
     justify-content: center;
     align-items: center;
     padding: 30px;
-    z-index: 1000;
+    z-index: 20000;
     overflow-y: auto;
     font-family: "Inter", sans-serif;
 }
@@ -193,6 +193,9 @@ function setupModalTriggers() {
 // Initialize modal system
 injectModalCSS();
 setupModalTriggers();
+
+// Make setupModalTriggers globally accessible
+window.setupModalTriggers = setupModalTriggers;
 
 // Make closeModal globally accessible
 window.closeModal = closeModal;
