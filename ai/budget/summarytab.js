@@ -29,10 +29,12 @@ document.addEventListener('DOMContentLoaded', function () {
     
     async function loadStoredContent(dataContainer, url) {
         try {
+            console.log('Summary tab - loadStoredContent started for URL:', url);
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
+            console.log('Summary tab - Content loaded successfully, length:', content.length);
 
             // Update container with content
             dataContainer.innerHTML = `
@@ -40,9 +42,131 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="data-label">SUMMARY</span>
                 <div class="data-content">${content}</div>
             `;
+            console.log('Summary tab - Content inserted into DOM');
 
             // Mark summary page as visited when loaded
             setLocal('summaryVisited', 'visited', 365);
+
+            // Similar to incometab.js approach - scripts are appended to document body
+            console.log('Summary tab - Processing scripts');
+            const scripts = dataContainer.querySelectorAll('script');
+            console.log('Summary tab - Found', scripts.length, 'script elements');
+            
+            scripts.forEach((script, index) => {
+                console.log(`Summary tab - Processing script ${index+1}:`, script.src || 'inline script');
+                
+                if (script.src && ![
+                    'summarytab.js', 'setlocal.js', 'getlocal.js', 'cookieoverwrite.js'
+                ].some(exclude => script.src.includes(exclude))) {
+                    const newScript = document.createElement('script');
+                    newScript.src = script.src + '?v=' + new Date().getTime(); 
+                    console.log('Summary tab - Adding external script to body:', newScript.src);
+                    
+                    if (
+                        script.src.includes('frequency.js') ||
+                        script.src.includes('utils.js') ||
+                        script.src.includes('hideShow.js')
+                    ) {
+                        newScript.type = 'module';
+                    }
+                    
+                    document.body.appendChild(newScript);
+                } else if (!script.src) {
+                    console.log('Summary tab - Adding inline script to body, length:', script.textContent.length);
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript);
+                }
+            });
+
+            // DIRECT UPDATE: Immediately update all the financial values 
+            // without waiting for other scripts to load
+            console.log('Summary tab - Performing direct update of all financial values');
+            
+            // Get values directly from localStorage
+            const assets = parseFloat(getLocal('ASSETS')) || 0;
+            const liabilities = parseFloat(getLocal('LIABILITIES')) || 0;
+            const netWorth = assets - liabilities;
+            const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
+            const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
+            const essential = parseFloat(getLocal('ESSENTIAL')) || 0;
+            const discretionary = parseFloat(getLocal('DISCRETIONARY')) || 0;
+            const housing = parseFloat(getLocal('HOUSING')) || 0;
+            const transportation = parseFloat(getLocal('TRANSPORTATION')) || 0;
+            const dependant = parseFloat(getLocal('DEPENDANT')) || 0;
+            const debt = parseFloat(getLocal('DEBT')) || 0;
+            const taxableIncome = parseFloat(getLocal('ANNUALTAXABLEINCOME')) || 0;
+            
+            console.log('Summary tab - Direct values:', { 
+                assets, liabilities, netWorth, income, expenses, 
+                essential, discretionary, housing, transportation, dependant, debt, taxableIncome 
+            });
+            
+            // Update all financial elements directly
+            const elementsToUpdate = {
+                'ASSETS': assets,
+                'LIABILITIES': liabilities,
+                'NETWORTH': netWorth,
+                'annual_income_sum': income,
+                'ANNUALEXPENSESUM': expenses,
+                'ESSENTIAL': essential,
+                'DISCRETIONARY': discretionary,
+                'HOUSING': housing,
+                'TRANSPORTATION': transportation,
+                'DEPENDANT': dependant,
+                'DEBT': debt,
+                'ANNUALTAXABLEINCOME': taxableIncome
+            };
+            
+            for (const [elementId, value] of Object.entries(elementsToUpdate)) {
+                const element = dataContainer.querySelector(`#${elementId}`);
+                if (element) {
+                    element.textContent = '$' + value.toFixed(2);
+                    console.log(`Summary tab - Directly updated ${elementId} element to: ${element.textContent}`);
+                } else {
+                    console.log(`Summary tab - Could not find element with id: ${elementId}`);
+                }
+            }
+            
+            // Frequency element might need special handling
+            const frequencyDropdown = dataContainer.querySelector('#frequency');
+            if (frequencyDropdown) {
+                frequencyDropdown.value = 'annual'; // Default to annual
+                console.log('Summary tab - Set frequency dropdown to annual');
+            }
+
+            // Manually trigger the updateFreeContent function after a delay
+            setTimeout(() => {
+                console.log('Summary tab - Running delayed update functions');
+                if (window.updateFreeContent) {
+                    console.log('Summary tab - Calling updateFreeContent()');
+                    window.updateFreeContent();
+                    console.log('Summary tab - updateFreeContent() completed');
+                    
+                    if (getLocal('authenticated') === 'paid' && window.updatePremiumContent) {
+                        console.log('Summary tab - Calling updatePremiumContent()');
+                        window.updatePremiumContent();
+                        console.log('Summary tab - updatePremiumContent() completed');
+                    }
+                } else {
+                    console.warn('Summary tab - updateFreeContent not found in window context');
+                }
+                
+                // Debug log to check localStorage values
+                console.log('Summary tab - Current localStorage values for assets/liabilities:');
+                console.log('ASSETS:', getLocal('ASSETS'));
+                console.log('LIABILITIES:', getLocal('LIABILITIES'));
+                console.log('NETWORTH calculation:', parseFloat(getLocal('ASSETS') || 0) - parseFloat(getLocal('LIABILITIES') || 0));
+                
+                // Check DOM elements that should display these values
+                const assetsElement = document.getElementById('ASSETS');
+                const liabilitiesElement = document.getElementById('LIABILITIES');
+                const networthElement = document.getElementById('NETWORTH');
+                
+                console.log('ASSETS element exists:', !!assetsElement, assetsElement ? 'content: ' + assetsElement.textContent : '');
+                console.log('LIABILITIES element exists:', !!liabilitiesElement, liabilitiesElement ? 'content: ' + liabilitiesElement.textContent : '');
+                console.log('NETWORTH element exists:', !!networthElement, networthElement ? 'content: ' + networthElement.textContent : '');
+            }, 500);
 
             // Now check if all pages have been visited and set a flag
             const introVisited = getLocal('introVisited');
@@ -62,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 setLocal('allPagesVisited', 'true', 365);
             }
         } catch (error) {
-            // Error handling without console logging
+            console.error('Summary tab - Error in loadStoredContent:', error);
         }
     }
 
