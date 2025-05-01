@@ -40,57 +40,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         expenseInitialized = true;
 
-        // Initialize tooltips
-        const interactiveElements = container.querySelectorAll(
-            ".checkboxrow input[type='number'], .checkboxrow label, .checkboxrow .checkbox-button-group input[type='checkbox']"
-        );
-        const tooltips = container.querySelectorAll(".checkboxrow .tooltip");
-        tooltips.forEach(tooltip => {
-            const content = tooltip.querySelector(".tooltip-content");
-            const message = tooltip.getAttribute("data-tooltip");
-            if (content && message) content.textContent = message;
-        });
-        interactiveElements.forEach(element => {
-            element.removeEventListener('click', handleTooltipClick);
-            element.addEventListener('click', handleTooltipClick);
-            function handleTooltipClick(e) {
-                const row = element.closest(".checkboxrow");
-                const tooltip = row.querySelector(".tooltip");
-                const content = tooltip ? tooltip.querySelector(".tooltip-content") : null;
-                container.querySelectorAll(".checkboxrow").forEach(r => {
-                    r.classList.remove("active");
-                    const otherTooltip = r.querySelector(".tooltip");
-                    if (otherTooltip) otherTooltip.classList.remove("show");
-                });
-                row.classList.add("active");
-                if (tooltip && content) {
-                    tooltip.classList.add("show");
-                    const contentRect = content.getBoundingClientRect();
-                    const viewportWidth = window.innerWidth;
-                    if (contentRect.left < 0) {
-                        content.style.left = '0';
-                        content.style.transform = 'translateX(0)';
-                    } else if (contentRect.right > viewportWidth) {
-                        content.style.left = '100%';
-                        content.style.transform = 'translateX(-100%)';
-                    } else {
-                        content.style.left = '50%';
-                        content.style.transform = 'translateX(-50%)';
-                    }
+        // Initialize tooltips using the centralized implementation
+        if (window.initializeTooltips) {
+            window.initializeTooltips(container);
+        } else {
+            // Fallback script loading if toolTip.js hasn't been loaded yet
+            const tooltipScript = document.createElement('script');
+            tooltipScript.src = '/utility/toolTip.js?v=' + new Date().getTime();
+            tooltipScript.onload = function() {
+                if (window.initializeTooltips) {
+                    window.initializeTooltips(container);
                 }
-                e.stopPropagation();
-            }
-        });
-        document.removeEventListener('click', handleOutsideClick);
-        document.addEventListener('click', handleOutsideClick);
-        function handleOutsideClick(e) {
-            if (!e.target.closest(".checkboxrow")) {
-                container.querySelectorAll(".checkboxrow").forEach(r => {
-                    r.classList.remove("active");
-                    const tooltip = r.querySelector(".tooltip");
-                    if (tooltip) tooltip.classList.remove("show");
-                });
-            }
+            };
+            document.head.appendChild(tooltipScript);
         }
     }
 
