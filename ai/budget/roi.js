@@ -27,10 +27,7 @@ window.toggleRevenueType = function () {
 
 // Updated calculateAnnual to use checked checkbox
 function calculateAnnual(inputId, frequencyGroupId) {
-    const element = document.getElementById(inputId);
-    if (!element) return 0; // Return 0 if element doesn't exist
-    
-    const input = parseFloat(element.value) || 0;
+    const input = parseFloat(document.getElementById(inputId).value) || 0;
     const frequencyGroup = document.getElementById(frequencyGroupId);
     
     let frequency = 'annually'; // Default to annual

@@ -290,10 +290,7 @@
 
         // Calculation helpers
         function calculateAnnual(inputId, frequencyGroupId) {
-            const element = document.getElementById(inputId);
-            if (!element) return 0; // Return 0 if element doesn't exist
-            
-            let input = parseFloat(element.value) || 0;
+            let input = parseFloat(document.getElementById(inputId).value) || 0;
             if (inputId === 'income_sole_prop') {
                 const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
                 if (calculatedFromWorksheet === 'true') {
@@ -305,15 +302,12 @@
                     }
                 }
             }
-            // Also check if frequency group exists
             const frequencyGroup = document.getElementById(frequencyGroupId);
-            let frequency = 'annually'; // Default to annual if not found
-            
+            let frequency = 'annually';
             if (frequencyGroup) {
                 const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
                 frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
             } else {
-                // Try DOM-wide search as fallback
                 const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
                 frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
             }
