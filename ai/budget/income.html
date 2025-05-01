@@ -389,10 +389,30 @@
                 const incomeValue = calculateAnnual(incomeField, frequencyField);
                 income += incomeValue;
             }
+            
+            // Store the calculated passive income in local storage
+            window.ANNUALPASSIVEINCOME = income;
+            setLocal("ANNUALPASSIVEINCOME", income.toString(), 365);
         }
+        
+        function calculateSelfEmploymentIncome() {
+            const selfEmploymentFields = [
+                ['income_sole_prop', 'income_sole_prop_frequency']
+            ];
+            let annualSelfEmploymentIncome = 0;
+            selfEmploymentFields.forEach(field => {
+                annualSelfEmploymentIncome += calculateAnnual(field[0], field[1]);
+            });
+            
+            // Store the calculated value in local storage
+            window.ANNUALSELFEMPLOYMENTINCOME = annualSelfEmploymentIncome;
+            setLocal("ANNUALSELFEMPLOYMENTINCOME", annualSelfEmploymentIncome.toString(), 365);
+        }
+        
         function calculateAll() {
             calculateNormalizedSum();
             calculateEmploymentIncome();
+            calculateSelfEmploymentIncome();
             passiveincome();
             const incomeFields = [
                 'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop',
