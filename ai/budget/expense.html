@@ -361,9 +361,7 @@
 
       // Calculation helpers
       function calculateAnnual(inputId, frequency) {
-          const input = document.getElementById(inputId);
-          if (!input || !input.value) return 0;
-          const amount = parseFloat(input.value) || 0;
+          const amount = parseFloat(document.getElementById(inputId).value) || 0;
           switch (frequency) {
               case 'annually': return amount;
               case 'quarterly': return amount * 4;
