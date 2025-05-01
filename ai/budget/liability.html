@@ -181,6 +181,8 @@
             LIABILITIES = liabilities;
             // Store result in both global and localStorage
             window.LIABILITIES = liabilities;
+            setLocal("LIABILITIES", LIABILITIES.toString(), 365);  // Add this line to save to localStorage immediately
+            
             const liabilitiesElement = document.getElementById('LIABILITIES');
             if (liabilitiesElement) {
                 liabilitiesElement.textContent = `$${LIABILITIES.toFixed(2)}`;
@@ -218,7 +220,7 @@
 
         function calculateAll() {
             calculateLiabilities();
-            setLocal("LIABILITIES", LIABILITIES.toString(), 365);
+            // The setLocal for LIABILITIES is now done inside calculateLiabilities
             calculateRevolving();
 
             const fields = [
