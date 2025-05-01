@@ -17,6 +17,75 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Only handles toggling open/close and loading the HTML now
+    
+    // Income container management
+    let incomeInitialized = false;
+    
+    function hideShowClass(className, action) {
+        document.querySelectorAll(`.${className}`).forEach(el => {
+            el.style.display = action === 'show' ? 'block' : 'none';
+        });
+    }
+
+    function initializeIncomeForm(container) {
+        if (incomeInitialized) {
+            return;
+        }
+        incomeInitialized = true;
+
+        // Initialize tooltips
+        const interactiveElements = container.querySelectorAll(
+            ".checkboxrow input[type='number'], .checkboxrow label, .checkboxrow [data-frequency-id]"
+        );
+        const tooltips = container.querySelectorAll(".tooltip, .tooltip1");
+        tooltips.forEach(tooltip => {
+            const content = tooltip.querySelector(".tooltip-content, .tooltip1-content");
+            const message = tooltip.getAttribute("data-tooltip");
+            if (content && message) content.textContent = message;
+        });
+        interactiveElements.forEach(element => {
+            element.removeEventListener('click', handleTooltipClick);
+            element.addEventListener('click', handleTooltipClick);
+            function handleTooltipClick(e) {
+                const row = element.closest(".checkboxrow");
+                const tooltip = row.querySelector(".tooltip, .tooltip1");
+                const content = tooltip ? tooltip.querySelector(".tooltip-content, .tooltip1-content") : null;
+                container.querySelectorAll(".checkboxrow").forEach(r => {
+                    r.classList.remove("active");
+                    const otherTooltip = r.querySelector(".tooltip, .tooltip1");
+                    if (otherTooltip) otherTooltip.classList.remove("show");
+                });
+                row.classList.add("active");
+                if (tooltip && content) {
+                    tooltip.classList.add("show");
+                    const contentRect = content.getBoundingClientRect();
+                    const viewportWidth = window.innerWidth;
+                    if (contentRect.left < 0) {
+                        content.style.left = '0';
+                        content.style.transform = 'translateX(0)';
+                    } else if (contentRect.right > viewportWidth) {
+                        content.style.left = '100%';
+                        content.style.transform = 'translateX(-100%)';
+                    } else {
+                        content.style.left = '50%';
+                        content.style.transform = 'translateX(-50%)';
+                    }
+                }
+                e.stopPropagation();
+            }
+        });
+        document.removeEventListener('click', handleOutsideClick);
+        document.addEventListener('click', handleOutsideClick);
+        function handleOutsideClick(e) {
+            if (!e.target.closest(".checkboxrow")) {
+                container.querySelectorAll(".checkboxrow").forEach(r => {
+                    r.classList.remove("active");
+                    const tooltip = r.querySelector(".tooltip, .tooltip1");
+                    if (tooltip) tooltip.classList.remove("show");
+                });
+            }
+        }
+    }
 
     async function loadStoredContent(dataContainer, url) {
         try {
@@ -57,6 +126,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.body.appendChild(newScript);
                 }
             });
+            
+            initializeIncomeForm(dataContainer);
         } catch (error) {
             // Error handling without console.error
         }
