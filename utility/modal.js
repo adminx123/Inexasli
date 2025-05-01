@@ -1,6 +1,6 @@
-// Define global handlers for keydown and click outside actions
-let handleKeyDown;
-let handleClickOutside;
+// Define global variables to track active event listeners
+let activeKeyDownHandler = null;
+let activeClickOutsideHandler = null;
 
 // Function to inject modal styles
 function injectModalCSS() {
@@ -94,21 +94,24 @@ function openModal(contentSrc) {
     // Add class to disable tooltips
     document.body.classList.add('modal-open');
 
+    // Clean up previous event listeners if they exist
+    removeExistingEventListeners();
+
     // Close modal on Escape key
-    handleKeyDown = (event) => {
+    activeKeyDownHandler = (event) => {
         if (event.key === 'Escape') {
             closeModal();
         }
     };
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', activeKeyDownHandler);
 
     // Close modal when clicking outside
-    handleClickOutside = (event) => {
+    activeClickOutsideHandler = (event) => {
         if (event.target === modal) {
             closeModal();
         }
     };
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('click', activeClickOutsideHandler);
 }
 
 // Function to open the modal with auto height for generated prompts
@@ -148,21 +151,36 @@ function openGeneratedPromptModal() {
     // Add class to disable tooltips
     document.body.classList.add('modal-open');
 
+    // Clean up previous event listeners if they exist
+    removeExistingEventListeners();
+
     // Close modal on Escape key
-    handleKeyDown = (event) => {
+    activeKeyDownHandler = (event) => {
         if (event.key === 'Escape') {
             closeModal();
         }
     };
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', activeKeyDownHandler);
 
     // Close modal when clicking outside
-    handleClickOutside = (event) => {
+    activeClickOutsideHandler = (event) => {
         if (event.target === modal) {
             closeModal();
         }
     };
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('click', activeClickOutsideHandler);
+}
+
+// Helper function to remove existing event listeners
+function removeExistingEventListeners() {
+    if (activeKeyDownHandler) {
+        document.removeEventListener('keydown', activeKeyDownHandler);
+        activeKeyDownHandler = null;
+    }
+    if (activeClickOutsideHandler) {
+        document.removeEventListener('click', activeClickOutsideHandler);
+        activeClickOutsideHandler = null;
+    }
 }
 
 // Function to close the modal
@@ -171,8 +189,9 @@ function closeModal() {
     if (modal) {
         modal.style.display = 'none';
         document.body.classList.remove('modal-open');
-        document.removeEventListener('keydown', handleKeyDown);
-        document.removeEventListener('click', handleClickOutside);
+        
+        // Clean up event listeners
+        removeExistingEventListeners();
     }
 }
 
