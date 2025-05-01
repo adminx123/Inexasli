@@ -559,7 +559,38 @@
         }
     })();
     </script>
-   
+    
+    <!-- Add modal.js script for the ROI worksheet modal trigger -->
+    <script src="/utility/modal.js"></script>
+    
+    <!-- Add script to handle ROI worksheet access based on payment status -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Ensure we have access to getLocal function
+            const getLocal = window.getLocal || function (key) {
+                try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
+            };
+            
+            // Get the ROI worksheet modal trigger
+            const roiModalTrigger = document.querySelector('.modal-trigger[data-modal-src="/ai/budget/ROI.html"]');
+            
+            if (roiModalTrigger) {
+                // Add click handler that checks payment status
+                roiModalTrigger.addEventListener('click', function(event) {
+                    // Get payment status from localStorage
+                    const isPaid = getLocal("authenticated") === "paid";
+                    
+                    if (!isPaid) {
+                        // If not paid, prevent modal from opening and show alert
+                        event.preventDefault();
+                        event.stopPropagation();
+                        alert("Payment required to access the Self Employed Worksheet");
+                        return false;
+                    }
+                });
+            }
+        });
+    </script>
  </body>
  
  </html>
