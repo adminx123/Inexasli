@@ -77,8 +77,6 @@
      </div>
  
 
-     <div class="filingStatus" style="display: none;">
-        <form id="websiteDesignForm">
             <h2 class="tooltip1" data-tooltip="What your legally status is for tax purposes">
                 Select Filing Status<span class="tooltip1-content"></span>
             </h2>
@@ -87,8 +85,6 @@
                     <!-- The select element will be created and populated by JavaScript -->
                 </div>
             </div>
-        </form>
-    </div>
      
  
      <div class="specifics" style="display: none;">
@@ -494,32 +490,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 subregionContainer.style.display = 'none';
             }
             
-            // Step 2: Check criteria for showing filing status
-            const subregion = subregionDropdown.value;
-            const residencyValue = residency.value;
-            const hasValidResidency = country && residencyValue && (subregion || country === 'OTHER');
-            
-            if (hasValidResidency) {
-                // Create filing status dropdown if needed
-                if (filingStatusContainer.children.length === 0) {
-                    updateFilingStatus(country, getLocal('fillingStatus'));
-                }
-                filingStatusDiv.style.display = 'block';
-            } else {
-                filingStatusDiv.style.display = 'none';
-            }
+            // Step 2: Always update filing status based on current country
+            // No visibility toggling, always keep the filing status visible
+            updateFilingStatus(country, getLocal('fillingStatus'));
             
             // Step 3: Update specific fields visibility based on filing status
             updateDependantsVisibility();
             updateMaritalStatusVisibility();
             updateSpecificsVisibility();
             
-            // Step 4: Update proceed button state
+            // Step 4: Update proceed button state if it exists
             const filingStatus = document.getElementById('filingStatus')?.value;
-            if (country && (subregion || country === 'OTHER') && residencyValue && filingStatus) {
-                proceedButton.classList.remove('disabled');
-            } else {
-                proceedButton.classList.add('disabled');
+            if (proceedButton) {
+                if (country && (subregion || country === 'OTHER') && residencyValue && filingStatus) {
+                    proceedButton.classList.remove('disabled');
+                } else {
+                    proceedButton.classList.add('disabled');
+                }
             }
             
             console.log('Form progress updated:', {
@@ -527,8 +514,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 subregion,
                 residency: residencyValue,
                 filingStatus,
-                showFilingStatus: hasValidResidency,
-                proceedEnabled: !proceedButton.classList.contains('disabled')
+                filingStatusCreated: !!document.getElementById('filingStatus')
             });
         }
 
