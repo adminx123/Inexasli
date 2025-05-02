@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="data-content">${content}</div>
             `;
             
-            // Mark intro page as visited when loaded
+            //  Mark intro page as visited when loaded
             setLocal('introVisited', 'visited', 365);
 
             const scripts = dataContainer.querySelectorAll('script');
