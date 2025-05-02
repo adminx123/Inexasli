@@ -537,30 +537,13 @@ function initIntroForm() {
             return; // Not all required fields are filled
         }
         
-        // All fields are valid, proceed to income tab
-        // Get parent window (since this is loaded inside a container)
-        const parentWindow = window.parent || window;
+        // All fields are valid
+        // Mark intro as visited in localStorage for the tab flow system
+        setLocalValue('introVisited', 'visited');
+        console.log("Marked intro as visited");
         
-        // First, close the intro container
-        const introContainer = parentWindow.document.querySelector('.data-container-intro');
-        if (introContainer && introContainer.dataset.state === 'expanded') {
-            const introClose = introContainer.querySelector('.close-data-container');
-            if (introClose) {
-                introClose.click(); 
-            }
-        }
-        
-        // Wait a brief moment to ensure intro is closed
-        setTimeout(() => {
-            // Next, open the income container
-            const incomeContainer = parentWindow.document.querySelector('.data-container-income');
-            if (incomeContainer && incomeContainer.dataset.state === 'collapsed') {
-                const incomeLabel = incomeContainer.querySelector('.data-label');
-                if (incomeLabel) {
-                    incomeLabel.click();
-                }
-            }
-        }, 300);
+        // We'll no longer automatically close this tab or open another
+        // Instead, let the user navigate manually and let the tab flow system handle guidance
     }
     
     // Initialize auto-transition
