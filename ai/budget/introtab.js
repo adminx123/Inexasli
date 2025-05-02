@@ -28,8 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Intro container management
     let introInitialized = false;
-    
-
 
     function initializeIntroForm(container) {
         // Remove the check for introInitialized to allow reinitializing
