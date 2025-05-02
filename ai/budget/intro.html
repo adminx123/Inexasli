@@ -260,7 +260,8 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+// Removed DOMContentLoaded wrapper to ensure this code runs when dynamically loaded
+(function() {
     // Polyfill for setLocal/getLocal if not present
     const setLocal = window.setLocal || function (key, value, days) {
         try { localStorage.setItem(key, encodeURIComponent(value)); } catch (e) { console.error(e); }
@@ -312,7 +313,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Populate subregion dropdown based on selected country
-    function updateSubregionDropdown(country) {
+    window.updateSubregionDropdown = function(country) {
+        if (!subregionDropdown) {
+            console.error('Subregion dropdown not found');
+            return;
+        }
+        
         subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
         const savedSubregion = getLocal('selectedSubregion');
         
@@ -328,7 +334,10 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             document.getElementById('subregionContainer').style.display = 'none';
         }
-    }
+        
+        // Debug output
+        console.log(`Updating subregion for country: ${country}, options count: ${subregionDropdown.options.length}`);
+    };
     
     // Show/hide dependants container based on filing status
     function updateDependantsVisibility() {
@@ -440,10 +449,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize - restore saved values
     function initializeForm() {
+        // Check if dropdowns are available in the DOM
+        if (!countryDropdown || !subregionDropdown) {
+            console.error('Country or subregion dropdown not found');
+            return;
+        }
+        
         // Restore saved country and update related fields
         if (getLocal('selectedCountry')) {
             countryDropdown.value = getLocal('selectedCountry');
-            updateSubregionDropdown(countryDropdown.value);
+            window.updateSubregionDropdown(countryDropdown.value);
             updateFilingStatusOptions(countryDropdown.value);
         }
         
@@ -487,28 +502,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Event listeners
-    countryDropdown.addEventListener('change', function() {
-        const selectedCountry = this.value;
-        setLocal('selectedCountry', selectedCountry, 365);
-        updateSubregionDropdown(selectedCountry);
-        updateFilingStatusOptions(selectedCountry);
-    });
+    // Event listeners - Make sure they're attached directly, not inside a DOMContentLoaded
+    if (countryDropdown) {
+        // Remove any existing listeners first
+        const newCountryDropdown = countryDropdown.cloneNode(true);
+        countryDropdown.parentNode.replaceChild(newCountryDropdown, countryDropdown);
+        
+        // Now attach the event listener to the fresh element
+        newCountryDropdown.addEventListener('change', function() {
+            const selectedCountry = this.value;
+            console.log("Country changed to:", selectedCountry);
+            setLocal('selectedCountry', selectedCountry, 365);
+            window.updateSubregionDropdown(selectedCountry);
+            updateFilingStatusOptions(selectedCountry);
+        });
+        
+        // Re-reference the dropdown after replacing it
+        countryDropdown = newCountryDropdown;
+    } else {
+        console.error('Country dropdown not found when attaching event listener');
+    }
     
-    subregionDropdown.addEventListener('change', function() {
-        setLocal('selectedSubregion', this.value, 365);
-    });
-    
-    residency.addEventListener('change', function() {
-        setLocal('residency', this.value, 365);
-    });
-    
-    filingStatusDropdown.addEventListener('change', function() {
-        setLocal('fillingStatus', this.value, 365);
-        updateDependantsVisibility();
-        updateMaritalStatusVisibility();
-        updateSpecificsVisibility();
-    });
+    if (subregionDropdown) {
+        subregionDropdown.addEventListener('change', function() {
+            setLocal('selectedSubregion', this.value, 365);
+        });
+    }
     
     // Save personal details changes
     ['ageSelf', 'ageSpouse'].forEach(id => {
@@ -537,9 +556,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Run initialization and setup
-    initializeForm();
-    setupAutoTransition();
-});
+    setTimeout(function() {
+        initializeForm();
+        setupAutoTransition();
+        
+        // Force trigger the updateSubregionDropdown if a country is already selected
+        if (countryDropdown && countryDropdown.value) {
+            console.log("Initial country value:", countryDropdown.value);
+            window.updateSubregionDropdown(countryDropdown.value);
+        }
+    }, 100);
+})();
 </script>
  </body>
  </html>
