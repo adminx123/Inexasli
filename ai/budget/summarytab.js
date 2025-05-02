@@ -26,6 +26,36 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     
     // Summary container management
+    let summaryInitialized = false;
+    
+    function initializeSummaryForm(container) {
+        // Remove the check for summaryInitialized to allow reinitializing
+        // when container is reopened
+        
+        summaryInitialized = true;
+
+        // Initialize tooltips using the centralized implementation
+        if (window.initializeTooltips) {
+            const cleanup = window.initializeTooltips(container);
+            // Store cleanup function on container for later use
+            if (cleanup && cleanup.cleanup) {
+                container._tooltipCleanup = cleanup.cleanup;
+            }
+        } else {
+            // Fallback script loading if toolTip.js hasn't been loaded yet
+            const tooltipScript = document.createElement('script');
+            tooltipScript.src = '/utility/toolTip.js?v=' + new Date().getTime();
+            tooltipScript.onload = function() {
+                if (window.initializeTooltips) {
+                    const cleanup = window.initializeTooltips(container);
+                    if (cleanup && cleanup.cleanup) {
+                        container._tooltipCleanup = cleanup.cleanup;
+                    }
+                }
+            };
+            document.head.appendChild(tooltipScript);
+        }
+    }
     
     async function loadStoredContent(dataContainer, url) {
         try {
@@ -38,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Update container with content
             dataContainer.innerHTML = `
-                <span class="close-data-container"></span>
+                <span class="close-data-container">×</span>
                 <span class="data-label">SUMMARY</span>
                 <div class="data-content">${content}</div>
             `;
@@ -47,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Mark summary page as visited when loaded
             setLocal('summaryVisited', 'visited', 365);
 
-            // Similar to incometab.js approach - scripts are appended to document body
+            // Process scripts like other tabs
             console.log('Summary tab - Processing scripts');
             const scripts = dataContainer.querySelectorAll('script');
             console.log('Summary tab - Found', scripts.length, 'script elements');
@@ -70,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         newScript.type = 'module';
                     }
                     
+                    newScript.onerror = () => {}; // Empty error handler
                     document.body.appendChild(newScript);
                 } else if (!script.src) {
                     console.log('Summary tab - Adding inline script to body, length:', script.textContent.length);
@@ -78,6 +109,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.body.appendChild(newScript);
                 }
             });
+
+            // Initialize the summary form
+            initializeSummaryForm(dataContainer);
 
             // DIRECT UPDATE: Immediately update all the financial values 
             // without waiting for other scripts to load
@@ -223,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                z-index: 10001;
             }
 
             .data-container-summary.expanded {
@@ -299,6 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .data-container-summary.collapsed {
                     width: 28px;
                     height: 100px;
+                    z-index: 10001;
                 }
 
                 .data-container-summary.expanded {
@@ -359,15 +395,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const isExpanded = dataContainer.dataset.state === 'expanded';
 
             if (isExpanded) {
-                dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('collapsed');
+                dataContainer.className = 'data-container-summary collapsed';
                 dataContainer.dataset.state = 'collapsed';
-                dataContainer.innerHTML = `
-                    <span class="data-label">SUMMARY</span>
-                `;
+                dataContainer.innerHTML = `<span class="data-label">SUMMARY</span>`;
             } else {
-                dataContainer.classList.remove('collapsed');
-                dataContainer.classList.add('expanded');
+                dataContainer.className = 'data-container-summary expanded';
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/budget/summary.html');
             }
@@ -375,27 +407,17 @@ document.addEventListener('DOMContentLoaded', function () {
             // Re-bind event listeners
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');
-
-            if (newLabel) {
-                newLabel.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
-
-            if (newClose) {
-                newClose.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
+            
+            if (newLabel) newLabel.addEventListener('click', function (e) { e.preventDefault(); toggleDataContainer(); });
+            if (newClose) newClose.addEventListener('click', function (e) { e.preventDefault(); toggleDataContainer(); });
         }
 
         // Add outside click listener to collapse when expanded
         document.addEventListener('click', function (e) {
             if (dataContainer && dataContainer.dataset.state === 'expanded') {
                 const isClickInside = dataContainer.contains(e.target);
-                if (!isClickInside) {
+                const isNavButton = e.target.closest('.nav-btn');
+                if (!isClickInside && !isNavButton) {
                     toggleDataContainer();
                 }
             }
