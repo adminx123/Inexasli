@@ -26,7 +26,10 @@ function initFrequencyButtons() {
     
     console.log('Found summary frequency placeholder:', placeholder);
     
-    // Create container for the frequency select
+    // Clear any existing content in the placeholder
+    placeholder.innerHTML = '';
+    
+    // Create container for the frequency select with a specific ID that matches what summary.html expects
     const hiddenSelect = document.createElement('select');
     hiddenSelect.id = 'frequency';
     hiddenSelect.style.display = 'none';
@@ -84,13 +87,13 @@ function initFrequencyButtons() {
         
         // Add hover effects
         button.addEventListener('mouseover', function() {
-            if (button.dataset.value !== hiddenSelect.value) {
+            if (hiddenSelect.value !== button.dataset.value) {
                 button.style.backgroundColor = '#FFFFFF';
             }
         });
         
         button.addEventListener('mouseout', function() {
-            if (button.dataset.value !== hiddenSelect.value) {
+            if (hiddenSelect.value !== button.dataset.value) {
                 button.style.backgroundColor = '#f5f5f5';
             }
         });
@@ -108,6 +111,11 @@ function initFrequencyButtons() {
         
         // Add click handler to update the frequency
         button.addEventListener('click', function() {
+            // If already selected, do nothing
+            if (hiddenSelect.value === button.dataset.value) {
+                return;
+            }
+            
             // Update all button styles
             buttonWrapper.querySelectorAll('button').forEach(btn => {
                 btn.style.backgroundColor = '#f5f5f5';
@@ -121,10 +129,29 @@ function initFrequencyButtons() {
             // Update the hidden select value
             hiddenSelect.value = button.dataset.value;
             
+            // DIRECT UPDATE METHOD - Update elements directly
+            // This is a backup approach in case the event doesn't propagate
+            directlyUpdateElements(button.dataset.value);
+            
             // Dispatch a change event to trigger the updateFreeContent function
-            hiddenSelect.dispatchEvent(new Event('change'));
+            const changeEvent = new Event('change', { bubbles: true });
+            hiddenSelect.dispatchEvent(changeEvent);
             
             console.log('Frequency changed to:', button.dataset.value);
+            
+            // Try standard technique for calling global functions
+            if (typeof window.updateFreeContent === 'function') {
+                console.log('Calling global updateFreeContent()');
+                window.updateFreeContent();
+                
+                // If premium, update that too
+                if (typeof window.updatePremiumContent === 'function' && getLocal('authenticated') === 'paid') {
+                    console.log('Calling global updatePremiumContent()');
+                    window.updatePremiumContent();
+                }
+            } else {
+                console.warn('updateFreeContent not found as a global function');
+            }
         });
         
         buttonWrapper.appendChild(button);
@@ -133,6 +160,83 @@ function initFrequencyButtons() {
     // Add the button wrapper to the placeholder
     placeholder.appendChild(buttonWrapper);
     console.log('Frequency buttons injected successfully');
+    
+    // Execute direct update once immediately to make sure initial values are correct
+    directlyUpdateElements('annual');
+}
+
+// Function to directly update elements based on frequency - fallback method
+function directlyUpdateElements(frequency) {
+    console.log('Directly updating elements for frequency:', frequency);
+    
+    const multiplier = getFrequencyMultiplier(frequency);
+    
+    // List of elements to update and their corresponding localStorage keys
+    // Only update income and expense related items, not static values like assets/liabilities
+    const elementsToUpdate = [
+        { id: 'annual_income_sum', key: 'ANNUALINCOME' },
+        { id: 'ANNUALEXPENSESUM', key: 'ANNUALEXPENSESUM' },
+        { id: 'ESSENTIAL', key: 'ESSENTIAL' },
+        { id: 'DISCRETIONARY', key: 'DISCRETIONARY' },
+        { id: 'HOUSING', key: 'HOUSING' },
+        { id: 'TRANSPORTATION', key: 'TRANSPORTATION' },
+        { id: 'DEPENDANT', key: 'DEPENDANT' },
+        { id: 'DEBT', key: 'DEBT' }
+    ];
+    
+    // Update each element
+    elementsToUpdate.forEach(item => {
+        const element = document.getElementById(item.id);
+        if (element) {
+            const value = parseFloat(getLocal(item.key)) || 0;
+            element.textContent = '$' + (value * multiplier).toFixed(2);
+            console.log(`Updated ${item.id} to $${(value * multiplier).toFixed(2)}`);
+        }
+    });
+    
+    // Static values that shouldn't change with frequency
+    const staticElements = [
+        { id: 'ASSETS', key: 'ASSETS' },
+        { id: 'LIABILITIES', key: 'LIABILITIES' },
+        { id: 'NETWORTH', key: null, calcFunc: () => 
+            (parseFloat(getLocal('ASSETS')) || 0) - (parseFloat(getLocal('LIABILITIES')) || 0) 
+        }
+    ];
+    
+    // Update static elements without applying frequency multiplier
+    staticElements.forEach(item => {
+        const element = document.getElementById(item.id);
+        if (element) {
+            const value = item.calcFunc ? item.calcFunc() : (parseFloat(getLocal(item.key)) || 0);
+            element.textContent = '$' + value.toFixed(2);
+            console.log(`Updated static element ${item.id} to $${value.toFixed(2)}`);
+        }
+    });
+    
+    // If premium, update DISPOSABLEINCOME too
+    if (getLocal('authenticated') === 'paid') {
+        const disposableElement = document.getElementById('DISPOSABLEINCOME');
+        if (disposableElement) {
+            const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
+            const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
+            const regionalTax = parseFloat(getLocal('REGIONALTAXANNUAL')) || 0;
+            const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
+            const obligations = parseFloat(getLocal('OTHEROBLIGATIONANNUAL')) || 0;
+            
+            const disposableIncome = income - expenses - regionalTax - subregionalTax - obligations;
+            disposableElement.textContent = '$' + (disposableIncome * multiplier).toFixed(2);
+            console.log(`Updated DISPOSABLEINCOME to $${(disposableIncome * multiplier).toFixed(2)}`);
+        }
+    }
+}
+
+// Helper function to get frequency multiplier
+function getFrequencyMultiplier(frequency) {
+    switch (frequency) {
+        case 'monthly': return 1 / 12;
+        case 'weekly': return 1 / 52;
+        default: return 1; // annual
+    }
 }
 
 // Observer to handle dynamic DOM changes - similar to frequency.js approach
