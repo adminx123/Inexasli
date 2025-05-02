@@ -6,9 +6,6 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { setLocal } from '/utility/setlocal.js';
-import { getLocal } from '/utility/getlocal.js';
-
 document.addEventListener('DOMContentLoaded', function () {
     // Dependency fallbacks
     const setLocal = window.setLocal || function (key, value, days) {
@@ -18,9 +15,50 @@ document.addEventListener('DOMContentLoaded', function () {
             // Error handling without console logging
         }
     };
+    
+    const getLocal = window.getLocal || function (key) {
+        try {
+            const value = localStorage.getItem(key);
+            return value ? decodeURIComponent(value) : null;
+        } catch (error) {
+            // Error handling without console logging
+            return null;
+        }
+    };
 
-    // Track initialization state for intro form
+    // Intro container management
     let introInitialized = false;
+    
+
+
+    function initializeIntroForm(container) {
+        // Remove the check for introInitialized to allow reinitializing
+        // when container is reopened
+        
+        introInitialized = true;
+
+        // Initialize tooltips using the centralized implementation
+        if (window.initializeTooltips) {
+            const cleanup = window.initializeTooltips(container);
+            // Store cleanup function on container for later use
+            if (cleanup && cleanup.cleanup) {
+                container._tooltipCleanup = cleanup.cleanup;
+            }
+        } else {
+            // Fallback script loading if toolTip.js hasn't been loaded yet
+            const tooltipScript = document.createElement('script');
+            tooltipScript.src = '/utility/toolTip.js?v=' + new Date().getTime();
+            tooltipScript.onload = function() {
+                if (window.initializeTooltips) {
+                    const cleanup = window.initializeTooltips(container);
+                    if (cleanup && cleanup.cleanup) {
+                        container._tooltipCleanup = cleanup.cleanup;
+                    }
+                }
+            };
+            document.head.appendChild(tooltipScript);
+        }
+    }
 
     async function loadStoredContent(dataContainer, url) {
         try {
@@ -40,9 +78,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
-                const newScript = document.createElement('script');
-                if (script.src) {
-                    newScript.src = script.src + '?v=' + new Date().getTime();
+                if (script.src && ![
+                    'introtab.js', 'setlocal.js', 'getlocal.js'
+                ].some(exclude => script.src.includes(exclude))) {
+                    const newScript = document.createElement('script');
+                    newScript.src = script.src + '?v=' + new Date().getTime(); // Prevent caching
                     if (
                         script.src.includes('setlocal.js') ||
                         script.src.includes('getlocal.js') ||
@@ -53,658 +93,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     newScript.onerror = () => {}; // Error handling without console logging
                     document.body.appendChild(newScript);
-                } else {
+                } else if (!script.src) {
+                    const newScript = document.createElement('script');
                     newScript.textContent = script.textContent;
                     document.body.appendChild(newScript);
                 }
             });
 
-            initializeIntroLogic(dataContainer);
+            initializeIntroForm(dataContainer);
         } catch (error) {
             // Error handling without console logging
         }
-    }
-
-    function initializeIntroForm(container) {
-        // Preserve original DOM methods
-        const originalQuerySelector = document.querySelector.bind(document);
-        const originalQuerySelectorAll = document.querySelectorAll.bind(document);
-        const originalGetElementById = document.getElementById.bind(document);
-
-        // Override DOM methods to prioritize container
-        document.querySelector = (selector) => container.querySelector(selector) || originalQuerySelector(selector);
-        document.querySelectorAll = (selector) => container.querySelectorAll(selector).length > 0 ? container.querySelectorAll(selector) : originalQuerySelectorAll(selector);
-        document.getElementById = (id) => container.querySelector(`#${id}`) || originalGetElementById(id);
-
-        // Declare `countryDropdown` only once at the top of the file
-        let countryDropdown = document.getElementById('country');
-
-        // Ensure `countryDropdown` is declared only once and reused
-        let subregionDropdown = document.getElementById('subregion');
-
-        const filingStatusContainer = document.getElementById('filingStatusContainer');
-        const subregionContainer = document.getElementById('subregionContainer');
-        const filingStatusSection = document.getElementById('filingStatusSection');
-        const dependantsContainer = document.querySelector('.dependantsContainer');
-        const residencyStatus = document.getElementById('residencyStatus');
-
-        const residency = document.getElementById('residency');
-        if (residency) {
-            const savedResidency = getLocal('residency');
-            if (savedResidency) {
-                residency.value = savedResidency;
-            }
-            residency.addEventListener('change', () => {
-                setLocal('residency', residency.value, 365);
-                toggleFilingStatusVisibility();
-            });
-            residency.style.display = 'block';
-        }
-
-        const filingOptions = {
-            CAN: [
-                { value: 'single_no_dependants', text: 'Single, No Dependants' },
-                { value: 'single_with_dependants', text: 'Single with Dependants' },
-                { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
-                { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
-                { value: 'single_caregiver', text: 'Single, Caregiver' },
-                { value: 'common_law_no_dependants', text: 'Common-Law, No Dependants' },
-                { value: 'common_law_with_dependants', text: 'Common-Law with Dependants' },
-                { value: 'common_law_with_disabled_dependants', text: 'Common-Law with Disabled Dependants' },
-                { value: 'common_law_self_disabled', text: 'Common-Law, Self-Disabled' },
-                { value: 'common_law_spouse_disabled', text: 'Common-Law, Spouse-Disabled' },
-                { value: 'common_law_caregiver', text: 'Common-Law, Caregiver' },
-                { value: 'married_no_dependants', text: 'Married, No Dependants' },
-                { value: 'married_with_dependants', text: 'Married with Dependants' },
-                { value: 'married_with_disabled_dependants', text: 'Married with Disabled Dependants' },
-                { value: 'married_self_disabled', text: 'Married, Self-Disabled' },
-                { value: 'married_spouse_disabled', text: 'Married, Spouse-Disabled' },
-                { value: 'married_caregiver', text: 'Married, Caregiver' },
-                { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
-                { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
-                { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
-                { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
-                { value: 'separated_with_dependants', text: 'Separated with Dependants' },
-                { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
-            ],
-            USA: [
-                { value: 'single_no_dependants', text: 'Single, No Dependants' },
-                { value: 'single_with_dependants', text: 'Single with Dependants' },
-                { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
-                { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
-                { value: 'single_caregiver', text: 'Single, Caregiver' },
-                { value: 'married_filing_jointly_no_dependants', text: 'Married Filing Jointly, No Dependants' },
-                { value: 'married_filing_jointly_with_dependants', text: 'Married Filing Jointly with Dependants' },
-                { value: 'married_filing_jointly_with_disabled_dependants', text: 'Married Filing Jointly with Disabled Dependants' },
-                { value: 'married_filing_jointly_self_disabled', text: 'Married Filing Jointly, Self-Disabled' },
-                { value: 'married_filing_jointly_spouse_disabled', text: 'Married Filing Jointly, Spouse-Disabled' },
-                { value: 'married_filing_jointly_caregiver', text: 'Married Filing Jointly, Caregiver' },
-                { value: 'married_filing_separately_no_dependants', text: 'Married Filing Separately, No Dependants' },
-                { value: 'married_filing_separately_with_dependants', text: 'Married Filing Separately with Dependants' },
-                { value: 'married_filing_separately_with_disabled_dependants', text: 'Married Filing Separately with Disabled Dependants' },
-                { value: 'married_filing_separately_self_disabled', text: 'Married Filing Separately, Self-Disabled' },
-                { value: 'head_of_household_no_dependants', text: 'Head of Household, No Dependants' },
-                { value: 'head_of_household_with_dependants', text: 'Head of Household with Dependants' },
-                { value: 'head_of_household_with_disabled_dependants', text: 'Head of Household with Disabled Dependants' },
-                { value: 'head_of_household_caregiver', text: 'Head of Household, Caregiver' },
-                { value: 'qualifying_widow_no_dependants', text: 'Qualifying Widow(er), No Dependants' },
-                { value: 'qualifying_widow_with_dependants', text: 'Qualifying Widow(er) with Dependants' },
-                { value: 'qualifying_widow_with_disabled_dependants', text: 'Qualifying Widow(er) with Disabled Dependants' }
-            ],
-            UK: [
-                { value: 'single_no_dependants', text: 'Single, No Dependants' },
-                { value: 'single_with_dependants', text: 'Single with Dependants' },
-                { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
-                { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
-                { value: 'single_caregiver', text: 'Single, Caregiver' },
-                { value: 'married_or_civil_partnership_no_dependants', text: 'Married or Civil Partnership, No Dependants' },
-                { value: 'married_or_civil_partnership_with_dependants', text: 'Married or Civil Partnership with Dependants' },
-                { value: 'married_or_civil_partnership_with_disabled_dependants', text: 'Married or Civil Partnership with Disabled Dependants' },
-                { value: 'married_or_civil_partnership_self_disabled', text: 'Married or Civil Partnership, Self-Disabled' },
-                { value: 'married_or_civil_partnership_spouse_disabled', text: 'Married or Civil Partnership, Spouse-Disabled' },
-                { value: 'married_or_civil_partnership_caregiver', text: 'Married or Civil Partnership, Caregiver' },
-                { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
-                { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
-                { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
-                { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
-                { value: 'separated_with_dependants', text: 'Separated with Dependants' },
-                { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
-            ],
-            AUS: [
-                { value: 'single_no_dependants', text: 'Single, No Dependants' },
-                { value: 'single_with_dependants', text: 'Single with Dependants' },
-                { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
-                { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
-                { value: 'single_caregiver', text: 'Single, Caregiver' },
-                { value: 'married_or_de_facto_no_dependants', text: 'Married or De Facto, No Dependants' },
-                { value: 'married_or_de_facto_with_dependants', text: 'Married or De Facto with Dependants' },
-                { value: 'married_or_de_facto_with_disabled_dependants', text: 'Married or De Facto with Disabled Dependants' },
-                { value: 'married_or_de_facto_self_disabled', text: 'Married or De Facto, Self-Disabled' },
-                { value: 'married_or_de_facto_spouse_disabled', text: 'Married or De Facto, Spouse-Disabled' },
-                { value: 'married_or_de_facto_caregiver', text: 'Married or De Facto, Caregiver' },
-                { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
-                { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
-                { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
-                { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
-                { value: 'separated_with_dependants', text: 'Separated with Dependants' },
-                { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
-            ],
-            OTHER: [
-                { value: 'single_no_dependants', text: 'Single, No Dependants' },
-                { value: 'single_with_dependants', text: 'Single with Dependants' },
-                { value: 'single_with_disabled_dependants', text: 'Single with Disabled Dependants' },
-                { value: 'single_self_disabled', text: 'Single, Self-Disabled' },
-                { value: 'single_caregiver', text: 'Single, Caregiver' },
-                { value: 'coupled_no_dependants', text: 'Coupled, No Dependants' },
-                { value: 'coupled_with_dependants', text: 'Coupled with Dependants' },
-                { value: 'coupled_with_disabled_dependants', text: 'Coupled with Disabled Dependants' },
-                { value: 'coupled_self_disabled', text: 'Coupled, Self-Disabled' },
-                { value: 'coupled_spouse_disabled', text: 'Coupled, Spouse-Disabled' },
-                { value: 'coupled_caregiver', text: 'Coupled, Caregiver' },
-                { value: 'widowed_no_dependants', text: 'Widowed, No Dependants' },
-                { value: 'widowed_with_dependants', text: 'Widowed with Dependants' },
-                { value: 'widowed_with_disabled_dependants', text: 'Widowed with Disabled Dependants' },
-                { value: 'separated_no_dependants', text: 'Separated, No Dependants' },
-                { value: 'separated_with_dependants', text: 'Separated with Dependants' },
-                { value: 'separated_with_disabled_dependants', text: 'Separated with Disabled Dependants' }
-            ]
-        };
-
-        const subregionMap = {
-            CAN: ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Northwest Territories", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"],
-            USA: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
-            UK: ["England", "Scotland", "Wales", "Northern Ireland", "Greater London", "West Midlands", "South East", "North West", "East of England", "Yorkshire and The Humber", "South West", "East Midlands", "North East"],
-            AUS: ["New South Wales", "Victoria", "Queensland", "South Australia", "Western Australia", "Tasmania", "Australian Capital Territory", "Northern Territory"],
-            OTHER: ["Province", "State", "Region", "District", "Territory", "Prefecture", "County", "Municipality"]
-        };
-
-        const savedCountry = getLocal('selectedCountry');
-        const savedSubregion = getLocal('selectedSubregion');
-        const savedStatus = getLocal('fillingStatus');
-
-        if (savedCountry) {
-            countryDropdown.value = savedCountry;
-            updateSubregionDropdown(savedCountry, savedSubregion);
-            updateFilingStatus(savedCountry, savedStatus);
-        }
-
-        // Add a debug log in the country dropdown change event to help troubleshoot
-        countryDropdown.addEventListener('change', function() {
-            const selectedCountry = this.value;
-            setLocal('selectedCountry', selectedCountry, 365);
-            
-            // Clear any previously selected subregion
-            setLocal('selectedSubregion', '', 365);
-            
-            // Always call updateSubregionDropdown when country changes
-            updateSubregionDropdown(selectedCountry);
-            
-            // Update other UI elements
-            updateFilingStatus(selectedCountry);
-            updateFormVisibility();
-            
-            if (residencyStatus) {
-                residencyStatus.style.display = 'block';
-            }
-        });
-
-        subregionDropdown.addEventListener('change', () => {
-            const subregion = subregionDropdown.value;
-            setLocal('selectedSubregion', subregion, 365);
-            
-            // Only update the filing status section visibility, not the personal details
-            const country = countryDropdown.value;
-            const residencyValue = getLocal('residency');
-            
-            // Only show filing status if all three tax residency fields are selected
-            const filingStatusDiv = document.querySelector('.filingStatus');
-            if (country && residencyValue && (subregion || country === 'OTHER')) {
-                if (filingStatusDiv) filingStatusDiv.style.display = 'block';
-                updateFilingStatus(country);
-            } else {
-                if (filingStatusDiv) filingStatusDiv.style.display = 'none';
-            }
-            
-            // Ensure personal details remain hidden unless filing status is selected
-            const specificsDiv = document.querySelector('.specifics');
-            const filingStatus = getLocal('fillingStatus');
-            if (!filingStatus && specificsDiv) {
-                specificsDiv.style.display = 'none';
-            }
-        });
-
-        function updateSubregionDropdown(country, savedSubregion) {
-            const subregionDropdown = document.getElementById('subregion');
-            const subregionContainer = document.getElementById('subregionContainer');
-        
-            // Clear existing options
-            subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
-        
-            // Populate subregion dropdown based on the selected country
-            if (country && subregionMap[country]) {
-                subregionMap[country].forEach(subregionCode => {
-                    const option = document.createElement('option');
-                    option.text = subregionCode;
-                    option.value = subregionCode;
-                    if (savedSubregion === subregionCode) option.selected = true;
-                    subregionDropdown.appendChild(option);
-                });
-                subregionContainer.style.display = 'block';
-                subregionDropdown.style.display = 'block';
-            } else {
-                subregionContainer.style.display = 'none';
-                subregionDropdown.style.display = 'none';
-            }
-        }
-        
-        // Ensure the function is called when the country changes
-        if (countryDropdown) {
-            countryDropdown.addEventListener('change', () => {
-                const country = countryDropdown.value;
-                const savedSubregion = getLocal('selectedSubregion');
-                updateSubregionDropdown(country, savedSubregion);
-            });
-        }
-
-        function updateFilingStatus(country, savedStatus) {
-            // Get the required elements
-            const filingStatusContainer = document.getElementById('filingStatusContainer');
-            const filingStatusSection = document.getElementById('filingStatusSection');
-            const filingStatusDiv = document.querySelector('.filingStatus');
-            
-            // Only proceed if we have all required fields
-            const subregion = getLocal('selectedSubregion');
-            const residencyValue = getLocal('residency');
-            
-            // Clear the container first
-            if (filingStatusContainer) {
-                filingStatusContainer.innerHTML = '';
-            } else {
-                return;
-            }
-            
-            // Check if we have all the required tax residency elements selected
-            if (country && residencyValue && (subregion || country === 'OTHER') && filingOptions[country]) {
-                // Create the select element with proper styling
-                const filingStatusDropdown = document.createElement('select');
-                filingStatusDropdown.id = 'filingStatus';
-                filingStatusDropdown.style.width = "345px";
-                filingStatusDropdown.style.maxWidth = "100%";
-                filingStatusDropdown.style.margin = "0 auto";
-                filingStatusDropdown.style.display = "block"; 
-                filingStatusDropdown.style.padding = "8px";
-                
-                // Add the default option
-                const defaultOption = document.createElement('option');
-                defaultOption.value = "";
-                defaultOption.text = "Select Filing Status";
-                filingStatusDropdown.appendChild(defaultOption);
-                
-                // Add all the options for the selected country
-                filingOptions[country].forEach(option => {
-                    const statusOption = document.createElement('option');
-                    statusOption.value = option.value;
-                    statusOption.text = option.text;
-                    if (savedStatus === option.value) {
-                        statusOption.selected = true;
-                    }
-                    filingStatusDropdown.appendChild(statusOption);
-                });
-                
-                // Add event listener to handle changes
-                filingStatusDropdown.addEventListener('change', () => {
-                    const selectedStatus = filingStatusDropdown.value;
-                    setLocal('fillingStatus', selectedStatus, 365);
-                    updateDependantsVisibility();
-                    updateMaritalStatusVisibility();
-                    updateSpecificsVisibility();
-                    updateFormVisibility();
-                });
-                
-                // Add the dropdown to the container
-                filingStatusContainer.appendChild(filingStatusDropdown);
-                
-                // If a saved status exists, set it and update relevant UI
-                if (savedStatus) {
-                    filingStatusDropdown.value = savedStatus;
-                    updateDependantsVisibility();
-                    updateMaritalStatusVisibility();
-                    updateSpecificsVisibility();
-                }
-                
-                // Show both the filing status div and section
-                if (filingStatusDiv) filingStatusDiv.style.display = 'block';
-                if (filingStatusSection) filingStatusSection.style.display = 'block';
-            } else {
-                // Hide if conditions aren't met
-                if (filingStatusDiv) filingStatusDiv.style.display = 'none';
-                if (filingStatusSection) filingStatusSection.style.display = 'none';
-            }
-        }
-
-        function updateFormVisibility() {
-            // Get all required stored values
-            const country = getLocal('selectedCountry');
-            const subregion = getLocal('selectedSubregion');
-            const residencyValue = getLocal('residency');
-            const filingStatus = getLocal('fillingStatus');
-            
-            // Get all relevant DOM elements
-            const residencyStatus = document.getElementById('residencyStatus');
-            const subregionContainer = document.getElementById('subregionContainer');
-            const filingStatusSection = document.getElementById('filingStatusSection');
-            const filingStatusDiv = document.querySelector('.filingStatus');
-            const specificsDiv = document.querySelector('.specifics');
-        
-            // Step 1: Always show all tax residency elements (these should always be visible)
-            if (residencyStatus) residencyStatus.style.display = 'block';
-            if (subregionContainer) subregionContainer.style.display = 'block';
-            
-            // Step 2: Show filing status only when all three tax residency fields have values
-            if (country && residencyValue && (subregion || country === 'OTHER')) {
-                if (filingStatusDiv) filingStatusDiv.style.display = 'block';
-            } else {
-                if (filingStatusDiv) filingStatusDiv.style.display = 'none';
-            }
-            
-            // Step 3: Show personal details ONLY when ALL requirements are met:
-            // - All tax residency fields must have selections
-            // - Filing status must be selected
-            const allResidencyFieldsSelected = country && residencyValue && (subregion || country === 'OTHER');
-            if (allResidencyFieldsSelected && filingStatus) {
-                if (specificsDiv) specificsDiv.style.display = 'block';
-            } else {
-                if (specificsDiv) specificsDiv.style.display = 'none';
-            }
-            
-            // Enable the proceed button only when all required fields are filled
-            const proceedButton = document.getElementById('proceedButton');
-            if (proceedButton) {
-                if (country && (subregion || country === 'OTHER') && residencyValue && filingStatus) {
-                    proceedButton.classList.remove('disabled');
-                } else {
-                    proceedButton.classList.add('disabled');
-                }
-            }
-        }
-        
-        // Update visibility on page load
-        updateFormVisibility();
-        
-        // Attach event listeners to update visibility dynamically
-        if (countryDropdown) {
-            countryDropdown.addEventListener('change', updateFormVisibility);
-        }
-        if (subregionDropdown) {
-            subregionDropdown.addEventListener('change', updateFormVisibility);
-        }
-        if (residency) {
-            residency.addEventListener('change', updateFormVisibility);
-        }
-        const filingStatusDropdown = document.getElementById('filingStatus');
-        if (filingStatusDropdown) {
-            filingStatusDropdown.addEventListener('change', updateFormVisibility);
-        }
-        const numericInputs = ['ageSelf', 'ageSpouse'];
-        numericInputs.forEach(id => {
-            const input = document.getElementById(id);
-            if (input) {
-                const savedValue = getLocal(id);
-                if (savedValue) input.value = savedValue;
-                input.addEventListener('change', () => {
-                    setLocal(id, input.value, 365);
-                    updateFormVisibility();
-                });
-            }
-        });
-
-        const selectInputs = ['employmentStatus'];
-        selectInputs.forEach(id => {
-            const select = document.getElementById(id);
-            if (select) {
-                const savedValue = getLocal(id);
-                if (savedValue) select.value = savedValue;
-                select.addEventListener('change', () => {
-                    setLocal(id, select.value, 365);
-                    updateFormVisibility();
-                });
-            }
-        });
-
-        const employmentStatusSpouse = document.getElementById('employmentStatusSpouse');
-        if (employmentStatusSpouse) {
-            const savedEmploymentStatusSpouse = getLocal('employmentStatusSpouse');
-            if (savedEmploymentStatusSpouse) {
-                employmentStatusSpouse.value = savedEmploymentStatusSpouse;
-            }
-            employmentStatusSpouse.addEventListener('change', () => {
-                setLocal('employmentStatusSpouse', employmentStatusSpouse.value, 365);
-            });
-        }
-
-        const textAreas = ['birthYearDisabledDependants'];
-        textAreas.forEach(id => {
-            const textarea = document.getElementById(id);
-            if (textarea) {
-                const savedValue = getLocal(id);
-                if (savedValue) textarea.value = savedValue;
-                textarea.addEventListener('change', () => {
-                    setLocal(id, textarea.value, 365);
-                    updateFormVisibility();
-                });
-            }
-        });
-
-        window.nextPage = function() {
-            const country = getLocal('selectedCountry');
-            const subregion = getLocal('selectedSubregion');
-            const fillingStatus = getLocal('fillingStatus');
-            const ageSelf = document.getElementById('ageSelf').value;
-            const ageSpouse = document.getElementById('ageSpouse').value;
-            const employmentStatus = document.getElementById('employmentStatus').value;
-
-            // Validation checks - keep all of these
-            if (!country) {
-                alert('Please select a country.');
-                return;
-            }
-            if (!subregion && country !== 'OTHER') {
-                alert('Please select a tax subregion.');
-                return;
-            }
-            if (!fillingStatus) {
-                alert('Please select a filing status.');
-                return;
-            }
-            if (!ageSelf) {
-                alert('Please enter your age.');
-                return;
-            }
-            if (!ageSpouse && [
-                'married_with_dependants',
-                'married_with_disabled_dependants',
-                'common_law_with_dependants',
-                'common_law_with_disabled_dependants',
-                'married_filing_jointly_with_dependants',
-                'married_filing_jointly_with_disabled_dependants',
-                'married_filing_separately_with_dependants',
-                'married_filing_separately_with_disabled_dependants',
-                'married_no_dependants',
-                'common_law_no_dependants',
-                'married_filing_jointly_no_dependants',
-                'married_filing_separately_no_dependants',
-                'married_or_civil_partnership_no_dependants',
-                'married_or_civil_partnership_with_dependants',
-                'married_or_de_facto_no_dependants',
-                'married_or_de_facto_with_dependants',
-                'coupled_no_dependants',
-                'coupled_with_dependants'
-            ].includes(fillingStatus)) {
-                alert('Please enter your spouse\'s age.');
-                return;
-            }
-            if (!employmentStatus) {
-                alert('Please select an employment status.');
-                return;
-            }
-
-            // First close the intro container
-            const introContainer = document.querySelector('.data-container-intro');
-            if (introContainer && introContainer.dataset.state === 'expanded') {
-                const introClose = introContainer.querySelector('.close-data-container');
-                if (introClose) {
-                    introClose.click();
-                } else {
-                    // Try to collapse it manually
-                    introContainer.className = 'data-container-intro collapsed';
-                    introContainer.dataset.state = 'collapsed';
-                    introContainer.innerHTML = `<span class="data-label">INTRO</span>`;
-                }
-            }
-
-            // Then expand the income container
-            const incomeContainer = document.querySelector('.data-container-income');
-            if (incomeContainer) {
-                // If the income tab is collapsed, expand it
-                if (incomeContainer.dataset.state === 'collapsed') {
-                    // Simply click the label to trigger the expansion
-                    const incomeLabel = incomeContainer.querySelector('.data-label');
-                    if (incomeLabel) {
-                        setTimeout(() => {
-                            incomeLabel.click();
-                        }, 300);
-                    } else {
-                        // Try to expand it manually if needed
-                        if (typeof window.expandIncomeTab === 'function') {
-                            window.expandIncomeTab();
-                        }
-                    }
-                }
-            }
-        };
-
-        function updateDependantsVisibility() {
-            const filingStatusDropdown = document.getElementById('filingStatus');
-            const selectedFilingStatus = filingStatusDropdown ? filingStatusDropdown.value : '';
-
-            const statusesWithDisabledDependants = [
-                'single_with_disabled_dependants',
-                'widowed_with_disabled_dependants',
-                'separated_with_disabled_dependants',
-                'married_with_disabled_dependants',
-                'common_law_with_disabled_dependants',
-                'coupled_with_disabled_dependants',
-                'qualifying_widow_with_disabled_dependants',
-                'married_filing_jointly_with_disabled_dependants',
-                'married_filing_separately_with_disabled_dependants',
-                'head_of_household_with_disabled_dependants',
-            ];
-
-            if (statusesWithDisabledDependants.includes(selectedFilingStatus)) {
-                dependantsContainer.style.display = 'block';
-                const birthYearField = document.getElementById('birthYearDisabledDependants');
-                const birthYearLabel = document.querySelector('label[for="birthYearDisabledDependants"]');
-                if (birthYearField && birthYearLabel) {
-                    birthYearField.style.display = 'block';
-                    birthYearLabel.style.display = 'block';
-                }
-            } else {
-                dependantsContainer.style.display = 'none';
-                const birthYearField = document.getElementById('birthYearDisabledDependants');
-                const birthYearLabel = document.querySelector('label[for="birthYearDisabledDependants"]');
-                if (birthYearField && birthYearLabel) {
-                    birthYearField.style.display = 'none';
-                    birthYearLabel.style.display = 'none';
-                }
-            }
-        }
-
-        function updateMaritalStatusVisibility() {
-            const filingStatusDropdown = document.getElementById('filingStatus');
-            const selectedFilingStatus = filingStatusDropdown ? filingStatusDropdown.value : '';
-
-            const singleStatuses = [
-                'single_no_dependants',
-                'single_with_dependants',
-                'single_with_disabled_dependants',
-                'single_self_disabled',
-                'single_caregiver',
-                'widowed_no_dependants',
-                'widowed_with_dependants',
-                'widowed_with_disabled_dependants',
-                'separated_no_dependants',
-                'separated_with_dependants',
-                'separated_with_disabled_dependants',
-                'head_of_household_no_dependants',
-                'head_of_household_with_dependants',
-                'head_of_household_with_disabled_dependants',
-                'head_of_household_caregiver',
-                'qualifying_widow_no_dependants',
-                'qualifying_widow_with_dependants',
-                'qualifying_widow_with_disabled_dependants'
-            ];
-
-            if (singleStatuses.includes(selectedFilingStatus) || !selectedFilingStatus) {
-                document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'none');
-            } else {
-                document.querySelectorAll('.spouseFields').forEach(field => field.style.display = 'block');
-            }
-        }
-
-        function updateSpecificsVisibility() {
-            const filingStatusDropdown = document.getElementById('filingStatus');
-            const specificsDiv = document.querySelector('.specifics');
-
-            if (filingStatusDropdown && filingStatusDropdown.value) {
-                specificsDiv.style.display = 'block';
-            } else {
-                specificsDiv.style.display = 'none';
-            }
-        }
-
-        function toggleFilingStatusVisibility() {
-            const residencyDropdown = document.getElementById('residency');
-            const filingStatusDiv = document.querySelector('.filingStatus');
-
-            if (residencyDropdown && filingStatusDiv) {
-                if (residencyDropdown.value) {
-                    filingStatusDiv.style.display = 'block';
-                } else {
-                    filingStatusDiv.style.display = 'none';
-                }
-            }
-        }
-
-        if (residency) {
-            residency.addEventListener('change', toggleFilingStatusVisibility);
-        }
-
-        toggleFilingStatusVisibility();
-        updateDependantsVisibility();
-        updateMaritalStatusVisibility();
-        updateSpecificsVisibility();
-
-        // Trigger DOMContentLoaded for intro scripts
-        try {
-            const event = new Event('DOMContentLoaded');
-            document.dispatchEvent(event);
-        } catch (error) {
-            // Error handling without console logging
-        }
-
-        // Restore original DOM methods
-        document.querySelector = originalQuerySelector;
-        document.querySelectorAll = originalQuerySelectorAll;
-        document.getElementById = originalGetElementById;
-    }
-
-    function initializeIntroLogic(container) {
-        if (introInitialized) {
-            return;
-        }
-
-        initializeIntroForm(container);
-        introInitialized = true;
     }
 
     function initializeDataContainer() {
