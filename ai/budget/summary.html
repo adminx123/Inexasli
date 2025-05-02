@@ -23,7 +23,7 @@
    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
    <link rel="shortcut icon" href="/images/favicon.ico" />
    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-   <!-- Include paymentform.js script to use its injected styles -->
+   <!-- frequencyChange.js is now loaded in budget.html -->
  </head>
   
  <body style="display: none;"> 
@@ -45,14 +45,10 @@
 
      
  
-     <!-- Frequency Selector (Free) -->
-     <div style="text-align:center;">
-       <select id="frequency">
-         <option value="annual">Annual Frequency</option>
-         <option value="monthly">Monthly Frequency</option>
-         <option value="weekly">Weekly Frequency</option>
-       </select>
-     </div>
+     <!-- Frequency Selector (Free) - Will be injected by frequencyChange.js -->
+     <div data-summary-frequency-id="summary_frequency" style="text-align:center; margin-bottom: 15px;"></div>
+
+     <!-- Styles now provided by frequencyChange.js -->
  
      
 
@@ -410,10 +406,8 @@
           
     
  
-     <!-- Free: Expense Pie Chart -->
-     <canvas id="myPieChart" width="250" height="250"></canvas>
-     <!-- Premium: Income Erosion Pie Chart -->
-     <canvas id="myPieChartTax" width="250" height="250"></canvas>
+     <!-- Expense charts removed as requested -->
+     <!-- Will add back pie charts later -->
  
 
 
@@ -533,10 +527,26 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('subscribe-sidebar').style.display = 'none';
     });
     
+    // Regional data display
+    const regionElement = document.getElementById('RegionDropdown');
+    if (regionElement) {
+        regionElement.textContent = getLocal('RegionDropdown').trim() !== "" ? getLocal('RegionDropdown') : "NONE";
+    }
+    const subregionElement = document.getElementById('SubregionDropdown');
+    if (subregionElement) {
+        subregionElement.textContent = getLocal('SubregionDropdown').trim() !== "" ? getLocal('SubregionDropdown') : "";
+    }
+
+    // Financial Projections (free)
+    timeToPay(false);
+    calculateGoal(false);
+
+    // Charts
+    updateExpensePieChart();
+    updateIncomeErosionPieChart();
+    
     console.log('Summary HTML - DOMContentLoaded event handler completed');
 });
-
-
 
 // Free content update function
 function updateFreeContent() {
@@ -554,33 +564,14 @@ function updateFreeContent() {
     updateElement('DEBT', 'DEBT', multiplier);
 
     // Update calculated fields
-    updateElement('TOTALTAXANNUAL', null, multiplier, calculateAnnualTax);
-
-    // Net Worth (free) - No frequency adjustment
-    updateElement('NETWORTH', null, 1, () => (parseFloat(getLocal('ASSETS')) || 0) - (parseFloat(getLocal('LIABILITIES')) || 0));
     updateElement('ASSETS', 'ASSETS', multiplier);
     updateElement('LIABILITIES', 'LIABILITIES', multiplier);
+    updateElement('NETWORTH', null, multiplier, () => {
+        return parseFloat(getLocal('ASSETS') || 0) - parseFloat(getLocal('LIABILITIES') || 0);
+    });
 
-    // Other fields
-    updateElement('ANNUALTAXABLEINCOME', 'ANNUALTAXABLEINCOME', multiplier);
-    updateElement('SD', 'SD', multiplier, null, 'usa-hide');
-    updateElement('BPA', 'BPA', multiplier, null, 'can-hide');
-    const regionElement = document.getElementById('RegionDropdown');
-    if (regionElement) {
-        regionElement.textContent = getLocal('RegionDropdown').trim() !== "" ? getLocal('RegionDropdown') : "NONE";
-    }
-    const subregionElement = document.getElementById('SubregionDropdown');
-    if (subregionElement) {
-        subregionElement.textContent = getLocal('SubregionDropdown').trim() !== "" ? getLocal('SubregionDropdown') : "";
-    }
-
-    // Financial Projections (free)
-    timeToPay(false);
-    calculateGoal(false);
-
-    // Charts
+    // Update charts
     updateExpensePieChart();
-    updateIncomeErosionPieChart();
 }
 
 function unlockPremiumContent() {
@@ -655,85 +646,16 @@ function calculateDisposableIncome() {
 
 
 
-// Expense Pie Chart (free)
+// Expense Pie Chart (free) - temporary stub until charts are added back later
 function updateExpensePieChart() {
-    const cookieNames = ['ESSENTIAL', 'DEBT', 'DEPENDANT', 'DISCRETIONARY', 'HOUSING', 'TRANSPORTATION'];
-    const data = cookieNames.map(name => parseFloat(getLocal(name)) || 0);
-    const config = {
-        type: 'pie',
-        data: {
-            labels: cookieNames,
-            datasets: [{
-                label: 'Expense Distribution',
-                data: data,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 
-                    'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 
-                    'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgb(194, 194, 194)', 'rgb(165, 165, 165)', 
-                    'rgb(118, 118, 118)', 'rgb(101, 101, 101)', 
-                    'rgb(76, 76, 76)', 'rgb(63, 63, 63)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                title: { display: true, text: 'Expense Distribution' }
-            }
-        }
-    };
-    if (window.myPieChart && typeof window.myPieChart.destroy === 'function') {
-        window.myPieChart.destroy();
-    }
-    window.myPieChart = new Chart(document.getElementById('myPieChart'), config);
+    // Chart functionality removed as requested
+    console.log('Expense pie chart update requested but chart is currently disabled');
 }
 
-// Income Erosion Pie Chart (premium)
+// Income Erosion Pie Chart - temporary stub until charts are added back later
 function updateIncomeErosionPieChart() {
-    const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
-    const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
-    const tax = calculateAnnualTax();
-    const obligations = calculateGovernmentObligations();
-    const disposable = calculateDisposableIncome();
-
-    const data = [disposable, expenses, tax, obligations];
-    const labels = ['Income After Deductions', 'Annual Expenses', 'Taxes', 'Obligations'];
-
-    const config = {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Income Erosion Chart',
-                data: data,
-                backgroundColor: [
-                    'rgba(143, 18, 45, 0.2)', 'rgba(17, 47, 128, 0.2)', 
-                    'rgba(14, 14, 14, 0.2)', 'rgba(14, 14, 14, 0.2)'
-                ],
-                borderColor: [
-                    'rgb(194, 194, 194)', 'rgb(165, 165, 165)', 
-                    'rgb(118, 118, 118)', 'rgb(101, 101, 101)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                title: { display: true, text: 'Income Erosion Chart' }
-            }
-        }
-    };
-    if (window.myPieChartTax && typeof window.myPieChartTax.destroy === 'function') {
-        window.myPieChartTax.destroy();
-    }
-    window.myPieChartTax = new Chart(document.getElementById('myPieChartTax'), config);
+    // Chart functionality removed as requested
+    console.log('Income erosion pie chart update requested but chart is currently disabled');
 }
 
 // Color change functions (premium)
