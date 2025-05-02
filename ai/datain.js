@@ -151,21 +151,27 @@ document.addEventListener('DOMContentLoaded', async function () {
                 z-index: 10000;
                 max-width: 34px;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
                 opacity: 1;
             }
 
-            .data-container-left.collapsed {
-                height: 150px;
+            .data-container-left.initial, .data-container-left.collapsed {
+                max-width: 36px;
+                height: 120px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10001;
             }
 
             .data-container-left.expanded {
                 max-width: 85%;
                 min-width: 25%;
-                height: auto;   
+                height: calc(100vh - 40px);
+                top: 20px;
             }
 
             .data-container-left:hover {
@@ -204,11 +210,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-left .data-content {
                 padding: 10px;
                 font-size: 14px;
-                max-height: 80vh;
+                max-height: calc(100vh - 80px);
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
                 max-width: 100%;
+                margin-top: 30px;
             }
 
             /* Mobile responsiveness for left container */
@@ -218,17 +225,21 @@ document.addEventListener('DOMContentLoaded', async function () {
                     padding: 3px;
                 }
 
-                .data-container-left.collapsed {
-                    height: 125px !important;
+                .data-container-left.initial, .data-container-left.collapsed {
+                    width: 28px;
+                    height: 100px;
+                    z-index: 10001;
                 }
 
                 .data-container-left.expanded {
                     max-width: 85%;
                     min-width: 25%;
+                    height: calc(100vh - 20px);
+                    top: 10px;
                 }
 
                 .data-container-left .data-label {
-                    font-size: 14px;
+                    font-size: 10px;
                     padding: 3px;
                 }
 
@@ -241,6 +252,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     font-size: 12px;
                     padding: 8px;
                     overflow-x: auto;
+                    margin-top: 25px;
                 }
             }
         `;

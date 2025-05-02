@@ -100,21 +100,30 @@ document.addEventListener('DOMContentLoaded', async function () {
                 z-index: 10000;
                 max-width: 34px;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, height 0.3s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
                 opacity: 1;
             }
 
-            .data-container-right.collapsed {
-                height: 150px !important;
+            .data-container-right.initial, .data-container-right.collapsed {
+                max-width: 36px;
+                height: 120px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10001;
             }
 
             .data-container-right.expanded {
                 max-width: 85%;
                 min-width: 25%;
-                height: auto;
+                height: calc(100vh - 40px);
+                top: 20px;
+                margin-right: -webkit-calc(85vw - 20px);
+                margin-right: -moz-calc(85vw - 20px);
+                margin-right: calc(85vw - 20px);
             }
 
             .data-container-right:hover {
@@ -153,11 +162,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-right .data-content {
                 padding: 10px;
                 font-size: 14px;
-                max-height: 80vh;
+                max-height: calc(100vh - 80px);
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
                 max-width: 100%;
+                margin-top: 30px;
             }
 
             /* Mobile responsiveness for right container */
@@ -167,17 +177,24 @@ document.addEventListener('DOMContentLoaded', async function () {
                     padding: 3px;
                 }
 
-                .data-container-right.collapsed {
-                    height: 125px !important;
+                .data-container-right.initial, .data-container-right.collapsed {
+                    width: 28px;
+                    height: 100px;
+                    z-index: 10001;
                 }
 
                 .data-container-right.expanded {
-                    max-width: 85%;
-                    min-width: 25%;
+                    width: 90vw;
+                    max-width: calc(90vw - 10px);
+                    height: calc(100vh - 20px);
+                    top: 10px;
+                    margin-right: -webkit-calc(85vw - 10px);
+                    margin-right: -moz-calc(85vw - 10px);
+                    margin-right: calc(85vw - 10px);
                 }
 
                 .data-container-right .data-label {
-                    font-size: 14px;
+                    font-size: 10px;
                     padding: 3px;
                 }
 
@@ -188,8 +205,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 .data-container-right .data-content {
                     font-size: 12px;
-                    padding: 0;
+                    padding: 8px;
                     overflow-x: auto;
+                    margin-top: 25px;
                 }
             }
         `;
