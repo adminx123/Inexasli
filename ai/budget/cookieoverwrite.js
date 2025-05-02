@@ -67,3 +67,130 @@ export function overwriteCookies() {
     console.log("All specified cookies have been overwritten and existing input fields cleared.");
 }
 
+// Creates a button with the 3D garbage can style
+export function createStyledButton(text, onClick, className = '', iconClass = '') {
+    // Create button container
+    const button = document.createElement('button');
+    button.className = `styled-3d-button ${className}`;
+    button.title = text; // Add title for accessibility
+    
+    // Apply 3D tab styling - matching the dataOverwrite.js style
+    button.style.backgroundColor = '#f5f5f5';
+    button.style.color = '#000';
+    button.style.border = '2px solid #000';
+    button.style.borderRadius = '8px';
+    button.style.boxShadow = '4px 4px 0 #000';
+    button.style.padding = '10px 16px';
+    button.style.margin = '0 5px';
+    button.style.display = 'flex';
+    button.style.justifyContent = 'center';
+    button.style.alignItems = 'center';
+    button.style.cursor = 'pointer';
+    button.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease';
+    button.style.fontFamily = '"Inter", sans-serif';
+    
+    // Add text if provided
+    if (text && !iconClass) {
+        button.textContent = text;
+    }
+    
+    // Add icon if provided
+    if (iconClass) {
+        const icon = document.createElement('i');
+        icon.className = iconClass;
+        icon.style.fontSize = '18px';
+        button.appendChild(icon);
+        
+        // Add text next to icon if provided
+        if (text) {
+            const textSpan = document.createElement('span');
+            textSpan.textContent = ` ${text}`; // Space before text
+            textSpan.style.marginLeft = '5px';
+            button.appendChild(textSpan);
+        }
+    }
+    
+    // Add hover effect matching the tab style
+    button.addEventListener('mouseover', function() {
+        button.style.backgroundColor = '#FFFFFF';
+    });
+    
+    button.addEventListener('mouseout', function() {
+        button.style.backgroundColor = '#f5f5f5';
+    });
+    
+    // Add active/click effect
+    button.addEventListener('mousedown', function() {
+        button.style.transform = 'translate(2px, 2px)';
+        button.style.boxShadow = '2px 2px 0 #000';
+    });
+    
+    button.addEventListener('mouseup', function() {
+        button.style.transform = 'translate(0, 0)';
+        button.style.boxShadow = '4px 4px 0 #000';
+    });
+    
+    // Add click event
+    if (onClick) {
+        button.addEventListener('click', onClick);
+    }
+    
+    return button;
+}
+
+// Creates a frequency button row with the 3D tab style
+export function createFrequencyButtons(container, onChange) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'frequency-button-wrapper';
+    wrapper.style.display = 'inline-flex';
+    wrapper.style.justifyContent = 'center';
+    wrapper.style.gap = '15px';
+    wrapper.style.margin = '15px 0';
+    
+    const frequencies = [
+        { value: 'annual', text: 'Annual' },
+        { value: 'monthly', text: 'Monthly' },
+        { value: 'weekly', text: 'Weekly' }
+    ];
+    
+    const buttons = [];
+    
+    frequencies.forEach(freq => {
+        const button = createStyledButton(freq.text, () => {
+            // Remove active class from all buttons
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.backgroundColor = '#f5f5f5';
+                btn.style.color = '#000';
+            });
+            
+            // Add active class to clicked button
+            button.classList.add('active');
+            button.style.backgroundColor = '#333';
+            button.style.color = '#fff';
+            
+            // Call onChange if provided
+            if (onChange) {
+                onChange(freq.value);
+            }
+        });
+        
+        // Set annual as default active
+        if (freq.value === 'annual') {
+            button.classList.add('active');
+            button.style.backgroundColor = '#333';
+            button.style.color = '#fff';
+        }
+        
+        buttons.push(button);
+        wrapper.appendChild(button);
+    });
+    
+    // Append to container if provided
+    if (container) {
+        container.appendChild(wrapper);
+    }
+    
+    return { wrapper, buttons };
+}
+
