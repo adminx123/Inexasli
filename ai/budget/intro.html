@@ -145,20 +145,40 @@
 </div>
 
 <script>
-// Removed DOMContentLoaded wrapper to ensure this code runs when dynamically loaded
-(function() {
-    // Polyfill for setLocal/getLocal if not present
-    const setLocal = window.setLocal || function (key, value, days) {
-        try { localStorage.setItem(key, encodeURIComponent(value)); } catch (e) { console.error(e); }
-    };
-    const getLocal = window.getLocal || function (key) {
-        try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
-    };
+// Direct script without wrapper to ensure it runs immediately
+document.addEventListener('DOMContentLoaded', function() {
+    initIntroForm();
+});
 
+// Also run the initialization immediately in case DOMContentLoaded already fired
+initIntroForm();
+
+function initIntroForm() {
+    console.log("Initializing intro form - " + new Date().toISOString());
+    
+    // Polyfill for localStorage access
+    function setLocalValue(key, value) {
+        try { 
+            localStorage.setItem(key, encodeURIComponent(value)); 
+            console.log(`Saved ${key}=${value} to localStorage`);
+        } catch (e) { 
+            console.error(e); 
+        }
+    }
+    
+    function getLocalValue(key) {
+        try { 
+            const value = localStorage.getItem(key);
+            return value ? decodeURIComponent(value) : null; 
+        } catch (e) { 
+            return null; 
+        }
+    }
+    
     // Get DOM elements
     const countryDropdown = document.getElementById('country');
     const subregionDropdown = document.getElementById('subregion');
-    const residency = document.getElementById('residency');
+    const residencyDropdown = document.getElementById('residency');
     const filingStatusDropdown = document.getElementById('filingStatus');
     const specificsDiv = document.querySelector('.specifics');
     const dependantsContainer = document.querySelector('.dependantsContainer');
@@ -282,7 +302,82 @@
         ]
     };
     
-    // Update filing status dropdown based on selected country - updated to match subregion style
+    // COUNTRY DROPDOWN HANDLER
+    if (countryDropdown) {
+        // Load saved value
+        const savedCountry = getLocalValue('selectedCountry');
+        if (savedCountry) {
+            countryDropdown.value = savedCountry;
+            console.log(`Restored country value: ${savedCountry}`);
+        }
+        
+        // Set up event listener
+        countryDropdown.addEventListener('change', function() {
+            const selectedCountry = this.value;
+            console.log(`Country changed to: ${selectedCountry}`);
+            setLocalValue('selectedCountry', selectedCountry);
+            updateSubregionDropdown(selectedCountry);
+            updateFilingStatusOptions(selectedCountry);
+        });
+        
+        // Force update dependent dropdowns based on current selection
+        if (countryDropdown.value) {
+            updateSubregionDropdown(countryDropdown.value);
+            updateFilingStatusOptions(countryDropdown.value);
+        }
+    }
+    
+    // SUBREGION DROPDOWN HANDLER
+    function updateSubregionDropdown(country) {
+        if (!subregionDropdown) {
+            console.error('Subregion dropdown not found');
+            return;
+        }
+        
+        // Clear existing options
+        subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
+        const savedSubregion = getLocalValue('selectedSubregion');
+        
+        if (country && subregionMap[country]) {
+            subregionMap[country].forEach(subregionName => {
+                const option = document.createElement('option');
+                option.text = subregionName;
+                option.value = subregionName;
+                if (savedSubregion === subregionName) {
+                    option.selected = true;
+                    console.log(`Restored subregion: ${subregionName}`);
+                }
+                subregionDropdown.appendChild(option);
+            });
+            document.getElementById('subregionContainer').style.display = 'block';
+        } else {
+            document.getElementById('subregionContainer').style.display = 'none';
+        }
+        
+        // Attach event listener
+        subregionDropdown.onchange = function() {
+            setLocalValue('selectedSubregion', this.value);
+            console.log(`Subregion saved: ${this.value}`);
+        };
+    }
+    
+    // RESIDENCY DROPDOWN HANDLER
+    if (residencyDropdown) {
+        // Load saved value
+        const savedResidency = getLocalValue('residency');
+        if (savedResidency) {
+            residencyDropdown.value = savedResidency;
+            console.log(`Restored residency: ${savedResidency}`);
+        }
+        
+        // Set up event listener
+        residencyDropdown.addEventListener('change', function() {
+            setLocalValue('residency', this.value);
+            console.log(`Residency saved: ${this.value}`);
+        });
+    }
+    
+    // FILING STATUS DROPDOWN HANDLER
     function updateFilingStatusOptions(country) {
         if (!filingStatusDropdown) {
             console.error('Filing status dropdown not found');
@@ -291,7 +386,7 @@
         
         // Clear previous options
         filingStatusDropdown.innerHTML = '<option value="">Select Filing Status</option>';
-        const savedFilingStatus = getLocal('fillingStatus');
+        const savedFilingStatus = getLocalValue('fillingStatus');
         
         // Populate with options for the selected country
         if (country && filingStatusMap[country]) {
@@ -307,7 +402,10 @@
                 const optionElement = document.createElement('option');
                 optionElement.value = option.value;
                 optionElement.text = option.text;
-                if (savedFilingStatus === option.value) optionElement.selected = true;
+                if (savedFilingStatus === option.value) {
+                    optionElement.selected = true;
+                    console.log(`Restored filing status: ${option.value}`);
+                }
                 optgroup.appendChild(optionElement);
             });
             
@@ -315,47 +413,25 @@
             filingStatusDropdown.appendChild(optgroup);
         }
         
-        // Reset filing status if no match was found with saved value
-        if (!filingStatusDropdown.value) {
-            filingStatusDropdown.value = '';
-            setLocal('fillingStatus', '', 365);
-        }
+        // Attach event listener after options are populated
+        filingStatusDropdown.onchange = function() {
+            setLocalValue('fillingStatus', this.value);
+            console.log(`Filing status saved: ${this.value}`);
+            updateDependantsVisibility();
+            updateMaritalStatusVisibility();
+            updateSpecificsVisibility();
+        };
         
-        // Update visibility of dependent sections
+        // Update UI based on current selection
         updateDependantsVisibility();
         updateMaritalStatusVisibility();
         updateSpecificsVisibility();
     }
     
-    // Populate subregion dropdown based on selected country
-    window.updateSubregionDropdown = function(country) {
-        if (!subregionDropdown) {
-            console.error('Subregion dropdown not found');
-            return;
-        }
-        
-        subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
-        const savedSubregion = getLocal('selectedSubregion');
-        
-        if (country && subregionMap[country]) {
-            subregionMap[country].forEach(subregionName => {
-                const option = document.createElement('option');
-                option.text = subregionName;
-                option.value = subregionName;
-                if (savedSubregion === subregionName) option.selected = true;
-                subregionDropdown.appendChild(option);
-            });
-            document.getElementById('subregionContainer').style.display = 'block';
-        } else {
-            document.getElementById('subregionContainer').style.display = 'none';
-        }
-        
-        // Debug output
-        console.log(`Updating subregion for country: ${country}, options count: ${subregionDropdown.options.length}`);
-    };
-    
     // Show/hide dependants container based on filing status
     function updateDependantsVisibility() {
+        if (!dependantsContainer || !filingStatusDropdown) return;
+        
         const selectedFilingStatus = filingStatusDropdown.value;
         const statusesWithDisabledDependants = [
             'single_with_disabled_dependants', 'widowed_with_disabled_dependants', 'separated_with_disabled_dependants',
@@ -370,6 +446,8 @@
     
     // Show/hide spouse fields based on filing status
     function updateMaritalStatusVisibility() {
+        if (!filingStatusDropdown) return;
+        
         const selectedFilingStatus = filingStatusDropdown.value;
         const singleStatuses = [
             'single_no_dependants', 'single_with_dependants', 'single_with_disabled_dependants', 'single_self_disabled', 'single_caregiver',
@@ -386,68 +464,37 @@
     
     // Show/hide personal details section based on filing status selection
     function updateSpecificsVisibility() {
+        if (!specificsDiv || !filingStatusDropdown) return;
+        
         specificsDiv.style.display = filingStatusDropdown.value ? 'block' : 'none';
     }
     
+    // PERSONAL DETAILS FIELDS
+    const personalDetailsFields = ['ageSelf', 'ageSpouse', 'employmentStatus', 'employmentStatusSpouse', 'birthYearDisabledDependants'];
+    
+    personalDetailsFields.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            // Restore saved value
+            const savedValue = getLocalValue(id);
+            if (savedValue) {
+                element.value = savedValue;
+                console.log(`Restored ${id}: ${savedValue}`);
+            }
+            
+            // Set up event listener
+            element.addEventListener('change', function() {
+                setLocalValue(id, this.value);
+                console.log(`Saved ${id}: ${this.value}`);
+            });
+        }
+    });
+    
     // Set up auto-transition when all required fields are filled
     function setupAutoTransition() {
-        // Perform validation checks
-        function validateAndTransition() {
-            const country = countryDropdown.value;
-            const subregion = subregionDropdown.value;
-            const residencyValue = residency.value;
-            const filingStatus = filingStatusDropdown.value;
-            const ageSelf = document.getElementById('ageSelf').value;
-            const ageSpouse = document.getElementById('ageSpouse').value;
-            const employmentStatus = document.getElementById('employmentStatus').value;
-            
-            //  Check if spouse fields are required based on filing status
-            const spouseRequired = [
-                'married_with_dependants','married_with_disabled_dependants','common_law_with_dependants',
-                'common_law_with_disabled_dependants','married_filing_jointly_with_dependants',
-                'married_filing_jointly_with_disabled_dependants','married_filing_separately_with_dependants',
-                'married_filing_separately_with_disabled_dependants','married_no_dependants',
-                'common_law_no_dependants','married_filing_jointly_no_dependants',
-                'married_filing_separately_no_dependants','married_or_civil_partnership_no_dependants',
-                'married_or_civil_partnership_with_dependants','married_or_de_facto_no_dependants',
-                'married_or_de_facto_with_dependants','coupled_no_dependants','coupled_with_dependants'
-            ].includes(filingStatus);
-            
-            // Perform validation checks
-            if (!country || (!subregion && country !== 'OTHER') || !residencyValue || !filingStatus || 
-                !ageSelf || !employmentStatus || (spouseRequired && !ageSpouse)) {
-                return; // Not all required fields are filled
-            }
-            
-            // All fields are valid, proceed to income tab
-            // Get parent window (since this is loaded inside a container)
-            const parentWindow = window.parent || window;
-            
-            // First, close the intro container
-            const introContainer = parentWindow.document.querySelector('.data-container-intro');
-            if (introContainer && introContainer.dataset.state === 'expanded') {
-                const introClose = introContainer.querySelector('.close-data-container');
-                if (introClose) {
-                    introClose.click(); 
-                }
-            }
-            
-            // Wait a brief moment to ensure intro is closed
-            setTimeout(() => {
-                // Next, open the income container
-                const incomeContainer = parentWindow.document.querySelector('.data-container-income');
-                if (incomeContainer && incomeContainer.dataset.state === 'collapsed') {
-                    const incomeLabel = incomeContainer.querySelector('.data-label');
-                    if (incomeLabel) {
-                        incomeLabel.click();
-                    }
-                }
-            }, 300);
-        }
-        
-        // Add event listeners to all form fields
+        // Add event listeners to all form fields for validation check
         const formElements = [
-            countryDropdown, subregionDropdown, residency, filingStatusDropdown,
+            countryDropdown, subregionDropdown, residencyDropdown, filingStatusDropdown,
             document.getElementById('ageSelf'), document.getElementById('ageSpouse'),
             document.getElementById('employmentStatus'), document.getElementById('employmentStatusSpouse')
         ];
@@ -462,126 +509,63 @@
         setTimeout(validateAndTransition, 500);
     }
     
-    // Initialize - restore saved values
-    function initializeForm() {
-        // Check if dropdowns are available in the DOM
-        if (!countryDropdown || !subregionDropdown) {
-            console.error('Country or subregion dropdown not found');
-            return;
+    // Validation and auto-transition logic
+    function validateAndTransition() {
+        const country = countryDropdown ? countryDropdown.value : '';
+        const subregion = subregionDropdown ? subregionDropdown.value : '';
+        const residencyValue = residencyDropdown ? residencyDropdown.value : '';
+        const filingStatus = filingStatusDropdown ? filingStatusDropdown.value : '';
+        const ageSelf = document.getElementById('ageSelf') ? document.getElementById('ageSelf').value : '';
+        const ageSpouse = document.getElementById('ageSpouse') ? document.getElementById('ageSpouse').value : '';
+        const employmentStatus = document.getElementById('employmentStatus') ? document.getElementById('employmentStatus').value : '';
+        
+        //  Check if spouse fields are required based on filing status
+        const spouseRequired = [
+            'married_with_dependants','married_with_disabled_dependants','common_law_with_dependants',
+            'common_law_with_disabled_dependants','married_filing_jointly_with_dependants',
+            'married_filing_jointly_with_disabled_dependants','married_filing_separately_with_dependants',
+            'married_filing_separately_with_disabled_dependants','married_no_dependants',
+            'common_law_no_dependants','married_filing_jointly_no_dependants',
+            'married_filing_separately_no_dependants','married_or_civil_partnership_no_dependants',
+            'married_or_civil_partnership_with_dependants','married_or_de_facto_no_dependants',
+            'married_or_de_facto_with_dependants','coupled_no_dependants','coupled_with_dependants'
+        ].includes(filingStatus);
+        
+        // Perform validation checks
+        if (!country || (!subregion && country !== 'OTHER') || !residencyValue || !filingStatus || 
+            !ageSelf || !employmentStatus || (spouseRequired && !ageSpouse)) {
+            return; // Not all required fields are filled
         }
         
-        // Restore saved country and update related fields
-        if (getLocal('selectedCountry')) {
-            countryDropdown.value = getLocal('selectedCountry');
-            window.updateSubregionDropdown(countryDropdown.value);
-            updateFilingStatusOptions(countryDropdown.value);
-        }
+        // All fields are valid, proceed to income tab
+        // Get parent window (since this is loaded inside a container)
+        const parentWindow = window.parent || window;
         
-        // Restore saved subregion
-        if (getLocal('selectedSubregion')) {
-            // Subregion already populated in updateSubregionDropdown
-        }
-        
-        // Restore saved residency
-        if (getLocal('residency')) {
-            residency.value = getLocal('residency');
-        }
-        
-        // Restore saved filing status
-        if (getLocal('fillingStatus')) {
-            filingStatusDropdown.value = getLocal('fillingStatus');
-            updateDependantsVisibility();
-            updateMaritalStatusVisibility();
-            updateSpecificsVisibility();
-        }
-        
-        // Restore saved personal details
-        ['ageSelf', 'ageSpouse'].forEach(id => {
-            const input = document.getElementById(id);
-            if (input && getLocal(id)) {
-                input.value = getLocal(id);
+        // First, close the intro container
+        const introContainer = parentWindow.document.querySelector('.data-container-intro');
+        if (introContainer && introContainer.dataset.state === 'expanded') {
+            const introClose = introContainer.querySelector('.close-data-container');
+            if (introClose) {
+                introClose.click(); 
             }
-        });
+        }
         
-        ['employmentStatus', 'employmentStatusSpouse'].forEach(id => {
-            const select = document.getElementById(id);
-            if (select && getLocal(id)) {
-                select.value = getLocal(id);
+        // Wait a brief moment to ensure intro is closed
+        setTimeout(() => {
+            // Next, open the income container
+            const incomeContainer = parentWindow.document.querySelector('.data-container-income');
+            if (incomeContainer && incomeContainer.dataset.state === 'collapsed') {
+                const incomeLabel = incomeContainer.querySelector('.data-label');
+                if (incomeLabel) {
+                    incomeLabel.click();
+                }
             }
-        });
-        
-        // Restore saved disabled dependants
-        const textarea = document.getElementById('birthYearDisabledDependants');
-        if (textarea && getLocal('birthYearDisabledDependants')) {
-            textarea.value = getLocal('birthYearDisabledDependants');
-        }
+        }, 300);
     }
     
-    // Event listeners - Make sure they're attached directly, not inside a DOMContentLoaded
-    if (countryDropdown) {
-        // Remove any existing listeners first
-        const newCountryDropdown = countryDropdown.cloneNode(true);
-        countryDropdown.parentNode.replaceChild(newCountryDropdown, countryDropdown);
-        
-        // Now attach the event listener to the fresh element
-        newCountryDropdown.addEventListener('change', function() {
-            const selectedCountry = this.value;
-            console.log("Country changed to:", selectedCountry);
-            setLocal('selectedCountry', selectedCountry, 365);
-            window.updateSubregionDropdown(selectedCountry);
-            updateFilingStatusOptions(selectedCountry);
-        });
-        
-        // Re-reference the dropdown after replacing it
-        countryDropdown = newCountryDropdown;
-    } else {
-        console.error('Country dropdown not found when attaching event listener');
-    }
-    
-    if (subregionDropdown) {
-        subregionDropdown.addEventListener('change', function() {
-            setLocal('selectedSubregion', this.value, 365);
-        });
-    }
-    
-    // Save personal details changes
-    ['ageSelf', 'ageSpouse'].forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-            input.addEventListener('change', function() {
-                setLocal(id, this.value, 365);
-            });
-        }
-    });
-    
-    ['employmentStatus', 'employmentStatusSpouse'].forEach(id => {
-        const select = document.getElementById(id);
-        if (select) {
-            select.addEventListener('change', function() {
-                setLocal(id, this.value, 365);
-            });
-        }
-    });
-    
-    const textarea = document.getElementById('birthYearDisabledDependants');
-    if (textarea) {
-        textarea.addEventListener('change', function() {
-            setLocal('birthYearDisabledDependants', this.value, 365);
-        });
-    }
-    
-    // Run initialization and setup
-    setTimeout(function() {
-        initializeForm();
-        setupAutoTransition();
-        
-        // Force trigger the updateSubregionDropdown if a country is already selected
-        if (countryDropdown && countryDropdown.value) {
-            console.log("Initial country value:", countryDropdown.value);
-            window.updateSubregionDropdown(countryDropdown.value);
-        }
-    }, 100);
-})();
+    // Initialize auto-transition
+    setupAutoTransition();
+}
 </script>
  </body>
  </html>
