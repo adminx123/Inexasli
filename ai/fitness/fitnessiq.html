@@ -1,0 +1,85 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FitnessIQ™</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/ai/styles/prompt.css">
+</head>
+<body>
+    <a href="/ai/landing/landing.html">
+        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
+    </a>
+
+    <div class="container">
+        <div class="row1">
+            <div class="grid-container" id="fitness-goal">
+                <div class="grid-item" data-value="Build Strength">Build Strength</div>
+                <div class="grid-item" data-value="Cardio">Cardio</div>
+                <div class="grid-item" data-value="Endurance">Endurance</div>
+            </div>
+        </div>
+        <div class="row1">
+            <input type="number" id="fitness-frequency" placeholder="Workouts/Week" min="1">
+            <input type="number" id="fitness-duration" placeholder="Workout Length (minutes)" min="1">
+        </div>
+        <div class="row1">
+            <input type="number" id="fitness-age" placeholder="Age" min="0">
+            <div class="height-input-group">
+                <input type="number" id="fitness-height" placeholder="Height" step="0.1" min="0">
+                <select id="fitness-height-unit">
+                    <option value="ft">ft</option>
+                    <option value="cm">cm</option>
+                </select>
+            </div>
+            <div class="weight-input-group">
+                <input type="number" id="fitness-weight" placeholder="Weight" step="0.1" min="0">
+                <select id="fitness-weight-unit">
+                    <option value="lbs">lbs</option>
+                    <option value="kg">kg</option>
+                </select>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="fitness-level">
+                <div class="grid-item" data-value="Beginner">Beginner</div>
+                <div class="grid-item" data-value="Intermediate">Intermediate</div>
+                <div class="grid-item" data-value="Advanced">Advanced</div>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="fitness-home-exercises">
+                <div class="grid-item" data-value="Gym">I want to workout in the gym</div>
+                <div class="grid-item" data-value="Home">I want to workout at home</div>
+            </div>
+        </div>
+        <div class="row1">
+            <textarea id="fitness-injuries" rows="3" placeholder="Injuries/Health Conditions (1 per line):\nKnee pain\nAsthma"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="FitnessIQ™" onclick="generatePrompt('FitnessIQ™')">Generate Promptemplate™ Now!</button>
+    </div>
+
+    <script src="/utility/modal.js"></script>
+    <script src="/payment/paymentform.js"></script>
+    <script src="/utility/tray.js"></script>
+    <script src="https://js.stripe.com/v3/" async></script>
+    <script src="fitnessiq.js"></script>
+</body>
+</html>

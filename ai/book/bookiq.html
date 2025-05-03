@@ -1,0 +1,84 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+-->
+
+
+
+   
+        <div class="row1">
+            <input type="text" id="book-title-author" placeholder="Enter book title and author (e.g., 'Pride and Prejudice by Jane Austen')">
+        </div>
+        <div class="row1">
+            <label for="summary-purpose">Select the purpose of the summary:</label>
+            <select id="summary-purpose">
+                <option value="personal">Personal Understanding</option>
+                <option value="book-club">Book Club Discussion</option>
+                <option value="academic">Academic Analysis</option>
+                <option value="teaching">Teaching</option>
+                <option value="social-media">Social Media Post</option>
+                <option value="review">Professional Review</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label for="summary-length">Select the summary length:</label>
+            <select id="summary-length">
+                <option value="short">Short (1 paragraph)</option>
+                <option value="medium">Medium (2-3 paragraphs)</option>
+                <option value="detailed">Detailed (4+ paragraphs)</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="summary-themes" rows="2" placeholder="Key themes or topics to highlight: (1 per line)\ne.g., love, leadership, identity"></textarea>
+        </div>
+        <div class="row1">
+            <label>Select the target audience(s):</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="summary-audience" value="general"> General Readers</label>
+                <label><input type="checkbox" name="summary-audience" value="students"> Students</label>
+                <label><input type="checkbox" name="summary-audience" value="professionals"> Professionals</label>
+                <label><input type="checkbox" name="summary-audience" value="book-club"> Book Club Members</label>
+                <label><input type="checkbox" name="summary-audience" value="children"> Children</label>
+                <label><input type="checkbox" name="summary-audience" value="researchers"> Academic Researchers</label>
+                <label><input type="checkbox" name="summary-audience" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <label>Select specific elements to include:</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="summary-elements" value="plot"> Plot</label>
+                <label><input type="checkbox" name="summary-elements" value="characters"> Characters</label>
+                <label><input type="checkbox" name="summary-elements" value="themes"> Themes</label>
+                <label><input type="checkbox" name="summary-elements" value="setting"> Setting</label>
+                <label><input type="checkbox" name="summary-elements" value="arguments"> Key Arguments</label>
+                <label><input type="checkbox" name="summary-elements" value="lessons"> Lessons/Insights</label>
+                <label><input type="checkbox" name="summary-elements" value="style"> Style/Writing</label>
+                <label><input type="checkbox" name="summary-elements" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <label for="summary-tone">Select the tone or style:</label>
+            <select id="summary-tone">
+                <option value="formal">Formal</option>
+                <option value="casual">Casual</option>
+                <option value="analytical">Analytical</option>
+                <option value="engaging">Engaging</option>
+                <option value="objective">Objective</option>
+                <option value="narrative">Narrative</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="summary-details" rows="3" placeholder="Additional details or constraints: (1 per line)\ne.g., avoid spoilers, focus on chapter 5"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="BookIQ™" onclick="generatePrompt('BookIQ™')">Generate Promptemplate™ Now!</button>
+ 
+
+  
+    <script src="ai/book/bookiq.js"></script>

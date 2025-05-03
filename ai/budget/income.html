@@ -1,0 +1,596 @@
+<!-- /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */ -->
+
+ <!DOCTYPE html>
+ <html lang="en">
+ 
+ <head>
+     <link rel="manifest" href="/manifest.json">
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+     <title>IncomeIQ™ Income</title>
+     <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
+     <link rel="stylesheet" href="/style/styles.css"> 
+     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
+ 
+     <!-- this is an extended list of places icon could be needed -->
+     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+     <link rel="shortcut icon" href="/images/favicon.ico" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+ 
+ </head>
+ 
+ <body>
+   
+    
+    
+
+ 
+     <div class="containerinter">
+         <h2 style="text-align: center; font-size: 18px; margin-bottom:15px;" class="tooltip1" data-tooltip="Employment involves working under a contract for an employer, receiving a regular salary or wage, and generally includes benefits like health insurance. Self-employment means working for oneself, where income might fluctuate based on work volume, with the individual handling their own taxes, benefits, and business expenses.">
+             Input Employment - Self Employment Income<span class="tooltip1-content"></span>
+         </h2>
+ 
+         <div class="checkboxrow">
+             <label for="income_salary_wages" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Salary/Wages:
+             </label>
+             <input type="number" inputmode="numeric" id="income_salary_wages">
+             <div data-frequency-id="income_salary_wages_frequency"></div>
+             <span id="income_salary_wages_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_tips" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Tips:
+             </label>
+             <input type="number" inputmode="numeric" id="income_tips">
+             <div data-frequency-id="income_tips_frequency"></div>
+             <span id="income_tips_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_bonuses" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Bonus:
+             </label>
+             <input type="number" inputmode="numeric" id="income_bonuses">
+             <div data-frequency-id="income_bonuses_frequency"></div>
+             <span id="income_bonuses_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_sole_prop" style="font-size: unset;" class="tooltip" data-tooltip="Enter net income after business expenses but before taxes;">
+                 <span class="tooltip-content"></span>
+                 Self Employment:
+             </label>
+             <input type="number" inputmode="numeric" id="income_sole_prop">
+             <div data-frequency-id="income_sole_prop_frequency"></div>
+             <span id="income_sole_prop_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <span class="modal-trigger" data-modal-src="/ai/budget/ROI.html" title="Calculate self-employment income for educational purposes">
+                 Optional - Self Employed Worksheet *Payment Required*
+             </span>
+         </div>
+   
+     
+         <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1" data-tooltip="Retirement income refers to the money received by individuals after they stop working, sourced from personal savings, pensions, or investment plans. Social benefit income encompasses payments from government welfare programs providing financial assistance based on criteria like age, unemployment, or disability, aimed at supporting those in need when they cannot earn through regular employment.">
+             Input Retirement - Social Benefit Income<span class="tooltip1-content"></span>
+         </h2>
+ 
+         <div class="checkboxrow">
+             <label for="income_federal_pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Pension, Federal:
+             </label>
+             <input type="number" inputmode="numeric" id="income_federal_pension">
+             <div data-frequency-id="income_federal_pension_frequency"></div>
+             <span id="income_federal_pension_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_work_pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Pension, Work:
+             </label>
+             <input type="number" inputmode="numeric" id="income_work_pension">
+             <div data-frequency-id="income_work_pension_frequency"></div>
+             <span id="income_work_pension_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_social_security" style="font-size: unset; " class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Social Security:
+             </label>
+             <input type="number" inputmode="numeric" id="income_social_security">
+             <div data-frequency-id="income_social_security_frequency"></div>
+             <span id="income_social_security_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_employment_insurance" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions;">
+                 <span class="tooltip-content"></span>
+                 Employment Insurance:
+             </label>
+             <input type="number" inputmode="numeric" id="income_employment_insurance">
+             <div data-frequency-id="income_employment_insurance_frequency"></div>
+             <span id="income_employment_insurance_annual"></span>
+         </div>
+    
+ 
+         <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1" data-tooltip="Passive income is earnings derived from ventures in which an individual is not actively involved, such as rental properties, royalties from creative works, or income from investments like dividends from stocks, interest from savings, or capital gains from asset sales. It contrasts with active income from employment or business operations where direct labor is exchanged for money.">
+             Input Passive Income<span class="tooltip1-content"></span>
+         </h2>
+ 
+         <div class="checkboxrow">
+             <label for="income_investment_property" style="font-size: unset;" class="tooltip" data-tooltip="Enter the net income after all operating expenses (e.g., maintenance, insurance) but before income taxes;">
+                 <span class="tooltip-content"></span>
+                 Investment Property:
+             </label>
+             <input type="number" inputmode="numeric" id="income_investment_property">
+             <div data-frequency-id="income_investment_property_frequency"></div>
+             <span id="income_investment_property_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_capital_gains_losses" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Capital Gains/Losses:
+             </label>
+             <input type="number" inputmode="numeric" id="income_capital_gains_losses">
+             <div data-frequency-id="income_capital_gains_losses_frequency"></div>
+             <span id="income_capital_gains_losses_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_venture_capital" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and after expenses;">
+                 <span class="tooltip-content"></span>
+                 Venture:
+             </label>
+             <input type="number" inputmode="numeric" id="income_venture_capital">
+             <div data-frequency-id="income_venture_capital_frequency"></div>
+             <span id="income_venture_capital_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_public_dividend" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Dividend, Public:
+             </label>
+             <input type="number" inputmode="numeric" id="income_public_dividend">
+             <div data-frequency-id="income_public_dividend_frequency"></div>
+             <span id="income_public_dividend_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_owner_dividend" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Dividend, Owner:
+             </label>
+             <input type="number" inputmode="numeric" id="income_owner_dividend">
+             <div data-frequency-id="income_owner_dividend_frequency"></div>
+             <span id="income_owner_dividend_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_interest" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Interest:
+             </label>
+             <input type="number" inputmode="numeric" id="income_interest">
+             <div data-frequency-id="income_interest_frequency"></div>
+             <span id="income_interest_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_royalties" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Royalties:
+             </label>
+             <input type="number" inputmode="numeric" id="income_royalties">
+             <div data-frequency-id="income_royalties_frequency"></div>
+             <span id="income_royalties_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_peer_to_peer_lending" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Peer to Peer Lending:
+             </label>
+             <input type="number" inputmode="numeric" id="income_peer_to_peer_lending">
+             <div data-frequency-id="income_peer_to_peer_lending_frequency"></div>
+             <span id="INCOME_PEER_TO_PEER_LENDING_ANNUAL"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_trust" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Trust:
+             </label>
+             <input type="number" inputmode="numeric" id="income_trust">
+             <div data-frequency-id="income_trust_frequency"></div>
+             <span id="income_trust_annual"></span>
+         </div>
+     
+ 
+         <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1" data-tooltip="Refers to any income that doesn't fit neatly into the categories of employment, self-employment, investment, or social benefits. This can include earnings from side gigs not considered a primary job, child support or alimony, lottery winnings, inheritances, or any other miscellaneous sources of revenue not derived from regular work or investments.">
+             Input Other Income<span class="tooltip1-content"></span>
+         </h2>
+ 
+         <div class="checkboxrow">
+             <label for="income_alimony" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Alimony:
+             </label>
+             <input type="number" inputmode="numeric" id="income_alimony">
+             <div data-frequency-id="income_alimony_frequency"></div>
+             <span id="income_alimony_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_scholarships_grants" style="font-size: unset;" class="tooltip" data-tooltip="Enter amount before tax;">
+                 <span class="tooltip-content"></span>
+                 Scholarship/Grants:
+             </label>
+             <input type="number" inputmode="numeric" id="income_scholarships_grants">
+             <div data-frequency-id="income_scholarships_grants_frequency"></div>
+             <span id="income_scholarships_grants_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_tax_free_income" style="font-size: unset;" class="tooltip" data-tooltip="Enter total amount received. Note: Some regions tax inheritance or gifts; consult a financial advisor;">
+                 <span class="tooltip-content"></span>
+                 Tax Free - Inheritance/Gifts:
+             </label>
+             <input type="number" inputmode="numeric" id="income_tax_free_income">
+             <div data-frequency-id="income_tax_free_income_frequency"></div>
+             <span id="income_tax_free_income_annual"></span>
+         </div>
+ 
+         <div class="checkboxrow">
+             <label for="income_gambling_winnings" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax. Note: Canadians don't pay tax on winnings unless professional; US residents do;">
+                 <span class="tooltip-content"></span>
+                 Gambling:
+             </label>
+             <input type="number" inputmode="numeric" id="income_gambling_winnings">
+             <div data-frequency-id="income_gambling_winnings_frequency"></div>
+             <span id="income_gambling_winnings_annual"></span>
+         </div>
+     </div>
+ 
+     <!-- Next button removed as calculations automatically happen on input and blur events -->
+  
+ 
+     <script>
+    // Inline all income logic from incometab.js
+    (function() {
+        // Polyfill for setLocal/getLocal if not present
+        const setLocal = window.setLocal || function (key, value, days) {
+            try { localStorage.setItem(key, encodeURIComponent(value)); } catch (e) { console.error(e); }
+        };
+        const getLocal = window.getLocal || function (key) {
+            try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
+        };
+        const overwriteCookies = window.overwriteCookies || function () { console.warn('overwriteCookies not defined'); };
+
+        // Tooltip functionality removed - now inherited from tooltip.js in budget.html
+
+        // Calculation helpers
+        function calculateAnnual(inputId, frequencyGroupId) {
+            let input = parseFloat(document.getElementById(inputId).value) || 0;
+            if (inputId === 'income_sole_prop') {
+                const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
+                if (calculatedFromWorksheet === 'true') {
+                    const totalRevenue = getLocal("totalRevenue");
+                    if (totalRevenue && totalRevenue !== 'annually' && !isNaN(parseFloat(totalRevenue))) {
+                        if (input != totalRevenue) {
+                            input = parseFloat(totalRevenue);
+                        }
+                    }
+                }
+            }
+            const frequencyGroup = document.getElementById(frequencyGroupId);
+            let frequency = 'annually';
+            if (frequencyGroup) {
+                const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
+                frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
+            } else {
+                const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
+                frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
+            }
+            
+            switch (frequency) {
+                case 'annually': return input;
+                case 'quarterly': return input * 4;
+                case 'monthly': return input * 12;
+                case 'weekly': return input * 52;
+                default: return 0;
+            }
+        }
+        function calculateNormalizedSum() {
+            const incomeFields = [
+                ['income_salary_wages', 'income_salary_wages_frequency'],
+                ['income_tips', 'income_tips_frequency'],
+                ['income_bonuses', 'income_bonuses_frequency'],
+                ['income_sole_prop', 'income_sole_prop_frequency'],
+                ['income_investment_property', 'income_investment_property_frequency'],
+                ['income_capital_gains_losses', 'income_capital_gains_losses_frequency'],
+                ['income_interest', 'income_interest_frequency'],
+                ['income_owner_dividend', 'income_owner_dividend_frequency'],
+                ['income_public_dividend', 'income_public_dividend_frequency'],
+                ['income_trust', 'income_trust_frequency'],
+                ['income_federal_pension', 'income_federal_pension_frequency'],
+                ['income_work_pension', 'income_work_pension_frequency'],
+                ['income_social_security', 'income_social_security_frequency'],
+                ['income_employment_insurance', 'income_employment_insurance_frequency'],
+                ['income_alimony', 'income_alimony_frequency'],
+                ['income_scholarships_grants', 'income_scholarships_grants_frequency'],
+                ['income_royalties', 'income_royalties_frequency'],
+                ['income_gambling_winnings', 'income_gambling_winnings_frequency'],
+                ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+                ['income_venture_capital', 'income_venture_capital_frequency'],
+                ['income_tax_free_income', 'income_tax_free_income_frequency']
+            ];
+            let annualIncomeSum = 0;
+            incomeFields.forEach(field => {
+                annualIncomeSum += calculateAnnual(field[0], field[1]);
+            });
+            
+            // Store the calculated value in local storage and global window object
+            window.ANNUALINCOME = annualIncomeSum;
+            setLocal("ANNUALINCOME", annualIncomeSum.toString(), 365);
+            
+            // Optional UI update (commented out as not needed)
+            const sumElement = document.getElementById('annual_income_sum');
+             if (sumElement) sumElement.textContent = `$${annualIncomeSum.toFixed(2)}`;
+        }
+        function calculateEmploymentIncome() {
+            const employmentIncomeFields = [
+                ['income_salary_wages', 'income_salary_wages_frequency'],
+                ['income_tips', 'income_tips_frequency'],
+                ['income_bonuses', 'income_bonuses_frequency']
+            ];
+            let annualEmploymentIncome = 0;
+            employmentIncomeFields.forEach(field => {
+                annualEmploymentIncome += calculateAnnual(field[0], field[1]);
+            });
+            // Optionally update a summary element
+            const empElement = document.getElementById('ANNUALEMPLOYMENTINCOME');
+            if (empElement) empElement.textContent = `$${annualEmploymentIncome.toFixed(2)}`;
+            
+            // Store the calculated value in local storage
+            window.ANNUALEMPLOYMENTINCOME = annualEmploymentIncome;
+            setLocal("ANNUALEMPLOYMENTINCOME", annualEmploymentIncome.toString(), 365);
+        }
+        function passiveincome() {
+            const fireFields = [
+                ['income_investment_property', 'income_investment_property_frequency'],
+                ['income_interest', 'income_interest_frequency'],
+                ['income_public_dividend', 'income_public_dividend_frequency'],
+                ['income_trust', 'income_trust_frequency'],
+                ['income_peer_to_peer_lending', 'income_peer_to_peer_lending_frequency'],
+                ['income_royalties', 'income_royalties_frequency']
+            ];
+            let income = 0;
+            for (const [incomeField, frequencyField] of fireFields) {
+                const incomeValue = calculateAnnual(incomeField, frequencyField);
+                income += incomeValue;
+            }
+            
+            // Store the calculated passive income in local storage
+            window.ANNUALPASSIVEINCOME = income;
+            setLocal("ANNUALPASSIVEINCOME", income.toString(), 365);
+        }
+        
+        function calculateSelfEmploymentIncome() {
+            const selfEmploymentFields = [
+                ['income_sole_prop', 'income_sole_prop_frequency']
+            ];
+            let annualSelfEmploymentIncome = 0;
+            selfEmploymentFields.forEach(field => {
+                annualSelfEmploymentIncome += calculateAnnual(field[0], field[1]);
+            });
+            
+            // Store the calculated value in local storage
+            window.ANNUALSELFEMPLOYMENTINCOME = annualSelfEmploymentIncome;
+            setLocal("ANNUALSELFEMPLOYMENTINCOME", annualSelfEmploymentIncome.toString(), 365);
+        }
+        
+        function calculateAll() {
+            calculateNormalizedSum();
+            calculateEmploymentIncome();
+            calculateSelfEmploymentIncome();
+            passiveincome();
+            const incomeFields = [
+                'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop',
+                'income_investment_property', 'income_capital_gains_losses', 'income_interest',
+                'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension',
+                'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony',
+                'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending',
+                'income_venture_capital', 'income_tax_free_income'
+            ];
+            incomeFields.forEach(field => {
+                const element = document.getElementById(field);
+                if (element) {
+                    const value = element.value.trim();
+                    setLocal(field, value !== "" ? value : "", 365);
+                }
+            });
+        }
+        
+        // Make calculateAll function accessible outside this scope
+        window.calculateAll = calculateAll;
+        
+        function calculateNext() {
+            calculateAll();
+            const parentWindow = window.parent || window;
+            const incomeContainer = parentWindow.document.querySelector('.data-container-income');
+            if (incomeContainer && incomeContainer.dataset.state === 'expanded') {
+                const incomeClose = incomeContainer.querySelector('.close-data-container');
+                if (incomeClose) incomeClose.click();
+            }
+            setTimeout(() => {
+                const expenseContainer = parentWindow.document.querySelector('.data-container-expense');
+                if (expenseContainer && expenseContainer.dataset.state === 'collapsed') {
+                    const expenseLabel = expenseContainer.querySelector('.data-label');
+                    if (expenseLabel) expenseLabel.click();
+                }
+            }, 300);
+        }
+        
+        // Setup all event listeners and initialize calculations
+        function setupPageFunctionality() {
+            // No longer initialize tooltips here - they're handled by tooltip.js
+            
+            // Form elements event listeners
+            const formElements = [
+                'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop',
+                'income_investment_property', 'income_capital_gains_losses', 'income_interest',
+                'income_owner_dividend', 'income_public_dividend', 'income_trust', 'income_federal_pension',
+                'income_work_pension', 'income_social_security', 'income_employment_insurance', 'income_alimony',
+                'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending',
+                'income_venture_capital', 'income_tax_free_income'
+            ];
+            
+            formElements.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const savedValue = getLocal(elementId);
+                    if (savedValue !== null) element.value = savedValue;
+                    
+                    // Add input event listener to trigger calculations
+                    element.addEventListener('input', function() {
+                        setLocal(elementId, element.value.trim() !== "" ? element.value : "", 365);
+                        // Recalculate and update all totals when any input changes
+                        calculateNormalizedSum();
+                        calculateEmploymentIncome();
+                        passiveincome();
+                    });
+                    
+                    // Also add blur event to ensure calculations happen even if focus leaves without input event
+                    element.addEventListener('blur', function() {
+                        calculateNormalizedSum();
+                        calculateEmploymentIncome();
+                        passiveincome();
+                    });
+                }
+            });
+            
+            // Next button - proceed to next tab directly, as terms are now handled by termsManager.js
+            const nextButton = document.getElementById('nextButton');
+            if (nextButton) {
+                nextButton.addEventListener('click', calculateNext);
+            }
+            
+            // Initialize calculations
+            calculateNormalizedSum();
+            calculateEmploymentIncome();
+            passiveincome();
+        }
+        
+        // Run setup on DOMContentLoaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupPageFunctionality);
+        } else {
+            // DOM already loaded, run setup immediately
+            setupPageFunctionality();
+        }
+        
+        // Also ensure calculations run on window load as a backup
+        window.addEventListener('load', function() {
+            calculateNormalizedSum();
+            calculateEmploymentIncome();
+            passiveincome();
+        });
+        
+        // Trigger recalculation when the tab becomes visible (e.g., switching back to tab)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                calculateNormalizedSum();
+                calculateEmploymentIncome();
+                passiveincome();
+            }
+        });
+        
+        // MutationObserver to detect dynamically added elements
+        const observer = new MutationObserver(function(mutations) {
+            let needsRecalculation = false;
+            
+            mutations.forEach(function(mutation) {
+                if (mutation.addedNodes.length > 0 || mutation.attributeName === 'value') {
+                    needsRecalculation = true;
+                }
+            });
+            
+            if (needsRecalculation) {
+                calculateNormalizedSum();
+                calculateEmploymentIncome();
+                passiveincome();
+            }
+        });
+        
+        // Start observing once DOM is ready
+        function startObserver() {
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['value', 'checked']
+            });
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startObserver);
+        } else {
+            startObserver();
+        }
+    })();
+    </script>
+    
+    <!-- Add modal.js script for the ROI worksheet modal trigger -->
+    <script src="/utility/modal.js"></script>
+    
+    <!-- Add script to handle ROI worksheet access based on payment status -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Ensure we have access to getLocal function
+            const getLocal = window.getLocal || function (key) {
+                try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
+            };
+            
+            // Get the ROI worksheet modal trigger
+            const roiModalTrigger = document.querySelector('.modal-trigger[data-modal-src="/ai/budget/ROI.html"]');
+            
+            if (roiModalTrigger) {
+                // Add click handler that checks payment status
+                roiModalTrigger.addEventListener('click', function(event) {
+                    // Get payment status from localStorage
+                    const isPaid = getLocal("authenticated") === "paid";
+                    
+                    if (!isPaid) {
+                        // If not paid, prevent modal from opening and show alert
+                        event.preventDefault();
+                        event.stopPropagation();
+                        alert("Payment required to access the Self Employed Worksheet");
+                        return false;
+                    }
+                });
+            }
+        });
+    </script>
+ </body>
+ 
+ </html>

@@ -1,0 +1,726 @@
+<!-- /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */ -->
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="description" content="Educational financial tool to estimate, learn, and simulate—not financial advice.">
+   <title> IncomeIQ™ Summary</title>
+   <link rel="icon" type="image/x-icon" href="/images/newLogo.jpg">
+   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="/style/styles.css">
+   <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.js"></script>
+   <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+   <link rel="shortcut icon" href="/images/favicon.ico" />
+   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+   <!-- frequencyChange.js is now loaded in budget.html -->
+ </head>
+  
+ <body style="display: none;"> 
+  
+ 
+
+
+
+   
+   <!-- Main Content -->
+
+    <h3 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">Summary</h4>
+
+
+     <!-- Disclaimer Banner -->
+     <div style="text-align: center; font-size: 0.9em; color: #fff; background: #333; padding: 10px; margin-bottom: 15px;">
+       Not financial advice. All calculations are educational estimates based on your inputs. Consult a professional before making financial decisions.
+     </div>
+
+     
+ 
+     <!-- Frequency Selector (Free) - Will be injected by frequencyChange.js -->
+     <div data-summary-frequency-id="summary_frequency" style="text-align:center; margin-bottom: 15px;"></div>
+
+     <!-- Styles now provided by frequencyChange.js -->
+ 
+     
+
+     
+    
+ 
+     <div class="summary-container">
+
+      <!-- Premium: Taxes & Obligations -->
+      <details style="margin-top:10px;">
+        <summary>
+          <span class="tooltip1" data-tooltip="Detailed tax and obligation breakdowns based on your inputs.">
+            <h2>TAXES & OBLIGATIONS<span class="tooltip1-content"></span></h2>
+          </span>
+        </summary>
+
+  
+
+
+          
+            <details style="margin-top:10px;">
+              <summary>
+                <p style="margin-left:21px;">
+                  <span class="tooltip1" data-tooltip="Total taxes owed, calculated from taxable income (gross minus deductions like SD in USA or BPA in Canada) using regional rates (e.g., USA federal/state, Canada federal/provincial). Includes income tax and full (USA) or 50% (Canada) capital gains tax; excludes obligations like CPP/Social Security. Use: Estimate tax burden.">
+                    <u>Total Tax Payable:</u><span class="tooltip1-content"></span><span id="TOTALTAXANNUAL"></span>
+                  </span>
+                </p>
+              </summary>
+          
+              <p style="margin-left:34px;">
+                <span class="tooltip1" data-tooltip="Regional taxes based on your data.">
+                  <u>Regional Tax Payable:</u><span class="tooltip1-content"></span>
+                  <span id="REGIONALTAXANNUAL"></span>
+                </span>
+              </p>
+              
+              <p style="margin-left:34px;">
+                <span class="tooltip1" data-tooltip="Subregion taxes from your inputs.">
+                  <u>Subregion Tax Payable:</u><span class="tooltip1-content"></span>
+                  <span id="SUBREGIONTAXANNUAL"></span>
+                </span>
+              </p>
+          
+            
+            
+             
+            </details>
+          
+            <details style="margin-top:10px;">
+              <summary>
+                <p style="margin-left:21px;">
+                  <span class="tooltip1" data-tooltip="Other government obligations from your inputs.">
+                    <u>Total Other Obligations:</u><span class="tooltip1-content"></span>
+                  </span>
+                </p>
+              </summary>
+           
+              <p style="margin-left:34px;">
+                <span class="tooltip1" data-tooltip="input collective amout of all othe robligations payable">
+                  <u>Other Obligations Payable:</u><span class="tooltip1-content"></span>
+                  <span id="OTHEROBLIGATIONANNUAL"></span>
+                </span>
+              </p>
+          
+
+<!--
+
+         <div class="can-hide">
+
+            <details style="margin-top:10px;">
+<summary>
+            <p style="margin-left:34px;">
+              <span class="tooltip1" data-tooltip="Total CPP based on your income and status.">
+                <u>Total CPP Payable:</u><span class="tooltip1-content"></span><span id="cpp_sum" ></span>
+              </span>
+            </p>
+</summary>
+
+            <p style="margin-left:34px;">
+              <span class="tooltip1" data-tooltip="CPP for self-employed, based on your income.">
+                <u>Self Employed CPP Payable:</u><span class="tooltip1-content"></span><span id="annual_cpp_seresult"></span>
+              </span>
+            </p>
+
+            <p style="margin-left:34px;">
+              <span class="tooltip1" data-tooltip="CPP for employed, from your data.">
+                <u>Employed CPP Payable:</u><span class="tooltip1-content"></span><span id="annual_cpp_eresult" ></span>
+              </span>
+            </p>
+</details>
+           
+
+            <p style="margin-left:34px;">
+              <span class="tooltip1" data-tooltip="Employment Insurance (EI) contribution, calculated from your income inputs (e.g., 1.63% up to ~$63,200 in 2025, per CRA) if employed. Self-employed individuals aren’t required to pay EI but can opt in for benefits like parental leave. Excludes non-wage income. Use: Estimate job-related costs.">         
+                       <u>Total Employment Insurance Payable:</u><span class="tooltip1-content"></span><span id="ANNUALEI" ></span>
+              </span>
+            </p>
+
+          </div>
+
+
+
+          <div class="usa-hide">
+
+            <details style="margin-top:10px;">
+<summary>
+            <p style="margin-left:34px;">
+              <span class="tooltip1" data-tooltip="Social Security total from your U.S. income data.">
+                <u>Social Security Total US:</u><span class="tooltip1-content"></span><span id="TOTALSOCIALSECURITY" ></span>
+              </span>
+            </p>
+</summary>
+
+
+            <p style="margin-left:34px;">
+              <span class="tooltip1" data-tooltip="Social Security for employed, based on your inputs.">
+                <u>Social Security Employed US:</u><span class="tooltip1-content"></span><span id="TOTALSOCIALSECURITYE" ></span>
+              </span>
+            </p>
+            <p style="margin-left:34px;">
+              <span class="tooltip1" data-tooltip="Social Security for self-employed, from your data.">
+                <u>Social Security Self Employed US:</u><span class="tooltip1-content"></span><span id="TOTALSOCIALSECURITYSE" ></span>
+              </span>
+            </p>
+            </details>
+
+
+            <p style="margin-left:34px;">
+              <span class="tooltip1" data-tooltip="Medicare tax calculated from your income.">
+                <u>Medicare:</u><span class="tooltip1-content"></span><span id="TOTALMEDICARE" ></span>
+              </span>
+            </p>
+          </div>
+        -->
+
+        </details>
+
+      </details>
+
+    </div>
+
+<div class="summary-container1">
+
+
+
+    
+     <!-- Free: Income & Expenses -->
+     <details style="margin-top:10px;">
+       <summary>
+         <span class="tooltip1" data-tooltip="Your total earnings and spending based on your inputs.">
+           <h2>INCOME & EXPENSES<span class="tooltip1-content"></span></h2>
+         </span>
+       </summary>
+
+<!-- Premium: Disposable Income -->
+
+<p style="margin-left:21px;" class="premium-section">
+   <span class="tooltip1" data-tooltip="Income left after subtracting expenses, taxes, and obligations from gross income. Calculated as: gross income - (taxes like income/capital gains + obligations like CPP/Social Security + all expenses). Includes only your spendable remainder; excludes locked savings. Use: Gauge financial flexibility.">
+               </style>DISPOSABLE INCOME:<span class="premium-notice">Premium</span><span class="tooltip1-content"></span><span id="DISPOSABLEINCOME" class="premium-blur">[Locked]</span>
+    </span>
+  </p>
+ 
+ 
+
+       <p style="margin-left:21px;">
+        <span class="tooltip1" data-tooltip="Total gross earnings you’ve entered (e.g., wages, freelance, interest). Calculated by summing all income sources before taxes or deductions. Includes taxable amounts (e.g., 100% capital gains in USA, 50% in Canada); excludes tax-free gains (e.g., Canada’s TFSA). Use: Base for tax and budget planning.">          
+           <u>Income:</u><span class="tooltip1-content"></span><span id="annual_income_sum"></span>
+         </span>
+       </p>
+       <details style="margin-top:10px;">
+         <summary>
+           <p style="margin-left:21px;">
+            <span class="tooltip1" data-tooltip="Total spending you’ve entered, calculated by summing all expense categories (essential, discretionary, etc.). Includes costs like housing and debt payments; excludes taxes or obligations unless specified. Use: Track cash outflow and budget.">            
+                 <u>Expense:</u><span class="tooltip1-content"></span><span id="ANNUALEXPENSESUM"></span>
+             </span>
+           </p>
+         </summary>
+         <p style="margin-left:34px;">
+           <span class="tooltip1" data-tooltip="Essential spending categories you’ve entered.">
+             <u>Essential Expense:</u><span class="tooltip1-content"></span><span id="ESSENTIAL"></span>
+           </span>
+         </p>
+         <p style="margin-left:34px;">
+           <span class="tooltip1" data-tooltip="Non-essential spending you’ve tracked.">
+             <u>Discretionary Expense:</u><span class="tooltip1-content"></span><span id="DISCRETIONARY"></span>
+           </span>
+         </p>
+         <p style="margin-left:34px;">
+           <span class="tooltip1" data-tooltip="Housing costs from your data.">
+             <u>Housing Expense:</u><span class="tooltip1-content"></span><span id="HOUSING"></span>
+           </span>
+         </p>
+         <p style="margin-left:34px;">
+           <span class="tooltip1" data-tooltip="Transportation costs you’ve logged.">
+             <u>Transportation Expense:</u><span class="tooltip1-content"></span><span id="TRANSPORTATION"></span>
+           </span>
+         </p>
+         <p style="margin-left:34px;">
+           <span class="tooltip1" data-tooltip="Dependant-related spending from your inputs.">
+             <u>Dependant Expense:</u><span class="tooltip1-content"></span><span id="DEPENDANT"></span>
+           </span>
+         </p>
+         <p style="margin-left:34px;">
+           <span class="tooltip1" data-tooltip="Debt payments you’ve entered.">
+             <u>Debt Expense:</u><span class="tooltip1-content"></span><span id="DEBT"></span>
+           </span>
+         </p>
+       </details>
+
+  
+
+     </details>
+
+
+ 
+  <details style="margin-top:10px;" >
+    <summary>
+      <span class="tooltip1" data-tooltip="Wealth tracking">
+        <h2>WEALTH<span class="tooltip1-content"></span></h2>
+      </span>
+    </summary>
+
+    <p style="margin-left:21px;">
+      <span class="tooltip1" data-tooltip="Total value of resources you’ve entered.">
+        <u>Assets:</u><span class="tooltip1-content"></span><span id="ASSETS"></span>
+      </span>
+    </p>
+    <p style="margin-left:21px;">
+      <span class="tooltip1" data-tooltip="Total debts or obligations you’ve logged.">
+        <u>Liabilities:</u><span class="tooltip1-content"></span><span id="LIABILITIES"></span>
+      </span>
+    </p>
+
+    <p style="margin-left:45px;">
+      <span class="tooltip1" data-tooltip="Assets minus liabilities. A snapshot of wealth based on your inputs.">
+        <u>Net Worth:</u><span class="tooltip1-content"></span><span id="NETWORTH"></span>
+      </span>
+    </p>
+  </details>
+
+    
+ 
+    
+ 
+          <!-- Premium: Premium Ratios -->
+        <!-- Premium: Premium Ratios -->
+<details style="margin-top:10px;">
+  <summary>
+    <span class="tooltip1" data-tooltip="Advanced ratios to explore financial relationships.">
+      <h2 style="justify-content: center;">RATIOS<span class="tooltip1-content"></span></h2>
+    </span>
+  </summary>
+
+
+
+  <details style="margin-top:10px;">
+    <summary>
+      <p style="margin-left:21px;" class="premium-section">
+        <span class="tooltip1" data-tooltip="Debt divided by income. A common metric from your inputs.">
+          <u>Debt to Income:<span class="premium-notice">Premium</span></u><span class="tooltip1-content"></span><span id="DEBTTOINCOME" class="premium-blur">[Locked]</span>
+        </span>
+      </p>
+    </summary>
+    <ul style="margin-left:34px;">
+      <li><strong>Above 0.36:</strong> Common threshold for concern, per Investopedia</li>
+      <li><strong>0.20 to 0.36:</strong> Typical range, per Investopedia</li>
+      <li><strong>Below 0.20:</strong> Often considered healthy, per Investopedia</li>
+    </ul>
+  </details>
+
+  <details style="margin-top:10px;">
+    <summary>
+      <p style="margin-left:21px;" class="premium-section">
+        <span class="tooltip1" data-tooltip="Passive income vs. expenses. A FIRE concept calculated from your data.">
+          <u>FIRE:<span class="premium-notice">Premium</span></u><span class="tooltip1-content"></span><span id="FIRERATIO" class="premium-blur">[Locked]</span>
+        </span>
+      </p>
+    </summary>
+    <ul style="margin-left:34px;">
+      <li><strong>Below 0.25:</strong> Early stage of financial independence, per Financial Planning Association</li>
+      <li><strong>0.25 to 0.99:</strong> Progress toward independence, per Financial Planning Association</li>
+      <li><strong>1.0 or higher:</strong> Common benchmark for financial independence, per Financial Planning Association</li>
+    </ul>
+  </details>
+
+  <details style="margin-top:10px;">
+    <summary>
+      <p style="margin-left:21px;" class="premium-section">
+        <span class="tooltip1" data-tooltip="Housing costs divided by income, calculated from your data.">
+          <u>Housing to Income:<span class="premium-notice">Premium</span></u><span class="tooltip1-content"></span><span id="HOUSINGTOINCOME" class="premium-blur">[Locked]</span>
+        </span>
+      </p>
+    </summary>
+    <ul style="margin-left:34px;">
+      <li><strong>Above 0.35:</strong> Common threshold for concern, per Investopedia</li>
+      <li><strong>0.28 to 0.35:</strong> Typical range, per Investopedia</li>
+      <li><strong>Below 0.28:</strong> Often considered affordable, per Investopedia</li>
+    </ul>
+  </details>
+
+  <details style="margin-top:10px;">
+    <summary>
+      <p style="margin-left:21px;" class="premium-section">
+        <span class="tooltip1" data-tooltip="Savings divided by debt, based on your inputs.">
+          <u>Savings to Debt:<span class="premium-notice">Premium</span></u><span class="tooltip1-content"></span><span id="SAVINGSTODEBT" class="premium-blur">[Locked]</span>
+        </span>
+      </p>
+    </summary>
+    <ul style="margin-left:34px;">
+      <li><strong>Below 1.0:</strong> Common threshold for concern, per Consumer Financial Protection Bureau</li>
+      <li><strong>1.0 to 2.0:</strong> Typical range, per Consumer Financial Protection Bureau</li>
+      <li><strong>2.0 or higher:</strong> Often considered a sign of stability, per Consumer Financial Protection Bureau</li>
+    </ul>
+  </details>
+</details>
+
+          <details style="margin-top:10px;" >
+            <summary>
+              <span class="tooltip1" data-tooltip="Hypothetical calculations based on your current data, for learning purposes only.">
+                <h2>FINANCIAL PROJECTIONS<span class="tooltip1-content"></span></h2>
+              </span>
+             
+            </summary>
+            <p style="margin-left:21px;" class="premium-section">
+              <span class="tooltip1" data-tooltip="Hypothetical time to pay revolving debt using your disposable income, no interest assumed.">
+                  <u>Revolving Debt - Time to Pay:<span class="premium-notice">Premium</span></u><span class="tooltip1-content"></span><span id="TIMETOPAYDEBT" class="premium-blur">[Locked]</span>
+              </span>
+          </p>
+            <p style="margin-left:21px;" class="premium-section">
+              <span class="tooltip1" data-tooltip="Enter a savings goal to see a hypothetical timeline based on your disposable income.">
+                <u>Savings Goal:<span class="premium-notice">Premium</span></u><input id="goalAmount" type="number" disabled style="margin-left: 15px;"><span class="tooltip1-content"></span><span id="goalResult"></span>
+              </span>
+            </p>
+          </details>
+
+          <details style="margin-top:10px;">
+            <summary>
+              <span class="tooltip1" data-tooltip="Relevant Data.">
+                <h2>CONTRIBUTING FACTORS<span class="tooltip1-content"></span></h2>
+              </span>
+            </summary>
+            
+            <p style="margin-left:34px;">
+              <span class="tooltip1" data-tooltip="Taxable income is what’s taxed after adjusting gross income (wages, interest, etc.). In Canada, only 50% of capital gains (profit from sold assets) is included; in the USA, 100% of capital gains is included, with rates varying by holding period (short-term at income rates, long-term at 0%-20%). It’s calculated by subtracting deductions—like Standard Deduction (USA) or Basic Personal Amount (Canada)—and exemptions from gross income. Excludes tax-free items (e.g., Canada’s TFSA gains). Use: Calculate tax owed and plan filings.">
+              <u> Xai Will have all its relvenat factors output here: taxable income SD or BPA amount etc</u><span class="tooltip1-content"></span>
+              </span>
+            </p>
+            
+          </details>
+        
+          
+     
+          
+            
+          
+    
+ 
+     <!-- Expense charts removed as requested -->
+     <!-- Will add back pie charts later -->
+ 
+
+
+</div>
+
+      
+        
+
+ 
+
+
+<!-- Inline script from summary.js -->
+<script type="module">
+/* 
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */
+
+import { getLocal } from '/utility/getlocal.js';
+import { setCookie } from '/utility/setcookie.js';
+import { setLocal } from '/utility/setlocal.js';
+
+// Tab highlighting
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(tab => {
+    const dataL = tab.getAttribute('data-location');
+    const location = document.location.pathname;
+    if (location.includes(dataL)) {
+        tab.removeAttribute('href');
+        tab.classList.add('active');
+    }
+});
+
+// Core DOMContentLoaded listener
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('Summary HTML - DOMContentLoaded event fired');
+    setCookie("summary", Date.now(), 32);
+
+    const paid = getLocal("authenticated");
+    const isPaid = paid === "paid";
+    const currentPath = window.location.pathname;
+    console.log('Summary HTML - Current path:', currentPath, 'isPaid:', isPaid);
+
+    if (isPaid && currentPath !== "/ai/budget/summary.html") {
+        window.location.href = "/ai/budget/summary.html";
+        return;
+    } else {
+        document.body.style.display = 'block';
+        console.log('Summary HTML - Body display set to block');
+    }
+
+    // Debug log localStorage values
+    console.log('Summary HTML - Current values in localStorage:');
+    console.log('ASSETS:', getLocal('ASSETS'));
+    console.log('LIABILITIES:', getLocal('LIABILITIES'));
+    console.log('ANNUALINCOME:', getLocal('ANNUALINCOME'));
+    console.log('ANNUALEXPENSESUM:', getLocal('ANNUALEXPENSESUM'));
+
+    console.log('Summary HTML - About to call updateFreeContent()');
+    updateFreeContent();
+    console.log('Summary HTML - updateFreeContent() completed');
+    
+    if (isPaid) {
+        console.log('Summary HTML - About to call unlockPremiumContent()');
+        unlockPremiumContent();
+        console.log('Summary HTML - About to call updatePremiumContent()');
+        updatePremiumContent();
+        console.log('Summary HTML - Premium content updated');
+    }
+
+    // Make update functions available globally for external calls (e.g., from summarytab.js)
+    console.log('Summary HTML - Making update functions available globally');
+    window.updateFreeContent = updateFreeContent;
+    window.updatePremiumContent = updatePremiumContent;
+    window.unlockPremiumContent = unlockPremiumContent;
+
+    const frequencyDropdown = document.getElementById('frequency');
+    frequencyDropdown.addEventListener('change', () => {
+        updateFreeContent();
+        if (isPaid) {
+            updatePremiumContent();
+            timeToPay(true);
+        } else {
+            timeToPay(false);
+        }
+        calculateGoal(isPaid);
+    });
+
+    const goalAmountInput = document.getElementById('goalAmount');
+    if (goalAmountInput) {
+        goalAmountInput.addEventListener('input', () => calculateGoal(isPaid));
+    }
+
+    // Add input event listeners for Taxes & Obligations
+    const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
+    inputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('input', () => {
+                const value = input.value || '0';
+                setLocal(id, value); // Store in local storage
+                updateFreeContent(); // Update calculated fields
+                if (isPaid) {
+                    updatePremiumContent(); // Update premium features
+                }
+                updateIncomeErosionPieChart(); // Update chart
+            });
+        }
+    });
+
+    document.getElementById('close-sidebar')?.addEventListener('click', function() {
+        document.getElementById('subscribe-sidebar').style.display = 'none';
+    });
+    
+    // Regional data display
+    const regionElement = document.getElementById('RegionDropdown');
+    if (regionElement) {
+        regionElement.textContent = getLocal('RegionDropdown').trim() !== "" ? getLocal('RegionDropdown') : "NONE";
+    }
+    const subregionElement = document.getElementById('SubregionDropdown');
+    if (subregionElement) {
+        subregionElement.textContent = getLocal('SubregionDropdown').trim() !== "" ? getLocal('SubregionDropdown') : "";
+    }
+
+    // Financial Projections (free)
+    timeToPay(false);
+    calculateGoal(false);
+
+    // Charts
+    updateExpensePieChart();
+    updateIncomeErosionPieChart();
+    
+    console.log('Summary HTML - DOMContentLoaded event handler completed');
+});
+
+// Free content update function
+function updateFreeContent() {
+    const frequency = document.getElementById('frequency').value;
+    const multiplier = getFrequencyMultiplier(frequency);
+
+    // Income & Expenses (free)
+    updateElement('annual_income_sum', 'ANNUALINCOME', multiplier);
+    updateElement('ANNUALEXPENSESUM', 'ANNUALEXPENSESUM', multiplier);
+    updateElement('ESSENTIAL', 'ESSENTIAL', multiplier);
+    updateElement('DISCRETIONARY', 'DISCRETIONARY', multiplier);
+    updateElement('HOUSING', 'HOUSING', multiplier);
+    updateElement('TRANSPORTATION', 'TRANSPORTATION', multiplier);
+    updateElement('DEPENDANT', 'DEPENDANT', multiplier);
+    updateElement('DEBT', 'DEBT', multiplier);
+
+    // Update calculated fields
+    updateElement('ASSETS', 'ASSETS', multiplier);
+    updateElement('LIABILITIES', 'LIABILITIES', multiplier);
+    updateElement('NETWORTH', null, multiplier, () => {
+        return parseFloat(getLocal('ASSETS') || 0) - parseFloat(getLocal('LIABILITIES') || 0);
+    });
+
+    // Update charts
+    updateExpensePieChart();
+}
+
+function unlockPremiumContent() {
+    document.querySelectorAll('.premium-blur').forEach(el => {
+        el.classList.remove('premium-blur');
+        if (el.textContent === '[Locked]') {
+            el.textContent = '';
+        }
+    });
+    document.querySelectorAll('.premium-notice').forEach(el => el.style.display = 'none');
+    const goalAmount = document.getElementById('goalAmount');
+    if (goalAmount) goalAmount.disabled = false;
+}
+
+// Premium content update function
+function updatePremiumContent() {
+    const frequency = document.getElementById('frequency').value;
+    const multiplier = getFrequencyMultiplier(frequency);
+
+    updateElement('DISPOSABLEINCOME', null, multiplier, calculateDisposableIncome);
+
+    const debtToIncome = (parseFloat(getLocal('LIABILITIES')) / parseFloat(getLocal('ANNUALINCOME')) || 0);
+    document.getElementById('DEBTTOINCOME').textContent = isNaN(debtToIncome) || !isFinite(debtToIncome) ? 'Not Applicable' : debtToIncome.toFixed(2);
+    colorChangeDTI();
+
+    const housingToIncome = (parseFloat(getLocal('HOUSING')) / parseFloat(getLocal('ANNUALINCOME')) || 0);
+    document.getElementById('HOUSINGTOINCOME').textContent = isNaN(housingToIncome) ? 'Not Applicable' : housingToIncome.toFixed(2);
+    colorChangeHTI();
+
+    const savingsToDebt = (parseFloat(getLocal('ASSETS')) / parseFloat(getLocal('LIABILITIES')) || 0);
+    document.getElementById('SAVINGSTODEBT').textContent = isNaN(savingsToDebt) || !isFinite(savingsToDebt) ? 'Not Applicable' : savingsToDebt.toFixed(2);
+    colorChangeSavingsToDebt(savingsToDebt);
+
+    const fireRatio = (parseFloat(getLocal('PASSIVEINCOME')) / parseFloat(getLocal('ANNUALEXPENSESUM')) || 0);
+    document.getElementById('FIRERATIO').textContent = isNaN(fireRatio) ? 'Not Applicable' : fireRatio.toFixed(2);
+    colorChangeFIRE();
+
+    timeToPay(true);
+    calculateGoal(true);
+}
+
+// Helper function to update elements
+function updateElement(elementId, cookieName, multiplier, calcFunction = null, regionClass = null) {
+    const element = document.getElementById(elementId);
+    if (element && (!regionClass || element.closest(`.${regionClass}`))) {
+        const value = calcFunction ? calcFunction() : (parseFloat(getLocal(cookieName)) || 0);
+        element.textContent = '$' + (value * multiplier).toFixed(2);
+    }
+}
+
+// Frequency multiplier
+function getFrequencyMultiplier(frequency) {
+    switch (frequency) {
+        case 'monthly': return 1 / 12;
+        case 'weekly': return 1 / 52;
+        default: return 1; // annual
+    }
+}
+
+// Calculate Disposable Income (premium)
+function calculateDisposableIncome() {
+    const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
+    const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
+    // Default tax and obligation values to 0 if not set
+    const regionalTax = parseFloat(getLocal('REGIONALTAXANNUAL')) || 0;
+    const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
+    const obligations = parseFloat(getLocal('OTHEROBLIGATIONANNUAL')) || 0;
+
+    return income - expenses - regionalTax - subregionalTax - obligations;
+}
+
+
+
+
+// Expense Pie Chart (free) - temporary stub until charts are added back later
+function updateExpensePieChart() {
+    // Chart functionality removed as requested
+    console.log('Expense pie chart update requested but chart is currently disabled');
+}
+
+// Income Erosion Pie Chart - temporary stub until charts are added back later
+function updateIncomeErosionPieChart() {
+    // Chart functionality removed as requested
+    console.log('Income erosion pie chart update requested but chart is currently disabled');
+}
+
+// Color change functions (premium)
+function colorChangeFIRE() {
+    const fire = parseFloat(document.getElementById("FIRERATIO").textContent);
+    if (isNaN(fire)) return;
+    document.getElementById("FIRERATIO").style.color = 
+        fire >= 1.0 ? "green" : fire >= 0.25 ? "orange" : "red";
+}
+
+function colorChangeSavingsToDebt(savingsToDebt) {
+    if (isNaN(savingsToDebt)) return;
+    document.getElementById("SAVINGSTODEBT").style.color = 
+        savingsToDebt >= 2 ? "green" : savingsToDebt >= 1 ? "orange" : "red";
+}
+
+function colorChangeHTI() {
+    const hti = parseFloat(document.getElementById("HOUSINGTOINCOME").textContent);
+    if (isNaN(hti)) return;
+    document.getElementById("HOUSINGTOINCOME").style.color = 
+        hti < 0.28 ? "green" : hti <= 0.35 ? "orange" : "red";
+}
+
+function colorChangeDTI() {
+    const dti = parseFloat(document.getElementById("DEBTTOINCOME").textContent);
+    if (isNaN(dti)) return;
+    document.getElementById("DEBTTOINCOME").style.color = 
+        dti < 0.20 ? "green" : dti <= 0.36 ? "orange" : "red";
+}
+
+// Financial Projections (free with premium enhancement)
+function timeToPay(isPaid) {
+    const frequency = document.getElementById('frequency').value;
+    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getLocal('ANNUALINCOME')) || 0) - (parseFloat(getLocal('ANNUALEXPENSESUM')) || 0);
+    const revolvingDebt = parseFloat(getLocal('LIABILITIESNA')) || 0;
+
+    let timeToPayDebt = document.getElementById('TIMETOPAYDEBT');
+    if (!revolvingDebt || disposableIncome <= 0) {
+        timeToPayDebt.textContent = disposableIncome <= 0 ? "RISK OF INSOLVENCY" : "Not Applicable";
+    } else {
+        let time = revolvingDebt / disposableIncome;
+        let unit = 'Years';
+        if (frequency === 'monthly') { time *= 12; unit = 'Months'; }
+        else if (frequency === 'weekly') { time *= 52; unit = 'Weeks'; }
+        timeToPayDebt.textContent = `${time.toFixed(2)} ${unit}`;
+    }
+}
+
+function calculateGoal(isPaid) {
+    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getLocal('ANNUALINCOME')) || 0) - (parseFloat(getLocal('ANNUALEXPENSESUM')) || 0);
+    const goalAmount = parseFloat(document.getElementById('goalAmount').value) || 0;
+    const frequency = document.getElementById('frequency').value;
+
+    if (disposableIncome <= 0 || goalAmount <= 0) {
+        document.getElementById('goalResult').textContent = '';
+        return;
+    }
+
+    let time = goalAmount / disposableIncome;
+    let unit = 'Years';
+    if (frequency === 'monthly') { time *= 12; unit = 'Months'; }
+    else if (frequency === 'weekly') { time *= 52; unit = 'Weeks'; }
+    document.getElementById('goalResult').textContent = `${unit} needed: ${time.toFixed(2)}`;
+}
+</script>
+
+</body>
+</html>
