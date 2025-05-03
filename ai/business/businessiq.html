@@ -7,101 +7,87 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 -->
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
-    <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NewBizIQ™</title>
-    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/ai/styles/prompt.css">
+  <link rel="stylesheet" href="/ai/styles/iq-standard.css">
 </head>
-<body>
-    <a href="/ai/landing/landing.html">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
-    </a>
 
-    <div class="container premium-section premium-blur">
-        <div class="row1">
-            <textarea id="business-vision" rows="1" placeholder="What’s your business idea? e.g., Launch a coffee shop"></textarea>
-        </div>
-        <div class="row1">
-            <div class="grid-container" id="business-knowledge-level">
-                <div class="grid-item" data-value="New">I’m New to Business</div>
-                <div class="grid-item" data-value="Intermediate">I’ve Run a Business Before</div>
-                <div class="grid-item" data-value="Sophisticated">I’m an Experienced Entrepreneur</div>
-            </div>
-        </div>
-        <div class="row1">
-            <div class="grid-container" id="business-general-skills">
-                <div class="grid-item" data-value="Communication">I Communicate Well</div>
-                <div class="grid-item" data-value="Problem-Solving">I Solve Problems</div>
-                <div class="grid-item" data-value="Teamwork">I Work in Teams</div>
-                <div class="grid-item" data-value="Time-Management">I Manage Time</div>
-                <div class="grid-item" data-value="Adaptability">I Adapt Easily</div>
-                <div class="grid-item" data-value="Critical-Thinking">I Think Critically</div>
-                <div class="grid-item" data-value="Leadership">I Lead Others</div>
-                <div class="grid-item" data-value="Creativity">I’m Creative</div>
-                <div class="grid-item" data-value="Work-Ethic">I Have Strong Work Ethic</div>
-                <div class="grid-item" data-value="Interpersonal">I Connect with People</div>
-                <div class="grid-item" data-value="Organization">I Stay Organized</div>
-                <div class="grid-item" data-value="Attention-to-Detail">I Focus on Details</div>
-                <div class="grid-item" data-value="Decision-Making">I Make Decisions</div>
-                <div class="grid-item" data-value="Analytical">I Analyze Well</div>
-                <div class="grid-item" data-value="Initiative">I Take Initiative</div>
-                <div class="grid-item" data-value="Technical">I’m Tech-Savvy</div>
-                <div class="grid-item" data-value="Emotional-Intelligence">I Understand Emotions</div>
-                <div class="grid-item" data-value="Negotiation">I Negotiate Effectively</div>
-                <div class="grid-item" data-value="Resilience">I’m Resilient</div>
-                <div class="grid-item" data-value="Project-Management">I Manage Projects</div>
-            </div>
-        </div>
-        <div class="row1">
-            <div class="grid-container" id="business-weaknesses">
-                <div class="grid-item" data-value="Procrastination">I Procrastinate</div>
-                <div class="grid-item" data-value="Impatience">I’m Impatient</div>
-                <div class="grid-item" data-value="Disorganization">I’m Disorganized</div>
-                <div class="grid-item" data-value="Overthinking">I Overthink</div>
-                <div class="grid-item" data-value="Perfectionism">I’m a Perfectionist</div>
-                <div class="grid-item" data-value="Lack-of-Confidence">I Lack Confidence</div>
-                <div class="grid-item" data-value="Difficulty-Delegating">I Struggle to Delegate</div>
-                <div class="grid-item" data-value="Poor-Time-Management">I Manage Time Poorly</div>
-                <div class="grid-item" data-value="Indecisiveness">I’m Indecisive</div>
-                <div class="grid-item" data-value="Fear-of-Failure">I Fear Failure</div>
-                <div class="grid-item" data-value="Limited-Technical-Skills">I Lack Tech Skills</div>
-                <div class="grid-item" data-value="Overcommitting">I Overcommit</div>
-                <div class="grid-item" data-value="Lack-of-Focus">I Lose Focus</div>
-                <div class="grid-item" data-value="Impulsiveness">I’m Impulsive</div>
-                <div class="grid-item" data-value="Difficulty-with-Feedback">I Resist Feedback</div>
-                <div class="grid-item" data-value="Resistance-to-Change">I Resist Change</div>
-                <div class="grid-item" data-value="Poor-Communication">I Communicate Poorly</div>
-                <div class="grid-item" data-value="Stress-Management">I Handle Stress Badly</div>
-                <div class="grid-item" data-value="Lack-of-Initiative">I Lack Initiative</div>
-                <div class="grid-item" data-value="Detail-Overload">I Miss the Big Picture</div>
-            </div>
-        </div>
-        <div class="row1">
-            <textarea id="business-organization" rows="4" placeholder="Business Equipment & Tools (1 per line):\nQuickBooks for accounting\nShopify for e-commerce\nLadder\nWelding Torch"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="business-network" rows="4" placeholder="Who can you leverage? (1 per line):\nFriend who owns a café\nLocal Chamber of Commerce\nBusiness mentor"></textarea>
-        </div>
-        <div class="row1">
-            <button class="generate-btn" data-prompt="newbiziq™" onclick="generatePrompt('newbiziq™')">Generate Promptemplate™ Now!</button>
-        </div>
+<div class="row1">
+    <h4>Business Idea</h4>
+    <textarea id="business-vision" rows="1" placeholder="What's your business idea? e.g., Launch a coffee shop"></textarea>
+</div>
+
+<div class="row1">
+    <div class="grid-container" id="business-knowledge-level">
+        <h4>Business Experience</h4>
+        <div class="grid-item" data-value="New">I'm New to Business</div>
+        <div class="grid-item" data-value="Intermediate">I've Run a Business Before</div>
+        <div class="grid-item" data-value="Sophisticated">I'm an Experienced Entrepreneur</div>
     </div>
+</div>
 
-    <script src="/utility/modal.js"></script>
-    <script src="/payment/paymentform.js"></script>
-    <script src="/utility/tray.js"></script>
-    <script src="https://js.stripe.com/v3/" async></script>
-    <script src="newbiziq.js"></script>
-</body>
-</html>
+<div class="row1">
+    <div class="grid-container" id="business-general-skills">
+        <h4>Your Strengths</h4>
+        <div class="grid-item" data-value="Communication">I Communicate Well</div>
+        <div class="grid-item" data-value="Problem-Solving">I Solve Problems</div>
+        <div class="grid-item" data-value="Teamwork">I Work in Teams</div>
+        <div class="grid-item" data-value="Time-Management">I Manage Time</div>
+        <div class="grid-item" data-value="Adaptability">I Adapt Easily</div>
+        <div class="grid-item" data-value="Critical-Thinking">I Think Critically</div>
+        <div class="grid-item" data-value="Leadership">I Lead Others</div>
+        <div class="grid-item" data-value="Creativity">I'm Creative</div>
+        <div class="grid-item" data-value="Work-Ethic">I Have Strong Work Ethic</div>
+        <div class="grid-item" data-value="Interpersonal">I Connect with People</div>
+        <div class="grid-item" data-value="Organization">I Stay Organized</div>
+        <div class="grid-item" data-value="Attention-to-Detail">I Focus on Details</div>
+        <div class="grid-item" data-value="Decision-Making">I Make Decisions</div>
+        <div class="grid-item" data-value="Analytical">I Analyze Well</div>
+        <div class="grid-item" data-value="Initiative">I Take Initiative</div>
+        <div class="grid-item" data-value="Technical">I'm Tech-Savvy</div>
+        <div class="grid-item" data-value="Emotional-Intelligence">I Understand Emotions</div>
+        <div class="grid-item" data-value="Negotiation">I Negotiate Effectively</div>
+        <div class="grid-item" data-value="Resilience">I'm Resilient</div>
+        <div class="grid-item" data-value="Project-Management">I Manage Projects</div>
+    </div>
+</div>
+
+<div class="row1">
+    <div class="grid-container" id="business-weaknesses">
+        <h4>Your Challenges</h4>
+        <div class="grid-item" data-value="Procrastination">I Procrastinate</div>
+        <div class="grid-item" data-value="Impatience">I'm Impatient</div>
+        <div class="grid-item" data-value="Disorganization">I'm Disorganized</div>
+        <div class="grid-item" data-value="Overthinking">I Overthink</div>
+        <div class="grid-item" data-value="Perfectionism">I'm a Perfectionist</div>
+        <div class="grid-item" data-value="Lack-of-Confidence">I Lack Confidence</div>
+        <div class="grid-item" data-value="Difficulty-Delegating">I Struggle to Delegate</div>
+        <div class="grid-item" data-value="Poor-Time-Management">I Manage Time Poorly</div>
+        <div class="grid-item" data-value="Indecisiveness">I'm Indecisive</div>
+        <div class="grid-item" data-value="Fear-of-Failure">I Fear Failure</div>
+        <div class="grid-item" data-value="Limited-Technical-Skills">I Lack Tech Skills</div>
+        <div class="grid-item" data-value="Overcommitting">I Overcommit</div>
+        <div class="grid-item" data-value="Lack-of-Focus">I Lose Focus</div>
+        <div class="grid-item" data-value="Impulsiveness">I'm Impulsive</div>
+        <div class="grid-item" data-value="Difficulty-with-Feedback">I Resist Feedback</div>
+        <div class="grid-item" data-value="Resistance-to-Change">I Resist Change</div>
+        <div class="grid-item" data-value="Poor-Communication">I Communicate Poorly</div>
+        <div class="grid-item" data-value="Stress-Management">I Handle Stress Badly</div>
+        <div class="grid-item" data-value="Lack-of-Initiative">I Lack Initiative</div>
+        <div class="grid-item" data-value="Detail-Overload">I Miss the Big Picture</div>
+    </div>
+</div>
+
+<div class="row1">
+    <h4>Resources & Tools</h4>
+    <textarea id="business-organization" rows="4" placeholder="Business Equipment & Tools (1 per line):\nQuickBooks for accounting\nShopify for e-commerce\nLadder\nWelding Torch"></textarea>
+</div>
+
+<div class="row1">
+    <h4>Your Network</h4>
+    <textarea id="business-network" rows="4" placeholder="Who can you leverage? (1 per line):\nFriend who owns a café\nLocal Chamber of Commerce\nBusiness mentor"></textarea>
+</div>
+
+<button class="generate-btn" data-prompt="newbiziq™" onclick="generatePrompt('newbiziq™')">Generate Promptemplate™ Now!</button>
+
+<script src="businessiq.js"></script>

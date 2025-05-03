@@ -7,79 +7,67 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 -->
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
-    <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AppIQ™</title>
-    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/ai/styles/prompt.css">
+  <link rel="stylesheet" href="/ai/styles/iq-standard.css">
 </head>
-<body>
-    <a href="/ai/landing/landing.html">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
-    </a>
 
-    <div class="container premium-section premium-blur">
-        <div class="row1">
-            <textarea id="app-purpose" rows="4" placeholder="e.g., task management"></textarea>
-        </div>
-        <div class="row1">
-            <div class="grid-container" id="app-code-status" style="grid-template-columns: 1fr 1fr; max-width: 300px;">
-                <div class="grid-item" data-value="code-started">I Have Code Started</div>
-                <div class="grid-item" data-value="no-code">I Have No Code</div>
-            </div>
-        </div>
-        <div class="row1 hidden" id="app-current-code-row1">
-            <textarea id="app-current-code" rows="6" placeholder="Paste your existing code here (e.g., HTML, CSS, JS, etc.)"></textarea>
-        </div>
-        <div class="row1">
-            <div class="grid-container" id="app-features">
-                <div class="grid-item" data-value="Notifications">I Want Notifications</div>
-                <div class="grid-item" data-value="User Accounts">I Want User Accounts</div>
-                <div class="grid-item" data-value="Payments">I Want Payments</div>
-                <div class="grid-item" data-value="Offline Mode">I Want Offline Mode</div>
-                <div class="grid-item" data-value="Contact Form">I Want a Contact Form</div>
-                <div class="grid-item" data-value="Mobile Responsiveness">I Want Mobile Responsiveness</div>
-                <div class="grid-item" data-value="About Us">I Want About Us</div>
-                <div class="grid-item" data-value="E-commerce Platform">I Want an E-commerce Platform</div>
-                <div class="grid-item" data-value="Payment Gateway">I Want a Payment Gateway</div>
-                <div class="grid-item" data-value="Gallery">I Want a Gallery</div>
-                <div class="grid-item" data-value="Social Media Integration">I Want Social Media Integration</div>
-                <div class="grid-item" data-value="Testimonials">I Want Testimonials</div>
-                <div class="grid-item" data-value="FAQ Section">I Want an FAQ Section</div>
-                <div class="grid-item" data-value="Blog Integration">I Want Blog Integration</div>
-                <div class="grid-item" data-value="Custom Graphics">I Want Custom Graphics</div>
-                <div class="grid-item" data-value="Calculation Functionality">I Want Calculation Functionality</div>
-                <div class="grid-item" data-value="Event Calendar">I Want an Event Calendar</div>
-            </div>
-        </div>
-        <div class="row1 hidden">
-            <textarea id="app-platform" rows="1" placeholder="e.g., iOS, Android"></textarea>
-        </div>
-        <div class="row1 hidden">
-            <textarea id="app-budget" rows="1" placeholder="e.g., $5000"></textarea>
-        </div>
-        <div class="row1 hidden">
-            <textarea id="app-timeline" rows="1" placeholder="e.g., 3 months"></textarea>
-        </div>
-        <div class="row1">
-            <button class="generate-btn" data-prompt="AppIQ™" onclick="generatePrompt('AppIQ™')">Generate Promptemplate™ Now!</button>
-        </div>
+<div class="row1">
+    <h4>App Purpose</h4>
+    <textarea id="app-purpose" rows="4" placeholder="e.g., task management"></textarea>
+</div>
+
+<div class="row1">
+    <div class="grid-container" id="app-code-status" style="grid-template-columns: 1fr 1fr; max-width: 300px;">
+        <h4>Development Status</h4>
+        <div class="grid-item" data-value="code-started">I Have Code Started</div>
+        <div class="grid-item" data-value="no-code">I Have No Code</div>
     </div>
+</div>
 
-    <script src="/utility/modal.js"></script>
-    <script src="/payment/paymentform.js"></script>
-    <script src="/utility/tray.js"></script>
-    <script src="https://js.stripe.com/v3/" async></script>
-    <script src="appiq.js"></script>
-</body>
-</html>
+<div class="row1 hidden" id="app-current-code-row1">
+    <h4>Current Code</h4>
+    <textarea id="app-current-code" rows="6" placeholder="Paste your existing code here (e.g., HTML, CSS, JS, etc.)"></textarea>
+</div>
+
+<div class="row1">
+    <div class="grid-container" id="app-features">
+        <h4>App Features</h4>
+        <div class="grid-item" data-value="Notifications">I Want Notifications</div>
+        <div class="grid-item" data-value="User Accounts">I Want User Accounts</div>
+        <div class="grid-item" data-value="Payments">I Want Payments</div>
+        <div class="grid-item" data-value="Offline Mode">I Want Offline Mode</div>
+        <div class="grid-item" data-value="Contact Form">I Want a Contact Form</div>
+        <div class="grid-item" data-value="Mobile Responsiveness">I Want Mobile Responsiveness</div>
+        <div class="grid-item" data-value="About Us">I Want About Us</div>
+        <div class="grid-item" data-value="E-commerce Platform">I Want an E-commerce Platform</div>
+        <div class="grid-item" data-value="Payment Gateway">I Want a Payment Gateway</div>
+        <div class="grid-item" data-value="Gallery">I Want a Gallery</div>
+        <div class="grid-item" data-value="Social Media Integration">I Want Social Media Integration</div>
+        <div class="grid-item" data-value="Testimonials">I Want Testimonials</div>
+        <div class="grid-item" data-value="FAQ Section">I Want an FAQ Section</div>
+        <div class="grid-item" data-value="Blog Integration">I Want Blog Integration</div>
+        <div class="grid-item" data-value="Custom Graphics">I Want Custom Graphics</div>
+        <div class="grid-item" data-value="Calculation Functionality">I Want Calculation Functionality</div>
+        <div class="grid-item" data-value="Event Calendar">I Want an Event Calendar</div>
+    </div>
+</div>
+
+<div class="row1 hidden">
+    <h4>App Platform</h4>
+    <textarea id="app-platform" rows="1" placeholder="e.g., iOS, Android"></textarea>
+</div>
+
+<div class="row1 hidden">
+    <h4>App Budget</h4>
+    <textarea id="app-budget" rows="1" placeholder="e.g., $5000"></textarea>
+</div>
+
+<div class="row1 hidden">
+    <h4>Timeline</h4>
+    <textarea id="app-timeline" rows="1" placeholder="e.g., 3 months"></textarea>
+</div>
+
+<button class="generate-btn" data-prompt="AppIQ™" onclick="generatePrompt('AppIQ™')">Generate Promptemplate™ Now!</button>
+
+<script src="appiq.js"></script>

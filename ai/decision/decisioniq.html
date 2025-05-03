@@ -7,83 +7,72 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 -->
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
-    <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DecisionIQ™</title>
-    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/ai/styles/prompt.css">
+  <link rel="stylesheet" href="/ai/styles/iq-standard.css">
 </head>
-<body>
-    <a href="/ai/landing/landing.html">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
-    </a>
 
-    <div class="container premium-section premium-blur">
-        <div class="row1">
-            <input type="text" id="decisioniq-goal" placeholder="Enter decision goal (e.g., Choose a software vendor)">
-        </div>
-        <div class="row1">
-            <label for="decisioniq-analysis-type">Select analysis type:</label>
-            <select id="decisioniq-analysis-type">
-                <option value="pros-cons">Pros/Cons</option>
-                <option value="weighted-scoring">Weighted Scoring</option>
-                <option value="cost-benefit">Cost-Benefit</option>
-                <option value="swot">SWOT</option>
-                <option value="multi-criteria">Multi-Criteria</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-        <div class="row1">
-            <label for="decisioniq-priority">Select priority focus:</label>
-            <select id="decisioniq-priority">
-                <option value="speed">Speed</option>
-                <option value="accuracy">Accuracy</option>
-                <option value="cost">Cost</option>
-                <option value="long-term-impact">Long-Term Impact</option>
-                <option value="simplicity">Simplicity</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-        <div class="row1">
-            <textarea id="decisioniq-criteria" rows="2" placeholder="Decision criteria: (1 per line)\ne.g., Cost, Features, Scalability"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="decisioniq-options" rows="2" placeholder="Decision options: (1 per line)\ne.g., Vendor A, Vendor B, Vendor C"></textarea>
-        </div>
-        <div class="row1">
-            <label>Select stakeholder(s):</label>
-            <div class="grid-items">
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="team-members"> Team Members</label>
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="executives"> Executives</label>
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="customers"> Customers</label>
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="partners"> Partners</label>
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="regulators"> Regulators</label>
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="other"> Other</label>
-            </div>
-        </div>
-        <div class="row1">
-            <textarea id="decisioniq-constraints" rows="2" placeholder="Constraints: (1 per line)\ne.g., Budget, Timeline, Resources"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="decisioniq-instructions" rows="3" placeholder="Additional instructions: (1 per line)\ne.g., Include risk analysis, Prioritize quantitative data"></textarea>
-        </div>
-        <button class="generate-btn" data-prompt="DecisionIQ™" onclick="generatePrompt('DecisionIQ™')">Generate Promptemplate™ Now!</button>
+<div class="row1">
+    <h4>Decision Goal</h4>
+    <input type="text" id="decisioniq-goal" placeholder="Enter decision goal (e.g., Choose a software vendor)">
+</div>
+
+<div class="row1">
+    <h4>Analysis Type</h4>
+    <select id="decisioniq-analysis-type">
+        <option value="pros-cons">Pros/Cons</option>
+        <option value="weighted-scoring">Weighted Scoring</option>
+        <option value="cost-benefit">Cost-Benefit</option>
+        <option value="swot">SWOT</option>
+        <option value="multi-criteria">Multi-Criteria</option>
+        <option value="other">Other</option>
+    </select>
+</div>
+
+<div class="row1">
+    <h4>Priority Focus</h4>
+    <select id="decisioniq-priority">
+        <option value="speed">Speed</option>
+        <option value="accuracy">Accuracy</option>
+        <option value="cost">Cost</option>
+        <option value="long-term-impact">Long-Term Impact</option>
+        <option value="simplicity">Simplicity</option>
+        <option value="other">Other</option>
+    </select>
+</div>
+
+<div class="row1">
+    <h4>Decision Criteria</h4>
+    <textarea id="decisioniq-criteria" rows="2" placeholder="Decision criteria: (1 per line)&#10;e.g., Cost, Features, Scalability"></textarea>
+</div>
+
+<div class="row1">
+    <h4>Decision Options</h4>
+    <textarea id="decisioniq-options" rows="2" placeholder="Decision options: (1 per line)&#10;e.g., Vendor A, Vendor B, Vendor C"></textarea>
+</div>
+
+<div class="row1">
+    <div class="grid-container" id="decisioniq-stakeholders-container">
+        <h4>Stakeholders</h4>
+        <div class="grid-item" data-value="team-members">Team Members</div>
+        <div class="grid-item" data-value="executives">Executives</div>
+        <div class="grid-item" data-value="customers">Customers</div>
+        <div class="grid-item" data-value="partners">Partners</div>
+        <div class="grid-item" data-value="regulators">Regulators</div>
+        <div class="grid-item" data-value="other">Other</div>
     </div>
+</div>
 
-    <script src="/utility/modal.js"></script>
-    <script src="/payment/paymentform.js"></script>
-    <script src="/utility/tray.js"></script>
-    <script src="https://js.stripe.com/v3/" async></script>
-    <script src="decisioniq.js"></script>
-</body>
-</html>
+<div class="row1">
+    <h4>Constraints</h4>
+    <textarea id="decisioniq-constraints" rows="2" placeholder="Constraints: (1 per line)&#10;e.g., Budget, Timeline, Resources"></textarea>
+</div>
+
+<div class="row1">
+    <h4>Additional Instructions</h4>
+    <textarea id="decisioniq-instructions" rows="3" placeholder="Additional instructions: (1 per line)&#10;e.g., Include risk analysis, Prioritize quantitative data"></textarea>
+</div>
+
+<button class="generate-btn" data-prompt="DecisionIQ™" onclick="generatePrompt('DecisionIQ™')">Generate Promptemplate™ Now!</button>
+
+<script src="decisioniq.js"></script>

@@ -7,122 +7,116 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 -->
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
-    <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EventIQ™</title>
-    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/ai/styles/prompt.css">
+  <link rel="stylesheet" href="/ai/styles/iq-standard.css">
 </head>
-<body>
-    <a href="/ai/landing/landing.html">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
-    </a>
 
-    <div class="container premium-section premium-blur">
-        <div class="row1">
-            <div class="grid-container" id="event-types">
-                <div class="grid-item" data-value="Birthday">Planning a Birthday</div>
-                <div class="grid-item" data-value="Wedding">Planning a Wedding</div>
-                <div class="grid-item" data-value="House Party">Planning a House Party</div>
-                <div class="grid-item" data-value="Corporate Event">Planning a Corporate Event</div>
-                <div class="grid-item" data-value="Family Reunion">Planning a Family Reunion</div>
-                <div class="grid-item" data-value="Concert">Planning a Concert</div>
-                <div class="grid-item" data-value="Graduation">Planning a Graduation</div>
-                <div class="grid-item" data-value="Festival">Planning a Festival</div>
-                <div class="grid-item" data-value="Charity Event">Planning a Charity Event</div>
-                <div class="grid-item" data-value="Community Gathering">Planning a Community Gathering</div>
-            </div>
-        </div>
-        <div class="row1">
-            <select id="event-venue" onchange="toggleEventDetails()">
-                <option value="Venue Secured">Venue Secured</option>
-                <option value="Venue Needed">Venue Needed</option>
-            </select>
-        </div>
-        <div class="row1">
-            <select id="event-location" onchange="toggleEventDetails()">
-                <option value="indoors">Indoors</option>
-                <option value="outdoors">Outdoors</option>
-            </select>
-        </div>
-        <div class="row1 hidden" id="event-indoors">
-            <div class="grid-container" id="event-indoor-setup">
-                <div class="grid-item" data-value="Seating">Seating Needed</div>
-                <div class="grid-item" data-value="Lighting">Lighting Needed</div>
-                <div class="grid-item" data-value="Decor">Decor Needed</div>
-                <div class="grid-item" data-value="Catering">Catering Needed</div>
-                <div class="grid-item" data-value="Microphone">Microphone Needed</div>
-                <div class="grid-item" data-value="Wi-Fi">Wi-Fi Needed</div>
-                <div class="grid-item" data-value="Sound Equipment">Sound Equipment Needed</div>
-                <div class="grid-item" data-value="Restrooms">Restrooms Needed</div>
-                <div class="grid-item" data-value="Registration">Registration Desk Needed</div>
-                <div class="grid-item" data-value="Security">Security Needed</div>
-            </div>
-        </div>
-        <div class="row1 hidden" id="event-outdoors">
-            <div class="grid-container" id="event-outdoor">
-                <div class="grid-item" data-value="Tent">Tent Needed</div>
-                <div class="grid-item" data-value="BackupPlan">Backup Plan Needed</div>
-                <div class="grid-item" data-value="Heaters">Heaters Needed</div>
-                <div class="grid-item" data-value="Sound Equipment">Sound Equipment Needed</div>
-                <div class="grid-item" data-value="Lighting">Lighting Needed</div>
-                <div class="grid-item" data-value="Seating">Seating Needed</div>
-                <div class="grid-item" data-value="Catering">Catering Needed</div>
-                <div class="grid-item" data-value="Security">Security Needed</div>
-                <div class="grid-item" data-value="Registration">Registration Desk Needed</div>
-                <div class="grid-item" data-value="Wi-Fi">Wi-Fi Needed</div>
-                <div class="grid-item" data-value="Decor">Decor Needed</div>
-            </div>
-        </div>
-        <div class="row1">
-            <div class="grid-container" id="event-elements">
-                <div class="grid-item" data-value="Food">Food Needed</div>
-                <div class="grid-item" data-value="Drinks">Drinks Needed</div>
-                <div class="grid-item" data-value="Alcoholic Drinks">Alcoholic Drinks Needed</div>
-                <div class="grid-item" data-value="Photography">Photography Needed</div>
-                <div class="grid-item" data-value="Games">Games Needed</div>
-                <div class="grid-item" data-value="Live Entertainment">Live Entertainment Needed</div>
-                <div class="grid-item" data-value="Decorations">Decorations Needed</div>
-                <div class="grid-item" data-value="Music">Music Needed</div>
-                <div class="grid-item" data-value="Invitations">Invitations Needed</div>
-                <div class="grid-item" data-value="Gift Bags">Gift Bags Needed</div>
-            </div>
-        </div>
-        <div class="row1">
-            <input type="number" id="event-guests" placeholder="People Expected #" min="1">
-            <input type="number" id="event-budget" placeholder="Event Budget $">
-        </div>
-        <div class="row1">
-            <label for="event-start">Start Time:</label>
-            <input type="time" id="event-start" name="event-start">
-            <label for="event-end">End Time:</label>
-            <input type="time" id="event-end" name="event-end">
-        </div>
-        <div class="row1">
-            <textarea id="event-specific-location" rows="1" placeholder="Address & City (e.g., 123 Main St, New York)"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="event-specific-context" rows="3" placeholder="General Context (1 per line):\nMajority of attendees have an Italian background\nMost individuals between 5-10 yrs old"></textarea>
-        </div>
-        <div class="row1">
-            <button class="generate-btn" data-prompt="EventIQ™" onclick="generatePrompt('EventIQ™')">Generate Promptemplate™ Now!</button>
-        </div>
+<div class="row1">
+    <div class="grid-container" id="event-types">
+        <h4>Event Type</h4>
+        <div class="grid-item" data-value="Birthday">Planning a Birthday</div>
+        <div class="grid-item" data-value="Wedding">Planning a Wedding</div>
+        <div class="grid-item" data-value="House Party">Planning a House Party</div>
+        <div class="grid-item" data-value="Corporate Event">Planning a Corporate Event</div>
+        <div class="grid-item" data-value="Family Reunion">Planning a Family Reunion</div>
+        <div class="grid-item" data-value="Concert">Planning a Concert</div>
+        <div class="grid-item" data-value="Graduation">Planning a Graduation</div>
+        <div class="grid-item" data-value="Festival">Planning a Festival</div>
+        <div class="grid-item" data-value="Charity Event">Planning a Charity Event</div>
+        <div class="grid-item" data-value="Community Gathering">Planning a Community Gathering</div>
     </div>
+</div>
 
-    <script src="/utility/modal.js"></script>
-    <script src="/payment/paymentform.js"></script>
-    <script src="/utility/tray.js"></script>
-    <script src="https://js.stripe.com/v3/" async></script>
-    <script src="eventiq.js"></script>
-</body>
-</html>
+<div class="row1">
+    <h4>Venue Status</h4>
+    <select id="event-venue" onchange="toggleEventDetails()">
+        <option value="Venue Secured">Venue Secured</option>
+        <option value="Venue Needed">Venue Needed</option>
+    </select>
+</div>
+
+<div class="row1">
+    <h4>Event Location</h4>
+    <select id="event-location" onchange="toggleEventDetails()">
+        <option value="indoors">Indoors</option>
+        <option value="outdoors">Outdoors</option>
+    </select>
+</div>
+
+<div class="row1 hidden" id="event-indoors">
+    <div class="grid-container" id="event-indoor-setup">
+        <h4>Indoor Requirements</h4>
+        <div class="grid-item" data-value="Seating">Seating Needed</div>
+        <div class="grid-item" data-value="Lighting">Lighting Needed</div>
+        <div class="grid-item" data-value="Decor">Decor Needed</div>
+        <div class="grid-item" data-value="Catering">Catering Needed</div>
+        <div class="grid-item" data-value="Microphone">Microphone Needed</div>
+        <div class="grid-item" data-value="Wi-Fi">Wi-Fi Needed</div>
+        <div class="grid-item" data-value="Sound Equipment">Sound Equipment Needed</div>
+        <div class="grid-item" data-value="Restrooms">Restrooms Needed</div>
+        <div class="grid-item" data-value="Registration">Registration Desk Needed</div>
+        <div class="grid-item" data-value="Security">Security Needed</div>
+    </div>
+</div>
+
+<div class="row1 hidden" id="event-outdoors">
+    <div class="grid-container" id="event-outdoor">
+        <h4>Outdoor Requirements</h4>
+        <div class="grid-item" data-value="Tent">Tent Needed</div>
+        <div class="grid-item" data-value="BackupPlan">Backup Plan Needed</div>
+        <div class="grid-item" data-value="Heaters">Heaters Needed</div>
+        <div class="grid-item" data-value="Sound Equipment">Sound Equipment Needed</div>
+        <div class="grid-item" data-value="Lighting">Lighting Needed</div>
+        <div class="grid-item" data-value="Seating">Seating Needed</div>
+        <div class="grid-item" data-value="Catering">Catering Needed</div>
+        <div class="grid-item" data-value="Security">Security Needed</div>
+        <div class="grid-item" data-value="Registration">Registration Desk Needed</div>
+        <div class="grid-item" data-value="Wi-Fi">Wi-Fi Needed</div>
+        <div class="grid-item" data-value="Decor">Decor Needed</div>
+    </div>
+</div>
+
+<div class="row1">
+    <div class="grid-container" id="event-elements">
+        <h4>Event Elements</h4>
+        <div class="grid-item" data-value="Food">Food Needed</div>
+        <div class="grid-item" data-value="Drinks">Drinks Needed</div>
+        <div class="grid-item" data-value="Alcoholic Drinks">Alcoholic Drinks Needed</div>
+        <div class="grid-item" data-value="Photography">Photography Needed</div>
+        <div class="grid-item" data-value="Games">Games Needed</div>
+        <div class="grid-item" data-value="Live Entertainment">Live Entertainment Needed</div>
+        <div class="grid-item" data-value="Decorations">Decorations Needed</div>
+        <div class="grid-item" data-value="Music">Music Needed</div>
+        <div class="grid-item" data-value="Invitations">Invitations Needed</div>
+        <div class="grid-item" data-value="Gift Bags">Gift Bags Needed</div>
+    </div>
+</div>
+
+<div class="row1">
+    <h4>Event Details</h4>
+    <input type="number" id="event-guests" placeholder="People Expected #" min="1">
+    <input type="number" id="event-budget" placeholder="Event Budget $">
+</div>
+
+<div class="row1">
+    <h4>Event Schedule</h4>
+    <label for="event-start">Start Time:</label>
+    <input type="time" id="event-start" name="event-start">
+    <label for="event-end">End Time:</label>
+    <input type="time" id="event-end" name="event-end">
+</div>
+
+<div class="row1">
+    <h4>Event Location</h4>
+    <textarea id="event-specific-location" rows="1" placeholder="Address & City (e.g., 123 Main St, New York)"></textarea>
+</div>
+
+<div class="row1">
+    <h4>Additional Context</h4>
+    <textarea id="event-specific-context" rows="3" placeholder="General Context (1 per line):\nMajority of attendees have an Italian background\nMost individuals between 5-10 yrs old"></textarea>
+</div>
+
+<button class="generate-btn" data-prompt="EventIQ™" onclick="generatePrompt('EventIQ™')">Generate Promptemplate™ Now!</button>
+
+<script src="eventiq.js"></script>

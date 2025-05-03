@@ -7,76 +7,68 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 -->
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
-    <link rel="manifest" href="/manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MarketingIQ™</title>
-    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="/ai/styles/prompt.css">
+  <link rel="stylesheet" href="/ai/styles/iq-standard.css">
 </head>
-<body>
-    <a href="/ai/landing/landing.html">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
-    </a>
 
-    <div class="container premium-section premium-blur">
-        <div class="row1">
-            <textarea id="market-goal" rows="4" placeholder="e.g., increase sales by 20%, boost brand awareness"></textarea>
-        </div>
-        <div class="row1">
-            <div class="grid-container" id="market-channels">
-                <div class="grid-item" data-value="Social Media">I Use Social Media</div>
-                <div class="grid-item" data-value="Email">I Use Email</div>
-                <div class="grid-item" data-value="Ads">I Use Ads</div>
-                <div class="grid-item" data-value="SEO">I Use SEO</div>
-                <div class="grid-item" data-value="Content Marketing">I Use Content Marketing</div>
-                <div class="grid-item" data-value="Influencer Partnerships">I Use Influencer Partnerships</div>
-            </div>
-        </div>
-        <div class="row1">
-            <textarea id="market-audience" rows="4" placeholder="Target Audience: (1 per line):\nAge 18-35\nTech enthusiasts\nSmall business owners"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="market-budget" rows="1" placeholder="Budget: $1000 or flexible based on ROI"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="market-metrics" rows="4" placeholder="Metrics: (1 per line)\n10% conversion\n5000 clicks\n15% engagement"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="market-message" rows="3" placeholder="Market Message: (1 per line)\nUnlock your potential with our AI tools\nSave time & boost efficiency with Promptemplates™"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="market-timeline" rows="1" placeholder="Timeline: 3 months, Q2 2025"></textarea>
-        </div>
-        <div class="row1">
-            <textarea id="market-competitors" rows="3" placeholder="Competitor Strengths: (1 per line)\nCompetitor A has a value advantage\nCompetitor B has a cost advantage"></textarea>
-        </div>
-        <div class="row1">
-            <div class="grid-container" id="market-visuals">
-                <div class="grid-item" data-value="Videos">Include Videos</div>
-                <div class="grid-item" data-value="Infographics">Include Infographic</div>
-                <div class="grid-item" data-value="Banners">Include Banners</div>
-                <div class="grid-item" data-value="Logos">Include Logos</div>
-            </div>
-        </div>
-        <div class="row1">
-            <button class="generate-btn" data-prompt="MarketingIQ™" onclick="generatePrompt('MarketingIQ™')">Generate Promptemplate™ Now!</button>
-        </div>
+<div class="row1">
+    <h4>Marketing Goal</h4>
+    <textarea id="market-goal" rows="2" placeholder="e.g., increase sales by 20%, boost brand awareness"></textarea>
+</div>
+
+<div class="row1">
+    <div class="grid-container" id="market-channels">
+        <h4>Marketing Channels</h4>
+        <div class="grid-item" data-value="Social Media">I Use Social Media</div>
+        <div class="grid-item" data-value="Email">I Use Email</div>
+        <div class="grid-item" data-value="Ads">I Use Ads</div>
+        <div class="grid-item" data-value="SEO">I Use SEO</div>
+        <div class="grid-item" data-value="Content Marketing">I Use Content Marketing</div>
+        <div class="grid-item" data-value="Influencer Partnerships">I Use Influencer Partnerships</div>
     </div>
+</div>
 
-    <script src="/utility/modal.js"></script>
-    <script src="/payment/paymentform.js"></script>
-    <script src="/utility/tray.js"></script>
-    <script src="https://js.stripe.com/v3/" async></script>
-    <script src="/ai/marketing/adagencyiq.js"></script>
-</body>
-</html>
+<div class="row1">
+    <h4>Target Audience</h4>
+    <textarea id="market-audience" rows="3" placeholder="Target Audience: (1 per line):\nAge 18-35\nTech enthusiasts\nSmall business owners"></textarea>
+</div>
+
+<div class="row1">
+    <h4>Budget</h4>
+    <textarea id="market-budget" rows="1" placeholder="Budget: $1000 or flexible based on ROI"></textarea>
+</div>
+
+<div class="row1">
+    <h4>Success Metrics</h4>
+    <textarea id="market-metrics" rows="3" placeholder="Metrics: (1 per line)\n10% conversion\n5000 clicks\n15% engagement"></textarea>
+</div>
+
+<div class="row1">
+    <h4>Marketing Message</h4>
+    <textarea id="market-message" rows="3" placeholder="Market Message: (1 per line)\nUnlock your potential with our AI tools\nSave time & boost efficiency with Promptemplates™"></textarea>
+</div>
+
+<div class="row1">
+    <h4>Campaign Timeline</h4>
+    <textarea id="market-timeline" rows="1" placeholder="Timeline: 3 months, Q2 2025"></textarea>
+</div>
+
+<div class="row1">
+    <h4>Competitor Analysis</h4>
+    <textarea id="market-competitors" rows="3" placeholder="Competitor Strengths: (1 per line)\nCompetitor A has a value advantage\nCompetitor B has a cost advantage"></textarea>
+</div>
+
+<div class="row1">
+    <div class="grid-container" id="market-visuals">
+        <h4>Visual Content</h4>
+        <div class="grid-item" data-value="Videos">Include Videos</div>
+        <div class="grid-item" data-value="Infographics">Include Infographic</div>
+        <div class="grid-item" data-value="Banners">Include Banners</div>
+        <div class="grid-item" data-value="Logos">Include Logos</div>
+    </div>
+</div>
+
+<button class="generate-btn" data-prompt="MarketingIQ™" onclick="generatePrompt('MarketingIQ™')">Generate Promptemplate™ Now!</button>
+
+<script src="adagencyiq.js"></script>
