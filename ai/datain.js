@@ -170,8 +170,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-left.expanded {
                 max-width: 85%;
                 min-width: 25%;
-                height: calc(100vh - 40px);
-                top: 20px;
+                height: calc(100vh - 100px);
+                /* Keep the centered positioning instead of fixed top */
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 11000; /* Higher z-index when expanded to appear over grid */
             }
 
             .data-container-left:hover {
