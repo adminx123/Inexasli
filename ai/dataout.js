@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.classList.add('expanded');
             dataContainer.dataset.state = 'expanded';
             dataContainer.innerHTML = `
-                <span class="close-data-container"></span>
+                <span class="close-data-container">-</span>
                 <span class="data-label">DATA OUT</span>
                 <div class="data-content">${content}</div>
             `;
@@ -119,11 +119,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-right.expanded {
                 max-width: 85%;
                 min-width: 25%;
-                height: calc(100vh - 40px);
-                top: 20px;
-                margin-right: -webkit-calc(85vw - 20px);
-                margin-right: -moz-calc(85vw - 20px);
-                margin-right: calc(85vw - 20px);
+                height: calc(100vh - 100px);
+                /* Keep the centered positioning instead of fixed top */
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 11000; /* Higher z-index when expanded to appear over grid */
             }
 
             .data-container-right:hover {
@@ -184,13 +184,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
 
                 .data-container-right.expanded {
-                    width: 90vw;
-                    max-width: calc(90vw - 10px);
+                    max-width: 85%;
+                    min-width: 25%;
                     height: calc(100vh - 20px);
                     top: 10px;
-                    margin-right: -webkit-calc(85vw - 10px);
-                    margin-right: -moz-calc(85vw - 10px);
-                    margin-right: calc(85vw - 10px);
                 }
 
                 .data-container-right .data-label {
@@ -217,7 +214,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.className = `data-container-right initial`;
         dataContainer.dataset.state = 'initial';
         dataContainer.innerHTML = `
-            <span class="close-data-container"></span>
+            <span class="close-data-container">+</span>
             <span class="data-label">DATA OUT</span>
         `;
         document.body.appendChild(dataContainer);
