@@ -1,0 +1,425 @@
+<!-- /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IncomeIQ™ Asset</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- this is an extended list of places icon could be needed -->
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+<link rel="shortcut icon" href="/images/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+
+
+    <link rel="manifest" href="/manifest.json">
+
+
+
+    <link rel="stylesheet" href="/style/styles.css">
+
+
+</head>
+
+<body>
+
+
+
+<div class="containerinter">
+  
+
+
+  
+
+
+
+        <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1"
+            data-tooltip="Assets that an individual can readily convert to cash or use to pay for immediate needs within a short period, typically within one year.">
+           Input Current Assets<span class="tooltip1-content"></span>
+        </h2>
+
+
+
+        <div class="row">
+            <label for="assets_checking_accounts">Checking Account:</label>
+            <input type='number' inputmode="numeric" id="assets_checking_accounts">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_checking_accounts_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="assets_savings_accounts">Savings Account:</label>
+            <input type='number' inputmode="numeric" id="assets_savings_accounts">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_savings_accounts_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="assets_other_liquid_accounts">Other Liquid Account:</label>
+            <input type='number' inputmode="numeric" id="assets_other_liquid_accounts">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_other_liquid_accounts_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+
+            <label for="" style="font-size: unset;" class="tooltip1"
+                data-tooltip="Include money owed to you from both personal sources (like loans to friends) and business activities (like sales on credit) that you haven't accounted for elsewhere. As a sole proprietor, these are all considered your assets.">
+                <span class="tooltip1-content"></span>
+                Accounts Receivable:</label>
+            <input type='number' inputmode="numeric" id="assets_money_lent_out">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_money_lent_out_percent" inputmode="numeric">
+        </div>
+
+ 
+
+
+
+        <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1"
+            data-tooltip="Assets in personal finance that are not expected to be converted into cash or used up within one year. These assets might provide value over a longer period.">
+            Input Non-Current/Long Term Assets<span class="tooltip1-content"></span>
+        </h2>
+
+        <div class="row">
+            <label for="assets_long_term_investment_accounts">Long Term Investment Account:</label>
+            <input type='number' inputmode="numeric" id="assets_long_term_investment_accounts">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_long_term_investment_accounts_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="assets_investment_properties">Investment Property:</label>
+            <input type='number' inputmode="numeric" id="assets_investment_properties">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_investment_properties_percent" inputmode="numeric">
+
+        </div>
+
+        <div class="row">
+            <label for="assets_art_jewelry">Art/Jewelry:</label>
+            <input type='number' inputmode="numeric" id="assets_art_jewelry">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_art_jewelry_percent" inputmode="numeric">
+        </div>
+
+
+
+
+        <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1"
+            data-tooltip="Assets that are fixed from a personal view are those meant for long-term use, like homes, cars, or furniture, which you don’t plan to sell soon.">
+            Input Fixed Expenses<span class="tooltip1-content"></span>
+        </h2>
+
+        <div class="row">
+            <label for="assets_primary_residence">Primary Residence:</label>
+            <input type='number' inputmode="numeric" id="assets_primary_residence">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_primary_residence_percent" inputmode="numeric">
+        </div>
+
+
+
+        <div class="row">
+            <label for="assets_small_business">Small Business:</label>
+            <input type='number' inputmode="numeric" id="assets_small_business">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="assets_small_business_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="assets_vehicles">Vehicle:</label>
+            <input type='number' inputmode="numeric" id="assets_vehicles">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets_vehicles_percent"
+                inputmode="numeric">
+        </div>
+
+
+
+
+
+</div>
+
+
+
+
+   
+
+        <!-- Button removed as calculations automatically happen on input and blur events -->
+
+
+
+  
+    </div>
+
+ 
+
+
+
+
+  
+
+
+</body>
+
+<script>
+    // aInline all asset logic as a self-executing function like income.html and expense.html
+    (function() {
+        // Dependency fallbacks
+        const setLocal = window.setLocal || function (key, value, days) {
+            try { localStorage.setItem(key, encodeURIComponent(value)); } catch (e) { console.error(e); }
+        };
+        const getLocal = window.getLocal || function (key) {
+            try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
+        };
+
+        // Asset logic
+        console.log('Asset logic initialized in asset.html at:', new Date().toISOString());
+        let ASSETS = 0;
+        let LIQUIDASSETS = 0;
+
+        function calculateAssets() {
+            const assetFields = [
+                'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+                'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+                'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry'
+            ];
+
+            let assets = 0;
+
+            for (let i = 0; i < assetFields.length; i++) {
+                const field = assetFields[i];
+                const element = document.getElementById(field);
+                if (!element) {
+                    console.error(`Element #${field} not found`);
+                    continue;
+                }
+                const fieldValue = element.value;
+                const parsedValue = parseFloat(fieldValue);
+                if (!isNaN(parsedValue)) {
+                    let fieldPercentage = parseFloat(document.querySelector(`#${field}_percent`)?.value);
+                    if (isNaN(fieldPercentage)) {
+                        fieldPercentage = 100;
+                    }
+                    assets += (parsedValue * fieldPercentage / 100);
+                }
+            }
+
+            ASSETS = assets;
+            // Store result in both global and localStorage
+            window.ASSETS = assets;
+            setLocal("ASSETS", ASSETS.toString(), 365);
+        }
+
+        function calculateLiquidAssets() {
+            const liquidAssetFields = [
+                'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+                'assets_money_lent_out'
+            ];
+
+            let liquidAssets = 0;
+            const isPartner = getLocal('assetspousecheckbox') === 'checked';
+
+            for (let i = 0; i < liquidAssetFields.length; i++) {
+                const field = liquidAssetFields[i];
+                const element = document.getElementById(field);
+                if (!element) {
+                    console.error(`Element #${field} not found`);
+                    continue;
+                }
+                const fieldValue = element.value;
+                const parsedValue = parseFloat(fieldValue);
+                if (!isNaN(parsedValue)) {
+                    let fieldPercentage = parseFloat(document.querySelector(`#${field}_percent`)?.value);
+                    if (isNaN(fieldPercentage) || !isPartner) {
+                        fieldPercentage = 100;
+                    }
+                    liquidAssets += (parsedValue * fieldPercentage / 100);
+                }
+            }
+
+            LIQUIDASSETS = liquidAssets;
+            // Store result in both global and localStorage
+            window.LIQUIDASSETS = liquidAssets;
+            setLocal("LIQUIDASSETS", LIQUIDASSETS.toString(), 365);
+        }
+
+        function calculateAll() {
+            calculateAssets();
+            calculateLiquidAssets();
+
+            const fields = [
+                'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+                'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+                'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
+                'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
+                'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent', 'assets_primary_residence_percent',
+                'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
+            ];
+
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                if (element) {
+                    setLocal(field, element.value.trim() !== "" ? element.value : field.includes('_percent') ? "100" : "", 365);
+                }
+            });
+        }
+        
+        // Make calculateAll function accessible outside this scope
+        window.calculateAll = calculateAll;
+
+        function calculateNext() {
+            calculateAll();
+            const parentWindow = window.parent || window;
+            const assetContainer = parentWindow.document.querySelector('.data-container-asset');
+            if (assetContainer && assetContainer.dataset.state === 'expanded') {
+                const assetClose = assetContainer.querySelector('.close-data-container');
+                if (assetClose) {
+                    assetClose.click();
+                }
+            }
+            setTimeout(() => {
+                const liabilityContainer = parentWindow.document.querySelector('.data-container-liability');
+                if (liabilityContainer && liabilityContainer.dataset.state === 'collapsed') {
+                    const liabilityLabel = liabilityContainer.querySelector('.data-label');
+                    if (liabilityLabel) {
+                        liabilityLabel.click();
+                    }
+                }
+            }, 300);
+        }
+
+        function calculateBack() {
+            calculateAll();
+            const parentWindow = window.parent || window;
+            const assetContainer = parentWindow.document.querySelector('.data-container-asset');
+            if (assetContainer && assetContainer.dataset.state === 'expanded') {
+                const assetClose = assetContainer.querySelector('.close-data-container');
+                if (assetClose) {
+                    assetClose.click();
+                }
+            }
+            setTimeout(() => {
+                const expenseContainer = parentWindow.document.querySelector('.data-container-expense');
+                if (expenseContainer && expenseContainer.dataset.state === 'collapsed') {
+                    const expenseLabel = expenseContainer.querySelector('.data-label');
+                    if (expenseLabel) {
+                        expenseLabel.click();
+                    }
+                }
+            }, 300);
+        }
+
+        // Setup all event listeners and initialize calculations
+        function setupPageFunctionality() {
+            const formElements = [
+                'assets_checking_accounts', 'assets_savings_accounts', 'assets_other_liquid_accounts',
+                'assets_money_lent_out', 'assets_long_term_investment_accounts', 'assets_primary_residence',
+                'assets_investment_properties', 'assets_small_business', 'assets_vehicles', 'assets_art_jewelry',
+                'assets_checking_accounts_percent', 'assets_savings_accounts_percent', 'assets_other_liquid_accounts_percent',
+                'assets_money_lent_out_percent', 'assets_long_term_investment_accounts_percent', 'assets_primary_residence_percent',
+                'assets_investment_properties_percent', 'assets_small_business_percent', 'assets_vehicles_percent', 'assets_art_jewelry_percent'
+            ];
+
+            formElements.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const savedValue = getLocal(elementId);
+                    if (savedValue !== null) {
+                        element.value = savedValue;
+                    }
+                    
+                    // Add input event listener to trigger calculations
+                    element.addEventListener('input', function() {
+                        setLocal(elementId, element.value.trim() !== "" ? element.value : elementId.includes('_percent') ? "100" : "", 365);
+                        // Recalculate and update all values when any input changes
+                        calculateAll();
+                    });
+                    
+                    // Also add blur event to ensure calculations happen even if focus leaves without input event
+                    element.addEventListener('blur', function() {
+                        calculateAll();
+                    });
+                }
+            });
+
+            const maritalStatus = getLocal('maritalStatus');
+            const percentInputs = document.querySelectorAll('.percent-input');
+            if (maritalStatus === 'married' || maritalStatus === 'common-law') {
+                percentInputs.forEach(input => input.style.display = 'block');
+            } else {
+                percentInputs.forEach(input => input.style.display = 'none');
+            }
+
+            // Add asset spouse checkbox handling
+            const spouseCheckbox = document.getElementById('assetspousecheckbox');
+            if (spouseCheckbox) {
+                const spouseValue = getLocal('assetspousecheckbox');
+                spouseCheckbox.checked = spouseValue === 'checked';
+                spouseCheckbox.addEventListener('change', function() {
+                    setLocal('assetspousecheckbox', this.checked ? 'checked' : 'unchecked', 365);
+                    percentInputs.forEach(input => {
+                        input.style.display = this.checked ? 'block' : 'none';
+                    });
+                    calculateAll();
+                });
+            }
+
+            // Navigation buttons
+            const nextButton = document.querySelector('.nav-btn.nav-right');
+            if (nextButton) {
+                nextButton.addEventListener('click', calculateNext);
+            }
+            
+            const backButton = document.querySelector('.nav-btn.nav-left');
+            if (backButton) {
+                backButton.addEventListener('click', calculateBack);
+            }
+            
+            const calculateButton = document.getElementById('calculateButton');
+            if (calculateButton && calculateButton !== nextButton) {
+                calculateButton.addEventListener('click', calculateNext);
+            }
+
+            // Initialize calculations
+            calculateAll();
+        }
+        
+        // Run setup on DOMContentLoaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupPageFunctionality);
+        } else {
+            // DOM already loaded, run setup immediately
+            setupPageFunctionality();
+        }
+        
+        // Also ensure calculations run on window load as a backup
+        window.addEventListener('load', function() {
+            calculateAll();
+        });
+        
+        // Trigger recalculation when the tab becomes visible (e.g., switching back to tab)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                calculateAll();
+            }
+        });
+    })();
+</script>
+
+</html>

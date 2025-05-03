@@ -1,0 +1,108 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SocialIQ™</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/ai/styles/prompt.css">
+</head>
+<body>
+    <a href="/ai/landing/landing.html">
+        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
+    </a>
+
+    <div class="container premium-section premium-blur">
+        <div class="row1">
+            <div class="grid-container" id="area-goal">
+                <div class="grid-item" data-value="Workplace">Workplace</div>
+                <div class="grid-item" data-value="Personal Life">Personal Life</div>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="incident-goal">
+                <div class="grid-item" data-value="Root Cause Identification">Root Cause Identification</div>
+                <div class="grid-item" data-value="Impact Evaluation">Impact Evaluation</div>
+                <div class="grid-item" data-value="Preventing Recurrence">Preventing Recurrence</div>
+                <div class="grid-item" data-value="Improving Response Time">Improving Response Time</div>
+                <div class="grid-item" data-value="Enhancing Decision Making">Enhancing Decision Making</div>
+                <div class="grid-item" data-value="Optimizing Resources">Optimizing Resources</div>
+                <div class="grid-item" data-value="Accountability">Accountability</div>
+                <div class="grid-item" data-value="Identifying Gaps in Process">Identifying Gaps in Process</div>
+                <div class="grid-item" data-value="Effective Communication">Effective Communication</div>
+                <div class="grid-item" data-value="Continuous Improvement">Continuous Improvement</div>
+            </div>
+        </div>
+        <div class="row1">
+            <textarea id="incident-details" rows="4" placeholder="Incident details:(1 per line)\nI argued with a coworker over a missed deadline\nThey said it was my fault\nIt was hard for me to accept any responsibility given their tone"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="incident-moments" rows="3" placeholder="Key moments that stood out:(1 per line)\nThey raised their voice\nThey smiled"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="incident-thoughts" rows="3" placeholder="Thoughts proceeding the incident:(1 per line)\nAm I going to lose my job\nWas I too harsh"></textarea>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="incident-warnings">
+                <div class="grid-item" data-value="anti-social">I’m Anti-Social</div>
+                <div class="grid-item" data-value="manipulative">I’m Manipulative</div>
+                <div class="grid-item" data-value="naive">I’m Naive</div>
+                <div class="grid-item" data-value="passive">I’m Passive</div>
+                <div class="grid-item" data-value="aggressive">I’m Aggressive</div>
+                <div class="grid-item" data-value="overly-emotional">I’m Overly Emotional</div>
+                <div class="grid-item" data-value="impulsive">I’m Impulsive</div>
+                <div class="grid-item" data-value="insecure">I’m Insecure</div>
+                <div class="grid-item" data-value="stubborn">I’m Stubborn</div>
+                <div class="grid-item" data-value="pessimistic">I’m Pessimistic</div>
+                <div class="grid-item" data-value="jealous">I’m Jealous</div>
+                <div class="grid-item" data-value="disorganized">I’m Disorganized</div>
+                <div class="grid-item" data-value="procrastinator">I’m a Procrastinator</div>
+                <div class="grid-item" data-value="self-centered">I’m Self-Centered</div>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="incident-mood">
+                <div class="grid-item" data-value="Anger">They Seemed Angry</div>
+                <div class="grid-item" data-value="Sad">They Seemed Sad</div>
+                <div class="grid-item" data-value="Honest">They Seemed Honest</div>
+                <div class="grid-item" data-value="Indirect">They Seemed Indirect</div>
+                <div class="grid-item" data-value="Manipulative">They Seemed Manipulative</div>
+                <div class="grid-item" data-value="Indifferent">They Seemed Indifferent</div>
+                <div class="grid-item" data-value="Cautious">They Seemed Cautious</div>
+                <div class="grid-item" data-value="Surprised">They Seemed Surprised</div>
+                <div class="grid-item" data-value="Confused">They Seemed Confused</div>
+                <div class="grid-item" data-value="Annoyed">They Seemed Annoyed</div>
+                <div class="grid-item" data-value="Relieved">They Seemed Relieved</div>
+                <div class="grid-item" data-value="Excited">They Seemed Excited</div>
+                <div class="grid-item" data-value="Frustrated">They Seemed Frustrated</div>
+                <div class="grid-item" data-value="Calm">They Seemed Calm</div>
+            </div>
+        </div>
+        <div class="row1">
+            <button class="generate-btn" data-prompt="SocialIQ™" onclick="generatePrompt('SocialIQ™')">Generate Promptemplate™ Now!</button>
+        </div>
+    </div>
+
+    <script src="/utility/modal.js"></script>
+    <script src="/payment/paymentform.js"></script>
+    <script src="/utility/tray.js"></script>
+    <script src="https://js.stripe.com/v3/" async></script>
+    <script src="socialiq.js"></script>
+</body>
+</html>

@@ -1,0 +1,1486 @@
+<!-- /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Promptemplate™</title>
+    <link rel="stylesheet" href="/ai/styles/prompt.css">
+    <link rel="stylesheet" href="/style/payment.css">
+
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+    <style>
+        .generate-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .toggle-icon {
+            font-size: 18px;
+            /* Matches header text size */
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/">
+        <img src="/images/apple-touch-icon.png" alt="Logo"
+            style="width: 50px; height: auto; display: block; margin: 0 auto;">
+    </a>
+
+    
+    <div id="intro">
+    <div class="containerround">
+        <h2 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">|
+            Promptemplate<span class="tm">™</span> |</h2>
+        <h2 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">
+            Unlock AI’s Power—Free & Premium, Zero Hassle Prompts in Seconds.</h2>
+        <p style="text-align: center; color: rgb(0, 0, 0); font-size: 14px; margin-bottom: 15px;">From epic parties to
+            killer business plans—make AI your genius sidekick.</p>
+        <p style="text-align: center; color: rgb(0, 0, 0); font-size: 14px; margin-bottom: 15px; font-style: italic;">
+            Turn AI into your secret weapon—explore now and save time today!</p>
+        <div class="row1">
+            <div class="benefits-card" id="scope-selector">
+                <div class="grid-item" id="personal-btn" data-scope="personal">Explore Promptemplate™</div><br>
+            </div>
+        </div>
+
+
+      <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+    <div class="checkbox-wrapper-2">
+        <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
+    </div>
+    <label for="termscheckbox" style="font-size: 11px;">
+        I agree to the Terms of Service (updated 6/Apr/2025). I understand Promptemplate™ is an educational
+        tool, not professional advice, and I use it at my own risk. INEXASLI isn’t liable for losses or
+        decisions. Liability is limited per the Terms.
+        <span class="modal-trigger" data-modal-src="/budget/legal.txt">
+            Read the Terms of Service.
+        </span>
+    </label>
+</div>
+
+
+
+        </div>
+    </div>
+
+    </div>
+
+    <div class="containerround hidden">
+        <!-- Personal Prompts -->
+        <div id="personal-prompts" class="hidden">
+            <h2 id="data-analysis" style="text-align: center; text-decoration: underline; font-weight: 600;">DATA ANALYSIS</h2>
+
+ <!-- Premium: Research -->
+ <div class="section1 premium-section">
+    <div class="section1-header" onclick="toggleSection(this)">
+        <h2>Research <span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section1-content premium-blur">
+        <div class="row1">
+            <textarea id="research-goal" rows="2"
+                placeholder="What is the goal of your research? (e.g., understand market trends, analyze customer behavior, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="research-purpose" rows="2"
+                placeholder="What is the purpose of this research? (e.g., inform a business decision, identify new opportunities, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="research-type">Select the type of research:</label>
+            <select id="research-type">
+                <option value="qualitative">Qualitative Research</option>
+                <option value="quantitative">Quantitative Research</option>
+                <option value="mixed-methods">Mixed Methods</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="research-scope" rows="2"
+                placeholder="What is the scope of your research? (e.g., specific region, target demographic, timeframe, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <label for="data-collection-method">How will the data be collected?</label>
+            <select id="data-collection-method">
+                <option value="survey">Survey</option>
+                <option value="interview">Interview</option>
+                <option value="focus-group">Focus Group</option>
+                <option value="observational">Observational Research</option>
+                <option value="secondary-data">Secondary Data Analysis</option>
+                <option value="experiment">Experiment</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="research-audience" rows="2"
+                placeholder="Who is the target audience for your research? (e.g., age group, professional background, geographic location, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="research-context" rows="3"
+                placeholder="Provide any context or background information that will help the research. (e.g., historical background, previous research, external factors, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="research-deliverables" rows="2"
+                placeholder="What are the expected deliverables from this research? (e.g., report, presentation, data analysis, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="additional-details" rows="3"
+                placeholder="Is there any other relevant detail or information to consider for your research? (e.g., ethical concerns, special requirements, etc.)"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="research">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
+
+            <!-- Premium: Social Incident -->
+            <div class="section1 premium-section">
+                <div class="section1-header" onclick="toggleSection(this)">
+                    <h2>SocialIQ™<span class="premium-notice">Premium</span></h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section1-content premium-blur">
+                    <div class="row1">
+                        <div class="grid-container" id="area-goal">
+                            <div class="grid-item" data-value="Workplace">Workplace</div>
+                            <div class="grid-item" data-value="Personal Life">Personal Life</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="incident-goal">
+                            <div class="grid-item" data-value="Root Cause Identification">Root Cause Identification
+                            </div>
+                            <div class="grid-item" data-value="Impact Evaluation">Impact Evaluation</div>
+                            <div class="grid-item" data-value="Preventing Recurrence">Preventing Recurrence</div>
+                            <div class="grid-item" data-value="Improving Response Time">Improving Response Time</div>
+                            <div class="grid-item" data-value="Enhancing Decision Making">Enhancing Decision Making
+                            </div>
+                            <div class="grid-item" data-value="Optimizing Resources">Optimizing Resources</div>
+                            <div class="grid-item" data-value="Accountability">Accountability</div>
+                            <div class="grid-item" data-value="Identifying Gaps in Process">Identifying Gaps in Process
+                            </div>
+                            <div class="grid-item" data-value="Effective Communication">Effective Communication</div>
+                            <div class="grid-item" data-value="Continuous Improvement">Continuous Improvement</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <div class="context-details">
+                            <div class="row1">
+                                <textarea id="incident-details" rows="4" placeholder="Incident details:(1 per line)
+I argued with a coworker over a missed deadline
+They said it was my fault
+It was hard for me to accept any responsibility given their tone"></textarea>
+                                <textarea id="incident-moments" rows="3" placeholder="Key moments that stood out:(1 per line)
+They raised their voice
+They smiled"></textarea>
+                                <textarea id="incident-thoughts" rows="3" placeholder="Thoughts proceeding the incident:(1 per line)
+Am I going to lose my job
+Was I too harsh"></textarea>
+                            </div>
+                            <div class="row1">
+                                <div class="grid-container" id="incident-warnings">
+                                    <div class="grid-item" data-value="anti-social">I’m Anti-Social</div>
+                                    <div class="grid-item" data-value="manipulative">I’m Manipulative</div>
+                                    <div class="grid-item" data-value="naive">I’m Naive</div>
+                                    <div class="grid-item" data-value="passive">I’m Passive</div>
+                                    <div class="grid-item" data-value="aggressive">I’m Aggressive</div>
+                                    <div class="grid-item" data-value="overly-emotional">I’m Overly Emotional</div>
+                                    <div class="grid-item" data-value="impulsive">I’m Impulsive</div>
+                                    <div class="grid-item" data-value="insecure">I’m Insecure</div>
+                                    <div class="grid-item" data-value="stubborn">I’m Stubborn</div>
+                                    <div class="grid-item" data-value="pessimistic">I’m Pessimistic</div>
+                                    <div class="grid-item" data-value="jealous">I’m Jealous</div>
+                                    <div class="grid-item" data-value="disorganized">I’m Disorganized</div>
+                                    <div class="grid-item" data-value="procrastinator">I’m a Procrastinator</div>
+                                    <div class="grid-item" data-value="self-centered">I’m Self-Centered</div>
+                                </div>
+                            </div>
+                            <div class="row1">
+                                <div class="grid-container" id="incident-mood">
+                                    <div class="grid-item" data-value="Anger">They Seemed Angry</div>
+                                    <div class="grid-item" data-value="Sad">They Seemed Sad</div>
+                                    <div class="grid-item" data-value="Honest">They Seemed Honest</div>
+                                    <div class="grid-item" data-value="Indirect">They Seemed Indirect</div>
+                                    <div class="grid-item" data-value="Manipulative">They Seemed Manipulative</div>
+                                    <div class="grid-item" data-value="Indifferent">They Seemed Indifferent</div>
+                                    <div class="grid-item" data-value="Cautious">They Seemed Cautious</div>
+                                    <div class="grid-item" data-value="Surprised">They Seemed Surprised</div>
+                                    <div class="grid-item" data-value="Confused">They Seemed Confused</div>
+                                    <div class="grid-item" data-value="Annoyed">They Seemed Annoyed</div>
+                                    <div class="grid-item" data-value="Relieved">They Seemed Relieved</div>
+                                    <div class="grid-item" data-value="Excited">They Seemed Excited</div>
+                                    <div class="grid-item" data-value="Frustrated">They Seemed Frustrated</div>
+                                    <div class="grid-item" data-value="Calm">They Seemed Calm</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="generate-btn" data-prompt="SocialIQ™">Generate Promptemplate™ Now!</button>
+                </div>
+            </div>
+
+            <h2 id="report-generation" style="text-align: center; text-decoration: underline; font-weight: 600;">REPORT GENERATION</h2>
+        
+<!-- Premium: ReportIQ™ -->
+<div class="section1 premium-section">
+    <div class="section1-header" onclick="toggleSection(this)">
+        <h2>ReportIQ™ <span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section1-content premium-blur">
+        <div class="row1">
+            <input type="text" id="reportiq-topic" placeholder="Enter report topic (e.g., Sales Performance)">
+        </div>
+        <div class="row1">
+            <label for="reportiq-type">Select report type:</label>
+            <select id="reportiq-type">
+                <option value="analytical">Analytical</option>
+                <option value="summary">Summary</option>
+                <option value="financial">Financial</option>
+                <option value="progress">Progress</option>
+                <option value="research">Research</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label for="reportiq-audience">Select audience:</label>
+            <select id="reportiq-audience">
+                <option value="executives">Executives</option>
+                <option value="team">Team</option>
+                <option value="clients">Clients</option>
+                <option value="regulators">Regulators</option>
+                <option value="public">Public</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="reportiq-data-sources" rows="2" placeholder="Data sources: (1 per line)
+e.g., CRM, Financial Records, Surveys"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="reportiq-key-metrics" rows="2" placeholder="Key metrics: (1 per line)
+e.g., Revenue, Conversion Rate, Customer Satisfaction"></textarea>
+        </div>
+        <div class="row1">
+            <label for="reportiq-priority">Select priority focus:</label>
+            <select id="reportiq-priority">
+                <option value="clarity">Clarity</option>
+                <option value="brevity">Brevity</option>
+                <option value="accuracy">Accuracy</option>
+                <option value="visualization">Visualization</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="reportiq-constraints" rows="2" placeholder="Constraints: (1 per line)
+e.g., Time, Data Access, Format Requirements"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="reportiq-instructions" rows="3" placeholder="Additional instructions: (1 per line)
+e.g., Include charts, Highlight trends"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="ReportIQ™">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
+
+<h2 id="planning-forecasting" style="text-align: center; text-decoration: underline; font-weight: 600;">PLANNING AND FORECASTING</h2>
+
+ <!-- Premium: Speculation -->
+ <div class="section1 premium-section">
+    <div class="section1-header" onclick="toggleSection(this)">
+        <h2>Speculation <span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section1-content premium-blur">
+        <div class="row1">
+            <textarea id="speculation-goal" rows="2"
+                placeholder="What is the goal of your speculation? (e.g., imagine future trends, explore 'what if' scenarios, etc.)"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="speculation-purpose" rows="2" placeholder="Why are you speculating: (1 per line)
+Inspire new ideas
+Prepare for uncertainty
+Challenge assumptions, etc."></textarea>
+        </div>
+        <div class="row1">
+            <label for="speculation-type">Select the type of speculation:</label>
+            <select id="speculation-type">
+                <option value="futuristic">Futuristic (e.g., predicting long-term outcomes)</option>
+                <option value="alternative">Alternative Scenarios (e.g., 'what if' possibilities)</option>
+                <option value="creative">Creative Exploration (e.g., wild ideas, no limits)</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="speculation-scope" rows="2" placeholder="What is the scope of your speculation: (1 per line)
+Specific industry
+Time period
+Hypothetical event"></textarea>
+        </div>
+        <div class="row1">
+            <label for="speculation-approach">How will you approach this speculation?</label>
+            <select id="speculation-approach">
+                <option value="brainstorming">Brainstorming</option>
+                <option value="thought-experiment">Thought Experiment</option>
+                <option value="storytelling">Storytelling/Narrative Building</option>
+                <option value="trend-extrapolation">Trend Extrapolation</option>
+                <option value="random-association">Random Idea Association</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="speculation-audience" rows="2" placeholder="Who or what is the focus of your speculation: (1 per line)
+Group of people
+Technology
+Cancer drugs"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="speculation-context" rows="3"
+                placeholder="Provide any context or starting point for your speculation: e.g. current trends, recent events, a specific problem, etc."></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="speculation-outcomes" rows="2" placeholder="What kinds of outcomes or ideas do you hope to generate: (1 per line)
+New concepts
+Scenarios
+Hypotheses"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="additional-details" rows="3" placeholder="Any additional details or constraints to guide your speculation: (1 per line)
+Tone
+Wildness level
+specific inspirations"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="speculation">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
+
+
+
+
+<div class="section1 premium-section">
+    <div class="section1-header" onclick="toggleSection(this)">
+        <h2>New Business <span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section1-content premium-blur">
+        <div class="row1">
+            <textarea id="business-vision" rows="1"
+                placeholder="What’s your business idea? e.g., Launch a coffee shop"></textarea>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="business-knowledge-level">
+                <div class="grid-item" data-value="New">I’m New to Business</div>
+                <div class="grid-item" data-value="Intermediate">I’ve Run a Business Before</div>
+                <div class="grid-item" data-value="Sophisticated">I’m an Experienced Entrepreneur</div>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="business-general-skills">
+                <div class="grid-item" data-value="Communication">I Communicate Well</div>
+                <div class="grid-item" data-value="Problem-Solving">I Solve Problems</div>
+                <div class="grid-item" data-value="Teamwork">I Work in Teams</div>
+                <div class="grid-item" data-value="Time-Management">I Manage Time</div>
+                <div class="grid-item" data-value="Adaptability">I Adapt Easily</div>
+                <div class="grid-item" data-value="Critical-Thinking">I Think Critically</div>
+                <div class="grid-item" data-value="Leadership">I Lead Others</div>
+                <div class="grid-item" data-value="Creativity">I’m Creative</div>
+                <div class="grid-item" data-value="Work-Ethic">I Have Strong Work Ethic</div>
+                <div class="grid-item" data-value="Interpersonal">I Connect with People</div>
+                <div class="grid-item" data-value="Organization">I Stay Organized</div>
+                <div class="grid-item" data-value="Attention-to-Detail">I Focus on Details</div>
+                <div class="grid-item" data-value="Decision-Making">I Make Decisions</div>
+                <div class="grid-item" data-value="Analytical">I Analyze Well</div>
+                <div class="grid-item" data-value="Initiative">I Take Initiative</div>
+                <div class="grid-item" data-value="Technical">I’m Tech-Savvy</div>
+                <div class="grid-item" data-value="Emotional-Intelligence">I Understand Emotions</div>
+                <div class="grid-item" data-value="Negotiation">I Negotiate Effectively</div>
+                <div class="grid-item" data-value="Resilience">I’m Resilient</div>
+                <div class="grid-item" data-value="Project-Management">I Manage Projects</div>
+            </div>
+        </div>
+        <div class="row1">
+            <div class="grid-container" id="business-weaknesses">
+                <div class="grid-item" data-value="Procrastination">I Procrastinate</div>
+                <div class="grid-item" data-value="Impatience">I’m Impatient</div>
+                <div class="grid-item" data-value="Disorganization">I’m Disorganized</div>
+                <div class="grid-item" data-value="Overthinking">I Overthink</div>
+                <div class="grid-item" data-value="Perfectionism">I’m a Perfectionist</div>
+                <div class="grid-item" data-value="Lack-of-Confidence">I Lack Confidence</div>
+                <div class="grid-item" data-value="Difficulty-Delegating">I Struggle to Delegate</div>
+                <div class="grid-item" data-value="Poor-Time-Management">I Manage Time Poorly</div>
+                <div class="grid-item" data-value="Indecisiveness">I’m Indecisive</div>
+                <div class="grid-item" data-value="Fear-of-Failure">I Fear Failure</div>
+                <div class="grid-item" data-value="Limited-Technical-Skills">I Lack Tech Skills</div>
+                <div class="grid-item" data-value="Overcommitting">I Overcommit</div>
+                <div class="grid-item" data-value="Lack-of-Focus">I Lose Focus</div>
+                <div class="grid-item" data-value="Impulsiveness">I’m Impulsive</div>
+                <div class="grid-item" data-value="Difficulty-with-Feedback">I Resist Feedback</div>
+                <div class="grid-item" data-value="Resistance-to-Change">I Resist Change</div>
+                <div class="grid-item" data-value="Poor-Communication">I Communicate Poorly</div>
+                <div class="grid-item" data-value="Stress-Management">I Handle Stress Badly</div>
+                <div class="grid-item" data-value="Lack-of-Initiative">I Lack Initiative</div>
+                <div class="grid-item" data-value="Detail-Overload">I Miss the Big Picture</div>
+            </div>
+        </div>
+        <div class="row1">
+            <textarea id="business-organization" rows="4" placeholder="Business Equipment & Tools (1 per line):
+QuickBooks for accounting
+Shopify for e-commerce
+Ladder
+Welding Torch"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="business-network" rows="4" placeholder="Who can you leverage? (1 per line):
+Friend who owns a café
+Local Chamber of Commerce
+Business mentor"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="business">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
+
+
+            <!-- Free: Budget Management -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Budget</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <p>Understand Personal Finance Basics Through This Interactive Tool!</p>
+                    <a href="/budget/intro.html">Try IncomeIQ™ Now!</a>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>EventIQ™</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row1">
+                        <div class="grid-container" id="event-types">
+                            <div class="grid-item" data-value="Birthday">Planning a Birthday</div>
+                            <div class="grid-item" data-value="Wedding">Planning a Wedding</div>
+                            <div class="grid-item" data-value="House Party">Planning a House Party</div>
+                            <div class="grid-item" data-value="Corporate Event">Planning a Corporate Event</div>
+                            <div class="grid-item" data-value="Family Reunion">Planning a Family Reunion</div>
+                            <div class="grid-item" data-value="Concert">Planning a Concert</div>
+                            <div class="grid-item" data-value="Graduation">Planning a Graduation</div>
+                            <div class="grid-item" data-value="Festival">Planning a Festival</div>
+                            <div class="grid-item" data-value="Charity Event">Planning a Charity Event</div>
+                            <div class="grid-item" data-value="Community Gathering">Planning a Community Gathering</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <select id="event-venue" onchange="toggleEventDetails()">
+                            <option value="Venue Secured">Venue Secured</option>
+                            <option value="Venue Needed">Venue Needed</option>
+                        </select>
+                    </div>
+                    <div class="row1">
+                        <select id="event-location" onchange="toggleEventDetails()">
+                            <option value="indoors">Indoors</option>
+                            <option value="outdoors">Outdoors</option>
+                        </select>
+                    </div>
+                    <div class="row1 hidden" id="event-indoors">
+                        <div class="grid-container" id="event-indoor-setup">
+                            <div class="grid-item" data-value="Seating">Seating Needed</div>
+                            <div class="grid-item" data-value="Lighting">Lighting Needed</div>
+                            <div class="grid-item" data-value="Decor">Decor Needed</div>
+                            <div class="grid-item" data-value="Catering">Catering Needed</div>
+                            <div class="grid-item" data-value="Microphone">Microphone Needed</div>
+                            <div class="grid-item" data-value="Wi-Fi">Wi-Fi Needed</div>
+                            <div class="grid-item" data-value="Sound Equipment">Sound Equipment Needed</div>
+                            <div class="grid-item" data-value="Restrooms">Restrooms Needed</div>
+                            <div class="grid-item" data-value="Registration">Registration Desk Needed</div>
+                            <div class="grid-item" data-value="Security">Security Needed</div>
+                        </div>
+                    </div>
+                    <div class="row1 hidden" id="event-outdoors">
+                        <div class="grid-container" id="event-outdoor">
+                            <div class="grid-item" data-value="Tent">Tent Needed</div>
+                            <div class="grid-item" data-value="BackupPlan">Backup Plan Needed</div>
+                            <div class="grid-item" data-value="Heaters">Heaters Needed</div>
+                            <div class="grid-item" data-value="Sound Equipment">Sound Equipment Needed</div>
+                            <div class="grid-item" data-value="Lighting">Lighting Needed</div>
+                            <div class="grid-item" data-value="Seating">Seating Needed</div>
+                            <div class="grid-item" data-value="Catering">Catering Needed</div>
+                            <div class="grid-item" data-value="Security">Security Needed</div>
+                            <div class="grid-item" data-value="Registration">Registration Desk Needed</div>
+                            <div class="grid-item" data-value="Wi-Fi">Wi-Fi Needed</div>
+                            <div class="grid-item" data-value="Decor">Decor Needed</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="event-elements">
+                            <div class="grid-item" data-value="Food">Food Needed</div>
+                            <div class="grid-item" data-value="Drinks">Drinks Needed</div>
+                            <div class="grid-item" data-value="Alcoholic Drinks">Alcoholic Drinks Needed</div>
+                            <div class="grid-item" data-value="Photography">Photography Needed</div>
+                            <div class="grid-item" data-value="Games">Games Needed</div>
+                            <div class="grid-item" data-value="Live Entertainment">Live Entertainment Needed</div>
+                            <div class="grid-item" data-value="Decorations">Decorations Needed</div>
+                            <div class="grid-item" data-value="Music">Music Needed</div>
+                            <div class="grid-item" data-value="Invitations">Invitations Needed</div>
+                            <div class="grid-item" data-value="Gift Bags">Gift Bags Needed</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <input type="number" id="event-guests" placeholder="People Expected #" min="1"></input>
+                        <input type="number" id="event-budget" rows="1" placeholder="Event Budget $"></input>
+                    </div>
+                    <div class="row1">
+                        <label for="event-start">Start Time:</label>
+                        <input type="time" id="event-start" name="event-start">
+                        <label for="event-end">End Time:</label>
+                        <input type="time" id="event-end" name="event-end">
+                    </div>
+
+                    <textarea id="event-specific-location" rows="1"
+                        placeholder="Address & City (e.g., 123 Main St, New York)"></textarea>
+
+
+                    <div class="row1">
+                        <textarea id="event-specific-context" rows="3" placeholder="General Context (1 per line):
+Majority of attendees have an Italian background
+Most individuals between 5-10 yrs old"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="EventIQ™">Generate Promptemplate™ Now!</button>
+                </div>
+            </div>
+
+            <!-- Premium: Trip Planner -->
+            <div class="section1 premium-section">
+                <div class="section1-header" onclick="toggleSection(this)">
+                    <h2>AdventureIQ™<span class="premium-notice">Premium</span></h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section1-content premium-blur">
+                    <div class="row1">
+                        <div class="grid-container" id="trip-activities">
+                            <div class="grid-item" data-value="Hiking">Hiking</div>
+                            <div class="grid-item" data-value="Sightseeing">Sightseeing</div>
+                            <div class="grid-item" data-value="Relaxation">Relaxation</div>
+                            <div class="grid-item" data-value="Attractions">Attractions</div>
+                            <div class="grid-item" data-value="Event">Event</div>
+                            <div class="grid-item" data-value="Cultural Tours">Cultural Tours</div>
+                            <div class="grid-item" data-value="Shopping">Shopping</div>
+                            <div class="grid-item" data-value="Adventure">Adventure</div>
+                            <div class="grid-item" data-value="Wildlife Watching">Wildlife Watching</div>
+                            <div class="grid-item" data-value="Water Sports">Water Sports</div>
+                            <div class="grid-item" data-value="Food Tours">Food Tours</div>
+                            <div class="grid-item" data-value="Museums">Museums</div>
+                            <div class="grid-item" data-value="Nightlife">Nightlife</div>
+                            <div class="grid-item" data-value="Wellness">Wellness</div>
+                            <div class="grid-item" data-value="Beach Time">Beach Time</div>
+                            <div class="grid-item" data-value="Skiing">Skiing</div>
+                            <div class="grid-item" data-value="Road Trips">Road Trips</div>
+                            <div class="grid-item" data-value="Camping">Camping</div>
+                            <div class="grid-item" data-value="Photography">Photography</div>
+                            <div class="grid-item" data-value="Historical Sites">Historical Sites</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="trip-relationship">
+                            <div class="grid-item" data-value="Parents">With Parents</div>
+                            <div class="grid-item" data-value="Siblings">With Siblings</div>
+                            <div class="grid-item" data-value="Friends">With Friends</div>
+                            <div class="grid-item" data-value="Intimate Partner">With Intimate Partner</div>
+                            <div class="grid-item" data-value="Business Partner">With Business Partner</div>
+                            <div class="grid-item" data-value="Co-Worker">With Co-Worker</div>
+                            <div class="grid-item" data-value="Client">With Client</div>
+                        </div>
+                    </div>
+                    <textarea id="trip-location" rows="3" placeholder="Trip Locations (one per line):
+New York
+New Jersey
+Hampton's"></textarea>
+                    <div class="row1">
+                        <textarea id="trip-specifics" rows="4" placeholder="Specifics Needed (one per line):
+Top rated hiking trails
+Hikes under 5km
+Best ice cream shops within 5km from city centre"></textarea>
+                        <textarea id="trip-plans" rows="3" placeholder="Trip Schedule (one per line):
+Monday - 6am hike, 8pm dinner
+Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
+                    </div>
+                    <div class="row1">
+                        <select id="trip-packing">
+                            <option value="YM">Packing tips needed for male</option>
+                            <option value="YF">Packing tips needed for female</option>
+                            <option value="YMF">Packing tips needed for male & female</option>
+                            <option value="NN">Packing tips not needed</option>
+                        </select>
+                    </div>
+                    <div class="row1">
+                        <input type="number" id="trip-people" rows="1" placeholder="Amount of people on trip:"></input>
+                    </div>
+                    <div class="row1">
+                        <input type="number" id="trip-days" rows="1" placeholder="Trip Length:"></input>
+                    </div>
+                    <div class="row1">
+                        <a href="/budget/vacation.html"> Use Vacation Cost Estimator & then Input Results Below!</a>
+                        <textarea id="trip-cost" rows="16" placeholder="Vacation Cost Estimator Results:"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="AdventureIQ™">Generate Promptemplate™ Now!</button>
+                </div>
+            </div>
+
+            <h2 id="creative-output" style="text-align: center; text-decoration: underline; font-weight: 600;">CREATIVE OUTPUT</h2>
+            
+
+
+            <div class="section1 premium-section">
+                <div class="section1-header" onclick="toggleSection(this)">
+                    <h2>App<span class="premium-notice">Premium</span></h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section1-content premium-blur">
+                    <div class="row1">
+                        <textarea id="app-purpose" rows="4" placeholder="e.g., task management"></textarea>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="app-code-status"
+                            style="grid-template-columns: 1fr 1fr; max-width: 300px;">
+                            <div class="grid-item" data-value="code-started">I Have Code Started</div>
+                            <div class="grid-item" data-value="no-code">I Have No Code</div>
+                        </div>
+                    </div>
+                    <div class="row1 hidden" id="app-current-code-row1">
+                        <textarea id="app-current-code" rows="6"
+                            placeholder="Paste your existing code here (e.g., HTML, CSS, JS, etc.)"></textarea>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="app-features">
+                            <div class="grid-item" data-value="Notifications">I Want Notifications</div>
+                            <div class="grid-item" data-value="User Accounts">I Want User Accounts</div>
+                            <div class="grid-item" data-value="Payments">I Want Payments</div>
+                            <div class="grid-item" data-value="Offline Mode">I Want Offline Mode</div>
+                            <div class="grid-item" data-value="Contact Form">I Want a Contact Form</div>
+                            <div class="grid-item" data-value="Mobile Responsiveness">I Want Mobile Responsiveness</div>
+                            <div class="grid-item" data-value="About Us">I Want About Us</div>
+                            <div class="grid-item" data-value="E-commerce Platform">I Want an E-commerce Platform</div>
+                            <div class="grid-item" data-value="Payment Gateway">I Want a Payment Gateway</div>
+                            <div class="grid-item" data-value="Gallery">I Want a Gallery</div>
+                            <div class="grid-item" data-value="Social Media Integration">I Want Social Media Integration
+                            </div>
+                            <div class="grid-item" data-value="Testimonials">I Want Testimonials</div>
+                            <div class="grid-item" data-value="FAQ Section">I Want an FAQ Section</div>
+                            <div class="grid-item" data-value="Blog Integration">I Want Blog Integration</div>
+                            <div class="grid-item" data-value="Custom Graphics">I Want Custom Graphics</div>
+                            <div class="grid-item" data-value="Calculation Functionality">I Want Calculation
+                                Functionality</div>
+                            <div class="grid-item" data-value="Event Calendar">I Want an Event Calendar</div>
+                        </div>
+                    </div>
+                    <div class="row1 hidden" id="app-details">
+                        <textarea id="app-platform" rows="1" placeholder="e.g., iOS, Android"></textarea>
+                        <textarea id="app-budget" rows="1" placeholder="e.g., $5000"></textarea>
+                        <textarea id="app-timeline" rows="1" placeholder="e.g., 3 months"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="app">Generate Promptemplate™ Now!</button>
+                </div>
+            </div>
+
+            <!-- Premium: Marketing Campaign -->
+            <div class="section1 premium-section">
+                <div class="section1-header" onclick="toggleSection(this)">
+                    <h2>Marketing Campaign <span class="premium-notice">Premium</span></h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section1-content premium-blur">
+                    <div class="row1">
+                        <textarea id="market-goal" rows="4"
+                            placeholder="e.g., increase sales by 20%, boost brand awareness"></textarea>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="market-channels">
+                            <div class="grid-item" data-value="Social Media">I Use Social Media</div>
+                            <div class="grid-item" data-value="Email">I Use Email</div>
+                            <div class="grid-item" data-value="Ads">I Use Ads</div>
+                            <div class="grid-item" data-value="SEO">I Use SEO</div>
+                            <div class="grid-item" data-value="Content Marketing">I Use Content Marketing</div>
+                            <div class="grid-item" data-value="Influencer Partnerships">I Use Influencer Partnerships
+                            </div>
+                        </div>
+                    </div>
+                    <textarea id="market-audience" rows="4" placeholder="Target Audience: (1 per line):
+Age 18-35
+Tech enthusiasts
+Small business owners"></textarea>
+                    <textarea id="market-budget" rows="1"
+                        placeholder="Budget: $1000 or flexible based on ROI"></textarea>
+                    <textarea id="market-metrics" rows="4" placeholder="Metrics: (1 per line)
+10% conversion
+5000 clicks
+15% engagement"></textarea>
+                    <textarea id="market-message" rows="3" placeholder="Market Message: (1 per line)
+Unlock your potential with our AI tools
+Save time & boost efficiency with Promptemplates™"></textarea>
+                    <textarea id="market-timeline" rows="1" placeholder="Timeline: 3 months, Q2 2025"></textarea>
+                    <textarea id="market-competitors" rows="3" placeholder="Competitor Strengths: (1 per line)
+Competitor A has a value advantage
+Competitor B has a cost advantage"></textarea>
+                    <div class="grid-container">
+                        <div class="grid-item" data-value="Videos">Include Videos</div>
+                        <div class="grid-item" data-value="Infographics">Include Infographic</div>
+                        <div class="grid-item" data-value="Banners">Include Banners</div>
+                        <div class="grid-item" data-value="Logos">Include Logos</div>
+                    </div>
+                    <button class="generate-btn" data-prompt="marketing">Generate Promptemplate™ Now!</button>
+                </div>
+            </div>
+
+
+<!-- Premium: Book Summary -->
+<div class="section1 premium-section">
+    <div class="section1-header" onclick="toggleSection(this)">
+        <h2>BookIQ™ <span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section1-content premium-blur">
+        <div class="row1">
+            <input type="text" id="book-title-author" placeholder="Enter book title and author (e.g., 'Pride and Prejudice by Jane Austen')">
+        </div>
+        <div class="row1">
+            <label for="summary-purpose">Select the purpose of the summary:</label>
+            <select id="summary-purpose">
+                <option value="personal">Personal Understanding</option>
+                <option value="book-club">Book Club Discussion</option>
+                <option value="academic">Academic Analysis</option>
+                <option value="teaching">Teaching</option>
+                <option value="social-media">Social Media Post</option>
+                <option value="review">Professional Review</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label for="summary-length">Select the summary length:</label>
+            <select id="summary-length">
+                <option value="short">Short (1 paragraph)</option>
+                <option value="medium">Medium (2-3 paragraphs)</option>
+                <option value="detailed">Detailed (4+ paragraphs)</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="summary-themes" rows="2" placeholder="Key themes or topics to highlight: (1 per line)
+e.g., love, leadership, identity"></textarea>
+        </div>
+        <div class="row1">
+            <label>Select the target audience(s):</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="summary-audience" value="general"> General Readers</label>
+                <label><input type="checkbox" name="summary-audience" value="students"> Students</label>
+                <label><input type="checkbox" name="summary-audience" value="professionals"> Professionals</label>
+                <label><input type="checkbox" name="summary-audience" value="book-club"> Book Club Members</label>
+                <label><input type="checkbox" name="summary-audience" value="children"> Children</label>
+                <label><input type="checkbox" name="summary-audience" value="researchers"> Academic Researchers</label>
+                <label><input type="checkbox" name="summary-audience" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <label>Select specific elements to include:</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="summary-elements" value="plot"> Plot</label>
+                <label><input type="checkbox" name="summary-elements" value="characters"> Characters</label>
+                <label><input type="checkbox" name="summary-elements" value="themes"> Themes</label>
+                <label><input type="checkbox" name="summary-elements" value="setting"> Setting</label>
+                <label><input type="checkbox" name="summary-elements" value="arguments"> Key Arguments</label>
+                <label><input type="checkbox" name="summary-elements" value="lessons"> Lessons/Insights</label>
+                <label><input type="checkbox" name="summary-elements" value="style"> Style/Writing</label>
+                <label><input type="checkbox" name="summary-elements" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <label for="summary-tone">Select the tone or style:</label>
+            <select id="summary-tone">
+                <option value="formal">Formal</option>
+                <option value="casual">Casual</option>
+                <option value="analytical">Analytical</option>
+                <option value="engaging">Engaging</option>
+                <option value="objective">Objective</option>
+                <option value="narrative">Narrative</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="summary-details" rows="3" placeholder="Additional details or constraints: (1 per line)
+e.g., avoid spoilers, focus on chapter 5"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="BookIQ™">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
+<h2 id="decision-support" style="text-align: center; text-decoration: underline; font-weight: 600;">DECISION SUPPORT</h2>
+           
+            <!-- Free: General -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>General</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row1">
+                        <textarea id="general-goal" rows="4" placeholder="Focus On:
+Planning an exciting hike
+Sales data
+Restaurants within 6km of LA city center"></textarea>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="general-purpose">
+                            <div class="grid-item" data-value="Identifying Trends and Patterns">Identifying Trends and
+                                Patterns</div>
+                            <div class="grid-item" data-value="Improving Decision-Making">Improving Decision-Making
+                            </div>
+                            <div class="grid-item" data-value="Problem Identification">Problem Identification</div>
+                            <div class="grid-item" data-value="Enhancing Performance and Efficiency">Enhancing
+                                Performance and Efficiency</div>
+                            <div class="grid-item" data-value="Predicting Future Outcomes">Predicting Future Outcomes
+                            </div>
+                            <div class="grid-item" data-value="Measuring Success and KPIs">Measuring Success and KPIs
+                            </div>
+                            <div class="grid-item" data-value="Personalization and Targeting">Personalization and
+                                Targeting</div>
+                            <div class="grid-item" data-value="Market Research and Competitor Analysis">Market Research
+                                and Competitor Analysis</div>
+                            <div class="grid-item" data-value="Cost Reduction and Resource Allocation">Cost Reduction
+                                and Resource Allocation</div>
+                            <div class="grid-item" data-value="Ensuring Compliance and Risk Management">Ensuring
+                                Compliance and Risk Management</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <textarea id="general-context" rows="5" placeholder="General Context:(1 per line)
+I’m hiking in Colorado
+Prefer trails under 5 miles
+Need dog-friendly options
+Fitness level of hiking group"></textarea>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="general-info-return">
+                            <div class="grid-item" data-value="narrative">Return Narrative Format</div>
+                            <div class="grid-item" data-value="faq">Return FAQ Format</div>
+                            <div class="grid-item" data-value="table">Return Table Format</div>
+                            <div class="grid-item" data-value="checklist">Return Checklist Format</div>
+                            <div class="grid-item" data-value="step-by-step">Return Step-by-Step Format</div>
+                            <div class="grid-item" data-value="q-and-a">Return Q&A Format</div>
+                            <div class="grid-item" data-value="summary">Return Summary Format</div>
+                            <div class="grid-item" data-value="quote-collection">Return Quote Collection Format</div>
+                            <div class="grid-item" data-value="timeline">Return Timeline Format</div>
+                            <div class="grid-item" data-value="json">Return JSON Format</div>
+                        </div>
+                    </div>
+                    <button class="generate-btn" data-prompt="general">Generate Promptemplate™ Now!</button>
+                </div>
+            </div>
+           
+           
+           
+            <!-- Premium: DecisionIQ™ -->
+<div class="section1 premium-section">
+    <div class="section1-header" onclick="toggleSection(this)">
+        <h2>DecisionIQ™ <span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section1-content premium-blur">
+        <div class="row1">
+            <input type="text" id="decisioniq-goal" placeholder="Enter decision goal (e.g., Choose a software vendor)">
+        </div>
+        <div class="row1">
+            <label for="decisioniq-analysis-type">Select analysis type:</label>
+            <select id="decisioniq-analysis-type">
+                <option value="pros-cons">Pros/Cons</option>
+                <option value="weighted-scoring">Weighted Scoring</option>
+                <option value="cost-benefit">Cost-Benefit</option>
+                <option value="swot">SWOT</option>
+                <option value="multi-criteria">Multi-Criteria</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label for="decisioniq-priority">Select priority focus:</label>
+            <select id="decisioniq-priority">
+                <option value="speed">Speed</option>
+                <option value="accuracy">Accuracy</option>
+                <option value="cost">Cost</option>
+                <option value="long-term-impact">Long-Term Impact</option>
+                <option value="simplicity">Simplicity</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="decisioniq-criteria" rows="2" placeholder="Decision criteria: (1 per line)
+e.g., Cost, Features, Scalability"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="decisioniq-options" rows="2" placeholder="Decision options: (1 per line)
+e.g., Vendor A, Vendor B, Vendor C"></textarea>
+        </div>
+        <div class="row1">
+            <label>Select stakeholder(s):</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="decisioniq-stakeholders" value="team-members"> Team Members</label>
+                <label><input type="checkbox" name="decisioniq-stakeholders" value="executives"> Executives</label>
+                <label><input type="checkbox" name="decisioniq-stakeholders" value="customers"> Customers</label>
+                <label><input type="checkbox" name="decisioniq-stakeholders" value="partners"> Partners</label>
+                <label><input type="checkbox" name="decisioniq-stakeholders" value="regulators"> Regulators</label>
+                <label><input type="checkbox" name="decisioniq-stakeholders" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <textarea id="decisioniq-constraints" rows="2" placeholder="Constraints: (1 per line)
+e.g., Budget, Timeline, Resources"></textarea>
+        </div>
+        <div class="row1">
+            <textarea id="decisioniq-instructions" rows="3" placeholder="Additional instructions: (1 per line)
+e.g., Include risk analysis, Prioritize quantitative data"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="DecisionIQ™">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
+<h2 id="workflow-automation" style="text-align: center; text-decoration: underline; font-weight: 600;">WORKFLOW AUTOMATION</h2>
+           
+           <!-- Premium: WorkflowIQ™ -->
+           <div class="section1 premium-section">
+            <div class="section1-header" onclick="toggleSection(this)">
+                <h2>WorkflowIQ™ <span class="premium-notice">Premium</span></h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="section1-content premium-blur">
+                <div class="row1">
+                    <input type="text" id="workflowiq-task" placeholder="Enter task (e.g., Invoice processing)">
+                </div>
+                <div class="row1">
+                    <textarea id="workflowiq-steps" rows="2" placeholder="Task steps: (1 per line)
+        e.g., Data entry, Approval, Archiving"></textarea>
+                </div>
+                <div class="row1">
+                    <textarea id="workflowiq-tools" rows="2" placeholder="Tools used: (1 per line)
+        e.g., Excel, ERP, Email"></textarea>
+                </div>
+                <div class="row1">
+                    <label for="workflowiq-automation-type">Select automation type:</label>
+                    <select id="workflowiq-automation-type">
+                        <option value="scripting">Scripting</option>
+                        <option value="rpa">RPA</option>
+                        <option value="api">API Integration</option>
+                        <option value="low-code">Low-Code Platform</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="row1">
+                    <label for="workflowiq-priority">Select priority focus:</label>
+                    <select id="workflowiq-priority">
+                        <option value="efficiency">Efficiency</option>
+                        <option value="cost">Cost</option>
+                        <option value="accuracy">Accuracy</option>
+                        <option value="scalability">Scalability</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="row1">
+                    <textarea id="workflowiq-goals" rows="2" placeholder="Goals: (1 per line)
+        e.g., Reduce time, Minimize errors"></textarea>
+                </div>
+                <div class="row1">
+                    <textarea id="workflowiq-constraints" rows="2" placeholder="Constraints: (1 per line)
+        e.g., Budget, Legacy systems"></textarea>
+                </div>
+                <div class="row1">
+                    <textarea id="workflowiq-instructions" rows="3" placeholder="Additional instructions: (1 per line)
+        e.g., Prefer open-source tools, Ensure audit trail"></textarea>
+                </div>
+                <button class="generate-btn" data-prompt="workflowiq">Generate Promptemplate™ Now!</button>
+            </div>
+        </div>
+        
+                    <div class="section">
+                        <div class="section-header" onclick="toggleSection(this)">
+                            <h2>Business Expense Receipts</h2>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="section-content">
+                            <div class="row1">
+                                <div class="grid-container" id="expense-location">
+                                    <div class="grid-item" data-value="Canada">Canada</div>
+                                    <div class="grid-item" data-value="USA">USA</div>
+                                </div>
+                            </div>
+                            <button class="generate-btn" data-prompt="expense">Generate Promptemplate™ Now!</button>
+                        </div>
+                    </div>
+
+
+                    <h2 id="educational-training" style="text-align: center; text-decoration: underline; font-weight: 600;">EDUCATIONAL TRAINING</h2>
+
+<!-- Premium: Quiz Generator -->
+<div class="section1 premium-section">
+    <div class="section1-header" onclick="toggleSection(this)">
+        <h2>QuizIQ™<span class="premium-notice">Premium</span></h2>
+        <span class="toggle-icon">+</span>
+    </div>
+    <div class="section1-content premium-blur">
+        <div class="row1">
+            <input type="text" id="quiz-subject" placeholder="Enter quiz subject (e.g., World War II, Python Programming)">
+        </div>
+        <div class="row1">
+            <label for="quiz-objective">Select the objective of the quiz:</label>
+            <select id="quiz-objective">
+                <option value="self-study">Self-Study</option>
+                <option value="classroom-assessment">Classroom Assessment</option>
+                <option value="exam-practice">Exam Practice</option>
+                <option value="knowledge-review">Knowledge Review</option>
+                <option value="certification-prep">Certification Prep</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label for="quiz-difficulty-tier">Select the difficulty tier:</label>
+            <select id="quiz-difficulty-tier">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label>Select question format(s):</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="quiz-formats" value="multiple-choice"> Multiple Choice</label>
+                <label><input type="checkbox" name="quiz-formats" value="true-false"> True/False</label>
+                <label><input type="checkbox" name="quiz-formats" value="short-answer"> Short Answer</label>
+                <label><input type="checkbox" name="quiz-formats" value="matching"> Matching</label>
+                <label><input type="checkbox" name="quiz-formats" value="fill-in-the-blank"> Fill-in-the-Blank</label>
+                <label><input type="checkbox" name="quiz-formats" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <label for="quiz-question-count">Select the number of questions:</label>
+            <select id="quiz-question-count">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="row1">
+            <textarea id="quiz-focus-areas" rows="2" placeholder="Focus areas to cover: (1 per line)
+e.g., Causes of WWI, Key Battles"></textarea>
+        </div>
+        <div class="row1">
+            <label>Select quiz participant(s):</label>
+            <div class="grid-items">
+                <label><input type="checkbox" name="quiz-participants" value="students"> Students</label>
+                <label><input type="checkbox" name="quiz-participants" value="professionals"> Professionals</label>
+                <label><input type="checkbox" name="quiz-participants" value="enthusiasts"> Enthusiasts</label>
+                <label><input type="checkbox" name="quiz-participants" value="general-learners"> General Learners</label>
+                <label><input type="checkbox" name="quiz-participants" value="kids"> Kids</label>
+                <label><input type="checkbox" name="quiz-participants" value="certification-trainees"> Certification Trainees</label>
+                <label><input type="checkbox" name="quiz-participants" value="other"> Other</label>
+            </div>
+        </div>
+        <div class="row1">
+            <textarea id="quiz-extra-instructions" rows="3" placeholder="Extra instructions or constraints: (1 per line)
+e.g., include answers, focus on recent events"></textarea>
+        </div>
+        <button class="generate-btn" data-prompt="QuizIQ™">Generate Promptemplate™ Now!</button>
+    </div>
+</div>
+
+
+<h2 id="personalized-experience" style="text-align: center; text-decoration: underline; font-weight: 600;">PERSONALIZED EXPERIENCE</h2>
+            <!-- Free: Calorie Counter -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>CalorieIQ™</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row1">
+                        <div class="grid-container" id="calorie-goal">
+                            <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
+                            <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
+                            <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
+                            <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="calorie-activity">
+                            <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
+                            <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3
+                                days/week)</div>
+                            <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise
+                                3-5 days/week)</div>
+                            <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)
+                            </div>
+                            <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <input type="number" id="calorie-age" placeholder="Age" min="0">
+                        <div class="height-input-group">
+                            <input type="number" id="calorie-height" placeholder="Height" step="0.1" min="0">
+                            <select id="calorie-height-unit">
+                                <option value="ft">ft</option>
+                                <option value="cm">cm</option>
+                            </select>
+                        </div>
+                        <div class="weight-input-group">
+                            <input type="number" id="calorie-weight" placeholder="Weight" step="0.1" min="0">
+                            <select id="calorie-weight-unit">
+                                <option value="lbs">lbs</option>
+                                <option value="kg">kg</option>
+                            </select>
+                        </div>
+                    </div>
+                    <textarea id="calorie-food-log" rows="3" placeholder="Meals:
+Chicken breast 200g with rice 1cup
+Potato 100g with broccoli 150g"></textarea>
+
+<div class="row1">
+    <div class="grid-container" id="calorie-recommendations">
+        <div class="grid-item" data-value="Meal Recommendations">Need meal recommendations to make up deficit</div>
+    </div>
+</div>
+
+                    <button class="generate-btn" data-prompt="CalorieIQ™" onclick="generateCaloriePrompt()">Generate
+                        Promptemplate™ Now!</button>
+                </div>
+            </div>
+        
+
+
+
+
+
+            <!-- Premium: Enneagram Assessment -->
+            <div class="section1 premium-section">
+                <div class="section1-header" onclick="toggleSection(this)">
+                    <h2>EnneagramIQ™ <span class="premium-notice">Premium</span></h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section1-content premium-blur">
+                    <div class="row1">
+                        <label for="enneagram-self">Describe Yourself:</label>
+                        <textarea id="enneagram-self" rows="4"
+                            placeholder="Tell us about yourself (e.g., I’m creative, impatient, and value efficiency. I’m ADHD and hate inefficiency)."></textarea>
+                    </div>
+                    <div class="row1">
+                        <label>Core Traits You Identify With (select all that apply):</label>
+                        <div class="grid-container" id="enneagram-traits">
+                            <div class="grid-item" data-value="1-Perfection">I must be perfect and avoid mistakes</div>
+                            <div class="grid-item" data-value="2-Help">I feel fulfilled by helping others</div>
+                            <div class="grid-item" data-value="3-Success">I’m driven to succeed and be recognized</div>
+                            <div class="grid-item" data-value="4-Unique">I need to be unique and authentic</div>
+                            <div class="grid-item" data-value="5-Knowledge">I seek knowledge and conserve energy</div>
+                            <div class="grid-item" data-value="6-Security">I crave security and question everything
+                            </div>
+                            <div class="grid-item" data-value="7-Fun">I chase excitement and avoid pain</div>
+                            <div class="grid-item" data-value="8-Control">I take charge and protect what’s mine</div>
+                            <div class="grid-item" data-value="9-Peace">I seek peace and avoid conflict</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <label>Behavioral Responses (select all that apply):</label>
+                        <div class="grid-container" id="enneagram-behaviors">
+                            <div class="grid-item" data-value="Conflict-1">In conflict, I focus on right/wrong</div>
+                            <div class="grid-item" data-value="Conflict-2">In conflict, I mediate or please</div>
+                            <div class="grid-item" data-value="Conflict-3">In conflict, I defend my image</div>
+                            <div class="grid-item" data-value="Conflict-4">In conflict, I feel misunderstood</div>
+                            <div class="grid-item" data-value="Conflict-5">In conflict, I withdraw to think</div>
+                            <div class="grid-item" data-value="Conflict-6">In conflict, I get anxious and defensive
+                            </div>
+                            <div class="grid-item" data-value="Conflict-7">In conflict, I deflect with humor</div>
+                            <div class="grid-item" data-value="Conflict-8">In conflict, I assert dominance</div>
+                            <div class="grid-item" data-value="Conflict-9">In conflict, I shut down or agree</div>
+                            <div class="grid-item" data-value="Stress-1">Under stress, I get rigid and critical</div>
+                            <div class="grid-item" data-value="Stress-2">Under stress, I cling to others</div>
+                            <div class="grid-item" data-value="Stress-3">Under stress, I push harder</div>
+                            <div class="grid-item" data-value="Stress-4">Under stress, I feel isolated</div>
+                            <div class="grid-item" data-value="Stress-5">Under stress, I retreat completely</div>
+                            <div class="grid-item" data-value="Stress-6">Under stress, I panic or overthink</div>
+                            <div class="grid-item" data-value="Stress-7">Under stress, I distract myself</div>
+                            <div class="grid-item" data-value="Stress-8">Under stress, I lash out</div>
+                            <div class="grid-item" data-value="Stress-9">Under stress, I numb out</div>
+                            <div class="grid-item" data-value="Growth-1">At my best, I’m calm and accepting</div>
+                            <div class="grid-item" data-value="Growth-2">At my best, I’m independent</div>
+                            <div class="grid-item" data-value="Growth-3">At my best, I’m genuine</div>
+                            <div class="grid-item" data-value="Growth-4">At my best, I inspire others</div>
+                            <div class="grid-item" data-value="Growth-5">At my best, I’m focused and insightful</div>
+                            <div class="grid-item" data-value="Growth-6">At my best, I’m brave and reliable</div>
+                            <div class="grid-item" data-value="Growth-7">At my best, I’m steady and productive</div>
+                            <div class="grid-item" data-value="Growth-8">At my best, I’m generous and open</div>
+                            <div class="grid-item" data-value="Growth-9">At my best, I’m engaged and assertive</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <label for="enneagram-motivations">Core Motivations:</label>
+                        <textarea id="enneagram-motivations" rows="3"
+                            placeholder="What drives you deep down? (e.g., being perfect, avoiding pain)"></textarea>
+                    </div>
+                    <div class="row1">
+                        <label for="enneagram-fears">Core Fears:</label>
+                        <textarea id="enneagram-fears" rows="3"
+                            placeholder="What do you fear most? (e.g., being corrupt, being abandoned)"></textarea>
+                    </div>
+                    <div class="row1">
+                        <label for="enneagram-stress">Behavior Under Stress:</label>
+                        <textarea id="enneagram-stress" rows="3"
+                            placeholder="How do you act when stressed? (e.g., I criticize everything or distract myself)"></textarea>
+                    </div>
+                    <div class="row1">
+                        <label for="enneagram-growth">Behavior at Your Best:</label>
+                        <textarea id="enneagram-growth" rows="3"
+                            placeholder="How do you act at your peak? (e.g., I’m focused and inspire others)"></textarea>
+                    </div>
+                    <div class="row1">
+                        <label for="enneagram-childhood">Influential Childhood Memory:</label>
+                        <textarea id="enneagram-childhood" rows="3"
+                            placeholder="A memory that shaped you (e.g., I was praised for being good)"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="EnneagramIQ™">Generate Promptemplate™
+                        Now!</button>
+                </div>
+            </div>
+
+
+
+
+            <!-- Free: RootOut -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>SymptomIQ™</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="row1">
+                        <textarea id="rootout-symptoms" rows="4" placeholder="Symptoms (one per line):
+Headache lasting 6 hours
+Fatigue
+Nausea"></textarea>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="rootout-triggers">
+                            <div class="grid-item" data-value="Diet">Diet (specific foods/drinks)</div>
+                            <div class="grid-item" data-value="Sleep">Lack of Sleep</div>
+                            <div class="grid-item" data-value="Stress">Stress</div>
+                            <div class="grid-item" data-value="Environment">Environment (e.g., pollen, noise)</div>
+                            <div class="grid-item" data-value="Exercise">Exercise (or lack of)</div>
+                            <div class="grid-item" data-value="Medications">Medications</div>
+                            <div class="grid-item" data-value="Hydration">Dehydration</div>
+                            <div class="grid-item" data-value="Screen Time">Screen Time</div>
+                            <div class="grid-item" data-value="Weather">Weather Changes</div>
+                            <div class="grid-item" data-value="Caffeine">Caffeine</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <textarea id="rootout-diet" rows="3" placeholder="Diet in the past 48 hours (one per line):
+Diet soda (Sucralose)
+Walnut muffin
+Chicken salad"></textarea>
+                    </div>
+                    <div class="row1">
+                        <textarea id="rootout-timing" rows="3" placeholder="Timing of symptoms (one per line):
+Headache started 3 PM Monday
+Fatigue worse in evenings
+Nausea after meals"></textarea>
+                    </div>
+                    <div class="row1">
+                        <textarea id="rootout-patterns" rows="3" placeholder="Any patterns you’ve noticed (one per line):
+Symptoms worse after breakfast
+Headaches often on Tuesdays"></textarea>
+                    </div>
+                    <div class="row1">
+                        <textarea id="rootout-context" rows="3" placeholder="Other context (one per line):
+High stress this week
+New detergent used
+Skipped gym last 3 days"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="SymptomIQ™" onclick="generatePrompt('rootout')">Generate
+                        Promptemplate™ Now!</button>
+                </div>
+            </div>
+
+
+
+            <div class="section1 premium-section">
+                <div class="section1-header" onclick="toggleSection(this)">
+                    <h2>EmotionIQ™ <span class="premium-notice">Premium</span></h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section1-content premium-blur">
+                    <div class="row1">
+                        <label for="therapy-goal">What’s Your Therapy Goal?</label>
+                        <textarea id="therapy-goal" rows="3"
+                            placeholder="e.g., Manage anxiety, process grief, improve self-esteem"></textarea>
+                    </div>
+                    <div class="row1">
+                        <label>Current Emotional State (select all that apply):</label>
+                        <div class="grid-container" id="therapy-emotions">
+                            <div class="grid-item" data-value="Anxious">Anxious</div>
+                            <div class="grid-item" data-value="Sad">Sad</div>
+                            <div class="grid-item" data-value="Angry">Angry</div>
+                            <div class="grid-item" data-value="Overwhelmed">Overwhelmed</div>
+                            <div class="grid-item" data-value="Numb">Numb</div>
+                            <div class="grid-item" data-value="Hopeful">Hopeful</div>
+                            <div class="grid-item" data-value="Confused">Confused</div>
+                            <div class="grid-item" data-value="Guilty">Guilty</div>
+                            <div class="grid-item" data-value="Excited">Excited</div>
+                            <div class="grid-item" data-value="Lonely">Lonely</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <label>Triggers or Stressors (select all that apply):</label>
+                        <div class="grid-container" id="therapy-triggers">
+                            <div class="grid-item" data-value="Work">Work Stress</div>
+                            <div class="grid-item" data-value="Relationships">Relationships</div>
+                            <div class="grid-item" data-value="Family">Family Issues</div>
+                            <div class="grid-item" data-value="Finances">Finances</div>
+                            <div class="grid-item" data-value="Health">Health Concerns</div>
+                            <div class="grid-item" data-value="Past Trauma">Past Trauma</div>
+                            <div class="grid-item" data-value="Social Pressure">Social Pressure</div>
+                            <div class="grid-item" data-value="Lack of Sleep">Lack of Sleep</div>
+                            <div class="grid-item" data-value="Change">Recent Changes</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <label for="therapy-recent">Recent Events or Feelings:</label>
+                        <textarea id="therapy-recent" rows="4" placeholder="What’s been on your mind lately? (1 per line):
+ Had a fight with my partner
+ Felt overwhelmed at work
+ Couldn’t sleep last night"></textarea>
+                    </div>
+                    <div class="row1">
+                        <label>Coping Strategies You’ve Tried (select all that apply):</label>
+                        <div class="grid-container" id="therapy-coping">
+                            <div class="grid-item" data-value="Talking">Talking to Someone</div>
+                            <div class="grid-item" data-value="Exercise">Exercise</div>
+                            <div class="grid-item" data-value="Meditation">Meditation</div>
+                            <div class="grid-item" data-value="Journalizing">Journalizing</div>
+                            <div class="grid-item" data-value="Distraction">Distraction (e.g., TV, games)</div>
+                            <div class="grid-item" data-value="Avoidance">Avoidance</div>
+                            <div class="grid-item" data-value="Sleep">Sleeping More</div>
+                            <div class="grid-item" data-value="Hobbies">Hobbies</div>
+                            <div class="grid-item" data-value="Therapy">Therapy/Counseling</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <label for="therapy-history">Therapy History or Context:</label>
+                        <textarea id="therapy-history" rows="3"
+                            placeholder="e.g., I’ve been in therapy for 6 months, I had a tough childhood, etc."></textarea>
+                    </div>
+                    <div class="row1">
+                        <label for="therapy-context">Context Dump (Past or Future Details):</label>
+                        <textarea id="therapy-context" rows="4" placeholder="Anything from your past or future that might relate (1 per line):
+ Had a tough breakup last year
+ Worried about a big presentation next week
+ Childhood memory of being ignored"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="EmotionIQ™">Generate Promptemplate™ Now!</button>
+                </div>
+            </div>
+
+
+
+
+
+
+            <!-- Free: Fitness Plan -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>FitnessIQ™</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+
+                    <div class="row1">
+                        <div class="grid-container" id="fitness-goal">
+                            <div class="grid-item" data-value="Build Strength">Build Strength</div>
+                            <div class="grid-item" data-value="Cardio">Cardio</div>
+                            <div class="grid-item" data-value="Endurance">Endurance</div>
+                        </div>
+                    </div>
+
+                    <div class="row1">
+                        <input type="number" id="fitness-frequency" rows="1" placeholder="Workouts/Week:"></input>
+                        <input type="number" id="fitness-duration" rows="1" placeholder="Workout/Length"></input>
+                    </div>
+
+                    <div class="row1">
+                        <input type="number" id="fitness-age" placeholder="Age" min="0">
+                        <div class="height-input-group">
+                            <input type="number" id="fitness-height" placeholder="Height" step="0.1" min="0">
+                            <select id="fitness-height-unit">
+                                <option value="ft">ft</option>
+                                <option value="cm">cm</option>
+                            </select>
+                        </div>
+                        <div class="weight-input-group">
+                            <input type="number" id="fitness-weight" placeholder="Weight" step="0.1" min="0">
+                            <select id="fitness-weight-unit">
+                                <option value="lbs">lbs</option>
+                                <option value="kg">kg</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row1">
+                        <div class="grid-container" id="fitness-level">
+                            <div class="grid-item" data-value="Beginner">Beginner</div>
+                            <div class="grid-item" data-value="Intermediate">Intermediate</div>
+                            <div class="grid-item" data-value="Advanced">Advanced</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <div class="grid-container" id="fitness-home-exercises">
+                            <div class="grid-item" data-value="Gym">I want to workout in the gym</div>
+                            <div class="grid-item" data-value="Home">I want to workout at home</div>
+                        </div>
+                    </div>
+                    <div class="row1">
+                        <textarea id="fitness-injuries" rows="3" placeholder="Injuries/Health Conditions (1 per line):
+ Knee pain
+ Asthma"></textarea>
+                    </div>
+                    <button class="generate-btn" data-prompt="FitnessIQ™">Generate Promptemplate™ Now!</button>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <div class="hidden" id="prompt-results">
+        <div id="result"></div>
+    </div>
+
+
+
+    <script src="/utility/modal.js"></script>
+    <script src="/payment/paymentform.js"></script>
+    <script src="/index.js"></script>
+    <script src="/utility/tray.js"></script>
+    <script src="/ai/old/prompt.js" type="module"></script>
+    <script src="https://js.stripe.com/v3/" async></script>
+</body>
+
+</html>

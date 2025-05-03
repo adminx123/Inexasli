@@ -1,0 +1,197 @@
+<!-- /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */ -->
+
+ <!DOCTYPE html>
+ <html lang="en">
+ 
+ <head>
+     <link rel="manifest" href="/manifest.json">
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+     <title>******</title>
+     <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+ 
+     <!-- Extended list of icon links -->
+     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+     <link rel="shortcut icon" href="/images/favicon.ico" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+ 
+     <link rel="manifest" href="/manifest.json">
+     <link rel="stylesheet" href="/ai/styles/prompt.css">
+     
+     <style>
+        /* Grid Container styling */
+        .main-grid-wrapper {
+            width: 90%;
+            max-width: 1200px;
+            margin: 80px auto 20px;
+            padding: 15px;
+        }
+        
+        .category-select-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        #category-select {
+            padding: 8px 15px;
+            border: 2px solid #000;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+            font-family: "Inter", sans-serif;
+            font-size: 14px;
+        }
+        
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .grid-item {
+            background-color: #e0e0e0;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: "Geist", sans-serif;
+            flex: 1 1 180px;
+            max-width: 220px;
+            box-shadow: 3px 3px 0 #000;
+            border: 1px solid #000;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .grid-item:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0 #000;
+        }
+        
+        .grid-item hr {
+            margin: 8px 0;
+            border: none;
+            border-top: 1px solid #000;
+        }
+        
+        .premium-notice {
+            font-size: 11px;
+            color: #888;
+            display: block;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+        
+        .page-title {
+            text-align: center;
+            font-family: "Geist", sans-serif;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-grid-wrapper {
+                width: 95%;
+                margin-top: 60px;
+                padding: 10px;
+            }
+            
+            .grid-item {
+                font-size: 12px;
+                padding: 12px;
+                flex: 1 1 140px;
+                max-width: 180px;
+            }
+        }
+     </style>
+ </head>
+ 
+ <body>
+
+        
+
+     <a href="/ai/landing/landing.html">
+         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px auto;
+         " onclick="sortAll();">
+     </a>
+ 
+     <!-- Main Grid Container -->
+     <div class="main-grid-wrapper">
+         
+         <div class="category-select-container">
+             <select id="category-select">
+                 <option value="all">ALL</option>
+                 <option value="dataanalysis">DATA</option>
+                 <option value="reportgeneration">REPORT</option>
+                 <option value="planningandforecasting">PLANNING</option>
+                 <option value="creative">CREATIVE</option>
+                 <option value="decision">DECISION</option>
+                 <option value="workflow">WORKFLOW</option>
+                 <option value="educational">EDUCATIONAL</option>
+             </select>
+         </div>
+         
+         <div class="grid-container">
+             <div class="grid-item">AdAgencyIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">AdventureIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">App<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">BookIQ™<hr></div>
+             <div class="grid-item">CalorieIQ™<hr></div>
+             <div class="grid-item">DecisionIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">EmotionIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">EnneagramIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">EventIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">FitnessIQ™<hr></div>
+             <div class="grid-item">General<hr></div>
+             <div class="grid-item">IncomeIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">NewBizIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">QuizIQ™<hr></div>
+             <div class="grid-item">ReceiptsIQ™<hr></div>
+             <div class="grid-item">ReportIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">ResearchIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">SocialIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">SpeculationIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="grid-item">SymptomIQ™<hr></div>
+             <div class="grid-item">WorkflowIQ™<hr><span class="premium-notice">Premium</span></div>
+         </div>
+     </div>
+ 
+
+
+     <script src="/utility/toolTip.js"></script>
+     <script src="/utility/tray.js"></script>
+     <script src="/ai/landing/landing.js" type="module"></script>
+     <!-- <script src="/payment/paymentform.js"></script> -->
+     <script src="/utility/modal.js"></script>
+
+     <script src="/ai/datain.js" type="module"></script>
+     <script src="/ai/dataout.js" type="module"></script>
+     <script src="/ai/promptgrid.js" type="module"></script>
+
+     <script src="/utility/dataConsentManager.js"></script>
+     <script src="/utility/termsManager.js"></script>
+     <script src="/utility/dataOverwrite.js"></script>
+
+     <script>
+         // Initialize the data overwrite button in the center of the screen
+         document.addEventListener('DOMContentLoaded', function() {
+             window.dataOverwrite.initButton(true);
+         });
+     </script>
+     
+     <script src="/index.js"></script>
+     <script src="https://js.stripe.com/v3/" async></script>
+ </body>
+ 
+ </html>

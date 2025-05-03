@@ -1,0 +1,381 @@
+<!-- /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IncomeIQ™ Liability</title>
+    <link rel="icon" type="image/x-icon" href="newLogo.jpg">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/style/styles.css">
+
+   <!-- this is an extended list of places icon could be needed -->
+   <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+   <link rel="shortcut icon" href="/images/favicon.ico" />
+   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+   
+
+    <link rel="manifest" href="/manifest.json">
+
+</head>
+
+<body>
+
+<div class="containerinter">
+        <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1"
+            data-tooltip="A type of debt where the borrower receives a fixed amount of money upfront, which they repay over time through regular payments until the loan is fully paid off. Once the loan is settled, the account is closed, and the borrower must apply for a new loan if they need more funds.">
+            Input Non-Revolving Liabilities<span class="tooltip1-content"></span>
+        </h2>
+
+        <div class="row">
+            <label for="liabilities_small_business_loan">Small Business Loan:</label>
+            <input type='number' inputmode="numeric" id="liabilities_small_business_loan">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_small_business_loan_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="liabilities_primary_residence">Primary Residence, Mortgage:</label>
+            <input type='number' inputmode="numeric" id="liabilities_primary_residence">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_primary_residence_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="liabilities_investment_properties">Investment Property, Mortgage:</label>
+            <input type='number' inputmode="numeric" id="liabilities_investment_properties">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_investment_properties_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="liabilities_vehicle_loan">Vehicle Loan:</label>
+            <input type='number' inputmode="numeric" id="liabilities_vehicle_loan">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_vehicle_loan_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="" style="font-size: unset;" class="tooltip1"
+                data-tooltip="List money you owe, whether it's to personal connections (like borrowing from family) or business suppliers that hasn't been accounted for elsewhere. In a sole proprietorship, these liabilities are part of your personal financial responsibility.">
+                <span class="tooltip1-content"></span>
+                Accounts Payable:</label>
+            <input type='number' inputmode="numeric" id="liabilities_personal_debt">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_personal_debt_percent" inputmode="numeric">
+        </div>
+
+        <h2 style="text-align: center; font-size: 18px;  margin-bottom:15px" class="tooltip1"
+            data-tooltip="Debts where you can borrow money up to a certain limit, pay it back, and borrow again. The amount you can borrow revolves as you pay off what you owe.">
+            Input Revolving Liabilities<span class="tooltip1-content"></span>
+        </h2>
+
+        <div class="row">
+            <label for="liabilities_student_loan">Student Loan:</label>
+            <input type='number' inputmode="numeric" id="liabilities_student_loan">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_student_loan_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="liabilities_line_of_credit">Line of Credit:</label>
+            <input type='number' inputmode="numeric" id="liabilities_line_of_credit">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_line_of_credit_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="liabilities_credit_card">Credit Card, Current Balance:</label>
+            <input type='number' inputmode="numeric" id="liabilities_credit_card">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_credit_card_percent" inputmode="numeric">
+        </div>
+
+        <div class="row">
+            <label for="" style="font-size: unset;" class="tooltip1" data-tooltip="Total tax payable">
+                <span class="tooltip1-content"></span>
+                Tax Arrears:</label>
+            <input type='number' inputmode="numeric" id="liabilities_tax_arrears">
+            <input type="number" min="0" max="100" placeholder="100%" class="percent-input"
+                id="liabilities_tax_arrears_percent" inputmode="numeric">
+        </div>
+</div>
+
+    
+        <!-- Button removed as calculations automatically happen on input and blur events -->
+
+    <div class="hidden">
+        <p><u>Liabilities:</u><span id="LIABILITIES"></span></p>
+        <span class="tooltiptext">Financial debts or obligations. Use: Debt management, financial strategy
+            formulation.</span>
+    </div>
+
+</body>
+
+<script>
+    // Inline all liability logic as a self-executing function like asset.html
+    (function() {
+        // Dependency fallbacks
+        const setLocal = window.setLocal || function (key, value, days) {
+            try { localStorage.setItem(key, encodeURIComponent(value)); } catch (e) { console.error(e); }
+        };
+        const getLocal = window.getLocal || function (key) {
+            try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
+        };
+        const setCookie = window.setCookie || function (name, value, days) {
+            try {
+                let expires = '';
+                if (days) {
+                    const date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = `; expires=${date.toUTCString()}`;
+                }
+                document.cookie = `${name}=${encodeURIComponent(value)}${expires}; path=/`;
+            } catch (e) { console.error(e); }
+        };
+
+        // Liability logic
+        console.log('Liability logic initialized in liability.html at:', new Date().toISOString());
+        let LIABILITIES = 0;
+        let LIABILITIESNA = 0;
+
+        function calculateLiabilities() {
+            const liabilitiesFields = [
+                'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
+                'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan',
+                'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears'
+            ];
+
+            let liabilities = 0;
+
+            for (let i = 0; i < liabilitiesFields.length; i++) {
+                const field = liabilitiesFields[i];
+                const element = document.getElementById(field);
+                if (!element) {
+                    console.error(`Element #${field} not found`);
+                    continue;
+                }
+                const fieldValue = element.value;
+                const parsedValue = parseFloat(fieldValue);
+                if (!isNaN(parsedValue)) {
+                    let fieldPercentage = parseFloat(document.querySelector(`#${field}_percent`)?.value);
+                    if (isNaN(fieldPercentage)) {
+                        fieldPercentage = 100;
+                    }
+                    liabilities += (parsedValue * fieldPercentage / 100);
+                }
+            }
+
+            LIABILITIES = liabilities;
+            // Store result in both global and localStorage
+            window.LIABILITIES = liabilities;
+            setLocal("LIABILITIES", LIABILITIES.toString(), 365);  // Add this line to save to localStorage immediately
+            
+            const liabilitiesElement = document.getElementById('LIABILITIES');
+            if (liabilitiesElement) {
+                liabilitiesElement.textContent = `$${LIABILITIES.toFixed(2)}`;
+            }
+        }
+
+        function calculateRevolving() {
+            const isPartner = getLocal('liabilityspousecheckbox') === 'checked';
+            const liabilitiesFields = [
+                'liabilities_personal_debt', 'liabilities_student_loan', 'liabilities_line_of_credit',
+                'liabilities_credit_card', 'liabilities_tax_arrears'
+            ];
+
+            let totalDebt = 0;
+
+            liabilitiesFields.forEach(field => {
+                const element = document.getElementById(field);
+                if (!element) {
+                    console.error(`Element #${field} not found`);
+                    return;
+                }
+                const fieldValue = parseFloat(element.value) || 0;
+                let fieldValuePercent = parseFloat(document.getElementById(`${field}_percent`)?.value);
+                if (isNaN(fieldValuePercent) || !isPartner) {
+                    fieldValuePercent = 100;
+                }
+                totalDebt += (fieldValue * fieldValuePercent / 100);
+            });
+
+            LIABILITIESNA = totalDebt;
+            // Store result in both global and localStorage
+            window.LIABILITIESNA = totalDebt;
+            setLocal("LIABILITIESNA", LIABILITIESNA.toString(), 365);
+        }
+
+        function calculateAll() {
+            calculateLiabilities();
+            // The setLocal for LIABILITIES is now done inside calculateLiabilities
+            calculateRevolving();
+
+            const fields = [
+                'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
+                'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan',
+                'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears',
+                'liabilities_small_business_loan_percent', 'liabilities_primary_residence_percent', 'liabilities_investment_properties_percent',
+                'liabilities_vehicle_loan_percent', 'liabilities_personal_debt_percent', 'liabilities_student_loan_percent',
+                'liabilities_line_of_credit_percent', 'liabilities_credit_card_percent', 'liabilities_tax_arrears_percent'
+            ];
+
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                if (element) {
+                    setLocal(field, element.value.trim() !== "" ? element.value : field.includes('_percent') ? "100" : "", 365);
+                }
+            });
+        }
+        
+        // Make calculateAll function accessible outside this scope
+        window.calculateAll = calculateAll;
+
+        function calculateNext() {
+            calculateAll();
+            setCookie('summary_reached', Date.now(), 365);
+            const parentWindow = window.parent || window;
+            const liabilityContainer = parentWindow.document.querySelector('.data-container-liability');
+            if (liabilityContainer && liabilityContainer.dataset.state === 'expanded') {
+                const liabilityClose = liabilityContainer.querySelector('.close-data-container');
+                if (liabilityClose) {
+                    liabilityClose.click();
+                }
+            }
+            setTimeout(() => {
+                const summaryContainer = parentWindow.document.querySelector('.data-container-summary');
+                if (summaryContainer && summaryContainer.dataset.state === 'collapsed') {
+                    const summaryLabel = summaryContainer.querySelector('.data-label');
+                    if (summaryLabel) {
+                        summaryLabel.click();
+                    }
+                }
+            }, 300);
+        }
+
+        function calculateBack() {
+            calculateAll();
+            const parentWindow = window.parent || window;
+            const liabilityContainer = parentWindow.document.querySelector('.data-container-liability');
+            if (liabilityContainer && liabilityContainer.dataset.state === 'expanded') {
+                const liabilityClose = liabilityContainer.querySelector('.close-data-container');
+                if (liabilityClose) {
+                    liabilityClose.click();
+                }
+            }
+            setTimeout(() => {
+                const assetContainer = parentWindow.document.querySelector('.data-container-asset');
+                if (assetContainer && assetContainer.dataset.state === 'collapsed') {
+                    const assetLabel = assetContainer.querySelector('.data-label');
+                    if (assetLabel) {
+                        assetLabel.click();
+                    }
+                }
+            }, 300);
+        }
+
+        // Setup all event listeners and initialize calculations
+        function setupPageFunctionality() {
+            const formElements = [
+                'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
+                'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan',
+                'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears',
+                'liabilities_small_business_loan_percent', 'liabilities_primary_residence_percent', 'liabilities_investment_properties_percent',
+                'liabilities_vehicle_loan_percent', 'liabilities_personal_debt_percent', 'liabilities_student_loan_percent',
+                'liabilities_line_of_credit_percent', 'liabilities_credit_card_percent', 'liabilities_tax_arrears_percent'
+            ];
+
+            formElements.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const savedValue = getLocal(elementId);
+                    if (savedValue !== null) {
+                        element.value = savedValue;
+                    }
+                    
+                    // Add input event listener to trigger calculations
+                    element.addEventListener('input', function() {
+                        setLocal(elementId, element.value.trim() !== "" ? element.value : elementId.includes('_percent') ? "100" : "", 365);
+                        // Recalculate and update all values when any input changes
+                        calculateAll();
+                    });
+                    
+                    // Also add blur event to ensure calculations happen even if focus leaves without input event
+                    element.addEventListener('blur', function() {
+                        calculateAll();
+                    });
+                }
+            });
+
+            const maritalStatus = getLocal('maritalStatus');
+            const percentInputs = document.querySelectorAll('.percent-input');
+            if (maritalStatus === 'married' || maritalStatus === 'common-law') {
+                percentInputs.forEach(input => input.style.display = 'block');
+            } else {
+                percentInputs.forEach(input => input.style.display = 'none');
+            }
+
+            // Add liability spouse checkbox handling
+            const spouseCheckbox = document.getElementById('liabilityspousecheckbox');
+            if (spouseCheckbox) {
+                const spouseValue = getLocal('liabilityspousecheckbox');
+                spouseCheckbox.checked = spouseValue === 'checked';
+                spouseCheckbox.addEventListener('change', function() {
+                    setLocal('liabilityspousecheckbox', this.checked ? 'checked' : 'unchecked', 365);
+                    percentInputs.forEach(input => {
+                        input.style.display = this.checked ? 'block' : 'none';
+                    });
+                    calculateAll();
+                });
+            }
+
+            // Navigation buttons
+            const nextButton = document.querySelector('#nextButton');
+            if (nextButton) {
+                nextButton.addEventListener('click', calculateNext);
+            }
+            
+            const backButton = document.querySelector('.nav-btn.nav-left');
+            if (backButton) {
+                backButton.addEventListener('click', calculateBack);
+            }
+
+            // Initialize calculations
+            calculateAll();
+        }
+        
+        // Run setup on DOMContentLoaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupPageFunctionality);
+        } else {
+            // DOM already loaded, run setup immediately
+            setupPageFunctionality();
+        }
+        
+        // Also ensure calculations run on window load as a backup
+        window.addEventListener('load', function() {
+            calculateAll();
+        });
+        
+        // Trigger recalculation when the tab becomes visible (e.g., switching back to tab)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                calculateAll();
+            }
+        });
+    })();
+</script>
+
+</html>
