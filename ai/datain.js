@@ -156,6 +156,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-family: "Inter", sans-serif;
                 visibility: visible;
                 opacity: 1;
+                display: flex;
+                flex-direction: column;
             }
 
             .data-container-left.initial, .data-container-left.collapsed {
@@ -175,6 +177,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 top: 50%;
                 transform: translateY(-50%);
                 z-index: 11000; /* Higher z-index when expanded to appear over grid */
+                overflow: hidden; /* Changed from default to hidden */
             }
 
             .data-container-left:hover {
@@ -192,6 +195,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 cursor: pointer;
                 font-weight: bold;
                 font-family: "Inter", sans-serif;
+                z-index: 11001; /* Make sure it's above other content */
             }
 
             .data-container-left .data-label {
@@ -208,17 +212,22 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-family: "Geist", sans-serif;
                 writing-mode: vertical-rl;
                 text-orientation: mixed;
+                z-index: 11001; /* Make sure it's above other content */
             }
 
             .data-container-left .data-content {
                 padding: 10px;
                 font-size: 14px;
-                max-height: calc(100vh - 80px);
+                height: calc(100% - 40px); /* Fixed height calculation */
+                max-height: none; /* Remove max-height limitation */
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
                 max-width: 100%;
                 margin-top: 30px;
+                position: relative; /* Add positioning context */
+                display: block; /* Ensure proper display */
+                box-sizing: border-box; /* Include padding in height calculation */
             }
 
             /* Mobile responsiveness for left container */
@@ -239,6 +248,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     min-width: 25%;
                     height: calc(100vh - 20px);
                     top: 10px;
+                    transform: none; /* Remove transform on mobile */
                 }
 
                 .data-container-left .data-label {
@@ -256,6 +266,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     padding: 8px;
                     overflow-x: auto;
                     margin-top: 25px;
+                    height: calc(100% - 35px); /* Adjusted for mobile */
                 }
             }
         `;
