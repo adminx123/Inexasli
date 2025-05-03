@@ -335,19 +335,27 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.addEventListener('promptGridItemSelected', function (e) {
             const url = e.detail.url;
             console.log(`Received promptGridItemSelected event with URL: ${url} (dataout.js)`);
+            
+            // Special handling for URLs that have output templates
             const outputMap = {
                 '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
                 '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
                 '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
                 '/ai/adventure/adventure.html': '/ai/adventure/adventureiqout.html'
             };
+            
+            // Just store the mapping but don't auto-open DataOut for CalorieIQ specifically
             const outUrl = outputMap[url];
             if (outUrl) {
                 setLocal('lastDataOutUrl', outUrl);
-                if (dataContainer.dataset.state !== 'expanded') {
-                    toggleDataContainer();
-                } else {
-                    loadStoredContent(outUrl);
+                
+                // Only auto-open for items other than CalorieIQ
+                if (url !== '/ai/calorie/calorieiq.html') {
+                    if (dataContainer.dataset.state !== 'expanded') {
+                        toggleDataContainer();
+                    } else {
+                        loadStoredContent(outUrl);
+                    }
                 }
             }
         });
