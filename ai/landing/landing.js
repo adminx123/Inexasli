@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle grid item clicks
     const gridItems = document.querySelectorAll('.grid-container .grid-item');
     const urls = [
-        '/ai/marketing/adagencyiq.html',
+      `  '/ai/marketing/adagencyiq.html',
         '/ai/adventure/adventureiq.html',
         '/ai/app/appiq.html',
         '/ai/book/bookiq.html',
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '/ai/fitness/fitnessiq.html',
         '/ai/general/general.html',
         '/ai/budget/incomeiq.html',
-        '/ai/business/newbiziq.html',
+        '/ai/business/businessiq.html',
         '/ai/quiz/quiziq.html',
         '/ai/receipts/receiptsiq.html',
         '/ai/report/reportiq.html',
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '/ai/social/socialiq.html',
         '/ai/speculation/speculationiq.html',
         '/ai/symptom/symptomiq.html',
-        '/ai/workflow/workflowiq.html'
+        '/ai/workflow/workflowiq.html'`
     ];
     
     // Function to load content into datain container
