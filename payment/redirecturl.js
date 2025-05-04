@@ -15,7 +15,8 @@ import { getCookie } from '/utility/getcookie.js';
 const urlParams = new URLSearchParams(window.location.search);
 const sessionId = urlParams.get("session_id");
 const container = document.querySelector(".container");
-const lambda = "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
+// Updated from Lambda to Cloudflare Worker URL
+const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const paid = getLocal("authenticated");
@@ -35,17 +36,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     if (sessionId) {
       try {
-        const res = await fetch(lambda, {
+        console.log("Checking payment status with Cloudflare Worker for session:", sessionId);
+        const res = await fetch(paymentEndpoint, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
           body: JSON.stringify({ task: "checkPayment", sessionId: sessionId }),
+          mode: "cors"
         });
+        
+        console.log("Payment verification response status:", res.status);
+        
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error("Payment verification error:", errorText);
+          throw new Error(`Payment verification failed: ${res.status} ${errorText}`);
+        }
+        
         const data = await res.json();
+        console.log("Payment verification response:", data);
 
         if (data.paymentStatus) {
           if (data.paymentStatus === "paid" || data.paymentStatus === "no_payment_required") {
             setLocal("authenticated", "paid", 32);
-            container.innerHTML = "payment successful redirecting ......";
+            container.innerHTML = "Payment successful! Redirecting...";
             const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
             if (calculatedFromWorksheet === "true") {
               const totalRevenue = getLocal("totalRevenue");
@@ -58,27 +74,29 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         } else if (data.error) {
           container.innerHTML = `
-            <h1 style="text-transform: capitalize;">payment failed</h1>
-            <p>sorry your payment attempt failed</p>
+            <h1 style="text-transform: capitalize;">Payment Failed</h1>
+            <p>Sorry, your payment attempt failed</p>
             <p>${data.error || ""}</p>
-            <a href="mailto:support@inexasli.com" class="contact-support">something's wrong? contact support</a>
+            <a href="mailto:support@inexasli.com" class="contact-support">Something's wrong? Contact support</a>
           `;
         } else {
           container.innerHTML = `
-            <h1 style="text-transform: capitalize;">payment failed</h1>
-            <p>sorry your payment attempt failed</p>
-            <a href="mailto:support@inexasli.com" class="contact-support">something's wrong? contact support</a>
+            <h1 style="text-transform: capitalize;">Payment Failed</h1>
+            <p>Sorry, your payment attempt failed</p>
+            <a href="mailto:support@inexasli.com" class="contact-support">Something's wrong? Contact support</a>
           `;
         }
       } catch (error) {
-        console.error(error.message);
+        console.error("Payment verification error:", error.message);
         container.innerHTML = `
-          <h1 style="text-transform: capitalize;">something went wrong</h1>
+          <h1 style="text-transform: capitalize;">Something Went Wrong</h1>
           <p>${error.message}</p>
-          <p>try again later</p>`;
+          <p>Please try again later or contact support.</p>
+          <a href="mailto:support@inexasli.com" class="contact-support">Contact Support</a>`;
       }
     } else {
-      container.innerHTML = "no or invalid session id";
+      console.log("No session ID found in URL");
+      container.innerHTML = "No or invalid session ID";
       redirectToLatest();
     }
   }
