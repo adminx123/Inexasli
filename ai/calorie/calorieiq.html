@@ -333,7 +333,8 @@ function handleLeftSidebarOpen (e) {
         console.log('Processed form data:', formData);
         localStorage.setItem("calorieIqFormData", JSON.stringify(formData))
 
-        const apiUrl = 'https://ocejuhqqla5zdps4uaiogwswki0vaclp.lambda-url.us-east-1.on.aws/';
+        // Updated with the new worker URL
+        const apiUrl = 'https://calorieiqworker.4hm7q4q75z.workers.dev/';
 
         
         try {
