@@ -26,7 +26,8 @@ export async function initializePayment() {
         // Wait for Stripe to load
         await waitForStripe();
 
-        const lambda = "https://cup7hlgbjk.execute-api.us-east-1.amazonaws.com/production/create-checkout-session";
+        // Replace AWS Lambda URL with your Cloudflare Worker URL
+        const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
         const publicKey = "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
         const payForm = document.querySelector("#payment-form");
 
@@ -69,12 +70,12 @@ export async function initializePayment() {
             console.log("Sending payload to Lambda:", payload);
 
             try {
-                console.log("Initiating fetch to:", lambda);
+                console.log("Initiating fetch to:", paymentEndpoint);
                 console.log("Current origin:", window.location.origin);
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
 
-                const res = await fetch(lambda, {
+                const res = await fetch(paymentEndpoint, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload),
