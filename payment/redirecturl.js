@@ -10,7 +10,6 @@
 
 import { setLocal } from '/utility/setlocal.js';
 import { getLocal } from '/utility/getlocal.js';
-import { getCookie } from '/utility/getcookie.js';
 
 const urlParams = new URLSearchParams(window.location.search);
 const sessionId = urlParams.get("session_id");
@@ -21,18 +20,14 @@ const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
 document.addEventListener("DOMContentLoaded", async () => {
   const paid = getLocal("authenticated");
 
-  const redirectToLatest = () => {
-    const promptCookie = getCookie("prompt") || { timestamp: 0 };
-    const summaryCookie = getCookie("summary") || { timestamp: 0 };
-    console.log(`promptTime: ${promptCookie.timestamp}, summaryTime: ${summaryCookie.timestamp}`);
-    const redirectUrl = promptCookie.timestamp > summaryCookie.timestamp
-      ? "/create/prompt.html"
-      : "/budget/summary.html";
-    window.location.href = redirectUrl;
+  // Simplified redirect function - always go to landing.html
+  const redirectToLanding = () => {
+    console.log("Redirecting to landing page");
+    window.location.href = "/ai/landing/landing.html";
   };
 
   if (paid === "paid") {
-    redirectToLatest();
+    redirectToLanding();
   } else {
     if (sessionId) {
       try {
@@ -62,15 +57,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           if (data.paymentStatus === "paid" || data.paymentStatus === "no_payment_required") {
             setLocal("authenticated", "paid", 32);
             container.innerHTML = "Payment successful! Redirecting...";
-            const calculatedFromWorksheet = getLocal("calculated_from_worksheet");
-            if (calculatedFromWorksheet === "true") {
-              const totalRevenue = getLocal("totalRevenue");
-              if (totalRevenue) {
-                setLocal("income_sole_prop", totalRevenue, 32);
-                setLocal("calculated_from_worksheet", "resolved", 32);
-              }
-            }
-            setTimeout(redirectToLatest, 2000); // 2s delay for UX
+            
+            // Remove the worksheet logic since website has changed
+            setTimeout(redirectToLanding, 2000); // 2s delay for UX
           }
         } else if (data.error) {
           container.innerHTML = `
@@ -97,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       console.log("No session ID found in URL");
       container.innerHTML = "No or invalid session ID";
-      redirectToLatest();
+      redirectToLanding();
     }
   }
 });
