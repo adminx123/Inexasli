@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to filter grid items by category
     function filterGridItems(category) {
-        const gridItems = document.querySelectorAll('.grid-item');
+        const gridItems = document.querySelectorAll('.landing-item');
         gridItems.forEach(item => {
             let itemText = item.textContent.split(/\n|Premium/)[0].trim().replace(/™/g, '');
             if (category === 'all' || itemCategories[category]?.includes(itemText)) {
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Handle grid item clicks
-    const gridItems = document.querySelectorAll('.grid-container .grid-item');
+    const gridItems = document.querySelectorAll('.landing-grid .landing-item');
     const urls = [
         '/ai/marketing/adagencyiq.html',
         '/ai/adventure/adventureiq.html',
