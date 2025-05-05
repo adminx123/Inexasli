@@ -19,138 +19,45 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-// Display CalorieIQ output 
+// Ultra simple display function - just shows whatever is in localStorage
 function displayCalorieOutput() {
+  console.log("ULTRA SIMPLE: displayCalorieOutput called");
   try {
     // Get data from localStorage
     const storedData = localStorage.getItem('calorieIqResponse');
-    console.log("DEBUG calorieiqout.html: Checking localStorage", {
-      hasData: !!storedData,
-      dataLength: storedData ? storedData.length : 0,
-      dataPreview: storedData ? storedData.substring(0, 100) + '...' : 'none'
-    });
+    console.log("ULTRA SIMPLE: localStorage data found:", !!storedData);
     
     if (storedData) {
+      // Show the raw data first so we can see what we're working with
+      document.getElementById('calorie-output').innerText = "RAW DATA: " + storedData;
+      
       try {
-        // Parse the data
+        // Parse the outer JSON
         const parsedData = JSON.parse(storedData);
-        console.log("DEBUG calorieiqout.html: Parsed localStorage data", {
-          hasMessage: !!parsedData.message,
-          message: parsedData.message,
-          hasText: !!parsedData.text,
-          textPreview: parsedData.text ? parsedData.text.substring(0, 100) + '...' : 'none',
-          hasData: !!parsedData.data
-        });
+        console.log("ULTRA SIMPLE: Parsed outer JSON successfully");
         
         if (parsedData.text) {
-          try {
-            // Check if text is JSON
-            if (parsedData.text.trim().startsWith('{')) {
-              // Text is JSON, try to parse it
-              const innerJson = JSON.parse(parsedData.text);
-              console.log("DEBUG calorieiqout.html: Text is JSON", {
-                jsonKeys: Object.keys(innerJson),
-                hasResponse: !!innerJson.Response,
-                responsePreview: innerJson.Response ? innerJson.Response.substring(0, 100) + '...' : 'none'
-              });
-              
-              if (innerJson.Response) {
-                // Successfully found the Response field in the inner JSON
-                document.getElementById('calorie-output').innerHTML = formatTextOutput(innerJson.Response);
-                console.log("DEBUG calorieiqout.html: Displaying formatted Response field");
-              } else if (innerJson.summary) {
-                // Older format with summary field
-                document.getElementById('calorie-output').innerText = innerJson.summary;
-                console.log("DEBUG calorieiqout.html: Displaying summary field");
-              } else {
-                // No Response field found, just stringify the JSON
-                document.getElementById('calorie-output').innerText = JSON.stringify(innerJson, null, 2);
-                console.log("DEBUG calorieiqout.html: Displaying stringified inner JSON");
-              }
-            } else {
-              // Not JSON, just use the text directly
-              document.getElementById('calorie-output').innerHTML = formatTextOutput(parsedData.text);
-              console.log("DEBUG calorieiqout.html: Displaying formatted text directly");
-            }
-          } catch (innerJsonError) {
-            // If parsing the inner JSON fails, just display the text
-            document.getElementById('calorie-output').innerHTML = formatTextOutput(parsedData.text);
-            console.log("DEBUG calorieiqout.html: Inner JSON parse failed, displaying text directly", {
-              error: innerJsonError.message
-            });
-          }
+          console.log("ULTRA SIMPLE: Found text property");
+          document.getElementById('calorie-output').innerText = parsedData.text;
         } else if (parsedData.data) {
-          // Old format - display the data property
-          document.getElementById('calorie-output').innerHTML = formatTextOutput(parsedData.data);
-          console.log("DEBUG calorieiqout.html: Displaying formatted data property");
+          console.log("ULTRA SIMPLE: Found data property");
+          document.getElementById('calorie-output').innerText = parsedData.data;
         } else {
-          // No text or data property, just stringify the whole response
-          document.getElementById('calorie-output').innerText = JSON.stringify(parsedData, null, 2);
-          console.log("DEBUG calorieiqout.html: No text/data properties found, displaying stringified response");
+          console.log("ULTRA SIMPLE: No text or data properties found");
+          document.getElementById('calorie-output').innerText = "Parsed response but couldn't find content: " + JSON.stringify(parsedData);
         }
       } catch (error) {
-        document.getElementById('calorie-output').innerText = 'Error parsing data: ' + error.message + '\n\nRaw data: ' + storedData;
-        console.error("DEBUG calorieiqout.html: Error parsing stored data:", error);
+        console.error("ULTRA SIMPLE: Error parsing JSON:", error);
+        document.getElementById('calorie-output').innerText = "Error parsing JSON: " + error.message + "\n\nRaw data: " + storedData;
       }
     } else {
-      document.getElementById('calorie-output').innerText = 'No CalorieIQ data available. Please generate data first.';
-      console.log("DEBUG calorieiqout.html: No data found in localStorage");
+      console.log("ULTRA SIMPLE: No data in localStorage");
+      document.getElementById('calorie-output').innerText = 'No CalorieIQ data available in localStorage. Please generate data first.';
     }
   } catch (error) {
+    console.error("ULTRA SIMPLE: Unexpected error:", error);
     document.getElementById('calorie-output').innerText = 'Error: ' + error.message;
-    console.error("DEBUG calorieiqout.html: Unexpected error:", error);
   }
-}
-
-// Format the text output with Markdown-style formatting
-function formatTextOutput(text) {
-  if (!text) return '';
-  
-  // Replace code blocks with formatted tables
-  let formatted = text
-    .replace(/```([\s\S]*?)```/g, function(match, code) {
-      return `<div class="nutrition-table">${formatTable(code)}</div>`;
-    });
-    
-  // Handle markdown headers
-  formatted = formatted
-    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-    .replace(/^## (.*$)/gm, '<h2>$1</h2>');
-    
-  // Convert line breaks to <br> outside of tables
-  formatted = formatted.replace(/\n/g, '<br>');
-  
-  return formatted;
-}
-
-// Format a text table into HTML
-function formatTable(tableText) {
-  const lines = tableText.trim().split('\n');
-  let html = '<table>';
-  
-  // Process header
-  if (lines.length > 0) {
-    const headerCells = lines[0].split('|').map(cell => cell.trim());
-    html += '<thead><tr>';
-    headerCells.forEach(cell => {
-      html += `<th>${cell}</th>`;
-    });
-    html += '</tr></thead>';
-  }
-  
-  // Skip header and separator line
-  html += '<tbody>';
-  for (let i = 2; i < lines.length; i++) {
-    const cells = lines[i].split('|').map(cell => cell.trim());
-    html += '<tr>';
-    cells.forEach(cell => {
-      html += `<td>${cell}</td>`;
-    });
-    html += '</tr>';
-  }
-  html += '</tbody></table>';
-  
-  return html;
 }
 
 // Copy output to clipboard
@@ -166,7 +73,10 @@ function copyCalorieOutput() {
 }
 
 // Display output when page loads
-document.addEventListener('DOMContentLoaded', displayCalorieOutput);
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("ULTRA SIMPLE: DOMContentLoaded event fired");
+  displayCalorieOutput();
+});
 </script>
 
 <style>
@@ -181,53 +91,7 @@ document.addEventListener('DOMContentLoaded', displayCalorieOutput);
   white-space: pre-wrap;
   line-height: 1.5;
   margin-bottom: 15px;
-}
-
-.nutrition-table {
-  margin: 15px 0;
-  overflow-x: auto;
-}
-
-.nutrition-table table {
-  width: 100%;
-  border-collapse: collapse;
   font-family: monospace;
-  font-size: 14px;
-}
-
-.nutrition-table th, .nutrition-table td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.nutrition-table th {
-  background-color: #f5f5f5;
-  font-weight: bold;
-}
-
-.nutrition-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.nutrition-table tr:hover {
-  background-color: #f1f1f1;
-}
-
-h1, h2 {
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-  font-weight: 600;
-}
-
-h1 {
-  font-size: 1.5em;
-  color: #2c3e50;
-}
-
-h2 {
-  font-size: 1.2em;
-  color: #3498db;
 }
 
 .copy-btn {
