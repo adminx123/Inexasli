@@ -109,22 +109,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 visibilityStyleSheet.insertRule(`${selector} { display: none !important; }`, 0);
             });
             
-            // Note: We don't force display on budget tabs, we just let them use their default display
-            // This preserves their original styling
+            // Show budget tabs by setting visibility to visible
+            budgetTabSelectors.forEach(selector => {
+                visibilityStyleSheet.insertRule(`${selector} { visibility: visible; }`, 0);
+            });
+            
+            // Apply direct DOM manipulation
+            applyDirectStyleChanges(isBudgetMode);
+            
+            // IMPORTANT: Call our manual initialization function after a delay
+            setTimeout(() => {
+                // Make sure all tabs are visible first
+                budgetTabSelectors.forEach(selector => {
+                    const tab = document.querySelector(selector);
+                    if (tab) {
+                        tab.style.visibility = 'visible';
+                    }
+                });
+                
+                console.log('Directly calling budgetTabFlow initialization function');
+                
+                // Call the manual initialization function we defined in landing.html
+                if (typeof window.manuallyInitBudgetFlow === 'function') {
+                    window.manuallyInitBudgetFlow();
+                    console.log('Successfully called manual budget flow initialization');
+                } else {
+                    console.error('Manual budget flow initialization function not found');
+                }
+            }, 500);
+            
         } else {
             console.log('Switching to standard mode: showing datain/dataout, hiding budget tabs');
             
-            // Add CSS rules to hide budget tabs
+            // Hide budget tabs using visibility
             budgetTabSelectors.forEach(selector => {
-                visibilityStyleSheet.insertRule(`${selector} { display: none !important; }`, 0);
+                visibilityStyleSheet.insertRule(`${selector} { visibility: hidden; }`, 0);
             });
             
-            // Note: We don't force display on data containers, we just let them use their default display
-            // This preserves their original styling
+            // Apply direct DOM manipulation
+            applyDirectStyleChanges(isBudgetMode);
         }
-        
-        // Apply direct DOM manipulation as a backup
-        applyDirectStyleChanges(isBudgetMode);
     }
     
     // Direct DOM manipulation as backup
@@ -146,17 +170,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (dataInContainer) dataInContainer.style.setProperty('display', 'none', 'important');
             if (dataOutContainer) dataOutContainer.style.setProperty('display', 'none', 'important');
             
-            // Show budget tabs by removing the display style altogether
+            // Show budget tabs by setting visibility
             budgetTabs.forEach(tab => {
-                tab.style.removeProperty('display');
+                tab.style.removeProperty('display'); // Ensure no display:none
+                tab.style.setProperty('visibility', 'visible');
             });
         } else {
             // Hide budget tabs
             budgetTabs.forEach(tab => {
-                tab.style.setProperty('display', 'none', 'important');
+                tab.style.setProperty('visibility', 'hidden');
             });
             
-            // Show data containers by removing the display style altogether
+            // Show data containers by removing the display style
             if (dataInContainer) dataInContainer.style.removeProperty('display');
             if (dataOutContainer) dataOutContainer.style.removeProperty('display');
         }
@@ -194,18 +219,22 @@ document.addEventListener('DOMContentLoaded', function() {
         visibilityStyleSheet.insertRule('.data-container-left { display: none !important; }', 0);
         visibilityStyleSheet.insertRule('.data-container-right { display: none !important; }', 0);
         
-        // Hide budget tabs
-        visibilityStyleSheet.insertRule('.data-container-intro { display: none !important; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-income { display: none !important; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-expense { display: none !important; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-asset { display: none !important; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-liability { display: none !important; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-summary { display: none !important; }', 0);
+        // Hide budget tabs BUT use visibility:hidden instead of display:none
+        // This keeps the elements in the DOM for budgetTabFlow.js to find them
+        visibilityStyleSheet.insertRule('.data-container-intro { visibility: hidden; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-income { visibility: hidden; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-expense { visibility: hidden; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-asset { visibility: hidden; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-liability { visibility: hidden; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-summary { visibility: hidden; }', 0);
         
         // Also apply direct DOM manipulation
-        const allContainers = [
+        const dataContainers = [
             '.data-container-left',
-            '.data-container-right',
+            '.data-container-right'
+        ];
+        
+        const budgetContainers = [
             '.data-container-intro',
             '.data-container-income',
             '.data-container-expense',
@@ -214,10 +243,18 @@ document.addEventListener('DOMContentLoaded', function() {
             '.data-container-summary'
         ];
         
-        allContainers.forEach(selector => {
+        dataContainers.forEach(selector => {
             const element = document.querySelector(selector);
             if (element) {
                 element.style.setProperty('display', 'none', 'important');
+            }
+        });
+        
+        budgetContainers.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.style.setProperty('visibility', 'hidden');
+                // Let the element remain in the layout for budgetTabFlow.js to find
             }
         });
     }
