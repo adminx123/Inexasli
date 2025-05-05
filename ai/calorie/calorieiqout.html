@@ -1,4 +1,4 @@
-    <table class="nutrition-table">
+<table class="nutrition-table">
         <thead>
             <tr>
                 <th>METRIC</th>
@@ -239,4 +239,257 @@ async function populate() {
 
 
 populate()
+
+// Display function that can handle both the new structured format and the older text format
+function displayCalorieOutput() {
+  const outputElement = document.getElementById('calorie-output');
+  outputElement.innerHTML = "<p>Processing data...</p>";
+  
+  try {
+    // Get data from localStorage
+    const storedData = localStorage.getItem('calorieIqResponse');
+    
+    if (!storedData) {
+      outputElement.innerHTML = "<p>No data found in localStorage. Please generate new calorie data.</p>";
+      return;
+    }
+    
+    // Log raw data for debugging
+    console.log("Raw stored data:", storedData);
+    
+    // Parse the outer response
+    const parsedData = JSON.parse(storedData);
+    console.log("Parsed data:", parsedData);
+    
+    // Check if we have the new structured format
+    if (parsedData.data && parsedData.data.structured) {
+      displayStructuredData(parsedData.data, outputElement);
+    } 
+    // Check if we have the old text format in a 'text' field
+    else if (parsedData.text) {
+      displayTextData(parsedData.text, outputElement);
+    }
+    // Fallback for any other format
+    else {
+      outputElement.innerHTML = `<h3>CalorieIQ Results</h3><pre>${JSON.stringify(parsedData, null, 2)}</pre>`;
+    }
+  } catch (error) {
+    console.error("Error displaying calorie data:", error);
+    outputElement.innerHTML = `
+      <div style="color: red; margin-bottom: 15px;">Error displaying data: ${error.message}</div>
+      <div style="color: orange;">
+        <p>Raw data from localStorage:</p>
+        <pre style="background: #f5f5f5; padding: 10px; overflow: auto; max-height: 300px; font-size: 12px;">${localStorage.getItem('calorieIqResponse') || 'No data found'}</pre>
+      </div>
+    `;
+  }
+}
+
+// Display structured data in a nice format
+function displayStructuredData(data, outputElement) {
+  // Extract the components
+  const { rawText, structured } = data;
+  
+  let htmlOutput = '<div class="results-container">';
+  
+  // BMI section
+  if (structured && structured.bmi) {
+    htmlOutput += `
+      <div class="bmi-section">
+        <h3>Your BMI</h3>
+        <div class="bmi-value">${structured.bmi}</div>
+      </div>
+    `;
+  }
+  
+  // Nutrients table section
+  if (structured && structured.nutrients && structured.nutrients.length > 0) {
+    htmlOutput += `
+      <div class="nutrients-section">
+        <h3>Nutrient Analysis</h3>
+        <table class="nutrients-table">
+          <thead>
+            <tr>
+              <th>Nutrient</th>
+              <th>Daily Target</th>
+              <th>Intake</th>
+              <th>% of Target</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+    
+    structured.nutrients.forEach(nutrient => {
+      htmlOutput += `
+        <tr>
+          <td>${nutrient.name}</td>
+          <td>${nutrient.target}</td>
+          <td>${nutrient.intake}</td>
+          <td>${nutrient.percentage}</td>
+        </tr>
+      `;
+    });
+    
+    htmlOutput += `
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+  
+  // Meal recommendations section
+  if (structured && structured.mealRecommendations && structured.mealRecommendations.length > 0) {
+    htmlOutput += `
+      <div class="recommendations-section">
+        <h3>Meal Recommendations</h3>
+        <ul class="recommendations-list">
+    `;
+    
+    structured.mealRecommendations.forEach(recommendation => {
+      if (recommendation.trim()) {
+        htmlOutput += `<li>${recommendation}</li>`;
+      }
+    });
+    
+    htmlOutput += `
+        </ul>
+      </div>
+    `;
+  }
+  
+  // If we couldn't find structured data, display the raw text as fallback
+  if (!structured || (!structured.bmi && !structured.nutrients.length && !structured.mealRecommendations.length)) {
+    htmlOutput += `
+      <div class="raw-text">
+        <h3>Nutritional Analysis</h3>
+        <div class="markdown-content">${formatMarkdown(rawText || '')}</div>
+      </div>
+    `;
+  }
+  
+  htmlOutput += '</div>';
+  outputElement.innerHTML = htmlOutput;
+}
+
+// Display text data with basic formatting
+function displayTextData(text, outputElement) {
+  try {
+    // Try to parse the text as JSON in case it's a JSON string
+    if (text.trim().startsWith('{') || text.trim().startsWith('[')) {
+      try {
+        const jsonData = JSON.parse(text);
+        // If it has a Response field, extract and format that
+        if (jsonData.Response) {
+          outputElement.innerHTML = `<div class="markdown-content">${formatMarkdown(jsonData.Response)}</div>`;
+          return;
+        }
+        // Otherwise just display the formatted JSON
+        outputElement.innerHTML = `<pre>${JSON.stringify(jsonData, null, 2)}</pre>`;
+        return;
+      } catch (e) {
+        console.log("Text is not valid JSON, displaying as text");
+      }
+    }
+    
+    // Format as plain text/markdown
+    outputElement.innerHTML = `<div class="markdown-content">${formatMarkdown(text)}</div>`;
+  } catch (error) {
+    console.error("Error in displayTextData:", error);
+    outputElement.innerHTML = `<pre>${text}</pre>`;
+  }
+}
+
+// Format markdown text to HTML
+function formatMarkdown(text) {
+  if (!text) return '';
+  
+  // Format headers
+  text = text.replace(/^# (.*$)/gm, '<h2>$1</h2>');
+  text = text.replace(/^## (.*$)/gm, '<h3>$1</h3>');
+  
+  // Format code blocks
+  text = text.replace(/```([\s\S]*?)```/g, function(match, p1) {
+    // Check if it looks like a table (contains | character)
+    if (p1.includes('|')) {
+      return formatTable(p1);
+    }
+    return '<pre><code>' + p1 + '</code></pre>';
+  });
+  
+  // Format lists
+  text = text.replace(/^\s*[\-\*]\s+(.*$)/gm, '<li>$1</li>');
+  text = text.replace(/(<li>.*<\/li>\n)+/g, '<ul>$&</ul>');
+  
+  // Format line breaks
+  text = text.replace(/\n/g, '<br>');
+  
+  return text;
+}
+
+// Format tables from markdown-style to HTML
+function formatTable(tableText) {
+  const lines = tableText.trim().split('\n');
+  let html = '<table class="nutrients-table">';
+  
+  // Process header (first row)
+  if (lines.length > 0) {
+    const headerCells = lines[0].split('|').map(cell => cell.trim()).filter(cell => cell);
+    html += '<thead><tr>';
+    headerCells.forEach(cell => {
+      html += `<th>${cell}</th>`;
+    });
+    html += '</tr></thead>';
+  }
+  
+  // Skip the separator row (if it exists)
+  const dataStartIndex = lines.length > 1 && lines[1].includes('---') ? 2 : 1;
+  
+  // Process data rows
+  if (lines.length > dataStartIndex) {
+    html += '<tbody>';
+    for (let i = dataStartIndex; i < lines.length; i++) {
+      const cells = lines[i].split('|').map(cell => cell.trim()).filter(cell => cell);
+      if (cells.length > 0) {
+        html += '<tr>';
+        cells.forEach(cell => {
+          html += `<td>${cell}</td>`;
+        });
+        html += '</tr>';
+      }
+    }
+    html += '</tbody>';
+  }
+  
+  html += '</table>';
+  return html;
+}
+
+// Copy output to clipboard
+function copyCalorieOutput() {
+  const output = document.getElementById('calorie-output').innerText;
+  navigator.clipboard.writeText(output)
+    .then(() => {
+      alert('Copied to clipboard!');
+    })
+    .catch(err => {
+      alert('Failed to copy: ' + err);
+    });
+}
+
+// Debug function to inspect localStorage content
+function debugLocalStorage() {
+  const data = localStorage.getItem('calorieIqResponse');
+  console.log("localStorage content:", data);
+  alert("Data length: " + (data ? data.length : 0) + " characters. Check console for details.");
+}
+
+// Call immediately and also on load
+displayCalorieOutput();
+window.addEventListener('load', displayCalorieOutput);
+
+// Add debug buttons
+document.write('<div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">');
+document.write('<button onclick="displayCalorieOutput()" style="background-color:#e74c3c;color:white;padding:8px 15px;border:none;border-radius:4px;cursor:pointer;">Force Display Data</button>');
+document.write('<button onclick="debugLocalStorage()" style="background-color:#3498db;color:white;padding:8px 15px;border:none;border-radius:4px;cursor:pointer;">Debug Storage</button>');
+document.write('</div>');
     </script>
