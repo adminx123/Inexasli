@@ -19,11 +19,20 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
-const formatCheckboxes = (selector, prefix) => {
-    const items = Array.from(document.querySelectorAll(selector))
-        .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
-        .join('\n');
-    return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
+
+// New function to format grid items instead of checkboxes
+const formatGridItems = (containerId, prefix) => {
+    const container = document.getElementById(containerId);
+    if (!container) return '';
+    
+    const selectedItems = Array.from(container.querySelectorAll('.grid-item.selected'))
+        .map(item => {
+            const value = item.getAttribute('data-value');
+            return value.charAt(0).toUpperCase() + value.slice(1).replace(/-/g, ' ');
+        });
+    
+    return selectedItems.length ? 
+        `${prefix}:\n${selectedItems.map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
 };
 
 function generatePrompt(promptType) {
@@ -41,8 +50,11 @@ function generatePrompt(promptType) {
             if (summaryLength?.value) prompt += formatList(summaryLength.value.charAt(0).toUpperCase() + summaryLength.value.slice(1), 'Summary Length');
             const summaryThemes = document.getElementById('summary-themes');
             if (summaryThemes?.value) prompt += formatList(summaryThemes.value, 'Key Themes or Topics');
-            prompt += formatCheckboxes('input[name="summary-audience"]:checked', 'Target Audience');
-            prompt += formatCheckboxes('input[name="summary-elements"]:checked', 'Specific Elements to Include');
+            
+            // Use the new grid-items format function instead of checkbox formatting
+            prompt += formatGridItems('summary-audience', 'Target Audience');
+            prompt += formatGridItems('summary-elements', 'Specific Elements to Include');
+            
             const summaryTone = document.getElementById('summary-tone');
             if (summaryTone?.value) prompt += formatList(summaryTone.value.charAt(0).toUpperCase() + summaryTone.value.slice(1), 'Tone or Style');
             const summaryDetails = document.getElementById('summary-details');

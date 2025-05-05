@@ -19,11 +19,20 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
-const formatCheckboxes = (selector, prefix) => {
-    const items = Array.from(document.querySelectorAll(selector))
-        .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
-        .join('\n');
-    return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
+
+// New function to format grid items instead of checkboxes
+const formatGridItems = (containerId, prefix) => {
+    const container = document.getElementById(containerId);
+    if (!container) return '';
+    
+    const selectedItems = Array.from(container.querySelectorAll('.grid-item.selected'))
+        .map(item => {
+            const value = item.getAttribute('data-value');
+            return value.charAt(0).toUpperCase() + value.slice(1).replace(/-/g, ' ');
+        });
+    
+    return selectedItems.length ? 
+        `${prefix}:\n${selectedItems.map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
 };
 
 function generatePrompt(promptType) {
@@ -39,12 +48,18 @@ function generatePrompt(promptType) {
             if (quizObjective?.value) prompt += formatList(quizObjective.value.charAt(0).toUpperCase() + quizObjective.value.slice(1), 'Objective of the Quiz');
             const quizDifficulty = document.getElementById('quiz-difficulty-tier');
             if (quizDifficulty?.value) prompt += formatList(quizDifficulty.value.charAt(0).toUpperCase() + quizDifficulty.value.slice(1), 'Difficulty Tier');
-            prompt += formatCheckboxes('input[name="quiz-formats"]:checked', 'Question Formats');
+            
+            // Use the new grid-items format function instead of checkbox formatting
+            prompt += formatGridItems('quiz-formats', 'Question Formats');
+            
             const quizQuestionCount = document.getElementById('quiz-question-count');
             if (quizQuestionCount?.value) prompt += formatList(quizQuestionCount.value, 'Number of Questions');
             const quizFocusAreas = document.getElementById('quiz-focus-areas');
             if (quizFocusAreas?.value) prompt += formatList(quizFocusAreas.value, 'Focus Areas');
-            prompt += formatCheckboxes('input[name="quiz-participants"]:checked', 'Quiz Participants');
+            
+            // Use the new grid-items format function for participants
+            prompt += formatGridItems('quiz-participants', 'Quiz Participants');
+            
             const quizExtraInstructions = document.getElementById('quiz-extra-instructions');
             if (quizExtraInstructions?.value) prompt += formatList(quizExtraInstructions.value, 'Extra Instructions or Constraints');
             prompt += `
