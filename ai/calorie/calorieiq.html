@@ -830,21 +830,26 @@ async function loadStoredContent(dataContainer, url) {
         `;
         console.log(`Stored content loaded from ${url} into dataout container (calorieiq.js)`);
 
-        const scriptUrl = url.replace('.html', '.js');
-        try {
-            const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
-            existingScripts.forEach(script => script.remove());
-            const scriptResponse = await fetch(scriptUrl);
-            if (scriptResponse.ok) {
-                const scriptContent = await scriptResponse.text();
-                const script = document.createElement('script');
-                script.textContent = scriptContent;
-                script.dataset.source = scriptUrl;
-                document.body.appendChild(script);
-                console.log(`Loaded and executed script: ${scriptUrl} (calorieiq.js)`);
+        // Only try to load associated JavaScript if this is not the apioutput.html file
+        if (!url.includes('apioutput.html')) {
+            const scriptUrl = url.replace('.html', '.js');
+            try {
+                const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
+                existingScripts.forEach(script => script.remove());
+                const scriptResponse = await fetch(scriptUrl);
+                if (scriptResponse.ok) {
+                    const scriptContent = await scriptResponse.text();
+                    const script = document.createElement('script');
+                    script.textContent = scriptContent;
+                    script.dataset.source = scriptUrl;
+                    document.body.appendChild(script);
+                    console.log(`Loaded and executed script: ${scriptUrl} (calorieiq.js)`);
+                }
+            } catch (error) {
+                console.log(`No script found or error loading ${scriptUrl}, skipping (calorieiq.js):`, error);
             }
-        } catch (error) {
-            console.log(`No script found or error loading ${scriptUrl}, skipping (calorieiq.js):`, error);
+        } else {
+            console.log('Skipping JavaScript load for apioutput.html');
         }
     } catch (error) {
         console.error(`Error loading stored content (calorieiq.js):`, error);
