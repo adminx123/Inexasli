@@ -669,8 +669,8 @@ function handleLeftSidebarOpen (e) {
             dataContainer.dataset.state = 'expanded';
             setLocal('dataOutContainerState', 'expanded');
     
-            // Use the unified apioutput.html for all features
-            const outUrl = '/ai/apioutput.html?gridItem=calorieiq';
+            // Path to output HTML - we'll use a dedicated calorieiqout.html for CalorieIQ
+            const outUrl = '/ai/calorie/calorieiqout.html';
     
             if (outUrl) {
                 setLocal('lastDataOutUrl', outUrl);
