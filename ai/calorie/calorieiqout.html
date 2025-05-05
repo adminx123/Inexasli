@@ -11,52 +11,57 @@
 </div>
 
 <script>
-/*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
- */
+// IMMEDIATELY print to page to see if script runs
+document.getElementById('calorie-output').innerText = "Script is running...";
 
 // Ultra simple display function - just shows whatever is in localStorage
 function displayCalorieOutput() {
-  console.log("ULTRA SIMPLE: displayCalorieOutput called");
+  // UPDATE PAGE IMMEDIATELY to show function was called
+  document.getElementById('calorie-output').innerText = "Function displayCalorieOutput was called...";
+  
   try {
     // Get data from localStorage
     const storedData = localStorage.getItem('calorieIqResponse');
-    console.log("ULTRA SIMPLE: localStorage data found:", !!storedData);
     
+    // Update page to show if data was found
     if (storedData) {
-      // Show the raw data first so we can see what we're working with
-      document.getElementById('calorie-output').innerText = "RAW DATA: " + storedData;
+      document.getElementById('calorie-output').innerText = "Raw data found: " + storedData;
       
       try {
-        // Parse the outer JSON
+        // Parse the JSON
         const parsedData = JSON.parse(storedData);
-        console.log("ULTRA SIMPLE: Parsed outer JSON successfully");
         
+        // Check if text property exists and parse it if it's JSON
         if (parsedData.text) {
-          console.log("ULTRA SIMPLE: Found text property");
-          document.getElementById('calorie-output').innerText = parsedData.text;
+          try {
+            const textData = JSON.parse(parsedData.text);
+            
+            // Check if parsed text has summary or Response property
+            if (textData.summary) {
+              document.getElementById('calorie-output').innerText = textData.summary;
+            } else if (textData.Response) {
+              document.getElementById('calorie-output').innerText = textData.Response;
+            } else {
+              // Just show the entire JSON object prettified
+              document.getElementById('calorie-output').innerText = JSON.stringify(textData, null, 2);
+            }
+          } catch (e) {
+            // If parsing JSON fails, just show the text directly
+            document.getElementById('calorie-output').innerText = parsedData.text;
+          }
         } else if (parsedData.data) {
-          console.log("ULTRA SIMPLE: Found data property");
           document.getElementById('calorie-output').innerText = parsedData.data;
         } else {
-          console.log("ULTRA SIMPLE: No text or data properties found");
-          document.getElementById('calorie-output').innerText = "Parsed response but couldn't find content: " + JSON.stringify(parsedData);
+          document.getElementById('calorie-output').innerText = "No text or data field found: " + JSON.stringify(parsedData, null, 2);
         }
       } catch (error) {
-        console.error("ULTRA SIMPLE: Error parsing JSON:", error);
-        document.getElementById('calorie-output').innerText = "Error parsing JSON: " + error.message + "\n\nRaw data: " + storedData;
+        document.getElementById('calorie-output').innerText = "Error parsing JSON: " + error.message;
       }
     } else {
-      console.log("ULTRA SIMPLE: No data in localStorage");
-      document.getElementById('calorie-output').innerText = 'No CalorieIQ data available in localStorage. Please generate data first.';
+      document.getElementById('calorie-output').innerText = "No calorieIqResponse found in localStorage";
     }
   } catch (error) {
-    console.error("ULTRA SIMPLE: Unexpected error:", error);
-    document.getElementById('calorie-output').innerText = 'Error: ' + error.message;
+    document.getElementById('calorie-output').innerText = "Error: " + error.message;
   }
 }
 
@@ -72,11 +77,18 @@ function copyCalorieOutput() {
     });
 }
 
-// Display output when page loads
+// Try to call the function immediately to prevent any timing issues
+displayCalorieOutput();
+
+// Also set up normal load event listener
 document.addEventListener('DOMContentLoaded', function() {
-  console.log("ULTRA SIMPLE: DOMContentLoaded event fired");
+  // Update page to show event fired
+  document.getElementById('calorie-output').innerText += "\nDOMContentLoaded event fired";
   displayCalorieOutput();
 });
+
+// Add a visible button to manually trigger the function
+document.write('<button onclick="displayCalorieOutput()" style="margin-top:10px;background-color:#e74c3c;color:white;padding:8px 15px;border:none;border-radius:4px;cursor:pointer;">Force Display Data</button>');
 </script>
 
 <style>
