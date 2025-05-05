@@ -19,7 +19,7 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-// Super simple display function
+// Super simple display function - ABSOLUTELY NO PRODUCT-SPECIFIC LOGIC
 function displayApiOutput() {
   try {
     // Get URL parameter
@@ -46,22 +46,13 @@ function displayApiOutput() {
         
         // Check for text property first (new format), then data property (old format)
         if (data.text) {
+          // New format - direct text
           document.getElementById('api-output').innerText = data.text;
         } else if (data.data) {
-          // Handle old format or nested JSON strings in data
-          if (typeof data.data === 'string' && data.data.trim().startsWith('{')) {
-            try {
-              // Try to parse as JSON first
-              const jsonData = JSON.parse(data.data);
-              document.getElementById('api-output').innerText = JSON.stringify(jsonData, null, 2);
-            } catch (e) {
-              // If not valid JSON, display as is
-              document.getElementById('api-output').innerText = data.data;
-            }
-          } else {
-            document.getElementById('api-output').innerText = data.data;
-          }
+          // Old format - direct access without any special handling
+          document.getElementById('api-output').innerText = data.data;
         } else {
+          // No text or data property, just stringify the whole response
           document.getElementById('api-output').innerText = JSON.stringify(data, null, 2);
         }
       } catch (error) {
