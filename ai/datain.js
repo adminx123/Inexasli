@@ -15,26 +15,21 @@ function initializeGridItems() {
     const gridItems = document.querySelectorAll('.grid-container .grid-item');
     gridItems.forEach(item => {
         if (!item.dataset.value) {
-            console.warn('Grid item is missing data-value attribute:', item);
             return;
         }
 
         // const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
         // const value = localStorage.getItem(key);
-        // console.log('item: ', key, 'value: ', value);
         // if (value === 'true') {
         //     item.classList.add('selected');
-        //     console.log(`Restored ${key}: true (datain.js)`);
         // } else if (value === 'false') {
         //     item.classList.remove('selected');
-        //     console.log(`Restored ${key}: false (datain.js)`);
         // }
 
         // Remove existing listeners to prevent duplicates
         item.removeEventListener('click', toggleGridItem);
         item.addEventListener('click', toggleGridItem);
     });
-    console.log('Added click event listener to grid items (datain.js)');
 
     function toggleGridItem() {
         const container = this.closest('.grid-container');
@@ -48,8 +43,7 @@ function initializeGridItems() {
         }
 
         const toggleEvent = new CustomEvent('grid-item-toggled', { detail: { item: this } });
-        console.log('Dispatched grid-item-toggled event (datain.js)', toggleEvent);
-document.dispatchEvent(toggleEvent);
+        document.dispatchEvent(toggleEvent);
         // saveGridItem(this);
     }
 
@@ -58,9 +52,7 @@ document.dispatchEvent(toggleEvent);
     //     const value = item.classList.contains('selected') ? 'true' : 'false';
     //     try {
     //         localStorage.setItem(key, value);
-    //         console.log(`Saved ${key}: ${value} (datain.js)`);
     //     } catch (error) {
-    //         console.error(`Error saving grid item ${key}:`, error);
     //     }
     // }
 }
@@ -68,7 +60,6 @@ document.dispatchEvent(toggleEvent);
 setTimeout(() => {
     document.addEventListener('data-in-opened', () => {
         initializeGridItems();
-        console.log('Data-in opened event triggered, initializing grid items (datain.js)');
     })
 }, 300);
 
@@ -85,12 +76,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function loadStoredContent(url) {
         try {
-            console.log(`Attempting to load stored content from ${url} (datain.js)`);
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Stored content fetched successfully (datain.js)');
 
             // Inject content into the container
             dataContainer.classList.remove('initial');
@@ -101,7 +90,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <span class="data-label">DATA IN</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded from ${url} into datain container (datain.js)`);
 
             // Initialize grid items directly
             initializeGridItems();
@@ -116,10 +104,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
 
                 oldScript.replaceWith(newScript);
-                console.log("has replaced the old script with the new", newScript)
             });
         } catch (error) {
-            console.error(`Error loading stored content (datain.js):`, error);
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">DATA IN</span>
@@ -130,7 +116,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-left')) {
-            console.log('Left data container already exists, skipping initialization (datain.js)');
             return;
         }
 
@@ -150,6 +135,21 @@ document.addEventListener('DOMContentLoaded', async function () {
                 box-shadow: 4px 4px 0 #000;
                 z-index: 10000;
                 max-width: 34px;
+                min-height: 30px;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+                overflow: hidden;
+                font-family: "Inter", sans-serif;
+                visibility: visible;
+                opacity: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .data-container-left.initial, .data-container-left.collapsed {
+                max-width: 36px;
+                height: 120px;
+                display: flex;
+                justify-content: center;
                 min-height: 30px;
                 transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
                 overflow: hidden;
@@ -281,7 +281,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         `;
 
         document.body.appendChild(dataContainer);
-        console.log('Left data container injected with state: initial (datain.js)');
 
         const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
@@ -292,7 +291,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 toggleDataContainer();
             });
         } else {
-            console.error('Left close button not found (datain.js)');
+            
         }
 
         if (dataLabel) {
@@ -301,7 +300,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 toggleDataContainer();
             });
         } else {
-            console.error('Left data label not found (datain.js)');
+            
         }
 
         function toggleDataContainer() {
@@ -318,13 +317,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <span class="close-data-container">+</span>
                     <span class="data-label">DATA IN</span>
                 `;
-                console.log('Left data container collapsed and reset (datain.js)');
+                
             } else {
                 dataContainer.classList.remove('initial');
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
                 setLocal('dataContainerState', 'expanded');
-                console.log('Left data container expanded (datain.js)');
+                
 
                 const leftSideBarOpen = new CustomEvent('left-sidebar-open', {
                     detail: {
@@ -333,7 +332,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
 
                 document.dispatchEvent(leftSideBarOpen);
-                console.log('Dispatched left-side-bar-open event (datain.js)', leftSideBarOpen);
+                
                 initializeGridItems();
                 const storedUrl = getLocal('lastGridItemUrl');
                 if (storedUrl) {
@@ -369,7 +368,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Listen for grid item selection events from promptgrid.js
         document.addEventListener('promptGridItemSelected', function (e) {
             const url = e.detail.url;
-            console.log(`Received promptGridItemSelected event with URL: ${url} (datain.js)`);
+            
             setLocal('lastGridItemUrl', url);
             if (dataContainer.dataset.state !== 'expanded') {
                 toggleDataContainer();
@@ -381,7 +380,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Fallback: Monitor localStorage changes for lastGridItemUrl
         window.addEventListener('storage', function (e) {
             if (e.key === 'lastGridItemUrl' && e.newValue) {
-                console.log(`Detected lastGridItemUrl change to: ${e.newValue} (datain.js)`);
+                
                 if (dataContainer.dataset.state !== 'expanded') {
                     toggleDataContainer();
                 } else {
@@ -394,7 +393,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.addEventListener('click', function (e) {
             const isClickInside = dataContainer.contains(e.target);
             if (!isClickInside && dataContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside left data container, collapsing (datain.js)');
+                
                 toggleDataContainer();
             }
         });
@@ -411,6 +410,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             initializeDataContainer();
         }
     } catch (error) {
-        console.error('Error initializing left data container (datain.js):', error);
+        
     }
 });
