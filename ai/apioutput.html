@@ -38,15 +38,53 @@ function displayApiOutput() {
     const storageKey = storageKeys[gridItem.toLowerCase()] || storageKeys['default'];
     console.log("SIMPLE DEBUG: storageKey =", storageKey);
     
-    // Get data from localStorage and show it directly
+    // Get data from localStorage
     const storedData = localStorage.getItem(storageKey);
     console.log("SIMPLE DEBUG: storedData found =", !!storedData);
     
     if (storedData) {
-      // Just display the raw data for now
-      document.getElementById('api-output').innerText = storedData;
+      try {
+        // Parse the outer JSON (from the worker response)
+        const parsedData = JSON.parse(storedData);
+        console.log("SIMPLE DEBUG: parsed worker response:", parsedData);
+        
+        if (parsedData.text) {
+          try {
+            // The text property might be a JSON string from xAI
+            const parsedText = JSON.parse(parsedData.text);
+            console.log("SIMPLE DEBUG: parsed text property:", parsedText);
+            
+            // Look for the "Response" field in the parsed text
+            if (parsedText.Response) {
+              document.getElementById('api-output').innerText = parsedText.Response;
+              console.log("SIMPLE DEBUG: Displaying Response field");
+            } else {
+              // No Response field found, just display the parsed text
+              document.getElementById('api-output').innerText = JSON.stringify(parsedText, null, 2);
+              console.log("SIMPLE DEBUG: Displaying full parsed text content");
+            }
+          } catch (textParseError) {
+            // If text isn't valid JSON, just display it directly
+            document.getElementById('api-output').innerText = parsedData.text;
+            console.log("SIMPLE DEBUG: Displaying text property directly (not JSON)");
+          }
+        } else if (parsedData.data) {
+          // Old format with data property
+          document.getElementById('api-output').innerText = parsedData.data;
+          console.log("SIMPLE DEBUG: Displaying data property");
+        } else {
+          // No text or data property found
+          document.getElementById('api-output').innerText = JSON.stringify(parsedData, null, 2);
+          console.log("SIMPLE DEBUG: Displaying full response");
+        }
+      } catch (jsonError) {
+        // If we can't parse the JSON, just show the raw data
+        document.getElementById('api-output').innerText = storedData;
+        console.log("SIMPLE DEBUG: Displaying raw localStorage content (JSON parse failed)");
+      }
     } else {
       document.getElementById('api-output').innerText = 'No data available in localStorage for ' + storageKey;
+      console.log("SIMPLE DEBUG: No data found in localStorage");
     }
   } catch (error) {
     document.getElementById('api-output').innerText = 'Error: ' + error.message;
