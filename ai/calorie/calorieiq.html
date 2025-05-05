@@ -80,7 +80,7 @@ Potato 100g with broccoli 150g"></textarea>
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
+ * is strictly prohibited. Violators will be pursued and prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 (function () {
      console.log("new script is in action (calorieiq.html)")
@@ -349,50 +349,24 @@ function handleLeftSidebarOpen (e) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
-
             
             const data = await response.json();
             if (data.message !== 'Success') {
                 throw new Error(`An error occurred: ${data.message || data.error || ''}`);
-
-            } else{
-            console.log('API response:', data);
-            btn.innerText = "success";
-            
-            localStorage.setItem('calorieIqResponse', JSON.stringify(data));
-
-            
-            toggleDataOutcontainer()
-            // toggleDatainContainer()
-
-
-
-
-
-              const spans = await findAllElements();
-            //   console.log('All elements ready:', spans);
-            // console.log("calorieiqresponse", data);
-            
-            // Populate table rows dynamically with null checks
-            const keys = ['calories','protein','carbs','fat','fiber','vitaminD','iron','calcium'];
-            keys.forEach((key, idx) => {
-                const row = data.data.nutritionTable[idx];
-                if (!row) return;
-                const t = row.targetAmount?.trim() || '';
-                const i = row.intake?.trim() || '';
-                const p = row.percentReached?.trim() || '';
-                if (spans[`${key}Target`]) spans[`${key}Target`].innerText = t;
-                if (spans[`${key}Intake`]) spans[`${key}Intake`].innerText = i;
-                if (spans[`${key}Percent`]) spans[`${key}Percent`].innerText = p;
-            });
-            if (spans.mealRecommendation) spans.mealRecommendation.innerText = data.data.mealRecommendations?.trim() || '';
-            if (spans.bmi) spans.bmi.innerText = `BMI ${data.data.metrics?.bmi?.trim() || ''}`;
-
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-            }, 3000);
-
+            } else {
+                console.log('API response:', data);
+                btn.innerText = "success";
+                
+                // Store the response in localStorage for apioutput.html to use
+                localStorage.setItem('calorieIqResponse', JSON.stringify(data));
+                
+                // Display the results
+                toggleDataOutcontainer();
+                
+                setTimeout(() => {
+                    btn.innerText = initialText;
+                    btn.removeAttribute('disabled');
+                }, 3000);
             }
             
         } catch (error) {
@@ -405,8 +379,6 @@ function handleLeftSidebarOpen (e) {
                 btn.innerText = initialText;
                 btn.removeAttribute('disabled');
             }, 4000);
-
-            
         }
     }
 
@@ -697,14 +669,9 @@ function handleLeftSidebarOpen (e) {
             dataContainer.dataset.state = 'expanded';
             setLocal('dataOutContainerState', 'expanded');
     
-            const lastGridItemUrl = getLocal('lastGridItemUrl');
-            const outputMap = {
-                '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
-                '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
-                '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq'
-            };
+            // Use the unified apioutput.html for all features
+            const outUrl = '/ai/apioutput.html?gridItem=calorieiq';
     
-            const outUrl = outputMap[lastGridItemUrl];
             if (outUrl) {
                 setLocal('lastDataOutUrl', outUrl);
                 loadStoredContent(dataContainer, outUrl);
