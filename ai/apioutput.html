@@ -6,7 +6,7 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
 -->
 <div class="api-output-container">
-  <div class="api-output" id="api-output">Loading...</div>
+  <span class="api-output" id="api-output">Loading xAI API data...</span>
   <button class="copy-btn" onclick="copyApiOutput()">Copy</button>
 </div>
 
@@ -18,125 +18,59 @@
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
-
-// Ultra simple display function - just shows whatever is in localStorage
-function displayApiOutput() {
+async function fetchXaiApiData() {
   try {
-    // Get URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const gridItem = urlParams.get('gridItem') || 'default';
-    console.log("SIMPLE DEBUG: gridItem =", gridItem);
     
-    // Map to storage key
-    const storageKeys = {
-      'calorieiq': 'calorieIqResponse',
-      'bookiq': 'bookIqResponse',
-      'symptomiq': 'symptomIqResponse',
-      'default': 'apiResponse'
+    // Map grid items to API prompts
+    const apiPrompts = {
+      'symptomiq': 'Analyze symptoms and provide health insights',
+      'calorieiq': 'Analyze calorie intake and provide nutritional advice',
+      // Add more grid items here in the future
+      'default': 'Provide general insights'
     };
+
+    const prompt = apiPrompts[gridItem.toLowerCase()] || apiPrompts['default'];
+
+    // Updated to use your Cloudflare Worker URL
+    const xaiApiEndpoint = "https://xaiapi.4hm7q4q75z.workers.dev/";
     
-    const storageKey = storageKeys[gridItem.toLowerCase()] || storageKeys['default'];
-    console.log("SIMPLE DEBUG: storageKey =", storageKey);
+    const response = await fetch(xaiApiEndpoint, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({ prompt: prompt }),
+      mode: "cors"
+    });
     
-    // Get data from localStorage
-    const storedData = localStorage.getItem(storageKey);
-    console.log("SIMPLE DEBUG: storedData found =", !!storedData);
-    
-    if (storedData) {
-      try {
-        // Parse the outer JSON (from the worker response)
-        const parsedData = JSON.parse(storedData);
-        console.log("SIMPLE DEBUG: parsed worker response:", parsedData);
-        
-        if (parsedData.text) {
-          try {
-            // The text property might be a JSON string from xAI
-            const parsedText = JSON.parse(parsedData.text);
-            console.log("SIMPLE DEBUG: parsed text property:", parsedText);
-            
-            // Look for the "Response" field in the parsed text
-            if (parsedText.Response) {
-              document.getElementById('api-output').innerText = parsedText.Response;
-              console.log("SIMPLE DEBUG: Displaying Response field");
-            } else {
-              // No Response field found, just display the parsed text
-              document.getElementById('api-output').innerText = JSON.stringify(parsedText, null, 2);
-              console.log("SIMPLE DEBUG: Displaying full parsed text content");
-            }
-          } catch (textParseError) {
-            // If text isn't valid JSON, just display it directly
-            document.getElementById('api-output').innerText = parsedData.text;
-            console.log("SIMPLE DEBUG: Displaying text property directly (not JSON)");
-          }
-        } else if (parsedData.data) {
-          // Old format with data property
-          document.getElementById('api-output').innerText = parsedData.data;
-          console.log("SIMPLE DEBUG: Displaying data property");
-        } else {
-          // No text or data property found
-          document.getElementById('api-output').innerText = JSON.stringify(parsedData, null, 2);
-          console.log("SIMPLE DEBUG: Displaying full response");
-        }
-      } catch (jsonError) {
-        // If we can't parse the JSON, just show the raw data
-        document.getElementById('api-output').innerText = storedData;
-        console.log("SIMPLE DEBUG: Displaying raw localStorage content (JSON parse failed)");
-      }
-    } else {
-      document.getElementById('api-output').innerText = 'No data available in localStorage for ' + storageKey;
-      console.log("SIMPLE DEBUG: No data found in localStorage");
-    }
+    if (!response.ok) throw new Error('API request failed');
+    const data = await response.json();
+    document.getElementById('api-output').textContent = JSON.stringify(data, null, 2);
   } catch (error) {
-    document.getElementById('api-output').innerText = 'Error: ' + error.message;
-    console.error("Error in displayApiOutput:", error);
+    console.error('Error fetching xAI API data:', error);
+    document.getElementById('api-output').textContent = 'Error loading API data';
   }
 }
 
-// Copy output to clipboard
 function copyApiOutput() {
-  const output = document.getElementById('api-output').innerText;
+  const output = document.getElementById('api-output').textContent;
   navigator.clipboard.writeText(output)
     .then(() => {
-      alert('Copied to clipboard!');
+      console.log('API output copied to clipboard');
+      if (typeof openCustomModal === 'function') {
+        openCustomModal('Copied to clipboard!');
+      } else {
+        alert('Copied to clipboard!');
+      }
     })
     .catch(err => {
-      alert('Failed to copy: ' + err);
+      console.error('Failed to copy:', err);
+      alert('Failed to copy');
     });
 }
 
-// Display output when page loads
-document.addEventListener('DOMContentLoaded', function() {
-  console.log("SIMPLE DEBUG: DOMContentLoaded fired");
-  displayApiOutput();
-});
+document.addEventListener('DOMContentLoaded', fetchXaiApiData);
 </script>
-
-<style>
-.api-output-container {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  padding: 15px;
-  max-width: 100%;
-  word-wrap: break-word;
-}
-
-.api-output {
-  white-space: pre-wrap;
-  line-height: 1.5;
-  margin-bottom: 15px;
-  font-family: monospace;
-}
-
-.copy-btn {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.copy-btn:hover {
-  background-color: #2980b9;
-}
-</style>
