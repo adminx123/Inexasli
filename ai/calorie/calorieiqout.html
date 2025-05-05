@@ -1,3 +1,10 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
+-->
 <table class="nutrition-table">
         <thead>
             <tr>
@@ -63,6 +70,11 @@
     <span id="meal-recommendation" style="max-width: 530px;display: inline-block;"></span>
 
     <span id="BMI">BMI</span>
+
+    <div class="api-output-container">
+  <div class="api-output" id="api-output">Loading...</div>
+  <button class="copy-btn" onclick="copyApiOutput()">Copy</button>
+</div>
 
     <script>
         console.log("calorieout script working")
@@ -240,4 +252,162 @@ async function populate() {
 
 
 populate()
+
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
+ */
+
+// Format calories data into a nice text format
+function formatCalorieData(data) {
+  // Check if data appears to be a CalorieIQ response
+  if (!data.nutrientNeeds && !data.intake && !data.percentages) {
+    // Not a CalorieIQ response format, return the raw data
+    return JSON.stringify(data, null, 2);
+  }
+  
+  // Start building formatted output
+  let output = "# NUTRITIONAL ANALYSIS\n\n";
+  
+  // Add BMI info if present
+  if (data.bmi) {
+    output += `BMI: ${data.bmi}\n\n`;
+  }
+  
+  // Create nutrient table
+  output += "```\n";
+  output += "NUTRIENT          | DAILY TARGET   | INTAKE         | % OF TARGET\n";
+  output += "------------------|----------------|----------------|------------\n";
+  
+  // Define nutrients to display
+  const nutrients = [
+    { key: 'calories', name: 'Calories', unit: 'kcal' },
+    { key: 'protein', name: 'Protein', unit: 'g' },
+    { key: 'carbohydrates', name: 'Carbs', unit: 'g' },
+    { key: 'fat', name: 'Fat', unit: 'g' },
+    { key: 'fiber', name: 'Fiber', unit: 'g' },
+    { key: 'vitaminD', name: 'Vitamin D', unit: 'mcg' },
+    { key: 'iron', name: 'Iron', unit: 'mg' },
+    { key: 'calcium', name: 'Calcium', unit: 'mg' }
+  ];
+  
+  // Add each nutrient to the table
+  nutrients.forEach(nutrient => {
+    const target = data.nutrientNeeds?.[nutrient.key] || 0;
+    const intake = data.intake?.[nutrient.key] || 0;
+    const percent = data.percentages?.[nutrient.key] || 0;
+    
+    const paddedName = nutrient.name.padEnd(16);
+    const paddedTarget = `${target} ${nutrient.unit}`.padEnd(14);
+    const paddedIntake = `${intake} ${nutrient.unit}`.padEnd(14);
+    const paddedPercent = `${percent}%`.padEnd(10);
+    
+    output += `${paddedName} | ${paddedTarget} | ${paddedIntake} | ${paddedPercent}\n`;
+  });
+  
+  output += "```\n\n";
+  
+  // Add meal suggestions if present
+  if (data.mealSuggestions) {
+    output += "# MEAL RECOMMENDATIONS\n\n";
+    output += data.mealSuggestions;
+  }
+  
+  return output;
+}
+
+// Display CalorieIQ output
+function displayCalorieOutput() {
+  try {
+    // Get data from localStorage
+    const storedData = localStorage.getItem('calorieIqResponse');
+    
+    if (storedData) {
+      try {
+        // Parse the data
+        const data = JSON.parse(storedData);
+        
+        if (data.text) {
+          // New format - direct text
+          document.getElementById('api-output').innerText = data.text;
+        } else if (data.data) {
+          // Old format - check if it's a JSON string
+          try {
+            if (typeof data.data === 'string' && data.data.trim().startsWith('{')) {
+              // It's a JSON string, try to parse it
+              const jsonData = JSON.parse(data.data);
+              
+              // Format it nicely for CalorieIQ
+              const formattedOutput = formatCalorieData(jsonData);
+              document.getElementById('api-output').innerText = formattedOutput;
+            } else {
+              // Not JSON, just display the text
+              document.getElementById('api-output').innerText = data.data;
+            }
+          } catch (e) {
+            // If parsing fails, just show the original data
+            document.getElementById('api-output').innerText = data.data;
+          }
+        } else {
+          // No text or data property, just stringify the whole response
+          document.getElementById('api-output').innerText = JSON.stringify(data, null, 2);
+        }
+      } catch (error) {
+        document.getElementById('api-output').innerText = 'Error parsing data: ' + error.message;
+      }
+    } else {
+      document.getElementById('api-output').innerText = 'No CalorieIQ data available';
+    }
+  } catch (error) {
+    document.getElementById('api-output').innerText = 'Error: ' + error.message;
+  }
+}
+
+// Copy output to clipboard
+function copyApiOutput() {
+  const output = document.getElementById('api-output').innerText;
+  navigator.clipboard.writeText(output)
+    .then(() => {
+      alert('Copied to clipboard!');
+    })
+    .catch(err => {
+      alert('Failed to copy: ' + err);
+    });
+}
+
+// Display output when page loads
+document.addEventListener('DOMContentLoaded', displayCalorieOutput);
     </script>
+
+<style>
+.api-output-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 15px;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+.api-output {
+  white-space: pre-wrap;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  font-family: monospace;
+}
+
+.copy-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.copy-btn:hover {
+  background-color: #2980b9;
+}
+</style>
