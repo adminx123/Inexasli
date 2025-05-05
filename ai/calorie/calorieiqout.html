@@ -65,6 +65,19 @@
 
     <script>
         console.log("calorieout script working")
+        
+        // Add event listener for messages from service worker
+        navigator.serviceWorker.addEventListener('message', event => {
+            console.log('Received message from service worker:', event.data);
+            if (event.data && event.data.type === 'calorieIqResponse') {
+                // Store the received data in localStorage
+                localStorage.setItem('calorieIqResponse', JSON.stringify(event.data.data));
+                console.log('Stored service worker response in localStorage');
+                // Populate the UI with the new data
+                populate();
+            }
+        });
+        
         function waitForElement(selector) {
     let tries = 0;
     return new Promise((resolve, reject) => {
@@ -147,13 +160,180 @@ async function populate() {
         const data = JSON.parse(rawData);
         console.log('Parsed data:', data);
 
-        // Check if we have the new format with nutritional_analysis text
-        if (data?.data?.nutritional_analysis) {
-            console.log('Found nutritional_analysis format, parsing...');
-            const parsedAnalysis = parseNutritionalAnalysis(data.data.nutritional_analysis);
-            console.log('Parsed analysis:', parsedAnalysis);
+        // Get the spans
+        const spans = await findAllElements();
+
+        // ====== NEW FORMAT HANDLING (direct message format) ======
+        // This handles the format: {"message":"Success","data":{"bmi":24.4,"nutrients":[...],"mealRecommendations":"..."}}
+        if (data.message === "Success" && data.data && data.data.nutrients) {
+            console.log('Found new direct message Success format, processing...');
             
-            const spans = await findAllElements();
+            // Populate BMI
+            if (spans.bmi && data.data.bmi) {
+                spans.bmi.innerText = "BMI: " + data.data.bmi;
+            }
+            
+            // Map nutrients by name to handle potentially varying order
+            const nutrientMap = {
+                'Calories': {target: spans.caloriesTarget, intake: spans.caloriesIntake, percent: spans.caloriesPercent},
+                'Protein': {target: spans.proteinTarget, intake: spans.proteinIntake, percent: spans.proteinPercent},
+                'Carbohydrates': {target: spans.carbsTarget, intake: spans.carbsIntake, percent: spans.carbsPercent},
+                'Fat': {target: spans.fatTarget, intake: spans.fatIntake, percent: spans.fatPercent},
+                'Fiber': {target: spans.fiberTarget, intake: spans.fiberIntake, percent: spans.fiberPercent},
+                'Vitamin D': {target: spans.vitaminDTarget, intake: spans.vitaminDIntake, percent: spans.vitaminDPercent},
+                'Iron': {target: spans.ironTarget, intake: spans.ironIntake, percent: spans.ironPercent},
+                'Calcium': {target: spans.calciumTarget, intake: spans.calciumIntake, percent: spans.calciumPercent}
+            };
+            
+            // Fill in each nutrient
+            for (const nutrient of data.data.nutrients) {
+                const elements = nutrientMap[nutrient.name];
+                if (elements) {
+                    if (elements.target) elements.target.innerText = nutrient.target;
+                    if (elements.intake) elements.intake.innerText = nutrient.intake;
+                    if (elements.percent) elements.percent.innerText = nutrient.percentage + '%';
+                }
+            }
+            
+            // Populate meal recommendations
+            if (spans.mealRecommendation && data.data.mealRecommendations) {
+                spans.mealRecommendation.innerText = data.data.mealRecommendations;
+            }
+            
+            console.log('Data population from Success format successful');
+            return;
+        }
+
+        // Check if we have the direct nutrients array format (nested in data property)
+        if (data?.data?.nutrients && Array.isArray(data.data.nutrients)) {
+            console.log('Found direct nutrients array format, processing...');
+            
+            // Populate BMI
+            if (spans.bmi && data.data.bmi) {
+                spans.bmi.innerText = "BMI: " + data.data.bmi;
+            }
+            
+            // Map nutrients by name to handle potentially varying order
+            const nutrientMap = {
+                'Calories': {target: spans.caloriesTarget, intake: spans.caloriesIntake, percent: spans.caloriesPercent},
+                'Protein': {target: spans.proteinTarget, intake: spans.proteinIntake, percent: spans.proteinPercent},
+                'Carbohydrates': {target: spans.carbsTarget, intake: spans.carbsIntake, percent: spans.carbsPercent},
+                'Fat': {target: spans.fatTarget, intake: spans.fatIntake, percent: spans.fatPercent},
+                'Fiber': {target: spans.fiberTarget, intake: spans.fiberIntake, percent: spans.fiberPercent},
+                'Vitamin D': {target: spans.vitaminDTarget, intake: spans.vitaminDIntake, percent: spans.vitaminDPercent},
+                'Iron': {target: spans.ironTarget, intake: spans.ironIntake, percent: spans.ironPercent},
+                'Calcium': {target: spans.calciumTarget, intake: spans.calciumIntake, percent: spans.calciumPercent}
+            };
+            
+            // Fill in each nutrient
+            for (const nutrient of data.data.nutrients) {
+                const elements = nutrientMap[nutrient.name];
+                if (elements) {
+                    if (elements.target) elements.target.innerText = nutrient.target;
+                    if (elements.intake) elements.intake.innerText = nutrient.intake;
+                    if (elements.percent) elements.percent.innerText = nutrient.percentage + '%';
+                }
+            }
+            
+            // Populate meal recommendations
+            if (spans.mealRecommendation && data.data.mealRecommendations) {
+                spans.mealRecommendation.innerText = data.data.mealRecommendations;
+            }
+            
+            console.log('Data population from direct nutrients array format successful');
+            return;
+        }
+
+        // First check if we have the new structured JSON format
+        if (data?.data?.response && typeof data.data.response === 'object') {
+            console.log('Found new JSON format, processing...');
+            const jsonResponse = data.data.response;
+            
+            // Populate BMI
+            if (spans.bmi && jsonResponse.bmi) {
+                spans.bmi.innerText = "BMI: " + jsonResponse.bmi;
+            }
+            
+            // Populate nutrients table
+            if (jsonResponse.nutrients && Array.isArray(jsonResponse.nutrients)) {
+                const nutrients = jsonResponse.nutrients;
+                
+                // Map nutrients to the right positions
+                const nutrientMap = {
+                    'Calories': 0,
+                    'Protein': 1, 
+                    'Carbohydrates': 2,
+                    'Fat': 3,
+                    'Fiber': 4,
+                    'Vitamin D': 5,
+                    'Iron': 6,
+                    'Calcium': 7
+                };
+                
+                // Fill in each nutrient
+                for (const nutrient of nutrients) {
+                    const position = nutrientMap[nutrient.name];
+                    if (position !== undefined) {
+                        switch(position) {
+                            case 0: // Calories
+                                if (spans.caloriesTarget) spans.caloriesTarget.innerText = nutrient.target;
+                                if (spans.caloriesIntake) spans.caloriesIntake.innerText = nutrient.intake;
+                                if (spans.caloriesPercent) spans.caloriesPercent.innerText = nutrient.percentage;
+                                break;
+                            case 1: // Protein
+                                if (spans.proteinTarget) spans.proteinTarget.innerText = nutrient.target;
+                                if (spans.proteinIntake) spans.proteinIntake.innerText = nutrient.intake;
+                                if (spans.proteinPercent) spans.proteinPercent.innerText = nutrient.percentage;
+                                break;
+                            case 2: // Carbs
+                                if (spans.carbsTarget) spans.carbsTarget.innerText = nutrient.target;
+                                if (spans.carbsIntake) spans.carbsIntake.innerText = nutrient.intake;
+                                if (spans.carbsPercent) spans.carbsPercent.innerText = nutrient.percentage;
+                                break;
+                            case 3: // Fat
+                                if (spans.fatTarget) spans.fatTarget.innerText = nutrient.target;
+                                if (spans.fatIntake) spans.fatIntake.innerText = nutrient.intake;
+                                if (spans.fatPercent) spans.fatPercent.innerText = nutrient.percentage;
+                                break;
+                            case 4: // Fiber
+                                if (spans.fiberTarget) spans.fiberTarget.innerText = nutrient.target;
+                                if (spans.fiberIntake) spans.fiberIntake.innerText = nutrient.intake;
+                                if (spans.fiberPercent) spans.fiberPercent.innerText = nutrient.percentage;
+                                break;
+                            case 5: // Vitamin D
+                                if (spans.vitaminDTarget) spans.vitaminDTarget.innerText = nutrient.target;
+                                if (spans.vitaminDIntake) spans.vitaminDIntake.innerText = nutrient.intake;
+                                if (spans.vitaminDPercent) spans.vitaminDPercent.innerText = nutrient.percentage;
+                                break;
+                            case 6: // Iron
+                                if (spans.ironTarget) spans.ironTarget.innerText = nutrient.target;
+                                if (spans.ironIntake) spans.ironIntake.innerText = nutrient.intake;
+                                if (spans.ironPercent) spans.ironPercent.innerText = nutrient.percentage;
+                                break;
+                            case 7: // Calcium
+                                if (spans.calciumTarget) spans.calciumTarget.innerText = nutrient.target;
+                                if (spans.calciumIntake) spans.calciumIntake.innerText = nutrient.intake;
+                                if (spans.calciumPercent) spans.calciumPercent.innerText = nutrient.percentage;
+                                break;
+                        }
+                    }
+                }
+            }
+            
+            // Populate meal recommendations
+            if (spans.mealRecommendation && jsonResponse.mealRecommendations) {
+                spans.mealRecommendation.innerText = jsonResponse.mealRecommendations;
+            }
+            
+            console.log('Data population from JSON structure successful');
+            return;
+        }
+
+        // Check if we have the response field with markdown content (previous format)
+        if (data?.data?.response && typeof data.data.response === 'string') {
+            console.log('Found response format, parsing...');
+            const parsedAnalysis = parseNutritionalAnalysis(data.data.response);
+            console.log('Parsed analysis:', parsedAnalysis);
             
             // Populate BMI
             if (spans.bmi && parsedAnalysis.bmi) {
@@ -219,8 +399,6 @@ async function populate() {
             console.error('Invalid or missing nutritionTable data');
             return;
         }
-
-        const spans = await findAllElements();
 
         // Populate the spans with data, with null checks (old format)
         if (spans.caloriesTarget && data.data.nutritionTable[0]) {
