@@ -14,7 +14,7 @@
 
 
         <div class="row1">
-            <input type="text" id="decisioniq-goal" placeholder="Enter decision goal (e.g., Choose a software vendor)">
+            <textarea id="decisioniq-goal" rows="2" placeholder="Enter decision goal (e.g., Choose a software vendor)"></textarea>
         </div>
         <div class="row1">
             <label for="decisioniq-analysis-type">Select analysis type:</label>
@@ -46,13 +46,13 @@
         </div>
         <div class="row1">
             <label>Select stakeholder(s):</label>
-            <div class="grid-items">
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="team-members"> Team Members</label>
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="executives"> Executives</label>
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="customers"> Customers</label>
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="partners"> Partners</label>
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="regulators"> Regulators</label>
-                <label><input type="checkbox" name="decisioniq-stakeholders" value="other"> Other</label>
+            <div class="grid-container" id="decisioniq-stakeholders">
+                <div class="grid-item" data-value="team-members">Team Members</div>
+                <div class="grid-item" data-value="executives">Executives</div>
+                <div class="grid-item" data-value="customers">Customers</div>
+                <div class="grid-item" data-value="partners">Partners</div>
+                <div class="grid-item" data-value="regulators">Regulators</div>
+                <div class="grid-item" data-value="other">Other</div>
             </div>
         </div>
         <div class="row1">

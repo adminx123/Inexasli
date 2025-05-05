@@ -19,11 +19,20 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
-const formatCheckboxes = (selector, prefix) => {
-    const items = Array.from(document.querySelectorAll(selector))
-        .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
-        .join('\n');
-    return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
+
+// Format function for grid items
+const formatGridItems = (containerId, prefix) => {
+    const container = document.getElementById(containerId);
+    if (!container) return '';
+    
+    const selectedItems = Array.from(container.querySelectorAll('.grid-item.selected'))
+        .map(item => {
+            const value = item.getAttribute('data-value');
+            return value.charAt(0).toUpperCase() + value.slice(1).replace(/-/g, ' ');
+        });
+    
+    return selectedItems.length ? 
+        `${prefix}:\n${selectedItems.map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
 };
 
 function generatePrompt(promptType) {
@@ -43,7 +52,10 @@ function generatePrompt(promptType) {
             if (criteria?.value) prompt += formatList(criteria.value, 'Decision Criteria');
             const options = document.getElementById('decisioniq-options');
             if (options?.value) prompt += formatList(options.value, 'Decision Options');
-            prompt += formatCheckboxes('input[name="decisioniq-stakeholders"]:checked', 'Stakeholders');
+            
+            // Use the new grid-items format function instead of checkbox formatting
+            prompt += formatGridItems('decisioniq-stakeholders', 'Stakeholders');
+            
             const constraints = document.getElementById('decisioniq-constraints');
             if (constraints?.value) prompt += formatList(constraints.value, 'Constraints');
             const instructions = document.getElementById('decisioniq-instructions');
