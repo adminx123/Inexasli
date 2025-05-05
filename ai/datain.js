@@ -15,23 +15,26 @@ function initializeGridItems() {
     const gridItems = document.querySelectorAll('.grid-container .grid-item');
     gridItems.forEach(item => {
         if (!item.dataset.value) {
-            // Remove console.warn for missing data-value attribute
+            console.warn('Grid item is missing data-value attribute:', item);
             return;
         }
 
         // const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
         // const value = localStorage.getItem(key);
+        // console.log('item: ', key, 'value: ', value);
         // if (value === 'true') {
         //     item.classList.add('selected');
+        //     console.log(`Restored ${key}: true (datain.js)`);
         // } else if (value === 'false') {
         //     item.classList.remove('selected');
+        //     console.log(`Restored ${key}: false (datain.js)`);
         // }
 
         // Remove existing listeners to prevent duplicates
         item.removeEventListener('click', toggleGridItem);
         item.addEventListener('click', toggleGridItem);
     });
-    // Remove console.log for event listeners
+    console.log('Added click event listener to grid items (datain.js)');
 
     function toggleGridItem() {
         const container = this.closest('.grid-container');
@@ -45,13 +48,27 @@ function initializeGridItems() {
         }
 
         const toggleEvent = new CustomEvent('grid-item-toggled', { detail: { item: this } });
-        document.dispatchEvent(toggleEvent);
+        console.log('Dispatched grid-item-toggled event (datain.js)', toggleEvent);
+document.dispatchEvent(toggleEvent);
+        // saveGridItem(this);
     }
+
+    // function saveGridItem(item) {
+    //     const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+    //     const value = item.classList.contains('selected') ? 'true' : 'false';
+    //     try {
+    //         localStorage.setItem(key, value);
+    //         console.log(`Saved ${key}: ${value} (datain.js)`);
+    //     } catch (error) {
+    //         console.error(`Error saving grid item ${key}:`, error);
+    //     }
+    // }
 }
 
 setTimeout(() => {
     document.addEventListener('data-in-opened', () => {
         initializeGridItems();
+        console.log('Data-in opened event triggered, initializing grid items (datain.js)');
     })
 }, 300);
 

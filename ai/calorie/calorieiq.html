@@ -80,7 +80,7 @@ Potato 100g with broccoli 150g"></textarea>
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
+ * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 (function () {
      console.log("new script is in action (calorieiq.html)")
@@ -349,24 +349,64 @@ function handleLeftSidebarOpen (e) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
+
             
             const data = await response.json();
             if (data.message !== 'Success') {
                 throw new Error(`An error occurred: ${data.message || data.error || ''}`);
-            } else {
-                console.log('API response:', data);
-                btn.innerText = "success";
-                
-                // Store the response in localStorage for apioutput.html to use
-                localStorage.setItem('calorieIqResponse', JSON.stringify(data));
-                
-                // Display the results
-                toggleDataOutcontainer();
-                
-                setTimeout(() => {
-                    btn.innerText = initialText;
-                    btn.removeAttribute('disabled');
-                }, 3000);
+
+            } else{
+            console.log('API response:', data);
+            btn.innerText = "success";
+            
+            localStorage.setItem('calorieIqResponse', JSON.stringify(data));
+
+            
+            toggleDataOutcontainer()
+            // toggleDatainContainer()
+
+
+
+
+
+              const spans = await findAllElements();
+            //   console.log('All elements ready:', spans);
+            // console.log("calorieiqresponse", data);
+            
+            // Populate the spans with data
+            spans.caloriesTarget.innerText = data.data.nutritionTable[0].targetAmount.trim();
+            spans.caloriesIntake.innerText = data.data.nutritionTable[0].intake.trim();
+            spans.caloriesPercent.innerText = data.data.nutritionTable[0].percentReached.trim();
+            spans.proteinTarget.innerText = data.data.nutritionTable[1].targetAmount.trim();
+            spans.proteinIntake.innerText = data.data.nutritionTable[1].intake.trim();
+            spans.proteinPercent.innerText = data.data.nutritionTable[1].percentReached.trim();
+            spans.carbsTarget.innerText = data.data.nutritionTable[2].targetAmount.trim();
+            spans.carbsIntake.innerText = data.data.nutritionTable[2].intake.trim();
+            spans.carbsPercent.innerText = data.data.nutritionTable[2].percentReached.trim();
+            spans.fatTarget.innerText = data.data.nutritionTable[3].targetAmount.trim();
+            spans.fatIntake.innerText = data.data.nutritionTable[3].intake.trim();
+            spans.fatPercent.innerText = data.data.nutritionTable[3].percentReached.trim();
+            spans.fiberTarget.innerText = data.data.nutritionTable[4].targetAmount.trim();
+            spans.fiberIntake.innerText = data.data.nutritionTable[4].intake.trim();
+            spans.fiberPercent.innerText = data.data.nutritionTable[4].percentReached.trim();
+            spans.vitaminDTarget.innerText = data.data.nutritionTable[5].targetAmount.trim();
+            spans.vitaminDIntake.innerText = data.data.nutritionTable[5].intake.trim();
+            spans.vitaminDPercent.innerText = data.data.nutritionTable[5].percentReached.trim();
+            spans.ironTarget.innerText = data.data.nutritionTable[6].targetAmount.trim();
+            spans.ironIntake.innerText = data.data.nutritionTable[6].intake.trim();
+            spans.ironPercent.innerText = data.data.nutritionTable[6].percentReached.trim();
+            spans.calciumTarget.innerText = data.data.nutritionTable[7].targetAmount.trim();
+            spans.calciumIntake.innerText = data.data.nutritionTable[7].intake.trim();
+            spans.calciumPercent.innerText = data.data.nutritionTable[7].percentReached.trim();
+            spans.mealRecommendation.innerText = data?.data?.mealRecommendations != 'null' ? data?.data?.mealRecommendations?.trim() : '';
+            spans.bmi.innerText += " " + data.data.metrics.bmi.trim();
+
+
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 3000);
+
             }
             
         } catch (error) {
@@ -379,6 +419,8 @@ function handleLeftSidebarOpen (e) {
                 btn.innerText = initialText;
                 btn.removeAttribute('disabled');
             }, 4000);
+
+            
         }
     }
 
@@ -669,9 +711,14 @@ function handleLeftSidebarOpen (e) {
             dataContainer.dataset.state = 'expanded';
             setLocal('dataOutContainerState', 'expanded');
     
-            // Path to output HTML - we'll use a dedicated calorieiqout.html for CalorieIQ
-            const outUrl = '/ai/calorie/calorieiqout.html';
+            const lastGridItemUrl = getLocal('lastGridItemUrl');
+            const outputMap = {
+                '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
+                '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
+                '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq'
+            };
     
+            const outUrl = outputMap[lastGridItemUrl];
             if (outUrl) {
                 setLocal('lastDataOutUrl', outUrl);
                 loadStoredContent(dataContainer, outUrl);
@@ -830,8 +877,22 @@ async function loadStoredContent(dataContainer, url) {
         `;
         console.log(`Stored content loaded from ${url} into dataout container (calorieiq.js)`);
 
-        // Don't try to load an associated JS file - calorieiqout.html has its script embedded
-        // This prevents the 404 error when trying to load non-existent calorieiqout.js
+        const scriptUrl = url.replace('.html', '.js');
+        try {
+            const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
+            existingScripts.forEach(script => script.remove());
+            const scriptResponse = await fetch(scriptUrl);
+            if (scriptResponse.ok) {
+                const scriptContent = await scriptResponse.text();
+                const script = document.createElement('script');
+                script.textContent = scriptContent;
+                script.dataset.source = scriptUrl;
+                document.body.appendChild(script);
+                console.log(`Loaded and executed script: ${scriptUrl} (calorieiq.js)`);
+            }
+        } catch (error) {
+            console.log(`No script found or error loading ${scriptUrl}, skipping (calorieiq.js):`, error);
+        }
     } catch (error) {
         console.error(`Error loading stored content (calorieiq.js):`, error);
         dataContainer.innerHTML = `
