@@ -19,12 +19,13 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-// Super simple display function - ABSOLUTELY NO PRODUCT-SPECIFIC LOGIC
+// Ultra simple display function - just shows whatever is in localStorage
 function displayApiOutput() {
   try {
     // Get URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const gridItem = urlParams.get('gridItem') || 'default';
+    console.log("SIMPLE DEBUG: gridItem =", gridItem);
     
     // Map to storage key
     const storageKeys = {
@@ -35,34 +36,21 @@ function displayApiOutput() {
     };
     
     const storageKey = storageKeys[gridItem.toLowerCase()] || storageKeys['default'];
+    console.log("SIMPLE DEBUG: storageKey =", storageKey);
     
-    // Get data from localStorage
+    // Get data from localStorage and show it directly
     const storedData = localStorage.getItem(storageKey);
+    console.log("SIMPLE DEBUG: storedData found =", !!storedData);
     
     if (storedData) {
-      try {
-        // Parse the data (it's always a JSON string in localStorage)
-        const data = JSON.parse(storedData);
-        
-        // Check for text property first (new format), then data property (old format)
-        if (data.text) {
-          // New format - direct text
-          document.getElementById('api-output').innerText = data.text;
-        } else if (data.data) {
-          // Old format - direct access without any special handling
-          document.getElementById('api-output').innerText = data.data;
-        } else {
-          // No text or data property, just stringify the whole response
-          document.getElementById('api-output').innerText = JSON.stringify(data, null, 2);
-        }
-      } catch (error) {
-        document.getElementById('api-output').innerText = storedData;
-      }
+      // Just display the raw data for now
+      document.getElementById('api-output').innerText = storedData;
     } else {
-      document.getElementById('api-output').innerText = 'No data available';
+      document.getElementById('api-output').innerText = 'No data available in localStorage for ' + storageKey;
     }
   } catch (error) {
     document.getElementById('api-output').innerText = 'Error: ' + error.message;
+    console.error("Error in displayApiOutput:", error);
   }
 }
 
@@ -79,7 +67,10 @@ function copyApiOutput() {
 }
 
 // Display output when page loads
-document.addEventListener('DOMContentLoaded', displayApiOutput);
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("SIMPLE DEBUG: DOMContentLoaded fired");
+  displayApiOutput();
+});
 </script>
 
 <style>
