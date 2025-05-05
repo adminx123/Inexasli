@@ -19,11 +19,13 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-// Super simple function to display API output from localStorage
+// Simple function to display API output from localStorage
 function displayApiOutput() {
   try {
+    console.log("apioutput.html: Starting to display API output");
     const urlParams = new URLSearchParams(window.location.search);
     const gridItem = urlParams.get('gridItem') || 'default';
+    console.log("apioutput.html: Displaying for gridItem:", gridItem);
     
     // Map grid items to localStorage keys
     const storageKeys = {
@@ -35,65 +37,166 @@ function displayApiOutput() {
     };
     
     const storageKey = storageKeys[gridItem.toLowerCase()] || storageKeys['default'];
+    console.log("apioutput.html: Using storage key:", storageKey);
+    
     const storedData = localStorage.getItem(storageKey);
+    console.log("apioutput.html: Raw stored data:", storedData ? storedData.substring(0, 100) + "..." : "null");
     
     if (storedData) {
       try {
         // Parse the stored data
         const data = JSON.parse(storedData);
+        console.log("apioutput.html: Parsed first-level JSON:", typeof data, Object.keys(data));
         
-        // Get the response content from data
+        // Special handling for calorieiq responses which often have nested JSON strings
         let outputContent = '';
-        if (data && data.data) {
-          // If content is directly in data.data as a string
-          if (typeof data.data === 'string') {
-            outputContent = data.data;
-          } 
-          // If there's a specific content field
-          else if (data.data.content) {
-            outputContent = data.data.content;
-          }
-          // If response is in a text field
-          else if (data.data.text) {
-            outputContent = data.data.text;
-          }
-          // For CalorieIQ specifically
-          else if (data.data.nutritionTable || data.data.mealRecommendations) {
-            // Just show the raw JSON for now
-            outputContent = JSON.stringify(data.data, null, 2);
-          }
-          // Any other structure - just stringify it
-          else {
-            outputContent = JSON.stringify(data.data, null, 2);
+        
+        if (data.data) {
+          console.log("apioutput.html: data.data type:", typeof data.data);
+          
+          // If data.data is a string that contains JSON, parse it again
+          if (typeof data.data === 'string' && data.data.trim().startsWith('{')) {
+            try {
+              const nestedData = JSON.parse(data.data);
+              console.log("apioutput.html: Parsed nested JSON:", Object.keys(nestedData));
+              
+              // For CalorieIQ format
+              if (nestedData.nutritionalNeeds && nestedData.foodIntakeAnalysis) {
+                outputContent = formatCalorieData(nestedData);
+              } else {
+                // Just stringify the nested data with nice formatting
+                outputContent = JSON.stringify(nestedData, null, 2);
+              }
+            } catch (nestedError) {
+              console.error("apioutput.html: Error parsing nested JSON:", nestedError);
+              outputContent = data.data; // Use the string directly if parsing fails
+            }
+          } else {
+            // If data.data is not a JSON string, use it directly
+            outputContent = typeof data.data === 'string' ? data.data : JSON.stringify(data.data, null, 2);
           }
         } else {
+          // If there's no data.data property, show the whole response
           outputContent = JSON.stringify(data, null, 2);
         }
         
-        // Format the content with code blocks
+        // Format output with code blocks if present
         document.getElementById('api-output').innerHTML = formatWithCodeBlocks(outputContent);
-      } catch (error) {
-        document.getElementById('api-output').textContent = 'Error parsing data: ' + error.message;
+        console.log("apioutput.html: Output displayed successfully");
+      } catch (parseError) {
+        console.error("apioutput.html: Error parsing stored data:", parseError);
+        document.getElementById('api-output').textContent = 'Error parsing stored data: ' + parseError.message;
       }
     } else {
-      document.getElementById('api-output').textContent = 'No data available';
+      console.log("apioutput.html: No data found for key:", storageKey);
+      document.getElementById('api-output').textContent = 'No data available for ' + gridItem;
     }
   } catch (error) {
+    console.error("apioutput.html: Error displaying API output:", error);
     document.getElementById('api-output').textContent = 'Error: ' + error.message;
   }
+}
+
+// Helper function to format CalorieIQ data nicely
+function formatCalorieData(data) {
+  let output = '';
+  
+  // Add BMI and Body Fat information
+  if (data.BMI || data.bmi) {
+    output += `BMI: ${data.BMI || data.bmi}\n`;
+  }
+  if (data.bodyFatPercentage || data.BodyFatPercentage) {
+    output += `Body Fat Percentage: ${data.bodyFatPercentage || data.BodyFatPercentage}%\n\n`;
+  }
+  
+  // Add nutritional data in a table format
+  output += "## Nutritional Analysis\n\n";
+  output += "```\n";
+  output += "Nutrient         | Target Amount | Intake        | % Reached\n";
+  output += "----------------|--------------|--------------|----------\n";
+  
+  const nutrients = [
+    {name: 'Calories', unit: 'kcal'}, 
+    {name: 'Protein', unit: 'g'}, 
+    {name: 'Carbohydrates', unit: 'g'}, 
+    {name: 'Fat', unit: 'g'},
+    {name: 'Fiber', unit: 'g'},
+    {name: 'VitaminD', unit: 'mcg', display: 'Vitamin D'},
+    {name: 'Iron', unit: 'mg'},
+    {name: 'Calcium', unit: 'mg'}
+  ];
+  
+  for (const nutrient of nutrients) {
+    const nameKey = nutrient.name.toLowerCase();
+    const displayName = nutrient.display || nutrient.name;
+    
+    // Find values across different possible key formats
+    const target = findValue(data.nutritionalNeeds, nutrient.name) || 0;
+    const intake = findValue(data.foodIntakeAnalysis, nutrient.name) || 0;
+    const percent = findValue(data.percentageReached, nutrient.name) || 0;
+    
+    // Format the row
+    const paddedName = displayName.padEnd(15);
+    const paddedTarget = `${target} ${nutrient.unit}`.padEnd(14);
+    const paddedIntake = `${intake} ${nutrient.unit}`.padEnd(14);
+    const paddedPercent = `${percent}%`.padEnd(10);
+    
+    output += `${paddedName} | ${paddedTarget} | ${paddedIntake} | ${paddedPercent}\n`;
+  }
+  
+  output += "```\n\n";
+  
+  // Add meal recommendations if present
+  if (data.mealRecommendations) {
+    output += "## Meal Recommendations\n\n";
+    output += data.mealRecommendations;
+  }
+  
+  return output;
+}
+
+// Helper function to find a value in an object with case-insensitive keys
+function findValue(obj, key) {
+  if (!obj) return null;
+  
+  // Try exact match first
+  if (obj[key] !== undefined) return obj[key];
+  
+  // Try lowercase version
+  const lowerKey = key.toLowerCase();
+  if (obj[lowerKey] !== undefined) return obj[lowerKey];
+  
+  // Try uppercase first letter
+  const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
+  if (obj[capitalizedKey] !== undefined) return obj[capitalizedKey];
+  
+  // Try fully uppercase
+  const upperKey = key.toUpperCase();
+  if (obj[upperKey] !== undefined) return obj[upperKey];
+  
+  // Handle special cases like VitaminD vs Vitamin D
+  if (key === 'VitaminD' && obj['Vitamin D'] !== undefined) return obj['Vitamin D'];
+  if (key === 'Vitamin D' && obj['VitaminD'] !== undefined) return obj['VitaminD'];
+  
+  return null;
 }
 
 // Format text with code blocks (similar to chat interfaces)
 function formatWithCodeBlocks(text) {
   if (!text) return '';
   
-  // Replace code blocks with formatted HTML
+  // Replace markdown code blocks with formatted HTML
   let formatted = text
     .replace(/```([a-zA-Z]*)([\s\S]*?)```/g, function(match, language, code) {
       return `<pre class="code-block ${language}"><code>${escapeHtml(code.trim())}</code></pre>`;
     });
     
-  // Convert line breaks to <br> tags
+  // Handle markdown headers
+  formatted = formatted
+    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+    .replace(/^# (.*$)/gm, '<h1>$1</h1>');
+    
+  // Convert line breaks to <br> outside of code blocks
   formatted = formatted.replace(/\n/g, '<br>');
   
   return formatted;
@@ -103,7 +206,7 @@ function formatWithCodeBlocks(text) {
 function escapeHtml(unsafe) {
   return unsafe
     .replace(/&/g, "&amp;")
-    .replace(/<//g, "&lt;")
+    .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
@@ -111,7 +214,7 @@ function escapeHtml(unsafe) {
 
 // Copy output to clipboard
 function copyApiOutput() {
-  const output = document.getElementById('api-output').textContent;
+  const output = document.getElementById('api-output').innerText;
   navigator.clipboard.writeText(output)
     .then(() => {
       alert('Copied to clipboard!');
@@ -150,6 +253,21 @@ document.addEventListener('DOMContentLoaded', displayApiOutput);
   font-size: 14px;
   line-height: 1.4;
   border-left: 3px solid #3498db;
+}
+
+h1, h2 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.5em;
+}
+
+h2 {
+  font-size: 1.2em;
+  color: #2980b9;
 }
 
 .copy-btn {
