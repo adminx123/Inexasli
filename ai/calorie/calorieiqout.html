@@ -24,38 +24,81 @@ function displayCalorieOutput() {
   try {
     // Get data from localStorage
     const storedData = localStorage.getItem('calorieIqResponse');
-    console.log("calorieiqout.html: Checking localStorage for data");
+    console.log("DEBUG calorieiqout.html: Checking localStorage", {
+      hasData: !!storedData,
+      dataLength: storedData ? storedData.length : 0,
+      dataPreview: storedData ? storedData.substring(0, 100) + '...' : 'none'
+    });
     
     if (storedData) {
       try {
         // Parse the data
-        const data = JSON.parse(storedData);
-        console.log("calorieiqout.html: Found data in localStorage:", typeof data);
+        const parsedData = JSON.parse(storedData);
+        console.log("DEBUG calorieiqout.html: Parsed localStorage data", {
+          hasMessage: !!parsedData.message,
+          message: parsedData.message,
+          hasText: !!parsedData.text,
+          textPreview: parsedData.text ? parsedData.text.substring(0, 100) + '...' : 'none',
+          hasData: !!parsedData.data
+        });
         
-        if (data.text) {
-          // Display the text directly - should be properly formatted from xAI
-          document.getElementById('calorie-output').innerHTML = formatTextOutput(data.text);
-          console.log("calorieiqout.html: Displaying text output");
-        } else if (data.data) {
-          // Old format - display the data property directly
-          document.getElementById('calorie-output').innerHTML = formatTextOutput(data.data);
-          console.log("calorieiqout.html: Displaying data output");
+        if (parsedData.text) {
+          try {
+            // Check if text is JSON
+            if (parsedData.text.trim().startsWith('{')) {
+              // Text is JSON, try to parse it
+              const innerJson = JSON.parse(parsedData.text);
+              console.log("DEBUG calorieiqout.html: Text is JSON", {
+                jsonKeys: Object.keys(innerJson),
+                hasResponse: !!innerJson.Response,
+                responsePreview: innerJson.Response ? innerJson.Response.substring(0, 100) + '...' : 'none'
+              });
+              
+              if (innerJson.Response) {
+                // Successfully found the Response field in the inner JSON
+                document.getElementById('calorie-output').innerHTML = formatTextOutput(innerJson.Response);
+                console.log("DEBUG calorieiqout.html: Displaying formatted Response field");
+              } else if (innerJson.summary) {
+                // Older format with summary field
+                document.getElementById('calorie-output').innerText = innerJson.summary;
+                console.log("DEBUG calorieiqout.html: Displaying summary field");
+              } else {
+                // No Response field found, just stringify the JSON
+                document.getElementById('calorie-output').innerText = JSON.stringify(innerJson, null, 2);
+                console.log("DEBUG calorieiqout.html: Displaying stringified inner JSON");
+              }
+            } else {
+              // Not JSON, just use the text directly
+              document.getElementById('calorie-output').innerHTML = formatTextOutput(parsedData.text);
+              console.log("DEBUG calorieiqout.html: Displaying formatted text directly");
+            }
+          } catch (innerJsonError) {
+            // If parsing the inner JSON fails, just display the text
+            document.getElementById('calorie-output').innerHTML = formatTextOutput(parsedData.text);
+            console.log("DEBUG calorieiqout.html: Inner JSON parse failed, displaying text directly", {
+              error: innerJsonError.message
+            });
+          }
+        } else if (parsedData.data) {
+          // Old format - display the data property
+          document.getElementById('calorie-output').innerHTML = formatTextOutput(parsedData.data);
+          console.log("DEBUG calorieiqout.html: Displaying formatted data property");
         } else {
           // No text or data property, just stringify the whole response
-          document.getElementById('calorie-output').innerText = JSON.stringify(data, null, 2);
-          console.log("calorieiqout.html: Displaying fallback JSON output");
+          document.getElementById('calorie-output').innerText = JSON.stringify(parsedData, null, 2);
+          console.log("DEBUG calorieiqout.html: No text/data properties found, displaying stringified response");
         }
       } catch (error) {
-        document.getElementById('calorie-output').innerText = 'Error parsing data: ' + error.message;
-        console.error("calorieiqout.html: Error parsing stored data:", error);
+        document.getElementById('calorie-output').innerText = 'Error parsing data: ' + error.message + '\n\nRaw data: ' + storedData;
+        console.error("DEBUG calorieiqout.html: Error parsing stored data:", error);
       }
     } else {
       document.getElementById('calorie-output').innerText = 'No CalorieIQ data available. Please generate data first.';
-      console.log("calorieiqout.html: No data found in localStorage");
+      console.log("DEBUG calorieiqout.html: No data found in localStorage");
     }
   } catch (error) {
     document.getElementById('calorie-output').innerText = 'Error: ' + error.message;
-    console.error("calorieiqout.html: Unexpected error:", error);
+    console.error("DEBUG calorieiqout.html: Unexpected error:", error);
   }
 }
 
