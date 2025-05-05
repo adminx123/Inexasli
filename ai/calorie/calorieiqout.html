@@ -207,9 +207,81 @@ async function populate() {
     }
 
     try {
-        const data = JSON.parse(localStorage.getItem('calorieIqResponse'));
-        console.log('Data retrieved:', data);
+        const rawData = localStorage.getItem('calorieIqResponse');
+        console.log('Raw data retrieved:', rawData);
+        
+        // Parse the JSON response
+        const data = JSON.parse(rawData);
+        console.log('Parsed data:', data);
 
+        // Check if we have the new format with nutritional_analysis text
+        if (data?.data?.nutritional_analysis) {
+            console.log('Found nutritional_analysis format, parsing...');
+            const parsedAnalysis = parseNutritionalAnalysis(data.data.nutritional_analysis);
+            console.log('Parsed analysis:', parsedAnalysis);
+            
+            const spans = await findAllElements();
+            
+            // Populate BMI
+            if (spans.bmi && parsedAnalysis.bmi) {
+                spans.bmi.innerText = "BMI: " + parsedAnalysis.bmi;
+            }
+            
+            // Populate nutrition table
+            if (parsedAnalysis.nutritionTable && parsedAnalysis.nutritionTable.length > 0) {
+                const nutrients = parsedAnalysis.nutritionTable;
+                
+                // Calories
+                if (spans.caloriesTarget && nutrients[0]) spans.caloriesTarget.innerText = nutrients[0].target;
+                if (spans.caloriesIntake && nutrients[0]) spans.caloriesIntake.innerText = nutrients[0].intake;
+                if (spans.caloriesPercent && nutrients[0]) spans.caloriesPercent.innerText = nutrients[0].percent;
+                
+                // Protein
+                if (spans.proteinTarget && nutrients[1]) spans.proteinTarget.innerText = nutrients[1].target;
+                if (spans.proteinIntake && nutrients[1]) spans.proteinIntake.innerText = nutrients[1].intake;
+                if (spans.proteinPercent && nutrients[1]) spans.proteinPercent.innerText = nutrients[1].percent;
+                
+                // Carbs
+                if (spans.carbsTarget && nutrients[2]) spans.carbsTarget.innerText = nutrients[2].target;
+                if (spans.carbsIntake && nutrients[2]) spans.carbsIntake.innerText = nutrients[2].intake;
+                if (spans.carbsPercent && nutrients[2]) spans.carbsPercent.innerText = nutrients[2].percent;
+                
+                // Fat
+                if (spans.fatTarget && nutrients[3]) spans.fatTarget.innerText = nutrients[3].target;
+                if (spans.fatIntake && nutrients[3]) spans.fatIntake.innerText = nutrients[3].intake;
+                if (spans.fatPercent && nutrients[3]) spans.fatPercent.innerText = nutrients[3].percent;
+                
+                // Fiber
+                if (spans.fiberTarget && nutrients[4]) spans.fiberTarget.innerText = nutrients[4].target;
+                if (spans.fiberIntake && nutrients[4]) spans.fiberIntake.innerText = nutrients[4].intake;
+                if (spans.fiberPercent && nutrients[4]) spans.fiberPercent.innerText = nutrients[4].percent;
+                
+                // Vitamin D
+                if (spans.vitaminDTarget && nutrients[5]) spans.vitaminDTarget.innerText = nutrients[5].target;
+                if (spans.vitaminDIntake && nutrients[5]) spans.vitaminDIntake.innerText = nutrients[5].intake;
+                if (spans.vitaminDPercent && nutrients[5]) spans.vitaminDPercent.innerText = nutrients[5].percent;
+                
+                // Iron
+                if (spans.ironTarget && nutrients[6]) spans.ironTarget.innerText = nutrients[6].target;
+                if (spans.ironIntake && nutrients[6]) spans.ironIntake.innerText = nutrients[6].intake;
+                if (spans.ironPercent && nutrients[6]) spans.ironPercent.innerText = nutrients[6].percent;
+                
+                // Calcium
+                if (spans.calciumTarget && nutrients[7]) spans.calciumTarget.innerText = nutrients[7].target;
+                if (spans.calciumIntake && nutrients[7]) spans.calciumIntake.innerText = nutrients[7].intake;
+                if (spans.calciumPercent && nutrients[7]) spans.calciumPercent.innerText = nutrients[7].percent;
+            }
+            
+            // Populate meal recommendations
+            if (spans.mealRecommendation && parsedAnalysis.mealRecommendations) {
+                spans.mealRecommendation.innerText = parsedAnalysis.mealRecommendations;
+            }
+            
+            console.log('Data population from nutritional_analysis successful');
+            return;
+        }
+        
+        // If the new format isn't found, try the old format
         if (!data?.data?.nutritionTable || !Array.isArray(data.data.nutritionTable)) {
             console.error('Invalid or missing nutritionTable data');
             return;
@@ -217,7 +289,7 @@ async function populate() {
 
         const spans = await findAllElements();
 
-        // Populate the spans with data, with null checks
+        // Populate the spans with data, with null checks (old format)
         if (spans.caloriesTarget && data.data.nutritionTable[0]) {
             spans.caloriesTarget.innerText = data.data.nutritionTable[0].targetAmount?.trim() || '';
         }
@@ -303,6 +375,58 @@ async function populate() {
     }
 }
 
+// Function to parse the nutritional_analysis string into a structured object
+function parseNutritionalAnalysis(text) {
+    console.log('Parsing nutritional analysis text:', text);
+    const result = {
+        bmi: null,
+        nutritionTable: [],
+        mealRecommendations: null
+    };
+    
+    // Extract BMI
+    const bmiMatch = text.match(/BMI:\s*(\d+\.?\d*)/);
+    if (bmiMatch && bmiMatch[1]) {
+        result.bmi = bmiMatch[1];
+    }
+    
+    // Extract nutrition table
+    const tableRegex = /```[\s\S]*?NUTRIENT[\s\S]*?\n([\s\S]*?)```/;
+    const tableMatch = text.match(tableRegex);
+    
+    if (tableMatch && tableMatch[1]) {
+        // Split the table into lines and process each nutrient line
+        const lines = tableMatch[1].split('\n').filter(line => line.trim().length > 0);
+        
+        // Skip header separator line (has dashes)
+        const dataLines = lines.filter(line => !line.match(/^-+\|/));
+        
+        dataLines.forEach(line => {
+            // Split the line by | and trim each part
+            const parts = line.split('|').map(part => part.trim());
+            
+            if (parts.length >= 4) {
+                const nutrient = {
+                    name: parts[0],
+                    target: parts[1],
+                    intake: parts[2],
+                    percent: parts[3]
+                };
+                result.nutritionTable.push(nutrient);
+            }
+        });
+    }
+    
+    // Extract meal recommendations
+    const mealRecsRegex = /# MEAL RECOMMENDATIONS\s*\n\s*([\s\S]*?)(?=$|\n#)/;
+    const mealRecsMatch = text.match(mealRecsRegex);
+    
+    if (mealRecsMatch && mealRecsMatch[1]) {
+        result.mealRecommendations = mealRecsMatch[1].trim();
+    }
+    
+    return result;
+}
 
 populate()
 
