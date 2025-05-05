@@ -85,15 +85,28 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.classList.remove('initial');
             dataContainer.classList.add('expanded');
             dataContainer.dataset.state = 'expanded';
+            
+            // Ensure prompt.css is included for all product items
+            const hasCssLink = content.includes('prompt.css');
+            const cssLinkHtml = hasCssLink ? '' : '<link rel="stylesheet" href="/ai/styles/prompt.css">';
+            
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
                 <span class="data-label">DATA IN</span>
-                <div class="data-content">${content}</div>
+                <div class="data-content">
+                    ${cssLinkHtml}
+                    ${content}
+                </div>
             `;
 
             // Initialize grid items directly
             initializeGridItems();
 
+            // Dispatch a custom event that the datain container is fully loaded
+            const dataInLoadedEvent = new CustomEvent('data-in-loaded', {
+                detail: { url: url }
+            });
+            document.dispatchEvent(dataInLoadedEvent);
 
             dataContainer.querySelectorAll('script').forEach(oldScript => {
                 const newScript = document.createElement('script');
