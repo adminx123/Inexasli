@@ -228,7 +228,8 @@ async function populate() {
             spans.mealRecommendation.innerText = data.data.mealRecommendations ? data.data.mealRecommendations.trim() : '';
         }
         if (spans.bmi && data.data.metrics) {
-            spans.bmi.innerText = `BMI ${data.data.metrics.bmi?.trim() || ''}`;
+            // Convert BMI value to string first to avoid trim() errors on numeric values
+            spans.bmi.innerText = `BMI ${String(data.data.metrics.bmi || '').trim()}`;
         }
 
         console.log('Data population successful');
