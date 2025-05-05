@@ -179,14 +179,26 @@
      <script src="/ai/dataout.js" type="module"></script>
      <script src="/ai/promptgrid.js" type="module"></script>
 
+     <!-- Budget tab scripts - correct file names and proper order -->
      <script src="/ai/budget/introtab.js" type="module"></script>
      <script src="/ai/budget/incometab.js" type="module"></script>
      <script src="/ai/budget/expensetab.js" type="module"></script>
      <script src="/ai/budget/assettab.js" type="module"></script>
-     <script src="/ai/budget/liablitytab.js" type="module"></script>
+     <script src="/ai/budget/liabilitytab.js" type="module"></script>
      <script src="/ai/budget/summarytab.js" type="module"></script>
-
-
+     
+     <!-- Load budgetTabFlow.js after all tab scripts, with a slight delay to ensure tabs are created -->
+     <script>
+        // Ensure all tabs are created before initializing budgetTabFlow
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const budgetFlowScript = document.createElement('script');
+                budgetFlowScript.src = '/ai/budget/budgetTabFlow.js';
+                document.head.appendChild(budgetFlowScript);
+                console.log('Dynamically loaded budgetTabFlow.js');
+            }, 1000); // 1 second delay to ensure other scripts have run
+        });
+     </script>
 
      <script src="/utility/dataConsentManager.js"></script>
      <script src="/utility/termsManager.js"></script>
