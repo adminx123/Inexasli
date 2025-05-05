@@ -6,7 +6,7 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
 -->
 <div class="api-output-container">
-  <span class="api-output" id="api-output">Loading xAI API data...</span>
+  <div class="api-output" id="api-output">Loading xAI API data...</div>
   <button class="copy-btn" onclick="copyApiOutput()">Copy</button>
 </div>
 
@@ -18,59 +18,151 @@
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
-async function fetchXaiApiData() {
+
+// Super simple function to display API output from localStorage
+function displayApiOutput() {
   try {
     const urlParams = new URLSearchParams(window.location.search);
     const gridItem = urlParams.get('gridItem') || 'default';
     
-    // Map grid items to API prompts
-    const apiPrompts = {
-      'symptomiq': 'Analyze symptoms and provide health insights',
-      'calorieiq': 'Analyze calorie intake and provide nutritional advice',
-      // Add more grid items here in the future
-      'default': 'Provide general insights'
+    // Map grid items to localStorage keys
+    const storageKeys = {
+      'calorieiq': 'calorieIqResponse',
+      'bookiq': 'bookIqResponse',
+      'symptomiq': 'symptomIqResponse',
+      // Add other products as needed
+      'default': 'apiResponse'
     };
-
-    const prompt = apiPrompts[gridItem.toLowerCase()] || apiPrompts['default'];
-
-    // Updated to use your Cloudflare Worker URL
-    const xaiApiEndpoint = "https://xaiapi.4hm7q4q75z.workers.dev/";
     
-    const response = await fetch(xaiApiEndpoint, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify({ prompt: prompt }),
-      mode: "cors"
-    });
+    const storageKey = storageKeys[gridItem.toLowerCase()] || storageKeys['default'];
+    const storedData = localStorage.getItem(storageKey);
     
-    if (!response.ok) throw new Error('API request failed');
-    const data = await response.json();
-    document.getElementById('api-output').textContent = JSON.stringify(data, null, 2);
+    if (storedData) {
+      try {
+        // Parse the stored data
+        const data = JSON.parse(storedData);
+        
+        // Get the response content from data
+        let outputContent = '';
+        if (data && data.data) {
+          // If content is directly in data.data as a string
+          if (typeof data.data === 'string') {
+            outputContent = data.data;
+          } 
+          // If there's a specific content field
+          else if (data.data.content) {
+            outputContent = data.data.content;
+          }
+          // If response is in a text field
+          else if (data.data.text) {
+            outputContent = data.data.text;
+          }
+          // For CalorieIQ specifically
+          else if (data.data.nutritionTable || data.data.mealRecommendations) {
+            // Just show the raw JSON for now
+            outputContent = JSON.stringify(data.data, null, 2);
+          }
+          // Any other structure - just stringify it
+          else {
+            outputContent = JSON.stringify(data.data, null, 2);
+          }
+        } else {
+          outputContent = JSON.stringify(data, null, 2);
+        }
+        
+        // Format the content with code blocks
+        document.getElementById('api-output').innerHTML = formatWithCodeBlocks(outputContent);
+      } catch (error) {
+        document.getElementById('api-output').textContent = 'Error parsing data: ' + error.message;
+      }
+    } else {
+      document.getElementById('api-output').textContent = 'No data available';
+    }
   } catch (error) {
-    console.error('Error fetching xAI API data:', error);
-    document.getElementById('api-output').textContent = 'Error loading API data';
+    document.getElementById('api-output').textContent = 'Error: ' + error.message;
   }
 }
 
+// Format text with code blocks (similar to chat interfaces)
+function formatWithCodeBlocks(text) {
+  if (!text) return '';
+  
+  // Replace code blocks with formatted HTML
+  let formatted = text
+    .replace(/```([a-zA-Z]*)([\s\S]*?)```/g, function(match, language, code) {
+      return `<pre class="code-block ${language}"><code>${escapeHtml(code.trim())}</code></pre>`;
+    });
+    
+  // Convert line breaks to <br> tags
+  formatted = formatted.replace(/\n/g, '<br>');
+  
+  return formatted;
+}
+
+// Escape HTML in code blocks
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/<//g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// Copy output to clipboard
 function copyApiOutput() {
   const output = document.getElementById('api-output').textContent;
   navigator.clipboard.writeText(output)
     .then(() => {
-      console.log('API output copied to clipboard');
-      if (typeof openCustomModal === 'function') {
-        openCustomModal('Copied to clipboard!');
-      } else {
-        alert('Copied to clipboard!');
-      }
+      alert('Copied to clipboard!');
     })
     .catch(err => {
-      console.error('Failed to copy:', err);
-      alert('Failed to copy');
+      alert('Failed to copy: ' + err);
     });
 }
 
-document.addEventListener('DOMContentLoaded', fetchXaiApiData);
+// Display output when page loads
+document.addEventListener('DOMContentLoaded', displayApiOutput);
 </script>
+
+<style>
+.api-output-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 15px;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+.api-output {
+  white-space: pre-wrap;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.code-block {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 8px 0;
+  overflow-x: auto;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  white-space: pre;
+  font-size: 14px;
+  line-height: 1.4;
+  border-left: 3px solid #3498db;
+}
+
+.copy-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.copy-btn:hover {
+  background-color: #2980b9;
+}
+</style>
