@@ -76,31 +76,33 @@ const DATA_FIELDS = [
 ];
 
 /**
- * Create and display a floating button in the center of the screen
+ * Create and display a floating button tucked into the top left corner of the screen
  * that triggers data overwrite when clicked
  */
 function createOverwriteButton() {
     // Create button container
     const buttonContainer = document.createElement('div');
     buttonContainer.style.position = 'fixed';
-    buttonContainer.style.top = '50%';
-    buttonContainer.style.left = '50%';
-    buttonContainer.style.transform = 'translate(-50%, -50%)';
+    buttonContainer.style.top = '0'; // Position at the very top
+    buttonContainer.style.left = '0'; // Position at the very left
+    buttonContainer.style.transform = 'none';
     buttonContainer.style.zIndex = '9997'; // Below data consent but above most content
-    buttonContainer.style.display = 'flex';
-    buttonContainer.style.justifyContent = 'center';
-    buttonContainer.style.alignItems = 'center';
+    buttonContainer.style.padding = '0'; // Remove any padding
+    buttonContainer.style.margin = '0'; // Remove any margin
+    buttonContainer.style.display = 'block'; // Use block instead of flex
     
     // Create the button with the 3D tab styling
     const button = document.createElement('button');
     button.id = 'overwriteButton';
     button.title = 'Clear All Data'; // Add title for accessibility
     
-    // Apply 3D tab styling - matching the incometab.js style
+    // Apply 3D tab styling - matching other edge elements
     button.style.backgroundColor = '#f5f5f5';
     button.style.color = '#000';
     button.style.border = '2px solid #000';
-    button.style.borderRadius = '8px';
+    button.style.borderLeft = 'none'; // Remove left border to look tucked into corner
+    button.style.borderTop = 'none'; // Remove top border to look tucked into corner
+    button.style.borderRadius = '0 0 8px 0'; // Rounded only on bottom right corner
     button.style.boxShadow = '4px 4px 0 #000';
     button.style.padding = '10px';
     button.style.width = '50px';
@@ -109,7 +111,11 @@ function createOverwriteButton() {
     button.style.justifyContent = 'center';
     button.style.alignItems = 'center';
     button.style.cursor = 'pointer';
+    button.style.margin = '0'; // Remove any margin
     button.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease';
+    button.style.position = 'relative'; // Add position relative
+    button.style.top = '0'; // Ensure it's at the very top
+    button.style.left = '0'; // Ensure it's at the very left
     
     // Create just an icon (no text)
     const icon = document.createElement('i');
