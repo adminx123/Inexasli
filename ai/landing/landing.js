@@ -55,14 +55,35 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Category select dropdown initialized');
     }
     
-    // Function to toggle between datain/dataout and budget tabs
+    // Create a style element that will forcefully control container visibility
+    const createVisibilityController = () => {
+        // Remove any existing controller first
+        const existingController = document.getElementById('container-visibility-controller');
+        if (existingController) {
+            existingController.remove();
+        }
+        
+        // Create new style element
+        const styleElement = document.createElement('style');
+        styleElement.id = 'container-visibility-controller';
+        document.head.appendChild(styleElement);
+        return styleElement.sheet;
+    };
+    
+    // Get or create the visibility controller stylesheet
+    let visibilityStyleSheet = createVisibilityController();
+    
+    // Function to toggle between datain/dataout and budget tabs with CSS rules
     function toggleUiMode(isBudgetMode) {
-        // Get the containers
-        const dataInContainer = document.querySelector('.data-container-left');
-        const dataOutContainer = document.querySelector('.data-container-right');
+        console.log(`Toggling UI mode. Budget mode: ${isBudgetMode}`);
+        
+        // Clear any existing rules
+        while (visibilityStyleSheet.cssRules.length > 0) {
+            visibilityStyleSheet.deleteRule(0);
+        }
         
         // Budget tabs selectors
-        const budgetTabs = [
+        const budgetTabSelectors = [
             '.data-container-intro',
             '.data-container-income',
             '.data-container-expense',
@@ -71,105 +92,135 @@ document.addEventListener('DOMContentLoaded', function() {
             '.data-container-summary'
         ];
         
+        // Data container selectors
+        const dataContainerSelectors = [
+            '.data-container-left',
+            '.data-container-right'
+        ];
+        
         // Save the mode in localStorage for persistence
         setLocal('budgetModeActive', isBudgetMode ? 'true' : 'false');
         
         if (isBudgetMode) {
             console.log('Switching to Budget mode: hiding datain/dataout, showing budget tabs');
             
-            // Hide datain and dataout containers
-            if (dataInContainer) dataInContainer.style.display = 'none';
-            if (dataOutContainer) dataOutContainer.style.display = 'none';
+            // Add CSS rules to hide data containers
+            dataContainerSelectors.forEach(selector => {
+                visibilityStyleSheet.insertRule(`${selector} { display: none !important; }`, 0);
+            });
             
-            // Show budget tabs or create them if they don't exist
-            // First, make sure the scripts are loaded
-            const loadBudgetScripts = () => {
-                const scriptsToLoad = [
-                    '/ai/budget/introtab.js',
-                    '/ai/budget/incometab.js',
-                    '/ai/budget/expensetab.js',
-                    '/ai/budget/assettab.js',
-                    '/ai/budget/liabilitytab.js',
-                    '/ai/budget/summarytab.js',
-                    '/ai/budget/budgetTabFlow.js',
-                ];
-                
-                // Check if scripts are already loaded
-                const loadedScripts = Array.from(document.querySelectorAll('script'))
-                    .map(script => script.src);
-                
-                // Load any missing scripts
-                scriptsToLoad.forEach(scriptPath => {
-                    if (!loadedScripts.some(src => src.includes(scriptPath))) {
-                        const script = document.createElement('script');
-                        script.src = scriptPath;
-                        script.type = 'module';
-                        script.dataset.budgetMode = 'true';
-                        document.head.appendChild(script);
-                        console.log(`Loaded budget script: ${scriptPath}`);
-                    }
-                });
-                
-                // Wait for budget tabs to be created and then show them
-                setTimeout(() => {
-                    budgetTabs.forEach(selector => {
-                        const tab = document.querySelector(selector);
-                        if (tab) {
-                            tab.style.display = '';
-                            console.log(`Showing budget tab: ${selector}`);
-                        } else {
-                            console.log(`Budget tab not found: ${selector}`);
-                        }
-                    });
-                }, 500);
-            };
-            
-            // Load budget scripts
-            loadBudgetScripts();
-            
+            // Note: We don't force display on budget tabs, we just let them use their default display
+            // This preserves their original styling
         } else {
             console.log('Switching to standard mode: showing datain/dataout, hiding budget tabs');
             
-            // Show datain and dataout containers
-            if (dataInContainer) dataInContainer.style.display = '';
-            if (dataOutContainer) dataOutContainer.style.display = '';
-            
-            // Hide budget tabs
-            budgetTabs.forEach(selector => {
-                const tab = document.querySelector(selector);
-                if (tab) {
-                    tab.style.display = 'none';
-                    console.log(`Hiding budget tab: ${selector}`);
-                }
+            // Add CSS rules to hide budget tabs
+            budgetTabSelectors.forEach(selector => {
+                visibilityStyleSheet.insertRule(`${selector} { display: none !important; }`, 0);
             });
+            
+            // Note: We don't force display on data containers, we just let them use their default display
+            // This preserves their original styling
+        }
+        
+        // Apply direct DOM manipulation as a backup
+        applyDirectStyleChanges(isBudgetMode);
+    }
+    
+    // Direct DOM manipulation as backup
+    function applyDirectStyleChanges(isBudgetMode) {
+        const dataInContainer = document.querySelector('.data-container-left');
+        const dataOutContainer = document.querySelector('.data-container-right');
+        
+        const budgetTabs = [
+            document.querySelector('.data-container-intro'),
+            document.querySelector('.data-container-income'),
+            document.querySelector('.data-container-expense'),
+            document.querySelector('.data-container-asset'),
+            document.querySelector('.data-container-liability'),
+            document.querySelector('.data-container-summary')
+        ].filter(Boolean); // Remove nulls
+        
+        if (isBudgetMode) {
+            // Hide data containers
+            if (dataInContainer) dataInContainer.style.setProperty('display', 'none', 'important');
+            if (dataOutContainer) dataOutContainer.style.setProperty('display', 'none', 'important');
+            
+            // Show budget tabs by removing the display style altogether
+            budgetTabs.forEach(tab => {
+                tab.style.removeProperty('display');
+            });
+        } else {
+            // Hide budget tabs
+            budgetTabs.forEach(tab => {
+                tab.style.setProperty('display', 'none', 'important');
+            });
+            
+            // Show data containers by removing the display style altogether
+            if (dataInContainer) dataInContainer.style.removeProperty('display');
+            if (dataOutContainer) dataOutContainer.style.removeProperty('display');
         }
     }
     
-    // Handle grid item clicks
-    const gridItems = document.querySelectorAll('.grid-container .grid-item');
-    const urls = [
-        '/ai/marketing/adagencyiq.html',
-        '/ai/adventure/adventureiq.html',
-        '/ai/app/appiq.html',
-        '/ai/book/bookiq.html',
-        '/ai/calorie/calorieiq.html',
-        '/ai/decision/decisioniq.html',
-        '/ai/emotion/emotioniq.html',
-        '/ai/enneagram/enneagramiq.html',
-        '/ai/event/eventiq.html',
-        '/ai/fitness/fitnessiq.html',
-        '/ai/general/general.html',
-        '/ai/budget/budget.html', // IncomeIQ URL
-        '/ai/business/newbiziq.html',
-        '/ai/quiz/quiziq.html',
-        '/ai/receipts/receiptsiq.html',
-        '/ai/report/reportiq.html',
-        '/ai/research/researchiq.html',
-        '/ai/social/socialiq.html',
-        '/ai/speculation/speculationiq.html',
-        '/ai/symptom/symptomiq.html',
-        '/ai/workflow/workflowiq.html'
-    ];
+    // Set up periodic check to maintain correct visibility
+    function setupVisibilityCheck(isBudgetMode) {
+        // Clear any existing interval
+        if (window._visibilityCheckInterval) {
+            clearInterval(window._visibilityCheckInterval);
+        }
+        
+        // Set up new interval
+        window._visibilityCheckInterval = setInterval(() => {
+            applyDirectStyleChanges(isBudgetMode);
+        }, 500); // Check every 500ms
+        
+        // Clear interval after 5 seconds to avoid unnecessary processing
+        setTimeout(() => {
+            if (window._visibilityCheckInterval) {
+                clearInterval(window._visibilityCheckInterval);
+                window._visibilityCheckInterval = null;
+            }
+        }, 5000);
+    }
+    
+    // Hide all containers initially
+    function hideAllContainersInitially() {
+        // Create initial CSS rules to hide everything
+        while (visibilityStyleSheet.cssRules.length > 0) {
+            visibilityStyleSheet.deleteRule(0);
+        }
+        
+        // Hide data containers
+        visibilityStyleSheet.insertRule('.data-container-left { display: none !important; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-right { display: none !important; }', 0);
+        
+        // Hide budget tabs
+        visibilityStyleSheet.insertRule('.data-container-intro { display: none !important; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-income { display: none !important; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-expense { display: none !important; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-asset { display: none !important; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-liability { display: none !important; }', 0);
+        visibilityStyleSheet.insertRule('.data-container-summary { display: none !important; }', 0);
+        
+        // Also apply direct DOM manipulation
+        const allContainers = [
+            '.data-container-left',
+            '.data-container-right',
+            '.data-container-intro',
+            '.data-container-income',
+            '.data-container-expense',
+            '.data-container-asset',
+            '.data-container-liability',
+            '.data-container-summary'
+        ];
+        
+        allContainers.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.style.setProperty('display', 'none', 'important');
+            }
+        });
+    }
     
     // Function to load content into datain container
     async function loadContent(url) {
@@ -200,6 +251,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Handle grid item clicks
+    const gridItems = document.querySelectorAll('.grid-container .grid-item');
+    const urls = [
+        '/ai/marketing/adagencyiq.html',
+        '/ai/adventure/adventureiq.html',
+        '/ai/app/appiq.html',
+        '/ai/book/bookiq.html',
+        '/ai/calorie/calorieiq.html',
+        '/ai/decision/decisioniq.html',
+        '/ai/emotion/emotioniq.html',
+        '/ai/enneagram/enneagramiq.html',
+        '/ai/event/eventiq.html',
+        '/ai/fitness/fitnessiq.html',
+        '/ai/general/general.html',
+        '/ai/budget/budget.html', // IncomeIQ URL
+        '/ai/business/newbiziq.html',
+        '/ai/quiz/quiziq.html',
+        '/ai/receipts/receiptsiq.html',
+        '/ai/report/reportiq.html',
+        '/ai/research/researchiq.html',
+        '/ai/social/socialiq.html',
+        '/ai/speculation/speculationiq.html',
+        '/ai/symptom/symptomiq.html',
+        '/ai/workflow/workflowiq.html'
+    ];
+    
     // Add click handlers to all grid items
     if (gridItems.length > 0) {
         gridItems.forEach((item, index) => {
@@ -212,11 +289,19 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Grid item click handlers initialized');
     }
     
+    // Initialize visibility control and hide all containers initially
+    hideAllContainersInitially();
+    
     // Check if we should be in budget mode on page load
     const lastGridItemUrl = getLocal('lastGridItemUrl');
-    const shouldActivateBudgetMode = lastGridItemUrl === '/ai/budget/budget.html';
-    if (shouldActivateBudgetMode) {
-        toggleUiMode(true);
+    if (lastGridItemUrl) {
+        console.log('Found lastGridItemUrl:', lastGridItemUrl);
+        const shouldActivateBudgetMode = lastGridItemUrl === '/ai/budget/budget.html';
+        
+        // Use a delay to ensure all containers are created before toggling
+        setTimeout(() => {
+            toggleUiMode(shouldActivateBudgetMode);
+        }, 500);
     }
     
     // Force initialization events for components
