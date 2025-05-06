@@ -3,6 +3,8 @@
 # Ignore engineered prompts and worker files containing sensitive IP
 ai/calorie/calorieiqWorker.js
 ai/income/incomeiqWorker.js
+ai/income/secretWorker.js
+
 
 ai/*Worker.js
 ai/*.secret.js
