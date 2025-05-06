@@ -345,13 +345,28 @@
                 ['income_tax_free_income', 'income_tax_free_income_frequency']
             ];
             let annualIncomeSum = 0;
+            
+            // Create an object to store all normalized values
+            const normalizedValues = {};
+            
             incomeFields.forEach(field => {
-                annualIncomeSum += calculateAnnual(field[0], field[1]);
+                const fieldId = field[0];
+                const frequencyId = field[1];
+                const annualValue = calculateAnnual(fieldId, frequencyId);
+                
+                // Store individual normalized value in the object
+                normalizedValues[fieldId] = annualValue;
+                
+                // Add to total as before
+                annualIncomeSum += annualValue;
             });
             
             // Store the calculated value in local storage and global window object
             window.ANNUALINCOME = annualIncomeSum;
             setLocal("ANNUALINCOME", annualIncomeSum.toString(), 365);
+            
+            // Store all normalized values as JSON in localStorage
+            setLocal("normalizedIncomeValues", JSON.stringify(normalizedValues), 365);
             
             // Optional UI update (commented out as not needed)
             const sumElement = document.getElementById('annual_income_sum');
