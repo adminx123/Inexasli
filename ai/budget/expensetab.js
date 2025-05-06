@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 dataContainer.className = 'data-container-expense expanded';
                 dataContainer.dataset.state = 'expanded';
-                loadStoredContent(dataContainer, '/ai/budget/expense.html');
+                loadStoredContent(dataContainer, '/ai/income/expense.html');
             }
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');

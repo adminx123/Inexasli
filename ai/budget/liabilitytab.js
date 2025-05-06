@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 dataContainer.className = 'data-container-liability expanded';
                 dataContainer.dataset.state = 'expanded';
-                loadStoredContent(dataContainer, '/ai/budget/liability.html');
+                loadStoredContent(dataContainer, '/ai/income/liability.html');
             }
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');

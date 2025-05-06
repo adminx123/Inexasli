@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="tray-dropdown" id="trayDropdownMenu">
       <div class="tray-menu-item-container">
-        <a href="/ai/budget/intro.html" id="website" class="tray-menu-item">IncomeIQ<span class="tm">™</span></a>
+        <a href="/ai/income/intro.html" id="website" class="tray-menu-item">IncomeIQ<span class="tm">™</span></a>
       </div>
 
       <div class="tray-menu-item-container">

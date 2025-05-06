@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 dataContainer.className = 'data-container-summary expanded';
                 dataContainer.dataset.state = 'expanded';
-                loadStoredContent(dataContainer, '/ai/budget/summary.html');
+                loadStoredContent(dataContainer, '/ai/income/summary.html');
             }
 
             // Re-bind event listeners
