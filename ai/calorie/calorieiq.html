@@ -404,16 +404,9 @@ function handleLeftSidebarOpen (e) {
             localStorage.setItem('calorieIqResponse', JSON.stringify(data));
 
             
-            toggleDataOutcontainer()
-            // toggleDatainContainer()
+            toggleDataOutcontainer();
 
-
-
-
-
-              const spans = await findAllElements();
-            //   console.log('All elements ready:', spans);
-            // console.log("calorieiqresponse", data);
+            const spans = await findAllElements();
             
             // Safely populate the spans with data using defensive programming
             // Check if nutritionTable and its elements exist before accessing properties
@@ -488,7 +481,6 @@ function handleLeftSidebarOpen (e) {
                 spans.bmi.innerText += " " + data.data.metrics.bmi.trim();
             }
 
-
             setTimeout(() => {
                 btn.innerText = initialText;
                 btn.removeAttribute('disabled');
@@ -506,8 +498,6 @@ function handleLeftSidebarOpen (e) {
                 btn.innerText = initialText;
                 btn.removeAttribute('disabled');
             }, 4000);
-
-            
         }
     }
 
