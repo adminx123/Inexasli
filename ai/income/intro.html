@@ -302,6 +302,23 @@ function initIntroForm() {
         ]
     };
     
+    // Define status arrays globally so they can be used by all functions
+    const singleStatuses = [
+        'single_no_dependants', 'single_with_dependants', 'single_with_disabled_dependants', 'single_self_disabled', 'single_caregiver',
+        'widowed_no_dependants', 'widowed_with_dependants', 'widowed_with_disabled_dependants', 'separated_no_dependants',
+        'separated_with_dependants', 'separated_with_disabled_dependants', 'head_of_household_no_dependants',
+        'head_of_household_with_dependants', 'head_of_household_with_disabled_dependants', 'head_of_household_caregiver',
+        'qualifying_widow_no_dependants', 'qualifying_widow_with_dependants', 'qualifying_widow_with_disabled_dependants'
+    ];
+    
+    const statusesWithDisabledDependants = [
+        'single_with_disabled_dependants', 'widowed_with_disabled_dependants', 'separated_with_disabled_dependants',
+        'married_with_disabled_dependants', 'common_law_with_disabled_dependants', 'coupled_with_disabled_dependants',
+        'qualifying_widow_with_disabled_dependants', 'married_filing_jointly_with_disabled_dependants',
+        'married_filing_separately_with_disabled_dependants', 'head_of_household_with_disabled_dependants',
+        'married_or_civil_partnership_with_disabled_dependants', 'married_or_de_facto_with_disabled_dependants'
+    ];
+    
     // COUNTRY DROPDOWN HANDLER
     if (countryDropdown) {
         // Load saved value
@@ -318,12 +335,69 @@ function initIntroForm() {
             setLocalValue('selectedCountry', selectedCountry);
             updateSubregionDropdown(selectedCountry);
             updateFilingStatusOptions(selectedCountry);
+            saveConsolidatedData(); // Update consolidated data
         });
         
         // Force update dependent dropdowns based on current selection
         if (countryDropdown.value) {
             updateSubregionDropdown(countryDropdown.value);
             updateFilingStatusOptions(countryDropdown.value);
+        }
+    }
+    
+    // FUNCTION TO SAVE CONSOLIDATED DATA
+    function saveConsolidatedData() {
+        try {
+            // Create an object to hold all relevant data
+            const consolidatedData = {};
+            
+            // Add country if it exists
+            const country = getLocalValue('selectedCountry');
+            if (country) consolidatedData.country = country;
+            
+            // Add subregion if it exists and is relevant
+            const subregion = getLocalValue('selectedSubregion');
+            if (subregion && country !== 'OTHER') consolidatedData.subregion = subregion;
+            
+            // Add residency status if it exists
+            const residency = getLocalValue('residency');
+            if (residency) consolidatedData.residency = residency;
+            
+            // Add filing status if it exists
+            const filingStatus = getLocalValue('fillingStatus');
+            if (filingStatus) consolidatedData.filingStatus = filingStatus;
+            
+            // Add personal details if they exist
+            const ageSelf = getLocalValue('ageSelf');
+            if (ageSelf) consolidatedData.ageSelf = ageSelf;
+            
+            const employmentStatus = getLocalValue('employmentStatus');
+            if (employmentStatus) consolidatedData.employmentStatus = employmentStatus;
+            
+            // Use existing singleStatuses array to determine if spouse details should be included
+            const hasSpouse = filingStatus && !singleStatuses.includes(filingStatus);
+            
+            if (hasSpouse) {
+                const ageSpouse = getLocalValue('ageSpouse');
+                if (ageSpouse) consolidatedData.ageSpouse = ageSpouse;
+                
+                const employmentStatusSpouse = getLocalValue('employmentStatusSpouse');
+                if (employmentStatusSpouse) consolidatedData.employmentStatusSpouse = employmentStatusSpouse;
+            }
+            
+            // Use existing statusesWithDisabledDependants array to determine if disabled dependants info should be included
+            const hasDisabledDependants = filingStatus && statusesWithDisabledDependants.includes(filingStatus);
+            
+            if (hasDisabledDependants) {
+                const birthYearDisabledDependants = getLocalValue('birthYearDisabledDependants');
+                if (birthYearDisabledDependants) consolidatedData.birthYearDisabledDependants = birthYearDisabledDependants;
+            }
+            
+            // Save the consolidated data to localStorage
+            localStorage.setItem('introDataJSON', JSON.stringify(consolidatedData));
+            console.log('Saved consolidated data to introDataJSON:', consolidatedData);
+        } catch (e) {
+            console.error('Error saving consolidated data:', e);
         }
     }
     
@@ -420,6 +494,7 @@ function initIntroForm() {
             updateDependantsVisibility();
             updateMaritalStatusVisibility();
             updateSpecificsVisibility();
+            saveConsolidatedData(); // Update consolidated data
         };
         
         // Update UI based on current selection
@@ -486,6 +561,7 @@ function initIntroForm() {
             element.addEventListener('change', function() {
                 setLocalValue(id, this.value);
                 console.log(`Saved ${id}: ${this.value}`);
+                saveConsolidatedData(); // Update consolidated data
             });
         }
     });
