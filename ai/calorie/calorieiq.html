@@ -87,7 +87,14 @@ Potato 100g with broccoli 150g"></textarea>
     //  const storedFormData = JSON.parse(localStorage.getItem("calorieIqFormData"));
     // Wait for DOM to be ready and handle dynamic content
     document.addEventListener('DOMContentLoaded', function () {
-        initializeForm();
+        // Only initialize form when we're actually on the calorieiq page
+        const lastGridItemUrl = getLocal('lastGridItemUrl');
+        if (lastGridItemUrl === '/ai/calorie/calorieiq.html') {
+            console.log("DOMContentLoaded: On calorieiq.html page, initializing form");
+            initializeForm();
+        } else {
+            console.log("DOMContentLoaded: Not on calorieiq.html page, skipping form initialization");
+        }
     });
 
     function handleDocumentClick(e) {
@@ -225,16 +232,18 @@ function handleInputChange (e) {
 }
 
 function handleLeftSidebarOpen (e) {
-            // console.log('Custom event "left-sidebar-open" triggered:', e.detail);
-            const storedFormData = JSON.parse(localStorage.getItem("calorieIqFormData"));
-            if (e.detail.state == "expanded" && storedFormData) {
-                console.log("Left sidebar is expanded and storedFormData is available.");
-                populateIn(storedFormData);
-            } else {
-                console.log("Left sidebar is not expanded or storedFormData is not available.");
-
-            }
+    // Only process form data when the current page is calorieiq.html
+    const lastGridItemUrl = getLocal('lastGridItemUrl');
+    if (e.detail.state == "expanded" && lastGridItemUrl === '/ai/calorie/calorieiq.html') {
+        console.log("Left sidebar is expanded for calorieiq.html, propagating form data");
+        const storedFormData = JSON.parse(localStorage.getItem("calorieIqFormData"));
+        if (storedFormData) {
+            populateIn(storedFormData);
         }
+    } else {
+        console.log("Left sidebar is expanded but not for calorieiq.html, skipping form propagation");
+    }
+}
 
 
 
