@@ -456,8 +456,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const currentPath = window.location.pathname;
     console.log('Summary HTML - Current path:', currentPath, 'isPaid:', isPaid);
 
-    if (isPaid && currentPath !== "/ai/budget/summary.html") {
-        window.location.href = "/ai/budget/summary.html";
+    if (isPaid && currentPath !== "/ai/income/summary.html") {
+        window.location.href = "/ai/income/summary.html";
         return;
     } else {
         document.body.style.display = 'block';

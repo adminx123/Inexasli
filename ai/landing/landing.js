@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(`Grid item clicked, loading content from: ${url}`);
             
             // Detect if this is the budget/incomeIQ item
-            const isBudgetItem = url === '/ai/budget/budget.html';
+            const isBudgetItem = url === '/ai/income/budget.html';
             
             // Toggle UI mode based on selection
             toggleUiMode(isBudgetItem);
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '/ai/event/eventiq.html',
         '/ai/fitness/fitnessiq.html',
         '/ai/general/general.html',
-        '/ai/budget/budget.html', // IncomeIQ URL
+        '/ai/income/budget.html', // IncomeIQ URL
         '/ai/business/newbiziq.html',
         '/ai/quiz/quiziq.html',
         '/ai/receipts/receiptsiq.html',
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const lastGridItemUrl = getLocal('lastGridItemUrl');
     if (lastGridItemUrl) {
         console.log('Found lastGridItemUrl:', lastGridItemUrl);
-        const shouldActivateBudgetMode = lastGridItemUrl === '/ai/budget/budget.html';
+        const shouldActivateBudgetMode = lastGridItemUrl === '/ai/income/budget.html';
         
         // Use a delay to ensure all containers are created before toggling
         setTimeout(() => {

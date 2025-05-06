@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 dataContainer.className = 'data-container-asset expanded';
                 dataContainer.dataset.state = 'expanded';
-                loadStoredContent(dataContainer, '/ai/budget/asset.html');
+                loadStoredContent(dataContainer, '/ai/income/asset.html');
             }
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');
