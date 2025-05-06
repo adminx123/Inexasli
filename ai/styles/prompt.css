@@ -516,3 +516,52 @@ table tbody tr:hover td {
 .containerinter {
   padding-left: 38px; /* Ensures contents are at least 38px from the left edge */
 }
+
+/* Section Headers and Description Text */
+.section-header {
+  text-align: center;
+  font-family: "Geist", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #000;
+  margin: 16px 0 8px 0;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #000;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Description text for explaining what user is doing */
+.section-description {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 12px 0;
+  padding: 0;
+  line-height: 1.4;
+  text-align: left;
+  font-weight: normal;
+}
+
+/* Section container with header and description */
+.section-container {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* Category Label for grouping related UI elements */
+.category-label {
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #000;
+  font-family: "Geist", sans-serif;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #000;
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}

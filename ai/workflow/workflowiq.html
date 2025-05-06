@@ -14,16 +14,19 @@
 
     <div class="container premium-section premium-blur">
         <div class="row1">
+            <label class="category-label">Task Description</label>
             <textarea id="workflowiq-task" rows="2" placeholder="Enter task (e.g., Invoice processing)"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Task Steps</label>
             <textarea id="workflowiq-steps" rows="2" placeholder="Task steps: (1 per line)\ne.g., Data entry, Approval, Archiving"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Tools Used</label>
             <textarea id="workflowiq-tools" rows="2" placeholder="Tools used: (1 per line)\ne.g., Excel, ERP, Email"></textarea>
         </div>
         <div class="row1">
-            <label for="workflowiq-automation-type">Select automation type:</label>
+            <label class="category-label">Automation Type</label>
             <select id="workflowiq-automation-type">
                 <option value="scripting">Scripting</option>
                 <option value="rpa">RPA</option>
@@ -33,7 +36,7 @@
             </select>
         </div>
         <div class="row1">
-            <label for="workflowiq-priority">Select priority focus:</label>
+            <label class="category-label">Priority Focus</label>
             <select id="workflowiq-priority">
                 <option value="efficiency">Efficiency</option>
                 <option value="cost">Cost</option>
@@ -43,12 +46,15 @@
             </select>
         </div>
         <div class="row1">
+            <label class="category-label">Goals</label>
             <textarea id="workflowiq-goals" rows="2" placeholder="Goals: (1 per line)\ne.g., Reduce time, Minimize errors"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Constraints</label>
             <textarea id="workflowiq-constraints" rows="2" placeholder="Constraints: (1 per line)\ne.g., Budget, Legacy systems"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Additional Instructions</label>
             <textarea id="workflowiq-instructions" rows="3" placeholder="Additional instructions: (1 per line)\ne.g., Prefer open-source tools, Ensure audit trail"></textarea>
         </div>
         <button class="generate-btn" data-prompt="WorkflowIQ™" onclick="generatePrompt('WorkflowIQ™')">Generate Promptemplate™ Now!</button>

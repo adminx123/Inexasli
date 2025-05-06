@@ -8,7 +8,8 @@
  * jurisdictions worldwide.
  */ -->
 
- <div class="row1">
+<div class="row1">
+    <label class="category-label">Fitness Goal</label>
     <div class="grid-container" id="calorie-goal">
         <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
         <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
@@ -18,6 +19,7 @@
 </div>
 
 <div class="row1">
+    <label class="category-label">Activity Level</label>
     <div class="grid-container" id="calorie-activity">
         <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
         <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
@@ -28,12 +30,14 @@
 </div>
 
 <div class="row1">
+    <label class="category-label">Meal Planning</label>
     <div class="grid-container" id="calorie-recommendations">
         <div class="grid-item" data-value="Meal Recommendations">Need meal recommendations to make up deficit</div>
     </div>
 </div>
 
 <div class="row1">
+    <label class="category-label">Dietary Preferences</label>
     <div class="grid-container" id="calorie-diet-type">
         <div class="grid-item" data-value="None">No Restrictions</div>
         <div class="grid-item" data-value="Vegetarian">Vegetarian</div>
@@ -46,33 +50,29 @@
     </div>
 </div>
 
-<div class="twoperrow">
-    <input type="number" inputmode="numeric" id="calorie-age" placeholder="Age" min="0">
-    <!-- <div class="rowuom"> -->
+<div class="row1">
+    <label class="category-label">Personal Information</label>
+    <div class="twoperrow">
+        <input type="number" inputmode="numeric" id="calorie-age" placeholder="Age" min="0">
         <input id="calorie-height" placeholder="Height eg. 2 meters">
-        <!-- <select id="calorie-height-unit">
-            <option value="ft" selected>FT</option>
-            <option value="cm">CM</option>
-        </select> -->
-    <!-- </div> -->
+    </div>
+    <div class="rowuom">
+        <input id="calorie-weight" placeholder="Weight eg. 100 lbs">
+    </div>
+    <select id="calorie-sex">
+        <option value="man" selected>Man</option>
+        <option value="woman">Woman</option>
+    </select>
 </div>
-<div class="rowuom">
-    <input id="calorie-weight" placeholder="Weight eg. 100 lbs">
-    <!-- <select id="calorie-weight-unit">
-        <option value="lbs" selected>LB</option>
-        <option value="kg">KG</option>
-    </select> -->
-</div>
-<select id="calorie-sex">
-    <option value="man" selected>Man</option>
-    <option value="woman">Woman</option>
-</select>
 
-<textarea id="calorie-food-log" rows="3" placeholder="Meals:
+<div class="row1">
+    <label class="category-label">Food Log</label>
+    <textarea id="calorie-food-log" rows="3" placeholder="Meals:
 Chicken breast 200g with rice 1cup
 Potato 100g with broccoli 150g"></textarea>
-<button class="generate-btn" onclick="handleGetCalorieIq(event)">Generate Now!</button>
-<button class="clear-btn">Clear All</button>
+    <button class="generate-btn" onclick="handleGetCalorieIq(event)">Generate Now!</button>
+    <button class="clear-btn">Clear All</button>
+</div>
 
 <script>
 /*
