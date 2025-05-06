@@ -357,6 +357,48 @@ function handleLeftSidebarOpen (e) {
 
             } else{
             console.log('API response:', data);
+            
+            // DETAILED DEBUGGING - Log the structure of the response
+            console.log('Response structure details:', {
+                messageType: typeof data.message,
+                hasDataProperty: !!data.data,
+                dataProperties: data.data ? Object.keys(data.data) : 'None',
+                hasBMI: data.data && data.data.bmi !== undefined,
+                bmiType: data.data && data.data.bmi !== undefined ? typeof data.data.bmi : 'N/A',
+                hasNutrients: data.data && Array.isArray(data.data.nutrients),
+                nutrientsLength: data.data && Array.isArray(data.data.nutrients) ? data.data.nutrients.length : 0,
+                hasMealRecommendations: data.data && data.data.mealRecommendations !== undefined,
+                hasNutritionTable: data.data && Array.isArray(data.data.nutritionTable),
+                nutritionTableLength: data.data && Array.isArray(data.data.nutritionTable) ? data.data.nutritionTable.length : 0
+            });
+            
+            // CONVERT FROM NEW FORMAT TO OLD FORMAT IF NEEDED
+            // The code in calorieiq.html expects nutritionTable but we're getting nutrients array
+            if (data.message === 'Success' && data.data && Array.isArray(data.data.nutrients) && !data.data.nutritionTable) {
+                console.log('Converting from nutrients format to nutritionTable format');
+                
+                // Create backward compatible format
+                data.data.nutritionTable = data.data.nutrients.map(nutrient => ({
+                    name: nutrient.name,
+                    targetAmount: nutrient.target,
+                    intake: nutrient.intake,
+                    percentReached: nutrient.percentage + '%'
+                }));
+                
+                // Add metrics for BMI if not present
+                if (data.data.bmi && !data.data.metrics) {
+                    data.data.metrics = {
+                        bmi: String(data.data.bmi)
+                    };
+                }
+                
+                console.log('Converted data for backward compatibility:', {
+                    hasNutritionTable: Array.isArray(data.data.nutritionTable),
+                    nutritionTableLength: data.data.nutritionTable.length,
+                    hasMetrics: !!data.data.metrics
+                });
+            }
+            
             btn.innerText = "success";
             
             localStorage.setItem('calorieIqResponse', JSON.stringify(data));
