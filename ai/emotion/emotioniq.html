@@ -13,11 +13,11 @@
     </a>
 
         <div class="row1">
-            <label for="therapy-goal">What’s Your Therapy Goal?</label>
+            <label class="category-label">Therapy Goal</label>
             <textarea id="therapy-goal" rows="3" placeholder="e.g., Manage anxiety, process grief, improve self-esteem"></textarea>
         </div>
         <div class="row1">
-            <label>Current Emotional State (select all that apply):</label>
+            <label class="category-label">Emotional State</label>
             <div class="grid-container" id="therapy-emotions">
                 <div class="grid-item" data-value="Anxious">Anxious</div>
                 <div class="grid-item" data-value="Sad">Sad</div>
@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="row1">
-            <label>Triggers or Stressors (select all that apply):</label>
+            <label class="category-label">Triggers & Stressors</label>
             <div class="grid-container" id="therapy-triggers">
                 <div class="grid-item" data-value="Work">Work Stress</div>
                 <div class="grid-item" data-value="Relationships">Relationships</div>
@@ -46,11 +46,11 @@
             </div>
         </div>
         <div class="row1">
-            <label for="therapy-recent">Recent Events or Feelings:</label>
-            <textarea id="therapy-recent" rows="4" placeholder="What’s been on your mind lately? (1 per line):\nHad a fight with my partner\nFelt overwhelmed at work\nCouldn’t sleep last night"></textarea>
+            <label class="category-label">Recent Events</label>
+            <textarea id="therapy-recent" rows="4" placeholder="What's been on your mind lately? (1 per line):\nHad a fight with my partner\nFelt overwhelmed at work\nCouldn't sleep last night"></textarea>
         </div>
         <div class="row1">
-            <label>Coping Strategies You’ve Tried (select all that apply):</label>
+            <label class="category-label">Coping Strategies</label>
             <div class="grid-container" id="therapy-coping">
                 <div class="grid-item" data-value="Talking">Talking to Someone</div>
                 <div class="grid-item" data-value="Exercise">Exercise</div>
@@ -64,11 +64,11 @@
             </div>
         </div>
         <div class="row1">
-            <label for="therapy-history">Therapy History or Context:</label>
-            <textarea id="therapy-history" rows="3" placeholder="e.g., I’ve been in therapy for 6 months, I had a tough childhood, etc."></textarea>
+            <label class="category-label">Therapy History</label>
+            <textarea id="therapy-history" rows="3" placeholder="e.g., I've been in therapy for 6 months, I had a tough childhood, etc."></textarea>
         </div>
         <div class="row1">
-            <label for="therapy-context">Context Dump (Past or Future Details):</label>
+            <label class="category-label">Context Details</label>
             <textarea id="therapy-context" rows="4" placeholder="Anything from your past or future that might relate (1 per line):\nHad a tough breakup last year\nWorried about a big presentation next week\nChildhood memory of being ignored"></textarea>
         </div>
         <button class="generate-btn" data-prompt="EmotionIQ™" onclick="generatePrompt('EmotionIQ™')">Generate Promptemplate™ Now!</button>

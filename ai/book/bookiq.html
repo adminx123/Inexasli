@@ -12,10 +12,11 @@
 
    
         <div class="row1">
+            <label class="category-label">Book Information</label>
             <textarea id="book-title-author" rows="2" placeholder="Enter book title and author (e.g., 'Pride and Prejudice by Jane Austen')"></textarea>
         </div>
         <div class="row1">
-            <label for="summary-purpose">Select the purpose of the summary:</label>
+            <label class="category-label">Summary Purpose</label>
             <select id="summary-purpose">
                 <option value="personal">Personal Understanding</option>
                 <option value="book-club">Book Club Discussion</option>
@@ -27,7 +28,7 @@
             </select>
         </div>
         <div class="row1">
-            <label for="summary-length">Select the summary length:</label>
+            <label class="category-label">Summary Length</label>
             <select id="summary-length">
                 <option value="short">Short (1 paragraph)</option>
                 <option value="medium">Medium (2-3 paragraphs)</option>
@@ -35,10 +36,11 @@
             </select>
         </div>
         <div class="row1">
+            <label class="category-label">Key Themes</label>
             <textarea id="summary-themes" rows="2" placeholder="Key themes or topics to highlight: (1 per line)\ne.g., love, leadership, identity"></textarea>
         </div>
         <div class="row1">
-            <label>Select the target audience(s):</label>
+            <label class="category-label">Target Audience</label>
             <div class="grid-container" id="summary-audience">
                 <div class="grid-item" data-value="general">General Readers</div>
                 <div class="grid-item" data-value="students">Students</div>
@@ -50,7 +52,7 @@
             </div>
         </div>
         <div class="row1">
-            <label>Select specific elements to include:</label>
+            <label class="category-label">Elements to Include</label>
             <div class="grid-container" id="summary-elements">
                 <div class="grid-item" data-value="plot">Plot</div>
                 <div class="grid-item" data-value="characters">Characters</div>
@@ -63,7 +65,7 @@
             </div>
         </div>
         <div class="row1">
-            <label for="summary-tone">Select the tone or style:</label>
+            <label class="category-label">Tone & Style</label>
             <select id="summary-tone">
                 <option value="formal">Formal</option>
                 <option value="casual">Casual</option>
@@ -75,6 +77,7 @@
             </select>
         </div>
         <div class="row1">
+            <label class="category-label">Additional Details</label>
             <textarea id="summary-details" rows="3" placeholder="Additional details or constraints: (1 per line)\ne.g., avoid spoilers, focus on chapter 5"></textarea>
         </div>
         <button class="generate-btn" data-prompt="BookIQ™" onclick="generatePrompt('BookIQ™')">Generate Promptemplate™ Now!</button>
