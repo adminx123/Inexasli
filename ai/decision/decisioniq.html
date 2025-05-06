@@ -14,10 +14,11 @@
 
 
         <div class="row1">
+            <label class="category-label">Decision Goal</label>
             <textarea id="decisioniq-goal" rows="2" placeholder="Enter decision goal (e.g., Choose a software vendor)"></textarea>
         </div>
         <div class="row1">
-            <label for="decisioniq-analysis-type">Select analysis type:</label>
+            <label class="category-label">Analysis Type</label>
             <select id="decisioniq-analysis-type">
                 <option value="pros-cons">Pros/Cons</option>
                 <option value="weighted-scoring">Weighted Scoring</option>
@@ -28,7 +29,7 @@
             </select>
         </div>
         <div class="row1">
-            <label for="decisioniq-priority">Select priority focus:</label>
+            <label class="category-label">Priority Focus</label>
             <select id="decisioniq-priority">
                 <option value="speed">Speed</option>
                 <option value="accuracy">Accuracy</option>
@@ -39,13 +40,15 @@
             </select>
         </div>
         <div class="row1">
+            <label class="category-label">Decision Criteria</label>
             <textarea id="decisioniq-criteria" rows="2" placeholder="Decision criteria: (1 per line)\ne.g., Cost, Features, Scalability"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Decision Options</label>
             <textarea id="decisioniq-options" rows="2" placeholder="Decision options: (1 per line)\ne.g., Vendor A, Vendor B, Vendor C"></textarea>
         </div>
         <div class="row1">
-            <label>Select stakeholder(s):</label>
+            <label class="category-label">Stakeholders</label>
             <div class="grid-container" id="decisioniq-stakeholders">
                 <div class="grid-item" data-value="team-members">Team Members</div>
                 <div class="grid-item" data-value="executives">Executives</div>
@@ -56,9 +59,11 @@
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Constraints</label>
             <textarea id="decisioniq-constraints" rows="2" placeholder="Constraints: (1 per line)\ne.g., Budget, Timeline, Resources"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Additional Instructions</label>
             <textarea id="decisioniq-instructions" rows="3" placeholder="Additional instructions: (1 per line)\ne.g., Include risk analysis, Prioritize quantitative data"></textarea>
         </div>
         <button class="generate-btn" data-prompt="DecisionIQ™" onclick="generatePrompt('DecisionIQ™')">Generate Promptemplate™ Now!</button>

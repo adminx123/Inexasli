@@ -13,6 +13,7 @@
     </a>
 
         <div class="row1">
+            <label class="category-label">Fitness Goal</label>
             <div class="grid-container" id="fitness-goal">
                 <div class="grid-item" data-value="Build Strength">Build Strength</div>
                 <div class="grid-item" data-value="Cardio">Cardio</div>
@@ -20,10 +21,12 @@
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Workout Schedule</label>
             <input type="number" id="fitness-frequency" placeholder="Workouts/Week" min="1">
             <input type="number" id="fitness-duration" placeholder="Workout Length (minutes)" min="1">
         </div>
         <div class="row1">
+            <label class="category-label">Personal Details</label>
             <input type="number" id="fitness-age" placeholder="Age" min="0">
             <div class="height-input-group">
                 <input type="number" id="fitness-height" placeholder="Height" step="0.1" min="0">
@@ -41,6 +44,7 @@
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Experience Level</label>
             <div class="grid-container" id="fitness-level">
                 <div class="grid-item" data-value="Beginner">Beginner</div>
                 <div class="grid-item" data-value="Intermediate">Intermediate</div>
@@ -48,12 +52,14 @@
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Workout Location</label>
             <div class="grid-container" id="fitness-home-exercises">
                 <div class="grid-item" data-value="Gym">I want to workout in the gym</div>
                 <div class="grid-item" data-value="Home">I want to workout at home</div>
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Health Considerations</label>
             <textarea id="fitness-injuries" rows="3" placeholder="Injuries/Health Conditions (1 per line):\nKnee pain\nAsthma"></textarea>
         </div>
         <button class="generate-btn" data-prompt="FitnessIQ™" onclick="generatePrompt('FitnessIQ™')">Generate Promptemplate™ Now!</button>

@@ -13,6 +13,7 @@
     </a>
 
         <div class="row1">
+            <label class="category-label">Event Type</label>
             <div class="grid-container" id="event-types">
                 <div class="grid-item" data-value="Birthday">Planning a Birthday</div>
                 <div class="grid-item" data-value="Wedding">Planning a Wedding</div>
@@ -27,18 +28,21 @@
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Venue Status</label>
             <select id="event-venue" onchange="toggleEventDetails()">
                 <option value="Venue Secured">Venue Secured</option>
                 <option value="Venue Needed">Venue Needed</option>
             </select>
         </div>
         <div class="row1">
+            <label class="category-label">Location Type</label>
             <select id="event-location" onchange="toggleEventDetails()">
                 <option value="indoors">Indoors</option>
                 <option value="outdoors">Outdoors</option>
             </select>
         </div>
         <div class="row1 hidden" id="event-indoors">
+            <label class="category-label">Indoor Requirements</label>
             <div class="grid-container" id="event-indoor-setup">
                 <div class="grid-item" data-value="Seating">Seating Needed</div>
                 <div class="grid-item" data-value="Lighting">Lighting Needed</div>
@@ -53,6 +57,7 @@
             </div>
         </div>
         <div class="row1 hidden" id="event-outdoors">
+            <label class="category-label">Outdoor Requirements</label>
             <div class="grid-container" id="event-outdoor">
                 <div class="grid-item" data-value="Tent">Tent Needed</div>
                 <div class="grid-item" data-value="BackupPlan">Backup Plan Needed</div>
@@ -68,6 +73,7 @@
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Event Elements</label>
             <div class="grid-container" id="event-elements">
                 <div class="grid-item" data-value="Food">Food Needed</div>
                 <div class="grid-item" data-value="Drinks">Drinks Needed</div>
@@ -82,19 +88,23 @@
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Attendance & Budget</label>
             <input type="number" id="event-guests" placeholder="People Expected #" min="1">
             <input type="number" id="event-budget" placeholder="Event Budget $">
         </div>
         <div class="row1">
-            <label for="event-start">Start Time:</label>
+            <label class="category-label">Event Time</label>
+            <label for="event-start">Start:</label>
             <input type="time" id="event-start" name="event-start">
-            <label for="event-end">End Time:</label>
+            <label for="event-end">End:</label>
             <input type="time" id="event-end" name="event-end">
         </div>
         <div class="row1">
+            <label class="category-label">Event Location</label>
             <textarea id="event-specific-location" rows="1" placeholder="Address & City (e.g., 123 Main St, New York)"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Additional Context</label>
             <textarea id="event-specific-context" rows="3" placeholder="General Context (1 per line):\nMajority of attendees have an Italian background\nMost individuals between 5-10 yrs old"></textarea>
         </div>
         <div class="row1">
