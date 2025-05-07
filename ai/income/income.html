@@ -365,8 +365,18 @@
             window.ANNUALINCOME = annualIncomeSum;
             setLocal("ANNUALINCOME", annualIncomeSum.toString(), 365);
             
-            // Store all normalized values as JSON in localStorage
-            setLocal("normalizedIncomeValues", JSON.stringify(normalizedValues), 365);
+            // Store all normalized values using setLocalJSON to avoid URL encoding
+            // Import setLocalJSON dynamically if not available
+            import('/utility/setLocalJSON.js')
+                .then(module => {
+                    const setLocalJSON = module.default;
+                    setLocalJSON('incomeValuesJSON', normalizedValues);
+                })
+                .catch(err => {
+                    console.error('Error importing setLocalJSON module:', err);
+                    // Fallback to direct storage with JSON stringify
+                    localStorage.setItem('incomeValuesJSON', JSON.stringify(normalizedValues));
+                });
             
             // Optional UI update (commented out as not needed)
             const sumElement = document.getElementById('annual_income_sum');

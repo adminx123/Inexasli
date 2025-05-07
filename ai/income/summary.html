@@ -504,6 +504,70 @@ document.addEventListener('DOMContentLoaded', function() {
     // Also remove display:none from the body
     document.body.style.display = 'block';
 });
+
+function calculateTaxesAndContributions() {
+    // Use the getLocalJSON utility to retrieve JSON data without URL decoding
+    import('/utility/getLocalJSON.js')
+        .then(module => {
+            const getLocalJSON = module.default;
+            
+            // Get data from localStorage using the JSON utility
+            const introData = getLocalJSON('introDataJSON');
+            const normalizedIncome = getLocalJSON('incomeValuesJSON');
+            
+            // Check if data exists
+            if (!introData || !normalizedIncome) {
+                console.error('Required data missing for tax calculation');
+                return;
+            }
+            
+            // Send data to worker
+            fetch('https://incomeiqworker.4hm7q4q75z.workers.dev/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    type: 'calculateTaxesAndContributions',
+                    introData: introData,
+                    normalizedIncome: normalizedIncome
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Worker response:', data);
+                // Handle the response data here and update UI
+                if (data && data.results) {
+                    // Update UI with calculation results
+                    updateCalculationResults(data.results);
+                }
+            })
+            .catch(error => {
+                console.error('Error sending data to worker:', error);
+            });
+        })
+        .catch(err => {
+            console.error('Error importing getLocalJSON module:', err);
+        });
+}
+
+// Helper function to update UI with calculation results
+function updateCalculationResults(results) {
+    // Update relevant UI elements with the calculation results
+    // For example:
+    if (results.incomeTax !== undefined) {
+        document.getElementById('TOTALTAXANNUAL').textContent = '$' + parseFloat(results.incomeTax).toFixed(2);
+    }
+    
+    if (results.obligations !== undefined) {
+        document.getElementById('OBLIGATIONANNUAL').textContent = '$' + parseFloat(results.obligations).toFixed(2);
+    }
+    
+    // Add other UI updates as needed
+    
+    // Refresh color formatting if needed
+    populateValuesFromLocalStorage();
+}
 </script>
 
 </body>
