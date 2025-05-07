@@ -7,27 +7,24 @@
  */
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Dependency fallbacks
+    // Import setLocal if not available from global scope
     const setLocal = window.setLocal || function (key, value, days) {
         try {
             localStorage.setItem(key, encodeURIComponent(value));
         } catch (error) {
-            // Error handling without console logging
-        }
-    };
-    const getLocal = window.getLocal || function (key) {
-        try {
-            const value = localStorage.getItem(key);
-            return value ? decodeURIComponent(value) : null;
-        } catch (error) {
-            // Error handling without console logging
-            return null;
+            // Error handling without console.error
         }
     };
     
     // Summary container management
     let summaryInitialized = false;
     
+    function hideShowClass(className, action) {
+        document.querySelectorAll(`.${className}`).forEach(el => {
+            el.style.display = action === 'show' ? 'block' : 'none';
+        });
+    }
+
     function initializeSummaryForm(container) {
         // Remove the check for summaryInitialized to allow reinitializing
         // when container is reopened
@@ -59,168 +56,60 @@ document.addEventListener('DOMContentLoaded', function () {
     
     async function loadStoredContent(dataContainer, url) {
         try {
-            console.log('Summary tab - loadStoredContent started for URL:', url);
+            const startTime = performance.now();
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
 
             const content = await response.text();
-            console.log('Summary tab - Content loaded successfully, length:', content.length);
 
-            // Update container with content
             dataContainer.innerHTML = `
-                <span class="close-data-container">×</span>
+                <span class="close-data-container">-</span>
                 <span class="data-label">SUMMARY</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log('Summary tab - Content inserted into DOM');
-
+            
             // Mark summary page as visited when loaded
             setLocal('summaryVisited', 'visited', 365);
 
-            // Process scripts like other tabs
-            console.log('Summary tab - Processing scripts');
             const scripts = dataContainer.querySelectorAll('script');
-            console.log('Summary tab - Found', scripts.length, 'script elements');
-            
-            scripts.forEach((script, index) => {
-                console.log(`Summary tab - Processing script ${index+1}:`, script.src || 'inline script');
-                
+            scripts.forEach(script => {
                 if (script.src && ![
                     'summarytab.js', 'setlocal.js', 'getlocal.js', 'cookieoverwrite.js'
                 ].some(exclude => script.src.includes(exclude))) {
                     const newScript = document.createElement('script');
-                    newScript.src = script.src + '?v=' + new Date().getTime(); 
-                    console.log('Summary tab - Adding external script to body:', newScript.src);
+                    newScript.src = script.src + '?v=' + new Date().getTime();
                     
-                    if (
+                    // Preserve the module type if it exists in the original script
+                    if (script.type === 'module' || 
                         script.src.includes('frequency.js') ||
                         script.src.includes('utils.js') ||
-                        script.src.includes('hideShow.js')
-                    ) {
+                        script.src.includes('hideShow.js')) {
                         newScript.type = 'module';
                     }
                     
                     newScript.onerror = () => {}; // Empty error handler
                     document.body.appendChild(newScript);
                 } else if (!script.src) {
-                    console.log('Summary tab - Adding inline script to body, length:', script.textContent.length);
                     const newScript = document.createElement('script');
+                    
+                    // Preserve the module type for inline scripts too
+                    if (script.type === 'module') {
+                        newScript.type = 'module';
+                    }
+                    
                     newScript.textContent = script.textContent;
                     document.body.appendChild(newScript);
                 }
             });
-
-            // Initialize the summary form
+            
             initializeSummaryForm(dataContainer);
-
-            // DIRECT UPDATE: Immediately update all the financial values 
-            // without waiting for other scripts to load
-            console.log('Summary tab - Performing direct update of all financial values');
             
-            // Get values directly from localStorage
-            const assets = parseFloat(getLocal('ASSETS')) || 0;
-            const liabilities = parseFloat(getLocal('LIABILITIES')) || 0;
-            const netWorth = assets - liabilities;
-            const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
-            const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
-            const essential = parseFloat(getLocal('ESSENTIAL')) || 0;
-            const discretionary = parseFloat(getLocal('DISCRETIONARY')) || 0;
-            const housing = parseFloat(getLocal('HOUSING')) || 0;
-            const transportation = parseFloat(getLocal('TRANSPORTATION')) || 0;
-            const dependant = parseFloat(getLocal('DEPENDANT')) || 0;
-            const debt = parseFloat(getLocal('DEBT')) || 0;
-            const taxableIncome = parseFloat(getLocal('ANNUALTAXABLEINCOME')) || 0;
-            
-            console.log('Summary tab - Direct values:', { 
-                assets, liabilities, netWorth, income, expenses, 
-                essential, discretionary, housing, transportation, dependant, debt, taxableIncome 
-            });
-            
-            // Update all financial elements directly
-            const elementsToUpdate = {
-                'ASSETS': assets,
-                'LIABILITIES': liabilities,
-                'NETWORTH': netWorth,
-                'annual_income_sum': income,
-                'ANNUALEXPENSESUM': expenses,
-                'ESSENTIAL': essential,
-                'DISCRETIONARY': discretionary,
-                'HOUSING': housing,
-                'TRANSPORTATION': transportation,
-                'DEPENDANT': dependant,
-                'DEBT': debt,
-                'ANNUALTAXABLEINCOME': taxableIncome
-            };
-            
-            for (const [elementId, value] of Object.entries(elementsToUpdate)) {
-                const element = dataContainer.querySelector(`#${elementId}`);
-                if (element) {
-                    element.textContent = '$' + value.toFixed(2);
-                    console.log(`Summary tab - Directly updated ${elementId} element to: ${element.textContent}`);
-                } else {
-                    console.log(`Summary tab - Could not find element with id: ${elementId}`);
-                }
-            }
-            
-            // Frequency element might need special handling
-            const frequencyDropdown = dataContainer.querySelector('#frequency');
-            if (frequencyDropdown) {
-                frequencyDropdown.value = 'annual'; // Default to annual
-                console.log('Summary tab - Set frequency dropdown to annual');
-            }
-
-            // Manually trigger the updateFreeContent function after a delay
-            setTimeout(() => {
-                console.log('Summary tab - Running delayed update functions');
-                if (window.updateFreeContent) {
-                    console.log('Summary tab - Calling updateFreeContent()');
-                    window.updateFreeContent();
-                    console.log('Summary tab - updateFreeContent() completed');
-                    
-                    if (getLocal('authenticated') === 'paid' && window.updatePremiumContent) {
-                        console.log('Summary tab - Calling updatePremiumContent()');
-                        window.updatePremiumContent();
-                        console.log('Summary tab - updatePremiumContent() completed');
-                    }
-                } else {
-                    console.warn('Summary tab - updateFreeContent not found in window context');
-                }
-                
-                // Debug log to check localStorage values
-                console.log('Summary tab - Current localStorage values for assets/liabilities:');
-                console.log('ASSETS:', getLocal('ASSETS'));
-                console.log('LIABILITIES:', getLocal('LIABILITIES'));
-                console.log('NETWORTH calculation:', parseFloat(getLocal('ASSETS') || 0) - parseFloat(getLocal('LIABILITIES') || 0));
-                
-                // Check DOM elements that should display these values
-                const assetsElement = document.getElementById('ASSETS');
-                const liabilitiesElement = document.getElementById('LIABILITIES');
-                const networthElement = document.getElementById('NETWORTH');
-                
-                console.log('ASSETS element exists:', !!assetsElement, assetsElement ? 'content: ' + assetsElement.textContent : '');
-                console.log('LIABILITIES element exists:', !!liabilitiesElement, liabilitiesElement ? 'content: ' + liabilitiesElement.textContent : '');
-                console.log('NETWORTH element exists:', !!networthElement, networthElement ? 'content: ' + networthElement.textContent : '');
-            }, 500);
-
-            // Now check if all pages have been visited and set a flag
-            const introVisited = getLocal('introVisited');
-            const incomeVisited = getLocal('incomeVisited');
-            const expenseVisited = getLocal('expenseVisited');
-            const assetVisited = getLocal('assetVisited');
-            const liabilityVisited = getLocal('liabilityVisited');
-            const summaryVisited = getLocal('summaryVisited');
-
-            if (introVisited === 'visited' && 
-                incomeVisited === 'visited' && 
-                expenseVisited === 'visited' && 
-                assetVisited === 'visited' && 
-                liabilityVisited === 'visited' &&
-                summaryVisited === 'visited') {
-                // All pages have been visited, set a combined flag
-                setLocal('allPagesVisited', 'true', 365);
+            // Initialize modal triggers after loading the content
+            if (typeof window.setupModalTriggers === 'function') {
+                window.setupModalTriggers();
             }
         } catch (error) {
-            console.error('Summary tab - Error in loadStoredContent:', error);
+            // Error handling without console.error
         }
     }
 
@@ -391,9 +280,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function toggleDataContainer() {
             if (!dataContainer) return;
-
             const isExpanded = dataContainer.dataset.state === 'expanded';
-
             if (isExpanded) {
                 dataContainer.className = 'data-container-summary collapsed';
                 dataContainer.dataset.state = 'collapsed';
@@ -403,16 +290,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataContainer.dataset.state = 'expanded';
                 loadStoredContent(dataContainer, '/ai/income/summary.html');
             }
-
-            // Re-bind event listeners
             const newLabel = dataContainer.querySelector('.data-label');
             const newClose = dataContainer.querySelector('.close-data-container');
-            
             if (newLabel) newLabel.addEventListener('click', function (e) { e.preventDefault(); toggleDataContainer(); });
             if (newClose) newClose.addEventListener('click', function (e) { e.preventDefault(); toggleDataContainer(); });
         }
 
-        // Add outside click listener to collapse when expanded
         document.addEventListener('click', function (e) {
             if (dataContainer && dataContainer.dataset.state === 'expanded') {
                 const isClickInside = dataContainer.contains(e.target);
@@ -427,6 +310,6 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         initializeDataContainer();
     } catch (error) {
-        // Error handling without console logging
+        // Error handling without console.error
     }
 });
