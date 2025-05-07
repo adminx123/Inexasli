@@ -72,7 +72,7 @@
               <summary>
                 <p style="margin-left:21px;">
                   <span class="tooltip1" data-tooltip="Total taxes owed, calculated from taxable income (gross minus deductions like SD in USA or BPA in Canada) using regional rates (e.g., USA federal/state, Canada federal/provincial). Includes income tax and full (USA) or 50% (Canada) capital gains tax; excludes obligations like CPP/Social Security. Use: Estimate tax burden.">
-                    <u>Total Tax Payable:</u><span class="tooltip1-content"></span><span id="TOTALTAXANNUAL"></span>
+                    <u>Total Tax Payable:</u><span class="tooltip1-content"></span><span id="total_taxes"></span>
                   </span>
                 </p>
               </summary>
@@ -92,7 +92,7 @@
               <p style="margin-left:21px;">
                 <span class="tooltip1" data-tooltip="input collective amout of all othe robligations payable">
                   <u>Other Obligations Payable:</u><span class="tooltip1-content"></span>
-                  <span id="OBLIGATIONANNUAL"></span>
+                  <span id="total_contributions"></span>
                 </span>
               </p>
             </summary>
@@ -385,7 +385,7 @@
             
           </details>
         
-          <button id="calculateTaxesBtn" style="margin: 10px 0; padding: 10px; background-color: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%;" onclick="calculateTaxesAndContributions()">
+          <button id="calculateTaxesBtn" style="margin: 10px 0; padding: 10px; background-color: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%;" onclick="updateTaxObligations()">
             Calculate Taxes & Contributions
           </button>
           
@@ -428,8 +428,8 @@ function populateValuesFromLocalStorage() {
         'TRANSPORTATION': parseFloat(getLocal('TRANSPORTATION')) || 0,
         'DEPENDANT': parseFloat(getLocal('DEPENDANT')) || 0,
         'DEBT': parseFloat(getLocal('DEBT')) || 0,
-        'TOTALTAXANNUAL': parseFloat(getLocal('TOTALTAXANNUAL')) || 0,
-        'OBLIGATIONANNUAL': parseFloat(getLocal('OBLIGATIONANNUAL')) || 0,
+        'total_taxes': parseFloat(getLocal('total_taxes')) || 0,
+        'total_contributions': parseFloat(getLocal('total_contributions')) || 0,
         'DISPOSABLEINCOME': parseFloat(getLocal('DISPOSABLEINCOME')) || 0
     };
     
@@ -505,72 +505,82 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.style.display = 'block';
 });
 
-function calculateTaxesAndContributions() {
-    // Use the getLocalJSON utility to retrieve JSON data without URL decoding
-    import('/utility/getLocalJSON.js')
-        .then(module => {
-            const getLocalJSON = module.default;
-            
-            // Get data from localStorage using the JSON utility
-            const introDataJSON = getLocalJSON('introDataJSON');
-            const incomeValuesJSON = getLocalJSON('incomeValuesJSON');
-            
-            // Check if data exists
-            if (!introDataJSON || !incomeValuesJSON) {
-                console.error('Required data missing for tax calculation');
-                return;
-            }
-            
-            // Send data to worker using the exact same names as localStorage keys
-            fetch('https://incomeiqworker.4hm7q4q75z.workers.dev/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    type: 'calculateTaxesAndContributions',
-                    introDataJSON: introDataJSON,
-                    incomeValuesJSON: incomeValuesJSON
-                })
+function updateTaxObligations() {
+    // Import both needed utilities
+    Promise.all([
+        import('/utility/getJSON.js'),
+        import('/utility/getJSON.js')
+    ])
+    .then(([getJSONModule1, getJSONModule2]) => {
+        const getLocalJSON = getJSONModule1.getLocalJSON || getJSONModule1.default;
+        const { processJSONResponse } = getJSONModule2;
+        
+        // Get data from localStorage using the JSON utility
+        const introDataJSON = getLocalJSON('introDataJSON');
+        const incomeValuesJSON = getLocalJSON('incomeValuesJSON');
+        
+        // Check if data exists
+        if (!introDataJSON || !incomeValuesJSON) {
+            console.error('Required data missing for tax calculation');
+            return;
+        }
+        
+        console.log('Sending data to worker:', { introDataJSON, incomeValuesJSON });
+        
+        // Send data to worker
+        fetch('https://incomeiqworker.4hm7q4q75z.workers.dev/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                introDataJSON: introDataJSON,
+                incomeValuesJSON: incomeValuesJSON
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Worker response:', data);
-                // Handle the response data here and update UI
-                if (data && data.results) {
-                    // Update UI with calculation results
-                    updateCalculationResults(data.results);
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Worker response:', data);
+            
+            // Process the JSON response - this will store all fields in localStorage
+            processJSONResponse(data).then(processedData => {
+                console.log('Processed data:', processedData);
+                
+                // Calculate disposable income based on the tax data - using the same variable names as localStorage keys
+                const annualIncome = parseFloat(getLocal('ANNUALINCOME')) || 0;
+                const annualExpense = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
+                const total_taxes = parseFloat(getLocal('total_taxes')) || 0;
+                const total_contributions = parseFloat(getLocal('total_contributions')) || 0;
+                
+                const disposableIncome = annualIncome - annualExpense - total_taxes - total_contributions;
+                setLocal('DISPOSABLEINCOME', disposableIncome.toString());
+                
+                // Update the DISPOSABLEINCOME span directly, as it's not handled by the xAI response
+                const disposableElement = document.getElementById('DISPOSABLEINCOME');
+                if (disposableElement) {
+                    disposableElement.textContent = '$' + disposableIncome.toFixed(2);
                 }
-            })
-            .catch(error => {
-                console.error('Error sending data to worker:', error);
+                
+                // Also store the tax calculation summary if available
+                if (data.data && data.data.calculation_summary) {
+                    setLocal('calculation_summary', data.data.calculation_summary);
+                }
+                
+                // Refresh all values from localStorage
+                populateValuesFromLocalStorage();
             });
         })
-        .catch(err => {
-            console.error('Error importing getLocalJSON module:', err);
+        .catch(error => {
+            console.error('Error in tax calculation:', error);
         });
+    })
+    .catch(err => {
+        console.error('Error importing utilities:', err);
+    });
 }
 
-// Helper function to update UI with calculation results
-function updateCalculationResults(results) {
-    // Update relevant UI elements with the calculation results
-    // For example:
-    if (results.incomeTax !== undefined) {
-        document.getElementById('TOTALTAXANNUAL').textContent = '$' + parseFloat(results.incomeTax).toFixed(2);
-    }
-    
-    if (results.obligations !== undefined) {
-        document.getElementById('OBLIGATIONANNUAL').textContent = '$' + parseFloat(results.obligations).toFixed(2);
-    }
-    
-    // Add other UI updates as needed
-    
-    // Refresh color formatting if needed
-    populateValuesFromLocalStorage();
-}
-
-// Make calculateTaxesAndContributions available globally
-window.calculateTaxesAndContributions = calculateTaxesAndContributions;
+// Make updateTaxObligations available globally
+window.updateTaxObligations = updateTaxObligations;
 </script>
 
 </body>
