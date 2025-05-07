@@ -25,24 +25,30 @@
         
         @keyframes pulse-color {
             0%, 100% { color: inherit; }
-            50% { color:rgb(255, 255, 255); }
+            50% { color: rgb(255, 255, 255); }
+        }
+        
+        @keyframes pulse-background {
+            0%, 100% { background-color: inherit; }
+            50% { background-color: #000; }
         }
         
         /* Applied to the next tab in sequence to draw attention - left side tabs */
         .next-tab-highlight {
-            animation: pulse-shadow 2s infinite, gentle-glow 2s infinite;
+            animation: pulse-shadow 2s infinite, pulse-background 2s infinite;
             transform-origin: left;
         }
         
         /* Applied to the right-side tabs (like summary) */
         .next-tab-highlight-right {
-            animation: pulse-shadow 2s infinite, gentle-glow 2s infinite;
+            animation: pulse-shadow 2s infinite, pulse-background 2s infinite;
             transform-origin: right;
         }
         
         .next-tab-highlight .data-label,
         .next-tab-highlight-right .data-label {
             animation: pulse-color 2s infinite;
+            transition: color 0.3s ease;
         }
         
         /* Applied to tabs that have been completed */
