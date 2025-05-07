@@ -393,9 +393,16 @@ function initIntroForm() {
                 if (birthYearDisabledDependants) consolidatedData.birthYearDisabledDependants = birthYearDisabledDependants;
             }
             
-            // Save the consolidated data to localStorage
-            localStorage.setItem('introDataJSON', JSON.stringify(consolidatedData));
-            console.log('Saved consolidated data to introDataJSON:', consolidatedData);
+            // Import and use setLocalJSON directly for storing the consolidated data
+            import('/utility/setLocalJSON.js')
+                .then(module => {
+                    const setLocalJSON = module.default;
+                    setLocalJSON('introDataJSON', consolidatedData);
+                    console.log('Saved consolidated data to introDataJSON using setLocalJSON:', consolidatedData);
+                })
+                .catch(err => {
+                    console.error('Error importing setLocalJSON:', err);
+                });
         } catch (e) {
             console.error('Error saving consolidated data:', e);
         }
