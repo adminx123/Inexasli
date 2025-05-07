@@ -25,7 +25,7 @@
     const TERMS_COOKIE_NAME = "terms_accepted";
     const TERMS_LOCAL_STORAGE_KEY = "termsAccepted";
     const TERMS_EXPIRY_DAYS = 365; // 1 year
-    const TERMS_FILE_PATH = "/ai/income/legal.txt"; // Path to terms of service file
+    const TERMS_FILE_PATH = "/legal.txt"; // Path to terms of service file
     const LAST_UPDATED_DATE = "April 6, 2025"; // Update this when terms change
 
     // CSS for the terms overlay
