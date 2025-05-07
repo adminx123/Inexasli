@@ -87,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     
                     // Preserve the module type if it exists in the original script
                     if (script.type === 'module' || 
-                        script.src.includes('frequency.js') ||
                         script.src.includes('utils.js') ||
                         script.src.includes('hideShow.js')) {
                         newScript.type = 'module';
