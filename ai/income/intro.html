@@ -327,10 +327,57 @@ function initIntroForm() {
         // Set up event listener
         countryDropdown.addEventListener('change', function() {
             const selectedCountry = this.value;
+            const previousCountry = getLocalValue('selectedCountry');
+            
+            // If country has changed, reset everything
+            if (selectedCountry !== previousCountry) {
+                // Reset all form fields in localStorage
+                const fieldsToReset = [
+                    'selectedSubregion',
+                    'residency',
+                    'fillingStatus',
+                    'ageSelf',
+                    'ageSpouse',
+                    'employmentStatus',
+                    'employmentStatusSpouse',
+                    'birthYearDisabledDependants'
+                ];
+                
+                // Clear localStorage values
+                fieldsToReset.forEach(field => setLocalValue(field, ''));
+                
+                // Reset UI elements
+                if (subregionDropdown) subregionDropdown.value = '';
+                if (residencyDropdown) residencyDropdown.value = '';
+                if (filingStatusDropdown) filingStatusDropdown.value = '';
+                
+                const inputFields = [
+                    'ageSelf', 'ageSpouse', 'employmentStatus', 
+                    'employmentStatusSpouse', 'birthYearDisabledDependants'
+                ];
+                
+                inputFields.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) element.value = '';
+                });
+                
+                // Hide specific sections until re-selected
+                if (specificsDiv) specificsDiv.style.display = 'none';
+                document.querySelectorAll('.spouseFields').forEach(field => {
+                    field.style.display = 'none';
+                });
+                if (dependantsContainer) dependantsContainer.style.display = 'none';
+            }
+            
+            // Save new country
             setLocalValue('selectedCountry', selectedCountry);
+            
+            // Update dependent dropdowns
             updateSubregionDropdown(selectedCountry);
             updateFilingStatusOptions(selectedCountry);
-            saveConsolidatedData(); // Update consolidated data
+            
+            // Create fresh introDataJSON with just the country
+            saveConsolidatedData();
         });
         
         // Force update dependent dropdowns based on current selection
@@ -430,6 +477,7 @@ function initIntroForm() {
         // Attach event listener
         subregionDropdown.onchange = function() {
             setLocalValue('selectedSubregion', this.value);
+            saveConsolidatedData(); // Call saveConsolidatedData when subregion changes
         };
     }
     
@@ -444,6 +492,7 @@ function initIntroForm() {
         // Set up event listener
         residencyDropdown.addEventListener('change', function() {
             setLocalValue('residency', this.value);
+            saveConsolidatedData(); // Call saveConsolidatedData when residency status changes
         });
     }
     
@@ -467,7 +516,9 @@ function initIntroForm() {
                             country === 'AUS' ? 'Australia' : 'Other';
             
             // Add options to the optgroup
+            const validFilingStatusValues = [];
             filingStatusMap[country].forEach(option => {
+                validFilingStatusValues.push(option.value);
                 const optionElement = document.createElement('option');
                 optionElement.value = option.value;
                 optionElement.text = option.text;
@@ -479,6 +530,12 @@ function initIntroForm() {
             
             // Add the optgroup to the select
             filingStatusDropdown.appendChild(optgroup);
+            
+            // Clear filing status if it's not valid for this country
+            if (savedFilingStatus && !validFilingStatusValues.includes(savedFilingStatus)) {
+                setLocalValue('fillingStatus', '');
+                filingStatusDropdown.value = '';
+            }
         }
         
         // Attach event listener after options are populated
