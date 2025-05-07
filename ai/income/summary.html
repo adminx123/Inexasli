@@ -422,11 +422,63 @@ import { getLocal } from '/utility/getlocal.js';
 import { setCookie } from '/utility/setcookie.js';
 import { setLocal } from '/utility/setlocal.js';
 
+// Function to get the appropriate currency symbol based on country
+function getCurrencySymbol(country) {
+    const currencyMap = {
+        // Major currencies
+        'USA': '$',        // United States - Dollar
+        'CAN': '$',        // Canada - Dollar (simplified to just $)
+        'GBR': '£',        // United Kingdom - Pound
+        'EUR': '€',        // Euro countries
+        'JPN': '¥',        // Japan - Yen
+        'CHN': '¥',        // China - Yuan (same symbol as Yen)
+        'AUS': '$',        // Australia - Dollar (simplified to just $)
+        'NZL': '$',        // New Zealand - Dollar (simplified to just $)
+        'IND': '₹',        // India - Rupee
+        'BRA': 'R$',       // Brazil - Real
+        'ZAF': 'R',        // South Africa - Rand
+        'RUS': '₽',        // Russia - Ruble
+        'MEX': '$',        // Mexico - Peso (simplified to just $)
+        'SGP': '$',        // Singapore - Dollar (simplified to just $)
+        'CHE': 'CHF',      // Switzerland - Franc
+        
+        // Add more currencies as needed
+    };
+    
+    // Default to $ if country is not in the map
+    return currencyMap[country] || '$';
+}
+
+// Function to get the current currency symbol based on stored personal details
+function getCurrentCurrencySymbol() {
+    let country;
+    
+    // Try to get the country from introDataJSON first
+    try {
+        const introData = JSON.parse(localStorage.getItem('introDataJSON'));
+        if (introData && introData.country) {
+            country = introData.country;
+        }
+    } catch (e) {
+        console.error('Error parsing introDataJSON:', e);
+    }
+    
+    // Fallback to direct country storage if available
+    if (!country) {
+        country = getLocal('RegionDropdown') || 'USA';
+    }
+    
+    return getCurrencySymbol(country);
+}
+
 // Function to populate all span elements from local storage
 function populateValuesFromLocalStorage() {
     console.log('Populating values from local storage');
     
-    // Standard financial values - using $ format
+    // Get the current currency symbol
+    const currencySymbol = getCurrentCurrencySymbol();
+    
+    // Standard financial values - using currency symbol format
     const financialElements = {
         'ASSETS': parseFloat(getLocal('ASSETS')) || 0,
         'LIABILITIES': parseFloat(getLocal('LIABILITIES')) || 0,
@@ -444,7 +496,7 @@ function populateValuesFromLocalStorage() {
         'DISPOSABLEINCOME': parseFloat(getLocal('DISPOSABLEINCOME')) || 0
     };
     
-    // Ratio values - without $ format
+    // Ratio values - without currency symbol format
     const ratioElements = {
         'FIRERATIO': parseFloat(getLocal('FIRERATIO')) || 0,
         'SAVINGSTODEBT': parseFloat(getLocal('SAVINGSTODEBT')) || 0,
@@ -458,15 +510,15 @@ function populateValuesFromLocalStorage() {
         'calculation_summary': getLocal('calculation_summary') || 'No calculation details available.'
     };
     
-    // Update financial elements with $ format
+    // Update financial elements with currency symbol format
     for (const [elementId, value] of Object.entries(financialElements)) {
         const element = document.getElementById(elementId);
         if (element) {
-            element.textContent = '$' + value.toFixed(2);
+            element.textContent = currencySymbol + value.toFixed(2);
         }
     }
     
-    // Update ratio elements without $ format
+    // Update ratio elements without currency symbol format
     for (const [elementId, value] of Object.entries(ratioElements)) {
         const element = document.getElementById(elementId);
         if (element) {
@@ -580,9 +632,10 @@ function updateTaxObligations() {
                 setLocal('DISPOSABLEINCOME', disposableIncome.toString());
                 
                 // Update the DISPOSABLEINCOME span directly, as it's not handled by the xAI response
+                const currencySymbol = getCurrentCurrencySymbol();
                 const disposableElement = document.getElementById('DISPOSABLEINCOME');
                 if (disposableElement) {
-                    disposableElement.textContent = '$' + disposableIncome.toFixed(2);
+                    disposableElement.textContent = currencySymbol + disposableIncome.toFixed(2);
                 }
                 
                 // Also store the tax calculation summary if available
