@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 0 #000;
     z-index: 10001;
-    width: 200px;
+    width: 400px;
     transition: top 0.3s ease-in-out, height 0.3s ease-in-out;
     overflow: hidden;
     font-family: "Inter", sans-serif;
@@ -63,13 +63,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .payment-form {
-    margin: 20px auto 0;
-    max-width: 260px;
+    margin: 10px auto 0;
+    max-width: 380px;
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
-    padding: 5px;
+    gap: 5px; /* Minimal gap between rows */
+    padding: 10px;
     background: #ffffff;
     border: 2px solid #000000;
     border-radius: 10px;
@@ -81,9 +81,16 @@ document.addEventListener('DOMContentLoaded', async function() {
     display: flex;
 }
 
-.payment-form .payment-input {
+/* Create a row container for inputs and buttons that should be side by side */
+.form-row {
+    display: flex;
     width: 100%;
-    padding: 8px 8px;
+    gap: 4px; /* Very tight gap between items in a row */
+}
+
+.payment-form .payment-input {
+    flex: 1; /* Share available space equally */
+    padding: 8px;
     font-size: 12px;
     color: #000000;
     background: #f9f9f9;
@@ -91,11 +98,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     border-radius: 6px;
     outline: none;
     font-family: "Inter", sans-serif;
+    margin: 0; /* No margin on inputs */
 }
 
 .payment-form .pay-button {
     width: 100%;
-    padding: 8px 8px;
+    padding: 8px;
     font-size: 12px;
     font-weight: bold;
     color: #ffffff;
@@ -104,11 +112,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     border-radius: 6px;
     cursor: pointer;
     font-family: "Geist", sans-serif;
+    margin: 2px 0; /* Very small vertical margin */
 }
 
 .payment-form .contact-support {
-     width: 100%;
-    padding: 8px 8px;
+    flex: 1; /* Share available space equally */
+    padding: 8px;
     font-size: 12px;
     font-weight: bold;
     color: #ffffff;
@@ -118,6 +127,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     cursor: pointer;
     font-family: "Geist", sans-serif;
     text-align: center;
+    margin: 0; /* No margin on buttons */
 }
 
 /* Premium Section Styling */
@@ -183,7 +193,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 /* Responsive Design */
 @media (max-width: 480px) {
     #subscribe-sidebar {
-        width: 150px;
+        width: 300px;
     }
     #subscribe-sidebar.initial {
         height: auto;
@@ -192,7 +202,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         height: auto;
     }
     .payment-form {
-        max-width: 220px;
+        max-width: 280px;
     }
     #subscribe-sidebar a.subscribe-link {
         font-size: 12px;
@@ -246,6 +256,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     .section1-header h2 {
         gap: 3px;
     }
+    
+    /* On very small screens, stack all elements */
+    @media (max-width: 320px) {
+        .form-row {
+            flex-direction: column;
+            gap: 3px;
+        }
+    }
 }
     `;
     document.head.appendChild(style);
@@ -261,11 +279,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             <a class="subscribe-link">Premium</a>
             <div id="status"></div>
             <form class="payment-form" id="payment-form">
-                <input type="text" class="payment-input" id="username" placeholder="input your name" required>
-                <input type="email" class="payment-input" id="useremail" placeholder="input your email" required>
+                <div class="form-row">
+                    <input type="text" class="payment-input" id="username" placeholder="input your name" required>
+                    <input type="email" class="payment-input" id="useremail" placeholder="input your email" required>
+                </div>
                 <button class="pay-button" id="pay-button">$2.99</button>
-                <a href="mailto:support@inexasli.com" class="contact-support">I have paid</a>
-                <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support";">Customer Portal</a>
+                <div class="form-row">
+                    <a href="mailto:support@inexasli.com" class="contact-support">I have paid</a>
+                    <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support">Customer Portal</a>
+                </div>
             </form>
         `;
         document.body.appendChild(sidebar);
