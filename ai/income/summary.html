@@ -512,16 +512,16 @@ function calculateTaxesAndContributions() {
             const getLocalJSON = module.default;
             
             // Get data from localStorage using the JSON utility
-            const introData = getLocalJSON('introDataJSON');
-            const normalizedIncome = getLocalJSON('incomeValuesJSON');
+            const introDataJSON = getLocalJSON('introDataJSON');
+            const incomeValuesJSON = getLocalJSON('incomeValuesJSON');
             
             // Check if data exists
-            if (!introData || !normalizedIncome) {
+            if (!introDataJSON || !incomeValuesJSON) {
                 console.error('Required data missing for tax calculation');
                 return;
             }
             
-            // Send data to worker
+            // Send data to worker using the exact same names as localStorage keys
             fetch('https://incomeiqworker.4hm7q4q75z.workers.dev/', {
                 method: 'POST',
                 headers: {
@@ -529,8 +529,8 @@ function calculateTaxesAndContributions() {
                 },
                 body: JSON.stringify({
                     type: 'calculateTaxesAndContributions',
-                    introData: introData,
-                    normalizedIncome: normalizedIncome
+                    introDataJSON: introDataJSON,
+                    incomeValuesJSON: incomeValuesJSON
                 })
             })
             .then(response => response.json())
@@ -568,6 +568,9 @@ function updateCalculationResults(results) {
     // Refresh color formatting if needed
     populateValuesFromLocalStorage();
 }
+
+// Make calculateTaxesAndContributions available globally
+window.calculateTaxesAndContributions = calculateTaxesAndContributions;
 </script>
 
 </body>
