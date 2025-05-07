@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 #subscribe-sidebar:hover {
-    background-color: #D4AF37;
+    background-color:rgb(226, 226, 226);
 }
 
 #subscribe-sidebar #close-sidebar {
@@ -99,12 +99,24 @@ document.addEventListener('DOMContentLoaded', async function() {
     margin: 5px 0;
     font-size: 12px;
     font-weight: bold;
-    color: #fff;
-    background: #000;
-    border: 2px solid #D4AF37;
+    color: #000 !important;
+    background: #fff !important;
+    border: 2px solid #000 !important;
     border-radius: 6px;
+    box-shadow: 4px 4px 0 #000 !important;
     cursor: pointer;
     font-family: "Geist", sans-serif;
+    position: relative !important; /* Add positioning context */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.payment-form .pay-button:hover {
+    background-color: #f5f5f5 !important;
+}
+
+.payment-form .pay-button:active {
+    transform: translate(2px, 2px) !important;
+    box-shadow: 2px 2px 0 #000 !important;
 }
 
 /* Bottom buttons row */
@@ -118,14 +130,28 @@ document.addEventListener('DOMContentLoaded', async function() {
     padding: 8px;
     font-size: 12px;
     font-weight: bold;
-    color: #fff;
-    background: #000;
-    border: 2px solid #D4AF37;
+    color: #000 !important;
+    background: #fff !important;
+    border: 2px solid #000 !important;
     border-radius: 6px;
+    box-shadow: 4px 4px 0 #000 !important;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
     font-family: "Geist", sans-serif;
+    position: relative !important; /* Add positioning context */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.payment-form .contact-support:hover {
+    background-color: #f5f5f5 !important;
+    color: #000 !important;
+    text-decoration: none !important;
+}
+
+.payment-form .contact-support:active {
+    transform: translate(2px, 2px) !important;
+    box-shadow: 2px 2px 0 #000 !important;
 }
 
 /* Responsive adjustments */
@@ -134,10 +160,49 @@ document.addEventListener('DOMContentLoaded', async function() {
         width: 300px;
     }
     
-    // ...existing code...
-}
+    #subscribe-sidebar.initial {
+        height: auto;
+    }
+    
+    #subscribe-sidebar.expanded {
+        height: auto;
+    }
+    
+    .payment-form {
+        max-width: 280px;
+    }
+    
+    .payment-form .payment-input,
+    .payment-form .contact-support {
+        width: 100%; /* Stack vertically on small screens */
+        margin: 3px 0;
+    }
+    
+    #subscribe-sidebar a.subscribe-link {
+        font-size: 12px;
+        padding: 3px;
+        font-family: "Geist", sans-serif;
+    }
 
-// ...existing code...
+    .premium-notice {
+        font-size: 0.65em;
+        padding: 3px 6px;
+    }
+
+    .premium-notice1 {
+        font-size: 12px;
+        padding: 3px 6px;
+    }
+
+    .section1-header {
+        padding: 2px;
+        font-size: 11px;
+    }
+    
+    .section1-header h2 {
+        gap: 3px;
+    }
+}
     `;
     document.head.appendChild(style);
 
