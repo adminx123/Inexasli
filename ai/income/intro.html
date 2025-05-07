@@ -154,15 +154,12 @@ document.addEventListener('DOMContentLoaded', function() {
 initIntroForm();
 
 function initIntroForm() {
-    console.log("Initializing intro form - " + new Date().toISOString());
-    
     // Polyfill for localStorage access
     function setLocalValue(key, value) {
         try { 
             localStorage.setItem(key, encodeURIComponent(value)); 
-            console.log(`Saved ${key}=${value} to localStorage`);
         } catch (e) { 
-            console.error(e); 
+            // Error handling for localStorage
         }
     }
     
@@ -325,13 +322,11 @@ function initIntroForm() {
         const savedCountry = getLocalValue('selectedCountry');
         if (savedCountry) {
             countryDropdown.value = savedCountry;
-            console.log(`Restored country value: ${savedCountry}`);
         }
         
         // Set up event listener
         countryDropdown.addEventListener('change', function() {
             const selectedCountry = this.value;
-            console.log(`Country changed to: ${selectedCountry}`);
             setLocalValue('selectedCountry', selectedCountry);
             updateSubregionDropdown(selectedCountry);
             updateFilingStatusOptions(selectedCountry);
@@ -398,20 +393,18 @@ function initIntroForm() {
                 .then(module => {
                     const setLocalJSON = module.default;
                     setLocalJSON('introDataJSON', consolidatedData);
-                    console.log('Saved consolidated data to introDataJSON using setLocalJSON:', consolidatedData);
                 })
                 .catch(err => {
-                    console.error('Error importing setLocalJSON:', err);
+                    // Error handling for import
                 });
         } catch (e) {
-            console.error('Error saving consolidated data:', e);
+            // Error handling for data consolidation
         }
     }
     
     // SUBREGION DROPDOWN HANDLER
     function updateSubregionDropdown(country) {
         if (!subregionDropdown) {
-            console.error('Subregion dropdown not found');
             return;
         }
         
@@ -426,7 +419,6 @@ function initIntroForm() {
                 option.value = subregionName;
                 if (savedSubregion === subregionName) {
                     option.selected = true;
-                    console.log(`Restored subregion: ${subregionName}`);
                 }
                 subregionDropdown.appendChild(option);
             });
@@ -438,7 +430,6 @@ function initIntroForm() {
         // Attach event listener
         subregionDropdown.onchange = function() {
             setLocalValue('selectedSubregion', this.value);
-            console.log(`Subregion saved: ${this.value}`);
         };
     }
     
@@ -448,20 +439,17 @@ function initIntroForm() {
         const savedResidency = getLocalValue('residency');
         if (savedResidency) {
             residencyDropdown.value = savedResidency;
-            console.log(`Restored residency: ${savedResidency}`);
         }
         
         // Set up event listener
         residencyDropdown.addEventListener('change', function() {
             setLocalValue('residency', this.value);
-            console.log(`Residency saved: ${this.value}`);
         });
     }
     
     // FILING STATUS DROPDOWN HANDLER
     function updateFilingStatusOptions(country) {
         if (!filingStatusDropdown) {
-            console.error('Filing status dropdown not found');
             return;
         }
         
@@ -485,7 +473,6 @@ function initIntroForm() {
                 optionElement.text = option.text;
                 if (savedFilingStatus === option.value) {
                     optionElement.selected = true;
-                    console.log(`Restored filing status: ${option.value}`);
                 }
                 optgroup.appendChild(optionElement);
             });
@@ -497,7 +484,6 @@ function initIntroForm() {
         // Attach event listener after options are populated
         filingStatusDropdown.onchange = function() {
             setLocalValue('fillingStatus', this.value);
-            console.log(`Filing status saved: ${this.value}`);
             updateDependantsVisibility();
             updateMaritalStatusVisibility();
             updateSpecificsVisibility();
@@ -561,13 +547,11 @@ function initIntroForm() {
             const savedValue = getLocalValue(id);
             if (savedValue) {
                 element.value = savedValue;
-                console.log(`Restored ${id}: ${savedValue}`);
             }
             
             // Set up event listener
             element.addEventListener('change', function() {
                 setLocalValue(id, this.value);
-                console.log(`Saved ${id}: ${this.value}`);
                 saveConsolidatedData(); // Update consolidated data
             });
         }
@@ -623,7 +607,6 @@ function initIntroForm() {
         // All fields are valid
         // Mark intro as visited in localStorage for the tab flow system
         setLocalValue('introVisited', 'visited');
-        console.log("Marked intro as visited");
         
         // We'll no longer automatically close this tab or open another
         // Instead, let the user navigate manually and let the tab flow system handle guidance
