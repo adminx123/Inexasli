@@ -71,6 +71,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // Mark summary page as visited when loaded
             setLocal('summaryVisited', 'visited', 365);
 
+            // Get reference to the body element in the loaded content and make it visible
+            const bodyElement = dataContainer.querySelector('.data-content body');
+            if (bodyElement) {
+                bodyElement.style.display = 'block';
+            }
+
             const scripts = dataContainer.querySelectorAll('script');
             scripts.forEach(script => {
                 if (script.src && ![
@@ -103,6 +109,24 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             
             initializeSummaryForm(dataContainer);
+            
+            // Manually call populateValuesFromLocalStorage function if it exists in window
+            // This ensures values are populated even if DOMContentLoaded doesn't fire
+            setTimeout(() => {
+                try {
+                    // Try to find and call the populateValuesFromLocalStorage function
+                    if (typeof window.populateValuesFromLocalStorage === 'function') {
+                        window.populateValuesFromLocalStorage();
+                    } else {
+                        // Try to execute it from the content's scope
+                        const populateScript = document.createElement('script');
+                        populateScript.textContent = 'if (typeof populateValuesFromLocalStorage === "function") populateValuesFromLocalStorage();';
+                        document.body.appendChild(populateScript);
+                    }
+                } catch (e) {
+                    // Silently handle errors
+                }
+            }, 100);
             
             // Initialize modal triggers after loading the content
             if (typeof window.setupModalTriggers === 'function') {
