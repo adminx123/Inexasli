@@ -492,9 +492,17 @@ function colorChangeDTI() {
         dti < 0.20 ? "green" : dti <= 0.36 ? "orange" : "red";
 }
 
-// Run the population function when the script loads
+// Make function available globally
+window.populateValuesFromLocalStorage = populateValuesFromLocalStorage;
+
+// Run the population function immediately and when DOM is loaded
+populateValuesFromLocalStorage();
+
 document.addEventListener('DOMContentLoaded', function() {
     populateValuesFromLocalStorage();
+    
+    // Also remove display:none from the body
+    document.body.style.display = 'block';
 });
 </script>
 
