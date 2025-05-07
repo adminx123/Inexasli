@@ -96,7 +96,18 @@
                 </span>
               </p>
             </summary>
-          
+
+            <!-- Add calculation summary section -->
+              <summary>
+                <p style="margin-left:21px;">
+                  <span class="tooltip1" data-tooltip="Detailed explanation of how taxes and contributions were calculated based on your inputs">
+                    <u>Calculation Details:</u><span class="tooltip1-content"></span>
+                  </span>
+                </p>
+              </summary>
+              <p style="margin-left:34px; font-size: 0.9em; max-width: 95%; white-space: pre-wrap;">
+                <span id="calculation_summary"></span>
+              </p>
 
 <!--
 
@@ -442,6 +453,11 @@ function populateValuesFromLocalStorage() {
         'TIMETOPAYDEBT': parseFloat(getLocal('TIMETOPAYDEBT')) || 0
     };
     
+    // Text elements - for calculation summary
+    const textElements = {
+        'calculation_summary': getLocal('calculation_summary') || 'No calculation details available.'
+    };
+    
     // Update financial elements with $ format
     for (const [elementId, value] of Object.entries(financialElements)) {
         const element = document.getElementById(elementId);
@@ -455,6 +471,14 @@ function populateValuesFromLocalStorage() {
         const element = document.getElementById(elementId);
         if (element) {
             element.textContent = value.toFixed(2);
+        }
+    }
+    
+    // Update text elements (like calculation_summary) without formatting
+    for (const [elementId, value] of Object.entries(textElements)) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.textContent = value;
         }
     }
     
