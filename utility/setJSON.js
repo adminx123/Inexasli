@@ -6,10 +6,10 @@
  * @param {object|array|any} value - The data to be stored as JSON
  * @returns {boolean} - True if successful, false otherwise
  */
-export function setLocalJSON(name, value) {
+export function setJSON(name, value) {
     try {
         if (name === undefined || name === null || name === '') {
-            console.error('Invalid key name provided to setLocalJSON');
+            console.error('Invalid key name provided to setJSON');
             return false;
         }
         
@@ -32,4 +32,4 @@ export function setLocalJSON(name, value) {
 }
 
 // Set default export
-export default setLocalJSON;
+export default setJSON;

@@ -435,11 +435,11 @@ function initIntroForm() {
                 if (birthYearDisabledDependants) consolidatedData.birthYearDisabledDependants = birthYearDisabledDependants;
             }
             
-            // Import and use setLocalJSON directly for storing the consolidated data
-            import('/utility/setLocalJSON.js')
+            // Import and use setJSON directly for storing the consolidated data
+            import('/utility/setJSON.js')
                 .then(module => {
-                    const setLocalJSON = module.default;
-                    setLocalJSON('introDataJSON', consolidatedData);
+                    const setJSON = module.default;
+                    setJSON('introDataJSON', consolidatedData);
                 })
                 .catch(err => {
                     // Error handling for import
