@@ -69,7 +69,6 @@
 
 
           
-            <details style="margin-top:10px;">
               <summary>
                 <p style="margin-left:21px;">
                   <span class="tooltip1" data-tooltip="Total taxes owed, calculated from taxable income (gross minus deductions like SD in USA or BPA in Canada) using regional rates (e.g., USA federal/state, Canada federal/provincial). Includes income tax and full (USA) or 50% (Canada) capital gains tax; excludes obligations like CPP/Social Security. Use: Estimate tax burden.">
@@ -78,40 +77,25 @@
                 </p>
               </summary>
           
-              <p style="margin-left:34px;">
-                <span class="tooltip1" data-tooltip="Regional taxes based on your data.">
-                  <u>Regional Tax Payable:</u><span class="tooltip1-content"></span>
-                  <span id="REGIONALTAXANNUAL"></span>
-                </span>
-              </p>
+           
               
-              <p style="margin-left:34px;">
-                <span class="tooltip1" data-tooltip="Subregion taxes from your inputs.">
-                  <u>Subregion Tax Payable:</u><span class="tooltip1-content"></span>
-                  <span id="SUBREGIONTAXANNUAL"></span>
-                </span>
-              </p>
+              
           
             
             
              
-            </details>
+            
           
-            <details style="margin-top:10px;">
-              <summary>
-                <p style="margin-left:21px;">
-                  <span class="tooltip1" data-tooltip="Other government obligations from your inputs.">
-                    <u>Total Other Obligations:</u><span class="tooltip1-content"></span>
-                  </span>
-                </p>
-              </summary>
-           
-              <p style="margin-left:34px;">
+             
+                <summary>
+
+              <p style="margin-left:21px;">
                 <span class="tooltip1" data-tooltip="input collective amout of all othe robligations payable">
                   <u>Other Obligations Payable:</u><span class="tooltip1-content"></span>
-                  <span id="OTHEROBLIGATIONANNUAL"></span>
+                  <span id="OBLIGATIONANNUAL"></span>
                 </span>
               </p>
+            </summary>
           
 
 <!--
@@ -392,13 +376,18 @@
             </summary>
             
             <p style="margin-left:34px;">
-              <span class="tooltip1" data-tooltip="Taxable income is what’s taxed after adjusting gross income (wages, interest, etc.). In Canada, only 50% of capital gains (profit from sold assets) is included; in the USA, 100% of capital gains is included, with rates varying by holding period (short-term at income rates, long-term at 0%-20%). It’s calculated by subtracting deductions—like Standard Deduction (USA) or Basic Personal Amount (Canada)—and exemptions from gross income. Excludes tax-free items (e.g., Canada’s TFSA gains). Use: Calculate tax owed and plan filings.">
-              <u> Xai Will have all its relvenat factors output here: taxable income SD or BPA amount etc</u><span class="tooltip1-content"></span>
+              <span class="tooltip1" data-tooltip="Taxable income is what's taxed after adjusting gross income (wages, interest, etc.). In Canada, only 50% of capital gains (profit from sold assets) is included; in the USA, 100% of capital gains is included, with rates varying by holding period (short-term at income rates, long-term at 0%-20%). It's calculated by subtracting deductions—like Standard Deduction (USA) or Basic Personal Amount (Canada)—and exemptions from gross income. Excludes tax-free items (e.g., Canada's TFSA gains). Use: Calculate tax owed and plan filings.">
+              <u>Tax Calculation Factors</u><span class="tooltip1-content"></span>
               </span>
             </p>
             
+            
+            
           </details>
         
+          <button id="calculateTaxesBtn" style="margin: 10px 0; padding: 10px; background-color: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%;" onclick="calculateTaxesAndContributions()">
+            Calculate Taxes & Contributions
+          </button>
           
      
           
@@ -417,248 +406,65 @@
         
 
  
-
-
-<!-- Inline script from summary.js -->
 <script type="module">
-/* 
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
- */
-
 import { getLocal } from '/utility/getlocal.js';
 import { setCookie } from '/utility/setcookie.js';
 import { setLocal } from '/utility/setlocal.js';
 
-// Tab highlighting
-const tabs = document.querySelectorAll('.tab');
-tabs.forEach(tab => {
-    const dataL = tab.getAttribute('data-location');
-    const location = document.location.pathname;
-    if (location.includes(dataL)) {
-        tab.removeAttribute('href');
-        tab.classList.add('active');
-    }
-});
-
-// Core DOMContentLoaded listener
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('Summary HTML - DOMContentLoaded event fired');
-    setCookie("summary", Date.now(), 32);
-
-    const paid = getLocal("authenticated");
-    const isPaid = paid === "paid";
-    const currentPath = window.location.pathname;
-    console.log('Summary HTML - Current path:', currentPath, 'isPaid:', isPaid);
-
-    if (isPaid && currentPath !== "/ai/income/summary.html") {
-        window.location.href = "/ai/income/summary.html";
-        return;
-    } else {
-        document.body.style.display = 'block';
-        console.log('Summary HTML - Body display set to block');
-    }
-
-    // Debug log localStorage values
-    console.log('Summary HTML - Current values in localStorage:');
-    console.log('ASSETS:', getLocal('ASSETS'));
-    console.log('LIABILITIES:', getLocal('LIABILITIES'));
-    console.log('ANNUALINCOME:', getLocal('ANNUALINCOME'));
-    console.log('ANNUALEXPENSESUM:', getLocal('ANNUALEXPENSESUM'));
-
-    console.log('Summary HTML - About to call updateFreeContent()');
-    updateFreeContent();
-    console.log('Summary HTML - updateFreeContent() completed');
+// Function to populate all span elements from local storage
+function populateValuesFromLocalStorage() {
+    console.log('Populating values from local storage');
     
-    if (isPaid) {
-        console.log('Summary HTML - About to call unlockPremiumContent()');
-        unlockPremiumContent();
-        console.log('Summary HTML - About to call updatePremiumContent()');
-        updatePremiumContent();
-        console.log('Summary HTML - Premium content updated');
-    }
-
-    // Make update functions available globally for external calls (e.g., from summarytab.js)
-    console.log('Summary HTML - Making update functions available globally');
-    window.updateFreeContent = updateFreeContent;
-    window.updatePremiumContent = updatePremiumContent;
-    window.unlockPremiumContent = unlockPremiumContent;
-
-    const frequencyDropdown = document.getElementById('frequency');
-    frequencyDropdown.addEventListener('change', () => {
-        updateFreeContent();
-        if (isPaid) {
-            updatePremiumContent();
-            timeToPay(true);
-        } else {
-            timeToPay(false);
-        }
-        calculateGoal(isPaid);
-    });
-
-    const goalAmountInput = document.getElementById('goalAmount');
-    if (goalAmountInput) {
-        goalAmountInput.addEventListener('input', () => calculateGoal(isPaid));
-    }
-
-    // Add input event listeners for Taxes & Obligations
-    const inputs = ['REGIONALTAXANNUAL', 'SUBREGIONTAXANNUAL', 'OTHEROBLIGATIONANNUAL'];
-    inputs.forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-            input.addEventListener('input', () => {
-                const value = input.value || '0';
-                setLocal(id, value); // Store in local storage
-                updateFreeContent(); // Update calculated fields
-                if (isPaid) {
-                    updatePremiumContent(); // Update premium features
-                }
-                updateIncomeErosionPieChart(); // Update chart
-            });
-        }
-    });
-
-    document.getElementById('close-sidebar')?.addEventListener('click', function() {
-        document.getElementById('subscribe-sidebar').style.display = 'none';
-    });
+    // Standard financial values - using $ format
+    const financialElements = {
+        'ASSETS': parseFloat(getLocal('ASSETS')) || 0,
+        'LIABILITIES': parseFloat(getLocal('LIABILITIES')) || 0,
+        'NETWORTH': (parseFloat(getLocal('ASSETS')) || 0) - (parseFloat(getLocal('LIABILITIES')) || 0),
+        'annual_income_sum': parseFloat(getLocal('ANNUALINCOME')) || 0,
+        'ANNUALEXPENSESUM': parseFloat(getLocal('ANNUALEXPENSESUM')) || 0,
+        'ESSENTIAL': parseFloat(getLocal('ESSENTIAL')) || 0,
+        'DISCRETIONARY': parseFloat(getLocal('DISCRETIONARY')) || 0,
+        'HOUSING': parseFloat(getLocal('HOUSING')) || 0,
+        'TRANSPORTATION': parseFloat(getLocal('TRANSPORTATION')) || 0,
+        'DEPENDANT': parseFloat(getLocal('DEPENDANT')) || 0,
+        'DEBT': parseFloat(getLocal('DEBT')) || 0,
+        'TOTALTAXANNUAL': parseFloat(getLocal('TOTALTAXANNUAL')) || 0,
+        'OBLIGATIONANNUAL': parseFloat(getLocal('OBLIGATIONANNUAL')) || 0,
+        'DISPOSABLEINCOME': parseFloat(getLocal('DISPOSABLEINCOME')) || 0
+    };
     
-    // Regional data display
-    const regionElement = document.getElementById('RegionDropdown');
-    if (regionElement) {
-        regionElement.textContent = getLocal('RegionDropdown').trim() !== "" ? getLocal('RegionDropdown') : "NONE";
-    }
-    const subregionElement = document.getElementById('SubregionDropdown');
-    if (subregionElement) {
-        subregionElement.textContent = getLocal('SubregionDropdown').trim() !== "" ? getLocal('SubregionDropdown') : "";
-    }
-
-    // Financial Projections (free)
-    timeToPay(false);
-    calculateGoal(false);
-
-    // Charts
-    updateExpensePieChart();
-    updateIncomeErosionPieChart();
+    // Ratio values - without $ format
+    const ratioElements = {
+        'FIRERATIO': parseFloat(getLocal('FIRERATIO')) || 0,
+        'SAVINGSTODEBT': parseFloat(getLocal('SAVINGSTODEBT')) || 0,
+        'HOUSINGTOINCOME': parseFloat(getLocal('HOUSINGTOINCOME')) || 0,
+        'DEBTTOINCOME': parseFloat(getLocal('DEBTTOINCOME')) || 0,
+        'TIMETOPAYDEBT': parseFloat(getLocal('TIMETOPAYDEBT')) || 0
+    };
     
-    console.log('Summary HTML - DOMContentLoaded event handler completed');
-});
-
-// Free content update function
-function updateFreeContent() {
-    const frequency = document.getElementById('frequency').value;
-    const multiplier = getFrequencyMultiplier(frequency);
-
-    // Income & Expenses (free)
-    updateElement('annual_income_sum', 'ANNUALINCOME', multiplier);
-    updateElement('ANNUALEXPENSESUM', 'ANNUALEXPENSESUM', multiplier);
-    updateElement('ESSENTIAL', 'ESSENTIAL', multiplier);
-    updateElement('DISCRETIONARY', 'DISCRETIONARY', multiplier);
-    updateElement('HOUSING', 'HOUSING', multiplier);
-    updateElement('TRANSPORTATION', 'TRANSPORTATION', multiplier);
-    updateElement('DEPENDANT', 'DEPENDANT', multiplier);
-    updateElement('DEBT', 'DEBT', multiplier);
-
-    // Update calculated fields
-    updateElement('ASSETS', 'ASSETS', multiplier);
-    updateElement('LIABILITIES', 'LIABILITIES', multiplier);
-    updateElement('NETWORTH', null, multiplier, () => {
-        return parseFloat(getLocal('ASSETS') || 0) - parseFloat(getLocal('LIABILITIES') || 0);
-    });
-
-    // Update charts
-    updateExpensePieChart();
-}
-
-function unlockPremiumContent() {
-    document.querySelectorAll('.premium-blur').forEach(el => {
-        el.classList.remove('premium-blur');
-        if (el.textContent === '[Locked]') {
-            el.textContent = '';
+    // Update financial elements with $ format
+    for (const [elementId, value] of Object.entries(financialElements)) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.textContent = '$' + value.toFixed(2);
         }
-    });
-    document.querySelectorAll('.premium-notice').forEach(el => el.style.display = 'none');
-    const goalAmount = document.getElementById('goalAmount');
-    if (goalAmount) goalAmount.disabled = false;
-}
-
-// Premium content update function
-function updatePremiumContent() {
-    const frequency = document.getElementById('frequency').value;
-    const multiplier = getFrequencyMultiplier(frequency);
-
-    updateElement('DISPOSABLEINCOME', null, multiplier, calculateDisposableIncome);
-
-    const debtToIncome = (parseFloat(getLocal('LIABILITIES')) / parseFloat(getLocal('ANNUALINCOME')) || 0);
-    document.getElementById('DEBTTOINCOME').textContent = isNaN(debtToIncome) || !isFinite(debtToIncome) ? 'Not Applicable' : debtToIncome.toFixed(2);
-    colorChangeDTI();
-
-    const housingToIncome = (parseFloat(getLocal('HOUSING')) / parseFloat(getLocal('ANNUALINCOME')) || 0);
-    document.getElementById('HOUSINGTOINCOME').textContent = isNaN(housingToIncome) ? 'Not Applicable' : housingToIncome.toFixed(2);
-    colorChangeHTI();
-
-    const savingsToDebt = (parseFloat(getLocal('ASSETS')) / parseFloat(getLocal('LIABILITIES')) || 0);
-    document.getElementById('SAVINGSTODEBT').textContent = isNaN(savingsToDebt) || !isFinite(savingsToDebt) ? 'Not Applicable' : savingsToDebt.toFixed(2);
-    colorChangeSavingsToDebt(savingsToDebt);
-
-    const fireRatio = (parseFloat(getLocal('PASSIVEINCOME')) / parseFloat(getLocal('ANNUALEXPENSESUM')) || 0);
-    document.getElementById('FIRERATIO').textContent = isNaN(fireRatio) ? 'Not Applicable' : fireRatio.toFixed(2);
+    }
+    
+    // Update ratio elements without $ format
+    for (const [elementId, value] of Object.entries(ratioElements)) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.textContent = value.toFixed(2);
+        }
+    }
+    
+    // Apply color formatting to ratio elements
     colorChangeFIRE();
-
-    timeToPay(true);
-    calculateGoal(true);
+    colorChangeSavingsToDebt(parseFloat(getLocal('SAVINGSTODEBT')) || 0);
+    colorChangeHTI();
+    colorChangeDTI();
 }
 
-// Helper function to update elements
-function updateElement(elementId, cookieName, multiplier, calcFunction = null, regionClass = null) {
-    const element = document.getElementById(elementId);
-    if (element && (!regionClass || element.closest(`.${regionClass}`))) {
-        const value = calcFunction ? calcFunction() : (parseFloat(getLocal(cookieName)) || 0);
-        element.textContent = '$' + (value * multiplier).toFixed(2);
-    }
-}
-
-// Frequency multiplier
-function getFrequencyMultiplier(frequency) {
-    switch (frequency) {
-        case 'monthly': return 1 / 12;
-        case 'weekly': return 1 / 52;
-        default: return 1; // annual
-    }
-}
-
-// Calculate Disposable Income (premium)
-function calculateDisposableIncome() {
-    const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
-    const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
-    // Default tax and obligation values to 0 if not set
-    const regionalTax = parseFloat(getLocal('REGIONALTAXANNUAL')) || 0;
-    const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
-    const obligations = parseFloat(getLocal('OTHEROBLIGATIONANNUAL')) || 0;
-
-    return income - expenses - regionalTax - subregionalTax - obligations;
-}
-
-
-
-
-// Expense Pie Chart (free) - temporary stub until charts are added back later
-function updateExpensePieChart() {
-    // Chart functionality removed as requested
-    console.log('Expense pie chart update requested but chart is currently disabled');
-}
-
-// Income Erosion Pie Chart - temporary stub until charts are added back later
-function updateIncomeErosionPieChart() {
-    // Chart functionality removed as requested
-    console.log('Income erosion pie chart update requested but chart is currently disabled');
-}
-
-// Color change functions (premium)
 function colorChangeFIRE() {
     const fire = parseFloat(document.getElementById("FIRERATIO").textContent);
     if (isNaN(fire)) return;
@@ -686,40 +492,10 @@ function colorChangeDTI() {
         dti < 0.20 ? "green" : dti <= 0.36 ? "orange" : "red";
 }
 
-// Financial Projections (free with premium enhancement)
-function timeToPay(isPaid) {
-    const frequency = document.getElementById('frequency').value;
-    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getLocal('ANNUALINCOME')) || 0) - (parseFloat(getLocal('ANNUALEXPENSESUM')) || 0);
-    const revolvingDebt = parseFloat(getLocal('LIABILITIESNA')) || 0;
-
-    let timeToPayDebt = document.getElementById('TIMETOPAYDEBT');
-    if (!revolvingDebt || disposableIncome <= 0) {
-        timeToPayDebt.textContent = disposableIncome <= 0 ? "RISK OF INSOLVENCY" : "Not Applicable";
-    } else {
-        let time = revolvingDebt / disposableIncome;
-        let unit = 'Years';
-        if (frequency === 'monthly') { time *= 12; unit = 'Months'; }
-        else if (frequency === 'weekly') { time *= 52; unit = 'Weeks'; }
-        timeToPayDebt.textContent = `${time.toFixed(2)} ${unit}`;
-    }
-}
-
-function calculateGoal(isPaid) {
-    const disposableIncome = isPaid ? calculateDisposableIncome() : (parseFloat(getLocal('ANNUALINCOME')) || 0) - (parseFloat(getLocal('ANNUALEXPENSESUM')) || 0);
-    const goalAmount = parseFloat(document.getElementById('goalAmount').value) || 0;
-    const frequency = document.getElementById('frequency').value;
-
-    if (disposableIncome <= 0 || goalAmount <= 0) {
-        document.getElementById('goalResult').textContent = '';
-        return;
-    }
-
-    let time = goalAmount / disposableIncome;
-    let unit = 'Years';
-    if (frequency === 'monthly') { time *= 12; unit = 'Months'; }
-    else if (frequency === 'weekly') { time *= 52; unit = 'Weeks'; }
-    document.getElementById('goalResult').textContent = `${unit} needed: ${time.toFixed(2)}`;
-}
+// Run the population function when the script loads
+document.addEventListener('DOMContentLoaded', function() {
+    populateValuesFromLocalStorage();
+});
 </script>
 
 </body>
