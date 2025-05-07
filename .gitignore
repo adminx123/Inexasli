@@ -4,6 +4,8 @@
 ai/calorie/calorieiqWorker.js
 ai/income/incomeiqWorker.js
 secretWorker.js
+ai/book/bookiqworker.js
+
 
 
 ai/*Worker.js
