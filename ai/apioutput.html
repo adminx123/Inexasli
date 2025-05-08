@@ -1,76 +1,46 @@
-<!--
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
--->
-<div class="api-output-container">
-  <span class="api-output" id="api-output">Loading xAI API data...</span>
-  <button class="copy-btn" onclick="copyApiOutput()">Copy</button>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API Output</title>
+  <style>
+    .api-output {
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <span id="output-span" class="api-output">Loading...</span>
+  <button onclick="copyOutput()">Copy</button>
 
-<script>
-/*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
- */
-async function fetchXaiApiData() {
-  try {
-    const urlParams = new URLSearchParams(window.location.search);
-    const gridItem = urlParams.get('gridItem') || 'default';
-    
-    // Map grid items to API prompts
-    const apiPrompts = {
-      'symptomiq': 'Analyze symptoms and provide health insights',
-      'calorieiq': 'Analyze calorie intake and provide nutritional advice',
-      // Add more grid items here in the future
-      'default': 'Provide general insights'
-    };
-
-    const prompt = apiPrompts[gridItem.toLowerCase()] || apiPrompts['default'];
-
-    // Updated to use your Cloudflare Worker URL
-    const xaiApiEndpoint = "https://xaiapi.4hm7q4q75z.workers.dev/";
-    
-    const response = await fetch(xaiApiEndpoint, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify({ prompt: prompt }),
-      mode: "cors"
-    });
-    
-    if (!response.ok) throw new Error('API request failed');
-    const data = await response.json();
-    document.getElementById('api-output').textContent = JSON.stringify(data, null, 2);
-  } catch (error) {
-    console.error('Error fetching xAI API data:', error);
-    document.getElementById('api-output').textContent = 'Error loading API data';
-  }
-}
-
-function copyApiOutput() {
-  const output = document.getElementById('api-output').textContent;
-  navigator.clipboard.writeText(output)
-    .then(() => {
-      console.log('API output copied to clipboard');
-      if (typeof openCustomModal === 'function') {
-        openCustomModal('Copied to clipboard!');
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1. Get the lastGridItemUrl using getLocal
+      const lastGridItemUrl = getLocal('lastGridItemUrl');
+      console.log('lastGridItemUrl:', lastGridItemUrl);
+      
+      // 2. Check if it's fitnessiq
+      if (lastGridItemUrl && lastGridItemUrl.includes('fitnessiq')) {
+        // 3. Get the fitnessIqResponse using getJSON
+        const data = getJSON('fitnessIqResponse');
+        
+        // 4. Display it in the span
+        if (data) {
+          document.getElementById('output-span').textContent = JSON.stringify(data, null, 2);
+        } else {
+          document.getElementById('output-span').textContent = 'No fitnessIqResponse data found';
+        }
       } else {
-        alert('Copied to clipboard!');
+        document.getElementById('output-span').textContent = 'Not a fitnessiq page';
       }
-    })
-    .catch(err => {
-      console.error('Failed to copy:', err);
-      alert('Failed to copy');
     });
-}
 
-document.addEventListener('DOMContentLoaded', fetchXaiApiData);
-</script>
+    function copyOutput() {
+      const text = document.getElementById('output-span').textContent;
+      navigator.clipboard.writeText(text)
+        .then(() => alert('Copied!'))
+        .catch(() => alert('Failed to copy'));
+    }
+  </script>
+</body>
+</html>

@@ -604,11 +604,22 @@
             // Store the response using setJSON
             setJSON('fitnessIqResponse', responseData);
             
-            // Redirect to results page or display results
+            // Update button state
             btn.innerText = 'Success!';
             setTimeout(() => {
-                window.location.href = '/ai/fitness/fitnessiqout.html';
+                btn.removeAttribute('disabled');
             }, 1000);
+            
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'fitnessiq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[FitnessIQ] Dispatched api-response-received event');
             
         } catch (error) {
             console.error('[FitnessIQ] Error generating fitness plan:', error);

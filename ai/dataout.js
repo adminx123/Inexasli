@@ -343,6 +343,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
                 '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
                 '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
+                '/ai/fitness/fitnessiq.html': '/apioutput.html?gridItem=fitnessiq',
                 '/ai/adventure/adventure.html': '/ai/adventure/adventureiqout.html'
             };
             
@@ -359,6 +360,40 @@ document.addEventListener('DOMContentLoaded', async function () {
                         loadStoredContent(outUrl);
                     }
                 }
+            }
+        });
+
+        // Listen for API response events from various modules
+        document.addEventListener('api-response-received', function (e) {
+            console.log('Received api-response-received event (dataout.js):', e.detail);
+            
+            // Get the module name and corresponding output URL
+            const moduleName = e.detail.module;
+            const responseType = e.detail.type || 'default';
+            
+            // Map of module names to their output URLs
+            const moduleOutputMap = {
+                'fitnessiq': '/apioutput.html?gridItem=fitnessiq',
+                'calorieiq': '/ai/calorie/calorieiqout.html',
+                'symptomiq': '/apioutput.html?gridItem=symptomiq',
+                'bookiq': '/apioutput.html?gridItem=bookiq',
+                'adventureiq': '/ai/adventure/adventureiqout.html'
+                // Add more modules as needed
+            };
+            
+            const outUrl = moduleOutputMap[moduleName];
+            if (outUrl) {
+                console.log(`Opening data container for ${moduleName} response with URL: ${outUrl}`);
+                setLocal('lastDataOutUrl', outUrl);
+                
+                // Toggle data container if it's not already expanded
+                if (dataContainer.dataset.state !== 'expanded') {
+                    toggleDataContainer();
+                } else {
+                    loadStoredContent(outUrl);
+                }
+            } else {
+                console.warn(`No output URL mapping found for module: ${moduleName}`);
             }
         });
 
