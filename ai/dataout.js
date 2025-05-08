@@ -290,29 +290,33 @@ document.addEventListener('DOMContentLoaded', async function () {
                 setLocal('dataOutContainerState', 'expanded');
                 console.log('Right data container expanded (dataout.js)');
 
+                // Get the CURRENT lastGridItemUrl - this is the key fix
                 const lastGridItemUrl = getLocal('lastGridItemUrl');
+                console.log(`Using current lastGridItemUrl for dataout: ${lastGridItemUrl} (dataout.js)`);
+                
                 const outputMap = {
                     '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
-                    '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
-                    '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
-                    '/ai/book/fitnessiq.html': '/apioutput.html?gridItem=fitnessiq',
-
+                    '/ai/symptom/symptomiq.html': '/ai/apioutput.html?gridItem=symptomiq',
+                    '/ai/book/bookiq.html': '/ai/apioutput.html?gridItem=bookiq',
+                    '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
                     '/ai/adventure/adventure.html': '/ai/adventure/adventureiqout.html'
                 };
+                
+                // Try to get the output URL for the current page
                 const outUrl = outputMap[lastGridItemUrl];
 
                 if (outUrl) {
+                    console.log(`Found output mapping for current page: ${lastGridItemUrl} → ${outUrl} (dataout.js)`);
                     setLocal('lastDataOutUrl', outUrl);
                     loadStoredContent(outUrl);
                 } else {
+                    console.log(`No output mapping found for current page: ${lastGridItemUrl} (dataout.js)`);
                     dataContainer.innerHTML = `
                         <span class="close-data-container">-</span>
                         <span class="data-label">DATA OUT</span>
                         <div class="data-content">No relevant content available</div>
                     `;
                 }
-
-
             }
 
             const newClose = dataContainer.querySelector('.close-data-container');
@@ -341,24 +345,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Special handling for URLs that have output templates
             const outputMap = {
                 '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
-                '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
-                '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
+                '/ai/symptom/symptomiq.html': '/ai/apioutput.html?gridItem=symptomiq',
+                '/ai/book/bookiq.html': '/ai/apioutput.html?gridItem=bookiq',
+                '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
                 '/ai/adventure/adventure.html': '/ai/adventure/adventureiqout.html'
             };
             
-            // Just store the mapping but don't auto-open DataOut for CalorieIQ specifically
+            // Just store the mapping but don't auto-open DataOut when clicking items on the landing page
             const outUrl = outputMap[url];
             if (outUrl) {
                 setLocal('lastDataOutUrl', outUrl);
                 
-                // Only auto-open for items other than CalorieIQ
-                if (url !== '/ai/calorie/calorieiq.html') {
-                    if (dataContainer.dataset.state !== 'expanded') {
-                        toggleDataContainer();
-                    } else {
-                        loadStoredContent(outUrl);
-                    }
-                }
+                // We don't want to auto-open the data container when clicking product-items
+                // Only store the mapping for later use
+                console.log(`Stored output mapping for ${url} → ${outUrl} (dataout.js)`);
             }
         });
 
@@ -375,8 +375,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
 
         document.addEventListener('click', function (e) {
-            const isClickInside = dataContainer.contains(e.target);
-            if (!isClickInside && dataContainer.dataset.state === 'expanded') {
+            // Skip if the click is on the data container itself, the close button, or the data label
+            if (dataContainer.contains(e.target) || 
+                e.target.classList.contains('close-data-container') || 
+                e.target.classList.contains('data-label')) {
+                return;
+            }
+            
+            // Only collapse if the container is expanded and click is outside
+            if (dataContainer.dataset.state === 'expanded') {
                 console.log('Clicked outside right data container, collapsing (dataout.js)');
                 toggleDataContainer();
             }
