@@ -80,71 +80,40 @@
 (function() {
     console.log("Fitness IQ script initializing");
 
-    // Basic utility functions for localStorage
-    function setLocalValue(key, value) {
-        try { 
-            localStorage.setItem(key, encodeURIComponent(value)); 
-            console.log(`[FitnessIQ] Saved ${key}: ${value}`);
-        } catch (e) { 
-            console.error(`[FitnessIQ] Error saving ${key}:`, e); 
-        }
-    }
-    
-    function getLocalValue(key) {
-        try { 
-            const value = localStorage.getItem(key);
-            console.log(`[FitnessIQ] Retrieved ${key}: ${value}`);
-            return value ? decodeURIComponent(value) : null; 
-        } catch (e) { 
-            console.error(`[FitnessIQ] Error retrieving ${key}:`, e);
-            return null; 
-        }
-    }
-    
-    function setJSONValue(key, value) {
+    // Load utility functions - either from global scope or locally defined
+    const setJSON = window.setJSON || function(name, value) {
         try {
-            if (value === null) {
-                localStorage.removeItem(key);
+            if (name === undefined || name === null || name === '') {
+                console.error('Invalid key name provided to setJSON');
+                return false;
+            }
+            
+            if (value === undefined) {
+                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                localStorage.removeItem(name);
                 return true;
             }
-            localStorage.setItem(key, JSON.stringify(value));
-            console.log(`[FitnessIQ] Saved JSON ${key}`);
+            
+            // Convert value to JSON string
+            const jsonString = JSON.stringify(value);
+            localStorage.setItem(name, jsonString);
             return true;
-        } catch (e) {
-            console.error(`[FitnessIQ] Error in setJSON:`, e);
+        } catch (error) {
+            console.error(`Error storing JSON in localStorage (${name}):`, error);
             return false;
         }
-    }
+    };
     
-    function getJSONValue(key, defaultValue) {
+    const getJSON = window.getJSON || function(name, defaultValue) {
         try {
-            const item = localStorage.getItem(key);
+            const item = localStorage.getItem(name);
             if (!item) return defaultValue;
-            const parsedValue = JSON.parse(item);
-            console.log(`[FitnessIQ] Retrieved JSON ${key}`);
-            return parsedValue;
-        } catch (e) {
-            console.error(`[FitnessIQ] Error in getJSON:`, e);
+            return JSON.parse(item);
+        } catch (error) {
+            console.error(`Error retrieving JSON from localStorage (${name}):`, error);
             return defaultValue;
         }
-    }
-
-    // Custom save functions for fitness form elements
-    function saveGridItem(item) {
-        if (!item || !item.parentElement || !item.dataset.value) return;
-        
-        const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-        const value = item.classList.contains('selected') ? 'true' : 'false';
-        setLocalValue(key, value);
-    }
-
-    function saveInput(input) {
-        if (!input || !input.id) return;
-        
-        const key = `input_${input.id}`;
-        const value = input.value;
-        setLocalValue(key, value);
-    }
+    };
 
     // Custom handler for grid item selection
     function customToggleGridItem(event) {
@@ -162,8 +131,8 @@
             this.classList.toggle('selected');
         }
         
-        // Save selection immediately
-        saveGridItem(this);
+        // Instead of saving just this item, save all form data
+        saveAllFormData();
         console.log(`[FitnessIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
     }
 
@@ -179,14 +148,6 @@
             
             // Add our handler to the fresh clone
             clone.addEventListener('click', customToggleGridItem, { capture: true });
-            
-            // Restore saved selection
-            const key = `grid_${clone.parentElement.id}_${clone.dataset.value.replace(/\s+/g, '_')}`;
-            const value = getLocalValue(key);
-            if (value === 'true') {
-                clone.classList.add('selected');
-                console.log(`[FitnessIQ] Restored selection: ${clone.dataset.value}`);
-            }
         });
         
         // Also override datain.js's initializeGridItems function to prevent conflicts
@@ -203,101 +164,192 @@
         }
     }
 
-    // Repopulate form from localStorage
-    function repopulateForm() {
-        console.log("[FitnessIQ] Repopulating form from localStorage");
+    // Collect all form data and save it to JSON storage
+    function saveAllFormData() {
+        console.log('[FitnessIQ] Saving all form data to JSON');
         
-        // First try to load from JSON data
-        const storedData = getJSONValue('fitnessIqFormData', null);
-        if (storedData) {
-            console.log('[FitnessIQ] Found stored form data:', storedData);
-            
-            // Populate form fields from stored data
-            if (storedData.goals && Array.isArray(storedData.goals)) {
-                storedData.goals.forEach(goal => {
-                    const item = document.querySelector(`#fitness-goal .grid-item[data-value="${goal}"]`);
-                    if (item) item.classList.add('selected');
-                });
-            }
-            
-            if (storedData.workoutLocation) {
-                const item = document.querySelector(`#fitness-home-exercises .grid-item[data-value="${storedData.workoutLocation}"]`);
-                if (item) item.classList.add('selected');
-            }
-            
-            if (storedData.fitnessLevel) {
-                const item = document.querySelector(`#fitness-level .grid-item[data-value="${storedData.fitnessLevel}"]`);
-                if (item) item.classList.add('selected');
-            }
-            
-            // Populate input fields
-            const ageInput = document.getElementById('fitness-age');
-            if (ageInput && storedData.age) ageInput.value = storedData.age;
-            
-            const heightInput = document.getElementById('fitness-height');
-            if (heightInput && storedData.height) heightInput.value = storedData.height;
-            
-            const heightUnitInput = document.getElementById('fitness-height-unit');
-            if (heightUnitInput && storedData.heightUnit) heightUnitInput.value = storedData.heightUnit;
-            
-            const weightInput = document.getElementById('fitness-weight');
-            if (weightInput && storedData.weight) weightInput.value = storedData.weight;
-            
-            const weightUnitInput = document.getElementById('fitness-weight-unit');
-            if (weightUnitInput && storedData.weightUnit) weightUnitInput.value = storedData.weightUnit;
-            
-            const frequencyInput = document.getElementById('fitness-frequency');
-            if (frequencyInput && storedData.frequency) frequencyInput.value = storedData.frequency;
-            
-            const durationInput = document.getElementById('fitness-duration');
-            if (durationInput && storedData.duration) durationInput.value = storedData.duration;
-            
-            const injuriesInput = document.getElementById('fitness-injuries');
-            if (injuriesInput && storedData.injuries) injuriesInput.value = storedData.injuries;
-            
+        const formData = collectFormData();
+        setJSON('fitnessIqFormData', formData);
+        console.log('[FitnessIQ] Form data saved as JSON');
+    }
+
+    // Collect form data without validation
+    function collectFormData() {
+        const formData = {
+            goals: [],
+            workoutLocation: null,
+            fitnessLevel: null,
+            age: null,
+            height: null,
+            heightUnit: null,
+            weight: null,
+            weightUnit: null,
+            injuries: null,
+            frequency: null,
+            duration: null
+        };
+        
+        // Collect goals (multi-selection)
+        document.querySelectorAll('#fitness-goal .grid-item.selected').forEach(item => {
+            formData.goals.push(item.dataset.value);
+        });
+        
+        // Collect workout location (single selection)
+        const locationItem = document.querySelector('#fitness-home-exercises .grid-item.selected');
+        if (locationItem) {
+            formData.workoutLocation = locationItem.dataset.value;
+        }
+        
+        // Collect fitness level (single selection)
+        const levelItem = document.querySelector('#fitness-level .grid-item.selected');
+        if (levelItem) {
+            formData.fitnessLevel = levelItem.dataset.value;
+        }
+        
+        // Collect numeric inputs
+        const ageInput = document.getElementById('fitness-age');
+        if (ageInput && ageInput.value) {
+            formData.age = parseInt(ageInput.value, 10);
+        }
+        
+        const heightInput = document.getElementById('fitness-height');
+        if (heightInput && heightInput.value) {
+            formData.height = parseFloat(heightInput.value);
+        }
+        
+        const heightUnitInput = document.getElementById('fitness-height-unit');
+        if (heightUnitInput) {
+            formData.heightUnit = heightUnitInput.value;
+        }
+        
+        const weightInput = document.getElementById('fitness-weight');
+        if (weightInput && weightInput.value) {
+            formData.weight = parseFloat(weightInput.value);
+        }
+        
+        const weightUnitInput = document.getElementById('fitness-weight-unit');
+        if (weightUnitInput) {
+            formData.weightUnit = weightUnitInput.value;
+        }
+        
+        const frequencyInput = document.getElementById('fitness-frequency');
+        if (frequencyInput && frequencyInput.value) {
+            formData.frequency = parseInt(frequencyInput.value, 10);
+        }
+        
+        const durationInput = document.getElementById('fitness-duration');
+        if (durationInput && durationInput.value) {
+            formData.duration = parseInt(durationInput.value, 10);
+        }
+        
+        // Collect text inputs
+        const injuriesInput = document.getElementById('fitness-injuries');
+        if (injuriesInput && injuriesInput.value.trim()) {
+            formData.injuries = injuriesInput.value.trim();
+        }
+        
+        return formData;
+    }
+
+    // Repopulate form from localStorage JSON
+    function repopulateForm() {
+        console.log("[FitnessIQ] Repopulating form from localStorage JSON");
+        
+        // Get the stored form data from JSON storage
+        const storedData = getJSON('fitnessIqFormData', null);
+        if (!storedData) {
+            console.log('[FitnessIQ] No stored form data found');
             return;
         }
         
-        // If no JSON data, fall back to individual localStorage items
-        // Restore grid item selections
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-            const value = getLocalValue(key);
-            if (value === 'true') {
-                item.classList.add('selected');
-                console.log(`[FitnessIQ] Restored grid item: ${key}`);
-            }
-        });
+        console.log('[FitnessIQ] Found stored form data:', storedData);
         
-        // Restore input values
-        document.querySelectorAll('input, textarea').forEach(input => {
-            const key = `input_${input.id}`;
-            const value = getLocalValue(key);
-            if (value) {
-                input.value = value;
-                console.log(`[FitnessIQ] Restored input: ${key}`);
-            }
-        });
-        
-        // Restore select values
-        document.querySelectorAll('select').forEach(select => {
-            const key = `input_${select.id}`;
-            const value = getLocalValue(key);
-            if (value) {
-                const optionExists = Array.from(select.options).some(opt => opt.value === value);
-                if (optionExists) {
-                    select.value = value;
-                    console.log(`[FitnessIQ] Restored select: ${key}`);
+        // Populate goals (multi-selection)
+        if (storedData.goals && Array.isArray(storedData.goals)) {
+            storedData.goals.forEach(goal => {
+                const item = document.querySelector(`#fitness-goal .grid-item[data-value="${goal}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[FitnessIQ] Restored goal: ${goal}`);
                 }
+            });
+        }
+        
+        // Populate workout location (single selection)
+        if (storedData.workoutLocation) {
+            const item = document.querySelector(`#fitness-home-exercises .grid-item[data-value="${storedData.workoutLocation}"]`);
+            if (item) {
+                item.classList.add('selected');
+                console.log(`[FitnessIQ] Restored workout location: ${storedData.workoutLocation}`);
             }
-        });
+        }
+        
+        // Populate fitness level (single selection)
+        if (storedData.fitnessLevel) {
+            const item = document.querySelector(`#fitness-level .grid-item[data-value="${storedData.fitnessLevel}"]`);
+            if (item) {
+                item.classList.add('selected');
+                console.log(`[FitnessIQ] Restored fitness level: ${storedData.fitnessLevel}`);
+            }
+        }
+        
+        // Populate numeric inputs
+        const ageInput = document.getElementById('fitness-age');
+        if (ageInput && storedData.age !== null && storedData.age !== undefined) {
+            ageInput.value = storedData.age;
+            console.log(`[FitnessIQ] Restored age: ${storedData.age}`);
+        }
+        
+        const heightInput = document.getElementById('fitness-height');
+        if (heightInput && storedData.height !== null && storedData.height !== undefined) {
+            heightInput.value = storedData.height;
+            console.log(`[FitnessIQ] Restored height: ${storedData.height}`);
+        }
+        
+        const heightUnitInput = document.getElementById('fitness-height-unit');
+        if (heightUnitInput && storedData.heightUnit) {
+            heightUnitInput.value = storedData.heightUnit;
+            console.log(`[FitnessIQ] Restored height unit: ${storedData.heightUnit}`);
+        }
+        
+        const weightInput = document.getElementById('fitness-weight');
+        if (weightInput && storedData.weight !== null && storedData.weight !== undefined) {
+            weightInput.value = storedData.weight;
+            console.log(`[FitnessIQ] Restored weight: ${storedData.weight}`);
+        }
+        
+        const weightUnitInput = document.getElementById('fitness-weight-unit');
+        if (weightUnitInput && storedData.weightUnit) {
+            weightUnitInput.value = storedData.weightUnit;
+            console.log(`[FitnessIQ] Restored weight unit: ${storedData.weightUnit}`);
+        }
+        
+        const frequencyInput = document.getElementById('fitness-frequency');
+        if (frequencyInput && storedData.frequency !== null && storedData.frequency !== undefined) {
+            frequencyInput.value = storedData.frequency;
+            console.log(`[FitnessIQ] Restored frequency: ${storedData.frequency}`);
+        }
+        
+        const durationInput = document.getElementById('fitness-duration');
+        if (durationInput && storedData.duration !== null && storedData.duration !== undefined) {
+            durationInput.value = storedData.duration;
+            console.log(`[FitnessIQ] Restored duration: ${storedData.duration}`);
+        }
+        
+        // Populate text inputs
+        const injuriesInput = document.getElementById('fitness-injuries');
+        if (injuriesInput && storedData.injuries) {
+            injuriesInput.value = storedData.injuries;
+            console.log(`[FitnessIQ] Restored injuries`);
+        }
     }
 
     // Handle input changes
     function setupInputHandlers() {
         document.querySelectorAll('input, textarea, select').forEach(input => {
             input.addEventListener('change', function() {
-                saveInput(this);
+                // Save all form data every time an input changes
+                saveAllFormData();
             });
         });
     }
@@ -310,22 +362,8 @@
         
         try {
             // Remove JSON data
-            setJSONValue('fitnessIqFormData', null);
-            setJSONValue('fitnessIqResponse', null);
-            
-            // Remove individual localStorage items
-            const keysToRemove = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('grid_fitness') || key.startsWith('input_fitness')) {
-                    keysToRemove.push(key);
-                }
-            }
-            
-            keysToRemove.forEach(key => {
-                localStorage.removeItem(key);
-                console.log(`[FitnessIQ] Removed ${key}`);
-            });
+            setJSON('fitnessIqFormData', null);
+            setJSON('fitnessIqResponse', null);
             
             // Reset UI
             document.querySelectorAll('.grid-container .grid-item').forEach(item => {
@@ -336,108 +374,62 @@
                 input.value = '';
             });
             
+            console.log('[FitnessIQ] All fitness data cleared');
             alert("All fitness data has been cleared successfully.");
         } catch (error) {
-            console.error('[FitnessIQ] Error clearing localStorage:', error);
+            console.error('[FitnessIQ] Error clearing data:', error);
             alert("Error clearing data: " + error.message);
         }
     }
 
-    // Collect form data and return as a structured object
+    // Validate form data and return as a structured object
     function getFormData() {
-        console.log('[FitnessIQ] Collecting form data...');
+        console.log('[FitnessIQ] Validating form data...');
         
-        const formData = {
-            goals: [],
-            workoutLocation: null,
-            age: null,
-            height: null,
-            heightUnit: null,
-            weight: null,
-            weightUnit: null,
-            fitnessLevel: null,
-            injuries: null,
-            frequency: null,
-            duration: null
-        };
+        const formData = collectFormData();
         
-        // Goals (multiple selection)
-        const selectedGoals = document.querySelectorAll('#fitness-goal .grid-item.selected');
-        if (selectedGoals.length === 0) {
+        // Validate required fields
+        if (!formData.goals || formData.goals.length === 0) {
             alert('Please select at least one fitness goal.');
             return null;
         }
-        selectedGoals.forEach(item => {
-            formData.goals.push(item.dataset.value);
-        });
         
-        // Workout Location (single selection)
-        const locationSelection = document.querySelector('#fitness-home-exercises .grid-item.selected');
-        if (!locationSelection) {
+        if (!formData.workoutLocation) {
             alert('Please select a workout location.');
             return null;
         }
-        formData.workoutLocation = locationSelection.dataset.value;
         
-        // Age
-        const ageInput = document.getElementById('fitness-age');
-        if (!ageInput?.value || isNaN(ageInput.value) || parseInt(ageInput.value, 10) <= 0) {
+        if (!formData.age || formData.age <= 0) {
             alert('Please enter a valid age.');
             return null;
         }
-        formData.age = parseInt(ageInput.value, 10);
         
-        // Height and units
-        const heightInput = document.getElementById('fitness-height');
-        const heightUnitInput = document.getElementById('fitness-height-unit');
-        if (!heightInput?.value || isNaN(heightInput.value) || parseFloat(heightInput.value) <= 0) {
+        if (!formData.height || formData.height <= 0) {
             alert('Please enter a valid height.');
             return null;
         }
-        formData.height = parseFloat(heightInput.value);
-        formData.heightUnit = heightUnitInput.value;
         
-        // Weight and units
-        const weightInput = document.getElementById('fitness-weight');
-        const weightUnitInput = document.getElementById('fitness-weight-unit');
-        if (!weightInput?.value || isNaN(weightInput.value) || parseFloat(weightInput.value) <= 0) {
+        if (!formData.weight || formData.weight <= 0) {
             alert('Please enter a valid weight.');
             return null;
         }
-        formData.weight = parseFloat(weightInput.value);
-        formData.weightUnit = weightUnitInput.value;
         
-        // Fitness Level (single selection)
-        const fitnessLevel = document.querySelector('#fitness-level .grid-item.selected');
-        if (!fitnessLevel) {
+        if (!formData.fitnessLevel) {
             alert('Please select your fitness level.');
             return null;
         }
-        formData.fitnessLevel = fitnessLevel.dataset.value;
         
-        // Injuries (optional)
-        const injuriesInput = document.getElementById('fitness-injuries');
-        if (injuriesInput?.value.trim()) {
-            formData.injuries = injuriesInput.value.trim();
-        }
-        
-        // Frequency
-        const frequencyInput = document.getElementById('fitness-frequency');
-        if (!frequencyInput?.value || isNaN(frequencyInput.value) || parseInt(frequencyInput.value, 10) <= 0) {
+        if (!formData.frequency || formData.frequency <= 0) {
             alert('Please enter a valid number of workouts per week.');
             return null;
         }
-        formData.frequency = parseInt(frequencyInput.value, 10);
         
-        // Duration
-        const durationInput = document.getElementById('fitness-duration');
-        if (!durationInput?.value || isNaN(durationInput.value) || parseInt(durationInput.value, 10) <= 0) {
+        if (!formData.duration || formData.duration <= 0) {
             alert('Please enter a valid workout duration in minutes.');
             return null;
         }
-        formData.duration = parseInt(durationInput.value, 10);
         
-        console.log('[FitnessIQ] Form data collected:', formData);
+        console.log('[FitnessIQ] Form data validated successfully:', formData);
         return formData;
     }
 
@@ -451,7 +443,7 @@
         console.log('[FitnessIQ] Generate button clicked.');
         
         try {
-            // Get form data
+            // Get and validate form data
             const formData = getFormData();
             if (!formData) {
                 console.error('[FitnessIQ] Form data is invalid or incomplete.');
@@ -460,8 +452,8 @@
                 return;
             }
             
-            // Save form data to localStorage
-            setJSONValue('fitnessIqFormData', formData);
+            // Save form data to localStorage JSON
+            setJSON('fitnessIqFormData', formData);
             
             // Send data to worker
             const apiUrl = 'https://fitnessiqworker.4hm7q4q75z.workers.dev/'; 
@@ -486,8 +478,8 @@
                 throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
             }
             
-            // Store the response
-            setJSONValue('fitnessIqResponse', responseData);
+            // Store the response using setJSON
+            setJSON('fitnessIqResponse', responseData);
             
             // Redirect to results page or display results
             btn.innerText = 'Success!';
@@ -542,21 +534,13 @@
         console.log("[FitnessIQ] Detected load through datain.js, reinitializing");
         setTimeout(initialize, 100); // Small delay to ensure DOM is updated
     });
-    
-    // Handle other scripts potentially overriding our grid handling
-    document.addEventListener('grid-item-toggled', function(e) {
-        if (e.detail && e.detail.item) {
-            saveGridItem(e.detail.item);
-        }
-    });
 
     // For external access if needed
     window.fitnessIq = {
         initialize: initialize,
-        saveGridItem: saveGridItem,
-        saveInput: saveInput,
-        getFormData: getFormData,
-        clearLocalStorage: clearLocalStorage
+        saveAllFormData: saveAllFormData,
+        clearLocalStorage: clearLocalStorage,
+        getFormData: getFormData
     };
 })();
 </script>
