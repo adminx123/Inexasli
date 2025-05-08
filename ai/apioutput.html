@@ -6,34 +6,156 @@
     .api-output {
       white-space: pre-wrap;
       font-family: monospace;
+      width: 100%;
+      overflow-x: auto;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #f8f8f8;
+      margin-bottom: 10px;
+    }
+    .copy-btn {
+      margin-top: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    .copy-btn:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
   <span id="output-span" class="api-output">Loading...</span>
-  <button onclick="copyOutput()">Copy</button>
+  <button class="copy-btn" onclick="copyOutput()">Copy</button>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // 1. Get the lastGridItemUrl using getLocal
-      const lastGridItemUrl = getLocal('lastGridItemUrl');
-      console.log('lastGridItemUrl:', lastGridItemUrl);
+    // Run immediately without waiting for DOMContentLoaded
+    (function() {
+      console.log('API Output script running');
       
-      // 2. Check if it's fitnessiq
-      if (lastGridItemUrl && lastGridItemUrl.includes('fitnessiq')) {
-        // 3. Get the fitnessIqResponse using getJSON
-        const data = getJSON('fitnessIqResponse');
-        
-        // 4. Display it in the span
-        if (data) {
-          document.getElementById('output-span').textContent = JSON.stringify(data, null, 2);
-        } else {
-          document.getElementById('output-span').textContent = 'No fitnessIqResponse data found';
+      // Reference the global utility functions
+      const getLocal = window.getLocal || function(key) {
+        try {
+          const value = localStorage.getItem(key);
+          return value ? decodeURIComponent(value) : null;
+        } catch (e) {
+          console.error('Error getting local value:', e);
+          return null;
         }
-      } else {
-        document.getElementById('output-span').textContent = 'Not a fitnessiq page';
+      };
+
+      const getJSON = window.getJSON || function(key) {
+        try {
+          const item = localStorage.getItem(key);
+          return item ? JSON.parse(item) : null;
+        } catch (e) {
+          console.error('Error parsing JSON:', e);
+          return null;
+        }
+      };
+
+      // Try to get span element - might be delayed
+      function updateOutput() {
+        const outputSpan = document.getElementById('output-span');
+        if (!outputSpan) {
+          console.log('Output span not found, will retry');
+          setTimeout(updateOutput, 100);
+          return;
+        }
+
+        // 1. Check URL parameters to see which module data to display
+        const urlParams = new URLSearchParams(window.location.search);
+        const gridItem = urlParams.get('gridItem');
+        console.log('gridItem parameter:', gridItem);
+        
+        // 2. Get the lastGridItemUrl as a fallback if gridItem parameter isn't set
+        const lastGridItemUrl = getLocal('lastGridItemUrl');
+        console.log('lastGridItemUrl:', lastGridItemUrl);
+        
+        // 3. Determine which module's data to show
+        let moduleName = '';
+        
+        if (gridItem) {
+          // Use the URL parameter if available
+          moduleName = gridItem;
+        } else if (lastGridItemUrl) {
+          // Extract module name from URL if parameter isn't provided
+          if (lastGridItemUrl.includes('fitnessiq')) {
+            moduleName = 'fitnessiq';
+          } else if (lastGridItemUrl.includes('calorieiq')) {
+            moduleName = 'calorieiq';
+          } else if (lastGridItemUrl.includes('bookiq')) {
+            moduleName = 'bookiq';
+          } else if (lastGridItemUrl.includes('symptomiq')) {
+            moduleName = 'symptomiq';
+          }
+        }
+        
+        console.log('Determined module name:', moduleName);
+        
+        // 3. Get the corresponding response data directly from localStorage
+        if (moduleName) {
+          // Fix capitalization for specific modules
+          let responseKey;
+          if (moduleName === 'fitnessiq') {
+            responseKey = 'fitnessIqResponse'; // Capital 'I' to match actual storage key
+            console.log('Using correctly capitalized key for fitness:', responseKey);
+          } else if (moduleName === 'calorieiq') {
+            responseKey = 'calorieIqResponse'; // Capital 'I' to match actual storage pattern
+          } else if (moduleName === 'bookiq') {
+            responseKey = 'bookIqResponse'; // Capital 'I' to match actual storage pattern
+          } else if (moduleName === 'symptomiq') {
+            responseKey = 'symptomIqResponse'; // Capital 'I' to match actual storage pattern
+          } else {
+            responseKey = moduleName + 'Response';
+          }
+          
+          console.log('Looking for data with key:', responseKey);
+          
+          // Try several approaches to get the data
+          let responseData = null;
+          
+          // Try to retrieve data directly from localStorage if getJSON might be failing
+          let data;
+          try {
+            data = getJSON(responseKey);
+            if (!data) {
+              // Fallback to direct localStorage access
+              const rawData = localStorage.getItem(responseKey);
+              if (rawData) {
+                data = JSON.parse(rawData);
+                console.log('Retrieved data directly from localStorage');
+              }
+            }
+          } catch (err) {
+            console.error('Error getting data:', err);
+          }
+          
+          if (data) {
+            // Use pretty formatting for complex objects
+            if (typeof data === 'object' && data !== null) {
+              outputSpan.textContent = JSON.stringify(data, null, 2);
+            } else {
+              outputSpan.textContent = data;
+            }
+            console.log('Data displayed successfully');
+          } else {
+            outputSpan.textContent = `No ${responseKey} data found in localStorage`;
+            console.log('No data found for key:', responseKey);
+          }
+        } else {
+          outputSpan.textContent = 'Could not determine which module data to display';
+          console.log('Module name could not be determined');
+        }
       }
-    });
+      
+      // Start the update process
+      updateOutput();
+    })();
 
     function copyOutput() {
       const text = document.getElementById('output-span').textContent;
