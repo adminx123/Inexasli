@@ -295,8 +295,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
                     '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
                     '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
-                    '/ai/book/fitnessiq.html': '/apioutput.html?gridItem=fitnessiq',
-
+                    '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
                     '/ai/adventure/adventure.html': '/ai/adventure/adventureiqout.html'
                 };
                 const outUrl = outputMap[lastGridItemUrl];
@@ -373,10 +372,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             
             // Map of module names to their output URLs
             const moduleOutputMap = {
-                'fitnessiq': '/apioutput.html?gridItem=fitnessiq',
+                'fitnessiq': '/ai/apioutput.html?gridItem=fitnessiq',
                 'calorieiq': '/ai/calorie/calorieiqout.html',
-                'symptomiq': '/apioutput.html?gridItem=symptomiq',
-                'bookiq': '/apioutput.html?gridItem=bookiq',
+                'symptomiq': '/ai/apioutput.html?gridItem=symptomiq',
+                'bookiq': '/ai/apioutput.html?gridItem=bookiq',
                 'adventureiq': '/ai/adventure/adventureiqout.html'
                 // Add more modules as needed
             };
