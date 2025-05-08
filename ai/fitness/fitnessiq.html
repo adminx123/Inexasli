@@ -80,8 +80,6 @@
 (function() {
     console.log("Fitness IQ script initializing");
 
-    // REMOVED: Setting of lastGridItemUrl as it should only be handled by landing.js
-
     // Load utility functions - either from global scope or locally defined
     const setLocal = window.setLocal || function(key, value) {
         try { 
@@ -91,8 +89,6 @@
             console.error(`[FitnessIQ] Error saving ${key}:`, e); 
         }
     };
-    
-    // REMOVED: Setting of lastGridItemUrl as it should only be handled by landing.js
     
     const getLocal = window.getLocal || function(key) {
         try { 
