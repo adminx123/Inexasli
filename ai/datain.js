@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.addEventListener('promptGridItemSelected', function (e) {
             const url = e.detail.url;
             
-            // REMOVED: Setting of lastGridItemUrl as it should only be handled by landing.js
+            setLocal('lastGridItemUrl', url);
             if (dataContainer.dataset.state !== 'expanded') {
                 toggleDataContainer();
             } else {
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Fallback: Monitor localStorage changes for lastGridItemUrl
         window.addEventListener('storage', function (e) {
             if (e.key === 'lastGridItemUrl' && e.newValue) {
-                // Only respond to changes, don't set the value
+                
                 if (dataContainer.dataset.state !== 'expanded') {
                     toggleDataContainer();
                 } else {
