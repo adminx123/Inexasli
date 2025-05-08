@@ -81,6 +81,28 @@
     console.log("Fitness IQ script initializing");
 
     // Load utility functions - either from global scope or locally defined
+    const setLocal = window.setLocal || function(key, value) {
+        try { 
+            localStorage.setItem(key, encodeURIComponent(value));
+            console.log(`[FitnessIQ] Local saved ${key}: ${value}`);
+        } catch (e) { 
+            console.error(`[FitnessIQ] Error saving ${key}:`, e); 
+        }
+    };
+    
+    const getLocal = window.getLocal || function(key) {
+        try { 
+            const value = localStorage.getItem(key);
+            const decodedValue = value ? decodeURIComponent(value) : null;
+            console.log(`[FitnessIQ] Local retrieved ${key}: ${decodedValue}`);
+            return decodedValue;
+        } catch (e) { 
+            console.error(`[FitnessIQ] Error retrieving ${key}:`, e);
+            return null; 
+        }
+    };
+
+    // We'll still use setJSON/getJSON as well
     const setJSON = window.setJSON || function(name, value) {
         try {
             if (name === undefined || name === null || name === '') {
@@ -97,9 +119,10 @@
             // Convert value to JSON string
             const jsonString = JSON.stringify(value);
             localStorage.setItem(name, jsonString);
+            console.log(`[FitnessIQ] JSON saved ${name}`);
             return true;
         } catch (error) {
-            console.error(`Error storing JSON in localStorage (${name}):`, error);
+            console.error(`[FitnessIQ] Error storing JSON: ${error}`);
             return false;
         }
     };
@@ -108,9 +131,11 @@
         try {
             const item = localStorage.getItem(name);
             if (!item) return defaultValue;
-            return JSON.parse(item);
+            const parsedValue = JSON.parse(item);
+            console.log(`[FitnessIQ] JSON retrieved ${name}`);
+            return parsedValue;
         } catch (error) {
-            console.error(`Error retrieving JSON from localStorage (${name}):`, error);
+            console.error(`[FitnessIQ] Error retrieving JSON: ${error}`);
             return defaultValue;
         }
     };
@@ -124,16 +149,52 @@
         const container = this.closest('.grid-container');
         if (container.id === 'fitness-home-exercises' || container.id === 'fitness-level') {
             // Single-selection: deselect others
-            container.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
+            container.querySelectorAll('.grid-item').forEach(item => {
+                item.classList.remove('selected');
+                // Also unselect in localStorage
+                const key = `grid_${container.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+                setLocal(key, 'false');
+            });
             this.classList.add('selected');
         } else {
             // Multi-selection: toggle
             this.classList.toggle('selected');
         }
         
-        // Instead of saving just this item, save all form data
-        saveAllFormData();
+        // Save this specific selection using setLocal
+        saveGridItem(this);
+
+        // Also save the entire form data as JSON
+        saveFormDataAsJSON();
+        
         console.log(`[FitnessIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+    }
+
+    // Save grid item selection using setLocal
+    function saveGridItem(item) {
+        const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+        const value = item.classList.contains('selected') ? 'true' : 'false';
+        setLocal(key, value);
+    }
+
+    // Save input value using setLocal
+    function saveInput(input) {
+        if (!input || !input.id) return;
+        
+        const key = `input_${input.id}`;
+        const value = input.value;
+        setLocal(key, value);
+        
+        // Also save the entire form data as JSON
+        saveFormDataAsJSON();
+    }
+
+    // Collect form data and save as JSON
+    function saveFormDataAsJSON() {
+        console.log('[FitnessIQ] Saving all form data to JSON');
+        
+        const formData = collectFormData();
+        setJSON('fitnessIqFormData', formData);
     }
 
     // Initialize our grid items with special handling
@@ -148,6 +209,14 @@
             
             // Add our handler to the fresh clone
             clone.addEventListener('click', customToggleGridItem, { capture: true });
+            
+            // Restore saved selection from localStorage
+            const key = `grid_${clone.parentElement.id}_${clone.dataset.value.replace(/\s+/g, '_')}`;
+            const value = getLocal(key);
+            if (value === 'true') {
+                clone.classList.add('selected');
+                console.log(`[FitnessIQ] Restored selection: ${clone.dataset.value}`);
+            }
         });
         
         // Also override datain.js's initializeGridItems function to prevent conflicts
@@ -162,15 +231,6 @@
                 }
             };
         }
-    }
-
-    // Collect all form data and save it to JSON storage
-    function saveAllFormData() {
-        console.log('[FitnessIQ] Saving all form data to JSON');
-        
-        const formData = collectFormData();
-        setJSON('fitnessIqFormData', formData);
-        console.log('[FitnessIQ] Form data saved as JSON');
     }
 
     // Collect form data without validation
@@ -251,105 +311,154 @@
         return formData;
     }
 
-    // Repopulate form from localStorage JSON
+    // Repopulate form from localStorage
     function repopulateForm() {
-        console.log("[FitnessIQ] Repopulating form from localStorage JSON");
+        console.log("[FitnessIQ] Repopulating form from localStorage");
+
+        // Try both approaches for maximum compatibility
         
-        // Get the stored form data from JSON storage
+        // First approach: Use individual localStorage items with getLocal
+        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+            const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+            const value = getLocal(key);
+            if (value === 'true') {
+                item.classList.add('selected');
+                console.log(`[FitnessIQ] Restored from localStorage: ${item.dataset.value}`);
+            }
+        });
+        
+        document.querySelectorAll('input, textarea').forEach(input => {
+            if (!input.id) return;
+            
+            const key = `input_${input.id}`;
+            const value = getLocal(key);
+            if (value && value !== 'null') {
+                input.value = value;
+                console.log(`[FitnessIQ] Restored from localStorage: ${input.id} = ${value}`);
+            }
+        });
+        
+        document.querySelectorAll('select').forEach(select => {
+            if (!select.id) return;
+            
+            const key = `input_${select.id}`;
+            const value = getLocal(key);
+            if (value && value !== 'null') {
+                const optionExists = Array.from(select.options).some(opt => opt.value === value);
+                if (optionExists) {
+                    select.value = value;
+                    console.log(`[FitnessIQ] Restored from localStorage: ${select.id} = ${value}`);
+                }
+            }
+        });
+
+        // Second approach: Also check for stored JSON data to fall back on
         const storedData = getJSON('fitnessIqFormData', null);
-        if (!storedData) {
-            console.log('[FitnessIQ] No stored form data found');
-            return;
-        }
-        
-        console.log('[FitnessIQ] Found stored form data:', storedData);
-        
-        // Populate goals (multi-selection)
-        if (storedData.goals && Array.isArray(storedData.goals)) {
-            storedData.goals.forEach(goal => {
-                const item = document.querySelector(`#fitness-goal .grid-item[data-value="${goal}"]`);
+        if (storedData) {
+            console.log('[FitnessIQ] Found stored JSON form data, using as fallback');
+            
+            // Only apply JSON data if individual localStorage items didn't work
+            
+            // Check if any goals were already set from localStorage
+            const hasExistingGoals = document.querySelector('#fitness-goal .grid-item.selected');
+            if (!hasExistingGoals && storedData.goals && Array.isArray(storedData.goals)) {
+                storedData.goals.forEach(goal => {
+                    const item = document.querySelector(`#fitness-goal .grid-item[data-value="${goal}"]`);
+                    if (item && !item.classList.contains('selected')) {
+                        item.classList.add('selected');
+                        console.log(`[FitnessIQ] Restored from JSON: goal ${goal}`);
+                    }
+                });
+            }
+            
+            // Check for workout location
+            if (!document.querySelector('#fitness-home-exercises .grid-item.selected') && storedData.workoutLocation) {
+                const item = document.querySelector(`#fitness-home-exercises .grid-item[data-value="${storedData.workoutLocation}"]`);
                 if (item) {
                     item.classList.add('selected');
-                    console.log(`[FitnessIQ] Restored goal: ${goal}`);
+                    console.log(`[FitnessIQ] Restored from JSON: workout location ${storedData.workoutLocation}`);
                 }
-            });
-        }
-        
-        // Populate workout location (single selection)
-        if (storedData.workoutLocation) {
-            const item = document.querySelector(`#fitness-home-exercises .grid-item[data-value="${storedData.workoutLocation}"]`);
-            if (item) {
-                item.classList.add('selected');
-                console.log(`[FitnessIQ] Restored workout location: ${storedData.workoutLocation}`);
+            }
+            
+            // Check for fitness level
+            if (!document.querySelector('#fitness-level .grid-item.selected') && storedData.fitnessLevel) {
+                const item = document.querySelector(`#fitness-level .grid-item[data-value="${storedData.fitnessLevel}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[FitnessIQ] Restored from JSON: fitness level ${storedData.fitnessLevel}`);
+                }
+            }
+            
+            // Check for other fields - only apply if not already set
+            const ageInput = document.getElementById('fitness-age');
+            if (ageInput && !ageInput.value && storedData.age) {
+                ageInput.value = storedData.age;
+                console.log(`[FitnessIQ] Restored from JSON: age ${storedData.age}`);
+            }
+            
+            const heightInput = document.getElementById('fitness-height');
+            if (heightInput && !heightInput.value && storedData.height) {
+                heightInput.value = storedData.height;
+                console.log(`[FitnessIQ] Restored from JSON: height ${storedData.height}`);
+            }
+            
+            const heightUnitInput = document.getElementById('fitness-height-unit');
+            if (heightUnitInput && !heightUnitInput.value && storedData.heightUnit) {
+                heightUnitInput.value = storedData.heightUnit;
+                console.log(`[FitnessIQ] Restored from JSON: height unit ${storedData.heightUnit}`);
+            }
+            
+            const weightInput = document.getElementById('fitness-weight');
+            if (weightInput && !weightInput.value && storedData.weight) {
+                weightInput.value = storedData.weight;
+                console.log(`[FitnessIQ] Restored from JSON: weight ${storedData.weight}`);
+            }
+            
+            const weightUnitInput = document.getElementById('fitness-weight-unit');
+            if (weightUnitInput && !weightUnitInput.value && storedData.weightUnit) {
+                weightUnitInput.value = storedData.weightUnit;
+                console.log(`[FitnessIQ] Restored from JSON: weight unit ${storedData.weightUnit}`);
+            }
+            
+            const frequencyInput = document.getElementById('fitness-frequency');
+            if (frequencyInput && !frequencyInput.value && storedData.frequency) {
+                frequencyInput.value = storedData.frequency;
+                console.log(`[FitnessIQ] Restored from JSON: frequency ${storedData.frequency}`);
+            }
+            
+            const durationInput = document.getElementById('fitness-duration');
+            if (durationInput && !durationInput.value && storedData.duration) {
+                durationInput.value = storedData.duration;
+                console.log(`[FitnessIQ] Restored from JSON: duration ${storedData.duration}`);
+            }
+            
+            const injuriesInput = document.getElementById('fitness-injuries');
+            if (injuriesInput && !injuriesInput.value && storedData.injuries) {
+                injuriesInput.value = storedData.injuries;
+                console.log(`[FitnessIQ] Restored from JSON: injuries`);
             }
         }
         
-        // Populate fitness level (single selection)
-        if (storedData.fitnessLevel) {
-            const item = document.querySelector(`#fitness-level .grid-item[data-value="${storedData.fitnessLevel}"]`);
-            if (item) {
-                item.classList.add('selected');
-                console.log(`[FitnessIQ] Restored fitness level: ${storedData.fitnessLevel}`);
+        // After repopulating, save all data using both approaches to ensure consistency
+        document.querySelectorAll('.grid-container .grid-item.selected').forEach(item => {
+            saveGridItem(item);
+        });
+        
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            if (input.value) {
+                saveInput(input);
             }
-        }
+        });
         
-        // Populate numeric inputs
-        const ageInput = document.getElementById('fitness-age');
-        if (ageInput && storedData.age !== null && storedData.age !== undefined) {
-            ageInput.value = storedData.age;
-            console.log(`[FitnessIQ] Restored age: ${storedData.age}`);
-        }
-        
-        const heightInput = document.getElementById('fitness-height');
-        if (heightInput && storedData.height !== null && storedData.height !== undefined) {
-            heightInput.value = storedData.height;
-            console.log(`[FitnessIQ] Restored height: ${storedData.height}`);
-        }
-        
-        const heightUnitInput = document.getElementById('fitness-height-unit');
-        if (heightUnitInput && storedData.heightUnit) {
-            heightUnitInput.value = storedData.heightUnit;
-            console.log(`[FitnessIQ] Restored height unit: ${storedData.heightUnit}`);
-        }
-        
-        const weightInput = document.getElementById('fitness-weight');
-        if (weightInput && storedData.weight !== null && storedData.weight !== undefined) {
-            weightInput.value = storedData.weight;
-            console.log(`[FitnessIQ] Restored weight: ${storedData.weight}`);
-        }
-        
-        const weightUnitInput = document.getElementById('fitness-weight-unit');
-        if (weightUnitInput && storedData.weightUnit) {
-            weightUnitInput.value = storedData.weightUnit;
-            console.log(`[FitnessIQ] Restored weight unit: ${storedData.weightUnit}`);
-        }
-        
-        const frequencyInput = document.getElementById('fitness-frequency');
-        if (frequencyInput && storedData.frequency !== null && storedData.frequency !== undefined) {
-            frequencyInput.value = storedData.frequency;
-            console.log(`[FitnessIQ] Restored frequency: ${storedData.frequency}`);
-        }
-        
-        const durationInput = document.getElementById('fitness-duration');
-        if (durationInput && storedData.duration !== null && storedData.duration !== undefined) {
-            durationInput.value = storedData.duration;
-            console.log(`[FitnessIQ] Restored duration: ${storedData.duration}`);
-        }
-        
-        // Populate text inputs
-        const injuriesInput = document.getElementById('fitness-injuries');
-        if (injuriesInput && storedData.injuries) {
-            injuriesInput.value = storedData.injuries;
-            console.log(`[FitnessIQ] Restored injuries`);
-        }
+        // Also update the JSON data
+        saveFormDataAsJSON();
     }
 
     // Handle input changes
     function setupInputHandlers() {
         document.querySelectorAll('input, textarea, select').forEach(input => {
             input.addEventListener('change', function() {
-                // Save all form data every time an input changes
-                saveAllFormData();
+                saveInput(this);
             });
         });
     }
@@ -361,9 +470,23 @@
         }
         
         try {
-            // Remove JSON data
-            setJSON('fitnessIqFormData', null);
-            setJSON('fitnessIqResponse', null);
+            // Clear individual localStorage items using keys pattern
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('grid_fitness') || key.startsWith('input_fitness')) {
+                    keysToRemove.push(key);
+                }
+            }
+            
+            keysToRemove.forEach(key => {
+                localStorage.removeItem(key);
+                console.log(`[FitnessIQ] Removed ${key}`);
+            });
+            
+            // Also remove JSON data
+            localStorage.removeItem('fitnessIqFormData');
+            localStorage.removeItem('fitnessIqResponse');
             
             // Reset UI
             document.querySelectorAll('.grid-container .grid-item').forEach(item => {
@@ -382,7 +505,7 @@
         }
     }
 
-    // Validate form data and return as a structured object
+    // Validate and get form data for submission
     function getFormData() {
         console.log('[FitnessIQ] Validating form data...');
         
@@ -452,7 +575,7 @@
                 return;
             }
             
-            // Save form data to localStorage JSON
+            // Save the full form data as JSON for the results page
             setJSON('fitnessIqFormData', formData);
             
             // Send data to worker
@@ -538,7 +661,8 @@
     // For external access if needed
     window.fitnessIq = {
         initialize: initialize,
-        saveAllFormData: saveAllFormData,
+        saveGridItem: saveGridItem,
+        saveInput: saveInput,
         clearLocalStorage: clearLocalStorage,
         getFormData: getFormData
     };
