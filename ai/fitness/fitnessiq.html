@@ -80,10 +80,7 @@
 (function() {
     console.log("Fitness IQ script initializing");
 
-    // Set lastGridItemUrl to track the current page - this is crucial for the dataout container to open automatically
-    const currentPath = window.location.pathname;
-    localStorage.setItem('lastGridItemUrl', currentPath);
-    console.log(`[FitnessIQ] Set lastGridItemUrl to: ${currentPath}`);
+    // REMOVED: Setting of lastGridItemUrl as it should only be handled by landing.js
 
     // Load utility functions - either from global scope or locally defined
     const setLocal = window.setLocal || function(key, value) {
@@ -95,8 +92,7 @@
         }
     };
     
-    // Set lastGridUrl for dataout container functionality
-    setLocal('lastGridItemUrl', currentPath);
+    // REMOVED: Setting of lastGridItemUrl as it should only be handled by landing.js
     
     const getLocal = window.getLocal || function(key) {
         try { 
