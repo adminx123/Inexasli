@@ -500,57 +500,6 @@
         }
     }
 
-    // Validate and get form data for submission
-    function getFormData() {
-        console.log('[FitnessIQ] Validating form data...');
-        
-        const formData = collectFormData();
-        
-        // Validate required fields
-        if (!formData.goals || formData.goals.length === 0) {
-            alert('Please select at least one fitness goal.');
-            return null;
-        }
-        
-        if (!formData.workoutLocation) {
-            alert('Please select a workout location.');
-            return null;
-        }
-        
-        if (!formData.age || formData.age <= 0) {
-            alert('Please enter a valid age.');
-            return null;
-        }
-        
-        if (!formData.height || formData.height <= 0) {
-            alert('Please enter a valid height.');
-            return null;
-        }
-        
-        if (!formData.weight || formData.weight <= 0) {
-            alert('Please enter a valid weight.');
-            return null;
-        }
-        
-        if (!formData.fitnessLevel) {
-            alert('Please select your fitness level.');
-            return null;
-        }
-        
-        if (!formData.frequency || formData.frequency <= 0) {
-            alert('Please enter a valid number of workouts per week.');
-            return null;
-        }
-        
-        if (!formData.duration || formData.duration <= 0) {
-            alert('Please enter a valid workout duration in minutes.');
-            return null;
-        }
-        
-        console.log('[FitnessIQ] Form data validated successfully:', formData);
-        return formData;
-    }
-
     // Handle the generate button click
     async function handleGenerateFitnessIq() {
         const btn = document.getElementById('generate-fitness-btn');
@@ -561,22 +510,20 @@
         console.log('[FitnessIQ] Generate button clicked.');
         
         try {
-            // Get and validate form data
-            const formData = getFormData();
+            // Instead of collecting form data again, just use what's already in localStorage
+            const formData = getJSON('fitnessIqInput');
             if (!formData) {
-                console.error('[FitnessIQ] Form data is invalid or incomplete.');
+                console.error('[FitnessIQ] No input data found in localStorage.');
+                alert('Please complete the form before generating a fitness plan.');
                 btn.innerText = initialText;
                 btn.removeAttribute('disabled');
                 return;
             }
             
-            // Save the full form data as JSON for the results page
-            setJSON('fitnessIqInput', formData);
-            
             // Send data to worker
             const apiUrl = 'https://fitnessiqworker.4hm7q4q75z.workers.dev/'; 
             
-            console.log('[FitnessIQ] Sending request to worker:', apiUrl);
+            console.log('[FitnessIQ] Sending fitnessIqInput directly from localStorage to worker');
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
