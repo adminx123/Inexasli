@@ -293,10 +293,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const lastGridItemUrl = getLocal('lastGridItemUrl');
                 const outputMap = {
                     '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
-                    '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
-                    '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
+                    '/ai/symptom/symptomiq.html': '/ai/apioutput.html?gridItem=symptomiq',
+                    '/ai/book/bookiq.html': '/ai/apioutput.html?gridItem=bookiq',
                     '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
-                    '/ai/adventure/adventureiq.html': '/apioutput.html?gridItem=adventureiq'
+                    '/ai/adventure/adventureiq.html': '/ai/apioutput.html?gridItem=adventureiq'
                 };
                 const outUrl = outputMap[lastGridItemUrl];
 
@@ -340,10 +340,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Special handling for URLs that have output templates
             const outputMap = {
                 '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
-                '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
-                '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
+                '/ai/symptom/symptomiq.html': '/ai/apioutput.html?gridItem=symptomiq',
+                '/ai/book/bookiq.html': '/ai/apioutput.html?gridItem=bookiq',
                 '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
-                '/ai/adventure/adventureiq.html': '/apioutput.html?gridItem=adventureiq'
+                '/ai/adventure/adventureiq.html': '/ai/apioutput.html?gridItem=adventureiq'
             };
             
             // Just store the mapping but don't auto-open DataOut for CalorieIQ specifically
@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'calorieiq': '/ai/calorie/calorieiqout.html',
                 'symptomiq': '/ai/apioutput.html?gridItem=symptomiq',
                 'bookiq': '/ai/apioutput.html?gridItem=bookiq',
-                'adventureiq': '/apioutput.html?gridItem=adventureiq'
+                'adventureiq': '/ai/apioutput.html?gridItem=adventureiq'
                 // Add more modules as needed
             };
             

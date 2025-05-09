@@ -1,4 +1,4 @@
-# INEXASLI .gitignore file
+# INEXASLI .gitignore files
 
 # Ignore engineered prompts and worker files containing sensitive IP
 ai/calorie/calorieiqWorker.js
@@ -11,7 +11,7 @@ ai/adventure/adventureiqworker.js
 
 
 
-ai/*worker.js
+/*worker.js
 ai/*.secret.js
 
 # Environment files
