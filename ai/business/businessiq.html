@@ -14,14 +14,14 @@
 
         <div class="row1">
             <label class="category-label">Business Idea</label>
-            <textarea id="business-vision" rows="1" placeholder="What’s your business idea? e.g., Launch a coffee shop"></textarea>
+            <textarea id="business-vision" rows="1" placeholder="What's your business idea? e.g., Launch a coffee shop"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Experience Level</label>
             <div class="grid-container" id="business-knowledge-level">
-                <div class="grid-item" data-value="New">I’m New to Business</div>
-                <div class="grid-item" data-value="Intermediate">I’ve Run a Business Before</div>
-                <div class="grid-item" data-value="Sophisticated">I’m an Experienced Entrepreneur</div>
+                <div class="grid-item" data-value="New">I'm New to Business</div>
+                <div class="grid-item" data-value="Intermediate">I've Run a Business Before</div>
+                <div class="grid-item" data-value="Sophisticated">I'm an Experienced Entrepreneur</div>
             </div>
         </div>
         <div class="row1">
@@ -34,7 +34,7 @@
                 <div class="grid-item" data-value="Adaptability">I Adapt Easily</div>
                 <div class="grid-item" data-value="Critical-Thinking">I Think Critically</div>
                 <div class="grid-item" data-value="Leadership">I Lead Others</div>
-                <div class="grid-item" data-value="Creativity">I’m Creative</div>
+                <div class="grid-item" data-value="Creativity">I'm Creative</div>
                 <div class="grid-item" data-value="Work-Ethic">I Have Strong Work Ethic</div>
                 <div class="grid-item" data-value="Interpersonal">I Connect with People</div>
                 <div class="grid-item" data-value="Organization">I Stay Organized</div>
@@ -42,10 +42,10 @@
                 <div class="grid-item" data-value="Decision-Making">I Make Decisions</div>
                 <div class="grid-item" data-value="Analytical">I Analyze Well</div>
                 <div class="grid-item" data-value="Initiative">I Take Initiative</div>
-                <div class="grid-item" data-value="Technical">I’m Tech-Savvy</div>
+                <div class="grid-item" data-value="Technical">I'm Tech-Savvy</div>
                 <div class="grid-item" data-value="Emotional-Intelligence">I Understand Emotions</div>
                 <div class="grid-item" data-value="Negotiation">I Negotiate Effectively</div>
-                <div class="grid-item" data-value="Resilience">I’m Resilient</div>
+                <div class="grid-item" data-value="Resilience">I'm Resilient</div>
                 <div class="grid-item" data-value="Project-Management">I Manage Projects</div>
             </div>
         </div>
@@ -53,19 +53,19 @@
             <label class="category-label">Your Challenges</label>
             <div class="grid-container" id="business-weaknesses">
                 <div class="grid-item" data-value="Procrastination">I Procrastinate</div>
-                <div class="grid-item" data-value="Impatience">I’m Impatient</div>
-                <div class="grid-item" data-value="Disorganization">I’m Disorganized</div>
+                <div class="grid-item" data-value="Impatience">I'm Impatient</div>
+                <div class="grid-item" data-value="Disorganization">I'm Disorganized</div>
                 <div class="grid-item" data-value="Overthinking">I Overthink</div>
-                <div class="grid-item" data-value="Perfectionism">I’m a Perfectionist</div>
+                <div class="grid-item" data-value="Perfectionism">I'm a Perfectionist</div>
                 <div class="grid-item" data-value="Lack-of-Confidence">I Lack Confidence</div>
                 <div class="grid-item" data-value="Difficulty-Delegating">I Struggle to Delegate</div>
                 <div class="grid-item" data-value="Poor-Time-Management">I Manage Time Poorly</div>
-                <div class="grid-item" data-value="Indecisiveness">I’m Indecisive</div>
+                <div class="grid-item" data-value="Indecisiveness">I'm Indecisive</div>
                 <div class="grid-item" data-value="Fear-of-Failure">I Fear Failure</div>
                 <div class="grid-item" data-value="Limited-Technical-Skills">I Lack Tech Skills</div>
                 <div class="grid-item" data-value="Overcommitting">I Overcommit</div>
                 <div class="grid-item" data-value="Lack-of-Focus">I Lose Focus</div>
-                <div class="grid-item" data-value="Impulsiveness">I’m Impulsive</div>
+                <div class="grid-item" data-value="Impulsiveness">I'm Impulsive</div>
                 <div class="grid-item" data-value="Difficulty-with-Feedback">I Resist Feedback</div>
                 <div class="grid-item" data-value="Resistance-to-Change">I Resist Change</div>
                 <div class="grid-item" data-value="Poor-Communication">I Communicate Poorly</div>
@@ -83,8 +83,502 @@
             <textarea id="business-network" rows="4" placeholder="Who can you leverage? (1 per line):\nFriend who owns a café\nLocal Chamber of Commerce\nBusiness mentor"></textarea>
         </div>
         <div class="row1">
-            <button class="generate-btn" data-prompt="newbiziq™" onclick="generatePrompt('newbiziq™')">Generate Promptemplate™ Now!</button>
+            <button class="generate-btn" id="generate-business-btn">Generate Business Plan Now!</button>
+            <button class="clear-btn" id="clear-business-btn">Clear All</button>
         </div>
 
+<script>
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
 
-    <script src="newbiziq.js"></script>
+// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
+(function() {
+    console.log("Business IQ script initializing");
+
+    // Load utility functions - either from global scope or locally defined
+    const setLocal = window.setLocal || function(key, value) {
+        try { 
+            localStorage.setItem(key, encodeURIComponent(value));
+            console.log(`[BusinessIQ] Local saved ${key}: ${value}`);
+        } catch (e) { 
+            console.error(`[BusinessIQ] Error saving ${key}:`, e); 
+        }
+    };
+    
+    const getLocal = window.getLocal || function(key) {
+        try { 
+            const value = localStorage.getItem(key);
+            const decodedValue = value ? decodeURIComponent(value) : null;
+            console.log(`[BusinessIQ] Local retrieved ${key}: ${decodedValue}`);
+            return decodedValue;
+        } catch (e) { 
+            console.error(`[BusinessIQ] Error retrieving ${key}:`, e);
+            return null; 
+        }
+    };
+
+    // JSON storage functions
+    const setJSON = window.setJSON || function(name, value) {
+        try {
+            if (name === undefined || name === null || name === '') {
+                console.error('Invalid key name provided to setJSON');
+                return false;
+            }
+            
+            if (value === undefined) {
+                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                localStorage.removeItem(name);
+                return true;
+            }
+            
+            // Convert value to JSON string
+            const jsonString = JSON.stringify(value);
+            localStorage.setItem(name, jsonString);
+            console.log(`[BusinessIQ] JSON saved ${name}`);
+            return true;
+        } catch (error) {
+            console.error(`[BusinessIQ] Error storing JSON: ${error}`);
+            return false;
+        }
+    };
+    
+    const getJSON = window.getJSON || function(name, defaultValue) {
+        try {
+            const item = localStorage.getItem(name);
+            if (!item) return defaultValue;
+            const parsedValue = JSON.parse(item);
+            console.log(`[BusinessIQ] JSON retrieved ${name}`);
+            return parsedValue;
+        } catch (error) {
+            console.error(`[BusinessIQ] Error retrieving JSON: ${error}`);
+            return defaultValue;
+        }
+    };
+
+    // Custom handler for grid item selection
+    function customToggleGridItem(event) {
+        // Stop event propagation to prevent other handlers from firing
+        event.stopPropagation();
+        event.preventDefault();
+        
+        const container = this.closest('.grid-container');
+        if (container.id === 'business-knowledge-level') {
+            // Single-selection: deselect others
+            container.querySelectorAll('.grid-item').forEach(item => {
+                item.classList.remove('selected');
+                // Also unselect in localStorage
+                const key = `grid_${container.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+                setLocal(key, 'false');
+            });
+            this.classList.add('selected');
+        } else {
+            // Multi-selection: toggle
+            this.classList.toggle('selected');
+        }
+        
+        // Save this specific selection using setLocal
+        saveGridItem(this);
+        
+        console.log(`[BusinessIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+    }
+
+    // Save grid item selection using setLocal
+    function saveGridItem(item) {
+        const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+        const value = item.classList.contains('selected') ? 'true' : 'false';
+        setLocal(key, value);
+        
+        // Directly save complete form data to JSON
+        console.log('[BusinessIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('businessIqInput', formData);
+    }
+
+    // Save input value using setLocal
+    function saveInput(input) {
+        if (!input || !input.id) return;
+        
+        const key = `input_${input.id}`;
+        const value = input.value;
+        setLocal(key, value);
+        
+        // Directly save complete form data to JSON
+        console.log('[BusinessIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('businessIqInput', formData);
+    }
+
+    // Initialize our grid items with special handling
+    function initializeBusinessGridItems() {
+        console.log("[BusinessIQ] Initializing business grid items");
+        
+        // First remove any existing click handlers from datain.js
+        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+            // Clone the node to remove all event listeners
+            const clone = item.cloneNode(true);
+            item.parentNode.replaceChild(clone, item);
+            
+            // Add our handler to the fresh clone
+            clone.addEventListener('click', customToggleGridItem, { capture: true });
+            
+            // Restore saved selection from localStorage
+            const key = `grid_${clone.parentElement.id}_${clone.dataset.value.replace(/\s+/g, '_')}`;
+            const value = getLocal(key);
+            if (value === 'true') {
+                clone.classList.add('selected');
+                console.log(`[BusinessIQ] Restored selection: ${clone.dataset.value}`);
+            }
+        });
+        
+        // Also override datain.js's initializeGridItems function to prevent conflicts
+        if (window.initializeGridItems) {
+            const originalInitGridItems = window.initializeGridItems;
+            window.initializeGridItems = function() {
+                console.log("[BusinessIQ] Intercepted external initializeGridItems call");
+                // Only let the original function initialize non-business grid containers
+                const nonBusinessGrids = document.querySelectorAll('.grid-container:not(#business-knowledge-level):not(#business-general-skills):not(#business-weaknesses)');
+                if (nonBusinessGrids.length > 0) {
+                    originalInitGridItems();
+                }
+            };
+        }
+    }
+
+    // Collect form data without validation
+    function collectFormData() {
+        const formData = {
+            businessIdea: null,
+            experienceLevel: null,
+            strengths: [],
+            challenges: [],
+            resourcesTools: null,
+            networkConnections: null
+        };
+        
+        // Collect business idea
+        const visionInput = document.getElementById('business-vision');
+        if (visionInput && visionInput.value.trim()) {
+            formData.businessIdea = visionInput.value.trim();
+        }
+        
+        // Collect experience level (single selection)
+        const levelItem = document.querySelector('#business-knowledge-level .grid-item.selected');
+        if (levelItem) {
+            formData.experienceLevel = levelItem.dataset.value;
+        }
+        
+        // Collect strengths (multi-selection)
+        document.querySelectorAll('#business-general-skills .grid-item.selected').forEach(item => {
+            formData.strengths.push(item.dataset.value);
+        });
+        
+        // Collect challenges (multi-selection)
+        document.querySelectorAll('#business-weaknesses .grid-item.selected').forEach(item => {
+            formData.challenges.push(item.dataset.value);
+        });
+        
+        // Collect resources & tools
+        const resourcesInput = document.getElementById('business-organization');
+        if (resourcesInput && resourcesInput.value.trim()) {
+            formData.resourcesTools = resourcesInput.value.trim();
+        }
+        
+        // Collect network & connections
+        const networkInput = document.getElementById('business-network');
+        if (networkInput && networkInput.value.trim()) {
+            formData.networkConnections = networkInput.value.trim();
+        }
+        
+        return formData;
+    }
+
+    // Repopulate form from localStorage
+    function repopulateForm() {
+        console.log("[BusinessIQ] Repopulating form from localStorage");
+
+        // Try both approaches for maximum compatibility
+        
+        // First approach: Use individual localStorage items with getLocal
+        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+            const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+            const value = getLocal(key);
+            if (value === 'true') {
+                item.classList.add('selected');
+                console.log(`[BusinessIQ] Restored from localStorage: ${item.dataset.value}`);
+            }
+        });
+        
+        document.querySelectorAll('input, textarea').forEach(input => {
+            if (!input.id) return;
+            
+            const key = `input_${input.id}`;
+            const value = getLocal(key);
+            if (value && value !== 'null') {
+                input.value = value;
+                console.log(`[BusinessIQ] Restored from localStorage: ${input.id} = ${value}`);
+            }
+        });
+
+        // Second approach: Also check for stored JSON data to fall back on
+        const storedData = getJSON('businessIqInput', null);
+        if (storedData) {
+            console.log('[BusinessIQ] Found stored JSON form data, using as fallback');
+            
+            // Only apply JSON data if individual localStorage items didn't work
+            
+            // Check for business idea
+            const visionInput = document.getElementById('business-vision');
+            if (visionInput && !visionInput.value && storedData.businessIdea) {
+                visionInput.value = storedData.businessIdea;
+                console.log(`[BusinessIQ] Restored from JSON: business idea`);
+            }
+            
+            // Check for experience level
+            if (!document.querySelector('#business-knowledge-level .grid-item.selected') && storedData.experienceLevel) {
+                const item = document.querySelector(`#business-knowledge-level .grid-item[data-value="${storedData.experienceLevel}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[BusinessIQ] Restored from JSON: experience level ${storedData.experienceLevel}`);
+                }
+            }
+            
+            // Check for strengths
+            const hasExistingStrengths = document.querySelector('#business-general-skills .grid-item.selected');
+            if (!hasExistingStrengths && storedData.strengths && Array.isArray(storedData.strengths)) {
+                storedData.strengths.forEach(strength => {
+                    const item = document.querySelector(`#business-general-skills .grid-item[data-value="${strength}"]`);
+                    if (item && !item.classList.contains('selected')) {
+                        item.classList.add('selected');
+                        console.log(`[BusinessIQ] Restored from JSON: strength ${strength}`);
+                    }
+                });
+            }
+            
+            // Check for challenges
+            const hasExistingChallenges = document.querySelector('#business-weaknesses .grid-item.selected');
+            if (!hasExistingChallenges && storedData.challenges && Array.isArray(storedData.challenges)) {
+                storedData.challenges.forEach(challenge => {
+                    const item = document.querySelector(`#business-weaknesses .grid-item[data-value="${challenge}"]`);
+                    if (item && !item.classList.contains('selected')) {
+                        item.classList.add('selected');
+                        console.log(`[BusinessIQ] Restored from JSON: challenge ${challenge}`);
+                    }
+                });
+            }
+            
+            // Check for resources & tools
+            const resourcesInput = document.getElementById('business-organization');
+            if (resourcesInput && !resourcesInput.value && storedData.resourcesTools) {
+                resourcesInput.value = storedData.resourcesTools;
+                console.log(`[BusinessIQ] Restored from JSON: resources & tools`);
+            }
+            
+            // Check for network & connections
+            const networkInput = document.getElementById('business-network');
+            if (networkInput && !networkInput.value && storedData.networkConnections) {
+                networkInput.value = storedData.networkConnections;
+                console.log(`[BusinessIQ] Restored from JSON: network & connections`);
+            }
+        }
+        
+        // After repopulating, save all data using both approaches to ensure consistency
+        document.querySelectorAll('.grid-container .grid-item.selected').forEach(item => {
+            saveGridItem(item);
+        });
+        
+        document.querySelectorAll('input, textarea').forEach(input => {
+            if (input.value) {
+                saveInput(input);
+            }
+        });
+    }
+
+    // Handle input changes
+    function setupInputHandlers() {
+        document.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('change', function() {
+                saveInput(this);
+            });
+        });
+    }
+
+    // Clear saved data from localStorage
+    function clearLocalStorage() {
+        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
+            return;
+        }
+        
+        try {
+            // Clear individual localStorage items using keys pattern
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('grid_business') || key.startsWith('input_business')) {
+                    keysToRemove.push(key);
+                }
+            }
+            
+            keysToRemove.forEach(key => {
+                localStorage.removeItem(key);
+                console.log(`[BusinessIQ] Removed ${key}`);
+            });
+            
+            // Also remove JSON data
+            localStorage.removeItem('businessIqInput');
+            localStorage.removeItem('businessIqResponse');
+            
+            // Reset UI
+            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('input, textarea').forEach(input => {
+                input.value = '';
+            });
+            
+            console.log('[BusinessIQ] All business data cleared');
+            alert("All business data has been cleared successfully.");
+        } catch (error) {
+            console.error('[BusinessIQ] Error clearing data:', error);
+            alert("Error clearing data: " + error.message);
+        }
+    }
+
+    // Handle the generate button click - directly talking to worker
+    async function handleGenerateBusinessIq() {
+        const btn = document.getElementById('generate-business-btn');
+        const initialText = btn.innerText;
+        btn.innerText = 'Loading...';
+        btn.setAttribute('disabled', 'true');
+        
+        console.log('[BusinessIQ] Generate button clicked.');
+        
+        try {
+            // Use what's already in localStorage
+            const formData = getJSON('businessIqInput');
+            if (!formData) {
+                console.error('[BusinessIQ] No input data found in localStorage.');
+                alert('Please complete the form before generating a business plan.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Validate minimum requirements
+            if (!formData.businessIdea) {
+                console.error('[BusinessIQ] No business idea provided.');
+                alert('Please provide a business idea before generating a plan.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Send data to worker
+            const apiUrl = 'https://businessiqworker.4hm7q4q75z.workers.dev/'; 
+            
+            console.log('[BusinessIQ] Sending businessIqInput directly from localStorage to worker');
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const responseData = await response.json();
+            console.log('[BusinessIQ] Worker response:', responseData);
+            
+            if (responseData.message !== 'Success') {
+                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            
+            // Store the response using setJSON
+            setJSON('businessIqResponse', responseData);
+            
+            // Update button state
+            btn.innerText = 'Success!';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+            
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'businessiq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[BusinessIQ] Dispatched api-response-received event');
+            
+        } catch (error) {
+            console.error('[BusinessIQ] Error generating business plan:', error);
+            alert('An error occurred while generating your business plan. Please try again later.');
+            
+            btn.innerText = 'Error';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+        }
+    }
+
+    // Attach event listeners to buttons
+    function setupButtonHandlers() {
+        const generateBtn = document.getElementById('generate-business-btn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', handleGenerateBusinessIq);
+        }
+        
+        const clearBtn = document.getElementById('clear-business-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', clearLocalStorage);
+        }
+    }
+
+    // Main initialization function - called immediately and again after full load
+    function initialize() {
+        console.log("[BusinessIQ] Initializing...");
+        initializeBusinessGridItems();
+        setupInputHandlers();
+        setupButtonHandlers();
+        repopulateForm();
+    }
+
+    // Initialize immediately
+    initialize();
+
+    // Also initialize when DOM is fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    }
+
+    // Special handler for when this page is loaded through datain.js
+    document.addEventListener('data-in-loaded', function(e) {
+        console.log("[BusinessIQ] Detected load through datain.js, reinitializing");
+        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
+    });
+
+    // Expose functions to global scope for external access
+    window.businessIq = {
+        initialize: initialize,
+        saveGridItem: saveGridItem,
+        saveInput: saveInput,
+        clearLocalStorage: clearLocalStorage,
+        collectFormData: collectFormData
+    };
+})();
+</script>

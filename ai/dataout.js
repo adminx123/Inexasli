@@ -379,7 +379,20 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'symptomiq': '/ai/apioutput.html?gridItem=symptomiq',
                 'bookiq': '/ai/apioutput.html?gridItem=bookiq',
                 'adventureiq': '/ai/apioutput.html?gridItem=adventureiq',
-                'appiq': '/ai/apioutput.html?gridItem=appiq'
+                'appiq': '/ai/apioutput.html?gridItem=appiq',
+                'businessiq': '/ai/apioutput.html?gridItem=businessiq',
+                'decisioniq': '/ai/apioutput.html?gridItem=decisioniq',
+                'emotioniq': '/ai/apioutput.html?gridItem=emotioniq',
+                'enneagramiq': '/ai/apioutput.html?gridItem=enneagramiq',
+                'eventiq': '/ai/apioutput.html?gridItem=eventiq',
+                'generaliq': '/ai/apioutput.html?gridItem=generaliq',
+                'adagencyiq': '/ai/apioutput.html?gridItem=adagencyiq',
+                'quiziq': '/ai/apioutput.html?gridItem=quiziq',
+                'reportiq': '/ai/apioutput.html?gridItem=reportiq',
+                'researchiq': '/ai/apioutput.html?gridItem=researchiq',
+                'socialiq': '/ai/apioutput.html?gridItem=socialiq',
+                'speculationiq': '/ai/apioutput.html?gridItem=speculationiq',
+                'workflowiq': '/ai/apioutput.html?gridItem=workflowiq'
                 // Add more modules as needed
             };
             
