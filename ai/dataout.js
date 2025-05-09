@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
                     '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
                     '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
-                    '/ai/adventure/adventure.html': '/ai/adventure/adventureiqout.html'
+                    '/ai/adventure/adventureiq.html': '/apioutput.html?gridItem=adventureiq'
                 };
                 const outUrl = outputMap[lastGridItemUrl];
 
@@ -342,8 +342,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
                 '/ai/symptom/symptomiq.html': '/apioutput.html?gridItem=symptomiq',
                 '/ai/book/bookiq.html': '/apioutput.html?gridItem=bookiq',
-                '/ai/fitness/fitnessiq.html': '/apioutput.html?gridItem=fitnessiq',
-                '/ai/adventure/adventure.html': '/ai/adventure/adventureiqout.html'
+                '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
+                '/ai/adventure/adventureiq.html': '/apioutput.html?gridItem=adventureiq'
             };
             
             // Just store the mapping but don't auto-open DataOut for CalorieIQ specifically
@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'calorieiq': '/ai/calorie/calorieiqout.html',
                 'symptomiq': '/ai/apioutput.html?gridItem=symptomiq',
                 'bookiq': '/ai/apioutput.html?gridItem=bookiq',
-                'adventureiq': '/ai/adventure/adventureiqout.html'
+                'adventureiq': '/apioutput.html?gridItem=adventureiq'
                 // Add more modules as needed
             };
             
