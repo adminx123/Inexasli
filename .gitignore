@@ -6,11 +6,12 @@ ai/income/incomeiqWorker.js
 secretWorker.js
 ai/book/bookiqworker.js
 ai/fitness/fitnessiqworker.js
+ai/adventure/adventureiqworker.js
 
 
 
 
-ai/*Worker.js
+ai/*worker.js
 ai/*.secret.js
 
 # Environment files
