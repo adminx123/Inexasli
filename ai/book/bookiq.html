@@ -98,32 +98,11 @@
 */
 
 // Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
+// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
 (function() {
     console.log("Book IQ script initializing");
 
-    // Load utility functions - either from global scope or locally defined
-    const setLocal = window.setLocal || function(key, value) {
-        try { 
-            localStorage.setItem(key, encodeURIComponent(value));
-            console.log(`[BookIQ] Local saved ${key}: ${value}`);
-        } catch (e) { 
-            console.error(`[BookIQ] Error saving ${key}:`, e); 
-        }
-    };
-    
-    const getLocal = window.getLocal || function(key) {
-        try { 
-            const value = localStorage.getItem(key);
-            const decodedValue = value ? decodeURIComponent(value) : null;
-            console.log(`[BookIQ] Local retrieved ${key}: ${decodedValue}`);
-            return decodedValue;
-        } catch (e) { 
-            console.error(`[BookIQ] Error retrieving ${key}:`, e);
-            return null; 
-        }
-    };
-
-    // JSON storage functions
+    // Only using JSON for data storage now - more efficient approach
     const setJSON = window.setJSON || function(name, value) {
         try {
             if (name === undefined || name === null || name === '') {
@@ -171,32 +150,26 @@
         // All grid containers in BookIQ allow multi-selection
         this.classList.toggle('selected');
         
-        // Save this specific selection using setLocal
+        // Save using JSON approach
         saveGridItem(this);
         
         console.log(`[BookIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
     }
 
-    // Save grid item selection using setLocal
+    // Save grid item selection - only using JSON for efficiency
     function saveGridItem(item) {
-        const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-        const value = item.classList.contains('selected') ? 'true' : 'false';
-        setLocal(key, value);
-        
+        // Skip individual localStorage items and only use JSON
         // Directly save complete form data to JSON
         console.log('[BookIQ] Saving all form data to JSON');
         const formData = collectFormData();
         setJSON('bookIqInput', formData);
     }
 
-    // Save input value using setLocal
+    // Save input value - only using JSON for efficiency
     function saveInput(input) {
         if (!input || !input.id) return;
         
-        const key = `input_${input.id}`;
-        const value = input.value;
-        setLocal(key, value);
-        
+        // Skip individual localStorage items and only use JSON
         // Directly save complete form data to JSON
         console.log('[BookIQ] Saving all form data to JSON');
         const formData = collectFormData();
@@ -215,15 +188,9 @@
             
             // Add our handler to the fresh clone
             clone.addEventListener('click', customToggleGridItem, { capture: true });
-            
-            // Restore saved selection from localStorage
-            const key = `grid_${clone.parentElement.id}_${clone.dataset.value.replace(/\s+/g, '_')}`;
-            const value = getLocal(key);
-            if (value === 'true') {
-                clone.classList.add('selected');
-                console.log(`[BookIQ] Restored selection: ${clone.dataset.value}`);
-            }
         });
+        
+        // No need to restore selections here - repopulateForm will handle it all from JSON
         
         // Also override datain.js's initializeGridItems function to prevent conflicts
         if (window.initializeGridItems) {
@@ -301,117 +268,148 @@
         return formData;
     }
 
-    // Repopulate form from localStorage
+    // Format data for prompt generation from bookiq.js
+    function formatList(items, prefix) {
+        return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
+    }
+
+    function formatGridItems(containerId, prefix) {
+        const container = document.getElementById(containerId);
+        if (!container) return '';
+        
+        const selectedItems = Array.from(container.querySelectorAll('.grid-item.selected'))
+            .map(item => {
+                const value = item.getAttribute('data-value');
+                return value.charAt(0).toUpperCase() + value.slice(1).replace(/-/g, ' ');
+            });
+        
+        return selectedItems.length ? 
+            `${prefix}:\n${selectedItems.map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
+    }
+
+    function generatePrompt() {
+        let prompt = '';
+        const bookTitleAuthor = document.getElementById('book-title-author');
+        
+        if (bookTitleAuthor?.value) {
+            prompt += formatList(bookTitleAuthor.value, 'Book Title and Author');
+            const summaryPurpose = document.getElementById('summary-purpose');
+            if (summaryPurpose?.value) prompt += formatList(summaryPurpose.value.charAt(0).toUpperCase() + summaryPurpose.value.slice(1), 'Purpose of the Summary');
+            const summaryLength = document.getElementById('summary-length');
+            if (summaryLength?.value) prompt += formatList(summaryLength.value.charAt(0).toUpperCase() + summaryLength.value.slice(1), 'Summary Length');
+            const summaryThemes = document.getElementById('summary-themes');
+            if (summaryThemes?.value) prompt += formatList(summaryThemes.value, 'Key Themes or Topics');
+            
+            // Use the new grid-items format function instead of checkbox formatting
+            prompt += formatGridItems('summary-audience', 'Target Audience');
+            prompt += formatGridItems('summary-elements', 'Specific Elements to Include');
+            
+            const summaryTone = document.getElementById('summary-tone');
+            if (summaryTone?.value) prompt += formatList(summaryTone.value.charAt(0).toUpperCase() + summaryTone.value.slice(1), 'Tone or Style');
+            const summaryDetails = document.getElementById('summary-details');
+            if (summaryDetails?.value) prompt += formatList(summaryDetails.value, 'Additional Details or Constraints');
+            prompt += `
+                Create a book summary based on the provided title, author, purpose, length, themes, audience, elements, tone, and details. Output the summary specifications in a code block with the following table format:
+                \`\`\`
+                Book Summary Specifications:
+                | Category            | Details                                       |
+                |--------------------|-----------------------------------------------|
+                | Title and Author   | [e.g., Pride and Prejudice by Jane Austen]   |
+                | Purpose            | [e.g., Personal Understanding]               |
+                | Length             | [e.g., Short (1 paragraph)]                  |
+                | Themes             | [e.g., Love, Identity]                       |
+                | Audience           | [e.g., General Readers, Students]            |
+                | Elements           | [e.g., Plot, Characters]                     |
+                | Tone               | [e.g., Formal]                               |
+                | Details            | [e.g., Avoid spoilers, Focus on chapter 5]   |
+
+                Note: Ensure the summary aligns with the specified purpose, audience, and tone.
+                \`\`\`
+                Include no text outside the code blocks.
+            `;
+        } else {
+            prompt = 'Error: Please provide a book title and author.';
+        }
+
+        return prompt;
+    }
+
+    // Repopulate form from localStorage - simplified to only use JSON
     function repopulateForm() {
-        console.log("[BookIQ] Repopulating form from localStorage");
+        console.log("[BookIQ] Repopulating form from JSON storage");
 
-        // Try both approaches for maximum compatibility
-        
-        // First approach: Use individual localStorage items with getLocal
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-            const value = getLocal(key);
-            if (value === 'true') {
-                item.classList.add('selected');
-                console.log(`[BookIQ] Restored from localStorage: ${item.dataset.value}`);
-            }
-        });
-        
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            if (!input.id) return;
-            
-            const key = `input_${input.id}`;
-            const value = getLocal(key);
-            if (value && value !== 'null') {
-                input.value = value;
-                console.log(`[BookIQ] Restored from localStorage: ${input.id} = ${value}`);
-            }
-        });
-
-        // Second approach: Also check for stored JSON data to fall back on
+        // Get stored JSON data
         const storedData = getJSON('bookIqInput', null);
-        if (storedData) {
-            console.log('[BookIQ] Found stored JSON form data, using as fallback');
+        if (!storedData) {
+            console.log('[BookIQ] No stored form data found');
+            return;
+        }
             
-            // Only apply JSON data if individual localStorage items didn't work
-            
-            // Check for title and author
-            const titleAuthorInput = document.getElementById('book-title-author');
-            if (titleAuthorInput && !titleAuthorInput.value && storedData.titleAuthor) {
-                titleAuthorInput.value = storedData.titleAuthor;
-                console.log(`[BookIQ] Restored from JSON: title & author`);
-            }
-            
-            // Check for purpose
-            const purposeSelect = document.getElementById('summary-purpose');
-            if (purposeSelect && !purposeSelect.value && storedData.purpose) {
-                purposeSelect.value = storedData.purpose;
-                console.log(`[BookIQ] Restored from JSON: purpose`);
-            }
-            
-            // Check for length
-            const lengthSelect = document.getElementById('summary-length');
-            if (lengthSelect && !lengthSelect.value && storedData.length) {
-                lengthSelect.value = storedData.length;
-                console.log(`[BookIQ] Restored from JSON: length`);
-            }
-            
-            // Check for themes
-            const themesInput = document.getElementById('summary-themes');
-            if (themesInput && !themesInput.value && storedData.themes) {
-                themesInput.value = storedData.themes;
-                console.log(`[BookIQ] Restored from JSON: themes`);
-            }
-            
-            // Check for audience
-            const hasExistingAudience = document.querySelector('#summary-audience .grid-item.selected');
-            if (!hasExistingAudience && storedData.audience && Array.isArray(storedData.audience)) {
-                storedData.audience.forEach(audience => {
-                    const item = document.querySelector(`#summary-audience .grid-item[data-value="${audience}"]`);
-                    if (item && !item.classList.contains('selected')) {
-                        item.classList.add('selected');
-                        console.log(`[BookIQ] Restored from JSON: audience ${audience}`);
-                    }
-                });
-            }
-            
-            // Check for elements
-            const hasExistingElements = document.querySelector('#summary-elements .grid-item.selected');
-            if (!hasExistingElements && storedData.elements && Array.isArray(storedData.elements)) {
-                storedData.elements.forEach(element => {
-                    const item = document.querySelector(`#summary-elements .grid-item[data-value="${element}"]`);
-                    if (item && !item.classList.contains('selected')) {
-                        item.classList.add('selected');
-                        console.log(`[BookIQ] Restored from JSON: element ${element}`);
-                    }
-                });
-            }
-            
-            // Check for tone
-            const toneSelect = document.getElementById('summary-tone');
-            if (toneSelect && !toneSelect.value && storedData.tone) {
-                toneSelect.value = storedData.tone;
-                console.log(`[BookIQ] Restored from JSON: tone`);
-            }
-            
-            // Check for details
-            const detailsInput = document.getElementById('summary-details');
-            if (detailsInput && !detailsInput.value && storedData.details) {
-                detailsInput.value = storedData.details;
-                console.log(`[BookIQ] Restored from JSON: details`);
-            }
+        console.log('[BookIQ] Found stored JSON form data');
+        
+        // Check for title and author
+        const titleAuthorInput = document.getElementById('book-title-author');
+        if (titleAuthorInput && storedData.titleAuthor) {
+            titleAuthorInput.value = storedData.titleAuthor;
+            console.log(`[BookIQ] Restored from JSON: title & author`);
         }
         
-        // After repopulating, save all data using both approaches to ensure consistency
-        document.querySelectorAll('.grid-container .grid-item.selected').forEach(item => {
-            saveGridItem(item);
-        });
+        // Check for purpose
+        const purposeSelect = document.getElementById('summary-purpose');
+        if (purposeSelect && storedData.purpose) {
+            purposeSelect.value = storedData.purpose;
+            console.log(`[BookIQ] Restored from JSON: purpose`);
+        }
         
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            if (input.value) {
-                saveInput(input);
-            }
-        });
+        // Check for length
+        const lengthSelect = document.getElementById('summary-length');
+        if (lengthSelect && storedData.length) {
+            lengthSelect.value = storedData.length;
+            console.log(`[BookIQ] Restored from JSON: length`);
+        }
+        
+        // Check for themes
+        const themesInput = document.getElementById('summary-themes');
+        if (themesInput && storedData.themes) {
+            themesInput.value = storedData.themes;
+            console.log(`[BookIQ] Restored from JSON: themes`);
+        }
+        
+        // Check for audience
+        if (storedData.audience && Array.isArray(storedData.audience)) {
+            storedData.audience.forEach(audience => {
+                const item = document.querySelector(`#summary-audience .grid-item[data-value="${audience}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[BookIQ] Restored from JSON: audience ${audience}`);
+                }
+            });
+        }
+        
+        // Check for elements
+        if (storedData.elements && Array.isArray(storedData.elements)) {
+            storedData.elements.forEach(element => {
+                const item = document.querySelector(`#summary-elements .grid-item[data-value="${element}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[BookIQ] Restored from JSON: element ${element}`);
+                }
+            });
+        }
+        
+        // Check for tone
+        const toneSelect = document.getElementById('summary-tone');
+        if (toneSelect && storedData.tone) {
+            toneSelect.value = storedData.tone;
+            console.log(`[BookIQ] Restored from JSON: tone`);
+        }
+        
+        // Check for details
+        const detailsInput = document.getElementById('summary-details');
+        if (detailsInput && storedData.details) {
+            detailsInput.value = storedData.details;
+            console.log(`[BookIQ] Restored from JSON: details`);
+        }
     }
 
     // Handle input changes
@@ -430,21 +428,7 @@
         }
         
         try {
-            // Clear individual localStorage items using keys pattern
-            const keysToRemove = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('grid_summary') || key.startsWith('input_book') || key.startsWith('input_summary')) {
-                    keysToRemove.push(key);
-                }
-            }
-            
-            keysToRemove.forEach(key => {
-                localStorage.removeItem(key);
-                console.log(`[BookIQ] Removed ${key}`);
-            });
-            
-            // Also remove JSON data
+            // Simply remove the JSON data - no need to iterate through individual keys
             localStorage.removeItem('bookIqInput');
             localStorage.removeItem('bookIqResponse');
             
@@ -457,8 +441,11 @@
                 input.value = '';
             });
             
+            // Reset select elements to default values
             document.querySelectorAll('select').forEach(select => {
-                select.selectedIndex = 0;
+                if (select.options.length > 0) {
+                    select.selectedIndex = 0;
+                }
             });
             
             console.log('[BookIQ] All book data cleared');
@@ -590,13 +577,13 @@
         setTimeout(initialize, 100); // Small delay to ensure DOM is updated
     });
 
-    // Expose functions to global scope for external access
+    // For external access if needed
     window.bookIq = {
         initialize: initialize,
         saveGridItem: saveGridItem,
         saveInput: saveInput,
         clearLocalStorage: clearLocalStorage,
-        collectFormData: collectFormData
+        getFormData: collectFormData  // Changed from collectFormData to match fitnessiq
     };
 })();
 </script>
