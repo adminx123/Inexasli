@@ -3,14 +3,27 @@
 # Ignore engineered prompts and worker files containing sensitive IP
 ai/calorie/calorieiqWorker.js
 ai/income/incomeiqWorker.js
-secretWorker.js
 ai/book/bookiqworker.js
 ai/fitness/fitnessiqworker.js
 ai/adventure/adventureiqworker.js
 ai/app/appiqworker.js
+ai/business/businessiqworker.js
+ai/enneagram/enneagramiqworker.js
+ai/event/eventiqworker.js
+ai/general/generaliqworker.js
+ai/marketing/adagencyiqworker.js
+ai/decision/decisioniqworker.js
+ai/report/reportiqworker.js 
+ai/workflow/workflowiqworker.js
+ai/speculation/speculationiqworker.js
+ai/social/socialiqworker.js
+ai/quiz/quiziqworker.js
+ai/symptom/symptomiqworker.js
+ai/research/researchiqworker.js
+ai/emotion/emotioniqWorker.js
 
-
-
+# Catch-all patterns for any missed worker files
+ai/**/*worker*.js
 /*worker.js
 ai/*.secret.js
 
