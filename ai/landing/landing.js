@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '/ai/fitness/fitnessiq.html',
         '/ai/general/general.html',
         '/ai/income/budget.html', // IncomeIQ URL
-        '/ai/business/newbiziq.html',
+        '/ai/business/businessiq.html',
         '/ai/quiz/quiziq.html',
         '/ai/receipts/receiptsiq.html',
         '/ai/report/reportiq.html',
