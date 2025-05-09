@@ -92,6 +92,8 @@
             moduleName = 'bookiq';
           } else if (lastGridItemUrl.includes('symptomiq')) {
             moduleName = 'symptomiq';
+          } else if (lastGridItemUrl.includes('adventureiq')) {
+            moduleName = 'adventureiq';
           }
         }
         
@@ -110,6 +112,9 @@
             responseKey = 'bookIqResponse'; // Capital 'I' to match actual storage pattern
           } else if (moduleName === 'symptomiq') {
             responseKey = 'symptomIqResponse'; // Capital 'I' to match actual storage pattern
+          } else if (moduleName === 'adventureiq') {
+            responseKey = 'adventureIqResponse'; // Capital 'I' to match actual storage pattern
+            console.log('Using correctly capitalized key for adventure:', responseKey);
           } else {
             responseKey = moduleName + 'Response';
           }

@@ -581,66 +581,59 @@ Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
         console.log('[AdventureIQ] Generate button clicked.');
         
         try {
-            // Get form data
-            const formData = collectFormData();
-            if (formData.activities.length === 0) {
-                alert('Please select at least one activity.');
+            // Instead of collecting form data again, just use what's already in localStorage
+            const formData = getJSON('adventureIqInput');
+            if (!formData) {
+                console.error('[AdventureIQ] No input data found in localStorage.');
+                alert('Please complete the form before generating an adventure plan.');
                 btn.innerText = initialText;
                 btn.removeAttribute('disabled');
                 return;
             }
             
-            if (!formData.people) {
-                alert('Please enter a valid number of people.');
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-                return;
+            // Send data to worker
+            const apiUrl = 'https://adventureiqworker.4hm7q4q75z.workers.dev/'; 
+            
+            console.log('[AdventureIQ] Sending adventureIqInput directly from localStorage to worker');
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
             
-            if (!formData.days) {
-                alert('Please enter a valid number of days.');
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-                return;
+            const responseData = await response.json();
+            console.log('[AdventureIQ] Worker response:', responseData);
+            
+            if (responseData.message !== 'Success') {
+                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
             }
             
-            console.log('[AdventureIQ] Form data validated:', formData);
-            
-            // Save JSON data
-            setJSON('adventureIqInput', formData);
-            
-            // Generate the prompt
-            const prompt = generatePrompt('AdventureIQ™');
-            console.log('[AdventureIQ] Generated prompt');
-            
-            // Simulate API call success
-            const responseData = {
-                message: 'Success',
-                data: { prompt: prompt }
-            };
-            console.log('[AdventureIQ] Response data prepared');
-            
-            // Store the response
+            // Store the response using setJSON
             setJSON('adventureIqResponse', responseData);
             
-            // Update UI
+            // Update button state
             btn.innerText = 'Success!';
             setTimeout(() => {
-                btn.removeAttribute('disabled');
                 btn.innerText = initialText;
+                btn.removeAttribute('disabled');
             }, 2000);
             
-            // Show the prompt in the custom modal
-            openCustomModal(prompt);
-            
-            // Optionally toggle data containers
-            if (typeof toggleDataOutcontainer === 'function') {
-                toggleDataOutcontainer();
-            }
-            
-            if (typeof toggleDatainContainer === 'function') {
-                toggleDatainContainer();
-            }
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'adventureiq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[AdventureIQ] Dispatched api-response-received event');
             
         } catch (error) {
             console.error('[AdventureIQ] Error generating adventure plan:', error);
