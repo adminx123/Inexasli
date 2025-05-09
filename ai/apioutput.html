@@ -94,6 +94,8 @@
             moduleName = 'symptomiq';
           } else if (lastGridItemUrl.includes('adventureiq')) {
             moduleName = 'adventureiq';
+          } else if (lastGridItemUrl.includes('appiq')) {
+            moduleName = 'appiq';
           }
         }
         
@@ -115,6 +117,9 @@
           } else if (moduleName === 'adventureiq') {
             responseKey = 'adventureIqResponse'; // Capital 'I' to match actual storage pattern
             console.log('Using correctly capitalized key for adventure:', responseKey);
+          } else if (moduleName === 'appiq') {
+            responseKey = 'appIqResponse'; // Capital 'I' to match actual storage pattern
+            console.log('Using correctly capitalized key for app:', responseKey);
           } else {
             responseKey = moduleName + 'Response';
           }
