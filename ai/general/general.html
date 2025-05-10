@@ -8,10 +8,20 @@
  * jurisdictions worldwide.
 -->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeneralIQ™ - Analysis Tool</title>
+    <link rel="stylesheet" href="/style/styles.css">
+</head>
+<body>
     <a href="/ai/landing/landing.html">
         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
     </a>
 
+    <div class="container">
         <div class="row1">
             <label class="category-label">Primary Goal</label>
             <textarea id="general-goal" rows="4" placeholder="Focus On:\nPlanning an exciting hike\nSales data\nRestaurants within 6km of LA city center"></textarea>
@@ -33,7 +43,7 @@
         </div>
         <div class="row1">
             <label class="category-label">Additional Context</label>
-            <textarea id="general-context" rows="5" placeholder="General Context: (1 per line)\nI’m hiking in Colorado\nPrefer trails under 5 miles\nNeed dog-friendly options\nFitness level of hiking group"></textarea>
+            <textarea id="general-context" rows="5" placeholder="General Context: (1 per line)\nI'm hiking in Colorado\nPrefer trails under 5 miles\nNeed dog-friendly options\nFitness level of hiking group"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Output Format</label>
@@ -50,7 +60,368 @@
                 <div class="grid-item" data-value="json">Return JSON Format</div>
             </div>
         </div>
-        <button class="generate-btn" data-prompt="GeneralIQ™" onclick="generatePrompt('GeneralIQ™')">Generate Promptemplate™ Now!</button>
+        <div class="row1">
+            <button class="generate-btn" id="generate-general-btn">Generate GeneralIQ™ Analysis</button>
+            <button class="clear-btn" id="clear-general-btn">Clear All</button>
+        </div>
+    </div>
 
+<script>
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
 
-    <script src="/ai/general/general.js"></script>
+// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
+(function() {
+    console.log("GeneralIQ script initializing");
+
+    // Only using JSON for data storage now - more efficient approach
+    const setJSON = window.setJSON || function(name, value) {
+        try {
+            if (name === undefined || name === null || name === '') {
+                console.error('Invalid key name provided to setJSON');
+                return false;
+            }
+            
+            if (value === undefined) {
+                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                localStorage.removeItem(name);
+                return true;
+            }
+            
+            // Convert value to JSON string
+            const jsonString = JSON.stringify(value);
+            localStorage.setItem(name, jsonString);
+            console.log(`[GeneralIQ] JSON saved ${name}`);
+            return true;
+        } catch (error) {
+            console.error(`[GeneralIQ] Error storing JSON: ${error}`);
+            return false;
+        }
+    };
+    
+    const getJSON = window.getJSON || function(name, defaultValue) {
+        try {
+            const item = localStorage.getItem(name);
+            if (!item) return defaultValue;
+            const parsedValue = JSON.parse(item);
+            console.log(`[GeneralIQ] JSON retrieved ${name}`);
+            return parsedValue;
+        } catch (error) {
+            console.error(`[GeneralIQ] Error retrieving JSON: ${error}`);
+            return defaultValue;
+        }
+    };
+
+    // Custom handler for grid item selection
+    function customToggleGridItem(event) {
+        // Stop event propagation to prevent other handlers from firing
+        event.stopPropagation();
+        event.preventDefault();
+        
+        const container = this.closest('.grid-container');
+        // All grid containers in GeneralIQ allow multi-selection
+        this.classList.toggle('selected');
+        
+        // Save using JSON approach
+        saveGridItem(this);
+        
+        console.log(`[GeneralIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+    }
+
+    // Save grid item selection - only using JSON for efficiency
+    function saveGridItem(item) {
+        // Skip individual localStorage items and only use JSON
+        // Directly save complete form data to JSON
+        console.log('[GeneralIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('generalIqInput', formData);
+    }
+
+    // Save input value - only using JSON for efficiency
+    function saveInput(input) {
+        if (!input || !input.id) return;
+        
+        // Skip individual localStorage items and only use JSON
+        // Directly save complete form data to JSON
+        console.log('[GeneralIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('generalIqInput', formData);
+    }
+
+    // Initialize our grid items with special handling
+    function initializeGeneralGridItems() {
+        console.log("[GeneralIQ] Initializing general grid items");
+        
+        // First remove any existing click handlers from datain.js
+        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+            // Clone the node to remove all event listeners
+            const clone = item.cloneNode(true);
+            item.parentNode.replaceChild(clone, item);
+            
+            // Add our handler to the fresh clone
+            clone.addEventListener('click', customToggleGridItem, { capture: true });
+        });
+        
+        // No need to restore selections here - repopulateForm will handle it all from JSON
+    }
+
+    // Collect form data without validation
+    function collectFormData() {
+        const formData = {
+            goal: null,
+            purposes: [],
+            context: null,
+            outputFormat: null
+        };
+        
+        // Collect goal
+        const goalInput = document.getElementById('general-goal');
+        if (goalInput && goalInput.value.trim()) {
+            formData.goal = goalInput.value.trim();
+        }
+        
+        // Collect purposes (multi-selection grid)
+        document.querySelectorAll('#general-purpose .grid-item.selected').forEach(item => {
+            formData.purposes.push(item.dataset.value);
+        });
+        
+        // Collect context
+        const contextInput = document.getElementById('general-context');
+        if (contextInput && contextInput.value.trim()) {
+            formData.context = contextInput.value.trim();
+        }
+        
+        // Collect output format (single selection)
+        const selectedFormat = document.querySelector('#general-info-return .grid-item.selected');
+        if (selectedFormat) {
+            formData.outputFormat = selectedFormat.dataset.value;
+        }
+        
+        return formData;
+    }
+
+    // Repopulate form from localStorage - simplified to only use JSON
+    function repopulateForm() {
+        console.log("[GeneralIQ] Repopulating form from JSON storage");
+
+        // Get stored JSON data
+        const storedData = getJSON('generalIqInput', null);
+        if (!storedData) {
+            console.log('[GeneralIQ] No stored form data found');
+            return;
+        }
+            
+        console.log('[GeneralIQ] Found stored JSON form data');
+        
+        // Populate goal
+        const goalInput = document.getElementById('general-goal');
+        if (goalInput && storedData.goal) {
+            goalInput.value = storedData.goal;
+            console.log(`[GeneralIQ] Restored from JSON: goal`);
+        }
+        
+        // Populate purposes
+        if (storedData.purposes && Array.isArray(storedData.purposes)) {
+            storedData.purposes.forEach(purpose => {
+                const item = document.querySelector(`#general-purpose .grid-item[data-value="${purpose}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[GeneralIQ] Restored from JSON: purpose ${purpose}`);
+                }
+            });
+        }
+        
+        // Populate context
+        const contextInput = document.getElementById('general-context');
+        if (contextInput && storedData.context) {
+            contextInput.value = storedData.context;
+            console.log(`[GeneralIQ] Restored from JSON: context`);
+        }
+        
+        // Populate output format
+        if (storedData.outputFormat) {
+            const formatItem = document.querySelector(`#general-info-return .grid-item[data-value="${storedData.outputFormat}"]`);
+            if (formatItem) {
+                formatItem.classList.add('selected');
+                console.log(`[GeneralIQ] Restored from JSON: output format ${storedData.outputFormat}`);
+            }
+        }
+    }
+
+    // Handle input changes
+    function setupInputHandlers() {
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('change', function() {
+                saveInput(this);
+            });
+        });
+    }
+
+    // Clear saved data from localStorage
+    function clearLocalStorage() {
+        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
+            return;
+        }
+        
+        try {
+            // Simply remove the JSON data - no need to iterate through individual keys
+            localStorage.removeItem('generalIqInput');
+            localStorage.removeItem('generalIqResponse');
+            
+            // Reset UI
+            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('input, textarea').forEach(input => {
+                input.value = '';
+            });
+            
+            console.log('[GeneralIQ] All general data cleared');
+            alert("All general data has been cleared successfully.");
+        } catch (error) {
+            console.error('[GeneralIQ] Error clearing data:', error);
+            alert("Error clearing data: " + error.message);
+        }
+    }
+
+    // Handle the generate button click - directly talking to worker
+    async function handleGenerateGeneralIq() {
+        const btn = document.getElementById('generate-general-btn');
+        const initialText = btn.innerText;
+        btn.innerText = 'Loading...';
+        btn.setAttribute('disabled', 'true');
+        
+        console.log('[GeneralIQ] Generate button clicked.');
+        
+        try {
+            // Use what's already in localStorage
+            const formData = getJSON('generalIqInput');
+            if (!formData) {
+                console.error('[GeneralIQ] No input data found in localStorage.');
+                alert('Please complete the form before generating an analysis.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Validate minimum requirements
+            if (!formData.goal) {
+                console.error('[GeneralIQ] No goal provided.');
+                alert('Please provide a primary goal before generating an analysis.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Send data to worker
+            const apiUrl = 'https://generaliqworker.4hm7q4q75z.workers.dev/'; 
+            
+            console.log('[GeneralIQ] Sending generalIqInput directly from localStorage to worker');
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const responseData = await response.json();
+            console.log('[GeneralIQ] Worker response:', responseData);
+            
+            if (responseData.message !== 'Success') {
+                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            
+            // Store the response using setJSON
+            setJSON('generalIqResponse', responseData);
+            
+            // Update button state
+            btn.innerText = 'Success!';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+            
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'generaliq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[GeneralIQ] Dispatched api-response-received event');
+            
+        } catch (error) {
+            console.error('[GeneralIQ] Error generating general analysis:', error);
+            alert('An error occurred while generating your analysis. Please try again later.');
+            
+            btn.innerText = 'Error';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+        }
+    }
+
+    // Attach event listeners to buttons
+    function setupButtonHandlers() {
+        const generateBtn = document.getElementById('generate-general-btn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', handleGenerateGeneralIq);
+        }
+        
+        const clearBtn = document.getElementById('clear-general-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', clearLocalStorage);
+        }
+    }
+
+    // Main initialization function - called immediately and again after full load
+    function initialize() {
+        console.log("[GeneralIQ] Initializing...");
+        initializeGeneralGridItems();
+        setupInputHandlers();
+        setupButtonHandlers();
+        repopulateForm();
+    }
+
+    // Initialize immediately
+    initialize();
+
+    // Also initialize when DOM is fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    }
+
+    // Special handler for when this page is loaded through datain.js
+    document.addEventListener('data-in-loaded', function(e) {
+        console.log("[GeneralIQ] Detected load through datain.js, reinitializing");
+        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
+    });
+
+    // For external access if needed
+    window.generalIq = {
+        initialize: initialize,
+        saveGridItem: saveGridItem,
+        saveInput: saveInput,
+        clearLocalStorage: clearLocalStorage,
+        getFormData: collectFormData
+    };
+})();
+</script>
+</body>
+</html>
