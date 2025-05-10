@@ -1,4 +1,10 @@
-<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adventure IQ</title>
+  <!--
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
@@ -6,91 +12,94 @@
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide. -->
+</head>
+<body>
+  <!-- Navigation -->
+  <a href="/ai/landing/landing.html">
+    <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
+  </a>
 
-    <a href="/ai/landing/landing.html">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
-    </a>
-
-        <div class="row1">
-            <label class="category-label">Trip Activities</label>
-            <div class="grid-container" id="trip-activities">
-                <div class="grid-item" data-value="Hiking">Hiking</div>
-                <div class="grid-item" data-value="Sightseeing">Sightseeing</div>
-                <div class="grid-item" data-value="Relaxation">Relaxation</div>
-                <div class="grid-item" data-value="Attractions">Attractions</div>
-                <div class="grid-item" data-value="Event">Event</div>
-                <div class="grid-item" data-value="Cultural Tours">Cultural Tours</div>
-                <div class="grid-item" data-value="Shopping">Shopping</div>
-                <div class="grid-item" data-value="Adventure">Adventure</div>
-                <div class="grid-item" data-value="Wildlife Watching">Wildlife Watching</div>
-                <div class="grid-item" data-value="Water Sports">Water Sports</div>
-                <div class="grid-item" data-value="Food Tours">Food Tours</div>
-                <div class="grid-item" data-value="Museums">Museums</div>
-                <div class="grid-item" data-value="Nightlife">Nightlife</div>
-                <div class="grid-item" data-value="Wellness">Wellness</div>
-                <div class="grid-item" data-value="Beach Time">Beach Time</div>
-                <div class="grid-item" data-value="Skiing">Skiing</div>
-                <div class="grid-item" data-value="Road Trips">Road Trips</div>
-                <div class="grid-item" data-value="Camping">Camping</div>
-                <div class="grid-item" data-value="Photography">Photography</div>
-                <div class="grid-item" data-value="Historical Sites">Historical Sites</div>
-            </div>
-        </div>
-        <div class="row1">
-            <label class="category-label">Travel Companions</label>
-            <div class="grid-container" id="trip-relationship">
-                <div class="grid-item" data-value="Parents">With Parents</div>
-                <div class="grid-item" data-value="Siblings">With Siblings</div>
-                <div class="grid-item" data-value="Friends">With Friends</div>
-                <div class="grid-item" data-value="Intimate Partner">With Intimate Partner</div>
-                <div class="grid-item" data-value="Business Partner">With Business Partner</div>
-                <div class="grid-item" data-value="Co-Worker">With Co-Worker</div>
-                <div class="grid-item" data-value="Client">With Client</div>
-            </div>
-        </div>
-        <div class="row1">
-            <label class="category-label">Destination</label>
-            <textarea id="trip-location" rows="3" placeholder="Trip Locations (one per line):
+  <!-- Form Sections - identical structure to fitnessiq.html but with adventure IDs -->
+  <div class="row1">
+    <label class="category-label">Trip Activities</label>
+    <div class="grid-container" id="trip-activities">
+      <div class="grid-item" data-value="Hiking">Hiking</div>
+      <div class="grid-item" data-value="Sightseeing">Sightseeing</div>
+      <div class="grid-item" data-value="Relaxation">Relaxation</div>
+      <div class="grid-item" data-value="Attractions">Attractions</div>
+      <div class="grid-item" data-value="Event">Event</div>
+      <div class="grid-item" data-value="Cultural Tours">Cultural Tours</div>
+      <div class="grid-item" data-value="Shopping">Shopping</div>
+      <div class="grid-item" data-value="Adventure">Adventure</div>
+      <div class="grid-item" data-value="Wildlife Watching">Wildlife Watching</div>
+      <div class="grid-item" data-value="Water Sports">Water Sports</div>
+      <div class="grid-item" data-value="Food Tours">Food Tours</div>
+      <div class="grid-item" data-value="Museums">Museums</div>
+      <div class="grid-item" data-value="Nightlife">Nightlife</div>
+      <div class="grid-item" data-value="Wellness">Wellness</div>
+      <div class="grid-item" data-value="Beach Time">Beach Time</div>
+      <div class="grid-item" data-value="Skiing">Skiing</div>
+      <div class="grid-item" data-value="Road Trips">Road Trips</div>
+      <div class="grid-item" data-value="Camping">Camping</div>
+      <div class="grid-item" data-value="Photography">Photography</div>
+      <div class="grid-item" data-value="Historical Sites">Historical Sites</div>
+    </div>
+  </div>
+  <div class="row1">
+    <label class="category-label">Travel Companions</label>
+    <div class="grid-container" id="trip-relationship">
+      <div class="grid-item" data-value="Parents">With Parents</div>
+      <div class="grid-item" data-value="Siblings">With Siblings</div>
+      <div class="grid-item" data-value="Friends">With Friends</div>
+      <div class="grid-item" data-value="Intimate Partner">With Intimate Partner</div>
+      <div class="grid-item" data-value="Business Partner">With Business Partner</div>
+      <div class="grid-item" data-value="Co-Worker">With Co-Worker</div>
+      <div class="grid-item" data-value="Client">With Client</div>
+    </div>
+  </div>
+  <div class="row1">
+    <label class="category-label">Destination</label>
+    <textarea id="trip-location" rows="3" placeholder="Trip Locations (one per line):
 New York, 51st st
 New Jersey, 6th ave
 Hampton's"></textarea>
-        </div>
-        <div class="row1">
-            <label class="category-label">Trip Details</label>
-            <textarea id="trip-specifics" rows="4" placeholder="Specifics Needed (one per line):
+  </div>
+  <div class="row1">
+    <label class="category-label">Trip Details</label>
+    <textarea id="trip-specifics" rows="4" placeholder="Specifics Needed (one per line):
 Top rated hiking trails
 Hikes under 5km
 Best ice cream shops within 5km from city centre"></textarea>
-            <textarea id="trip-plans" rows="3" placeholder="Trip Schedule (one per line):
+    <textarea id="trip-plans" rows="3" placeholder="Trip Schedule (one per line):
 Monday - 6am hike, 8pm dinner
 Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
-        </div>
-        <div class="row1">
-            <label class="category-label">Packing Requirements</label>
-            <select id="trip-packing">
-                <option value="YM">Packing tips needed for male</option>
-                <option value="YF">Packing tips needed for female</option>
-                <option value="YMF">Packing tips needed for male & female</option>
-                <option value="NN">Packing tips not needed</option>
-            </select>
-        </div>
-        <div class="row1">
-            <label class="category-label">Group Size</label>
-            <input type="number" id="trip-people" placeholder="Amount of people on trip" min="1">
-        </div>
-        <div class="row1">
-            <label class="category-label">Trip Duration</label>
-            <input type="number" id="trip-days" placeholder="Trip Length (days)" min="1">
-        </div>
-        <div class="row1">
-            <label class="category-label">Budget</label>
-            <textarea id="trip-budget" rows="4" placeholder="Budget: $3000 usd"></textarea>
-        </div>
-        <button class="generate-btn" id="generate-adventure-btn" data-prompt="AdventureIQ™">Generate Promptemplate™ Now!</button>
-        <button class="clear-btn" id="clear-adventure-btn">Clear All</button>
+  </div>
+  <div class="row1">
+    <label class="category-label">Packing Requirements</label>
+    <select id="trip-packing">
+      <option value="YM">Packing tips needed for male</option>
+      <option value="YF">Packing tips needed for female</option>
+      <option value="YMF">Packing tips needed for male & female</option>
+      <option value="NN">Packing tips not needed</option>
+    </select>
+  </div>
+  <div class="row1">
+    <label class="category-label">Group Size</label>
+    <input type="number" id="trip-people" placeholder="Amount of people on trip" min="1">
+  </div>
+  <div class="row1">
+    <label class="category-label">Trip Duration</label>
+    <input type="number" id="trip-days" placeholder="Trip Length (days)" min="1">
+  </div>
+  <div class="row1">
+    <label class="category-label">Budget</label>
+    <textarea id="trip-budget" rows="4" placeholder="Budget: $3000 usd"></textarea>
+  </div>
+  <button class="generate-btn" id="generate-adventure-btn">Generate Prompt Now!</button>
+  <button class="clear-btn" id="clear-adventure-btn">Clear All</button>
 
-<script>
-/*
+  <script>
+  /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
@@ -99,600 +108,290 @@ Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 */
-
-// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
-(function() {
+  (function() {
     console.log("Adventure IQ script initializing");
-
-    // Load utility functions - either from global scope or locally defined
-    const setLocal = window.setLocal || function(key, value) {
-        try { 
-            localStorage.setItem(key, encodeURIComponent(value));
-            console.log(`[AdventureIQ] Local saved ${key}: ${value}`);
-        } catch (e) { 
-            console.error(`[AdventureIQ] Error saving ${key}:`, e); 
-        }
-    };
-    
-    const getLocal = window.getLocal || function(key) {
-        try { 
-            const value = localStorage.getItem(key);
-            const decodedValue = value ? decodeURIComponent(value) : null;
-            console.log(`[AdventureIQ] Local retrieved ${key}: ${decodedValue}`);
-            return decodedValue;
-        } catch (e) { 
-            console.error(`[AdventureIQ] Error retrieving ${key}:`, e);
-            return null; 
-        }
-    };
-
-    // We'll still use setJSON/getJSON as well
     const setJSON = window.setJSON || function(name, value) {
-        try {
-            if (name === undefined || name === null || name === '') {
-                console.error('Invalid key name provided to setJSON');
-                return false;
-            }
-            
-            if (value === undefined) {
-                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
-                localStorage.removeItem(name);
-                return true;
-            }
-            
-            // Convert value to JSON string
-            const jsonString = JSON.stringify(value);
-            localStorage.setItem(name, jsonString);
-            console.log(`[AdventureIQ] JSON saved ${name}`);
-            return true;
-        } catch (error) {
-            console.error(`[AdventureIQ] Error storing JSON: ${error}`);
-            return false;
+      try {
+        if (name === undefined || name === null || name === '') {
+          console.error('Invalid key name provided to setJSON');
+          return false;
         }
+        
+        if (value === undefined) {
+          console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+          localStorage.removeItem(name);
+          return true;
+        }
+        
+        const jsonString = JSON.stringify(value);
+        localStorage.setItem(name, jsonString);
+        console.log(`[AdventureIQ] JSON saved ${name}`);
+        return true;
+      } catch (error) {
+        console.error(`[AdventureIQ] Error storing JSON: ${error}`);
+        return false;
+      }
     };
-    
     const getJSON = window.getJSON || function(name, defaultValue) {
-        try {
-            const item = localStorage.getItem(name);
-            if (!item) return defaultValue;
-            const parsedValue = JSON.parse(item);
-            console.log(`[AdventureIQ] JSON retrieved ${name}`);
-            return parsedValue;
-        } catch (error) {
-            console.error(`[AdventureIQ] Error retrieving JSON: ${error}`);
-            return defaultValue;
-        }
+      try {
+        const item = localStorage.getItem(name);
+        if (!item) return defaultValue;
+        const parsedValue = JSON.parse(item);
+        console.log(`[AdventureIQ] JSON retrieved ${name}`);
+        return parsedValue;
+      } catch (error) {
+        console.error(`[AdventureIQ] Error retrieving JSON: ${error}`);
+        return defaultValue;
+      }
     };
 
-    // Custom handler for grid item selection
     function customToggleGridItem(event) {
-        // Stop event propagation to prevent other handlers from firing
-        event.stopPropagation();
-        event.preventDefault();
-        
-        const item = this;
-        item.classList.toggle('selected');
-        
-        // Save this specific selection
-        saveGridItem(item);
-        
-        console.log(`[AdventureIQ] Toggled ${item.dataset.value}: ${item.classList.contains('selected') ? 'selected' : 'deselected'}`);
+      event.stopPropagation(); event.preventDefault();
+      const container = this.closest('.grid-container');
+      if (container.id === 'adventure-...') {
+        /* single selection logic as in fitnessiq */
+      } else {
+        this.classList.toggle('selected');
+      }
+      saveGridItem(this);
     }
 
-    // Save grid item selection
     function saveGridItem(item) {
-        const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-        const value = item.classList.contains('selected') ? 'true' : 'false';
-        setLocal(key, value);
-        
-        // Directly save complete form data to JSON
-        console.log('[AdventureIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('adventureIqInput', formData);
+      console.log('[AdventureIQ] Saving all form data to JSON');
+      const formData = collectFormData();
+      setJSON('adventureIqInput', formData);
     }
 
-    // Save input value
     function saveInput(input) {
-        if (!input || !input.id) return;
-        
-        const key = `input_${input.id}`;
-        const value = input.value;
-        setLocal(key, value);
-        
-        // Directly save complete form data to JSON
-        console.log('[AdventureIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('adventureIqInput', formData);
+      console.log('[AdventureIQ] Saving all form data to JSON');
+      const formData = collectFormData();
+      setJSON('adventureIqInput', formData);
     }
 
-    // Initialize our grid items with special handling
-    function initializeAdventureGridItems() {
-        console.log("[AdventureIQ] Initializing adventure grid items");
-        
-        // First remove any existing click handlers from datain.js
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            // Clone the node to remove all event listeners
-            const clone = item.cloneNode(true);
-            item.parentNode.replaceChild(clone, item);
-            
-            // Add our handler to the fresh clone
-            clone.addEventListener('click', customToggleGridItem, { capture: true });
-            
-            // Restore saved selection from localStorage
-            const key = `grid_${clone.parentElement.id}_${clone.dataset.value.replace(/\s+/g, '_')}`;
-            const value = getLocal(key);
-            if (value === 'true') {
-                clone.classList.add('selected');
-                console.log(`[AdventureIQ] Restored selection: ${clone.dataset.value}`);
-            }
-        });
-        
-        // Also override datain.js's initializeGridItems function to prevent conflicts
-        if (window.initializeGridItems) {
-            const originalInitGridItems = window.initializeGridItems;
-            window.initializeGridItems = function() {
-                console.log("[AdventureIQ] Intercepted external initializeGridItems call");
-                // Only let the original function initialize non-adventure grid containers
-                const nonAdventureGrids = document.querySelectorAll('.grid-container:not(#trip-activities):not(#trip-relationship)');
-                if (nonAdventureGrids.length > 0) {
-                    originalInitGridItems();
-                }
-            };
-        }
-    }
-
-    // Collect form data without validation
     function collectFormData() {
-        const formData = {
-            activities: [],
-            relationships: [],
-            location: null,
-            specifics: null,
-            plans: null,
-            packing: null,
-            people: null,
-            days: null,
-            budget: null
-        };
-        
-        // Collect activities (multi-selection)
-        document.querySelectorAll('#trip-activities .grid-item.selected').forEach(item => {
-            formData.activities.push(item.dataset.value);
-        });
-        
-        // Collect relationships (multi-selection)
-        document.querySelectorAll('#trip-relationship .grid-item.selected').forEach(item => {
-            formData.relationships.push(item.dataset.value);
-        });
-        
-        // Collect text inputs
-        const locationInput = document.getElementById('trip-location');
-        if (locationInput && locationInput.value.trim()) {
-            formData.location = locationInput.value.trim();
-        }
-        
-        const specificsInput = document.getElementById('trip-specifics');
-        if (specificsInput && specificsInput.value.trim()) {
-            formData.specifics = specificsInput.value.trim();
-        }
-        
-        const plansInput = document.getElementById('trip-plans');
-        if (plansInput && plansInput.value.trim()) {
-            formData.plans = plansInput.value.trim();
-        }
-        
-        // Collect select inputs
-        const packingInput = document.getElementById('trip-packing');
-        if (packingInput) {
-            formData.packing = packingInput.value;
-        }
-        
-        // Collect numeric inputs
-        const peopleInput = document.getElementById('trip-people');
-        if (peopleInput && peopleInput.value && !isNaN(peopleInput.value)) {
-            formData.people = parseInt(peopleInput.value, 10);
-        }
-        
-        const daysInput = document.getElementById('trip-days');
-        if (daysInput && daysInput.value && !isNaN(daysInput.value)) {
-            formData.days = parseInt(daysInput.value, 10);
-        }
-        
-        // Collect budget
-        const budgetInput = document.getElementById('trip-budget');
-        if (budgetInput && budgetInput.value.trim()) {
-            formData.budget = budgetInput.value.trim();
-        }
-        
-        return formData;
+      const formData = { 
+        activities: [],
+        relationships: [],
+        location: null,
+        specifics: null,
+        plans: null,
+        packing: null,
+        people: null,
+        days: null,
+        budget: null
+      };
+      document.querySelectorAll('#trip-activities .grid-item.selected').forEach(item => {
+        formData.activities.push(item.dataset.value);
+      });
+      document.querySelectorAll('#trip-relationship .grid-item.selected').forEach(item => {
+        formData.relationships.push(item.dataset.value);
+      });
+      const locationInput = document.getElementById('trip-location');
+      if (locationInput && locationInput.value.trim()) {
+        formData.location = locationInput.value.trim();
+      }
+      const specificsInput = document.getElementById('trip-specifics');
+      if (specificsInput && specificsInput.value.trim()) {
+        formData.specifics = specificsInput.value.trim();
+      }
+      const plansInput = document.getElementById('trip-plans');
+      if (plansInput && plansInput.value.trim()) {
+        formData.plans = plansInput.value.trim();
+      }
+      const packingInput = document.getElementById('trip-packing');
+      if (packingInput) {
+        formData.packing = packingInput.value;
+      }
+      const peopleInput = document.getElementById('trip-people');
+      if (peopleInput && peopleInput.value && !isNaN(peopleInput.value)) {
+        formData.people = parseInt(peopleInput.value, 10);
+      }
+      const daysInput = document.getElementById('trip-days');
+      if (daysInput && daysInput.value && !isNaN(daysInput.value)) {
+        formData.days = parseInt(daysInput.value, 10);
+      }
+      const budgetInput = document.getElementById('trip-budget');
+      if (budgetInput && budgetInput.value.trim()) {
+        formData.budget = budgetInput.value.trim();
+      }
+      return formData;
     }
 
-    // Repopulate form from localStorage
     function repopulateForm() {
-        console.log("[AdventureIQ] Repopulating form from localStorage");
-
-        // Try both approaches for maximum compatibility
-        
-        // First approach: Use individual localStorage items with getLocal
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-            const value = getLocal(key);
-            if (value === 'true') {
-                item.classList.add('selected');
-                console.log(`[AdventureIQ] Restored from localStorage: ${item.dataset.value}`);
-            }
-        });
-        
-        document.querySelectorAll('input, textarea').forEach(input => {
-            if (!input.id) return;
-            
-            const key = `input_${input.id}`;
-            const value = getLocal(key);
-            if (value && value !== 'null') {
-                input.value = value;
-                console.log(`[AdventureIQ] Restored from localStorage: ${input.id} = ${value}`);
-            }
-        });
-        
-        document.querySelectorAll('select').forEach(select => {
-            if (!select.id) return;
-            
-            const key = `input_${select.id}`;
-            const value = getLocal(key);
-            if (value && value !== 'null') {
-                const optionExists = Array.from(select.options).some(opt => opt.value === value);
-                if (optionExists) {
-                    select.value = value;
-                    console.log(`[AdventureIQ] Restored from localStorage: ${select.id} = ${value}`);
-                }
-            }
-        });
-
-        // Second approach: Also check for stored JSON data to fall back on
-        const storedData = getJSON('adventureIqInput', null);
-        if (storedData) {
-            console.log('[AdventureIQ] Found stored JSON form data, using as fallback');
-            
-            // Only apply JSON data if individual localStorage items didn't work
-            
-            // Check if any activities were already set from localStorage
-            const hasExistingActivities = document.querySelector('#trip-activities .grid-item.selected');
-            if (!hasExistingActivities && storedData.activities && Array.isArray(storedData.activities)) {
-                storedData.activities.forEach(activity => {
-                    const item = document.querySelector(`#trip-activities .grid-item[data-value="${activity}"]`);
-                    if (item && !item.classList.contains('selected')) {
-                        item.classList.add('selected');
-                        console.log(`[AdventureIQ] Restored from JSON: activity ${activity}`);
-                    }
-                });
-            }
-            
-            // Check if any relationships were already set from localStorage
-            const hasExistingRelationships = document.querySelector('#trip-relationship .grid-item.selected');
-            if (!hasExistingRelationships && storedData.relationships && Array.isArray(storedData.relationships)) {
-                storedData.relationships.forEach(relationship => {
-                    const item = document.querySelector(`#trip-relationship .grid-item[data-value="${relationship}"]`);
-                    if (item && !item.classList.contains('selected')) {
-                        item.classList.add('selected');
-                        console.log(`[AdventureIQ] Restored from JSON: relationship ${relationship}`);
-                    }
-                });
-            }
-            
-            // Check for other fields - only apply if not already set
-            const locationInput = document.getElementById('trip-location');
-            if (locationInput && !locationInput.value && storedData.location) {
-                locationInput.value = storedData.location;
-                console.log(`[AdventureIQ] Restored from JSON: location`);
-            }
-            
-            const specificsInput = document.getElementById('trip-specifics');
-            if (specificsInput && !specificsInput.value && storedData.specifics) {
-                specificsInput.value = storedData.specifics;
-                console.log(`[AdventureIQ] Restored from JSON: specifics`);
-            }
-            
-            const plansInput = document.getElementById('trip-plans');
-            if (plansInput && !plansInput.value && storedData.plans) {
-                plansInput.value = storedData.plans;
-                console.log(`[AdventureIQ] Restored from JSON: plans`);
-            }
-            
-            const packingInput = document.getElementById('trip-packing');
-            if (packingInput && packingInput.value === 'NN' && storedData.packing) {
-                packingInput.value = storedData.packing;
-                console.log(`[AdventureIQ] Restored from JSON: packing ${storedData.packing}`);
-            }
-            
-            const peopleInput = document.getElementById('trip-people');
-            if (peopleInput && !peopleInput.value && storedData.people) {
-                peopleInput.value = storedData.people;
-                console.log(`[AdventureIQ] Restored from JSON: people ${storedData.people}`);
-            }
-            
-            const daysInput = document.getElementById('trip-days');
-            if (daysInput && !daysInput.value && storedData.days) {
-                daysInput.value = storedData.days;
-                console.log(`[AdventureIQ] Restored from JSON: days ${storedData.days}`);
-            }
-            
-            const budgetInput = document.getElementById('trip-budget');
-            if (budgetInput && !budgetInput.value && storedData.budget) {
-                budgetInput.value = storedData.budget;
-                console.log(`[AdventureIQ] Restored from JSON: budget`);
-            }
+      console.log("[AdventureIQ] Repopulating form from JSON storage");
+      const storedData = getJSON('adventureIqInput', null);
+      if (!storedData) return;
+      document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+        const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
+        const value = getLocal(key);
+        if (value === 'true') {
+          item.classList.add('selected');
+          console.log(`[AdventureIQ] Restored from localStorage: ${item.dataset.value}`);
         }
-        
-        // After repopulating, save all data using both approaches to ensure consistency
-        document.querySelectorAll('.grid-container .grid-item.selected').forEach(item => {
-            saveGridItem(item);
-        });
-        
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            if (input.value) {
-                saveInput(input);
+      });
+      document.querySelectorAll('input, textarea').forEach(input => {
+        if (!input.id) return;
+        const key = `input_${input.id}`;
+        const value = getLocal(key);
+        if (value && value !== 'null') {
+          input.value = value;
+          console.log(`[AdventureIQ] Restored from localStorage: ${input.id} = ${value}`);
+        }
+      });
+      document.querySelectorAll('select').forEach(select => {
+        if (!select.id) return;
+        const key = `input_${select.id}`;
+        const value = getLocal(key);
+        if (value && value !== 'null') {
+          const optionExists = Array.from(select.options).some(opt => opt.value === value);
+          if (optionExists) {
+            select.value = value;
+            console.log(`[AdventureIQ] Restored from localStorage: ${select.id} = ${value}`);
+          }
+        }
+      });
+      if (storedData) {
+        console.log('[AdventureIQ] Found stored JSON form data, using as fallback');
+        const hasExistingActivities = document.querySelector('#trip-activities .grid-item.selected');
+        if (!hasExistingActivities && storedData.activities && Array.isArray(storedData.activities)) {
+          storedData.activities.forEach(activity => {
+            const item = document.querySelector(`#trip-activities .grid-item[data-value="${activity}"]`);
+            if (item && !item.classList.contains('selected')) {
+              item.classList.add('selected');
+              console.log(`[AdventureIQ] Restored from JSON: activity ${activity}`);
             }
-        });
+          });
+        }
+        const hasExistingRelationships = document.querySelector('#trip-relationship .grid-item.selected');
+        if (!hasExistingRelationships && storedData.relationships && Array.isArray(storedData.relationships)) {
+          storedData.relationships.forEach(relationship => {
+            const item = document.querySelector(`#trip-relationship .grid-item[data-value="${relationship}"]`);
+            if (item && !item.classList.contains('selected')) {
+              item.classList.add('selected');
+              console.log(`[AdventureIQ] Restored from JSON: relationship ${relationship}`);
+            }
+          });
+        }
+        const locationInput = document.getElementById('trip-location');
+        if (locationInput && !locationInput.value && storedData.location) {
+          locationInput.value = storedData.location;
+          console.log(`[AdventureIQ] Restored from JSON: location`);
+        }
+        const specificsInput = document.getElementById('trip-specifics');
+        if (specificsInput && !specificsInput.value && storedData.specifics) {
+          specificsInput.value = storedData.specifics;
+          console.log(`[AdventureIQ] Restored from JSON: specifics`);
+        }
+        const plansInput = document.getElementById('trip-plans');
+        if (plansInput && !plansInput.value && storedData.plans) {
+          plansInput.value = storedData.plans;
+          console.log(`[AdventureIQ] Restored from JSON: plans`);
+        }
+        const packingInput = document.getElementById('trip-packing');
+        if (packingInput && packingInput.value === 'NN' && storedData.packing) {
+          packingInput.value = storedData.packing;
+          console.log(`[AdventureIQ] Restored from JSON: packing ${storedData.packing}`);
+        }
+        const peopleInput = document.getElementById('trip-people');
+        if (peopleInput && !peopleInput.value && storedData.people) {
+          peopleInput.value = storedData.people;
+          console.log(`[AdventureIQ] Restored from JSON: people ${storedData.people}`);
+        }
+        const daysInput = document.getElementById('trip-days');
+        if (daysInput && !daysInput.value && storedData.days) {
+          daysInput.value = storedData.days;
+          console.log(`[AdventureIQ] Restored from JSON: days ${storedData.days}`);
+        }
+        const budgetInput = document.getElementById('trip-budget');
+        if (budgetInput && !budgetInput.value && storedData.budget) {
+          budgetInput.value = storedData.budget;
+          console.log(`[AdventureIQ] Restored from JSON: budget`);
+        }
+      }
+      document.querySelectorAll('.grid-container .grid-item.selected').forEach(item => {
+        saveGridItem(item);
+      });
+      document.querySelectorAll('input, textarea, select').forEach(input => {
+        if (input.value) {
+          saveInput(input);
+        }
+      });
     }
 
-    // Handle input changes
     function setupInputHandlers() {
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            input.addEventListener('change', function() {
-                saveInput(this);
-            });
-        });
+      document.querySelectorAll('input, textarea, select').forEach(input => {
+        input.addEventListener('change', function() { saveInput(this); });
+      });
     }
 
-    // Clear saved data from localStorage
     function clearLocalStorage() {
-        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
-            return;
-        }
-        
-        try {
-            // Clear individual localStorage items using keys pattern
-            const keysToRemove = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('grid_trip_') || key.startsWith('input_trip_')) {
-                    keysToRemove.push(key);
-                }
-            }
-            
-            keysToRemove.forEach(key => {
-                localStorage.removeItem(key);
-                console.log(`[AdventureIQ] Removed ${key}`);
-            });
-            
-            // Also remove JSON data
-            localStorage.removeItem('adventureIqInput');
-            localStorage.removeItem('adventureIqResponse');
-            
-            // Reset UI
-            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            document.querySelectorAll('input, textarea').forEach(input => {
-                input.value = '';
-            });
-
-            // Reset packing dropdown to default
-            const packingSelect = document.getElementById('trip-packing');
-            if (packingSelect) {
-                packingSelect.value = 'NN';
-            }
-            
-            console.log('[AdventureIQ] All adventure data cleared');
-            alert("All adventure data has been cleared successfully.");
-        } catch (error) {
-            console.error('[AdventureIQ] Error clearing data:', error);
-            alert("Error clearing data: " + error.message);
-        }
+      if (!confirm("Are you sure you want to clear all saved data?")) return;
+      localStorage.removeItem('adventureIqInput');
+      localStorage.removeItem('adventureIqResponse');
+      document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+        item.classList.remove('selected');
+      });
+      document.querySelectorAll('input, textarea').forEach(input => {
+        input.value = '';
+      });
+      const packingSelect = document.getElementById('trip-packing');
+      if (packingSelect) {
+        packingSelect.value = 'NN';
+      }
+      console.log('[AdventureIQ] All adventure data cleared');
+      alert("All adventure data has been cleared successfully.");
     }
 
-    // Format data for prompt generation
-    const formatList = (items, prefix) => items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
-    const formatGrid = (selector, prefix) => {
-        const items = Array.from(document.querySelectorAll(selector))
-            .filter(el => el.classList.contains('selected'))
-            .map(el => el.dataset.value)
-            .join('\n');
-        return items ? `${prefix}:\n${items.split('\n').map((item, i) => `${i + 1}. ${item}`).join('\n')}\n\n` : '';
-    };
-
-    // Generate prompt based on form data
-    function generatePrompt(promptType) {
-        console.log('Debug: generatePrompt function called with argument:', promptType);
-        let prompt = '';
-        if (promptType === 'AdventureIQ™') {
-            prompt += formatGrid('#trip-activities .grid-item.selected', 'Review the following activities I want to do on my trip');
-            prompt += 'Purpose of review: To build a logical timeline for my trip in checklist format code block. If available, include the weather forecast for the location(s).\n\n';
-            const tripSpecifics = document.getElementById('trip-specifics');
-            if (tripSpecifics?.value) {
-                prompt += formatGrid('#trip-activities .grid-item.selected', 'The main activities of this trip will be');
-                prompt += `Activity-specific information requested:\n${tripSpecifics.value}\n\n`;
-            }
-            const plans = document.getElementById('trip-plans');
-            if (plans?.value) prompt += formatList(plans.value, 'Confirmed Schedule');
-            const packing = document.getElementById('trip-packing');
-            if (packing?.value) {
-                let packingDescription = '';
-                switch (packing.value) {
-                    case 'YM': packingDescription = 'Packing tips needed for Male'; break;
-                    case 'YF': packingDescription = 'Packing tips needed for Female'; break;
-                    case 'YMF': packingDescription = 'Packing tips needed for Male & Female'; break;
-                    case 'NN': packingDescription = 'Packing tips not needed'; break;
-                }
-                prompt += formatList(packingDescription, 'Packing Requirements');
-            }
-            const people = document.getElementById('trip-people');
-            if (people?.value) prompt += formatList(people.value, 'Number of People on Trip');
-            const days = document.getElementById('trip-days');
-            if (days?.value) prompt += formatList(days.value, 'Trip Length (days)');
-            const location = document.getElementById('trip-location');
-            if (location?.value) prompt += formatList(location.value, 'Trip Location');
-            prompt += formatGrid('#trip-relationship .grid-item.selected', 'Relationship to People on Trip');
-            const budget = document.getElementById('trip-budget');
-            if (budget?.value) prompt += formatList(budget.value, 'Trip Budget');
-            prompt += `
-                Output the trip timeline in a text-based checklist format in a code block with the following columns: Day, Time, Activity, Location, Notes. Use this header format:
-                \`\`\`
-                | Day       | Time      | Activity         | Location        | Notes           |
-                |-----------|-----------|------------------|-----------------|-----------------|
-                \`\`\`
-                If packing tips are requested, provide them in a separate text-based list in a code block with the following format:
-                \`\`\`
-                Packing Tips:
-                1. Item 1
-                2. Item 2
-                ...
-                \`\`\`
-                If weather forecast is available, include it in a separate text-based table in a code block with columns: Day, Location, Weather, Temperature (°C). Use this header format:
-                \`\`\`
-                | Day       | Location  | Weather          | Temperature (°C) |
-                |-----------|-----------|------------------|------------------|
-                \`\`\`
-                Include no text outside the code blocks unless specified.
-            `;
-        }
-        return prompt;
-    }
-
-    // Helper function to open a modal with the generated prompt
-    function openCustomModal(content) {
-        console.log('Debug: openCustomModal called with content');
-        if (typeof openGeneratedPromptModal === 'function') {
-            openGeneratedPromptModal(content);
-        } else {
-            console.warn('openGeneratedPromptModal not found, using fallback');
-            alert('Generated prompt:\n' + content);
-        }
-    }
-
-    // Handle the generate button click
     async function handleGenerateAdventureIq() {
-        const btn = document.getElementById('generate-adventure-btn');
-        const initialText = btn.innerText;
-        btn.innerText = 'Loading...';
-        btn.setAttribute('disabled', 'true');
-        
-        console.log('[AdventureIQ] Generate button clicked.');
-        
-        try {
-            // Instead of collecting form data again, just use what's already in localStorage
-            const formData = getJSON('adventureIqInput');
-            if (!formData) {
-                console.error('[AdventureIQ] No input data found in localStorage.');
-                alert('Please complete the form before generating an adventure plan.');
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-                return;
-            }
-            
-            // Send data to worker
-            const apiUrl = 'https://adventureiqworker.4hm7q4q75z.workers.dev/'; 
-            
-            console.log('[AdventureIQ] Sending adventureIqInput directly from localStorage to worker');
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            
-            const responseData = await response.json();
-            console.log('[AdventureIQ] Worker response:', responseData);
-            
-            if (responseData.message !== 'Success') {
-                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-            
-            // Store the response using setJSON
-            setJSON('adventureIqResponse', responseData);
-            
-            // Update button state
-            btn.innerText = 'Success!';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-            }, 2000);
-            
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'adventureiq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
-                }
-            });
-            document.dispatchEvent(event);
-            console.log('[AdventureIQ] Dispatched api-response-received event');
-            
-        } catch (error) {
-            console.error('[AdventureIQ] Error generating adventure plan:', error);
-            alert('An error occurred while generating your adventure plan. Please try again later.');
-            
-            btn.innerText = 'Error';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-            }, 2000);
+      const btn = document.getElementById('generate-adventure-btn');
+      const initialText = btn.innerText;
+      btn.innerText = 'Loading...'; btn.setAttribute('disabled', 'true');
+      try {
+        const formData = getJSON('adventureIqInput');
+        if (!formData) {
+          alert('Please complete the form before generating a prompt.');
+          btn.innerText = initialText; btn.removeAttribute('disabled');
+          return;
         }
-    }
-
-    // Attach event listeners to buttons
-    function setupButtonHandlers() {
-        const generateBtn = document.getElementById('generate-adventure-btn');
-        if (generateBtn) {
-            generateBtn.addEventListener('click', handleGenerateAdventureIq);
+        const apiUrl = 'https://adventureiqworker.4hm7q4q75z.workers.dev/';
+        const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) });
+        const data = await response.json();
+        if (data.message !== 'Success') {
+          throw new Error(`An error occurred: ${data.message || data.error || ''}`);
         }
-        
-        const clearBtn = document.getElementById('clear-adventure-btn');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', clearLocalStorage);
-        }
+        setJSON('adventureIqResponse', data);
+        btn.innerText = 'Success!';
+        setTimeout(() => {
+          btn.innerText = initialText;
+          btn.removeAttribute('disabled');
+        }, 2000);
+        const event = new CustomEvent('api-response-received', {
+          detail: {
+            module: 'adventureiq',
+            type: 'worker-response',
+            timestamp: Date.now()
+          }
+        });
+        document.dispatchEvent(event);
+        console.log('[AdventureIQ] Dispatched api-response-received event');
+      } catch (error) {
+        console.error('[AdventureIQ] Error generating adventure plan:', error);
+        alert('An error occurred while generating your adventure plan. Please try again later.');
+        btn.innerText = 'Error';
+        setTimeout(() => {
+          btn.innerText = initialText;
+          btn.removeAttribute('disabled');
+        }, 2000);
+      }
     }
 
-    // Main initialization function - called immediately and again after full load
-    function initialize() {
-        console.log("[AdventureIQ] Initializing...");
-        initializeAdventureGridItems();
-        setupInputHandlers();
-        setupButtonHandlers();
-        repopulateForm();
-    }
-
-    // Initialize immediately
-    initialize();
-
-    // Also initialize when DOM is fully loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initialize);
-    }
-
-    // Special handler for when this page is loaded through datain.js
-    document.addEventListener('data-in-loaded', function(e) {
-        console.log("[AdventureIQ] Detected load through datain.js, reinitializing");
-        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
-    });
-
-    // For external access if needed
-    window.adventureIq = {
-        initialize: initialize,
-        saveGridItem: saveGridItem,
-        saveInput: saveInput,
-        clearLocalStorage: clearLocalStorage,
-        getFormData: collectFormData,
-        generatePrompt: generatePrompt,
-        handleGenerate: handleGenerateAdventureIq
-    };
-})();
-</script>
+    repopulateForm();
+    setupInputHandlers();
+    document.getElementById('generate-adventure-btn').addEventListener('click', handleGenerateAdventureIq);
+    document.getElementById('clear-adventure-btn').addEventListener('click', clearLocalStorage);
+    document.querySelectorAll('.grid-container .grid-item').forEach(item => item.addEventListener('click', customToggleGridItem, { capture: true }));
+  })();
+  </script>
+</body>
+</html>
 
