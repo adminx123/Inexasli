@@ -66,8 +66,439 @@
             <label class="category-label">Additional Instructions</label>
             <textarea id="decisioniq-instructions" rows="3" placeholder="Additional instructions: (1 per line)\ne.g., Include risk analysis, Prioritize quantitative data"></textarea>
         </div>
-        <button class="generate-btn" data-prompt="DecisionIQ™" onclick="generatePrompt('DecisionIQ™')">Generate Promptemplate™ Now!</button>
+        <div class="row1">
+            <button class="generate-btn" id="generate-decision-btn">Generate Decision Analysis Now!</button>
+            <button class="clear-btn" id="clear-decision-btn">Clear All</button>
+        </div>
  
+<script>
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
 
- 
-    <script src="decisioniq.js"></script>
+// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
+(function() {
+    console.log("Decision IQ script initializing");
+
+    // Only using JSON for data storage now - more efficient approach
+    const setJSON = window.setJSON || function(name, value) {
+        try {
+            if (name === undefined || name === null || name === '') {
+                console.error('Invalid key name provided to setJSON');
+                return false;
+            }
+            
+            if (value === undefined) {
+                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                localStorage.removeItem(name);
+                return true;
+            }
+            
+            // Convert value to JSON string
+            const jsonString = JSON.stringify(value);
+            localStorage.setItem(name, jsonString);
+            console.log(`[DecisionIQ] JSON saved ${name}`);
+            return true;
+        } catch (error) {
+            console.error(`[DecisionIQ] Error storing JSON: ${error}`);
+            return false;
+        }
+    };
+    
+    const getJSON = window.getJSON || function(name, defaultValue) {
+        try {
+            const item = localStorage.getItem(name);
+            if (!item) return defaultValue;
+            const parsedValue = JSON.parse(item);
+            console.log(`[DecisionIQ] JSON retrieved ${name}`);
+            return parsedValue;
+        } catch (error) {
+            console.error(`[DecisionIQ] Error retrieving JSON: ${error}`);
+            return defaultValue;
+        }
+    };
+
+    // Custom handler for grid item selection
+    function customToggleGridItem(event) {
+        // Stop event propagation to prevent other handlers from firing
+        event.stopPropagation();
+        event.preventDefault();
+        
+        const container = this.closest('.grid-container');
+        // All grid containers in DecisionIQ allow multi-selection
+        this.classList.toggle('selected');
+        
+        // Save using JSON approach
+        saveGridItem(this);
+        
+        console.log(`[DecisionIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+    }
+
+    // Save grid item selection - only using JSON for efficiency
+    function saveGridItem(item) {
+        // Skip individual localStorage items and only use JSON
+        // Directly save complete form data to JSON
+        console.log('[DecisionIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('decisionIqInput', formData);
+    }
+
+    // Save input value - only using JSON for efficiency
+    function saveInput(input) {
+        if (!input || !input.id) return;
+        
+        // Skip individual localStorage items and only use JSON
+        // Directly save complete form data to JSON
+        console.log('[DecisionIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('decisionIqInput', formData);
+    }
+
+    // Initialize our grid items with special handling
+    function initializeDecisionGridItems() {
+        console.log("[DecisionIQ] Initializing decision grid items");
+        
+        // First remove any existing click handlers from datain.js
+        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+            // Clone the node to remove all event listeners
+            const clone = item.cloneNode(true);
+            item.parentNode.replaceChild(clone, item);
+            
+            // Add our handler to the fresh clone
+            clone.addEventListener('click', customToggleGridItem, { capture: true });
+        });
+        
+        // No need to restore selections here - repopulateForm will handle it all from JSON
+        
+        // Also override datain.js's initializeGridItems function to prevent conflicts
+        if (window.initializeGridItems) {
+            const originalInitGridItems = window.initializeGridItems;
+            window.initializeGridItems = function() {
+                console.log("[DecisionIQ] Intercepted external initializeGridItems call");
+                // Only let the original function initialize non-decision grid containers
+                const nonDecisionGrids = document.querySelectorAll('.grid-container:not(#decisioniq-stakeholders)');
+                if (nonDecisionGrids.length > 0) {
+                    originalInitGridItems();
+                }
+            };
+        }
+    }
+
+    // Collect form data without validation
+    function collectFormData() {
+        const formData = {
+            goal: null,
+            analysisType: null,
+            priority: null,
+            criteria: null,
+            options: null,
+            stakeholders: [],
+            constraints: null,
+            instructions: null
+        };
+        
+        // Collect decision goal
+        const goalInput = document.getElementById('decisioniq-goal');
+        if (goalInput && goalInput.value.trim()) {
+            formData.goal = goalInput.value.trim();
+        }
+        
+        // Collect analysis type
+        const analysisTypeSelect = document.getElementById('decisioniq-analysis-type');
+        if (analysisTypeSelect) {
+            formData.analysisType = analysisTypeSelect.value;
+        }
+        
+        // Collect priority
+        const prioritySelect = document.getElementById('decisioniq-priority');
+        if (prioritySelect) {
+            formData.priority = prioritySelect.value;
+        }
+        
+        // Collect criteria
+        const criteriaInput = document.getElementById('decisioniq-criteria');
+        if (criteriaInput && criteriaInput.value.trim()) {
+            formData.criteria = criteriaInput.value.trim();
+        }
+        
+        // Collect options
+        const optionsInput = document.getElementById('decisioniq-options');
+        if (optionsInput && optionsInput.value.trim()) {
+            formData.options = optionsInput.value.trim();
+        }
+        
+        // Collect stakeholders (multi-selection grid)
+        document.querySelectorAll('#decisioniq-stakeholders .grid-item.selected').forEach(item => {
+            formData.stakeholders.push(item.dataset.value);
+        });
+        
+        // Collect constraints
+        const constraintsInput = document.getElementById('decisioniq-constraints');
+        if (constraintsInput && constraintsInput.value.trim()) {
+            formData.constraints = constraintsInput.value.trim();
+        }
+        
+        // Collect instructions
+        const instructionsInput = document.getElementById('decisioniq-instructions');
+        if (instructionsInput && instructionsInput.value.trim()) {
+            formData.instructions = instructionsInput.value.trim();
+        }
+        
+        return formData;
+    }
+
+    // Repopulate form from localStorage - simplified to only use JSON
+    function repopulateForm() {
+        console.log("[DecisionIQ] Repopulating form from JSON storage");
+
+        // Get stored JSON data
+        const storedData = getJSON('decisionIqInput', null);
+        if (!storedData) {
+            console.log('[DecisionIQ] No stored form data found');
+            return;
+        }
+            
+        console.log('[DecisionIQ] Found stored JSON form data');
+        
+        // Populate decision goal
+        const goalInput = document.getElementById('decisioniq-goal');
+        if (goalInput && storedData.goal) {
+            goalInput.value = storedData.goal;
+            console.log(`[DecisionIQ] Restored from JSON: goal`);
+        }
+        
+        // Populate analysis type
+        const analysisTypeSelect = document.getElementById('decisioniq-analysis-type');
+        if (analysisTypeSelect && storedData.analysisType) {
+            analysisTypeSelect.value = storedData.analysisType;
+            console.log(`[DecisionIQ] Restored from JSON: analysis type`);
+        }
+        
+        // Populate priority
+        const prioritySelect = document.getElementById('decisioniq-priority');
+        if (prioritySelect && storedData.priority) {
+            prioritySelect.value = storedData.priority;
+            console.log(`[DecisionIQ] Restored from JSON: priority`);
+        }
+        
+        // Populate criteria
+        const criteriaInput = document.getElementById('decisioniq-criteria');
+        if (criteriaInput && storedData.criteria) {
+            criteriaInput.value = storedData.criteria;
+            console.log(`[DecisionIQ] Restored from JSON: criteria`);
+        }
+        
+        // Populate options
+        const optionsInput = document.getElementById('decisioniq-options');
+        if (optionsInput && storedData.options) {
+            optionsInput.value = storedData.options;
+            console.log(`[DecisionIQ] Restored from JSON: options`);
+        }
+        
+        // Populate stakeholders
+        if (storedData.stakeholders && Array.isArray(storedData.stakeholders)) {
+            storedData.stakeholders.forEach(stakeholder => {
+                const item = document.querySelector(`#decisioniq-stakeholders .grid-item[data-value="${stakeholder}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[DecisionIQ] Restored from JSON: stakeholder ${stakeholder}`);
+                }
+            });
+        }
+        
+        // Populate constraints
+        const constraintsInput = document.getElementById('decisioniq-constraints');
+        if (constraintsInput && storedData.constraints) {
+            constraintsInput.value = storedData.constraints;
+            console.log(`[DecisionIQ] Restored from JSON: constraints`);
+        }
+        
+        // Populate instructions
+        const instructionsInput = document.getElementById('decisioniq-instructions');
+        if (instructionsInput && storedData.instructions) {
+            instructionsInput.value = storedData.instructions;
+            console.log(`[DecisionIQ] Restored from JSON: instructions`);
+        }
+    }
+
+    // Handle input changes
+    function setupInputHandlers() {
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('change', function() {
+                saveInput(this);
+            });
+        });
+    }
+
+    // Clear saved data from localStorage
+    function clearLocalStorage() {
+        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
+            return;
+        }
+        
+        try {
+            // Simply remove the JSON data - no need to iterate through individual keys
+            localStorage.removeItem('decisionIqInput');
+            localStorage.removeItem('decisionIqResponse');
+            
+            // Reset UI
+            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('input, textarea').forEach(input => {
+                input.value = '';
+            });
+            
+            // Reset select elements to default values
+            document.querySelectorAll('select').forEach(select => {
+                if (select.options.length > 0) {
+                    select.selectedIndex = 0;
+                }
+            });
+            
+            console.log('[DecisionIQ] All decision data cleared');
+            alert("All decision data has been cleared successfully.");
+        } catch (error) {
+            console.error('[DecisionIQ] Error clearing data:', error);
+            alert("Error clearing data: " + error.message);
+        }
+    }
+
+    // Handle the generate button click - directly talking to worker
+    async function handleGenerateDecisionIq() {
+        const btn = document.getElementById('generate-decision-btn');
+        const initialText = btn.innerText;
+        btn.innerText = 'Loading...';
+        btn.setAttribute('disabled', 'true');
+        
+        console.log('[DecisionIQ] Generate button clicked.');
+        
+        try {
+            // Use what's already in localStorage
+            const formData = getJSON('decisionIqInput');
+            if (!formData) {
+                console.error('[DecisionIQ] No input data found in localStorage.');
+                alert('Please complete the form before generating a decision analysis.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Validate minimum requirements
+            if (!formData.goal) {
+                console.error('[DecisionIQ] No decision goal provided.');
+                alert('Please provide a decision goal before generating an analysis.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Send data to worker
+            const apiUrl = 'https://decisioniqworker.4hm7q4q75z.workers.dev/'; 
+            
+            console.log('[DecisionIQ] Sending decisionIqInput directly from localStorage to worker');
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const responseData = await response.json();
+            console.log('[DecisionIQ] Worker response:', responseData);
+            
+            if (responseData.message !== 'Success') {
+                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            
+            // Store the response using setJSON
+            setJSON('decisionIqResponse', responseData);
+            
+            // Update button state
+            btn.innerText = 'Success!';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+            
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'decisioniq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[DecisionIQ] Dispatched api-response-received event');
+            
+        } catch (error) {
+            console.error('[DecisionIQ] Error generating decision analysis:', error);
+            alert('An error occurred while generating your decision analysis. Please try again later.');
+            
+            btn.innerText = 'Error';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+        }
+    }
+
+    // Attach event listeners to buttons
+    function setupButtonHandlers() {
+        const generateBtn = document.getElementById('generate-decision-btn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', handleGenerateDecisionIq);
+        }
+        
+        const clearBtn = document.getElementById('clear-decision-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', clearLocalStorage);
+        }
+    }
+
+    // Main initialization function - called immediately and again after full load
+    function initialize() {
+        console.log("[DecisionIQ] Initializing...");
+        initializeDecisionGridItems();
+        setupInputHandlers();
+        setupButtonHandlers();
+        repopulateForm();
+    }
+
+    // Initialize immediately
+    initialize();
+
+    // Also initialize when DOM is fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    }
+
+    // Special handler for when this page is loaded through datain.js
+    document.addEventListener('data-in-loaded', function(e) {
+        console.log("[DecisionIQ] Detected load through datain.js, reinitializing");
+        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
+    });
+
+    // For external access if needed
+    window.decisionIq = {
+        initialize: initialize,
+        saveGridItem: saveGridItem,
+        saveInput: saveInput,
+        clearLocalStorage: clearLocalStorage,
+        getFormData: collectFormData
+    };
+})();
+</script>
