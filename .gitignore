@@ -21,7 +21,7 @@ ai/quiz/quiziqworker.js
 ai/symptom/symptomiqworker.js
 ai/research/researchiqworker.js
 ai/emotion/emotioniqWorker.js
-
+operation.txt
 # Catch-all patterns for any missed worker files
 ai/**/*worker*.js
 /*worker.js

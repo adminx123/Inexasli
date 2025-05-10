@@ -77,7 +77,442 @@
             <label class="category-label">Additional Instructions</label>
             <textarea id="quiz-extra-instructions" rows="3" placeholder="Extra instructions or constraints: (1 per line)\ne.g., include answers, focus on recent events"></textarea>
         </div>
-        <button class="generate-btn" data-prompt="QuizIQ™" onclick="generatePrompt('QuizIQ™')">Generate Promptemplate™ Now!</button>
+        <div class="row1">
+            <button class="generate-btn" id="generate-quiz-btn">Generate Quiz Now!</button>
+            <button class="clear-btn" id="clear-quiz-btn">Clear All</button>
+        </div>
 
- 
-    <script src="quiziq.js"></script>
+<script>
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
+
+// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
+(function() {
+    console.log("QuizIQ script initializing");
+
+    // Only using JSON for data storage now - more efficient approach
+    const setJSON = window.setJSON || function(name, value) {
+        try {
+            if (name === undefined || name === null || name === '') {
+                console.error('Invalid key name provided to setJSON');
+                return false;
+            }
+            
+            if (value === undefined) {
+                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                localStorage.removeItem(name);
+                return true;
+            }
+            
+            // Convert value to JSON string
+            const jsonString = JSON.stringify(value);
+            localStorage.setItem(name, jsonString);
+            console.log(`[QuizIQ] JSON saved ${name}`);
+            return true;
+        } catch (error) {
+            console.error(`[QuizIQ] Error storing JSON: ${error}`);
+            return false;
+        }
+    };
+    
+    const getJSON = window.getJSON || function(name, defaultValue) {
+        try {
+            const item = localStorage.getItem(name);
+            if (!item) return defaultValue;
+            const parsedValue = JSON.parse(item);
+            console.log(`[QuizIQ] JSON retrieved ${name}`);
+            return parsedValue;
+        } catch (error) {
+            console.error(`[QuizIQ] Error retrieving JSON: ${error}`);
+            return defaultValue;
+        }
+    };
+
+    // Custom handler for grid item selection
+    function customToggleGridItem(event) {
+        // Stop event propagation to prevent other handlers from firing
+        event.stopPropagation();
+        event.preventDefault();
+        
+        const container = this.closest('.grid-container');
+        // Multi-selection: toggle
+        this.classList.toggle('selected');
+        
+        // Save using JSON approach
+        saveGridItem(this);
+        
+        console.log(`[QuizIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+    }
+
+    // Save grid item selection - only using JSON for efficiency
+    function saveGridItem(item) {
+        // Skip individual localStorage items and only use JSON
+        // Directly save complete form data to JSON
+        console.log('[QuizIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('quizIqInput', formData);
+    }
+
+    // Save input value - only using JSON for efficiency
+    function saveInput(input) {
+        if (!input || !input.id) return;
+        
+        // Skip individual localStorage items and only use JSON
+        // Directly save complete form data to JSON
+        console.log('[QuizIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('quizIqInput', formData);
+    }
+
+    // Initialize our grid items with special handling
+    function initializeQuizGridItems() {
+        console.log("[QuizIQ] Initializing quiz grid items");
+        
+        // First remove any existing click handlers from datain.js
+        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+            // Clone the node to remove all event listeners
+            const clone = item.cloneNode(true);
+            item.parentNode.replaceChild(clone, item);
+            
+            // Add our handler to the fresh clone
+            clone.addEventListener('click', customToggleGridItem, { capture: true });
+        });
+        
+        // No need to restore selections here - repopulateForm will handle it all from JSON
+        
+        // Also override datain.js's initializeGridItems function to prevent conflicts
+        if (window.initializeGridItems) {
+            const originalInitGridItems = window.initializeGridItems;
+            window.initializeGridItems = function() {
+                console.log("[QuizIQ] Intercepted external initializeGridItems call");
+                // Only let the original function initialize non-quiz grid containers
+                const nonQuizGrids = document.querySelectorAll('.grid-container:not(#quiz-formats):not(#quiz-participants)');
+                if (nonQuizGrids.length > 0) {
+                    originalInitGridItems();
+                }
+            };
+        }
+    }
+
+    // Collect form data without validation
+    function collectFormData() {
+        const formData = {
+            subject: null,
+            objective: null,
+            difficultyTier: null,
+            formats: [],
+            questionCount: null,
+            focusAreas: null,
+            participants: [],
+            extraInstructions: null
+        };
+        
+        // Collect quiz subject
+        const subjectInput = document.getElementById('quiz-subject');
+        if (subjectInput && subjectInput.value.trim()) {
+            formData.subject = subjectInput.value.trim();
+        }
+        
+        // Collect quiz objective
+        const objectiveSelect = document.getElementById('quiz-objective');
+        if (objectiveSelect) {
+            formData.objective = objectiveSelect.value;
+        }
+        
+        // Collect difficulty tier
+        const difficultySelect = document.getElementById('quiz-difficulty-tier');
+        if (difficultySelect) {
+            formData.difficultyTier = difficultySelect.value;
+        }
+        
+        // Collect question formats (multi-selection grid)
+        document.querySelectorAll('#quiz-formats .grid-item.selected').forEach(item => {
+            formData.formats.push(item.dataset.value);
+        });
+        
+        // Collect question count
+        const questionCountSelect = document.getElementById('quiz-question-count');
+        if (questionCountSelect) {
+            formData.questionCount = questionCountSelect.value;
+        }
+        
+        // Collect focus areas
+        const focusAreasInput = document.getElementById('quiz-focus-areas');
+        if (focusAreasInput && focusAreasInput.value.trim()) {
+            formData.focusAreas = focusAreasInput.value.trim();
+        }
+        
+        // Collect participants (multi-selection grid)
+        document.querySelectorAll('#quiz-participants .grid-item.selected').forEach(item => {
+            formData.participants.push(item.dataset.value);
+        });
+        
+        // Collect extra instructions
+        const extraInstructionsInput = document.getElementById('quiz-extra-instructions');
+        if (extraInstructionsInput && extraInstructionsInput.value.trim()) {
+            formData.extraInstructions = extraInstructionsInput.value.trim();
+        }
+        
+        return formData;
+    }
+
+    // Repopulate form from localStorage - simplified to only use JSON
+    function repopulateForm() {
+        console.log("[QuizIQ] Repopulating form from JSON storage");
+
+        // Get stored JSON data
+        const storedData = getJSON('quizIqInput', null);
+        if (!storedData) {
+            console.log('[QuizIQ] No stored form data found');
+            return;
+        }
+            
+        console.log('[QuizIQ] Found stored JSON form data');
+        
+        // Populate quiz subject
+        const subjectInput = document.getElementById('quiz-subject');
+        if (subjectInput && storedData.subject) {
+            subjectInput.value = storedData.subject;
+            console.log(`[QuizIQ] Restored from JSON: quiz subject`);
+        }
+        
+        // Populate quiz objective
+        const objectiveSelect = document.getElementById('quiz-objective');
+        if (objectiveSelect && storedData.objective) {
+            objectiveSelect.value = storedData.objective;
+            console.log(`[QuizIQ] Restored from JSON: quiz objective`);
+        }
+        
+        // Populate difficulty tier
+        const difficultySelect = document.getElementById('quiz-difficulty-tier');
+        if (difficultySelect && storedData.difficultyTier) {
+            difficultySelect.value = storedData.difficultyTier;
+            console.log(`[QuizIQ] Restored from JSON: difficulty tier`);
+        }
+        
+        // Populate question formats
+        if (storedData.formats && Array.isArray(storedData.formats)) {
+            storedData.formats.forEach(format => {
+                const item = document.querySelector(`#quiz-formats .grid-item[data-value="${format}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[QuizIQ] Restored from JSON: format ${format}`);
+                }
+            });
+        }
+        
+        // Populate question count
+        const questionCountSelect = document.getElementById('quiz-question-count');
+        if (questionCountSelect && storedData.questionCount) {
+            questionCountSelect.value = storedData.questionCount;
+            console.log(`[QuizIQ] Restored from JSON: question count`);
+        }
+        
+        // Populate focus areas
+        const focusAreasInput = document.getElementById('quiz-focus-areas');
+        if (focusAreasInput && storedData.focusAreas) {
+            focusAreasInput.value = storedData.focusAreas;
+            console.log(`[QuizIQ] Restored from JSON: focus areas`);
+        }
+        
+        // Populate participants
+        if (storedData.participants && Array.isArray(storedData.participants)) {
+            storedData.participants.forEach(participant => {
+                const item = document.querySelector(`#quiz-participants .grid-item[data-value="${participant}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[QuizIQ] Restored from JSON: participant ${participant}`);
+                }
+            });
+        }
+        
+        // Populate extra instructions
+        const extraInstructionsInput = document.getElementById('quiz-extra-instructions');
+        if (extraInstructionsInput && storedData.extraInstructions) {
+            extraInstructionsInput.value = storedData.extraInstructions;
+            console.log(`[QuizIQ] Restored from JSON: extra instructions`);
+        }
+    }
+
+    // Handle input changes
+    function setupInputHandlers() {
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('change', function() {
+                saveInput(this);
+            });
+        });
+    }
+
+    // Clear saved data from localStorage
+    function clearLocalStorage() {
+        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
+            return;
+        }
+        
+        try {
+            // Simply remove the JSON data - no need to iterate through individual keys
+            localStorage.removeItem('quizIqInput');
+            localStorage.removeItem('quizIqResponse');
+            
+            // Reset UI
+            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('input, textarea').forEach(input => {
+                input.value = '';
+            });
+            
+            // Reset select elements to default values
+            document.querySelectorAll('select').forEach(select => {
+                if (select.options.length > 0) {
+                    select.selectedIndex = 0;
+                }
+            });
+            
+            console.log('[QuizIQ] All quiz data cleared');
+            alert("All quiz data has been cleared successfully.");
+        } catch (error) {
+            console.error('[QuizIQ] Error clearing data:', error);
+            alert("Error clearing data: " + error.message);
+        }
+    }
+
+    // Handle the generate button click - directly talking to worker
+    async function handleGenerateQuizIq() {
+        const btn = document.getElementById('generate-quiz-btn');
+        const initialText = btn.innerText;
+        btn.innerText = 'Loading...';
+        btn.setAttribute('disabled', 'true');
+        
+        console.log('[QuizIQ] Generate button clicked.');
+        
+        try {
+            // Use what's already in localStorage
+            const formData = getJSON('quizIqInput');
+            if (!formData) {
+                console.error('[QuizIQ] No input data found in localStorage.');
+                alert('Please complete the form before generating a quiz.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Validate minimum requirements
+            if (!formData.subject) {
+                console.error('[QuizIQ] No quiz subject provided.');
+                alert('Please provide a quiz subject before generating a quiz.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Send data to worker
+            const apiUrl = 'https://quiziqworker.4hm7q4q75z.workers.dev/'; 
+            
+            console.log('[QuizIQ] Sending quizIqInput directly from localStorage to worker');
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const responseData = await response.json();
+            console.log('[QuizIQ] Worker response:', responseData);
+            
+            if (responseData.message !== 'Success') {
+                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            
+            // Store the response using setJSON
+            setJSON('quizIqResponse', responseData);
+            
+            // Update button state
+            btn.innerText = 'Success!';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+            
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'quiziq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[QuizIQ] Dispatched api-response-received event');
+            
+        } catch (error) {
+            console.error('[QuizIQ] Error generating quiz:', error);
+            alert('An error occurred while generating your quiz. Please try again later.');
+            
+            btn.innerText = 'Error';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+        }
+    }
+
+    // Attach event listeners to buttons
+    function setupButtonHandlers() {
+        const generateBtn = document.getElementById('generate-quiz-btn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', handleGenerateQuizIq);
+        }
+        
+        const clearBtn = document.getElementById('clear-quiz-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', clearLocalStorage);
+        }
+    }
+
+    // Main initialization function - called immediately and again after full load
+    function initialize() {
+        console.log("[QuizIQ] Initializing...");
+        initializeQuizGridItems();
+        setupInputHandlers();
+        setupButtonHandlers();
+        repopulateForm();
+    }
+
+    // Initialize immediately
+    initialize();
+
+    // Also initialize when DOM is fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    }
+
+    // Special handler for when this page is loaded through datain.js
+    document.addEventListener('data-in-loaded', function(e) {
+        console.log("[QuizIQ] Detected load through datain.js, reinitializing");
+        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
+    });
+
+    // For external access if needed
+    window.quizIq = {
+        initialize: initialize,
+        saveGridItem: saveGridItem,
+        saveInput: saveInput,
+        clearLocalStorage: clearLocalStorage,
+        getFormData: collectFormData
+    };
+})();
+</script>
