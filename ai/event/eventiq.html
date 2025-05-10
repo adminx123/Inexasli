@@ -8,10 +8,20 @@
  * jurisdictions worldwide.
 -->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventIQ™ - Event Planning Assistant</title>
+    <link rel="stylesheet" href="/style/styles.css">
+</head>
+<body>
     <a href="/ai/landing/landing.html">
         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
     </a>
 
+    <div class="container">
         <div class="row1">
             <label class="category-label">Event Type</label>
             <div class="grid-container" id="event-types">
@@ -29,19 +39,19 @@
         </div>
         <div class="row1">
             <label class="category-label">Venue Status</label>
-            <select id="event-venue" onchange="toggleEventDetails()">
+            <select id="event-venue">
                 <option value="Venue Secured">Venue Secured</option>
                 <option value="Venue Needed">Venue Needed</option>
             </select>
         </div>
         <div class="row1">
             <label class="category-label">Location Type</label>
-            <select id="event-location" onchange="toggleEventDetails()">
+            <select id="event-location">
                 <option value="indoors">Indoors</option>
                 <option value="outdoors">Outdoors</option>
             </select>
         </div>
-        <div class="row1 hidden" id="event-indoors">
+        <div class="row1" id="event-indoors">
             <label class="category-label">Indoor Requirements</label>
             <div class="grid-container" id="event-indoor-setup">
                 <div class="grid-item" data-value="Seating">Seating Needed</div>
@@ -108,8 +118,531 @@
             <textarea id="event-specific-context" rows="3" placeholder="General Context (1 per line):\nMajority of attendees have an Italian background\nMost individuals between 5-10 yrs old"></textarea>
         </div>
         <div class="row1">
-            <button class="generate-btn" data-prompt="EventIQ™" onclick="generatePrompt('EventIQ™')">Generate Promptemplate™ Now!</button>
+            <button class="generate-btn" id="generate-event-btn">Generate EventIQ™ Plan</button>
+            <button class="clear-btn" id="clear-event-btn">Clear All</button>
         </div>
+    </div>
 
+<script>
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
 
-    <script src="eventiq.js"></script>
+// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
+(function() {
+    console.log("EventIQ script initializing");
+
+    // Only using JSON for data storage now - more efficient approach
+    const setJSON = window.setJSON || function(name, value) {
+        try {
+            if (name === undefined || name === null || name === '') {
+                console.error('Invalid key name provided to setJSON');
+                return false;
+            }
+            
+            if (value === undefined) {
+                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                localStorage.removeItem(name);
+                return true;
+            }
+            
+            // Convert value to JSON string
+            const jsonString = JSON.stringify(value);
+            localStorage.setItem(name, jsonString);
+            console.log(`[EventIQ] JSON saved ${name}`);
+            return true;
+        } catch (error) {
+            console.error(`[EventIQ] Error storing JSON: ${error}`);
+            return false;
+        }
+    };
+    
+    const getJSON = window.getJSON || function(name, defaultValue) {
+        try {
+            const item = localStorage.getItem(name);
+            if (!item) return defaultValue;
+            const parsedValue = JSON.parse(item);
+            console.log(`[EventIQ] JSON retrieved ${name}`);
+            return parsedValue;
+        } catch (error) {
+            console.error(`[EventIQ] Error retrieving JSON: ${error}`);
+            return defaultValue;
+        }
+    };
+
+    // Custom handler for grid item selection
+    function customToggleGridItem(event) {
+        // Stop event propagation to prevent other handlers from firing
+        event.stopPropagation();
+        event.preventDefault();
+        
+        const container = this.closest('.grid-container');
+        // All grid containers in EventIQ allow multi-selection
+        this.classList.toggle('selected');
+        
+        // Save using JSON approach
+        saveGridItem(this);
+        
+        console.log(`[EventIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+    }
+
+    // Save grid item selection - only using JSON for efficiency
+    function saveGridItem(item) {
+        // Skip individual localStorage items and only use JSON
+        // Directly save complete form data to JSON
+        console.log('[EventIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('eventIqInput', formData);
+    }
+
+    // Save input value - only using JSON for efficiency
+    function saveInput(input) {
+        if (!input || !input.id) return;
+        
+        // Skip individual localStorage items and only use JSON
+        // Directly save complete form data to JSON
+        console.log('[EventIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('eventIqInput', formData);
+    }
+
+    // Toggle visibility of indoor/outdoor setup based on event-location
+    function toggleEventDetails() {
+        const location = document.getElementById('event-location').value;
+        const indoorsRow = document.getElementById('event-indoors');
+        const outdoorsRow = document.getElementById('event-outdoors');
+
+        if (location === 'indoors') {
+            indoorsRow.classList.remove('hidden');
+            outdoorsRow.classList.add('hidden');
+        } else if (location === 'outdoors') {
+            indoorsRow.classList.add('hidden');
+            outdoorsRow.classList.remove('hidden');
+        }
+        
+        // Save the form data after toggling
+        saveInput(document.getElementById('event-location'));
+    }
+
+    // Initialize our grid items with special handling
+    function initializeEventGridItems() {
+        console.log("[EventIQ] Initializing event grid items");
+        
+        // First remove any existing click handlers from datain.js
+        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+            // Clone the node to remove all event listeners
+            const clone = item.cloneNode(true);
+            item.parentNode.replaceChild(clone, item);
+            
+            // Add our handler to the fresh clone
+            clone.addEventListener('click', customToggleGridItem, { capture: true });
+        });
+        
+        // Set up location toggle listener
+        const locationSelect = document.getElementById('event-location');
+        if (locationSelect) {
+            locationSelect.addEventListener('change', toggleEventDetails);
+        }
+        
+        // Set up venue status listener
+        const venueSelect = document.getElementById('event-venue');
+        if (venueSelect) {
+            venueSelect.addEventListener('change', function() {
+                saveInput(this);
+            });
+        }
+        
+        // No need to restore selections here - repopulateForm will handle it all from JSON
+    }
+
+    // Collect form data without validation
+    function collectFormData() {
+        const formData = {
+            eventType: [],
+            venueStatus: null,
+            locationType: null,
+            indoorSetup: [],
+            outdoorSetup: [],
+            eventElements: [],
+            guestCount: null,
+            budget: null,
+            startTime: null,
+            endTime: null,
+            location: null,
+            context: null
+        };
+        
+        // Collect event types (multi-selection grid)
+        document.querySelectorAll('#event-types .grid-item.selected').forEach(item => {
+            formData.eventType.push(item.dataset.value);
+        });
+        
+        // Collect venue status
+        const venueSelect = document.getElementById('event-venue');
+        if (venueSelect) {
+            formData.venueStatus = venueSelect.value;
+        }
+        
+        // Collect location type
+        const locationSelect = document.getElementById('event-location');
+        if (locationSelect) {
+            formData.locationType = locationSelect.value;
+        }
+        
+        // Collect indoor setup (multi-selection grid)
+        document.querySelectorAll('#event-indoor-setup .grid-item.selected').forEach(item => {
+            formData.indoorSetup.push(item.dataset.value);
+        });
+        
+        // Collect outdoor setup (multi-selection grid)
+        document.querySelectorAll('#event-outdoor .grid-item.selected').forEach(item => {
+            formData.outdoorSetup.push(item.dataset.value);
+        });
+        
+        // Collect event elements (multi-selection grid)
+        document.querySelectorAll('#event-elements .grid-item.selected').forEach(item => {
+            formData.eventElements.push(item.dataset.value);
+        });
+        
+        // Collect guest count
+        const guestInput = document.getElementById('event-guests');
+        if (guestInput && guestInput.value.trim()) {
+            formData.guestCount = guestInput.value.trim();
+        }
+        
+        // Collect budget
+        const budgetInput = document.getElementById('event-budget');
+        if (budgetInput && budgetInput.value.trim()) {
+            formData.budget = budgetInput.value.trim();
+        }
+        
+        // Collect start time
+        const startTimeInput = document.getElementById('event-start');
+        if (startTimeInput && startTimeInput.value.trim()) {
+            formData.startTime = startTimeInput.value.trim();
+        }
+        
+        // Collect end time
+        const endTimeInput = document.getElementById('event-end');
+        if (endTimeInput && endTimeInput.value.trim()) {
+            formData.endTime = endTimeInput.value.trim();
+        }
+        
+        // Collect specific location
+        const locationInput = document.getElementById('event-specific-location');
+        if (locationInput && locationInput.value.trim()) {
+            formData.location = locationInput.value.trim();
+        }
+        
+        // Collect context
+        const contextInput = document.getElementById('event-specific-context');
+        if (contextInput && contextInput.value.trim()) {
+            formData.context = contextInput.value.trim();
+        }
+        
+        return formData;
+    }
+
+    // Repopulate form from localStorage - simplified to only use JSON
+    function repopulateForm() {
+        console.log("[EventIQ] Repopulating form from JSON storage");
+
+        // Get stored JSON data
+        const storedData = getJSON('eventIqInput', null);
+        if (!storedData) {
+            console.log('[EventIQ] No stored form data found');
+            return;
+        }
+            
+        console.log('[EventIQ] Found stored JSON form data');
+        
+        // Populate event types
+        if (storedData.eventType && Array.isArray(storedData.eventType)) {
+            storedData.eventType.forEach(type => {
+                const item = document.querySelector(`#event-types .grid-item[data-value="${type}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[EventIQ] Restored from JSON: event type ${type}`);
+                }
+            });
+        }
+        
+        // Populate venue status
+        const venueSelect = document.getElementById('event-venue');
+        if (venueSelect && storedData.venueStatus) {
+            venueSelect.value = storedData.venueStatus;
+            console.log(`[EventIQ] Restored from JSON: venue status`);
+        }
+        
+        // Populate location type and toggle visibility
+        const locationSelect = document.getElementById('event-location');
+        if (locationSelect && storedData.locationType) {
+            locationSelect.value = storedData.locationType;
+            toggleEventDetails(); // Call to update visibility
+            console.log(`[EventIQ] Restored from JSON: location type`);
+        }
+        
+        // Populate indoor setup
+        if (storedData.indoorSetup && Array.isArray(storedData.indoorSetup)) {
+            storedData.indoorSetup.forEach(setup => {
+                const item = document.querySelector(`#event-indoor-setup .grid-item[data-value="${setup}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[EventIQ] Restored from JSON: indoor setup ${setup}`);
+                }
+            });
+        }
+        
+        // Populate outdoor setup
+        if (storedData.outdoorSetup && Array.isArray(storedData.outdoorSetup)) {
+            storedData.outdoorSetup.forEach(setup => {
+                const item = document.querySelector(`#event-outdoor .grid-item[data-value="${setup}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[EventIQ] Restored from JSON: outdoor setup ${setup}`);
+                }
+            });
+        }
+        
+        // Populate event elements
+        if (storedData.eventElements && Array.isArray(storedData.eventElements)) {
+            storedData.eventElements.forEach(element => {
+                const item = document.querySelector(`#event-elements .grid-item[data-value="${element}"]`);
+                if (item) {
+                    item.classList.add('selected');
+                    console.log(`[EventIQ] Restored from JSON: event element ${element}`);
+                }
+            });
+        }
+        
+        // Populate guest count
+        const guestInput = document.getElementById('event-guests');
+        if (guestInput && storedData.guestCount) {
+            guestInput.value = storedData.guestCount;
+            console.log(`[EventIQ] Restored from JSON: guest count`);
+        }
+        
+        // Populate budget
+        const budgetInput = document.getElementById('event-budget');
+        if (budgetInput && storedData.budget) {
+            budgetInput.value = storedData.budget;
+            console.log(`[EventIQ] Restored from JSON: budget`);
+        }
+        
+        // Populate start time
+        const startTimeInput = document.getElementById('event-start');
+        if (startTimeInput && storedData.startTime) {
+            startTimeInput.value = storedData.startTime;
+            console.log(`[EventIQ] Restored from JSON: start time`);
+        }
+        
+        // Populate end time
+        const endTimeInput = document.getElementById('event-end');
+        if (endTimeInput && storedData.endTime) {
+            endTimeInput.value = storedData.endTime;
+            console.log(`[EventIQ] Restored from JSON: end time`);
+        }
+        
+        // Populate specific location
+        const locationInput = document.getElementById('event-specific-location');
+        if (locationInput && storedData.location) {
+            locationInput.value = storedData.location;
+            console.log(`[EventIQ] Restored from JSON: specific location`);
+        }
+        
+        // Populate context
+        const contextInput = document.getElementById('event-specific-context');
+        if (contextInput && storedData.context) {
+            contextInput.value = storedData.context;
+            console.log(`[EventIQ] Restored from JSON: context`);
+        }
+    }
+
+    // Handle input changes
+    function setupInputHandlers() {
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('change', function() {
+                saveInput(this);
+            });
+        });
+    }
+
+    // Clear saved data from localStorage
+    function clearLocalStorage() {
+        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
+            return;
+        }
+        
+        try {
+            // Simply remove the JSON data - no need to iterate through individual keys
+            localStorage.removeItem('eventIqInput');
+            localStorage.removeItem('eventIqResponse');
+            
+            // Reset UI
+            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('input, textarea').forEach(input => {
+                input.value = '';
+            });
+            
+            // Reset select elements to default values
+            document.querySelectorAll('select').forEach(select => {
+                if (select.options.length > 0) {
+                    select.selectedIndex = 0;
+                }
+            });
+            
+            // Ensure proper visibility of location-specific elements
+            toggleEventDetails();
+            
+            console.log('[EventIQ] All event data cleared');
+            alert("All event data has been cleared successfully.");
+        } catch (error) {
+            console.error('[EventIQ] Error clearing data:', error);
+            alert("Error clearing data: " + error.message);
+        }
+    }
+
+    // Handle the generate button click - directly talking to worker
+    async function handleGenerateEventIq() {
+        const btn = document.getElementById('generate-event-btn');
+        const initialText = btn.innerText;
+        btn.innerText = 'Loading...';
+        btn.setAttribute('disabled', 'true');
+        
+        console.log('[EventIQ] Generate button clicked.');
+        
+        try {
+            // Use what's already in localStorage
+            const formData = getJSON('eventIqInput');
+            if (!formData) {
+                console.error('[EventIQ] No input data found in localStorage.');
+                alert('Please complete the form before generating an event plan.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Validate minimum requirements
+            if (!formData.eventType || formData.eventType.length === 0) {
+                console.error('[EventIQ] No event type selected.');
+                alert('Please select at least one event type before generating a plan.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Send data to worker
+            const apiUrl = 'https://eventiqworker.4hm7q4q75z.workers.dev/'; 
+            
+            console.log('[EventIQ] Sending eventIqInput directly from localStorage to worker');
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const responseData = await response.json();
+            console.log('[EventIQ] Worker response:', responseData);
+            
+            if (responseData.message !== 'Success') {
+                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            
+            // Store the response using setJSON
+            setJSON('eventIqResponse', responseData);
+            
+            // Update button state
+            btn.innerText = 'Success!';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+            
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'eventiq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[EventIQ] Dispatched api-response-received event');
+            
+        } catch (error) {
+            console.error('[EventIQ] Error generating event plan:', error);
+            alert('An error occurred while generating your event plan. Please try again later.');
+            
+            btn.innerText = 'Error';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+        }
+    }
+
+    // Attach event listeners to buttons
+    function setupButtonHandlers() {
+        const generateBtn = document.getElementById('generate-event-btn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', handleGenerateEventIq);
+        }
+        
+        const clearBtn = document.getElementById('clear-event-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', clearLocalStorage);
+        }
+    }
+
+    // Main initialization function - called immediately and again after full load
+    function initialize() {
+        console.log("[EventIQ] Initializing...");
+        initializeEventGridItems();
+        setupInputHandlers();
+        setupButtonHandlers();
+        repopulateForm();
+        toggleEventDetails(); // Ensure proper visibility on load
+    }
+
+    // Initialize immediately
+    initialize();
+
+    // Also initialize when DOM is fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    }
+
+    // Special handler for when this page is loaded through datain.js
+    document.addEventListener('data-in-loaded', function(e) {
+        console.log("[EventIQ] Detected load through datain.js, reinitializing");
+        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
+    });
+
+    // For external access if needed
+    window.eventIq = {
+        initialize: initialize,
+        toggleEventDetails: toggleEventDetails,
+        saveGridItem: saveGridItem,
+        saveInput: saveInput,
+        clearLocalStorage: clearLocalStorage,
+        getFormData: collectFormData
+    };
+})();
+</script>
+</body>
+</html>
