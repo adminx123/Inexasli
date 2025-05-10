@@ -358,6 +358,13 @@
                 input.value = '';
             });
             
+            // Reset select elements to default values if any are added in the future
+            document.querySelectorAll('select').forEach(select => {
+                if (select.options.length > 0) {
+                    select.selectedIndex = 0;
+                }
+            });
+            
             console.log('[BusinessIQ] All business data cleared');
             alert("All business data has been cleared successfully.");
         } catch (error) {
@@ -493,7 +500,7 @@
         saveGridItem: saveGridItem,
         saveInput: saveInput,
         clearLocalStorage: clearLocalStorage,
-        collectFormData: collectFormData
+        getFormData: collectFormData  // Changed from collectFormData to getFormData for consistency
     };
 })();
 </script>
