@@ -13,12 +13,14 @@
     </a>
 
         <div class="row1">
+            <label class="category-label">Incident Area</label>
             <div class="grid-container" id="area-goal">
                 <div class="grid-item" data-value="Workplace">Workplace</div>
                 <div class="grid-item" data-value="Personal Life">Personal Life</div>
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Analysis Goals</label>
             <div class="grid-container" id="incident-goal">
                 <div class="grid-item" data-value="Root Cause Identification">Root Cause Identification</div>
                 <div class="grid-item" data-value="Impact Evaluation">Impact Evaluation</div>
@@ -33,33 +35,38 @@
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Incident Details</label>
             <textarea id="incident-details" rows="4" placeholder="Incident details:(1 per line)\nI argued with a coworker over a missed deadline\nThey said it was my fault\nIt was hard for me to accept any responsibility given their tone"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Key Moments</label>
             <textarea id="incident-moments" rows="3" placeholder="Key moments that stood out:(1 per line)\nThey raised their voice\nThey smiled"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Initial Thoughts</label>
             <textarea id="incident-thoughts" rows="3" placeholder="Thoughts proceeding the incident:(1 per line)\nAm I going to lose my job\nWas I too harsh"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">My Personality Traits</label>
             <div class="grid-container" id="incident-warnings">
-                <div class="grid-item" data-value="anti-social">I’m Anti-Social</div>
-                <div class="grid-item" data-value="manipulative">I’m Manipulative</div>
-                <div class="grid-item" data-value="naive">I’m Naive</div>
-                <div class="grid-item" data-value="passive">I’m Passive</div>
-                <div class="grid-item" data-value="aggressive">I’m Aggressive</div>
-                <div class="grid-item" data-value="overly-emotional">I’m Overly Emotional</div>
-                <div class="grid-item" data-value="impulsive">I’m Impulsive</div>
-                <div class="grid-item" data-value="insecure">I’m Insecure</div>
-                <div class="grid-item" data-value="stubborn">I’m Stubborn</div>
-                <div class="grid-item" data-value="pessimistic">I’m Pessimistic</div>
-                <div class="grid-item" data-value="jealous">I’m Jealous</div>
-                <div class="grid-item" data-value="disorganized">I’m Disorganized</div>
-                <div class="grid-item" data-value="procrastinator">I’m a Procrastinator</div>
-                <div class="grid-item" data-value="self-centered">I’m Self-Centered</div>
+                <div class="grid-item" data-value="anti-social">I'm Anti-Social</div>
+                <div class="grid-item" data-value="manipulative">I'm Manipulative</div>
+                <div class="grid-item" data-value="naive">I'm Naive</div>
+                <div class="grid-item" data-value="passive">I'm Passive</div>
+                <div class="grid-item" data-value="aggressive">I'm Aggressive</div>
+                <div class="grid-item" data-value="overly-emotional">I'm Overly Emotional</div>
+                <div class="grid-item" data-value="impulsive">I'm Impulsive</div>
+                <div class="grid-item" data-value="insecure">I'm Insecure</div>
+                <div class="grid-item" data-value="stubborn">I'm Stubborn</div>
+                <div class="grid-item" data-value="pessimistic">I'm Pessimistic</div>
+                <div class="grid-item" data-value="jealous">I'm Jealous</div>
+                <div class="grid-item" data-value="disorganized">I'm Disorganized</div>
+                <div class="grid-item" data-value="procrastinator">I'm a Procrastinator</div>
+                <div class="grid-item" data-value="self-centered">I'm Self-Centered</div>
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Perceived Mood/Tone of Others</label>
             <div class="grid-container" id="incident-mood">
                 <div class="grid-item" data-value="Anger">They Seemed Angry</div>
                 <div class="grid-item" data-value="Sad">They Seemed Sad</div>
@@ -78,8 +85,422 @@
             </div>
         </div>
         <div class="row1">
-            <button class="generate-btn" data-prompt="SocialIQ™" onclick="generatePrompt('SocialIQ™')">Generate Promptemplate™ Now!</button>
+            <button class="generate-btn" id="generate-social-btn">Generate Social Analysis Now!</button>
+            <button class="clear-btn" id="clear-social-btn">Clear All</button>
         </div>
 
+<script>
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
 
-    <script src="socialiq.js"></script>
+// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
+(function() {
+    console.log("SocialIQ script initializing");
+
+    // Only using JSON for data storage now - more efficient approach
+    const setJSON = window.setJSON || function(name, value) {
+        try {
+            if (name === undefined || name === null || name === '') {
+                console.error('Invalid key name provided to setJSON');
+                return false;
+            }
+            
+            if (value === undefined) {
+                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                localStorage.removeItem(name);
+                return true;
+            }
+            
+            // Convert value to JSON string
+            const jsonString = JSON.stringify(value);
+            localStorage.setItem(name, jsonString);
+            console.log(`[SocialIQ] JSON saved ${name}`);
+            return true;
+        } catch (error) {
+            console.error(`[SocialIQ] Error storing JSON: ${error}`);
+            return false;
+        }
+    };
+    
+    const getJSON = window.getJSON || function(name, defaultValue) {
+        try {
+            const item = localStorage.getItem(name);
+            if (!item) return defaultValue;
+            const parsedValue = JSON.parse(item);
+            console.log(`[SocialIQ] JSON retrieved ${name}`);
+            return parsedValue;
+        } catch (error) {
+            console.error(`[SocialIQ] Error retrieving JSON: ${error}`);
+            return defaultValue;
+        }
+    };
+
+    // Custom handler for grid item selection
+    function customToggleGridItem(event) {
+        // Stop event propagation to prevent other handlers from firing
+        event.stopPropagation();
+        event.preventDefault();
+        
+        const item = this;
+        const container = item.closest('.grid-container');
+        
+        // Single selection for area-goal, multiple selection for others
+        if (container.id === 'area-goal') {
+            document.querySelectorAll('#area-goal .grid-item').forEach(el => el.classList.remove('selected'));
+            item.classList.add('selected');
+        } else {
+            // Multi-selection: toggle
+            item.classList.toggle('selected');
+        }
+        
+        // Save using JSON approach
+        saveGridItem(item);
+        
+        console.log(`[SocialIQ] Toggled ${item.dataset.value} in ${container.id}: ${item.classList.contains('selected') ? 'selected' : 'deselected'}`);
+    }
+
+    // Save grid item selection - only using JSON for efficiency
+    function saveGridItem(item) {
+        // Skip individual localStorage items and only use JSON
+        // Directly save complete form data to JSON
+        console.log('[SocialIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('socialIqInput', formData);
+    }
+
+    // Save input value - only using JSON for efficiency
+    function saveInput(input) {
+        if (!input || !input.id) return;
+        
+        // Skip individual localStorage items and only use JSON
+        // Directly save complete form data to JSON
+        console.log('[SocialIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('socialIqInput', formData);
+    }
+
+    // Initialize our grid items with special handling
+    function initializeSocialGridItems() {
+        console.log("[SocialIQ] Initializing social grid items");
+        
+        // First remove any existing click handlers
+        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+            // Clone the node to remove all event listeners
+            const clone = item.cloneNode(true);
+            item.parentNode.replaceChild(clone, item);
+            
+            // Add our handler to the fresh clone
+            clone.addEventListener('click', customToggleGridItem, { capture: true });
+        });
+        
+        // No need to restore selections here - repopulateForm will handle it all from JSON
+    }
+
+    // Collect form data without validation
+    function collectFormData() {
+        const formData = {
+            incidentArea: null,
+            analysisGoals: [],
+            incidentDetails: null,
+            keyMoments: null,
+            initialThoughts: null,
+            personalityTraits: [],
+            perceivedMood: []
+        };
+        
+        // Collect incident area (single selection)
+        const selectedArea = document.querySelector('#area-goal .grid-item.selected');
+        if (selectedArea) {
+            formData.incidentArea = selectedArea.dataset.value;
+        }
+        
+        // Collect analysis goals (multiple selection)
+        document.querySelectorAll('#incident-goal .grid-item.selected').forEach(item => {
+            formData.analysisGoals.push(item.dataset.value);
+        });
+        
+        // Collect incident details
+        const detailsInput = document.getElementById('incident-details');
+        if (detailsInput && detailsInput.value.trim()) {
+            formData.incidentDetails = detailsInput.value.trim();
+        }
+        
+        // Collect key moments
+        const momentsInput = document.getElementById('incident-moments');
+        if (momentsInput && momentsInput.value.trim()) {
+            formData.keyMoments = momentsInput.value.trim();
+        }
+        
+        // Collect initial thoughts
+        const thoughtsInput = document.getElementById('incident-thoughts');
+        if (thoughtsInput && thoughtsInput.value.trim()) {
+            formData.initialThoughts = thoughtsInput.value.trim();
+        }
+        
+        // Collect personality traits (multiple selection)
+        document.querySelectorAll('#incident-warnings .grid-item.selected').forEach(item => {
+            formData.personalityTraits.push(item.dataset.value);
+        });
+        
+        // Collect perceived mood (multiple selection)
+        document.querySelectorAll('#incident-mood .grid-item.selected').forEach(item => {
+            formData.perceivedMood.push(item.dataset.value);
+        });
+        
+        return formData;
+    }
+
+    // Repopulate form from localStorage - simplified to only use JSON
+    function repopulateForm() {
+        console.log("[SocialIQ] Repopulating form from JSON storage");
+
+        // Get stored JSON data
+        const storedData = getJSON('socialIqInput', null);
+        if (!storedData) {
+            console.log('[SocialIQ] No stored form data found');
+            return;
+        }
+            
+        console.log('[SocialIQ] Found stored JSON form data');
+        
+        // Populate incident area (single selection)
+        if (storedData.incidentArea) {
+            const areaItem = document.querySelector(`#area-goal .grid-item[data-value="${storedData.incidentArea}"]`);
+            if (areaItem) {
+                document.querySelectorAll('#area-goal .grid-item').forEach(el => el.classList.remove('selected'));
+                areaItem.classList.add('selected');
+                console.log(`[SocialIQ] Restored from JSON: incident area`);
+            }
+        }
+        
+        // Populate analysis goals (multiple selection)
+        if (storedData.analysisGoals && Array.isArray(storedData.analysisGoals)) {
+            storedData.analysisGoals.forEach(goal => {
+                const goalItem = document.querySelector(`#incident-goal .grid-item[data-value="${goal}"]`);
+                if (goalItem) {
+                    goalItem.classList.add('selected');
+                    console.log(`[SocialIQ] Restored from JSON: analysis goal ${goal}`);
+                }
+            });
+        }
+        
+        // Populate incident details
+        const detailsInput = document.getElementById('incident-details');
+        if (detailsInput && storedData.incidentDetails) {
+            detailsInput.value = storedData.incidentDetails;
+            console.log(`[SocialIQ] Restored from JSON: incident details`);
+        }
+        
+        // Populate key moments
+        const momentsInput = document.getElementById('incident-moments');
+        if (momentsInput && storedData.keyMoments) {
+            momentsInput.value = storedData.keyMoments;
+            console.log(`[SocialIQ] Restored from JSON: key moments`);
+        }
+        
+        // Populate initial thoughts
+        const thoughtsInput = document.getElementById('incident-thoughts');
+        if (thoughtsInput && storedData.initialThoughts) {
+            thoughtsInput.value = storedData.initialThoughts;
+            console.log(`[SocialIQ] Restored from JSON: initial thoughts`);
+        }
+        
+        // Populate personality traits (multiple selection)
+        if (storedData.personalityTraits && Array.isArray(storedData.personalityTraits)) {
+            storedData.personalityTraits.forEach(trait => {
+                const traitItem = document.querySelector(`#incident-warnings .grid-item[data-value="${trait}"]`);
+                if (traitItem) {
+                    traitItem.classList.add('selected');
+                    console.log(`[SocialIQ] Restored from JSON: personality trait ${trait}`);
+                }
+            });
+        }
+        
+        // Populate perceived mood (multiple selection)
+        if (storedData.perceivedMood && Array.isArray(storedData.perceivedMood)) {
+            storedData.perceivedMood.forEach(mood => {
+                const moodItem = document.querySelector(`#incident-mood .grid-item[data-value="${mood}"]`);
+                if (moodItem) {
+                    moodItem.classList.add('selected');
+                    console.log(`[SocialIQ] Restored from JSON: perceived mood ${mood}`);
+                }
+            });
+        }
+    }
+
+    // Handle input changes
+    function setupInputHandlers() {
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('change', function() {
+                saveInput(this);
+            });
+        });
+    }
+
+    // Clear saved data from localStorage
+    function clearLocalStorage() {
+        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
+            return;
+        }
+        
+        try {
+            // Simply remove the JSON data - no need to iterate through individual keys
+            localStorage.removeItem('socialIqInput');
+            localStorage.removeItem('socialIqResponse');
+            
+            // Reset UI
+            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('input, textarea').forEach(input => {
+                input.value = '';
+            });
+            
+            console.log('[SocialIQ] All social data cleared');
+            alert("All social analysis data has been cleared successfully.");
+        } catch (error) {
+            console.error('[SocialIQ] Error clearing data:', error);
+            alert("Error clearing data: " + error.message);
+        }
+    }
+
+    // Handle the generate button click - directly talking to worker
+    async function handleGenerateSocialIq() {
+        const btn = document.getElementById('generate-social-btn');
+        const initialText = btn.innerText;
+        btn.innerText = 'Loading...';
+        btn.setAttribute('disabled', 'true');
+        
+        console.log('[SocialIQ] Generate button clicked.');
+        
+        try {
+            // Use what's already in localStorage
+            const formData = getJSON('socialIqInput');
+            if (!formData) {
+                console.error('[SocialIQ] No input data found in localStorage.');
+                alert('Please complete the form before generating a social analysis.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Validate minimum requirements
+            if (!formData.incidentDetails) {
+                console.error('[SocialIQ] No incident details provided.');
+                alert('Please provide incident details before generating a social analysis.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Send data to worker
+            const apiUrl = 'https://socialiqworker.4hm7q4q75z.workers.dev/'; 
+            
+            console.log('[SocialIQ] Sending socialIqInput directly from localStorage to worker');
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Inexasli-Api-Key': 'dummy-key' // In real implementation, use a proper API key
+                },
+                body: JSON.stringify({ formData: formData })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const responseData = await response.json();
+            console.log('[SocialIQ] Worker response:', responseData);
+            
+            if (responseData.message !== 'Success') {
+                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            
+            // Store the response using setJSON
+            setJSON('socialIqResponse', responseData);
+            
+            // Update button state
+            btn.innerText = 'Success!';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+            
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'socialiq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[SocialIQ] Dispatched api-response-received event');
+            
+        } catch (error) {
+            console.error('[SocialIQ] Error generating social analysis:', error);
+            alert('An error occurred while generating your social analysis. Please try again later.');
+            
+            btn.innerText = 'Error';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+        }
+    }
+
+    // Attach event listeners to buttons
+    function setupButtonHandlers() {
+        const generateBtn = document.getElementById('generate-social-btn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', handleGenerateSocialIq);
+        }
+        
+        const clearBtn = document.getElementById('clear-social-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', clearLocalStorage);
+        }
+    }
+
+    // Main initialization function - called immediately and again after full load
+    function initialize() {
+        console.log("[SocialIQ] Initializing...");
+        initializeSocialGridItems();
+        setupInputHandlers();
+        setupButtonHandlers();
+        repopulateForm();
+    }
+
+    // Initialize immediately
+    initialize();
+
+    // Also initialize when DOM is fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    }
+
+    // Special handler for when this page is loaded through datain.js
+    document.addEventListener('data-in-loaded', function(e) {
+        console.log("[SocialIQ] Detected load through datain.js, reinitializing");
+        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
+    });
+
+    // For external access if needed
+    window.socialIq = {
+        initialize: initialize,
+        saveGridItem: saveGridItem,
+        saveInput: saveInput,
+        clearLocalStorage: clearLocalStorage,
+        getFormData: collectFormData
+    };
+})();
+</script>

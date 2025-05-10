@@ -13,13 +13,15 @@
     </a>
 
         <div class="row1">
+            <label class="category-label">Speculation Goal</label>
             <textarea id="speculation-goal" rows="2" placeholder="What is the goal of your speculation? (e.g., imagine future trends, explore 'what if' scenarios, etc.)"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Purpose of Speculation</label>
             <textarea id="speculation-purpose" rows="2" placeholder="Why are you speculating: (1 per line)\nInspire new ideas\nPrepare for uncertainty\nChallenge assumptions, etc."></textarea>
         </div>
         <div class="row1">
-            <label for="speculation-type">Select the type of speculation:</label>
+            <label class="category-label">Type of Speculation</label>
             <select id="speculation-type">
                 <option value="futuristic">Futuristic (e.g., predicting long-term outcomes)</option>
                 <option value="alternative">Alternative Scenarios (e.g., 'what if' possibilities)</option>
@@ -27,10 +29,11 @@
             </select>
         </div>
         <div class="row1">
+            <label class="category-label">Scope of Speculation</label>
             <textarea id="speculation-scope" rows="2" placeholder="What is the scope of your speculation: (1 per line)\nSpecific industry\nTime period\nHypothetical event"></textarea>
         </div>
         <div class="row1">
-            <label for="speculation-approach">How will you approach this speculation?</label>
+            <label class="category-label">Approach to Speculation</label>
             <select id="speculation-approach">
                 <option value="brainstorming">Brainstorming</option>
                 <option value="thought-experiment">Thought Experiment</option>
@@ -40,20 +43,414 @@
             </select>
         </div>
         <div class="row1">
+            <label class="category-label">Focus of Speculation</label>
             <textarea id="speculation-audience" rows="2" placeholder="Who or what is the focus of your speculation: (1 per line)\nGroup of people\nTechnology\nCancer drugs"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Context of Speculation</label>
             <textarea id="speculation-context" rows="3" placeholder="Provide any context or starting point for your speculation: e.g. current trends, recent events, a specific problem, etc."></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Expected Outcomes</label>
             <textarea id="speculation-outcomes" rows="2" placeholder="What kinds of outcomes or ideas do you hope to generate: (1 per line)\nNew concepts\nScenarios\nHypotheses"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Additional Details</label>
             <textarea id="additional-details" rows="3" placeholder="Any additional details or constraints to guide your speculation: (1 per line)\nTone\nWildness level\nspecific inspirations"></textarea>
         </div>
         <div class="row1">
-            <button class="generate-btn" data-prompt="SpeculationIQ™" onclick="generatePrompt('SpeculationIQ™')">Generate Promptemplate™ Now!</button>
+            <button class="generate-btn" id="generate-speculation-btn">Generate Speculation Now!</button>
+            <button class="clear-btn" id="clear-speculation-btn">Clear All</button>
         </div>
 
+<script>
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
 
-    <script src="speculationiq.js"></script>
+// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
+(function() {
+    console.log("SpeculationIQ script initializing");
+
+    // Only using JSON for data storage now - more efficient approach
+    const setJSON = window.setJSON || function(name, value) {
+        try {
+            if (name === undefined || name === null || name === '') {
+                console.error('Invalid key name provided to setJSON');
+                return false;
+            }
+            
+            if (value === undefined) {
+                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                localStorage.removeItem(name);
+                return true;
+            }
+            
+            // Convert value to JSON string
+            const jsonString = JSON.stringify(value);
+            localStorage.setItem(name, jsonString);
+            console.log(`[SpeculationIQ] JSON saved ${name}`);
+            return true;
+        } catch (error) {
+            console.error(`[SpeculationIQ] Error storing JSON: ${error}`);
+            return false;
+        }
+    };
+    
+    const getJSON = window.getJSON || function(name, defaultValue) {
+        try {
+            const item = localStorage.getItem(name);
+            if (!item) return defaultValue;
+            const parsedValue = JSON.parse(item);
+            console.log(`[SpeculationIQ] JSON retrieved ${name}`);
+            return parsedValue;
+        } catch (error) {
+            console.error(`[SpeculationIQ] Error retrieving JSON: ${error}`);
+            return defaultValue;
+        }
+    };
+
+    // Save input value
+    function saveInput(input) {
+        if (!input || !input.id) return;
+        
+        // Directly save complete form data to JSON
+        console.log('[SpeculationIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('speculationIqInput', formData);
+    }
+
+    // Collect form data without validation
+    function collectFormData() {
+        const formData = {
+            goal: null,
+            purpose: null,
+            type: null,
+            scope: null,
+            approach: null,
+            audience: null,
+            context: null,
+            outcomes: null,
+            additionalDetails: null
+        };
+        
+        // Collect goal
+        const goalInput = document.getElementById('speculation-goal');
+        if (goalInput && goalInput.value.trim()) {
+            formData.goal = goalInput.value.trim();
+        }
+        
+        // Collect purpose
+        const purposeInput = document.getElementById('speculation-purpose');
+        if (purposeInput && purposeInput.value.trim()) {
+            formData.purpose = purposeInput.value.trim();
+        }
+        
+        // Collect type (dropdown)
+        const typeInput = document.getElementById('speculation-type');
+        if (typeInput) {
+            formData.type = typeInput.value;
+        }
+        
+        // Collect scope
+        const scopeInput = document.getElementById('speculation-scope');
+        if (scopeInput && scopeInput.value.trim()) {
+            formData.scope = scopeInput.value.trim();
+        }
+        
+        // Collect approach (dropdown)
+        const approachInput = document.getElementById('speculation-approach');
+        if (approachInput) {
+            formData.approach = approachInput.value;
+        }
+        
+        // Collect audience (focus)
+        const audienceInput = document.getElementById('speculation-audience');
+        if (audienceInput && audienceInput.value.trim()) {
+            formData.audience = audienceInput.value.trim();
+        }
+        
+        // Collect context
+        const contextInput = document.getElementById('speculation-context');
+        if (contextInput && contextInput.value.trim()) {
+            formData.context = contextInput.value.trim();
+        }
+        
+        // Collect outcomes
+        const outcomesInput = document.getElementById('speculation-outcomes');
+        if (outcomesInput && outcomesInput.value.trim()) {
+            formData.outcomes = outcomesInput.value.trim();
+        }
+        
+        // Collect additional details
+        const detailsInput = document.getElementById('additional-details');
+        if (detailsInput && detailsInput.value.trim()) {
+            formData.additionalDetails = detailsInput.value.trim();
+        }
+        
+        return formData;
+    }
+
+    // Repopulate form from localStorage
+    function repopulateForm() {
+        console.log("[SpeculationIQ] Repopulating form from JSON storage");
+
+        // Get stored JSON data
+        const storedData = getJSON('speculationIqInput', null);
+        if (!storedData) {
+            console.log('[SpeculationIQ] No stored form data found');
+            return;
+        }
+            
+        console.log('[SpeculationIQ] Found stored JSON form data');
+        
+        // Populate goal
+        const goalInput = document.getElementById('speculation-goal');
+        if (goalInput && storedData.goal) {
+            goalInput.value = storedData.goal;
+            console.log(`[SpeculationIQ] Restored from JSON: goal`);
+        }
+        
+        // Populate purpose
+        const purposeInput = document.getElementById('speculation-purpose');
+        if (purposeInput && storedData.purpose) {
+            purposeInput.value = storedData.purpose;
+            console.log(`[SpeculationIQ] Restored from JSON: purpose`);
+        }
+        
+        // Populate type (dropdown)
+        const typeInput = document.getElementById('speculation-type');
+        if (typeInput && storedData.type) {
+            typeInput.value = storedData.type;
+            console.log(`[SpeculationIQ] Restored from JSON: type ${storedData.type}`);
+        }
+        
+        // Populate scope
+        const scopeInput = document.getElementById('speculation-scope');
+        if (scopeInput && storedData.scope) {
+            scopeInput.value = storedData.scope;
+            console.log(`[SpeculationIQ] Restored from JSON: scope`);
+        }
+        
+        // Populate approach (dropdown)
+        const approachInput = document.getElementById('speculation-approach');
+        if (approachInput && storedData.approach) {
+            approachInput.value = storedData.approach;
+            console.log(`[SpeculationIQ] Restored from JSON: approach ${storedData.approach}`);
+        }
+        
+        // Populate audience (focus)
+        const audienceInput = document.getElementById('speculation-audience');
+        if (audienceInput && storedData.audience) {
+            audienceInput.value = storedData.audience;
+            console.log(`[SpeculationIQ] Restored from JSON: audience`);
+        }
+        
+        // Populate context
+        const contextInput = document.getElementById('speculation-context');
+        if (contextInput && storedData.context) {
+            contextInput.value = storedData.context;
+            console.log(`[SpeculationIQ] Restored from JSON: context`);
+        }
+        
+        // Populate outcomes
+        const outcomesInput = document.getElementById('speculation-outcomes');
+        if (outcomesInput && storedData.outcomes) {
+            outcomesInput.value = storedData.outcomes;
+            console.log(`[SpeculationIQ] Restored from JSON: outcomes`);
+        }
+        
+        // Populate additional details
+        const detailsInput = document.getElementById('additional-details');
+        if (detailsInput && storedData.additionalDetails) {
+            detailsInput.value = storedData.additionalDetails;
+            console.log(`[SpeculationIQ] Restored from JSON: additional details`);
+        }
+    }
+
+    // Handle input changes
+    function setupInputHandlers() {
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('change', function() {
+                saveInput(this);
+            });
+            
+            // Also save on keyup for text inputs with a small delay
+            if (input.tagName === 'TEXTAREA' || input.tagName === 'INPUT' && input.type === 'text') {
+                input.addEventListener('keyup', function() {
+                    clearTimeout(this.saveTimeout);
+                    this.saveTimeout = setTimeout(() => {
+                        saveInput(this);
+                    }, 500);
+                });
+            }
+        });
+    }
+
+    // Clear saved data from localStorage
+    function clearLocalStorage() {
+        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
+            return;
+        }
+        
+        try {
+            // Simply remove the JSON data - no need to iterate through individual keys
+            localStorage.removeItem('speculationIqInput');
+            localStorage.removeItem('speculationIqResponse');
+            
+            // Reset UI
+            document.querySelectorAll('input, textarea').forEach(input => {
+                input.value = '';
+            });
+            
+            // Reset select fields to first option
+            document.querySelectorAll('select').forEach(select => {
+                if (select.options.length > 0) {
+                    select.selectedIndex = 0;
+                }
+            });
+            
+            console.log('[SpeculationIQ] All speculation data cleared');
+            alert("All speculation data has been cleared successfully.");
+        } catch (error) {
+            console.error('[SpeculationIQ] Error clearing data:', error);
+            alert("Error clearing data: " + error.message);
+        }
+    }
+
+    // Handle the generate button click - directly talking to worker
+    async function handleGenerateSpeculation() {
+        const btn = document.getElementById('generate-speculation-btn');
+        const initialText = btn.innerText;
+        btn.innerText = 'Loading...';
+        btn.setAttribute('disabled', 'true');
+        
+        console.log('[SpeculationIQ] Generate button clicked.');
+        
+        try {
+            // Use what's already in localStorage
+            const formData = getJSON('speculationIqInput');
+            if (!formData) {
+                console.error('[SpeculationIQ] No input data found in localStorage.');
+                alert('Please complete the form before generating a speculation.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Validate minimum requirements
+            if (!formData.goal) {
+                console.error('[SpeculationIQ] No speculation goal provided.');
+                alert('Please provide a speculation goal before generating.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Send data to worker
+            const apiUrl = 'https://speculationiqworker.4hm7q4q75z.workers.dev/'; 
+            
+            console.log('[SpeculationIQ] Sending speculationIqInput directly from localStorage to worker');
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Inexasli-Api-Key': 'dummy-key' // In real implementation, use a proper API key
+                },
+                body: JSON.stringify({ formData: formData })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const responseData = await response.json();
+            console.log('[SpeculationIQ] Worker response:', responseData);
+            
+            if (responseData.message !== 'Success') {
+                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            
+            // Store the response using setJSON
+            setJSON('speculationIqResponse', responseData);
+            
+            // Update button state
+            btn.innerText = 'Success!';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+            
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'speculationiq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[SpeculationIQ] Dispatched api-response-received event');
+            
+        } catch (error) {
+            console.error('[SpeculationIQ] Error generating speculation:', error);
+            alert('An error occurred while generating your speculation. Please try again later.');
+            
+            btn.innerText = 'Error';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
+        }
+    }
+
+    // Attach event listeners to buttons
+    function setupButtonHandlers() {
+        const generateBtn = document.getElementById('generate-speculation-btn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', handleGenerateSpeculation);
+        }
+        
+        const clearBtn = document.getElementById('clear-speculation-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', clearLocalStorage);
+        }
+    }
+
+    // Main initialization function - called immediately and again after full load
+    function initialize() {
+        console.log("[SpeculationIQ] Initializing...");
+        setupInputHandlers();
+        setupButtonHandlers();
+        repopulateForm();
+    }
+
+    // Initialize immediately
+    initialize();
+
+    // Also initialize when DOM is fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    }
+
+    // Special handler for when this page is loaded through datain.js
+    document.addEventListener('data-in-loaded', function(e) {
+        console.log("[SpeculationIQ] Detected load through datain.js, reinitializing");
+        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
+    });
+
+    // For external access if needed
+    window.speculationIq = {
+        initialize: initialize,
+        saveInput: saveInput,
+        clearLocalStorage: clearLocalStorage,
+        getFormData: collectFormData
+    };
+})();
+</script>
