@@ -57,8 +57,119 @@
             <label class="category-label">Additional Instructions</label>
             <textarea id="workflowiq-instructions" rows="3" placeholder="Additional instructions: (1 per line)\ne.g., Prefer open-source tools, Ensure audit trail"></textarea>
         </div>
-        <button class="generate-btn" data-prompt="WorkflowIQ™" onclick="generatePrompt('WorkflowIQ™')">Generate Promptemplate™ Now!</button>
+        <button class="generate-btn" id="generate-workflow-btn">Generate Workflow Plan Now!</button>
+        <button class="clear-btn" id="clear-workflow-btn">Clear All</button>
     </div>
 
+    <script>
+    /*
+     * Copyright (c) 2025 INEXASLI. All rights reserved.
+     * This code is protected under Canadian and international copyright laws.
+     * Unauthorized use, reproduction, distribution, or modification of this code 
+     * without explicit written permission via email from info@inexasli.com 
+     * is strictly prohibited.
+    */
+    (function() {
+        console.log("[WorkflowIQ] script initializing");
 
-    <script src="workflowiq.js"></script>
+        const setJSON = window.setJSON || function(name, value) {
+            try {
+                if (!name) return false;
+                if (value === undefined) { localStorage.removeItem(name); return true; }
+                localStorage.setItem(name, JSON.stringify(value));
+                return true;
+            } catch (e) {
+                console.error(e);
+                return false;
+            }
+        };
+        const getJSON = window.getJSON || function(name, defaultValue) {
+            try {
+                const item = localStorage.getItem(name);
+                return item ? JSON.parse(item) : defaultValue;
+            } catch (e) { console.error(e); return defaultValue; }
+        };
+
+        function saveInput(input) {
+            if (!input || !input.id) return;
+            const formData = collectFormData();
+            setJSON('workflowIqInput', formData);
+        }
+
+        function collectFormData() {
+            return {
+                task: document.getElementById('workflowiq-task')?.value.trim() || '',
+                steps: document.getElementById('workflowiq-steps')?.value.trim() || '',
+                tools: document.getElementById('workflowiq-tools')?.value.trim() || '',
+                automationType: document.getElementById('workflowiq-automation-type')?.value || '',
+                priority: document.getElementById('workflowiq-priority')?.value || '',
+                goals: document.getElementById('workflowiq-goals')?.value.trim() || '',
+                constraints: document.getElementById('workflowiq-constraints')?.value.trim() || '',
+                instructions: document.getElementById('workflowiq-instructions')?.value.trim() || ''
+            };
+        }
+
+        function repopulateForm() {
+            const data = getJSON('workflowIqInput', null);
+            if (!data) return;
+            document.getElementById('workflowiq-task').value = data.task;
+            document.getElementById('workflowiq-steps').value = data.steps;
+            document.getElementById('workflowiq-tools').value = data.tools;
+            document.getElementById('workflowiq-automation-type').value = data.automationType;
+            document.getElementById('workflowiq-priority').value = data.priority;
+            document.getElementById('workflowiq-goals').value = data.goals;
+            document.getElementById('workflowiq-constraints').value = data.constraints;
+            document.getElementById('workflowiq-instructions').value = data.instructions;
+        }
+
+        function clearLocalStorage() {
+            if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) return;
+            localStorage.removeItem('workflowIqInput');
+            localStorage.removeItem('workflowIqResponse');
+            document.querySelectorAll('input, textarea, select').forEach(el => el.value = '');
+            alert("All workflow data has been cleared successfully.");
+        }
+
+        async function handleGenerateWorkflowIq() {
+            const btn = document.getElementById('generate-workflow-btn');
+            const initialText = btn.innerText;
+            btn.innerText = 'Loading...';
+            btn.disabled = true;
+            try {
+                const formData = getJSON('workflowIqInput');
+                if (!formData || !formData.task) {
+                    alert('Please complete the form before generating a workflow plan.');
+                    btn.innerText = initialText;
+                    btn.disabled = false;
+                    return;
+                }
+                const response = await fetch('https://workflow.4hm7q4q75z.workers.dev/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                setJSON('workflowIqResponse', data);
+                btn.innerText = 'Success!';
+                setTimeout(() => { btn.disabled = false; btn.innerText = initialText; }, 1000);
+                document.dispatchEvent(new CustomEvent('api-response-received', { detail: { module: 'workflowiq', type: 'worker-response', timestamp: Date.now() } }));
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while generating.');
+                btn.innerText = 'Error';
+                setTimeout(() => { btn.innerText = initialText; btn.disabled = false; }, 2000);
+            }
+        }
+
+        function setupHandlers() {
+            document.querySelectorAll('textarea, input, select').forEach(el => el.addEventListener('change', () => saveInput(el)));
+            document.getElementById('generate-workflow-btn').addEventListener('click', handleGenerateWorkflowIq);
+            document.getElementById('clear-workflow-btn').addEventListener('click', clearLocalStorage);
+        }
+
+        // Initialize
+        setupHandlers();
+        repopulateForm();
+    })();
+    </script>
