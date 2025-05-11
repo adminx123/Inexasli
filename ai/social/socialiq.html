@@ -402,16 +402,15 @@
             }
             
             // Send data to worker
-            const apiUrl = 'https://socialiqworker.4hm7q4q75z.workers.dev/'; 
+            const apiUrl = 'https://social.4hm7q4q75z.workers.dev/'; 
             
             console.log('[SocialIQ] Sending socialIqInput directly from localStorage to worker');
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-Inexasli-Api-Key': 'dummy-key' // In real implementation, use a proper API key
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ formData: formData })
+                body: JSON.stringify(formData)
             });
             
             if (!response.ok) {
