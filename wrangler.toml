@@ -1,0 +1,60 @@
+name = "inexasli-workers"
+account_id = "b70c309587ed8ba2bfa06320792ea457"
+workers_dev = true
+compatibility_date = "2025-05-11"
+
+[env.workflow]
+name = "workflow"
+main = "./ai/workflow/workflowiqworker.js"
+
+[env.symptom]
+name = "symptom"
+main = "./ai/symptom/symptomiqworker.js"
+
+[env.fitness]
+name = "fitness"
+main = "./ai/fitness/fitnessiqworker.js"
+
+[env.report]
+name = "report"
+main = "./ai/report/reportiqworker.js"
+
+[env.research]
+name = "research"
+main = "./ai/research/researchiqworker.js"
+
+[env.social]
+name = "social" 
+main = "./ai/social/socialiqworker.js"
+
+[env.speculation]
+name = "speculation"
+main = "./ai/speculation/speculationiqworker.js"
+
+[env.enneagram]
+name = "enneagram"
+main = "./ai/enneagram/enneagramiqworker.js"
+
+[env.event]
+name = "event"
+main = "./ai/event/eventiqworker.js"
+
+[env.quiz]
+name = "quiz"
+main = "./ai/quiz/quiziqworker.js"
+
+[env.general]
+name = "general"
+main = "./ai/general/generaliqworker.js"
+
+[env.marketing]
+name = "marketing"
+main = "./ai/marketing/adagencyiqworker.js"
+
+[env.app]
+name = "app"
+main = "./ai/app/appiqworker.js"
+
+[env.adventure]
+name = "adventure"
+main = "./ai/adventure/adventureiqworker.js"

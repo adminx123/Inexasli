@@ -4,22 +4,39 @@
     "description": "A web application project.",
     "main": "index.js",
     "scripts": {
-      "start": "webpack serve --mode development",
-      "build": "webpack --mode production",
-      "test": "jest"
+        "start": "webpack serve --mode development",
+        "build": "webpack --mode production",
+        "test": "jest",
+        "login": "npx wrangler login",
+        "deploy:all": "npm run deploy:workflow && npm run deploy:symptom && npm run deploy:fitness && npm run deploy:report && npm run deploy:research && npm run deploy:social && npm run deploy:speculation && npm run deploy:enneagram && npm run deploy:event && npm run deploy:quiz && npm run deploy:general && npm run deploy:marketing && npm run deploy:app && npm run deploy:adventure",
+        "deploy:workflow": "npx wrangler deploy -e workflow",
+        "deploy:symptom": "npx wrangler deploy -e symptom",
+        "deploy:fitness": "npx wrangler deploy -e fitness",
+        "deploy:report": "npx wrangler deploy -e report",
+        "deploy:research": "npx wrangler deploy -e research",
+        "deploy:social": "npx wrangler deploy -e social",
+        "deploy:speculation": "npx wrangler deploy -e speculation",
+        "deploy:enneagram": "npx wrangler deploy -e enneagram",
+        "deploy:event": "npx wrangler deploy -e event",
+        "deploy:quiz": "npx wrangler deploy -e quiz",
+        "deploy:general": "npx wrangler deploy -e general",
+        "deploy:marketing": "npx wrangler deploy -e marketing",
+        "deploy:app": "npx wrangler deploy -e app",
+        "deploy:adventure": "npx wrangler deploy -e adventure"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
-      "webpack": "^5.0.0",
-      "webpack-cli": "^4.0.0",
-      "webpack-dev-server": "^3.0.0"
+        "webpack": "^5.0.0",
+        "webpack-cli": "^4.0.0",
+        "webpack-dev-server": "^3.0.0"
     },
     "devDependencies": {
-      "jest": "^26.0.0",
-      "babel-loader": "^8.0.0",
-      "css-loader": "^5.0.0",
-      "style-loader": "^2.0.0"
+        "babel-loader": "^8.0.0",
+        "css-loader": "^5.0.0",
+        "jest": "^26.0.0",
+        "style-loader": "^2.0.0",
+        "wrangler": "^4.14.4"
     }
-  }
+}
