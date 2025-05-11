@@ -24,11 +24,11 @@
     <div class="container">
         <div class="row1">
             <label class="category-label">Therapy Goal</label>
-            <textarea id="therapy-goal" rows="3" placeholder="e.g., Manage anxiety, process grief, improve self-esteem"></textarea>
+            <textarea id="emotioniq-goal" rows="3" placeholder="e.g., Manage anxiety, process grief, improve self-esteem"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Emotional State</label>
-            <div class="grid-container" id="therapy-emotions">
+            <div class="grid-container" id="emotioniq-emotions">
                 <div class="grid-item" data-value="Anxious">Anxious</div>
                 <div class="grid-item" data-value="Sad">Sad</div>
                 <div class="grid-item" data-value="Angry">Angry</div>
@@ -43,7 +43,7 @@
         </div>
         <div class="row1">
             <label class="category-label">Triggers & Stressors</label>
-            <div class="grid-container" id="therapy-triggers">
+            <div class="grid-container" id="emotioniq-triggers">
                 <div class="grid-item" data-value="Work">Work Stress</div>
                 <div class="grid-item" data-value="Relationships">Relationships</div>
                 <div class="grid-item" data-value="Family">Family Issues</div>
@@ -57,11 +57,11 @@
         </div>
         <div class="row1">
             <label class="category-label">Recent Events</label>
-            <textarea id="therapy-recent" rows="4" placeholder="What's been on your mind lately? (1 per line):\nHad a fight with my partner\nFelt overwhelmed at work\nCouldn't sleep last night"></textarea>
+            <textarea id="emotioniq-recent" rows="4" placeholder="What's been on your mind lately? (1 per line):\nHad a fight with my partner\nFelt overwhelmed at work\nCouldn't sleep last night"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Coping Strategies</label>
-            <div class="grid-container" id="therapy-coping">
+            <div class="grid-container" id="emotioniq-coping">
                 <div class="grid-item" data-value="Talking">Talking to Someone</div>
                 <div class="grid-item" data-value="Exercise">Exercise</div>
                 <div class="grid-item" data-value="Meditation">Meditation</div>
@@ -75,11 +75,11 @@
         </div>
         <div class="row1">
             <label class="category-label">Therapy History</label>
-            <textarea id="therapy-history" rows="3" placeholder="e.g., I've been in therapy for 6 months, I had a tough childhood, etc."></textarea>
+            <textarea id="emotioniq-history" rows="3" placeholder="e.g., I've been in therapy for 6 months, I had a tough childhood, etc."></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Context Details</label>
-            <textarea id="therapy-context" rows="4" placeholder="Anything from your past or future that might relate (1 per line):\nHad a tough breakup last year\nWorried about a big presentation next week\nChildhood memory of being ignored"></textarea>
+            <textarea id="emotioniq-context" rows="4" placeholder="Anything from your past or future that might relate (1 per line):\nHad a tough breakup last year\nWorried about a big presentation next week\nChildhood memory of being ignored"></textarea>
         </div>
         <div class="row1">
             <button class="generate-btn" id="generate-emotion-btn">Generate EmotionIQ™ Analysis</button>
@@ -98,396 +98,50 @@
  * jurisdictions worldwide.
 */
 
-// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
 (function() {
-    console.log("EmotionIQ script initializing");
+    const setJSON = window.setJSON || function(k,v){ if(!k) return; if(v===undefined) return localStorage.removeItem(k); localStorage.setItem(k,JSON.stringify(v)); };
+    const getJSON = window.getJSON || function(k,def){ try{const v=localStorage.getItem(k); return v?JSON.parse(v):def;}catch{return def;} };
 
-    // Only using JSON for data storage now - more efficient approach
-    const setJSON = window.setJSON || function(name, value) {
-        try {
-            if (name === undefined || name === null || name === '') {
-                console.error('Invalid key name provided to setJSON');
-                return false;
-            }
-            
-            if (value === undefined) {
-                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
-                localStorage.removeItem(name);
-                return true;
-            }
-            
-            // Convert value to JSON string
-            const jsonString = JSON.stringify(value);
-            localStorage.setItem(name, jsonString);
-            console.log(`[EmotionIQ] JSON saved ${name}`);
-            return true;
-        } catch (error) {
-            console.error(`[EmotionIQ] Error storing JSON: ${error}`);
-            return false;
-        }
-    };
-    
-    const getJSON = window.getJSON || function(name, defaultValue) {
-        try {
-            const item = localStorage.getItem(name);
-            if (!item) return defaultValue;
-            const parsedValue = JSON.parse(item);
-            console.log(`[EmotionIQ] JSON retrieved ${name}`);
-            return parsedValue;
-        } catch (error) {
-            console.error(`[EmotionIQ] Error retrieving JSON: ${error}`);
-            return defaultValue;
-        }
-    };
-
-    // Custom handler for grid item selection
-    function customToggleGridItem(event) {
-        // Stop event propagation to prevent other handlers from firing
-        event.stopPropagation();
-        event.preventDefault();
-        
-        const container = this.closest('.grid-container');
-        // All grid containers in EmotionIQ allow multi-selection
-        this.classList.toggle('selected');
-        
-        // Save using JSON approach
-        saveGridItem(this);
-        
-        console.log(`[EmotionIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+    function collectFormData(){
+        const data={ goal:null, emotions:[], triggers:[], recent:null, coping:[], history:null, context:null };
+        const g=document.getElementById('emotioniq-goal'); if(g&&g.value.trim()) data.goal=g.value.trim();
+        document.querySelectorAll('#emotioniq-emotions .grid-item.selected').forEach(i=>data.emotions.push(i.dataset.value));
+        document.querySelectorAll('#emotioniq-triggers .grid-item.selected').forEach(i=>data.triggers.push(i.dataset.value));
+        const r=document.getElementById('emotioniq-recent'); if(r&&r.value.trim()) data.recent=r.value.trim();
+        document.querySelectorAll('#emotioniq-coping .grid-item.selected').forEach(i=>data.coping.push(i.dataset.value));
+        const h=document.getElementById('emotioniq-history'); if(h&&h.value.trim()) data.history=h.value.trim();
+        const c=document.getElementById('emotioniq-context'); if(c&&c.value.trim()) data.context=c.value.trim();
+        return data;
     }
 
-    // Save grid item selection - only using JSON for efficiency
-    function saveGridItem(item) {
-        // Skip individual localStorage items and only use JSON
-        // Directly save complete form data to JSON
-        console.log('[EmotionIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('emotionIqInput', formData);
+    function saveAll(){ setJSON('emotionIqInput', collectFormData()); }
+    function customToggle(e){ e.stopPropagation(); e.preventDefault(); this.classList.toggle('selected'); saveAll(); }
+
+    function repopulateForm(){ const d=getJSON('emotionIqInput',{}); if(!d) return;
+        if(d.goal) document.getElementById('emotioniq-goal').value=d.goal;
+        (d.emotions||[]).forEach(v=>{ const el=document.querySelector(`#emotioniq-emotions .grid-item[data-value='${v}']`); if(el) el.classList.add('selected'); });
+        (d.triggers||[]).forEach(v=>{ const el=document.querySelector(`#emotioniq-triggers .grid-item[data-value='${v}']`); if(el) el.classList.add('selected'); });
+        if(d.recent) document.getElementById('emotioniq-recent').value=d.recent;
+        (d.coping||[]).forEach(v=>{ const el=document.querySelector(`#emotioniq-coping .grid-item[data-value='${v}']`); if(el) el.classList.add('selected'); });
+        if(d.history) document.getElementById('emotioniq-history').value=d.history;
+        if(d.context) document.getElementById('emotioniq-context').value=d.context;
     }
 
-    // Save input value - only using JSON for efficiency
-    function saveInput(input) {
-        if (!input || !input.id) return;
-        
-        // Skip individual localStorage items and only use JSON
-        // Directly save complete form data to JSON
-        console.log('[EmotionIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('emotionIqInput', formData);
+    function clearData(){ if(!confirm('Clear all saved data?')) return; localStorage.removeItem('emotionIqInput'); localStorage.removeItem('emotionIqResponse'); document.querySelectorAll('.grid-item.selected').forEach(i=>i.classList.remove('selected')); document.querySelectorAll('textarea').forEach(t=>t.value=''); }
+
+    async function generate(){ const btn=document.getElementById('generate-emotion-btn'); const old=btn.innerText; btn.innerText='Loading...'; btn.disabled=true;
+        const data=getJSON('emotionIqInput'); if(!data||!data.goal){ alert('Please complete the form'); btn.innerText=old; btn.disabled=false; return; }
+        try{ const res=await fetch('https://emotioniqworker.4hm7q4q75z.workers.dev/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+            const json=await res.json(); setJSON('emotionIqResponse',json); document.dispatchEvent(new CustomEvent('api-response-received',{detail:{module:'emotioniq',type:'worker-response',timestamp:Date.now()}})); btn.innerText='Success!';
+        }catch(e){ console.error(e); alert('Error generating analysis'); btn.innerText='Error'; }
+        setTimeout(()=>{ btn.innerText=old; btn.disabled=false; },2000);
     }
 
-    // Initialize our grid items with special handling
-    function initializeEmotionGridItems() {
-        console.log("[EmotionIQ] Initializing emotion grid items");
-        
-        // First remove any existing click handlers from datain.js
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            // Clone the node to remove all event listeners
-            const clone = item.cloneNode(true);
-            item.parentNode.replaceChild(clone, item);
-            
-            // Add our handler to the fresh clone
-            clone.addEventListener('click', customToggleGridItem, { capture: true });
-        });
-        
-        // No need to restore selections here - repopulateForm will handle it all from JSON
-    }
-
-    // Collect form data without validation
-    function collectFormData() {
-        const formData = {
-            goal: null,
-            emotions: [],
-            triggers: [],
-            recentEvents: null,
-            copingStrategies: [],
-            therapyHistory: null,
-            contextDetails: null
-        };
-        
-        // Collect therapy goal
-        const goalInput = document.getElementById('therapy-goal');
-        if (goalInput && goalInput.value.trim()) {
-            formData.goal = goalInput.value.trim();
-        }
-        
-        // Collect emotions (multi-selection grid)
-        document.querySelectorAll('#therapy-emotions .grid-item.selected').forEach(item => {
-            formData.emotions.push(item.dataset.value);
-        });
-        
-        // Collect triggers (multi-selection grid)
-        document.querySelectorAll('#therapy-triggers .grid-item.selected').forEach(item => {
-            formData.triggers.push(item.dataset.value);
-        });
-        
-        // Collect recent events
-        const recentInput = document.getElementById('therapy-recent');
-        if (recentInput && recentInput.value.trim()) {
-            formData.recentEvents = recentInput.value.trim();
-        }
-        
-        // Collect coping strategies (multi-selection grid)
-        document.querySelectorAll('#therapy-coping .grid-item.selected').forEach(item => {
-            formData.copingStrategies.push(item.dataset.value);
-        });
-        
-        // Collect therapy history
-        const historyInput = document.getElementById('therapy-history');
-        if (historyInput && historyInput.value.trim()) {
-            formData.therapyHistory = historyInput.value.trim();
-        }
-        
-        // Collect context details
-        const contextInput = document.getElementById('therapy-context');
-        if (contextInput && contextInput.value.trim()) {
-            formData.contextDetails = contextInput.value.trim();
-        }
-        
-        return formData;
-    }
-
-    // Repopulate form from localStorage - simplified to only use JSON
-    function repopulateForm() {
-        console.log("[EmotionIQ] Repopulating form from JSON storage");
-
-        // Get stored JSON data
-        const storedData = getJSON('emotionIqInput', null);
-        if (!storedData) {
-            console.log('[EmotionIQ] No stored form data found');
-            return;
-        }
-            
-        console.log('[EmotionIQ] Found stored JSON form data');
-        
-        // Populate therapy goal
-        const goalInput = document.getElementById('therapy-goal');
-        if (goalInput && storedData.goal) {
-            goalInput.value = storedData.goal;
-            console.log(`[EmotionIQ] Restored from JSON: goal`);
-        }
-        
-        // Populate emotions
-        if (storedData.emotions && Array.isArray(storedData.emotions)) {
-            storedData.emotions.forEach(emotion => {
-                const item = document.querySelector(`#therapy-emotions .grid-item[data-value="${emotion}"]`);
-                if (item) {
-                    item.classList.add('selected');
-                    console.log(`[EmotionIQ] Restored from JSON: emotion ${emotion}`);
-                }
-            });
-        }
-        
-        // Populate triggers
-        if (storedData.triggers && Array.isArray(storedData.triggers)) {
-            storedData.triggers.forEach(trigger => {
-                const item = document.querySelector(`#therapy-triggers .grid-item[data-value="${trigger}"]`);
-                if (item) {
-                    item.classList.add('selected');
-                    console.log(`[EmotionIQ] Restored from JSON: trigger ${trigger}`);
-                }
-            });
-        }
-        
-        // Populate recent events
-        const recentInput = document.getElementById('therapy-recent');
-        if (recentInput && storedData.recentEvents) {
-            recentInput.value = storedData.recentEvents;
-            console.log(`[EmotionIQ] Restored from JSON: recent events`);
-        }
-        
-        // Populate coping strategies
-        if (storedData.copingStrategies && Array.isArray(storedData.copingStrategies)) {
-            storedData.copingStrategies.forEach(strategy => {
-                const item = document.querySelector(`#therapy-coping .grid-item[data-value="${strategy}"]`);
-                if (item) {
-                    item.classList.add('selected');
-                    console.log(`[EmotionIQ] Restored from JSON: coping strategy ${strategy}`);
-                }
-            });
-        }
-        
-        // Populate therapy history
-        const historyInput = document.getElementById('therapy-history');
-        if (historyInput && storedData.therapyHistory) {
-            historyInput.value = storedData.therapyHistory;
-            console.log(`[EmotionIQ] Restored from JSON: therapy history`);
-        }
-        
-        // Populate context details
-        const contextInput = document.getElementById('therapy-context');
-        if (contextInput && storedData.contextDetails) {
-            contextInput.value = storedData.contextDetails;
-            console.log(`[EmotionIQ] Restored from JSON: context details`);
-        }
-    }
-
-    // Handle input changes
-    function setupInputHandlers() {
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            input.addEventListener('change', function() {
-                saveInput(this);
-            });
-        });
-    }
-
-    // Clear saved data from localStorage
-    function clearLocalStorage() {
-        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
-            return;
-        }
-        
-        try {
-            // Simply remove the JSON data - no need to iterate through individual keys
-            localStorage.removeItem('emotionIqInput');
-            localStorage.removeItem('emotionIqResponse');
-            
-            // Reset UI
-            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            document.querySelectorAll('input, textarea').forEach(input => {
-                input.value = '';
-            });
-            
-            console.log('[EmotionIQ] All emotion data cleared');
-            alert("All emotion data has been cleared successfully.");
-        } catch (error) {
-            console.error('[EmotionIQ] Error clearing data:', error);
-            alert("Error clearing data: " + error.message);
-        }
-    }
-
-    // Handle the generate button click - directly talking to worker
-    async function handleGenerateEmotionIq() {
-        const btn = document.getElementById('generate-emotion-btn');
-        const initialText = btn.innerText;
-        btn.innerText = 'Loading...';
-        btn.setAttribute('disabled', 'true');
-        
-        console.log('[EmotionIQ] Generate button clicked.');
-        
-        try {
-            // Use what's already in localStorage
-            const formData = getJSON('emotionIqInput');
-            if (!formData) {
-                console.error('[EmotionIQ] No input data found in localStorage.');
-                alert('Please complete the form before generating an emotional analysis.');
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-                return;
-            }
-            
-            // Validate minimum requirements
-            if (!formData.goal) {
-                console.error('[EmotionIQ] No therapy goal provided.');
-                alert('Please provide a therapy goal before generating an analysis.');
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-                return;
-            }
-            
-            // Send data to worker
-            const apiUrl = 'https://emotioniqworker.4hm7q4q75z.workers.dev/'; 
-            
-            console.log('[EmotionIQ] Sending emotionIqInput directly from localStorage to worker');
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            
-            const responseData = await response.json();
-            console.log('[EmotionIQ] Worker response:', responseData);
-            
-            if (responseData.message !== 'Success') {
-                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-            
-            // Store the response using setJSON
-            setJSON('emotionIqResponse', responseData);
-            
-            // Update button state
-            btn.innerText = 'Success!';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-            }, 2000);
-            
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'emotioniq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
-                }
-            });
-            document.dispatchEvent(event);
-            console.log('[EmotionIQ] Dispatched api-response-received event');
-            
-        } catch (error) {
-            console.error('[EmotionIQ] Error generating emotional analysis:', error);
-            alert('An error occurred while generating your emotional analysis. Please try again later.');
-            
-            btn.innerText = 'Error';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-            }, 2000);
-        }
-    }
-
-    // Attach event listeners to buttons
-    function setupButtonHandlers() {
-        const generateBtn = document.getElementById('generate-emotion-btn');
-        if (generateBtn) {
-            generateBtn.addEventListener('click', handleGenerateEmotionIq);
-        }
-        
-        const clearBtn = document.getElementById('clear-emotion-btn');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', clearLocalStorage);
-        }
-    }
-
-    // Main initialization function - called immediately and again after full load
-    function initialize() {
-        console.log("[EmotionIQ] Initializing...");
-        initializeEmotionGridItems();
-        setupInputHandlers();
-        setupButtonHandlers();
-        repopulateForm();
-    }
-
-    // Initialize immediately
-    initialize();
-
-    // Also initialize when DOM is fully loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initialize);
-    }
-
-    // Special handler for when this page is loaded through datain.js
-    document.addEventListener('data-in-loaded', function(e) {
-        console.log("[EmotionIQ] Detected load through datain.js, reinitializing");
-        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
-    });
-
-    // For external access if needed
-    window.emotionIq = {
-        initialize: initialize,
-        saveGridItem: saveGridItem,
-        saveInput: saveInput,
-        clearLocalStorage: clearLocalStorage,
-        getFormData: collectFormData
-    };
+    repopulateForm();
+    document.querySelectorAll('.grid-container .grid-item').forEach(i=>i.addEventListener('click',customToggle));
+    document.querySelectorAll('textarea').forEach(t=>t.addEventListener('change',saveAll));
+    document.getElementById('generate-emotion-btn').addEventListener('click',generate);
+    document.getElementById('clear-emotion-btn').addEventListener('click',clearData);
 })();
 </script>
 </body>
