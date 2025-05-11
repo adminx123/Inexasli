@@ -110,286 +110,85 @@ Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
 */
   (function() {
     console.log("Adventure IQ script initializing");
+
+    // JSON storage helpers
     const setJSON = window.setJSON || function(name, value) {
       try {
-        if (name === undefined || name === null || name === '') {
-          console.error('Invalid key name provided to setJSON');
-          return false;
-        }
-        
-        if (value === undefined) {
-          console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
-          localStorage.removeItem(name);
-          return true;
-        }
-        
-        const jsonString = JSON.stringify(value);
-        localStorage.setItem(name, jsonString);
+        if (!name) return false;
+        if (value === undefined) { localStorage.removeItem(name); return true; }
+        localStorage.setItem(name, JSON.stringify(value));
         console.log(`[AdventureIQ] JSON saved ${name}`);
         return true;
-      } catch (error) {
-        console.error(`[AdventureIQ] Error storing JSON: ${error}`);
-        return false;
-      }
+      } catch (e) { console.error(`[AdventureIQ] Error storing JSON: ${e}`); return false; }
     };
     const getJSON = window.getJSON || function(name, defaultValue) {
       try {
         const item = localStorage.getItem(name);
-        if (!item) return defaultValue;
-        const parsedValue = JSON.parse(item);
-        console.log(`[AdventureIQ] JSON retrieved ${name}`);
-        return parsedValue;
-      } catch (error) {
-        console.error(`[AdventureIQ] Error retrieving JSON: ${error}`);
-        return defaultValue;
-      }
+        return item ? JSON.parse(item) : defaultValue;
+      } catch (e) { console.error(`[AdventureIQ] Error retrieving JSON: ${e}`); return defaultValue; }
     };
 
     function customToggleGridItem(event) {
       event.stopPropagation(); event.preventDefault();
       const container = this.closest('.grid-container');
-      if (container.id === 'adventure-...') {
-        /* single selection logic as in fitnessiq */
-      } else {
-        this.classList.toggle('selected');
-      }
+      // Multi vs single logic: only multi here for adventure
+      this.classList.toggle('selected');
       saveGridItem(this);
+      console.log(`[AdventureIQ] Toggled ${this.dataset.value} in ${container.id}`);
     }
 
     function saveGridItem(item) {
       console.log('[AdventureIQ] Saving all form data to JSON');
-      const formData = collectFormData();
-      setJSON('adventureIqInput', formData);
+      setJSON('adventureIqInput', collectFormData());
     }
 
     function saveInput(input) {
       console.log('[AdventureIQ] Saving all form data to JSON');
-      const formData = collectFormData();
-      setJSON('adventureIqInput', formData);
+      setJSON('adventureIqInput', collectFormData());
     }
 
     function collectFormData() {
-      const formData = { 
-        activities: [],
-        relationships: [],
-        location: null,
-        specifics: null,
-        plans: null,
-        packing: null,
-        people: null,
-        days: null,
-        budget: null
-      };
-      document.querySelectorAll('#trip-activities .grid-item.selected').forEach(item => {
-        formData.activities.push(item.dataset.value);
+      const formData = { activities: [], relationships: [], location: null, specifics: null, plans: null, packing: null, people: null, days: null, budget: null };
+      document.querySelectorAll('#trip-activities .grid-item.selected').forEach(i => formData.activities.push(i.dataset.value));
+      document.querySelectorAll('#trip-relationship .grid-item.selected').forEach(i => formData.relationships.push(i.dataset.value));
+      ['location','specifics','plans','packing','people','days','budget'].forEach(field => {
+        const el = document.getElementById(`trip-${field}`);
+        if (el) formData[field] = (el.value||'').trim() || null;
       });
-      document.querySelectorAll('#trip-relationship .grid-item.selected').forEach(item => {
-        formData.relationships.push(item.dataset.value);
-      });
-      const locationInput = document.getElementById('trip-location');
-      if (locationInput && locationInput.value.trim()) {
-        formData.location = locationInput.value.trim();
-      }
-      const specificsInput = document.getElementById('trip-specifics');
-      if (specificsInput && specificsInput.value.trim()) {
-        formData.specifics = specificsInput.value.trim();
-      }
-      const plansInput = document.getElementById('trip-plans');
-      if (plansInput && plansInput.value.trim()) {
-        formData.plans = plansInput.value.trim();
-      }
-      const packingInput = document.getElementById('trip-packing');
-      if (packingInput) {
-        formData.packing = packingInput.value;
-      }
-      const peopleInput = document.getElementById('trip-people');
-      if (peopleInput && peopleInput.value && !isNaN(peopleInput.value)) {
-        formData.people = parseInt(peopleInput.value, 10);
-      }
-      const daysInput = document.getElementById('trip-days');
-      if (daysInput && daysInput.value && !isNaN(daysInput.value)) {
-        formData.days = parseInt(daysInput.value, 10);
-      }
-      const budgetInput = document.getElementById('trip-budget');
-      if (budgetInput && budgetInput.value.trim()) {
-        formData.budget = budgetInput.value.trim();
-      }
       return formData;
     }
 
     function repopulateForm() {
-      console.log("[AdventureIQ] Repopulating form from JSON storage");
-      const storedData = getJSON('adventureIqInput', null);
-      if (!storedData) return;
-      document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-        const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-        const value = getLocal(key);
-        if (value === 'true') {
-          item.classList.add('selected');
-          console.log(`[AdventureIQ] Restored from localStorage: ${item.dataset.value}`);
-        }
-      });
-      document.querySelectorAll('input, textarea').forEach(input => {
-        if (!input.id) return;
-        const key = `input_${input.id}`;
-        const value = getLocal(key);
-        if (value && value !== 'null') {
-          input.value = value;
-          console.log(`[AdventureIQ] Restored from localStorage: ${input.id} = ${value}`);
-        }
-      });
-      document.querySelectorAll('select').forEach(select => {
-        if (!select.id) return;
-        const key = `input_${select.id}`;
-        const value = getLocal(key);
-        if (value && value !== 'null') {
-          const optionExists = Array.from(select.options).some(opt => opt.value === value);
-          if (optionExists) {
-            select.value = value;
-            console.log(`[AdventureIQ] Restored from localStorage: ${select.id} = ${value}`);
-          }
-        }
-      });
-      if (storedData) {
-        console.log('[AdventureIQ] Found stored JSON form data, using as fallback');
-        const hasExistingActivities = document.querySelector('#trip-activities .grid-item.selected');
-        if (!hasExistingActivities && storedData.activities && Array.isArray(storedData.activities)) {
-          storedData.activities.forEach(activity => {
-            const item = document.querySelector(`#trip-activities .grid-item[data-value="${activity}"]`);
-            if (item && !item.classList.contains('selected')) {
-              item.classList.add('selected');
-              console.log(`[AdventureIQ] Restored from JSON: activity ${activity}`);
-            }
-          });
-        }
-        const hasExistingRelationships = document.querySelector('#trip-relationship .grid-item.selected');
-        if (!hasExistingRelationships && storedData.relationships && Array.isArray(storedData.relationships)) {
-          storedData.relationships.forEach(relationship => {
-            const item = document.querySelector(`#trip-relationship .grid-item[data-value="${relationship}"]`);
-            if (item && !item.classList.contains('selected')) {
-              item.classList.add('selected');
-              console.log(`[AdventureIQ] Restored from JSON: relationship ${relationship}`);
-            }
-          });
-        }
-        const locationInput = document.getElementById('trip-location');
-        if (locationInput && !locationInput.value && storedData.location) {
-          locationInput.value = storedData.location;
-          console.log(`[AdventureIQ] Restored from JSON: location`);
-        }
-        const specificsInput = document.getElementById('trip-specifics');
-        if (specificsInput && !specificsInput.value && storedData.specifics) {
-          specificsInput.value = storedData.specifics;
-          console.log(`[AdventureIQ] Restored from JSON: specifics`);
-        }
-        const plansInput = document.getElementById('trip-plans');
-        if (plansInput && !plansInput.value && storedData.plans) {
-          plansInput.value = storedData.plans;
-          console.log(`[AdventureIQ] Restored from JSON: plans`);
-        }
-        const packingInput = document.getElementById('trip-packing');
-        if (packingInput && packingInput.value === 'NN' && storedData.packing) {
-          packingInput.value = storedData.packing;
-          console.log(`[AdventureIQ] Restored from JSON: packing ${storedData.packing}`);
-        }
-        const peopleInput = document.getElementById('trip-people');
-        if (peopleInput && !peopleInput.value && storedData.people) {
-          peopleInput.value = storedData.people;
-          console.log(`[AdventureIQ] Restored from JSON: people ${storedData.people}`);
-        }
-        const daysInput = document.getElementById('trip-days');
-        if (daysInput && !daysInput.value && storedData.days) {
-          daysInput.value = storedData.days;
-          console.log(`[AdventureIQ] Restored from JSON: days ${storedData.days}`);
-        }
-        const budgetInput = document.getElementById('trip-budget');
-        if (budgetInput && !budgetInput.value && storedData.budget) {
-          budgetInput.value = storedData.budget;
-          console.log(`[AdventureIQ] Restored from JSON: budget`);
-        }
-      }
-      document.querySelectorAll('.grid-container .grid-item.selected').forEach(item => {
-        saveGridItem(item);
-      });
-      document.querySelectorAll('input, textarea, select').forEach(input => {
-        if (input.value) {
-          saveInput(input);
-        }
+      console.log('[AdventureIQ] Repopulating form from JSON storage');
+      const data = getJSON('adventureIqInput', null);
+      if (!data) return;
+      data.activities?.forEach(v => document.querySelector(`#trip-activities .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+      data.relationships?.forEach(v => document.querySelector(`#trip-relationship .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+      ['location','specifics','plans','packing','people','days','budget'].forEach(f => {
+        const el = document.getElementById(`trip-${f}`);
+        if (el && data[f]) el.value = data[f];
       });
     }
 
     function setupInputHandlers() {
-      document.querySelectorAll('input, textarea, select').forEach(input => {
-        input.addEventListener('change', function() { saveInput(this); });
-      });
+      document.querySelectorAll('input, textarea, select').forEach(i => i.addEventListener('change', () => saveInput(i)));
     }
 
     function clearLocalStorage() {
-      if (!confirm("Are you sure you want to clear all saved data?")) return;
+      if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
       localStorage.removeItem('adventureIqInput');
       localStorage.removeItem('adventureIqResponse');
-      document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-        item.classList.remove('selected');
-      });
-      document.querySelectorAll('input, textarea').forEach(input => {
-        input.value = '';
-      });
-      const packingSelect = document.getElementById('trip-packing');
-      if (packingSelect) {
-        packingSelect.value = 'NN';
-      }
-      console.log('[AdventureIQ] All adventure data cleared');
-      alert("All adventure data has been cleared successfully.");
+      document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
+      document.querySelectorAll('input, textarea').forEach(i => i.value = '');
+      document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
     }
 
-    async function handleGenerateAdventureIq() {
-      const btn = document.getElementById('generate-adventure-btn');
-      const initialText = btn.innerText;
-      btn.innerText = 'Loading...'; btn.setAttribute('disabled', 'true');
-      try {
-        const formData = getJSON('adventureIqInput');
-        if (!formData) {
-          alert('Please complete the form before generating a prompt.');
-          btn.innerText = initialText; btn.removeAttribute('disabled');
-          return;
-        }
-        const apiUrl = 'https://adventureiqworker.4hm7q4q75z.workers.dev/';
-        const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) });
-        const data = await response.json();
-        if (data.message !== 'Success') {
-          throw new Error(`An error occurred: ${data.message || data.error || ''}`);
-        }
-        setJSON('adventureIqResponse', data);
-        btn.innerText = 'Success!';
-        setTimeout(() => {
-          btn.innerText = initialText;
-          btn.removeAttribute('disabled');
-        }, 2000);
-        const event = new CustomEvent('api-response-received', {
-          detail: {
-            module: 'adventureiq',
-            type: 'worker-response',
-            timestamp: Date.now()
-          }
-        });
-        document.dispatchEvent(event);
-        console.log('[AdventureIQ] Dispatched api-response-received event');
-      } catch (error) {
-        console.error('[AdventureIQ] Error generating adventure plan:', error);
-        alert('An error occurred while generating your adventure plan. Please try again later.');
-        btn.innerText = 'Error';
-        setTimeout(() => {
-          btn.innerText = initialText;
-          btn.removeAttribute('disabled');
-        }, 2000);
-      }
-    }
-
+    // Initialization
+    document.querySelectorAll('.grid-container .grid-item').forEach(item => item.addEventListener('click', customToggleGridItem, { capture: true }));
     repopulateForm();
     setupInputHandlers();
-    document.getElementById('generate-adventure-btn').addEventListener('click', handleGenerateAdventureIq);
+    document.getElementById('generate-adventure-btn').addEventListener('click', () => location.href = 'dataout.html');
     document.getElementById('clear-adventure-btn').addEventListener('click', clearLocalStorage);
-    document.querySelectorAll('.grid-container .grid-item').forEach(item => item.addEventListener('click', customToggleGridItem, { capture: true }));
   })();
   </script>
 </body>
