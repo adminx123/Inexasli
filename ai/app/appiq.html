@@ -80,200 +80,124 @@
   (function() {
     console.log("App IQ script initializing");
 
+    // JSON storage helpers
     const setJSON = window.setJSON || function(name, value) {
       try {
-        if (name === undefined || name === null || name === '') {
-          console.error('Invalid key name provided to setJSON');
-          return false;
-        }
-        
-        if (value === undefined) {
-          console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
-          localStorage.removeItem(name);
-          return true;
-        }
-        
-        const jsonString = JSON.stringify(value);
-        localStorage.setItem(name, jsonString);
+        if (!name) return false;
+        if (value === undefined) { localStorage.removeItem(name); return true; }
+        localStorage.setItem(name, JSON.stringify(value));
         console.log(`[AppIQ] JSON saved ${name}`);
         return true;
-      } catch (error) {
-        console.error(`[AppIQ] Error storing JSON: ${error}`);
-        return false;
-      }
+      } catch (e) { console.error(`[AppIQ] Error storing JSON: ${e}`); return false; }
     };
-
     const getJSON = window.getJSON || function(name, defaultValue) {
       try {
         const item = localStorage.getItem(name);
-        if (!item) return defaultValue;
-        const parsedValue = JSON.parse(item);
-        console.log(`[AppIQ] JSON retrieved ${name}`);
-        return parsedValue;
-      } catch (error) {
-        console.error(`[AppIQ] Error retrieving JSON: ${error}`);
-        return defaultValue;
-      }
+        return item ? JSON.parse(item) : defaultValue;
+      } catch (e) { console.error(`[AppIQ] Error retrieving JSON: ${e}`); return defaultValue; }
     };
 
     function customToggleGridItem(event) {
-      event.stopPropagation();
-      event.preventDefault();
+      event.stopPropagation(); event.preventDefault();
       const container = this.closest('.grid-container');
-      container.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
-      this.classList.add('selected');
+      // Single-selection for code status, multi-selection for features
+      if (container.id === 'app-code-status') {
+        container.querySelectorAll('.grid-item').forEach(i => i.classList.remove('selected'));
+        this.classList.add('selected');
+      } else {
+        this.classList.toggle('selected');
+      }
       saveGridItem(this);
+      console.log(`[AppIQ] Toggled ${this.dataset.value} in ${container.id}`);
     }
 
     function saveGridItem(item) {
       console.log('[AppIQ] Saving all form data to JSON');
-      const formData = collectFormData();
-      setJSON('appIqInput', formData);
+      setJSON('appIqInput', collectFormData());
     }
 
     function saveInput(input) {
       console.log('[AppIQ] Saving all form data to JSON');
-      const formData = collectFormData();
-      setJSON('appIqInput', formData);
+      setJSON('appIqInput', collectFormData());
     }
 
     function collectFormData() {
-      const formData = {
-        purpose: null,
-        codeStatus: null,
-        features: [],
-        platform: null,
-        budget: null,
-        timeline: null
-      };
-      
-      const purposeInput = document.getElementById('app-purpose');
-      if (purposeInput && purposeInput.value.trim()) {
-        formData.purpose = purposeInput.value.trim();
-      }
-      
-      const codeStatusItem = document.querySelector('#app-code-status .grid-item.selected');
-      if (codeStatusItem) {
-        formData.codeStatus = codeStatusItem.dataset.value;
-      }
-      
-      document.querySelectorAll('#app-features .grid-item.selected').forEach(item => {
-        formData.features.push(item.dataset.value);
+      const formData = { purpose: null, codeStatus: null, features: [], platform: null, budget: null, timeline: null };
+      const purposeEl = document.getElementById('app-purpose');
+      if (purposeEl && purposeEl.value.trim()) formData.purpose = purposeEl.value.trim();
+      const codeEl = document.querySelector('#app-code-status .grid-item.selected');
+      if (codeEl) formData.codeStatus = codeEl.dataset.value;
+      document.querySelectorAll('#app-features .grid-item.selected').forEach(i => formData.features.push(i.dataset.value));
+      ['platform','budget','timeline'].forEach(field => {
+        const el = document.getElementById(`app-${field}`);
+        if (el && el.value.trim()) formData[field] = el.value.trim();
       });
-      
-      const platformInput = document.getElementById('app-platform');
-      if (platformInput && platformInput.value.trim()) {
-        formData.platform = platformInput.value.trim();
-      }
-      
-      const budgetInput = document.getElementById('app-budget');
-      if (budgetInput && budgetInput.value.trim()) {
-        formData.budget = budgetInput.value.trim();
-      }
-      
-      const timelineInput = document.getElementById('app-timeline');
-      if (timelineInput && timelineInput.value.trim()) {
-        formData.timeline = timelineInput.value.trim();
-      }
-      
       return formData;
     }
 
     function repopulateForm() {
-      console.log("[AppIQ] Repopulating form from JSON storage");
-      const stored = getJSON('appIqInput', null);
-      if (!stored) return;
-      
-      const purposeInput = document.getElementById('app-purpose');
-      if (purposeInput && stored.purpose) {
-        purposeInput.value = stored.purpose;
-      }
-      
-      if (stored.codeStatus) {
-        const item = document.querySelector(`#app-code-status .grid-item[data-value="${stored.codeStatus}"]`);
-        if (item) {
-          item.classList.add('selected');
-        }
-      }
-      
-      if (stored.features && Array.isArray(stored.features)) {
-        stored.features.forEach(feature => {
-          const item = document.querySelector(`#app-features .grid-item[data-value="${feature}"]`);
-          if (item) {
-            item.classList.add('selected');
-          }
-        });
-      }
-      
-      const platformInput = document.getElementById('app-platform');
-      if (platformInput && stored.platform) {
-        platformInput.value = stored.platform;
-      }
-      
-      const budgetInput = document.getElementById('app-budget');
-      if (budgetInput && stored.budget) {
-        budgetInput.value = stored.budget;
-      }
-      
-      const timelineInput = document.getElementById('app-timeline');
-      if (timelineInput && stored.timeline) {
-        timelineInput.value = stored.timeline;
-      }
-    }
-
-    function setupInputHandlers() {
-      document.querySelectorAll('textarea').forEach(input => {
-        input.addEventListener('change', function() {
-          saveInput(this);
-        });
+      console.log('[AppIQ] Repopulating form from JSON storage');
+      const data = getJSON('appIqInput', null);
+      if (!data) return;
+      if (data.purpose) document.getElementById('app-purpose').value = data.purpose;
+      if (data.codeStatus) document.querySelector(`#app-code-status .grid-item[data-value="${data.codeStatus}"]`)?.classList.add('selected');
+      data.features?.forEach(v => document.querySelector(`#app-features .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+      ['platform','budget','timeline'].forEach(f => {
+        const el = document.getElementById(`app-${f}`);
+        if (el && data[f]) el.value = data[f];
       });
     }
 
+    function setupInputHandlers() {
+      document.querySelectorAll('input, textarea, select').forEach(i => i.addEventListener('change', () => saveInput(i)));
+    }
+
     function clearLocalStorage() {
-      if (!confirm("Are you sure you want to clear all saved data?")) return;
+      if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
       localStorage.removeItem('appIqInput');
       localStorage.removeItem('appIqResponse');
-      document.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
-      document.querySelectorAll('textarea').forEach(input => input.value = '');
+      document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
+      document.querySelectorAll('input, textarea').forEach(i => i.value = '');
+      document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
     }
 
     async function handleGenerateAppIq() {
       const btn = document.getElementById('generate-app-btn');
-      const init = btn.innerText;
-      btn.innerText = 'Loading...';
-      btn.disabled = true;
+      const initText = btn.innerText;
+      btn.innerText = 'Loading...'; btn.disabled = true;
       try {
         const formData = getJSON('appIqInput');
-        if (!formData) {
-          alert('Complete form first');
-          btn.innerText = init;
-          btn.disabled = false;
-          return;
-        }
-        const apiUrl = 'https://appiqworker.4hm7q4q75z.workers.dev/';
-        const res = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData)
-        });
-        const data = await res.json();
+        if (!formData) { alert('Please complete the form before generating an app plan.'); throw new Error('No input data'); }
+        const apiUrl = 'https://app.4hm7q4q75z.workers.dev/';
+        const resp = await fetch(apiUrl, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(formData) });
+        if (!resp.ok) throw new Error(`HTTP error! Status: ${resp.status}`);
+        const data = await resp.json();
         setJSON('appIqResponse', data);
+        btn.innerText = 'Success!'; setTimeout(() => btn.disabled = false, 1000);
+        document.dispatchEvent(new CustomEvent('api-response-received', { detail: { module: 'appiq', type: 'worker-response', timestamp: Date.now() } }));
       } catch (e) {
-        console.error(e);
-        alert('Error');
+        console.error('[AppIQ] Error:', e);
+        alert('An error occurred while generating your app plan.');
+        btn.innerText = 'Error'; setTimeout(() => { btn.innerText = initText; btn.disabled = false; }, 2000);
       }
-      btn.innerText = init;
-      btn.disabled = false;
     }
 
-    repopulateForm();
-    setupInputHandlers();
-    document.getElementById('generate-app-btn').addEventListener('click', handleGenerateAppIq);
-    document.getElementById('clear-app-btn').addEventListener('click', clearLocalStorage);
-    document.querySelectorAll('.grid-item').forEach(item => item.addEventListener('click', customToggleGridItem, { capture: true }));
+    function setupButtonHandlers() {
+      document.getElementById('generate-app-btn').addEventListener('click', handleGenerateAppIq);
+      document.getElementById('clear-app-btn').addEventListener('click', clearLocalStorage);
+    }
 
+    function initialize() {
+      console.log('[AppIQ] Initializing...');
+      document.querySelectorAll('.grid-container .grid-item').forEach(i => i.addEventListener('click', customToggleGridItem, { capture: true }));
+      setupInputHandlers(); setupButtonHandlers(); repopulateForm();
+    }
+
+    initialize();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize);
+    document.addEventListener('data-in-loaded', () => setTimeout(initialize, 100));
+
+    window.appIq = { initialize, saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
   })();
   </script>
 </body>

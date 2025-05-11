@@ -97,35 +97,24 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 */
-
 (function() {
     console.log("Business IQ script initializing");
 
+    // JSON storage helpers
     const setJSON = window.setJSON || function(name, value) {
         try {
             if (!name) return false;
-            if (value === undefined) {
-                localStorage.removeItem(name);
-                return true;
-            }
+            if (value === undefined) { localStorage.removeItem(name); return true; }
             localStorage.setItem(name, JSON.stringify(value));
             console.log(`[BusinessIQ] JSON saved ${name}`);
             return true;
-        } catch (error) {
-            console.error(`[BusinessIQ] Error storing JSON: ${error}`);
-            return false;
-        }
+        } catch (e) { console.error(`[BusinessIQ] Error storing JSON: ${e}`); return false; }
     };
-
     const getJSON = window.getJSON || function(name, defaultValue) {
         try {
             const item = localStorage.getItem(name);
-            if (!item) return defaultValue;
-            return JSON.parse(item);
-        } catch (error) {
-            console.error(`[BusinessIQ] Error retrieving JSON: ${error}`);
-            return defaultValue;
-        }
+            return item ? JSON.parse(item) : defaultValue;
+        } catch (e) { console.error(`[BusinessIQ] Error retrieving JSON: ${e}`); return defaultValue; }
     };
 
     function customToggleGridItem(event) {
@@ -138,96 +127,89 @@
             this.classList.toggle('selected');
         }
         saveGridItem(this);
+        console.log(`[BusinessIQ] Toggled ${this.dataset.value} in ${container.id}`);
     }
 
     function saveGridItem(item) {
-        const formData = collectFormData();
-        setJSON('businessIqInput', formData);
-        console.log('[BusinessIQ] Form data saved');
+        console.log('[BusinessIQ] Saving all form data to JSON');
+        setJSON('businessIqInput', collectFormData());
     }
 
     function saveInput(input) {
-        const formData = collectFormData();
-        setJSON('businessIqInput', formData);
-        console.log('[BusinessIQ] Form data saved');
+        console.log('[BusinessIQ] Saving all form data to JSON');
+        setJSON('businessIqInput', collectFormData());
     }
 
     function collectFormData() {
-        const formData = {
-            vision: null,
-            knowledgeLevel: null,
-            strengths: [],
-            weaknesses: [],
-            organization: null,
-            network: null
-        };
-        const visionInput = document.getElementById('business-vision');
-        if (visionInput && visionInput.value.trim()) formData.vision = visionInput.value.trim();
-        const levelItem = document.querySelector('#business-knowledge-level .grid-item.selected');
-        if (levelItem) formData.knowledgeLevel = levelItem.dataset.value;
-        document.querySelectorAll('#business-general-skills .grid-item.selected').forEach(i => formData.strengths.push(i.dataset.value));
-        document.querySelectorAll('#business-weaknesses .grid-item.selected').forEach(i => formData.weaknesses.push(i.dataset.value));
-        const orgInput = document.getElementById('business-organization');
-        if (orgInput && orgInput.value.trim()) formData.organization = orgInput.value.trim();
-        const netInput = document.getElementById('business-network');
-        if (netInput && netInput.value.trim()) formData.network = netInput.value.trim();
+        const formData = { vision:null, knowledgeLevel:null, strengths:[], weaknesses:[], organization:null, network:null };
+        if (document.getElementById('business-vision').value.trim()) formData.vision = document.getElementById('business-vision').value.trim();
+        const lvl = document.querySelector('#business-knowledge-level .grid-item.selected'); if (lvl) formData.knowledgeLevel = lvl.dataset.value;
+        document.querySelectorAll('#business-general-skills .grid-item.selected').forEach(i=>formData.strengths.push(i.dataset.value));
+        document.querySelectorAll('#business-weaknesses .grid-item.selected').forEach(i=>formData.weaknesses.push(i.dataset.value));
+        if (document.getElementById('business-organization').value.trim()) formData.organization = document.getElementById('business-organization').value.trim();
+        if (document.getElementById('business-network').value.trim()) formData.network = document.getElementById('business-network').value.trim();
         return formData;
     }
 
     function repopulateForm() {
-        const stored = getJSON('businessIqInput', null);
-        if (!stored) return;
-        if (stored.vision) document.getElementById('business-vision').value = stored.vision;
-        if (stored.knowledgeLevel) {
-            const item = document.querySelector(`#business-knowledge-level .grid-item[data-value="${stored.knowledgeLevel}"]`);
-            item && item.classList.add('selected');
-        }
-        stored.strengths?.forEach(val => {
-            const it = document.querySelector(`#business-general-skills .grid-item[data-value="${val}"]`);
-            it && it.classList.add('selected');
-        });
-        stored.weaknesses?.forEach(val => {
-            const it = document.querySelector(`#business-weaknesses .grid-item[data-value="${val}"]`);
-            it && it.classList.add('selected');
-        });
-        if (stored.organization) document.getElementById('business-organization').value = stored.organization;
-        if (stored.network) document.getElementById('business-network').value = stored.network;
+        console.log('[BusinessIQ] Repopulating form from JSON storage');
+        const data = getJSON('businessIqInput', null);
+        if (!data) return;
+        if (data.vision) document.getElementById('business-vision').value = data.vision;
+        if (data.knowledgeLevel) document.querySelector(`#business-knowledge-level .grid-item[data-value="${data.knowledgeLevel}"]`)?.classList.add('selected');
+        data.strengths?.forEach(v => document.querySelector(`#business-general-skills .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+        data.weaknesses?.forEach(v => document.querySelector(`#business-weaknesses .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+        if (data.organization) document.getElementById('business-organization').value = data.organization;
+        if (data.network) document.getElementById('business-network').value = data.network;
     }
 
     function setupInputHandlers() {
-        document.querySelectorAll('textarea').forEach(input => input.addEventListener('change', () => saveInput(input)));
+        document.querySelectorAll('textarea').forEach(i => i.addEventListener('change', () => saveInput(i)));
     }
 
     function clearLocalStorage() {
-        if (!confirm('Are you sure you want to clear all saved data?')) return;
+        if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
         localStorage.removeItem('businessIqInput');
         localStorage.removeItem('businessIqResponse');
-        document.querySelectorAll('.grid-item.selected').forEach(i => i.classList.remove('selected'));
-        document.querySelectorAll('textarea').forEach(input => input.value = '');
+        document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
+        document.querySelectorAll('textarea').forEach(i => i.value = '');
     }
 
     async function handleGenerateBusinessIq() {
         const btn = document.getElementById('generate-business-btn');
-        const init = btn.innerText; btn.innerText = 'Loading...'; btn.disabled = true;
+        const initText = btn.innerText; btn.innerText = 'Loading...'; btn.disabled = true;
         try {
             const formData = getJSON('businessIqInput');
-            if (!formData) { alert('Please complete the form before generating.'); btn.innerText = init; btn.disabled = false; return; }
-            const apiUrl = 'https://businessiqworker.4hm7q4q75z.workers.dev/';
-            const res = await fetch(apiUrl, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(formData) });
-            const data = await res.json();
+            if (!formData) { alert('Please complete the form before generating a business plan.'); throw new Error('No input data'); }
+            const apiUrl = 'https://business.4hm7q4q75z.workers.dev/';
+            const response = await fetch(apiUrl, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(formData) });
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.json();
             setJSON('businessIqResponse', data);
-            btn.innerText = 'Success!'; setTimeout(() => { btn.innerText = init; btn.disabled = false; }, 2000);
+            btn.innerText = 'Success!'; setTimeout(() => btn.disabled = false, 1000);
             document.dispatchEvent(new CustomEvent('api-response-received', { detail: { module: 'businessiq', type: 'worker-response', timestamp: Date.now() } }));
         } catch (e) {
-            console.error('[BusinessIQ] Error:', e);
-            alert('Error generating business plan.');
-            btn.innerText = 'Error'; setTimeout(() => { btn.innerText = init; btn.disabled = false; }, 2000);
+            console.error('[BusinessIQ] Error generating business plan:', e);
+            alert('An error occurred while generating your business plan.');
+            btn.innerText = 'Error'; setTimeout(() => { btn.innerText = initText; btn.disabled = false; }, 2000);
         }
     }
 
-    repopulateForm(); setupInputHandlers();
-    document.getElementById('generate-business-btn').addEventListener('click', handleGenerateBusinessIq);
-    document.getElementById('clear-business-btn').addEventListener('click', clearLocalStorage);
-    document.querySelectorAll('#business-knowledge-level .grid-item, #business-general-skills .grid-item, #business-weaknesses .grid-item').forEach(i => i.addEventListener('click', customToggleGridItem, { capture: true }));
+    function setupButtonHandlers() {
+        document.getElementById('generate-business-btn').addEventListener('click', handleGenerateBusinessIq);
+        document.getElementById('clear-business-btn').addEventListener('click', clearLocalStorage);
+    }
+
+    function initialize() {
+        console.log('[BusinessIQ] Initializing...');
+        document.querySelectorAll('.grid-container .grid-item').forEach(i => i.addEventListener('click', customToggleGridItem, { capture: true }));
+        setupInputHandlers(); setupButtonHandlers(); repopulateForm();
+    }
+
+    initialize();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize);
+    document.addEventListener('data-in-loaded', () => setTimeout(initialize, 100));
+
+    window.businessIq = { initialize, saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
 })();
 </script>

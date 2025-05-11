@@ -96,144 +96,119 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 */
-
 (function() {
     console.log("Book IQ script initializing");
 
+    // JSON storage helpers
     const setJSON = window.setJSON || function(name, value) {
         try {
-            if (name === undefined || name === null || name === '') {
-                console.error('Invalid key name provided to setJSON');
-                return false;
-            }
-            
-            if (value === undefined) {
-                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
-                localStorage.removeItem(name);
-                return true;
-            }
-            
-            const jsonString = JSON.stringify(value);
-            localStorage.setItem(name, jsonString);
+            if (!name) return false;
+            if (value === undefined) { localStorage.removeItem(name); return true; }
+            localStorage.setItem(name, JSON.stringify(value));
             console.log(`[BookIQ] JSON saved ${name}`);
             return true;
-        } catch (error) {
-            console.error(`[BookIQ] Error storing JSON: ${error}`);
-            return false;
-        }
+        } catch (e) { console.error(`[BookIQ] Error storing JSON: ${e}`); return false; }
     };
-    
     const getJSON = window.getJSON || function(name, defaultValue) {
         try {
             const item = localStorage.getItem(name);
-            if (!item) return defaultValue;
-            const parsedValue = JSON.parse(item);
-            console.log(`[BookIQ] JSON retrieved ${name}`);
-            return parsedValue;
-        } catch (error) {
-            console.error(`[BookIQ] Error retrieving JSON: ${error}`);
-            return defaultValue;
-        }
+            return item ? JSON.parse(item) : defaultValue;
+        } catch (e) { console.error(`[BookIQ] Error retrieving JSON: ${e}`); return defaultValue; }
     };
 
     function customToggleGridItem(event) {
-        event.stopPropagation();
-        event.preventDefault();
+        event.stopPropagation(); event.preventDefault();
         this.classList.toggle('selected');
         saveGridItem(this);
+        console.log(`[BookIQ] Toggled ${this.dataset.value}`);
     }
 
     function saveGridItem(item) {
         console.log('[BookIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('bookIqInput', formData);
+        setJSON('bookIqInput', collectFormData());
     }
 
     function saveInput(input) {
         console.log('[BookIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('bookIqInput', formData);
+        setJSON('bookIqInput', collectFormData());
     }
 
     function collectFormData() {
-        const formData = {
-            titleAuthor: null,
-            summaryPurpose: null,
-            summaryLength: null,
-            themes: null,
-            audience: [],
-            elements: [],
-            tone: null,
-            details: null
-        };
-        const titleInput = document.getElementById('book-title-author');
-        if (titleInput && titleInput.value.trim()) formData.titleAuthor = titleInput.value.trim();
-        const purposeInput = document.getElementById('summary-purpose');
-        if (purposeInput) formData.summaryPurpose = purposeInput.value;
-        const lengthInput = document.getElementById('summary-length');
-        if (lengthInput) formData.summaryLength = lengthInput.value;
-        const themesInput = document.getElementById('summary-themes');
-        if (themesInput && themesInput.value.trim()) formData.themes = themesInput.value.trim();
-        document.querySelectorAll('#summary-audience .grid-item.selected').forEach(i => formData.audience.push(i.dataset.value));
-        document.querySelectorAll('#summary-elements .grid-item.selected').forEach(i => formData.elements.push(i.dataset.value));
-        const toneInput = document.getElementById('summary-tone');
-        if (toneInput) formData.tone = toneInput.value;
-        const detailsInput = document.getElementById('summary-details');
-        if (detailsInput && detailsInput.value.trim()) formData.details = detailsInput.value.trim();
+        const formData = { titleAuthor:null, summaryPurpose:null, summaryLength:null, themes:null, audience:[], elements:[], tone:null, details:null };
+        const ta = id => document.getElementById(id);
+        if (ta('book-title-author')?.value.trim()) formData.titleAuthor = ta('book-title-author').value.trim();
+        formData.summaryPurpose = ta('summary-purpose')?.value;
+        formData.summaryLength = ta('summary-length')?.value;
+        if (ta('summary-themes')?.value.trim()) formData.themes = ta('summary-themes').value.trim();
+        document.querySelectorAll('#summary-audience .grid-item.selected').forEach(i=>formData.audience.push(i.dataset.value));
+        document.querySelectorAll('#summary-elements .grid-item.selected').forEach(i=>formData.elements.push(i.dataset.value));
+        formData.tone = ta('summary-tone')?.value;
+        if (ta('summary-details')?.value.trim()) formData.details = ta('summary-details').value.trim();
         return formData;
     }
 
     function repopulateForm() {
         console.log('[BookIQ] Repopulating form from JSON storage');
-        const stored = getJSON('bookIqInput', null);
-        if (!stored) return;
-        if (stored.titleAuthor) document.getElementById('book-title-author').value = stored.titleAuthor;
-        if (stored.summaryPurpose) document.getElementById('summary-purpose').value = stored.summaryPurpose;
-        if (stored.summaryLength) document.getElementById('summary-length').value = stored.summaryLength;
-        if (stored.themes) document.getElementById('summary-themes').value = stored.themes;
-        if (Array.isArray(stored.audience)) stored.audience.forEach(val => { const it = document.querySelector(`#summary-audience .grid-item[data-value="${val}"]`); if (it) it.classList.add('selected'); });
-        if (Array.isArray(stored.elements)) stored.elements.forEach(val => { const it = document.querySelector(`#summary-elements .grid-item[data-value="${val}"]`); if (it) it.classList.add('selected'); });
-        if (stored.tone) document.getElementById('summary-tone').value = stored.tone;
-        if (stored.details) document.getElementById('summary-details').value = stored.details;
+        const data = getJSON('bookIqInput', null);
+        if (!data) return;
+        if (data.titleAuthor) document.getElementById('book-title-author').value = data.titleAuthor;
+        if (data.summaryPurpose) document.getElementById('summary-purpose').value = data.summaryPurpose;
+        if (data.summaryLength) document.getElementById('summary-length').value = data.summaryLength;
+        if (data.themes) document.getElementById('summary-themes').value = data.themes;
+        data.audience?.forEach(v=>document.querySelector(`#summary-audience .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+        data.elements?.forEach(v=>document.querySelector(`#summary-elements .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+        if (data.tone) document.getElementById('summary-tone').value = data.tone;
+        if (data.details) document.getElementById('summary-details').value = data.details;
     }
 
     function setupInputHandlers() {
-        document.querySelectorAll('textarea, select').forEach(input => input.addEventListener('change', () => saveInput(input)));
+        document.querySelectorAll('textarea, select').forEach(i=>i.addEventListener('change', ()=>saveInput(i)));
     }
 
     function clearLocalStorage() {
-        if (!confirm('Are you sure you want to clear all saved data?')) return;
+        if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
         localStorage.removeItem('bookIqInput');
         localStorage.removeItem('bookIqResponse');
-        document.querySelectorAll('.grid-item.selected').forEach(i => i.classList.remove('selected'));
-        document.querySelectorAll('textarea').forEach(input => input.value = '');
-        document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+        document.querySelectorAll('.grid-container .grid-item').forEach(i=>i.classList.remove('selected'));
+        document.querySelectorAll('textarea').forEach(i=>i.value='');
+        document.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
     }
 
     async function handleGenerateBookIq() {
         const btn = document.getElementById('generate-book-btn');
-        const init = btn.innerText; btn.innerText = 'Loading...'; btn.disabled = true;
+        const init = btn.innerText; btn.innerText='Loading...'; btn.disabled=true;
         try {
             const formData = getJSON('bookIqInput');
-            if (!formData) { alert('Please complete the form before generating.'); btn.innerText = init; btn.disabled = false; return; }
-            const apiUrl = 'https://bookiqworker.4hm7q4q75z.workers.dev/';
-            const res = await fetch(apiUrl, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(formData) });
+            if (!formData) { alert('Please complete the form before generating.'); throw new Error('No input data'); }
+            const apiUrl = 'https://book.4hm7q4q75z.workers.dev/';
+            const res = await fetch(apiUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(formData) });
+            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
             const data = await res.json();
-            if (data.message !== 'Success') throw new Error(data.error || data.message);
             setJSON('bookIqResponse', data);
-            btn.innerText = 'Success!';
-            setTimeout(() => { btn.innerText = init; btn.disabled = false; }, 2000);
+            btn.innerText='Success!'; setTimeout(()=>btn.disabled=false,1000);
             document.dispatchEvent(new CustomEvent('api-response-received',{detail:{module:'bookiq',type:'worker-response',timestamp:Date.now()}}));
-        } catch (e) {
-            console.error('[BookIQ] Error:', e);
+        } catch(e) {
+            console.error('[BookIQ] Error:',e);
             alert('Error generating summary.');
-            btn.innerText = 'Error'; setTimeout(() => { btn.innerText = init; btn.disabled = false; }, 2000);
+            btn.innerText='Error'; setTimeout(()=>{btn.innerText=init;btn.disabled=false;},2000);
         }
     }
 
-    repopulateForm(); setupInputHandlers();
-    document.getElementById('generate-book-btn').addEventListener('click', handleGenerateBookIq);
-    document.getElementById('clear-book-btn').addEventListener('click', clearLocalStorage);
-    document.querySelectorAll('#summary-audience .grid-item, #summary-elements .grid-item').forEach(i => i.addEventListener('click', customToggleGridItem, {capture:true}));
+    function setupButtonHandlers() {
+        document.getElementById('generate-book-btn').addEventListener('click', handleGenerateBookIq);
+        document.getElementById('clear-book-btn').addEventListener('click', clearLocalStorage);
+    }
+
+    function initialize() {
+        console.log('[BookIQ] Initializing...');
+        document.querySelectorAll('.grid-container .grid-item').forEach(i=>i.addEventListener('click', customToggleGridItem, {capture:true}));
+        setupInputHandlers(); setupButtonHandlers(); repopulateForm();
+    }
+
+    initialize();
+    if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', initialize);
+    document.addEventListener('data-in-loaded',()=>setTimeout(initialize,100));
+
+    window.bookIq = { initialize, saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
 })();
 </script>
