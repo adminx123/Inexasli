@@ -188,6 +188,44 @@
             try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
         };
 
+        // Standardized JSON functions for consistent storage approach
+        const setJSON = window.setJSON || function(name, value) {
+            try {
+                if (name === undefined || name === null || name === '') {
+                    console.error('Invalid key name provided to setJSON');
+                    return false;
+                }
+                
+                if (value === undefined) {
+                    console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                    localStorage.removeItem(name);
+                    return true;
+                }
+                
+                // Convert value to JSON string
+                const jsonString = JSON.stringify(value);
+                localStorage.setItem(name, jsonString);
+                console.log(`[IncomeIQ] JSON saved ${name}`);
+                return true;
+            } catch (error) {
+                console.error(`[IncomeIQ] Error storing JSON: ${error}`);
+                return false;
+            }
+        };
+        
+        const getJSON = window.getJSON || function(name, defaultValue) {
+            try {
+                const item = localStorage.getItem(name);
+                if (!item) return defaultValue;
+                const parsedValue = JSON.parse(item);
+                console.log(`[IncomeIQ] JSON retrieved ${name}`);
+                return parsedValue;
+            } catch (error) {
+                console.error(`[IncomeIQ] Error retrieving JSON: ${error}`);
+                return defaultValue;
+            }
+        };
+
         // Asset logic
         console.log('Asset logic initialized in asset.html at:', new Date().toISOString());
         let ASSETS = 0;
@@ -323,6 +361,44 @@
                     }
                 }
             }, 300);
+        }
+
+        function saveAssetData() {
+            const assetFields = [
+                'assets_primary_residence', 'assets_secondary_residence', 
+                'assets_vehicles', 'assets_recreational_vehicles', 
+                'assets_household_items', 'assets_collectibles', 
+                'assets_jewelry', 'assets_art', 
+                'assets_business_equity', 'assets_cash', 
+                'assets_tfsatfra', 'assets_personal_rrsp', 
+                'assets_pension', 'assets_digital_stocks_bonds', 
+                'assets_life_insurance', 'assets_personal_loans_receivable',
+                'assets_cryptocurrency'
+            ];
+            
+            const assetData = {};
+            
+            assetFields.forEach(field => {
+                const input = document.getElementById(field);
+                if (input) {
+                    assetData[field] = input.value ? parseFloat(input.value) : 0;
+                }
+                
+                // Get spouse percentage if applicable
+                const percentInput = document.getElementById(`${field}_percent`);
+                if (percentInput) {
+                    assetData[`${field}_percent`] = percentInput.value ? parseFloat(percentInput.value) : 100;
+                }
+            });
+            
+            // Save spouse checkbox state
+            const spouseCheckbox = document.getElementById('spousecheckbox');
+            if (spouseCheckbox) {
+                assetData.spouseCheckbox = spouseCheckbox.checked;
+            }
+            
+            // Save using standardized JSON approach
+            setJSON('assetInput', assetData);
         }
 
         // Setup all event listeners and initialize calculations

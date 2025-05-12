@@ -8,7 +8,7 @@
         "build": "webpack --mode production",
         "test": "jest",
         "login": "npx wrangler login",
-        "deploy:all": "npm run deploy:workflow && npm run deploy:symptom && npm run deploy:fitness && npm run deploy:report && npm run deploy:research && npm run deploy:social && npm run deploy:speculation && npm run deploy:enneagram && npm run deploy:event && npm run deploy:quiz && npm run deploy:general && npm run deploy:marketing && npm run deploy:app && npm run deploy:adventure",
+        "deploy:all": "npm run deploy:workflow && npm run deploy:symptom && npm run deploy:fitness && npm run deploy:report && npm run deploy:research && npm run deploy:social && npm run deploy:speculation && npm run deploy:enneagram && npm run deploy:event && npm run deploy:quiz && npm run deploy:general && npm run deploy:marketing && npm run deploy:app && npm run deploy:adventure && npm run deploy:calorie && npm run deploy:income",
         "deploy:workflow": "npx wrangler deploy -e workflow",
         "deploy:symptom": "npx wrangler deploy -e symptom",
         "deploy:fitness": "npx wrangler deploy -e fitness",
@@ -22,7 +22,9 @@
         "deploy:general": "npx wrangler deploy -e general",
         "deploy:marketing": "npx wrangler deploy -e marketing",
         "deploy:app": "npx wrangler deploy -e app",
-        "deploy:adventure": "npx wrangler deploy -e adventure"
+        "deploy:adventure": "npx wrangler deploy -e adventure",
+        "deploy:calorie": "npx wrangler deploy -e calorie",
+        "deploy:income": "npx wrangler deploy -e income"
     },
     "keywords": [],
     "author": "",

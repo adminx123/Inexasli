@@ -350,6 +350,44 @@
           try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
       };
 
+      // Standardized JSON functions for consistent storage approach
+      const setJSON = window.setJSON || function(name, value) {
+          try {
+              if (name === undefined || name === null || name === '') {
+                  console.error('Invalid key name provided to setJSON');
+                  return false;
+              }
+              
+              if (value === undefined) {
+                  console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                  localStorage.removeItem(name);
+                  return true;
+              }
+              
+              // Convert value to JSON string
+              const jsonString = JSON.stringify(value);
+              localStorage.setItem(name, jsonString);
+              console.log(`[IncomeIQ] JSON saved ${name}`);
+              return true;
+          } catch (error) {
+              console.error(`[IncomeIQ] Error storing JSON: ${error}`);
+              return false;
+          }
+      };
+      
+      const getJSON = window.getJSON || function(name, defaultValue) {
+          try {
+              const item = localStorage.getItem(name);
+              if (!item) return defaultValue;
+              const parsedValue = JSON.parse(item);
+              console.log(`[IncomeIQ] JSON retrieved ${name}`);
+              return parsedValue;
+          } catch (error) {
+              console.error(`[IncomeIQ] Error retrieving JSON: ${error}`);
+              return defaultValue;
+          }
+      };
+
       // Expense variables
       let ANNUALEXPENSESUM = 0;
       let HOUSING = 0;
@@ -719,6 +757,48 @@
               calculateAll();
           }
       });
+
+      function saveExpenseData() {
+          const expenseFields = [
+              // Essential expenses
+              'expenses_grocery', 'expenses_fitness', 'expenses_hygiene', 'expenses_internet', 'expenses_insurance',
+              'expenses_medical', 'expenses_dental', 'expenses_mobile_phone', 'expenses_rent', 'expenses_property_taxes',
+              'expenses_water', 'expenses_electricity', 'expenses_gas', 'expenses_sewage', 'expenses_garbage',
+              'expenses_homeowners_association', 'expenses_snow_removal', 'expenses_lawn_maintenance',
+              // Lifestyle expenses
+              'expenses_dining_out', 'expenses_entertainment', 'expenses_vacations', 'expenses_hobbies', 'expenses_pets',
+              'expenses_streaming_services', 'expenses_software_subscriptions', 'expenses_newspaper_magazines',
+              'expenses_television', 'expenses_gift_giving', 'expenses_education', 'expenses_daycare',
+              'expenses_charitable_donations', 'expenses_clothing_purchases', 'expenses_personal_care', 'expenses_coffee_shops',
+              // Transportation expenses
+              'expenses_car_payment', 'expenses_car_insurance', 'expenses_fuel', 'expenses_car_maintenance', 'expenses_parking',
+              'expenses_ride_sharing', 'expenses_transit_pass', 'expenses_auto_registration',
+              // Debt expenses
+              'expenses_credit_card', 'expenses_student_loans', 'expenses_other_loans', 'expenses_debt_consolidation_loans',
+              'expenses_loan_for_others', 'expenses_alimony'
+          ];
+          
+          const expenseData = {};
+          
+          // Collect all expense values
+          expenseFields.forEach(field => {
+              const input = document.getElementById(field);
+              if (input) {
+                  expenseData[field] = input.value ? parseFloat(input.value) : 0;
+                  
+                  // Get frequency information
+                  const frequencyId = `${field}_frequency`;
+                  const frequencyGroup = document.querySelector(`[data-frequency-id="${frequencyId}"]`);
+                  if (frequencyGroup) {
+                      const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
+                      expenseData[`${field}_frequency`] = checkedCheckbox ? checkedCheckbox.value : 'monthly';
+                  }
+              }
+          });
+          
+          // Save using standardized JSON approach
+          setJSON('expenseInput', expenseData);
+      }
   })();
   </script>
 </body>

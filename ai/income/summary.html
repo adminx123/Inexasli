@@ -621,61 +621,75 @@ function updateTaxObligations() {
         const getLocalJSON = getJSONModule1.getLocalJSON || getJSONModule1.default;
         const { processJSONResponse } = getJSONModule2;
         
-        // Get data from localStorage using the JSON utility
-        const introDataJSON = getLocalJSON('introDataJSON');
-        const incomeValuesJSON = getLocalJSON('incomeValuesJSON');
+        // Get data from localStorage using the standardized JSON approach
+        const getJSON = window.getJSON || function(name, defaultValue) {
+            try {
+                const item = localStorage.getItem(name);
+                if (!item) return defaultValue;
+                const parsedValue = JSON.parse(item);
+                console.log(`[IncomeIQ] JSON retrieved ${name}`);
+                return parsedValue;
+            } catch (error) {
+                console.error(`[IncomeIQ] Error retrieving JSON: ${error}`);
+                return defaultValue;
+            }
+        };
+        
+        // Gather all data into a consolidated object for the worker
+        const incomeIqInput = {
+            introData: getJSON('introInput', {}),
+            incomeData: getJSON('incomeInput', {})
+            // We're only sending the required fields per the updated worker
+        };
         
         // Check if data exists
-        if (!introDataJSON || !incomeValuesJSON) {
-            console.error('Required data missing for tax calculation');
+        if (!incomeIqInput.introData || !incomeIqInput.incomeData) {
+            console.error('Required data missing for financial analysis');
             return;
         }
         
-        console.log('Sending data to worker:', { introDataJSON, incomeValuesJSON });
+        console.log('Sending data to worker:', incomeIqInput);
         
         // Send data to worker
-        fetch('https://incomeiqworker.4hm7q4q75z.workers.dev/', {
+        fetch('https://income.4hm7q4q75z.workers.dev/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                introDataJSON: introDataJSON,
-                incomeValuesJSON: incomeValuesJSON
-            })
+            body: JSON.stringify(incomeIqInput)
         })
         .then(response => response.json())
         .then(data => {
             console.log('Worker response:', data);
             
-            // Process the JSON response - this will store all fields in localStorage
-            processJSONResponse(data).then(processedData => {
-                console.log('Processed data:', processedData);
+            if (data && data.data) {
+                // Store tax and obligation values in localStorage
+                const taxData = data.data;
                 
-                // Calculate disposable income based on the tax data - using the same variable names as localStorage keys
+                // Store values in localStorage with correct keys that match element IDs
+                setLocal('total_taxes', taxData.total_taxes.toString());
+                setLocal('total_contributions', taxData.total_contributions.toString());
+                setLocal('calculation_summary', taxData.calculation_summary);
+                
+                // Calculate disposable income based on the tax data
                 const annualIncome = parseFloat(getLocal('ANNUALINCOME')) || 0;
                 const annualExpense = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
-                const total_taxes = parseFloat(getLocal('total_taxes')) || 0;
-                const total_contributions = parseFloat(getLocal('total_contributions')) || 0;
+                const total_taxes = taxData.total_taxes;
+                const total_contributions = taxData.total_contributions;
                 
                 const disposableIncome = annualIncome - annualExpense - total_taxes - total_contributions;
                 setLocal('DISPOSABLEINCOME', disposableIncome.toString());
                 
-                // Update the DISPOSABLEINCOME span directly, as it's not handled by the xAI response
+                // Update the DISPOSABLEINCOME span directly
                 const currencySymbol = getCurrentCurrencySymbol();
                 const disposableElement = document.getElementById('DISPOSABLEINCOME');
                 if (disposableElement) {
                     disposableElement.textContent = currencySymbol + disposableIncome.toFixed(2);
                 }
                 
-                // Also store the tax calculation summary if available
-                if (data.data && data.data.calculation_summary) {
-                    setLocal('calculation_summary', data.data.calculation_summary);
-                }
-                
                 // Refresh all values from localStorage
                 populateValuesFromLocalStorage();
-            });
+            }
         })
         .catch(error => {
             console.error('Error in tax calculation:', error);

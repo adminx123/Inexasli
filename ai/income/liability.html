@@ -146,6 +146,44 @@
             } catch (e) { console.error(e); }
         };
 
+        // Standardized JSON functions for consistent storage approach
+        const setJSON = window.setJSON || function(name, value) {
+            try {
+                if (name === undefined || name === null || name === '') {
+                    console.error('Invalid key name provided to setJSON');
+                    return false;
+                }
+                
+                if (value === undefined) {
+                    console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                    localStorage.removeItem(name);
+                    return true;
+                }
+                
+                // Convert value to JSON string
+                const jsonString = JSON.stringify(value);
+                localStorage.setItem(name, jsonString);
+                console.log(`[IncomeIQ] JSON saved ${name}`);
+                return true;
+            } catch (error) {
+                console.error(`[IncomeIQ] Error storing JSON: ${error}`);
+                return false;
+            }
+        };
+        
+        const getJSON = window.getJSON || function(name, defaultValue) {
+            try {
+                const item = localStorage.getItem(name);
+                if (!item) return defaultValue;
+                const parsedValue = JSON.parse(item);
+                console.log(`[IncomeIQ] JSON retrieved ${name}`);
+                return parsedValue;
+            } catch (error) {
+                console.error(`[IncomeIQ] Error retrieving JSON: ${error}`);
+                return defaultValue;
+            }
+        };
+
         // Liability logic
         console.log('Liability logic initialized in liability.html at:', new Date().toISOString());
         let LIABILITIES = 0;
@@ -220,24 +258,31 @@
 
         function calculateAll() {
             calculateLiabilities();
-            // The setLocal for LIABILITIES is now done inside calculateLiabilities
-            calculateRevolving();
-
-            const fields = [
-                'liabilities_small_business_loan', 'liabilities_primary_residence', 'liabilities_investment_properties',
-                'liabilities_vehicle_loan', 'liabilities_personal_debt', 'liabilities_student_loan',
-                'liabilities_line_of_credit', 'liabilities_credit_card', 'liabilities_tax_arrears',
-                'liabilities_small_business_loan_percent', 'liabilities_primary_residence_percent', 'liabilities_investment_properties_percent',
-                'liabilities_vehicle_loan_percent', 'liabilities_personal_debt_percent', 'liabilities_student_loan_percent',
-                'liabilities_line_of_credit_percent', 'liabilities_credit_card_percent', 'liabilities_tax_arrears_percent'
+            
+            // Save all fields to localStorage
+            const liabilityFields = [
+                'liabilities_small_business_loan', 'liabilities_primary_residence',
+                'liabilities_secondary_residence', 'liabilities_investment_property',
+                'liabilities_vehicle', 'liabilities_recreational_vehicle',
+                'liabilities_line_of_credit', 'liabilities_credit_card',
+                'liabilities_student_loans', 'liabilities_personal_loans',
+                'liabilities_tax_arrears'
             ];
-
-            fields.forEach(field => {
+            
+            liabilityFields.forEach(field => {
                 const element = document.getElementById(field);
                 if (element) {
-                    setLocal(field, element.value.trim() !== "" ? element.value : field.includes('_percent') ? "100" : "", 365);
+                    setLocal(field, element.value !== "" ? element.value : "", 365);
+                }
+                
+                const percentElement = document.getElementById(field + '_percent');
+                if (percentElement) {
+                    setLocal(field + '_percent', percentElement.value !== "" ? percentElement.value : "100", 365);
                 }
             });
+            
+            // Save in standardized JSON format
+            saveLiabilityData();
         }
         
         // Make calculateAll function accessible outside this scope
@@ -284,6 +329,41 @@
                     }
                 }
             }, 300);
+        }
+
+        function saveLiabilityData() {
+            const liabilityFields = [
+                'liabilities_small_business_loan', 'liabilities_primary_residence',
+                'liabilities_secondary_residence', 'liabilities_investment_property',
+                'liabilities_vehicle', 'liabilities_recreational_vehicle',
+                'liabilities_line_of_credit', 'liabilities_credit_card',
+                'liabilities_student_loans', 'liabilities_personal_loans',
+                'liabilities_tax_arrears'
+            ];
+            
+            const liabilityData = {};
+            
+            liabilityFields.forEach(field => {
+                const input = document.getElementById(field);
+                if (input) {
+                    liabilityData[field] = input.value ? parseFloat(input.value) : 0;
+                }
+                
+                // Get spouse percentage if applicable
+                const percentInput = document.getElementById(`${field}_percent`);
+                if (percentInput) {
+                    liabilityData[`${field}_percent`] = percentInput.value ? parseFloat(percentInput.value) : 100;
+                }
+            });
+            
+            // Save spouse checkbox state
+            const spouseCheckbox = document.getElementById('liabilityspousecheckbox');
+            if (spouseCheckbox) {
+                liabilityData.spouseCheckbox = spouseCheckbox.checked;
+            }
+            
+            // Save using standardized JSON approach
+            setJSON('liabilityInput', liabilityData);
         }
 
         // Setup all event listeners and initialize calculations

@@ -172,6 +172,44 @@ function initIntroForm() {
         }
     }
     
+    // Use standardized JSON approach for data storage
+    const setJSON = window.setJSON || function(name, value) {
+        try {
+            if (name === undefined || name === null || name === '') {
+                console.error('Invalid key name provided to setJSON');
+                return false;
+            }
+            
+            if (value === undefined) {
+                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                localStorage.removeItem(name);
+                return true;
+            }
+            
+            // Convert value to JSON string
+            const jsonString = JSON.stringify(value);
+            localStorage.setItem(name, jsonString);
+            console.log(`[IncomeIQ] JSON saved ${name}`);
+            return true;
+        } catch (error) {
+            console.error(`[IncomeIQ] Error storing JSON: ${error}`);
+            return false;
+        }
+    };
+    
+    const getJSON = window.getJSON || function(name, defaultValue) {
+        try {
+            const item = localStorage.getItem(name);
+            if (!item) return defaultValue;
+            const parsedValue = JSON.parse(item);
+            console.log(`[IncomeIQ] JSON retrieved ${name}`);
+            return parsedValue;
+        } catch (error) {
+            console.error(`[IncomeIQ] Error retrieving JSON: ${error}`);
+            return defaultValue;
+        }
+    };
+    
     // Get DOM elements
     const countryDropdown = document.getElementById('country');
     const subregionDropdown = document.getElementById('subregion');
@@ -439,7 +477,7 @@ function initIntroForm() {
             import('/utility/setJSON.js')
                 .then(module => {
                     const setJSON = module.default;
-                    setJSON('introDataJSON', consolidatedData);
+                    setJSON('introInput', consolidatedData);
                 })
                 .catch(err => {
                     // Error handling for import
@@ -609,7 +647,7 @@ function initIntroForm() {
             // Set up event listener
             element.addEventListener('change', function() {
                 setLocalValue(id, this.value);
-                saveConsolidatedData(); // Update consolidated data
+                saveConsolidatedData(); // Update consolidated data using JSON
             });
         }
     });
