@@ -348,19 +348,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/app/appiq.html': '/ai/apioutput.html?gridItem=appiq'
             };
             
-            // Just store the mapping but don't auto-open DataOut for CalorieIQ specifically
+            // Just store the mapping but don't auto-open DataOut 
+            // We'll let users manually open it when they want to see output
             const outUrl = outputMap[url];
             if (outUrl) {
                 setLocal('lastDataOutUrl', outUrl);
                 
-                // Only auto-open for items other than CalorieIQ
-                if (url !== '/ai/calorie/calorieiq.html') {
-                    if (dataContainer.dataset.state !== 'expanded') {
-                        toggleDataContainer();
-                    } else {
-                        loadStoredContent(outUrl);
-                    }
-                }
+                // Don't automatically open the dataout container for any product
+                // (removed the auto-opening logic that was here previously)
             }
         });
 
