@@ -187,7 +187,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     max-width: 85%;
                     min-width: 25%;
                     height: calc(100vh - 20px);
-                    top: 10px;
+                    top: 50%;
+                    right: 0;
+                    transform: translateY(-50%);
                 }
 
                 .data-container-right .data-label {
