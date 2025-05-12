@@ -365,18 +365,46 @@
             window.ANNUALINCOME = annualIncomeSum;
             setLocal("ANNUALINCOME", annualIncomeSum.toString(), 365);
             
-            // Store all normalized values using setJSON to avoid URL encoding
-            // Import setJSON dynamically if not available
-            import('/utility/setJSON.js')
-                .then(module => {
-                    const setJSON = module.default;
-                    setJSON('incomeValuesJSON', normalizedValues);
-                })
-                .catch(err => {
-                    console.error('Error importing setJSON module:', err);
-                    // Fallback to direct storage with JSON stringify
-                    localStorage.setItem('incomeValuesJSON', JSON.stringify(normalizedValues));
-                });
+            // Store all normalized values using the standardized JSON approach
+            const setJSON = window.setJSON || function(name, value) {
+                try {
+                    if (name === undefined || name === null || name === '') {
+                        console.error('Invalid key name provided to setJSON');
+                        return false;
+                    }
+                    
+                    if (value === undefined) {
+                        console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                        localStorage.removeItem(name);
+                        return true;
+                    }
+                    
+                    // Convert value to JSON string
+                    const jsonString = JSON.stringify(value);
+                    localStorage.setItem(name, jsonString);
+                    console.log(`[IncomeIQ] JSON saved ${name}`);
+                    return true;
+                } catch (error) {
+                    console.error(`[IncomeIQ] Error storing JSON: ${error}`);
+                    return false;
+                }
+            };
+
+            const getJSON = window.getJSON || function(name, defaultValue) {
+                try {
+                    const item = localStorage.getItem(name);
+                    if (!item) return defaultValue;
+                    const parsedValue = JSON.parse(item);
+                    console.log(`[IncomeIQ] JSON retrieved ${name}`);
+                    return parsedValue;
+                } catch (error) {
+                    console.error(`[IncomeIQ] Error retrieving JSON: ${error}`);
+                    return defaultValue;
+                }
+            };
+            
+            // Use the inline setJSON function
+            setJSON('incomeInput', normalizedValues);
             
             // Optional UI update (commented out as not needed)
             const sumElement = document.getElementById('annual_income_sum');

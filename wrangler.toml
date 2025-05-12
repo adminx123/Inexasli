@@ -58,3 +58,20 @@ main = "./ai/app/appiqworker.js"
 [env.adventure]
 name = "adventure"
 main = "./ai/adventure/adventureiqworker.js"
+
+[env.calorie]
+name = "calorie"
+main = "./ai/calorie/calorieiqworker.js"
+
+[env.income]
+name = "income"
+main = "./ai/income/incomeiqworker.js"
+
+# Environment variables for the income worker
+[env.income.vars]
+# A placeholder value - you'll need to set the actual value via wrangler secret
+WORKER_API_KEY = "placeholder-replace-with-actual-worker-api-key"
+
+# Service bindings for the income worker
+[env.income.services]
+secret_binding = "secretworker"
