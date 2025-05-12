@@ -23,6 +23,13 @@
    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
    <link rel="shortcut icon" href="/images/favicon.ico" />
    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+   <!-- Import JSON utility scripts -->
+   <script type="module">
+     import { setJSON } from '/utility/setJSON.js';
+     import { getLocalJSON } from '/utility/getJSON.js';
+     window.setJSON = setJSON;
+     window.getJSON = getLocalJSON;
+   </script>
    <!-- frequencyChange.js is now loaded in budget.html -->
  </head>
   
@@ -505,6 +512,139 @@ function getCurrentCurrencySymbol() {
 function populateValuesFromLocalStorage() {
     console.log('Populating values from local storage');
     
+    // Try to import getLocalJSON
+    import('/utility/getJSON.js').then(module => {
+        const getLocalJSON = module.getLocalJSON || module.default;
+        
+        // First try to get tax data from JSON storage
+        let taxData = null;
+        try {
+            taxData = getLocalJSON('taxResponse');
+            console.log('Found tax data in JSON storage:', taxData);
+        } catch (e) {
+            console.warn('Could not retrieve tax data from JSON storage:', e);
+        }
+        
+        // If we have JSON tax data, use it to update the tax-related fields
+        if (taxData) {
+            console.log('Using tax data from JSON storage');
+            
+            // Calculate disposable income
+            const annualIncome = parseFloat(getLocal('ANNUALINCOME')) || 0;
+            const annualExpense = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
+            const disposableIncome = annualIncome - annualExpense - taxData.total_taxes - taxData.total_contributions;
+            setLocal('DISPOSABLEINCOME', disposableIncome.toString());
+            
+            // Update tax elements directly from taxData
+            const currencySymbol = getCurrentCurrencySymbol();
+            
+            const taxElement = document.getElementById('total_taxes');
+            if (taxElement) {
+                taxElement.textContent = currencySymbol + taxData.total_taxes.toFixed(2);
+            }
+            
+            const contributionsElement = document.getElementById('total_contributions');
+            if (contributionsElement) {
+                contributionsElement.textContent = currencySymbol + taxData.total_contributions.toFixed(2);
+            }
+            
+            const summaryElement = document.getElementById('calculation_summary');
+            if (summaryElement) {
+                summaryElement.textContent = taxData.calculation_summary || '';
+            }
+        }
+        
+        // Get the current currency symbol
+        const currencySymbol = getCurrentCurrencySymbol();
+        
+        // Standard financial values - using currency symbol format
+        const financialElements = {
+            'ASSETS': parseFloat(getLocal('ASSETS')) || 0,
+            'LIABILITIES': parseFloat(getLocal('LIABILITIES')) || 0,
+            'NETWORTH': (parseFloat(getLocal('ASSETS')) || 0) - (parseFloat(getLocal('LIABILITIES')) || 0),
+            'annual_income_sum': parseFloat(getLocal('ANNUALINCOME')) || 0,
+            'ANNUALEXPENSESUM': parseFloat(getLocal('ANNUALEXPENSESUM')) || 0,
+            'ESSENTIAL': parseFloat(getLocal('ESSENTIAL')) || 0,
+            'DISCRETIONARY': parseFloat(getLocal('DISCRETIONARY')) || 0,
+            'HOUSING': parseFloat(getLocal('HOUSING')) || 0,
+            'TRANSPORTATION': parseFloat(getLocal('TRANSPORTATION')) || 0,
+            'DEPENDANT': parseFloat(getLocal('DEPENDANT')) || 0,
+            'DEBT': parseFloat(getLocal('DEBT')) || 0,
+            'DISPOSABLEINCOME': parseFloat(getLocal('DISPOSABLEINCOME')) || 0
+        };
+        
+        // Tax elements handled separately if we have taxData
+        if (!taxData) {
+            // Only use localStorage for tax values if we don't have JSON
+            // This is a fallback for backwards compatibility
+            const taxElement = document.getElementById('total_taxes');
+            if (taxElement) {
+                const total_taxes = parseFloat(getLocal('total_taxes')) || 0;
+                taxElement.textContent = currencySymbol + total_taxes.toFixed(2);
+            }
+            
+            const contributionsElement = document.getElementById('total_contributions');
+            if (contributionsElement) {
+                const total_contributions = parseFloat(getLocal('total_contributions')) || 0;
+                contributionsElement.textContent = currencySymbol + total_contributions.toFixed(2);
+            }
+            
+            const summaryElement = document.getElementById('calculation_summary');
+            if (summaryElement) {
+                summaryElement.textContent = getLocal('calculation_summary') || 'No calculation details available.';
+            }
+        }
+        
+        // Update financial elements with currency symbol format
+        for (const [elementId, value] of Object.entries(financialElements)) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = currencySymbol + value.toFixed(2);
+            }
+        }
+        
+        // Update ratio elements without currency symbol format
+        const ratioElements = {
+            'FIRERATIO': parseFloat(getLocal('FIRERATIO')) || 0,
+            'SAVINGSTODEBT': parseFloat(getLocal('SAVINGSTODEBT')) || 0,
+            'HOUSINGTOINCOME': parseFloat(getLocal('HOUSINGTOINCOME')) || 0,
+            'DEBTTOINCOME': parseFloat(getLocal('DEBTTOINCOME')) || 0,
+            'TIMETOPAYDEBT': parseFloat(getLocal('TIMETOPAYDEBT')) || 0
+        };
+        
+        for (const [elementId, value] of Object.entries(ratioElements)) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = value.toFixed(2);
+            }
+        }
+        
+        // Update text elements (like calculation_summary) without formatting
+        const textElements = {
+            'calculation_summary': taxData ? taxData.calculation_summary || '' : getLocal('calculation_summary') || ''
+        };
+        
+        for (const [elementId, value] of Object.entries(textElements)) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = value;
+            }
+        }
+        
+        // Apply color formatting to ratio elements
+        colorChangeFIRE();
+        colorChangeSavingsToDebt(parseFloat(getLocal('SAVINGSTODEBT')) || 0);
+        colorChangeHTI();
+        colorChangeDTI();
+    }).catch(error => {
+        console.error('Error loading getJSON module:', error);
+        // Fallback to the old implementation without JSON
+        populateValuesWithoutJSON();
+    });
+}
+
+// Fallback function if getLocalJSON is not available
+function populateValuesWithoutJSON() {
     // Get the current currency symbol
     const currencySymbol = getCurrentCurrencySymbol();
     
@@ -521,8 +661,6 @@ function populateValuesFromLocalStorage() {
         'TRANSPORTATION': parseFloat(getLocal('TRANSPORTATION')) || 0,
         'DEPENDANT': parseFloat(getLocal('DEPENDANT')) || 0,
         'DEBT': parseFloat(getLocal('DEBT')) || 0,
-        'total_taxes': parseFloat(getLocal('total_taxes')) || 0,
-        'total_contributions': parseFloat(getLocal('total_contributions')) || 0,
         'DISPOSABLEINCOME': parseFloat(getLocal('DISPOSABLEINCOME')) || 0
     };
     
@@ -535,10 +673,23 @@ function populateValuesFromLocalStorage() {
         'TIMETOPAYDEBT': parseFloat(getLocal('TIMETOPAYDEBT')) || 0
     };
     
-    // Text elements - for calculation summary
-    const textElements = {
-        'calculation_summary': getLocal('calculation_summary') || 'No calculation details available.'
-    };
+    // Tax values from individual localStorage items
+    const taxElement = document.getElementById('total_taxes');
+    if (taxElement) {
+        const total_taxes = parseFloat(getLocal('total_taxes')) || 0;
+        taxElement.textContent = currencySymbol + total_taxes.toFixed(2);
+    }
+    
+    const contributionsElement = document.getElementById('total_contributions');
+    if (contributionsElement) {
+        const total_contributions = parseFloat(getLocal('total_contributions')) || 0;
+        contributionsElement.textContent = currencySymbol + total_contributions.toFixed(2);
+    }
+    
+    const summaryElement = document.getElementById('calculation_summary');
+    if (summaryElement) {
+        summaryElement.textContent = getLocal('calculation_summary') || 'No calculation details available.';
+    }
     
     // Update financial elements with currency symbol format
     for (const [elementId, value] of Object.entries(financialElements)) {
@@ -553,14 +704,6 @@ function populateValuesFromLocalStorage() {
         const element = document.getElementById(elementId);
         if (element) {
             element.textContent = value.toFixed(2);
-        }
-    }
-    
-    // Update text elements (like calculation_summary) without formatting
-    for (const [elementId, value] of Object.entries(textElements)) {
-        const element = document.getElementById(elementId);
-        if (element) {
-            element.textContent = value;
         }
     }
     
@@ -615,11 +758,11 @@ function updateTaxObligations() {
     // Import both needed utilities
     Promise.all([
         import('/utility/getJSON.js'),
-        import('/utility/getJSON.js')
+        import('/utility/setJSON.js')
     ])
-    .then(([getJSONModule1, getJSONModule2]) => {
-        const getLocalJSON = getJSONModule1.getLocalJSON || getJSONModule1.default;
-        const { processJSONResponse } = getJSONModule2;
+    .then(([getJSONModule, setJSONModule]) => {
+        const getLocalJSON = getJSONModule.getLocalJSON || getJSONModule.default;
+        const setJSON = setJSONModule.setJSON || setJSONModule.default;
         
         // Get data from localStorage using the standardized JSON approach
         const getJSON = window.getJSON || function(name, defaultValue) {
@@ -663,15 +806,17 @@ function updateTaxObligations() {
             console.log('Worker response:', data);
             
             if (data && data.data) {
-                // Store tax and obligation values in localStorage
-                const taxData = data.data;
+                // Show the full raw XAI response for debugging
+                if (data.data._debug && data.data._debug.raw_response) {
+                    console.log('Raw XAI response:', data.data._debug.raw_response);
+                }
                 
-                // Store values in localStorage with correct keys that match element IDs
-                setLocal('total_taxes', taxData.total_taxes.toString());
-                setLocal('total_contributions', taxData.total_contributions.toString());
-                setLocal('calculation_summary', taxData.calculation_summary);
+                // Save only the entire worker response as JSON
+                setJSON('taxResponse', data.data);
+                console.log('Saved tax response as JSON:', data.data);
                 
                 // Calculate disposable income based on the tax data
+                const taxData = data.data;
                 const annualIncome = parseFloat(getLocal('ANNUALINCOME')) || 0;
                 const annualExpense = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
                 const total_taxes = taxData.total_taxes;
@@ -680,8 +825,26 @@ function updateTaxObligations() {
                 const disposableIncome = annualIncome - annualExpense - total_taxes - total_contributions;
                 setLocal('DISPOSABLEINCOME', disposableIncome.toString());
                 
-                // Update the DISPOSABLEINCOME span directly
+                // Update the elements directly using values from taxData
                 const currencySymbol = getCurrentCurrencySymbol();
+                
+                // Update tax elements
+                const taxElement = document.getElementById('total_taxes');
+                if (taxElement) {
+                    taxElement.textContent = currencySymbol + total_taxes.toFixed(2);
+                }
+                
+                const contributionsElement = document.getElementById('total_contributions');
+                if (contributionsElement) {
+                    contributionsElement.textContent = currencySymbol + total_contributions.toFixed(2);
+                }
+                
+                const summaryElement = document.getElementById('calculation_summary');
+                if (summaryElement) {
+                    summaryElement.textContent = taxData.calculation_summary || '';
+                }
+                
+                // Update the DISPOSABLEINCOME span directly
                 const disposableElement = document.getElementById('DISPOSABLEINCOME');
                 if (disposableElement) {
                     disposableElement.textContent = currencySymbol + disposableIncome.toFixed(2);
