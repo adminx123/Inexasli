@@ -76,3 +76,19 @@ WORKER_API_KEY = "placeholder-replace-with-actual-worker-api-key"
 [[env.income.services]]
 binding = "secret_binding"
 service = "secretworker"
+
+[env.book]
+name = "book"
+main = "./ai/book/bookiqworker.js"
+
+[env.business]
+name = "business"
+main = "./ai/business/businessiqworker.js"
+
+[env.decision]
+name = "decision"
+main = "./ai/decision/decisioniqworker.js"
+
+[env.emotion]
+name = "emotion"
+main = "./ai/emotion/emotioniqworker.js"
