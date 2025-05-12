@@ -73,5 +73,6 @@ main = "./ai/income/incomeiqworker.js"
 WORKER_API_KEY = "placeholder-replace-with-actual-worker-api-key"
 
 # Service bindings for the income worker
-[env.income.services]
-secret_binding = "secretworker"
+[[env.income.services]]
+binding = "secret_binding"
+service = "secretworker"
