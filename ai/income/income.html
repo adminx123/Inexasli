@@ -285,6 +285,96 @@
             try { const v = localStorage.getItem(key); return v ? decodeURIComponent(v) : null; } catch (e) { return null; }
         };
         const overwriteCookies = window.overwriteCookies || function () { console.warn('overwriteCookies not defined'); };
+        
+        // Key for storing all income input values in a single JSON object
+        const INCOME_VALUES_STORAGE_KEY = 'incomeValues';
+        
+        // Helper functions to get/set values in the JSON object
+        function getIncomeValue(fieldId, defaultValue = '') {
+            const setJSON = window.setJSON || function(name, value) {
+                try {
+                    if (name === undefined || name === null || name === '') {
+                        console.error('Invalid key name provided to setJSON');
+                        return false;
+                    }
+                    
+                    if (value === undefined) {
+                        console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                        localStorage.removeItem(name);
+                        return true;
+                    }
+                    
+                    // Convert value to JSON string
+                    const jsonString = JSON.stringify(value);
+                    localStorage.setItem(name, jsonString);
+                    console.log(`[IncomeIQ] JSON saved ${name}`);
+                    return true;
+                } catch (error) {
+                    console.error(`[IncomeIQ] Error storing JSON: ${error}`);
+                    return false;
+                }
+            };
+
+            const getJSON = window.getJSON || function(name, defaultValue) {
+                try {
+                    const item = localStorage.getItem(name);
+                    if (!item) return defaultValue;
+                    const parsedValue = JSON.parse(item);
+                    console.log(`[IncomeIQ] JSON retrieved ${name}`);
+                    return parsedValue;
+                } catch (error) {
+                    console.error(`[IncomeIQ] Error retrieving JSON: ${error}`);
+                    return defaultValue;
+                }
+            };
+            
+            const values = getJSON(INCOME_VALUES_STORAGE_KEY, {});
+            return values[fieldId] !== undefined ? values[fieldId] : defaultValue;
+        }
+        
+        function saveIncomeValue(fieldId, value) {
+            const setJSON = window.setJSON || function(name, value) {
+                try {
+                    if (name === undefined || name === null || name === '') {
+                        console.error('Invalid key name provided to setJSON');
+                        return false;
+                    }
+                    
+                    if (value === undefined) {
+                        console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
+                        localStorage.removeItem(name);
+                        return true;
+                    }
+                    
+                    // Convert value to JSON string
+                    const jsonString = JSON.stringify(value);
+                    localStorage.setItem(name, jsonString);
+                    console.log(`[IncomeIQ] JSON saved ${name}`);
+                    return true;
+                } catch (error) {
+                    console.error(`[IncomeIQ] Error storing JSON: ${error}`);
+                    return false;
+                }
+            };
+
+            const getJSON = window.getJSON || function(name, defaultValue) {
+                try {
+                    const item = localStorage.getItem(name);
+                    if (!item) return defaultValue;
+                    const parsedValue = JSON.parse(item);
+                    console.log(`[IncomeIQ] JSON retrieved ${name}`);
+                    return parsedValue;
+                } catch (error) {
+                    console.error(`[IncomeIQ] Error retrieving JSON: ${error}`);
+                    return defaultValue;
+                }
+            };
+            
+            const values = getJSON(INCOME_VALUES_STORAGE_KEY, {});
+            values[fieldId] = value;
+            setJSON(INCOME_VALUES_STORAGE_KEY, values);
+            return value;
+        }
 
         // Tooltip functionality removed - now inherited from tooltip.js in budget.html
 
@@ -365,7 +455,7 @@
             window.ANNUALINCOME = annualIncomeSum;
             setLocal("ANNUALINCOME", annualIncomeSum.toString(), 365);
             
-            // Store all normalized values using the standardized JSON approach
+            // Use the already defined setJSON function to store normalized values
             const setJSON = window.setJSON || function(name, value) {
                 try {
                     if (name === undefined || name === null || name === '') {
@@ -387,19 +477,6 @@
                 } catch (error) {
                     console.error(`[IncomeIQ] Error storing JSON: ${error}`);
                     return false;
-                }
-            };
-
-            const getJSON = window.getJSON || function(name, defaultValue) {
-                try {
-                    const item = localStorage.getItem(name);
-                    if (!item) return defaultValue;
-                    const parsedValue = JSON.parse(item);
-                    console.log(`[IncomeIQ] JSON retrieved ${name}`);
-                    return parsedValue;
-                } catch (error) {
-                    console.error(`[IncomeIQ] Error retrieving JSON: ${error}`);
-                    return defaultValue;
                 }
             };
             
@@ -467,6 +544,7 @@
             calculateEmploymentIncome();
             calculateSelfEmploymentIncome();
             passiveincome();
+            
             const incomeFields = [
                 'income_salary_wages', 'income_tips', 'income_bonuses', 'income_sole_prop',
                 'income_investment_property', 'income_capital_gains_losses', 'income_interest',
@@ -475,13 +553,44 @@
                 'income_scholarships_grants', 'income_royalties', 'income_gambling_winnings', 'income_peer_to_peer_lending',
                 'income_venture_capital', 'income_tax_free_income'
             ];
+            
+            const getJSON = window.getJSON || function(name, defaultValue) {
+                try {
+                    const item = localStorage.getItem(name);
+                    if (!item) return defaultValue;
+                    const parsedValue = JSON.parse(item);
+                    return parsedValue;
+                } catch (error) {
+                    console.error(`[IncomeIQ] Error retrieving JSON: ${error}`);
+                    return defaultValue;
+                }
+            };
+            
+            const setJSON = window.setJSON || function(name, value) {
+                try {
+                    const jsonString = JSON.stringify(value);
+                    localStorage.setItem(name, jsonString);
+                    return true;
+                } catch (error) {
+                    console.error(`[IncomeIQ] Error storing JSON: ${error}`);
+                    return false;
+                }
+            };
+            
+            // Get existing values or create new object
+            const values = getJSON(INCOME_VALUES_STORAGE_KEY, {});
+            
+            // Update all values at once
             incomeFields.forEach(field => {
                 const element = document.getElementById(field);
                 if (element) {
                     const value = element.value.trim();
-                    setLocal(field, value !== "" ? value : "", 365);
+                    values[field] = value !== "" ? value : "";
                 }
             });
+            
+            // Save all values with a single call
+            setJSON(INCOME_VALUES_STORAGE_KEY, values);
         }
         
         // Make calculateAll function accessible outside this scope
@@ -521,12 +630,12 @@
             formElements.forEach(elementId => {
                 const element = document.getElementById(elementId);
                 if (element) {
-                    const savedValue = getLocal(elementId);
-                    if (savedValue !== null) element.value = savedValue;
+                    const savedValue = getIncomeValue(elementId);
+                    if (savedValue !== null && savedValue !== undefined) element.value = savedValue;
                     
                     // Add input event listener to trigger calculations
                     element.addEventListener('input', function() {
-                        setLocal(elementId, element.value.trim() !== "" ? element.value : "", 365);
+                        saveIncomeValue(elementId, element.value.trim() !== "" ? element.value : "");
                         // Recalculate and update all totals when any input changes
                         calculateNormalizedSum();
                         calculateEmploymentIncome();
