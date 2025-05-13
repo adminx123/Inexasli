@@ -55,7 +55,31 @@
         </div>
         <div class="row1">
             <label class="category-label">Expected Deliverables</label>
-            <textarea id="research-deliverables" rows="2" placeholder="What are the expected deliverables from this research? (e.g., report, presentation, data analysis, etc.)"></textarea>
+            <select id="research-deliverables">
+                <option value="report">Detailed Research Report</option>
+                <option value="analysis">Data Analysis</option>
+                <option value="recommendations">Strategic Recommendations</option>
+                <option value="case-study">Case Study</option>
+                <option value="white-paper">White Paper</option>
+                <option value="market-analysis">Market Analysis</option>
+                <option value="competitive-analysis">Competitive Analysis</option>
+                <option value="trend-forecast">Trend Forecast</option>
+                <option value="literature-summary">Literature Summary</option>
+                <option value="infographic">Infographic Content</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label class="category-label">Output Format</label>
+            <select id="output-format">
+                <option value="technical-report">Technical Report</option>
+                <option value="executive-summary">Executive Summary</option>
+                <option value="data-visualization">Data Visualization Dashboard</option>
+                <option value="presentation">Presentation Structure</option>
+                <option value="literature-review">Literature Review</option>
+                <option value="comprehensive">Comprehensive Research Document</option>
+                <option value="bullet-points">Bullet Point Summary</option>
+                <option value="tabular">Tabular Data</option>
+            </select>
         </div>
         <div class="row1">
             <label class="category-label">Additional Details</label>
@@ -67,15 +91,7 @@
         </div>
 
 <script>
-/*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
-*/
+
 
 // Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
 (function() {
@@ -141,6 +157,7 @@
             audience: null,
             context: null,
             deliverables: null,
+            outputFormat: null,
             additionalDetails: null
         };
         
@@ -187,9 +204,15 @@
         }
         
         // Collect expected deliverables
-        const deliverablesInput = document.getElementById('research-deliverables');
-        if (deliverablesInput && deliverablesInput.value.trim()) {
-            formData.deliverables = deliverablesInput.value.trim();
+        const deliverablesSelect = document.getElementById('research-deliverables');
+        if (deliverablesSelect) {
+            formData.deliverables = deliverablesSelect.value;
+        }
+        
+        // Collect output format
+        const outputFormatSelect = document.getElementById('output-format');
+        if (outputFormatSelect) {
+            formData.outputFormat = outputFormatSelect.value;
         }
         
         // Collect additional details
@@ -264,10 +287,17 @@
         }
         
         // Populate expected deliverables
-        const deliverablesInput = document.getElementById('research-deliverables');
-        if (deliverablesInput && storedData.deliverables) {
-            deliverablesInput.value = storedData.deliverables;
+        const deliverablesSelect = document.getElementById('research-deliverables');
+        if (deliverablesSelect && storedData.deliverables) {
+            deliverablesSelect.value = storedData.deliverables;
             console.log(`[ResearchIQ] Restored from JSON: expected deliverables`);
+        }
+        
+        // Populate output format
+        const outputFormatSelect = document.getElementById('output-format');
+        if (outputFormatSelect && storedData.outputFormat) {
+            outputFormatSelect.value = storedData.outputFormat;
+            console.log(`[ResearchIQ] Restored from JSON: output format`);
         }
         
         // Populate additional details
