@@ -8,31 +8,14 @@
  * jurisdictions worldwide.
 -->
 
-    <a href="/ai/landing/landing.html">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
-    </a>
+ 
 
-        <div class="row1">
-            <label class="category-label">Primary Goal</label>
-            <select id="business-primary-goal">
-                <option value="startup">Launch a New Startup</option>
-                <option value="expand">Expand Existing Business</option>
-                <option value="improve">Improve Business Operations</option>
-                <option value="pivot">Pivot Business Model</option>
-                <option value="franchise">Create a Franchise</option>
-                <option value="online">Take Business Online</option>
-            </select>
-        </div>
         <div class="row1">
             <label class="category-label">Business Idea</label>
             <textarea id="business-vision" rows="1" placeholder="What's your business idea? e.g., Launch a coffee shop"></textarea>
         </div>
         <div class="row1">
-            <label class="category-label">Purpose</label>
-            <textarea id="business-purpose" rows="1" placeholder="Why does this business matter? e.g., To create a community gathering place"></textarea>
-        </div>
-        <div class="row1">
-            <label class="category-label">Scope (Experience Level)</label>
+            <label class="category-label">Experience Level</label>
             <div class="grid-container" id="business-knowledge-level">
                 <div class="grid-item" data-value="New">I'm New to Business</div>
                 <div class="grid-item" data-value="Intermediate">I've Run a Business Before</div>
@@ -40,7 +23,7 @@
             </div>
         </div>
         <div class="row1">
-            <label class="category-label">Sub-Scope Preferences: Strengths</label>
+            <label class="category-label">Your Strengths</label>
             <div class="grid-container" id="business-general-skills">
                 <div class="grid-item" data-value="Communication">I Communicate Well</div>
                 <div class="grid-item" data-value="Problem-Solving">I Solve Problems</div>
@@ -65,7 +48,7 @@
             </div>
         </div>
         <div class="row1">
-            <label class="category-label">Sub-Scope Preferences: Challenges</label>
+            <label class="category-label">Your Challenges</label>
             <div class="grid-container" id="business-weaknesses">
                 <div class="grid-item" data-value="Procrastination">I Procrastinate</div>
                 <div class="grid-item" data-value="Impatience">I'm Impatient</div>
@@ -96,30 +79,6 @@
         <div class="row1">
             <label class="category-label">Network & Connections</label>
             <textarea id="business-network" rows="4" placeholder="Who can you leverage? (1 per line):\nFriend who owns a café\nLocal Chamber of Commerce\nBusiness mentor"></textarea>
-        </div>
-        <div class="row1">
-            <label class="category-label">Synthesis Instructions</label>
-            <select id="business-synthesis">
-                <option value="comprehensive">Comprehensive Business Plan</option>
-                <option value="lean">Lean Business Canvas</option>
-                <option value="startup">Startup Pitch Deck</option>
-                <option value="growth">Growth Strategy</option>
-                <option value="operational">Operational Plan</option>
-            </select>
-        </div>
-        <div class="row1">
-            <label class="category-label">Output Preferences</label>
-            <select id="business-output">
-                <option value="formal">Formal Business Language</option>
-                <option value="simple">Simple, Easy-to-Understand</option>
-                <option value="academic">Academic/Research Style</option>
-                <option value="persuasive">Persuasive/Marketing Style</option>
-                <option value="technical">Technical/Industry-Specific</option>
-            </select>
-        </div>
-        <div class="row1">
-            <label class="category-label">Additional Details</label>
-            <textarea id="business-additional" rows="3" placeholder="Any special requirements or constraints?"></textarea>
         </div>
         <div class="row1">
             <button class="generate-btn" id="generate-business-btn">Generate Business Plan Now!</button>
@@ -180,50 +139,13 @@
     }
 
     function collectFormData() {
-        const formData = { 
-            primaryGoal: null, 
-            vision: null, 
-            purpose: null,
-            knowledgeLevel: null, 
-            strengths: [], 
-            weaknesses: [], 
-            organization: null, 
-            network: null, 
-            synthesis: null,
-            output: null,
-            additional: null
-        };
-        
-        const primaryGoal = document.getElementById('business-primary-goal');
-        if (primaryGoal && primaryGoal.value) formData.primaryGoal = primaryGoal.value;
-        
-        if (document.getElementById('business-vision').value.trim()) 
-            formData.vision = document.getElementById('business-vision').value.trim();
-            
-        if (document.getElementById('business-purpose').value.trim()) 
-            formData.purpose = document.getElementById('business-purpose').value.trim();
-            
-        const lvl = document.querySelector('#business-knowledge-level .grid-item.selected'); 
-        if (lvl) formData.knowledgeLevel = lvl.dataset.value;
-        
+        const formData = { vision:null, knowledgeLevel:null, strengths:[], weaknesses:[], organization:null, network:null };
+        if (document.getElementById('business-vision').value.trim()) formData.vision = document.getElementById('business-vision').value.trim();
+        const lvl = document.querySelector('#business-knowledge-level .grid-item.selected'); if (lvl) formData.knowledgeLevel = lvl.dataset.value;
         document.querySelectorAll('#business-general-skills .grid-item.selected').forEach(i=>formData.strengths.push(i.dataset.value));
         document.querySelectorAll('#business-weaknesses .grid-item.selected').forEach(i=>formData.weaknesses.push(i.dataset.value));
-        
-        if (document.getElementById('business-organization').value.trim()) 
-            formData.organization = document.getElementById('business-organization').value.trim();
-            
-        if (document.getElementById('business-network').value.trim()) 
-            formData.network = document.getElementById('business-network').value.trim();
-            
-        const synthesis = document.getElementById('business-synthesis');
-        if (synthesis && synthesis.value) formData.synthesis = synthesis.value;
-        
-        const output = document.getElementById('business-output');
-        if (output && output.value) formData.output = output.value;
-        
-        if (document.getElementById('business-additional').value.trim())
-            formData.additional = document.getElementById('business-additional').value.trim();
-            
+        if (document.getElementById('business-organization').value.trim()) formData.organization = document.getElementById('business-organization').value.trim();
+        if (document.getElementById('business-network').value.trim()) formData.network = document.getElementById('business-network').value.trim();
         return formData;
     }
 
@@ -231,49 +153,16 @@
         console.log('[BusinessIQ] Repopulating form from JSON storage');
         const data = getJSON('businessIqInput', null);
         if (!data) return;
-        
-        if (data.primaryGoal) {
-            const primaryGoal = document.getElementById('business-primary-goal');
-            if (primaryGoal) primaryGoal.value = data.primaryGoal;
-        }
-        
         if (data.vision) document.getElementById('business-vision').value = data.vision;
-        
-        if (data.purpose) {
-            const purpose = document.getElementById('business-purpose');
-            if (purpose) purpose.value = data.purpose;
-        }
-        
-        if (data.knowledgeLevel) 
-            document.querySelector(`#business-knowledge-level .grid-item[data-value="${data.knowledgeLevel}"]`)?.classList.add('selected');
-            
-        data.strengths?.forEach(v => 
-            document.querySelector(`#business-general-skills .grid-item[data-value="${v}"]`)?.classList.add('selected'));
-            
-        data.weaknesses?.forEach(v => 
-            document.querySelector(`#business-weaknesses .grid-item[data-value="${v}"]`)?.classList.add('selected'));
-            
+        if (data.knowledgeLevel) document.querySelector(`#business-knowledge-level .grid-item[data-value="${data.knowledgeLevel}"]`)?.classList.add('selected');
+        data.strengths?.forEach(v => document.querySelector(`#business-general-skills .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+        data.weaknesses?.forEach(v => document.querySelector(`#business-weaknesses .grid-item[data-value="${v}"]`)?.classList.add('selected'));
         if (data.organization) document.getElementById('business-organization').value = data.organization;
         if (data.network) document.getElementById('business-network').value = data.network;
-        
-        if (data.synthesis) {
-            const synthesis = document.getElementById('business-synthesis');
-            if (synthesis) synthesis.value = data.synthesis;
-        }
-        
-        if (data.output) {
-            const output = document.getElementById('business-output');
-            if (output) output.value = data.output;
-        }
-        
-        if (data.additional) {
-            const additional = document.getElementById('business-additional');
-            if (additional) additional.value = data.additional;
-        }
     }
 
     function setupInputHandlers() {
-        document.querySelectorAll('textarea, select').forEach(i => i.addEventListener('change', () => saveInput(i)));
+        document.querySelectorAll('textarea').forEach(i => i.addEventListener('change', () => saveInput(i)));
     }
 
     function clearLocalStorage() {
@@ -282,7 +171,6 @@
         localStorage.removeItem('businessIqResponse');
         document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
         document.querySelectorAll('textarea').forEach(i => i.value = '');
-        document.querySelectorAll('select').forEach(i => i.selectedIndex = 0);
     }
 
     async function handleGenerateBusinessIq() {
