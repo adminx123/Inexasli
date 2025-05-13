@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 border-radius: 8px 0 0 8px;
                 box-shadow: -4px 4px 0 #000;
                 z-index: 10000;
-                max-width: 34px;
+                max-width: 36px; /* Changed from 34px to 36px to match other tabs */
                 min-height: 30px;
                 transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
                 overflow: hidden;
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             .data-container-summary.collapsed {
-                width: 34px;
+                max-width: 36px; /* Changed from width: 34px to match other tabs */
                 height: 120px;
                 display: flex;
                 justify-content: center;
@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 .data-container-summary.collapsed {
-                    width: 28px;
+                    max-width: 28px; /* Changed from width: 28px to max-width to match other tabs */
                     height: 100px;
                     z-index: 10001;
                 }
