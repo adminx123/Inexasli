@@ -14,41 +14,41 @@
 
 
         <div class="row1">
-            <label class="category-label">Decision Goal</label>
+            <label class="category-label">Primary Goal</label>
             <textarea id="decisioniq-goal" rows="2" placeholder="Enter decision goal (e.g., Choose a software vendor)"></textarea>
         </div>
         <div class="row1">
-            <label class="category-label">Analysis Type</label>
+            <label class="category-label">Purpose</label>
             <select id="decisioniq-analysis-type">
-                <option value="pros-cons">Pros/Cons</option>
-                <option value="weighted-scoring">Weighted Scoring</option>
-                <option value="cost-benefit">Cost-Benefit</option>
-                <option value="swot">SWOT</option>
-                <option value="multi-criteria">Multi-Criteria</option>
-                <option value="other">Other</option>
+                <option value="pros-cons">Pros/Cons Analysis</option>
+                <option value="weighted-scoring">Weighted Scoring Matrix</option>
+                <option value="cost-benefit">Cost-Benefit Analysis</option>
+                <option value="swot">SWOT Analysis</option>
+                <option value="multi-criteria">Multi-Criteria Decision Analysis</option>
+                <option value="other">Other Analysis Method</option>
             </select>
         </div>
         <div class="row1">
-            <label class="category-label">Priority Focus</label>
+            <label class="category-label">Scope</label>
             <select id="decisioniq-priority">
-                <option value="speed">Speed</option>
-                <option value="accuracy">Accuracy</option>
-                <option value="cost">Cost</option>
+                <option value="speed">Speed (Quick Decision)</option>
+                <option value="accuracy">Accuracy (Precise Decision)</option>
+                <option value="cost">Cost (Budget-Focused)</option>
                 <option value="long-term-impact">Long-Term Impact</option>
-                <option value="simplicity">Simplicity</option>
-                <option value="other">Other</option>
+                <option value="simplicity">Simplicity (Easy Implementation)</option>
+                <option value="other">Other Priority</option>
             </select>
         </div>
         <div class="row1">
-            <label class="category-label">Decision Criteria</label>
+            <label class="category-label">Sub-Scope Preferences: Decision Criteria</label>
             <textarea id="decisioniq-criteria" rows="2" placeholder="Decision criteria: (1 per line)\ne.g., Cost, Features, Scalability"></textarea>
         </div>
         <div class="row1">
-            <label class="category-label">Decision Options</label>
+            <label class="category-label">Sub-Scope Preferences: Options</label>
             <textarea id="decisioniq-options" rows="2" placeholder="Decision options: (1 per line)\ne.g., Vendor A, Vendor B, Vendor C"></textarea>
         </div>
         <div class="row1">
-            <label class="category-label">Stakeholders</label>
+            <label class="category-label">Sub-Scope Preferences: Stakeholders</label>
             <div class="grid-container" id="decisioniq-stakeholders">
                 <div class="grid-item" data-value="team-members">Team Members</div>
                 <div class="grid-item" data-value="executives">Executives</div>
@@ -63,8 +63,28 @@
             <textarea id="decisioniq-constraints" rows="2" placeholder="Constraints: (1 per line)\ne.g., Budget, Timeline, Resources"></textarea>
         </div>
         <div class="row1">
-            <label class="category-label">Additional Instructions</label>
-            <textarea id="decisioniq-instructions" rows="3" placeholder="Additional instructions: (1 per line)\ne.g., Include risk analysis, Prioritize quantitative data"></textarea>
+            <label class="category-label">Synthesis Instructions</label>
+            <select id="decisioniq-synthesis">
+                <option value="detailed">Detailed Analysis Report</option>
+                <option value="executive">Executive Summary</option>
+                <option value="matrix">Decision Matrix</option>
+                <option value="recommendation">Recommendation Only</option>
+                <option value="presentation">Presentation Format</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label class="category-label">Output Preferences</label>
+            <select id="decisioniq-output">
+                <option value="formal">Formal Business Style</option>
+                <option value="simple">Simple, Clear Language</option>
+                <option value="technical">Technical/Data-Driven</option>
+                <option value="visual">Visual/Graphical Focus</option>
+                <option value="balanced">Balanced Perspective</option>
+            </select>
+        </div>
+        <div class="row1">
+            <label class="category-label">Additional Details</label>
+            <textarea id="decisioniq-instructions" rows="3" placeholder="Any special requirements or considerations: (1 per line)\ne.g., Include risk analysis, Prioritize quantitative data"></textarea>
         </div>
         <div class="row1">
             <button class="generate-btn" id="generate-decision-btn">Generate Decision Analysis Now!</button>
@@ -119,15 +139,49 @@
     }
 
     function collectFormData() {
-        const formData = { goal:null, analysisType:null, priority:null, criteria:null, options:null, stakeholders:[], constraints:null, instructions:null };
-        const g = document.getElementById('decisioniq-goal'); if (g && g.value.trim()) formData.goal = g.value.trim();
-        const at = document.getElementById('decisioniq-analysis-type'); if (at) formData.analysisType = at.value;
-        const pr = document.getElementById('decisioniq-priority'); if (pr) formData.priority = pr.value;
-        const c = document.getElementById('decisioniq-criteria'); if (c && c.value.trim()) formData.criteria = c.value.trim();
-        const o = document.getElementById('decisioniq-options'); if (o && o.value.trim()) formData.options = o.value.trim();
-        document.querySelectorAll('#decisioniq-stakeholders .grid-item.selected').forEach(i => formData.stakeholders.push(i.dataset.value));
-        const cons = document.getElementById('decisioniq-constraints'); if (cons && cons.value.trim()) formData.constraints = cons.value.trim();
-        const ins = document.getElementById('decisioniq-instructions'); if (ins && ins.value.trim()) formData.instructions = ins.value.trim();
+        const formData = { 
+            primaryGoal: null, 
+            purpose: null, 
+            scope: null, 
+            decisionCriteria: null, 
+            options: null, 
+            stakeholders: [], 
+            constraints: null, 
+            synthesis: null,
+            output: null,
+            additionalDetails: null 
+        };
+        
+        const g = document.getElementById('decisioniq-goal'); 
+        if (g && g.value.trim()) formData.primaryGoal = g.value.trim();
+        
+        const at = document.getElementById('decisioniq-analysis-type'); 
+        if (at) formData.purpose = at.value;
+        
+        const pr = document.getElementById('decisioniq-priority'); 
+        if (pr) formData.scope = pr.value;
+        
+        const c = document.getElementById('decisioniq-criteria'); 
+        if (c && c.value.trim()) formData.decisionCriteria = c.value.trim();
+        
+        const o = document.getElementById('decisioniq-options'); 
+        if (o && o.value.trim()) formData.options = o.value.trim();
+        
+        document.querySelectorAll('#decisioniq-stakeholders .grid-item.selected').forEach(i => 
+            formData.stakeholders.push(i.dataset.value));
+        
+        const cons = document.getElementById('decisioniq-constraints'); 
+        if (cons && cons.value.trim()) formData.constraints = cons.value.trim();
+        
+        const syn = document.getElementById('decisioniq-synthesis');
+        if (syn) formData.synthesis = syn.value;
+        
+        const out = document.getElementById('decisioniq-output');
+        if (out) formData.output = out.value;
+        
+        const ins = document.getElementById('decisioniq-instructions'); 
+        if (ins && ins.value.trim()) formData.additionalDetails = ins.value.trim();
+        
         return formData;
     }
 
@@ -135,14 +189,34 @@
         console.log('[DecisionIQ] Repopulating form from JSON storage');
         const data = getJSON('decisionIqInput', null);
         if (!data) return;
-        if (data.goal) document.getElementById('decisioniq-goal').value = data.goal;
-        if (data.analysisType) document.getElementById('decisioniq-analysis-type').value = data.analysisType;
-        if (data.priority) document.getElementById('decisioniq-priority').value = data.priority;
-        if (data.criteria) document.getElementById('decisioniq-criteria').value = data.criteria;
+        
+        if (data.primaryGoal) document.getElementById('decisioniq-goal').value = data.primaryGoal;
+        else if (data.goal) document.getElementById('decisioniq-goal').value = data.goal;
+        
+        if (data.purpose) document.getElementById('decisioniq-analysis-type').value = data.purpose;
+        else if (data.analysisType) document.getElementById('decisioniq-analysis-type').value = data.analysisType;
+        
+        if (data.scope) document.getElementById('decisioniq-priority').value = data.scope;
+        else if (data.priority) document.getElementById('decisioniq-priority').value = data.priority;
+        
+        if (data.decisionCriteria) document.getElementById('decisioniq-criteria').value = data.decisionCriteria;
+        else if (data.criteria) document.getElementById('decisioniq-criteria').value = data.criteria;
+        
         if (data.options) document.getElementById('decisioniq-options').value = data.options;
-        data.stakeholders?.forEach(v => document.querySelector(`#decisioniq-stakeholders .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+        
+        data.stakeholders?.forEach(v => 
+            document.querySelector(`#decisioniq-stakeholders .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+        
         if (data.constraints) document.getElementById('decisioniq-constraints').value = data.constraints;
-        if (data.instructions) document.getElementById('decisioniq-instructions').value = data.instructions;
+        
+        if (data.synthesis && document.getElementById('decisioniq-synthesis')) 
+            document.getElementById('decisioniq-synthesis').value = data.synthesis;
+        
+        if (data.output && document.getElementById('decisioniq-output')) 
+            document.getElementById('decisioniq-output').value = data.output;
+        
+        if (data.additionalDetails) document.getElementById('decisioniq-instructions').value = data.additionalDetails;
+        else if (data.instructions) document.getElementById('decisioniq-instructions').value = data.instructions;
     }
 
     function setupInputHandlers() {
