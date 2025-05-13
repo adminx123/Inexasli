@@ -60,25 +60,7 @@ function initializeFrequencyGroup(frequencyId) {
         return;
     }
 
-    // Try to get the frequency from incomeInput first
-    const getJSON = window.getJSON || function(name, defaultValue) {
-        try {
-            const item = localStorage.getItem(name);
-            if (!item) return defaultValue;
-            return JSON.parse(item);
-        } catch (error) {
-            return defaultValue;
-        }
-    };
-    
-    // Get incomeInput value if it exists
-    const incomeInput = getJSON('incomeInput', {});
-    
-    // Extract the base field ID from the frequency ID (remove "_frequency" suffix)
-    const baseFieldId = frequencyId.replace('_frequency', '');
-    
-    // Try to get the frequency from incomeInput only
-    const savedFrequency = incomeInput && incomeInput[baseFieldId];
+    const savedFrequency = getLocal(`frequency_${frequencyId}`);
     const defaultFrequency = 'annually';
     const frequencyToSet = savedFrequency || defaultFrequency;
 
@@ -93,16 +75,17 @@ function initializeFrequencyGroup(frequencyId) {
         checkboxes.forEach(checkbox => {
             checkbox.checked = checkbox.value === defaultFrequency;
         });
-        // DO NOT save to local storage here - removed
+        setLocal(`frequency_${frequencyId}`, defaultFrequency, 365);
         console.log(`Corrected multiple selections in ${frequencyId}, set to ${defaultFrequency}`);
     } else if (checkedCount === 0) {
         checkboxes.forEach(checkbox => {
             checkbox.checked = checkbox.value === defaultFrequency;
         });
-        // DO NOT save to local storage here - removed
+        setLocal(`frequency_${frequencyId}`, defaultFrequency, 365);
     }
 
-    // DO NOT save to local storage here - removed
+    // Save the selected frequency
+    setLocal(`frequency_${frequencyId}`, frequencyToSet, 365);
 
     // Add event listeners for checkbox changes
     checkboxes.forEach(checkbox => {
@@ -113,41 +96,8 @@ function initializeFrequencyGroup(frequencyId) {
                         otherCheckbox.checked = false;
                     }
                 });
-                
-                // DO NOT save to localStorage - removed
-                
-                // Get current incomeInput and update it
-                const getJSON = window.getJSON || function(name, defaultValue) {
-                    try {
-                        const item = localStorage.getItem(name);
-                        if (!item) return defaultValue;
-                        return JSON.parse(item);
-                    } catch (error) {
-                        return defaultValue;
-                    }
-                };
-                
-                const setJSON = window.setJSON || function(name, value) {
-                    try {
-                        if (!name) return false;
-                        const jsonString = JSON.stringify(value);
-                        localStorage.setItem(name, jsonString);
-                        return true;
-                    } catch (error) {
-                        return false;
-                    }
-                };
-                
-                // Get the current incomeInput object
-                const incomeInput = getJSON('incomeInput', {});
-                const baseFieldId = frequencyId.replace('_frequency', '');
-                
-                // Update the frequency in incomeInput
-                incomeInput[baseFieldId] = this.value;
-                setJSON('incomeInput', incomeInput);
-                
-                console.log(`Set frequency for ${frequencyId} to ${this.value} in incomeInput`);
-                
+                setLocal(`frequency_${frequencyId}`, this.value, 365);
+                console.log(`Set frequency for ${frequencyId} to ${this.value}`);
                 // Trigger calculation if needed
                 if (typeof calculateAll === 'function') {
                     calculateAll();
@@ -177,51 +127,14 @@ export function initializeFrequencyGroups() {
 // Save frequency group values
 export function saveFrequencyGroups() {
     const frequencyGroups = Array.from(document.querySelectorAll('.checkbox-button-group')).map(el => el.id);
-    
-    // Get incomeInput to update frequencies
-    const getJSON = window.getJSON || function(name, defaultValue) {
-        try {
-            const item = localStorage.getItem(name);
-            if (!item) return defaultValue;
-            return JSON.parse(item);
-        } catch (error) {
-            return defaultValue;
-        }
-    };
-    
-    const setJSON = window.setJSON || function(name, value) {
-        try {
-            if (!name) return false;
-            const jsonString = JSON.stringify(value);
-            localStorage.setItem(name, jsonString);
-            return true;
-        } catch (error) {
-            return false;
-        }
-    };
-    
-    const incomeInput = getJSON('incomeInput', {});
-    let updated = false;
-    
     frequencyGroups.forEach(frequencyId => {
         const group = document.getElementById(frequencyId);
         if (group) {
             const checkedCheckbox = group.querySelector('input[type="checkbox"]:checked');
             const value = checkedCheckbox ? checkedCheckbox.value : 'annually';
-            
-            // DO NOT save to localStorage - removed
-            
-            // Save to incomeInput
-            const baseFieldId = frequencyId.replace('_frequency', '');
-            incomeInput[baseFieldId] = value;
-            updated = true;
+            setLocal(`frequency_${frequencyId}`, value, 365);
         }
     });
-    
-    // Save updated incomeInput if changes were made
-    if (updated) {
-        setJSON('incomeInput', incomeInput);
-    }
 }
 
 // Initialize on page load
