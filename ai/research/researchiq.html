@@ -33,14 +33,16 @@
             <textarea id="research-scope" rows="2" placeholder="What is the scope of your research? (e.g., specific region, target demographic, timeframe, etc.)"></textarea>
         </div>
         <div class="row1">
-            <label class="category-label">Data Collection Method</label>
-            <select id="data-collection-method">
-                <option value="survey">Survey</option>
-                <option value="interview">Interview</option>
-                <option value="focus-group">Focus Group</option>
-                <option value="observational">Observational Research</option>
-                <option value="secondary-data">Secondary Data Analysis</option>
-                <option value="experiment">Experiment</option>
+            <label class="category-label">Analysis Preference</label>
+            <select id="analysis-preference">
+                <option value="comparative">Comparative Analysis</option>
+                <option value="statistical">Statistical Analysis</option>
+                <option value="historical">Historical Trends Analysis</option>
+                <option value="competitive">Competitive Research</option>
+                <option value="demographic">Market Demographics</option>
+                <option value="cost-benefit">Cost-Benefit Analysis</option>
+                <option value="literature">Literature Review</option>
+                <option value="case-studies">Case Studies</option>
             </select>
         </div>
         <div class="row1">
@@ -135,7 +137,7 @@
             purpose: null,
             type: null,
             scope: null,
-            dataCollection: null,
+            analysisPreference: null,
             audience: null,
             context: null,
             deliverables: null,
@@ -166,10 +168,10 @@
             formData.scope = scopeInput.value.trim();
         }
         
-        // Collect data collection method
-        const dataCollectionSelect = document.getElementById('data-collection-method');
-        if (dataCollectionSelect) {
-            formData.dataCollection = dataCollectionSelect.value;
+        // Collect analysis preference
+        const analysisPreferenceSelect = document.getElementById('analysis-preference');
+        if (analysisPreferenceSelect) {
+            formData.analysisPreference = analysisPreferenceSelect.value;
         }
         
         // Collect target audience
@@ -240,11 +242,11 @@
             console.log(`[ResearchIQ] Restored from JSON: research scope`);
         }
         
-        // Populate data collection method
-        const dataCollectionSelect = document.getElementById('data-collection-method');
-        if (dataCollectionSelect && storedData.dataCollection) {
-            dataCollectionSelect.value = storedData.dataCollection;
-            console.log(`[ResearchIQ] Restored from JSON: data collection method`);
+        // Populate analysis preference
+        const analysisPreferenceSelect = document.getElementById('analysis-preference');
+        if (analysisPreferenceSelect && storedData.analysisPreference) {
+            analysisPreferenceSelect.value = storedData.analysisPreference;
+            console.log(`[ResearchIQ] Restored from JSON: analysis preference`);
         }
         
         // Populate target audience
