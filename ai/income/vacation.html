@@ -299,10 +299,12 @@
      <script src="/utility/modal.js"></script>
      <script src="/utility/toolTip.js"></script>
  
-     <!-- Merged JavaScript from vacation.js -->
+     <!-- Merged JavaScript from vacation.js with getJSON and setJSON implementation -->
      <script type="module">
      import { setLocal } from '/utility/setlocal.js';
      import { getLocal } from '/utility/getLocal.js';
+     import { setJSON } from '/utility/setJSON.js';
+     import { getLocalJSON } from '/utility/getJSON.js';
 
      // Define expenseCategories and totalOnlyCategories FIRST
      const expenseCategories = [
@@ -314,6 +316,17 @@
      ];
 
      const totalOnlyCategories = ['flights', 'tickets', 'insurance', 'sim', 'luggage'];
+
+     // Form element IDs
+     const formElementIds = [
+         'trip_duration', 'trip_flights', 'trip_car', 'trip_uber', 'trip_transit', 'trip_bike',
+         'trip_hotels', 'trip_camping', 'trip_dining', 'trip_grocery', 'trip_tickets',
+         'trip_alcohol', 'trip_gambling', 'trip_rental', 'trip_insurance', 'trip_sim', 'trip_luggage'
+     ];
+
+     // Key names for JSON storage
+     const TRIP_INPUTS_KEY = 'vacation_trip_inputs';
+     const TRIP_FREQUENCIES_KEY = 'vacation_trip_frequencies';
 
      function getTermsCookie(name) {
          const now = Date.now();
@@ -341,19 +354,40 @@
          }));
      }
 
+     // Load all input values and frequencies from JSON storage
      window.loadLocalStorage = function() {
-         console.log('Starting loadLocalStorage...');
+         console.log('Starting loadLocalStorage with JSON...');
+         
+         // Get all input values from JSON storage
+         const savedInputs = getLocalJSON(TRIP_INPUTS_KEY, {});
          formElementIds.forEach(id => {
              const element = document.getElementById(id);
              if (element) {
-                 const storedValue = getLocal(id);
-                 element.value = storedValue || '';
+                 // Use the saved value or empty string if not found
+                 const storedValue = savedInputs[id] || '';
+                 element.value = storedValue;
                  console.log(`Set ${id} to ${element.value}`);
              } else {
                  console.warn(`Element with ID '${id}' not found in the DOM`);
              }
          });
-         console.log('LocalStorage values loaded into form elements');
+         
+         // Get all frequency selections from JSON storage
+         const savedFrequencies = getLocalJSON(TRIP_FREQUENCIES_KEY, {});
+         document.querySelectorAll('.checkbox-button-group').forEach(group => {
+             const groupId = group.id;
+             const savedFrequency = savedFrequencies[groupId] || 'total';
+             
+             const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`);
+             if (checkboxToCheck) {
+                 checkboxToCheck.checked = true;
+                 console.log(`Set ${checkboxToCheck.value} as checked for ${groupId}`);
+             } else {
+                 group.querySelector('input[value="total"]').checked = true;
+             }
+         });
+         
+         console.log('JSON values loaded into form elements');
      };
 
      const tabs = document.querySelectorAll('.tab');
@@ -403,7 +437,16 @@
 
          const amount = parseFloat(amountInput.value) || 0;
          const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
-         const frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`trip_${category}_frequency`) || 'total';
+         
+         // Get frequency from the checked checkbox or from saved frequencies
+         let frequency;
+         if (checkedCheckbox) {
+             frequency = checkedCheckbox.value;
+         } else {
+             const savedFrequencies = getLocalJSON(TRIP_FREQUENCIES_KEY, {});
+             frequency = savedFrequencies[`trip_${category}_frequency`] || 'total';
+         }
+         
          let total = 0;
 
          if (totalOnlyCategories.includes(category)) {
@@ -496,52 +539,68 @@
              .catch(err => alert('Failed to copy results: ' + err));
      };
 
+     // Save all input values and frequencies as JSON
      window.createCookies = function() {
-         console.log('Saving cookies...');
+         console.log('Saving with JSON...');
+         
+         // Collect all input values into a single object
+         const inputValues = {};
          formElementIds.forEach(id => {
              const element = document.getElementById(id);
              if (element) {
-                 const value = element.value || '0';
-                 setLocal(id, value, 365);
-                 console.log(`Saved ${id}: ${value}`);
+                 inputValues[id] = element.value || '0';
+                 console.log(`Added ${id}: ${inputValues[id]} to inputs object`);
              }
          });
-
+         
+         // Save all input values as a single JSON object
+         setJSON(TRIP_INPUTS_KEY, inputValues);
+         
+         // Collect all frequency selections into a single object
+         const frequencyValues = {};
          expenseCategories.forEach(category => {
              const frequencyGroup = document.getElementById(`trip_${category}_frequency`);
              const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
-             const value = checkedCheckbox ? checkedCheckbox.value : getLocal(`trip_${category}_frequency`) || 'total';
-             setLocal(`trip_${category}_frequency`, value, 365);
-             console.log(`Saved trip_${category}_frequency: ${value}`);
+             const value = checkedCheckbox ? checkedCheckbox.value : 'total';
+             frequencyValues[`trip_${category}_frequency`] = value;
+             console.log(`Added trip_${category}_frequency: ${value} to frequencies object`);
          });
-         console.log('Cookies created for all form elements');
+         
+         // Save all frequency selections as a single JSON object
+         setJSON(TRIP_FREQUENCIES_KEY, frequencyValues);
+         
+         console.log('All data saved as JSON objects');
      };
 
+     // Clear all saved data
      window.overwriteCookies1 = function() {
-         console.log('Overwriting cookies...');
+         console.log('Clearing all JSON data...');
+         
+         // Clear input fields and save empty JSON
+         const emptyInputs = {};
          formElementIds.forEach(id => {
-             setLocal(id, '', 365);
+             emptyInputs[id] = '';
              const element = document.getElementById(id);
              if (element) element.value = '';
          });
-
+         setJSON(TRIP_INPUTS_KEY, emptyInputs);
+         
+         // Reset all frequency selections to 'total' and save as JSON
+         const defaultFrequencies = {};
          expenseCategories.forEach(category => {
-             setLocal(`trip_${category}_frequency`, 'total', 365);
-             const frequencyGroup = document.getElementById(`trip_${category}_frequency`);
+             const groupId = `trip_${category}_frequency`;
+             defaultFrequencies[groupId] = 'total';
+             
+             const frequencyGroup = document.getElementById(groupId);
              const checkboxes = frequencyGroup.querySelectorAll('input[type="checkbox"]');
              checkboxes.forEach(cb => {
                  cb.checked = cb.value === 'total';
              });
          });
-         console.log("All Vacation Worksheet cookies have been overwritten and fields cleared.");
+         setJSON(TRIP_FREQUENCIES_KEY, defaultFrequencies);
+         
+         console.log("All Vacation Worksheet data has been cleared");
      };
-
-     // Form element IDs
-     const formElementIds = [
-         'trip_duration', 'trip_flights', 'trip_car', 'trip_uber', 'trip_transit', 'trip_bike',
-         'trip_hotels', 'trip_camping', 'trip_dining', 'trip_grocery', 'trip_tickets',
-         'trip_alcohol', 'trip_gambling', 'trip_rental', 'trip_insurance', 'trip_sim', 'trip_luggage'
-     ];
 
      // Event listeners
      expenseCategories.forEach(category => {
@@ -567,25 +626,25 @@
              checkboxes.forEach(checkbox => {
                  checkbox.addEventListener('change', function() {
                      if (this.checked) {
+                         // Uncheck other checkboxes in the same group
                          checkboxes.forEach(cb => {
                              if (cb !== this) cb.checked = false;
                          });
-                         setLocal(group.id, this.value, 365);
-                         console.log(`Saved ${this.value} to cookie for ${group.id}`);
+                         
+                         // Get current frequencies from storage
+                         const savedFrequencies = getLocalJSON(TRIP_FREQUENCIES_KEY, {});
+                         savedFrequencies[group.id] = this.value;
+                         
+                         // Update the frequencies object and save
+                         setJSON(TRIP_FREQUENCIES_KEY, savedFrequencies);
+                         
+                         console.log(`Saved ${this.value} to JSON for ${group.id}`);
+                         
                          const category = group.id.replace('trip_', '').replace('_frequency', '');
                          updateFrequency(category);
                      }
                  });
              });
-
-             const savedFrequency = getLocal(group.id) || 'total';
-             const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`);
-             if (checkboxToCheck) {
-                 checkboxToCheck.checked = true;
-                 console.log(`Set ${checkboxToCheck.value} as checked for ${group.id}`);
-             } else {
-                 group.querySelector('input[value="total"]').checked = true;
-             }
          });
      });
      </script>
