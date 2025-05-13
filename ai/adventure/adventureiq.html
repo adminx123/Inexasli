@@ -35,6 +35,10 @@
     </select>
   </div>
   <div class="row1">
+    <label class="category-label">Trip Purpose</label>
+    <textarea id="trip-purpose" rows="2" placeholder="Why this trip matters (e.g., 'Annual vacation to recharge', 'Team building for our department', 'Celebrating our 10th anniversary')"></textarea>
+  </div>
+  <div class="row1">
     <label class="category-label">Trip Activities</label>
     <div class="grid-container" id="trip-activities">
       <div class="grid-item" data-value="Hiking">Hiking</div>
@@ -104,6 +108,32 @@ Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
   <div class="row1">
     <label class="category-label">Trip Duration</label>
     <input type="number" id="trip-days" placeholder="Trip Length (days)" min="1">
+  </div>
+  <div class="row1">
+    <label class="category-label">Accessibility Needs</label>
+    <div class="grid-container" id="trip-accessibility">
+      <div class="grid-item" data-value="None">No Special Needs</div>
+      <div class="grid-item" data-value="Mobility">Mobility Considerations</div>
+      <div class="grid-item" data-value="Visual">Visual Impairment</div>
+      <div class="grid-item" data-value="Hearing">Hearing Impairment</div>
+      <div class="grid-item" data-value="Dietary">Dietary Restrictions</div>
+      <div class="grid-item" data-value="Medical">Medical Conditions</div>
+      <div class="grid-item" data-value="Children">Young Children</div>
+      <div class="grid-item" data-value="Elderly">Elderly Travelers</div>
+    </div>
+  </div>
+  <div class="row1">
+    <label class="category-label">Preferred Transportation</label>
+    <div class="grid-container" id="trip-transport">
+      <div class="grid-item" data-value="Walking">Walking</div>
+      <div class="grid-item" data-value="Public">Public Transit</div>
+      <div class="grid-item" data-value="Car">Rental Car</div>
+      <div class="grid-item" data-value="Taxi">Taxi/Rideshare</div>
+      <div class="grid-item" data-value="Bike">Bicycle</div>
+      <div class="grid-item" data-value="Tour">Guided Tours</div>
+      <div class="grid-item" data-value="Train">Train Travel</div>
+      <div class="grid-item" data-value="Ferry">Ferry/Boat</div>
+    </div>
   </div>
   <div class="row1">
     <label class="category-label">Budget</label>
@@ -183,7 +213,8 @@ Include more free time between activities"></textarea>
 
     function collectFormData() {
       const formData = { 
-        primaryGoal: null, 
+        primaryGoal: null,
+        purpose: null, 
         activities: [], 
         relationships: [], 
         location: null, 
@@ -193,12 +224,16 @@ Include more free time between activities"></textarea>
         people: null, 
         days: null, 
         budget: null,
+        accessibility: [],
+        transport: [],
         outputFormat: null,
         specialInstructions: null
       };
       document.querySelectorAll('#trip-activities .grid-item.selected').forEach(i => formData.activities.push(i.dataset.value));
       document.querySelectorAll('#trip-relationship .grid-item.selected').forEach(i => formData.relationships.push(i.dataset.value));
-      ['primary-goal', 'location','specifics','plans','packing','people','days','budget','output-format','special-instructions'].forEach(field => {
+      document.querySelectorAll('#trip-accessibility .grid-item.selected').forEach(i => formData.accessibility.push(i.dataset.value));
+      document.querySelectorAll('#trip-transport .grid-item.selected').forEach(i => formData.transport.push(i.dataset.value));
+      ['primary-goal', 'purpose', 'location','specifics','plans','packing','people','days','budget','output-format','special-instructions'].forEach(field => {
         const el = document.getElementById(`trip-${field}`);
         if (el) formData[field === 'primary-goal' ? 'primaryGoal' : 
                  field === 'output-format' ? 'outputFormat' : 
@@ -213,10 +248,12 @@ Include more free time between activities"></textarea>
       if (!data) return;
       data.activities?.forEach(v => document.querySelector(`#trip-activities .grid-item[data-value="${v}"]`)?.classList.add('selected'));
       data.relationships?.forEach(v => document.querySelector(`#trip-relationship .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+      data.accessibility?.forEach(v => document.querySelector(`#trip-accessibility .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+      data.transport?.forEach(v => document.querySelector(`#trip-transport .grid-item[data-value="${v}"]`)?.classList.add('selected'));
       
       // Handle dropdown and text fields
       if(data.primaryGoal) document.getElementById('trip-primary-goal').value = data.primaryGoal;
-      ['location','specifics','plans','packing','people','days','budget'].forEach(f => {
+      ['purpose', 'location','specifics','plans','packing','people','days','budget'].forEach(f => {
         const el = document.getElementById(`trip-${f}`);
         if (el && data[f]) el.value = data[f];
       });
