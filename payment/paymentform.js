@@ -9,23 +9,25 @@ document.addEventListener('DOMContentLoaded', async function() {
     left: 50%;
     transform: translateX(-50%);
     background-color: #f5f5f5;
-    padding: 8px;
+    padding: 4px;
     border: 2px solid #000;
     border-top: none;
     border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 0 #000;
     z-index: 10001;
     width: 400px;
-    transition: top 0.3s ease-in-out, height 0.3s ease-in-out;
+    max-height: 36px; /* Match the same proportion as other tabs */
+    transition: max-height 0.3s ease-in-out, height 0.3s ease-in-out;
     overflow: hidden;
     font-family: "Inter", sans-serif;
 }
 
 #subscribe-sidebar.initial {
-    height: auto;
+    max-height: 36px; /* Fixed collapsed height to match other tabs */
 }
 
 #subscribe-sidebar.expanded {
+    max-height: none; /* Allow full height when expanded */
     height: auto;
     top: 0;
 }
@@ -34,14 +36,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     text-decoration: none;
     color: #000;
     font-size: 12px;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    padding: 8px 8px;
+    padding: 4px;
     cursor: pointer;
     transition: color 0.2s ease;
     line-height: 1.2;
-    max-height: auto;
-    overflow: hidden;
+    height: 100%;
     font-family: "Geist", sans-serif;
 }
 
@@ -51,13 +54,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 #subscribe-sidebar #close-sidebar {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    font-size: 18px;
+    top: 4px;
+    right: 8px;
+    font-size: 14px;
+    line-height: 1;
     color: #000;
     cursor: pointer;
     font-weight: bold;
-    display: block;
     font-family: "Inter", sans-serif;
 }
 
@@ -158,13 +161,15 @@ document.addEventListener('DOMContentLoaded', async function() {
 @media (max-width: 480px) {
     #subscribe-sidebar {
         width: 300px;
+        max-height: 28px; /* Match mobile tab height */
     }
     
     #subscribe-sidebar.initial {
-        height: auto;
+        max-height: 28px; /* Match mobile tab height */
     }
     
     #subscribe-sidebar.expanded {
+        max-height: none; /* Allow full expansion */
         height: auto;
     }
     
@@ -179,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     
     #subscribe-sidebar a.subscribe-link {
-        font-size: 12px;
+        font-size: 10px;
         padding: 3px;
         font-family: "Geist", sans-serif;
     }

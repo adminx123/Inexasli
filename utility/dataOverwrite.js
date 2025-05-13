@@ -104,9 +104,9 @@ function createOverwriteButton() {
     button.style.borderTop = 'none'; // Remove top border to look tucked into corner
     button.style.borderRadius = '0 0 8px 0'; // Rounded only on bottom right corner
     button.style.boxShadow = '4px 4px 0 #000';
-    button.style.padding = '10px';
-    button.style.width = '50px';
-    button.style.height = '50px';
+    button.style.padding = '0'; // Reduced padding
+    button.style.width = '36px'; // Changed from 50px to 36px
+    button.style.height = '36px'; // Changed from 50px to 36px
     button.style.display = 'flex';
     button.style.justifyContent = 'center';
     button.style.alignItems = 'center';
@@ -120,7 +120,7 @@ function createOverwriteButton() {
     // Create just an icon (no text)
     const icon = document.createElement('i');
     icon.className = 'bx bx-trash';
-    icon.style.fontSize = '24px';
+    icon.style.fontSize = '18px'; // Reduced from 24px to match new container size
     button.appendChild(icon);
     
     // Add hover effect matching the tab style
@@ -149,6 +149,26 @@ function createOverwriteButton() {
     // Append button to container, and container to body
     buttonContainer.appendChild(button);
     document.body.appendChild(buttonContainer);
+    
+    // Add media query for mobile devices
+    const mobileQuery = window.matchMedia("(max-width: 480px)");
+    const adjustForMobile = (query) => {
+        if (query.matches) { // If media query matches (mobile)
+            button.style.width = '28px'; // Match mobile tab width
+            button.style.height = '28px'; // Match mobile tab height
+            icon.style.fontSize = '14px'; // Smaller icon for mobile
+        } else {
+            button.style.width = '36px'; // Desktop size
+            button.style.height = '36px'; // Desktop size
+            icon.style.fontSize = '18px'; // Desktop icon size
+        }
+    };
+    
+    // Initial check
+    adjustForMobile(mobileQuery);
+    
+    // Listen for changes (like rotation)
+    mobileQuery.addListener(adjustForMobile);
     
     return buttonContainer;
 }

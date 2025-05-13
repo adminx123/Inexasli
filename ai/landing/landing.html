@@ -31,88 +31,137 @@
      <style>
         /* Landing-specific Grid Styling */
         .main-grid-wrapper {
-            width: 90%;
+            width: 95%;
             max-width: 1200px;
-            margin: 80px auto 20px;
-            padding: 15px;
+            margin: 60px auto 20px;
+            padding: 10px;
         }
         
         .category-select-container {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         #category-select {
-            padding: 8px 15px;
+            padding: 6px 12px;
             border: 2px solid #000;
             border-radius: 4px;
             background-color: #f5f5f5;
             font-family: "Inter", sans-serif;
             font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
         }
         
-        /* Product grid - renamed from landing-grid */
+        /* Compact Product grid */
         .product-grid {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            padding-right: 5px;
+            max-height: 85vh;
+            overflow-y: auto;
         }
         
         .product-item {
             background-color: #e0e0e0;
-            padding: 15px;
-            border-radius: 6px;
+            padding: 10px 15px;
+            border-radius: 5px;
             text-align: center;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-family: "Geist", sans-serif;
-            flex: 1 1 180px;
-            max-width: 220px;
-            box-shadow: 3px 3px 0 #000;
+            width: 100%;
+            box-shadow: 2px 2px 0 #000;
             border: 1px solid #000;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .product-item:hover {
             background-color: #d0d0d0;
             transform: translateY(-2px);
-            box-shadow: 4px 4px 0 #000;
+            box-shadow: 3px 3px 0 #000;
         }
         
         .product-item hr {
-            margin: 8px 0;
-            border: none;
-            border-top: 1px solid #000;
+            display: none; /* Hide the horizontal rule since we're using a row layout */
+        }
+        
+        .product-item span:first-child {
+            font-weight: 500;
         }
         
         .premium-notice {
-            font-size: 11px;
+            font-size: 10px;
             color: #888;
-            display: block;
-            margin-top: 5px;
+            display: inline-block;
             font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background-color: #f0f0f0;
         }
         
         .page-title {
             text-align: center;
             font-family: "Geist", sans-serif;
-            margin-bottom: 30px;
-            font-size: 24px;
+            margin-bottom: 20px;
+            font-size: 22px;
         }
         
+        /* Two-row fixed-height layout for desktop */
+        @media (min-width: 769px) {
+            .product-grid {
+                max-width: 400px;
+            }
+            
+            .category-select-container {
+                max-width: 400px;
+            }
+            
+            .product-item {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            .premium-notice {
+                font-size: 11px;
+            }
+        }
+        
+        /* Compact mobile layout */
         @media (max-width: 768px) {
             .main-grid-wrapper {
-                width: 95%;
-                margin-top: 60px;
-                padding: 10px;
+                width: 98%;
+                margin-top: 50px;
+                padding: 5px;
+            }
+            
+            .product-grid {
+                max-width: 280px;
+            }
+            
+            .category-select-container {
+                max-width: 280px;
             }
             
             .product-item {
                 font-size: 12px;
-                padding: 12px;
-                flex: 1 1 140px;
-                max-width: 180px;
+                padding: 10px 12px;
+            }
+            
+            .product-grid {
+                gap: 6px;
             }
         }
      </style>
@@ -144,27 +193,27 @@
          </div>
          
          <div class="product-grid">
-             <div class="product-item">AdAgencyIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">AdventureIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">App<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">BookIQ™<hr></div>
-             <div class="product-item">CalorieIQ™<hr></div>
-             <div class="product-item">DecisionIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">EmotionIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">EnneagramIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">EventIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">FitnessIQ™<hr></div>
-             <div class="product-item">General<hr></div>
-             <div class="product-item">IncomeIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">NewBizIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">QuizIQ™<hr></div>
-             <div class="product-item">ReceiptsIQ™<hr></div>
-             <div class="product-item">ReportIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">ResearchIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">SocialIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">SpeculationIQ™<hr><span class="premium-notice">Premium</span></div>
-             <div class="product-item">SymptomIQ™<hr></div>
-             <div class="product-item">WorkflowIQ™<hr><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>AdAgencyIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>AdventureIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>App</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>BookIQ™</span><span></span></div>
+             <div class="product-item"><span>CalorieIQ™</span><span></span></div>
+             <div class="product-item"><span>DecisionIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>EmotionIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>EnneagramIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>EventIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>FitnessIQ™</span><span></span></div>
+             <div class="product-item"><span>General</span><span></span></div>
+             <div class="product-item"><span>IncomeIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>NewBizIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>QuizIQ™</span><span></span></div>
+             <div class="product-item"><span>ReceiptsIQ™</span><span></span></div>
+             <div class="product-item"><span>ReportIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>ResearchIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>SocialIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>SpeculationIQ™</span><span class="premium-notice">Premium</span></div>
+             <div class="product-item"><span>SymptomIQ™</span><span></span></div>
+             <div class="product-item"><span>WorkflowIQ™</span><span class="premium-notice">Premium</span></div>
          </div>
      </div>
  
