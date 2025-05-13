@@ -339,6 +339,18 @@
     <!-- Arrow buttons removed as calculations automatically happen on input and blur events -->
   </div>
 
+  <script type="module">
+    // Import frequency functions
+    import { initializeFrequencyGroups } from '/ai/income/frequency.js';
+    
+    // Initialize frequency groups when the DOM is loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeFrequencyGroups);
+    } else {
+      initializeFrequencyGroups();
+    }
+  </script>
+  
   <script>
     // Inline all expense logic from expensetab.js
     (function() {
@@ -387,6 +399,36 @@
               return defaultValue;
           }
       };
+      
+      // Keys for storing all expense values and frequency settings in JSON objects
+      const EXPENSE_VALUES_STORAGE_KEY = 'expenseValues';
+      const FREQUENCIES_STORAGE_KEY = 'frequencySettings';
+      
+      // Helper functions to get/set expense values in the JSON object
+      function getExpenseValue(fieldId, defaultValue = '') {
+          const values = getJSON(EXPENSE_VALUES_STORAGE_KEY, {});
+          return values[fieldId] !== undefined ? values[fieldId] : defaultValue;
+      }
+      
+      function saveExpenseValue(fieldId, value) {
+          const values = getJSON(EXPENSE_VALUES_STORAGE_KEY, {});
+          values[fieldId] = value;
+          setJSON(EXPENSE_VALUES_STORAGE_KEY, values);
+          return value;
+      }
+      
+      // Helper functions to get/set frequency values in the JSON object
+      function getFrequencySetting(frequencyId, defaultValue = 'annually') {
+          const settings = getJSON(FREQUENCIES_STORAGE_KEY, {});
+          return settings[frequencyId] || defaultValue;
+      }
+      
+      function saveFrequencySetting(frequencyId, value) {
+          const settings = getJSON(FREQUENCIES_STORAGE_KEY, {});
+          settings[frequencyId] = value;
+          setJSON(FREQUENCIES_STORAGE_KEY, settings);
+          return value;
+      }
 
       // Expense variables
       let ANNUALEXPENSESUM = 0;
@@ -458,14 +500,12 @@
 
           let annualExpenseSum = 0;
           expenseFields.forEach(([inputId, frequencyGroupId]) => {
-              const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
-              const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+              const frequency = getFrequencySetting(frequencyGroupId, 'annually');
               annualExpenseSum += calculateAnnual(inputId, frequency);
           });
 
           ANNUALEXPENSESUM = annualExpenseSum;
-          const retirementCheckbox = document.querySelector(`#expenses_retirement_frequency input[type="checkbox"]:checked`);
-          const retirementFrequency = retirementCheckbox ? retirementCheckbox.value : 'annually';
+          const retirementFrequency = getFrequencySetting('expenses_retirement_frequency', 'annually');
           const retirementContribution = calculateAnnual('expenses_retirement', retirementFrequency);
           setLocal('RETIREMENTCONTRIBUTION', retirementContribution, 365);
       }
@@ -483,8 +523,7 @@
 
           let essential = 0;
           essentialFields.forEach(([inputId, frequencyGroupId]) => {
-              const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
-              const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+              const frequency = getFrequencySetting(frequencyGroupId, 'annually');
               essential += calculateAnnual(inputId, frequency);
           });
 
@@ -504,8 +543,7 @@
 
           let discretionary = 0;
           discretionaryFields.forEach(([inputId, frequencyGroupId]) => {
-              const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
-              const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+              const frequency = getFrequencySetting(frequencyGroupId, 'annually');
               discretionary += calculateAnnual(inputId, frequency);
           });
 
@@ -528,8 +566,7 @@
 
           let housing = 0;
           housingFields.forEach(([inputId, frequencyGroupId]) => {
-              const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
-              const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+              const frequency = getFrequencySetting(frequencyGroupId, 'annually');
               housing += calculateAnnual(inputId, frequency);
           });
 
@@ -548,8 +585,7 @@
 
           let transportation = 0;
           transportationFields.forEach(([inputId, frequencyGroupId]) => {
-              const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
-              const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+              const frequency = getFrequencySetting(frequencyGroupId, 'annually');
               transportation += calculateAnnual(inputId, frequency);
           });
 
@@ -570,8 +606,7 @@
 
           let dependant = 0;
           dependantFields.forEach(([inputId, frequencyGroupId]) => {
-              const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
-              const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+              const frequency = getFrequencySetting(frequencyGroupId, 'annually');
               dependant += calculateAnnual(inputId, frequency);
           });
 
@@ -589,8 +624,7 @@
 
           let debt = 0;
           debtFields.forEach(([inputId, frequencyGroupId]) => {
-              const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
-              const frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
+              const frequency = getFrequencySetting(frequencyGroupId, 'annually');
               debt += calculateAnnual(inputId, frequency);
           });
 
@@ -631,13 +665,20 @@
               'dependant_transportation', 'dependant_tuition', 'dependant_housing', 'dependant_cellular_service'
           ];
           
+          // Get existing values or create new object
+          const values = getJSON(EXPENSE_VALUES_STORAGE_KEY, {});
+          
+          // Update all values at once
           expenseFields.forEach(field => {
               const element = document.getElementById(field);
               if (element) {
                   const value = element.value.trim();
-                  setLocal(field, value !== "" ? value : "", 365);
+                  values[field] = value !== "" ? value : "";
               }
           });
+          
+          // Save all values with a single call
+          setJSON(EXPENSE_VALUES_STORAGE_KEY, values);
       }
       
       // Make calculateAll function accessible outside this scope
@@ -706,12 +747,12 @@
           expenseFields.forEach(elementId => {
               const element = document.getElementById(elementId);
               if (element) {
-                  const savedValue = getLocal(elementId);
-                  if (savedValue !== null) element.value = savedValue;
+                  const savedValue = getExpenseValue(elementId);
+                  if (savedValue !== null && savedValue !== undefined) element.value = savedValue;
                   
                   // Add input event listener to trigger calculations
                   element.addEventListener('input', function() {
-                      setLocal(elementId, element.value.trim() !== "" ? element.value : "", 365);
+                      saveExpenseValue(elementId, element.value.trim() !== "" ? element.value : "");
                       // Recalculate and update all totals when any input changes
                       calculateAll();
                   });
@@ -786,13 +827,9 @@
               if (input) {
                   expenseData[field] = input.value ? parseFloat(input.value) : 0;
                   
-                  // Get frequency information
+                  // Get frequency information from JSON storage
                   const frequencyId = `${field}_frequency`;
-                  const frequencyGroup = document.querySelector(`[data-frequency-id="${frequencyId}"]`);
-                  if (frequencyGroup) {
-                      const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
-                      expenseData[`${field}_frequency`] = checkedCheckbox ? checkedCheckbox.value : 'monthly';
-                  }
+                  expenseData[`${field}_frequency`] = getFrequencySetting(frequencyId, 'monthly');
               }
           });
           
