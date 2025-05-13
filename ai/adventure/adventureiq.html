@@ -21,6 +21,20 @@
 
   <!-- Form Sections - identical structure to fitnessiq.html but with adventure IDs -->
   <div class="row1">
+    <label class="category-label">Primary Goal</label>
+    <select id="trip-primary-goal">
+      <option value="leisure">Leisure & Relaxation</option>
+      <option value="adventure">Adventure & Exploration</option>
+      <option value="cultural">Cultural Immersion</option>
+      <option value="educational">Educational Experience</option>
+      <option value="business">Business Trip with Leisure</option>
+      <option value="family">Family Bonding</option>
+      <option value="romantic">Romantic Getaway</option>
+      <option value="wellness">Health & Wellness Retreat</option>
+      <option value="special-occasion">Special Occasion Celebration</option>
+    </select>
+  </div>
+  <div class="row1">
     <label class="category-label">Trip Activities</label>
     <div class="grid-container" id="trip-activities">
       <div class="grid-item" data-value="Hiking">Hiking</div>
@@ -95,6 +109,26 @@ Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
     <label class="category-label">Budget</label>
     <textarea id="trip-budget" rows="4" placeholder="Budget: $3000 usd"></textarea>
   </div>
+  <div class="row1">
+    <label class="category-label">Output Format</label>
+    <select id="trip-output-format">
+      <option value="detailed-itinerary">Detailed Day-by-Day Itinerary</option>
+      <option value="bullet-points">Bullet Point Summary</option>
+      <option value="travel-guide">Travel Guide with Maps</option>
+      <option value="visual-timeline">Visual Timeline</option>
+      <option value="packing-focused">Packing-Focused Plan</option>
+      <option value="budget-breakdown">Budget Breakdown</option>
+      <option value="thematic-experience">Thematic Experience</option>
+      <option value="family-friendly">Family-Friendly Format</option>
+    </select>
+  </div>
+  <div class="row1">
+    <label class="category-label">Special Instructions</label>
+    <textarea id="trip-special-instructions" rows="3" placeholder="Any special requirements or preferences for how your itinerary should be created:
+Focus on sustainable travel options
+Emphasize accessible attractions
+Include more free time between activities"></textarea>
+  </div>
   <button class="generate-btn" id="generate-adventure-btn">Generate Prompt Now!</button>
   <button class="clear-btn" id="clear-adventure-btn">Clear All</button>
 
@@ -148,12 +182,27 @@ Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
     }
 
     function collectFormData() {
-      const formData = { activities: [], relationships: [], location: null, specifics: null, plans: null, packing: null, people: null, days: null, budget: null };
+      const formData = { 
+        primaryGoal: null, 
+        activities: [], 
+        relationships: [], 
+        location: null, 
+        specifics: null, 
+        plans: null, 
+        packing: null, 
+        people: null, 
+        days: null, 
+        budget: null,
+        outputFormat: null,
+        specialInstructions: null
+      };
       document.querySelectorAll('#trip-activities .grid-item.selected').forEach(i => formData.activities.push(i.dataset.value));
       document.querySelectorAll('#trip-relationship .grid-item.selected').forEach(i => formData.relationships.push(i.dataset.value));
-      ['location','specifics','plans','packing','people','days','budget'].forEach(field => {
+      ['primary-goal', 'location','specifics','plans','packing','people','days','budget','output-format','special-instructions'].forEach(field => {
         const el = document.getElementById(`trip-${field}`);
-        if (el) formData[field] = (el.value||'').trim() || null;
+        if (el) formData[field === 'primary-goal' ? 'primaryGoal' : 
+                 field === 'output-format' ? 'outputFormat' : 
+                 field === 'special-instructions' ? 'specialInstructions' : field] = (el.value||'').trim() || null;
       });
       return formData;
     }
@@ -164,10 +213,17 @@ Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
       if (!data) return;
       data.activities?.forEach(v => document.querySelector(`#trip-activities .grid-item[data-value="${v}"]`)?.classList.add('selected'));
       data.relationships?.forEach(v => document.querySelector(`#trip-relationship .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+      
+      // Handle dropdown and text fields
+      if(data.primaryGoal) document.getElementById('trip-primary-goal').value = data.primaryGoal;
       ['location','specifics','plans','packing','people','days','budget'].forEach(f => {
         const el = document.getElementById(`trip-${f}`);
         if (el && data[f]) el.value = data[f];
       });
+      
+      // Handle new fields
+      if(data.outputFormat) document.getElementById('trip-output-format').value = data.outputFormat;
+      if(data.specialInstructions) document.getElementById('trip-special-instructions').value = data.specialInstructions;
     }
 
     function setupInputHandlers() {
