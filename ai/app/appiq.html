@@ -1,29 +1,5 @@
-<!--
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
--->
 
-  <a href="/ai/landing/landing.html">
-    <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
-  </a>
 
-  <div class="row1">
-    <label class="category-label">Primary Goal</label>
-    <select id="app-primary-goal">
-      <option value="mobile-app">Mobile App Development</option>
-      <option value="web-app">Web App Development</option>
-      <option value="cross-platform">Cross-Platform App Development</option>
-      <option value="enterprise">Enterprise App Solution</option>
-      <option value="prototype">App Prototype</option>
-      <option value="mvp">Minimum Viable Product</option>
-      <option value="redesign">App Redesign/Update</option>
-    </select>
-  </div>
   <div class="row1">
     <label class="category-label">App Purpose</label>
     <textarea id="app-purpose" rows="4" placeholder="e.g., task management"></textarea>
@@ -36,7 +12,7 @@
     </div>
   </div>
   <div class="row1">
-    <label class="category-label">Sub-Scope Preferences</label>
+    <label class="category-label">App Features</label>
     <div class="grid-container" id="app-features">
       <div class="grid-item" data-value="Notifications">I Want Notifications</div>
       <div class="grid-item" data-value="User Accounts">I Want User Accounts</div>
@@ -58,7 +34,7 @@
     </div>
   </div>
   <div class="row1">
-    <label class="category-label">Scope</label>
+    <label class="category-label">Target Platform</label>
     <textarea id="app-platform" rows="1" placeholder="e.g., iOS, Android"></textarea>
   </div>
   <div class="row1">
@@ -68,35 +44,6 @@
   <div class="row1">
     <label class="category-label">Timeline</label>
     <textarea id="app-timeline" rows="1" placeholder="e.g., 3 months"></textarea>
-  </div>
-  <div class="row1">
-    <label class="category-label">Synthesis Instructions</label>
-    <select id="app-synthesis">
-      <option value="phased-approach">Phased Development Approach</option>
-      <option value="tech-focused">Technology-Focused Plan</option>
-      <option value="feature-priority">Feature Priority Roadmap</option>
-      <option value="cost-breakdown">Cost Breakdown Structure</option>
-      <option value="timeline-focused">Timeline-Focused Plan</option>
-      <option value="comprehensive">Comprehensive Development Plan</option>
-    </select>
-  </div>
-  <div class="row1">
-    <label class="category-label">Output Preferences</label>
-    <select id="app-output-format">
-      <option value="detailed-plan">Detailed Technical Plan</option>
-      <option value="executive-summary">Executive Summary</option>
-      <option value="bullet-points">Bullet Point Summary</option>
-      <option value="visual-timeline">Visual Timeline</option>
-      <option value="budget-breakdown">Budget Breakdown</option>
-      <option value="technical-specs">Technical Specifications</option>
-    </select>
-  </div>
-  <div class="row1">
-    <label class="category-label">Additional Details</label>
-    <textarea id="app-additional-details" rows="3" placeholder="Any special requirements or preferences for your app development plan:
-Need accessibility features
-Focus on data security
-Include third-party integration options"></textarea>
   </div>
   <button class="generate-btn" id="generate-app-btn">Generate App Plan Now!</button>
   <button class="clear-btn" id="clear-app-btn">Clear All</button>
@@ -156,58 +103,16 @@ Include third-party integration options"></textarea>
     }
 
     function collectFormData() {
-      const formData = { 
-        primaryGoal: null,
-        purpose: null, 
-        codeStatus: null, 
-        features: [], 
-        platform: null, 
-        budget: null, 
-        timeline: null, 
-        synthesis: null, 
-        outputFormat: null,
-        additionalDetails: null 
-      };
-      
-      // Get primaryGoal from select element
-      const primaryGoalEl = document.getElementById('app-primary-goal');
-      if (primaryGoalEl && primaryGoalEl.value) formData.primaryGoal = primaryGoalEl.value;
-      
-      // Get purpose from textarea
+      const formData = { purpose: null, codeStatus: null, features: [], platform: null, budget: null, timeline: null };
       const purposeEl = document.getElementById('app-purpose');
       if (purposeEl && purposeEl.value.trim()) formData.purpose = purposeEl.value.trim();
-      
-      // Get code status from grid selection
       const codeEl = document.querySelector('#app-code-status .grid-item.selected');
       if (codeEl) formData.codeStatus = codeEl.dataset.value;
-      
-      // Get features from grid (multi-select)
       document.querySelectorAll('#app-features .grid-item.selected').forEach(i => formData.features.push(i.dataset.value));
-      
-      // Get platform/scope from textarea
-      const platformEl = document.getElementById('app-platform');
-      if (platformEl && platformEl.value.trim()) formData.platform = platformEl.value.trim();
-      
-      // Get budget from textarea
-      const budgetEl = document.getElementById('app-budget');
-      if (budgetEl && budgetEl.value.trim()) formData.budget = budgetEl.value.trim();
-      
-      // Get timeline from textarea
-      const timelineEl = document.getElementById('app-timeline');
-      if (timelineEl && timelineEl.value.trim()) formData.timeline = timelineEl.value.trim();
-      
-      // Get synthesis instructions from select
-      const synthesisEl = document.getElementById('app-synthesis');
-      if (synthesisEl && synthesisEl.value) formData.synthesis = synthesisEl.value;
-      
-      // Get output format from select
-      const outputFormatEl = document.getElementById('app-output-format');
-      if (outputFormatEl && outputFormatEl.value) formData.outputFormat = outputFormatEl.value;
-      
-      // Get additional details from textarea
-      const additionalDetailsEl = document.getElementById('app-additional-details');
-      if (additionalDetailsEl && additionalDetailsEl.value.trim()) formData.additionalDetails = additionalDetailsEl.value.trim();
-      
+      ['platform','budget','timeline'].forEach(field => {
+        const el = document.getElementById(`app-${field}`);
+        if (el && el.value.trim()) formData[field] = el.value.trim();
+      });
       return formData;
     }
 
@@ -215,58 +120,13 @@ Include third-party integration options"></textarea>
       console.log('[AppIQ] Repopulating form from JSON storage');
       const data = getJSON('appIqInput', null);
       if (!data) return;
-      
-      // Repopulate primary goal select
-      if (data.primaryGoal) {
-        const primaryGoalEl = document.getElementById('app-primary-goal');
-        if (primaryGoalEl) primaryGoalEl.value = data.primaryGoal;
-      }
-      
-      // Repopulate purpose textarea
-      if (data.purpose) {
-        const purposeEl = document.getElementById('app-purpose');
-        if (purposeEl) purposeEl.value = data.purpose;
-      }
-      
-      // Repopulate code status grid selection
-      if (data.codeStatus) {
-        const codeStatusEl = document.querySelector(`#app-code-status .grid-item[data-value="${data.codeStatus}"]`);
-        if (codeStatusEl) codeStatusEl.classList.add('selected');
-      }
-      
-      // Repopulate features (multi-select grid)
-      if (data.features && Array.isArray(data.features)) {
-        data.features.forEach(feature => {
-          const featureEl = document.querySelector(`#app-features .grid-item[data-value="${feature}"]`);
-          if (featureEl) featureEl.classList.add('selected');
-        });
-      }
-      
-      // Repopulate simple text fields
-      ['platform', 'budget', 'timeline'].forEach(field => {
-        if (data[field]) {
-          const el = document.getElementById(`app-${field}`);
-          if (el) el.value = data[field];
-        }
+      if (data.purpose) document.getElementById('app-purpose').value = data.purpose;
+      if (data.codeStatus) document.querySelector(`#app-code-status .grid-item[data-value="${data.codeStatus}"]`)?.classList.add('selected');
+      data.features?.forEach(v => document.querySelector(`#app-features .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+      ['platform','budget','timeline'].forEach(f => {
+        const el = document.getElementById(`app-${f}`);
+        if (el && data[f]) el.value = data[f];
       });
-      
-      // Repopulate synthesis select
-      if (data.synthesis) {
-        const synthesisEl = document.getElementById('app-synthesis');
-        if (synthesisEl) synthesisEl.value = data.synthesis;
-      }
-      
-      // Repopulate output format select
-      if (data.outputFormat) {
-        const outputFormatEl = document.getElementById('app-output-format');
-        if (outputFormatEl) outputFormatEl.value = data.outputFormat;
-      }
-      
-      // Repopulate additional details textarea
-      if (data.additionalDetails) {
-        const additionalDetailsEl = document.getElementById('app-additional-details');
-        if (additionalDetailsEl) additionalDetailsEl.value = data.additionalDetails;
-      }
     }
 
     function setupInputHandlers() {
