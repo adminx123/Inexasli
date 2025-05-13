@@ -8,28 +8,13 @@
  * jurisdictions worldwide.
 -->
 
-    <a href="/ai/landing/landing.html">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
-    </a>
-   
-        <div class="row1">
-            <label class="category-label">Primary Goal</label>
-            <select id="book-primary-goal">
-                <option value="learn">Learn Key Insights</option>
-                <option value="review">Write a Review</option>
-                <option value="discuss">Facilitate Discussion</option>
-                <option value="teach">Teach Others</option>
-                <option value="analyze">Literary Analysis</option>
-                <option value="share">Share on Social Media</option>
-                <option value="reference">Quick Reference</option>
-            </select>
-        </div>
+ 
         <div class="row1">
             <label class="category-label">Book Title & Author</label>
-            <textarea id="book-title-author" rows="2" placeholder="To Kill a Mockingbird by Harper Lee"></textarea>
+            <textarea id="book-title-author" rows="2" ></textarea>
         </div>
         <div class="row1">
-            <label class="category-label">Purpose</label>
+            <label class="category-label">Summary Purpose</label>
             <select id="summary-purpose">
                 <option value="personal">Personal Understanding</option>
                 <option value="book-club">Book Club Discussion</option>
@@ -41,7 +26,7 @@
             </select>
         </div>
         <div class="row1">
-            <label class="category-label">Scope</label>
+            <label class="category-label">Summary Length</label>
             <select id="summary-length">
                 <option value="short">Short (1 paragraph)</option>
                 <option value="medium">Medium (2-3 paragraphs)</option>
@@ -65,7 +50,7 @@
             </div>
         </div>
         <div class="row1">
-            <label class="category-label">Sub-Scope Preferences</label>
+            <label class="category-label">Elements to Include</label>
             <div class="grid-container" id="summary-elements">
                 <div class="grid-item" data-value="plot">Plot</div>
                 <div class="grid-item" data-value="characters">Characters</div>
@@ -78,19 +63,7 @@
             </div>
         </div>
         <div class="row1">
-            <label class="category-label">Synthesis Instructions</label>
-            <select id="summary-synthesis">
-                <option value="chronological">Chronological Flow</option>
-                <option value="thematic">Thematic Organization</option>
-                <option value="critical">Critical Analysis</option>
-                <option value="character-focused">Character-Centered</option>
-                <option value="comparative">Comparison to Similar Works</option>
-                <option value="historical-context">Historical Context</option>
-                <option value="simplified">Simplified Overview</option>
-            </select>
-        </div>
-        <div class="row1">
-            <label class="category-label">Output Preferences</label>
+            <label class="category-label">Tone & Style</label>
             <select id="summary-tone">
                 <option value="formal">Formal</option>
                 <option value="casual">Casual</option>
@@ -109,8 +82,6 @@
             <button class="generate-btn" id="generate-book-btn">Generate Book Summary Now!</button>
             <button class="clear-btn" id="clear-book-btn">Clear All</button>
         </div>
-    </body>
-</html>
 
 <script>
 /*
@@ -160,58 +131,16 @@
     }
 
     function collectFormData() {
-        const formData = { 
-            primaryGoal: null,
-            titleAuthor: null, 
-            summaryPurpose: null, 
-            summaryLength: null, 
-            themes: null, 
-            audience: [], 
-            elements: [], 
-            synthesis: null,
-            tone: null, 
-            details: null 
-        };
-        
+        const formData = { titleAuthor:null, summaryPurpose:null, summaryLength:null, themes:null, audience:[], elements:[], tone:null, details:null };
         const ta = id => document.getElementById(id);
-        
-        // Get primary goal from select
-        if (ta('book-primary-goal')?.value) 
-            formData.primaryGoal = ta('book-primary-goal').value;
-            
-        // Get title and author from textarea
-        if (ta('book-title-author')?.value.trim()) 
-            formData.titleAuthor = ta('book-title-author').value.trim();
-            
-        // Get purpose from select
+        if (ta('book-title-author')?.value.trim()) formData.titleAuthor = ta('book-title-author').value.trim();
         formData.summaryPurpose = ta('summary-purpose')?.value;
-        
-        // Get length/scope from select
         formData.summaryLength = ta('summary-length')?.value;
-        
-        // Get themes from textarea
-        if (ta('summary-themes')?.value.trim()) 
-            formData.themes = ta('summary-themes').value.trim();
-            
-        // Get audience from grid selection (multi-select)
-        document.querySelectorAll('#summary-audience .grid-item.selected')
-            .forEach(i => formData.audience.push(i.dataset.value));
-            
-        // Get elements/sub-scope preferences from grid (multi-select)
-        document.querySelectorAll('#summary-elements .grid-item.selected')
-            .forEach(i => formData.elements.push(i.dataset.value));
-            
-        // Get synthesis instructions from select
-        if (ta('summary-synthesis')?.value)
-            formData.synthesis = ta('summary-synthesis').value;
-            
-        // Get tone/output preferences from select
+        if (ta('summary-themes')?.value.trim()) formData.themes = ta('summary-themes').value.trim();
+        document.querySelectorAll('#summary-audience .grid-item.selected').forEach(i=>formData.audience.push(i.dataset.value));
+        document.querySelectorAll('#summary-elements .grid-item.selected').forEach(i=>formData.elements.push(i.dataset.value));
         formData.tone = ta('summary-tone')?.value;
-        
-        // Get additional details from textarea
-        if (ta('summary-details')?.value.trim()) 
-            formData.details = ta('summary-details').value.trim();
-            
+        if (ta('summary-details')?.value.trim()) formData.details = ta('summary-details').value.trim();
         return formData;
     }
 
@@ -219,70 +148,14 @@
         console.log('[BookIQ] Repopulating form from JSON storage');
         const data = getJSON('bookIqInput', null);
         if (!data) return;
-        
-        // Repopulate primary goal
-        if (data.primaryGoal) {
-            const primaryGoalEl = document.getElementById('book-primary-goal');
-            if (primaryGoalEl) primaryGoalEl.value = data.primaryGoal;
-        }
-        
-        // Repopulate title & author
-        if (data.titleAuthor) {
-            const titleAuthorEl = document.getElementById('book-title-author');
-            if (titleAuthorEl) titleAuthorEl.value = data.titleAuthor;
-        }
-        
-        // Repopulate purpose
-        if (data.summaryPurpose) {
-            const purposeEl = document.getElementById('summary-purpose');
-            if (purposeEl) purposeEl.value = data.summaryPurpose;
-        }
-        
-        // Repopulate length/scope
-        if (data.summaryLength) {
-            const lengthEl = document.getElementById('summary-length');
-            if (lengthEl) lengthEl.value = data.summaryLength;
-        }
-        
-        // Repopulate themes
-        if (data.themes) {
-            const themesEl = document.getElementById('summary-themes');
-            if (themesEl) themesEl.value = data.themes;
-        }
-        
-        // Repopulate audience (multi-select grid)
-        if (data.audience && Array.isArray(data.audience)) {
-            data.audience.forEach(audience => {
-                const audienceEl = document.querySelector(`#summary-audience .grid-item[data-value="${audience}"]`);
-                if (audienceEl) audienceEl.classList.add('selected');
-            });
-        }
-        
-        // Repopulate elements/sub-scope preferences (multi-select grid)
-        if (data.elements && Array.isArray(data.elements)) {
-            data.elements.forEach(element => {
-                const elementEl = document.querySelector(`#summary-elements .grid-item[data-value="${element}"]`);
-                if (elementEl) elementEl.classList.add('selected');
-            });
-        }
-        
-        // Repopulate synthesis instructions
-        if (data.synthesis) {
-            const synthesisEl = document.getElementById('summary-synthesis');
-            if (synthesisEl) synthesisEl.value = data.synthesis;
-        }
-        
-        // Repopulate tone/output preferences
-        if (data.tone) {
-            const toneEl = document.getElementById('summary-tone');
-            if (toneEl) toneEl.value = data.tone;
-        }
-        
-        // Repopulate additional details
-        if (data.details) {
-            const detailsEl = document.getElementById('summary-details');
-            if (detailsEl) detailsEl.value = data.details;
-        }
+        if (data.titleAuthor) document.getElementById('book-title-author').value = data.titleAuthor;
+        if (data.summaryPurpose) document.getElementById('summary-purpose').value = data.summaryPurpose;
+        if (data.summaryLength) document.getElementById('summary-length').value = data.summaryLength;
+        if (data.themes) document.getElementById('summary-themes').value = data.themes;
+        data.audience?.forEach(v=>document.querySelector(`#summary-audience .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+        data.elements?.forEach(v=>document.querySelector(`#summary-elements .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+        if (data.tone) document.getElementById('summary-tone').value = data.tone;
+        if (data.details) document.getElementById('summary-details').value = data.details;
     }
 
     function setupInputHandlers() {
@@ -300,21 +173,75 @@
 
     async function handleGenerateBookIq() {
         const btn = document.getElementById('generate-book-btn');
-        const init = btn.innerText; btn.innerText='Loading...'; btn.disabled=true;
+        const initialText = btn.innerText;
+        btn.innerText = 'Loading...';
+        btn.setAttribute('disabled', 'true');
+        
+        console.log('[BookIQ] Generate button clicked.');
+        
         try {
+            // Instead of collecting form data again, just use what's already in localStorage
             const formData = getJSON('bookIqInput');
-            if (!formData) { alert('Please complete the form before generating.'); throw new Error('No input data'); }
-            const apiUrl = 'https://book.4hm7q4q75z.workers.dev/';
-            const res = await fetch(apiUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(formData) });
-            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-            const data = await res.json();
-            setJSON('bookIqResponse', data);
-            btn.innerText='Success!'; setTimeout(()=>btn.disabled=false,1000);
-            document.dispatchEvent(new CustomEvent('api-response-received',{detail:{module:'bookiq',type:'worker-response',timestamp:Date.now()}}));
-        } catch(e) {
-            console.error('[BookIQ] Error:',e);
-            alert('Error generating summary.');
-            btn.innerText='Error'; setTimeout(()=>{btn.innerText=init;btn.disabled=false;},2000);
+            if (!formData) {
+                console.error('[BookIQ] No input data found in localStorage.');
+                alert('Please complete the form before generating a book summary.');
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+                return;
+            }
+            
+            // Send data to worker
+            const apiUrl = 'https://book.4hm7q4q75z.workers.dev/'; 
+            
+            console.log('[BookIQ] Sending bookIqInput directly from localStorage to worker');
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const responseData = await response.json();
+            console.log('[BookIQ] Worker response:', responseData);
+            
+            if (responseData.message !== 'Success') {
+                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            
+            // Store the response using setJSON
+            setJSON('bookIqResponse', responseData);
+            
+            // Update button state
+            btn.innerText = 'Success!';
+            setTimeout(() => {
+                btn.removeAttribute('disabled');
+            }, 1000);
+            
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'bookiq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[BookIQ] Dispatched api-response-received event');
+            
+        } catch (error) {
+            console.error('[BookIQ] Error generating book summary:', error);
+            alert('An error occurred while generating your book summary. Please try again later.');
+            
+            btn.innerText = 'Error';
+            setTimeout(() => {
+                btn.innerText = initialText;
+                btn.removeAttribute('disabled');
+            }, 2000);
         }
     }
 
