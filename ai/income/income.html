@@ -302,14 +302,34 @@
                     }
                 }
             }
-            const frequencyGroup = document.getElementById(frequencyGroupId);
+            
+            // Try to get frequency from incomeInput object
+            const getJSON = window.getJSON || function(name, defaultValue) {
+                try {
+                    const item = localStorage.getItem(name);
+                    if (!item) return defaultValue;
+                    return JSON.parse(item);
+                } catch (error) {
+                    return defaultValue;
+                }
+            };
+            
+            // Get incomeInput value if it exists
+            const incomeInput = getJSON('incomeInput', {});
+            
             let frequency = 'annually';
-            if (frequencyGroup) {
+            
+            // First check if we can get frequency from incomeInput
+            if (incomeInput && incomeInput[inputId]) {
+                frequency = incomeInput[inputId];
+            } 
+            // If not found in incomeInput, get from UI
+            else if (frequencyGroup) {
                 const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
-                frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
+                frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
             } else {
                 const checkedCheckbox = document.querySelector(`#${frequencyGroupId} input[type="checkbox"]:checked`);
-                frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`frequency_${frequencyGroupId}`) || 'annually';
+                frequency = checkedCheckbox ? checkedCheckbox.value : 'annually';
             }
             
             switch (frequency) {
