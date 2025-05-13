@@ -6,8 +6,24 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { setLocal } from '/utility/setlocal.js';
-import { getLocal } from '/utility/getlocal.js';
+import { setJSON } from '/utility/setJSON.js';
+import { getLocalJSON } from '/utility/getJSON.js';
+
+// Key for storing all frequency settings in a single JSON object
+const FREQUENCIES_STORAGE_KEY = 'frequencySettings';
+
+// Helper functions to get/set values in the JSON object
+function getFrequencySetting(frequencyId, defaultValue = 'annually') {
+    const settings = getLocalJSON(FREQUENCIES_STORAGE_KEY, {});
+    return settings[frequencyId] || defaultValue;
+}
+
+function saveFrequencySetting(frequencyId, value) {
+    const settings = getLocalJSON(FREQUENCIES_STORAGE_KEY, {});
+    settings[frequencyId] = value;
+    setJSON(FREQUENCIES_STORAGE_KEY, settings);
+    return value;
+}
 
 // Frequency options
 const FREQUENCY_OPTIONS = [
@@ -60,7 +76,7 @@ function initializeFrequencyGroup(frequencyId) {
         return;
     }
 
-    const savedFrequency = getLocal(`frequency_${frequencyId}`);
+    const savedFrequency = getFrequencySetting(frequencyId);
     const defaultFrequency = 'annually';
     const frequencyToSet = savedFrequency || defaultFrequency;
 
@@ -75,17 +91,17 @@ function initializeFrequencyGroup(frequencyId) {
         checkboxes.forEach(checkbox => {
             checkbox.checked = checkbox.value === defaultFrequency;
         });
-        setLocal(`frequency_${frequencyId}`, defaultFrequency, 365);
+        saveFrequencySetting(frequencyId, defaultFrequency);
         console.log(`Corrected multiple selections in ${frequencyId}, set to ${defaultFrequency}`);
     } else if (checkedCount === 0) {
         checkboxes.forEach(checkbox => {
             checkbox.checked = checkbox.value === defaultFrequency;
         });
-        setLocal(`frequency_${frequencyId}`, defaultFrequency, 365);
+        saveFrequencySetting(frequencyId, defaultFrequency);
     }
 
     // Save the selected frequency
-    setLocal(`frequency_${frequencyId}`, frequencyToSet, 365);
+    saveFrequencySetting(frequencyId, frequencyToSet);
 
     // Add event listeners for checkbox changes
     checkboxes.forEach(checkbox => {
@@ -96,7 +112,7 @@ function initializeFrequencyGroup(frequencyId) {
                         otherCheckbox.checked = false;
                     }
                 });
-                setLocal(`frequency_${frequencyId}`, this.value, 365);
+                saveFrequencySetting(frequencyId, this.value);
                 console.log(`Set frequency for ${frequencyId} to ${this.value}`);
                 // Trigger calculation if needed
                 if (typeof calculateAll === 'function') {
@@ -126,15 +142,20 @@ export function initializeFrequencyGroups() {
 
 // Save frequency group values
 export function saveFrequencyGroups() {
+    const settings = getLocalJSON(FREQUENCIES_STORAGE_KEY, {});
     const frequencyGroups = Array.from(document.querySelectorAll('.checkbox-button-group')).map(el => el.id);
+    
     frequencyGroups.forEach(frequencyId => {
         const group = document.getElementById(frequencyId);
         if (group) {
             const checkedCheckbox = group.querySelector('input[type="checkbox"]:checked');
             const value = checkedCheckbox ? checkedCheckbox.value : 'annually';
-            setLocal(`frequency_${frequencyId}`, value, 365);
+            settings[frequencyId] = value;
         }
     });
+    
+    // Save all frequencies at once
+    setJSON(FREQUENCIES_STORAGE_KEY, settings);
 }
 
 // Initialize on page load
