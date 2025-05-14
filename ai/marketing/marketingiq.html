@@ -405,7 +405,7 @@
             // Send data to worker
             const apiUrl = 'https://marketing.4hm7q4q75z.workers.dev/'; 
             
-            console.log('[AdAgencyIQ] Sending marketingIqInput directly from localStorage to worker');
+            console.log('[MarketingIQ] Sending marketingIqInput directly from localStorage to worker');
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -419,14 +419,22 @@
             }
             
             const responseData = await response.json();
-            console.log('[AdAgencyIQ] Worker response:', responseData);
+            console.log('[MarketingIQ] Worker response:', responseData);
             
             if (responseData.message !== 'Success') {
                 throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
             }
             
-            // Store the response using setJSON
-            setJSON('marketingIqResponse', responseData);
+            // Store the response data correctly
+            if (responseData.data) {
+                // If response has a data property (wrapper), store just that data
+                setJSON('marketingIqResponse', responseData.data);
+                console.log('[MarketingIQ] Stored AI response data in localStorage (unwrapped)');
+            } else {
+                // Otherwise store the whole response
+                setJSON('marketingIqResponse', responseData);
+                console.log('[MarketingIQ] Stored entire response in localStorage');
+            }
             
             // Update button state
             btn.innerText = 'Success!';
@@ -438,16 +446,16 @@
             // Dispatch an event to notify dataout.js that a response was received
             const event = new CustomEvent('api-response-received', {
                 detail: {
-                    module: 'adagencyiq',
+                    module: 'marketingiq',
                     type: 'worker-response',
                     timestamp: Date.now()
                 }
             });
             document.dispatchEvent(event);
-            console.log('[AdAgencyIQ] Dispatched api-response-received event');
+            console.log('[MarketingIQ] Dispatched api-response-received event');
             
         } catch (error) {
-            console.error('[AdAgencyIQ] Error generating marketing campaign:', error);
+            console.error('[MarketingIQ] Error generating marketing campaign:', error);
             alert('An error occurred while generating your campaign. Please try again later.');
             
             btn.innerText = 'Error';

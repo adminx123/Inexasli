@@ -93,7 +93,7 @@ service = "secretworker"
 
 [env.marketing]
 name = "marketing"
-main = "./ai/marketing/adagencyiqworker.js"
+main = "./ai/marketing/marketingiqworker.js"
 
 [[env.marketing.services]]
 binding = "secret_binding"

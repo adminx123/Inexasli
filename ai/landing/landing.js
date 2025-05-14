@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle grid item clicks
     const gridItems = document.querySelectorAll('.product-grid .product-item');
     const urls = [
-        '/ai/marketing/adagencyiq.html',
+        '/ai/marketing/marketingiq.html',
         '/ai/adventure/adventureiq.html',
         '/ai/app/appiq.html',
         '/ai/book/bookiq.html',
