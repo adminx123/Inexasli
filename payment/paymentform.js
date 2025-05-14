@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     border: 2px solid #000;
     border-radius: 8px;
     box-shadow: 4px 4px 0 #000;
-    z-index: 10002;
+    z-index: 15000;
     width: 400px;
     font-family: "Inter", sans-serif;
     display: none;
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10001;
+    z-index: 14000;
     display: none;
 }
 
@@ -292,7 +292,7 @@ function createPaymentCornerButton() {
     buttonContainer.style.top = '0'; // Position at the very top
     buttonContainer.style.right = '0'; // Position at the very right
     buttonContainer.style.transform = 'none';
-    buttonContainer.style.zIndex = '9997'; // Same z-index as dataOverwrite button
+    buttonContainer.style.zIndex = '12000'; // Higher z-index than dataout tab (11000) when expanded
     buttonContainer.style.padding = '0'; // Remove any padding
     buttonContainer.style.margin = '0'; // Remove any margin
     buttonContainer.style.display = 'block'; // Use block instead of flex
