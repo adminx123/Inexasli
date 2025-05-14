@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'NewBizIQ' // Fixed typo from 'Newnewbiziq'
             ],
             'creative': [
-                'AdAgencyIQ',
+                'MarketingIQ',
                 'QuizIQ'
             ],
             'decision': [

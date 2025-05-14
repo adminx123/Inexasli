@@ -108,7 +108,7 @@
             moduleName = 'eventiq';
           } else if (lastGridItemUrl.includes('general')) {
             moduleName = 'generaliq';
-          } else if (lastGridItemUrl.includes('marketingiq') || lastGridItemUrl.includes('adagencyiq')) {
+          } else if (lastGridItemUrl.includes('marketingiq')) {
             moduleName = 'marketingiq';
             console.log('Detected marketing module from URL');
           } else if (lastGridItemUrl.includes('quiziq')) {
@@ -162,9 +162,7 @@
           } else if (moduleName === 'marketingiq') {
             responseKey = 'marketingIqResponse'; // Capital 'I' to match actual storage pattern
             console.log('Using correctly capitalized key for marketing:', responseKey);
-          } else if (moduleName === 'adagencyiq') {
-            responseKey = 'adagencyIqResponse'; // Capital 'I' to match actual storage pattern
-          } else if (moduleName === 'quiziq') {
+                    } else if (moduleName === 'quiziq') {
             responseKey = 'quizIqResponse'; // Capital 'I' to match actual storage pattern
           } else if (moduleName === 'reportiq') {
             responseKey = 'reportIqResponse'; // Capital 'I' to match actual storage pattern
