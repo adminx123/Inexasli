@@ -36,13 +36,13 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 99998; /* Just below dataConsent */
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            font-family: "Roboto", sans-serif;
+            font-family: "Inter", sans-serif;
         }
         
         .terms-container {
@@ -50,8 +50,9 @@
             max-width: 600px;
             width: 90%;
             border-radius: 8px;
+            border: 2px solid #000;
             padding: 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 4px 4px 0 #000;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
@@ -62,6 +63,7 @@
             color: #222;
             margin-top: 0;
             margin-bottom: 15px;
+            font-family: "Geist", sans-serif;
         }
         
         .terms-container p {
@@ -72,14 +74,14 @@
         }
 
         .terms-link {
-            color: #007bff;
+            color: #000;
             cursor: pointer;
             text-decoration: underline;
             font-weight: 500;
         }
         
         .terms-link:hover {
-            color: #0056b3;
+            color: #444;
         }
         
         .terms-checkbox-container {
@@ -107,38 +109,83 @@
         
         .terms-continue-btn {
             padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+            border-radius: 6px;
+            box-shadow: 4px 4px 0 #000;
             cursor: pointer;
             font-size: 0.9rem;
+            font-weight: bold;
+            font-family: "Geist", sans-serif;
             flex-grow: 1;
-            transition: background-color 0.2s;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
         }
         
         .terms-continue-btn[disabled] {
-            background-color: #99c2ff;
+            background-color: #f0f0f0;
+            color: #999;
             cursor: not-allowed;
+            box-shadow: 2px 2px 0 #999;
+            border-color: #999;
         }
         
         .terms-continue-btn:not([disabled]):hover {
-            background-color: #0069d9;
+            background-color: #f5f5f5;
+        }
+        
+        .terms-continue-btn:not([disabled]):active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000;
         }
         
         .terms-leave-btn {
             padding: 10px 20px;
-            background-color: #f8f9fa;
-            color: #212529;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+            border-radius: 6px;
+            box-shadow: 4px 4px 0 #000;
             cursor: pointer;
             font-size: 0.9rem;
-            transition: background-color 0.2s;
+            font-weight: bold;
+            font-family: "Geist", sans-serif;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
         }
         
         .terms-leave-btn:hover {
-            background-color: #e2e6ea;
+            background-color: #f5f5f5;
+        }
+        
+        .terms-leave-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000;
+        }
+        
+        @media (max-width: 480px) {
+            .terms-container {
+                padding: 15px;
+                width: 90%;
+                max-width: 300px;
+            }
+            
+            .terms-container h2 {
+                font-size: 1.1rem;
+            }
+            
+            .terms-container p {
+                font-size: 0.9rem;
+            }
+            
+            .terms-buttons {
+                flex-direction: column;
+            }
+            
+            .terms-continue-btn,
+            .terms-leave-btn {
+                width: 100%;
+                margin-bottom: 8px;
+            }
         }
     `;
 

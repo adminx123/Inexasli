@@ -31,13 +31,13 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 999999; /* Extremely high z-index */
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            font-family: "Roboto", sans-serif;
+            font-family: "Inter", sans-serif;
         }
         
         .data-consent-modal {
@@ -45,8 +45,9 @@
             max-width: 600px;
             width: 90%;
             border-radius: 8px;
+            border: 2px solid #000;
             padding: 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 4px 4px 0 #000;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
@@ -70,6 +71,7 @@
             color: #222;
             margin-top: 0;
             margin-bottom: 15px;
+            font-family: "Geist", sans-serif;
         }
         
         .data-consent-modal p {
@@ -88,30 +90,44 @@
         
         .data-consent-modal button {
             padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.9rem;
-            transition: background-color 0.2s;
+            font-weight: bold;
+            font-family: "Geist", sans-serif;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
         }
         
         .data-consent-modal .accept-btn {
-            background-color: #007bff;
-            color: white;
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0 #000;
         }
         
         .data-consent-modal .accept-btn:hover {
-            background-color: #0069d9;
+            background-color: #f5f5f5;
+        }
+        
+        .data-consent-modal .accept-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000;
         }
         
         .data-consent-modal .reject-btn {
-            background-color: #f8f9fa;
-            color: #212529;
-            border: 1px solid #dee2e6;
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0 #000;
         }
         
         .data-consent-modal .reject-btn:hover {
-            background-color: #e2e6ea;
+            background-color: #f5f5f5;
+        }
+        
+        .data-consent-modal .reject-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000;
         }
         
         .data-consent-modal .decline-message {
@@ -120,7 +136,7 @@
             padding: 15px;
             background-color: #f8d7da;
             border: 1px solid #f5c6cb;
-            border-radius: 4px;
+            border-radius: 6px;
             color: #721c24;
         }
         
@@ -132,21 +148,35 @@
         }
         
         .data-consent-modal .reconsider-btn {
-            background-color: #28a745;
-            color: white;
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0 #000;
         }
         
         .data-consent-modal .reconsider-btn:hover {
-            background-color: #218838;
+            background-color: #f5f5f5;
+        }
+        
+        .data-consent-modal .reconsider-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000;
         }
         
         .data-consent-modal .leave-btn {
-            background-color: #dc3545;
-            color: white;
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0 #000;
         }
         
         .data-consent-modal .leave-btn:hover {
-            background-color: #c82333;
+            background-color: #f5f5f5;
+        }
+        
+        .data-consent-modal .leave-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000;
         }
         
         /* Disable specific elements that might still be clickable */
@@ -168,6 +198,8 @@
         @media (max-width: 480px) {
             .data-consent-modal {
                 padding: 15px;
+                width: 90%;
+                max-width: 300px;
             }
             
             .data-consent-modal h2 {
