@@ -71,7 +71,7 @@
             </div>
         </div>
         <div class="row1">
-            <button class="generate-btn" id="generate-marketing-btn">Generate AdAgencyIQ™ Campaign</button>
+            <button class="generate-btn" id="generate-marketing-btn">Generate MarketingIQ™ Campaign</button>
             <button class="clear-btn" id="clear-marketing-btn">Clear All</button>
         </div>
     </div>
@@ -89,7 +89,7 @@
 
 // Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
 (function() {
-    console.log("AdAgencyIQ script initializing");
+    console.log("MarketingIQ script initializing");
 
     // Only using JSON for data storage now - more efficient approach
     const setJSON = window.setJSON || function(name, value) {
@@ -108,10 +108,10 @@
             // Convert value to JSON string
             const jsonString = JSON.stringify(value);
             localStorage.setItem(name, jsonString);
-            console.log(`[AdAgencyIQ] JSON saved ${name}`);
+            console.log(`[MarketingIQ] JSON saved ${name}`);
             return true;
         } catch (error) {
-            console.error(`[AdAgencyIQ] Error storing JSON: ${error}`);
+            console.error(`[MarketingIQ] Error storing JSON: ${error}`);
             return false;
         }
     };
@@ -121,10 +121,10 @@
             const item = localStorage.getItem(name);
             if (!item) return defaultValue;
             const parsedValue = JSON.parse(item);
-            console.log(`[AdAgencyIQ] JSON retrieved ${name}`);
+            console.log(`[MarketingIQ] JSON retrieved ${name}`);
             return parsedValue;
         } catch (error) {
-            console.error(`[AdAgencyIQ] Error retrieving JSON: ${error}`);
+            console.error(`[MarketingIQ] Error retrieving JSON: ${error}`);
             return defaultValue;
         }
     };
@@ -136,20 +136,20 @@
         event.preventDefault();
         
         const container = this.closest('.grid-container');
-        // All grid containers in AdAgencyIQ allow multi-selection
+        // All grid containers in MarketingIQ allow multi-selection
         this.classList.toggle('selected');
         
         // Save using JSON approach
         saveGridItem(this);
         
-        console.log(`[AdAgencyIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+        console.log(`[MarketingIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
     }
 
     // Save grid item selection - only using JSON for efficiency
     function saveGridItem(item) {
         // Skip individual localStorage items and only use JSON
         // Directly save complete form data to JSON
-        console.log('[AdAgencyIQ] Saving all form data to JSON');
+        console.log('[MarketingIQ] Saving all form data to JSON');
         const formData = collectFormData();
         setJSON('marketingIqInput', formData);
     }
@@ -160,14 +160,14 @@
         
         // Skip individual localStorage items and only use JSON
         // Directly save complete form data to JSON
-        console.log('[AdAgencyIQ] Saving all form data to JSON');
+        console.log('[MarketingIQ] Saving all form data to JSON');
         const formData = collectFormData();
         setJSON('marketingIqInput', formData);
     }
 
     // Initialize our grid items with special handling
     function initializeMarketingGridItems() {
-        console.log("[AdAgencyIQ] Initializing marketing grid items");
+        console.log("[MarketingIQ] Initializing marketing grid items");
         
         // First remove any existing click handlers from datain.js
         document.querySelectorAll('.grid-container .grid-item').forEach(item => {
@@ -253,16 +253,16 @@
 
     // Repopulate form from localStorage - simplified to only use JSON
     function repopulateForm() {
-        console.log("[AdAgencyIQ] Repopulating form from JSON storage");
+        console.log("[MarketingIQ] Repopulating form from JSON storage");
 
         // Get stored JSON data
         const storedData = getJSON('marketingIqInput', null);
         if (!storedData) {
-            console.log('[AdAgencyIQ] No stored form data found');
+            console.log('[MarketingIQ] No stored form data found');
             return;
         }
             
-        console.log('[AdAgencyIQ] Found stored JSON form data');
+        console.log('[MarketingIQ] Found stored JSON form data');
         
         // Populate goal
         const goalInput = document.getElementById('market-goal');
