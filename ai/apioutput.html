@@ -3,34 +3,172 @@
 <head>
   <title>API Output</title>
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #f5f5f5;
+      overflow: hidden;
+    }
+    
+    .dataout-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 10px;
+      box-sizing: border-box;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    
+    .dataout-header {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #000;
+      font-family: "Geist", sans-serif;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #000;
+    }
+    
+    .output-wrapper {
+      position: relative;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+    
     .api-output {
       white-space: pre-wrap;
       font-family: monospace;
-      width: 100%;
+      padding: 15px;
+      overflow-y: auto;
       overflow-x: auto;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background-color: #f8f8f8;
-      margin-bottom: 10px;
+      background-color: #fff;
+      flex: 1 1 auto;
+      font-size: 14px;
+      border: 2px solid #000;
+      border-radius: 6px;
+      box-shadow: 4px 4px 0 #000;
+      min-height: calc(100vh - 120px);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+    
+    .api-output:hover {
+      transform: translateY(-2px);
+    }
+    
     .copy-btn {
-      margin-top: 10px;
-      padding: 5px 10px;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
+      background-color: #fff;
+      color: #000;
+      border: 2px solid #000;
+      border-radius: 6px;
+      box-shadow: 3px 3px 0 #000;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      z-index: 10;
+      padding: 5px;
     }
+    
+    /* Added SVG copy icon class */
+    .copy-icon {
+      width: 25px;
+      height: 25px;
+      color: #000;
+    }
+    
     .copy-btn:hover {
-      background-color: #45a049;
+      background-color: #f8f8f8;
+    }
+    
+    .copy-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 2px 2px 0 #000;
+    }
+    
+    .copy-icon-wrapper {
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+    }
+    
+    .copy-icon-wrapper:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    .copy-icon-wrapper:active {
+      transform: scale(0.95);
+    }
+    
+    @media (max-width: 480px) {
+      .dataout-container {
+        padding: 8px;
+      }
+      
+      .dataout-header {
+        font-size: 16px;
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+      }
+      
+      .api-output {
+        font-size: 13px;
+        padding: 10px;
+        min-height: calc(100vh - 100px);
+      }
+      
+      .output-wrapper {
+        margin-bottom: 8px;
+      }
+      
+      .copy-icon-wrapper {
+        width: 35px;
+        height: 35px;
+        top: 5px;
+        right: 8px;
+      }
+      
+      .copy-icon {
+        width: 20px;
+        height: 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <span id="output-span" class="api-output">Loading...</span>
-  <button class="copy-btn" onclick="copyOutput()">Copy</button>
+  <div class="dataout-container">
+    <div class="dataout-header">Data Output</div>
+    <div class="output-wrapper">
+      <div id="output-span" class="api-output">Loading...</div>
+      <div class="copy-icon-wrapper" onclick="copyOutput()" title="Copy to clipboard">
+        <svg class="copy-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 4V16C8 16.5304 8.21071 17.0391 8.58579 17.4142C8.96086 17.7893 9.46957 18 10 18H18C18.5304 18 19.0391 17.7893 19.4142 17.4142C19.7893 17.0391 20 16.5304 20 16V7.242C20 6.97556 19.9467 6.71181 19.8433 6.46624C19.7399 6.22068 19.5885 5.99824 19.398 5.812L16.083 2.57C15.7094 2.20466 15.2076 2.00007 14.685 2H10C9.46957 2 8.96086 2.21071 8.58579 2.58579C8.21071 2.96086 8 3.46957 8 4V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 18V20C16 20.5304 15.7893 21.0391 15.4142 21.4142C15.0391 21.7893 14.5304 22 14 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V8C4 7.46957 4.21071 6.96086 4.58579 6.58579C4.96086 6.21071 5.46957 6 6 6H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
 
   <script>
     // Run immediately without waiting for DOMContentLoaded
@@ -229,8 +367,19 @@
 
     function copyOutput() {
       const text = document.getElementById('output-span').textContent;
+      const copyIconWrapper = document.querySelector('.copy-icon-wrapper');
+      const originalHTML = copyIconWrapper.innerHTML;
+      
       navigator.clipboard.writeText(text)
-        .then(() => alert('Copied!'))
+        .then(() => {
+          // Change the icon to a success state
+          copyIconWrapper.innerHTML = '<svg class="copy-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 12L11 14L15 10M12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+          
+          // Reset button after 2 seconds
+          setTimeout(() => {
+            copyIconWrapper.innerHTML = originalHTML;
+          }, 2000);
+        })
         .catch(() => alert('Failed to copy'));
     }
   </script>
