@@ -302,8 +302,21 @@ document.addEventListener('DOMContentLoaded', async function () {
                     '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
                     '/ai/adventure/adventureiq.html': '/ai/apioutput.html?gridItem=adventureiq',
                     '/ai/app/appiq.html': '/ai/apioutput.html?gridItem=appiq',
-                    '/ai/decision/decisioniq.html': '/ai/apioutput.html?gridItem=appiq',
-                    '/ai/emotion/emotioniq.html': '/ai/apioutput.html?gridItem=appiq'
+                    '/ai/decision/decisioniq.html': '/ai/apioutput.html?gridItem=decisioniq',
+                    '/ai/emotion/emotioniq.html': '/ai/apioutput.html?gridItem=emotioniq',
+                    '/ai/enneagram/enneagramiq.html': '/ai/apioutput.html?gridItem=enneagramiq',
+                    '/ai/event/eventiq.html': '/ai/apioutput.html?gridItem=eventiq',
+                    '/ai/marketing/marketingiq.html': '/ai/apioutput.html?gridItem=marketingiq',
+                    '/ai/newbiz/newbiziq.html': '/ai/apioutput.html?gridItem=newbiziq',
+                    '/ai/quiz/quiziq.html': '/ai/apioutput.html?gridItem=quiziq',
+                    '/ai/receipts/receiptsiq.html': '/ai/apioutput.html?gridItem=receiptsiq',
+                    '/ai/report/reportiq.html': '/ai/apioutput.html?gridItem=reportiq',
+                    '/ai/research/researchiq.html': '/ai/apioutput.html?gridItem=researchiq',
+                    '/ai/social/socialiq.html': '/ai/apioutput.html?gridItem=socialiq',
+                    '/ai/speculation/speculationiq.html': '/ai/apioutput.html?gridItem=speculationiq',
+                    '/ai/workflow/workflowiq.html': '/ai/apioutput.html?gridItem=workflowiq'
+
+
 
 
                 };
