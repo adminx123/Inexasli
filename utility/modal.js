@@ -35,6 +35,9 @@ function injectModalCSS() {
     overflow: auto;
     position: relative;
     font-family: "Inter", sans-serif;
+    border: 2px solid #000;
+    border-radius: 8px;
+    box-shadow: 4px 4px 0 #000;
 }
 
 .modal-content iframe {
@@ -44,15 +47,39 @@ function injectModalCSS() {
 }
 
 .modal-trigger {
-    color: #007bff;
+    color: #000;
     cursor: pointer;
     text-decoration: underline;
     font-family: "Geist", sans-serif;
 }
 
 .modal-trigger:hover {
-    color: #0056b3;
+    color: #444;
     text-decoration: none;
+}
+
+/* Button styling */
+.modal-content button {
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000;
+    border: 2px solid #000;
+    border-radius: 6px;
+    box-shadow: 4px 4px 0 #000;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    font-family: "Geist", sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.modal-content button:hover {
+    background-color: #f5f5f5;
+}
+
+.modal-content button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000;
 }
 
 @media (min-width: 800px) {
@@ -60,7 +87,14 @@ function injectModalCSS() {
         padding: 50px;
     }
 }
-    `;
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 15px;
+        width: 90%;
+        max-width: 300px;
+    }
+}`;
     document.head.appendChild(style);
 }
 
@@ -124,8 +158,8 @@ function openGeneratedPromptModal() {
 
     // Clear existing content and inject styled content
     modalContent.innerHTML = `
-        <div style="text-align: center; font-family: Arial, sans-serif;">
-            <h2 style="color: #333; font-size: 24px; margin-bottom: 10px;">Your Promptemplate™ is Ready!</h2>
+        <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
+            <h2 style="color: #333; font-size: 24px; margin-bottom: 10px; font-family: 'Geist', sans-serif;">Your Promptemplate™ is Ready!</h2>
             <p style="color: #555; font-size: 16px; margin-bottom: 20px;">It’s copied to your clipboard—paste it into your favorite AI chat with Ctrl+V (Cmd+V on Mac) or right-click > Paste.</p>
             <div class="button-container" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;">
                 <button class="ai-button" style="background: none; border: none; cursor: pointer;" onclick="window.open('https://grok.com', '_blank')">
@@ -141,7 +175,7 @@ function openGeneratedPromptModal() {
                     <img src="/images/gemini.png" alt="Gemini" style="width: 60px; height: 60px;">
                 </button>
             </div>
-            <button onclick="closeModal()" style="padding: 10px 20px; background: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Got It</button>
+            <button onclick="closeModal()" style="padding: 10px 20px; background: #fff; color: #000; border: 2px solid #000; border-radius: 6px; box-shadow: 4px 4px 0 #000; cursor: pointer; font-weight: bold; font-family: 'Geist', sans-serif; transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;">Got It</button>
         </div>
     `;
 
