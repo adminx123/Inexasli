@@ -291,7 +291,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle grid item clicks
     const gridItems = document.querySelectorAll('.product-grid .product-item');
     const urls = [
-        '/ai/marketing/marketingiq.html',
         '/ai/adventure/adventureiq.html',
         '/ai/app/appiq.html',
         '/ai/book/bookiq.html',
@@ -303,7 +302,8 @@ document.addEventListener('DOMContentLoaded', function() {
         '/ai/fitness/fitnessiq.html',
         '/ai/general/general.html',
         '/ai/income/budget.html', // IncomeIQ URL
-        '/ai/business/businessiq.html',
+        '/ai/marketing/marketingiq.html', // MarketingIQ URL
+        '/ai/business/businessiq.html', // NewBizIQ URL
         '/ai/quiz/quiziq.html',
         '/ai/receipts/receiptsiq.html',
         '/ai/report/reportiq.html',
