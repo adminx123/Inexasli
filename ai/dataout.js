@@ -301,7 +301,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     '/ai/book/bookiq.html': '/ai/apioutput.html?gridItem=bookiq',
                     '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
                     '/ai/adventure/adventureiq.html': '/ai/apioutput.html?gridItem=adventureiq',
-                    '/ai/app/appiq.html': '/ai/apioutput.html?gridItem=appiq'
+                    '/ai/app/appiq.html': '/ai/apioutput.html?gridItem=appiq',
+                                        '/ai/decision/decisioniq.html': '/ai/apioutput.html?gridItem=appiq'
+
                 };
                 const outUrl = outputMap[lastGridItemUrl];
 
