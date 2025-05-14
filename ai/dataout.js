@@ -1,6 +1,12 @@
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
+ * This c        } catch (error) {
+            dataContainer.innerHTML = `
+                <span class="close-data-container">-</span>
+                <span class="data-label">DATA OUT</span>
+                <div class="data-content">Error loading content</div>
+            `;
+        }rotected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
@@ -21,11 +27,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function loadStoredContent(url) {
         try {
-            console.log(`Attempting to load stored content from ${url} (dataout.js)`);
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
             const content = await response.text();
-            console.log('Stored content fetched successfully (dataout.js)');
 
             dataContainer.classList.remove('initial');
             dataContainer.classList.add('expanded');
@@ -35,7 +39,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <span class="data-label">DATA OUT</span>
                 <div class="data-content">${content}</div>
             `;
-            console.log(`Stored content loaded from ${url} into dataout container (dataout.js)`);
 
             dataContainer.querySelectorAll('script').forEach(oldScript => {
                 const newScript = document.createElement('script');
@@ -46,7 +49,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
 
                 oldScript.replaceWith(newScript);
-                console.log("has replaced the old script with the new", newScript)
             });
 
             // const scriptUrl = url.replace('.html', '.js');
