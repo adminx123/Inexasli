@@ -347,7 +347,21 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/book/bookiq.html': '/ai/apioutput.html?gridItem=bookiq',
                 '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
                 '/ai/adventure/adventureiq.html': '/ai/apioutput.html?gridItem=adventureiq',
-                '/ai/app/appiq.html': '/ai/apioutput.html?gridItem=appiq'
+                '/ai/app/appiq.html': '/ai/apioutput.html?gridItem=appiq',
+                '/ai/business/businessiq.html': '/ai/apioutput.html?gridItem=businessiq',
+                '/ai/decision/decisioniq.html': '/ai/apioutput.html?gridItem=decisioniq',
+                '/ai/emotion/emotioniq.html': '/ai/apioutput.html?gridItem=emotioniq',
+                '/ai/enneagram/enneagramiq.html': '/ai/apioutput.html?gridItem=enneagramiq',
+                '/ai/event/eventiq.html': '/ai/apioutput.html?gridItem=eventiq',
+                '/ai/general/general.html': '/ai/apioutput.html?gridItem=generaliq',
+                '/ai/income/income.html': '/ai/apioutput.html?gridItem=incomeiq',
+                '/ai/marketing/marketingiq.html': '/ai/apioutput.html?gridItem=marketingiq',
+                '/ai/quiz/quiziq.html': '/ai/apioutput.html?gridItem=quiziq',
+                '/ai/report/reportiq.html': '/ai/apioutput.html?gridItem=reportiq',
+                '/ai/research/researchiq.html': '/ai/apioutput.html?gridItem=researchiq',
+                '/ai/social/socialiq.html': '/ai/apioutput.html?gridItem=socialiq',
+                '/ai/speculation/speculationiq.html': '/ai/apioutput.html?gridItem=speculationiq',
+                '/ai/workflow/workflowiq.html': '/ai/apioutput.html?gridItem=workflowiq'
             };
             
             // Just store the mapping but don't auto-open DataOut 
@@ -383,7 +397,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'enneagramiq': '/ai/apioutput.html?gridItem=enneagramiq',
                 'eventiq': '/ai/apioutput.html?gridItem=eventiq',
                 'generaliq': '/ai/apioutput.html?gridItem=generaliq',
-                'adagencyiq': '/ai/apioutput.html?gridItem=adagencyiq',
+                'marketingiq': '/ai/apioutput.html?gridItem=marketingiq',
                 'quiziq': '/ai/apioutput.html?gridItem=quiziq',
                 'reportiq': '/ai/apioutput.html?gridItem=reportiq',
                 'researchiq': '/ai/apioutput.html?gridItem=researchiq',
