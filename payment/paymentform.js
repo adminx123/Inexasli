@@ -1,86 +1,71 @@
 // paymentform.js
 document.addEventListener('DOMContentLoaded', async function() {
-    // Inject CSS styles
+    // Create payment corner button - this is now the primary payment interface
+    createPaymentCornerButton();
+    
+    // Inject CSS styles for payment interface
     const style = document.createElement('style');
-    style.textContent = `/* Subscribe Sidebar */
-#subscribe-sidebar {
+    style.textContent = `
+/* Payment Modal Styles */
+#payment-modal {
     position: fixed;
-    top: 0;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     background-color: #f5f5f5;
-    padding: 4px;
+    padding: 15px;
     border: 2px solid #000;
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    box-shadow: 0 4px 0 #000;
-    z-index: 10001;
+    border-radius: 8px;
+    box-shadow: 4px 4px 0 #000;
+    z-index: 10002;
     width: 400px;
-    max-height: 36px; /* Match the same proportion as other tabs */
-    transition: max-height 0.3s ease-in-out, height 0.3s ease-in-out;
-    overflow: hidden;
     font-family: "Inter", sans-serif;
+    display: none;
+    max-width: 90vw;
 }
 
-#subscribe-sidebar.initial {
-    max-height: 36px; /* Fixed collapsed height to match other tabs */
-}
-
-#subscribe-sidebar.expanded {
-    max-height: none; /* Allow full height when expanded */
-    height: auto;
-    top: 0;
-}
-
-#subscribe-sidebar a.subscribe-link {
-    text-decoration: none;
-    color: #000;
-    font-size: 12px;
+#payment-modal-header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    text-align: center;
-    padding: 4px;
-    cursor: pointer;
-    transition: color 0.2s ease;
-    line-height: 1.2;
-    height: 100%;
+    margin-bottom: 10px;
+}
+
+#payment-modal-title {
+    font-weight: bold;
+    font-size: 16px;
     font-family: "Geist", sans-serif;
 }
 
-#subscribe-sidebar:hover {
-    background-color:rgb(226, 226, 226);
-}
-
-#subscribe-sidebar #close-sidebar {
-    position: absolute;
-    top: 4px;
-    right: 8px;
-    font-size: 14px;
-    line-height: 1;
-    color: #000;
+#close-payment-modal {
+    font-size: 18px;
     cursor: pointer;
     font-weight: bold;
-    font-family: "Inter", sans-serif;
 }
 
-/* Payment form styling - much cleaner now */
-.payment-form {
-    display: none;
+#payment-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 10px 0 5px 0;
-    font-family: "Inter", sans-serif;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10001;
+    display: none;
 }
 
-#subscribe-sidebar.expanded .payment-form {
-    display: block;
+/* Payment form styling */
+.payment-form {
+    width: 100%;
+    padding: 5px 0;
+    font-family: "Inter", sans-serif;
 }
 
 /* Name and email row */
 .payment-form .input-row {
     display: flex;
     gap: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .payment-form .payment-input {
@@ -99,8 +84,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     display: block;
     width: 100%;
     padding: 8px;
-    margin: 5px 0;
-    font-size: 12px;
+    margin: 10px 0;
+    font-size: 14px;
     font-weight: bold;
     color: #000 !important;
     background: #fff !important;
@@ -125,7 +110,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 /* Bottom buttons row */
 .payment-form .button-row {
     display: flex;
-    gap: 5px;
+    gap: 10px;
 }
 
 .payment-form .contact-support {
@@ -159,34 +144,28 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
-    #subscribe-sidebar {
-        width: 300px;
-        max-height: 28px; /* Match mobile tab height */
-    }
-    
-    #subscribe-sidebar.initial {
-        max-height: 28px; /* Match mobile tab height */
-    }
-    
-    #subscribe-sidebar.expanded {
-        max-height: none; /* Allow full expansion */
-        height: auto;
+    #payment-modal {
+        width: 90%;
+        max-width: 300px;
+        padding: 12px;
     }
     
     .payment-form {
-        max-width: 280px;
+        max-width: 100%;
+    }
+    
+    .payment-form .input-row {
+        flex-direction: column;
     }
     
     .payment-form .payment-input,
     .payment-form .contact-support {
-        width: 100%; /* Stack vertically on small screens */
+        width: 100%;
         margin: 3px 0;
     }
     
-    #subscribe-sidebar a.subscribe-link {
-        font-size: 10px;
-        padding: 3px;
-        font-family: "Geist", sans-serif;
+    .payment-form .button-row {
+        flex-direction: column;
     }
 
     .premium-notice {
@@ -211,91 +190,73 @@ document.addEventListener('DOMContentLoaded', async function() {
     `;
     document.head.appendChild(style);
 
-    // Create sidebar HTML
-    if (!document.getElementById('subscribe-sidebar')) {
-        const sidebar = document.createElement('div');
-        sidebar.id = 'subscribe-sidebar';
-        sidebar.classList.add('initial');
-        sidebar.dataset.state = 'initial';
-        sidebar.innerHTML = `
-            <span id="close-sidebar">+</span>
-            <a class="subscribe-link">Premium</a>
+    // Create modal HTML for payment form
+    if (!document.getElementById('payment-modal')) {
+        // Create overlay for modal
+        const overlay = document.createElement('div');
+        overlay.id = 'payment-modal-overlay';
+        
+        // Create modal container
+        const modal = document.createElement('div');
+        modal.id = 'payment-modal';
+        modal.innerHTML = `
+            <div id="payment-modal-header">
+                <div id="payment-modal-title">Premium Features</div>
+                <div id="close-payment-modal">×</div>
+            </div>
             <div id="status"></div>
             <form class="payment-form" id="payment-form">
                 <div class="input-row">
-                    <input type="text" class="payment-input" id="username" placeholder="input your name" required>
-                    <input type="email" class="payment-input" id="useremail" placeholder="input your email" required>
+                    <input type="text" class="payment-input" id="username" placeholder="Input your name" required>
+                    <input type="email" class="payment-input" id="useremail" placeholder="Input your email" required>
                 </div>
-                <button class="pay-button" id="pay-button">$2.99</button>
+                <button class="pay-button" id="pay-button">Subscribe - $2.99</button>
                 <div class="button-row">
                     <a href="mailto:support@inexasli.com" class="contact-support">I have paid</a>
                     <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support">Customer Portal</a>
                 </div>
             </form>
         `;
-        document.body.appendChild(sidebar);
-
-        console.log('Payment form injected');
-
-        // Set up sidebar functionality
-        const closeButton = document.getElementById('close-sidebar');
-        const subscribeLink = document.querySelector('#subscribe-sidebar a.subscribe-link');
-        const sidebarElement = document.getElementById('subscribe-sidebar');
-
-        console.log('Sidebar:', sidebarElement);
-        console.log('Subscribe Link:', subscribeLink);
-        console.log('Close Button:', closeButton);
-        console.log('Initial State:', sidebarElement.dataset.state);
-
-        // Function to toggle the sidebar state
-        const toggleSidebar = () => {
-            const paymentForm = document.querySelector('.payment-form');
-            if (sidebarElement.dataset.state === 'initial') {
-                sidebarElement.classList.remove('initial');
-                sidebarElement.classList.add('expanded');
-                sidebarElement.dataset.state = 'expanded';
-                closeButton.textContent = '-';
         
-                // No need for positioning logic since top is fixed
-                console.log('Sidebar expanded downwards from top');
-            } else {
-                sidebarElement.classList.remove('expanded');
-                sidebarElement.classList.add('initial');
-                sidebarElement.dataset.state = 'initial';
-                closeButton.textContent = '+';
-        
-                console.log('Sidebar returned to initial state');
-            }
+        // Add overlay and modal to the document
+        document.body.appendChild(overlay);
+        document.body.appendChild(modal);
+
+        console.log('Payment modal created');
+
+        // Set up modal close functionality
+        const closeButton = document.getElementById('close-payment-modal');
+        const modalElement = document.getElementById('payment-modal');
+        const overlayElement = document.getElementById('payment-modal-overlay');
+
+        // Function to open payment modal
+        window.openPaymentModal = function() {
+            modalElement.style.display = 'block';
+            overlayElement.style.display = 'block';
+            console.log('Payment modal opened');
         };
-        
 
-        // Click handlers for subscribe link and close button
-        if (subscribeLink) {
-            subscribeLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Subscribe link clicked. Current state:', sidebarElement.dataset.state);
-                toggleSidebar();
-            });
-        } else {
-            console.error('Subscribe link not found');
-        }
+        // Function to close payment modal
+        window.closePaymentModal = function() {
+            modalElement.style.display = 'none';
+            overlayElement.style.display = 'none';
+            console.log('Payment modal closed');
+        };
 
+        // Click handler for close button
         if (closeButton) {
             closeButton.addEventListener('click', function(e) {
                 e.preventDefault();
-                console.log('Close button clicked. Current state:', sidebarElement.dataset.state);
-                toggleSidebar();
+                window.closePaymentModal();
             });
         } else {
             console.error('Close button not found');
         }
 
-        // New: Collapse sidebar when clicking outside
-        document.addEventListener('click', function(e) {
-            const isClickInsideSidebar = sidebarElement.contains(e.target);
-            if (!isClickInsideSidebar && sidebarElement.dataset.state === 'expanded') {
-                console.log('Clicked outside sidebar, collapsing it');
-                toggleSidebar();
+        // Close modal when clicking on overlay
+        overlayElement.addEventListener('click', function(e) {
+            if (e.target === overlayElement) {
+                window.closePaymentModal();
             }
         });
 
@@ -319,3 +280,108 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     });
 });
+
+/**
+ * Create and display a floating button tucked into the top right corner of the screen
+ * that triggers payment functionality when clicked
+ */
+function createPaymentCornerButton() {
+    // Create button container
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.position = 'fixed';
+    buttonContainer.style.top = '0'; // Position at the very top
+    buttonContainer.style.right = '0'; // Position at the very right
+    buttonContainer.style.transform = 'none';
+    buttonContainer.style.zIndex = '9997'; // Same z-index as dataOverwrite button
+    buttonContainer.style.padding = '0'; // Remove any padding
+    buttonContainer.style.margin = '0'; // Remove any margin
+    buttonContainer.style.display = 'block'; // Use block instead of flex
+    
+    // Create the button with the 3D tab styling
+    const button = document.createElement('button');
+    button.id = 'paymentButton';
+    button.title = 'Premium Features'; // Add title for accessibility
+    
+    // Apply 3D tab styling - matching dataOverwrite button
+    button.style.backgroundColor = '#f5f5f5';
+    button.style.color = '#000';
+    button.style.border = '2px solid #000';
+    button.style.borderRight = 'none'; // Remove right border to look tucked into corner
+    button.style.borderTop = 'none'; // Remove top border to look tucked into corner
+    button.style.borderRadius = '0 0 0 8px'; // Rounded only on bottom left corner
+    button.style.boxShadow = '-4px 4px 0 #000'; // Shadow on left side
+    button.style.padding = '0'; // Reduced padding
+    button.style.width = '36px'; // Match dataOverwrite button
+    button.style.height = '36px'; // Match dataOverwrite button
+    button.style.display = 'flex';
+    button.style.justifyContent = 'center';
+    button.style.alignItems = 'center';
+    button.style.cursor = 'pointer';
+    button.style.margin = '0'; // Remove any margin
+    button.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease';
+    button.style.position = 'relative'; // Add position relative
+    button.style.top = '0'; // Ensure it's at the very top
+    button.style.right = '0'; // Ensure it's at the very right
+    
+    // Create the $ symbol
+    const icon = document.createElement('span');
+    icon.textContent = '$';
+    icon.style.fontSize = '18px'; // Match dataOverwrite icon size
+    icon.style.fontWeight = 'bold';
+    button.appendChild(icon);
+    
+    // Add hover effect matching the tab style
+    button.addEventListener('mouseover', function() {
+        button.style.backgroundColor = '#FFFFFF';
+    });
+    
+    button.addEventListener('mouseout', function() {
+        button.style.backgroundColor = '#f5f5f5';
+    });
+    
+    // Add active/click effect
+    button.addEventListener('mousedown', function() {
+        button.style.transform = 'translate(-2px, 2px)';
+        button.style.boxShadow = '-2px 2px 0 #000';
+    });
+    
+    button.addEventListener('mouseup', function() {
+        button.style.transform = 'translate(0, 0)';
+        button.style.boxShadow = '-4px 4px 0 #000';
+    });
+    
+    // Add click event to open payment modal
+    button.addEventListener('click', function() {
+        if (typeof window.openPaymentModal === 'function') {
+            window.openPaymentModal();
+        } else {
+            console.error('Payment modal function not found');
+        }
+    });
+    
+    // Add media query for mobile devices
+    const mobileQuery = window.matchMedia("(max-width: 480px)");
+    const adjustForMobile = (query) => {
+        if (query.matches) { // If media query matches (mobile)
+            button.style.width = '28px'; // Match mobile tab width
+            button.style.height = '28px'; // Match mobile tab height
+            icon.style.fontSize = '14px'; // Smaller icon for mobile
+        } else {
+            button.style.width = '36px'; // Desktop size
+            button.style.height = '36px'; // Desktop size
+            icon.style.fontSize = '18px'; // Desktop icon size
+        }
+    };
+    
+    // Initial check
+    adjustForMobile(mobileQuery);
+    
+    // Listen for changes (like rotation)
+    mobileQuery.addListener(adjustForMobile);
+    
+    // Append button to container, and container to body
+    buttonContainer.appendChild(button);
+    document.body.appendChild(buttonContainer);
+    
+    return buttonContainer;
+}
