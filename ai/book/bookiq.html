@@ -173,75 +173,21 @@
 
     async function handleGenerateBookIq() {
         const btn = document.getElementById('generate-book-btn');
-        const initialText = btn.innerText;
-        btn.innerText = 'Loading...';
-        btn.setAttribute('disabled', 'true');
-        
-        console.log('[BookIQ] Generate button clicked.');
-        
+        const init = btn.innerText; btn.innerText='Loading...'; btn.disabled=true;
         try {
-            // Instead of collecting form data again, just use what's already in localStorage
             const formData = getJSON('bookIqInput');
-            if (!formData) {
-                console.error('[BookIQ] No input data found in localStorage.');
-                alert('Please complete the form before generating a book summary.');
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-                return;
-            }
-            
-            // Send data to worker
-            const apiUrl = 'https://book.4hm7q4q75z.workers.dev/'; 
-            
-            console.log('[BookIQ] Sending bookIqInput directly from localStorage to worker');
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            
-            const responseData = await response.json();
-            console.log('[BookIQ] Worker response:', responseData);
-            
-            if (responseData.message !== 'Success') {
-                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-            
-            // Store the response using setJSON
-            setJSON('bookIqResponse', responseData);
-            
-            // Update button state
-            btn.innerText = 'Success!';
-            setTimeout(() => {
-                btn.removeAttribute('disabled');
-            }, 1000);
-            
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'bookiq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
-                }
-            });
-            document.dispatchEvent(event);
-            console.log('[BookIQ] Dispatched api-response-received event');
-            
-        } catch (error) {
-            console.error('[BookIQ] Error generating book summary:', error);
-            alert('An error occurred while generating your book summary. Please try again later.');
-            
-            btn.innerText = 'Error';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-            }, 2000);
+            if (!formData) { alert('Please complete the form before generating.'); throw new Error('No input data'); }
+            const apiUrl = 'https://book.4hm7q4q75z.workers.dev/';
+            const res = await fetch(apiUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(formData) });
+            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+            const data = await res.json();
+            setJSON('bookIqResponse', data);
+            btn.innerText='Success!'; setTimeout(()=>btn.disabled=false,1000);
+            document.dispatchEvent(new CustomEvent('api-response-received',{detail:{module:'bookiq',type:'worker-response',timestamp:Date.now()}}));
+        } catch(e) {
+            console.error('[BookIQ] Error:',e);
+            alert('Error generating summary.');
+            btn.innerText='Error'; setTimeout(()=>{btn.innerText=init;btn.disabled=false;},2000);
         }
     }
 

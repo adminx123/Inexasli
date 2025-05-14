@@ -7,70 +7,125 @@ compatibility_date = "2025-05-11"
 name = "workflow"
 main = "./ai/workflow/workflowiqworker.js"
 
+[[env.workflow.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 [env.symptom]
 name = "symptom"
 main = "./ai/symptom/symptomiqworker.js"
+
+[[env.symptom.services]]
+binding = "secret_binding"
+service = "secretworker"
 
 [env.fitness]
 name = "fitness"
 main = "./ai/fitness/fitnessiqworker.js"
 
+[[env.fitness.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 [env.report]
 name = "report"
 main = "./ai/report/reportiqworker.js"
+
+[[env.report.services]]
+binding = "secret_binding"
+service = "secretworker"
 
 [env.research]
 name = "research"
 main = "./ai/research/researchiqworker.js"
 
+[[env.research.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 [env.social]
 name = "social" 
 main = "./ai/social/socialiqworker.js"
+
+[[env.social.services]]
+binding = "secret_binding"
+service = "secretworker"
 
 [env.speculation]
 name = "speculation"
 main = "./ai/speculation/speculationiqworker.js"
 
+[[env.speculation.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 [env.enneagram]
 name = "enneagram"
 main = "./ai/enneagram/enneagramiqworker.js"
+
+[[env.enneagram.services]]
+binding = "secret_binding"
+service = "secretworker"
 
 [env.event]
 name = "event"
 main = "./ai/event/eventiqworker.js"
 
+[[env.event.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 [env.quiz]
 name = "quiz"
 main = "./ai/quiz/quiziqworker.js"
+
+[[env.quiz.services]]
+binding = "secret_binding"
+service = "secretworker"
 
 [env.general]
 name = "general"
 main = "./ai/general/generaliqworker.js"
 
+[[env.general.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 [env.marketing]
 name = "marketing"
 main = "./ai/marketing/adagencyiqworker.js"
+
+[[env.marketing.services]]
+binding = "secret_binding"
+service = "secretworker"
 
 [env.app]
 name = "app"
 main = "./ai/app/appiqworker.js"
 
+[[env.app.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 [env.adventure]
 name = "adventure"
 main = "./ai/adventure/adventureiqworker.js"
+
+[[env.adventure.services]]
+binding = "secret_binding"
+service = "secretworker"
 
 [env.calorie]
 name = "calorie"
 main = "./ai/calorie/calorieiqworker.js"
 
+[[env.calorie.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 [env.income]
 name = "income"
 main = "./ai/income/incomeiqworker.js"
-
-# Environment variables for the income worker
-[env.income.vars]
-# A placeholder value - you'll need to set the actual value via wrangler secret
-WORKER_API_KEY = "placeholder-replace-with-actual-worker-api-key"
 
 # Service bindings for the income worker
 [[env.income.services]]
@@ -81,14 +136,30 @@ service = "secretworker"
 name = "book"
 main = "./ai/book/bookiqworker.js"
 
+[[env.book.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 [env.business]
 name = "business"
 main = "./ai/business/businessiqworker.js"
+
+[[env.business.services]]
+binding = "secret_binding"
+service = "secretworker"
 
 [env.decision]
 name = "decision"
 main = "./ai/decision/decisioniqworker.js"
 
+[[env.decision.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 [env.emotion]
 name = "emotion"
 main = "./ai/emotion/emotioniqworker.js"
+
+[[env.emotion.services]]
+binding = "secret_binding"
+service = "secretworker"
