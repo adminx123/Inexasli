@@ -37,24 +37,49 @@
             padding: 10px;
         }
         
-        .category-select-container {
-            margin-bottom: 15px;
-            text-align: center;
+        /* Category Filter Grid */
+        .category-filter-grid {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 8px;
             width: 100%;
             max-width: 300px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto 20px;
+            padding-right: 5px;
+            justify-content: space-between;
         }
         
-        #category-select {
-            padding: 6px 12px;
-            border: 2px solid #000;
-            border-radius: 4px;
-            background-color: #f5f5f5;
-            font-family: "Inter", sans-serif;
-            font-size: 14px;
-            width: 100%;
-            box-sizing: border-box;
+        .category-filter-item {
+            background-color: #e0e0e0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: "Geist", sans-serif;
+            width: calc(50% - 4px);
+            box-shadow: 2px 2px 0 #000;
+            border: 1px solid #000;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        
+        .category-filter-item:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-2px);
+            box-shadow: 3px 3px 0 #000;
+        }
+        
+        .category-filter-item.active {
+            background-color: #c0c0c0;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2), 2px 2px 0 #000;
+            transform: translateY(0);
         }
         
         /* Compact Product grid */
@@ -71,7 +96,7 @@
         }
         
         .product-item {
-            background-color: #e0e0e0;
+            background-color: #ffffff;
             padding: 10px 15px;
             border-radius: 5px;
             text-align: center;
@@ -89,7 +114,7 @@
         }
         
         .product-item:hover {
-            background-color: #d0d0d0;
+            background-color: #f5f5f5;
             transform: translateY(-2px);
             box-shadow: 3px 3px 0 #000;
         }
@@ -125,8 +150,15 @@
                 max-width: 400px;
             }
             
-            .category-select-container {
+            .category-filter-grid {
                 max-width: 400px;
+                gap: 10px;
+            }
+            
+            .category-filter-item {
+                padding: 12px 20px;
+                font-size: 14px;
+                width: calc(50% - 5px);
             }
             
             .product-item {
@@ -151,8 +183,15 @@
                 max-width: 280px;
             }
             
-            .category-select-container {
+            .category-filter-grid {
                 max-width: 280px;
+                gap: 6px;
+            }
+            
+            .category-filter-item {
+                font-size: 12px;
+                padding: 10px 12px;
+                width: calc(50% - 3px);
             }
             
             .product-item {
@@ -176,17 +215,15 @@
      <!-- Main Grid Container -->
      <div class="main-grid-wrapper">
          
-         <div class="category-select-container">
-             <select id="category-select">
-                 <option value="all">ALL</option>
-                 <option value="dataanalysis">DATA</option>
-                 <option value="reportgeneration">REPORT</option>
-                 <option value="planningandforecasting">PLANNING</option>
-                 <option value="creative">CREATIVE</option>
-                 <option value="decision">DECISION</option>
-                 <option value="workflow">WORKFLOW</option>
-                 <option value="educational">EDUCATIONAL</option>
-             </select>
+         <div class="category-filter-grid">
+             <div class="category-filter-item active" data-category="all">ALL</div>
+             <div class="category-filter-item" data-category="health">HEALTH</div>
+             <div class="category-filter-item" data-category="business">BUSINESS</div>
+             <div class="category-filter-item" data-category="finance">FINANCE</div>
+             <div class="category-filter-item" data-category="lifestyle">LIFESTYLE</div>
+             <div class="category-filter-item" data-category="personal">PERSONAL</div>
+             <div class="category-filter-item" data-category="learning">LEARNING</div>
+             <div class="category-filter-item" data-category="productivity">PRODUCTIVITY</div>
          </div>
          
          <div class="product-grid">
@@ -217,7 +254,7 @@
 
 
      <script src="/utility/toolTip.js"></script>
-     <script src="/utility/tray.js"></script>
+     <!-- <script src="/utility/tray.js"></script> -->
      <script src="/ai/landing/landing.js" type="module"></script>
      <script src="/payment/paymentform.js"></script>
      <script src="/utility/modal.js"></script>

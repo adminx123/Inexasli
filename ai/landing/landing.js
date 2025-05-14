@@ -20,15 +20,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Prompt cookie set by landing.js:', currentTime);
     
-    // Categorization of grid items by type
+    // Categorization of grid items by domain (more user-friendly)
     const itemCategories = {
-        'dataanalysis': ['BookIQ', 'CalorieIQ', 'ReceiptsIQ', 'ResearchIQ', 'EmotionIQ'],
-        'reportgeneration': ['EnneagramIQ', 'SocialIQ', 'ReportIQ', 'SymptomIQ'],
-        'planningandforecasting': ['AdventureIQ', 'EventIQ', 'FitnessIQ', 'IncomeIQ', 'NewBizIQ'],
-        'creative': ['MarketingIQ', 'QuizIQ'],
-        'decision': ['DecisionIQ'],
-        'workflow': ['App', 'WorkflowIQ'],
-        'educational': ['General']
+        'health': ['CalorieIQ', 'FitnessIQ', 'SymptomIQ', 'EmotionIQ'],
+        'business': ['NewBizIQ', 'WorkflowIQ', 'MarketingIQ', 'DecisionIQ'],
+        'finance': ['IncomeIQ', 'ReceiptsIQ', 'SpeculationIQ'],
+        'lifestyle': ['AdventureIQ', 'EventIQ', 'SocialIQ'],
+        'personal': ['EnneagramIQ', 'EmotionIQ', 'SocialIQ'],
+        'learning': ['BookIQ', 'ResearchIQ', 'QuizIQ', 'General', 'ReportIQ'],
+        'productivity': ['App', 'WorkflowIQ', 'DecisionIQ']
     };
     
     // Function to filter grid items by category
@@ -37,22 +37,33 @@ document.addEventListener('DOMContentLoaded', function() {
         gridItems.forEach(item => {
             let itemText = item.textContent.split(/\n|Premium/)[0].trim().replace(/™/g, '');
             if (category === 'all' || itemCategories[category]?.includes(itemText)) {
-                item.style.display = 'block';
+                item.style.display = 'flex'; // Use flex to maintain the row layout
             } else {
                 item.style.display = 'none';
             }
         });
         console.log(`Filtered grid items by category: ${category}`);
+        
+        // Update active class on filter buttons
+        document.querySelectorAll('.category-filter-item').forEach(btn => {
+            if (btn.getAttribute('data-category') === category) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
     }
     
-    // Setup category dropdown filter
-    const categorySelect = document.getElementById('category-select');
-    if (categorySelect) {
-        categorySelect.addEventListener('change', (e) => {
-            const category = e.target.value;
-            filterGridItems(category);
+    // Setup category filter buttons
+    const categoryButtons = document.querySelectorAll('.category-filter-item');
+    if (categoryButtons.length > 0) {
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.getAttribute('data-category');
+                filterGridItems(category);
+            });
         });
-        console.log('Category select dropdown initialized');
+        console.log('Category filter buttons initialized');
     }
     
     // Create a style element that will forcefully control container visibility
