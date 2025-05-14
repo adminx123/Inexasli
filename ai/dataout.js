@@ -302,7 +302,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
                     '/ai/adventure/adventureiq.html': '/ai/apioutput.html?gridItem=adventureiq',
                     '/ai/app/appiq.html': '/ai/apioutput.html?gridItem=appiq',
-                                        '/ai/decision/decisioniq.html': '/ai/apioutput.html?gridItem=appiq'
+                    '/ai/decision/decisioniq.html': '/ai/apioutput.html?gridItem=appiq',
+                    '/ai/emotion/emotioniq.html': '/ai/apioutput.html?gridItem=appiq'
+
 
                 };
                 const outUrl = outputMap[lastGridItemUrl];
@@ -343,7 +345,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.addEventListener('promptGridItemSelected', function (e) {
             const url = e.detail.url;
             console.log(`Received promptGridItemSelected event with URL: ${url} (dataout.js)`);
-            
+
             // Special handling for URLs that have output templates
             const outputMap = {
                 '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
@@ -367,13 +369,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/speculation/speculationiq.html': '/ai/apioutput.html?gridItem=speculationiq',
                 '/ai/workflow/workflowiq.html': '/ai/apioutput.html?gridItem=workflowiq'
             };
-            
+
             // Just store the mapping but don't auto-open DataOut 
             // We'll let users manually open it when they want to see output
             const outUrl = outputMap[url];
             if (outUrl) {
                 setLocal('lastDataOutUrl', outUrl);
-                
+
                 // Don't automatically open the dataout container for any product
                 // (removed the auto-opening logic that was here previously)
             }
@@ -382,11 +384,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Listen for API response events from various modules
         document.addEventListener('api-response-received', function (e) {
             console.log('Received api-response-received event (dataout.js):', e.detail);
-            
+
             // Get the module name and corresponding output URL
             const moduleName = e.detail.module;
             const responseType = e.detail.type || 'default';
-            
+
             // Map of module names to their output URLs
             const moduleOutputMap = {
                 'fitnessiq': '/ai/apioutput.html?gridItem=fitnessiq',
@@ -410,12 +412,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'workflowiq': '/ai/apioutput.html?gridItem=workflowiq'
                 // Add more modules as needed
             };
-            
+
             const outUrl = moduleOutputMap[moduleName];
             if (outUrl) {
                 console.log(`Opening data container for ${moduleName} response with URL: ${outUrl}`);
                 setLocal('lastDataOutUrl', outUrl);
-                
+
                 // Toggle data container if it's not already expanded
                 if (dataContainer.dataset.state !== 'expanded') {
                     toggleDataContainer();
