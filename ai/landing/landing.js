@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'dataanalysis': ['BookIQ', 'CalorieIQ', 'ReceiptsIQ', 'ResearchIQ', 'EmotionIQ'],
         'reportgeneration': ['EnneagramIQ', 'SocialIQ', 'ReportIQ', 'SymptomIQ'],
         'planningandforecasting': ['AdventureIQ', 'EventIQ', 'FitnessIQ', 'IncomeIQ', 'NewBizIQ'],
-        'creative': ['AdAgencyIQ', 'QuizIQ'],
+        'creative': ['MarketingIQ', 'QuizIQ'],
         'decision': ['DecisionIQ'],
         'workflow': ['App', 'WorkflowIQ'],
         'educational': ['General']
