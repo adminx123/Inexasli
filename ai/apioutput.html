@@ -43,14 +43,14 @@
       flex-direction: column;
       margin-bottom: 5px;
       max-height: calc(100% - 45px);
-      overflow: hidden;
+      overflow: visible;
     }
     
     .api-output {
       white-space: pre-wrap;
       font-family: monospace;
       padding: 15px;
-      overflow: hidden;
+      overflow-y: auto;
       background-color: #fff;
       flex: 1 1 auto;
       font-size: 14px;
@@ -141,11 +141,13 @@
         font-size: 13px;
         padding: 10px;
         max-height: calc(100% - 50px);
+        overflow-y: auto;
       }
       
       .output-wrapper {
         margin-bottom: 5px;
         max-height: calc(100% - 35px);
+        overflow: visible;
       }
       
       .copy-icon-wrapper {
