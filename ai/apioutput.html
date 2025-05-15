@@ -17,11 +17,13 @@
     .apioutput-container {
       display: flex;
       flex-direction: column;
-      height: calc(100vh - 100px);
-      padding: 10px;
+      height: 100%;
+      max-height: calc(100vh - 110px);
+      padding: 8px;
       box-sizing: border-box;
       max-width: 100%;
       overflow: hidden;
+      background-color: transparent;
     }
     
     .apioutput-header {
@@ -55,7 +57,7 @@
       border-radius: 6px;
       box-shadow: 4px 4px 0 #000;
       height: calc(100% - 20px);
-      max-height: calc(100vh - 150px);
+      max-height: calc(100% - 60px);
       transition: box-shadow 0.2s ease;
     }
     
@@ -137,7 +139,7 @@
       .api-output {
         font-size: 13px;
         padding: 10px;
-        min-height: calc(100vh - 100px);
+        max-height: calc(100% - 50px);
       }
       
       .output-wrapper {
@@ -154,28 +156,6 @@
       .copy-icon {
         width: 20px;
         height: 20px;
-      }
-    }
-    
-    /* Special styles when loaded inside data-container-right from dataout.js */
-    .data-container-right .apioutput-container {
-      height: 100%;
-      max-height: calc(100vh - 110px);
-      padding: 8px;
-      background-color: transparent;
-    }
-    
-    .data-container-right .api-output {
-      max-height: calc(100% - 60px);
-    }
-    
-    @media (max-width: 480px) {
-      .data-container-right .apioutput-container {
-        height: calc(100vh - 40px);
-      }
-      
-      .data-container-right .api-output {
-        max-height: calc(100% - 50px);
       }
     }
   </style>
@@ -198,20 +178,6 @@
     // Run immediately without waiting for DOMContentLoaded
     (function() {
       console.log('API Output script running');
-      
-      // Check if this page is loaded inside data-container-right
-      function isInsideDataContainer() {
-        try {
-          return window.parent && window.parent.document.querySelector('.data-container-right');
-        } catch (e) {
-          return false;
-        }
-      }
-      
-      // Adapt container styling if loaded inside data-container-right
-      if (isInsideDataContainer()) {
-        document.body.classList.add('inside-data-container');
-      }
       
       // Reference the global utility functions
       const getLocal = window.getLocal || function(key) {
