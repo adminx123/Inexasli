@@ -37,104 +37,33 @@
             padding: 10px;
         }
         
-        /* Category Filter Grid */
-        .category-filter-grid {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 8px;
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto 20px;
-            padding-right: 5px;
-            justify-content: space-between;
-        }
-        
-        .category-filter-item {
-            background-color: #e0e0e0;
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 13px;
-            font-family: "Geist", sans-serif;
-            width: calc(50% - 4px);
-            box-shadow: 2px 2px 0 #000;
-            border: 1px solid #000;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
-        
-        .category-filter-item:hover {
-            background-color: #d0d0d0;
-            transform: translateY(-2px);
-            box-shadow: 3px 3px 0 #000;
-        }
-        
-        .category-filter-item.active {
-            background-color: #c0c0c0;
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2), 2px 2px 0 #000;
-            transform: translateY(0);
-        }
-        
-        /* Compact Product grid */
-        .product-grid {
+        /* Welcome message styling */
+        .welcome-message {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto;
-            padding-right: 5px;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-        
-        .product-item {
-            background-color: #ffffff;
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 13px;
-            font-family: "Geist", sans-serif;
-            width: 100%;
-            box-shadow: 2px 2px 0 #000;
-            border: 1px solid #000;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 10% auto;
+            padding: 30px;
+            max-width: 500px;
+            background-color: #ffffff;
+            border: 2px solid #000;
+            border-radius: 8px;
+            box-shadow: 4px 4px 0 #000;
         }
         
-        .product-item:hover {
-            background-color: #f5f5f5;
-            transform: translateY(-2px);
-            box-shadow: 3px 3px 0 #000;
+        .welcome-message h2 {
+            font-family: "Geist", sans-serif;
+            font-size: 24px;
+            margin-bottom: 15px;
         }
         
-        .product-item hr {
-            display: none; /* Hide the horizontal rule since we're using a row layout */
-        }
-        
-        .product-item span:first-child {
-            font-weight: 500;
-        }
-        
-        .premium-notice {
-            font-size: 10px;
-            color: #888;
-            display: inline-block;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 3px;
-            background-color: #f0f0f0;
+        .welcome-message p {
+            font-family: "Inter", sans-serif;
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
         }
         
         .page-title {
@@ -144,34 +73,23 @@
             font-size: 22px;
         }
         
-        /* Two-row fixed-height layout for desktop */
+        /* Desktop layout */
         @media (min-width: 769px) {
-            .product-grid {
-                max-width: 400px;
+            .welcome-message {
+                padding: 40px;
+                margin: 15% auto;
             }
             
-            .category-filter-grid {
-                max-width: 400px;
-                gap: 10px;
+            .welcome-message h2 {
+                font-size: 28px;
             }
             
-            .category-filter-item {
-                padding: 12px 20px;
-                font-size: 14px;
-                width: calc(50% - 5px);
-            }
-            
-            .product-item {
-                padding: 12px 20px;
-                font-size: 14px;
-            }
-            
-            .premium-notice {
-                font-size: 11px;
+            .welcome-message p {
+                font-size: 18px;
             }
         }
         
-        /* Compact mobile layout */
+        /* Mobile layout */
         @media (max-width: 768px) {
             .main-grid-wrapper {
                 width: 98%;
@@ -179,28 +97,17 @@
                 padding: 5px;
             }
             
-            .product-grid {
-                max-width: 280px;
+            .welcome-message {
+                padding: 20px;
+                margin: 20% auto;
             }
             
-            .category-filter-grid {
-                max-width: 280px;
-                gap: 6px;
+            .welcome-message h2 {
+                font-size: 20px;
             }
             
-            .category-filter-item {
-                font-size: 12px;
-                padding: 10px 12px;
-                width: calc(50% - 3px);
-            }
-            
-            .product-item {
-                font-size: 12px;
-                padding: 10px 12px;
-            }
-            
-            .product-grid {
-                gap: 6px;
+            .welcome-message p {
+                font-size: 14px;
             }
         }
      </style>
@@ -212,42 +119,11 @@
 
 
  
-     <!-- Main Grid Container -->
+     <!-- Main Container - Now empty as product items are in category modal -->
      <div class="main-grid-wrapper">
-         
-         <div class="category-filter-grid">
-             <div class="category-filter-item active" data-category="all">ALL</div>
-             <div class="category-filter-item" data-category="health">HEALTH</div>
-             <div class="category-filter-item" data-category="business">BUSINESS</div>
-             <div class="category-filter-item" data-category="finance">FINANCE</div>
-             <div class="category-filter-item" data-category="lifestyle">LIFESTYLE</div>
-             <div class="category-filter-item" data-category="personal">PERSONAL</div>
-             <div class="category-filter-item" data-category="learning">LEARNING</div>
-             <div class="category-filter-item" data-category="productivity">PRODUCTIVITY</div>
-         </div>
-         
-         <div class="product-grid">
-             <div class="product-item"><span>AdventureIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>App</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>BookIQ™</span><span></span></div>
-             <div class="product-item"><span>CalorieIQ™</span><span></span></div>
-             <div class="product-item"><span>DecisionIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>EmotionIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>EnneagramIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>EventIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>FitnessIQ™</span><span></span></div>
-             <div class="product-item"><span>General</span><span></span></div>
-             <div class="product-item"><span>IncomeIQ™</span><span class="premium-notice">Premium</span></div>
-                          <div class="product-item"><span>MarketingIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>NewBizIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>QuizIQ™</span><span></span></div>
-             <div class="product-item"><span>ReceiptsIQ™</span><span></span></div>
-             <div class="product-item"><span>ReportIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>ResearchIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>SocialIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>SpeculationIQ™</span><span class="premium-notice">Premium</span></div>
-             <div class="product-item"><span>SymptomIQ™</span><span></span></div>
-             <div class="product-item"><span>WorkflowIQ™</span><span class="premium-notice">Premium</span></div>
+         <div class="welcome-message">
+             <h2>Welcome to INEXASLI</h2>
+             <p>Click the category button in the bottom left corner to browse products.</p>
          </div>
      </div>
  
