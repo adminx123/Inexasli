@@ -37,35 +37,6 @@
             padding: 10px;
         }
         
-        /* Welcome message styling */
-        .welcome-message {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            margin: 10% auto;
-            padding: 30px;
-            max-width: 500px;
-            background-color: #ffffff;
-            border: 2px solid #000;
-            border-radius: 8px;
-            box-shadow: 4px 4px 0 #000;
-        }
-        
-        .welcome-message h2 {
-            font-family: "Geist", sans-serif;
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-        
-        .welcome-message p {
-            font-family: "Inter", sans-serif;
-            font-size: 16px;
-            color: #555;
-            line-height: 1.5;
-        }
-        
         .page-title {
             text-align: center;
             font-family: "Geist", sans-serif;
@@ -75,18 +46,7 @@
         
         /* Desktop layout */
         @media (min-width: 769px) {
-            .welcome-message {
-                padding: 40px;
-                margin: 15% auto;
-            }
-            
-            .welcome-message h2 {
-                font-size: 28px;
-            }
-            
-            .welcome-message p {
-                font-size: 18px;
-            }
+            /* Desktop-specific styles if needed */
         }
         
         /* Mobile layout */
@@ -95,19 +55,6 @@
                 width: 98%;
                 margin-top: 50px;
                 padding: 5px;
-            }
-            
-            .welcome-message {
-                padding: 20px;
-                margin: 20% auto;
-            }
-            
-            .welcome-message h2 {
-                font-size: 20px;
-            }
-            
-            .welcome-message p {
-                font-size: 14px;
             }
         }
      </style>
@@ -119,12 +66,9 @@
 
 
  
-     <!-- Main Container - Now empty as product items are in category modal -->
+     <!-- Main Container - Empty as product items are in category modal -->
      <div class="main-grid-wrapper">
-         <div class="welcome-message">
-             <h2>Welcome to INEXASLI</h2>
-             <p>Click the category button in the bottom left corner to browse products.</p>
-         </div>
+         <!-- Content now handled by category.js modal -->
      </div>
  
 
