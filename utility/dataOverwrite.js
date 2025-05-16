@@ -83,7 +83,7 @@ function createOverwriteButton() {
     // Create button container
     const buttonContainer = document.createElement('div');
     buttonContainer.style.position = 'fixed';
-    buttonContainer.style.top = '0'; // Position at the very top
+    buttonContainer.style.bottom = '0'; // Position at the very bottom
     buttonContainer.style.left = '0'; // Position at the very left
     buttonContainer.style.transform = 'none';
     buttonContainer.style.zIndex = '9997'; // Below data consent but above most content
@@ -96,14 +96,14 @@ function createOverwriteButton() {
     button.id = 'overwriteButton';
     button.title = 'Clear All Data'; // Add title for accessibility
     
-    // Apply 3D tab styling - matching other edge elements
+    // Apply 3D tab styling - matching the bottom left corner style
     button.style.backgroundColor = '#f5f5f5';
     button.style.color = '#000';
     button.style.border = '2px solid #000';
     button.style.borderLeft = 'none'; // Remove left border to look tucked into corner
-    button.style.borderTop = 'none'; // Remove top border to look tucked into corner
-    button.style.borderRadius = '0 0 8px 0'; // Rounded only on bottom right corner
-    button.style.boxShadow = '4px 4px 0 #000';
+    button.style.borderBottom = 'none'; // Remove bottom border to look tucked into corner
+    button.style.borderRadius = '0 8px 0 0'; // Rounded only on top right corner
+    button.style.boxShadow = '4px -4px 0 #000'; // Shadow up and right
     button.style.padding = '0'; // Reduced padding
     button.style.width = '36px'; // Changed from 50px to 36px
     button.style.height = '36px'; // Changed from 50px to 36px
@@ -114,7 +114,7 @@ function createOverwriteButton() {
     button.style.margin = '0'; // Remove any margin
     button.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease';
     button.style.position = 'relative'; // Add position relative
-    button.style.top = '0'; // Ensure it's at the very top
+    button.style.bottom = '0'; // Ensure it's at the very bottom
     button.style.left = '0'; // Ensure it's at the very left
     
     // Create just an icon (no text)
@@ -132,15 +132,15 @@ function createOverwriteButton() {
         button.style.backgroundColor = '#f5f5f5';
     });
     
-    // Add active/click effect
+    // Add active/click effect - adjusted for bottom left position
     button.addEventListener('mousedown', function() {
-        button.style.transform = 'translate(2px, 2px)';
-        button.style.boxShadow = '2px 2px 0 #000';
+        button.style.transform = 'translate(2px, -2px)'; // Move diagonally up-right when pressed
+        button.style.boxShadow = '2px -2px 0 #000'; // Smaller shadow when pressed
     });
     
     button.addEventListener('mouseup', function() {
         button.style.transform = 'translate(0, 0)';
-        button.style.boxShadow = '4px 4px 0 #000';
+        button.style.boxShadow = '4px -4px 0 #000'; // Restore shadow when released
     });
     
     // Add click event
