@@ -6,26 +6,41 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { getCookie } from '/utility/getcookie.js';
+/**
+ * landing.js
+ * Main functionality for the landing page
+ * 
+ * NOTE: This file works in conjunction with utility/category.js
+ * - Product items and grid functionality have been moved to category.js
+ * - This file provides core UI mode toggling and container visibility management
+ * - It exports toggleUiMode and setLocal for use by category.js
+ */
+
 import { setLocal } from '/utility/setlocal.js';
 import { getLocal } from '/utility/getlocal.js';
 
-// Set the prompt cookie to ensure datain.js, dataout.js, and promptgrid.js initialize
-document.addEventListener('DOMContentLoaded', function() {
-    // Set the prompt cookie to the current timestamp
-    const currentTime = Date.now();
+// Define selectors once to avoid duplication
+const SELECTORS = {
+    budget: [
+        '.data-container-intro',
+        '.data-container-income',
+        '.data-container-expense',
+        '.data-container-asset',
+        '.data-container-liability',
+        '.data-container-summary'
+    ],
+    data: [
+        '.data-container-left',
+        '.data-container-right'
+    ]
+};
+
+// UI Manager to handle all UI-related functionality
+const UIManager = {
+    styleSheet: null,
     
-    // Set the cookie directly in the document
-    document.cookie = `prompt=${currentTime}; path=/; max-age=86400`; // valid for 24 hours
-    
-    console.log('Prompt cookie set by landing.js:', currentTime);
-    
-    // Category functionality moved to utility/category.js
-    // The category button in the bottom left corner now handles all category filtering
-    console.log('Category functionality moved to utility/category.js');
-    
-    // Create a style element that will forcefully control container visibility
-    const createVisibilityController = () => {
+    // Initialize the style controller
+    initStyles() {
         // Remove any existing controller first
         const existingController = document.getElementById('container-visibility-controller');
         if (existingController) {
@@ -36,257 +51,153 @@ document.addEventListener('DOMContentLoaded', function() {
         const styleElement = document.createElement('style');
         styleElement.id = 'container-visibility-controller';
         document.head.appendChild(styleElement);
-        return styleElement.sheet;
-    };
+        this.styleSheet = styleElement.sheet;
+        return this.styleSheet;
+    },
     
-    // Get or create the visibility controller stylesheet
-    let visibilityStyleSheet = createVisibilityController();
-    
-    // Function to toggle between datain/dataout and budget tabs with CSS rules
-    function toggleUiMode(isBudgetMode) {
-        console.log(`Toggling UI mode. Budget mode: ${isBudgetMode}`);
-        
-        // Clear any existing rules
-        while (visibilityStyleSheet.cssRules.length > 0) {
-            visibilityStyleSheet.deleteRule(0);
+    // Clear all existing CSS rules
+    clearRules() {
+        if (!this.styleSheet) return;
+        while (this.styleSheet.cssRules.length > 0) {
+            this.styleSheet.deleteRule(0);
         }
-        
-        // Budget tabs selectors
-        const budgetTabSelectors = [
-            '.data-container-intro',
-            '.data-container-income',
-            '.data-container-expense',
-            '.data-container-asset',
-            '.data-container-liability',
-            '.data-container-summary'
-        ];
-        
-        // Data container selectors
-        const dataContainerSelectors = [
-            '.data-container-left',
-            '.data-container-right'
-        ];
-        
-        // Save the mode in localStorage for persistence
-        setLocal('budgetModeActive', isBudgetMode ? 'true' : 'false');
-        
-        if (isBudgetMode) {
-            console.log('Switching to Budget mode: hiding datain/dataout, showing budget tabs');
-            
-            // Add CSS rules to hide data containers
-            dataContainerSelectors.forEach(selector => {
-                visibilityStyleSheet.insertRule(`${selector} { display: none !important; }`, 0);
-            });
-            
-            // Show budget tabs by setting visibility to visible
-            budgetTabSelectors.forEach(selector => {
-                visibilityStyleSheet.insertRule(`${selector} { visibility: visible; }`, 0);
-            });
-            
-            // Apply direct DOM manipulation
-            applyDirectStyleChanges(isBudgetMode);
-            
-            // IMPORTANT: Call our manual initialization function after a delay
-            setTimeout(() => {
-                // Make sure all tabs are visible first
-                budgetTabSelectors.forEach(selector => {
-                    const tab = document.querySelector(selector);
-                    if (tab) {
-                        tab.style.visibility = 'visible';
-                    }
-                });
-                
-                console.log('Directly calling budgetTabFlow initialization function');
-                
-                // Call the manual initialization function we defined in landing.html
-                if (typeof window.manuallyInitBudgetFlow === 'function') {
-                    window.manuallyInitBudgetFlow();
-                    console.log('Successfully called manual budget flow initialization');
-                } else {
-                    console.error('Manual budget flow initialization function not found');
-                }
-            }, 500);
-            
-        } else {
-            console.log('Switching to standard mode: showing datain/dataout, hiding budget tabs');
-            
-            // Hide budget tabs using visibility
-            budgetTabSelectors.forEach(selector => {
-                visibilityStyleSheet.insertRule(`${selector} { visibility: hidden; }`, 0);
-            });
-            
-            // Apply direct DOM manipulation
-            applyDirectStyleChanges(isBudgetMode);
-        }
-    }
+    },
     
-    // Direct DOM manipulation as backup
-    function applyDirectStyleChanges(isBudgetMode) {
-        const dataInContainer = document.querySelector('.data-container-left');
-        const dataOutContainer = document.querySelector('.data-container-right');
-        
-        const budgetTabs = [
-            document.querySelector('.data-container-intro'),
-            document.querySelector('.data-container-income'),
-            document.querySelector('.data-container-expense'),
-            document.querySelector('.data-container-asset'),
-            document.querySelector('.data-container-liability'),
-            document.querySelector('.data-container-summary')
-        ].filter(Boolean); // Remove nulls
+    // Apply CSS rules based on mode
+    applyRules(isBudgetMode) {
+        this.clearRules();
         
         if (isBudgetMode) {
             // Hide data containers
-            if (dataInContainer) dataInContainer.style.setProperty('display', 'none', 'important');
-            if (dataOutContainer) dataOutContainer.style.setProperty('display', 'none', 'important');
+            SELECTORS.data.forEach(selector => {
+                this.styleSheet.insertRule(`${selector} { display: none !important; }`, 0);
+            });
             
-            // Show budget tabs by setting visibility
-            budgetTabs.forEach(tab => {
-                tab.style.removeProperty('display'); // Ensure no display:none
-                tab.style.setProperty('visibility', 'visible');
+            // Show budget tabs
+            SELECTORS.budget.forEach(selector => {
+                this.styleSheet.insertRule(`${selector} { visibility: visible; }`, 0);
             });
         } else {
             // Hide budget tabs
-            budgetTabs.forEach(tab => {
-                tab.style.setProperty('visibility', 'hidden');
+            SELECTORS.budget.forEach(selector => {
+                this.styleSheet.insertRule(`${selector} { visibility: hidden; }`, 0);
+            });
+        }
+    },
+    
+    // Apply direct DOM style changes for immediate effect
+    applyDOMStyles(isBudgetMode) {
+        const dataContainers = SELECTORS.data.map(selector => document.querySelector(selector)).filter(Boolean);
+        const budgetContainers = SELECTORS.budget.map(selector => document.querySelector(selector)).filter(Boolean);
+        
+        if (isBudgetMode) {
+            // Hide data containers
+            dataContainers.forEach(element => {
+                element.style.setProperty('display', 'none', 'important');
             });
             
-            // Show data containers by removing the display style
-            if (dataInContainer) dataInContainer.style.removeProperty('display');
-            if (dataOutContainer) dataOutContainer.style.removeProperty('display');
-        }
-    }
-    
-    // Set up periodic check to maintain correct visibility
-    function setupVisibilityCheck(isBudgetMode) {
-        // Clear any existing interval
-        if (window._visibilityCheckInterval) {
-            clearInterval(window._visibilityCheckInterval);
-        }
-        
-        // Set up new interval
-        window._visibilityCheckInterval = setInterval(() => {
-            applyDirectStyleChanges(isBudgetMode);
-        }, 500); // Check every 500ms
-        
-        // Clear interval after 5 seconds to avoid unnecessary processing
-        setTimeout(() => {
-            if (window._visibilityCheckInterval) {
-                clearInterval(window._visibilityCheckInterval);
-                window._visibilityCheckInterval = null;
-            }
-        }, 5000);
-    }
-    
-    // Hide all containers initially
-    function hideAllContainersInitially() {
-        // Create initial CSS rules to hide everything
-        while (visibilityStyleSheet.cssRules.length > 0) {
-            visibilityStyleSheet.deleteRule(0);
-        }
-        
-        // Hide data containers
-        visibilityStyleSheet.insertRule('.data-container-left { display: none !important; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-right { display: none !important; }', 0);
-        
-        // Hide budget tabs BUT use visibility:hidden instead of display:none
-        // This keeps the elements in the DOM for budgetTabFlow.js to find them
-        visibilityStyleSheet.insertRule('.data-container-intro { visibility: hidden; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-income { visibility: hidden; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-expense { visibility: hidden; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-asset { visibility: hidden; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-liability { visibility: hidden; }', 0);
-        visibilityStyleSheet.insertRule('.data-container-summary { visibility: hidden; }', 0);
-        
-        // Also apply direct DOM manipulation
-        const dataContainers = [
-            '.data-container-left',
-            '.data-container-right'
-        ];
-        
-        const budgetContainers = [
-            '.data-container-intro',
-            '.data-container-income',
-            '.data-container-expense',
-            '.data-container-asset',
-            '.data-container-liability',
-            '.data-container-summary'
-        ];
-        
-        dataContainers.forEach(selector => {
-            const element = document.querySelector(selector);
-            if (element) {
-                element.style.setProperty('display', 'none', 'important');
-            }
-        });
-        
-        budgetContainers.forEach(selector => {
-            const element = document.querySelector(selector);
-            if (element) {
+            // Show budget tabs
+            budgetContainers.forEach(element => {
+                element.style.removeProperty('display');
+                element.style.setProperty('visibility', 'visible');
+            });
+        } else {
+            // Hide budget tabs
+            budgetContainers.forEach(element => {
                 element.style.setProperty('visibility', 'hidden');
-                // Let the element remain in the layout for budgetTabFlow.js to find
-            }
-        });
-    }
+            });
+            
+            // Show data containers
+            dataContainers.forEach(element => {
+                element.style.removeProperty('display');
+            });
+        }
+    },
     
-    // Function to load content into datain container
-    async function loadContent(url) {
-        try {
-            console.log(`Grid item clicked, loading content from: ${url}`);
-            
-            // Detect if this is the budget/incomeIQ item
-            const isBudgetItem = url === '/ai/income/budget.html';
-            
-            // Toggle UI mode based on selection
-            toggleUiMode(isBudgetItem);
-            
-            if (!isBudgetItem) {
-                // For non-budget items, use regular content loading
-                // Create and dispatch event for promptgrid.js to handle
-                const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
-                    detail: { url: url }
-                });
-                document.dispatchEvent(gridItemEvent);
-            }
-            
-            // Store the URL in localStorage for persistence
-            setLocal('lastGridItemUrl', url);
-            console.log(`Stored lastGridItemUrl: ${url}`);
-            
-        } catch (error) {
-            console.error('Error triggering content load:', error);
+    // Initialize budget flow when in budget mode
+    initBudgetFlow() {
+        // Make sure all tabs are visible first
+        SELECTORS.budget.forEach(selector => {
+            const tab = document.querySelector(selector);
+            if (tab) tab.style.visibility = 'visible';
+        });
+        
+        // Call manual initialization function
+        if (typeof window.manuallyInitBudgetFlow === 'function') {
+            window.manuallyInitBudgetFlow();
+        } else {
+            console.error('Budget flow initialization function not found');
+        }
+    },
+    
+    // Hide all containers on initial load
+    hideAllInitially() {
+        this.clearRules();
+        
+        // Hide data containers with display:none
+        SELECTORS.data.forEach(selector => {
+            this.styleSheet.insertRule(`${selector} { display: none !important; }`, 0);
+        });
+        
+        // Hide budget tabs with visibility:hidden to keep them in DOM
+        SELECTORS.budget.forEach(selector => {
+            this.styleSheet.insertRule(`${selector} { visibility: hidden; }`, 0);
+        });
+        
+        // Also apply direct DOM styles
+        this.applyDOMStyles(false);
+    },
+    
+    // Master function to toggle UI mode
+    setMode(isBudgetMode) {
+        // Save the mode in localStorage for persistence
+        setLocal('budgetModeActive', isBudgetMode ? 'true' : 'false');
+        
+        // Apply CSS rules
+        this.applyRules(isBudgetMode);
+        
+        // Apply direct DOM manipulation
+        this.applyDOMStyles(isBudgetMode);
+        
+        // Initialize budget flow if needed
+        if (isBudgetMode) {
+            setTimeout(() => this.initBudgetFlow(), 500);
         }
     }
+};
+
+// Main initialization function that runs when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    const currentTime = Date.now();
     
-    // Make loadContent function available for categoryManager to use
-    window.toggleUiMode = toggleUiMode;
+    // Set the prompt cookie for datain.js, dataout.js, and promptgrid.js
+    document.cookie = `prompt=${currentTime}; path=/; max-age=86400`;
+    
+    // Initialize UI manager and set up styles
+    UIManager.initStyles();
+    UIManager.hideAllInitially();
+    
+    // Export functions for category.js to use
+    window.toggleUiMode = function(isBudgetMode) {
+        UIManager.setMode(isBudgetMode);
+    };
     window.setLocal = setLocal;
-    
-    // The product items are now in the category.js modal
-    // No need to add click handlers to grid items on the landing page
-    console.log('Product items moved to category modal');
-    
-    // Initialize visibility control and hide all containers initially
-    hideAllContainersInitially();
     
     // Check if we should be in budget mode on page load
     const lastGridItemUrl = getLocal('lastGridItemUrl');
     if (lastGridItemUrl) {
-        console.log('Found lastGridItemUrl:', lastGridItemUrl);
         const shouldActivateBudgetMode = lastGridItemUrl === '/ai/income/budget.html';
         
-        // Use a delay to ensure all containers are created before toggling
+        // Use a delay to ensure all containers are created
         setTimeout(() => {
-            toggleUiMode(shouldActivateBudgetMode);
+            UIManager.setMode(shouldActivateBudgetMode);
         }, 500);
     }
     
     // Force initialization events for components
     setTimeout(() => {
-        // Dispatch a custom event to notify the components to initialize
-        const initEvent = new CustomEvent('force-components-init', {
+        document.dispatchEvent(new CustomEvent('force-components-init', {
             detail: { timestamp: currentTime }
-        });
-        document.dispatchEvent(initEvent);
-        console.log('Forced initialization event dispatched');
+        }));
     }, 100);
 });
