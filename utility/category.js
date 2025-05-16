@@ -273,25 +273,6 @@ const categoryManager = (function() {
         }
     }
 
-    // Function to handle category redirection if needed
-    function handleCategoryRedirect(category) {
-        // This is a placeholder function that can be implemented
-        // if you want to add navigation to category pages in the future
-        console.log(`Category selected: ${category}`);
-        
-        // Example implementation:
-        // const categoryUrls = {
-        //     'health': '/categories/health.html',
-        //     'business': '/categories/business.html',
-        //     // Add more category URLs as needed
-        // };
-        // 
-        // const url = categoryUrls[category];
-        // if (url) {
-        //     window.location.href = url;
-        // }
-    }
-
     // Function to create modal HTML with category content - enhanced for boil-down approach
     function createCategoryModalContent() {
         // Create container for the modal content
