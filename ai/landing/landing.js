@@ -20,51 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Prompt cookie set by landing.js:', currentTime);
     
-    // Categorization of grid items by domain (more user-friendly)
-    const itemCategories = {
-        'health': ['CalorieIQ', 'FitnessIQ', 'SymptomIQ', 'EmotionIQ'],
-        'business': ['NewBizIQ', 'WorkflowIQ', 'MarketingIQ', 'DecisionIQ'],
-        'finance': ['IncomeIQ', 'ReceiptsIQ', 'SpeculationIQ'],
-        'lifestyle': ['AdventureIQ', 'EventIQ', 'SocialIQ'],
-        'personal': ['EnneagramIQ', 'EmotionIQ', 'SocialIQ'],
-        'learning': ['BookIQ', 'ResearchIQ', 'QuizIQ', 'General', 'ReportIQ'],
-        'productivity': ['App', 'WorkflowIQ', 'DecisionIQ']
-    };
-    
-    // Function to filter grid items by category
-    function filterGridItems(category) {
-        const gridItems = document.querySelectorAll('.product-item');
-        gridItems.forEach(item => {
-            let itemText = item.textContent.split(/\n|Premium/)[0].trim().replace(/™/g, '');
-            if (category === 'all' || itemCategories[category]?.includes(itemText)) {
-                item.style.display = 'flex'; // Use flex to maintain the row layout
-            } else {
-                item.style.display = 'none';
-            }
-        });
-        console.log(`Filtered grid items by category: ${category}`);
-        
-        // Update active class on filter buttons
-        document.querySelectorAll('.category-filter-item').forEach(btn => {
-            if (btn.getAttribute('data-category') === category) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    }
-    
-    // Setup category filter buttons
-    const categoryButtons = document.querySelectorAll('.category-filter-item');
-    if (categoryButtons.length > 0) {
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const category = button.getAttribute('data-category');
-                filterGridItems(category);
-            });
-        });
-        console.log('Category filter buttons initialized');
-    }
+    // Category functionality moved to utility/category.js
+    // The category button in the bottom left corner now handles all category filtering
+    console.log('Category functionality moved to utility/category.js');
     
     // Create a style element that will forcefully control container visibility
     const createVisibilityController = () => {
@@ -299,43 +257,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Handle grid item clicks
-    const gridItems = document.querySelectorAll('.product-grid .product-item');
-    const urls = [
-        '/ai/adventure/adventureiq.html',
-        '/ai/app/appiq.html',
-        '/ai/book/bookiq.html',
-        '/ai/calorie/calorieiq.html',
-        '/ai/decision/decisioniq.html',
-        '/ai/emotion/emotioniq.html',
-        '/ai/enneagram/enneagramiq.html',
-        '/ai/event/eventiq.html',
-        '/ai/fitness/fitnessiq.html',
-        '/ai/general/general.html',
-        '/ai/income/budget.html', // IncomeIQ URL
-        '/ai/marketing/marketingiq.html', // MarketingIQ URL
-        '/ai/business/businessiq.html', // NewBizIQ URL
-        '/ai/quiz/quiziq.html',
-        '/ai/receipts/receiptsiq.html',
-        '/ai/report/reportiq.html',
-        '/ai/research/researchiq.html',
-        '/ai/social/socialiq.html',
-        '/ai/speculation/speculationiq.html',
-        '/ai/symptom/symptomiq.html',
-        '/ai/workflow/workflowiq.html'
-    ];
+    // Make loadContent function available for categoryManager to use
+    window.toggleUiMode = toggleUiMode;
+    window.setLocal = setLocal;
     
-    // Add click handlers to all grid items
-    if (gridItems.length > 0) {
-        gridItems.forEach((item, index) => {
-            if (index < urls.length) {
-                item.addEventListener('click', () => {
-                    loadContent(urls[index]);
-                });
-            }
-        });
-        console.log('Grid item click handlers initialized');
-    }
+    // The product items are now in the category.js modal
+    // No need to add click handlers to grid items on the landing page
+    console.log('Product items moved to category modal');
     
     // Initialize visibility control and hide all containers initially
     hideAllContainersInitially();
