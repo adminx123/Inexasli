@@ -143,8 +143,8 @@ function createOverwriteButton() {
         button.style.boxShadow = '4px -4px 0 #000'; // Restore shadow when released
     });
     
-    // Add click event
-    button.addEventListener('click', overwriteAllData);
+    // Add click event to open the modal
+    button.addEventListener('click', openDataOverwriteModal);
     
     // Append button to container, and container to body
     buttonContainer.appendChild(button);
@@ -174,15 +174,234 @@ function createOverwriteButton() {
 }
 
 /**
- * Clear all localStorage data and cookies
- * This is a more aggressive approach than the previous implementation
- * and will clear ALL data, not just specific fields
+ * Create or get the data overwrite modal container
  */
-function overwriteAllData() {
-    if (!confirm("Are you sure you want to clear ALL stored data? This will reset all fields and your preferences. This action cannot be undone.")) {
-        return; // Exit if user cancels
+function getDataOverwriteModal() {
+    let modal = document.getElementById('data-overwrite-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'data-overwrite-modal';
+        modal.className = 'data-overwrite-modal';
+        
+        // Add click handler to close when clicking outside the content
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeDataOverwriteModal();
+            }
+        });
+        
+        // Add keydown handler to close on escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modal.style.display === 'flex') {
+                closeDataOverwriteModal();
+            }
+        });
+        
+        // Create and append modal content
+        const modalContent = createDataOverwriteModalContent();
+        modal.appendChild(modalContent);
+        
+        document.body.appendChild(modal);
+        
+        // Add modal styles
+        addDataOverwriteModalStyles();
+    }
+    return modal;
+}
+
+/**
+ * Function to open the data overwrite modal
+ */
+function openDataOverwriteModal() {
+    const modal = getDataOverwriteModal();
+    modal.style.display = 'flex';
+}
+
+/**
+ * Function to close the data overwrite modal
+ */
+function closeDataOverwriteModal() {
+    const modal = document.getElementById('data-overwrite-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+/**
+ * Add CSS styles for the data overwrite modal
+ */
+function addDataOverwriteModalStyles() {
+    // Check if styles already exist
+    if (document.getElementById('data-overwrite-modal-styles')) {
+        return;
     }
     
+    const style = document.createElement('style');
+    style.id = 'data-overwrite-modal-styles';
+    style.textContent = `
+        .data-overwrite-modal {
+            display: none;
+            position: fixed;
+            background-color: rgba(0, 0, 0, 0.5);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            z-index: 20000;
+            overflow-y: auto;
+            font-family: "Inter", sans-serif;
+            backdrop-filter: blur(3px);
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .data-overwrite-modal-content {
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 25px;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            font-family: "Inter", sans-serif;
+            border: 2px solid #000;
+            border-radius: 8px;
+            box-shadow: 4px 4px 0 #000;
+            cursor: default;
+        }
+        
+        .data-overwrite-modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: "Geist", sans-serif;
+        }
+        
+        .data-overwrite-modal-description {
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .data-overwrite-modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+        }
+        
+        .data-overwrite-modal-button {
+            padding: 10px 20px;
+            border: 2px solid #000;
+            border-radius: 6px;
+            font-family: "Geist", sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 3px 3px 0 #000;
+        }
+        
+        .data-overwrite-modal-button.confirm {
+            background-color: #ff5555;
+            color: white;
+        }
+        
+        .data-overwrite-modal-button.cancel {
+            background-color: #f5f5f5;
+            color: #000;
+        }
+        
+        .data-overwrite-modal-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .data-overwrite-modal-button:active {
+            transform: translateY(0);
+            box-shadow: 1px 1px 0 #000;
+        }
+        
+        @media (max-width: 480px) {
+            .data-overwrite-modal-content {
+                padding: 20px 15px;
+                width: 90%;
+                max-width: 320px;
+            }
+            
+            .data-overwrite-modal-title {
+                font-size: 1.1rem;
+            }
+            
+            .data-overwrite-modal-description {
+                font-size: 0.9rem;
+            }
+            
+            .data-overwrite-modal-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .data-overwrite-modal-button {
+                width: 100%;
+            }
+        }
+    `;
+    
+    document.head.appendChild(style);
+}
+
+/**
+ * Create the content for the data overwrite modal
+ */
+function createDataOverwriteModalContent() {
+    const modalContent = document.createElement('div');
+    modalContent.className = 'data-overwrite-modal-content';
+    
+    // Add title
+    const title = document.createElement('h2');
+    title.className = 'data-overwrite-modal-title';
+    title.textContent = 'Clear All Data';
+    modalContent.appendChild(title);
+    
+    // Add description
+    const description = document.createElement('p');
+    description.className = 'data-overwrite-modal-description';
+    description.textContent = 'Are you sure you want to clear ALL stored data? This will reset all fields and your preferences. This action cannot be undone.';
+    modalContent.appendChild(description);
+    
+    // Add buttons container
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.className = 'data-overwrite-modal-buttons';
+    
+    // Add confirm button
+    const confirmButton = document.createElement('button');
+    confirmButton.className = 'data-overwrite-modal-button confirm';
+    confirmButton.textContent = 'Yes, Clear All Data';
+    confirmButton.addEventListener('click', executeDataOverwrite);
+    buttonsContainer.appendChild(confirmButton);
+    
+    // Add cancel button
+    const cancelButton = document.createElement('button');
+    cancelButton.className = 'data-overwrite-modal-button cancel';
+    cancelButton.textContent = 'Cancel';
+    cancelButton.addEventListener('click', closeDataOverwriteModal);
+    buttonsContainer.appendChild(cancelButton);
+    
+    modalContent.appendChild(buttonsContainer);
+    
+    return modalContent;
+}
+
+/**
+ * Execute the data overwrite process after confirmation
+ */
+function executeDataOverwrite() {
     try {
         // First clear specific fields in localStorage
         DATA_FIELDS.forEach(field => {
@@ -213,16 +432,68 @@ function overwriteAllData() {
             element.checked = false;
         });
         
-        // Alert the user
-        alert("All data has been successfully cleared. The page will now reload.");
+        // Show success message by updating modal content
+        showSuccessMessage();
         
-        // Reload the page to apply changes
-        window.location.reload();
+        // Reload the page after a delay
+        setTimeout(() => {
+            window.location.reload();
+        }, 1500);
         
     } catch (e) {
         console.error("Error clearing data:", e);
-        alert("There was an error clearing your data: " + e.message);
+        showErrorMessage(e.message);
     }
+}
+
+/**
+ * Show a success message in the modal
+ */
+function showSuccessMessage() {
+    const modal = document.getElementById('data-overwrite-modal');
+    if (modal) {
+        const modalContent = modal.querySelector('.data-overwrite-modal-content');
+        if (modalContent) {
+            modalContent.innerHTML = `
+                <h2 class="data-overwrite-modal-title">Success!</h2>
+                <p class="data-overwrite-modal-description">All data has been successfully cleared. The page will now reload.</p>
+            `;
+        }
+    }
+}
+
+/**
+ * Show an error message in the modal
+ */
+function showErrorMessage(errorMessage) {
+    const modal = document.getElementById('data-overwrite-modal');
+    if (modal) {
+        const modalContent = modal.querySelector('.data-overwrite-modal-content');
+        if (modalContent) {
+            modalContent.innerHTML = `
+                <h2 class="data-overwrite-modal-title">Error</h2>
+                <p class="data-overwrite-modal-description">There was an error clearing your data: ${errorMessage}</p>
+                <div class="data-overwrite-modal-buttons">
+                    <button class="data-overwrite-modal-button cancel">Close</button>
+                </div>
+            `;
+            
+            // Add click handler for the close button
+            const closeButton = modalContent.querySelector('.data-overwrite-modal-button');
+            if (closeButton) {
+                closeButton.addEventListener('click', closeDataOverwriteModal);
+            }
+        }
+    }
+}
+
+/**
+ * Clear all localStorage data and cookies
+ * This is a more aggressive approach than the previous implementation
+ * and will clear ALL data, not just specific fields
+ */
+function overwriteAllData() {
+    openDataOverwriteModal();
 }
 
 /**
@@ -240,5 +511,7 @@ function initDataOverwrite(showButton = false) {
 // Export functions for use in other files
 window.dataOverwrite = {
     initButton: initDataOverwrite,
-    clearAll: overwriteAllData
+    clearAll: overwriteAllData,
+    openModal: openDataOverwriteModal,
+    closeModal: closeDataOverwriteModal
 };
