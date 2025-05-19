@@ -295,6 +295,9 @@ const categoryManager = (function() {
                 z-index: 20000;
                 overflow-y: auto;
                 font-family: "Inter", sans-serif;
+                backdrop-filter: blur(3px);
+                transition: background-color 0.3s ease;
+                cursor: pointer; /* Indicate that the backdrop is clickable */
             }
             
             .category-modal-content {
@@ -312,6 +315,18 @@ const categoryManager = (function() {
                 border: 2px solid #000;
                 border-radius: 8px;
                 box-shadow: 4px 4px 0 #000;
+                cursor: default; /* Reset cursor for the modal content */
+            }
+            
+            /* Style for h2 elements to ensure proper spacing */
+            .category-modal-content h2 {
+                margin: 0 0 20px 0;
+                padding: 0;
+                width: auto;
+                max-width: 80%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             
             /* Back button styling */
@@ -436,17 +451,6 @@ const categoryManager = (function() {
                 background-color: #f0f0f0;
             }
             
-            .modal-close-button {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                background: none;
-                border: none;
-                font-size: 18px;
-                cursor: pointer;
-                color: #000;
-            }
-            
             @media (max-width: 768px) {
                 .category-modal-content {
                     padding: 15px;
@@ -481,21 +485,26 @@ const categoryManager = (function() {
         styleElement.textContent = modalStyles;
         document.head.appendChild(styleElement);
         
-        // Create close button
-        const closeButton = document.createElement('button');
-        closeButton.className = 'modal-close-button';
-        closeButton.innerHTML = '&times;';
-        closeButton.addEventListener('click', closeCategoryModal);
-        modalContent.appendChild(closeButton);
+        // Create header container to hold the title
+        const headerContainer = document.createElement('div');
+        headerContainer.style.display = 'flex';
+        headerContainer.style.justifyContent = 'center';
+        headerContainer.style.alignItems = 'center';
+        headerContainer.style.position = 'relative';
+        headerContainer.style.width = '100%';
+        headerContainer.style.marginBottom = '20px';
         
         // Create title
         const title = document.createElement('h2');
         title.style.textAlign = 'center';
         title.style.fontFamily = '"Geist", sans-serif';
-        title.style.marginBottom = '20px';
+        title.style.margin = '0';
         title.style.fontSize = '20px';
         title.textContent = 'Categories';
-        modalContent.appendChild(title);
+        headerContainer.appendChild(title);
+        
+        // Add the header container to the modal content
+        modalContent.appendChild(headerContainer);
         
         // Create category filter grid
         const filterGrid = document.createElement('div');
