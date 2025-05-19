@@ -9,6 +9,7 @@
 import { getCookie } from '/utility/getcookie.js';
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
+import { initializeSwipeFunctionality } from '/utility/swipeFunctionality.js';
 
 
 function initializeGridItems() {
@@ -380,60 +381,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
                 setLocal('dataContainerState', 'expanded');
-                
-                // Show swipe hint
-                const swipeHint = document.createElement('div');
-                swipeHint.className = 'swipe-hint';
-                swipeHint.innerHTML = '← <span class="swipe-animation">Swipe left to close</span>';
-                swipeHint.style.cssText = `
-                    position: absolute;
-                    bottom: 20px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background-color: rgba(0, 0, 0, 0.7);
-                    color: white;
-                    padding: 10px 15px;
-                    border-radius: 20px;
-                    font-family: "Geist", sans-serif;
-                    font-size: 16px;
-                    z-index: 12000;
-                    opacity: 0;
-                    transition: opacity 0.5s ease;
-                `;
-                
-                // Add animation style for the swipe hint
-                const animStyle = document.createElement('style');
-                animStyle.textContent = `
-                    @keyframes pulse {
-                        0% { opacity: 0.7; }
-                        50% { opacity: 1; }
-                        100% { opacity: 0.7; }
-                    }
-                    @keyframes swipeLeft {
-                        0% { transform: translateX(0); }
-                        50% { transform: translateX(-10px); }
-                        100% { transform: translateX(0); }
-                    }
-                    .swipe-animation {
-                        display: inline-block;
-                        animation: pulse 1.5s infinite, swipeLeft 1.5s infinite;
-                    }
-                `;
-                document.head.appendChild(animStyle);
-                dataContainer.appendChild(swipeHint);
-                
-                // Fade in the hint and then fade it out after a few seconds
-                setTimeout(() => {
-                    swipeHint.style.opacity = '1';
-                    setTimeout(() => {
-                        swipeHint.style.opacity = '0';
-                        setTimeout(() => {
-                            if (swipeHint.parentNode) {
-                                swipeHint.parentNode.removeChild(swipeHint);
-                            }
-                        }, 500);
-                    }, 3000);
-                }, 500);
 
                 const leftSideBarOpen = new CustomEvent('left-sidebar-open', {
                     detail: {
@@ -514,232 +461,55 @@ document.addEventListener('DOMContentLoaded', async function () {
             toggleDataContainer();
         }
         
-        // Add swipe to close functionality
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let currentTranslate = 0;
+        // Initialize swipe functionality for the datain container
+        let swipeHandler = null;
         
-        function handleTouchStart(e) {
-            console.log('Touch start detected on datain container');
-            
-            if (dataContainer.dataset.state !== 'expanded') {
-                console.log('Container not expanded, ignoring touch');
-                return;
-            }
-            
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            console.log(`Touch coordinates: X=${touchStartX}, Y=${touchStartY}`);
-            
-            // Add transition temporarily during the swipe
-            dataContainer.style.transition = 'none';
-            
-            // Make sure these event listeners are properly attached
-            dataContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
-            dataContainer.addEventListener('touchend', handleTouchEnd);
-            dataContainer.addEventListener('touchcancel', handleTouchEnd);
-            
-            // Prevent default and stop propagation to ensure no other touch handlers interfere
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        
-        function handleTouchMove(e) {
-            if (dataContainer.dataset.state !== 'expanded') return;
-            
-            const touchX = e.touches[0].clientX;
-            const touchY = e.touches[0].clientY;
-            
-            // Calculate horizontal distance moved
-            const diffX = touchX - touchStartX;
-            
-            // Calculate vertical distance moved for determining if it's a horizontal swipe
-            const diffY = touchY - touchStartY;
-            
-            // If this appears to be primarily a horizontal swipe
-            if (Math.abs(diffX) > Math.abs(diffY) * 0.8) {
-                // Always prevent default to ensure we have control of horizontal swipes
-                e.preventDefault();
-                e.stopPropagation();
-            } else if (Math.abs(diffY) > 10) {
-                // This appears to be a vertical scroll, so don't interfere
-                return;
-            }
-            
-            console.log(`Touch move: diffX=${diffX}, diffY=${diffY}`);
-            
-            // Make horizontal swipe detection more sensitive (reduced from 1.0 to 0.8)
-            if (Math.abs(diffX) > Math.abs(diffY) * 0.8) {
-                // For datain (left container), only respond to leftward swipes (changed from rightward)
-                if (diffX < 0) {
-                    currentTranslate = diffX;
-                    dataContainer.style.transform = `translateX(${diffX}px)`;
-                    console.log(`Applied transform: translateX(${diffX}px)`);
+        // Observer to watch for state changes on the dataContainer
+        const dataContainerObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-state') {
+                    const state = dataContainer.dataset.state;
                     
-                    // Add dynamic opacity effect based on swipe distance
-                    // Calculate opacity: 1 at 0px swipe, decreasing to 0.7 at 100px swipe
-                    const opacityValue = Math.max(0.7, 1 - (Math.abs(diffX) / 300));
-                    dataContainer.style.opacity = opacityValue;
-                    
-                    // Show swipe indicator if swipe distance is significant
-                    if (Math.abs(diffX) > 50) {
-                        if (!dataContainer.querySelector('.swipe-indicator')) {
-                            const indicator = document.createElement('div');
-                            indicator.className = 'swipe-indicator';
-                            indicator.innerHTML = '← Swipe to close';
-                            indicator.style.cssText = `
-                                position: absolute;
-                                top: 50%;
-                                left: 20%;
-                                transform: translateY(-50%);
-                                background-color: rgba(0, 0, 0, 0.7);
-                                color: white;
-                                padding: 10px 15px;
-                                border-radius: 20px;
-                                font-family: "Geist", sans-serif;
-                                font-size: 16px;
-                                z-index: 12000;
-                                opacity: 0;
-                                transition: opacity 0.2s ease;
-                            `;
-                            dataContainer.appendChild(indicator);
-                            
-                            // Fade in the indicator
-                            setTimeout(() => {
-                                indicator.style.opacity = '1';
-                            }, 10);
+                    if (state === 'expanded') {
+                        // If expanded and swipe handler doesn't exist, create one
+                        if (!swipeHandler) {
+                            swipeHandler = initializeSwipeFunctionality(
+                                dataContainer, 
+                                'left', 
+                                toggleDataContainer, 
+                                { 
+                                    sessionStorageKey: 'swipeEducationShownLeft'
+                                }
+                            );
+                            console.log('Swipe functionality initialized for datain container');
+                        }
+                    } else {
+                        // If not expanded and swipe handler exists, destroy it
+                        if (swipeHandler) {
+                            swipeHandler.destroy();
+                            swipeHandler = null;
+                            console.log('Swipe functionality removed from datain container');
                         }
                     }
                 }
-            }
+            });
+        });
+        
+        // Start observing
+        dataContainerObserver.observe(dataContainer, { attributes: true });
+        
+        // Initialize swipe handler if container is already expanded
+        if (dataContainer.dataset.state === 'expanded') {
+            swipeHandler = initializeSwipeFunctionality(
+                dataContainer, 
+                'left', 
+                toggleDataContainer, 
+                { 
+                    sessionStorageKey: 'swipeEducationShownLeft' 
+                }
+            );
+            console.log('Initial swipe functionality initialized for datain container');
         }
-        
-        function handleTouchEnd(e) {
-            if (dataContainer.dataset.state !== 'expanded') return;
-            
-            // Remove swipe indicator if it exists
-            const indicator = dataContainer.querySelector('.swipe-indicator');
-            if (indicator) {
-                indicator.style.opacity = '0';
-                setTimeout(() => {
-                    if (indicator.parentNode) {
-                        indicator.parentNode.removeChild(indicator);
-                    }
-                }, 200);
-            }
-            
-            // Restore transition for smooth animation
-            dataContainer.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-            
-            // Check if the swipe was significant enough to close the container
-            if (currentTranslate < -100) { // Threshold for closing gesture (100px) - changed from > 100
-                // Complete the swipe animation
-                dataContainer.style.transform = 'translateX(-100%)';
-                dataContainer.style.opacity = '0';
-                
-                // Close the container after animation completes
-                setTimeout(() => {
-                    dataContainer.style.transform = '';
-                    dataContainer.style.opacity = '1';
-                    dataContainer.style.transition = '';
-                    toggleDataContainer();
-                }, 300);
-            } else {
-                // Reset position if swipe wasn't far enough
-                dataContainer.style.transform = '';
-                dataContainer.style.opacity = '1';
-                setTimeout(() => {
-                    dataContainer.style.transition = '';
-                }, 300);
-            }
-            
-            // Remove event listeners
-            dataContainer.removeEventListener('touchmove', handleTouchMove);
-            dataContainer.removeEventListener('touchend', handleTouchEnd);
-            dataContainer.removeEventListener('touchcancel', handleTouchEnd);
-            
-            currentTranslate = 0;
-        }
-        
-        // Add touch event listeners to container and its content
-        dataContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
-        
-        // Also add touch events to the data-content area to ensure nested scrollable content doesn't block swipes
-        dataContainer.addEventListener('touchmove', (e) => {
-            // Only prevent default when we need to (horizontal swipe)
-            const touch = e.touches[0];
-            const diffX = touch.clientX - touchStartX;
-            const diffY = touch.clientY - touchStartY;
-            
-            // Only prevent default for horizontal swipes (left swipes for left container)
-            if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && diffX < 0) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        }, { passive: false });
-        
-        // Add swipe indicator on initial touch (to educate users about the gesture)
-        function addInitialSwipeIndicator() {
-            if (dataContainer.dataset.state === 'expanded' && !document.querySelector('.swipe-education')) {
-                const indicator = document.createElement('div');
-                indicator.className = 'swipe-education';
-                indicator.innerHTML = '<div class="swipe-arrow">←</div> Swipe left to close';
-                indicator.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 30px;
-                    transform: translateY(-50%);
-                    background-color: rgba(0, 0, 0, 0.8);
-                    color: white;
-                    padding: 15px;
-                    border-radius: 12px;
-                    font-family: "Geist", sans-serif;
-                    font-size: 16px;
-                    z-index: 12500;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                    pointer-events: none;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                `;
-                
-                const arrowStyle = document.createElement('style');
-                arrowStyle.textContent = `
-                    @keyframes pulseArrow {
-                        0% { opacity: 0.7; transform: translateX(0); }
-                        50% { opacity: 1; transform: translateX(-10px); }
-                        100% { opacity: 0.7; transform: translateX(0); }
-                    }
-                    .swipe-arrow {
-                        display: inline-block;
-                        animation: pulseArrow 1.5s infinite;
-                        font-size: 20px;
-                        margin-right: 5px;
-                    }
-                `;
-                document.head.appendChild(arrowStyle);
-                document.body.appendChild(indicator);
-                
-                // Show and hide the indicator briefly after a delay
-                setTimeout(() => {
-                    indicator.style.opacity = '1';
-                    setTimeout(() => {
-                        indicator.style.opacity = '0';
-                        setTimeout(() => {
-                            if (indicator.parentNode) indicator.parentNode.removeChild(indicator);
-                        }, 500);
-                    }, 3000);
-                }, 1000);
-            }
-        }
-        
-        // Show swipe indicator when container is expanded
-        document.addEventListener('touchstart', () => {
-            // Only show education the first time per session
-            if (!sessionStorage.getItem('swipeEducationShownLeft') && dataContainer.dataset.state === 'expanded') {
-                addInitialSwipeIndicator();
-                sessionStorage.setItem('swipeEducationShownLeft', 'true');
-            }
-        }, { passive: true });
         
         // Debug message to confirm initialization
         console.log('Swipe functionality initialized for datain container');
