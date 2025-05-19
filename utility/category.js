@@ -128,7 +128,7 @@ const categoryManager = (function() {
             if (!document.querySelector('.category-back-button')) {
                 const backButton = document.createElement('button');
                 backButton.className = 'category-back-button';
-                backButton.textContent = '← Back to Categories';
+                backButton.textContent = '←';
                 backButton.addEventListener('click', showCategoriesOnly);
                 
                 // Insert back button before the product grid
