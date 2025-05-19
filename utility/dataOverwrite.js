@@ -86,7 +86,7 @@ function createOverwriteButton() {
     buttonContainer.style.bottom = '0'; // Position at the very bottom
     buttonContainer.style.left = '0'; // Position at the very left
     buttonContainer.style.transform = 'none';
-    buttonContainer.style.zIndex = '9997'; // Below data consent but above most content
+    buttonContainer.style.zIndex = '12001'; // Higher than expanded datain/dataout containers (11000)
     buttonContainer.style.padding = '0'; // Remove any padding
     buttonContainer.style.margin = '0'; // Remove any margin
     buttonContainer.style.display = 'block'; // Use block instead of flex
