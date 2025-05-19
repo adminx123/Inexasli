@@ -29,18 +29,10 @@
             <label class="category-label">Personal Details</label>
             <input type="number" id="fitness-age" placeholder="Age" min="0">
             <div class="height-input-group">
-                <input type="number" id="fitness-height" placeholder="Height" step="0.1" min="0">
-                <select id="fitness-height-unit">
-                    <option value="ft">ft</option>
-                    <option value="cm">cm</option>
-                </select>
+                <input type="number" id="fitness-height" placeholder="Height (e.g. 6'1", 185cm)">
             </div>
             <div class="weight-input-group">
-                <input type="number" id="fitness-weight" placeholder="Weight" step="0.1" min="0">
-                <select id="fitness-weight-unit">
-                    <option value="lbs">lbs</option>
-                    <option value="kg">kg</option>
-                </select>
+                <input type="number" id="fitness-weight" placeholder="Weight (e.g. 180lbs, 82kg)">
             </div>
         </div>
         <div class="row1">
@@ -201,9 +193,7 @@
             fitnessLevel: null,
             age: null,
             height: null,
-            heightUnit: null,
             weight: null,
-            weightUnit: null,
             injuries: null,
             frequency: null,
             duration: null
@@ -233,23 +223,13 @@
         }
         
         const heightInput = document.getElementById('fitness-height');
-        if (heightInput && heightInput.value) {
-            formData.height = parseFloat(heightInput.value);
-        }
-        
-        const heightUnitInput = document.getElementById('fitness-height-unit');
-        if (heightUnitInput) {
-            formData.heightUnit = heightUnitInput.value;
+        if (heightInput && heightInput.value.trim()) {
+            formData.height = heightInput.value.trim();
         }
         
         const weightInput = document.getElementById('fitness-weight');
-        if (weightInput && weightInput.value) {
-            formData.weight = parseFloat(weightInput.value);
-        }
-        
-        const weightUnitInput = document.getElementById('fitness-weight-unit');
-        if (weightUnitInput) {
-            formData.weightUnit = weightUnitInput.value;
+        if (weightInput && weightInput.value.trim()) {
+            formData.weight = weightInput.value.trim();
         }
         
         const frequencyInput = document.getElementById('fitness-frequency');
@@ -326,22 +306,10 @@
             console.log(`[FitnessIQ] Restored from JSON: height ${storedData.height}`);
         }
         
-        const heightUnitInput = document.getElementById('fitness-height-unit');
-        if (heightUnitInput && storedData.heightUnit) {
-            heightUnitInput.value = storedData.heightUnit;
-            console.log(`[FitnessIQ] Restored from JSON: height unit ${storedData.heightUnit}`);
-        }
-        
         const weightInput = document.getElementById('fitness-weight');
         if (weightInput && storedData.weight) {
             weightInput.value = storedData.weight;
             console.log(`[FitnessIQ] Restored from JSON: weight ${storedData.weight}`);
-        }
-        
-        const weightUnitInput = document.getElementById('fitness-weight-unit');
-        if (weightUnitInput && storedData.weightUnit) {
-            weightUnitInput.value = storedData.weightUnit;
-            console.log(`[FitnessIQ] Restored from JSON: weight unit ${storedData.weightUnit}`);
         }
         
         const frequencyInput = document.getElementById('fitness-frequency');
