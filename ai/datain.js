@@ -183,14 +183,18 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-left.expanded {
-                max-width: 85%;
-                min-width: 25%;
-                height: calc(100vh - 100px);
-                /* Keep the centered positioning instead of fixed top */
-                top: 50%;
-                transform: translateY(-50%);
+                max-width: 100%;
+                width: 100%;
+                min-width: 100%;
+                height: 100vh;
+                top: 0;
+                left: 0;
+                transform: none;
                 z-index: 11000; /* Higher z-index when expanded to appear over grid */
                 overflow: hidden; /* Changed from default to hidden */
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
             }
 
             .data-container-left:hover {
@@ -210,6 +214,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-family: "Inter", sans-serif;
                 z-index: 11001; /* Make sure it's above other content */
             }
+            
+            .data-container-left.expanded .close-data-container {
+                top: 4px;
+                right: 10px;
+                left: auto;
+                font-size: 18px;
+                padding: 5px;
+                z-index: 11002;
+                background-color: #f5f5f5;
+                border-radius: 4px;
+            }
 
             .data-container-left .data-label {
                 text-decoration: none;
@@ -227,6 +242,19 @@ document.addEventListener('DOMContentLoaded', async function () {
                 text-orientation: mixed;
                 z-index: 11001; /* Make sure it's above other content */
             }
+            
+            .data-container-left.expanded .data-label {
+                writing-mode: horizontal-tb;
+                position: absolute;
+                top: 4px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 18px;
+                padding: 5px;
+                z-index: 11002;
+                background-color: #f5f5f5;
+                border-radius: 4px;
+            }
 
             .data-container-left .data-content {
                 padding: 10px;
@@ -236,6 +264,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
+                width: 100%;
                 max-width: 100%;
                 margin-top: 30px;
                 position: relative; /* Add positioning context */
@@ -257,20 +286,35 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
 
                 .data-container-left.expanded {
-                    max-width: 85%;
-                    min-width: 25%;
-                    height: calc(100vh - 20px);
-                    top: 10px;
-                    transform: none; /* Remove transform on mobile */
+                    max-width: 100%;
+                    width: 100%;
+                    min-width: 100%;
+                    height: 100vh;
+                    top: 0;
+                    left: 0;
+                    transform: none;
+                    border-radius: 0;
+                    border: none;
+                    box-shadow: none;
                 }
 
                 .data-container-left .data-label {
                     font-size: 10px;
                     padding: 3px;
                 }
+                
+                .data-container-left.expanded .data-label {
+                    font-size: 16px;
+                    padding: 4px;
+                }
 
                 .data-container-left .close-data-container {
                     font-size: 12px;
+                    padding: 4px;
+                }
+                
+                .data-container-left.expanded .close-data-container {
+                    font-size: 16px;
                     padding: 4px;
                 }
 
@@ -337,6 +381,59 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dataContainer.dataset.state = 'expanded';
                 setLocal('dataContainerState', 'expanded');
                 
+                // Show swipe hint
+                const swipeHint = document.createElement('div');
+                swipeHint.className = 'swipe-hint';
+                swipeHint.innerHTML = '<span class="swipe-animation">Swipe right to close</span> →';
+                swipeHint.style.cssText = `
+                    position: absolute;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: rgba(0, 0, 0, 0.7);
+                    color: white;
+                    padding: 10px 15px;
+                    border-radius: 20px;
+                    font-family: "Geist", sans-serif;
+                    font-size: 16px;
+                    z-index: 12000;
+                    opacity: 0;
+                    transition: opacity 0.5s ease;
+                `;
+                
+                // Add animation style for the swipe hint
+                const animStyle = document.createElement('style');
+                animStyle.textContent = `
+                    @keyframes pulse {
+                        0% { opacity: 0.7; }
+                        50% { opacity: 1; }
+                        100% { opacity: 0.7; }
+                    }
+                    @keyframes swipeRight {
+                        0% { transform: translateX(0); }
+                        50% { transform: translateX(10px); }
+                        100% { transform: translateX(0); }
+                    }
+                    .swipe-animation {
+                        display: inline-block;
+                        animation: pulse 1.5s infinite, swipeRight 1.5s infinite;
+                    }
+                `;
+                document.head.appendChild(animStyle);
+                dataContainer.appendChild(swipeHint);
+                
+                // Fade in the hint and then fade it out after a few seconds
+                setTimeout(() => {
+                    swipeHint.style.opacity = '1';
+                    setTimeout(() => {
+                        swipeHint.style.opacity = '0';
+                        setTimeout(() => {
+                            if (swipeHint.parentNode) {
+                                swipeHint.parentNode.removeChild(swipeHint);
+                            }
+                        }, 500);
+                    }, 3000);
+                }, 500);
 
                 const leftSideBarOpen = new CustomEvent('left-sidebar-open', {
                     detail: {
@@ -416,6 +513,133 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (lastState === 'expanded') {
             toggleDataContainer();
         }
+        
+        // Add swipe to close functionality
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let currentTranslate = 0;
+        
+        function handleTouchStart(e) {
+            if (dataContainer.dataset.state !== 'expanded') return;
+            
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            
+            // Add transition temporarily during the swipe
+            dataContainer.style.transition = 'none';
+            
+            dataContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+            dataContainer.addEventListener('touchend', handleTouchEnd);
+            dataContainer.addEventListener('touchcancel', handleTouchEnd);
+        }
+        
+        function handleTouchMove(e) {
+            if (dataContainer.dataset.state !== 'expanded') return;
+            
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            
+            // Calculate horizontal distance moved
+            const diffX = touchX - touchStartX;
+            
+            // Calculate vertical distance moved for determining if it's a horizontal swipe
+            const diffY = touchY - touchStartY;
+            
+            // Make sure horizontal swipe is more significant than vertical (avoid conflict with scrolling)
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                // For datain (left container), only respond to rightward swipes
+                if (diffX > 0) {
+                    e.preventDefault(); // Prevent page scrolling during swipe
+                    currentTranslate = diffX;
+                    dataContainer.style.transform = `translateX(${diffX}px)`;
+                    
+                    // Add dynamic opacity effect based on swipe distance
+                    // Calculate opacity: 1 at 0px swipe, decreasing to 0.7 at 100px swipe
+                    const opacityValue = Math.max(0.7, 1 - (Math.abs(diffX) / 300));
+                    dataContainer.style.opacity = opacityValue;
+                    
+                    // Show swipe indicator if swipe distance is significant
+                    if (Math.abs(diffX) > 50) {
+                        if (!dataContainer.querySelector('.swipe-indicator')) {
+                            const indicator = document.createElement('div');
+                            indicator.className = 'swipe-indicator';
+                            indicator.innerHTML = 'Swipe to close →';
+                            indicator.style.cssText = `
+                                position: absolute;
+                                top: 50%;
+                                right: 20%;
+                                transform: translateY(-50%);
+                                background-color: rgba(0, 0, 0, 0.7);
+                                color: white;
+                                padding: 10px 15px;
+                                border-radius: 20px;
+                                font-family: "Geist", sans-serif;
+                                font-size: 16px;
+                                z-index: 12000;
+                                opacity: 0;
+                                transition: opacity 0.2s ease;
+                            `;
+                            dataContainer.appendChild(indicator);
+                            
+                            // Fade in the indicator
+                            setTimeout(() => {
+                                indicator.style.opacity = '1';
+                            }, 10);
+                        }
+                    }
+                }
+            }
+        }
+        
+        function handleTouchEnd(e) {
+            if (dataContainer.dataset.state !== 'expanded') return;
+            
+            // Remove swipe indicator if it exists
+            const indicator = dataContainer.querySelector('.swipe-indicator');
+            if (indicator) {
+                indicator.style.opacity = '0';
+                setTimeout(() => {
+                    if (indicator.parentNode) {
+                        indicator.parentNode.removeChild(indicator);
+                    }
+                }, 200);
+            }
+            
+            // Restore transition for smooth animation
+            dataContainer.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+            
+            // Check if the swipe was significant enough to close the container
+            if (currentTranslate > 100) { // Threshold for closing gesture (100px)
+                // Complete the swipe animation
+                dataContainer.style.transform = 'translateX(100%)';
+                dataContainer.style.opacity = '0';
+                
+                // Close the container after animation completes
+                setTimeout(() => {
+                    dataContainer.style.transform = '';
+                    dataContainer.style.opacity = '1';
+                    dataContainer.style.transition = '';
+                    toggleDataContainer();
+                }, 300);
+            } else {
+                // Reset position if swipe wasn't far enough
+                dataContainer.style.transform = '';
+                dataContainer.style.opacity = '1';
+                setTimeout(() => {
+                    dataContainer.style.transition = '';
+                }, 300);
+            }
+            
+            // Remove event listeners
+            dataContainer.removeEventListener('touchmove', handleTouchMove);
+            dataContainer.removeEventListener('touchend', handleTouchEnd);
+            dataContainer.removeEventListener('touchcancel', handleTouchEnd);
+            
+            currentTranslate = 0;
+        }
+        
+        // Add touch event listener to container
+        dataContainer.addEventListener('touchstart', handleTouchStart);
     }
 
     try {
