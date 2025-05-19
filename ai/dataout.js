@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Show swipe hint
                 const swipeHint = document.createElement('div');
                 swipeHint.className = 'swipe-hint';
-                swipeHint.innerHTML = '← <span class="swipe-animation">Swipe left to close</span>';
+                swipeHint.innerHTML = '<span class="swipe-animation">Swipe right to close</span> →';
                 swipeHint.style.cssText = `
                     position: absolute;
                     bottom: 20px;
@@ -364,14 +364,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                         50% { opacity: 1; }
                         100% { opacity: 0.7; }
                     }
-                    @keyframes swipeLeft {
+                    @keyframes swipeRight {
                         0% { transform: translateX(0); }
-                        50% { transform: translateX(-10px); }
+                        50% { transform: translateX(10px); }
                         100% { transform: translateX(0); }
                     }
                     .swipe-animation {
                         display: inline-block;
-                        animation: pulse 1.5s infinite, swipeLeft 1.5s infinite;
+                        animation: pulse 1.5s infinite, swipeRight 1.5s infinite;
                     }
                 `;
                 document.head.appendChild(animStyle);
@@ -591,10 +591,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         function handleTouchMove(e) {
             if (dataContainer.dataset.state !== 'expanded') return;
             
-            // Always prevent default to ensure we have control
-            e.preventDefault();
-            e.stopPropagation();
-            
             const touchX = e.touches[0].clientX;
             const touchY = e.touches[0].clientY;
             
@@ -604,13 +600,23 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Calculate vertical distance moved for determining if it's a horizontal swipe
             const diffY = touchY - touchStartY;
             
+            // If this appears to be primarily a horizontal swipe
+            if (Math.abs(diffX) > Math.abs(diffY) * 0.8) {
+                // Always prevent default to ensure we have control of horizontal swipes
+                e.preventDefault();
+                e.stopPropagation();
+            } else if (Math.abs(diffY) > 10) {
+                // This appears to be a vertical scroll, so don't interfere
+                return;
+            }
+            
             console.log(`Touch move: diffX=${diffX}, diffY=${diffY}`);
             
             // Make sure horizontal swipe is more significant than vertical (avoid conflict with scrolling)
             // Reduced the threshold to make swiping more responsive
             if (Math.abs(diffX) > Math.abs(diffY) * 0.8) {
-                // For dataout (right container), only respond to leftward swipes
-                if (diffX < 0) {
+                // For dataout (right container), only respond to rightward swipes (changed from leftward)
+                if (diffX > 0) {
                     currentTranslate = diffX;
                     
                     // Apply transform directly to container to ensure it moves
@@ -627,11 +633,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                         if (!dataContainer.querySelector('.swipe-indicator')) {
                             const indicator = document.createElement('div');
                             indicator.className = 'swipe-indicator';
-                            indicator.innerHTML = '← Swipe to close';
+                            indicator.innerHTML = 'Swipe to close →';
                             indicator.style.cssText = `
                                 position: absolute;
                                 top: 50%;
-                                left: 20%;
+                                right: 20%;
                                 transform: translateY(-50%);
                                 background-color: rgba(0, 0, 0, 0.7);
                                 color: white;
@@ -673,9 +679,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
             
             // Check if the swipe was significant enough to close the container
-            if (currentTranslate < -100) { // Threshold for closing gesture (100px)
+            if (currentTranslate > 100) { // Threshold for closing gesture (100px) - changed from < -100
                 // Complete the swipe animation
-                dataContainer.style.transform = 'translateX(-100%)';
+                dataContainer.style.transform = 'translateX(100%)';
                 dataContainer.style.opacity = '0';
                 
                 // Close the container after animation completes
@@ -712,12 +718,75 @@ document.addEventListener('DOMContentLoaded', async function () {
             const diffX = touch.clientX - touchStartX;
             const diffY = touch.clientY - touchStartY;
             
-            // Only prevent default for horizontal swipes (left swipes for right container)
-            if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && diffX < 0) {
+            // Only prevent default for horizontal swipes (right swipes for right container)
+            if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && diffX > 0) {
                 e.preventDefault();
                 e.stopPropagation();
             }
         }, { passive: false });
+        
+        // Add swipe indicator on initial touch (to educate users about the gesture)
+        function addInitialSwipeIndicator() {
+            if (dataContainer.dataset.state === 'expanded' && !document.querySelector('.swipe-education')) {
+                const indicator = document.createElement('div');
+                indicator.className = 'swipe-education';
+                indicator.innerHTML = '<div class="swipe-arrow">→</div> Swipe right to close';
+                indicator.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    right: 30px;
+                    transform: translateY(-50%);
+                    background-color: rgba(0, 0, 0, 0.8);
+                    color: white;
+                    padding: 15px;
+                    border-radius: 12px;
+                    font-family: "Geist", sans-serif;
+                    font-size: 16px;
+                    z-index: 12500;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                    pointer-events: none;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                `;
+                
+                const arrowStyle = document.createElement('style');
+                arrowStyle.textContent = `
+                    @keyframes pulseArrow {
+                        0% { opacity: 0.7; transform: translateX(0); }
+                        50% { opacity: 1; transform: translateX(10px); }
+                        100% { opacity: 0.7; transform: translateX(0); }
+                    }
+                    .swipe-arrow {
+                        display: inline-block;
+                        animation: pulseArrow 1.5s infinite;
+                        font-size: 20px;
+                        margin-right: 5px;
+                    }
+                `;
+                document.head.appendChild(arrowStyle);
+                document.body.appendChild(indicator);
+                
+                // Show and hide the indicator briefly after a delay
+                setTimeout(() => {
+                    indicator.style.opacity = '1';
+                    setTimeout(() => {
+                        indicator.style.opacity = '0';
+                        setTimeout(() => {
+                            if (indicator.parentNode) indicator.parentNode.removeChild(indicator);
+                        }, 500);
+                    }, 3000);
+                }, 1000);
+            }
+        }
+        
+        // Show swipe indicator when container is expanded
+        document.addEventListener('touchstart', () => {
+            // Only show education the first time per session
+            if (!sessionStorage.getItem('swipeEducationShown') && dataContainer.dataset.state === 'expanded') {
+                addInitialSwipeIndicator();
+                sessionStorage.setItem('swipeEducationShown', 'true');
+            }
+        }, { passive: true });
         
         // Debug message to confirm initialization
         console.log('Swipe functionality initialized for dataout container');
