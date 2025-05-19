@@ -124,21 +124,10 @@ const categoryManager = (function() {
             // Add the product grid to the modal
             modalContent.appendChild(productGrid);
             
-            // Add a back button to go back to categories
-            if (!document.querySelector('.category-back-button')) {
-                const backButton = document.createElement('button');
-                backButton.className = 'category-back-button';
-                backButton.textContent = '←';
-                backButton.addEventListener('click', showCategoriesOnly);
-                
-                // Insert back button before the product grid
-                modalContent.insertBefore(backButton, productGrid);
-            }
-            
-            // Hide the category filters
+            // Keep category filters visible
             const filterGrid = document.querySelector('.category-filter-grid');
             if (filterGrid) {
-                filterGrid.style.display = 'none';
+                filterGrid.style.display = 'flex';
             }
             
             // No need to update title since we removed it
@@ -203,26 +192,7 @@ const categoryManager = (function() {
         return productGrid;
     }
     
-    // Function to show only categories and hide products
-    function showCategoriesOnly() {
-        // Remove any product grid
-        const existingProductGrid = document.querySelector('#category-modal .product-grid');
-        if (existingProductGrid) {
-            existingProductGrid.remove();
-        }
-        
-        // Show the category filters
-        const filterGrid = document.querySelector('.category-filter-grid');
-        if (filterGrid) {
-            filterGrid.style.display = 'flex';
-        }
-        
-        // Remove the back button
-        const backButton = document.querySelector('.category-back-button');
-        if (backButton) {
-            backButton.remove();
-        }
-    }
+    // Categories are always visible, no need for a function to toggle their visibility
     
     // Function to load product content - connects to landing.js functionality
     function loadProductContent(url) {
@@ -305,32 +275,7 @@ const categoryManager = (function() {
                 cursor: default; /* Reset cursor for the modal content */
             }
             
-            /* Back button styling */
-            .category-back-button {
-                background-color: #f5f5f5;
-                color: #000;
-                border: 1px solid #000;
-                border-radius: 5px;
-                padding: 8px 15px;
-                margin-bottom: 15px;
-                cursor: pointer;
-                font-family: "Geist", sans-serif;
-                font-size: 14px;
-                box-shadow: 2px 2px 0 #000;
-                transition: all 0.2s ease;
-                align-self: flex-start;
-            }
-            
-            .category-back-button:hover {
-                background-color: #e5e5e5;
-                transform: translateY(-2px);
-                box-shadow: 3px 3px 0 #000;
-            }
-            
-            .category-back-button:active {
-                transform: translateY(0);
-                box-shadow: 1px 1px 0 #000;
-            }
+            /* No back button styling needed */
             
             .category-filter-grid {
                 display: flex;
@@ -371,7 +316,7 @@ const categoryManager = (function() {
             }
             
             .category-filter-item.active {
-                background-color: #c0c0c0;
+                background-color:rgb(255, 255, 255);
                 box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2), 2px 2px 0 #000;
                 transform: translateY(0);
             }
