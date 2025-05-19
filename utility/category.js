@@ -141,11 +141,7 @@ const categoryManager = (function() {
                 filterGrid.style.display = 'none';
             }
             
-            // Update the modal title based on category
-            const title = modalContent.querySelector('h2');
-            if (title) {
-                title.textContent = category === 'all' ? 'All Products' : category.charAt(0).toUpperCase() + category.slice(1);
-            }
+            // No need to update title since we removed it
         }
     }
     
@@ -225,15 +221,6 @@ const categoryManager = (function() {
         const backButton = document.querySelector('.category-back-button');
         if (backButton) {
             backButton.remove();
-        }
-        
-        // Reset modal title
-        const modalContent = document.querySelector('.category-modal-content');
-        if (modalContent) {
-            const title = modalContent.querySelector('h2');
-            if (title) {
-                title.textContent = 'Categories';
-            }
         }
     }
     
@@ -316,17 +303,6 @@ const categoryManager = (function() {
                 border-radius: 8px;
                 box-shadow: 4px 4px 0 #000;
                 cursor: default; /* Reset cursor for the modal content */
-            }
-            
-            /* Style for h2 elements to ensure proper spacing */
-            .category-modal-content h2 {
-                margin: 0 0 20px 0;
-                padding: 0;
-                width: auto;
-                max-width: 80%;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
             }
             
             /* Back button styling */
@@ -485,26 +461,7 @@ const categoryManager = (function() {
         styleElement.textContent = modalStyles;
         document.head.appendChild(styleElement);
         
-        // Create header container to hold the title
-        const headerContainer = document.createElement('div');
-        headerContainer.style.display = 'flex';
-        headerContainer.style.justifyContent = 'center';
-        headerContainer.style.alignItems = 'center';
-        headerContainer.style.position = 'relative';
-        headerContainer.style.width = '100%';
-        headerContainer.style.marginBottom = '20px';
-        
-        // Create title
-        const title = document.createElement('h2');
-        title.style.textAlign = 'center';
-        title.style.fontFamily = '"Geist", sans-serif';
-        title.style.margin = '0';
-        title.style.fontSize = '20px';
-        title.textContent = 'Categories';
-        headerContainer.appendChild(title);
-        
-        // Add the header container to the modal content
-        modalContent.appendChild(headerContainer);
+        // No header/title needed for a clean, minimal interface
         
         // Create category filter grid
         const filterGrid = document.createElement('div');
@@ -531,16 +488,6 @@ const categoryManager = (function() {
         });
         
         modalContent.appendChild(filterGrid);
-        
-        // Add a subtitle or instruction
-        const subtitle = document.createElement('p');
-        subtitle.style.textAlign = 'center';
-        subtitle.style.fontFamily = '"Inter", sans-serif';
-        subtitle.style.fontSize = '14px';
-        subtitle.style.margin = '20px 0 0';
-        subtitle.style.color = '#555';
-        subtitle.textContent = 'Select a category to filter products';
-        modalContent.appendChild(subtitle);
         
         return modalContent;
     }
