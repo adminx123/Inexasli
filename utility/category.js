@@ -34,7 +34,7 @@ const categoryManager = (function() {
         'EventIQ': '/ai/event/eventiq.html',
         'FitnessIQ': '/ai/fitness/fitnessiq.html',
         'General': '/ai/general/general.html',
-        'IncomeIQ': '/ai/income/budget.html',
+        'IncomeIQ': '/ai/income/intro.html',
         'MarketingIQ': '/ai/marketing/marketingiq.html',
         'NewBizIQ': '/ai/business/businessiq.html',
         'QuizIQ': '/ai/quiz/quiziq.html',
@@ -242,8 +242,8 @@ const categoryManager = (function() {
         try {
             console.log(`Product item clicked, loading content from: ${url}`);
             
-            // Detect if this is the budget/incomeIQ item
-            const isBudgetItem = url === '/ai/income/budget.html';
+            // Detect if this is the intro/incomeIQ item
+            const isBudgetItem = url === '/ai/income/intro.html';
             
             // Toggle UI mode based on selection if the function exists
             if (typeof window.toggleUiMode === 'function') {
