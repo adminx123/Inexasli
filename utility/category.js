@@ -701,19 +701,8 @@ if (document.body) {
     });
 }
 
-// Open the category modal automatically when on landing page
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if we're on the landing page
-    if (window.location.pathname.includes('landing.html') || 
-        window.location.pathname === '/' ||
-        window.location.pathname === '/index.html') {
-        
-        // Wait a moment before opening the modal to ensure everything is loaded
-        setTimeout(() => {
-            categoryManager.openModal();
-        }, 500);
-    }
-});
+// Removed automatic opening of category modal on page load
+// Modal will now only open when the category button is clicked
 
 // Make functions available to landing.js
 window.categoryManager = categoryManager;
