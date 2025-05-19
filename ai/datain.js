@@ -520,21 +520,36 @@ document.addEventListener('DOMContentLoaded', async function () {
         let currentTranslate = 0;
         
         function handleTouchStart(e) {
-            if (dataContainer.dataset.state !== 'expanded') return;
+            console.log('Touch start detected on datain container');
+            
+            if (dataContainer.dataset.state !== 'expanded') {
+                console.log('Container not expanded, ignoring touch');
+                return;
+            }
             
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
+            console.log(`Touch coordinates: X=${touchStartX}, Y=${touchStartY}`);
             
             // Add transition temporarily during the swipe
             dataContainer.style.transition = 'none';
             
+            // Make sure these event listeners are properly attached
             dataContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
             dataContainer.addEventListener('touchend', handleTouchEnd);
             dataContainer.addEventListener('touchcancel', handleTouchEnd);
+            
+            // Prevent default and stop propagation to ensure no other touch handlers interfere
+            e.preventDefault();
+            e.stopPropagation();
         }
         
         function handleTouchMove(e) {
             if (dataContainer.dataset.state !== 'expanded') return;
+            
+            // Always prevent default and stop propagation
+            e.preventDefault();
+            e.stopPropagation();
             
             const touchX = e.touches[0].clientX;
             const touchY = e.touches[0].clientY;
@@ -545,13 +560,15 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Calculate vertical distance moved for determining if it's a horizontal swipe
             const diffY = touchY - touchStartY;
             
-            // Make sure horizontal swipe is more significant than vertical (avoid conflict with scrolling)
-            if (Math.abs(diffX) > Math.abs(diffY)) {
+            console.log(`Touch move: diffX=${diffX}, diffY=${diffY}`);
+            
+            // Make horizontal swipe detection more sensitive (reduced from 1.0 to 0.8)
+            if (Math.abs(diffX) > Math.abs(diffY) * 0.8) {
                 // For datain (left container), only respond to rightward swipes
                 if (diffX > 0) {
-                    e.preventDefault(); // Prevent page scrolling during swipe
                     currentTranslate = diffX;
                     dataContainer.style.transform = `translateX(${diffX}px)`;
+                    console.log(`Applied transform: translateX(${diffX}px)`);
                     
                     // Add dynamic opacity effect based on swipe distance
                     // Calculate opacity: 1 at 0px swipe, decreasing to 0.7 at 100px swipe
@@ -638,15 +655,44 @@ document.addEventListener('DOMContentLoaded', async function () {
             currentTranslate = 0;
         }
         
-        // Add touch event listener to container
-        dataContainer.addEventListener('touchstart', handleTouchStart);
+        // Add touch event listeners to container and its content
+        dataContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+        
+        // Also add touch events to the data-content area to ensure nested scrollable content doesn't block swipes
+        dataContainer.addEventListener('touchmove', (e) => {
+            // Only prevent default when we need to (horizontal swipe)
+            const touch = e.touches[0];
+            const diffX = touch.clientX - touchStartX;
+            const diffY = touch.clientY - touchStartY;
+            
+            // Only prevent default for horizontal swipes
+            if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && diffX > 0) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }, { passive: false });
+        
+        // Debug message to confirm initialization
+        console.log('Swipe functionality initialized for datain container');
     }
 
     try {
         if (!isCookieExpired) {
             initializeDataContainer();
+            
+            // Mobile device detection for debugging
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            console.log(`Device detected: ${isMobile ? 'Mobile' : 'Desktop'}`);
+            console.log(`User agent: ${navigator.userAgent}`);
+            
+            // Additional debug info for touch support
+            if (isMobile) {
+                console.log('Touch events should be fully supported on this device');
+                console.log(`Touch points supported: ${navigator.maxTouchPoints}`);
+                console.log(`Screen size: ${window.screen.width}x${window.screen.height}`);
+            }
         }
     } catch (error) {
-        
+        console.error('Error initializing left data container (datain.js):', error);
     }
 });
