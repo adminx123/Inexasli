@@ -16,6 +16,21 @@
  * - It exports toggleUiMode and setLocal for use by category.js
  */
 
+// Add initial style tag to prevent flash of content
+(function() {
+    const initialStyle = document.createElement('style');
+    initialStyle.id = 'initial-container-hide';
+    initialStyle.textContent = `
+        .data-container-intro, .data-container-income, .data-container-expense,
+        .data-container-asset, .data-container-liability, .data-container-summary {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+    `;
+    document.head.appendChild(initialStyle);
+})();
+
 import { setLocal } from '/utility/setlocal.js';
 import { getLocal } from '/utility/getlocal.js';
 
@@ -87,29 +102,50 @@ const UIManager = {
     
     // Apply direct DOM style changes for immediate effect
     applyDOMStyles(isBudgetMode) {
-        const dataContainers = SELECTORS.data.map(selector => document.querySelector(selector)).filter(Boolean);
-        const budgetContainers = SELECTORS.budget.map(selector => document.querySelector(selector)).filter(Boolean);
+        // Use querySelectorAll to get all matching elements, not just the first one
+        const dataContainers = [];
+        const budgetContainers = [];
+        
+        // Collect all elements for both selectors
+        SELECTORS.data.forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => dataContainers.push(el));
+        });
+        
+        SELECTORS.budget.forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => budgetContainers.push(el));
+        });
         
         if (isBudgetMode) {
             // Hide data containers
             dataContainers.forEach(element => {
-                element.style.setProperty('display', 'none', 'important');
+                if (element) {
+                    element.style.setProperty('display', 'none', 'important');
+                }
             });
             
-            // Show budget tabs
+            // Show budget tabs - ensure they're fully visible with opacity
             budgetContainers.forEach(element => {
-                element.style.removeProperty('display');
-                element.style.setProperty('visibility', 'visible');
+                if (element) {
+                    element.style.removeProperty('display');
+                    element.style.setProperty('visibility', 'visible');
+                    element.style.setProperty('opacity', '1');
+                }
             });
         } else {
-            // Hide budget tabs
+            // Hide budget tabs - use both display:none and visibility:hidden for belt-and-suspenders
             budgetContainers.forEach(element => {
-                element.style.setProperty('visibility', 'hidden');
+                if (element) {
+                    element.style.setProperty('display', 'none', 'important');
+                    element.style.setProperty('visibility', 'hidden', 'important');
+                    element.style.setProperty('opacity', '0', 'important');
+                }
             });
             
             // Show data containers
             dataContainers.forEach(element => {
-                element.style.removeProperty('display');
+                if (element) {
+                    element.style.removeProperty('display');
+                }
             });
         }
     },
@@ -139,13 +175,25 @@ const UIManager = {
             this.styleSheet.insertRule(`${selector} { display: none !important; }`, 0);
         });
         
-        // Hide budget tabs with visibility:hidden to keep them in DOM
+        // Aggressively hide budget tabs (both display:none and visibility:hidden)
         SELECTORS.budget.forEach(selector => {
-            this.styleSheet.insertRule(`${selector} { visibility: hidden; }`, 0);
+            this.styleSheet.insertRule(`${selector} { display: none !important; visibility: hidden !important; opacity: 0 !important; }`, 0);
         });
         
-        // Also apply direct DOM styles
+        // Also apply direct DOM styles immediately
         this.applyDOMStyles(false);
+        
+        // Apply styles directly to DOM elements to ensure they're hidden
+        SELECTORS.budget.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                if (el) {
+                    el.style.setProperty('display', 'none', 'important');
+                    el.style.setProperty('visibility', 'hidden', 'important');
+                    el.style.setProperty('opacity', '0', 'important');
+                }
+            });
+        });
     },
     
     // Master function to toggle UI mode
@@ -186,12 +234,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check if we should be in budget mode on page load
     const lastGridItemUrl = getLocal('lastGridItemUrl');
     if (lastGridItemUrl) {
-        const shouldActivateBudgetMode = lastGridItemUrl === '/ai/income/budget.html';
+        const shouldActivateBudgetMode = lastGridItemUrl === '/ai/income/intro.html';
         
-        // Use a delay to ensure all containers are created
+        // Reduced delay for faster transition and to prevent flashing
         setTimeout(() => {
             UIManager.setMode(shouldActivateBudgetMode);
-        }, 500);
+        }, 100);
+    }
+    
+    // Remove the initial style tag once the UI manager has taken over
+    const initialStyleTag = document.getElementById('initial-container-hide');
+    if (initialStyleTag) {
+        setTimeout(() => initialStyleTag.remove(), 200);
     }
     
     // Force initialization events for components
