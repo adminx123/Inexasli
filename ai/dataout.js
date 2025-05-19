@@ -26,6 +26,22 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let dataContainer = null;
 
+    // Listen for datain expansion/collapse
+    document.addEventListener('datain-state-changed', function(event) {
+        if (!dataContainer) return;
+        
+        const dataInState = event.detail.state;
+        if (dataInState === 'expanded') {
+            // When datain is expanded, make dataout appear above it
+            dataContainer.style.zIndex = '12000';
+        } else {
+            // When datain is collapsed, reset dataout's z-index
+            if (dataContainer.dataset.state !== 'expanded') {
+                dataContainer.style.zIndex = '10000';
+            }
+        }
+    });
+
     async function loadStoredContent(url) {
         try {
             const response = await fetch(url);
@@ -103,7 +119,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 z-index: 10000;
                 max-width: 34px;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, z-index 0.1s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
@@ -320,7 +336,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         function toggleDataContainer() {
             if (!dataContainer) return;
             const isExpanded = dataContainer.dataset.state === 'expanded';
-
+            
+            // Get reference to datain container
+            const dataInContainer = document.querySelector('.data-container-left');
+        
             if (isExpanded) {
                 dataContainer.classList.remove('expanded');
                 dataContainer.classList.add('initial');
@@ -330,6 +349,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <span class="close-data-container">+</span>
                     <span class="data-label">DATA OUT</span>
                 `;
+                
+                // Reset datain container z-index when dataout collapses
+                if (dataInContainer) {
+                    dataInContainer.style.zIndex = '10000';
+                }
+                
+                // Dispatch state change event
+                document.dispatchEvent(new CustomEvent('dataout-state-changed', {
+                    detail: { state: 'initial' }
+                }));
+                
                 console.log('Right data container collapsed and reset (dataout.js)');
             } else {
                 dataContainer.classList.remove('initial');
@@ -337,8 +367,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dataContainer.dataset.state = 'expanded';
                 setLocal('dataOutContainerState', 'expanded');
                 
+                // Set datain container to higher z-index to appear above expanded dataout
+                if (dataInContainer) {
+                    dataInContainer.style.zIndex = '12000';
+                }
+                
+                // Dispatch state change event
+                document.dispatchEvent(new CustomEvent('dataout-state-changed', {
+                    detail: { state: 'expanded' }
+                }));
+                
                 // Note: Swipe hint is now handled by the swipeFunctionality.js module
-
+        
                 const lastGridItemUrl = getLocal('lastGridItemUrl');
                 const outputMap = {
                     '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
@@ -362,7 +402,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     '/ai/workflow/workflowiq.html': '/ai/apioutput.html?gridItem=workflowiq'
                 };
                 const outUrl = outputMap[lastGridItemUrl];
-
+        
                 if (outUrl) {
                     setLocal('lastDataOutUrl', outUrl);
                     loadStoredContent(outUrl);
@@ -374,17 +414,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                     `;
                 }
             }
-
+        
             const newClose = dataContainer.querySelector('.close-data-container');
             const newLabel = dataContainer.querySelector('.data-label');
-
+        
             if (newClose) {
                 newClose.addEventListener('click', function (e) {
                     e.preventDefault();
                     toggleDataContainer();
                 });
             }
-
+        
             if (newLabel) {
                 newLabel.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -392,6 +432,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
             }
         }
+        
 
         // Listen for grid item selection or output events
         document.addEventListener('promptGridItemSelected', function (e) {
@@ -549,23 +590,35 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.log('Swipe functionality initialized for dataout container');
     }
 
-    try {
-        if (!isCookieExpired) {
-            initializeDataContainer();
-            
-            // Mobile device detection for debugging
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            console.log(`Device detected: ${isMobile ? 'Mobile' : 'Desktop'}`);
-            console.log(`User agent: ${navigator.userAgent}`);
-            
-            // Additional debug info for touch support
-            if (isMobile) {
-                console.log('Touch events should be fully supported on this device');
-                console.log(`Touch points supported: ${navigator.maxTouchPoints}`);
-                console.log(`Screen size: ${window.screen.width}x${window.screen.height}`);
-            }
+    async function initializeApp() {
+        initializeDataContainer();
+
+        // Check if data-in is already expanded to adjust z-index appropriately
+        const dataInContainer = document.querySelector('.data-container-left');
+        if (dataInContainer && dataInContainer.dataset.state === 'expanded') {
+            dataContainer.style.zIndex = '12000';
         }
-    } catch (error) {
-        console.error('Error initializing right data container (dataout.js):', error);
+
+        try {
+            if (!isCookieExpired) {
+                initializeDataContainer();
+                
+                // Mobile device detection for debugging
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                console.log(`Device detected: ${isMobile ? 'Mobile' : 'Desktop'}`);
+                console.log(`User agent: ${navigator.userAgent}`);
+                
+                // Additional debug info for touch support
+                if (isMobile) {
+                    console.log('Touch events should be fully supported on this device');
+                    console.log(`Touch points supported: ${navigator.maxTouchPoints}`);
+                    console.log(`Screen size: ${window.screen.width}x${window.screen.height}`);
+                }
+            }
+        } catch (error) {
+            console.error('Error initializing right data container (dataout.js):', error);
+        }
     }
+
+    initializeApp();
 });

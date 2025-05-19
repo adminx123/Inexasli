@@ -73,7 +73,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let dataContainer = null;
 
-
+    // Listen for dataout expansion/collapse
+    document.addEventListener('dataout-state-changed', function(event) {
+        if (!dataContainer) return;
+        
+        const dataOutState = event.detail.state;
+        if (dataOutState === 'expanded') {
+            // When dataout is expanded, make datain appear above it
+            dataContainer.style.zIndex = '12000';
+        } else {
+            // When dataout is collapsed, reset datain's z-index
+            if (dataContainer.dataset.state !== 'expanded') {
+                dataContainer.style.zIndex = '10000';
+            }
+        }
+    });
 
     async function loadStoredContent(url) {
         try {
@@ -150,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 z-index: 10000;
                 max-width: 34px;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, z-index 0.1s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
@@ -165,7 +179,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 display: flex;
                 justify-content: center;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, z-index 0.1s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
@@ -365,6 +379,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (!dataContainer) return;
 
             const isExpanded = dataContainer.dataset.state === 'expanded';
+            
+            // Get reference to dataout container
+            const dataOutContainer = document.querySelector('.data-container-right');
 
             if (isExpanded) {
                 dataContainer.classList.remove('expanded');
@@ -376,12 +393,31 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <span class="data-label">DATA IN</span>
                 `;
                 
+                // Reset dataout container z-index when datain collapses
+                if (dataOutContainer) {
+                    dataOutContainer.style.zIndex = '10000';
+                }
+                
+                // Dispatch state change event
+                document.dispatchEvent(new CustomEvent('datain-state-changed', {
+                    detail: { state: 'initial' }
+                }));
+                
             } else {
                 dataContainer.classList.remove('initial');
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
-                setLocal('dataContainerState', 'expanded');
-
+                
+                // Set dataout container to higher z-index to appear above expanded datain
+                if (dataOutContainer) {
+                    dataOutContainer.style.zIndex = '12000';
+                }
+                
+                // Dispatch state change event
+                document.dispatchEvent(new CustomEvent('datain-state-changed', {
+                    detail: { state: 'expanded' }
+                }));
+                
                 const leftSideBarOpen = new CustomEvent('left-sidebar-open', {
                     detail: {
                         state: 'expanded'
@@ -515,23 +551,35 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.log('Swipe functionality initialized for datain container');
     }
 
-    try {
-        if (!isCookieExpired) {
-            initializeDataContainer();
-            
-            // Mobile device detection for debugging
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            console.log(`Device detected: ${isMobile ? 'Mobile' : 'Desktop'}`);
-            console.log(`User agent: ${navigator.userAgent}`);
-            
-            // Additional debug info for touch support
-            if (isMobile) {
-                console.log('Touch events should be fully supported on this device');
-                console.log(`Touch points supported: ${navigator.maxTouchPoints}`);
-                console.log(`Screen size: ${window.screen.width}x${window.screen.height}`);
-            }
+    async function initializeApp() {
+        initializeDataContainer();
+
+        // Check if data-out is already expanded to adjust z-index appropriately
+        const dataOutContainer = document.querySelector('.data-container-right');
+        if (dataOutContainer && dataOutContainer.dataset.state === 'expanded') {
+            dataContainer.style.zIndex = '12000';
         }
-    } catch (error) {
-        console.error('Error initializing left data container (datain.js):', error);
+
+        try {
+            if (!isCookieExpired) {
+                initializeDataContainer();
+                
+                // Mobile device detection for debugging
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                console.log(`Device detected: ${isMobile ? 'Mobile' : 'Desktop'}`);
+                console.log(`User agent: ${navigator.userAgent}`);
+                
+                // Additional debug info for touch support
+                if (isMobile) {
+                    console.log('Touch events should be fully supported on this device');
+                    console.log(`Touch points supported: ${navigator.maxTouchPoints}`);
+                    console.log(`Screen size: ${window.screen.width}x${window.screen.height}`);
+                }
+            }
+        } catch (error) {
+            console.error('Error initializing left data container (datain.js):', error);
+        }
     }
+
+    initializeApp();
 });
