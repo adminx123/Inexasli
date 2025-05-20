@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 left: 0;
                 transform: none;
                 z-index: 11000; /* Higher z-index when expanded to appear over grid */
-                overflow: hidden; /* Changed from default to hidden */
+                overflow-y: auto; /* Changed to allow vertical scrolling */
                 border-radius: 0;
                 border: none;
                 box-shadow: none;
@@ -336,9 +336,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 .data-container-left .data-content {
                     font-size: 12px;
                     padding: 8px;
+                    overflow-y: auto; /* Ensure vertical scrolling works */
                     overflow-x: auto;
                     margin-top: 25px;
                     height: calc(100% - 35px); /* Adjusted for mobile */
+                    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
                 }
             }
         `;
