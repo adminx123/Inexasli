@@ -50,13 +50,11 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
         container.style.transition = 'none';
         
         // Add event listeners for swipe gestures
-        container.addEventListener('touchmove', handleTouchMove, { passive: false });
+        container.addEventListener('touchmove', handleTouchMove, { passive: true });
         container.addEventListener('touchend', handleTouchEnd);
         container.addEventListener('touchcancel', handleTouchEnd);
         
-        // Prevent default and stop propagation to ensure no other touch handlers interfere
-        e.preventDefault();
-        e.stopPropagation();
+        // Don't prevent default here to allow scrolling to work
     }
     
     function handleTouchMove(e) {
@@ -67,9 +65,11 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
         const diffX = touchX - touchStartX;
         const diffY = touchY - touchStartY;
         
-        // If this appears to be primarily a horizontal swipe
-        if (Math.abs(diffX) > Math.abs(diffY) * 0.8) {
-            // Always prevent default for horizontal swipes to ensure smooth gesture
+        // If this appears to be primarily a horizontal swipe AND in the correct direction
+        const isCorrectDirection = (direction === 'left' && diffX < 0) || (direction === 'right' && diffX > 0);
+        
+        if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && isCorrectDirection) {
+            // Only prevent default for intentional horizontal swipes in the correct direction
             e.preventDefault();
             e.stopPropagation();
         } else if (Math.abs(diffY) > 10) {
@@ -78,9 +78,6 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
         }
         
         console.log(`Touch move: diffX=${diffX}, diffY=${diffY}`);
-        
-        // Check if the swipe is in the correct direction
-        const isCorrectDirection = (direction === 'left' && diffX < 0) || (direction === 'right' && diffX > 0);
         
         // Only apply transform for swipes in the correct direction
         if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && isCorrectDirection) {
@@ -180,23 +177,14 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     }
     
     // Add touch event listeners to container
-    container.addEventListener('touchstart', handleTouchStart, { passive: false });
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
     
     // Also add touch events to handle nested scrollable content
     container.addEventListener('touchmove', (e) => {
-        // Only prevent default when we need to (horizontal swipe in correct direction)
-        const touch = e.touches[0];
-        const diffX = touch.clientX - touchStartX;
-        const diffY = touch.clientY - touchStartY;
-        
-        const isCorrectDirection = (direction === 'left' && diffX < 0) || (direction === 'right' && diffX > 0);
-        
-        // Only prevent default for horizontal swipes in the correct direction
-        if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && isCorrectDirection) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    }, { passive: false });
+        // For nested scrollable content, we want to allow default scrolling behavior
+        // We don't need to prevent default here as that would block scrolling
+        // This event listener is just for handling additional logic, not blocking scrolls
+    }, { passive: true });
     
     // Show swipe hint if enabled
     if (config.showSwipeHint) {
