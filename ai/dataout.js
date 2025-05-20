@@ -15,9 +15,15 @@
 import { getCookie } from '/utility/getcookie.js';
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
-import { initializeSwipeFunctionality } from '/utility/swipeFunctionality.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
+    // Additional logging for debugging
+    console.log('[DataOut] Adding api-response-received event listener');
+    // Listen specifically for the adventureiq module
+    document.addEventListener('api-response-received', function(debugEvent) {
+        console.log('[DataOut] DEBUG: api-response-received event caught:', debugEvent.detail);
+    });
+    
     // Check if the "prompt" cookie is more than 10 minutes old
     const promptCookie = getCookie("prompt");
     const currentTime = Date.now();
@@ -334,8 +340,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         function toggleDataContainer() {
-            if (!dataContainer) return;
+            console.log('[DataOut] toggleDataContainer called');
+            if (!dataContainer) {
+                console.error('[DataOut] ERROR: dataContainer is null/undefined!');
+                return;
+            }
+            
             const isExpanded = dataContainer.dataset.state === 'expanded';
+            console.log(`[DataOut] Current state: ${isExpanded ? 'expanded' : 'initial/collapsed'}`);
             
             // Get reference to datain container
             const dataInContainer = document.querySelector('.data-container-left');
@@ -360,7 +372,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     detail: { state: 'initial' }
                 }));
                 
-                console.log('Right data container collapsed and reset (dataout.js)');
+                console.log('[DataOut] Right data container collapsed and reset');
             } else {
                 dataContainer.classList.remove('initial');
                 dataContainer.classList.add('expanded');
@@ -377,7 +389,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     detail: { state: 'expanded' }
                 }));
                 
-                // Note: Swipe hint is now handled by the swipeFunctionality.js module
+                console.log('[DataOut] Right data container expanded');
         
                 const lastGridItemUrl = getLocal('lastGridItemUrl');
                 const outputMap = {
@@ -476,7 +488,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Listen for API response events from various modules
         document.addEventListener('api-response-received', function (e) {
-            console.log('Received api-response-received event (dataout.js):', e.detail);
+            console.log('[DataOut] Received api-response-received event (dataout.js):', e.detail);
+
+            // Add debug information
+            if (!dataContainer) {
+                console.error('[DataOut] ERROR: dataContainer not initialized when event received!');
+                return;
+            }
+            console.log('[DataOut] Current data container state:', dataContainer.dataset.state);
 
             // Get the module name and corresponding output URL
             const moduleName = e.detail.module;
@@ -508,17 +527,31 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             const outUrl = moduleOutputMap[moduleName];
             if (outUrl) {
-                console.log(`Opening data container for ${moduleName} response with URL: ${outUrl}`);
+                console.log(`[DataOut] Opening data container for ${moduleName} response with URL: ${outUrl}`);
                 setLocal('lastDataOutUrl', outUrl);
 
-                // Toggle data container if it's not already expanded
+                // Force toggle data container to show the content
+                // This is the fix for the automatic opening issue
+                console.log('[DataOut] Forcing data container to open for API response');
+                
+                // Ensure we're in the right state first
                 if (dataContainer.dataset.state !== 'expanded') {
-                    toggleDataContainer();
+                    console.log('[DataOut] Container not expanded, expanding now...');
+                    // Use setTimeout with a longer delay to ensure this runs after any potential race conditions
+                    setTimeout(() => {
+                        toggleDataContainer();
+                        // Load content after a longer delay to ensure container is fully ready
+                        setTimeout(() => {
+                            console.log('[DataOut] Loading content after delay:', outUrl);
+                            loadStoredContent(outUrl);
+                        }, 300);
+                    }, 100);
                 } else {
+                    console.log('[DataOut] Container already expanded, loading content...');
                     loadStoredContent(outUrl);
                 }
             } else {
-                console.warn(`No output URL mapping found for module: ${moduleName}`);
+                console.warn(`[DataOut] No output URL mapping found for module: ${moduleName}`);
             }
         });
 
@@ -548,46 +581,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             toggleDataContainer();
         }
         
-        // Initialize swipe functionality for the dataout container
-        let swipeHandler = null;
-        
-        // Observer to watch for state changes on the dataContainer
-        const dataContainerObserver = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'data-state') {
-                    const state = dataContainer.dataset.state;
-                    
-                    if (state === 'expanded') {
-                        // If expanded and swipe handler doesn't exist, create one
-                        if (!swipeHandler) {
-                            swipeHandler = initializeSwipeFunctionality(
-                                dataContainer, 
-                                'right', 
-                                toggleDataContainer, 
-                                { 
-                                    sessionStorageKey: 'swipeEducationShownRight'
-                                }
-                            );
-                            console.log('Swipe functionality initialized for dataout container');
-                        }
-                    } else {
-                        // If not expanded and swipe handler exists, destroy it
-                        if (swipeHandler) {
-                            swipeHandler.destroy();
-                            swipeHandler = null;
-                            console.log('Swipe functionality removed from dataout container');
-                        }
-                    }
-                }
-            });
-        });
-        
-        // Start observing the data container for changes to its dataset.state
-        dataContainerObserver.observe(dataContainer, { attributes: true });
-        // Note: Swipe functionality is now handled by the swipeFunctionality.js module
-        
-        // Debug message to confirm initialization
-        console.log('Swipe functionality initialized for dataout container');
+        // Swipe functionality has been removed to fix automatic opening issues
     }
 
     async function initializeApp() {
