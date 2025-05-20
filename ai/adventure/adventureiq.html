@@ -222,8 +222,8 @@ Include more free time between activities"></textarea>
 
     function clearLocalStorage() {
       if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
-      localStorage.removeItem('adventureIqInput');
-      localStorage.removeItem('adventureIqResponse');
+      setJSON('adventureIqInput', undefined);
+      setJSON('adventureIqResponse', undefined);
       document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
       document.querySelectorAll('input, textarea').forEach(i => i.value = '');
       document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
