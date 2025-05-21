@@ -135,6 +135,23 @@
         }
     };
 
+    // Handler for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[ResearchIQ] Grid item toggled event received');
+        const item = event.detail.item;
+        
+        // Save grid item selection
+        saveGridItem(item);
+    }
+    
+    // Save grid item selection - only using JSON for efficiency
+    function saveGridItem(item) {
+        // Directly save complete form data to JSON
+        console.log('[ResearchIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('researchIqInput', formData);
+    }
+
     // Save input value - only using JSON for efficiency
     function saveInput(input) {
         if (!input || !input.id) return;
@@ -452,6 +469,10 @@
         setupInputHandlers();
         setupButtonHandlers();
         repopulateForm();
+        
+        // Set up grid-item-toggled event listener
+        document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
+        document.addEventListener('grid-item-toggled', handleGridItemToggled);
     }
 
     // Initialize immediately

@@ -80,28 +80,32 @@
                 return defaultValue;
             }
         };
-        function customToggleGridItem(event) {
-            event.stopPropagation();
-            event.preventDefault();
-            this.classList.toggle('selected');
-            saveGridItem(this);
+        
+        // Handler for grid-item-toggled event from datain.js
+        function handleGridItemToggled(event) {
+            console.log('[SymptomIQ] Grid item toggled event received');
+            const item = event.detail.item;
+            
+            // Save grid item selection
+            saveGridItem(item);
         }
+        
         function saveGridItem(item) {
             const formData = collectFormData();
             setJSON('symptomIqInput', formData);
         }
+        
         function saveInput(input) {
             if (!input || !input.id) return;
             const formData = collectFormData();
             setJSON('symptomIqInput', formData);
         }
+        
         function initializeSymptomGridItems() {
-            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-                const clone = item.cloneNode(true);
-                item.parentNode.replaceChild(clone, item);
-                clone.addEventListener('click', customToggleGridItem, { capture: true });
-            });
+            console.log("[SymptomIQ] Initializing symptom grid items");
+            // No need to add click handlers - datain.js handles that now
         }
+        
         function collectFormData() {
             return {
                 symptoms: document.getElementById('rootout-symptoms')?.value || '',
@@ -112,6 +116,7 @@
                 context: document.getElementById('rootout-context')?.value || ''
             };
         }
+        
         function repopulateForm() {
             const data = getJSON('symptomIqInput', null);
             if (!data) return;
@@ -125,6 +130,7 @@
             document.getElementById('rootout-patterns').value = data.patterns;
             document.getElementById('rootout-context').value = data.context;
         }
+        
         function clearLocalStorage() {
             if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) return;
             localStorage.removeItem('symptomIqInput');
@@ -133,6 +139,7 @@
             document.querySelectorAll('textarea').forEach(input => input.value = '');
             alert("All symptom data has been cleared successfully.");
         }
+        
         async function handleGenerateSymptomIq() {
             const btn = document.getElementById('generate-symptom-btn');
             const initialText = btn.innerText;
@@ -164,25 +171,45 @@
                 setTimeout(() => { btn.innerText = initialText; btn.disabled = false; }, 2000);
             }
         }
+        
         function setupButtonHandlers() {
             document.getElementById('generate-symptom-btn').addEventListener('click', handleGenerateSymptomIq);
             document.getElementById('clear-symptom-btn').addEventListener('click', clearLocalStorage);
         }
+        
         function setupInputHandlers() {
             document.querySelectorAll('textarea').forEach(input => input.addEventListener('change', function() { saveInput(this); }));
         }
+        
         function initialize() {
             console.log("[SymptomIQ] Initializing...");
             initializeSymptomGridItems();
             setupInputHandlers();
             setupButtonHandlers();
             repopulateForm();
+            
+            // Set up grid-item-toggled event listener
+            document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
+            document.addEventListener('grid-item-toggled', handleGridItemToggled);
         }
+        
         initialize();
+        
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initialize);
         }
-        document.addEventListener('data-in-loaded', function() { setTimeout(initialize, 100); });
-        window.symptomIq = { initialize, saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
+        
+        document.addEventListener('data-in-loaded', function() { 
+            console.log("[SymptomIQ] Detected load through datain.js, reinitializing");
+            setTimeout(initialize, 100); 
+        });
+        
+        window.symptomIq = { 
+            initialize, 
+            saveGridItem, 
+            saveInput, 
+            clearLocalStorage, 
+            getFormData: collectFormData 
+        };
     })();
     </script>

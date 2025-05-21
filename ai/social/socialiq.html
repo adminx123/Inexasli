@@ -107,21 +107,6 @@
     // Only using JSON for data storage now - more efficient approach
     const setJSON = window.setJSON || function(name, value) {
         try {
-            if (name === undefined || name === null || name === '') {
-                console.error('Invalid key name provided to setJSON');
-                return false;
-            }
-            
-            if (value === undefined) {
-                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
-                localStorage.removeItem(name);
-                return true;
-            }
-            
-            // Convert value to JSON string
-            const jsonString = JSON.stringify(value);
-            localStorage.setItem(name, jsonString);
-            console.log(`[SocialIQ] JSON saved ${name}`);
             return true;
         } catch (error) {
             console.error(`[SocialIQ] Error storing JSON: ${error}`);
@@ -142,28 +127,24 @@
         }
     };
 
-    // Custom handler for grid item selection
-    function customToggleGridItem(event) {
-        // Stop event propagation to prevent other handlers from firing
-        event.stopPropagation();
-        event.preventDefault();
-        
-        const item = this;
+    // Handler for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[SocialIQ] Grid item toggled event received');
+        const item = event.detail.item;
         const container = item.closest('.grid-container');
         
         // Single selection for area-goal, multiple selection for others
         if (container.id === 'area-goal') {
-            document.querySelectorAll('#area-goal .grid-item').forEach(el => el.classList.remove('selected'));
-            item.classList.add('selected');
-        } else {
-            // Multi-selection: toggle
-            item.classList.toggle('selected');
+            // Ensure only one item is selected in this container
+            container.querySelectorAll('.grid-item').forEach(i => {
+                if (i !== item) i.classList.remove('selected');
+            });
         }
         
         // Save using JSON approach
         saveGridItem(item);
         
-        console.log(`[SocialIQ] Toggled ${item.dataset.value} in ${container.id}: ${item.classList.contains('selected') ? 'selected' : 'deselected'}`);
+        console.log(`[SocialIQ] Handled toggle for ${item.dataset.value} in ${container.id}: ${item.classList.contains('selected') ? 'selected' : 'deselected'}`);
     }
 
     // Save grid item selection - only using JSON for efficiency
@@ -186,21 +167,10 @@
         setJSON('socialIqInput', formData);
     }
 
-    // Initialize our grid items with special handling
+    // Initialize our grid items
     function initializeSocialGridItems() {
         console.log("[SocialIQ] Initializing social grid items");
-        
-        // First remove any existing click handlers
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            // Clone the node to remove all event listeners
-            const clone = item.cloneNode(true);
-            item.parentNode.replaceChild(clone, item);
-            
-            // Add our handler to the fresh clone
-            clone.addEventListener('click', customToggleGridItem, { capture: true });
-        });
-        
-        // No need to restore selections here - repopulateForm will handle it all from JSON
+        // No need to add click handlers - datain.js handles that now
     }
 
     // Collect form data without validation
@@ -477,6 +447,10 @@
         setupInputHandlers();
         setupButtonHandlers();
         repopulateForm();
+        
+        // Set up grid-item-toggled event listener
+        document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
+        document.addEventListener('grid-item-toggled', handleGridItemToggled);
     }
 
     // Initialize immediately
