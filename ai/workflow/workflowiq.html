@@ -69,9 +69,6 @@
 
         const setJSON = window.setJSON || function(name, value) {
             try {
-                if (!name) return false;
-                if (value === undefined) { localStorage.removeItem(name); return true; }
-                localStorage.setItem(name, JSON.stringify(value));
                 return true;
             } catch (e) {
                 console.error(e);
@@ -84,6 +81,22 @@
                 return item ? JSON.parse(item) : defaultValue;
             } catch (e) { console.error(e); return defaultValue; }
         };
+
+        // Handler for grid-item-toggled event from datain.js
+        function handleGridItemToggled(event) {
+            console.log('[WorkflowIQ] Grid item toggled event received');
+            const item = event.detail.item;
+            
+            // Save grid item selection
+            saveGridItem(item);
+        }
+        
+        // Save grid item selection
+        function saveGridItem(item) {
+            console.log('[WorkflowIQ] Saving all form data to JSON');
+            const formData = collectFormData();
+            setJSON('workflowIqInput', formData);
+        }
 
         function saveInput(input) {
             if (!input || !input.id) return;
@@ -158,13 +171,52 @@
         }
 
         function setupHandlers() {
-            document.querySelectorAll('textarea, input, select').forEach(el => el.addEventListener('change', () => saveInput(el)));
-            document.getElementById('generate-workflow-btn').addEventListener('click', handleGenerateWorkflowIq);
-            document.getElementById('clear-workflow-btn').addEventListener('click', clearLocalStorage);
+            // Set up input handlers
+            document.querySelectorAll('input, textarea, select').forEach(input => {
+                input.addEventListener('change', function() {
+                    saveInput(this);
+                });
+            });
+            
+            // Button handlers
+            const generateBtn = document.getElementById('generate-workflow-btn');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', handleGenerateWorkflowIq);
+            }
+            
+            const clearBtn = document.getElementById('clear-workflow-btn');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', clearLocalStorage);
+            }
+            
+            // Set up grid-item-toggled event listener
+            document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
+            document.addEventListener('grid-item-toggled', handleGridItemToggled);
         }
-
-        // Initialize
-        setupHandlers();
-        repopulateForm();
+        
+        // Initialize with a function that can be called again when loaded through datain.js
+        function initialize() {
+            console.log("[WorkflowIQ] Initializing...");
+            setupHandlers();
+            repopulateForm();
+        }
+        
+        // Initialize immediately
+        initialize();
+        
+        // Special handler for when this page is loaded through datain.js
+        document.addEventListener('data-in-loaded', function(e) {
+            console.log("[WorkflowIQ] Detected load through datain.js, reinitializing");
+            setTimeout(initialize, 100); // Small delay to ensure DOM is updated
+        });
+        
+        // For external access if needed
+        window.workflowIq = {
+            initialize,
+            saveGridItem,
+            saveInput,
+            clearLocalStorage,
+            getFormData: collectFormData
+        };
     })();
     </script>

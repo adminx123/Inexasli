@@ -100,21 +100,6 @@
     // Only using JSON for data storage now - more efficient approach
     const setJSON = window.setJSON || function(name, value) {
         try {
-            if (name === undefined || name === null || name === '') {
-                console.error('Invalid key name provided to setJSON');
-                return false;
-            }
-            
-            if (value === undefined) {
-                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
-                localStorage.removeItem(name);
-                return true;
-            }
-            
-            // Convert value to JSON string
-            const jsonString = JSON.stringify(value);
-            localStorage.setItem(name, jsonString);
-            console.log(`[QuizIQ] JSON saved ${name}`);
             return true;
         } catch (error) {
             console.error(`[QuizIQ] Error storing JSON: ${error}`);
@@ -135,20 +120,16 @@
         }
     };
 
-    // Custom handler for grid item selection
-    function customToggleGridItem(event) {
-        // Stop event propagation to prevent other handlers from firing
-        event.stopPropagation();
-        event.preventDefault();
-        
-        const container = this.closest('.grid-container');
-        // Multi-selection: toggle
-        this.classList.toggle('selected');
+    // Handler for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[QuizIQ] Grid item toggled event received');
+        const item = event.detail.item;
+        const container = item.closest('.grid-container');
         
         // Save using JSON approach
-        saveGridItem(this);
+        saveGridItem(item);
         
-        console.log(`[QuizIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+        console.log(`[QuizIQ] Handled toggle for ${item.dataset.value} in ${container.id}: ${item.classList.contains('selected') ? 'selected' : 'deselected'}`);
     }
 
     // Save grid item selection - only using JSON for efficiency
@@ -171,34 +152,10 @@
         setJSON('quizIqInput', formData);
     }
 
-    // Initialize our grid items with special handling
+    // Initialize our grid items
     function initializeQuizGridItems() {
         console.log("[QuizIQ] Initializing quiz grid items");
-        
-        // First remove any existing click handlers from datain.js
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            // Clone the node to remove all event listeners
-            const clone = item.cloneNode(true);
-            item.parentNode.replaceChild(clone, item);
-            
-            // Add our handler to the fresh clone
-            clone.addEventListener('click', customToggleGridItem, { capture: true });
-        });
-        
-        // No need to restore selections here - repopulateForm will handle it all from JSON
-        
-        // Also override datain.js's initializeGridItems function to prevent conflicts
-        if (window.initializeGridItems) {
-            const originalInitGridItems = window.initializeGridItems;
-            window.initializeGridItems = function() {
-                console.log("[QuizIQ] Intercepted external initializeGridItems call");
-                // Only let the original function initialize non-quiz grid containers
-                const nonQuizGrids = document.querySelectorAll('.grid-container:not(#quiz-formats):not(#quiz-participants)');
-                if (nonQuizGrids.length > 0) {
-                    originalInitGridItems();
-                }
-            };
-        }
+        // No need to add click handlers - datain.js handles that now
     }
 
     // Collect form data without validation
@@ -490,6 +447,10 @@
         setupInputHandlers();
         setupButtonHandlers();
         repopulateForm();
+        
+        // Set up grid-item-toggled event listener
+        document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
+        document.addEventListener('grid-item-toggled', handleGridItemToggled);
     }
 
     // Initialize immediately
