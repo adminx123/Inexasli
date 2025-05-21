@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         
                 const lastGridItemUrl = getLocal('lastGridItemUrl');
                 const outputMap = {
-                    '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
+                    '/ai/calorie/calorieiq.html': '/ai/apioutput.html?gridItem=calorieiq',
                     '/ai/symptom/symptomiq.html': '/ai/apioutput.html?gridItem=symptomiq',
                     '/ai/book/bookiq.html': '/ai/apioutput.html?gridItem=bookiq',
                     '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             // Special handling for URLs that have output templates
             const outputMap = {
-                '/ai/calorie/calorieiq.html': '/ai/calorie/calorieiqout.html',
+                '/ai/calorie/calorieiq.html': '/ai/apioutput.html?gridItem=calorieiq',
                 '/ai/symptom/symptomiq.html': '/ai/apioutput.html?gridItem=symptomiq',
                 '/ai/book/bookiq.html': '/ai/apioutput.html?gridItem=bookiq',
                 '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
@@ -504,7 +504,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Map of module names to their output URLs
             const moduleOutputMap = {
                 'fitnessiq': '/ai/apioutput.html?gridItem=fitnessiq',
-                'calorieiq': '/ai/calorie/calorieiqout.html',
+                'calorieiq': '/ai/apioutput.html?gridItem=calorieiq',
                 'symptomiq': '/ai/apioutput.html?gridItem=symptomiq',
                 'bookiq': '/ai/apioutput.html?gridItem=bookiq',
                 'adventureiq': '/ai/apioutput.html?gridItem=adventureiq',
