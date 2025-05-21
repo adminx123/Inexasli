@@ -107,16 +107,16 @@
         } catch (e) { console.error(`[EmotionIQ] Error retrieving JSON: ${e}`); return defaultValue; }
     };
 
-    function customToggleGridItem(event) {
-        event.stopPropagation(); event.preventDefault();
-        this.classList.toggle('selected');
-        saveGridItem(this);
-        console.log(`[EmotionIQ] Toggled ${this.dataset.value}`);
-    }
-
     function saveGridItem(item) {
         console.log('[EmotionIQ] Saving all form data to JSON');
         setJSON('emotionIqInput', collectFormData());
+    }
+    
+    // Listen for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[EmotionIQ] Grid item toggled event received');
+        const item = event.detail.item;
+        saveGridItem(item);
     }
 
     function saveInput(input) {
@@ -150,52 +150,46 @@
     }
 
     function setupInputHandlers() {
-        document.querySelectorAll('textarea').forEach(el=>el.addEventListener('change', ()=>saveInput(el)));
-        document.querySelectorAll('#emotioniq-emotions .grid-item, #emotioniq-triggers .grid-item, #emotioniq-coping .grid-item').forEach(i=>i.addEventListener('click', customToggleGridItem, { capture: true }));
+        document.querySelectorAll('textarea').forEach(i => i.addEventListener('change', () => saveInput(i)));
     }
 
     function clearLocalStorage() {
         if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
-        localStorage.removeItem('emotionIqInput');
-        localStorage.removeItem('emotionIqResponse');
-        document.querySelectorAll('.grid-container .grid-item').forEach(i=>i.classList.remove('selected'));
-        document.querySelectorAll('textarea').forEach(i=>i.value='');
+        setJSON('emotionIqInput', undefined);
+        setJSON('emotionIqResponse', undefined);
+        document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
+        document.querySelectorAll('textarea').forEach(i => i.value = '');
     }
 
     async function handleGenerateEmotionIq() {
         const btn = document.getElementById('generate-emotion-btn');
-        const initText = btn.innerText; btn.innerText='Loading...'; btn.disabled=true;
+        const initText = btn.innerText;
+        btn.innerText = 'Loading...'; btn.disabled = true;
         try {
             const formData = getJSON('emotionIqInput');
-            if (!formData) { alert('Please complete the form before generating analysis.'); throw new Error('No input data'); }
+            if (!formData) { alert('Please complete the form before generating.'); throw new Error('No input data'); }
             const apiUrl = 'https://emotion.4hm7q4q75z.workers.dev/';
-            const res = await fetch(apiUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(formData) });
+            const res = await fetch(apiUrl, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(formData) });
             if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
             const data = await res.json();
             setJSON('emotionIqResponse', data);
-            btn.innerText='Success!'; setTimeout(()=>btn.disabled=false,1000);
-            document.dispatchEvent(new CustomEvent('api-response-received',{detail:{module:'emotioniq',type:'worker-response',timestamp:Date.now()}}));
+            btn.innerText = 'Success!'; setTimeout(() => btn.disabled = false, 1000);
+            document.dispatchEvent(new CustomEvent('api-response-received', { detail: { module: 'emotioniq', type: 'worker-response', timestamp: Date.now() } }));
         } catch (e) {
-            console.error('[EmotionIQ] Error generating analysis:', e);
-            alert('An error occurred while generating analysis.');
-            btn.innerText='Error'; setTimeout(()=>{btn.innerText=initText;btn.disabled=false;},2000);
+            console.error('[EmotionIQ] Error:', e);
+            alert('Error generating analysis.');
+            btn.innerText = 'Error'; setTimeout(() => { btn.innerText = initText; btn.disabled = false; }, 2000);
         }
     }
 
-    function setupButtonHandlers() {
-        document.getElementById('generate-emotion-btn').addEventListener('click', handleGenerateEmotionIq);
-        document.getElementById('clear-emotion-btn').addEventListener('click', clearLocalStorage);
-    }
+    // Initialization
+    // Instead of direct click handlers, listen for the custom event from datain.js
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    repopulateForm();
+    setupInputHandlers();
+    document.getElementById('generate-emotion-btn').addEventListener('click', handleGenerateEmotionIq);
+    document.getElementById('clear-emotion-btn').addEventListener('click', clearLocalStorage);
 
-    function initialize() {
-        console.log('[EmotionIQ] Initializing...');
-        setupInputHandlers(); setupButtonHandlers(); repopulateForm();
-    }
-
-    initialize();
-    if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', initialize);
-    document.addEventListener('data-in-loaded', ()=>setTimeout(initialize,100));
-
-    window.emotionIq = { initialize, saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
+    window.emotionIq = { saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
 })();
 </script>
