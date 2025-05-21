@@ -152,6 +152,7 @@ Include more free time between activities"></textarea>
       } catch (e) { console.error(`[AdventureIQ] Error retrieving JSON: ${e}`); return defaultValue; }
     };
 
+    // This function is no longer used for direct click events
     function customToggleGridItem(event) {
       event.stopPropagation(); event.preventDefault();
       const container = this.closest('.grid-container');
@@ -164,6 +165,13 @@ Include more free time between activities"></textarea>
     function saveGridItem(item) {
       console.log('[AdventureIQ] Saving all form data to JSON');
       setJSON('adventureIqInput', collectFormData());
+    }
+    
+    // Listen for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+      console.log('[AdventureIQ] Grid item toggled event received');
+      const item = event.detail.item;
+      saveGridItem(item);
     }
 
     function saveInput(input) {
@@ -305,7 +313,8 @@ Include more free time between activities"></textarea>
     }
 
     // Initialization
-    document.querySelectorAll('.grid-container .grid-item').forEach(item => item.addEventListener('click', customToggleGridItem, { capture: true }));
+    // Instead of direct click handlers, listen for the custom event from datain.js
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
     repopulateForm();
     setupInputHandlers();
     document.getElementById('generate-adventure-btn').addEventListener('click', handleGenerateAdventureIq);

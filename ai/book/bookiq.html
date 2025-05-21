@@ -113,16 +113,16 @@
         } catch (e) { console.error(`[BookIQ] Error retrieving JSON: ${e}`); return defaultValue; }
     };
 
-    function customToggleGridItem(event) {
-        event.stopPropagation(); event.preventDefault();
-        this.classList.toggle('selected');
-        saveGridItem(this);
-        console.log(`[BookIQ] Toggled ${this.dataset.value}`);
-    }
-
     function saveGridItem(item) {
         console.log('[BookIQ] Saving all form data to JSON');
         setJSON('bookIqInput', collectFormData());
+    }
+    
+    // Listen for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[BookIQ] Grid item toggled event received');
+        const item = event.detail.item;
+        saveGridItem(item);
     }
 
     function saveInput(input) {
@@ -164,8 +164,8 @@
 
     function clearLocalStorage() {
         if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
-        localStorage.removeItem('bookIqInput');
-        localStorage.removeItem('bookIqResponse');
+        setJSON('bookIqInput', undefined);
+        setJSON('bookIqResponse', undefined);
         document.querySelectorAll('.grid-container .grid-item').forEach(i=>i.classList.remove('selected'));
         document.querySelectorAll('textarea').forEach(i=>i.value='');
         document.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
@@ -191,21 +191,14 @@
         }
     }
 
-    function setupButtonHandlers() {
-        document.getElementById('generate-book-btn').addEventListener('click', handleGenerateBookIq);
-        document.getElementById('clear-book-btn').addEventListener('click', clearLocalStorage);
-    }
+    // Initialization
+    // Instead of direct click handlers, listen for the custom event from datain.js
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    repopulateForm();
+    setupInputHandlers();
+    document.getElementById('generate-book-btn').addEventListener('click', handleGenerateBookIq);
+    document.getElementById('clear-book-btn').addEventListener('click', clearLocalStorage);
 
-    function initialize() {
-        console.log('[BookIQ] Initializing...');
-        document.querySelectorAll('.grid-container .grid-item').forEach(i=>i.addEventListener('click', customToggleGridItem, {capture:true}));
-        setupInputHandlers(); setupButtonHandlers(); repopulateForm();
-    }
-
-    initialize();
-    if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', initialize);
-    document.addEventListener('data-in-loaded',()=>setTimeout(initialize,100));
-
-    window.bookIq = { initialize, saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
+    window.bookIq = { saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
 })();
 </script>
