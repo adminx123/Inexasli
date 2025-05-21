@@ -64,273 +64,165 @@
  * jurisdictions worldwide.
 */
 
-// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
 (function() {
     console.log("Fitness IQ script initializing");
 
-    // Only using JSON for data storage now - more efficient approach
+    // JSON storage helpers
     const setJSON = window.setJSON || function(name, value) {
         try {
-            if (name === undefined || name === null || name === '') {
-                console.error('Invalid key name provided to setJSON');
-                return false;
-            }
-            
-            if (value === undefined) {
-                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
-                localStorage.removeItem(name);
-                return true;
-            }
-            
-            // Convert value to JSON string
-            const jsonString = JSON.stringify(value);
-            localStorage.setItem(name, jsonString);
+            if (!name) return false;
+            if (value === undefined) { localStorage.removeItem(name); return true; }
+            localStorage.setItem(name, JSON.stringify(value));
             console.log(`[FitnessIQ] JSON saved ${name}`);
             return true;
-        } catch (error) {
-            console.error(`[FitnessIQ] Error storing JSON: ${error}`);
-            return false;
-        }
+        } catch (e) { console.error(`[FitnessIQ] Error storing JSON: ${e}`); return false; }
     };
     
     const getJSON = window.getJSON || function(name, defaultValue) {
         try {
             const item = localStorage.getItem(name);
-            if (!item) return defaultValue;
-            const parsedValue = JSON.parse(item);
-            console.log(`[FitnessIQ] JSON retrieved ${name}`);
-            return parsedValue;
-        } catch (error) {
-            console.error(`[FitnessIQ] Error retrieving JSON: ${error}`);
-            return defaultValue;
-        }
+            return item ? JSON.parse(item) : defaultValue;
+        } catch (e) { console.error(`[FitnessIQ] Error retrieving JSON: ${e}`); return defaultValue; }
     };
 
-    // Custom handler for grid item selection
-    function customToggleGridItem(event) {
-        // Stop event propagation to prevent other handlers from firing
-        event.stopPropagation();
-        event.preventDefault();
+    function saveGridItem(item) {
+        console.log('[FitnessIQ] Saving all form data to JSON');
+        setJSON('fitnessIqInput', collectFormData());
+    }
+    
+    // Listen for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[FitnessIQ] Grid item toggled event received');
+        const item = event.detail.item;
+        const container = item.closest('.grid-container');
         
-        const container = this.closest('.grid-container');
+        // Handle single-selection logic for certain containers
         if (container.id === 'fitness-home-exercises' || container.id === 'fitness-level') {
-            // Single-selection: deselect others
-            container.querySelectorAll('.grid-item').forEach(item => {
-                item.classList.remove('selected');
-                // No need to set individual localStorage items
+            container.querySelectorAll('.grid-item').forEach(i => {
+                if (i !== item) i.classList.remove('selected');
             });
-            this.classList.add('selected');
-        } else {
-            // Multi-selection: toggle
-            this.classList.toggle('selected');
         }
         
-        // Save using JSON approach
-        saveGridItem(this);
-        
-        console.log(`[FitnessIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+        saveGridItem(item);
     }
 
-    // Save grid item selection - only using JSON for efficiency
-    function saveGridItem(item) {
-        // Skip individual localStorage items and only use JSON
-        // Directly save complete form data to JSON
-        console.log('[FitnessIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('fitnessIqInput', formData);
-    }
-
-    // Save input value - only using JSON for efficiency
+    // Save input value
     function saveInput(input) {
         if (!input || !input.id) return;
-        
-        // Skip individual localStorage items and only use JSON
-        // Directly save complete form data to JSON
         console.log('[FitnessIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('fitnessIqInput', formData);
+        setJSON('fitnessIqInput', collectFormData());
     }
 
-    // Initialize our grid items with special handling
-    function initializeFitnessGridItems() {
-        console.log("[FitnessIQ] Initializing fitness grid items");
-        
-        // First remove any existing click handlers from datain.js
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            // Clone the node to remove all event listeners
-            const clone = item.cloneNode(true);
-            item.parentNode.replaceChild(clone, item);
-            
-            // Add our handler to the fresh clone
-            clone.addEventListener('click', customToggleGridItem, { capture: true });
-        });
-        
-        // No need to restore selections here - repopulateForm will handle it all from JSON
-        
-        // Also override datain.js's initializeGridItems function to prevent conflicts
-        if (window.initializeGridItems) {
-            const originalInitGridItems = window.initializeGridItems;
-            window.initializeGridItems = function() {
-                console.log("[FitnessIQ] Intercepted external initializeGridItems call");
-                // Only let the original function initialize non-fitness grid containers
-                const nonFitnessGrids = document.querySelectorAll('.grid-container:not(#fitness-goal):not(#fitness-level):not(#fitness-home-exercises)');
-                if (nonFitnessGrids.length > 0) {
-                    originalInitGridItems();
-                }
-            };
-        }
-    }
-
-    // Collect form data without validation
+    // Collect form data
     function collectFormData() {
         const formData = {
             goals: [],
-            workoutLocation: null,
-            fitnessLevel: null,
             age: null,
             height: null,
             weight: null,
-            injuries: null,
-            frequency: null,
-            duration: null
+            level: null,
+            homeExercises: null,
+            equipment: [],
+            limitations: [],
+            preferences: [],
+            days: null,
+            timePerSession: null
         };
         
-        // Collect goals (multi-selection)
+        // Collect from various form elements
         document.querySelectorAll('#fitness-goal .grid-item.selected').forEach(item => {
             formData.goals.push(item.dataset.value);
         });
         
-        // Collect workout location (single selection)
-        const locationItem = document.querySelector('#fitness-home-exercises .grid-item.selected');
-        if (locationItem) {
-            formData.workoutLocation = locationItem.dataset.value;
-        }
+        const age = document.getElementById('fitness-age');
+        if (age && age.value) formData.age = parseInt(age.value, 10);
         
-        // Collect fitness level (single selection)
-        const levelItem = document.querySelector('#fitness-level .grid-item.selected');
-        if (levelItem) {
-            formData.fitnessLevel = levelItem.dataset.value;
-        }
+        const height = document.getElementById('fitness-height');
+        if (height && height.value) formData.height = height.value;
         
-        // Collect numeric inputs
-        const ageInput = document.getElementById('fitness-age');
-        if (ageInput && ageInput.value) {
-            formData.age = parseInt(ageInput.value, 10);
-        }
+        const weight = document.getElementById('fitness-weight');
+        if (weight && weight.value) formData.weight = weight.value;
         
-        const heightInput = document.getElementById('fitness-height');
-        if (heightInput && heightInput.value.trim()) {
-            formData.height = heightInput.value.trim();
-        }
+        const level = document.querySelector('#fitness-level .grid-item.selected');
+        if (level) formData.level = level.dataset.value;
         
-        const weightInput = document.getElementById('fitness-weight');
-        if (weightInput && weightInput.value.trim()) {
-            formData.weight = weightInput.value.trim();
-        }
+        const homeExercises = document.querySelector('#fitness-home-exercises .grid-item.selected');
+        if (homeExercises) formData.homeExercises = homeExercises.dataset.value;
         
-        const frequencyInput = document.getElementById('fitness-frequency');
-        if (frequencyInput && frequencyInput.value) {
-            formData.frequency = parseInt(frequencyInput.value, 10);
-        }
+        document.querySelectorAll('#fitness-equipment .grid-item.selected').forEach(item => {
+            formData.equipment.push(item.dataset.value);
+        });
         
-        const durationInput = document.getElementById('fitness-duration');
-        if (durationInput && durationInput.value) {
-            formData.duration = parseInt(durationInput.value, 10);
-        }
+        document.querySelectorAll('#fitness-limitations .grid-item.selected').forEach(item => {
+            formData.limitations.push(item.dataset.value);
+        });
         
-        // Collect text inputs
-        const injuriesInput = document.getElementById('fitness-injuries');
-        if (injuriesInput && injuriesInput.value.trim()) {
-            formData.injuries = injuriesInput.value.trim();
-        }
+        document.querySelectorAll('#fitness-preferences .grid-item.selected').forEach(item => {
+            formData.preferences.push(item.dataset.value);
+        });
+        
+        const days = document.getElementById('fitness-days');
+        if (days && days.value) formData.days = parseInt(days.value, 10);
+        
+        const timePerSession = document.getElementById('fitness-time-per-session');
+        if (timePerSession && timePerSession.value) formData.timePerSession = parseInt(timePerSession.value, 10);
         
         return formData;
     }
 
-    // Repopulate form from localStorage - simplified to only use JSON
+    // Repopulate form from localStorage
     function repopulateForm() {
-        console.log("[FitnessIQ] Repopulating form from JSON storage");
-
-        // Get stored JSON data
-        const storedData = getJSON('fitnessIqInput', null);
-        if (!storedData) {
-            console.log('[FitnessIQ] No stored form data found');
-            return;
-        }
-            
-        console.log('[FitnessIQ] Found stored JSON form data');
+        console.log('[FitnessIQ] Repopulating form from JSON storage');
+        const data = getJSON('fitnessIqInput', null);
+        if (!data) return;
         
-        // Populate goals (multi-selection)
-        if (storedData.goals && Array.isArray(storedData.goals)) {
-            storedData.goals.forEach(goal => {
-                const item = document.querySelector(`#fitness-goal .grid-item[data-value="${goal}"]`);
-                if (item) {
-                    item.classList.add('selected');
-                    console.log(`[FitnessIQ] Restored from JSON: goal ${goal}`);
-                }
-            });
-        }
+        // Repopulate goals
+        data.goals?.forEach(goal => {
+            const element = document.querySelector(`#fitness-goal .grid-item[data-value="${goal}"]`);
+            if (element) element.classList.add('selected');
+        });
         
-        // Populate workout location (single selection)
-        if (storedData.workoutLocation) {
-            const item = document.querySelector(`#fitness-home-exercises .grid-item[data-value="${storedData.workoutLocation}"]`);
-            if (item) {
-                item.classList.add('selected');
-                console.log(`[FitnessIQ] Restored from JSON: workout location ${storedData.workoutLocation}`);
-            }
+        // Repopulate numeric inputs
+        if (data.age) document.getElementById('fitness-age').value = data.age;
+        if (data.height) document.getElementById('fitness-height').value = data.height;
+        if (data.weight) document.getElementById('fitness-weight').value = data.weight;
+        
+        // Repopulate single-selection items
+        if (data.level) {
+            const levelElement = document.querySelector(`#fitness-level .grid-item[data-value="${data.level}"]`);
+            if (levelElement) levelElement.classList.add('selected');
         }
         
-        // Populate fitness level (single selection)
-        if (storedData.fitnessLevel) {
-            const item = document.querySelector(`#fitness-level .grid-item[data-value="${storedData.fitnessLevel}"]`);
-            if (item) {
-                item.classList.add('selected');
-                console.log(`[FitnessIQ] Restored from JSON: fitness level ${storedData.fitnessLevel}`);
-            }
+        if (data.homeExercises) {
+            const homeElement = document.querySelector(`#fitness-home-exercises .grid-item[data-value="${data.homeExercises}"]`);
+            if (homeElement) homeElement.classList.add('selected');
         }
         
-        // Populate other fields
-        const ageInput = document.getElementById('fitness-age');
-        if (ageInput && storedData.age) {
-            ageInput.value = storedData.age;
-            console.log(`[FitnessIQ] Restored from JSON: age ${storedData.age}`);
-        }
+        // Repopulate multi-selection items
+        data.equipment?.forEach(item => {
+            const element = document.querySelector(`#fitness-equipment .grid-item[data-value="${item}"]`);
+            if (element) element.classList.add('selected');
+        });
         
-        const heightInput = document.getElementById('fitness-height');
-        if (heightInput && storedData.height) {
-            heightInput.value = storedData.height;
-            console.log(`[FitnessIQ] Restored from JSON: height ${storedData.height}`);
-        }
+        data.limitations?.forEach(item => {
+            const element = document.querySelector(`#fitness-limitations .grid-item[data-value="${item}"]`);
+            if (element) element.classList.add('selected');
+        });
         
-        const weightInput = document.getElementById('fitness-weight');
-        if (weightInput && storedData.weight) {
-            weightInput.value = storedData.weight;
-            console.log(`[FitnessIQ] Restored from JSON: weight ${storedData.weight}`);
-        }
+        data.preferences?.forEach(item => {
+            const element = document.querySelector(`#fitness-preferences .grid-item[data-value="${item}"]`);
+            if (element) element.classList.add('selected');
+        });
         
-        const frequencyInput = document.getElementById('fitness-frequency');
-        if (frequencyInput && storedData.frequency) {
-            frequencyInput.value = storedData.frequency;
-            console.log(`[FitnessIQ] Restored from JSON: frequency ${storedData.frequency}`);
-        }
-        
-        const durationInput = document.getElementById('fitness-duration');
-        if (durationInput && storedData.duration) {
-            durationInput.value = storedData.duration;
-            console.log(`[FitnessIQ] Restored from JSON: duration ${storedData.duration}`);
-        }
-        
-        const injuriesInput = document.getElementById('fitness-injuries');
-        if (injuriesInput && storedData.injuries) {
-            injuriesInput.value = storedData.injuries;
-            console.log(`[FitnessIQ] Restored from JSON: injuries`);
-        }
+        // Repopulate other numeric inputs
+        if (data.days) document.getElementById('fitness-days').value = data.days;
+        if (data.timePerSession) document.getElementById('fitness-time-per-session').value = data.timePerSession;
     }
 
     // Handle input changes
     function setupInputHandlers() {
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            input.addEventListener('change', function() {
+        document.querySelectorAll('input, textarea, select').forEach(element => {
+            element.addEventListener('change', function() {
                 saveInput(this);
             });
         });
@@ -338,37 +230,15 @@
 
     // Clear saved data from localStorage
     function clearLocalStorage() {
-        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
-            return;
-        }
+        if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
         
-        try {
-            // Simply remove the JSON data - no need to iterate through individual keys
-            localStorage.removeItem('fitnessIqInput');
-            localStorage.removeItem('fitnessIqResponse');
-            
-            // Reset UI
-            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            document.querySelectorAll('input, textarea').forEach(input => {
-                input.value = '';
-            });
-            
-            // Reset select elements to default values
-            document.querySelectorAll('select').forEach(select => {
-                if (select.options.length > 0) {
-                    select.selectedIndex = 0;
-                }
-            });
-            
-            console.log('[FitnessIQ] All fitness data cleared');
-            alert("All fitness data has been cleared successfully.");
-        } catch (error) {
-            console.error('[FitnessIQ] Error clearing data:', error);
-            alert("Error clearing data: " + error.message);
-        }
+        setJSON('fitnessIqInput', undefined);
+        setJSON('fitnessIqResponse', undefined);
+        
+        document.querySelectorAll('.grid-container .grid-item').forEach(item => item.classList.remove('selected'));
+        document.querySelectorAll('input:not([type="button"]):not([type="submit"])').forEach(input => input.value = '');
+        document.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
+        document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
     }
 
     // Handle the generate button click
@@ -376,25 +246,22 @@
         const btn = document.getElementById('generate-fitness-btn');
         const initialText = btn.innerText;
         btn.innerText = 'Loading...';
-        btn.setAttribute('disabled', 'true');
-        
-        console.log('[FitnessIQ] Generate button clicked.');
+        btn.disabled = true;
         
         try {
-            // Instead of collecting form data again, just use what's already in localStorage
             const formData = getJSON('fitnessIqInput');
             if (!formData) {
                 console.error('[FitnessIQ] No input data found in localStorage.');
                 alert('Please complete the form before generating a fitness plan.');
                 btn.innerText = initialText;
-                btn.removeAttribute('disabled');
+                btn.disabled = false;
                 return;
             }
             
             // Send data to worker
-            const apiUrl = 'https://fitness.4hm7q4q75z.workers.dev/'; 
+            const apiUrl = 'https://fitness.4hm7q4q75z.workers.dev/';
             
-            console.log('[FitnessIQ] Sending fitnessIqInput directly from localStorage to worker');
+            console.log('[FitnessIQ] Sending fitnessIqInput to worker');
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -414,13 +281,13 @@
                 throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
             }
             
-            // Store the response using setJSON
+            // Store the response
             setJSON('fitnessIqResponse', responseData);
             
             // Update button state
             btn.innerText = 'Success!';
             setTimeout(() => {
-                btn.removeAttribute('disabled');
+                btn.disabled = false;
             }, 1000);
             
             // Dispatch an event to notify dataout.js that a response was received
@@ -441,54 +308,25 @@
             btn.innerText = 'Error';
             setTimeout(() => {
                 btn.innerText = initialText;
-                btn.removeAttribute('disabled');
+                btn.disabled = false;
             }, 2000);
         }
     }
 
-    // Attach event listeners to buttons
-    function setupButtonHandlers() {
-        const generateBtn = document.getElementById('generate-fitness-btn');
-        if (generateBtn) {
-            generateBtn.addEventListener('click', handleGenerateFitnessIq);
-        }
-        
-        const clearBtn = document.getElementById('clear-fitness-btn');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', clearLocalStorage);
-        }
-    }
-
-    // Main initialization function - called immediately and again after full load
-    function initialize() {
-        console.log("[FitnessIQ] Initializing...");
-        initializeFitnessGridItems();
-        setupInputHandlers();
-        setupButtonHandlers();
-        repopulateForm();
-    }
-
-    // Initialize immediately
-    initialize();
-
-    // Also initialize when DOM is fully loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initialize);
-    }
-
-    // Special handler for when this page is loaded through datain.js
-    document.addEventListener('data-in-loaded', function(e) {
-        console.log("[FitnessIQ] Detected load through datain.js, reinitializing");
-        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
-    });
+    // Initialization
+    // Instead of direct click handlers, listen for the custom event from datain.js
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    repopulateForm();
+    setupInputHandlers();
+    document.getElementById('generate-fitness-btn').addEventListener('click', handleGenerateFitnessIq);
+    document.getElementById('clear-fitness-btn').addEventListener('click', clearLocalStorage);
 
     // For external access if needed
     window.fitnessIq = {
-        initialize: initialize,
-        saveGridItem: saveGridItem,
-        saveInput: saveInput,
-        clearLocalStorage: clearLocalStorage,
-        getFormData: collectFormData  // Changed from getFormData to collectFormData
+        saveGridItem,
+        saveInput,
+        collectFormData,
+        clearLocalStorage
     };
 })();
 </script>
