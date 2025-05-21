@@ -1,4 +1,3 @@
-name = "inexasli-workers"
 account_id = "b70c309587ed8ba2bfa06320792ea457"
 workers_dev = true
 compatibility_date = "2025-05-11"
