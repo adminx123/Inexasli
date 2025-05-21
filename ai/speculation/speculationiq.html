@@ -81,21 +81,6 @@
     // Only using JSON for data storage now - more efficient approach
     const setJSON = window.setJSON || function(name, value) {
         try {
-            if (name === undefined || name === null || name === '') {
-                console.error('Invalid key name provided to setJSON');
-                return false;
-            }
-            
-            if (value === undefined) {
-                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
-                localStorage.removeItem(name);
-                return true;
-            }
-            
-            // Convert value to JSON string
-            const jsonString = JSON.stringify(value);
-            localStorage.setItem(name, jsonString);
-            console.log(`[SpeculationIQ] JSON saved ${name}`);
             return true;
         } catch (error) {
             console.error(`[SpeculationIQ] Error storing JSON: ${error}`);
@@ -115,6 +100,23 @@
             return defaultValue;
         }
     };
+
+    // Handler for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[SpeculationIQ] Grid item toggled event received');
+        const item = event.detail.item;
+        
+        // Save grid item selection
+        saveGridItem(item);
+    }
+    
+    // Save grid item selection - only using JSON for efficiency
+    function saveGridItem(item) {
+        // Directly save complete form data to JSON
+        console.log('[SpeculationIQ] Saving all form data to JSON');
+        const formData = collectFormData();
+        setJSON('speculationIqInput', formData);
+    }
 
     // Save input value
     function saveInput(input) {
@@ -429,6 +431,10 @@
         setupInputHandlers();
         setupButtonHandlers();
         repopulateForm();
+        
+        // Set up grid-item-toggled event listener
+        document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
+        document.addEventListener('grid-item-toggled', handleGridItemToggled);
     }
 
     // Initialize immediately
