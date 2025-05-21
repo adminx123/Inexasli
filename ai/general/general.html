@@ -108,22 +108,21 @@
         }
     };
 
-    // Custom handler for grid item selection
-    function customToggleGridItem(event) {
-        // Stop event propagation to prevent other handlers from firing
-        event.stopPropagation();
-        event.preventDefault();
+    // Handler for grid item toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[GeneralIQ] Grid item toggled event received');
+        const item = event.detail.item;
+        const container = item.closest('.grid-container');
         
-        const container = this.closest('.grid-container');
         // All grid containers in GeneralIQ allow multi-selection
-        this.classList.toggle('selected');
+        // No need to handle special selection logic here
         
-        // Save using JSON approach
-        saveGridItem(this);
+        // Save grid item selection
+        saveGridItem(item);
         
-        console.log(`[GeneralIQ] Toggled ${this.dataset.value} in ${container.id}: ${this.classList.contains('selected') ? 'selected' : 'deselected'}`);
+        console.log(`[GeneralIQ] Handled grid toggle for ${item.dataset.value} in ${container.id}: ${item.classList.contains('selected') ? 'selected' : 'deselected'}`);
     }
-
+    
     // Save grid item selection - only using JSON for efficiency
     function saveGridItem(item) {
         // Skip individual localStorage items and only use JSON
@@ -144,19 +143,11 @@
         setJSON('generalIqInput', formData);
     }
 
-    // Initialize our grid items with special handling
+    // Initialize our grid items
     function initializeGeneralGridItems() {
         console.log("[GeneralIQ] Initializing general grid items");
         
-        // First remove any existing click handlers from datain.js
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            // Clone the node to remove all event listeners
-            const clone = item.cloneNode(true);
-            item.parentNode.replaceChild(clone, item);
-            
-            // Add our handler to the fresh clone
-            clone.addEventListener('click', customToggleGridItem, { capture: true });
-        });
+        // No need to add click handlers - datain.js handles that now
         
         // No need to restore selections here - repopulateForm will handle it all from JSON
     }
@@ -386,6 +377,10 @@
         setupInputHandlers();
         setupButtonHandlers();
         repopulateForm();
+        
+        // Set up grid-item-toggled event listener
+        document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
+        document.addEventListener('grid-item-toggled', handleGridItemToggled);
     }
 
     // Initialize immediately

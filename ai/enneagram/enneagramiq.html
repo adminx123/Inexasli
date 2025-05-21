@@ -89,8 +89,21 @@
 
 <script>
 (function(){
-    const setJSON = window.setJSON || ((k,v)=>{ if(!k) return; if(v===undefined) return localStorage.removeItem(k); localStorage.setItem(k,JSON.stringify(v)); });
-    const getJSON = window.getJSON || ((k,d)=>{ try{const s=localStorage.getItem(k); return s?JSON.parse(s):d;}catch{return d;} });
+    const setJSON = window.setJSON || function(name, value) {
+        try {
+            if (!name) return false;
+            if (value === undefined) { localStorage.removeItem(name); return true; }
+            localStorage.setItem(name, JSON.stringify(value));
+            console.log(`[EnneagramIQ] JSON saved ${name}`);
+            return true;
+        } catch (e) { console.error(`[EnneagramIQ] Error storing JSON: ${e}`); return false; }
+    };
+    const getJSON = window.getJSON || function(name, defaultValue) {
+        try {
+            const item = localStorage.getItem(name);
+            return item ? JSON.parse(item) : defaultValue;
+        } catch (e) { console.error(`[EnneagramIQ] Error retrieving JSON: ${e}`); return defaultValue; }
+    };
 
     function collectFormData(){
         const data={ self:null, traits:[], behaviors:[], motivations:null, fears:null, stress:null, growth:null, childhood:null };
@@ -105,8 +118,20 @@
         return data;
     }
 
+    function saveGridItem(item) {
+        console.log('[EnneagramIQ] Saving all form data to JSON');
+        setJSON('enneagramIqInput', collectFormData());
+    }
+    
+    // Listen for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[EnneagramIQ] Grid item toggled event received');
+        const item = event.detail.item;
+        saveGridItem(item);
+    }
+
     function repopulateForm(){
-        const d=getJSON('enneagramIqInput',{}); if(!d) return;
+        const d=getJSON('enneagramIqInput',null); if(!d) return;
         if(d.self) document.getElementById('enneagram-self').value=d.self;
         (d.traits||[]).forEach(v=>{const e=document.querySelector(`#enneagram-traits .grid-item[data-value="${v}"]`); if(e) e.classList.add('selected');});
         (d.behaviors||[]).forEach(v=>{const e=document.querySelector(`#enneagram-behaviors .grid-item[data-value="${v}"]`); if(e) e.classList.add('selected');});
@@ -117,35 +142,43 @@
         if(d.childhood) document.getElementById('enneagram-childhood').value=d.childhood;
     }
 
-    function saveAll(){ setJSON('enneagramIqInput', collectFormData()); }
-    function toggleItem(e){ e.stopPropagation(); e.preventDefault(); this.classList.toggle('selected'); saveAll(); }
-
-    // Initialize grid items: remove inherited handlers by cloning and add our toggleItem
-    function initializeEnneagramGridItems() {
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-            const clone = item.cloneNode(true);
-            item.parentNode.replaceChild(clone, item);
-            clone.addEventListener('click', toggleItem, { capture: true });
-        });
+    function saveAll(){ 
+        setJSON('enneagramIqInput', collectFormData()); 
     }
 
-    function clearLocalStorage(){ if(!confirm('Clear all saved data?')) return; localStorage.removeItem('enneagramIqInput'); localStorage.removeItem('enneagramIqResponse'); document.querySelectorAll('.grid-item.selected').forEach(i=>i.classList.remove('selected')); document.querySelectorAll('textarea').forEach(t=>t.value=''); }
+    function clearLocalStorage(){ 
+        if(!confirm('Clear all saved data?')) return; 
+        setJSON('enneagramIqInput', undefined); 
+        setJSON('enneagramIqResponse', undefined); 
+        document.querySelectorAll('.grid-item.selected').forEach(i=>i.classList.remove('selected')); 
+        document.querySelectorAll('textarea').forEach(t=>t.value=''); 
+    }
 
     async function generateEnneagram(){
-        const btn=document.getElementById('generate-enneagram-btn'), txt=btn.innerText;
-        btn.innerText='Loading...'; btn.disabled=true;
-        const data=getJSON('enneagramIqInput'); if(!data||!data.self){ alert('Please complete the form'); btn.innerText=txt; btn.disabled=false; return; }
-        try{
-            const res=await fetch('https://enneagram.4hm7q4q75z.workers.dev/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-            const json=await res.json(); setJSON('enneagramIqResponse', json);
-            document.dispatchEvent(new CustomEvent('api-response-received',{detail:{module:'enneagramiq',type:'worker-response',timestamp:Date.now()}}));
-            btn.innerText='Success!';
-        }catch(e){ console.error(e); alert('Error generating analysis'); btn.innerText='Error'; }
-        setTimeout(()=>{btn.innerText=txt;btn.disabled=false;},2000);
+        const btn = document.getElementById('generate-enneagram-btn');
+        const initText = btn.innerText;
+        btn.innerText = 'Loading...'; btn.disabled = true;
+        try {
+            const formData = getJSON('enneagramIqInput');
+            if (!formData) { alert('Please complete the form before generating.'); throw new Error('No input data'); }
+            const apiUrl = 'https://enneagram.4hm7q4q75z.workers.dev/';
+            const res = await fetch(apiUrl, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(formData) });
+            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+            const data = await res.json();
+            setJSON('enneagramIqResponse', data);
+            btn.innerText = 'Success!'; setTimeout(() => btn.disabled = false, 1000);
+            document.dispatchEvent(new CustomEvent('api-response-received', { detail: { module: 'enneagramiq', type: 'worker-response', timestamp: Date.now() } }));
+        } catch (e) {
+            console.error('[EnneagramIQ] Error:', e);
+            alert('Error generating analysis.');
+            btn.innerText = 'Error'; setTimeout(() => { btn.innerText = initText; btn.disabled = false; }, 2000);
+        }
     }
 
+    // Initialization
+    // Instead of direct click handlers, listen for the custom event from datain.js
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
     repopulateForm();
-    initializeEnneagramGridItems();
     document.querySelectorAll('textarea').forEach(t=>t.addEventListener('change',saveAll));
     document.getElementById('generate-enneagram-btn').addEventListener('click',generateEnneagram);
     document.getElementById('clear-enneagram-btn').addEventListener('click',clearLocalStorage);
