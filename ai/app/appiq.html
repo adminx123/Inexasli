@@ -1,6 +1,4 @@
-
-
-  <div class="row1">
+<div class="row1">
     <label class="category-label">App Purpose</label>
     <textarea id="app-purpose" rows="4" placeholder="e.g., task management"></textarea>
   </div>
@@ -78,23 +76,25 @@
       } catch (e) { console.error(`[AppIQ] Error retrieving JSON: ${e}`); return defaultValue; }
     };
 
-    function customToggleGridItem(event) {
-      event.stopPropagation(); event.preventDefault();
-      const container = this.closest('.grid-container');
-      // Single-selection for code status, multi-selection for features
-      if (container.id === 'app-code-status') {
-        container.querySelectorAll('.grid-item').forEach(i => i.classList.remove('selected'));
-        this.classList.add('selected');
-      } else {
-        this.classList.toggle('selected');
-      }
-      saveGridItem(this);
-      console.log(`[AppIQ] Toggled ${this.dataset.value} in ${container.id}`);
-    }
-
     function saveGridItem(item) {
       console.log('[AppIQ] Saving all form data to JSON');
       setJSON('appIqInput', collectFormData());
+    }
+    
+    // Listen for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+      console.log('[AppIQ] Grid item toggled event received');
+      const item = event.detail.item;
+      const container = item.closest('.grid-container');
+      
+      // Handle single-selection logic for code status
+      if (container.id === 'app-code-status') {
+        container.querySelectorAll('.grid-item').forEach(i => {
+          if (i !== item) i.classList.remove('selected');
+        });
+      }
+      
+      saveGridItem(item);
     }
 
     function saveInput(input) {
@@ -135,8 +135,8 @@
 
     function clearLocalStorage() {
       if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
-      localStorage.removeItem('appIqInput');
-      localStorage.removeItem('appIqResponse');
+      setJSON('appIqInput', undefined);
+      setJSON('appIqResponse', undefined);
       document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
       document.querySelectorAll('input, textarea').forEach(i => i.value = '');
       document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
@@ -163,21 +163,15 @@
       }
     }
 
-    function setupButtonHandlers() {
-      document.getElementById('generate-app-btn').addEventListener('click', handleGenerateAppIq);
-      document.getElementById('clear-app-btn').addEventListener('click', clearLocalStorage);
-    }
-
-    function initialize() {
-      console.log('[AppIQ] Initializing...');
-      document.querySelectorAll('.grid-container .grid-item').forEach(i => i.addEventListener('click', customToggleGridItem, { capture: true }));
-      setupInputHandlers(); setupButtonHandlers(); repopulateForm();
-    }
-
-    initialize();
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize);
-    document.addEventListener('data-in-loaded', () => setTimeout(initialize, 100));
-
-    window.appIq = { initialize, saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
+    // Initialization
+    // Instead of direct click handlers, listen for the custom event from datain.js
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    repopulateForm();
+    setupInputHandlers();
+    document.getElementById('generate-app-btn').addEventListener('click', handleGenerateAppIq);
+    document.getElementById('clear-app-btn').addEventListener('click', clearLocalStorage);
+    
+    // Export for potential external access
+    window.appIq = { saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
   })();
   </script>
