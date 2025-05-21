@@ -534,21 +534,44 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // This is the fix for the automatic opening issue
                 console.log('[DataOut] Forcing data container to open for API response');
                 
-                // Ensure we're in the right state first
-                if (dataContainer.dataset.state !== 'expanded') {
-                    console.log('[DataOut] Container not expanded, expanding now...');
-                    // Use setTimeout with a longer delay to ensure this runs after any potential race conditions
+                // Get reference to the datain container and collapse it first
+                const dataInContainer = document.querySelector('.data-container-left');
+                if (dataInContainer && dataInContainer.dataset.state === 'expanded') {
+                    console.log('[DataOut] Collapsing datain container first');
+                    // Create a custom event to trigger datain collapse
+                    const collapseDatinEvent = new CustomEvent('collapse-datain-container');
+                    document.dispatchEvent(collapseDatinEvent);
+                    
+                    // Add a small delay to ensure datain collapse animation has started
                     setTimeout(() => {
+                        // Now expand the dataout container
+                        if (dataContainer.dataset.state !== 'expanded') {
+                            console.log('[DataOut] Container not expanded, expanding now...');
+                            toggleDataContainer();
+                            // Load content after a delay to ensure container is fully ready
+                            setTimeout(() => {
+                                console.log('[DataOut] Loading content after delay:', outUrl);
+                                loadStoredContent(outUrl);
+                            }, 300);
+                        } else {
+                            console.log('[DataOut] Container already expanded, loading content...');
+                            loadStoredContent(outUrl);
+                        }
+                    }, 100);
+                } else {
+                    // No need to collapse datain, just expand dataout
+                    if (dataContainer.dataset.state !== 'expanded') {
+                        console.log('[DataOut] Container not expanded, expanding now...');
                         toggleDataContainer();
-                        // Load content after a longer delay to ensure container is fully ready
+                        // Load content after a delay to ensure container is fully ready
                         setTimeout(() => {
                             console.log('[DataOut] Loading content after delay:', outUrl);
                             loadStoredContent(outUrl);
                         }, 300);
-                    }, 100);
-                } else {
-                    console.log('[DataOut] Container already expanded, loading content...');
-                    loadStoredContent(outUrl);
+                    } else {
+                        console.log('[DataOut] Container already expanded, loading content...');
+                        loadStoredContent(outUrl);
+                    }
                 }
             } else {
                 console.warn(`[DataOut] No output URL mapping found for module: ${moduleName}`);

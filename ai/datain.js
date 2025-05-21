@@ -376,6 +376,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         } else {
             
         }
+        
+        // Listen for the special collapse event from dataout.js
+        document.addEventListener('collapse-datain-container', function() {
+            console.log('[DataIn] Received collapse-datain-container event');
+            if (dataContainer && dataContainer.dataset.state === 'expanded') {
+                console.log('[DataIn] Collapsing datain container due to dataout expansion');
+                toggleDataContainer();
+            }
+        });
 
         function toggleDataContainer() {
             if (!dataContainer) return;
