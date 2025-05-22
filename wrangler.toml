@@ -91,3 +91,27 @@ main = "./ai/emotion/emotion.js"
 [[env.emotion.services]]
 binding = "secret_binding"
 service = "secretworker"
+
+[env.enneagram]
+name = "enneagram"
+main = "./ai/enneagram/enneagram.js"
+
+[[env.enneagram.services]]
+binding = "secret_binding"
+service = "secretworker"
+
+[env.event]
+name = "event"
+main = "./ai/event/event.js"
+
+[[env.event.services]]
+binding = "secret_binding"
+service = "secretworker"
+
+[env.fitness]
+name = "fitness"
+main = "./ai/fitness/fitness.js"
+
+[[env.fitness.services]]
+binding = "secret_binding"
+service = "secretworker"
