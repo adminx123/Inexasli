@@ -1,25 +1,25 @@
 # INEXASLI .gitignore files
 
 # Ignore engineered prompts and worker files containing sensitive IP
-ai/calorie/calorieiqWorker.js
-ai/income/incomeiqWorker.js
-ai/book/bookiqworker.js
-ai/fitness/fitnessiqworker.js
-ai/adventure/adventureiqworker.js
-ai/app/appiqworker.js
-ai/business/businessiqworker.js
-ai/enneagram/enneagramiqworker.js
-ai/event/eventiqworker.js
-ai/general/generaliqworker.js
-ai/decision/decisioniqworker.js
-ai/report/reportiqworker.js 
-ai/workflow/workflowiqworker.js
-ai/speculation/speculationiqworker.js
-ai/social/socialiqworker.js
-ai/quiz/quiziqworker.js
-ai/symptom/symptomiqworker.js
-ai/research/researchiqworker.js
-ai/emotion/emotioniqWorker.js
+ai/calorie/calorie.js
+ai/income/income.js
+ai/book/book.js
+ai/fitness/fitness.js
+ai/adventure/adventure.js
+ai/app/app.js
+ai/business/business.js
+ai/enneagram/enneagram.js
+ai/event/event.js
+ai/general/general.js
+ai/decision/decision.js
+ai/report/report.js 
+ai/workflow/workflow.js
+ai/speculation/speculation.js
+ai/social/social.js
+ai/quiz/quiz.js
+ai/symptom/symptom.js
+ai/research/research.js
+ai/emotion/emotion.js
 
 # Entire prompts directory
 DIRECTION/
