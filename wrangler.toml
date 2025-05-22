@@ -11,13 +11,7 @@ upload.format = "modules"
 # Set to "info" for normal logs, "debug" for verbose logs
 log_level = "debug"
 
-# [env.workflow]
-# name = "workflow"
-# main = "./ai/workflow/workflow.js"
 
-# [[env.workflow.services]]
-# binding = "secret_binding"
-# service = "secretworker"
 
 [env.symptom]
 name = "symptom"
@@ -27,13 +21,7 @@ main = "./ai/symptom/symptom.js"
 binding = "secret_binding"
 service = "secretworker"
 
-# [env.report]
-# name = "report"
-# main = "./ai/report/report.js"
 
-# [[env.report.services]]
-# binding = "secret_binding"
-# service = "secretworker"
 
 [env.research]
 name = "research"
@@ -43,29 +31,11 @@ main = "./ai/research/research.js"
 binding = "secret_binding"
 service = "secretworker"
 
-# [env.general]
-# name = "general"
-# main = "./ai/general/general.js"
 
-# [[env.general.services]]
-# binding = "secret_binding"
-# service = "secretworker"
 
-# [env.marketing]
-# name = "marketing"
-# main = "./ai/marketing/marketing.js"
 
-# [[env.marketing.services]]
-# binding = "secret_binding"
-# service = "secretworker"
 
-# [env.app]
-# name = "app"
-# main = "./ai/app/app.js"
 
-# [[env.app.services]]
-# binding = "secret_binding"
-# service = "secretworker"
 
 [env.adventure]
 name = "adventure"
@@ -104,13 +74,7 @@ main = "./ai/book/book.js"
 binding = "secret_binding"
 service = "secretworker"
 
-# [env.business]
-# name = "business"
-# main = "./ai/business/business.js"
 
-# [[env.business.services]]
-# binding = "secret_binding"
-# service = "secretworker"
 
 [env.decision]
 name = "decision"
