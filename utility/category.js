@@ -14,18 +14,17 @@ const categoryManager = (function() {
     // Categorization of grid items by domain
     const itemCategories = {
         'health': ['CalorieIQ', 'FitnessIQ', 'SymptomIQ', 'EmotionIQ'],
-        'business': ['NewBizIQ', 'WorkflowIQ', 'MarketingIQ', 'DecisionIQ'],
+        'business': ['DecisionIQ'], 
         'finance': ['IncomeIQ', 'ReceiptsIQ', 'SpeculationIQ'],
         'lifestyle': ['AdventureIQ', 'EventIQ', 'SocialIQ'],
         'personal': ['EnneagramIQ', 'EmotionIQ', 'SocialIQ'],
-        'learning': ['BookIQ', 'ResearchIQ', 'QuizIQ', 'General', 'ReportIQ'],
-        'productivity': ['App', 'WorkflowIQ', 'DecisionIQ']
+        'learning': ['BookIQ', 'ResearchIQ', 'QuizIQ'], 
+        'productivity': ['DecisionIQ'] 
     };
 
     // Product URLs mapping 
     const productUrls = {
         'AdventureIQ': '/ai/adventure/adventureiq.html',
-        'App': '/ai/app/appiq.html',
         'BookIQ': '/ai/book/bookiq.html',
         'CalorieIQ': '/ai/calorie/calorieiq.html',
         'DecisionIQ': '/ai/decision/decisioniq.html',
@@ -33,18 +32,13 @@ const categoryManager = (function() {
         'EnneagramIQ': '/ai/enneagram/enneagramiq.html',
         'EventIQ': '/ai/event/eventiq.html',
         'FitnessIQ': '/ai/fitness/fitnessiq.html',
-        'General': '/ai/general/general.html',
         'IncomeIQ': '/ai/income/intro.html',
-        'MarketingIQ': '/ai/marketing/marketingiq.html',
-        'NewBizIQ': '/ai/business/businessiq.html',
         'QuizIQ': '/ai/quiz/quiziq.html',
         'ReceiptsIQ': '/ai/receipts/receiptsiq.html',
-        'ReportIQ': '/ai/report/reportiq.html',
         'ResearchIQ': '/ai/research/researchiq.html',
         'SocialIQ': '/ai/social/socialiq.html',
         'SpeculationIQ': '/ai/speculation/speculationiq.html',
         'SymptomIQ': '/ai/symptom/symptomiq.html',
-        'WorkflowIQ': '/ai/workflow/workflowiq.html'
     };
 
     // Create or get modal container
