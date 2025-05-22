@@ -13,7 +13,7 @@ log_level = "debug"
 
 [env.workflow]
 name = "workflow"
-main = "./ai/workflow/workflowiqworker.js"
+main = "./ai/workflow/workflow.js"
 
 [[env.workflow.services]]
 binding = "secret_binding"
@@ -21,7 +21,7 @@ service = "secretworker"
 
 [env.symptom]
 name = "symptom"
-main = "./ai/symptom/symptomiqworker.js"
+main = "./ai/symptom/symptom.js"
 
 [[env.symptom.services]]
 binding = "secret_binding"
@@ -29,7 +29,7 @@ service = "secretworker"
 
 [env.fitness]
 name = "fitness"
-main = "./ai/fitness/fitnessiqworker.js"
+main = "./ai/fitness/fitness.js"
 
 [[env.fitness.services]]
 binding = "secret_binding"
@@ -37,7 +37,7 @@ service = "secretworker"
 
 [env.report]
 name = "report"
-main = "./ai/report/reportiqworker.js"
+main = "./ai/report/report.js"
 
 [[env.report.services]]
 binding = "secret_binding"
@@ -45,7 +45,7 @@ service = "secretworker"
 
 [env.research]
 name = "research"
-main = "./ai/research/researchiqworker.js"
+main = "./ai/research/research.js"
 
 [[env.research.services]]
 binding = "secret_binding"
@@ -53,7 +53,7 @@ service = "secretworker"
 
 [env.social]
 name = "social" 
-main = "./ai/social/socialiqworker.js"
+main = "./ai/social/social.js"
 
 [[env.social.services]]
 binding = "secret_binding"
@@ -61,7 +61,7 @@ service = "secretworker"
 
 [env.speculation]
 name = "speculation"
-main = "./ai/speculation/speculationiqworker.js"
+main = "./ai/speculation/speculation.js"
 
 [[env.speculation.services]]
 binding = "secret_binding"
@@ -69,7 +69,7 @@ service = "secretworker"
 
 [env.enneagram]
 name = "enneagram"
-main = "./ai/enneagram/enneagramiqworker.js"
+main = "./ai/enneagram/enneagram.js"
 
 [[env.enneagram.services]]
 binding = "secret_binding"
@@ -77,7 +77,7 @@ service = "secretworker"
 
 [env.event]
 name = "event"
-main = "./ai/event/eventiqworker.js"
+main = "./ai/event/event.js"
 
 [[env.event.services]]
 binding = "secret_binding"
@@ -85,7 +85,7 @@ service = "secretworker"
 
 [env.quiz]
 name = "quiz"
-main = "./ai/quiz/quiziqworker.js"
+main = "./ai/quiz/quiz.js"
 
 [[env.quiz.services]]
 binding = "secret_binding"
@@ -93,7 +93,7 @@ service = "secretworker"
 
 [env.general]
 name = "general"
-main = "./ai/general/generaliqworker.js"
+main = "./ai/general/general.js"
 
 [[env.general.services]]
 binding = "secret_binding"
@@ -101,7 +101,7 @@ service = "secretworker"
 
 [env.marketing]
 name = "marketing"
-main = "./ai/marketing/marketingiqworker.js"
+main = "./ai/marketing/marketing.js"
 
 [[env.marketing.services]]
 binding = "secret_binding"
@@ -109,7 +109,7 @@ service = "secretworker"
 
 [env.app]
 name = "app"
-main = "./ai/app/appiqworker.js"
+main = "./ai/app/app.js"
 
 [[env.app.services]]
 binding = "secret_binding"
@@ -129,7 +129,7 @@ service = "secretworker"
 
 [env.calorie]
 name = "calorie"
-main = "./ai/calorie/calorieiqworker.js"
+main = "./ai/calorie/calorie.js"
 
 [[env.calorie.services]]
 binding = "secret_binding"
@@ -146,7 +146,7 @@ service = "secretworker"
 
 [env.book]
 name = "book"
-main = "./ai/book/bookiqworker.js"
+main = "./ai/book/book.js"
 
 [[env.book.services]]
 binding = "secret_binding"
@@ -154,7 +154,7 @@ service = "secretworker"
 
 [env.business]
 name = "business"
-main = "./ai/business/businessiqworker.js"
+main = "./ai/business/business.js"
 
 [[env.business.services]]
 binding = "secret_binding"
@@ -162,7 +162,7 @@ service = "secretworker"
 
 [env.decision]
 name = "decision"
-main = "./ai/decision/decisioniqworker.js"
+main = "./ai/decision/decision.js"
 
 [[env.decision.services]]
 binding = "secret_binding"
@@ -170,7 +170,7 @@ service = "secretworker"
 
 [env.emotion]
 name = "emotion"
-main = "./ai/emotion/emotioniqworker.js"
+main = "./ai/emotion/emotion.js"
 
 [[env.emotion.services]]
 binding = "secret_binding"
