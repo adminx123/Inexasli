@@ -2,6 +2,15 @@ account_id = "b70c309587ed8ba2bfa06320792ea457"
 workers_dev = true
 compatibility_date = "2025-05-11"
 
+# Global logging configuration that applies to all workers
+[build]
+command = ""
+watch_dir = "build/worker"
+upload.format = "modules"
+
+# Set to "info" for normal logs, "debug" for verbose logs
+log_level = "debug"
+
 [env.workflow]
 name = "workflow"
 main = "./ai/workflow/workflowiqworker.js"
@@ -108,7 +117,11 @@ service = "secretworker"
 
 [env.adventure]
 name = "adventure"
-main = "./ai/adventure/adventureiqworker.js"
+main = "./ai/adventure/adventure.js"
+
+# Enable debug logs specifically for the adventure worker
+[env.adventure.build]
+log_level = "debug"
 
 [[env.adventure.services]]
 binding = "secret_binding"
