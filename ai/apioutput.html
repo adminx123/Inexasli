@@ -241,10 +241,6 @@
             moduleName = 'symptomiq';
           } else if (lastGridItemUrl.includes('adventureiq')) {
             moduleName = 'adventureiq';
-          } else if (lastGridItemUrl.includes('appiq')) {
-            moduleName = 'appiq';
-          } else if (lastGridItemUrl.includes('businessiq')) {
-            moduleName = 'businessiq';
           } else if (lastGridItemUrl.includes('decisioniq')) {
             moduleName = 'decisioniq';
           } else if (lastGridItemUrl.includes('emotioniq')) {
@@ -253,23 +249,14 @@
             moduleName = 'enneagramiq';
           } else if (lastGridItemUrl.includes('eventiq')) {
             moduleName = 'eventiq';
-          } else if (lastGridItemUrl.includes('general')) {
-            moduleName = 'generaliq';
-          } else if (lastGridItemUrl.includes('marketingiq')) {
-            moduleName = 'marketingiq';
-            console.log('Detected marketing module from URL');
           } else if (lastGridItemUrl.includes('quiziq')) {
             moduleName = 'quiziq';
-          } else if (lastGridItemUrl.includes('reportiq')) {
-            moduleName = 'reportiq';
           } else if (lastGridItemUrl.includes('researchiq')) {
             moduleName = 'researchiq';
           } else if (lastGridItemUrl.includes('socialiq')) {
             moduleName = 'socialiq';
           } else if (lastGridItemUrl.includes('speculationiq')) {
             moduleName = 'speculationiq';
-          } else if (lastGridItemUrl.includes('workflowiq')) {
-            moduleName = 'workflowiq';
           }
         }
         
@@ -291,11 +278,6 @@
           } else if (moduleName === 'adventureiq') {
             responseKey = 'adventureIqResponse'; // Capital 'I' to match actual storage pattern
             console.log('Using correctly capitalized key for adventure:', responseKey);
-          } else if (moduleName === 'appiq') {
-            responseKey = 'appIqResponse'; // Capital 'I' to match actual storage pattern
-            console.log('Using correctly capitalized key for app:', responseKey);
-          } else if (moduleName === 'businessiq') {
-            responseKey = 'businessIqResponse'; // Capital 'I' to match actual storage pattern
           } else if (moduleName === 'decisioniq') {
             responseKey = 'decisionIqResponse'; // Capital 'I' to match actual storage pattern
           } else if (moduleName === 'emotioniq') {
@@ -304,23 +286,14 @@
             responseKey = 'enneagramIqResponse'; // Capital 'I' to match actual storage pattern
           } else if (moduleName === 'eventiq') {
             responseKey = 'eventIqResponse'; // Capital 'I' to match actual storage pattern
-          } else if (moduleName === 'generaliq') {
-            responseKey = 'generalIqResponse'; // Capital 'I' to match actual storage pattern
-          } else if (moduleName === 'marketingiq') {
-            responseKey = 'marketingIqResponse'; // Capital 'I' to match actual storage pattern
-            console.log('Using correctly capitalized key for marketing:', responseKey);
-                    } else if (moduleName === 'quiziq') {
+          } else if (moduleName === 'quiziq') {
             responseKey = 'quizIqResponse'; // Capital 'I' to match actual storage pattern
-          } else if (moduleName === 'reportiq') {
-            responseKey = 'reportIqResponse'; // Capital 'I' to match actual storage pattern
           } else if (moduleName === 'researchiq') {
             responseKey = 'researchIqResponse'; // Capital 'I' to match actual storage pattern
           } else if (moduleName === 'socialiq') {
             responseKey = 'socialIqResponse'; // Capital 'I' to match actual storage pattern
           } else if (moduleName === 'speculationiq') {
             responseKey = 'speculationIqResponse'; // Capital 'I' to match actual storage pattern
-          } else if (moduleName === 'workflowiq') {
-            responseKey = 'workflowIqResponse'; // Capital 'I' to match actual storage pattern
           } else {
             responseKey = moduleName + 'Response';
           }

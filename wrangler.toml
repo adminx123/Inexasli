@@ -11,13 +11,13 @@ upload.format = "modules"
 # Set to "info" for normal logs, "debug" for verbose logs
 log_level = "debug"
 
-[env.workflow]
-name = "workflow"
-main = "./ai/workflow/workflow.js"
+# [env.workflow]
+# name = "workflow"
+# main = "./ai/workflow/workflow.js"
 
-[[env.workflow.services]]
-binding = "secret_binding"
-service = "secretworker"
+# [[env.workflow.services]]
+# binding = "secret_binding"
+# service = "secretworker"
 
 [env.symptom]
 name = "symptom"
@@ -27,21 +27,13 @@ main = "./ai/symptom/symptom.js"
 binding = "secret_binding"
 service = "secretworker"
 
-[env.fitness]
-name = "fitness"
-main = "./ai/fitness/fitness.js"
+# [env.report]
+# name = "report"
+# main = "./ai/report/report.js"
 
-[[env.fitness.services]]
-binding = "secret_binding"
-service = "secretworker"
-
-[env.report]
-name = "report"
-main = "./ai/report/report.js"
-
-[[env.report.services]]
-binding = "secret_binding"
-service = "secretworker"
+# [[env.report.services]]
+# binding = "secret_binding"
+# service = "secretworker"
 
 [env.research]
 name = "research"
@@ -51,69 +43,29 @@ main = "./ai/research/research.js"
 binding = "secret_binding"
 service = "secretworker"
 
-[env.social]
-name = "social" 
-main = "./ai/social/social.js"
+# [env.general]
+# name = "general"
+# main = "./ai/general/general.js"
 
-[[env.social.services]]
-binding = "secret_binding"
-service = "secretworker"
+# [[env.general.services]]
+# binding = "secret_binding"
+# service = "secretworker"
 
-[env.speculation]
-name = "speculation"
-main = "./ai/speculation/speculation.js"
+# [env.marketing]
+# name = "marketing"
+# main = "./ai/marketing/marketing.js"
 
-[[env.speculation.services]]
-binding = "secret_binding"
-service = "secretworker"
+# [[env.marketing.services]]
+# binding = "secret_binding"
+# service = "secretworker"
 
-[env.enneagram]
-name = "enneagram"
-main = "./ai/enneagram/enneagram.js"
+# [env.app]
+# name = "app"
+# main = "./ai/app/app.js"
 
-[[env.enneagram.services]]
-binding = "secret_binding"
-service = "secretworker"
-
-[env.event]
-name = "event"
-main = "./ai/event/event.js"
-
-[[env.event.services]]
-binding = "secret_binding"
-service = "secretworker"
-
-[env.quiz]
-name = "quiz"
-main = "./ai/quiz/quiz.js"
-
-[[env.quiz.services]]
-binding = "secret_binding"
-service = "secretworker"
-
-[env.general]
-name = "general"
-main = "./ai/general/general.js"
-
-[[env.general.services]]
-binding = "secret_binding"
-service = "secretworker"
-
-[env.marketing]
-name = "marketing"
-main = "./ai/marketing/marketing.js"
-
-[[env.marketing.services]]
-binding = "secret_binding"
-service = "secretworker"
-
-[env.app]
-name = "app"
-main = "./ai/app/app.js"
-
-[[env.app.services]]
-binding = "secret_binding"
-service = "secretworker"
+# [[env.app.services]]
+# binding = "secret_binding"
+# service = "secretworker"
 
 [env.adventure]
 name = "adventure"
@@ -152,13 +104,13 @@ main = "./ai/book/book.js"
 binding = "secret_binding"
 service = "secretworker"
 
-[env.business]
-name = "business"
-main = "./ai/business/business.js"
+# [env.business]
+# name = "business"
+# main = "./ai/business/business.js"
 
-[[env.business.services]]
-binding = "secret_binding"
-service = "secretworker"
+# [[env.business.services]]
+# binding = "secret_binding"
+# service = "secretworker"
 
 [env.decision]
 name = "decision"
