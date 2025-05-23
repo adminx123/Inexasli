@@ -144,17 +144,42 @@
     
     .meal-card {
       background: #f8f9fa;
-      border-left: 4px solid #007bff;
       padding: 15px;
       margin-bottom: 15px;
-      border-radius: 0 8px 8px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    /* Different colors for different priority deficit recommendations */
+    .meal-card:nth-child(1) {
+      border-left: 4px solid #e74c3c;
+    }
+    
+    .meal-card:nth-child(2) {
+      border-left: 4px solid #f39c12;
+    }
+    
+    .meal-card:nth-child(3) {
+      border-left: 4px solid #27ae60;
     }
     
     .meal-title {
       font-weight: bold;
-      color: #007bff;
       margin-bottom: 8px;
       font-size: 16px;
+    }
+    
+    /* Different colors for different priority deficit titles */
+    .meal-card:nth-child(1) .meal-title {
+      color: #e74c3c;
+    }
+    
+    .meal-card:nth-child(2) .meal-title {
+      color: #f39c12;
+    }
+    
+    .meal-card:nth-child(3) .meal-title {
+      color: #27ae60;
     }
     
     .meal-content {
@@ -517,16 +542,16 @@
           container.appendChild(nutrientsGrid);
         }
         
-        // Meal Recommendations
+        // Deficit-Filling Recommendations
         const mealsSection = document.createElement('div');
         mealsSection.className = 'meals-section';
-        mealsSection.innerHTML = '<h3 style="color: #333; margin-bottom: 15px;">🍽️ Meal Recommendations</h3>';
+        mealsSection.innerHTML = '<h3 style="color: #333; margin-bottom: 15px;">🎯 Deficit-Filling Recommendations</h3>';
         
         if (calorieData.mealRecommendations1) {
           const meal1 = document.createElement('div');
           meal1.className = 'meal-card';
           meal1.innerHTML = `
-            <div class="meal-title">Morning Meals</div>
+            <div class="meal-title">Priority Deficit Foods</div>
             <div class="meal-content">${calorieData.mealRecommendations1}</div>
           `;
           mealsSection.appendChild(meal1);
@@ -536,7 +561,7 @@
           const meal2 = document.createElement('div');
           meal2.className = 'meal-card';
           meal2.innerHTML = `
-            <div class="meal-title">Afternoon Meals</div>
+            <div class="meal-title">Secondary Nutrient Needs</div>
             <div class="meal-content">${calorieData.mealRecommendations2}</div>
           `;
           mealsSection.appendChild(meal2);
@@ -546,7 +571,7 @@
           const meal3 = document.createElement('div');
           meal3.className = 'meal-card';
           meal3.innerHTML = `
-            <div class="meal-title">Evening Meals</div>
+            <div class="meal-title">Complete Your Daily Goals</div>
             <div class="meal-content">${calorieData.mealRecommendations3}</div>
           `;
           mealsSection.appendChild(meal3);
