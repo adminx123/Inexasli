@@ -12,17 +12,17 @@
   <!-- Form Sections - identical structure to fitnessiq.html but with adventure IDs -->
   <div class="row1">
     <label class="category-label">Primary Goal</label>
-    <select id="trip-primary-goal">
-      <option value="leisure">Leisure & Relaxation</option>
-      <option value="adventure">Adventure & Exploration</option>
-      <option value="cultural">Cultural Immersion</option>
-      <option value="educational">Educational Experience</option>
-      <option value="business">Business Trip with Leisure</option>
-      <option value="family">Family Bonding</option>
-      <option value="romantic">Romantic Getaway</option>
-      <option value="wellness">Health & Wellness Retreat</option>
-      <option value="special-occasion">Special Occasion Celebration</option>
-    </select>
+    <div class="grid-container" id="trip-primary-goals">
+      <div class="grid-item" data-value="leisure">Leisure & Relaxation</div>
+      <div class="grid-item" data-value="adventure">Adventure & Exploration</div>
+      <div class="grid-item" data-value="cultural">Cultural Immersion</div>
+      <div class="grid-item" data-value="educational">Educational Experience</div>
+      <div class="grid-item" data-value="business">Business Trip with Leisure</div>
+      <div class="grid-item" data-value="family">Family Bonding</div>
+      <div class="grid-item" data-value="romantic">Romantic Getaway</div>
+      <div class="grid-item" data-value="wellness">Health & Wellness Retreat</div>
+      <div class="grid-item" data-value="special-occasion">Special Occasion Celebration</div>
+    </div>
   </div>
   <div class="row1">
     <label class="category-label">Trip Activities</label>
@@ -59,7 +59,20 @@
       <div class="grid-item" data-value="Business Partner">With Business Partner</div>
       <div class="grid-item" data-value="Co-Worker">With Co-Worker</div>
       <div class="grid-item" data-value="Client">With Client</div>
+      <div class="grid-item" data-value="Pet">With Pet</div>
     </div>
+  </div>
+  <div class="row1">
+    <label class="category-label">Group Size</label>
+    <input type="number" id="trip-people" placeholder="Amount of people on trip" min="1">
+  </div>
+  <div class="row1">
+    <label class="category-label">Dependents</label>
+    <input type="number" id="trip-dependents" placeholder="Number of dependents you're paying for" min="0">
+  </div>
+  <div class="row1">
+    <label class="category-label">Starting Location</label>
+    <input type="text" id="trip-home-location" placeholder="Where are you traveling from? (e.g., Toronto, Canada)">
   </div>
   <div class="row1">
     <label class="category-label">Destination</label>
@@ -69,14 +82,12 @@ New Jersey, 6th ave
 Hampton's"></textarea>
   </div>
   <div class="row1">
-    <label class="category-label">Trip Details</label>
-    <textarea id="trip-specifics" rows="4" placeholder="Specifics Needed (one per line):
-Top rated hiking trails
-Hikes under 5km
-Best ice cream shops within 5km from city centre"></textarea>
-    <textarea id="trip-plans" rows="3" placeholder="Trip Schedule (one per line):
-Monday - 6am hike, 8pm dinner
-Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
+    <label class="category-label">Trip Duration</label>
+    <input type="number" id="trip-days" placeholder="Trip Length (days)" min="1">
+  </div>
+  <div class="row1">
+    <label class="category-label">Budget</label>
+    <input type="text" id="trip-budget" placeholder="Budget amount (e.g., $3000 USD)">
   </div>
   <div class="row1">
     <label class="category-label">Packing Requirements</label>
@@ -85,31 +96,6 @@ Tuesday - 8am breakfast in city, 5pm visit with friends"></textarea>
       <option value="YF">Packing tips needed for female</option>
       <option value="YMF">Packing tips needed for male & female</option>
       <option value="NN">Packing tips not needed</option>
-    </select>
-  </div>
-  <div class="row1">
-    <label class="category-label">Group Size</label>
-    <input type="number" id="trip-people" placeholder="Amount of people on trip" min="1">
-  </div>
-  <div class="row1">
-    <label class="category-label">Trip Duration</label>
-    <input type="number" id="trip-days" placeholder="Trip Length (days)" min="1">
-  </div>
-  <div class="row1">
-    <label class="category-label">Budget</label>
-    <textarea id="trip-budget" rows="4" placeholder="Budget: $3000 usd"></textarea>
-  </div>
-  <div class="row1">
-    <label class="category-label">Output Format</label>
-    <select id="trip-output-format">
-      <option value="detailed-itinerary">Detailed Day-by-Day Itinerary</option>
-      <option value="bullet-points">Bullet Point Summary</option>
-      <option value="travel-guide">Travel Guide with Maps</option>
-      <option value="visual-timeline">Visual Timeline</option>
-      <option value="packing-focused">Packing-Focused Plan</option>
-      <option value="budget-breakdown">Budget Breakdown</option>
-      <option value="thematic-experience">Thematic Experience</option>
-      <option value="family-friendly">Family-Friendly Format</option>
     </select>
   </div>
   <div class="row1">
@@ -181,25 +167,24 @@ Include more free time between activities"></textarea>
 
     function collectFormData() {
       const formData = { 
-        primaryGoal: null, 
+        primaryGoals: [], 
         activities: [], 
         relationships: [], 
+        homeLocation: null,
         location: null, 
-        specifics: null, 
-        plans: null, 
         packing: null, 
-        people: null, 
-        days: null, 
+        people: null,
+        dependents: null,
+        days: null,
         budget: null,
-        outputFormat: null,
         specialInstructions: null
       };
+      document.querySelectorAll('#trip-primary-goals .grid-item.selected').forEach(i => formData.primaryGoals.push(i.dataset.value));
       document.querySelectorAll('#trip-activities .grid-item.selected').forEach(i => formData.activities.push(i.dataset.value));
       document.querySelectorAll('#trip-relationship .grid-item.selected').forEach(i => formData.relationships.push(i.dataset.value));
-      ['primary-goal', 'location','specifics','plans','packing','people','days','budget','output-format','special-instructions'].forEach(field => {
+      ['home-location','location','packing','people','dependents','days','budget','special-instructions'].forEach(field => {
         const el = document.getElementById(`trip-${field}`);
-        if (el) formData[field === 'primary-goal' ? 'primaryGoal' : 
-                 field === 'output-format' ? 'outputFormat' : 
+        if (el) formData[field === 'home-location' ? 'homeLocation' : 
                  field === 'special-instructions' ? 'specialInstructions' : field] = (el.value||'').trim() || null;
       });
       return formData;
@@ -209,18 +194,21 @@ Include more free time between activities"></textarea>
       console.log('[AdventureIQ] Repopulating form from JSON storage');
       const data = getJSON('adventureIqInput', null);
       if (!data) return;
+      
+      // Handle grid selections
+      data.primaryGoals?.forEach(v => document.querySelector(`#trip-primary-goals .grid-item[data-value="${v}"]`)?.classList.add('selected'));
       data.activities?.forEach(v => document.querySelector(`#trip-activities .grid-item[data-value="${v}"]`)?.classList.add('selected'));
       data.relationships?.forEach(v => document.querySelector(`#trip-relationship .grid-item[data-value="${v}"]`)?.classList.add('selected'));
       
-      // Handle dropdown and text fields
-      if(data.primaryGoal) document.getElementById('trip-primary-goal').value = data.primaryGoal;
-      ['location','specifics','plans','packing','people','days','budget'].forEach(f => {
+      // Handle text fields and dropdown
+      ['home-location','location','packing','people','dependents','days','budget'].forEach(f => {
         const el = document.getElementById(`trip-${f}`);
-        if (el && data[f]) el.value = data[f];
+        if (el && data[f === 'home-location' ? 'homeLocation' : f]) {
+          el.value = data[f === 'home-location' ? 'homeLocation' : f];
+        }
       });
       
-      // Handle new fields
-      if(data.outputFormat) document.getElementById('trip-output-format').value = data.outputFormat;
+      // Handle special instructions
       if(data.specialInstructions) document.getElementById('trip-special-instructions').value = data.specialInstructions;
     }
 
