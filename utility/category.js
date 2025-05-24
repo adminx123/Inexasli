@@ -159,7 +159,7 @@ const categoryManager = (function() {
             // Add premium tag to selected items
             const premiumItems = [
                 'AdventureIQ', 'App', 'DecisionIQ', 'EmotionIQ', 'EnneagramIQ', 
-                'EventIQ', 'IncomeIQ', 'MarketingIQ', 'NewBizIQ', 'ReportIQ',
+                'EventIQ', 'IncomeIQ', 'NewBizIQ', 'ReportIQ',
                 'ResearchIQ', 'SocialIQ', 'SpeculationIQ', 'WorkflowIQ'
             ];
             if (premiumItems.includes(name)) {
