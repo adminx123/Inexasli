@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.dataset.state = 'expanded';
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
-                <span class="data-label">DATA OUT</span>
                 <div class="data-content">${content}</div>
             `;
 
@@ -73,7 +72,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error(`Error loading stored content (dataout.js):`, error);
             dataContainer.innerHTML = `
                 <span class="close-data-container"></span>
-                <span class="data-label">DATA OUT</span>
                 <div class="data-content">Error loading content: ${error.message}</div>
             `;
         }
