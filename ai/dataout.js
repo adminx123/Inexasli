@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-radius: 0;
                 border: none;
                 box-shadow: none;
+                padding: 0;
             }
 
             .data-container-right:hover {
@@ -187,7 +188,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-right .data-content {
-                padding: 10px;
+                padding: 0;
                 font-size: 14px;
                 height: calc(100% - 40px);
                 max-height: none;
@@ -223,6 +224,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     border-radius: 0;
                     border: none;
                     box-shadow: none;
+                    padding: 0;
                 }
 
                 .data-container-right .data-label {
@@ -247,7 +249,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 .data-container-right .data-content {
                     font-size: 12px;
-                    padding: 8px;
+                    padding: 0;
                     overflow-x: auto;
                     margin-top: 25px;
                 }
