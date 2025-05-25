@@ -324,7 +324,7 @@
   <script>
     // Run immediately without waiting for DOMContentLoaded
     (function() {
-      console.log('API Output script running');
+      console.log('API Output Router script running');
       
       // Reference the global utility functions
       const getLocal = window.getLocal || function(key) {
@@ -337,15 +337,23 @@
         }
       };
 
-      const getJSON = window.getJSON || function(key) {
-        try {
-          const item = localStorage.getItem(key);
-          return item ? JSON.parse(item) : null;
-        } catch (e) {
-          console.error('Error parsing JSON:', e);
-          return null;
-        }
+      // Module-specific output page mappings
+      const moduleOutputPages = {
+        'calorieiq': '/ai/calorie/calorieoutput.html',
+        'philosophyiq': '/ai/philosophy/philosophyoutput.html'
+        // Add more modules here as they get migrated to specific output pages
       };
+
+      // Function to redirect to module-specific output page
+      function redirectToModuleOutput(moduleName) {
+        if (moduleOutputPages[moduleName]) {
+          const redirectUrl = moduleOutputPages[moduleName] + window.location.search;
+          console.log(`Redirecting to module-specific output page: ${redirectUrl}`);
+          window.location.href = redirectUrl;
+          return true;
+        }
+        return false;
+      }
 
       // Try to get span element - might be delayed
       function updateOutput() {
@@ -371,12 +379,21 @@
         if (gridItem) {
           // Use the URL parameter if available
           moduleName = gridItem;
+          
+          // Try to redirect to module-specific output page
+          if (redirectToModuleOutput(moduleName)) {
+            return; // Stop further processing if redirect was successful
+          }
         } else if (lastGridItemUrl) {
           // Extract module name from URL if parameter isn't provided
           if (lastGridItemUrl.includes('fitnessiq')) {
             moduleName = 'fitnessiq';
           } else if (lastGridItemUrl.includes('calorieiq')) {
             moduleName = 'calorieiq';
+            // Try to redirect to module-specific output page
+            if (redirectToModuleOutput(moduleName)) {
+              return; // Stop further processing if redirect was successful
+            }
           } else if (lastGridItemUrl.includes('bookiq')) {
             moduleName = 'bookiq';
           } else if (lastGridItemUrl.includes('symptomiq')) {
@@ -399,6 +416,12 @@
             moduleName = 'socialiq';
           } else if (lastGridItemUrl.includes('speculationiq')) {
             moduleName = 'speculationiq';
+          } else if (lastGridItemUrl.includes('philosophyiq')) {
+            moduleName = 'philosophyiq';
+            // Try to redirect to module-specific output page
+            if (redirectToModuleOutput(moduleName)) {
+              return; // Stop further processing if redirect was successful
+            }
           }
         }
         
@@ -436,6 +459,8 @@
             responseKey = 'socialIqResponse'; // Capital 'I' to match actual storage pattern
           } else if (moduleName === 'speculationiq') {
             responseKey = 'speculationIqResponse'; // Capital 'I' to match actual storage pattern
+          } else if (moduleName === 'philosophyiq') {
+            responseKey = 'philosophyIqResponse'; // Capital 'I' to match actual storage pattern
           } else {
             responseKey = moduleName + 'Response';
           }
@@ -471,6 +496,9 @@
             // Check if this is calorie analysis data
             if (data.calorieAnalysis && data.calorieAnalysis.nutrients) {
               displayCalorieAnalysis(data.calorieAnalysis, outputSpan);
+            } else if (data.quotes && Array.isArray(data.quotes) && responseKey === 'philosophyIqResponse') {
+              // Custom formatting for PhilosophyIQ data
+              displayPhilosophyWisdom(data, outputSpan);
             } else if (typeof data === 'object' && data !== null) {
               // Use pretty formatting for other complex objects
               outputSpan.textContent = JSON.stringify(data, null, 2);
@@ -580,9 +608,93 @@
         container.appendChild(mealsSection);
         outputElement.appendChild(container);
       }
-    })();
+    })();      function displayPhilosophyWisdom(wisdomData, outputElement) {
+        outputElement.innerHTML = '';
+        outputElement.classList.add('philosophy-display');
+        
+        const container = document.createElement('div');
+        container.style.fontFamily = '"Inter", sans-serif';
+        container.style.fontSize = '16px';
+        container.style.lineHeight = '1.6';
+        
+        // Topic header
+        const header = document.createElement('div');
+        header.style.textAlign = 'center';
+        header.style.marginBottom = '25px';
+        header.innerHTML = `<h2 style="margin: 0; color: #333;">Wisdom on: ${wisdomData.topic}</h2>`;
+        container.appendChild(header);
+        
+        // Quotes section
+        if (wisdomData.quotes && Array.isArray(wisdomData.quotes)) {
+          wisdomData.quotes.forEach(quote => {
+            const quoteCard = document.createElement('div');
+            quoteCard.style.background = '#f8f9fa';
+            quoteCard.style.border = '1px solid #e9ecef';
+            quoteCard.style.borderRadius = '8px';
+            quoteCard.style.padding = '20px';
+            quoteCard.style.marginBottom = '20px';
+            quoteCard.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.05)';
+            
+            // Custom colors for different traditions
+            let traditionColor = '#333';
+            switch(quote.tradition.toLowerCase()) {
+              case 'taoism':
+                traditionColor = '#4CAF50';
+                break;
+              case 'buddhism':
+                traditionColor = '#FF9800';
+                break;
+              case 'christianity':
+                traditionColor = '#2196F3';
+                break;
+              case 'islam':
+                traditionColor = '#673AB7';
+                break;
+              case 'hermetic':
+                traditionColor = '#E91E63';
+                break;
+              default:
+                traditionColor = '#333';
+            }
+            
+            quoteCard.innerHTML = `
+              <div style="font-weight: bold; color: ${traditionColor}; font-size: 18px; margin-bottom: 10px;">
+                ${quote.tradition}
+              </div>
+              <div style="font-style: italic; margin-bottom: 10px;">
+                "${quote.quote}"
+              </div>
+              <div style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                - ${quote.source}
+              </div>
+              <div style="font-size: 15px; color: #333;">
+                ${quote.relevance}
+              </div>
+            `;
+            
+            container.appendChild(quoteCard);
+          });
+        }
+        
+        // Reflection
+        if (wisdomData.reflection) {
+          const reflection = document.createElement('div');
+          reflection.style.background = 'linear-gradient(135deg, #f9f9f9, #f1f1f1)';
+          reflection.style.padding = '20px';
+          reflection.style.borderRadius = '8px';
+          reflection.style.border = '1px solid #e0e0e0';
+          reflection.style.marginTop = '20px';
+          reflection.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 10px; font-size: 17px;">Reflection</div>
+            <div>${wisdomData.reflection}</div>
+          `;
+          container.appendChild(reflection);
+        }
+        
+        outputElement.appendChild(container);
+      }
 
-    function copyOutput() {
+      function copyOutput() {
       const text = document.getElementById('output-span').textContent;
       const copyIconWrapper = document.querySelector('.copy-icon-wrapper');
       const originalHTML = copyIconWrapper.innerHTML;

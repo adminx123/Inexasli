@@ -16,9 +16,9 @@ const categoryManager = (function() {
         'health': ['CalorieIQ', 'FitnessIQ', 'SymptomIQ', 'EmotionIQ'],
         'business': ['DecisionIQ'], 
         'finance': ['IncomeIQ', 'ReceiptsIQ', 'SpeculationIQ'],
-        'lifestyle': ['AdventureIQ', 'EventIQ', 'SocialIQ'],
-        'personal': ['EnneagramIQ', 'EmotionIQ', 'SocialIQ'],
-        'learning': ['BookIQ', 'ResearchIQ', 'QuizIQ'], 
+        'lifestyle': ['AdventureIQ', 'EventIQ', 'SocialIQ', 'PhilosophyIQ'],
+        'personal': ['EnneagramIQ', 'EmotionIQ', 'SocialIQ', 'PhilosophyIQ'],
+        'learning': ['BookIQ', 'ResearchIQ', 'QuizIQ', 'PhilosophyIQ'], 
         'productivity': ['DecisionIQ'] 
     };
 
@@ -33,6 +33,7 @@ const categoryManager = (function() {
         'EventIQ': '/ai/event/eventiq.html',
         'FitnessIQ': '/ai/fitness/fitnessiq.html',
         'IncomeIQ': '/ai/income/intro.html',
+        'PhilosophyIQ': '/ai/philosophy/philosophyiq.html',
         'QuizIQ': '/ai/quiz/quiziq.html',
         'ReceiptsIQ': '/ai/receipts/receiptsiq.html',
         'ResearchIQ': '/ai/research/researchiq.html',

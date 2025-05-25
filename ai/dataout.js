@@ -393,21 +393,22 @@ document.addEventListener('DOMContentLoaded', async function () {
         
                 const lastGridItemUrl = getLocal('lastGridItemUrl');
                 const outputMap = {
-                    '/ai/calorie/calorieiq.html': '/ai/apioutput.html?gridItem=calorieiq',
-                    '/ai/symptom/symptomiq.html': '/ai/apioutput.html?gridItem=symptomiq',
-                    '/ai/book/bookiq.html': '/ai/apioutput.html?gridItem=bookiq',
-                    '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
-                    '/ai/adventure/adventureiq.html': '/ai/apioutput.html?gridItem=adventureiq',
-                    '/ai/decision/decisioniq.html': '/ai/apioutput.html?gridItem=decisioniq',
-                    '/ai/emotion/emotioniq.html': '/ai/apioutput.html?gridItem=emotioniq',
-                    '/ai/enneagram/enneagramiq.html': '/ai/apioutput.html?gridItem=enneagramiq',
-                    '/ai/event/eventiq.html': '/ai/apioutput.html?gridItem=eventiq',
-                    '/ai/newbiz/newbiziq.html': '/ai/apioutput.html?gridItem=newbiziq',
-                    '/ai/quiz/quiziq.html': '/ai/apioutput.html?gridItem=quiziq',
-                    '/ai/receipts/receiptsiq.html': '/ai/apioutput.html?gridItem=receiptsiq',
-                    '/ai/research/researchiq.html': '/ai/apioutput.html?gridItem=researchiq',
-                    '/ai/social/socialiq.html': '/ai/apioutput.html?gridItem=socialiq',
-                    '/ai/speculation/speculationiq.html': '/ai/apioutput.html?gridItem=speculationiq'
+                    '/ai/calorie/calorieiq.html': '/ai/calorie/calorieoutput.html',
+                    '/ai/symptom/symptomiq.html': '/ai/symptom/symptomoutput.html',
+                    '/ai/book/bookiq.html': '/ai/book/bookoutput.html',
+                    '/ai/fitness/fitnessiq.html': '/ai/fitness/fitnessoutput.html',
+                    '/ai/adventure/adventureiq.html': '/ai/adventure/adventureoutput.html',
+                    '/ai/decision/decisioniq.html': '/ai/decision/decisionoutput.html',
+                    '/ai/emotion/emotioniq.html': '/ai/emotion/emotionoutput.html',
+                    '/ai/enneagram/enneagramiq.html': '/ai/enneagram/enneagramoutput.html',
+                    '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
+                    '/ai/newbiz/newbiziq.html': '/ai/newbiz/newbizoutput.html',
+                    '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
+                    '/ai/receipts/receiptsiq.html': '/ai/receipts/receiptsoutput.html',
+                    '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
+                    '/ai/social/socialiq.html': '/ai/social/socialoutput.html',
+                    '/ai/speculation/speculationiq.html': '/ai/speculation/speculationoutput.html',
+                    '/ai/philosophy/philosophyiq.html': '/ai/philosophy/philosophyoutput.html'
                 };
                 const outUrl = outputMap[lastGridItemUrl];
         
@@ -449,20 +450,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             // Special handling for URLs that have output templates
             const outputMap = {
-                '/ai/calorie/calorieiq.html': '/ai/apioutput.html?gridItem=calorieiq',
-                '/ai/symptom/symptomiq.html': '/ai/apioutput.html?gridItem=symptomiq',
-                '/ai/book/bookiq.html': '/ai/apioutput.html?gridItem=bookiq',
-                '/ai/fitness/fitnessiq.html': '/ai/apioutput.html?gridItem=fitnessiq',
-                '/ai/adventure/adventureiq.html': '/ai/apioutput.html?gridItem=adventureiq',
-                '/ai/decision/decisioniq.html': '/ai/apioutput.html?gridItem=decisioniq',
-                '/ai/emotion/emotioniq.html': '/ai/apioutput.html?gridItem=emotioniq',
-                '/ai/enneagram/enneagramiq.html': '/ai/apioutput.html?gridItem=enneagramiq',
-                '/ai/event/eventiq.html': '/ai/apioutput.html?gridItem=eventiq',
-                '/ai/income/income.html': '/ai/apioutput.html?gridItem=incomeiq',
-                '/ai/quiz/quiziq.html': '/ai/apioutput.html?gridItem=quiziq',
-                '/ai/research/researchiq.html': '/ai/apioutput.html?gridItem=researchiq',
-                '/ai/social/socialiq.html': '/ai/apioutput.html?gridItem=socialiq',
-                '/ai/speculation/speculationiq.html': '/ai/apioutput.html?gridItem=speculationiq'
+                '/ai/calorie/calorieiq.html': '/ai/calorie/calorieoutput.html',
+                '/ai/symptom/symptomiq.html': '/ai/symptom/symptomoutput.html',
+                '/ai/book/bookiq.html': '/ai/book/bookoutput.html',
+                '/ai/fitness/fitnessiq.html': '/ai/fitness/fitnessoutput.html',
+                '/ai/adventure/adventureiq.html': '/ai/adventure/adventureoutput.html',
+                '/ai/decision/decisioniq.html': '/ai/decision/decisionoutput.html',
+                '/ai/emotion/emotioniq.html': '/ai/emotion/emotionoutput.html',
+                '/ai/enneagram/enneagramiq.html': '/ai/enneagram/enneagramoutput.html',
+                '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
+                '/ai/income/income.html': '/ai/income/incomeoutput.html',
+                '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
+                '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
+                '/ai/social/socialiq.html': '/ai/social/socialoutput.html',
+                '/ai/speculation/speculationiq.html': '/ai/speculation/speculationoutput.html',
+                '/ai/philosophy/philosophyiq.html': '/ai/philosophy/philosophyoutput.html'
             };
 
             // Just store the mapping but don't auto-open DataOut 
@@ -491,21 +493,22 @@ document.addEventListener('DOMContentLoaded', async function () {
             const moduleName = e.detail.module;
             const responseType = e.detail.type || 'default';
 
-            // Map of module names to their output URLs
+            // Map of module names to their module-specific output URLs
             const moduleOutputMap = {
-                'fitnessiq': '/ai/apioutput.html?gridItem=fitnessiq',
-                'calorieiq': '/ai/apioutput.html?gridItem=calorieiq',
-                'symptomiq': '/ai/apioutput.html?gridItem=symptomiq',
-                'bookiq': '/ai/apioutput.html?gridItem=bookiq',
-                'adventureiq': '/ai/apioutput.html?gridItem=adventureiq',
-                'decisioniq': '/ai/apioutput.html?gridItem=decisioniq',
-                'emotioniq': '/ai/apioutput.html?gridItem=emotioniq',
-                'enneagramiq': '/ai/apioutput.html?gridItem=enneagramiq',
-                'eventiq': '/ai/apioutput.html?gridItem=eventiq',
-                'quiziq': '/ai/apioutput.html?gridItem=quiziq',
-                'researchiq': '/ai/apioutput.html?gridItem=researchiq',
-                'socialiq': '/ai/apioutput.html?gridItem=socialiq',
-                'speculationiq': '/ai/apioutput.html?gridItem=speculationiq'
+                'fitnessiq': '/ai/fitness/fitnessoutput.html',
+                'calorieiq': '/ai/calorie/calorieoutput.html',
+                'symptomiq': '/ai/symptom/symptomoutput.html',
+                'bookiq': '/ai/book/bookoutput.html',
+                'adventureiq': '/ai/adventure/adventureoutput.html',
+                'decisioniq': '/ai/decision/decisionoutput.html',
+                'emotioniq': '/ai/emotion/emotionoutput.html',
+                'enneagramiq': '/ai/enneagram/enneagramoutput.html',
+                'eventiq': '/ai/event/eventoutput.html',
+                'quiziq': '/ai/quiz/quizoutput.html',
+                'researchiq': '/ai/research/researchoutput.html',
+                'socialiq': '/ai/social/socialoutput.html',
+                'speculationiq': '/ai/speculation/speculationoutput.html',
+                'philosophyiq': '/ai/philosophy/philosophyoutput.html'
                 // Add more modules as needed
             };
 
