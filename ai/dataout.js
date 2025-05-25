@@ -1,12 +1,6 @@
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This c        } catch (error) {
-            dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
-                <span class="data-label">DATA OUT</span>
-                <div class="data-content">Error loading content</div>
-            `;
-        }rotected under Canadian and international copyright laws.
+rotected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
@@ -74,24 +68,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 oldScript.replaceWith(newScript);
             });
 
-            // const scriptUrl = url.replace('.html', '.js');
-            // try {
-            //     const existingScripts = document.querySelectorAll(`script[data-source="${scriptUrl}"]`);
-            //     existingScripts.forEach(script => script.remove());
-            //     const scriptResponse = await fetch(scriptUrl);
-            //     if (!scriptResponse.ok) throw new Error(`Failed to fetch script ${scriptUrl}`);
-            //     const scriptContent = await scriptResponse.text();
-            //     const script = document.createElement('script');
-            //     script.textContent = scriptContent;
-            //     script.dataset.source = scriptUrl;
-            //     document.body.appendChild(script);
-            //     console.log(`Loaded and executed script: ${scriptUrl} (dataout.js)`);
-
-            //     // Re-initialize grid items after content load
-            //     initializeGridItems();
-            // } catch (error) {
-            //     console.error(`Error loading script ${scriptUrl}, skipping (dataout.js):`, error);
-            // }
+          
         } catch (error) {
             console.error(`Error loading stored content (dataout.js):`, error);
             dataContainer.innerHTML = `
