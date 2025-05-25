@@ -115,3 +115,11 @@ main = "./ai/fitness/fitness.js"
 [[env.fitness.services]]
 binding = "secret_binding"
 service = "secretworker"
+
+[env.philosophy]
+name = "philosophy"
+main = "./ai/philosophy/philosophy.js"
+
+[[env.philosophy.services]]
+binding = "secret_binding"
+service = "secretworker"
