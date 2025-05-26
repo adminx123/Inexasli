@@ -372,7 +372,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const outputMap = {
                     '/ai/calorie/calorieiq.html': '/ai/calorie/calorieoutput.html',
                     '/ai/symptom/symptomiq.html': '/ai/symptom/symptomoutput.html',
-                    '/ai/book/bookiq.html': '/ai/book/bookoutput.html',
                     '/ai/fitness/fitnessiq.html': '/ai/fitness/fitnessoutput.html',
                     '/ai/adventure/adventureiq.html': '/ai/adventure/adventureoutput.html',
                     '/ai/decision/decisioniq.html': '/ai/decision/decisionoutput.html',
@@ -381,7 +380,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
                     '/ai/newbiz/newbiziq.html': '/ai/newbiz/newbizoutput.html',
                     '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
-                    '/ai/receipts/receiptsiq.html': '/ai/receipts/receiptsoutput.html',
                     '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
                     '/ai/social/socialiq.html': '/ai/social/socialoutput.html',
                     '/ai/speculation/speculationiq.html': '/ai/speculation/speculationoutput.html',
@@ -475,7 +473,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'fitnessiq': '/ai/fitness/fitnessoutput.html',
                 'calorieiq': '/ai/calorie/calorieoutput.html',
                 'symptomiq': '/ai/symptom/symptomoutput.html',
-                'bookiq': '/ai/book/bookoutput.html',
                 'adventureiq': '/ai/adventure/adventureoutput.html',
                 'decisioniq': '/ai/decision/decisionoutput.html',
                 'emotioniq': '/ai/emotion/emotionoutput.html',

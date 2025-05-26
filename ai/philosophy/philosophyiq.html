@@ -1,0 +1,178 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide. -->
+
+  <!-- Simple Form for Philosophical Wisdom -->
+  <div class="row1">
+    <label class="category-label">Seeking Wisdom On</label>
+    <textarea id="philosophy-question" rows="5" placeholder="Enter what you're seeking wisdom about in your life..."></textarea>
+  </div>
+
+  <button class="generate-btn" id="generate-philosophy-btn">Find Philosophical Wisdom</button>
+  <button class="clear-btn" id="clear-philosophy-btn">Clear All</button>
+
+  <script>
+  /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
+  (function() {
+    console.log("Philosophy IQ script initializing");
+
+    // JSON storage helpers
+    const setJSON = window.setJSON || function(name, value) {
+      try {
+        if (!name) return false;
+        if (value === undefined) { localStorage.removeItem(name); return true; }
+        localStorage.setItem(name, JSON.stringify(value));
+        console.log(`[PhilosophyIQ] JSON saved ${name}`);
+        return true;
+      } catch (e) { console.error(`[PhilosophyIQ] Error storing JSON: ${e}`); return false; }
+    };
+    const getJSON = window.getJSON || function(name, defaultValue) {
+      try {
+        const item = localStorage.getItem(name);
+        return item ? JSON.parse(item) : defaultValue;
+      } catch (e) { console.error(`[PhilosophyIQ] Error retrieving JSON: ${e}`); return defaultValue; }
+    };
+
+    function saveFormData() {
+      console.log('[PhilosophyIQ] Saving form data to JSON');
+      setJSON('philosophyIqInput', collectFormData());
+    }
+
+    function collectFormData() {
+      const formData = { 
+        question: null,
+        // Hard-code the traditions we want to include
+        traditions: ["taoism", "buddhism", "islam", "christianity", "hermetic"]
+      };
+
+      // Get the philosophical question text
+      const questionEl = document.getElementById('philosophy-question');
+      if (questionEl) {
+        formData.question = (questionEl.value || '').trim() || null;
+      }
+
+      return formData;
+    }
+
+    function repopulateForm() {
+      console.log('[PhilosophyIQ] Repopulating form from JSON storage');
+      const data = getJSON('philosophyIqInput', null);
+      if (!data) return;
+      
+      // Handle text question field
+      if (data.question) {
+        document.getElementById('philosophy-question').value = data.question;
+      }
+    }
+
+    function setupInputHandlers() {
+      document.getElementById('philosophy-question').addEventListener('change', saveFormData);
+    }
+
+    function clearLocalStorage() {
+      if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
+      setJSON('philosophyIqInput', undefined);
+      setJSON('philosophyIqResponse', undefined);
+      document.getElementById('philosophy-question').value = '';
+    }
+
+    // Handle the generate button click
+    async function handleGeneratePhilosophyIq() {
+      const btn = document.getElementById('generate-philosophy-btn');
+      const initialText = btn.innerText;
+      btn.innerText = 'Gathering Wisdom...';
+      btn.setAttribute('disabled', 'true');
+      
+      console.log('[PhilosophyIQ] Generate button clicked.');
+      
+      try {
+        // Save the current form data first
+        saveFormData();
+        
+        // Use what's stored in localStorage
+        const formData = getJSON('philosophyIqInput');
+        if (!formData || !formData.question) {
+          console.error('[PhilosophyIQ] No question found in input data.');
+          alert('Please enter what you\'re seeking wisdom on before proceeding.');
+          btn.innerText = initialText;
+          btn.removeAttribute('disabled');
+          return;
+        }
+        
+        // Send data to worker
+        const apiUrl = 'https://philosophy.4hm7q4q75z.workers.dev/'; 
+        
+        console.log('[PhilosophyIQ] Sending philosophyIqInput to worker');
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Inexasli-Api-Key': 'your-api-key' // Replace with actual API key mechanism
+          },
+          body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const responseData = await response.json();
+        console.log('[PhilosophyIQ] Worker response:', responseData);
+        
+        if (responseData.message !== 'Success') {
+          throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+        }
+        
+        // Store the response using setJSON
+        setJSON('philosophyIqResponse', responseData);
+        
+        // Update button state
+        btn.innerText = 'Wisdom Found!';
+        setTimeout(() => {
+          btn.innerText = initialText;
+          btn.removeAttribute('disabled');
+        }, 2000);
+        
+        // Dispatch an event to notify dataout.js that a response was received
+        const event = new CustomEvent('api-response-received', {
+          detail: {
+            module: 'philosophyiq',
+            type: 'worker-response',
+            timestamp: Date.now()
+          }
+        });
+        document.dispatchEvent(event);
+        console.log('[PhilosophyIQ] Dispatched api-response-received event');
+        
+      } catch (error) {
+        console.error('[PhilosophyIQ] Error generating philosophical response:', error);
+        alert('An error occurred while seeking philosophical wisdom. Please try again later.');
+        
+        btn.innerText = 'Error';
+        setTimeout(() => {
+          btn.innerText = initialText;
+          btn.removeAttribute('disabled');
+        }, 2000);
+      }
+    }
+
+    // Initialization
+    repopulateForm();
+    setupInputHandlers();
+    document.getElementById('generate-philosophy-btn').addEventListener('click', handleGeneratePhilosophyIq);
+    document.getElementById('clear-philosophy-btn').addEventListener('click', clearLocalStorage);
+  })();
+  </script>
