@@ -307,6 +307,7 @@
       }
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- include centralized copy utility -->
   <script src="../../utility/copy.js"></script>
 </head>
@@ -396,8 +397,8 @@
       
       // Start the update process
       updateOutput();
-      // Initialize centralized copy button
-      createCopyButton('output-span');
+      // Initialize copy button as image download
+      copyUtil.init({ containerId: 'output-span', mode: 'image' });
     })();
 
     function displayCalorieAnalysis(calorieData, outputElement) {

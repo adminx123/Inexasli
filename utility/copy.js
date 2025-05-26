@@ -242,23 +242,30 @@ function formatPhilosophyContent(outputEl) {
  * @param {Object} options - Configuration options
  * @param {string} options.containerId - ID of the container with content to copy
  * @param {string} options.contentType - Type of content (e.g., 'philosophy') for special formatting
+ * @param {string} options.mode - Mode of copying, 'text' for text content, 'image' for image capture
  * @returns {HTMLElement} - The button container element
  */
 function initCopyButton(options = {}) {
-    const { containerId = 'output-span', contentType = '' } = options;
-    
-    let formatCallback;
-    
-    // Select formatter based on content type
-    switch(contentType.toLowerCase()) {
-        case 'philosophy':
-            formatCallback = formatPhilosophyContent;
-            break;
-        default:
-            formatCallback = null;
+    const { containerId = 'output-span', contentType = '', mode = 'text' } = options;
+    let callback;
+    if (mode === 'image') {
+        callback = function(el) {
+            html2canvas(el).then(canvas => {
+                canvas.toBlob(blob => {
+                    const link = document.createElement('a');
+                    link.download = 'output.png';
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                });
+            });
+            return '';
+        };
+    } else if (contentType.toLowerCase() === 'philosophy') {
+        callback = formatPhilosophyContent;
+    } else {
+        callback = null;
     }
-    
-    return createCopyButton(containerId, formatCallback);
+    return createCopyButton(containerId, callback);
 }
 
 // Export functions for use in other files
