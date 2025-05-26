@@ -357,23 +357,6 @@
     (function() {
       console.log('Philosophy API Output script running');
       
-      // Initialize the copy button in the bottom right corner
-      function initCopyButton() {
-        if (window.copyUtil) {
-          console.log('Initializing copy button in bottom right corner');
-          window.copyUtil.init({
-            containerId: 'output-span',
-            contentType: 'quiz'
-          });
-        } else {
-          console.error('Copy utility not available, retrying in 100ms');
-          setTimeout(initCopyButton, 100);
-        }
-      }
-      
-      // Try to initialize the copy button
-      initCopyButton();
-      
       // Reference the global utility functions
       const getLocal = window.getLocal || function(key) {
         try {
@@ -597,9 +580,12 @@
       }
     })();
 
-    // Copy functionality moved to /utility/copy.js
+      // Initialize centralized copy button
+      createCopyButton('output-span');
     
   </script>
+  
+  <script src="../../utility/copy.js"></script>
   
   <style>
     /* Additional styles for loading and empty state */
