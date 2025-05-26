@@ -43,7 +43,18 @@
         </div>
         <div class="row1">
             <label class="category-label">Decision Criteria</label>
-            <textarea id="decisioniq-criteria" rows="2" placeholder="Decision criteria: (1 per line)\ne.g., Cost, Features, Scalability"></textarea>
+            <div class="grid-container" id="decisioniq-criteria">
+                <div class="grid-item" data-value="Cost">Cost</div>
+                <div class="grid-item" data-value="Quality">Quality</div>
+                <div class="grid-item" data-value="Time">Timeline</div>
+                <div class="grid-item" data-value="Risk">Risk</div>
+                <div class="grid-item" data-value="Features">Features</div>
+                <div class="grid-item" data-value="Scalability">Scalability</div>
+                <div class="grid-item" data-value="Compatibility">Compatibility</div>
+                <div class="grid-item" data-value="Reliability">Reliability</div>
+                <div class="grid-item" data-value="User Experience">User Experience</div>
+                <div class="grid-item" data-value="Custom">Custom (specify in instructions)</div>
+            </div>
         </div>
         <div class="row1">
             <label class="category-label">Decision Options</label>
@@ -121,11 +132,11 @@
     }
 
     function collectFormData() {
-        const formData = { goal:null, analysisType:null, priority:null, criteria:null, options:null, stakeholders:[], constraints:null, instructions:null };
+        const formData = { goal:null, analysisType:null, priority:null, criteria:[], options:null, stakeholders:[], constraints:null, instructions:null };
         const g = document.getElementById('decisioniq-goal'); if (g && g.value.trim()) formData.goal = g.value.trim();
         const at = document.getElementById('decisioniq-analysis-type'); if (at) formData.analysisType = at.value;
         const pr = document.getElementById('decisioniq-priority'); if (pr) formData.priority = pr.value;
-        const c = document.getElementById('decisioniq-criteria'); if (c && c.value.trim()) formData.criteria = c.value.trim();
+        document.querySelectorAll('#decisioniq-criteria .grid-item.selected').forEach(i => formData.criteria.push(i.dataset.value));
         const o = document.getElementById('decisioniq-options'); if (o && o.value.trim()) formData.options = o.value.trim();
         document.querySelectorAll('#decisioniq-stakeholders .grid-item.selected').forEach(i => formData.stakeholders.push(i.dataset.value));
         const cons = document.getElementById('decisioniq-constraints'); if (cons && cons.value.trim()) formData.constraints = cons.value.trim();
@@ -140,7 +151,7 @@
         if (data.goal) document.getElementById('decisioniq-goal').value = data.goal;
         if (data.analysisType) document.getElementById('decisioniq-analysis-type').value = data.analysisType;
         if (data.priority) document.getElementById('decisioniq-priority').value = data.priority;
-        if (data.criteria) document.getElementById('decisioniq-criteria').value = data.criteria;
+        data.criteria?.forEach(v => document.querySelector(`#decisioniq-criteria .grid-item[data-value="${v}"]`)?.classList.add('selected'));
         if (data.options) document.getElementById('decisioniq-options').value = data.options;
         data.stakeholders?.forEach(v => document.querySelector(`#decisioniq-stakeholders .grid-item[data-value="${v}"]`)?.classList.add('selected'));
         if (data.constraints) document.getElementById('decisioniq-constraints').value = data.constraints;
