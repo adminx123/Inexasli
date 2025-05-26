@@ -263,35 +263,6 @@
       box-shadow: 5px 5px 0 #000;
     }
     
-    .copy-icon-wrapper {
-      position: absolute;
-      top: 6px;
-      right: 10px;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 10;
-      border-radius: 4px;
-      transition: background-color 0.2s ease;
-    }
-    
-    .copy-icon-wrapper:hover {
-      background-color: rgba(0, 0, 0, 0.05);
-    }
-    
-    .copy-icon-wrapper:active {
-      transform: scale(0.95);
-    }
-    
-    .copy-icon {
-      width: 25px;
-      height: 25px;
-      color: #000;
-    }
-    
     @media (max-width: 480px) {
       .apioutput-container {
         padding: 8px 8px 5px 8px;
@@ -317,18 +288,6 @@
         overflow: visible;
       }
       
-      .copy-icon-wrapper {
-        width: 35px;
-        height: 35px;
-        top: 5px;
-        right: 8px;
-      }
-      
-      .copy-icon {
-        width: 20px;
-        height: 20px;
-      }
-      
       .nutrients-grid {
         grid-template-columns: 1fr;
         gap: 10px;
@@ -348,23 +307,18 @@
       }
     }
   </style>
+  <!-- include centralized copy utility -->
+  <script src="../../utility/copy.js"></script>
 </head>
 <body id="main-content">
   <div class="apioutput-container">
     <div class="apioutput-header">Nutrition Analysis</div>
     <div class="output-wrapper">
       <div id="output-span" class="api-output">Loading...</div>
-      <div class="copy-icon-wrapper" onclick="copyOutput()" title="Copy to clipboard">
-        <svg class="copy-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 4V16C8 16.5304 8.21071 17.0391 8.58579 17.4142C8.96086 17.7893 9.46957 18 10 18H18C18.5304 18 19.0391 17.7893 19.4142 17.4142C19.7893 17.0391 20 16.5304 20 16V7.242C20 6.97556 19.9467 6.71181 19.8433 6.46624C19.7399 6.22068 19.5885 5.99824 19.398 5.812L16.083 2.57C15.7094 2.20466 15.2076 2.00007 14.685 2H10C9.46957 2 8.96086 2.21071 8.58579 2.58579C8.21071 2.96086 8 3.46957 8 4V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M16 18V20C16 20.5304 15.7893 21.0391 15.4142 21.4142C15.0391 21.7893 14.5304 22 14 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V8C4 7.46957 4.21071 6.96086 4.58579 6.58579C4.96086 6.21071 5.46957 6 6 6H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
     </div>
   </div>
 
   <script>
-    // Run immediately without waiting for DOMContentLoaded
     (function() {
       console.log('Calorie API Output script running');
       
@@ -442,114 +396,98 @@
       
       // Start the update process
       updateOutput();
-      
-      function displayCalorieAnalysis(calorieData, outputElement) {
-        outputElement.innerHTML = '';
-        outputElement.classList.add('calorie-display');
-        
-        const container = document.createElement('div');
-        
-        // Header
-        const header = document.createElement('div');
-        header.className = 'calorie-header';
-        header.innerHTML = '<h2 style="margin: 0; color: #333;">📊 Nutrition Analysis</h2>';
-        container.appendChild(header);
-        
-        // BMI Section
-        if (calorieData.bmi) {
-          const bmiSection = document.createElement('div');
-          bmiSection.className = 'bmi-section';
-          bmiSection.innerHTML = `🎯 Your BMI: ${calorieData.bmi}`;
-          container.appendChild(bmiSection);
-        }
-        
-        // Nutrients Grid
-        if (calorieData.nutrients) {
-          const nutrientsGrid = document.createElement('div');
-          nutrientsGrid.className = 'nutrients-grid';
-          
-          calorieData.nutrients.forEach(nutrient => {
-            const card = document.createElement('div');
-            card.className = 'nutrient-card';
-            
-            const percentage = parseInt(nutrient.percentage);
-            let progressClass = 'percentage-good';
-            if (percentage < 85) progressClass = 'percentage-warning';
-            if (percentage < 70) progressClass = 'percentage-low';
-            
-            card.innerHTML = `
-              <div class="nutrient-name">${nutrient.name}</div>
-              <div class="nutrient-progress">
-                <div class="nutrient-progress-bar ${progressClass}" style="width: ${percentage}%"></div>
-              </div>
-              <div class="nutrient-details">
-                <span>${nutrient.intake} / ${nutrient.target}</span>
-                <span style="font-weight: bold; color: ${percentage >= 85 ? '#4CAF50' : percentage >= 70 ? '#FF9800' : '#f44336'}">${nutrient.percentage}</span>
-              </div>
-            `;
-            
-            nutrientsGrid.appendChild(card);
-          });
-          
-          container.appendChild(nutrientsGrid);
-        }
-        
-        // Deficit-Filling Recommendations
-        const mealsSection = document.createElement('div');
-        mealsSection.className = 'meals-section';
-        mealsSection.innerHTML = '<h3 style="color: #333; margin-bottom: 15px;">🎯 Deficit-Filling Recommendations</h3>';
-        
-        if (calorieData.mealRecommendations1) {
-          const meal1 = document.createElement('div');
-          meal1.className = 'meal-card';
-          meal1.innerHTML = `
-            <div class="meal-title">Priority Deficit Foods</div>
-            <div class="meal-content">${calorieData.mealRecommendations1}</div>
-          `;
-          mealsSection.appendChild(meal1);
-        }
-        
-        if (calorieData.mealRecommendations2) {
-          const meal2 = document.createElement('div');
-          meal2.className = 'meal-card';
-          meal2.innerHTML = `
-            <div class="meal-title">Secondary Nutrient Needs</div>
-            <div class="meal-content">${calorieData.mealRecommendations2}</div>
-          `;
-          mealsSection.appendChild(meal2);
-        }
-        
-        if (calorieData.mealRecommendations3) {
-          const meal3 = document.createElement('div');
-          meal3.className = 'meal-card';
-          meal3.innerHTML = `
-            <div class="meal-title">Complete Your Daily Goals</div>
-            <div class="meal-content">${calorieData.mealRecommendations3}</div>
-          `;
-          mealsSection.appendChild(meal3);
-        }
-        
-        container.appendChild(mealsSection);
-        outputElement.appendChild(container);
-      }
+      // Initialize centralized copy button
+      createCopyButton('output-span');
     })();
 
-    function copyOutput() {
-      const text = document.getElementById('output-span').textContent;
-      const copyIconWrapper = document.querySelector('.copy-icon-wrapper');
-      const originalHTML = copyIconWrapper.innerHTML;
+    function displayCalorieAnalysis(calorieData, outputElement) {
+      outputElement.innerHTML = '';
+      outputElement.classList.add('calorie-display');
       
-      navigator.clipboard.writeText(text)
-        .then(() => {
-          // Change the icon to a success state
-          copyIconWrapper.innerHTML = '<svg class="copy-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 12L11 14L15 10M12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      const container = document.createElement('div');
+      
+      // Header
+      const header = document.createElement('div');
+      header.className = 'calorie-header';
+      header.innerHTML = '<h2 style="margin: 0; color: #333;">📊 Nutrition Analysis</h2>';
+      container.appendChild(header);
+      
+      // BMI Section
+      if (calorieData.bmi) {
+        const bmiSection = document.createElement('div');
+        bmiSection.className = 'bmi-section';
+        bmiSection.innerHTML = `🎯 Your BMI: ${calorieData.bmi}`;
+        container.appendChild(bmiSection);
+      }
+      
+      // Nutrients Grid
+      if (calorieData.nutrients) {
+        const nutrientsGrid = document.createElement('div');
+        nutrientsGrid.className = 'nutrients-grid';
+        
+        calorieData.nutrients.forEach(nutrient => {
+          const card = document.createElement('div');
+          card.className = 'nutrient-card';
           
-          // Reset button after 2 seconds
-          setTimeout(() => {
-            copyIconWrapper.innerHTML = originalHTML;
-          }, 2000);
-        })
-        .catch(() => alert('Failed to copy'));
+          const percentage = parseInt(nutrient.percentage);
+          let progressClass = 'percentage-good';
+          if (percentage < 85) progressClass = 'percentage-warning';
+          if (percentage < 70) progressClass = 'percentage-low';
+          
+          card.innerHTML = `
+            <div class="nutrient-name">${nutrient.name}</div>
+            <div class="nutrient-progress">
+              <div class="nutrient-progress-bar ${progressClass}" style="width: ${percentage}%"></div>
+            </div>
+            <div class="nutrient-details">
+              <span>${nutrient.intake} / ${nutrient.target}</span>
+              <span style="font-weight: bold; color: ${percentage >= 85 ? '#4CAF50' : percentage >= 70 ? '#FF9800' : '#f44336'}">${nutrient.percentage}</span>
+            </div>
+          `;
+          
+          nutrientsGrid.appendChild(card);
+        });
+        
+        container.appendChild(nutrientsGrid);
+      }
+      
+      // Deficit-Filling Recommendations
+      const mealsSection = document.createElement('div');
+      mealsSection.className = 'meals-section';
+      mealsSection.innerHTML = '<h3 style="color: #333; margin-bottom: 15px;">🎯 Deficit-Filling Recommendations</h3>';
+      
+      if (calorieData.mealRecommendations1) {
+        const meal1 = document.createElement('div');
+        meal1.className = 'meal-card';
+        meal1.innerHTML = `
+          <div class="meal-title">Priority Deficit Foods</div>
+          <div class="meal-content">${calorieData.mealRecommendations1}</div>
+        `;
+        mealsSection.appendChild(meal1);
+      }
+      
+      if (calorieData.mealRecommendations2) {
+        const meal2 = document.createElement('div');
+        meal2.className = 'meal-card';
+        meal2.innerHTML = `
+          <div class="meal-title">Secondary Nutrient Needs</div>
+          <div class="meal-content">${calorieData.mealRecommendations2}</div>
+        `;
+        mealsSection.appendChild(meal2);
+      }
+      
+      if (calorieData.mealRecommendations3) {
+        const meal3 = document.createElement('div');
+        meal3.className = 'meal-card';
+        meal3.innerHTML = `
+          <div class="meal-title">Complete Your Daily Goals</div>
+          <div class="meal-content">${calorieData.mealRecommendations3}</div>
+        `;
+        mealsSection.appendChild(meal3);
+      }
+      
+      container.appendChild(mealsSection);
+      outputElement.appendChild(container);
     }
   </script>
 </body>
