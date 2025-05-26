@@ -26,7 +26,7 @@ function createCopyButton(containerId, getContentCallback) {
     buttonContainer.style.position = 'fixed';
     buttonContainer.style.bottom = '0'; // Position at the very bottom (snug in corner)
     buttonContainer.style.right = '0'; // Position at the very right (snug in corner)
-    buttonContainer.style.zIndex = '12001'; // Higher than expanded containers
+    buttonContainer.style.zIndex = '12001'; // Use highest z-index to be visible with other components
     buttonContainer.style.padding = '0';
     buttonContainer.style.margin = '0';
     buttonContainer.style.display = 'block';
