@@ -60,7 +60,7 @@
      </style>
  </head>
  
- <body>
+ <body id="main-content">
 
         
 
@@ -238,10 +238,27 @@
          // Initialize the data overwrite button in the center of the screen
          document.addEventListener('DOMContentLoaded', function() {
              window.dataOverwrite.initButton(true);
+             
+             // Initialize the copy button for the main content
+             if (window.copyUtil) {
+                 console.log('Initializing copy button');
+                 try {
+                     window.copyUtil.init({
+                         containerId: 'main-content',  // Using body with ID main-content
+                         contentType: ''               // No special formatting
+                     });
+                     console.log('Copy button initialized successfully');
+                 } catch(err) {
+                     console.error('Error initializing copy button:', err);
+                 }
+             } else {
+                 console.error('copyUtil not found - check if copy.js loaded correctly');
+             }
          });
      </script>
      
      <script src="/index.js"></script>
+     <script src="/utility/copy.js"></script>
      <script src="https://js.stripe.com/v3/" async></script>
  </body>
  
