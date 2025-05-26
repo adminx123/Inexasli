@@ -19,15 +19,6 @@ function initializeGridItems() {
             return;
         }
 
-        // const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-        // const value = localStorage.getItem(key);
-        // if (value === 'true') {
-        //     item.classList.add('selected');
-        // } else if (value === 'false') {
-        //     item.classList.remove('selected');
-        // }
-
-        // Remove existing listeners to prevent duplicates
         item.removeEventListener('click', toggleGridItem);
         item.addEventListener('click', toggleGridItem);
     });

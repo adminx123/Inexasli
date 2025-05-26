@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Calorie Analysis Output</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", sans-serif;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      background-color: transparent;
+      overflow: hidden;
+      color: #333;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    /* Override the star-like elements */
+    body::before {
+      display: none; /* Remove the radial gradient element */
+    }
+    
+    /* Remove the star symbol after the header */
+    .apioutput-header:after {
+      display: none;
+    }
+    
+    .apioutput-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-height: 100vh;
+      box-sizing: border-box;
+      width: 100vw;
+      max-width: 100vw;
+      overflow: hidden;
+      background-color: transparent;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .apioutput-header {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 12px 0;
+      color: #000;
+      font-family: "Playfair Display", serif;
+      padding: 10px;
+      border-bottom: 2px solid #000;
+      letter-spacing: 0.5px;
+      text-align: center;
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    .output-wrapper {
+      position: relative;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      max-height: 100%;
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .api-output {
+      white-space: pre-wrap;
+      font-family: "Inter", sans-serif;
+      padding: 5px;
+      overflow-y: auto;
+      background-color: #fff;
+      flex: 1 1 auto;
+      font-size: 15px;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      height: calc(100% - 10px); /* Adjust height accounting for top and bottom margins */
+      max-height: calc(100% - 10px);
+      width: calc(100% - 10px); /* Adjust width accounting for left and right margins */
+      max-width: calc(100% - 10px);
+      margin: 5px;
+      transition: all 0.3s ease;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #888 #f1f1f1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .api-output::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .api-output::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .api-output::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+    
+    .calorie-display {
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: normal;
+    }
+    
+    .calorie-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    .bmi-section {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .nutrients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .nutrient-card {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 15px;
+      transition: transform 0.2s ease;
+    }
+    
+    .nutrient-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .nutrient-name {
+      font-weight: bold;
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    
+    .nutrient-progress {
+      background: #e9ecef;
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    
+    .nutrient-progress-bar {
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+    
+    .nutrient-details {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .percentage-good { background: linear-gradient(90deg, #4CAF50, #45a049); }
+    .percentage-warning { background: linear-gradient(90deg, #FF9800, #F57C00); }
+    .percentage-low { background: linear-gradient(90deg, #f44336, #d32f2f); }
+    
+    .meals-section {
+      margin-top: 25px;
+    }
+    
+    .meal-card {
+      background: #f8f9fa;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    /* Different colors for different priority deficit recommendations */
+    .meal-card:nth-child(1) {
+      border-left: 4px solid #e74c3c;
+    }
+    
+    .meal-card:nth-child(2) {
+      border-left: 4px solid #f39c12;
+    }
+    
+    .meal-card:nth-child(3) {
+      border-left: 4px solid #27ae60;
+    }
+    
+    .meal-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    
+    /* Different colors for different priority deficit titles */
+    .meal-card:nth-child(1) .meal-title {
+      color: #e74c3c;
+    }
+    
+    .meal-card:nth-child(2) .meal-title {
+      color: #f39c12;
+    }
+    
+    .meal-card:nth-child(3) .meal-title {
+      color: #27ae60;
+    }
+    
+    .meal-content {
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .api-output:hover {
+      box-shadow: 5px 5px 0 #000;
+    }
+    
+    .copy-icon-wrapper {
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+    }
+    
+    .copy-icon-wrapper:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    .copy-icon-wrapper:active {
+      transform: scale(0.95);
+    }
+    
+    .copy-icon {
+      width: 25px;
+      height: 25px;
+      color: #000;
+    }
+    
+    @media (max-width: 480px) {
+      .apioutput-container {
+        padding: 8px 8px 5px 8px;
+        height: calc(100vh - 45px);
+      }
+      
+      .apioutput-header {
+        font-size: 16px;
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+      }
+      
+      .api-output {
+        font-size: 13px;
+        padding: 10px;
+        max-height: calc(100% - 50px);
+        overflow-y: auto;
+      }
+      
+      .output-wrapper {
+        margin-bottom: 5px;
+        max-height: calc(100% - 35px);
+        overflow: visible;
+      }
+      
+      .copy-icon-wrapper {
+        width: 35px;
+        height: 35px;
+        top: 5px;
+        right: 8px;
+      }
+      
+      .copy-icon {
+        width: 20px;
+        height: 20px;
+      }
+      
+      .nutrients-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .nutrient-card {
+        padding: 12px;
+      }
+      
+      .bmi-section {
+        font-size: 16px;
+        padding: 12px;
+      }
+      
+      .meal-card {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body id="main-content">
+  <div class="apioutput-container">
+    <div class="apioutput-header">Nutrition Analysis</div>
+    <div class="output-wrapper">
+      <div id="output-span" class="api-output">Loading...</div>
+      <div class="copy-icon-wrapper" onclick="copyOutput()" title="Copy to clipboard">
+        <svg class="copy-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 4V16C8 16.5304 8.21071 17.0391 8.58579 17.4142C8.96086 17.7893 9.46957 18 10 18H18C18.5304 18 19.0391 17.7893 19.4142 17.4142C19.7893 17.0391 20 16.5304 20 16V7.242C20 6.97556 19.9467 6.71181 19.8433 6.46624C19.7399 6.22068 19.5885 5.99824 19.398 5.812L16.083 2.57C15.7094 2.20466 15.2076 2.00007 14.685 2H10C9.46957 2 8.96086 2.21071 8.58579 2.58579C8.21071 2.96086 8 3.46957 8 4V4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 18V20C16 20.5304 15.7893 21.0391 15.4142 21.4142C15.0391 21.7893 14.5304 22 14 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V8C4 7.46957 4.21071 6.96086 4.58579 6.58579C4.96086 6.21071 5.46957 6 6 6H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Run immediately without waiting for DOMContentLoaded
+    (function() {
+      console.log('Calorie API Output script running');
+      
+      // Reference the global utility functions
+      const getLocal = window.getLocal || function(key) {
+        try {
+          const value = localStorage.getItem(key);
+          return value ? decodeURIComponent(value) : null;
+        } catch (e) {
+          console.error('Error getting local value:', e);
+          return null;
+        }
+      };
+
+      const getJSON = window.getJSON || function(key) {
+        try {
+          const item = localStorage.getItem(key);
+          return item ? JSON.parse(item) : null;
+        } catch (e) {
+          console.error('Error parsing JSON:', e);
+          return null;
+        }
+      };
+
+      // Try to get span element - might be delayed
+      function updateOutput() {
+        const outputSpan = document.getElementById('output-span');
+        if (!outputSpan) {
+          console.log('Output span not found, will retry');
+          setTimeout(updateOutput, 100);
+          return;
+        }
+
+        // Specifically look for calorieIqResponse data
+        const responseKey = 'calorieIqResponse';
+        console.log('Looking for data with key:', responseKey);
+        
+        // Try several approaches to get the data
+        let data;
+        try {
+          data = getJSON(responseKey);
+          if (!data) {
+            // Fallback to direct localStorage access
+            const rawData = localStorage.getItem(responseKey);
+            if (rawData) {
+              data = JSON.parse(rawData);
+              console.log('Retrieved data directly from localStorage');
+            }
+          }
+          
+          // Handle nested response format if present
+          if (data && data.message === 'Success' && data.data) {
+            console.log('Found nested data structure, using the data property');
+            data = data.data;
+          }
+        } catch (err) {
+          console.error('Error getting data:', err);
+        }
+        
+        if (data) {
+          if (data.calorieAnalysis && data.calorieAnalysis.nutrients) {
+            displayCalorieAnalysis(data.calorieAnalysis, outputSpan);
+          } else if (typeof data === 'object' && data !== null) {
+            // Use pretty formatting for other complex objects
+            outputSpan.textContent = JSON.stringify(data, null, 2);
+          } else {
+            outputSpan.textContent = data;
+          }
+          console.log('Data displayed successfully');
+        } else {
+          outputSpan.textContent = `No ${responseKey} data found in localStorage`;
+          console.log('No data found for key:', responseKey);
+        }
+      }
+      
+      // Start the update process
+      updateOutput();
+      
+      function displayCalorieAnalysis(calorieData, outputElement) {
+        outputElement.innerHTML = '';
+        outputElement.classList.add('calorie-display');
+        
+        const container = document.createElement('div');
+        
+        // Header
+        const header = document.createElement('div');
+        header.className = 'calorie-header';
+        header.innerHTML = '<h2 style="margin: 0; color: #333;">📊 Nutrition Analysis</h2>';
+        container.appendChild(header);
+        
+        // BMI Section
+        if (calorieData.bmi) {
+          const bmiSection = document.createElement('div');
+          bmiSection.className = 'bmi-section';
+          bmiSection.innerHTML = `🎯 Your BMI: ${calorieData.bmi}`;
+          container.appendChild(bmiSection);
+        }
+        
+        // Nutrients Grid
+        if (calorieData.nutrients) {
+          const nutrientsGrid = document.createElement('div');
+          nutrientsGrid.className = 'nutrients-grid';
+          
+          calorieData.nutrients.forEach(nutrient => {
+            const card = document.createElement('div');
+            card.className = 'nutrient-card';
+            
+            const percentage = parseInt(nutrient.percentage);
+            let progressClass = 'percentage-good';
+            if (percentage < 85) progressClass = 'percentage-warning';
+            if (percentage < 70) progressClass = 'percentage-low';
+            
+            card.innerHTML = `
+              <div class="nutrient-name">${nutrient.name}</div>
+              <div class="nutrient-progress">
+                <div class="nutrient-progress-bar ${progressClass}" style="width: ${percentage}%"></div>
+              </div>
+              <div class="nutrient-details">
+                <span>${nutrient.intake} / ${nutrient.target}</span>
+                <span style="font-weight: bold; color: ${percentage >= 85 ? '#4CAF50' : percentage >= 70 ? '#FF9800' : '#f44336'}">${nutrient.percentage}</span>
+              </div>
+            `;
+            
+            nutrientsGrid.appendChild(card);
+          });
+          
+          container.appendChild(nutrientsGrid);
+        }
+        
+        // Deficit-Filling Recommendations
+        const mealsSection = document.createElement('div');
+        mealsSection.className = 'meals-section';
+        mealsSection.innerHTML = '<h3 style="color: #333; margin-bottom: 15px;">🎯 Deficit-Filling Recommendations</h3>';
+        
+        if (calorieData.mealRecommendations1) {
+          const meal1 = document.createElement('div');
+          meal1.className = 'meal-card';
+          meal1.innerHTML = `
+            <div class="meal-title">Priority Deficit Foods</div>
+            <div class="meal-content">${calorieData.mealRecommendations1}</div>
+          `;
+          mealsSection.appendChild(meal1);
+        }
+        
+        if (calorieData.mealRecommendations2) {
+          const meal2 = document.createElement('div');
+          meal2.className = 'meal-card';
+          meal2.innerHTML = `
+            <div class="meal-title">Secondary Nutrient Needs</div>
+            <div class="meal-content">${calorieData.mealRecommendations2}</div>
+          `;
+          mealsSection.appendChild(meal2);
+        }
+        
+        if (calorieData.mealRecommendations3) {
+          const meal3 = document.createElement('div');
+          meal3.className = 'meal-card';
+          meal3.innerHTML = `
+            <div class="meal-title">Complete Your Daily Goals</div>
+            <div class="meal-content">${calorieData.mealRecommendations3}</div>
+          `;
+          mealsSection.appendChild(meal3);
+        }
+        
+        container.appendChild(mealsSection);
+        outputElement.appendChild(container);
+      }
+    })();
+
+    function copyOutput() {
+      const text = document.getElementById('output-span').textContent;
+      const copyIconWrapper = document.querySelector('.copy-icon-wrapper');
+      const originalHTML = copyIconWrapper.innerHTML;
+      
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          // Change the icon to a success state
+          copyIconWrapper.innerHTML = '<svg class="copy-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 12L11 14L15 10M12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+          
+          // Reset button after 2 seconds
+          setTimeout(() => {
+            copyIconWrapper.innerHTML = originalHTML;
+          }, 2000);
+        })
+        .catch(() => alert('Failed to copy'));
+    }
+  </script>
+</body>
+</html>
