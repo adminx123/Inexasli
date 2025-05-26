@@ -13,11 +13,11 @@
 const categoryManager = (function() {
     // Categorization of grid items by domain
     const itemCategories = {
-        'health': ['CalorieIQ', 'FitnessIQ', 'SymptomIQ', 'EmotionIQ'],
+        'health': ['CalorieIQ', 'FitnessIQ', 'SymptomIQ'],
         'business': ['DecisionIQ'], 
         'finance': ['IncomeIQ', 'SpeculationIQ'],
         'lifestyle': ['EventIQ', 'SocialIQ', 'PhilosophyIQ'],
-        'personal': ['EnneagramIQ', 'EmotionIQ', 'SocialIQ', 'PhilosophyIQ'],
+        'personal': ['EnneagramIQ', 'SocialIQ', 'PhilosophyIQ'],
         'learning': ['ResearchIQ', 'QuizIQ', 'PhilosophyIQ'], 
         'productivity': ['DecisionIQ'] 
     };
@@ -26,7 +26,6 @@ const categoryManager = (function() {
     const productUrls = {
         'CalorieIQ': '/ai/calorie/calorieiq.html',
         'DecisionIQ': '/ai/decision/decisioniq.html',
-        'EmotionIQ': '/ai/emotion/emotioniq.html',
         'EnneagramIQ': '/ai/enneagram/enneagramiq.html',
         'EventIQ': '/ai/event/eventiq.html',
         'FitnessIQ': '/ai/fitness/fitnessiq.html',
@@ -156,7 +155,7 @@ const categoryManager = (function() {
             
             // Add premium tag to selected items
             const premiumItems = [
-                'DecisionIQ', 'EmotionIQ', 'EnneagramIQ',
+                'DecisionIQ', 'EnneagramIQ',
                 'EventIQ', 'IncomeIQ', 'ResearchIQ', 'SocialIQ', 'SpeculationIQ'
             ];
             if (premiumItems.includes(name)) {

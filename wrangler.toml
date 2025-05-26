@@ -84,14 +84,6 @@ main = "./ai/decision/decision.js"
 binding = "secret_binding"
 service = "secretworker"
 
-[env.emotion]
-name = "emotion"
-main = "./ai/emotion/emotion.js"
-
-[[env.emotion.services]]
-binding = "secret_binding"
-service = "secretworker"
-
 [env.enneagram]
 name = "enneagram"
 main = "./ai/enneagram/enneagram.js"

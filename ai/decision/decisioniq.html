@@ -73,7 +73,40 @@
         </div>
         <div class="row1">
             <label class="category-label">Constraints</label>
-            <textarea id="decisioniq-constraints" rows="2" placeholder="Constraints: (1 per line)\ne.g., Budget, Timeline, Resources"></textarea>
+            <div class="grid-container" id="decisioniq-constraint-types">
+                <div class="grid-item constraint-item" data-value="Budget" data-type="Budget">
+                    <span class="constraint-label">Budget</span>
+                    <input type="text" class="constraint-input" placeholder="Enter budget limit..." style="display:none;">
+                </div>
+                <div class="grid-item constraint-item" data-value="Timeline" data-type="Timeline">
+                    <span class="constraint-label">Timeline</span>
+                    <input type="text" class="constraint-input" placeholder="Enter deadline..." style="display:none;">
+                </div>
+                <div class="grid-item constraint-item" data-value="Resources" data-type="Resources">
+                    <span class="constraint-label">Resources</span>
+                    <input type="text" class="constraint-input" placeholder="Enter resource limits..." style="display:none;">
+                </div>
+                <div class="grid-item constraint-item" data-value="Technical" data-type="Technical">
+                    <span class="constraint-label">Technical</span>
+                    <input type="text" class="constraint-input" placeholder="Enter technical constraints..." style="display:none;">
+                </div>
+                <div class="grid-item constraint-item" data-value="Regulatory" data-type="Regulatory">
+                    <span class="constraint-label">Regulatory</span>
+                    <input type="text" class="constraint-input" placeholder="Enter regulatory constraints..." style="display:none;">
+                </div>
+                <div class="grid-item constraint-item" data-value="Location" data-type="Location">
+                    <span class="constraint-label">Location</span>
+                    <input type="text" class="constraint-input" placeholder="Enter location constraints..." style="display:none;">
+                </div>
+                <div class="grid-item constraint-item" data-value="Legal" data-type="Legal">
+                    <span class="constraint-label">Legal</span>
+                    <input type="text" class="constraint-input" placeholder="Enter legal constraints..." style="display:none;">
+                </div>
+                <div class="grid-item constraint-item" data-value="Other" data-type="Other">
+                    <span class="constraint-label">Other</span>
+                    <input type="text" class="constraint-input" placeholder="Enter other constraints..." style="display:none;">
+                </div>
+            </div>
         </div>
         <div class="row1">
             <label class="category-label">Additional Instructions</label>
@@ -123,6 +156,23 @@
     function handleGridItemToggled(event) {
         console.log('[DecisionIQ] Grid item toggled event received');
         const item = event.detail.item;
+        
+        // Check if this is a constraint item
+        if (item.closest('#decisioniq-constraint-types')) {
+            const input = item.querySelector('.constraint-input');
+            if (input) {
+                if (item.classList.contains('selected')) {
+                    // Show the input field
+                    input.style.display = 'block';
+                    input.focus();
+                } else {
+                    // Hide the input field and clear its value
+                    input.style.display = 'none';
+                    input.value = '';
+                }
+            }
+        }
+        
         saveGridItem(item);
     }
 
@@ -132,14 +182,35 @@
     }
 
     function collectFormData() {
-        const formData = { goal:null, analysisType:null, priority:null, criteria:[], options:null, stakeholders:[], constraints:null, instructions:null };
+        const formData = { 
+            goal: null, 
+            analysisType: null, 
+            priority: null, 
+            criteria: [], 
+            options: null, 
+            stakeholders: [], 
+            constraints: [], 
+            instructions: null 
+        };
+        
         const g = document.getElementById('decisioniq-goal'); if (g && g.value.trim()) formData.goal = g.value.trim();
         const at = document.getElementById('decisioniq-analysis-type'); if (at) formData.analysisType = at.value;
         const pr = document.getElementById('decisioniq-priority'); if (pr) formData.priority = pr.value;
         document.querySelectorAll('#decisioniq-criteria .grid-item.selected').forEach(i => formData.criteria.push(i.dataset.value));
         const o = document.getElementById('decisioniq-options'); if (o && o.value.trim()) formData.options = o.value.trim();
         document.querySelectorAll('#decisioniq-stakeholders .grid-item.selected').forEach(i => formData.stakeholders.push(i.dataset.value));
-        const cons = document.getElementById('decisioniq-constraints'); if (cons && cons.value.trim()) formData.constraints = cons.value.trim();
+        
+        // Collect constraints with their values
+        document.querySelectorAll('#decisioniq-constraint-types .grid-item.selected').forEach(item => {
+            const type = item.getAttribute('data-type');
+            const input = item.querySelector('.constraint-input');
+            const value = input ? input.value.trim() : '';
+            
+            if (type && value) {
+                formData.constraints.push({ type, value });
+            }
+        });
+        
         const ins = document.getElementById('decisioniq-instructions'); if (ins && ins.value.trim()) formData.instructions = ins.value.trim();
         return formData;
     }
@@ -154,7 +225,22 @@
         data.criteria?.forEach(v => document.querySelector(`#decisioniq-criteria .grid-item[data-value="${v}"]`)?.classList.add('selected'));
         if (data.options) document.getElementById('decisioniq-options').value = data.options;
         data.stakeholders?.forEach(v => document.querySelector(`#decisioniq-stakeholders .grid-item[data-value="${v}"]`)?.classList.add('selected'));
-        if (data.constraints) document.getElementById('decisioniq-constraints').value = data.constraints;
+        
+        // Repopulate constraints
+        data.constraints?.forEach(c => {
+            if (c.type && c.value) {
+                const gridItem = document.querySelector(`#decisioniq-constraint-types .grid-item[data-type="${c.type}"]`);
+                if (gridItem) {
+                    gridItem.classList.add('selected');
+                    const input = gridItem.querySelector('.constraint-input');
+                    if (input) {
+                        input.value = c.value;
+                        input.style.display = 'block';
+                    }
+                }
+            }
+        });
+        
         if (data.instructions) document.getElementById('decisioniq-instructions').value = data.instructions;
     }
 
@@ -169,6 +255,10 @@
         document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
         document.querySelectorAll('textarea').forEach(i => i.value = '');
         document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+        document.querySelectorAll('.constraint-input').forEach(input => {
+            input.value = '';
+            input.style.display = 'none';
+        });
     }
 
     async function handleGenerateDecisionIq() {
@@ -192,11 +282,27 @@
         }
     }
 
+    // We're no longer using these functions as the inputs are now directly in the grid items
+    function setupConstraintInputs() {
+        // Add change event listeners to all constraint inputs
+        document.querySelectorAll('.constraint-input').forEach(input => {
+            input.addEventListener('change', saveInput);
+            input.addEventListener('blur', function() {
+                // If input is empty when losing focus, deselect the constraint
+                if (!this.value.trim() && this.parentNode.classList.contains('selected')) {
+                    this.parentNode.classList.remove('selected');
+                    this.style.display = 'none';
+                }
+            });
+        });
+    }
+
     // Initialization
     // Instead of direct click handlers, listen for the custom event from datain.js
     document.addEventListener('grid-item-toggled', handleGridItemToggled);
     repopulateForm();
     setupInputHandlers();
+    setupConstraintInputs();
     document.getElementById('generate-decision-btn').addEventListener('click', handleGenerateDecisionIq);
     document.getElementById('clear-decision-btn').addEventListener('click', clearLocalStorage);
 
