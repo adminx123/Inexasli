@@ -113,9 +113,15 @@ document.addEventListener('DOMContentLoaded', async function () {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                z-index: 10001;
+                z-index: 12000; /* Ensure collapsed Data Out is above expanded Data In */
             }
-
+            /* Explicit override to ensure tab stays above Data In */
+            .data-container-right.initial {
+                z-index: 20000 !important;
+            }
+            .data-container-right.collapsed {
+                z-index: 20000 !important;
+            }
             .data-container-right.expanded {
                 max-width: 100%;
                 width: 100%;
