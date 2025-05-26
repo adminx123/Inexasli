@@ -16,7 +16,7 @@ const categoryManager = (function() {
         'health': ['CalorieIQ', 'FitnessIQ', 'SymptomIQ', 'EmotionIQ'],
         'business': ['DecisionIQ'], 
         'finance': ['IncomeIQ', 'SpeculationIQ'],
-        'lifestyle': ['AdventureIQ', 'EventIQ', 'SocialIQ', 'PhilosophyIQ'],
+        'lifestyle': ['EventIQ', 'SocialIQ', 'PhilosophyIQ'],
         'personal': ['EnneagramIQ', 'EmotionIQ', 'SocialIQ', 'PhilosophyIQ'],
         'learning': ['ResearchIQ', 'QuizIQ', 'PhilosophyIQ'], 
         'productivity': ['DecisionIQ'] 
@@ -24,7 +24,6 @@ const categoryManager = (function() {
 
     // Product URLs mapping 
     const productUrls = {
-        'AdventureIQ': '/ai/adventure/adventureiq.html',
         'CalorieIQ': '/ai/calorie/calorieiq.html',
         'DecisionIQ': '/ai/decision/decisioniq.html',
         'EmotionIQ': '/ai/emotion/emotioniq.html',
@@ -157,7 +156,7 @@ const categoryManager = (function() {
             
             // Add premium tag to selected items
             const premiumItems = [
-                'AdventureIQ', 'DecisionIQ', 'EmotionIQ', 'EnneagramIQ',
+                'DecisionIQ', 'EmotionIQ', 'EnneagramIQ',
                 'EventIQ', 'IncomeIQ', 'ResearchIQ', 'SocialIQ', 'SpeculationIQ'
             ];
             if (premiumItems.includes(name)) {
