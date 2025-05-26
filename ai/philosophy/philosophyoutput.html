@@ -580,8 +580,8 @@
       }
     })();
 
-      // Initialize centralized copy button
-      createCopyButton('output-span');
+      // Initialize copy button with formatted text for philosophy output
+      copyUtil.init({ containerId: 'output-span', contentType: 'philosophy', mode: 'text' });
     
   </script>
   
