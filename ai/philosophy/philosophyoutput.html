@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Philosophical Wisdom Output</title>
+  <title>Philosophy Analysis Output</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -481,7 +481,7 @@
         
         if (data) {
           if (data.quotes && Array.isArray(data.quotes)) {
-            displayPhilosophyWisdom(data, outputSpan);
+            displayPhilosophyData(data, outputSpan);
           } else if (typeof data === 'object' && data !== null) {
             // Use pretty formatting for other complex objects
             outputSpan.textContent = JSON.stringify(data, null, 2);
@@ -504,7 +504,7 @@
       // Start the update process with slight delay to allow for animations
       setTimeout(updateOutput, 500);
       
-      function displayPhilosophyWisdom(wisdomData, outputElement) {
+      function displayPhilosophyData(philosophyData, outputElement) {
         outputElement.innerHTML = '';
         outputElement.classList.add('philosophy-display');
         
@@ -513,7 +513,7 @@
         // Topic header
         const header = document.createElement('div');
         header.className = 'wisdom-topic';
-        header.innerHTML = `<h2>Wisdom on: ${wisdomData.topic}</h2>`;
+        header.innerHTML = `<h2>Wisdom on: ${philosophyData.topic}</h2>`;
         container.appendChild(header);
         
         // Quotes container
@@ -521,8 +521,8 @@
         quotesContainer.className = 'quotes-container';
         
         // Quotes section
-        if (wisdomData.quotes && Array.isArray(wisdomData.quotes)) {
-          wisdomData.quotes.forEach(quote => {
+        if (philosophyData.quotes && Array.isArray(philosophyData.quotes)) {
+          philosophyData.quotes.forEach(quote => {
             const quoteCard = document.createElement('div');
             
             // Custom colors for different traditions using CSS classes
@@ -568,12 +568,12 @@
         container.appendChild(quotesContainer);
         
         // Reflection
-        if (wisdomData.reflection) {
+        if (philosophyData.reflection) {
           const reflection = document.createElement('div');
           reflection.className = 'reflection';
           reflection.innerHTML = `
             <div class="reflection-title">Reflection</div>
-            <div>${wisdomData.reflection}</div>
+            <div>${philosophyData.reflection}</div>
           `;
           container.appendChild(reflection);
         }
