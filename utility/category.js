@@ -15,17 +15,16 @@ const categoryManager = (function() {
     const itemCategories = {
         'health': ['CalorieIQ', 'FitnessIQ', 'SymptomIQ', 'EmotionIQ'],
         'business': ['DecisionIQ'], 
-        'finance': ['IncomeIQ', 'ReceiptsIQ', 'SpeculationIQ'],
+        'finance': ['IncomeIQ', 'SpeculationIQ'],
         'lifestyle': ['AdventureIQ', 'EventIQ', 'SocialIQ', 'PhilosophyIQ'],
         'personal': ['EnneagramIQ', 'EmotionIQ', 'SocialIQ', 'PhilosophyIQ'],
-        'learning': ['BookIQ', 'ResearchIQ', 'QuizIQ', 'PhilosophyIQ'], 
+        'learning': ['ResearchIQ', 'QuizIQ', 'PhilosophyIQ'], 
         'productivity': ['DecisionIQ'] 
     };
 
     // Product URLs mapping 
     const productUrls = {
         'AdventureIQ': '/ai/adventure/adventureiq.html',
-        'BookIQ': '/ai/book/bookiq.html',
         'CalorieIQ': '/ai/calorie/calorieiq.html',
         'DecisionIQ': '/ai/decision/decisioniq.html',
         'EmotionIQ': '/ai/emotion/emotioniq.html',
@@ -35,7 +34,6 @@ const categoryManager = (function() {
         'IncomeIQ': '/ai/income/intro.html',
         'PhilosophyIQ': '/ai/philosophy/philosophyiq.html',
         'QuizIQ': '/ai/quiz/quiziq.html',
-        'ReceiptsIQ': '/ai/receipts/receiptsiq.html',
         'ResearchIQ': '/ai/research/researchiq.html',
         'SocialIQ': '/ai/social/socialiq.html',
         'SpeculationIQ': '/ai/speculation/speculationiq.html',
@@ -159,9 +157,8 @@ const categoryManager = (function() {
             
             // Add premium tag to selected items
             const premiumItems = [
-                'AdventureIQ', 'App', 'DecisionIQ', 'EmotionIQ', 'EnneagramIQ', 
-                'EventIQ', 'IncomeIQ', 'NewBizIQ', 'ReportIQ',
-                'ResearchIQ', 'SocialIQ', 'SpeculationIQ', 'WorkflowIQ'
+                'AdventureIQ', 'DecisionIQ', 'EmotionIQ', 'EnneagramIQ',
+                'EventIQ', 'IncomeIQ', 'ResearchIQ', 'SocialIQ', 'SpeculationIQ'
             ];
             if (premiumItems.includes(name)) {
                 premiumSpan.textContent = 'Premium';
