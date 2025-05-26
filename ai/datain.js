@@ -94,16 +94,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             
             // Ensure prompt.css is included for all product items
             const hasCssLink = content.includes('prompt.css');
-            const cssLinkHtml = hasCssLink ? '' : '<link rel="stylesheet" href="/ai/styles/prompt.css">';
-            
-            dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
-                <span class="data-label">DATA IN</span>
-                <div class="data-content">
-                    ${cssLinkHtml}
-                    ${content}
-                </div>
-            `;
+            const cssLinkHtml = hasCssLink ? '' : '<link rel="stylesheet" href="/ai/styles/prompt.css">';                dataContainer.innerHTML = `
+                    <span class="close-data-container">-</span>
+                    <div class="data-content">
+                        ${cssLinkHtml}
+                        ${content}
+                    </div>
+                `;
 
             // Initialize grid items directly
             initializeGridItems();
@@ -127,7 +124,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (error) {
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
-                <span class="data-label">DATA IN</span>
                 <div class="data-content">Error loading content: ${error.message}</div>
             `;
         }
@@ -250,16 +246,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             
             .data-container-left.expanded .data-label {
-                writing-mode: horizontal-tb;
-                position: absolute;
-                top: 4px;
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: 18px;
-                padding: 5px;
-                z-index: 11002;
-                background-color: #f5f5f5;
-                border-radius: 4px;
+                display: none;
             }
 
             .data-container-left .data-content {
@@ -435,7 +422,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 } else {
                     dataContainer.innerHTML = `
                         <span class="close-data-container">-</span>
-                        <span class="data-label">DATA IN</span>
                         <div class="data-content">No content selected. Please select a grid item.</div>
                     `;
                 }

@@ -91,10 +91,11 @@ select option {
 }
 
 textarea {
-  height: 100px; /* Taller for usability */
+  height: auto; /* Let the rows attribute determine height */
   max-width: 400px; /* Match inputs/selects */
   resize: vertical; /* Allow vertical resize only */
   padding: 12px;
+  min-height: 40px; /* Minimum height for small textareas */
 }
 
 input[type="number"]:focus,
@@ -368,12 +369,13 @@ button:hover {
   }
 
   textarea {
-    height: 100px; /* Initial height */
+    height: auto; /* Let the rows attribute determine height */
     max-width: 400px; /* Match inputs/selects */
     padding: 12px;
     resize: none; /* Disable manual resizing */
     overflow-y: auto; /* Allow scrolling if needed */
     line-height: 1.5; /* Consistent line spacing */
+    min-height: 40px; /* Minimum height for small textareas */
   }
 
   
