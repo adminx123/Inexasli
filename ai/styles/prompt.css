@@ -299,6 +299,24 @@ button:hover {
   .container {
     padding: 10px;
   }
+
+  /* Ensure all children of mobile-container fill its width */
+  .mobile-container .row1,
+  .mobile-container .grid-container,
+  .mobile-container table,
+  .mobile-container button {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .mobile-container input[type="number"],
+  .mobile-container select,
+  .mobile-container textarea {
+    width: 100%;
+    max-width: 100%;
+    margin: 8px auto;
+  }
 }
 
 @media (max-width: 375px) {
@@ -564,4 +582,30 @@ table tbody tr:hover td {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+}
+
+/* Invisible mobile-sized wrapper */
+.mobile-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: transparent;
+}
+
+/* Ensure all children of mobile-container fill its width */
+.mobile-container .row1,
+.mobile-container .grid-container,
+.mobile-container table,
+.mobile-container button {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.mobile-container input[type="number"],
+.mobile-container select,
+.mobile-container textarea {
+  width: 100%;
+  max-width: 100%;
+  margin: 8px auto;
 }
