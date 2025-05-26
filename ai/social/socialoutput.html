@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Social Analysis Output</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", sans-serif;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      background-color: transparent;
+      overflow: hidden;
+      color: #333;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    /* Override the star-like elements */
+    body::before {
+      display: none; /* Remove the radial gradient element */
+    }
+    
+    /* Remove the star symbol after the header */
+    .decision-header:after {
+      display: none;
+    }
+    
+    .decision-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-height: 100vh;
+      box-sizing: border-box;
+      width: 100vw;
+      max-width: 100vw;
+      overflow: hidden;
+      background-color: transparent;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .social-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-height: 100vh;
+      box-sizing: border-box;
+      width: 100vw;
+      max-width: 100vw;
+      overflow: hidden;
+      background-color: transparent;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .decision-header {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 12px 0;
+      color: #000;
+      font-family: "Playfair Display", serif;
+      padding: 10px;
+      border-bottom: 2px solid #000;
+      letter-spacing: 0.5px;
+      text-align: center;
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    .social-header {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 12px 0;
+      color: #000;
+      font-family: "Playfair Display", serif;
+      padding: 10px;
+      border-bottom: 2px solid #000;
+      letter-spacing: 0.5px;
+      text-align: center;
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    .decision-header:after {
+      content: '✦';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      padding: 0 10px;
+      color: #666;
+    }
+    
+    .decision-output-wrapper {
+      position: relative;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      max-height: 100%;
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .social-output-wrapper {
+      position: relative;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      max-height: 100%;
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .decision-output {
+      white-space: pre-wrap;
+      font-family: "Inter", sans-serif;
+      padding: 5px;
+      overflow-y: auto;
+      background-color: #fff;
+      flex: 1 1 auto;
+      font-size: 15px;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      height: calc(100% - 10px); /* Adjust height accounting for top and bottom margins */
+      max-height: calc(100% - 10px);
+      width: calc(100% - 10px); /* Adjust width accounting for left and right margins */
+      max-width: calc(100% - 10px);
+      margin: 5px;
+      transition: all 0.3s ease;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #888 #f1f1f1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .social-output {
+      white-space: pre-wrap;
+      font-family: "Inter", sans-serif;
+      padding: 5px;
+      overflow-y: auto;
+      background-color: #fff;
+      flex: 1 1 auto;
+      font-size: 15px;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      height: calc(100% - 10px); /* Adjust height accounting for top and bottom margins */
+      max-height: calc(100% - 10px);
+      width: calc(100% - 10px); /* Adjust width accounting for left and right margins */
+      max-width: calc(100% - 10px);
+      margin: 5px;
+      transition: all 0.3s ease;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #888 #f1f1f1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .decision-display {
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: normal;
+    }
+    
+    .social-display {
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: normal;
+    }
+    
+    .wisdom-topic {
+      font-family: "Playfair Display", serif;
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding-bottom: 15px;
+    }
+    
+    .wisdom-topic h2 {
+      margin: 0;
+      color: #333;
+      font-weight: 700;
+      font-size: 24px;
+    }
+    
+    .wisdom-topic:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #888, transparent);
+    }
+    
+    .quotes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    
+    .quote-card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 5px;
+      position: relative;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+      border-left: 5px solid;
+    }
+    
+    .quote-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    
+    /* Removed decorative quotation mark */
+    
+    .tradition {
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+    }
+    
+    /* Removed the bullet point (tradition:before) */
+    
+    .tradition-taoism { color: #333; }
+    .quote-card.tradition-taoism { border-left-color: #ddd; }
+    
+    .tradition-buddhism { color: #333; }
+    .quote-card.tradition-buddhism { border-left-color: #ddd; }
+    
+    .tradition-christianity { color: #333; } 
+    .quote-card.tradition-christianity { border-left-color: #ddd; }
+    
+    .tradition-islam { color: #333; }
+    .quote-card.tradition-islam { border-left-color: #ddd; }
+    
+    .tradition-hermetic { color: #333; }
+    .quote-card.tradition-hermetic { border-left-color: #ddd; }
+    
+    .quote {
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      margin-bottom: 12px;
+      font-size: 17px;
+      line-height: 1.7;
+      color: #444;
+      padding-left: 10px;
+      border-left: 2px solid #eee;
+    }
+    
+    .source {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+    
+    .relevance {
+      font-size: 15px;
+      color: #444;
+      background-color: #f9f9f9;
+      padding: 12px;
+      border-radius: 6px;
+      line-height: 1.6;
+    }
+    
+    .reflection {
+      background: linear-gradient(145deg, #f8f9fa, #e6f7ff);
+      padding: 25px;
+      border-radius: 12px;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      border: 1px solid #e1e8ed;
+      position: relative;
+    }
+    
+    .reflection:before {
+      content: '✦';
+      position: absolute;
+      top: -12px;
+      left: 25px;
+      background: #fff;
+      padding: 0 10px;
+      color: #666;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+    
+    .reflection-title {
+      font-weight: 700;
+      margin-bottom: 12px;
+      font-size: 18px;
+      color: #333;
+      font-family: "Playfair Display", serif;
+    }
+    
+    .decision-output:hover {
+      box-shadow: 6px 6px 0 #000;
+    }
+    
+    .social-output:hover {
+      box-shadow: 6px 6px 0 #000;
+    }
+    
+    /* Copy button styles now in external JS file */
+    
+    @media (max-width: 480px) {
+      .decision-container {
+        padding: 10px;
+        height: 100vh;
+        max-height: 100vh;
+        margin: 0;
+      }
+      
+      .social-container {
+        padding: 10px;
+        height: 100vh;
+        max-height: 100vh;
+        margin: 0;
+      }
+      
+      .decision-header {
+        font-size: 18px;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+      }
+      
+      .social-header {
+        font-size: 18px;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+      }
+      
+      .decision-output {
+        font-size: 14px;
+        padding: 12px;
+        max-height: calc(100% - 40px);
+      }
+      
+      .social-output {
+        font-size: 14px;
+        padding: 12px;
+        max-height: calc(100% - 40px);
+      }
+      
+      .decision-output-wrapper {
+        margin-bottom: 0;
+        max-height: 100%;
+      }
+      
+      .social-output-wrapper {
+        margin-bottom: 0;
+        max-height: 100%;
+      }
+      
+      /* Old copy icon styles removed as they're now handled by copy.js */
+      
+      .quote-card {
+        padding: 15px;
+        margin-bottom: 5px;
+      }
+      
+      .wisdom-topic h2 {
+        font-size: 20px;
+      }
+      
+      .quotes-container {
+        gap: 20px;
+      }
+      
+      .quote {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="decision-container">
+    <div class="decision-output-wrapper">
+      <div id="output-span" class="decision-output">
+        <div class="loading">
+          <div class="loading-text">Gathering wisdom...</div>
+          <div class="loading-spinner"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Copy utility is already included in the head -->
+  
+  <script>
+    // Run immediately without waiting for DOMContentLoaded
+    (function() {
+      console.log('Philosophy API Output script running');
+      
+      // Initialize the copy button in the bottom right corner
+      function initCopyButton() {
+        if (window.copyUtil) {
+          console.log('Initializing copy button in bottom right corner');
+          window.copyUtil.init({
+            containerId: 'output-span',
+            contentType: 'social'
+          });
+        } else {
+          console.error('Copy utility not available, retrying in 100ms');
+          setTimeout(initCopyButton, 100);
+        }
+      }
+      
+      // Try to initialize the copy button
+      initCopyButton();
+      
+      // Reference the global utility functions
+      const getLocal = window.getLocal || function(key) {
+        try {
+          const value = localStorage.getItem(key);
+          return value ? decodeURIComponent(value) : null;
+        } catch (e) {
+          console.error('Error getting local value:', e);
+          return null;
+        }
+      };
+
+      const getJSON = window.getJSON || function(key) {
+        try {
+          const item = localStorage.getItem(key);
+          return item ? JSON.parse(item) : null;
+        } catch (e) {
+          console.error('Error parsing JSON:', e);
+          return null;
+        }
+      };
+
+      // Try to get span element - might be delayed
+      function updateOutput() {
+        const outputSpan = document.getElementById('output-span');
+        if (!outputSpan) {
+          console.log('Output span not found, will retry');
+          setTimeout(updateOutput, 100);
+          return;
+        }
+
+        // Specifically look for philosophyIqResponse data
+        const responseKey = 'socialIqResponse';
+        console.log('Looking for data with key:', responseKey);
+        
+        // Try several approaches to get the data
+        let data;
+        try {
+          // Check if the mock data should be used for demonstration
+          const urlParams = new URLSearchParams(window.location.search);
+          const useMockData = urlParams.get('demo') === 'true';
+          
+          if (useMockData) {
+            data = {
+              "topic": "Maintaining a faithful marriage",
+              "quotes": [
+                {
+                  "tradition": "Taoism",
+                  "quote": "The soft overcomes the hard; the gentle overcomes the rigid.",
+                  "source": "Tao Te Ching, Chapter 78, by Lao Tzu",
+                  "relevance": "This teaches that gentleness and adaptability in a marriage can help overcome challenges, fostering faithfulness through harmony rather than force."
+                },
+                {
+                  "tradition": "Buddhism",
+                  "quote": "Radiate boundless love towards the entire world.",
+                  "source": "Metta Sutta, attributed to Buddha",
+                  "relevance": "In the context of marriage, this encourages cultivating unconditional love and compassion, which are essential for maintaining faithfulness and emotional connection."
+                },
+                {
+                  "tradition": "Islam",
+                  "quote": "And among His signs is this, that He created for you mates from among yourselves, that you may dwell in tranquility with them, and He has put love and mercy between your hearts.",
+                  "source": "Quran 30:21",
+                  "relevance": "This verse highlights the divine purpose of marriage for peace and mercy, emphasizing the importance of faithfulness as a means to achieve tranquility in the relationship."
+                },
+                {
+                  "tradition": "Christianity",
+                  "quote": "Therefore what God has joined together, let no one separate.",
+                  "source": "Matthew 19:6, Bible",
+                  "relevance": "This underscores the sacred covenant of marriage, promoting lifelong faithfulness and commitment as ordained by God."
+                },
+                {
+                  "tradition": "Hermetic",
+                  "quote": "Gender is in everything; everything has its Masculine and Feminine Principles.",
+                  "source": "The Kybalion",
+                  "relevance": "This principle suggests that balance between masculine and feminine energies in a marriage can lead to harmony and faithful partnership, reflecting universal laws."
+                }
+              ],
+              "reflection": "Together, these perspectives from different traditions emphasize harmony, love, divine purpose, commitment, and balance, offering a multifaceted approach to nurturing a faithful marriage by integrating adaptability, compassion, mercy, covenant, and energetic equilibrium."
+            };
+          } else {
+            data = getJSON(responseKey);
+            if (!data) {
+              // Fallback to direct localStorage access
+              const rawData = localStorage.getItem(responseKey);
+              if (rawData) {
+                data = JSON.parse(rawData);
+                console.log('Retrieved data directly from localStorage');
+              }
+            }
+            
+            // Handle nested response format if present
+            if (data && data.message === 'Success' && data.data) {
+              console.log('Found nested data structure, using the data property');
+              data = data.data;
+            }
+            
+            // Get the philosophical wisdom if it's nested in an object
+            if (data && data.philosophicalWisdom) {
+              console.log('Found philosophicalWisdom property, using it');
+              data = data.philosophicalWisdom;
+            }
+          }
+        } catch (err) {
+          console.error('Error getting data:', err);
+        }
+        
+        if (data) {
+          if (data.quotes && Array.isArray(data.quotes)) {
+            displaySocialData(data, outputSpan);
+          } else if (typeof data === 'object' && data !== null) {
+            // Use pretty formatting for other complex objects
+            outputSpan.textContent = JSON.stringify(data, null, 2);
+          } else {
+            outputSpan.textContent = data;
+          }
+          console.log('Data displayed successfully');
+        } else {
+          outputSpan.innerHTML = `
+            <div class="no-data">
+              <div class="no-data-icon">📜</div>
+              <div class="no-data-message">No wisdom found in the archives</div>
+              <div class="no-data-help">Return to PhilosophyIQ and submit your question</div>
+            </div>
+          `;
+          console.log('No data found for key:', responseKey);
+        }
+      }
+      
+      // Start the update process with slight delay to allow for animations
+      setTimeout(updateOutput, 500);
+      
+      function displaySocialData(socialData, outputElement) {
+        outputElement.innerHTML = '';
+        outputElement.classList.add('social-display');
+        
+        const container = document.createElement('div');
+        
+        // Topic header
+        const header = document.createElement('div');
+        header.className = 'wisdom-topic';
+        header.innerHTML = `<h2>Wisdom on: ${socialData.topic}</h2>`;
+        container.appendChild(header);
+        
+        // Quotes container
+        const quotesContainer = document.createElement('div');
+        quotesContainer.className = 'quotes-container';
+        
+        // Quotes section
+        if (socialData.quotes && Array.isArray(socialData.quotes)) {
+          socialData.quotes.forEach(quote => {
+            const quoteCard = document.createElement('div');
+            
+            // Custom colors for different traditions using CSS classes
+            let traditionClass = '';
+            switch(quote.tradition.toLowerCase()) {
+              case 'taoism':
+                traditionClass = 'tradition-taoism';
+                break;
+              case 'buddhism':
+                traditionClass = 'tradition-buddhism';
+                break;
+              case 'christianity':
+                traditionClass = 'tradition-christianity';
+                break;
+              case 'islam':
+                traditionClass = 'tradition-islam';
+                break;
+              case 'hermetic':
+                traditionClass = 'tradition-hermetic';
+                break;
+            }
+            
+            quoteCard.className = `quote-card ${traditionClass}`;
+            quoteCard.innerHTML = `
+              <div class="tradition">
+                ${quote.tradition}
+              </div>
+              <div class="quote">
+                "${quote.quote}"
+              </div>
+              <div class="source">
+                — ${quote.source}
+              </div>
+              <div class="relevance">
+                ${quote.relevance}
+              </div>
+            `;
+            
+            quotesContainer.appendChild(quoteCard);
+          });
+        }
+        
+        container.appendChild(quotesContainer);
+        
+        // Reflection
+        if (socialData.reflection) {
+          const reflection = document.createElement('div');
+          reflection.className = 'reflection';
+          reflection.innerHTML = `
+            <div class="reflection-title">Reflection</div>
+            <div>${socialData.reflection}</div>
+          `;
+          container.appendChild(reflection);
+        }
+        
+        outputElement.appendChild(container);
+        
+        // Add animation effect to gradually reveal the cards
+        const cards = document.querySelectorAll('.quote-card');
+        cards.forEach((card, index) => {
+          setTimeout(() => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, 100);
+          }, index * 150);
+        });
+      }
+    })();
+
+    // Copy functionality moved to /utility/copy.js
+    
+  </script>
+  
+  <style>
+    /* Additional styles for loading and empty state */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px;
+      color: #666;
+    }
+    
+    .loading-text {
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-family: "Playfair Display", serif;
+      letter-spacing: 0.5px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0,0,0,0.1);
+      border-left: 4px solid #555;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    .no-data {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .no-data-icon {
+      font-size: 50px;
+      margin-bottom: 20px;
+      opacity: 0.6;
+    }
+    
+    .no-data-message {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #555;
+    }
+    
+    .no-data-help {
+      font-size: 14px;
+      color: #777;
+    }
+    
+    /* Tooltip styles removed as they're now handled by copy.js */
+    
+    /* Card animation setup */
+    .quote-card {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  </style>
+</body>
+</html>
