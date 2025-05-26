@@ -10,14 +10,12 @@
 
 <div class="mobile-container">
 
-    <a href="/ai/landing/landing.html">
-        <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 25px; height: auto; display: block; margin: 15px;">
-    </a>
 
 
         <div class="row1">
             <label class="category-label">Decision Goal</label>
-            <textarea id="decisioniq-goal" rows="2" placeholder="Enter decision goal (e.g., Choose a software vendor)"></textarea>
+            <textarea id="decisioniq-goal" rows="2" placeholder="Choose a software vendor for our CRM system
+Select new office location for regional headquarters"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Analysis Type</label>
@@ -27,7 +25,16 @@
                 <option value="cost-benefit">Cost-Benefit</option>
                 <option value="swot">SWOT</option>
                 <option value="multi-criteria">Multi-Criteria</option>
-                <option value="other">Other</option>
+                <option value="decision-tree">Decision Tree</option>
+                <option value="risk-analysis">Risk Analysis</option>
+                <option value="scenario-planning">Scenario Planning</option>
+                <option value="pareto-analysis">Pareto Analysis</option>
+                <option value="force-field">Force Field Analysis</option>
+                <option value="stakeholder-analysis">Stakeholder Analysis</option>
+                <option value="gap-analysis">Gap Analysis</option>
+                <option value="impact-analysis">Impact Analysis</option>
+                <option value="feasibility-study">Feasibility Study</option>
+                <option value="roi-analysis">ROI Analysis</option>
             </select>
         </div>
         <div class="row1">
@@ -58,7 +65,8 @@
         </div>
         <div class="row1">
             <label class="category-label">Decision Options</label>
-            <textarea id="decisioniq-options" rows="2" placeholder="Decision options: (1 per line)\ne.g., Vendor A, Vendor B, Vendor C"></textarea>
+            <textarea id="decisioniq-options" rows="2" placeholder="Salesforce CRM Premium Package
+HubSpot Enterprise Solution"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Stakeholders</label>
@@ -109,8 +117,12 @@
             </div>
         </div>
         <div class="row1">
-            <label class="category-label">Additional Instructions</label>
-            <textarea id="decisioniq-instructions" rows="3" placeholder="Additional instructions: (1 per line)\ne.g., Include risk analysis, Prioritize quantitative data"></textarea>
+            <label class="category-label">Specific Considerations</label>
+            <textarea id="decisioniq-instructions" rows="5" placeholder="Solution must support team of 250+ employees worldwide
+Need GDPR and HIPAA compliance for all data handling
+Budget constraints require financing options over 36 months
+Must integrate with existing Microsoft systems
+Need multilingual support for global offices"></textarea>
         </div>
         <div class="row1">
             <button class="generate-btn" id="generate-decision-btn">Generate Decision Analysis Now!</button>
