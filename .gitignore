@@ -23,6 +23,7 @@ ai/emotion/emotion.js
 
 # Entire prompts directory
 DIRECTION/
+future/
 ai/
 # Catch-all patterns for any missed worker files
 ai/**/*worker*.js
