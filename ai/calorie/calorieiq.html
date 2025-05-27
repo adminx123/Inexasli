@@ -317,23 +317,37 @@
   addBtn.addEventListener('click', () => addMealInput());
 
   async function handleGenerateCalorieIq() {
-    const btn = document.getElementById('generate-calorie-btn');
-    const initText = btn.innerText;
-    btn.innerText = 'Loading...'; btn.disabled = true;
     try {
       const formData = getJSON('calorieIqInput');
-      if (!formData) { alert('Please complete the form before generating a calorie plan.'); throw new Error('No input data'); }
-      const apiUrl = 'https://calorie.4hm7q4q75z.workers.dev/'; // Update with the correct endpoint
-      const resp = await fetch(apiUrl, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(formData) });
-      if (!resp.ok) throw new Error(`HTTP error! Status: ${resp.status}`);
-      const data = await resp.json();
-      setJSON('calorieIqResponse', data);
-      btn.innerText = 'Success!'; setTimeout(() => btn.disabled = false, 1000);
-      document.dispatchEvent(new CustomEvent('api-response-received', { detail: { module: 'calorieiq', type: 'worker-response', timestamp: Date.now() } }));
+      if (!formData) { 
+        alert('Please complete the form before generating a calorie plan.'); 
+        return;
+      }
+
+      // Use enhanced loading with educational facts
+      const result = await window.enhancedLoading(
+        'generate-calorie-btn',
+        'calorie',
+        async () => {
+          const apiUrl = 'https://calorie.4hm7q4q75z.workers.dev/';
+          const resp = await fetch(apiUrl, { 
+            method: 'POST', 
+            headers: {'Content-Type':'application/json'}, 
+            body: JSON.stringify(formData) 
+          });
+          if (!resp.ok) throw new Error(`HTTP error! Status: ${resp.status}`);
+          return await resp.json();
+        }
+      );
+
+      setJSON('calorieIqResponse', result);
+      document.dispatchEvent(new CustomEvent('api-response-received', { 
+        detail: { module: 'calorieiq', type: 'worker-response', timestamp: Date.now() } 
+      }));
+      
     } catch (e) {
       console.error('[CalorieIQ] Error:', e);
       alert('An error occurred while generating your calorie plan.');
-      btn.innerText = 'Error'; setTimeout(() => { btn.innerText = initText; btn.disabled = false; }, 2000);
     }
   }
 

@@ -53,6 +53,12 @@ service = "secretworker"
 name = "calorie"
 main = "./ai/calorie/calorie.js"
 
+# KV namespace for AI-generated facts
+[[env.calorie.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
+
 [[env.calorie.services]]
 binding = "secret_binding"
 service = "secretworker"
@@ -104,6 +110,12 @@ service = "secretworker"
 name = "fitness"
 main = "./ai/fitness/fitness.js"
 
+# KV namespace for AI-generated facts
+[[env.fitness.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
+
 [[env.fitness.services]]
 binding = "secret_binding"
 service = "secretworker"
@@ -113,5 +125,23 @@ name = "philosophy"
 main = "./ai/philosophy/philosophy.js"
 
 [[env.philosophy.services]]
+binding = "secret_binding"
+service = "secretworker"
+
+[env.fact-generator]
+name = "fact-generator"
+main = "./ai/fact-generator/fact-generator.js"
+
+# Weekly cron job - runs every Sunday at 2 AM UTC
+[env.fact-generator.triggers]
+crons = ["0 2 * * SUN"]
+
+# KV namespace for storing generated facts
+[[env.fact-generator.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
+
+[[env.fact-generator.services]]
 binding = "secret_binding"
 service = "secretworker"

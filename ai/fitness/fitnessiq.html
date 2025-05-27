@@ -244,52 +244,42 @@
 
     // Handle the generate button click
     async function handleGenerateFitnessIq() {
-        const btn = document.getElementById('generate-fitness-btn');
-        const initialText = btn.innerText;
-        btn.innerText = 'Loading...';
-        btn.disabled = true;
-        
         try {
             const formData = getJSON('fitnessIqInput');
             if (!formData) {
-                console.error('[FitnessIQ] No input data found in localStorage.');
                 alert('Please complete the form before generating a fitness plan.');
-                btn.innerText = initialText;
-                btn.disabled = false;
                 return;
             }
-            
-            // Send data to worker
-            const apiUrl = 'https://fitness.4hm7q4q75z.workers.dev/';
-            
-            console.log('[FitnessIQ] Sending fitnessIqInput to worker');
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            
-            const responseData = await response.json();
-            console.log('[FitnessIQ] Worker response:', responseData);
-            
-            if (responseData.message !== 'Success') {
-                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-            
+
+            // Use enhanced loading with educational facts
+            const result = await window.enhancedLoading(
+                'generate-fitness-btn',
+                'fitness',
+                async () => {
+                    const apiUrl = 'https://fitness.4hm7q4q75z.workers.dev/';
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    const responseData = await response.json();
+                    if (responseData.message !== 'Success') {
+                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                    }
+                    
+                    return responseData;
+                }
+            );
+
             // Store the response
-            setJSON('fitnessIqResponse', responseData);
-            
-            // Update button state
-            btn.innerText = 'Success!';
-            setTimeout(() => {
-                btn.disabled = false;
-            }, 1000);
+            setJSON('fitnessIqResponse', result);
             
             // Dispatch an event to notify dataout.js that a response was received
             const event = new CustomEvent('api-response-received', {
@@ -305,12 +295,6 @@
         } catch (error) {
             console.error('[FitnessIQ] Error generating fitness plan:', error);
             alert('An error occurred while generating your fitness plan. Please try again later.');
-            
-            btn.innerText = 'Error';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.disabled = false;
-            }, 2000);
         }
     }
 
