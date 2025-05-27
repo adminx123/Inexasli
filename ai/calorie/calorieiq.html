@@ -66,17 +66,17 @@
 <div class="row1">
     <label class="category-label">Food Log</label>
     <div id="multifield-container">
-        <div class="multifield-input-container">
-            <input type="text" class="multifield-input" data-meal="breakfast" placeholder="Breakfast: e.g., Oatmeal with berries">
+        <div style="display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 400px;">
+            <input type="text" data-meal="breakfast" placeholder="Breakfast: e.g., Oatmeal with berries" style="flex: 1; margin: 0;">
         </div>
-        <div class="multifield-input-container">
-            <input type="text" class="multifield-input" data-meal="lunch" placeholder="Lunch: e.g., Chicken salad with vegetables">
+        <div style="display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 400px;">
+            <input type="text" data-meal="lunch" placeholder="Lunch: e.g., Chicken salad with vegetables" style="flex: 1; margin: 0;">
         </div>
-        <div class="multifield-input-container">
-            <input type="text" class="multifield-input" data-meal="dinner" placeholder="Dinner: e.g., Salmon with quinoa and broccoli">
+        <div style="display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 400px;">
+            <input type="text" data-meal="dinner" placeholder="Dinner: e.g., Salmon with quinoa and broccoli" style="flex: 1; margin: 0;">
         </div>
     </div>
-    <button class="multifield-add-btn" id="multifield-add-btn" title="Add another meal/snack">+</button>
+    <button id="multifield-add-btn" title="Add another meal/snack" style="width: 40px; height: 40px; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; cursor: pointer; font-size: 20px; display: block; margin: 8px auto; transition: all 0.2s ease;">+</button>
     <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
     <button class="clear-btn" id="clear-calorie-btn">Clear All</button>
 </div>
@@ -166,7 +166,7 @@
     if (sexEl) formData.sex = sexEl.value;
     
     // Collect meal inputs
-    document.querySelectorAll('.multifield-input').forEach(input => {
+    document.querySelectorAll('#multifield-container input[type="text"]').forEach(input => {
       if (input.value.trim()) {
         formData.meals.push({
           type: input.dataset.meal || 'meal',
@@ -209,7 +209,7 @@
     // Repopulate meals
     if (data.meals && Array.isArray(data.meals)) {
       // Clear existing meal inputs first
-      document.querySelectorAll('.multifield-input').forEach(input => input.value = '');
+      document.querySelectorAll('#multifield-container input[type="text"]').forEach(input => input.value = '');
       
       data.meals.forEach((meal, index) => {
         const existingInput = document.querySelector(`[data-meal="${meal.type}"]`);
@@ -242,44 +242,6 @@
     document.querySelectorAll('input, textarea, select').forEach(i => i.addEventListener('change', () => saveInput(i)));
   }
 
-  function addMealInput(mealType = null, value = '') {
-    const mealsContainer = document.getElementById('multifield-container');
-    const mealCount = document.querySelectorAll('.multifield-input').length;
-    const defaultMealType = mealType || `snack${mealCount - 2}`; // Start with snack1, snack2, etc.
-    
-    const mealContainer = document.createElement('div');
-    mealContainer.className = 'multifield-input-container';
-    
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'multifield-input';
-    input.dataset.meal = defaultMealType;
-    input.placeholder = `${defaultMealType.charAt(0).toUpperCase() + defaultMealType.slice(1)}: e.g., Apple and nuts`;
-    input.value = value;
-    
-    // Add event listener for the new input
-    input.addEventListener('change', () => saveInput(input));
-    
-    // Add remove button for additional meals (not breakfast, lunch, dinner)
-    if (!['breakfast', 'lunch', 'dinner'].includes(defaultMealType)) {
-      const removeBtn = document.createElement('button');
-      removeBtn.type = 'button';
-      removeBtn.className = 'multifield-remove-btn';
-      removeBtn.innerHTML = '×';
-      removeBtn.title = 'Remove meal';
-      removeBtn.addEventListener('click', () => {
-        mealContainer.remove();
-        saveInput(input); // Save after removal
-      });
-      mealContainer.appendChild(removeBtn);
-    }
-    
-    mealContainer.appendChild(input);
-    mealsContainer.appendChild(mealContainer);
-    
-    return input;
-  }
-
   function clearLocalStorage() {
     if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
     setJSON('calorieIqInput', undefined);
@@ -290,13 +252,46 @@
     
     // Remove any additional meal inputs (keep only breakfast, lunch, dinner)
     const mealsContainer = document.getElementById('multifield-container');
-    const mealInputs = document.querySelectorAll('.multifield-input');
+    const mealInputs = document.querySelectorAll('#multifield-container input[type="text"]');
     mealInputs.forEach((input, index) => {
       if (index >= 3) {
-        input.closest('.multifield-input-container').remove();
+        input.closest('div').remove();
       }
     });
   }
+
+  // Reintroduce addMealInput for dynamic meal inputs
+  function addMealInput(mealType = null, value = '') {
+    const container = document.getElementById('multifield-container');
+    const inputGroup = document.createElement('div');
+    inputGroup.style.cssText = 'display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 400px;';
+    
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = mealType ? `${mealType.charAt(0).toUpperCase()+mealType.slice(1)}: ` : 'Meal:';
+    input.style.cssText = 'flex: 1; margin: 0;'; // Use flex to fill available space, remove margin
+    inputGroup.appendChild(input);
+    
+    const removeBtn = document.createElement('button');
+    removeBtn.innerText = '×';
+    removeBtn.style.cssText = 'width: 40px; height: 40px; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;';
+    removeBtn.addEventListener('click', () => { inputGroup.remove(); saveInput(input); });
+    removeBtn.addEventListener('mouseenter', () => { removeBtn.style.backgroundColor = '#e9e9e9'; });
+    removeBtn.addEventListener('mouseleave', () => { removeBtn.style.backgroundColor = '#f9f9f9'; });
+    inputGroup.appendChild(removeBtn);
+    
+    container.appendChild(inputGroup);
+    if (mealType) input.dataset.meal = mealType;
+    if (value) input.value = value;
+    input.addEventListener('change', () => saveInput(input));
+    input.focus();
+  }
+
+  // Bind addMealInput to "+" button and add hover effects
+  const addBtn = document.getElementById('multifield-add-btn');
+  addBtn.addEventListener('click', () => addMealInput());
+  addBtn.addEventListener('mouseenter', () => { addBtn.style.backgroundColor = '#e9e9e9'; });
+  addBtn.addEventListener('mouseleave', () => { addBtn.style.backgroundColor = '#f9f9f9'; });
 
   async function handleGenerateCalorieIq() {
     const btn = document.getElementById('generate-calorie-btn');
@@ -319,17 +314,18 @@
     }
   }
 
-  // Initialization
-  // Instead of direct click handlers, listen for the custom event from datain.js
+  // Removed multifield script and related handlers
+  document.getElementById('generate-calorie-btn').addEventListener('click', handleGenerateCalorieIq);
+  document.getElementById('clear-calorie-btn').addEventListener('click', clearLocalStorage);
+
+  // Initialize storage and handlers
   document.addEventListener('grid-item-toggled', handleGridItemToggled);
   repopulateForm();
   setupInputHandlers();
-  document.getElementById('generate-calorie-btn').addEventListener('click', handleGenerateCalorieIq);
-  document.getElementById('clear-calorie-btn').addEventListener('click', clearLocalStorage);
-  document.getElementById('multifield-add-btn').addEventListener('click', () => addMealInput());
+  setupConstraintInputs();
   
   // Export for potential external access
-  window.calorieIq = { saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData, addMealInput };
+  window.calorieIq = { saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
 })();
 </script>
 
