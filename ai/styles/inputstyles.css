@@ -112,40 +112,6 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-.rowuom {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  max-width: 400px;
-  margin: 8px auto;
-}
-
-.rowuom input,
-.rowuom select {
-  flex: 1 1 0;
-  min-width: 0;
-  height: 40px;
-  padding: 8px 12px;
-  font-size: 16px;
-  border: 1px solid #7c7c7c;
-  border-radius: 6px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  font-family: "Inter", sans-serif;
-  box-sizing: border-box;
-}
-
-.rowuom select {
-  appearance: none; /* Remove browser default styling */
-  text-align: center;
-  padding-left: 12px; /* Match input padding */
-  padding-right: 12px;
-}
-
-
-
 /* Container */
 .container {
   background-color: #f5f5f5;
@@ -296,93 +262,7 @@ button:hover {
   display: none;
 }
 
-/* Constraint input styles */
-.constraint-inputs-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  max-width: 400px;
-  margin: 10px auto;
-}
-
-.constraint-input-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background-color: #f5f5f5;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #000;
-}
-
-.constraint-input-group label {
-  font-weight: 500;
-  min-width: 80px;
-}
-
-.constraint-input-group input {
-  flex-grow: 1;
-  padding: 8px;
-  border: 1px solid #7c7c7c;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.remove-constraint {
-  background: none;
-  border: none;
-  color: #ff3b30;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 0 5px;
-  width: auto;
-  margin: 0;
-}
-
-.constraint-item.selected {
-  position: relative;
-}
-
-/* Expandable grid items for constraints */
-.constraint-item {
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-
-.constraint-item.selected {
-  padding-bottom: 50px; /* Further increased space for the input (was 45px) */
-}
-
-.constraint-input {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  height: 30px;
-  padding: 4px 8px;
-  border: 1px solid #7c7c7c;
-  border-radius: 4px;
-  font-size: 12px;
-  transition: all 0.3s ease;
-  opacity: 0;
-  visibility: hidden;
-  background-color: #ffffff;
-  margin-top: 12px; /* Further increased spacing from text */
-}
-
-.constraint-label {
-  display: block;
-  margin-bottom: 10px; /* Add significant spacing between label and input */
-}
-
-.constraint-item.selected .constraint-input {
-  opacity: 1;
-  visibility: visible;
-}
+/* Removed .constraint-inputs-container, .constraint-input-group, .constraint-item, .constraint-label, .constraint-input, .remove-constraint styles as they are not referenced in any input.txt files. */
 
 /* Mobile Adjustments */
 @media (max-width: 480px) {
@@ -609,42 +489,6 @@ table tbody tr:hover td {
 }
 
 /* Removed .twoperrow styling to standardize input layout for calorieiq.html. Use .rowuom or default input wrappers for consistent styling. */
-
-.api-output-container {
-  position: relative;
-  display: inline-block;
-  max-width: 100%;
-}
-
-.api-output {
-  display: block;
-  background-color: #f5f5f5;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  white-space: pre-wrap; /* Handles large or small text */
-  max-height: 300px;
-  overflow-y: auto;
-  font-family: "Inter", sans-serif;
-  font-size: 14px;
-}
-
-.copy-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background-color: #e0e0e0;
-  border: none;
-  border-radius: 4px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 12px;
-  font-family: "Geist", sans-serif;
-}
-
-.copy-btn:hover {
-  background-color: #d0d0d0;
-}
 
 .containerinter {
   padding-left: 38px; /* Ensures contents are at least 38px from the left edge */
