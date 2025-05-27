@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Geist:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Global Reset and Base Styles for Outputs */
+* {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #ffffff;
+  color: #000;
+  text-align: left;
+  margin-bottom: 75px;
+  padding-bottom: 25px;
+  position: relative;
+}
+
+/* ====================
+   Device Container - Main Layout Constraint
+   ==================== */
+/* Invisible device-sized wrapper - constrains all output content to consistent width */
+.device-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: transparent;
+}
+
+/* Ensure all children of device-container fill its width appropriately */
+.device-container .row1,
+.device-container table,
+.device-container button,
+.device-container .output-content {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* ====================
+   Minimal Output Base Styles
+   ==================== */
+.output-content {
+  width: 100%;
+  max-width: 460px; /* Match input controls max-width for consistency */
+  margin: 0 auto;
+  padding: 15px;
+  font-family: "Inter", sans-serif;
+  line-height: 1.5;
+  color: #000;
+}
+
+/* Output headings */
+.output-content h1,
+.output-content h2,
+.output-content h3,
+.output-content h4,
+.output-content h5,
+.output-content h6 {
+  font-family: "Geist", sans-serif;
+  margin: 16px 0 8px 0;
+  color: #000;
+}
+
+.output-content h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.output-content h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.output-content h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Output paragraphs */
+.output-content p {
+  margin: 12px 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Output lists */
+.output-content ul,
+.output-content ol {
+  margin: 12px 0;
+  padding-left: 20px;
+}
+
+.output-content li {
+  margin: 4px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Output tables */
+.output-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+.output-content th,
+.output-content td {
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.output-content th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  font-family: "Geist", sans-serif;
+}
+
+/* Output code blocks */
+.output-content pre,
+.output-content code {
+  font-family: "Geist Mono", monospace;
+  background-color: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.output-content pre {
+  padding: 12px;
+  margin: 12px 0;
+  overflow-x: auto;
+  border: 1px solid #ddd;
+}
+
+/* Output blockquotes */
+.output-content blockquote {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 4px solid #000;
+  background-color: #f9f9f9;
+  font-style: italic;
+}
+
+/* Hidden class for dynamic content */
+.hidden {
+  display: none;
+}
+
+/* Custom styling placeholder - individual output files can add their own styles here */
+/* Each output.txt file can include additional CSS that works within the device-container constraints */
