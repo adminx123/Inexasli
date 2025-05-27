@@ -65,7 +65,6 @@
 
 <div class="row1">
     <label class="category-label">Food Log</label>
-    <div id="multifield-container">
         <div style="display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 400px;">
             <input type="text" data-meal="breakfast" placeholder="Breakfast: e.g., Oatmeal with berries" style="flex: 1; margin: 0;">
         </div>
@@ -75,11 +74,12 @@
         <div style="display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 400px;">
             <input type="text" data-meal="dinner" placeholder="Dinner: e.g., Salmon with quinoa and broccoli" style="flex: 1; margin: 0;">
         </div>
-    </div>
     <button id="multifield-add-btn" title="Add another meal/snack" style="width: 40px; height: 40px; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; cursor: pointer; font-size: 20px; display: block; margin: 8px auto; transition: all 0.2s ease;">+</button>
-    <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
+ <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
     <button class="clear-btn" id="clear-calorie-btn">Clear All</button>
 </div>
+   
+</div> 
 
 <script>
 /*
@@ -166,7 +166,7 @@
     if (sexEl) formData.sex = sexEl.value;
     
     // Collect meal inputs
-    document.querySelectorAll('#multifield-container input[type="text"]').forEach(input => {
+    document.querySelectorAll('input[data-meal]').forEach(input => {
       if (input.value.trim()) {
         formData.meals.push({
           type: input.dataset.meal || 'meal',
@@ -209,7 +209,7 @@
     // Repopulate meals
     if (data.meals && Array.isArray(data.meals)) {
       // Clear existing meal inputs first
-      document.querySelectorAll('#multifield-container input[type="text"]').forEach(input => input.value = '');
+      document.querySelectorAll('input[data-meal]').forEach(input => input.value = '');
       
       data.meals.forEach((meal, index) => {
         const existingInput = document.querySelector(`[data-meal="${meal.type}"]`);
@@ -251,8 +251,7 @@
     document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
     
     // Remove any additional meal inputs (keep only breakfast, lunch, dinner)
-    const mealsContainer = document.getElementById('multifield-container');
-    const mealInputs = document.querySelectorAll('#multifield-container input[type="text"]');
+    const mealInputs = document.querySelectorAll('input[data-meal]');
     mealInputs.forEach((input, index) => {
       if (index >= 3) {
         input.closest('div').remove();
@@ -262,14 +261,14 @@
 
   // Reintroduce addMealInput for dynamic meal inputs
   function addMealInput(mealType = null, value = '') {
-    const container = document.getElementById('multifield-container');
+    const addBtn = document.getElementById('multifield-add-btn');
     const inputGroup = document.createElement('div');
     inputGroup.style.cssText = 'display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 400px;';
     
     const input = document.createElement('input');
     input.type = 'text';
     input.placeholder = mealType ? `${mealType.charAt(0).toUpperCase()+mealType.slice(1)}: ` : 'Meal:';
-    input.style.cssText = 'flex: 1; margin: 0;'; // Use flex to fill available space, remove margin
+    input.style.cssText = 'flex: 1; margin: 0;';
     inputGroup.appendChild(input);
     
     const removeBtn = document.createElement('button');
@@ -280,7 +279,7 @@
     removeBtn.addEventListener('mouseleave', () => { removeBtn.style.backgroundColor = '#f9f9f9'; });
     inputGroup.appendChild(removeBtn);
     
-    container.appendChild(inputGroup);
+    addBtn.parentNode.insertBefore(inputGroup, addBtn);
     if (mealType) input.dataset.meal = mealType;
     if (value) input.value = value;
     input.addEventListener('change', () => saveInput(input));
@@ -329,4 +328,4 @@
 })();
 </script>
 
-</div> <!-- Close device-container -->
+<!-- Close device-container -->
