@@ -83,45 +83,63 @@ const categoryManager = (function() {
         }
     }
 
+    // Add a flag to prevent infinite recursion
+    let isFilteringInProgress = false;
+
     // Function to handle category selection
     function filterGridItems(category) {
-        // Update active class on filter buttons
-        document.querySelectorAll('.category-filter-item').forEach(btn => {
-            if (btn.getAttribute('data-category') === category) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-        
-        // Emit a custom event that other parts of the application can listen for
-        const categorySelectedEvent = new CustomEvent('categorySelected', { 
-            detail: { category: category }
-        });
-        document.dispatchEvent(categorySelectedEvent);
-        
-        // Clear any existing product items in the modal
-        const existingProductGrid = document.querySelector('#category-modal .product-grid');
-        if (existingProductGrid) {
-            existingProductGrid.remove();
+        // Prevent recursive calls
+        if (isFilteringInProgress) {
+            console.log('Filtering already in progress, skipping recursive call');
+            return;
         }
         
-        // Create a product grid to show filtered items
-        const productGrid = createProductGrid(category);
+        isFilteringInProgress = true;
         
-        // Get the modal content element
-        const modalContent = document.querySelector('.category-modal-content');
-        if (modalContent) {
-            // Add the product grid to the modal
-            modalContent.appendChild(productGrid);
+        try {
+            // Update active class on filter buttons
+            document.querySelectorAll('.category-filter-item').forEach(btn => {
+                if (btn.getAttribute('data-category') === category) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
             
-            // Keep category filters visible
-            const filterGrid = document.querySelector('.category-filter-grid');
-            if (filterGrid) {
-                filterGrid.style.display = 'flex';
+            // Emit a custom event that other parts of the application can listen for
+            const categorySelectedEvent = new CustomEvent('categorySelected', { 
+                detail: { category: category }
+            });
+            document.dispatchEvent(categorySelectedEvent);
+        
+            // Clear any existing product items in the modal
+            const existingProductGrid = document.querySelector('#category-modal .product-grid');
+            if (existingProductGrid) {
+                existingProductGrid.remove();
             }
             
-            // No need to update title since we removed it
+            // Create a product grid to show filtered items
+            const productGrid = createProductGrid(category);
+            
+            // Get the modal content element
+            const modalContent = document.querySelector('.category-modal-content');
+            if (modalContent) {
+                // Add the product grid to the modal
+                modalContent.appendChild(productGrid);
+                
+                // Keep category filters visible
+                const filterGrid = document.querySelector('.category-filter-grid');
+                if (filterGrid) {
+                    filterGrid.style.display = 'flex';
+                }
+                
+                // No need to update title since we removed it
+            }
+        } catch (error) {
+            console.error('Error in filterGridItems:', error);
+        } finally {
+            // Always reset the flag to prevent permanent blocking
+            isFilteringInProgress = false;
         }
     }
     
