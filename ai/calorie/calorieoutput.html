@@ -1,43 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Calorie Analysis Output</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles/outputstyles.css">
   <style>
-    html {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-  <style>
-    body {
-      margin: 0;
+    .device-container {
+      margin: 0 auto;
       padding: 0;
       font-family: "Inter", sans-serif;
-      height: 100vh;
-      width: 100vw;
+      height: auto;
+      min-height: 600px;
+      max-height: 800px;
+      width: 100%;
+      max-width: 480px;
       display: flex;
       flex-direction: column;
-      background-color: transparent;
-      overflow: hidden;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: visible;
       color: #333;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      position: relative;
+      box-sizing: border-box;
     }
-    
+
     /* Override the star-like elements */
-    body::before {
+    .device-container::before {
       display: none; /* Remove the radial gradient element */
     }
-    
+
     /* Remove the star symbol after the header */
     .apioutput-header:after {
       display: none;
@@ -46,20 +37,13 @@
     .apioutput-container {
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      max-height: 100vh;
-      box-sizing: border-box;
-      width: 100vw;
-      max-width: 100vw;
-      overflow: hidden;
+      height: 100%;
+      width: 100%;
       background-color: transparent;
       margin: 0;
       padding: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      position: relative;
+      box-sizing: border-box;
     }
     
     .apioutput-header {
@@ -84,21 +68,12 @@
       flex-direction: column;
       margin: 0;
       width: 100%;
-      max-width: 100%;
-      height: 100%;
-      max-height: 100%;
-      overflow: hidden;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
     }
     
     .api-output {
       white-space: pre-wrap;
       font-family: "Inter", sans-serif;
-      padding: 5px;
+      padding: 15px;
       overflow-y: auto;
       background-color: #fff;
       flex: 1 1 auto;
@@ -106,20 +81,13 @@
       border: 0;
       border-radius: 0;
       box-shadow: none;
-      height: calc(100% - 10px); /* Adjust height accounting for top and bottom margins */
-      max-height: calc(100% - 10px);
-      width: calc(100% - 10px); /* Adjust width accounting for left and right margins */
-      max-width: calc(100% - 10px);
-      margin: 5px;
+      width: 100%;
+      margin: 0;
       transition: all 0.3s ease;
       scroll-behavior: smooth;
       scrollbar-width: thin;
       scrollbar-color: #888 #f1f1f1;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      box-sizing: border-box;
     }
     
     .api-output::-webkit-scrollbar {
@@ -248,7 +216,7 @@
     }
     
     .meal-card:nth-child(2) .meal-title {
-      color: #f39c12;
+      color: #fffb07;
     }
     
     .meal-card:nth-child(3) .meal-title {
@@ -264,60 +232,15 @@
       box-shadow: 5px 5px 0 #000;
     }
     
-    @media (max-width: 480px) {
-      .apioutput-container {
-        padding: 8px 8px 5px 8px;
-        height: calc(100vh - 45px);
-      }
-      
-      .apioutput-header {
-        font-size: 16px;
-        margin-bottom: 8px;
-        padding-bottom: 6px;
-      }
-      
-      .api-output {
-        font-size: 13px;
-        padding: 10px;
-        max-height: calc(100% - 50px);
-        overflow-y: auto;
-      }
-      
-      .output-wrapper {
-        margin-bottom: 5px;
-        max-height: calc(100% - 35px);
-        overflow: visible;
-      }
-      
-      .nutrients-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-      
-      .nutrient-card {
-        padding: 12px;
-      }
-      
-      .bmi-section {
-        font-size: 16px;
-        padding: 12px;
-      }
-      
-      .meal-card {
-        padding: 12px;
-      }
-    }
+   
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- include centralized copy utility -->
   <script src="../../utility/copy.js"></script>
-</head>
-<body id="main-content">
-  <div class="apioutput-container">
-    <div class="apioutput-header">Nutrition Analysis</div>
+  
+  <div class="device-container">
     <div class="output-wrapper">
       <div id="output-span" class="api-output">Loading...</div>
-    </div>
   </div>
 
   <script>
@@ -492,5 +415,4 @@
       outputElement.appendChild(container);
     }
   </script>
-</body>
-</html>
+
