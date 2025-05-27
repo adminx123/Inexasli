@@ -151,3 +151,31 @@ preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 [[env.fact-generator.services]]
 binding = "secret_binding"
 service = "secretworker"
+
+[env.emotion]
+name = "emotion"
+main = "./ai/emotion/emotion.js"
+
+# KV namespace for AI-generated facts
+[[env.emotion.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
+
+[[env.emotion.services]]
+binding = "secret_binding"
+service = "secretworker"
+
+[env.social]
+name = "social"
+main = "./ai/social/social.js"
+
+# KV namespace for AI-generated facts
+[[env.social.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
+
+[[env.social.services]]
+binding = "secret_binding"
+service = "secretworker"
