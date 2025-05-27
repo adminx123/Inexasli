@@ -92,9 +92,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.classList.add('expanded');
             dataContainer.dataset.state = 'expanded';
             
-            // Ensure prompt.css is included for all product items
-            const hasCssLink = content.includes('prompt.css');
-            const cssLinkHtml = hasCssLink ? '' : '<link rel="stylesheet" href="/ai/styles/prompt.css">';                dataContainer.innerHTML = `
+            // Ensure inputstyles.css is included for all product items
+            const hasCssLink = content.includes('inputstyles.css');
+            const cssLinkHtml = hasCssLink ? '' : '<link rel="stylesheet" href="/ai/styles/inputstyles.css">';                dataContainer.innerHTML = `
                     <span class="close-data-container">-</span>
                     <div class="data-content">
                         ${cssLinkHtml}
