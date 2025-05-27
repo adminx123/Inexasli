@@ -191,7 +191,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .grid-item.selected {
-  background-color: #000;
+  background-color: #585858;
   color: #fff;
   box-shadow: 3px 3px 0.5px #000;
   border: 1.5px solid #000;
