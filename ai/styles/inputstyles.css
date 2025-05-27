@@ -574,16 +574,7 @@ table tbody tr:hover td {
   }
 }
 
-
-
-/* two per row */
-.twoperrow {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
-  gap: 10px; /* Space between items */
-  max-width: 400px; /* Optional: adjust to fit your layout */
-  margin: auto; /* Optional: center the row */
-}
+/* Removed .twoperrow styling to standardize input layout for calorieiq.html. Use .rowuom or default input wrappers for consistent styling. */
 
 .api-output-container {
   position: relative;
