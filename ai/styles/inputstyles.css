@@ -50,7 +50,8 @@ a {
 }
 
 /* Input, Select, and Textarea Styles */
-input[type="number"],#calorie-height,
+input[type="number"],
+input[type="text"],
 select,
 textarea {
   width: 100%;
@@ -273,11 +274,11 @@ button:hover {
   }
 
   input[type="number"],
+  input[type="text"],
   select,
   textarea,
-  button, 
-  #calorie-height {
-    max-width: 100%;
+  button {
+    max-width: 400px;
     font-size: 14px;
     height: 40px;
   }
@@ -315,6 +316,7 @@ button:hover {
   }
 
   .mobile-container input[type="number"],
+  .mobile-container input[type="text"],
   .mobile-container select,
   .mobile-container textarea {
     width: 100%;
@@ -464,6 +466,7 @@ button:hover {
 }
 
 .mobile-container input[type="number"],
+.mobile-container input[type="text"],
 .mobile-container select,
 .mobile-container textarea {
   width: 100%;
