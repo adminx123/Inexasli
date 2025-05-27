@@ -92,11 +92,6 @@
 
     // Handle the generate button click
     async function handleGeneratePhilosophyIq() {
-      const btn = document.getElementById('generate-philosophy-btn');
-      const initialText = btn.innerText;
-      btn.innerText = 'Gathering Wisdom...';
-      btn.setAttribute('disabled', 'true');
-      
       console.log('[PhilosophyIQ] Generate button clicked.');
       
       try {
@@ -108,44 +103,44 @@
         if (!formData || !formData.question) {
           console.error('[PhilosophyIQ] No question found in input data.');
           alert('Please enter what you\'re seeking wisdom on before proceeding.');
-          btn.innerText = initialText;
-          btn.removeAttribute('disabled');
           return;
         }
         
-        // Send data to worker
-        const apiUrl = 'https://philosophy.4hm7q4q75z.workers.dev/'; 
-        
-        console.log('[PhilosophyIQ] Sending philosophyIqInput to worker');
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Inexasli-Api-Key': 'your-api-key' // Replace with actual API key mechanism
-          },
-          body: JSON.stringify(formData)
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        
-        const responseData = await response.json();
-        console.log('[PhilosophyIQ] Worker response:', responseData);
-        
-        if (responseData.message !== 'Success') {
-          throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-        }
+        // Use enhanced loading with educational facts
+        const result = await window.enhancedLoading(
+          'generate-philosophy-btn',
+          'philosophy',
+          async () => {
+            // Send data to worker
+            const apiUrl = 'https://philosophy.4hm7q4q75z.workers.dev/'; 
+            
+            console.log('[PhilosophyIQ] Sending philosophyIqInput to worker');
+            const response = await fetch(apiUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Inexasli-Api-Key': 'your-api-key' // Replace with actual API key mechanism
+              },
+              body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            const responseData = await response.json();
+            console.log('[PhilosophyIQ] Worker response:', responseData);
+            
+            if (responseData.message !== 'Success') {
+              throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            
+            return responseData;
+          }
+        );
         
         // Store the response using setJSON
-        setJSON('philosophyIqResponse', responseData);
-        
-        // Update button state
-        btn.innerText = 'Wisdom Found!';
-        setTimeout(() => {
-          btn.innerText = initialText;
-          btn.removeAttribute('disabled');
-        }, 2000);
+        setJSON('philosophyIqResponse', result);
         
         // Dispatch an event to notify dataout.js that a response was received
         const event = new CustomEvent('api-response-received', {
@@ -161,12 +156,6 @@
       } catch (error) {
         console.error('[PhilosophyIQ] Error generating philosophical response:', error);
         alert('An error occurred while seeking philosophical wisdom. Please try again later.');
-        
-        btn.innerText = 'Error';
-        setTimeout(() => {
-          btn.innerText = initialText;
-          btn.removeAttribute('disabled');
-        }, 2000);
       }
     }
 
