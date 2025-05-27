@@ -57,7 +57,7 @@ input[type="text"],
 select,
 textarea {
   width: 100%;
-  max-width: 400px; /* Consistent width for symmetry */
+  max-width: 460px; /* Use most of device-container width (480px) */
   height: 40px; /* Uniform height for inputs/selects */
   padding: 8px 12px; /* Comfortable padding */
   margin: 8px auto; /* Centered with vertical spacing */
@@ -95,7 +95,7 @@ select option {
 
 textarea {
   height: auto; /* Let the rows attribute determine height */
-  max-width: 400px; /* Match inputs/selects */
+  max-width: 460px; /* Match inputs/selects */
   resize: vertical; /* Allow vertical resize only */
   padding: 12px;
   min-height: 40px; /* Minimum height for small textareas */
@@ -164,6 +164,8 @@ textarea:focus {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.5rem;
   width: 100%;
+  max-width: 460px; /* Match form inputs max-width for consistency */
+  margin: 0 auto; /* Center the grid container */
 }
 
 .grid-item {
@@ -222,7 +224,7 @@ button {
   transition: background-color 0.2s ease;
   font-family: "Geist", sans-serif;
   width: 100%;
-  max-width: 400px; /* Match inputs/selects/textarea */
+  max-width: 460px; /* Match inputs/selects/textarea */
   display: block;
 }
 
@@ -247,7 +249,7 @@ button:hover {
   padding: 12px 24px;
   margin: 8px auto;
   width: 100%;
-  max-width: 400px;
+  max-width: 460px;
   display: block;
   transition: background-color 0.2s, color 0.2s;
 }
@@ -375,7 +377,7 @@ button:hover {
   padding-bottom: 5px;
   border-bottom: 1px solid #000;
   width: 100%;
-  max-width: 400px;
+  max-width: 460px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -389,9 +391,8 @@ button:hover {
   background-color: transparent;
 }
 
-/* Ensure all children of device-container fill its width, excluding multi-field inputs */
+/* Ensure all children of device-container fill its width, excluding grid-container and multi-field inputs */
 .device-container .row1,
-.device-container .grid-container,
 .device-container table,
 .device-container button {
   width: 100%;
