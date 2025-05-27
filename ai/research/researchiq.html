@@ -368,11 +368,6 @@
 
     // Handle the generate button click - directly talking to worker
     async function handleGenerateResearchIq() {
-        const btn = document.getElementById('generate-research-btn');
-        const initialText = btn.innerText;
-        btn.innerText = 'Loading...';
-        btn.setAttribute('disabled', 'true');
-        
         console.log('[ResearchIQ] Generate button clicked.');
         
         try {
@@ -381,8 +376,6 @@
             if (!formData) {
                 console.error('[ResearchIQ] No input data found in localStorage.');
                 alert('Please complete the form before generating a research plan.');
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
                 return;
             }
             
@@ -390,43 +383,42 @@
             if (!formData.goal) {
                 console.error('[ResearchIQ] No research goal provided.');
                 alert('Please provide a research goal before generating a research plan.');
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
                 return;
             }
             
-            // Send data to worker
-            const apiUrl = 'https://research.4hm7q4q75z.workers.dev/'; 
-            
-            console.log('[ResearchIQ] Sending researchIqInput directly from localStorage to worker');
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            
-            const responseData = await response.json();
-            console.log('[ResearchIQ] Worker response:', responseData);
-            
-            if (responseData.message !== 'Success') {
-                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
+            // Use enhanced loading with educational facts
+            const result = await window.enhancedLoading(
+                'generate-research-btn',
+                'research',
+                async () => {
+                    const apiUrl = 'https://research.4hm7q4q75z.workers.dev/'; 
+                    
+                    console.log('[ResearchIQ] Sending researchIqInput directly from localStorage to worker');
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    const responseData = await response.json();
+                    console.log('[ResearchIQ] Worker response:', responseData);
+                    
+                    if (responseData.message !== 'Success') {
+                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                    }
+                    
+                    return responseData;
+                }
+            );
             
             // Store the response using setJSON
-            setJSON('researchIqResponse', responseData);
-            
-            // Update button state
-            btn.innerText = 'Success!';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-            }, 2000);
+            setJSON('researchIqResponse', result);
             
             // Dispatch an event to notify dataout.js that a response was received
             const event = new CustomEvent('api-response-received', {
@@ -442,12 +434,6 @@
         } catch (error) {
             console.error('[ResearchIQ] Error generating research plan:', error);
             alert('An error occurred while generating your research plan. Please try again later.');
-            
-            btn.innerText = 'Error';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-            }, 2000);
         }
     }
 
