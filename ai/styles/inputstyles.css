@@ -231,6 +231,18 @@ input[type="number"]::-webkit-outer-spin-button {
   border: 1.5px solid #000;
 }
 
+/* Make the last grid item span two columns if the number of items is odd */
+.grid-container .grid-item:last-child:nth-child(odd) {
+  grid-column: span 2;
+}
+
+@media (max-width: 600px) {
+  /* On mobile, span all columns for last item if odd */
+  .grid-container .grid-item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
 /* Button */
 button {
   background-color: #000000;
