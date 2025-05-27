@@ -8,7 +8,7 @@
  * jurisdictions worldwide.
  */ -->
 
-<div class="mobile-container">
+<div class="device-container">
 
 <div class="row1">
     <label class="category-label">Fitness Goal</label>
@@ -65,9 +65,18 @@
 
 <div class="row1">
     <label class="category-label">Food Log</label>
-    <textarea id="calorie-food-log" rows="3" placeholder="Meals:
-Chicken breast 200g with rice 1cup
-Potato 100g with broccoli 150g"></textarea>
+    <div id="multifield-container">
+        <div class="multifield-input-container">
+            <input type="text" class="multifield-input" data-meal="breakfast" placeholder="Breakfast: e.g., Oatmeal with berries">
+        </div>
+        <div class="multifield-input-container">
+            <input type="text" class="multifield-input" data-meal="lunch" placeholder="Lunch: e.g., Chicken salad with vegetables">
+        </div>
+        <div class="multifield-input-container">
+            <input type="text" class="multifield-input" data-meal="dinner" placeholder="Dinner: e.g., Salmon with quinoa and broccoli">
+        </div>
+    </div>
+    <button class="multifield-add-btn" id="multifield-add-btn" title="Add another meal/snack">+</button>
     <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
     <button class="clear-btn" id="clear-calorie-btn">Clear All</button>
 </div>
@@ -134,7 +143,7 @@ Potato 100g with broccoli 150g"></textarea>
       height: null, 
       weight: null, 
       sex: null, 
-      foodLog: null 
+      meals: []
     };
     
     // Collect selected grid items
@@ -156,8 +165,15 @@ Potato 100g with broccoli 150g"></textarea>
     const sexEl = document.getElementById('calorie-sex');
     if (sexEl) formData.sex = sexEl.value;
     
-    const foodLogEl = document.getElementById('calorie-food-log');
-    if (foodLogEl && foodLogEl.value.trim()) formData.foodLog = foodLogEl.value.trim();
+    // Collect meal inputs
+    document.querySelectorAll('.multifield-input').forEach(input => {
+      if (input.value.trim()) {
+        formData.meals.push({
+          type: input.dataset.meal || 'meal',
+          content: input.value.trim()
+        });
+      }
+    });
     
     return formData;
   }
@@ -189,11 +205,79 @@ Potato 100g with broccoli 150g"></textarea>
     if (data.height) document.getElementById('calorie-height').value = data.height;
     if (data.weight) document.getElementById('calorie-weight').value = data.weight;
     if (data.sex) document.getElementById('calorie-sex').value = data.sex;
-    if (data.foodLog) document.getElementById('calorie-food-log').value = data.foodLog;
+    
+    // Repopulate meals
+    if (data.meals && Array.isArray(data.meals)) {
+      // Clear existing meal inputs first
+      document.querySelectorAll('.multifield-input').forEach(input => input.value = '');
+      
+      data.meals.forEach((meal, index) => {
+        const existingInput = document.querySelector(`[data-meal="${meal.type}"]`);
+        if (existingInput) {
+          existingInput.value = meal.content;
+        } else {
+          // Add new meal input if it doesn't exist
+          addMealInput(meal.type, meal.content);
+        }
+      });
+    }
+    
+    // Handle legacy foodLog format for backward compatibility
+    if (data.foodLog && !data.meals) {
+      const lines = data.foodLog.split('\n').filter(line => line.trim());
+      lines.forEach((line, index) => {
+        const mealTypes = ['breakfast', 'lunch', 'dinner'];
+        const mealType = mealTypes[index] || `meal${index + 1}`;
+        const existingInput = document.querySelector(`[data-meal="${mealType}"]`);
+        if (existingInput) {
+          existingInput.value = line.trim();
+        } else {
+          addMealInput(mealType, line.trim());
+        }
+      });
+    }
   }
 
   function setupInputHandlers() {
     document.querySelectorAll('input, textarea, select').forEach(i => i.addEventListener('change', () => saveInput(i)));
+  }
+
+  function addMealInput(mealType = null, value = '') {
+    const mealsContainer = document.getElementById('multifield-container');
+    const mealCount = document.querySelectorAll('.multifield-input').length;
+    const defaultMealType = mealType || `snack${mealCount - 2}`; // Start with snack1, snack2, etc.
+    
+    const mealContainer = document.createElement('div');
+    mealContainer.className = 'multifield-input-container';
+    
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'multifield-input';
+    input.dataset.meal = defaultMealType;
+    input.placeholder = `${defaultMealType.charAt(0).toUpperCase() + defaultMealType.slice(1)}: e.g., Apple and nuts`;
+    input.value = value;
+    
+    // Add event listener for the new input
+    input.addEventListener('change', () => saveInput(input));
+    
+    // Add remove button for additional meals (not breakfast, lunch, dinner)
+    if (!['breakfast', 'lunch', 'dinner'].includes(defaultMealType)) {
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'multifield-remove-btn';
+      removeBtn.innerHTML = '×';
+      removeBtn.title = 'Remove meal';
+      removeBtn.addEventListener('click', () => {
+        mealContainer.remove();
+        saveInput(input); // Save after removal
+      });
+      mealContainer.appendChild(removeBtn);
+    }
+    
+    mealContainer.appendChild(input);
+    mealsContainer.appendChild(mealContainer);
+    
+    return input;
   }
 
   function clearLocalStorage() {
@@ -203,6 +287,15 @@ Potato 100g with broccoli 150g"></textarea>
     document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
     document.querySelectorAll('input, textarea').forEach(i => i.value = '');
     document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+    
+    // Remove any additional meal inputs (keep only breakfast, lunch, dinner)
+    const mealsContainer = document.getElementById('multifield-container');
+    const mealInputs = document.querySelectorAll('.multifield-input');
+    mealInputs.forEach((input, index) => {
+      if (index >= 3) {
+        input.closest('.multifield-input-container').remove();
+      }
+    });
   }
 
   async function handleGenerateCalorieIq() {
@@ -233,10 +326,11 @@ Potato 100g with broccoli 150g"></textarea>
   setupInputHandlers();
   document.getElementById('generate-calorie-btn').addEventListener('click', handleGenerateCalorieIq);
   document.getElementById('clear-calorie-btn').addEventListener('click', clearLocalStorage);
+  document.getElementById('multifield-add-btn').addEventListener('click', () => addMealInput());
   
   // Export for potential external access
-  window.calorieIq = { saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
+  window.calorieIq = { saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData, addMealInput };
 })();
 </script>
 
-</div> <!-- Close mobile-container -->
+</div> <!-- Close device-container -->

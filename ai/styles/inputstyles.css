@@ -49,7 +49,9 @@ a {
   margin: 0 auto;
 }
 
-/* Input, Select, and Textarea Styles */
+/* ====================
+   Form Controls
+   ==================== */
 input[type="number"],
 input[type="text"],
 select,
@@ -99,21 +101,20 @@ textarea {
   min-height: 40px; /* Minimum height for small textareas */
 }
 
+/* ====================
+   Form Controls Focus State
+   ==================== */
 input[type="number"]:focus,
+input[type="text"]:focus,
 select:focus,
 textarea:focus {
   border-color: #000;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  appearance: none;
-  margin: 0;
-}
-
-/* Container */
+/* ====================
+   Layout: Container
+   ==================== */
 .container {
   background-color: #f5f5f5;
   color: #000;
@@ -142,7 +143,9 @@ input[type="number"]::-webkit-outer-spin-button {
   box-shadow: 2px 2px 0 #000;
 }
 
-/* Row1 (Container for Inputs and Grids) */
+/* ====================
+   Layout: Rows
+   ==================== */
 .row1 {
   display: flex;
   flex-direction: column;
@@ -153,7 +156,9 @@ input[type="number"]::-webkit-outer-spin-button {
   width: 100%; /* Ensure full width */
 }
 
-/* Grid Container and Items */
+/* ====================
+   Layout: Grid
+   ==================== */
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -203,12 +208,6 @@ input[type="number"]::-webkit-outer-spin-button {
   grid-column: span 2;
 }
 
-@media (max-width: 600px) {
-  /* On mobile, span all columns for last item if odd */
-  .grid-container .grid-item:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-  }
-}
 
 /* Button */
 button {
@@ -265,72 +264,7 @@ button:hover {
 
 /* Removed .constraint-inputs-container, .constraint-input-group, .constraint-item, .constraint-label, .constraint-input, .remove-constraint styles as they are not referenced in any input.txt files. */
 
-/* Mobile Adjustments */
-@media (max-width: 480px) {
-  .grid-item {
-    font-size: 11px;
-    padding: 0.75rem;
-    min-width: 100px;
-  }
-
-  input[type="number"],
-  input[type="text"],
-  select,
-  textarea,
-  button {
-    max-width: 400px;
-    font-size: 14px;
-    height: 40px;
-  }
-
-  textarea {
-    height: auto; /* Let the rows attribute determine height */
-    max-width: 400px; /* Match inputs/selects */
-    padding: 12px;
-    resize: none; /* Disable manual resizing */
-    overflow-y: auto; /* Allow scrolling if needed */
-    line-height: 1.5; /* Consistent line spacing */
-    min-height: 40px; /* Minimum height for small textareas */
-  }
-
-  
-
-  .row1 {
-    padding: 8px;
-    gap: 8px;
-    margin-bottom: 15px;
-  }
-
-  .container {
-    padding: 10px;
-  }
-
-  /* Ensure all children of mobile-container fill its width */
-  .mobile-container .row1,
-  .mobile-container .grid-container,
-  .mobile-container table,
-  .mobile-container button {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-  }
-
-  .mobile-container input[type="number"],
-  .mobile-container input[type="text"],
-  .mobile-container select,
-  .mobile-container textarea {
-    width: 100%;
-    max-width: 100%;
-    margin: 8px auto;
-  }
-}
-
-@media (max-width: 375px) {
-  .grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  }
-}
-
+/* Checkbox Styles */
 .checkbox-wrapper-2 .ikxBAC {
     background-color: #dfe1e4;
     border-radius: 72px;
@@ -447,29 +381,101 @@ button:hover {
   text-align: center;
 }
 
-/* Invisible mobile-sized wrapper */
-.mobile-container {
+/* Invisible device-sized wrapper */
+.device-container {
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
   background-color: transparent;
 }
 
-/* Ensure all children of mobile-container fill its width */
-.mobile-container .row1,
-.mobile-container .grid-container,
-.mobile-container table,
-.mobile-container button {
+/* Ensure all children of device-container fill its width, excluding multi-field inputs */
+.device-container .row1,
+.device-container .grid-container,
+.device-container table,
+.device-container button {
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
 }
 
-.mobile-container input[type="number"],
-.mobile-container input[type="text"],
-.mobile-container select,
-.mobile-container textarea {
-  width: 100%;
-  max-width: 100%;
-  margin: 8px auto;
+/* Multi-field input and button styles (generic naming) */
+#multifield-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 8px auto 15px;
 }
+
+.multifield-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  width: 100%; /* allow inputs to size themselves */
+}
+
+.multifield-input {
+  flex: 1;
+  width: 100%;        /* fill container width */
+  max-width: 100%;    /* override global max-width */
+  margin: 0;          /* remove auto margins inside flex */
+}
+
+/* Removed custom focus styling for multifield-input, now inherits global focus style */
+
+.multifield-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 8px auto;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.multifield-add-btn:hover {
+  background-color: #333;
+  transform: scale(1.05);
+}
+
+.multifield-add-btn:active {
+  transform: scale(0.95);
+}
+
+.multifield-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  flex-shrink: 0;
+}
+
+.multifield-remove-btn:hover {
+  background-color: #d32f2f;
+  transform: scale(1.1);
+}
+
+.multifield-remove-btn:active {
+  transform: scale(0.9);
+}
+
+
