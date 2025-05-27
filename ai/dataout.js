@@ -479,7 +479,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'symptomiq': '/ai/symptom/symptomoutput.html',
                 'adventureiq': '/ai/adventure/adventureoutput.html',
                 'decisioniq': '/ai/decision/decisionoutput.html',
-                'emotioniq': '/ai/emotion/emotionoutput.html',
                 'enneagramiq': '/ai/enneagram/enneagramoutput.html',
                 'eventiq': '/ai/event/eventoutput.html',
                 'quiziq': '/ai/quiz/quizoutput.html',

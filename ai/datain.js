@@ -660,15 +660,7 @@ function startEducationalRotation(btn, moduleName) {
             "Consistency beats intensity for long-term results",
             "Proper form prevents 90% of workout injuries"
         ],
-        'emotion': [
-            "Exercise releases natural endorphins in 20 minutes",
-            "Deep breathing activates your relaxation response",
-            "Gratitude practice rewires your brain for positivity",
-            "Social connections boost mental health significantly",
-            "Mindfulness reduces stress hormones like cortisol",
-            "Quality sleep regulates emotional processing",
-            "Nature exposure lowers anxiety and depression"
-        ],
+       
         'decision': [
             "Good decisions come from experience and reflection",
             "Writing pros/cons clarifies complex choices",
@@ -789,15 +781,7 @@ window.getLocalQuickFact = function(moduleName) {
             "Consistency beats intensity for long-term results",
             "Proper form prevents 90% of workout injuries"
         ],
-        'emotion': [
-            "Exercise releases natural endorphins in 20 minutes",
-            "Deep breathing activates your relaxation response",
-            "Gratitude practice rewires your brain for positivity",
-            "Social connections boost mental health significantly",
-            "Mindfulness reduces stress hormones like cortisol",
-            "Quality sleep regulates emotional processing",
-            "Nature exposure lowers anxiety and depression"
-        ],
+       
         'decision': [
             "Good decisions come from experience and reflection",
             "Writing pros/cons clarifies complex choices",
