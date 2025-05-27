@@ -274,23 +274,44 @@ Need multilingual support for global offices"></textarea>
     }
 
     async function handleGenerateDecisionIq() {
-        const btn = document.getElementById('generate-decision-btn');
-        const initText = btn.innerText;
-        btn.innerText = 'Loading...'; btn.disabled = true;
         try {
             const formData = getJSON('decisionIqInput');
-            if (!formData) { alert('Please complete the form before generating.'); throw new Error('No input data'); }
-            const apiUrl = 'https://decision.4hm7q4q75z.workers.dev/';
-            const res = await fetch(apiUrl, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(formData) });
-            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-            const data = await res.json();
-            setJSON('decisionIqResponse', data);
-            btn.innerText = 'Success!'; setTimeout(() => btn.disabled = false, 1000);
-            document.dispatchEvent(new CustomEvent('api-response-received', { detail: { module: 'decisioniq', type: 'worker-response', timestamp: Date.now() } }));
+            if (!formData) { 
+                alert('Please complete the form before generating.'); 
+                return; 
+            }
+            
+            // Use enhanced loading with educational facts
+            const result = await window.enhancedLoading(
+                'generate-decision-btn',
+                'decision',
+                async () => {
+                    const apiUrl = 'https://decision.4hm7q4q75z.workers.dev/';
+                    const response = await fetch(apiUrl, { 
+                        method: 'POST', 
+                        headers: {'Content-Type':'application/json'}, 
+                        body: JSON.stringify(formData) 
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    return await response.json();
+                }
+            );
+            
+            // Store the response
+            setJSON('decisionIqResponse', result);
+            
+            // Dispatch event to notify dataout.js
+            document.dispatchEvent(new CustomEvent('api-response-received', { 
+                detail: { module: 'decisioniq', type: 'worker-response', timestamp: Date.now() } 
+            }));
+            
         } catch (e) {
             console.error('[DecisionIQ] Error:', e);
             alert('Error generating decision analysis.');
-            btn.innerText = 'Error'; setTimeout(() => { btn.innerText = initText; btn.disabled = false; }, 2000);
         }
     }
 
