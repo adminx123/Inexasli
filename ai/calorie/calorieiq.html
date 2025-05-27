@@ -68,7 +68,7 @@
     <input type="text" data-meal="breakfast" placeholder="Breakfast: e.g., Oatmeal with berries">
     <input type="text" data-meal="lunch" placeholder="Lunch: e.g., Chicken salad with vegetables">
     <input type="text" data-meal="dinner" placeholder="Dinner: e.g., Salmon with quinoa and broccoli">
-    <button id="multifield-add-btn" title="Add another meal/snack">+</button>
+    <button id="multifield-add-btn" class="multifield-add-btn" title="Add another meal/snack">+</button>
  <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
     <button class="clear-btn" id="clear-calorie-btn">Clear All</button>
 </div>
@@ -233,7 +233,24 @@
   }
 
   function setupInputHandlers() {
-    document.querySelectorAll('input, textarea, select').forEach(i => i.addEventListener('change', () => saveInput(i)));
+    // Use event delegation to handle both existing and dynamically added inputs
+    document.addEventListener('change', function(event) {
+      if (event.target.matches('input, textarea, select')) {
+        saveInput(event.target);
+      }
+    });
+    
+    document.addEventListener('input', function(event) {
+      if (event.target.matches('input[data-meal], textarea')) {
+        saveInput(event.target);
+      }
+    });
+    
+    document.addEventListener('blur', function(event) {
+      if (event.target.matches('input[data-meal]')) {
+        saveInput(event.target);
+      }
+    });
   }
 
   function clearLocalStorage() {
@@ -261,22 +278,37 @@
     
     const input = document.createElement('input');
     input.type = 'text';
+    
+    // Generate a unique meal type if none provided
+    if (!mealType) {
+      const existingMeals = document.querySelectorAll('input[data-meal]');
+      mealType = `snack${existingMeals.length + 1}`;
+    }
+    
     input.placeholder = mealType ? `${mealType.charAt(0).toUpperCase()+mealType.slice(1)}: ` : 'Meal:';
     input.style.cssText = 'flex: 1; margin: 0; width: 100%; height: 40px; padding: 8px 12px; font-size: 16px; line-height: 1.5; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease; font-family: "Inter", sans-serif; box-sizing: border-box;';
+    
+    // Always set data-meal attribute for proper data collection
+    input.dataset.meal = mealType;
+    
     inputGroup.appendChild(input);
     
     const removeBtn = document.createElement('button');
     removeBtn.innerText = '×';
     removeBtn.style.cssText = 'width: 40px; height: 40px; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;';
-    removeBtn.addEventListener('click', () => { inputGroup.remove(); saveInput(input); });
+    removeBtn.addEventListener('click', () => { 
+      inputGroup.remove(); 
+      // Save the current state after removing the input
+      setJSON('calorieIqInput', collectFormData());
+    });
     removeBtn.addEventListener('mouseenter', () => { removeBtn.style.backgroundColor = '#e9e9e9'; });
     removeBtn.addEventListener('mouseleave', () => { removeBtn.style.backgroundColor = '#f9f9f9'; });
     inputGroup.appendChild(removeBtn);
     
     addBtn.parentNode.insertBefore(inputGroup, addBtn);
-    if (mealType) input.dataset.meal = mealType;
     if (value) input.value = value;
-    input.addEventListener('change', () => saveInput(input));
+    
+    // Event delegation will handle the events, so no need to add listeners here
     input.focus();
   }
 
