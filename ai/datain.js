@@ -596,21 +596,27 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
     const originalDisabled = btn.disabled;
     
     try {
-        // Phase 1: Disable button and start API call immediately
+        // Phase 1: Disable button and show loading state
         btn.disabled = true;
-        btn.innerText = '🧠 AI analyzing your data...';
+        btn.innerText = '🧠 Analyzing...';
+        
+        // Show educational modal overlay while API processes
+        if (window.showEducationalLoadingOverlay) {
+            window.showEducationalLoadingOverlay(moduleName);
+        }
         
         // Start the main API call immediately (no delay)
         const apiPromise = apiCall();
         
-        // Start the educational rotation while API processes
-        const rotationInterval = startEducationalRotation(btn, moduleName);
-        
         // Wait for API to complete
         const result = await apiPromise;
         
-        // Stop rotation and show success
-        clearInterval(rotationInterval);
+        // Close the modal overlay
+        if (window.closeModal) {
+            window.closeModal();
+        }
+        
+        // Show success state
         btn.innerText = '✅ Success! Opening your results...';
         setTimeout(() => {
             btn.innerText = originalText;
@@ -620,6 +626,11 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
         return result;
         
     } catch (error) {
+        // Close modal on error
+        if (window.closeModal) {
+            window.closeModal();
+        }
+        
         // Error state
         btn.innerText = '❌ Error occurred. Please try again.';
         setTimeout(() => {
@@ -630,178 +641,5 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
     }
 };
 
-/**
- * Starts simple fact rotation cycle while API processes
- * @param {HTMLElement} btn - Button element to update
- * @param {string} moduleName - Module name for tailored facts
- * @returns {number} Interval ID to clear later
- */
-function startEducationalRotation(btn, moduleName) {
-    let factIndex = 0;
-    const facts = [];
-    
-    // Get all facts for this module
-    const modulesFacts = {
-        'calorie': [
-            "Your brain uses 20% of daily calories",
-            "Protein burns 30% more calories to digest", 
-            "Fiber keeps you full 4x longer than simple carbs",
-            "Green tea boosts metabolism by 4-5%",
-            "Muscle burns 3x more calories than fat",
-            "Eating slowly reduces overeating by 25%",
-            "Healthy fats help absorb vitamins A, D, E, K"
-        ],
-        'fitness': [
-            "HIIT boosts metabolism for 24 hours post-workout",
-            "Strength training prevents age-related muscle loss",
-            "Walking 10,000 steps burns ~300-400 calories",
-            "Recovery is when muscles actually grow stronger",
-            "Compound exercises work multiple muscle groups",
-            "Consistency beats intensity for long-term results",
-            "Proper form prevents 90% of workout injuries"
-        ],
-       
-        'decision': [
-            "Good decisions come from experience and reflection",
-            "Writing pros/cons clarifies complex choices",
-            "Sleep on big decisions for better clarity",
-            "Gut feelings often contain valuable information",
-            "Time constraints can improve decision quality",
-            "Most decisions are reversible with effort",
-            "Analysis paralysis often hurts more than helps"
-        ],
-        'philosophy': [
-            "Wisdom comes from questioning our assumptions",
-            "Meaning emerges through our chosen values",
-            "Suffering often leads to personal growth",
-            "Authenticity requires knowing yourself deeply",
-            "Purpose gives direction to daily actions",
-            "Mindfulness reveals life's hidden patterns",
-            "Growth happens outside your comfort zone"
-        ],
-        'research': [
-            "Knowledge compounds when shared with others",
-            "Primary sources are more reliable than summaries",
-            "Questions lead to better insights than assumptions",
-            "Research skills transfer across all fields",
-            "Credible sources cite other credible sources",
-            "Diverse perspectives reveal hidden biases",
-            "Evidence-based thinking improves decisions"
-        ],
-        'quiz': [
-            "Spaced repetition improves long-term retention",
-            "Testing yourself is better than re-reading",
-            "Mistakes help strengthen neural pathways",
-            "Teaching others reinforces your own learning",
-            "Active recall beats passive review",
-            "Challenging questions build deeper understanding",
-            "Learning styles are less important than practice"
-        ],
-        'social': [
-            "Active listening builds stronger relationships",
-            "Empathy can be learned and improved",
-            "Body language conveys 55% of communication",
-            "Shared experiences create lasting bonds",
-            "Vulnerability often increases trust",
-            "Cultural awareness prevents misunderstandings",
-            "Conflict resolution skills improve all relationships"
-        ],
-        'enneagram': [
-            "Personality patterns emerge from core motivations",
-            "Self-awareness is the first step to growth",
-            "Each type has unique strengths and challenges",
-            "Understanding others reduces interpersonal conflict",
-            "Growth happens through conscious effort",
-            "Stress and security affect behavior patterns",
-            "Integration leads to more balanced living"
-        ]
-    };
-    
-    // Get facts for this module or default to calorie facts
-    const moduleFacts = modulesFacts[moduleName] || modulesFacts['calorie'];
-    
-    // Try to fetch fresh fact from KV store first
-    fetch(`https://${moduleName}.4hm7q4q75z.workers.dev/quick-fact`)
-        .then(response => {
-            if (response.ok) return response.text();
-            throw new Error(`HTTP ${response.status}`);
-        })
-        .then(fact => {
-            // Add KV fact to beginning of rotation
-            facts.unshift(`${fact} (Daily AI Insight)`);
-            console.log(`Added KV fact to rotation: ${fact}`);
-        })
-        .catch(error => {
-            console.warn('KV fact fetch failed, using local facts only:', error.message);
-        });
-    
-    // Add local facts to rotation
-    facts.push(...moduleFacts.map(fact => `${fact} (Learning Library)`));
-    
-    // If no facts loaded, use fallback
-    if (facts.length === 0) {
-        facts.push('🧠 Processing your analysis with advanced AI...');
-    }
-    
-    // Rotation timer - cycle every 4 seconds through different facts
-    const interval = setInterval(() => {
-        if (facts.length > 0) {
-            btn.innerText = `💡 ${facts[factIndex % facts.length]}`;
-            factIndex++;
-        }
-    }, 4000);
-    
-    return interval;
-}
-
-/**
- * Get a daily quick fact for testing (when worker endpoint isn't available)
- * @param {string} moduleName - Name of the module
- * @returns {string} A fact for the module
- */
-window.getLocalQuickFact = function(moduleName) {
-    const dayOfWeek = new Date().getDay(); // 0-6
-    
-    const modulesFacts = {
-        'calorie': [
-            "Your brain uses 20% of daily calories",
-            "Protein burns 30% more calories to digest", 
-            "Fiber keeps you full 4x longer than simple carbs",
-            "Green tea boosts metabolism by 4-5%",
-            "Muscle burns 3x more calories than fat",
-            "Eating slowly reduces overeating by 25%",
-            "Healthy fats help absorb vitamins A, D, E, K"
-        ],
-        'fitness': [
-            "HIIT boosts metabolism for 24 hours post-workout",
-            "Strength training prevents age-related muscle loss",
-            "Walking 10,000 steps burns ~300-400 calories",
-            "Recovery is when muscles actually grow stronger",
-            "Compound exercises work multiple muscle groups",
-            "Consistency beats intensity for long-term results",
-            "Proper form prevents 90% of workout injuries"
-        ],
-       
-        'decision': [
-            "Good decisions come from experience and reflection",
-            "Writing pros/cons clarifies complex choices",
-            "Sleep on big decisions for better clarity",
-            "Gut feelings often contain valuable information",
-            "Time constraints can improve decision quality",
-            "Most decisions are reversible with effort",
-            "Analysis paralysis often hurts more than helps"
-        ],
-        'philosophy': [
-            "Wisdom comes from questioning our assumptions",
-            "Meaning emerges through our chosen values",
-            "Suffering often leads to personal growth",
-            "Authenticity requires knowing yourself deeply",
-            "Purpose gives direction to daily actions",
-            "Mindfulness reveals life's hidden patterns",
-            "Growth happens outside your comfort zone"
-        ]
-    };
-    
-    const facts = modulesFacts[moduleName] || modulesFacts['calorie'];
-    return facts[dayOfWeek];
-};
+// Educational functionality has been moved to modal.js overlay system
+// The enhancedLoading function now uses window.showEducationalLoadingOverlay(moduleName)
