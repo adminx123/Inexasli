@@ -336,74 +336,61 @@
 
     // Handle the generate button click
     async function handleGenerateEventIq() {
-        const btn = document.getElementById('generate-event-btn');
-        const initialText = btn.innerText;
-        btn.innerText = 'Loading...';
-        btn.disabled = true;
+        console.log('[EventIQ] Generate button clicked.');
         
-        try {
-            const formData = getJSON('eventIqInput');
-            if (!formData) {
-                console.error('[EventIQ] No input data found in localStorage.');
-                alert('Please complete the form before generating an event plan.');
-                btn.innerText = initialText;
-                btn.disabled = false;
-                return;
-            }
-            
-            // Send data to worker
-            const apiUrl = 'https://event.4hm7q4q75z.workers.dev/';
-            
-            console.log('[EventIQ] Sending eventIqInput to worker');
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            
-            const responseData = await response.json();
-            console.log('[EventIQ] Worker response:', responseData);
-            
-            if (responseData.message !== 'Success') {
-                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-            
-            // Store the response
-            setJSON('eventIqResponse', responseData);
-            
-            // Update button state
-            btn.innerText = 'Success!';
-            setTimeout(() => {
-                btn.disabled = false;
-            }, 1000);
-            
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'eventiq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
+        const result = await window.enhancedLoading(
+            'generate-event-btn',
+            'event',
+            async () => {
+                const formData = getJSON('eventIqInput');
+                if (!formData) {
+                    console.error('[EventIQ] No input data found in localStorage.');
+                    throw new Error('Please complete the form before generating an event plan.');
                 }
-            });
-            document.dispatchEvent(event);
-            console.log('[EventIQ] Dispatched api-response-received event');
-            
-        } catch (error) {
-            console.error('[EventIQ] Error generating event plan:', error);
-            alert('An error occurred while generating your event plan. Please try again later.');
-            
-            btn.innerText = 'Error';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.disabled = false;
-            }, 2000);
-        }
+                
+                // Send data to worker
+                const apiUrl = 'https://event.4hm7q4q75z.workers.dev/';
+                
+                console.log('[EventIQ] Sending eventIqInput to worker');
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const responseData = await response.json();
+                console.log('[EventIQ] Worker response:', responseData);
+                
+                if (responseData.message !== 'Success') {
+                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                }
+                
+                // Store the response
+                setJSON('eventIqResponse', responseData);
+                
+                // Dispatch an event to notify dataout.js that a response was received
+                const event = new CustomEvent('api-response-received', {
+                    detail: {
+                        module: 'eventiq',
+                        type: 'worker-response',
+                        timestamp: Date.now()
+                    }
+                });
+                document.dispatchEvent(event);
+                console.log('[EventIQ] Dispatched api-response-received event');
+                
+                return responseData;
+            }
+        );
+        
+        // Enhanced loading either returns result or throws error - no need to check result.success
+        console.log('[EventIQ] Event plan generated successfully');
     }
 
     // Initialization
