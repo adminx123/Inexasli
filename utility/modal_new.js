@@ -41,6 +41,11 @@ function injectModalCSS() {
     box-shadow: 4px 4px 0 #000;
 }
 
+/* Narrow style for IQ pages */
+.modal-content.narrow {
+    max-width: 480px !important;
+}
+
 .modal-content iframe {
     width: 100%;
     height: 100%;
@@ -115,8 +120,27 @@ function createModal() {
 
 // Function to open the modal with specified content
 function openModal(contentSrc) {
+    // List of IQ pages from input.txt
+    const narrowList = [
+        '/ai/calorie/calorieiq.html',
+        '/ai/decision/decisioniq.html',
+        '/ai/enneagram/enneagramiq.html',
+        '/ai/event/eventiq.html',
+        '/ai/fitness/fitnessiq.html',
+        '/ai/philosophy/philosophyiq.html',
+        '/ai/quiz/quiziq.html',
+        '/ai/research/researchiq.html',
+        '/ai/social/socialiq.html'
+    ];
     const modal = createModal();
     const modalContent = modal.querySelector('.modal-content');
+
+    // Apply narrow class if the URL matches
+    if (narrowList.some(path => contentSrc.endsWith(path))) {
+        modalContent.classList.add('narrow');
+    } else {
+        modalContent.classList.remove('narrow');
+    }
     
     // Clear existing content and prepare iframe
     modalContent.innerHTML = '';
