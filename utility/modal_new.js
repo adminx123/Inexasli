@@ -118,10 +118,28 @@ function openModal(contentSrc) {
     const modal = createModal();
     const modalContent = modal.querySelector('.modal-content');
     
-    // Clear existing content and load new content via iframe
+    // Clear existing content and prepare iframe
     modalContent.innerHTML = '';
     const iframe = document.createElement('iframe');
     iframe.src = contentSrc;
+    // hide until styled
+    iframe.style.visibility = 'hidden';
+    iframe.style.opacity = '0';
+    iframe.style.transition = 'opacity 0.2s ease';
+    // inject shared CSS on load then fade in
+    iframe.onload = () => {
+        const docHead = iframe.contentDocument.head;
+        ['/ai/styles/inputstyles.css', 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'].forEach(href => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            docHead.appendChild(link);
+        });
+        requestAnimationFrame(() => {
+            iframe.style.visibility = 'visible';
+            iframe.style.opacity = '1';
+        });
+    };
     modalContent.appendChild(iframe);
 
     modal.style.display = 'flex';
