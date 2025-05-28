@@ -1,5 +1,8 @@
 // paymentform.js
 document.addEventListener('DOMContentLoaded', async function() {
+    // Import modal system
+    await import('../utility/modal_new.js');
+    
     // Create payment corner button - this is now the primary payment interface
     createPaymentCornerButton();
     
@@ -110,13 +113,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 /* Bottom buttons row */
 .payment-form .button-row {
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .payment-form .contact-support {
     flex: 1;
     padding: 8px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
     color: #000 !important;
     background: #fff !important;
@@ -129,6 +133,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-family: "Geist", sans-serif;
     position: relative !important; /* Add positioning context */
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    min-width: 0; /* Allow flex items to shrink */
+}
 }
 
 .payment-form .contact-support:hover {
@@ -214,6 +220,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <div class="button-row">
                     <a href="mailto:support@inexasli.com" class="contact-support">I have paid</a>
                     <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support">Customer Portal</a>
+                    <button class="contact-support" id="terms-button">Terms of Service</button>
                 </div>
             </form>
         `;
@@ -269,6 +276,77 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.error('Failed to import and initialize payment.js:', error);
         }
     }
+
+    // Create legal modal function using the modal system
+    window.openLegalModal = async function() {
+        try {
+            // Close payment modal if it's open
+            if (typeof window.closePaymentModal === 'function') {
+                window.closePaymentModal();
+            }
+            
+            // Fetch legal.txt content
+            const response = await fetch('/legal.txt');
+            const legalText = await response.text();
+            
+            // Create modal using the modal_new.js system
+            const modal = document.querySelector('.modal') || createModal();
+            const modalContent = modal.querySelector('.modal-content');
+            
+            // Clear existing content and add legal content
+            modalContent.innerHTML = `
+                <div style="width: 100%; height: 100%; overflow-y: auto; font-family: 'Inter', sans-serif;">
+                    <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #000;">
+                        <h2 style="color: #333; font-size: 24px; margin: 0; font-family: 'Geist', sans-serif; text-align: center;">Terms of Service</h2>
+                    </div>
+                    <div style="font-size: 14px; line-height: 1.6; white-space: pre-wrap; color: #333; height: calc(100% - 80px); overflow-y: auto;">${legalText}</div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            document.body.classList.add('modal-open');
+            
+            // Add custom click-outside handler specifically for legal modal
+            const clickOutsideHandler = (event) => {
+                // Check if the click is on the modal background (not on modal-content)
+                if (event.target === modal) {
+                    window.closeModal();
+                    // Remove our custom handler
+                    modal.removeEventListener('click', clickOutsideHandler);
+                }
+            };
+            
+            // Add click listener to the modal itself
+            modal.addEventListener('click', clickOutsideHandler);
+            
+            console.log('Legal modal opened using modal_new.js system');
+        } catch (error) {
+            console.error('Failed to load legal content:', error);
+            alert('Failed to load Terms of Service. Please try again.');
+        }
+    };
+
+    // Helper function to create modal if it doesn't exist (from modal_new.js)
+    function createModal() {
+        let modal = document.querySelector('.modal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.className = 'modal';
+            const content = document.createElement('div');
+            content.className = 'modal-content';
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+        }
+        return modal;
+    }
+
+    // Add event listener for Terms of Service button
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'terms-button') {
+            e.preventDefault();
+            window.openLegalModal();
+        }
+    });
 
     // Add functionality to toggle premium sections
     const premiumHeaders = document.querySelectorAll('.section1-header');
