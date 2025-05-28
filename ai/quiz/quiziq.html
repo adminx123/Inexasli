@@ -345,87 +345,68 @@
 
     // Handle the generate button click - directly talking to worker
     async function handleGenerateQuizIq() {
-        const btn = document.getElementById('generate-quiz-btn');
-        const initialText = btn.innerText;
-        btn.innerText = 'Loading...';
-        btn.setAttribute('disabled', 'true');
-        
         console.log('[QuizIQ] Generate button clicked.');
         
-        try {
-            // Use what's already in localStorage
-            const formData = getJSON('quizIqInput');
-            if (!formData) {
-                console.error('[QuizIQ] No input data found in localStorage.');
-                alert('Please complete the form before generating a quiz.');
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-                return;
-            }
-            
-            // Validate minimum requirements
-            if (!formData.subject) {
-                console.error('[QuizIQ] No quiz subject provided.');
-                alert('Please provide a quiz subject before generating a quiz.');
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-                return;
-            }
-            
-            // Send data to worker
-            const apiUrl = 'https://quiz.4hm7q4q75z.workers.dev/'; 
-            
-            console.log('[QuizIQ] Sending quizIqInput directly from localStorage to worker');
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            
-            const responseData = await response.json();
-            console.log('[QuizIQ] Worker response:', responseData);
-            
-            if (responseData.message !== 'Success') {
-                throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-            
-            // Store the response using setJSON
-            setJSON('quizIqResponse', responseData);
-            
-            // Update button state
-            btn.innerText = 'Success!';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-            }, 2000);
-            
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'quiziq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
+        const result = await window.enhancedLoading(
+            'generate-quiz-btn',
+            'quiz',
+            async () => {
+                // Use what's already in localStorage
+                const formData = getJSON('quizIqInput');
+                if (!formData) {
+                    console.error('[QuizIQ] No input data found in localStorage.');
+                    throw new Error('Please complete the form before generating a quiz.');
                 }
-            });
-            document.dispatchEvent(event);
-            console.log('[QuizIQ] Dispatched api-response-received event');
-            
-        } catch (error) {
-            console.error('[QuizIQ] Error generating quiz:', error);
-            alert('An error occurred while generating your quiz. Please try again later.');
-            
-            btn.innerText = 'Error';
-            setTimeout(() => {
-                btn.innerText = initialText;
-                btn.removeAttribute('disabled');
-            }, 2000);
-        }
+                
+                // Validate minimum requirements
+                if (!formData.subject) {
+                    console.error('[QuizIQ] No quiz subject provided.');
+                    throw new Error('Please provide a quiz subject before generating a quiz.');
+                }
+                
+                // Send data to worker
+                const apiUrl = 'https://quiz.4hm7q4q75z.workers.dev/'; 
+                
+                console.log('[QuizIQ] Sending quizIqInput directly from localStorage to worker');
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const responseData = await response.json();
+                console.log('[QuizIQ] Worker response:', responseData);
+                
+                if (responseData.message !== 'Success') {
+                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                }
+                
+                // Store the response using setJSON
+                setJSON('quizIqResponse', responseData);
+                
+                // Dispatch an event to notify dataout.js that a response was received
+                const event = new CustomEvent('api-response-received', {
+                    detail: {
+                        module: 'quiziq',
+                        type: 'worker-response',
+                        timestamp: Date.now()
+                    }
+                });
+                document.dispatchEvent(event);
+                console.log('[QuizIQ] Dispatched api-response-received event');
+                
+                return responseData;
+            }
+        );
+        
+        // Enhanced loading either returns result or throws error - no need to check result.success
+        console.log('[QuizIQ] Quiz generated successfully');
     }
 
     // Attach event listeners to buttons
