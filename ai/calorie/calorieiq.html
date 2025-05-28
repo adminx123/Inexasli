@@ -94,9 +94,9 @@
 
 <div class="row1">
     <label class="category-label">Personal Information</label>
-    <input id="calorie-age" type="text" placeholder="Age">
-    <input id="calorie-height" type="text" placeholder="Height eg. 2 meters">
-    <input id="calorie-weight" type="text" placeholder="Weight eg. 100 lbs">
+    <input id="calorie-age" type="text" placeholder="Age: your age">
+    <input id="calorie-height" type="text" placeholder="Height: 2 meters, 5'10, etc.">
+    <input id="calorie-weight" type="text" placeholder="Weight: 100 lbs, 70 kg, etc.">
     <select id="calorie-sex">
         <option value="man" selected>Man</option>
         <option value="woman">Woman</option>
@@ -105,9 +105,9 @@
 
 <div class="row1">
     <label class="category-label">Food Log</label>
-    <input type="text" data-meal="breakfast" placeholder="Breakfast: e.g., Oatmeal with berries">
-    <input type="text" data-meal="lunch" placeholder="Lunch: e.g., Chicken salad with vegetables">
-    <input type="text" data-meal="dinner" placeholder="Dinner: e.g., Salmon with quinoa and broccoli">
+    <input type="text" data-meal="breakfast" placeholder="Breakfast: 1 cup oatmeal, 0.5 cup berries, 1 tbsp honey">
+    <input type="text" data-meal="lunch" placeholder="Lunch: 200g chicken, 150g salad, 2 tbsp olive oil">
+    <input type="text" data-meal="dinner" placeholder="Dinner: 6 oz salmon, 1/2 cup quinoa, 100g broccoli">
     <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
     <button class="clear-btn" id="clear-calorie-btn">Clear All</button>
 </div>
@@ -327,7 +327,20 @@
       mealType = `snack${existingMeals.length + 1}`;
     }
     
-    input.placeholder = mealType ? `${mealType.charAt(0).toUpperCase()+mealType.slice(1)}: ` : 'Meal:';
+    // Set placeholder with measurement suggestions
+    let placeholderText = '';
+    if (mealType === 'breakfast') {
+      placeholderText = 'Breakfast: 1 cup oatmeal, 0.5 cup berries, 1 tbsp honey';
+    } else if (mealType === 'lunch') {
+      placeholderText = 'Lunch: 200g chicken, 150g salad, 2 tbsp olive oil';
+    } else if (mealType === 'dinner') {
+      placeholderText = 'Dinner: 6 oz salmon, 1/2 cup quinoa, 100g broccoli';
+    } else if (mealType && mealType.startsWith('snack')) {
+      placeholderText = `${mealType.charAt(0).toUpperCase()+mealType.slice(1)}: 30g nuts, 1 medium apple`;
+    } else {
+      placeholderText = `${mealType ? mealType.charAt(0).toUpperCase()+mealType.slice(1) : 'Meal'}: 100g yogurt, 2 oz crackers`;
+    }
+    input.placeholder = placeholderText;
     input.style.cssText = 'flex: 1; margin: 0; width: 100%; height: 40px; padding: 8px 12px; font-size: 16px; line-height: 1.5; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease; font-family: "Inter", sans-serif; box-sizing: border-box;';
     
     // Always set data-meal attribute for proper data collection
