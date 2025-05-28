@@ -254,6 +254,9 @@ window.setupModalTriggers = setupModalTriggers;
 // Make closeModal globally accessible
 window.closeModal = closeModal;
 
+// Make openModal globally accessible
+window.openModal = openModal;
+
 // Make openGeneratedPromptModal globally accessible
 window.openGeneratedPromptModal = openGeneratedPromptModal;
 

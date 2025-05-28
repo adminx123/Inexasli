@@ -202,7 +202,7 @@ const categoryManager = (function() {
     
     // Categories are always visible, no need for a function to toggle their visibility
     
-    // Function to load product content - connects to landing.js functionality
+    // Function to load product content - opens in modal
     function loadProductContent(url) {
         try {
             console.log(`Product item clicked, loading content from: ${url}`);
@@ -210,18 +210,35 @@ const categoryManager = (function() {
             // Detect if this is the intro/incomeIQ item
             const isBudgetItem = url === '/ai/income/intro.html';
             
-            // Toggle UI mode based on selection if the function exists
-            if (typeof window.toggleUiMode === 'function') {
-                window.toggleUiMode(isBudgetItem);
-            }
-            
-            if (!isBudgetItem) {
-                // For non-budget items, use regular content loading
-                // Create and dispatch event for promptgrid.js to handle
-                const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
-                    detail: { url: url }
-                });
-                document.dispatchEvent(gridItemEvent);
+            // Open the content in a modal using modal_new.js
+            if (typeof window.openModal === 'function') {
+                window.openModal(url);
+                console.log(`Opened ${url} in modal`);
+                
+                // For budget items, also trigger UI mode change if available
+                if (isBudgetItem && typeof window.toggleUiMode === 'function') {
+                    // Small delay to let modal open first
+                    setTimeout(() => {
+                        window.toggleUiMode(true);
+                    }, 100);
+                }
+            } else {
+                console.error('openModal function not available - check if modal_new.js is loaded');
+                // Fallback to current behavior if modal is not available
+                
+                // Toggle UI mode based on selection if the function exists
+                if (typeof window.toggleUiMode === 'function') {
+                    window.toggleUiMode(isBudgetItem);
+                }
+                
+                if (!isBudgetItem) {
+                    // For non-budget items, use regular content loading
+                    // Create and dispatch event for promptgrid.js to handle
+                    const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
+                        detail: { url: url }
+                    });
+                    document.dispatchEvent(gridItemEvent);
+                }
             }
             
             // Store the URL in localStorage for persistence
