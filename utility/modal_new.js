@@ -34,11 +34,17 @@ function injectModalCSS() {
     height: 90%;
     max-height: 90vh;
     overflow: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
     position: relative;
     font-family: "Inter", sans-serif;
     border: 2px solid #000;
     border-radius: 8px;
     box-shadow: 4px 4px 0 #000;
+}
+
+.modal-content::-webkit-scrollbar {
+    display: none;  /* WebKit browsers */
 }
 
 /* Narrow style for IQ pages */
@@ -100,7 +106,17 @@ function injectModalCSS() {
         width: 90%;
         max-width: 300px;
     }
-}`;
+}
+
+/* Hide scrollbars but keep scroll functionality */
+.modal, .modal-content {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+.modal::-webkit-scrollbar, .modal-content::-webkit-scrollbar {
+    display: none;  /* WebKit browsers */
+}
+`;
     document.head.appendChild(style);
 }
 
@@ -159,6 +175,17 @@ function openModal(contentSrc) {
             link.href = href;
             docHead.appendChild(link);
         });
+        // Hide scrollbars inside iframe content but keep scrolling
+        const hideScrollbarStyle = document.createElement('style');
+        hideScrollbarStyle.textContent = `html, body {
+    overflow: auto;
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+    display: none;            /* WebKit */
+}`;
+        docHead.appendChild(hideScrollbarStyle);
         requestAnimationFrame(() => {
             iframe.style.visibility = 'visible';
             iframe.style.opacity = '1';
