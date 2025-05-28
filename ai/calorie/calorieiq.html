@@ -8,6 +8,46 @@
  * jurisdictions worldwide.
  */ -->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie IQ</title>
+    <link rel="stylesheet" href="../styles/inputstyles.css">
+    <script src="../datain.js"></script>
+    <style>
+        /* Additional styling for buttons */
+        .generate-btn, .clear-btn {
+            background-color: #000000;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 12px 24px;
+            margin: 8px auto;
+            font-family: "Geist", sans-serif;
+            width: 100%;
+            max-width: 460px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .generate-btn:hover, .clear-btn:hover {
+            background-color: #333;
+        }
+        
+        /* Ensure proper spacing and alignment for meal inputs and buttons */
+        .row1:last-child {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
 <div class="device-container">
 
 <div class="row1">
@@ -68,8 +108,7 @@
     <input type="text" data-meal="breakfast" placeholder="Breakfast: e.g., Oatmeal with berries">
     <input type="text" data-meal="lunch" placeholder="Lunch: e.g., Chicken salad with vegetables">
     <input type="text" data-meal="dinner" placeholder="Dinner: e.g., Salmon with quinoa and broccoli">
-    <button id="multifield-add-btn" class="multifield-add-btn" title="Add another meal/snack">+</button>
- <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
+    <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
     <button class="clear-btn" id="clear-calorie-btn">Clear All</button>
 </div>
    
@@ -268,11 +307,14 @@
         input.closest('div').remove();
       }
     });
+    
+    // Ensure the add button is recreated after clearing
+    console.log('[CalorieIQ] Recreating add button after clearing data');
+    createAddButton();
   }
 
   // Reintroduce addMealInput for dynamic meal inputs
   function addMealInput(mealType = null, value = '') {
-    const addBtn = document.getElementById('multifield-add-btn');
     const inputGroup = document.createElement('div');
     inputGroup.style.cssText = 'display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 460px; width: 100%;';
     
@@ -298,6 +340,8 @@
     removeBtn.style.cssText = 'width: 40px; height: 40px; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;';
     removeBtn.addEventListener('click', () => { 
       inputGroup.remove(); 
+      // Reposition add button after removal
+      repositionAddButton();
       // Save the current state after removing the input
       setJSON('calorieIqInput', collectFormData());
     });
@@ -305,16 +349,72 @@
     removeBtn.addEventListener('mouseleave', () => { removeBtn.style.backgroundColor = '#f9f9f9'; });
     inputGroup.appendChild(removeBtn);
     
-    addBtn.parentNode.insertBefore(inputGroup, addBtn);
+    // Find the current add button and position the new input before it
+    const addBtn = document.getElementById('multifield-add-btn');
+    if (addBtn && addBtn.parentNode) {
+      addBtn.parentNode.insertBefore(inputGroup, addBtn);
+    } else {
+      console.log('[CalorieIQ] Add button not found during meal input creation, using fallback positioning');
+      // Fallback: find the last meal input and insert after it
+      const mealInputs = document.querySelectorAll('input[data-meal]');
+      const lastMealInput = mealInputs[mealInputs.length - 1];
+      if (lastMealInput && lastMealInput.parentNode) {
+        lastMealInput.parentNode.insertBefore(inputGroup, lastMealInput.nextSibling);
+      } else {
+        // Last resort: append to the food log section
+        const foodLogSection = document.querySelector('.row1:last-child');
+        if (foodLogSection) {
+          foodLogSection.insertBefore(inputGroup, foodLogSection.lastElementChild);
+        }
+      }
+      // Ensure add button exists and is positioned correctly
+      setTimeout(() => {
+        repositionAddButton();
+      }, 50);
+    }
+    
     if (value) input.value = value;
     
     // Event delegation will handle the events, so no need to add listeners here
     input.focus();
   }
 
-  // Bind addMealInput to "+" button
-  const addBtn = document.getElementById('multifield-add-btn');
-  addBtn.addEventListener('click', () => addMealInput());
+  // Create the add button dynamically with the same styling as the X button
+  function createAddButton() {
+    console.log('[CalorieIQ] Creating add button...');
+    
+    // Remove any existing add button first to ensure only one exists
+    const existingAddBtn = document.getElementById('multifield-add-btn');
+    if (existingAddBtn) {
+      console.log('[CalorieIQ] Removing existing add button to recreate it');
+      existingAddBtn.remove();
+    }
+    
+    // Find the last meal input to position the add button after it
+    const mealInputs = document.querySelectorAll('input[data-meal]');
+    const lastMealInput = mealInputs[mealInputs.length - 1];
+    console.log('[CalorieIQ] Last meal input found:', lastMealInput);
+    
+    if (!lastMealInput) {
+      console.error('[CalorieIQ] No meal inputs found!');
+      return;
+    }
+    
+    const addBtn = document.createElement('button');
+    addBtn.id = 'multifield-add-btn';
+    addBtn.title = 'Add another meal/snack';
+    addBtn.innerText = '+';
+    addBtn.style.cssText = 'width: 40px; height: 40px; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; margin: 8px auto;';
+    addBtn.addEventListener('click', () => addMealInput());
+    addBtn.addEventListener('mouseenter', () => { addBtn.style.backgroundColor = '#e9e9e9'; });
+    addBtn.addEventListener('mouseleave', () => { addBtn.style.backgroundColor = '#f9f9f9'; });
+    
+    console.log('[CalorieIQ] Add button created:', addBtn);
+    
+    // Insert the add button right after the last meal input
+    lastMealInput.parentNode.insertBefore(addBtn, lastMealInput.nextSibling);
+    console.log('[CalorieIQ] Add button inserted after last meal input');
+  }
 
   async function handleGenerateCalorieIq() {
     try {
@@ -351,19 +451,55 @@
     }
   }
 
-  // Removed multifield script and related handlers
-  document.getElementById('generate-calorie-btn').addEventListener('click', handleGenerateCalorieIq);
-  document.getElementById('clear-calorie-btn').addEventListener('click', clearLocalStorage);
+  // Main initialization function
+  function initialize() {
+    console.log("[CalorieIQ] Initializing...");
+    
+    // Set up event listeners
+    const generateBtn = document.getElementById('generate-calorie-btn');
+    if (generateBtn) {
+      generateBtn.removeEventListener('click', handleGenerateCalorieIq); // Prevent duplicates
+      generateBtn.addEventListener('click', handleGenerateCalorieIq);
+    }
+    
+    const clearBtn = document.getElementById('clear-calorie-btn');
+    if (clearBtn) {
+      clearBtn.removeEventListener('click', clearLocalStorage); // Prevent duplicates
+      clearBtn.addEventListener('click', clearLocalStorage);
+    }
+    
+    // Set up grid item event listener
+    document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove existing to prevent duplicates
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    
+    // Initialize form and handlers
+    repopulateForm();
+    setupInputHandlers();
+    
+    // Create the add button
+    createAddButton();
+  }
 
-  // Initialize storage and handlers
-  document.addEventListener('grid-item-toggled', handleGridItemToggled);
-  repopulateForm();
-  setupInputHandlers();
-  setupConstraintInputs();
+  // Initialize immediately
+  initialize();
+
+  // Also initialize when DOM is fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialize);
+  }
+
+  // Special handler for when this page is loaded through datain.js
+  document.addEventListener('data-in-loaded', function(e) {
+    console.log("[CalorieIQ] Detected load through datain.js, reinitializing");
+    setTimeout(initialize, 100); // Small delay to ensure DOM is updated
+  });
   
   // Export for potential external access
   window.calorieIq = { saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
 })();
 </script>
+
+</body>
+</html>
 
 <!-- Close device-container -->
