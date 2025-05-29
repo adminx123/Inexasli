@@ -200,8 +200,16 @@
         };
       };
 
-      // Initialize Mermaid
-      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+      // Initialize Mermaid with error handling
+      if (typeof mermaid !== 'undefined') {
+        try {
+          mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        } catch (error) {
+          console.warn('Failed to initialize mermaid:', error);
+        }
+      } else {
+        console.warn('Mermaid library not available');
+      }
       
       // Create visualization based on analysis type
       const createVisualization = (data, containerId) => {
@@ -295,14 +303,30 @@
 
       // Decision Tree Visualization using Mermaid
       const createDecisionTreeVisualization = (data, container) => {
-        if (data.mermaidSyntax) {
-          const mermaidDiv = document.createElement('div');
-          mermaidDiv.className = 'mermaid';
-          mermaidDiv.textContent = data.mermaidSyntax.replace(/\\n/g, '\n');
-          container.appendChild(mermaidDiv);
-          
-          // Re-initialize mermaid for new content
-          mermaid.init(undefined, mermaidDiv);
+        if (data.mermaidSyntax && typeof mermaid !== 'undefined') {
+          try {
+            const mermaidDiv = document.createElement('div');
+            mermaidDiv.className = 'mermaid';
+            mermaidDiv.textContent = data.mermaidSyntax.replace(/\\n/g, '\n');
+            container.appendChild(mermaidDiv);
+            
+            // Re-initialize mermaid for new content
+            mermaid.init(undefined, mermaidDiv);
+          } catch (error) {
+            console.warn('Mermaid rendering failed:', error);
+            // Fallback to simple visualization
+            container.innerHTML = `
+              <div class="decision-tree-fallback">
+                <h3>Decision Tree Structure (Fallback)</h3>
+                <div class="nodes-info">
+                  <strong>Nodes:</strong> ${data.nodes?.length || 0} decision points
+                </div>
+                <div class="edges-info">
+                  <strong>Connections:</strong> ${data.edges?.length || 0} pathways
+                </div>
+              </div>
+            `;
+          }
         } else {
           // Fallback: create simple node visualization
           container.innerHTML = `
