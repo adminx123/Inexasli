@@ -33,7 +33,7 @@
       bottom: 0;
     }
     
-    .fitness-container  {
+    .device-container {
       margin: 0 auto;
       padding: 0;
       font-family: "Inter", sans-serif;
@@ -67,7 +67,7 @@
       box-sizing: border-box;
     }
     
-    .fitness-output-wrapper {
+    .output-wrapper {
       position: relative;
       flex: 1 1 auto;
       display: flex;
@@ -85,7 +85,7 @@
       bottom: 0;
     }
     
-    .fitness-output {
+    .api-output {
       white-space: pre-wrap; /* Keep for JSON display */
       font-family: "Inter", sans-serif;
       padding: 5px;
@@ -112,16 +112,16 @@
       bottom: 0;
     }
     
-    .fitness-output::-webkit-scrollbar {
+    .api-output::-webkit-scrollbar {
       width: 6px;
     }
     
-    .fitness-output::-webkit-scrollbar-track {
+    .api-output::-webkit-scrollbar-track {
       background: #f1f1f1;
       border-radius: 10px;
     }
     
-    .fitness-output::-webkit-scrollbar-thumb {
+    .api-output::-webkit-scrollbar-thumb {
       background: #ccc; /* Lighter scrollbar thumb */
       border-radius: 10px;
     }
@@ -130,9 +130,9 @@
   </style>
 </head>
 <body>
-  <div class="fitness-container">
-    <div class="fitness-output-wrapper">
-      <div id="output-span" class="fitness-output">
+  <div class="device-container">
+    <div class="output-wrapper">
+      <div id="output-span" class="api-output">
         <div class="loading">
           <div class="loading-text">Loading data...</div>
           <div class="loading-spinner"></div>
