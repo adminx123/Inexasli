@@ -1,7 +1,7 @@
 // paymentform.js
 document.addEventListener('DOMContentLoaded', async function() {
     // Import modal system
-    await import('../utility/modal_new.js');
+    await import('../utility/modal.js');
     
     // Create payment corner button - this is now the primary payment interface
     createPaymentCornerButton();
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const response = await fetch('/legal.txt');
             const legalText = await response.text();
             
-            // Create modal using the modal_new.js system
+            // Create modal using the .js system
             const modal = document.querySelector('.modal') || createModal();
             const modalContent = modal.querySelector('.modal-content');
             
@@ -319,14 +319,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Add click listener to the modal itself
             modal.addEventListener('click', clickOutsideHandler);
             
-            console.log('Legal modal opened using modal_new.js system');
+            console.log('Legal modal opened using modal.js system');
         } catch (error) {
             console.error('Failed to load legal content:', error);
             alert('Failed to load Terms of Service. Please try again.');
         }
     };
 
-    // Helper function to create modal if it doesn't exist (from modal_new.js)
+    // Helper function to create modal if it doesn't exist (from modal.js)
     function createModal() {
         let modal = document.querySelector('.modal');
         if (!modal) {
