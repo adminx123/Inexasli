@@ -441,15 +441,15 @@
         
         // Determine if this should be a bar item or level item
         const isNumericWeight = !isNaN(weight) && weight > 0;
-        const isLevelWeight = ['high', 'medium', 'low'].includes(String(weight).toLowerCase());
+        const isLevelWeight = ['high', 'medium', 'low'].includes(String(item.weight).toLowerCase());
         
         if (isLevelWeight) {
           // Level-based item (High/Medium/Low)
-          const level = String(weight).toLowerCase();
+          const level = String(item.weight).toLowerCase();
           return `
             <div class="level-item">
               <div class="level-content">
-                <div class="level-badge ${level}" style="border-color: ${color}; color: ${color};">${weight.toUpperCase()}</div>
+                <div class="level-badge ${level}" style="border-color: ${color}; color: ${color};">${String(item.weight).toUpperCase()}</div>
                 <div class="level-label">${point}</div>
               </div>
             </div>
