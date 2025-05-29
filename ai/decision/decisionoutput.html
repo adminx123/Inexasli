@@ -27,8 +27,7 @@
       bottom: 0;
     }
     
-    /* Override the star-like elements */
-    .decision-container  {
+    .device-container {
       margin: 0 auto;
       padding: 0;
       font-family: "Inter", sans-serif;
@@ -62,61 +61,41 @@
       box-sizing: border-box;
     }
     
-    .decision-output-wrapper {
+    .output-wrapper {
       position: relative;
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       margin: 0;
       width: 100%;
-      max-width: 100%;
-      height: 100%;
-      max-height: 100%;
-      overflow: hidden;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
     }
     
-    .decision-output {
-      white-space: pre-wrap; /* Keep for JSON display */
+    .api-output {
+      white-space: pre-wrap;
       font-family: "Inter", sans-serif;
-      padding: 5px;
+      padding: 15px;
       overflow-y: auto;
-      background-color: #f9f9f9; /* Light background for content area */
+      background-color: #fff;
       flex: 1 1 auto;
       font-size: 15px;
       border: 0;
       border-radius: 0;
       box-shadow: none;
-      height: calc(100% - 50px); /* Adjust height considering header */
-      max-height: calc(100% - 50px); /* Adjust height considering header */
-      width: 100%; 
-      max-width: 100%;
-      margin: 5px;
+      width: 100%;
+      margin: 0;
       transition: all 0.3s ease;
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: #888 #f1f1f1;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
     }
     
-    .decision-output::-webkit-scrollbar {
+    .api-output::-webkit-scrollbar {
       width: 6px;
     }
     
-    .decision-output::-webkit-scrollbar-track {
+    .api-output::-webkit-scrollbar-track {
       background: #f1f1f1;
       border-radius: 10px;
     }
     
-    .decision-output::-webkit-scrollbar-thumb {
+    .api-output::-webkit-scrollbar-thumb {
       background: #ccc; /* Lighter scrollbar thumb */
       border-radius: 10px;
     }
@@ -127,9 +106,9 @@
   </style>
 </head>
 <body>
-  <div class="decision-container">
-    <div class="decision-output-wrapper">
-      <div id="output-span" class="decision-output">
+  <div class="device-container">
+    <div class="output-wrapper">
+      <div id="output-span" class="api-output">
         <div class="loading">
           <div class="loading-text">Loading data...</div>
           <div class="loading-spinner"></div>
