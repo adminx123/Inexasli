@@ -270,16 +270,16 @@ const categoryManager = (function() {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                padding: 20px;
-                width: 90%;
-                max-width: 500px;
+                padding: 15px;
+                width: 80%;
+                max-width: 400px;
                 max-height: 80vh;
                 overflow: auto;
                 position: relative;
                 font-family: "Inter", sans-serif;
                 border: 2px solid #000;
                 border-radius: 8px;
-                box-shadow: 4px 4px 0 #000;
+                box-shadow: 2px 2px 0 #000;
                 cursor: default; /* Reset cursor for the modal content */
             }
             
@@ -289,7 +289,7 @@ const categoryManager = (function() {
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
-                gap: 12px;
+                gap: 8px;
                 width: 100%;
                 max-width: 100%;
                 margin: 0;
@@ -297,15 +297,15 @@ const categoryManager = (function() {
             }
             
             .category-filter-item {
-                background-color: #e0e0e0;
-                padding: 12px 15px;
+                background-color: #fff;
+                padding: 8px 12px;
                 border-radius: 5px;
                 text-align: center;
                 cursor: pointer;
-                font-size: 14px;
+                font-size: 12px;
                 font-family: "Geist", sans-serif;
-                min-width: 100px;
-                box-shadow: 2px 2px 0 #000;
+                min-width: 80px;
+                box-shadow: 1px 1px 0 #000;
                 border: 1px solid #000;
                 transition: transform 0.2s ease, box-shadow 0.2s ease;
                 display: flex;
@@ -313,19 +313,19 @@ const categoryManager = (function() {
                 align-items: center;
                 text-transform: uppercase;
                 font-weight: 500;
-                flex: 0 0 calc(33.33% - 12px);
-                margin-bottom: 12px;
+                flex: 0 0 calc(33.33% - 8px);
+                margin-bottom: 8px;
             }
             
             .category-filter-item:hover {
                 background-color: #d0d0d0;
                 transform: translateY(-2px);
-                box-shadow: 3px 3px 0 #000;
+                box-shadow: 2px 2px 0 #000;
             }
             
             .category-filter-item.active {
                 background-color:rgb(255, 255, 255);
-                box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2), 2px 2px 0 #000;
+                box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2), 1px 1px 0 #000;
                 transform: translateY(0);
             }
             
@@ -333,7 +333,7 @@ const categoryManager = (function() {
             .product-grid {
                 display: flex;
                 flex-direction: column;
-                gap: 8px;
+                gap: 6px;
                 width: 100%;
                 max-width: 100%;
                 margin: 0;
@@ -344,14 +344,14 @@ const categoryManager = (function() {
             
             .product-item {
                 background-color: #ffffff;
-                padding: 10px 15px;
+                padding: 8px 12px;
                 border-radius: 5px;
                 text-align: center;
                 cursor: pointer;
-                font-size: 13px;
+                font-size: 12px;
                 font-family: "Geist", sans-serif;
                 width: 100%;
-                box-shadow: 2px 2px 0 #000;
+                box-shadow: 1px 1px 0 #000;
                 border: 1px solid #000;
                 transition: transform 0.2s ease, box-shadow 0.2s ease;
                 display: flex;
@@ -363,7 +363,7 @@ const categoryManager = (function() {
             .product-item:hover {
                 background-color: #f5f5f5;
                 transform: translateY(-2px);
-                box-shadow: 3px 3px 0 #000;
+                box-shadow: 2px 2px 0 #000;
             }
             
             .product-item span:first-child {
@@ -382,29 +382,29 @@ const categoryManager = (function() {
             
             @media (max-width: 768px) {
                 .category-modal-content {
-                    padding: 15px;
-                    width: 90%;
+                    padding: 12px;
+                    width: 85%;
                     max-width: 320px;
                 }
                 
                 .category-filter-grid {
-                    gap: 8px;
+                    gap: 6px;
                 }
                 
                 .category-filter-item {
-                    font-size: 12px;
-                    padding: 10px;
-                    min-width: 80px;
-                    flex: 0 0 calc(50% - 8px);
+                    font-size: 11px;
+                    padding: 8px;
+                    min-width: 70px;
+                    flex: 0 0 calc(50% - 6px);
                 }
                 
                 .product-item {
-                    font-size: 12px;
-                    padding: 10px 12px;
+                    font-size: 11px;
+                    padding: 8px 10px;
                 }
                 
                 .premium-notice {
-                    font-size: 9px;
+                    font-size: 8px;
                 }
             }
         `;
