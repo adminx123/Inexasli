@@ -33,7 +33,7 @@
       bottom: 0;
     }
     
-    .social-container  {
+    .device-container  {
       margin: 0 auto;
       padding: 0;
       font-family: "Inter", sans-serif;
@@ -67,7 +67,7 @@
       box-sizing: border-box;
     }
     
-    .social-output-wrapper {
+    .output-wrapper {
       position: relative;
       flex: 1 1 auto;
       display: flex;
@@ -85,7 +85,7 @@
       bottom: 0;
     }
     
-    .social-output {
+    .api-output {
       white-space: pre-wrap; /* Keep for JSON display */
       font-family: "Inter", sans-serif;
       padding: 5px;
@@ -111,7 +111,7 @@
       right: 0;
       bottom: 0;
     }
-    .social-output::-webkit-scrollbar-thumb {
+    .api-output::-webkit-scrollbar-thumb {
       background: #ccc; /* Lighter scrollbar thumb */
       border-radius: 10px;
     }
@@ -120,10 +120,10 @@
   </style>
 </head>
 <body>
-  <div class="social-container">
-    <div class="social-output-wrapper">
+  <div class="device-container">
+    <div class="output-wrapper">
       <div class="social-header">Social Analysis Output</div>
-      <div id="output-span" class="social-output">
+      <div id="output-span" class="api-output">
         <div class="loading">
           <div class="loading-text">Loading data...</div>
           <div class="loading-spinner"></div>
