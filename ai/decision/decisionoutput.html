@@ -377,11 +377,107 @@
           </div>
         `;
 
-        // Create bar charts for each option
+        // Create bar charts for each option with alignment
         data.options.forEach((option, index) => {
-          createSimpleBarChart(option.pros || [], `pros-bars-${index}`, '#333');
-          createSimpleBarChart(option.cons || [], `cons-bars-${index}`, '#666');
+          createAlignedBarCharts(option.pros || [], option.cons || [], `pros-bars-${index}`, `cons-bars-${index}`);
         });
+      };
+
+      // Aligned bar charts helper function for pros/cons T-chart with proper alignment
+      const createAlignedBarCharts = (prosData, consData, prosContainerId, consContainerId) => {
+        const prosContainer = document.getElementById(prosContainerId);
+        const consContainer = document.getElementById(consContainerId);
+        if (!prosContainer || !consContainer) return;
+        
+        // Clear any existing content
+        prosContainer.innerHTML = '';
+        consContainer.innerHTML = '';
+        
+        // Filter and validate data
+        const validProsData = prosData.filter(item => item && (item.point || item.factor) && item.weight);
+        const validConsData = consData.filter(item => item && (item.point || item.factor) && item.weight);
+        
+        if (!validProsData.length && !validConsData.length) {
+          prosContainer.innerHTML = '<div class="no-data">No pros data</div>';
+          consContainer.innerHTML = '<div class="no-data">No cons data</div>';
+          return;
+        }
+        
+        // Determine maximum number of rows needed for alignment
+        const maxRows = Math.max(validProsData.length, validConsData.length);
+        
+        // Create items for both sides with consistent heights
+        for (let i = 0; i < maxRows; i++) {
+          const prosItem = validProsData[i] || null;
+          const consItem = validConsData[i] || null;
+          
+          // Create pros item or spacer
+          const prosDiv = document.createElement('div');
+          prosDiv.className = 'aligned-item';
+          if (prosItem) {
+            prosDiv.innerHTML = createItemHTML(prosItem, '#333');
+          } else {
+            prosDiv.innerHTML = '<div class="spacer-item"></div>';
+          }
+          prosContainer.appendChild(prosDiv);
+          
+          // Create cons item or spacer
+          const consDiv = document.createElement('div');
+          consDiv.className = 'aligned-item';
+          if (consItem) {
+            consDiv.innerHTML = createItemHTML(consItem, '#666');
+          } else {
+            consDiv.innerHTML = '<div class="spacer-item"></div>';
+          }
+          consContainer.appendChild(consDiv);
+        }
+      };
+      
+      // Helper function to create consistent item HTML
+      const createItemHTML = (item, color) => {
+        const point = item.point || item.factor || item.text || 'Unknown';
+        const weight = parseFloat(item.weight) || 0;
+        const category = item.category || weight;
+        
+        // Determine if this should be a bar item or level item
+        const isNumericWeight = !isNaN(weight) && weight > 0;
+        const isLevelWeight = ['high', 'medium', 'low'].includes(String(weight).toLowerCase());
+        
+        if (isLevelWeight) {
+          // Level-based item (High/Medium/Low)
+          const level = String(weight).toLowerCase();
+          return `
+            <div class="level-item">
+              <div class="level-content">
+                <div class="level-badge ${level}" style="border-color: ${color}; color: ${color};">${weight.toUpperCase()}</div>
+                <div class="level-label">${point}</div>
+              </div>
+            </div>
+          `;
+        } else if (isNumericWeight) {
+          // Bar-based item with numeric weight
+          const maxWeight = 100; // Assume scale of 0-100
+          const percentage = Math.min((weight / maxWeight) * 100, 100);
+          
+          return `
+            <div class="bar-item">
+              <div class="bar-label">${point}</div>
+              <div class="bar-background">
+                <div class="bar-fill" style="width: ${percentage}%; background-color: ${color};"></div>
+              </div>
+              <div class="bar-value">${weight}</div>
+            </div>
+          `;
+        } else {
+          // Simple text item
+          return `
+            <div class="level-item">
+              <div class="level-content">
+                <div class="level-label">${point}</div>
+              </div>
+            </div>
+          `;
+        }
       };
 
       // Cost-Benefit Visualization
@@ -671,18 +767,36 @@
           if (value <= 0 || !label) return;
           
           const barContainer = document.createElement('div');
-          barContainer.className = 'bar-item';
           
-          const percentage = Math.max((value / maxValue) * 100, 5); // Minimum 5% for visibility
-          const barColor = getWeightColor(item.weight, color);
+          // Check if this is a level-based representation (High/Medium/Low)
+          const isLevelBased = typeof item.weight === 'string' && 
+                              ['high', 'medium', 'low'].includes(item.weight.toLowerCase());
           
-          barContainer.innerHTML = `
-            <div class="bar-label">${label}</div>
-            <div class="bar-background">
-              <div class="bar-fill" style="width: ${percentage}%; background-color: ${barColor};"></div>
-            </div>
-            <div class="bar-value">${displayValue}</div>
-          `;
+          if (isLevelBased) {
+            // For level-based items, show simple text representation without bars
+            barContainer.className = 'level-item';
+            const levelColor = getWeightColor(item.weight, color);
+            
+            barContainer.innerHTML = `
+              <div class="level-content">
+                <div class="level-badge" style="color: ${levelColor}; border-color: ${levelColor};">${displayValue}</div>
+                <div class="level-label">${label}</div>
+              </div>
+            `;
+          } else {
+            // For numeric/quantitative data, show bars as before
+            barContainer.className = 'bar-item';
+            const percentage = Math.max((value / maxValue) * 100, 5); // Minimum 5% for visibility
+            const barColor = getWeightColor(item.weight, color);
+            
+            barContainer.innerHTML = `
+              <div class="bar-label">${label}</div>
+              <div class="bar-background">
+                <div class="bar-fill" style="width: ${percentage}%; background-color: ${barColor};"></div>
+              </div>
+              <div class="bar-value">${displayValue}</div>
+            `;
+          }
           
           container.appendChild(barContainer);
         });
@@ -900,7 +1014,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       background-color: #333;
-      border-bottom: 4px solid #333; /* Bold horizontal line of the T */
+      /* Remove border-bottom to connect properly with content */
     }
 
     .pros-header, .cons-header {
@@ -934,15 +1048,16 @@
       grid-template-columns: 1fr 1fr;
       min-height: 200px;
       background-color: white;
+      align-items: start; /* Align content to top */
     }
 
     .pros-side, .cons-side {
-      padding: 20px;
+      padding: 0 20px 20px 20px; /* Remove top padding to eliminate gap */
       background-color: white;
     }
 
     .pros-side {
-      border-right: 3px solid #333; /* Continue the bold vertical line */
+      border-right: 3px solid #333; /* Continue the bold vertical line seamlessly */
     }
 
     .charts-container {
@@ -993,7 +1108,7 @@
     .pros-bars, .cons-bars {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 4px; /* Reduced gap between items */
     }
 
     /* Bar chart items */
@@ -1001,7 +1116,9 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
-      margin-bottom: 8px;
+      margin-bottom: 0; /* Remove bottom margin to reduce spacing */
+      min-height: 40px; /* Consistent minimum height for alignment */
+      justify-content: flex-start;
     }
 
     .bar-label {
@@ -1032,7 +1149,55 @@
       font-size: 11px;
       color: #777;
       font-weight: 600;
+    }
+
+    /* Aligned items for proper T-chart row alignment */
+    .aligned-item {
+      min-height: 45px; /* Consistent minimum height for perfect alignment */
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .spacer-item {
+      height: 45px; /* Match the aligned-item height */
+      visibility: hidden; /* Invisible but takes up space */
+    }
+
+    /* Level-based items (High/Medium/Low) - no bars, just badges */
+    .level-item {
+      margin-bottom: 0; /* Remove bottom margin to reduce spacing */
+      padding: 0;
+      min-height: 40px; /* Same as bar-item for consistent alignment */
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    .level-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .level-badge {
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border: 1px solid;
+      border-radius: 8px;
+      background-color: transparent;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
+      align-self: flex-start;
+    }
+
+    .level-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #555;
+      line-height: 1.3;
     }
 
     /* No data message */
@@ -1389,5 +1554,49 @@
     .visualization-info strong {
       color: #333;
       font-weight: 500;
+    }
+
+    /* Paired content for horizontal alignment */
+    .paired-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .paired-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: 40px;
+      align-items: start;
+    }
+
+    .paired-cell {
+      padding: 0 20px;
+      display: flex;
+      align-items: flex-start;
+      min-height: 40px;
+    }
+
+    .paired-cell.pros-cell {
+      border-right: 3px solid #333;
+      background-color: white;
+    }
+
+    .paired-cell.cons-cell {
+      background-color: white;
+    }
+
+    .empty-cell {
+      min-height: 40px;
+      width: 100%;
+    }
+
+    /* Ensure items in paired cells take full width */
+    .paired-cell .bar-item,
+    .paired-cell .level-item {
+      width: 100%;
+      margin-bottom: 0;
     }
   </style>
