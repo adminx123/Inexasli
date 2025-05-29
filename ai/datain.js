@@ -594,6 +594,7 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
     
     const originalText = btn.innerText;
     const originalDisabled = btn.disabled;
+    let overlayControl = null;
     
     try {
         // Phase 1: Disable button and show loading state
@@ -602,7 +603,7 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
         
         // Show educational modal overlay while API processes
         if (window.showEducationalLoadingOverlay) {
-            window.showEducationalLoadingOverlay(moduleName);
+            overlayControl = window.showEducationalLoadingOverlay(moduleName);
         }
         
         // Start the main API call immediately (no delay)
@@ -611,9 +612,9 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
         // Wait for API to complete
         const result = await apiPromise;
         
-        // Close the modal overlay
-        if (window.closeModal) {
-            window.closeModal();
+        // Close the modal overlay using the proper control object
+        if (overlayControl && overlayControl.close) {
+            overlayControl.close();
         }
         
         // Show success state
@@ -626,9 +627,9 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
         return result;
         
     } catch (error) {
-        // Close modal on error
-        if (window.closeModal) {
-            window.closeModal();
+        // Close modal on error using the proper control object
+        if (overlayControl && overlayControl.close) {
+            overlayControl.close();
         }
         
         // Error state
