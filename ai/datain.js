@@ -601,13 +601,13 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
         btn.disabled = true;
         btn.innerText = '🧠 Analyzing...';
         
+        // Start the main API call immediately (before showing overlay)
+        const apiPromise = apiCall();
+        
         // Show educational modal overlay while API processes
         if (window.showEducationalLoadingOverlay) {
             overlayControl = window.showEducationalLoadingOverlay(moduleName);
         }
-        
-        // Start the main API call immediately (no delay)
-        const apiPromise = apiCall();
         
         // Wait for API to complete
         const result = await apiPromise;
