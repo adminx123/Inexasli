@@ -638,6 +638,7 @@
             weight: `${c.weight}%`,
             category: c.weight
           }));
+          console.log('Criteria data for chart:', criteriaForChart);
           createSimpleBarChart(criteriaForChart, 'criteria-chart', '#333');
         }
 
@@ -725,8 +726,16 @@
 
         // Determine data structure and extract values
         const getValue = (item) => {
+          // For criteria weights, category should be the numeric value
           if (typeof item.category === 'number') return item.category;
           if (typeof item.amount === 'number') return item.amount;
+          
+          // Handle percentage strings (e.g., "25%")
+          if (typeof item.weight === 'string' && item.weight.includes('%')) {
+            const numericValue = parseFloat(item.weight.replace('%', ''));
+            return isNaN(numericValue) ? 0 : numericValue;
+          }
+          
           if (item.weight) return getWeightValue(item.weight);
           return 0; // No valid value found
         };
@@ -756,7 +765,22 @@
 
         // Calculate max value, ensuring we have valid data
         const values = validData.map(getValue).filter(v => v > 0);
-        const maxValue = values.length > 0 ? Math.max(...values) : 1;
+        let maxValue = values.length > 0 ? Math.max(...values) : 1;
+        
+        // For percentage data (criteria weights), use 100 as max if values look like percentages
+        const hasPercentageWeights = validData.some(item => 
+          typeof item.weight === 'string' && item.weight.includes('%')
+        );
+        if (hasPercentageWeights && maxValue <= 100) {
+          maxValue = 100;
+        }
+        
+        console.log('Chart data:', {
+          validData: validData,
+          values: values,
+          maxValue: maxValue,
+          hasPercentageWeights: hasPercentageWeights
+        });
         
         validData.forEach(item => {
           const value = getValue(item);
@@ -793,8 +817,8 @@
               <div class="bar-label">${label}</div>
               <div class="bar-background">
                 <div class="bar-fill" style="width: ${percentage}%; background-color: ${barColor};"></div>
+                <div class="bar-value" style="left: calc(${percentage}% + 4px);">${displayValue}</div>
               </div>
-              <div class="bar-value">${displayValue}</div>
             `;
           }
           
@@ -974,7 +998,7 @@
     .all-options-container {
       display: flex;
       flex-direction: column;
-      gap: 25px;
+      gap: 10px;
     }
 
     .option-chart {
@@ -1028,19 +1052,7 @@
     }
 
     .pros-header {
-      border-right: 3px solid #000; /* Bold vertical line of the T */
-    }
-
-    .pros-header::before {
-      content: "✓";
-      margin-right: 8px;
-      font-weight: bold;
-    }
-
-    .cons-header::before {
-      content: "✗";
-      margin-right: 8px;
-      font-weight: bold;
+      border-right: 3px solid #333; /* Bold vertical line of the T - matches content border */
     }
 
     .t-chart-content {
@@ -1108,16 +1120,16 @@
     .pros-bars, .cons-bars {
       display: flex;
       flex-direction: column;
-      gap: 4px; /* Reduced gap between items */
+      gap: 2px;
     }
 
     /* Bar chart items */
     .bar-item {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      margin-bottom: 0; /* Remove bottom margin to reduce spacing */
-      min-height: 40px; /* Consistent minimum height for alignment */
+      gap: 2px;
+      margin-bottom: 0;
+      min-height: 30px;
       justify-content: flex-start;
     }
 
@@ -1133,7 +1145,7 @@
       border-radius: 4px;
       height: 16px;
       position: relative;
-      overflow: hidden;
+      overflow: visible; /* Allow text to extend beyond */
       border: 1px solid #ddd;
     }
 
@@ -1141,14 +1153,24 @@
       height: 100%;
       border-radius: 3px;
       transition: width 0.3s ease;
-      min-width: 8px; /* Smaller minimum for better visual hierarchy */
+      min-width: 8px;
       box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 0;
+      left: 0;
     }
 
     .bar-value {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: calc(100% + 4px); /* Position just after the end of the bar fill */
       font-size: 11px;
-      color: #777;
-      font-weight: 600;
+      color: #333;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      z-index: 2;
     }
 
     /* Aligned items for proper T-chart row alignment */
@@ -1191,6 +1213,22 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       align-self: flex-start;
+    }
+
+    /* Specific level badge colors for better visibility */
+    .level-badge.high {
+      color: #333 !important;
+      border-color: #333 !important;
+    }
+
+    .level-badge.medium {
+      color: #666 !important;
+      border-color: #666 !important;
+    }
+
+    .level-badge.low {
+      color: #999 !important;
+      border-color: #999 !important;
     }
 
     .level-label {
@@ -1460,18 +1498,18 @@
 
     .criteria-weights,
     .options-scores {
-      margin-bottom: 25px;
+      margin-bottom: 10px;
     }
 
     .option-score {
-      margin-bottom: 20px;
-      padding: 15px;
+      margin-bottom: 10px;
+      padding: 8px;
       background-color: #f8f9fa;
       border-radius: 8px;
     }
 
     .option-score h5 {
-      margin: 0 0 10px 0;
+      margin: 0 0 5px 0;
       color: #333;
       font-weight: 600;
     }
