@@ -82,7 +82,7 @@
     }
     
     .bmi-section {
-      background: linear-gradient(135deg, #4CAF50, #45a049);
+      background: #000;
       color: white;
       padding: 15px;
       border-radius: 10px;
@@ -140,9 +140,9 @@
       color: #666;
     }
     
-    .percentage-good { background: linear-gradient(90deg, #4CAF50, #45a049); }
-    .percentage-warning { background: linear-gradient(90deg, #df9d3b, #bb7732); }
-    .percentage-low { background: linear-gradient(90deg, #f44336, #d32f2f); }
+    .percentage-good { background: #000; }
+    .percentage-warning { background: #000; }
+    .percentage-low { background: #000; }
     
     .meals-section {
       margin-top: 25px;
@@ -157,16 +157,16 @@
     }
     
     /* Different colors for different priority deficit recommendations */
-    .meal-card:nth-child(1) {
-      border-left: 4px solid #e74c3c;
-    }
-    
     .meal-card:nth-child(2) {
-      border-left: 4px solid #ff9d00;
+      border-left: 4px solid #000;
     }
     
     .meal-card:nth-child(3) {
-      border-left: 4px solid #27ae60;
+      border-left: 4px solid #000;
+    }
+    
+    .meal-card:nth-child(4) {
+      border-left: 4px solid #000;
     }
     
     .meal-title {
@@ -176,16 +176,16 @@
     }
     
     /* Different colors for different priority deficit titles */
-    .meal-card:nth-child(1) .meal-title {
-      color: #e74c3c;
-    }
-    
     .meal-card:nth-child(2) .meal-title {
-      color: #fffb07;
+      color: #000;
     }
     
     .meal-card:nth-child(3) .meal-title {
-      color: #27ae60;
+      color: #000;
+    }
+    
+    .meal-card:nth-child(4) .meal-title {
+      color: #000;
     }
     
     .meal-content {
@@ -299,14 +299,14 @@
       // Header
       const header = document.createElement('div');
       header.className = 'calorie-header';
-      header.innerHTML = '<h2 style="margin: 0; color: #333;">📊 Nutrition Analysis</h2>';
+      header.innerHTML = '<h2 style="margin: 0; color: #333;">Nutrition Analysis</h2>';
       container.appendChild(header);
       
       // BMI Section
       if (calorieData.bmi) {
         const bmiSection = document.createElement('div');
         bmiSection.className = 'bmi-section';
-        bmiSection.innerHTML = `🎯 Your BMI: ${calorieData.bmi}`;
+        bmiSection.innerHTML = `Your BMI: ${calorieData.bmi}`;
         container.appendChild(bmiSection);
       }
       
@@ -331,7 +331,7 @@
             </div>
             <div class="nutrient-details">
               <span>${nutrient.intake} / ${nutrient.target}</span>
-              <span style="font-weight: bold; color: ${percentage >= 85 ? '#4CAF50' : percentage >= 70 ? '#FF9800' : '#f44336'}">${nutrient.percentage}</span>
+              <span style="font-weight: bold; color: #000">${nutrient.percentage}</span>
             </div>
           `;
           
@@ -344,7 +344,7 @@
       // Deficit-Filling Recommendations
       const mealsSection = document.createElement('div');
       mealsSection.className = 'meals-section';
-      mealsSection.innerHTML = '<h3 style="color: #333; margin-bottom: 15px;">🎯 Deficit-Filling Recommendations</h3>';
+      mealsSection.innerHTML = '<h3 style="color: #333; margin-bottom: 15px;">Deficit-Filling Recommendations</h3>';
       
       if (calorieData.mealRecommendations1) {
         const meal1 = document.createElement('div');
