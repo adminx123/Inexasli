@@ -379,8 +379,8 @@
 
         // Create bar charts for each option
         data.options.forEach((option, index) => {
-          createSimpleBarChart(option.pros || [], `pros-bars-${index}`, '#4CAF50');
-          createSimpleBarChart(option.cons || [], `cons-bars-${index}`, '#f44336');
+          createSimpleBarChart(option.pros || [], `pros-bars-${index}`, '#333');
+          createSimpleBarChart(option.cons || [], `cons-bars-${index}`, '#666');
         });
       };
 
@@ -435,8 +435,8 @@
           category: benefit.amount
         }));
         
-        createSimpleBarChart(costsForChart, 'costs-chart', '#FF6B6B');
-        createSimpleBarChart(benefitsForChart, 'benefits-chart', '#4ECDC4');
+        createSimpleBarChart(costsForChart, 'costs-chart', '#666');
+        createSimpleBarChart(benefitsForChart, 'benefits-chart', '#333');
       };
 
       // SWOT Visualization
@@ -542,7 +542,7 @@
             weight: `${c.weight}%`,
             category: c.weight
           }));
-          createSimpleBarChart(criteriaForChart, 'criteria-chart', '#9C27B0');
+          createSimpleBarChart(criteriaForChart, 'criteria-chart', '#333');
         }
 
         // Show option scores
@@ -649,9 +649,9 @@
         const getWeightColor = (weight, baseColor) => {
           if (typeof weight === 'string') {
             switch (weight.toLowerCase()) {
-              case 'high': return '#d32f2f'; // Dark red for high impact
-              case 'medium': return '#f57c00'; // Orange for medium impact  
-              case 'low': return '#388e3c'; // Green for low impact
+              case 'high': return '#333'; // Dark gray/black for high impact
+              case 'medium': return '#666'; // Medium gray for medium impact  
+              case 'low': return '#999'; // Light gray for low impact
               default: return baseColor;
             }
           }
@@ -879,7 +879,7 @@
     }
 
     .score-badge {
-      background-color: #2196F3;
+      background-color: #333;
       color: white;
       padding: 4px 8px;
       border-radius: 12px;
@@ -887,53 +887,62 @@
       font-weight: 500;
     }
 
-    /* T-Chart Layout */
+    /* T-Chart Layout - Bold T-Shape with Black/White Theme */
     .t-chart {
       background-color: white;
-      border-radius: 6px;
+      border: 2px solid #333;
+      border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     .t-chart-headers {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      border-bottom: 2px solid #ddd;
+      background-color: #333;
+      border-bottom: 4px solid #333; /* Bold horizontal line of the T */
     }
 
     .pros-header, .cons-header {
-      padding: 12px 15px;
-      font-size: 14px;
-      font-weight: 600;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 700;
       text-align: center;
       color: white;
+      background-color: #333;
+      position: relative;
     }
 
     .pros-header {
-      background-color: #4CAF50;
-      border-right: 1px solid #45a049;
+      border-right: 3px solid #000; /* Bold vertical line of the T */
     }
 
-    .cons-header {
-      background-color: #f44336;
+    .pros-header::before {
+      content: "✓";
+      margin-right: 8px;
+      font-weight: bold;
+    }
+
+    .cons-header::before {
+      content: "✗";
+      margin-right: 8px;
+      font-weight: bold;
     }
 
     .t-chart-content {
       display: grid;
       grid-template-columns: 1fr 1fr;
       min-height: 200px;
+      background-color: white;
     }
 
     .pros-side, .cons-side {
-      padding: 15px;
+      padding: 20px;
+      background-color: white;
     }
 
     .pros-side {
-      border-right: 2px solid #ddd;
-      background-color: #fafafa;
-    }
-
-    .cons-side {
-      background-color: #fafafa;
+      border-right: 3px solid #333; /* Continue the bold vertical line */
     }
 
     .charts-container {
@@ -946,19 +955,11 @@
       background-color: white;
       padding: 15px;
       border-radius: 6px;
-      border: 1px solid #eee;
-    }
-
-    .pros-chart {
-      border-left: 4px solid #4CAF50;
-    }
-
-    .cons-chart {
-      border-left: 4px solid #f44336;
+      border: 1px solid #ddd;
     }
 
     .pros-chart h4 {
-      color: #4CAF50;
+      color: #333;
       margin: 0 0 15px 0;
       font-size: 16px;
       font-weight: 600;
@@ -970,10 +971,11 @@
       content: "✓";
       margin-right: 8px;
       font-weight: bold;
+      color: #333;
     }
 
     .cons-chart h4 {
-      color: #f44336;
+      color: #333;
       margin: 0 0 15px 0;
       font-size: 16px;
       font-weight: 600;
@@ -985,6 +987,7 @@
       content: "✗";
       margin-right: 8px;
       font-weight: bold;
+      color: #333;
     }
 
     .pros-bars, .cons-bars {
@@ -1045,8 +1048,8 @@
 
     /* Recommendation section */
     .recommendation-section {
-      background-color: #e3f2fd;
-      border: 1px solid #2196F3;
+      background-color: #f8f8f8;
+      border: 1px solid #333;
       border-radius: 8px;
       padding: 20px;
       margin-top: 20px;
@@ -1054,7 +1057,7 @@
 
     .recommendation-section h3 {
       margin: 0 0 15px 0;
-      color: #1976D2;
+      color: #333;
     }
 
     .top-choice, .reasoning, .confidence {
@@ -1081,23 +1084,23 @@
     }
 
     .swot-quadrant.strengths {
-      background-color: #e8f5e8;
-      border-color: #4caf50;
+      background-color: #f8f8f8;
+      border-color: #333;
     }
 
     .swot-quadrant.weaknesses {
-      background-color: #fff3e0;
-      border-color: #ff9800;
+      background-color: #f0f0f0;
+      border-color: #666;
     }
 
     .swot-quadrant.opportunities {
-      background-color: #e3f2fd;
-      border-color: #2196f3;
+      background-color: #f8f8f8;
+      border-color: #333;
     }
 
     .swot-quadrant.threats {
-      background-color: #ffebee;
-      border-color: #f44336;
+      background-color: #f0f0f0;
+      border-color: #666;
     }
 
     .swot-quadrant h4 {
@@ -1135,21 +1138,21 @@
     }
 
     .risk-level.high {
-      background-color: #ffebee;
-      color: #c62828;
-      border: 2px solid #f44336;
+      background-color: #f0f0f0;
+      color: #333;
+      border: 2px solid #666;
     }
 
     .risk-level.medium {
-      background-color: #fff3e0;
-      color: #ef6c00;
-      border: 2px solid #ff9800;
+      background-color: #f5f5f5;
+      color: #666;
+      border: 2px solid #999;
     }
 
     .risk-level.low {
-      background-color: #e8f5e8;
-      color: #2e7d32;
-      border: 2px solid #4caf50;
+      background-color: #f8f8f8;
+      color: #333;
+      border: 2px solid #333;
     }
 
     .risk-item {
@@ -1246,13 +1249,13 @@
     }
 
     .stakeholder-card.champion {
-      border-color: #4caf50;
-      background-color: #e8f5e8;
+      border-color: #333;
+      background-color: #f8f8f8;
     }
 
     .stakeholder-card.supporter {
-      border-color: #8bc34a;
-      background-color: #f1f8e9;
+      border-color: #666;
+      background-color: #f5f5f5;
     }
 
     .stakeholder-card.neutral {
@@ -1261,13 +1264,13 @@
     }
 
     .stakeholder-card.skeptic {
-      border-color: #ff9800;
-      background-color: #fff3e0;
+      border-color: #999;
+      background-color: #f0f0f0;
     }
 
     .stakeholder-card.blocker {
-      border-color: #f44336;
-      background-color: #ffebee;
+      border-color: #666;
+      background-color: #f0f0f0;
     }
 
     .stakeholder-card h4 {
