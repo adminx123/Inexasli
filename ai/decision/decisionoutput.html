@@ -668,6 +668,8 @@
           return;
         }
 
+        console.log('Output span found, looking for data...');
+
         // Specifically look for decisionIqResponse data
         const responseKey = 'decisionIqResponse';
         console.log('Looking for data with key:', responseKey);
@@ -676,6 +678,7 @@
         let data;
         try {
           data = getJSON(responseKey);
+          console.log('Raw data from getJSON:', data);
         } catch (err) {
           console.error('Error getting data:', err);
         }
@@ -684,13 +687,20 @@
           // Use built-in visualization logic
           console.log('Data found:', data);
           
+          // Extract the actual decision data from the response
+          let decisionData = data;
+          if (data.data && data.message === "Success") {
+            decisionData = data.data;
+            console.log('Extracted decision data:', decisionData);
+          }
+          
           try {
-            createVisualization(data, 'output-span');
-            console.log('Visualization created for analysis type:', data.analysisType);
+            createVisualization(decisionData, 'output-span');
+            console.log('Visualization created for analysis type:', decisionData.analysisType);
           } catch (vizError) {
             console.error('Error creating visualization:', vizError);
             // Fallback to JSON display
-            outputSpan.textContent = JSON.stringify(data, null, 2);
+            outputSpan.textContent = JSON.stringify(decisionData, null, 2);
           }
           
           console.log('Data displayed successfully');
