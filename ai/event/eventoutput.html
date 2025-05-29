@@ -139,7 +139,6 @@
     // Run immediately without waiting for DOMContentLoaded
     (function() {
       console.log('Event API Output script running');
-      createCopyButton('output-span');
       const getLocal = window.getLocal || function(key) {
         try {
           const value = localStorage.getItem(key);
