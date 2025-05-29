@@ -202,45 +202,52 @@ const categoryManager = (function() {
     
     // Categories are always visible, no need for a function to toggle their visibility
     
-    // Function to load product content - opens in modal
+    // Function to load product content - opens in modal or inline iframe
     function loadProductContent(url) {
-        try {
-            console.log(`Product item clicked, loading content from: ${url}`);
-            
-            // Detect if this is the intro/incomeIQ item
-            const isBudgetItem = url === '/ai/income/intro.html';
-            
-            // Open the content in a modal using modal_new.js
+        // If an inline product iframe exists, load here
+        const inlineFrame = document.getElementById('product-frame');
+        if (inlineFrame) {
+            console.log(`Loading into inline iframe: ${url}`);
+            inlineFrame.src = url;
+            return;
+        }
+         try {
+             console.log(`Product item clicked, loading content from: ${url}`);
+             
+             // Detect if this is the intro/incomeIQ item
+             const isBudgetItem = url === '/ai/income/intro.html';
+             
+            // Fallback to modal if no inline frame
             if (typeof window.openModal === 'function') {
                 window.openModal(url);
                 console.log(`Opened ${url} in modal`);
-                
-                // For budget items, also trigger UI mode change if available
-                if (isBudgetItem && typeof window.toggleUiMode === 'function') {
-                    // Small delay to let modal open first
-                    setTimeout(() => {
-                        window.toggleUiMode(true);
-                    }, 100);
-                }
-            } else {
-                console.error('openModal function not available - check if modal_new.js is loaded');
-                // Fallback to current behavior if modal is not available
-                
-                // Toggle UI mode based on selection if the function exists
-                if (typeof window.toggleUiMode === 'function') {
-                    window.toggleUiMode(isBudgetItem);
-                }
-                
-                if (!isBudgetItem) {
-                    // For non-budget items, use regular content loading
-                    // Create and dispatch event for promptgrid.js to handle
-                    const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
-                        detail: { url: url }
-                    });
-                    document.dispatchEvent(gridItemEvent);
-                }
-            }
-            
+                 
+                 // For budget items, also trigger UI mode change if available
+                 if (isBudgetItem && typeof window.toggleUiMode === 'function') {
+                     // Small delay to let modal open first
+                     setTimeout(() => {
+                         window.toggleUiMode(true);
+                     }, 100);
+                 }
+             } else {
+                 console.error('openModal function not available - check if modal_new.js is loaded');
+                 // Fallback to current behavior if modal is not available
+                 
+                 // Toggle UI mode based on selection if the function exists
+                 if (typeof window.toggleUiMode === 'function') {
+                     window.toggleUiMode(isBudgetItem);
+                 }
+                 
+                 if (!isBudgetItem) {
+                     // For non-budget items, use regular content loading
+                     // Create and dispatch event for promptgrid.js to handle
+                     const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
+                         detail: { url: url }
+                     });
+                     document.dispatchEvent(gridItemEvent);
+                 }
+             }
+             
             // Store the URL in localStorage for persistence
             if (typeof window.setLocal === 'function') {
                 window.setLocal('lastGridItemUrl', url);
