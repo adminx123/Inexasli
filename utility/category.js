@@ -596,7 +596,8 @@ const categoryManager = (function() {
     return {
         initButton: initCategoryButton,
         openModal: openCategoryModal,
-        closeModal: closeCategoryModal
+        closeModal: closeCategoryModal,
+        loadProductContent: loadProductContent
     };
 })();
 
@@ -616,4 +617,4 @@ if (document.body) {
 // Make functions available to landing.js
 window.categoryManager = categoryManager;
 // Expose loadProductContent for other scripts to use
-window.loadProductContent = loadProductContent;
+window.loadProductContent = categoryManager.loadProductContent;
