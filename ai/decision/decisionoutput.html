@@ -137,6 +137,12 @@
       </div>
     </div>
 
+  <!-- Add Mermaid.js for decision trees -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  
+  <!-- Add D3.js for charts -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  
   <script src="../../utility/copy.js"></script>
   
   <script>
@@ -194,6 +200,9 @@
         };
       };
 
+      // Initialize Mermaid
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+      
       // Create visualization based on analysis type
       const createVisualization = (data, containerId) => {
         const container = document.getElementById(containerId);
@@ -206,19 +215,403 @@
         }
 
         const hints = getVisualizationHints(data.analysisType);
-        console.log(`Visualization hints for ${data.analysisType}:`, hints);
+        console.log(`Creating visualization for ${data.analysisType}:`, hints);
 
-        // For now, show the JSON with visualization hints as a comment
-        // Later you can implement actual D3.js/Mermaid.js visualizations here
-        container.innerHTML = `
-          <div class="visualization-info">
-            <h3>Analysis Type: ${data.analysisType}</h3>
-            <p><strong>Recommended:</strong> ${hints.recommended}</p>
-            <p><strong>Chart Types:</strong> ${hints.chartTypes.join(', ')}</p>
-            <p><strong>Description:</strong> ${hints.description}</p>
-          </div>
-          <pre>${JSON.stringify(data, null, 2)}</pre>
+        // Clear container
+        container.innerHTML = '';
+
+        // Create visualization header
+        const header = document.createElement('div');
+        header.className = 'visualization-header';
+        header.innerHTML = `
+          <h2>${data.decisionTitle || 'Decision Analysis'}</h2>
+          <div class="analysis-type">Analysis Type: ${data.analysisType}</div>
         `;
+        container.appendChild(header);
+
+        // Create visualization content
+        const vizContainer = document.createElement('div');
+        vizContainer.className = 'visualization-content';
+        vizContainer.id = `viz-${containerId}`;
+        container.appendChild(vizContainer);
+
+        // Route to appropriate visualization
+        try {
+          switch (data.analysisType) {
+            case 'decision-tree':
+              createDecisionTreeVisualization(data, vizContainer);
+              break;
+            case 'pros-cons':
+              createProsConsVisualization(data, vizContainer);
+              break;
+            case 'cost-benefit':
+              createCostBenefitVisualization(data, vizContainer);
+              break;
+            case 'swot':
+              createSwotVisualization(data, vizContainer);
+              break;
+            case 'risk-analysis':
+              createRiskAnalysisVisualization(data, vizContainer);
+              break;
+            case 'weighted-scoring':
+              createWeightedScoringVisualization(data, vizContainer);
+              break;
+            case 'stakeholder-analysis':
+              createStakeholderVisualization(data, vizContainer);
+              break;
+            default:
+              // Fallback to JSON with hints
+              vizContainer.innerHTML = `
+                <div class="visualization-info">
+                  <p><strong>Recommended:</strong> ${hints.recommended}</p>
+                  <p><strong>Chart Types:</strong> ${hints.chartTypes.join(', ')}</p>
+                  <p><strong>Description:</strong> ${hints.description}</p>
+                </div>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+              `;
+          }
+        } catch (error) {
+          console.error('Error creating visualization:', error);
+          vizContainer.innerHTML = `
+            <div class="error-message">
+              <h3>Visualization Error</h3>
+              <p>Could not create visualization. Showing raw data:</p>
+            </div>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          `;
+        }
+
+        // Add raw data toggle
+        const rawDataToggle = document.createElement('div');
+        rawDataToggle.className = 'raw-data-toggle';
+        rawDataToggle.innerHTML = `
+          <button onclick="toggleRawData('${containerId}')">Show/Hide Raw Data</button>
+          <div id="raw-data-${containerId}" class="raw-data" style="display: none;">
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          </div>
+        `;
+        container.appendChild(rawDataToggle);
+      };
+
+      // Decision Tree Visualization using Mermaid
+      const createDecisionTreeVisualization = (data, container) => {
+        if (data.mermaidSyntax) {
+          const mermaidDiv = document.createElement('div');
+          mermaidDiv.className = 'mermaid';
+          mermaidDiv.textContent = data.mermaidSyntax.replace(/\\n/g, '\n');
+          container.appendChild(mermaidDiv);
+          
+          // Re-initialize mermaid for new content
+          mermaid.init(undefined, mermaidDiv);
+        } else {
+          // Fallback: create simple node visualization
+          container.innerHTML = `
+            <div class="decision-tree-fallback">
+              <h3>Decision Tree Structure</h3>
+              <div class="nodes-info">
+                <strong>Nodes:</strong> ${data.nodes?.length || 0} decision points
+              </div>
+              <div class="edges-info">
+                <strong>Connections:</strong> ${data.edges?.length || 0} pathways
+              </div>
+            </div>
+          `;
+        }
+      };
+
+      // Pros/Cons Visualization using D3.js
+      const createProsConsVisualization = (data, container) => {
+        if (!data.options || !data.options.length) {
+          container.innerHTML = '<p>No options data available for visualization.</p>';
+          return;
+        }
+
+        const option = data.options[0]; // Show first option for now
+        
+        container.innerHTML = `
+          <div class="pros-cons-chart">
+            <h3>${option.name}</h3>
+            <div class="score-display">Overall Score: ${option.overallScore}/100</div>
+            <div class="charts-container">
+              <div class="pros-chart">
+                <h4>Pros (${option.pros?.length || 0})</h4>
+                <div id="pros-bars"></div>
+              </div>
+              <div class="cons-chart">
+                <h4>Cons (${option.cons?.length || 0})</h4>
+                <div id="cons-bars"></div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Create simple bar charts for pros/cons
+        createSimpleBarChart(option.pros || [], 'pros-bars', '#4CAF50');
+        createSimpleBarChart(option.cons || [], 'cons-bars', '#f44336');
+      };
+
+      // Cost-Benefit Visualization
+      const createCostBenefitVisualization = (data, container) => {
+        if (!data.options || !data.options.length) {
+          container.innerHTML = '<p>No options data available for visualization.</p>';
+          return;
+        }
+
+        const option = data.options[0];
+        
+        container.innerHTML = `
+          <div class="cost-benefit-chart">
+            <h3>${option.name}</h3>
+            <div class="financial-metrics">
+              <div class="metric">
+                <span class="label">ROI:</span>
+                <span class="value">${option.roi || 'N/A'}</span>
+              </div>
+              <div class="metric">
+                <span class="label">NPV:</span>
+                <span class="value">$${(option.netPresentValue || 0).toLocaleString()}</span>
+              </div>
+              <div class="metric">
+                <span class="label">Payback:</span>
+                <span class="value">${option.paybackPeriod || 'N/A'}</span>
+              </div>
+            </div>
+            <div class="costs-benefits">
+              <div class="costs-section">
+                <h4>Costs</h4>
+                <div id="costs-chart"></div>
+              </div>
+              <div class="benefits-section">
+                <h4>Benefits</h4>
+                <div id="benefits-chart"></div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Convert cost-benefit data structure for bar charts
+        const costsForChart = (option.costs || []).map(cost => ({
+          point: cost.category,
+          weight: cost.amount.toLocaleString(),
+          category: cost.amount
+        }));
+        const benefitsForChart = (option.benefits || []).map(benefit => ({
+          point: benefit.category, 
+          weight: benefit.amount.toLocaleString(),
+          category: benefit.amount
+        }));
+        
+        createSimpleBarChart(costsForChart, 'costs-chart', '#FF6B6B');
+        createSimpleBarChart(benefitsForChart, 'benefits-chart', '#4ECDC4');
+      };
+
+      // SWOT Visualization
+      const createSwotVisualization = (data, container) => {
+        if (!data.swotMatrix) {
+          container.innerHTML = '<p>No SWOT matrix data available for visualization.</p>';
+          return;
+        }
+
+        const { strengths, weaknesses, opportunities, threats } = data.swotMatrix;
+
+        container.innerHTML = `
+          <div class="swot-matrix">
+            <div class="swot-quadrant strengths">
+              <h4>Strengths</h4>
+              <ul>${(strengths || []).map(s => `<li><strong>${s.factor}</strong><br><small>${s.impact} impact</small></li>`).join('')}</ul>
+            </div>
+            <div class="swot-quadrant weaknesses">
+              <h4>Weaknesses</h4>
+              <ul>${(weaknesses || []).map(w => `<li><strong>${w.factor}</strong><br><small>${w.impact} impact</small></li>`).join('')}</ul>
+            </div>
+            <div class="swot-quadrant opportunities">
+              <h4>Opportunities</h4>
+              <ul>${(opportunities || []).map(o => `<li><strong>${o.factor}</strong><br><small>${o.impact} impact, ${o.likelihood} likelihood</small></li>`).join('')}</ul>
+            </div>
+            <div class="swot-quadrant threats">
+              <h4>Threats</h4>
+              <ul>${(threats || []).map(t => `<li><strong>${t.factor}</strong><br><small>${t.impact} impact, ${t.likelihood} likelihood</small></li>`).join('')}</ul>
+            </div>
+          </div>
+        `;
+      };
+
+      // Risk Analysis Visualization
+      const createRiskAnalysisVisualization = (data, container) => {
+        if (!data.options || !data.options.length) {
+          container.innerHTML = '<p>No risk data available for visualization.</p>';
+          return;
+        }
+
+        const option = data.options[0];
+        
+        container.innerHTML = `
+          <div class="risk-analysis">
+            <h3>${option.name}</h3>
+            <div class="risk-overview">
+              <div class="risk-level ${option.overallRiskLevel?.toLowerCase()}">
+                Overall Risk: ${option.overallRiskLevel} (${option.riskScore}/10)
+              </div>
+            </div>
+            <div class="risks-list">
+              <h4>Identified Risks</h4>
+              <div id="risks-container"></div>
+            </div>
+          </div>
+        `;
+
+        const risksContainer = container.querySelector('#risks-container');
+        (option.risks || []).forEach(risk => {
+          const riskDiv = document.createElement('div');
+          riskDiv.className = `risk-item ${risk.probability?.toLowerCase()} ${risk.impact?.toLowerCase()}`;
+          riskDiv.innerHTML = `
+            <div class="risk-header">
+              <strong>${risk.risk}</strong>
+              <span class="risk-score">${risk.riskScore}/10</span>
+            </div>
+            <div class="risk-details">
+              <span class="category">${risk.category}</span>
+              <span class="probability">Probability: ${risk.probability}</span>
+              <span class="impact">Impact: ${risk.impact}</span>
+            </div>
+            <div class="mitigation">${risk.mitigation}</div>
+          `;
+          risksContainer.appendChild(riskDiv);
+        });
+      };
+
+      // Weighted Scoring Visualization
+      const createWeightedScoringVisualization = (data, container) => {
+        if (!data.options || !data.options.length) {
+          container.innerHTML = '<p>No scoring data available for visualization.</p>';
+          return;
+        }
+
+        container.innerHTML = `
+          <div class="weighted-scoring">
+            <h3>Weighted Scoring Analysis</h3>
+            <div class="criteria-weights">
+              <h4>Criteria Weights</h4>
+              <div id="criteria-chart"></div>
+            </div>
+            <div class="options-scores">
+              <h4>Option Scores</h4>
+              <div id="scores-chart"></div>
+            </div>
+          </div>
+        `;
+
+        // Show criteria weights
+        if (data.criteria) {
+          const criteriaForChart = data.criteria.map(c => ({
+            point: c.name,
+            weight: `${c.weight}%`,
+            category: c.weight
+          }));
+          createSimpleBarChart(criteriaForChart, 'criteria-chart', '#9C27B0');
+        }
+
+        // Show option scores
+        data.options.forEach((option, index) => {
+          const optionDiv = document.createElement('div');
+          optionDiv.className = 'option-score';
+          optionDiv.innerHTML = `
+            <h5>${option.name} - Total: ${option.totalScore}</h5>
+            <div class="scores-breakdown">
+              ${(option.scores || []).map(s => `
+                <div class="score-item">
+                  <span>${s.criterion}:</span>
+                  <span>${s.rawScore}/10 (weighted: ${s.weightedScore})</span>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          container.querySelector('#scores-chart').appendChild(optionDiv);
+        });
+      };
+
+      // Stakeholder Analysis Visualization
+      const createStakeholderVisualization = (data, container) => {
+        if (!data.stakeholders || !data.stakeholders.length) {
+          container.innerHTML = '<p>No stakeholder data available for visualization.</p>';
+          return;
+        }
+
+        container.innerHTML = `
+          <div class="stakeholder-analysis">
+            <h3>Stakeholder Analysis</h3>
+            <div class="stakeholders-grid">
+              ${data.stakeholders.map(stakeholder => `
+                <div class="stakeholder-card ${stakeholder.attitude?.toLowerCase()}">
+                  <h4>${stakeholder.name}</h4>
+                  <div class="stakeholder-details">
+                    <div><strong>Type:</strong> ${stakeholder.type}</div>
+                    <div><strong>Influence:</strong> ${stakeholder.influence}</div>
+                    <div><strong>Impact:</strong> ${stakeholder.impact}</div>
+                    <div><strong>Attitude:</strong> ${stakeholder.attitude}</div>
+                    <div><strong>Strategy:</strong> ${stakeholder.managementStrategy}</div>
+                  </div>
+                  <div class="interests">
+                    <strong>Interests:</strong> ${(stakeholder.interests || []).join(', ')}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      };
+
+      // Simple bar chart helper function - handles multiple data structures
+      const createSimpleBarChart = (data, containerId, color) => {
+        const container = document.getElementById(containerId);
+        if (!container || !data.length) return;
+
+        // Determine data structure and extract values
+        const getValue = (item) => {
+          if (typeof item.category === 'number') return item.category;
+          if (typeof item.amount === 'number') return item.amount;
+          if (typeof item.weight === 'number') return item.weight;
+          return 1; // fallback
+        };
+
+        const getLabel = (item) => {
+          return item.point || item.factor || item.name || item.category || 'Item';
+        };
+
+        const getDisplayValue = (item) => {
+          if (item.weight && typeof item.weight === 'string') return item.weight;
+          if (item.amount) return item.amount.toLocaleString();
+          if (item.impact) return item.impact;
+          return getValue(item);
+        };
+
+        const maxValue = Math.max(...data.map(getValue));
+        
+        data.forEach(item => {
+          const barContainer = document.createElement('div');
+          barContainer.className = 'bar-item';
+          
+          const value = getValue(item);
+          const percentage = maxValue > 0 ? (value / maxValue) * 100 : 0;
+          
+          barContainer.innerHTML = `
+            <div class="bar-label">${getLabel(item)}</div>
+            <div class="bar-background">
+              <div class="bar-fill" style="width: ${percentage}%; background-color: ${color};"></div>
+            </div>
+            <div class="bar-value">${getDisplayValue(item)}</div>
+          `;
+          
+          container.appendChild(barContainer);
+        });
+      };
+
+      // Toggle raw data function
+      window.toggleRawData = (containerId) => {
+        const rawDataDiv = document.getElementById(`raw-data-${containerId}`);
+        if (rawDataDiv) {
+          rawDataDiv.style.display = rawDataDiv.style.display === 'none' ? 'block' : 'none';
+        }
       };
       
       // Reference the global utility functions
@@ -355,8 +748,339 @@
       font-size: 14px;
       color: #777;
     }
-    
 
+    /* Visualization Components CSS */
+    .visualization-header h2 {
+      margin: 0 0 10px 0;
+      color: #333;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .analysis-type {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    /* SWOT Matrix */
+    .swot-matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .swot-quadrant {
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid;
+    }
+
+    .swot-quadrant.strengths {
+      background-color: #e8f5e8;
+      border-color: #4caf50;
+    }
+
+    .swot-quadrant.weaknesses {
+      background-color: #fff3e0;
+      border-color: #ff9800;
+    }
+
+    .swot-quadrant.opportunities {
+      background-color: #e3f2fd;
+      border-color: #2196f3;
+    }
+
+    .swot-quadrant.threats {
+      background-color: #ffebee;
+      border-color: #f44336;
+    }
+
+    .swot-quadrant h4 {
+      margin: 0 0 10px 0;
+      font-weight: 600;
+    }
+
+    .swot-quadrant ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .swot-quadrant li {
+      margin-bottom: 8px;
+      padding: 5px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 4px;
+    }
+
+    /* Risk Analysis */
+    .risk-analysis {
+      margin: 20px 0;
+    }
+
+    .risk-overview {
+      margin-bottom: 20px;
+    }
+
+    .risk-level {
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .risk-level.high {
+      background-color: #ffebee;
+      color: #c62828;
+      border: 2px solid #f44336;
+    }
+
+    .risk-level.medium {
+      background-color: #fff3e0;
+      color: #ef6c00;
+      border: 2px solid #ff9800;
+    }
+
+    .risk-level.low {
+      background-color: #e8f5e8;
+      color: #2e7d32;
+      border: 2px solid #4caf50;
+    }
+
+    .risk-item {
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #ddd;
+    }
+
+    .risk-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .risk-score {
+      background-color: #f0f0f0;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .risk-details {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .mitigation {
+      font-style: italic;
+      color: #666;
+    }
+
+    /* Financial Metrics */
+    .financial-metrics {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .metric {
+      text-align: center;
+    }
+
+    .metric .label {
+      display: block;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .metric .value {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    /* Charts Container */
+    .charts-container,
+    .costs-benefits {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .pros-chart,
+    .cons-chart,
+    .costs-section,
+    .benefits-section {
+      flex: 1;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    /* Bar Charts */
+    .bar-item {
+      margin-bottom: 10px;
+    }
+
+    .bar-label {
+      font-size: 14px;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .bar-background {
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      height: 20px;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .bar-value {
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    /* Stakeholder Analysis */
+    .stakeholders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .stakeholder-card {
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+    }
+
+    .stakeholder-card.champion {
+      border-color: #4caf50;
+      background-color: #e8f5e8;
+    }
+
+    .stakeholder-card.supporter {
+      border-color: #8bc34a;
+      background-color: #f1f8e9;
+    }
+
+    .stakeholder-card.neutral {
+      border-color: #9e9e9e;
+      background-color: #f5f5f5;
+    }
+
+    .stakeholder-card.skeptic {
+      border-color: #ff9800;
+      background-color: #fff3e0;
+    }
+
+    .stakeholder-card.blocker {
+      border-color: #f44336;
+      background-color: #ffebee;
+    }
+
+    .stakeholder-card h4 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+
+    .stakeholder-details div {
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .interests {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    /* Weighted Scoring */
+    .weighted-scoring {
+      margin: 20px 0;
+    }
+
+    .criteria-weights,
+    .options-scores {
+      margin-bottom: 25px;
+    }
+
+    .option-score {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .option-score h5 {
+      margin: 0 0 10px 0;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .scores-breakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .score-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 10px;
+      background-color: white;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    /* Raw Data Toggle */
+    .raw-data-toggle {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    .raw-data-toggle button {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .raw-data-toggle button:hover {
+      background-color: #5a6268;
+    }
+
+    .raw-data {
+      margin-top: 15px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+    }
     
     /* Card animation setup */
     .quote-card {
