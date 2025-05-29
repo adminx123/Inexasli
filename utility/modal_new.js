@@ -34,22 +34,11 @@ function injectModalCSS() {
     height: 90%;
     max-height: 90vh;
     overflow: auto;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;     /* Firefox */
     position: relative;
     font-family: "Inter", sans-serif;
     border: 2px solid #000;
     border-radius: 8px;
     box-shadow: 4px 4px 0 #000;
-}
-
-.modal-content::-webkit-scrollbar {
-    display: none;  /* WebKit browsers */
-}
-
-/* Narrow style for IQ pages */
-.modal-content.narrow {
-    max-width: 480px !important;
 }
 
 .modal-content iframe {
@@ -106,17 +95,7 @@ function injectModalCSS() {
         width: 90%;
         max-width: 300px;
     }
-}
-
-/* Hide scrollbars but keep scroll functionality */
-.modal, .modal-content {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;     /* Firefox */
-}
-.modal::-webkit-scrollbar, .modal-content::-webkit-scrollbar {
-    display: none;  /* WebKit browsers */
-}
-`;
+}`;
     document.head.appendChild(style);
 }
 
@@ -136,61 +115,13 @@ function createModal() {
 
 // Function to open the modal with specified content
 function openModal(contentSrc) {
-    // List of IQ pages from input.txt
-    const narrowList = [
-        '/ai/calorie/calorieiq.html',
-        '/ai/decision/decisioniq.html',
-        '/ai/enneagram/enneagramiq.html',
-        '/ai/event/eventiq.html',
-        '/ai/fitness/fitnessiq.html',
-        '/ai/philosophy/philosophyiq.html',
-        '/ai/quiz/quiziq.html',
-        '/ai/research/researchiq.html',
-        '/ai/social/socialiq.html'
-    ];
     const modal = createModal();
     const modalContent = modal.querySelector('.modal-content');
-
-    // Apply narrow class if the URL matches
-    if (narrowList.some(path => contentSrc.endsWith(path))) {
-        modalContent.classList.add('narrow');
-    } else {
-        modalContent.classList.remove('narrow');
-    }
     
-    // Clear existing content and prepare iframe
+    // Clear existing content and load new content via iframe
     modalContent.innerHTML = '';
     const iframe = document.createElement('iframe');
     iframe.src = contentSrc;
-    // hide until styled
-    iframe.style.visibility = 'hidden';
-    iframe.style.opacity = '0';
-    iframe.style.transition = 'opacity 0.2s ease';
-    // inject shared CSS on load then fade in
-    iframe.onload = () => {
-        const docHead = iframe.contentDocument.head;
-        ['/ai/styles/inputstyles.css', 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'].forEach(href => {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = href;
-            docHead.appendChild(link);
-        });
-        // Hide scrollbars inside iframe content but keep scrolling
-        const hideScrollbarStyle = document.createElement('style');
-        hideScrollbarStyle.textContent = `html, body {
-    overflow: auto;
-    -ms-overflow-style: none;  /* IE/Edge */
-    scrollbar-width: none;     /* Firefox */
-}
-html::-webkit-scrollbar, body::-webkit-scrollbar {
-    display: none;            /* WebKit */
-}`;
-        docHead.appendChild(hideScrollbarStyle);
-        requestAnimationFrame(() => {
-            iframe.style.visibility = 'visible';
-            iframe.style.opacity = '1';
-        });
-    };
     modalContent.appendChild(iframe);
 
     modal.style.display = 'flex';
@@ -322,9 +253,6 @@ window.setupModalTriggers = setupModalTriggers;
 
 // Make closeModal globally accessible
 window.closeModal = closeModal;
-
-// Make openModal globally accessible
-window.openModal = openModal;
 
 // Make openGeneratedPromptModal globally accessible
 window.openGeneratedPromptModal = openGeneratedPromptModal;
