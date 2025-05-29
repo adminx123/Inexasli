@@ -235,13 +235,17 @@ button:hover {
 /* Generate Button */
 .generate-btn {
   align-self: center;
+  border: 1.5px solid #000;
+  box-shadow: 3px 3px 0.5px #000;
+  background-color: #fff;
+  color: #000;
 }
 
 /* Clear Button */
 .clear-btn {
   background-color: #fff;
   color: #000;
-  border: 2px solid #000;
+  border: 1.5px solid #000;
   font-family: "Geist", sans-serif;
   font-size: 16px;
   border-radius: 5px;
@@ -252,6 +256,7 @@ button:hover {
   max-width: 460px;
   display: block;
   transition: background-color 0.2s, color 0.2s;
+  box-shadow: 3px 3px 0.5px #000;
 }
 
 .clear-btn:hover {

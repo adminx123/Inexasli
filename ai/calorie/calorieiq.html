@@ -312,7 +312,7 @@
     
     const removeBtn = document.createElement('button');
     removeBtn.innerText = '×';
-    removeBtn.style.cssText = 'width: 40px; height: 40px; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;';
+    removeBtn.style.cssText = 'width: 40px; height: 40px; border: 1.5px solid #000; border-radius: 6px; background-color: #fff; color: #000; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 3px 3px 0.5px #000;';
     removeBtn.addEventListener('click', () => { 
       inputGroup.remove(); 
       // Only reposition button if not during form repopulation
@@ -323,7 +323,7 @@
       setJSON('calorieIqInput', collectFormData());
     });
     removeBtn.addEventListener('mouseenter', () => { removeBtn.style.backgroundColor = '#e9e9e9'; });
-    removeBtn.addEventListener('mouseleave', () => { removeBtn.style.backgroundColor = '#f9f9f9'; });
+    removeBtn.addEventListener('mouseleave', () => { removeBtn.style.backgroundColor = '#fff'; });
     inputGroup.appendChild(removeBtn);
     
     // Find the main food log container (row1) to add the new input below the existing ones
@@ -379,10 +379,10 @@
     addBtn.id = 'multifield-add-btn';
     addBtn.title = 'Add another meal/snack';
     addBtn.innerText = '+';
-    addBtn.style.cssText = 'width: 40px; height: 40px; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;';
+    addBtn.style.cssText = 'width: 40px; height: 40px; border: 1.5px solid #000; border-radius: 6px; background-color: #fff; color: #000; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 3px 3px 0.5px #000;';
     addBtn.addEventListener('click', () => addMealInput());
     addBtn.addEventListener('mouseenter', () => { addBtn.style.backgroundColor = '#e9e9e9'; });
-    addBtn.addEventListener('mouseleave', () => { addBtn.style.backgroundColor = '#f9f9f9'; });
+    addBtn.addEventListener('mouseleave', () => { addBtn.style.backgroundColor = '#fff'; });
     
     console.log('[CalorieIQ] Add button created:', addBtn);
     
