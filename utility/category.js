@@ -3,7 +3,12 @@
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * is strictl            .category-filter-row-all {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                padding: 0 4px;
+            }hibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
  */
@@ -16,8 +21,7 @@ const categoryManager = (function() {
         'health': ['CalorieIQ', 'FitnessIQ', 'SymptomIQ'],
         'business': ['DecisionIQ'], 
         'finance': ['IncomeIQ', 'SpeculationIQ'],
-        'lifestyle': ['EventIQ', 'SocialIQ', 'PhilosophyIQ'],
-        'personal': ['EnneagramIQ', 'SocialIQ', 'PhilosophyIQ'],
+        'lifestyle': ['EventIQ', 'SocialIQ', 'PhilosophyIQ', 'EnneagramIQ'],
         'learning': ['ResearchIQ', 'QuizIQ', 'PhilosophyIQ'], 
         'productivity': ['DecisionIQ'] 
     };
@@ -287,12 +291,26 @@ const categoryManager = (function() {
             
             .category-filter-grid {
                 display: flex;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+                max-width: 100%;
+                margin: 0 0 10px 0;
+                justify-content: center;
+            }
+            
+            .category-filter-row-all {
+                display: flex;
+                justify-content: stretch;
+                width: 100%;
+            }
+            
+            .category-filter-row-others {
+                display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
                 gap: 8px;
                 width: 100%;
-                max-width: 100%;
-                margin: 0;
                 justify-content: center;
             }
             
@@ -313,8 +331,8 @@ const categoryManager = (function() {
                 align-items: center;
                 text-transform: uppercase;
                 font-weight: 500;
-                flex: 0 0 calc(33.33% - 8px);
-                margin-bottom: 8px;
+                flex: 0 0 calc(33.33% - 6px);
+                margin: 0;
             }
             
             .category-filter-item:hover {
@@ -337,7 +355,7 @@ const categoryManager = (function() {
                 width: 100%;
                 max-width: 100%;
                 margin: 0;
-                padding-right: 5px;
+                padding: 0;
                 max-height: 60vh;
                 overflow-y: auto;
             }
@@ -420,25 +438,45 @@ const categoryManager = (function() {
         const filterGrid = document.createElement('div');
         filterGrid.className = 'category-filter-grid';
         
-        // Add filter items with a more uniform layout
-        const categories = [
-            { id: 'all', label: 'ALL' },
+        // Create "All" row at the top
+        const allRow = document.createElement('div');
+        allRow.className = 'category-filter-row-all';
+        
+        const allFilter = document.createElement('div');
+        allFilter.className = 'category-filter-item active';
+        allFilter.setAttribute('data-category', 'all');
+        allFilter.textContent = 'ALL';
+        allFilter.style.width = 'calc(100% - 8px)';
+        allFilter.style.flex = 'none';
+        allFilter.addEventListener('click', () => filterGridItems('all'));
+        allRow.appendChild(allFilter);
+        
+        filterGrid.appendChild(allRow);
+        
+        // Create row for other categories
+        const othersRow = document.createElement('div');
+        othersRow.className = 'category-filter-row-others';
+        
+        // Add other filter items with updated category list
+        const otherCategories = [
             { id: 'health', label: 'HEALTH' },
             { id: 'business', label: 'BUSINESS' },
             { id: 'finance', label: 'FINANCE' },
             { id: 'lifestyle', label: 'LIFESTYLE' },
-            { id: 'personal', label: 'PERSONAL' },
             { id: 'learning', label: 'LEARNING' },
             { id: 'productivity', label: 'PRODUCTIVITY' }
         ];
         
-        categories.forEach(cat => {
+        otherCategories.forEach(cat => {
             const filterItem = document.createElement('div');
-            filterItem.className = 'category-filter-item' + (cat.id === 'all' ? ' active' : '');
+            filterItem.className = 'category-filter-item';
             filterItem.setAttribute('data-category', cat.id);
-            filterItem.textContent = cat.label;        filterItem.addEventListener('click', () => filterGridItems(cat.id));
-            filterGrid.appendChild(filterItem);
+            filterItem.textContent = cat.label;
+            filterItem.addEventListener('click', () => filterGridItems(cat.id));
+            othersRow.appendChild(filterItem);
         });
+        
+        filterGrid.appendChild(othersRow);
         
         modalContent.appendChild(filterGrid);
         
