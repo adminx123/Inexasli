@@ -809,14 +809,27 @@ function prepareContentForCapture(containerEl) {
     console.log(`🎯 Preparing ${cards.length} cards for capture`);
     
     cards.forEach((card, index) => {
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
-        card.style.visibility = 'visible';
-        card.style.display = 'block';
+        // Force full visibility and remove all animations/transitions
+        card.style.setProperty('opacity', '1', 'important');
+        card.style.setProperty('transform', 'translateY(0)', 'important');
+        card.style.setProperty('visibility', 'visible', 'important');
+        card.style.setProperty('display', 'block', 'important');
+        card.style.setProperty('animation', 'none', 'important');
+        card.style.setProperty('transition', 'none', 'important');
+        card.style.setProperty('animation-delay', '0s', 'important');
+        card.style.setProperty('transition-delay', '0s', 'important');
         
-        // Remove any animation delays
-        card.style.animationDelay = '0s';
-        card.style.transitionDelay = '0s';
+        // Also apply to child elements that might have opacity issues
+        const cardElements = card.querySelectorAll('*');
+        cardElements.forEach(el => {
+            // Don't override intentionally hidden elements
+            const computedStyle = window.getComputedStyle(el);
+            if (computedStyle.display !== 'none') {
+                el.style.setProperty('opacity', '1', 'important');
+                el.style.setProperty('animation', 'none', 'important');
+                el.style.setProperty('transition', 'none', 'important');
+            }
+        });
     });
     
     // Remove any loading indicators
@@ -855,7 +868,7 @@ function createPDFFromCanvas(canvas) {
     const y = (pdfHeight - imgHeight) / 2;
     
     // Convert canvas to image and add to PDF
-    const imgData = canvas.toDataURL('image/jpeg', 0.9);
+    const imgData = canvas.toDataURL('image/jpeg', 1.0);
     pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
     
     // Add footer
