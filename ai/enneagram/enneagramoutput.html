@@ -1012,12 +1012,7 @@
                 }, index * 150);
               });
               
-              // Show success message after all cards are animated using enhanced UI
-              setTimeout(() => {
-                if (window.enhancedUI) {
-                  window.enhancedUI.showToast('Your Enneagram analysis has been loaded successfully! 🌟', 'success');
-                }
-              }, cards.length * 150 + 500);
+              // Success toast removed per user request
             }, 100);
             
             console.log('Data displayed successfully');

@@ -180,7 +180,7 @@ function openShareModal(containerId, getContentCallback) {
     `;
 
     // Ensure Font Awesome is loaded before creating modal content
-    ensureGlobalFontAwesome(() => {
+    window.enhancedUI.ensureFontAwesome(() => {
         modalContent.innerHTML = `
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 <button class="share-action-btn" data-action="share" style="
@@ -345,28 +345,28 @@ function shareContent(containerId, getContentCallback) {
     const containerEl = document.getElementById(containerId);
     if (!containerEl) {
         console.error(`Element with ID '${containerId}' not found`);
-        showToast('Cannot find content to share. Please ensure the page has fully loaded.', 'error');
+        window.enhancedUI.showToast('Cannot find content to share. Please ensure the page has fully loaded.', 'error');
         return;
     }
 
     // Show loading toast
-    const loadingToast = showToast('Preparing content for sharing...', 'info', 10000);
+    const loadingToast = window.enhancedUI.showToast('Preparing content for sharing...', 'info', 10000);
     
     // Load jsPDF library if not already loaded
     if (typeof jsPDF === 'undefined') {
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
         script.onload = () => {
-            closeToast(loadingToast);
+            window.enhancedUI.closeToast(loadingToast);
             generateShareablePDF(containerId, getContentCallback);
         };
         script.onerror = () => {
-            closeToast(loadingToast);
-            showToast('Failed to load PDF library. Please check your internet connection.', 'error');
+            window.enhancedUI.closeToast(loadingToast);
+            window.enhancedUI.showToast('Failed to load PDF library. Please check your internet connection.', 'error');
         };
         document.head.appendChild(script);
     } else {
-        closeToast(loadingToast);
+        window.enhancedUI.closeToast(loadingToast);
         generateShareablePDF(containerId, getContentCallback);
     }
 }
@@ -377,7 +377,7 @@ function shareContent(containerId, getContentCallback) {
  * @param {Function} getContentCallback - Optional callback to get specific formatted content
  */
 function generateShareablePDF(containerId, getContentCallback) {
-    const progressToast = showToast('Creating shareable PDF...', 'info', 15000);
+    const progressToast = window.enhancedUI.showToast('Creating shareable PDF...', 'info', 15000);
     
     try {
         const { jsPDF } = window.jspdf;
@@ -469,11 +469,12 @@ function generateShareablePDF(containerId, getContentCallback) {
                 marginLeft, pageHeight - 10);
         }
         
-        closeToast(progressToast);
+        window.enhancedUI.closeToast(progressToast);
         
         // Create a blob from the PDF
         const pdfBlob = doc.output('blob');
-        const filename = `inexasli-content-${new Date().toISOString().split('T')[0]}.pdf`;
+        const { analysisType, title } = getAnalysisTypeFromPage();
+        const filename = `${analysisType}-${new Date().toISOString().split('T')[0]}.pdf`;
         
         // Try to use Web Share API with the PDF file
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], filename, { type: 'application/pdf' })] })) {
@@ -483,7 +484,7 @@ function generateShareablePDF(containerId, getContentCallback) {
                 text: 'Sharing content from INEXASLI',
                 files: [file]
             }).then(() => {
-                showToast('PDF shared successfully!', 'success');
+                window.enhancedUI.showToast('PDF shared successfully!', 'success');
             }).catch(error => {
                 if (error.name !== 'AbortError') {
                     console.log('Web Share API failed, falling back to download:', error);
@@ -497,16 +498,16 @@ function generateShareablePDF(containerId, getContentCallback) {
         
     } catch (error) {
         console.error('PDF generation error:', error);
-        closeToast(progressToast);
+        window.enhancedUI.closeToast(progressToast);
         
         if (error.message.includes('not found')) {
-            showToast('Cannot find content to share. Please ensure the page has fully loaded.', 'error', 5000);
+            window.enhancedUI.showToast('Cannot find content to share. Please ensure the page has fully loaded.', 'error', 5000);
         } else if (error.message.includes('still loading')) {
-            showToast('Content is still loading. Please wait a moment and try again.', 'warning', 5000);
+            window.enhancedUI.showToast('Content is still loading. Please wait a moment and try again.', 'warning', 5000);
         } else if (error.message.includes('No content available')) {
-            showToast('No content available to share. Please ensure content has loaded.', 'error', 5000);
+            window.enhancedUI.showToast('No content available to share. Please ensure content has loaded.', 'error', 5000);
         } else {
-            showToast('Error creating shareable PDF. Please try again.', 'error');
+            window.enhancedUI.showToast('Error creating shareable PDF. Please try again.', 'error');
         }
     }
 }
@@ -531,18 +532,18 @@ function fallbackPDFShare(pdfBlob, filename) {
     // Clean up the URL object
     setTimeout(() => URL.revokeObjectURL(url), 100);
     
-    showToast(`PDF "${filename}" downloaded! You can now attach it to emails, messages, or share it however you like.`, 'success', 6000);
+    window.enhancedUI.showToast(`PDF "${filename}" downloaded! You can now attach it to emails, messages, or share it however you like.`, 'success', 6000);
 }
 
 /**
  * Print the current page
  */
 function printContent() {
-    showToast('Preparing content for printing...', 'info', 2000);
+    window.enhancedUI.showToast('Preparing content for printing...', 'info', 2000);
     setTimeout(() => {
         window.print();
         setTimeout(() => {
-            showToast('Print dialog opened. You can also save as PDF from the print options.', 'info');
+            window.enhancedUI.showToast('Print dialog opened. You can also save as PDF from the print options.', 'info');
         }, 1000);
     }, 500);
 }
@@ -553,23 +554,23 @@ function printContent() {
  * @param {Function} getContentCallback - Optional callback to get specific formatted content
  */
 function downloadAsPDF(containerId, getContentCallback) {
-    const loadingToast = showToast('Preparing PDF download...', 'info', 10000);
+    const loadingToast = window.enhancedUI.showToast('Preparing PDF download...', 'info', 10000);
     
     // Load jsPDF library if not already loaded
     if (typeof jsPDF === 'undefined') {
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
         script.onload = () => {
-            closeToast(loadingToast);
+            window.enhancedUI.closeToast(loadingToast);
             generatePDF(containerId, getContentCallback);
         };
         script.onerror = () => {
-            closeToast(loadingToast);
-            showToast('Failed to load PDF library. Please check your internet connection.', 'error');
+            window.enhancedUI.closeToast(loadingToast);
+            window.enhancedUI.showToast('Failed to load PDF library. Please check your internet connection.', 'error');
         };
         document.head.appendChild(script);
     } else {
-        closeToast(loadingToast);
+        window.enhancedUI.closeToast(loadingToast);
         generatePDF(containerId, getContentCallback);
     }
 }
@@ -658,13 +659,13 @@ function extractVisibleContent(container) {
  */
 function generatePDF(containerId, getContentCallback) {
     console.log('🎯 Starting PDF generation with visual capture');
-    const progressToast = showToast('📄 Preparing visual PDF...', 'info', 15000);
+    const progressToast = window.enhancedUI.showToast('📄 Preparing visual PDF...', 'info', 15000);
     
     // Validate container exists first
     const containerEl = document.getElementById(containerId);
     if (!containerEl) {
-        closeToast(progressToast);
-        showToast('❌ Content container not found. Page may not be loaded.', 'error');
+        window.enhancedUI.closeToast(progressToast);
+        window.enhancedUI.showToast('❌ Content container not found. Page may not be loaded.', 'error');
         return;
     }
     
@@ -673,8 +674,8 @@ function generatePDF(containerId, getContentCallback) {
     const hasContent = containerEl.textContent.trim().length > 100;
     
     if (!hasCards && !hasContent) {
-        closeToast(progressToast);
-        showToast('❌ No content to export. Wait for analysis to complete.', 'warning');
+        window.enhancedUI.closeToast(progressToast);
+        window.enhancedUI.showToast('❌ No content to export. Wait for analysis to complete.', 'warning');
         return;
     }
     
@@ -687,8 +688,8 @@ function generatePDF(containerId, getContentCallback) {
         captureAndCreatePDF(containerId, progressToast);
     }).catch(error => {
         console.error('❌ Failed to load libraries:', error);
-        closeToast(progressToast);
-        showToast('❌ Failed to load PDF libraries. Check your internet connection.', 'error');
+        window.enhancedUI.closeToast(progressToast);
+        window.enhancedUI.showToast('❌ Failed to load PDF libraries. Check your internet connection.', 'error');
     });
 }
 
@@ -739,8 +740,8 @@ function captureAndCreatePDF(containerId, progressToast) {
     const { jsPDF } = window.jspdf;
     
     // Update progress
-    closeToast(progressToast);
-    const captureToast = showToast('📸 Capturing visual content...', 'info', 10000);
+    window.enhancedUI.closeToast(progressToast);
+    const captureToast = window.enhancedUI.showToast('📸 Capturing visual content...', 'info', 10000);
     
     // Prepare content for capture
     prepareContentForCapture(containerEl);
@@ -777,12 +778,12 @@ function captureAndCreatePDF(containerId, progressToast) {
             }
         }).then(canvas => {
             console.log('✅ Canvas captured successfully');
-            closeToast(captureToast);
+            window.enhancedUI.closeToast(captureToast);
             
             // Validate canvas has content
             if (canvas.width === 0 || canvas.height === 0) {
                 console.error('❌ Canvas is empty');
-                showToast('❌ Failed to capture content. Trying text fallback...', 'warning');
+                window.enhancedUI.showToast('❌ Failed to capture content. Trying text fallback...', 'warning');
                 generateTextFallbackPDF(containerId);
                 return;
             }
@@ -792,8 +793,8 @@ function captureAndCreatePDF(containerId, progressToast) {
             
         }).catch(error => {
             console.error('❌ html2canvas failed:', error);
-            closeToast(captureToast);
-            showToast('❌ Visual capture failed. Generating text-based PDF...', 'warning');
+            window.enhancedUI.closeToast(captureToast);
+            window.enhancedUI.showToast('❌ Visual capture failed. Generating text-based PDF...', 'warning');
             generateTextFallbackPDF(containerId);
         });
     }, 1000);
@@ -840,6 +841,136 @@ function prepareContentForCapture(containerEl) {
 }
 
 /**
+ * Determine the analysis type and filename prefix based on current page
+ * @returns {Object} - Object with analysisType and title
+ */
+function getAnalysisTypeFromPage() {
+    console.log('[PDF] Starting analysis type detection...');
+    
+    // Enhanced debugging - log all relevant information
+    const currentPath = window.location.pathname;
+    const currentHref = window.location.href;
+    const lastGridItemUrl = localStorage.getItem('lastGridItemUrl');
+    
+    console.log('[PDF] Current path:', currentPath);
+    console.log('[PDF] Current href:', currentHref);
+    console.log('[PDF] lastGridItemUrl:', lastGridItemUrl);
+    
+    // Also check all localStorage keys for debugging
+    console.log('[PDF] All localStorage keys:', Object.keys(localStorage));
+    
+    // Function to extract analysis type from URL
+    function extractAnalysisType(url) {
+        if (!url) return null;
+        
+        console.log('[PDF] Checking URL patterns for:', url);
+        
+        // Check for patterns in the URL
+        if (url.includes('/calorie/') || url.includes('calorie')) {
+            console.log('[PDF] Matched calorie pattern');
+            return { analysisType: 'calorie-analysis', title: 'Calorie Analysis' };
+        }
+        if (url.includes('/enneagram/') || url.includes('enneagram')) {
+            console.log('[PDF] Matched enneagram pattern');
+            return { analysisType: 'enneagram-analysis', title: 'Enneagram Analysis' };
+        }
+        if (url.includes('/fitness/') || url.includes('fitness')) {
+            console.log('[PDF] Matched fitness pattern');
+            return { analysisType: 'fitness-analysis', title: 'Fitness Analysis' };
+        }
+        if (url.includes('/decision/') || url.includes('decision')) {
+            console.log('[PDF] Matched decision pattern');
+            return { analysisType: 'decision-analysis', title: 'Decision Analysis' };
+        }
+        if (url.includes('/philosophy/') || url.includes('philosophy')) {
+            console.log('[PDF] Matched philosophy pattern');
+            return { analysisType: 'philosophy-analysis', title: 'Philosophy Analysis' };
+        }
+        if (url.includes('/quiz/') || url.includes('quiz')) {
+            console.log('[PDF] Matched quiz pattern');
+            return { analysisType: 'quiz-results', title: 'Quiz Results' };
+        }
+        if (url.includes('/event/') || url.includes('event')) {
+            console.log('[PDF] Matched event pattern');
+            return { analysisType: 'event-analysis', title: 'Event Analysis' };
+        }
+        if (url.includes('/adventure/') || url.includes('adventure')) {
+            console.log('[PDF] Matched adventure pattern');
+            return { analysisType: 'adventure-analysis', title: 'Adventure Analysis' };
+        }
+        if (url.includes('/social/') || url.includes('social')) {
+            console.log('[PDF] Matched social pattern');
+            return { analysisType: 'social-analysis', title: 'Social Analysis' };
+        }
+        if (url.includes('/research/') || url.includes('research')) {
+            console.log('[PDF] Matched research pattern');
+            return { analysisType: 'research-analysis', title: 'Research Analysis' };
+        }
+        if (url.includes('/newbiz/') || url.includes('newbiz') || url.includes('business')) {
+            console.log('[PDF] Matched business pattern');
+            return { analysisType: 'business-analysis', title: 'Business Analysis' };
+        }
+        if (url.includes('/symptom/') || url.includes('symptom')) {
+            console.log('[PDF] Matched symptom pattern');
+            return { analysisType: 'symptom-analysis', title: 'Symptom Analysis' };
+        }
+        if (url.includes('/book/') || url.includes('book')) {
+            console.log('[PDF] Matched book pattern');
+            return { analysisType: 'book-analysis', title: 'Book Analysis' };
+        }
+        if (url.includes('/speculation/') || url.includes('speculation')) {
+            console.log('[PDF] Matched speculation pattern');
+            return { analysisType: 'speculation-analysis', title: 'Speculation Analysis' };
+        }
+        
+        console.log('[PDF] No pattern matched for URL:', url);
+        return null;
+    }
+    
+    // Try lastGridItemUrl first
+    if (lastGridItemUrl) {
+        console.log('[PDF] Checking lastGridItemUrl...');
+        const result = extractAnalysisType(lastGridItemUrl);
+        if (result) {
+            console.log('[PDF] Found analysis type from lastGridItemUrl:', result);
+            return result;
+        }
+    }
+    
+    // Fallback to current URL
+    console.log('[PDF] Checking current URL path...');
+    const pathResult = extractAnalysisType(currentPath);
+    if (pathResult) {
+        console.log('[PDF] Found analysis type from current path:', pathResult);
+        return pathResult;
+    }
+    
+    // Fallback to current href
+    console.log('[PDF] Checking current href...');
+    const hrefResult = extractAnalysisType(currentHref);
+    if (hrefResult) {
+        console.log('[PDF] Found analysis type from current href:', hrefResult);
+        return hrefResult;
+    }
+    
+    // Check if we're on an output page and try to extract from page content
+    if (currentPath.includes('output') || currentHref.includes('output')) {
+        console.log('[PDF] On output page, checking page title...');
+        const pageTitle = document.title.toLowerCase();
+        console.log('[PDF] Page title:', pageTitle);
+        
+        const titleResult = extractAnalysisType(pageTitle);
+        if (titleResult) {
+            console.log('[PDF] Found analysis type from page title:', titleResult);
+            return titleResult;
+        }
+    }
+    
+    console.log('[PDF] Could not determine analysis type, using default');
+    return { analysisType: 'inexasli-analysis', title: 'INEXASLI Analysis' };
+}
+
+/**
  * Create PDF from captured canvas
  * @param {HTMLCanvasElement} canvas - Captured canvas
  */
@@ -876,13 +1007,14 @@ function createPDFFromCanvas(canvas) {
     pdf.setTextColor(100, 100, 100);
     pdf.text(`Generated by INEXASLI | ${new Date().toLocaleDateString()}`, margin, pdfHeight - 5);
     
-    // Save PDF
+    // Save PDF with dynamic filename
     const timestamp = new Date().toISOString().split('T')[0];
-    const filename = `enneagram-analysis-${timestamp}.pdf`;
+    const { analysisType, title } = getAnalysisTypeFromPage();
+    const filename = `${analysisType}-${timestamp}.pdf`;
     pdf.save(filename);
     
     console.log('🎉 Visual PDF generated successfully!');
-    showToast(`🎉 Visual PDF "${filename}" downloaded successfully!`, 'success', 5000);
+    window.enhancedUI.showToast(`🎉 Visual PDF "${filename}" downloaded successfully!`, 'success', 5000);
 }
 
 /**
@@ -950,17 +1082,18 @@ function generateTextFallbackPDF(containerId) {
         doc.setTextColor(100, 100, 100);
         doc.text(`Generated by INEXASLI | ${new Date().toLocaleDateString()}`, margin, pageHeight - 10);
         
-        // Save PDF
+        // Save PDF with dynamic filename
         const timestamp = new Date().toISOString().split('T')[0];
-        const filename = `enneagram-text-${timestamp}.pdf`;
+        const { analysisType, title } = getAnalysisTypeFromPage();
+        const filename = `${analysisType}-text-${timestamp}.pdf`;
         doc.save(filename);
         
         console.log('📄 Text PDF generated successfully');
-        showToast(`📄 Text-based PDF "${filename}" downloaded as fallback`, 'success', 5000);
+        window.enhancedUI.showToast(`📄 Text-based PDF "${filename}" downloaded as fallback`, 'success', 5000);
         
     } catch (error) {
         console.error('❌ Failed to generate text PDF:', error);
-        showToast('❌ Failed to generate PDF. Please try again.', 'error');
+        window.enhancedUI.showToast('❌ Failed to generate PDF. Please try again.', 'error');
     }
 }
 
@@ -975,137 +1108,12 @@ function initCopyButton(options = {}) {
     return createCopyButton(containerId);
 }
 
-/**
- * Show toast notification
- * @param {string} message - Message to display
- * @param {string} type - Type of toast (success, error, warning, info)
- * @param {number} duration - Duration in milliseconds
- */
-function showToast(message, type = 'info', duration = 3000) {
-    const toast = document.createElement('div');
-    const toastId = 'toast-' + Date.now();
-    toast.id = toastId;
-    toast.setAttribute('role', 'alert');
-    toast.setAttribute('aria-live', 'assertive');
-    
-    // Toast styling based on type
-    const typeStyles = {
-        success: { bg: '#4caf50', icon: 'fas fa-check-circle' },
-        error: { bg: '#f44336', icon: 'fas fa-exclamation-circle' },
-        warning: { bg: '#ff9800', icon: 'fas fa-exclamation-triangle' },
-        info: { bg: '#333', icon: 'fas fa-info-circle' }
-    };
-    
-    const style = typeStyles[type] || typeStyles.info;
-    
-    toast.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${style.bg};
-        color: white;
-        padding: 16px 24px;
-        border-radius: 8px;
-        z-index: 25001;
-        font-size: 14px;
-        font-family: "Inter", sans-serif;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.3);
-        opacity: 0;
-        transform: translateX(100%);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        max-width: 350px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    `;
-    
-    // Ensure Font Awesome is loaded for toast icons
-    ensureGlobalFontAwesome(() => {
-        toast.innerHTML = `
-            <i class="${style.icon}" aria-hidden="true" style="font-size: 16px;"></i>
-            <span>${message}</span>
-            <button onclick="closeToast('${toastId}')" style="
-                background: none;
-                border: none;
-                color: white;
-                cursor: pointer;
-                padding: 0;
-                margin-left: auto;
-                font-size: 16px;
-                opacity: 0.7;
-                transition: opacity 0.2s;
-            " aria-label="Close notification">
-                <i class="fas fa-times" aria-hidden="true"></i>
-            </button>
-        `;
-        
-        document.body.appendChild(toast);
-        
-        // Animate in
-        setTimeout(() => {
-            toast.style.opacity = '1';
-            toast.style.transform = 'translateX(0)';
-        }, 100);
-        
-        // Auto dismiss
-        setTimeout(() => {
-            closeToast(toastId);
-        }, duration);
-    });
-    
-    return toastId;
-}
-
-/**
- * Ensure Font Awesome is available globally (shared function)
- * @param {Function} callback - Function to call when Font Awesome is ready
- */
-function ensureGlobalFontAwesome(callback) {
-    // Check if Font Awesome is already loaded
-    if (document.querySelector('link[href*="font-awesome"]') || 
-        document.querySelector('link[href*="fontawesome"]') ||
-        window.FontAwesome) {
-        callback();
-        return;
-    }
-    
-    // Load Font Awesome CSS
-    const fontAwesomeLink = document.createElement('link');
-    fontAwesomeLink.rel = 'stylesheet';
-    fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-    fontAwesomeLink.onload = callback;
-    fontAwesomeLink.onerror = () => {
-        console.warn('Failed to load Font Awesome, icons may not display');
-        callback(); // Still proceed with functionality
-    };
-    document.head.appendChild(fontAwesomeLink);
-}
-
-/**
- * Close toast notification
- * @param {string} toastId - ID of the toast to close
- */
-function closeToast(toastId) {
-    const toast = document.getElementById(toastId);
-    if (toast) {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
-            }
-        }, 400);
-    }
-}
-
-// Make toast functions globally accessible
-window.showToast = showToast;
-window.closeToast = closeToast;
-window.printContent = printContent;
-
 // Export functions for use in other files
 // Global utility object for external access
 window.copyUtil = {
     init: initCopyButton,
     openShareModal: openShareModal
 };
+
+// Make print function globally accessible
+window.printContent = printContent;

@@ -70,9 +70,6 @@ function initEnhancedUI(options = {}) {
         }
 
         console.log('✅ Enhanced UI System initialized');
-        
-        // Announce system ready for screen readers
-        announceToScreenReader('Enhanced UI features loaded and ready');
     });
 
     return {
@@ -590,7 +587,8 @@ window.enhancedUI = {
     closeToast,
     scrollToTop,
     isEmbedded: checkIfEmbedded,
-    announceToScreenReader
+    announceToScreenReader,
+    ensureFontAwesome
 };
 
 // Auto-initialize if DOM is ready
