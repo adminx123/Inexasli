@@ -486,6 +486,27 @@
 
       // Initialize copy button with formatted text for philosophy output
       copyUtil.init({ containerId: 'output-span', contentType: 'philosophy', mode: 'text' });
+      
+      // Initialize enhanced UI system
+      function initEnhancedUISystem() {
+        // Wait a bit to ensure DOM and containers are ready
+        setTimeout(() => {
+          // Initialize the enhanced UI with embed detection
+          if (window.enhancedUI) {
+            window.enhancedUI.init({
+              containerId: 'output-span',
+              scrollToTop: true,
+              embedEnforcement: true,
+              accessibility: true
+            });
+          } else {
+            console.warn('Enhanced UI system not loaded');
+          }
+        }, 100);
+      }
+      
+      // Initialize enhanced UI system after content loads
+      initEnhancedUISystem();
     
   </script>
   
