@@ -73,13 +73,45 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 .payment-form .payment-input {
     flex: 1;
-    padding: 8px;
-    font-size: 12px;
-    color: #000;
-    background: #f9f9f9;
-    border: 2px solid #7b7b7b;
-    border-radius: 6px;
-    outline: none;
+    padding: 8px !important;
+    font-size: 12px !important;
+    color: #000 !important;
+    background: #f9f9f9 !important;
+    border: 2px solid #7b7b7b !important;
+    border-radius: 6px !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    font-family: "Inter", sans-serif !important;
+    line-height: 1.2 !important;
+    height: 36px !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    margin: 0 !important;
+    vertical-align: baseline !important;
+}
+
+.payment-form input[type="text"].payment-input,
+.payment-form input[type="email"].payment-input {
+    flex: 1 !important;
+    padding: 8px !important;
+    font-size: 12px !important;
+    font-family: "Inter", sans-serif !important;
+    line-height: 1.2 !important;
+    border: 2px solid #7b7b7b !important;
+    background: #f9f9f9 !important;
+    color: #000 !important;
+    height: 36px !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    border-radius: 6px !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    vertical-align: baseline !important;
 }
 
 /* Pay button row */
@@ -115,6 +147,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    Margin-top: 55px;
 }
 
 .payment-form .contact-support {
@@ -134,6 +167,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     position: relative !important; /* Add positioning context */
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     min-width: 0; /* Allow flex items to shrink */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 }
 
@@ -220,8 +256,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <div class="button-row">
                     <a href="mailto:support@inexasli.com" class="contact-support">I have paid</a>
                     <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="contact-support">Customer Portal</a>
-                    <button class="contact-support" id="terms-button">Terms of Service</button>
                 </div>
+                <button id="terms-button" class="contact-support">Terms of Service</button>
+             
             </form>
         `;
         
