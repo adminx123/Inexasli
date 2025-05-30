@@ -315,17 +315,19 @@ const categoryManager = (function() {
             }
             
             .category-filter-item {
-                background-color: #fff;
+                background-color: #f5f5f5;
+                color: #000;
                 padding: 8px 12px;
                 border-radius: 5px;
+                border: 1.5px solid #000;
+                box-shadow: 3px 3px 0.5px #000;
                 text-align: center;
                 cursor: pointer;
-                font-size: 12px;
+                transition: all 0.3s ease;
                 font-family: "Geist", sans-serif;
+                box-sizing: border-box;
+                font-size: 12px;
                 min-width: 80px;
-                box-shadow: 1px 1px 0 #000;
-                border: 1px solid #000;
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -336,15 +338,23 @@ const categoryManager = (function() {
             }
             
             .category-filter-item:hover {
-                background-color: #d0d0d0;
-                transform: translateY(-2px);
-                box-shadow: 2px 2px 0 #000;
+                transform: translateY(-5px);
+                background-color: rgb(255, 255, 255);
+                box-shadow: 3px 3px 0.5px #000;
+                color: #000;
+            }
+            
+            .category-filter-item:active {
+                transform: translateY(1px);
+                background-color: #f5f5f5;
+                box-shadow: 1.5px 1.5px 0.5px #000;
             }
             
             .category-filter-item.active {
-                background-color:rgb(255, 255, 255);
-                box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2), 1px 1px 0 #000;
-                transform: translateY(0);
+                background-color: #f5f5f5;
+                color: #000;
+                box-shadow: 3px 3px 0.5px #000;
+                border: 1.5px solid #000;
             }
             
             /* Product grid styling inside modal */
