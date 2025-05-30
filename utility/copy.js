@@ -867,9 +867,9 @@ function createPDFFromCanvas(canvas) {
     const x = (pdfWidth - imgWidth) / 2;
     const y = (pdfHeight - imgHeight) / 2;
     
-    // Convert canvas to image and add to PDF
-    const imgData = canvas.toDataURL('image/jpeg', 1.0);
-    pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+    // Convert canvas to image and add to PDF (using PNG for crisp quality)
+    const imgData = canvas.toDataURL('image/png');
+    pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
     
     // Add footer
     pdf.setFontSize(8);
