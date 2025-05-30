@@ -1152,6 +1152,16 @@
       
       // Add enhanced UI elements
       function addEnhancedUI() {
+        // Only add these UI elements if we're running as a standalone page,
+        // not when embedded as content in another page (like landing.html)
+        const isEmbedded = document.querySelector('.data-container-right') !== null || 
+                          window.location.pathname !== '/ai/enneagram/enneagramoutput.html';
+        
+        if (isEmbedded) {
+          console.log('Enneagram output running as embedded content - skipping global UI elements');
+          return;
+        }
+        
         // Add floating action button for scroll to top
         const fab = document.createElement('button');
         fab.className = 'fab tooltip';
