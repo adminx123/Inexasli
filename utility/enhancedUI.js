@@ -486,41 +486,8 @@ function checkIfEmbedded() {
  * Accessibility Features
  */
 function initAccessibilityFeatures(containerId) {
-    addSkipLinks(containerId);
     setupARIALandmarks(containerId);
     console.log('✅ Accessibility features initialized');
-}
-
-function addSkipLinks(containerId) {
-    const skipLink = document.createElement('a');
-    skipLink.href = `#${containerId}`;
-    skipLink.textContent = 'Skip to main content';
-    skipLink.className = 'skip-link';
-    
-    skipLink.style.cssText = `
-        position: absolute;
-        top: -40px;
-        left: 6px;
-        background: #000;
-        color: white;
-        padding: 8px 16px;
-        text-decoration: none;
-        border-radius: 4px;
-        z-index: 30000;
-        transition: top 0.2s ease;
-        font-family: "Inter", sans-serif;
-        font-size: 14px;
-    `;
-    
-    skipLink.addEventListener('focus', function() {
-        this.style.top = '6px';
-    });
-    
-    skipLink.addEventListener('blur', function() {
-        this.style.top = '-40px';
-    });
-    
-    document.body.insertBefore(skipLink, document.body.firstChild);
 }
 
 function setupARIALandmarks(containerId) {
