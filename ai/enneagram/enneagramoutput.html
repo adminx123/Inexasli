@@ -902,12 +902,6 @@
         if (analysis.summaryAndNextSteps) {
           const summaryContent = `
             <div class="section-content">${analysis.summaryAndNextSteps}</div>
-            <div style="text-align: center; margin-top: 25px;">
-              <button class="share-button" onclick="shareEnneagramResults()" 
-                      aria-label="Share these Enneagram results" title="Share analysis">
-                <i class="fas fa-share-alt" style="margin-right: 8px;" aria-hidden="true"></i>Share These Results
-              </button>
-            </div>
           `;
           
           const summaryCard = createCard(
@@ -924,122 +918,12 @@
         const footerEl = document.createElement('div');
         footerEl.className = 'enneagram-footer';
         footerEl.innerHTML = `
-          <div style="margin-bottom: 15px;" role="group" aria-label="Analysis actions">
-            <button class="share-button" onclick="printAnalysis()" style="margin-right: 10px; background-color: #28a745;" 
-                    aria-label="Print this analysis" title="Print analysis">
-              <i class="fas fa-print" style="margin-right: 8px;" aria-hidden="true"></i>Print Analysis
-            </button>
-            <button class="share-button" onclick="downloadAnalysis()" style="background-color: #17a2b8;"
-                    aria-label="Download analysis as PDF" title="Download PDF">
-              <i class="fas fa-download" style="margin-right: 8px;" aria-hidden="true"></i>Save as PDF
-            </button>
-          </div>
           <p>✨ Enneagram analysis by <strong>INEXASLI</strong> ✨</p>
           <p style="font-size: 11px; margin-top: 5px; color: #aaa;">Discover your authentic self through ancient wisdom</p>
         `;
         mainEl.appendChild(footerEl);
         
         return mainEl;
-      }
-      
-      // Enhanced share functionality
-      window.shareEnneagramResults = function() {
-        if (navigator.share) {
-          navigator.share({
-            title: 'My Enneagram Analysis - INEXASLI',
-            text: 'Check out my personalized Enneagram analysis! Discover your authentic self through ancient wisdom.',
-            url: window.location.href
-          })
-          .then(() => {
-            showToast('Analysis shared successfully!', 'success');
-          })
-          .catch(error => {
-            console.log('Error sharing:', error);
-            if (error.name !== 'AbortError') {
-              fallbackShare();
-            }
-          });
-        } else {
-          fallbackShare();
-        }
-      };
-      
-      function fallbackShare() {
-        const url = window.location.href;
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(url).then(() => {
-            showToast('Link copied to clipboard! You can now share it anywhere.', 'success');
-          }).catch(() => {
-            showManualCopyOption(url);
-          });
-        } else {
-          showManualCopyOption(url);
-        }
-      }
-      
-      function showManualCopyOption(url) {
-        const modal = document.createElement('div');
-        modal.style.cssText = `
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0,0,0,0.7);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 2000;
-        `;
-        
-        modal.innerHTML = `
-          <div style="
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-          ">
-            <h3 style="margin: 0 0 15px 0; color: #333;">Share Your Analysis</h3>
-            <p style="margin: 0 0 20px 0; color: #666;">Copy this link to share your Enneagram analysis:</p>
-            <input type="text" value="${url}" readonly style="
-              width: 100%;
-              padding: 12px;
-              border: 2px solid #ddd;
-              border-radius: 6px;
-              margin-bottom: 20px;
-              font-size: 14px;
-              box-sizing: border-box;
-            " onclick="this.select()">
-            <div>
-              <button onclick="this.parentElement.parentElement.parentElement.remove()" style="
-                background: #6e8efb;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 14px;
-              ">Close</button>
-            </div>
-          </div>
-        `;
-        
-        document.body.appendChild(modal);
-        
-        // Auto-select the text
-        const input = modal.querySelector('input');
-        input.select();
-        input.focus();
-        
-        // Close on outside click
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) {
-            modal.remove();
-          }
-        });
       }
       
       // Enhanced toast notification system
@@ -1208,119 +1092,6 @@
           mainContent.setAttribute('aria-label', 'Enneagram analysis results');
         }
       }
-      
-      // Enhanced print functionality
-      window.printAnalysis = function() {
-        // Check if content is loaded first
-        const outputSpan = document.getElementById('output-span');
-        if (!outputSpan) {
-          showToast('Content area not found. Please refresh the page.', 'error');
-          return;
-        }
-        
-        // Check if still loading
-        const hasLoadingContent = outputSpan.querySelector('.loading, .loading-text, .loading-spinner');
-        const hasActualContent = outputSpan.querySelector('.enneagram-card, .enneagram-content');
-        
-        if (hasLoadingContent && !hasActualContent) {
-          showToast('Analysis is still loading. Please wait for it to complete before printing.', 'warning');
-          return;
-        }
-        
-        if (!hasActualContent) {
-          showToast('No analysis content found. Please complete an Enneagram analysis first.', 'warning');
-          return;
-        }
-        
-        // Use copy.js print functionality for consistency
-        if (window.copyUtil) {
-          // Call the copy.js print function
-          window.printContent();
-        } else {
-          // Fallback to basic print
-          showToast('Preparing analysis for printing...', 'info', 2000);
-          
-          setTimeout(() => {
-            window.print();
-            setTimeout(() => {
-              showToast('Print dialog opened. You can also save as PDF from the print options.', 'info');
-            }, 1000);
-          }, 500);
-        }
-      };
-      
-      // Download as PDF functionality - Use copy.js PDF functionality for consistency
-      window.downloadAnalysis = function() {
-        // Check if content is loaded first
-        const outputSpan = document.getElementById('output-span');
-        if (!outputSpan) {
-          showToast('Content area not found. Please refresh the page.', 'error');
-          return;
-        }
-        
-        // Check if still loading
-        const hasLoadingContent = outputSpan.querySelector('.loading, .loading-text, .loading-spinner');
-        const hasActualContent = outputSpan.querySelector('.enneagram-card, .enneagram-content');
-        
-        if (hasLoadingContent && !hasActualContent) {
-          showToast('Analysis is still loading. Please wait for it to complete before downloading.', 'warning');
-          return;
-        }
-        
-        if (!hasActualContent) {
-          showToast('No analysis content found. Please complete an Enneagram analysis first.', 'warning');
-          return;
-        }
-        
-        // Use the copy.js PDF functionality which is more robust
-        if (window.copyUtil && window.copyUtil.openShareModal) {
-          // Open the share modal and let user choose PDF option
-          window.copyUtil.openShareModal('output-span', function(outputEl) {
-            // Custom formatting for enneagram content
-            let textToCopy = '';
-            
-            // Get the title
-            const titleEl = outputEl.querySelector('.enneagram-content');
-            if (titleEl) {
-              textToCopy += 'ENNEAGRAM ANALYSIS REPORT\n';
-              textToCopy += '═══════════════════════════\n\n';
-            }
-            
-            // Get all cards content
-            const cards = outputEl.querySelectorAll('.enneagram-card');
-            cards.forEach(card => {
-              const title = card.querySelector('h2')?.textContent || '';
-              const subtitle = card.querySelector('.card-subtitle')?.textContent || '';
-              const content = card.querySelector('.card-body');
-              
-              if (title) {
-                textToCopy += `${title.toUpperCase()}\n`;
-                textToCopy += '─'.repeat(title.length) + '\n';
-              }
-              
-              if (subtitle) {
-                textToCopy += `${subtitle}\n\n`;
-              }
-              
-              if (content) {
-                let textContent = content.innerText || content.textContent || '';
-                textContent = textContent.replace(/\s+/g, ' ').trim();
-                textToCopy += `${textContent}\n\n`;
-              }
-            });
-            
-            textToCopy += '\n──────────────────────────\n';
-            textToCopy += `Generated on: ${new Date().toLocaleDateString()}\n`;
-            textToCopy += 'Powered by INEXASLI Enneagram Intelligence\n';
-            
-            return textToCopy;
-          });
-        } else {
-          // Fallback to basic PDF generation if copy.js not available
-          showToast('PDF functionality not available. Please try the share button instead.', 'warning');
-        }
-      };
-      
       
       function updateOutput() {
         const outputSpan = document.getElementById('output-span');
