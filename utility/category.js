@@ -77,6 +77,12 @@ const categoryManager = (function() {
     function openCategoryModal() {
         const modal = getCategoryModal();
         modal.style.display = 'flex';
+        
+        // Remove has-products class initially (hide separator line)
+        const filterGrid = document.querySelector('.category-filter-grid');
+        if (filterGrid) {
+            filterGrid.classList.remove('has-products');
+        }
     }
     
     // Function to close the category modal
@@ -135,6 +141,8 @@ const categoryManager = (function() {
                 const filterGrid = document.querySelector('.category-filter-grid');
                 if (filterGrid) {
                     filterGrid.style.display = 'flex';
+                    // Add has-products class to show the separator line
+                    filterGrid.classList.add('has-products');
                 }
                 
                 // No need to update title since we removed it
@@ -295,8 +303,13 @@ const categoryManager = (function() {
                 gap: 10px;
                 width: 100%;
                 max-width: 100%;
-                margin: 0 0 10px 0;
+                margin: 0 0 15px 0;
                 justify-content: center;
+                padding-bottom: 15px;
+            }
+            
+            .category-filter-grid.has-products {
+                border-bottom: 2px solid #000;
             }
             
             .category-filter-row-all {
@@ -335,12 +348,13 @@ const categoryManager = (function() {
                 font-weight: 500;
                 flex: 0 0 calc(33.33% - 6px);
                 margin: 0;
+                transform: translateY(-2px);
             }
             
             .category-filter-item:hover {
-                transform: translateY(-5px);
+                transform: translateY(-7px);
                 background-color: rgb(255, 255, 255);
-                box-shadow: 3px 3px 0.5px #000;
+                box-shadow: 4px 4px 1px #000;
                 color: #000;
             }
             
@@ -351,10 +365,11 @@ const categoryManager = (function() {
             }
             
             .category-filter-item.active {
-                background-color: #f5f5f5;
+                background-color: #f0f0f0;
                 color: #000;
-                box-shadow: 3px 3px 0.5px #000;
+                box-shadow: inset 2px 2px 3px rgba(0, 0, 0, 0.3);
                 border: 1.5px solid #000;
+                transform: translateY(2px);
             }
             
             /* Product grid styling inside modal */
@@ -453,7 +468,7 @@ const categoryManager = (function() {
         allRow.className = 'category-filter-row-all';
         
         const allFilter = document.createElement('div');
-        allFilter.className = 'category-filter-item active';
+        allFilter.className = 'category-filter-item';
         allFilter.setAttribute('data-category', 'all');
         allFilter.textContent = 'ALL';
         allFilter.style.width = 'calc(100% - 8px)';
