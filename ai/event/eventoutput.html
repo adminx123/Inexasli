@@ -1,6 +1,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/outputstyles.css">
   <style>
     html {
       height: 100%;
@@ -9,44 +10,7 @@
     }
   </style>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Inter", sans-serif; /* Base font */
-      height: 100vh;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      background-color: transparent;
-      overflow: hidden;
-      color: #333;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    
-    .event-container  {
-      margin: 0 auto;
-      padding: 0;
-      font-family: "Inter", sans-serif;
-      height: auto;
-      min-height: 600px;
-      max-height: 800px;
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      flex-direction: column;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      overflow: visible;
-      color: #333;
-      position: relative;
-      box-sizing: border-box;
-    }
+    /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
     
     .event-header {
       font-size: 18px; /* Adjusted size */
@@ -61,72 +25,18 @@
       box-sizing: border-box;
     }
     
-    .event-output-wrapper {
-      position: relative;
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-      width: 100%;
-      max-width: 100%;
-      height: 100%;
-      max-height: 100%;
-      overflow: hidden;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    
-    .event-output {
+    /* Custom event-specific styles for JSON display */
+    .api-output {
       white-space: pre-wrap; /* Keep for JSON display */
-      font-family: "Inter", sans-serif;
-      padding: 5px;
-      overflow-y: auto;
       background-color: #f9f9f9; /* Light background for content area */
-      flex: 1 1 auto;
-      font-size: 15px;
-      border: 0;
-      border-radius: 0;
-      box-shadow: none;
-      height: calc(100% - 50px); /* Adjust height considering header */
-      max-height: calc(100% - 50px); /* Adjust height considering header */
-      width: 100%; 
-      max-width: 100%;
-      margin: 5px;
-      transition: all 0.3s ease;
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: #888 #f1f1f1;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
     }
-    
-    .event-output::-webkit-scrollbar {
-      width: 6px;
-    }
-    
-    .event-output::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-    
-    .event-output::-webkit-scrollbar-thumb {
-      background: #ccc; /* Lighter scrollbar thumb */
-      border-radius: 10px;
-    }
-    
    
   </style>
 </head>
 <body>
-  <div class="event-container">
-    <div class="event-output-wrapper">
-      <div id="output-span" class="event-output">
+  <div class="device-container">
+    <div class="output-wrapper">
+      <div id="output-span" class="api-output">
         <div class="loading">
           <div class="loading-text">Loading data...</div>
           <div class="loading-spinner"></div>
