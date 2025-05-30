@@ -16,9 +16,10 @@
 // Global configuration
 const ENHANCED_UI_CONFIG = {
     scrollFab: {
-        showThreshold: 300,
+        showThreshold: 100,
         mobileSize: 28,
-        desktopSize: 36
+        desktopSize: 36,
+        alwaysShow: false // Set to false for normal operation
     },
     toast: {
         defaultDuration: 3000,
@@ -89,7 +90,8 @@ function initScrollToTopFAB() {
     fabContainer.style.cssText = `
         position: fixed;
         bottom: 20px;
-        right: 20px;
+        left: 50%;
+        transform: translateX(-50%);
         z-index: 12000;
         opacity: 0;
         visibility: hidden;
@@ -162,13 +164,10 @@ function initScrollToTopFAB() {
         fab.style.height = `${size}px`;
         fab.style.fontSize = query.matches ? '14px' : '18px';
         
-        if (query.matches) {
-            fabContainer.style.bottom = '15px';
-            fabContainer.style.right = '15px';
-        } else {
-            fabContainer.style.bottom = '20px';
-            fabContainer.style.right = '20px';
-        }
+        // Keep button centered regardless of screen size
+        fabContainer.style.bottom = query.matches ? '15px' : '20px';
+        fabContainer.style.left = '50%';
+        fabContainer.style.transform = 'translateX(-50%)';
     };
 
     adjustFABForMobile(mobileQuery);
@@ -177,8 +176,15 @@ function initScrollToTopFAB() {
     // Scroll visibility logic
     let isVisible = false;
     const toggleFABVisibility = () => {
-        const scrollY = window.scrollY || document.documentElement.scrollTop;
-        const shouldShow = scrollY > ENHANCED_UI_CONFIG.scrollFab.showThreshold;
+        let scrollY = window.scrollY || document.documentElement.scrollTop;
+        
+        // Check if we're in a dataout.js context and get container scroll position
+        const dataContainer = document.querySelector('.data-container-right.expanded .data-content');
+        if (dataContainer) {
+            scrollY = dataContainer.scrollTop;
+        }
+        
+        const shouldShow = scrollY > ENHANCED_UI_CONFIG.scrollFab.showThreshold || ENHANCED_UI_CONFIG.scrollFab.alwaysShow;
 
         if (shouldShow && !isVisible) {
             fabContainer.style.opacity = '1';
@@ -193,7 +199,10 @@ function initScrollToTopFAB() {
         }
     };
 
-    // Throttled scroll listener
+    // Initial visibility check
+    toggleFABVisibility();
+
+    // Throttled scroll listener for window
     let scrollTimeout;
     window.addEventListener('scroll', () => {
         if (scrollTimeout) return;
@@ -203,26 +212,73 @@ function initScrollToTopFAB() {
         }, 16); // ~60fps
     }, { passive: true });
 
+    // Monitor for data container creation and add scroll listener
+    const observeDataContainers = () => {
+        const dataContainer = document.querySelector('.data-container-right.expanded .data-content');
+        if (dataContainer) {
+            dataContainer.addEventListener('scroll', () => {
+                if (scrollTimeout) return;
+                scrollTimeout = setTimeout(() => {
+                    toggleFABVisibility();
+                    scrollTimeout = null;
+                }, 16); // ~60fps
+            }, { passive: true });
+        }
+    };
+
+    // Use MutationObserver to watch for data container changes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'childList' || mutation.type === 'attributes') {
+                observeDataContainers();
+                toggleFABVisibility(); // Recheck visibility when DOM changes
+            }
+        });
+    });
+    
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['class', 'data-state']
+    });
+
     fabContainer.appendChild(fab);
     document.body.appendChild(fabContainer);
-
-    console.log('✅ Scroll-to-top FAB initialized');
 }
 
 /**
  * Smooth scroll to top function
  */
 function scrollToTop() {
-    const scrollToTopAnimation = () => {
-        const currentScroll = window.scrollY || document.documentElement.scrollTop;
-        if (currentScroll > 0) {
-            window.scrollTo(0, currentScroll - currentScroll / 8);
-            requestAnimationFrame(scrollToTopAnimation);
-        }
-    };
+    // Check if we're in a dataout.js context with an expanded data container
+    const dataContainer = document.querySelector('.data-container-right.expanded .data-content');
     
-    scrollToTopAnimation();
-    announceToScreenReader('Scrolled to top of page');
+    if (dataContainer) {
+        // Scroll the content container to top
+        const scrollToTopAnimation = () => {
+            const currentScroll = dataContainer.scrollTop;
+            if (currentScroll > 0) {
+                dataContainer.scrollTop = currentScroll - currentScroll / 8;
+                requestAnimationFrame(scrollToTopAnimation);
+            }
+        };
+        
+        scrollToTopAnimation();
+        announceToScreenReader('Scrolled to top of content');
+    } else {
+        // Fallback to normal window scrolling for regular pages
+        const scrollToTopAnimation = () => {
+            const currentScroll = window.scrollY || document.documentElement.scrollTop;
+            if (currentScroll > 0) {
+                window.scrollTo(0, currentScroll - currentScroll / 8);
+                requestAnimationFrame(scrollToTopAnimation);
+            }
+        };
+        
+        scrollToTopAnimation();
+        announceToScreenReader('Scrolled to top of page');
+    }
 }
 
 /**
