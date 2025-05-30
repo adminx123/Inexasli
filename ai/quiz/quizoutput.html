@@ -1,49 +1,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/outputstyles.css">
   <style>
-    html {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Inter", sans-serif;
-      height: 100vh;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      background-color: transparent;
-      overflow: hidden;
-      color: #333;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    .device-container  {
-      margin: 0 auto;
-      padding: 0;
-      font-family: "Inter", sans-serif;
-      height: auto;
-      min-height: 600px;
-      max-height: 800px;
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      flex-direction: column;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      overflow: visible;
-      color: #333;
-      position: relative;
-      box-sizing: border-box;
-    }
+    /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
+    
     .quiz-header {
       font-size: 18px;
       font-weight: 500;
@@ -56,42 +17,11 @@
       width: 100%;
       box-sizing: border-box;
     }
+    
+    /* Custom styles for quiz output */
     .api-output {
-      white-space: pre-wrap;
-      font-family: "Inter", sans-serif;
-      padding: 5px;
-      overflow-y: auto;
-      background-color: #f9f9f9;
-      flex: 1 1 auto;
-      font-size: 15px;
-      border: 0;
-      border-radius: 0;
-      box-shadow: none;
-      height: calc(100% - 50px);
-      max-height: calc(100% - 50px);
-      width: 100%;
-      max-width: 100%;
-      margin: 5px;
-      transition: all 0.3s ease;
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: #888 #f1f1f1;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    .api-output::-webkit-scrollbar {
-      width: 6px;
-    }
-    .api-output::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-    .api-output::-webkit-scrollbar-thumb {
-      background: #ccc;
-      border-radius: 10px;
+      white-space: pre-wrap; /* For JSON display */
+      background-color: #f9f9f9; /* Light background for content area */
     }
     @media (max-width: 480px) {
       .device-container {

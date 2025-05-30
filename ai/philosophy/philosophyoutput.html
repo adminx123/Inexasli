@@ -1,296 +1,243 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Philosophy Output</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <style>
-    html {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Inter", sans-serif;
-      height: 100vh;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      background-color: transparent;
-      overflow: hidden;
-      color: #333;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    
-    /* Override the star-like elements */
-    body::before {
-      display: none; /* Remove the radial gradient element */
-    }
-    
-    /* Remove the star symbol after the header */
-    .philosophy-header:after {
-      display: none;
-    }
-    
-    .device-container  {
-      margin: 0 auto;
-      padding: 0;
-      font-family: "Inter", sans-serif;
-      height: auto;
-      min-height: 600px;
-      max-height: 800px;
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      flex-direction: column;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      overflow: visible;
-      color: #333;
-      position: relative;
-      box-sizing: border-box;
-    }
-    
-    .philosophy-header {
-      font-size: 20px;
-      font-weight: 600;
-      margin: 0 0 12px 0;
-      color: #000;
-      font-family: "Playfair Display", serif;
-      padding: 10px;
-      border-bottom: 2px solid #000;
-      letter-spacing: 0.5px;
-      text-align: center;
-      position: relative;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    
-    .philosophy-header:after {
-      content: '✦';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fff;
-      padding: 0 10px;
-      color: #666;
-    }
-    
-    .output-wrapper {
-      position: relative;
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-      width: 100%;
-      max-width: 100%;
-      height: 100%;
-      max-height: 100%;
-      overflow: hidden;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    
-    .api-output {
-      white-space: pre-wrap;
-      font-family: "Inter", sans-serif;
-      padding: 5px;
-      overflow-y: auto;
-      background-color: #fff;
-      flex: 1 1 auto;
-      font-size: 15px;
-      border: 0;
-      border-radius: 0;
-      box-shadow: none;
-      height: calc(100% - 10px); /* Adjust height accounting for top and bottom margins */
-      max-height: calc(100% - 10px);
-      width: calc(100% - 10px); /* Adjust width accounting for left and right margins */
-      max-width: calc(100% - 10px);
-      margin: 5px;
-      transition: all 0.3s ease;
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: #888 #f1f1f1;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    
-    .api-output::-webkit-scrollbar {
-      width: 6px;
-    }
-    
-    .api-output::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-    
-    .api-output::-webkit-scrollbar-thumb {
-      background: #888;
-      border-radius: 10px;
-    }
-    
-    .philosophy-display {
-      font-family: "Inter", sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      white-space: normal;
-    }
-    
-    .wisdom-topic {
-      font-family: "Playfair Display", serif;
-      text-align: center;
-      margin-bottom: 30px;
-      position: relative;
-      padding-bottom: 15px;
-    }
-    
-    .wisdom-topic h2 {
-      margin: 0;
-      color: #333;
-      font-weight: 700;
-      font-size: 24px;
-    }
-    
-    .wisdom-topic:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #888, transparent);
-    }
-    
-    .quotes-container {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-    }
-    
-    .quote-card {
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 22px;
-      margin-bottom: 5px;
-      position: relative;
-      transition: all 0.3s ease;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-      border-left: 5px solid;
-    }
-    
-    .quote-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-    
-    /* Removed decorative quotation mark */
-    
-    .tradition {
-      font-weight: 600;
-      font-size: 18px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-    }
-    
-    /* Removed the bullet point (tradition:before) */
-    
-    .tradition-taoism { color: #333; }
-    .quote-card.tradition-taoism { border-left-color: #ddd; }
-    
-    .tradition-buddhism { color: #333; }
-    .quote-card.tradition-buddhism { border-left-color: #ddd; }
-    
-    .tradition-christianity { color: #333; } 
-    .quote-card.tradition-christianity { border-left-color: #ddd; }
-    
-    .tradition-islam { color: #333; }
-    .quote-card.tradition-islam { border-left-color: #ddd; }
-    
-    .tradition-hermetic { color: #333; }
-    .quote-card.tradition-hermetic { border-left-color: #ddd; }
-    
-    .quote {
-      font-family: "Playfair Display", serif;
-      font-style: italic;
-      margin-bottom: 12px;
-      font-size: 17px;
-      line-height: 1.7;
-      color: #444;
-      padding-left: 10px;
-      border-left: 2px solid #eee;
-    }
-    
-    .source {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 15px;
-      font-weight: 500;
-    }
-    
-    .relevance {
-      font-size: 15px;
-      color: #444;
-      background-color: #f9f9f9;
-      padding: 12px;
-      border-radius: 6px;
-      line-height: 1.6;
-    }
-    
-    .reflection {
-      background: linear-gradient(145deg, #f8f9fa, #e6f7ff);
-      padding: 25px;
-      border-radius: 12px;
-      margin-top: 30px;
-      margin-bottom: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-      border: 1px solid #e1e8ed;
-      position: relative;
-    }
-    
-    .reflection:before {
-      content: '✦';
-      position: absolute;
-      top: -12px;
-      left: 25px;
-      background: #fff;
-      padding: 0 10px;
-      color: #666;
-      border-radius: 12px;
-      font-size: 14px;
-    }
-    
-    .reflection-title {
-      font-weight: 700;
-      margin-bottom: 12px;
-      font-size: 18px;
-      color: #333;
-      font-family: "Playfair Display", serif;
-    }
-    
-    .api-output:hover {
-      box-shadow: 6px 6px 0 #000;
-    }
-    
-    /* Copy button styles now in external JS file */
-    
-   
-  </style>
+  <link rel="stylesheet" href="../styles/outputstyles.css">
+<style>
+
+
+  /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
+
+  /* Override the star-like elements */
+  body::before {
+    display: none; /* Remove the radial gradient element */
+  }
+  
+  /* Remove the star symbol after the header */
+  .philosophy-header:after {
+    display: none;
+  }
+  
+  .philosophy-header {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: #000;
+    font-family: "Playfair Display", serif;
+    padding: 10px;
+    border-bottom: 2px solid #000;
+    letter-spacing: 0.5px;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+
+  
+  .philosophy-display {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    white-space: normal;
+  }
+  
+  .wisdom-topic {
+    font-family: "Playfair Display", serif;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
+  }
+  
+  .wisdom-topic h2 {
+    margin: 0;
+    color: #333;
+    font-weight: 700;
+    font-size: 24px;
+  }
+  
+  .wisdom-topic:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #888, transparent);
+  }
+  
+  .quotes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .quote-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 5px;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    border-left: 5px solid;
+    opacity: 0; /* For animation */
+    transform: translateY(20px); /* For animation */
+  }
+  
+  .quote-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+  
+  .tradition {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .tradition-taoism { color: #333; }
+  .quote-card.tradition-taoism { border-left-color: #ddd; }
+  
+  .tradition-buddhism { color: #333; }
+  .quote-card.tradition-buddhism { border-left-color: #ddd; }
+  
+  .tradition-christianity { color: #333; } 
+  .quote-card.tradition-christianity { border-left-color: #ddd; }
+  
+  .tradition-islam { color: #333; }
+  .quote-card.tradition-islam { border-left-color: #ddd; }
+  
+  .tradition-hermetic { color: #333; }
+  .quote-card.tradition-hermetic { border-left-color: #ddd; }
+  
+  .quote {
+    font-family: "Playfair Display", serif;
+    font-style: italic;
+    margin-bottom: 12px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #444;
+    padding-left: 10px;
+    border-left: 2px solid #eee;
+  }
+  
+  .source {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
+  
+  .relevance {
+    font-size: 15px;
+    color: #444;
+    background-color: #f9f9f9;
+    padding: 12px;
+    border-radius: 6px;
+    line-height: 1.6;
+  }
+  
+  .reflection {
+    background: linear-gradient(145deg, #f8f9fa, #e6f7ff);
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border: 1px solid #e1e8ed;
+    position: relative;
+  }
+  
+  .reflection:before {
+    content: '✦';
+    position: absolute;
+    top: -12px;
+    left: 25px;
+    background: #fff;
+    padding: 0 10px;
+    color: #666;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+  
+  .reflection-title {
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #333;
+    font-family: "Playfair Display", serif;
+  }
+  
+  /* Loading and empty state styles */
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+    color: #666;
+  }
+  
+  .loading-text {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-family: "Playfair Display", serif;
+    letter-spacing: 0.5px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0,0,0,0.1);
+    border-left: 4px solid #555;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  .no-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .no-data-icon {
+    font-size: 50px;
+    margin-bottom: 20px;
+    opacity: 0.6;
+  }
+  
+  .no-data-message {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #555;
+  }
+  
+  .no-data-help {
+    font-size: 14px;
+    color: #777;
+  }
+</style>
 </head>
 <body>
   <div class="device-container">
@@ -540,73 +487,5 @@
   </script>
   
   <script src="../../utility/copy.js"></script>
-  
-  <style>
-    /* Additional styles for loading and empty state */
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 20px;
-      color: #666;
-    }
-    
-    .loading-text {
-      margin-bottom: 20px;
-      font-size: 18px;
-      font-family: "Playfair Display", serif;
-      letter-spacing: 0.5px;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(0,0,0,0.1);
-      border-left: 4px solid #555;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    .no-data {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 20px;
-      text-align: center;
-    }
-    
-    .no-data-icon {
-      font-size: 50px;
-      margin-bottom: 20px;
-      opacity: 0.6;
-    }
-    
-    .no-data-message {
-      font-size: 18px;
-      margin-bottom: 10px;
-      font-weight: 600;
-      color: #555;
-    }
-    
-    .no-data-help {
-      font-size: 14px;
-      color: #777;
-    }
-    
-    /* Tooltip styles removed as they're now handled by copy.js */
-    
-    /* Card animation setup */
-    .quote-card {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-  </style>
+</body>
+</html>
