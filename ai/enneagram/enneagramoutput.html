@@ -1,35 +1,625 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Enneagram Analysis - INEXASLI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles/outputstyles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
- 
-
-    
     /* Using standard device-container from outputstyles.css as .enneagram-container */
     
     .enneagram-header {
-      font-size: 18px; /* Adjusted size */
-      font-weight: 500; /* Adjusted weight */
+      font-size: 22px;
+      font-weight: 600;
       margin: 0;
-      color: #333; /* Standard text color */
-      font-family: "Inter", sans-serif; /* Standard font */
-      padding: 15px; /* Adjusted padding */
-      border-bottom: 1px solid #eee; /* Lighter border */
+      color: #222;
+      font-family: "Playfair Display", serif;
+      padding: 20px 15px;
+      border-bottom: 1px solid #eee;
       text-align: center;
       width: 100%;
       box-sizing: border-box;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    
-    /* Using standard output-wrapper and api-output styles from outputstyles.css */
     
     /* Custom styles for enneagram output */
     .api-output {
-      white-space: pre-wrap; /* For JSON display */
-      background-color: #f9f9f9; /* Light background for content area */
+      white-space: normal;
+      background-color: #f9f9f9;
+      padding: 0;
     }
     
-   
+    .enneagram-content {
+      padding: 15px;
+    }
+    
+    /* Card styles */
+    .enneagram-card {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transform: translateY(0);
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    .enneagram-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    
+    .card-header {
+      padding: 15px 20px;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: #fff;
+    }
+    
+    .card-body {
+      padding: 20px;
+    }
+    
+    .card-title {
+      font-family: "Playfair Display", serif;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      color: #fff;
+    }
+    
+    .card-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 5px;
+      color: #fff;
+    }
+    
+    /* Type number badge */
+    .type-badge {
+      display: inline-block;
+      background-color: rgba(255,255,255,0.25);
+      color: #fff;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    
+    /* Lists */
+    .traits-list {
+      margin: 15px 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    
+    .traits-list li {
+      padding: 10px 15px;
+      margin-bottom: 8px;
+      background-color: #f8f9fa;
+      border-left: 3px solid #6e8efb;
+      border-radius: 4px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    
+    /* Sections */
+    .section-title {
+      font-family: "Playfair Display", serif;
+      font-size: 18px;
+      color: #333;
+      margin: 25px 0 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .section-content {
+      line-height: 1.6;
+    }
+    
+    /* Growth opportunities */
+    .growth-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    
+    .growth-item-icon {
+      flex: 0 0 30px;
+      height: 30px;
+      background-color: #a777e3;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    
+    .growth-item-content {
+      flex: 1;
+    }
+    
+    /* Type-specific color schemes */
+    .type-1 .card-header { background: linear-gradient(135deg, #FF5E62, #FF9966); }
+    .type-2 .card-header { background: linear-gradient(135deg, #FC5C7D, #6A82FB); }
+    .type-3 .card-header { background: linear-gradient(135deg, #FFCC70, #C850C0); }
+    .type-4 .card-header { background: linear-gradient(135deg, #00B09B, #96C93D); }
+    .type-5 .card-header { background: linear-gradient(135deg, #4568DC, #B06AB3); }
+    .type-6 .card-header { background: linear-gradient(135deg, #3A1C71, #D76D77); }
+    .type-7 .card-header { background: linear-gradient(135deg, #FDC830, #F37335); }
+    .type-8 .card-header { background: linear-gradient(135deg, #ED213A, #93291E); }
+    .type-9 .card-header { background: linear-gradient(135deg, #1A2980, #26D0CE); }
+    
+    /* Animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    
+    /* Footer */
+    .enneagram-footer {
+      text-align: center;
+      margin-top: 30px;
+      padding: 15px;
+      font-size: 13px;
+      color: #888;
+    }
+    
+    /* Share button */
+    .share-button {
+      display: inline-block;
+      background-color: #6e8efb;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 24px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(110,142,251,0.3);
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+    
+    .share-button:hover {
+      background-color: #5d7dea;
+      box-shadow: 0 6px 12px rgba(110,142,251,0.4);
+      transform: translateY(-2px);
+    }
+    
+    /* Progress indicator */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, #6e8efb, #a777e3);
+      z-index: 1000;
+      transition: width 0.3s ease;
+    }
+    
+    /* Floating action button */
+    .fab {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      border-radius: 50%;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(110,142,251,0.4);
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+    
+    .fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(110,142,251,0.6);
+    }
+    
+    /* Tooltip styles */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 12px;
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    /* Enhanced card interactions */
+    .enneagram-card.expanded {
+      position: relative;
+      z-index: 10;
+    }
+    
+    /* Enhanced mobile optimizations */
+    @media (max-width: 768px) {
+      .enneagram-header h1 {
+        font-size: 18px;
+      }
+      
+      .card-title {
+        font-size: 18px;
+      }
+      
+      .section-title {
+        font-size: 16px;
+      }
+      
+      .share-button {
+        padding: 8px 16px;
+        font-size: 13px;
+        margin: 5px;
+        width: calc(50% - 10px);
+        display: inline-block;
+      }
+      
+      .fab {
+        width: 48px;
+        height: 48px;
+        bottom: 16px;
+        right: 16px;
+        font-size: 18px;
+      }
+      
+      .enneagram-card {
+        margin-bottom: 15px;
+        border-radius: 8px;
+      }
+      
+      .card-body {
+        padding: 15px;
+      }
+      
+      .traits-list li {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+      
+      .growth-item-icon {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+      }
+      
+      .tooltip .tooltiptext {
+        width: 80px;
+        margin-left: -40px;
+        font-size: 11px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .enneagram-content {
+        padding: 10px;
+      }
+      
+      .share-button {
+        width: 100%;
+        margin: 5px 0;
+      }
+      
+      .card-header {
+        padding: 12px 15px;
+      }
+      
+      .type-badge {
+        font-size: 12px;
+        padding: 3px 10px;
+      }
+    }
+    
+    /* Print styles */
+    @media print {
+      .fab,
+      .progress-bar,
+      .skip-link {
+        display: none !important;
+      }
+      
+      .enneagram-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 15px;
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+      
+      .card-header {
+        background: #f5f5f5 !important;
+        color: #333 !important;
+      }
+      
+      .share-button {
+        display: none !important;
+      }
+    }
+    
+    /* Accessibility improvements */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 6px;
+      background: #000;
+      color: #fff;
+      padding: 8px;
+      text-decoration: none;
+      border-radius: 4px;
+      z-index: 1002;
+      font-size: 14px;
+      transition: top 0.3s ease;
+    }
+    
+    .skip-link:focus {
+      top: 6px;
+    }
+    
+    /* Enhanced focus styles for better accessibility */
+    .enneagram-card:focus {
+      outline: 2px solid #6e8efb;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(110, 142, 251, 0.2);
+    }
+    
+    .share-button:focus,
+    .fab:focus {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(110, 142, 251, 0.3);
+    }
+    
+    /* Reduce motion for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+      .enneagram-card {
+        animation: none;
+        transition: none;
+      }
+      
+      .fab,
+      .share-button {
+        transition: none;
+      }
+      
+      .progress-bar {
+        transition: none;
+      }
+    }
+    
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      .enneagram-card {
+        border: 2px solid;
+      }
+      
+      .card-header {
+        background: #000 !important;
+        color: #fff !important;
+      }
+    }
+    
+    /* Type-specific accent colors for elements */
+    .type-1 .traits-list li { border-left-color: #FF5E62; }
+    .type-2 .traits-list li { border-left-color: #FC5C7D; }
+    .type-3 .traits-list li { border-left-color: #FFCC70; }
+    .type-4 .traits-list li { border-left-color: #00B09B; }
+    .type-5 .traits-list li { border-left-color: #4568DC; }
+    .type-6 .traits-list li { border-left-color: #3A1C71; }
+    .type-7 .traits-list li { border-left-color: #FDC830; }
+    .type-8 .traits-list li { border-left-color: #ED213A; }
+    .type-9 .traits-list li { border-left-color: #1A2980; }
+    
+    /* Enhanced loading states and animations */
+    .loading-enhanced {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-radius: 12px;
+      margin: 20px 0;
+    }
+    
+    .loading-spinner-enhanced {
+      width: 60px;
+      height: 60px;
+      border: 6px solid rgba(110, 142, 251, 0.1);
+      border-left: 6px solid #6e8efb;
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    .loading-dots {
+      display: flex;
+      gap: 4px;
+      margin-top: 10px;
+    }
+    
+    .loading-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #6e8efb;
+      border-radius: 50%;
+      animation: loadingDots 1.4s infinite ease-in-out;
+    }
+    
+    .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+    .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+    .loading-dot:nth-child(3) { animation-delay: 0; }
+    
+    @keyframes loadingDots {
+      0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    /* Success animation */
+    .success-checkmark {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: block;
+      stroke-width: 2;
+      stroke: #4caf50;
+      stroke-miterlimit: 10;
+      margin: 10px auto;
+      box-shadow: inset 0px 0px 0px #4caf50;
+      animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
+    }
+    
+    .success-checkmark__circle {
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      stroke-width: 2;
+      stroke-miterlimit: 10;
+      stroke: #4caf50;
+      fill: none;
+      animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+    
+    .success-checkmark__check {
+      transform-origin: 50% 50%;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+    }
+    
+    @keyframes stroke {
+      100% { stroke-dashoffset: 0; }
+    }
+    
+    @keyframes scale {
+      0%, 100% { transform: none; }
+      50% { transform: scale3d(1.1, 1.1, 1); }
+    }
+    
+    @keyframes fill {
+      100% { box-shadow: inset 0px 0px 0px 30px #4caf50; }
+    }
+
+    /* Accessibility improvements */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 6px;
+      background: #000;
+      color: #fff;
+      padding: 8px;
+      text-decoration: none;
+      border-radius: 4px;
+      z-index: 1002;
+      font-size: 14px;
+      transition: top 0.3s ease;
+    }
+    
+    .skip-link:focus {
+      top: 6px;
+    }
+    
+    /* Enhanced focus styles for better accessibility */
+    .enneagram-card:focus {
+      outline: 2px solid #6e8efb;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(110, 142, 251, 0.2);
+    }
+    
+    .share-button:focus,
+    .fab:focus {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(110, 142, 251, 0.3);
+    }
+    
+    /* Reduce motion for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+      .enneagram-card {
+        animation: none;
+        transition: none;
+      }
+      
+      .fab,
+      .share-button {
+        transition: none;
+      }
+      
+      .progress-bar {
+        transition: none;
+      }
+    }
+    
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      .enneagram-card {
+        border: 2px solid;
+      }
+      
+      .card-header {
+        background: #000 !important;
+        color: #fff !important;
+      }
+    }
+    
+    /* Type-specific accent colors for elements */
+    .type-1 .traits-list li { border-left-color: #FF5E62; }
+    .type-2 .traits-list li { border-left-color: #FC5C7D; }
+    .type-3 .traits-list li { border-left-color: #FFCC70; }
+    .type-4 .traits-list li { border-left-color: #00B09B; }
+    .type-5 .traits-list li { border-left-color: #4568DC; }
+    .type-6 .traits-list li { border-left-color: #3A1C71; }
+    .type-7 .traits-list li { border-left-color: #FDC830; }
+    .type-8 .traits-list li { border-left-color: #ED213A; }
+    .type-9 .traits-list li { border-left-color: #1A2980; }
   </style>
 </head>
 <body>
@@ -59,6 +649,7 @@
           return null;
         }
       };
+      
       const getJSON = window.getJSON || function(key) {
         try {
           const item = localStorage.getItem(key);
@@ -68,6 +659,700 @@
           return null;
         }
       };
+      
+      // Helper function to extract type number from string (e.g., "Type 6" -> 6)
+      function extractTypeNumber(typeString) {
+        if (!typeString) return null;
+        const match = typeString.match(/\d+/);
+        return match ? match[0] : null;
+      }
+      
+      // Create a card element
+      function createCard(title, subtitle, content, className = '', delay = 0) {
+        const card = document.createElement('div');
+        card.className = `enneagram-card ${className} delay-${delay}`;
+        card.setAttribute('role', 'article');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `${title}: ${subtitle}`);
+        
+        const header = document.createElement('div');
+        header.className = 'card-header';
+        
+        const titleEl = document.createElement('h2');
+        titleEl.className = 'card-title';
+        titleEl.textContent = title;
+        titleEl.setAttribute('id', `card-title-${delay}`);
+        
+        const subtitleEl = document.createElement('div');
+        subtitleEl.className = 'card-subtitle';
+        subtitleEl.textContent = subtitle || '';
+        subtitleEl.setAttribute('aria-describedby', `card-title-${delay}`);
+        
+        header.appendChild(titleEl);
+        if (subtitle) header.appendChild(subtitleEl);
+        
+        const body = document.createElement('div');
+        body.className = 'card-body';
+        body.innerHTML = content;
+        body.setAttribute('role', 'region');
+        body.setAttribute('aria-labelledby', `card-title-${delay}`);
+        
+        card.appendChild(header);
+        card.appendChild(body);
+        
+        // Add keyboard navigation
+        card.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+        
+        return card;
+      }
+      
+      // Format the Enneagram analysis content
+      function formatEnneagramAnalysis(data) {
+        if (!data || !data.enneagramAnalysis) {
+          return '<p>Invalid Enneagram analysis data.</p>';
+        }
+        
+        const analysis = data.enneagramAnalysis;
+        const mainEl = document.createElement('div');
+        mainEl.className = 'enneagram-content';
+        
+        // Extract the type number for color theming
+        const typeNumber = extractTypeNumber(analysis.coreTypeProfile?.typeNumber);
+        
+        // 1. Introduction Section
+        const introEl = document.createElement('div');
+        introEl.innerHTML = `
+          <div class="enneagram-header">
+            <h1><i class="fas fa-star" style="margin-right: 8px; color: #6e8efb;"></i>Your Enneagram Analysis</h1>
+            <p style="font-size: 14px; margin-top: 5px; color: #666;">
+              Generated on ${new Date(data.generatedDate).toLocaleDateString()}
+            </p>
+          </div>
+          <p style="padding: 15px; line-height: 1.6;">${analysis.introduction}</p>
+        `;
+        mainEl.appendChild(introEl);
+        
+        // 2. Core Type Profile Card
+        if (analysis.coreTypeProfile) {
+          const core = analysis.coreTypeProfile;
+          let coreContent = '';
+          
+          if (core.typeNumber) {
+            coreContent += `<span class="type-badge">${core.typeNumber}</span>`;
+          }
+          
+          coreContent += `
+            <p><i class="fas fa-fire" style="color: #6e8efb; margin-right: 8px;"></i> <strong>Core Motivation:</strong> ${core.coreMotivation}</p>
+            <p><i class="fas fa-exclamation-triangle" style="color: #ff7676; margin-right: 8px;"></i> <strong>Core Fear:</strong> ${core.coreFear}</p>
+          `;
+          
+          if (core.keyCharacteristics && core.keyCharacteristics.length) {
+            coreContent += '<h3 class="section-title"><i class="fas fa-fingerprint" style="margin-right: 8px;"></i>Key Characteristics</h3>';
+            coreContent += '<ul class="traits-list">';
+            core.keyCharacteristics.forEach(trait => {
+              coreContent += `<li>${trait}</li>`;
+            });
+            coreContent += '</ul>';
+          }
+          
+          if (core.personalizedReflection) {
+            coreContent += `
+              <h3 class="section-title"><i class="fas fa-comment-dots" style="margin-right: 8px;"></i>Personal Reflection</h3>
+              <div class="section-content">${core.personalizedReflection}</div>
+            `;
+          }
+          
+          const coreCard = createCard(
+            `${core.typeName || core.typeNumber}`, 
+            'Your Core Enneagram Type',
+            coreContent,
+            `type-${typeNumber}`,
+            1
+          );
+          mainEl.appendChild(coreCard);
+        }
+        
+        // 3. Wing Influence Card
+        if (analysis.wingInfluence && analysis.wingInfluence.wingTypeNumber) {
+          const wing = analysis.wingInfluence;
+          const wingContent = `
+            <p><i class="fas fa-feather" style="color: #6e8efb; margin-right: 8px;"></i>Your wing adds additional qualities that complement your core type.</p>
+            <div class="section-content" style="margin-top: 15px; padding: 15px; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #6e8efb;">${wing.howWingInfluencesCore}</div>
+          `;
+          
+          const wingTypeNum = extractTypeNumber(wing.wingTypeNumber);
+          const wingCard = createCard(
+            `🪶 ${wing.wingTypeName || wing.wingTypeNumber}`,
+            'Your Wing Influence',
+            wingContent,
+            `type-${wingTypeNum}`,
+            2
+          );
+          mainEl.appendChild(wingCard);
+        }
+        
+        // 4. Integration & Disintegration Paths
+        if (analysis.integrationDisintegrationPaths) {
+          const paths = analysis.integrationDisintegrationPaths;
+          let pathsContent = '';
+          
+          if (paths.integrationPoint && paths.integrationPoint.typeNumber) {
+            pathsContent += `
+              <h3 class="section-title"><i class="fas fa-arrow-up" style="margin-right: 8px; color: #4caf50;"></i>Growth Direction (${paths.integrationPoint.typeNumber})</h3>
+              <div class="section-content">${paths.integrationPoint.description}</div>
+            `;
+          }
+          
+          if (paths.disintegrationPoint && paths.disintegrationPoint.typeNumber) {
+            pathsContent += `
+              <h3 class="section-title"><i class="fas fa-arrow-down" style="margin-right: 8px; color: #ff5252;"></i>Stress Direction (${paths.disintegrationPoint.typeNumber})</h3>
+              <div class="section-content">${paths.disintegrationPoint.description}</div>
+            `;
+          }
+          
+          const pathsCard = createCard(
+            '↕️ Integration & Stress Patterns',
+            'How you move between types under different conditions',
+            pathsContent,
+            '',
+            3
+          );
+          mainEl.appendChild(pathsCard);
+        }
+        
+        // 5. Tritype & Instincts
+        if (analysis.tritypeAndInstincts) {
+          const tri = analysis.tritypeAndInstincts;
+          let triContent = '';
+          
+          if (tri.tritypeInterpretation) {
+            triContent += `
+              <h3 class="section-title"><i class="fas fa-sitemap" style="margin-right: 8px;"></i>Tritype Analysis</h3>
+              <div class="section-content">${tri.tritypeInterpretation}</div>
+            `;
+          }
+          
+          if (tri.instinctualVariantStack) {
+            triContent += `
+              <h3 class="section-title"><i class="fas fa-layer-group" style="margin-right: 8px;"></i>Instinctual Stack</h3>
+              <p>${tri.instinctualVariantStack}</p>
+            `;
+          }
+          
+          if (tri.dominantInstinctFocus) {
+            triContent += `
+              <h3 class="section-title"><i class="fas fa-compass" style="margin-right: 8px;"></i>Dominant Instinct</h3>
+              <div class="section-content">${tri.dominantInstinctFocus}</div>
+            `;
+          }
+          
+          if (triContent) {
+            const triCard = createCard(
+              '🔗 Tritype & Instinctual Variants',
+              'Additional layers of your personality pattern',
+              triContent,
+              '',
+              4
+            );
+            mainEl.appendChild(triCard);
+          }
+        }
+        
+        // 6. Growth Opportunities
+        if (analysis.addressingUserFocus) {
+          const focus = analysis.addressingUserFocus;
+          let focusContent = '';
+          
+          if (focus.insightsOnQuestions) {
+            focusContent += `
+              <h3 class="section-title"><i class="fas fa-lightbulb" style="margin-right: 8px; color: #ffc107;"></i>Insights on Your Questions</h3>
+              <div class="section-content">${focus.insightsOnQuestions}</div>
+            `;
+          }
+          
+          if (focus.growthOpportunities && focus.growthOpportunities.length) {
+            focusContent += '<h3 class="section-title"><i class="fas fa-seedling" style="margin-right: 8px; color: #4caf50;"></i>Growth Opportunities</h3>';
+            
+            focus.growthOpportunities.forEach((opportunity, index) => {
+              focusContent += `
+                <div class="growth-item">
+                  <div class="growth-item-icon">${index + 1}</div>
+                  <div class="growth-item-content">${opportunity}</div>
+                </div>
+              `;
+            });
+          }
+          
+          const focusCard = createCard(
+            '🌱 Personal Development',
+            'Addressing your questions and growth paths',
+            focusContent,
+            '',
+            5
+          );
+          mainEl.appendChild(focusCard);
+        }
+        
+        // 7. Summary
+        if (analysis.summaryAndNextSteps) {
+          const summaryContent = `
+            <div class="section-content">${analysis.summaryAndNextSteps}</div>
+            <div style="text-align: center; margin-top: 25px;">
+              <button class="share-button" onclick="shareEnneagramResults()" 
+                      aria-label="Share these Enneagram results" title="Share analysis">
+                <i class="fas fa-share-alt" style="margin-right: 8px;" aria-hidden="true"></i>Share These Results
+              </button>
+            </div>
+          `;
+          
+          const summaryCard = createCard(
+            '📋 Summary & Next Steps',
+            'Your path forward on the Enneagram journey',
+            summaryContent,
+            '',
+            6
+          );
+          mainEl.appendChild(summaryCard);
+        }
+        
+        // Footer
+        const footerEl = document.createElement('div');
+        footerEl.className = 'enneagram-footer';
+        footerEl.innerHTML = `
+          <div style="margin-bottom: 15px;" role="group" aria-label="Analysis actions">
+            <button class="share-button" onclick="printAnalysis()" style="margin-right: 10px; background-color: #28a745;" 
+                    aria-label="Print this analysis" title="Print analysis">
+              <i class="fas fa-print" style="margin-right: 8px;" aria-hidden="true"></i>Print Analysis
+            </button>
+            <button class="share-button" onclick="downloadAnalysis()" style="background-color: #17a2b8;"
+                    aria-label="Download analysis as PDF" title="Download PDF">
+              <i class="fas fa-download" style="margin-right: 8px;" aria-hidden="true"></i>Save as PDF
+            </button>
+          </div>
+          <p>✨ Enneagram analysis by <strong>INEXASLI</strong> ✨</p>
+          <p style="font-size: 11px; margin-top: 5px; color: #aaa;">Discover your authentic self through ancient wisdom</p>
+        `;
+        mainEl.appendChild(footerEl);
+        
+        return mainEl;
+      }
+      
+      // Enhanced share functionality
+      window.shareEnneagramResults = function() {
+        if (navigator.share) {
+          navigator.share({
+            title: 'My Enneagram Analysis - INEXASLI',
+            text: 'Check out my personalized Enneagram analysis! Discover your authentic self through ancient wisdom.',
+            url: window.location.href
+          })
+          .then(() => {
+            showToast('Analysis shared successfully!', 'success');
+          })
+          .catch(error => {
+            console.log('Error sharing:', error);
+            if (error.name !== 'AbortError') {
+              fallbackShare();
+            }
+          });
+        } else {
+          fallbackShare();
+        }
+      };
+      
+      function fallbackShare() {
+        const url = window.location.href;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).then(() => {
+            showToast('Link copied to clipboard! You can now share it anywhere.', 'success');
+          }).catch(() => {
+            showManualCopyOption(url);
+          });
+        } else {
+          showManualCopyOption(url);
+        }
+      }
+      
+      function showManualCopyOption(url) {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2000;
+        `;
+        
+        modal.innerHTML = `
+          <div style="
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+          ">
+            <h3 style="margin: 0 0 15px 0; color: #333;">Share Your Analysis</h3>
+            <p style="margin: 0 0 20px 0; color: #666;">Copy this link to share your Enneagram analysis:</p>
+            <input type="text" value="${url}" readonly style="
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #ddd;
+              border-radius: 6px;
+              margin-bottom: 20px;
+              font-size: 14px;
+              box-sizing: border-box;
+            " onclick="this.select()">
+            <div>
+              <button onclick="this.parentElement.parentElement.parentElement.remove()" style="
+                background: #6e8efb;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 14px;
+              ">Close</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Auto-select the text
+        const input = modal.querySelector('input');
+        input.select();
+        input.focus();
+        
+        // Close on outside click
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.remove();
+          }
+        });
+      }
+      
+      // Enhanced toast notification system
+      function showToast(message, type = 'info', duration = 3000) {
+        const toast = document.createElement('div');
+        const toastId = 'toast-' + Date.now();
+        toast.id = toastId;
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        
+        // Toast styling based on type
+        const typeStyles = {
+          success: { bg: '#4caf50', icon: 'fas fa-check-circle' },
+          error: { bg: '#f44336', icon: 'fas fa-exclamation-circle' },
+          warning: { bg: '#ff9800', icon: 'fas fa-exclamation-triangle' },
+          info: { bg: '#333', icon: 'fas fa-info-circle' }
+        };
+        
+        const style = typeStyles[type] || typeStyles.info;
+        
+        toast.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: ${style.bg};
+          color: white;
+          padding: 16px 24px;
+          border-radius: 8px;
+          z-index: 1001;
+          font-size: 14px;
+          box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+          opacity: 0;
+          transform: translateX(100%);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          max-width: 350px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        `;
+        
+        toast.innerHTML = `
+          <i class="${style.icon}" aria-hidden="true"></i>
+          <span>${message}</span>
+          <button onclick="closeToast('${toastId}')" style="
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            margin-left: auto;
+            font-size: 16px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+          " aria-label="Close notification">
+            <i class="fas fa-times" aria-hidden="true"></i>
+          </button>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Animate in
+        setTimeout(() => {
+          toast.style.opacity = '1';
+          toast.style.transform = 'translateX(0)';
+        }, 100);
+        
+        // Auto dismiss
+        setTimeout(() => {
+          closeToast(toastId);
+        }, duration);
+        
+        return toastId;
+      }
+      
+      window.closeToast = function(toastId) {
+        const toast = document.getElementById(toastId);
+        if (toast) {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateX(100%)';
+          setTimeout(() => {
+            if (toast.parentNode) {
+              toast.parentNode.removeChild(toast);
+            }
+          }, 400);
+        }
+      };
+      
+      // Scroll to top functionality
+      window.scrollToTop = function() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      };
+      
+      // Progress bar functionality
+      function updateProgressBar() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        
+        let progressBar = document.querySelector('.progress-bar');
+        if (!progressBar) {
+          progressBar = document.createElement('div');
+          progressBar.className = 'progress-bar';
+          document.body.appendChild(progressBar);
+        }
+        progressBar.style.width = scrolled + '%';
+      }
+      
+      // Add enhanced UI elements
+      function addEnhancedUI() {
+        // Add floating action button for scroll to top
+        const fab = document.createElement('button');
+        fab.className = 'fab tooltip';
+        fab.setAttribute('aria-label', 'Scroll to top of page');
+        fab.setAttribute('title', 'Back to top');
+        fab.innerHTML = `
+          <i class="fas fa-arrow-up" aria-hidden="true"></i>
+          <span class="tooltiptext">Back to top</span>
+        `;
+        fab.onclick = scrollToTop;
+        
+        // Add keyboard support for FAB
+        fab.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            scrollToTop();
+          }
+        });
+        
+        document.body.appendChild(fab);
+        
+        // Show/hide FAB based on scroll position
+        window.addEventListener('scroll', () => {
+          updateProgressBar();
+          const scrolled = window.pageYOffset;
+          fab.style.opacity = scrolled > 300 ? '1' : '0';
+          fab.style.pointerEvents = scrolled > 300 ? 'auto' : 'none';
+          fab.setAttribute('tabindex', scrolled > 300 ? '0' : '-1');
+        });
+        
+        // Add skip to content link for screen readers
+        const skipLink = document.createElement('a');
+        skipLink.href = '#main-content';
+        skipLink.className = 'skip-link';
+        skipLink.textContent = 'Skip to main content';
+        skipLink.setAttribute('aria-label', 'Skip navigation to main content');
+        document.body.insertBefore(skipLink, document.body.firstChild);
+        
+        // Add main content landmark
+        const mainContent = document.querySelector('.enneagram-content');
+        if (mainContent) {
+          mainContent.setAttribute('id', 'main-content');
+          mainContent.setAttribute('role', 'main');
+          mainContent.setAttribute('aria-label', 'Enneagram analysis results');
+        }
+      }
+      
+      // Enhanced print functionality
+      window.printAnalysis = function() {
+        showToast('Preparing analysis for printing...', 'info', 2000);
+        
+        setTimeout(() => {
+          window.print();
+          // Note: We can't detect if print was successful or cancelled reliably
+          setTimeout(() => {
+            showToast('Print dialog opened. You can also save as PDF from the print options.', 'info');
+          }, 1000);
+        }, 500);
+      };
+      
+      // Download as PDF functionality
+      window.downloadAnalysis = function() {
+        const loadingToast = showToast('Preparing PDF download...', 'info', 10000);
+        
+        // Load jsPDF library if not already loaded
+        if (typeof jsPDF === 'undefined') {
+          const script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+          script.onload = () => {
+            closeToast(loadingToast);
+            generatePDF();
+          };
+          script.onerror = () => {
+            closeToast(loadingToast);
+            showToast('Failed to load PDF library. Please check your internet connection.', 'error');
+          };
+          document.head.appendChild(script);
+        } else {
+          closeToast(loadingToast);
+          generatePDF();
+        }
+      };
+      
+      function generatePDF() {
+        const progressToast = showToast('Generating PDF...', 'info', 15000);
+        
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          
+          // PDF styling
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const pageHeight = doc.internal.pageSize.getHeight();
+          let yPosition = 20;
+          const lineHeight = 6;
+          const marginLeft = 20;
+          const marginRight = 20;
+          const maxWidth = pageWidth - marginLeft - marginRight;
+          
+          // Header with logo area
+          doc.setFillColor(110, 142, 251);
+          doc.rect(0, 0, pageWidth, 15, 'F');
+          
+          // Title
+          doc.setFontSize(20);
+          doc.setFont(undefined, 'bold');
+          doc.setTextColor(255, 255, 255);
+          doc.text('Enneagram Analysis Report', marginLeft, 10);
+          
+          // Reset colors for body
+          doc.setTextColor(0, 0, 0);
+          yPosition = 25;
+          
+          // Date and source
+          doc.setFontSize(10);
+          doc.setFont(undefined, 'normal');
+          doc.text(`Generated on: ${new Date().toLocaleDateString()}`, marginLeft, yPosition);
+          yPosition += 6;
+          doc.text('Powered by INEXASLI Enneagram Intelligence', marginLeft, yPosition);
+          yPosition += 15;
+          
+          // Function to add text with word wrapping
+          function addWrappedText(text, fontSize = 10, isBold = false) {
+            doc.setFontSize(fontSize);
+            doc.setFont(undefined, isBold ? 'bold' : 'normal');
+            const lines = doc.splitTextToSize(text, maxWidth);
+            
+            lines.forEach(line => {
+              if (yPosition > pageHeight - 20) {
+                doc.addPage();
+                yPosition = 20;
+              }
+              doc.text(line, marginLeft, yPosition);
+              yPosition += lineHeight;
+            });
+            yPosition += 2; // Extra spacing
+          }
+          
+          // Extract text content from cards
+          const cards = document.querySelectorAll('.enneagram-card');
+          let processedCards = 0;
+          
+          cards.forEach((card, index) => {
+            const title = card.querySelector('h2')?.textContent || '';
+            const subtitle = card.querySelector('.card-subtitle')?.textContent || '';
+            const content = card.querySelector('.card-body');
+            
+            if (title) {
+              // Add section separator for readability
+              if (index > 0) {
+                yPosition += 5;
+                doc.setDrawColor(200, 200, 200);
+                doc.line(marginLeft, yPosition, pageWidth - marginRight, yPosition);
+                yPosition += 10;
+              }
+              
+              addWrappedText(title, 14, true);
+              yPosition += 3;
+            }
+            
+            if (subtitle) {
+              addWrappedText(subtitle, 12, false);
+              yPosition += 3;
+            }
+            
+            if (content) {
+              // Extract text content without HTML tags and clean it up
+              let textContent = content.innerText || content.textContent || '';
+              textContent = textContent.replace(/\s+/g, ' ').trim();
+              addWrappedText(textContent, 10, false);
+              yPosition += 8; // Extra spacing between sections
+            }
+            
+            processedCards++;
+          });
+          
+          // Footer
+          const pageCount = doc.internal.getNumberOfPages();
+          for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.setTextColor(128, 128, 128);
+            doc.text(`Page ${i} of ${pageCount} | INEXASLI Enneagram Analysis`, 
+              marginLeft, pageHeight - 10);
+          }
+          
+          closeToast(progressToast);
+          
+          // Save the PDF
+          const filename = `enneagram-analysis-${new Date().toISOString().split('T')[0]}.pdf`;
+          doc.save(filename);
+          
+          showToast(`PDF "${filename}" downloaded successfully!`, 'success');
+          
+        } catch (error) {
+          console.error('PDF generation error:', error);
+          closeToast(progressToast);
+          showToast('Error generating PDF. Please try again or use the Print option.', 'error');
+        }
+      }
+      
       function updateOutput() {
         const outputSpan = document.getElementById('output-span');
         if (!outputSpan) {
@@ -75,28 +1360,95 @@
           setTimeout(updateOutput, 100);
           return;
         }
+        
         const responseKey = 'enneagramIqResponse';
         console.log('Looking for data with key:', responseKey);
         let data;
+        
         try {
           data = getJSON(responseKey);
+          
+          if (data) {
+            // Validate data structure - checking for the new cleaner structure
+            if (!data.enneagramAnalysis) {
+              throw new Error('Invalid data structure: missing enneagramAnalysis');
+            }
+            
+            // Format the data directly since it now has the clean structure
+            const formattedContent = formatEnneagramAnalysis(data);
+            
+            outputSpan.innerHTML = '';
+            outputSpan.appendChild(formattedContent);
+            
+            // Add enhanced UI elements after content is loaded
+            setTimeout(() => {
+              addEnhancedUI();
+              
+              // Trigger staggered card animations
+              const cards = document.querySelectorAll('.enneagram-card');
+              cards.forEach((card, index) => {
+                setTimeout(() => {
+                  card.style.opacity = '1';
+                  card.style.transform = 'translateY(0)';
+                }, index * 150);
+              });
+              
+              // Show success message after all cards are animated
+              setTimeout(() => {
+                showToast('Your Enneagram analysis has been loaded successfully! 🌟', 'success');
+              }, cards.length * 150 + 500);
+            }, 100);
+            
+            console.log('Data displayed successfully');
+          } else {
+            displayNoDataMessage(outputSpan);
+          }
         } catch (err) {
-          console.error('Error getting data:', err);
-        }
-        if (data) {
-          outputSpan.textContent = JSON.stringify(data, null, 2);
-          console.log('Data displayed successfully');
-        } else {
-          outputSpan.innerHTML = `
-            <div class="no-data">
-              <div class="no-data-icon">🚫</div>
-              <div class="no-data-message">No Response Found</div>
-              <div class="no-data-help">Please try again.</div>
-            </div>
-          `;
-          console.log('No data found for key:', responseKey);
+          console.error('Error processing data:', err);
+          displayErrorMessage(outputSpan, err.message);
         }
       }
+      
+      function displayNoDataMessage(outputSpan) {
+        outputSpan.innerHTML = `
+          <div class="no-data" role="alert" aria-live="polite">
+            <div class="no-data-icon" aria-hidden="true">🚫</div>
+            <div class="no-data-message">No Analysis Found</div>
+            <div class="no-data-help">Please ensure you've completed an Enneagram analysis first, then refresh this page.</div>
+            <button class="share-button" onclick="window.location.reload()" style="margin-top: 15px;" 
+                    aria-label="Refresh page to reload analysis">
+              <i class="fas fa-refresh" style="margin-right: 8px;" aria-hidden="true"></i>Refresh Page
+            </button>
+            <button class="share-button" onclick="goToEnneagramTest()" style="margin-top: 15px; margin-left: 10px; background-color: #28a745;" 
+                    aria-label="Take new Enneagram analysis">
+              <i class="fas fa-play" style="margin-right: 8px;" aria-hidden="true"></i>Take Analysis
+            </button>
+          </div>
+        `;
+        console.log('No data found for key: enneagramIqResponse');
+        showToast('No Enneagram analysis data found. Please take the analysis first.', 'warning');
+      }
+      
+      function displayErrorMessage(outputSpan, errorMessage) {
+        outputSpan.innerHTML = `
+          <div class="no-data" role="alert" aria-live="assertive">
+            <div class="no-data-icon" aria-hidden="true">⚠️</div>
+            <div class="no-data-message">Error Loading Analysis</div>
+            <div class="no-data-help">There was an error loading your Enneagram analysis: ${errorMessage}</div>
+            <button class="share-button" onclick="window.location.reload()" style="margin-top: 15px;" 
+                    aria-label="Try to reload the analysis">
+              <i class="fas fa-refresh" style="margin-right: 8px;" aria-hidden="true"></i>Try Again
+            </button>
+          </div>
+        `;
+        showToast(`Error: ${errorMessage}`, 'error');
+      }
+      
+      // Helper function to navigate to Enneagram test
+      window.goToEnneagramTest = function() {
+        window.location.href = './enneagramiq.html';
+      };
+      
       setTimeout(updateOutput, 100);
     })();
   </script>
