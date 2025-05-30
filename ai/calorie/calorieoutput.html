@@ -1,8 +1,17 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calorie API Output</title>
+  
+  <!-- Preconnect and font links -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles/outputstyles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
     /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
     
@@ -134,8 +143,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- include centralized copy utility -->
   <script src="../../utility/copy.js"></script>
-  
-  <div class="device-container">
+  <script src="../../utility/enhancedUI.js"></script>
+</head>
+<body>
+  <!-- Main content container with ID for accessibility -->
+  <div id="main-content" class="device-container calorie-container">
     <div class="output-wrapper">
       <div id="output-span" class="api-output">Loading...</div>
   </div>
@@ -312,4 +324,6 @@
       outputElement.appendChild(container);
     }
   </script>
+</body>
+</html>
 
