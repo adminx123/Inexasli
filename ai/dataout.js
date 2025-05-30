@@ -556,7 +556,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         document.addEventListener('click', function (e) {
             const isClickInside = dataContainer.contains(e.target);
-            if (!isClickInside && dataContainer.dataset.state === 'expanded') {
+            // Check if click is on copy button or its modal/toast elements
+            const isCopyButton = e.target.closest('#copyButtonContainer, #copyButton, .share-modal-backdrop, .share-modal-content, .share-action-btn') ||
+                                e.target.id === 'copyButton' ||
+                                e.target.id === 'copyButtonContainer' ||
+                                e.target.closest('[id^="toast-"]');
+            
+            if (!isClickInside && !isCopyButton && dataContainer.dataset.state === 'expanded') {
                 console.log('Clicked outside right data container, collapsing (dataout.js)');
                 toggleDataContainer();
             }
