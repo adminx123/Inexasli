@@ -1211,157 +1211,116 @@
       
       // Enhanced print functionality
       window.printAnalysis = function() {
-        showToast('Preparing analysis for printing...', 'info', 2000);
+        // Check if content is loaded first
+        const outputSpan = document.getElementById('output-span');
+        if (!outputSpan) {
+          showToast('Content area not found. Please refresh the page.', 'error');
+          return;
+        }
         
-        setTimeout(() => {
-          window.print();
-          // Note: We can't detect if print was successful or cancelled reliably
-          setTimeout(() => {
-            showToast('Print dialog opened. You can also save as PDF from the print options.', 'info');
-          }, 1000);
-        }, 500);
-      };
-      
-      // Download as PDF functionality
-      window.downloadAnalysis = function() {
-        const loadingToast = showToast('Preparing PDF download...', 'info', 10000);
+        // Check if still loading
+        const hasLoadingContent = outputSpan.querySelector('.loading, .loading-text, .loading-spinner');
+        const hasActualContent = outputSpan.querySelector('.enneagram-card, .enneagram-content');
         
-        // Load jsPDF library if not already loaded
-        if (typeof jsPDF === 'undefined') {
-          const script = document.createElement('script');
-          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-          script.onload = () => {
-            closeToast(loadingToast);
-            generatePDF();
-          };
-          script.onerror = () => {
-            closeToast(loadingToast);
-            showToast('Failed to load PDF library. Please check your internet connection.', 'error');
-          };
-          document.head.appendChild(script);
+        if (hasLoadingContent && !hasActualContent) {
+          showToast('Analysis is still loading. Please wait for it to complete before printing.', 'warning');
+          return;
+        }
+        
+        if (!hasActualContent) {
+          showToast('No analysis content found. Please complete an Enneagram analysis first.', 'warning');
+          return;
+        }
+        
+        // Use copy.js print functionality for consistency
+        if (window.copyUtil) {
+          // Call the copy.js print function
+          window.printContent();
         } else {
-          closeToast(loadingToast);
-          generatePDF();
+          // Fallback to basic print
+          showToast('Preparing analysis for printing...', 'info', 2000);
+          
+          setTimeout(() => {
+            window.print();
+            setTimeout(() => {
+              showToast('Print dialog opened. You can also save as PDF from the print options.', 'info');
+            }, 1000);
+          }, 500);
         }
       };
       
-      function generatePDF() {
-        const progressToast = showToast('Generating PDF...', 'info', 15000);
+      // Download as PDF functionality - Use copy.js PDF functionality for consistency
+      window.downloadAnalysis = function() {
+        // Check if content is loaded first
+        const outputSpan = document.getElementById('output-span');
+        if (!outputSpan) {
+          showToast('Content area not found. Please refresh the page.', 'error');
+          return;
+        }
         
-        try {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF();
-          
-          // PDF styling
-          const pageWidth = doc.internal.pageSize.getWidth();
-          const pageHeight = doc.internal.pageSize.getHeight();
-          let yPosition = 20;
-          const lineHeight = 6;
-          const marginLeft = 20;
-          const marginRight = 20;
-          const maxWidth = pageWidth - marginLeft - marginRight;
-          
-          // Header with logo area
-          doc.setFillColor(110, 142, 251);
-          doc.rect(0, 0, pageWidth, 15, 'F');
-          
-          // Title
-          doc.setFontSize(20);
-          doc.setFont(undefined, 'bold');
-          doc.setTextColor(255, 255, 255);
-          doc.text('Enneagram Analysis Report', marginLeft, 10);
-          
-          // Reset colors for body
-          doc.setTextColor(0, 0, 0);
-          yPosition = 25;
-          
-          // Date and source
-          doc.setFontSize(10);
-          doc.setFont(undefined, 'normal');
-          doc.text(`Generated on: ${new Date().toLocaleDateString()}`, marginLeft, yPosition);
-          yPosition += 6;
-          doc.text('Powered by INEXASLI Enneagram Intelligence', marginLeft, yPosition);
-          yPosition += 15;
-          
-          // Function to add text with word wrapping
-          function addWrappedText(text, fontSize = 10, isBold = false) {
-            doc.setFontSize(fontSize);
-            doc.setFont(undefined, isBold ? 'bold' : 'normal');
-            const lines = doc.splitTextToSize(text, maxWidth);
+        // Check if still loading
+        const hasLoadingContent = outputSpan.querySelector('.loading, .loading-text, .loading-spinner');
+        const hasActualContent = outputSpan.querySelector('.enneagram-card, .enneagram-content');
+        
+        if (hasLoadingContent && !hasActualContent) {
+          showToast('Analysis is still loading. Please wait for it to complete before downloading.', 'warning');
+          return;
+        }
+        
+        if (!hasActualContent) {
+          showToast('No analysis content found. Please complete an Enneagram analysis first.', 'warning');
+          return;
+        }
+        
+        // Use the copy.js PDF functionality which is more robust
+        if (window.copyUtil && window.copyUtil.openShareModal) {
+          // Open the share modal and let user choose PDF option
+          window.copyUtil.openShareModal('output-span', function(outputEl) {
+            // Custom formatting for enneagram content
+            let textToCopy = '';
             
-            lines.forEach(line => {
-              if (yPosition > pageHeight - 20) {
-                doc.addPage();
-                yPosition = 20;
-              }
-              doc.text(line, marginLeft, yPosition);
-              yPosition += lineHeight;
-            });
-            yPosition += 2; // Extra spacing
-          }
-          
-          // Extract text content from cards
-          const cards = document.querySelectorAll('.enneagram-card');
-          let processedCards = 0;
-          
-          cards.forEach((card, index) => {
-            const title = card.querySelector('h2')?.textContent || '';
-            const subtitle = card.querySelector('.card-subtitle')?.textContent || '';
-            const content = card.querySelector('.card-body');
+            // Get the title
+            const titleEl = outputEl.querySelector('.enneagram-content');
+            if (titleEl) {
+              textToCopy += 'ENNEAGRAM ANALYSIS REPORT\n';
+              textToCopy += '═══════════════════════════\n\n';
+            }
             
-            if (title) {
-              // Add section separator for readability
-              if (index > 0) {
-                yPosition += 5;
-                doc.setDrawColor(200, 200, 200);
-                doc.line(marginLeft, yPosition, pageWidth - marginRight, yPosition);
-                yPosition += 10;
+            // Get all cards content
+            const cards = outputEl.querySelectorAll('.enneagram-card');
+            cards.forEach(card => {
+              const title = card.querySelector('h2')?.textContent || '';
+              const subtitle = card.querySelector('.card-subtitle')?.textContent || '';
+              const content = card.querySelector('.card-body');
+              
+              if (title) {
+                textToCopy += `${title.toUpperCase()}\n`;
+                textToCopy += '─'.repeat(title.length) + '\n';
               }
               
-              addWrappedText(title, 14, true);
-              yPosition += 3;
-            }
+              if (subtitle) {
+                textToCopy += `${subtitle}\n\n`;
+              }
+              
+              if (content) {
+                let textContent = content.innerText || content.textContent || '';
+                textContent = textContent.replace(/\s+/g, ' ').trim();
+                textToCopy += `${textContent}\n\n`;
+              }
+            });
             
-            if (subtitle) {
-              addWrappedText(subtitle, 12, false);
-              yPosition += 3;
-            }
+            textToCopy += '\n──────────────────────────\n';
+            textToCopy += `Generated on: ${new Date().toLocaleDateString()}\n`;
+            textToCopy += 'Powered by INEXASLI Enneagram Intelligence\n';
             
-            if (content) {
-              // Extract text content without HTML tags and clean it up
-              let textContent = content.innerText || content.textContent || '';
-              textContent = textContent.replace(/\s+/g, ' ').trim();
-              addWrappedText(textContent, 10, false);
-              yPosition += 8; // Extra spacing between sections
-            }
-            
-            processedCards++;
+            return textToCopy;
           });
-          
-          // Footer
-          const pageCount = doc.internal.getNumberOfPages();
-          for (let i = 1; i <= pageCount; i++) {
-            doc.setPage(i);
-            doc.setFontSize(8);
-            doc.setTextColor(128, 128, 128);
-            doc.text(`Page ${i} of ${pageCount} | INEXASLI Enneagram Analysis`, 
-              marginLeft, pageHeight - 10);
-          }
-          
-          closeToast(progressToast);
-          
-          // Save the PDF
-          const filename = `enneagram-analysis-${new Date().toISOString().split('T')[0]}.pdf`;
-          doc.save(filename);
-          
-          showToast(`PDF "${filename}" downloaded successfully!`, 'success');
-          
-        } catch (error) {
-          console.error('PDF generation error:', error);
-          closeToast(progressToast);
-          showToast('Error generating PDF. Please try again or use the Print option.', 'error');
+        } else {
+          // Fallback to basic PDF generation if copy.js not available
+          showToast('PDF functionality not available. Please try the share button instead.', 'warning');
         }
-      }
+      };
+      
       
       function updateOutput() {
         const outputSpan = document.getElementById('output-span');
@@ -1458,8 +1417,30 @@
       window.goToEnneagramTest = function() {
         window.location.href = './enneagramiq.html';
       };
-      
+
+      // Initialize copy button functionality after content is loaded
+      function initializeCopyButton() {
+        if (window.copyUtil && window.copyUtil.init) {
+          try {
+            console.log('Initializing copy button for enneagram output...');
+            window.copyUtil.init({
+              containerId: 'output-span'
+            });
+            console.log('Copy button initialized successfully');
+          } catch (err) {
+            console.error('Error initializing copy button:', err);
+          }
+        } else {
+          console.log('Copy utility not available yet, retrying...');
+          // Retry after a short delay if copy.js hasn't loaded yet
+          setTimeout(initializeCopyButton, 500);
+        }
+      }
+
       setTimeout(updateOutput, 100);
+
+      // Initialize copy button after a short delay to ensure copy.js is loaded
+      setTimeout(initializeCopyButton, 1000);
     })();
   </script>
   <script src="../../utility/copy.js"></script>
