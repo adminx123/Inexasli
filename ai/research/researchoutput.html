@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles/outputstyles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../../utility/enhancedUI.js"></script>
   <style>
     /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
     
@@ -163,5 +165,37 @@
       transform: translateY(20px);
     }
   </style>
+<body>
+  <!-- Main content container with ID for accessibility -->
+  <div id="main-content" class="device-container research-container">
+    <!-- Content will be dynamically inserted here -->
+    
+    <script>
+      // Initialize Enhanced UI System
+      function initEnhancedUISystem() {
+        // Wait a bit to ensure DOM and containers are ready
+        setTimeout(() => {
+          // Initialize the enhanced UI with embed detection
+          if (window.enhancedUI) {
+            window.enhancedUI.init({
+              containerId: 'main-content',
+              scrollToTop: true,
+              embedEnforcement: true,
+              accessibility: true
+            });
+          } else {
+            console.warn('Enhanced UI system not loaded');
+          }
+        }, 100);
+      }
+      
+      // Initialize when page loads
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initEnhancedUISystem);
+      } else {
+        initEnhancedUISystem();
+      }
+    </script>
+  </div>
 </body>
 </html>
