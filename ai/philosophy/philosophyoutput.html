@@ -75,17 +75,20 @@
     background: linear-gradient(90deg, transparent, #888, transparent);
   }
   
+  /* Container behind cards gets page background color for floating effect */
   .quotes-container {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 16px;
+    background-color: transparent;
+    padding: 0;
   }
   
   .quote-card {
     background: #ffffff;
     border-radius: 10px;
     padding: 22px;
-    margin-bottom: 5px;
+    margin-bottom: 0;
     position: relative;
     transition: all 0.3s ease;
     box-shadow: 0 3px 15px rgba(0,0,0,0.05);
@@ -238,6 +241,11 @@
   .no-data-help {
     font-size: 14px;
     color: #777;
+  }
+  
+  /* Ensure container background matches gap background */
+  .philosophy-container {
+    background-color: #f9fafb;
   }
 </style>
 </head>

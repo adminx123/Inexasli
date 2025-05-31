@@ -149,5 +149,28 @@ body {
   display: none;
 }
 
+/* Shared card spacing rules */
+.quotes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* remove whitespace between cards */
+}
+
+.quote-card {
+  margin-bottom: 0; /* remove bottom margin */
+}
+
+.enneagram-card {
+  margin-bottom: 0; /* remove bottom margin between enneagram cards */
+}
+
 /* Custom styling placeholder - individual output files can add their own styles here */
 /* Each output.txt file can include additional CSS that works within the device-container constraints */
+
+/* DataOut panel background overrides */
+.data-container-right,
+.data-container-right:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
