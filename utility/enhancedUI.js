@@ -40,6 +40,7 @@ const ENHANCED_UI_CONFIG = {
  * @param {boolean} options.scrollToTop - Enable scroll-to-top FAB (default: true)
  * @param {boolean} options.embedEnforcement - Enable embed-only enforcement (default: true)
  * @param {boolean} options.accessibility - Enable accessibility features (default: true)
+ * @param {boolean} options.guidedForms - Enable guided form completion (default: true)
  * @param {string} options.containerId - Main content container ID (default: 'output-span')
  */
 function initEnhancedUI(options = {}) {
@@ -47,6 +48,7 @@ function initEnhancedUI(options = {}) {
         scrollToTop: true,
         embedEnforcement: true,
         accessibility: true,
+        guidedForms: true,
         containerId: 'output-span',
         ...options
     };
@@ -70,13 +72,34 @@ function initEnhancedUI(options = {}) {
             initScrollToTopFAB();
         }
 
+        // Initialize guided forms if enabled and form elements are present
+        if (config.guidedForms && typeof window.initGuidedForms === 'function') {
+            const hasFormElements = document.querySelector('.row1, .grid-container, .mobile-container');
+            if (hasFormElements) {
+                console.log('🎯 Initializing guided forms from Enhanced UI');
+                setTimeout(() => {
+                    window.initGuidedForms({
+                        autoAdvance: true,
+                        showProgressIndicator: true,
+                        smoothTransitions: true,
+                        enableSkipping: true
+                    });
+                }, 200);
+            }
+        }
+
         console.log('✅ Enhanced UI System initialized');
     });
 
     return {
         showToast,
         scrollToTop,
-        isEmbedded: checkIfEmbedded
+        isEmbedded: checkIfEmbedded,
+        toggleGuidedMode: () => {
+            if (typeof window.toggleGuidedMode === 'function') {
+                window.toggleGuidedMode();
+            }
+        }
     };
 }
 

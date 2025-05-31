@@ -82,50 +82,100 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function loadStoredContent(url) {
         try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
-
-            const content = await response.text();
-
-            // Inject content into the container
-            dataContainer.classList.remove('initial');
-            dataContainer.classList.add('expanded');
-            dataContainer.dataset.state = 'expanded';
-            
-            // Ensure inputstyles.css is included for all product items
-            const hasCssLink = content.includes('inputstyles.css');
-            const cssLinkHtml = hasCssLink ? '' : '<link rel="stylesheet" href="/ai/styles/inputstyles.css">';                dataContainer.innerHTML = `
-                    <span class="close-data-container">-</span>
-                    <div class="data-content">
-                        ${cssLinkHtml}
-                        ${content}
-                    </div>
-                `;
-
-            // Initialize grid items directly
-            initializeGridItems();
-
-            // Dispatch a custom event that the datain container is fully loaded
-            const dataInLoadedEvent = new CustomEvent('data-in-loaded', {
-                detail: { url: url }
-            });
-            document.dispatchEvent(dataInLoadedEvent);
-
-            dataContainer.querySelectorAll('script').forEach(oldScript => {
-                const newScript = document.createElement('script');
-                if (oldScript.src) {
-                    newScript.src = oldScript.src;
-                } else {
-                    newScript.textContent = oldScript.textContent;
-                }
-
-                oldScript.replaceWith(newScript);
-            });
-        } catch (error) {
             dataContainer.innerHTML = `
                 <span class="close-data-container">-</span>
-                <div class="data-content">Error loading content: ${error.message}</div>
+                <div class="data-content">Loading...</div>
             `;
+
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const content = await response.text();
+            dataContainer.innerHTML = `
+                <span class="close-data-container">-</span>
+                <div class="data-content">${content}</div>
+            `;
+
+            // Re-initialize grid items after content load
+            initializeGridItems();
+            
+            // Auto-initialize guided forms for all form content
+            setTimeout(() => {
+                const hasFormElements = dataContainer.querySelector('.row1, .grid-container, .mobile-container, .device-container');
+                if (hasFormElements) {
+                    console.log('[DataIn] Auto-initializing guided forms for loaded content');
+                    
+                    // Load guided forms script if not already loaded
+                    if (!window.GuidedFormSystem && !document.querySelector('script[src*="guidedForms.js"]')) {
+                        // Disable auto-initialization from the script itself
+                        window.autoInitGuidedForms = false;
+                        
+                        const guidedFormsScript = document.createElement('script');
+                        guidedFormsScript.src = '/utility/guidedForms.js';
+                        guidedFormsScript.onload = () => {
+                            console.log('[DataIn] Guided forms script loaded');
+                            // Auto-initialize guided forms immediately after script loads
+                            if (window.initGuidedForms) {
+                                console.log('[DataIn] Auto-starting guided forms');
+                                window.initGuidedForms({
+                                    autoAdvance: true,
+                                    showProgressIndicator: true,
+                                    smoothTransitions: true,
+                                    enableSkipping: true,
+                                    autoStart: true
+                                });
+                            }
+                        };
+                        document.head.appendChild(guidedFormsScript);
+                    } else if (window.initGuidedForms) {
+                        // Script already loaded, auto-initialize immediately
+                        console.log('[DataIn] Auto-starting guided forms (script already loaded)');
+                        window.initGuidedForms({
+                            autoAdvance: true,
+                            showProgressIndicator: true,
+                            smoothTransitions: true,
+                            enableSkipping: true,
+                            autoStart: true
+                        });
+                    }
+                }
+            }, 300);
+
+            // Dispatch custom event to notify that data-in content has loaded
+            document.dispatchEvent(new CustomEvent('data-in-loaded', {
+                detail: {
+                    url: url,
+                    container: dataContainer
+                }
+            }));
+
+            // Re-bind close button
+            const closeButton = dataContainer.querySelector('.close-data-container');
+            if (closeButton) {
+                closeButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleDataContainer();
+                });
+            }
+        } catch (error) {
+            console.error('Error loading content:', error);
+            dataContainer.innerHTML = `
+                <span class="close-data-container">-</span>
+                <div class="data-content">Error loading content. Please try again.</div>
+            `;
+            
+            // Re-bind close button even on error
+            const closeButton = dataContainer.querySelector('.close-data-container');
+            if (closeButton) {
+                closeButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleDataContainer();
+                });
+            }
         }
     }
 
