@@ -108,13 +108,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-right.initial, .data-container-right.collapsed {
-                max-width: 240px;
-                width: 240px;
+                width: calc(100vw - 160px);
+                max-width: calc(100vw - 160px);
+                min-width: 240px;
                 height: 36px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 z-index: 12000; /* Ensure collapsed Data Out is above expanded Data In */
+                margin-left: 5px;
+                margin-right: 5px;
             }
             /* Explicit override to ensure tab stays above Data In */
             .data-container-right.initial {
@@ -274,6 +277,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.body.appendChild(dataContainer);
         console.log('Right data container injected with state: initial (dataout.js)');
 
+        // Add click listener to entire container for expansion
+        dataContainer.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (dataContainer.dataset.state !== 'expanded') {
+                toggleDataContainer();
+            }
+        });
+
         const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -345,6 +356,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <span class="close-data-container">+</span>
                     <span class="data-label">DATA OUT</span>
                 `;
+                
+                // Re-add click listener to entire container for expansion
+                dataContainer.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (dataContainer.dataset.state !== 'expanded') {
+                        toggleDataContainer();
+                    }
+                });
                 
                 // Reset datain container z-index when dataout collapses
                 if (dataInContainer) {

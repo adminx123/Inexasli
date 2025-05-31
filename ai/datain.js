@@ -161,13 +161,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-left.initial, .data-container-left.collapsed {
-                max-width: 240px;
-                width: 240px;
+                width: calc(100vw - 160px);
+                max-width: calc(100vw - 160px);
+                min-width: 240px;
                 height: 36px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 z-index: 10001;
+                margin-left: 5px;
+                margin-right: 5px;
             }
 
             .data-container-left.expanded {
@@ -320,6 +323,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         document.body.appendChild(dataContainer);
 
+        // Add click listener to entire container for expansion
+        dataContainer.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (dataContainer.dataset.state !== 'expanded') {
+                toggleDataContainer();
+            }
+        });
+
         const closeButton = dataContainer.querySelector('.close-data-container');
         const dataLabel = dataContainer.querySelector('.data-label');
 
@@ -367,6 +378,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <span class="close-data-container">+</span>
                     <span class="data-label">DATA IN</span>
                 `;
+                
+                // Re-add click listener to entire container for expansion
+                dataContainer.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (dataContainer.dataset.state !== 'expanded') {
+                        toggleDataContainer();
+                    }
+                });
                 
                 // Reset dataout container z-index when datain collapses
                 if (dataOutContainer) {
