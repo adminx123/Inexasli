@@ -1,7 +1,7 @@
 {
   "name": "INEXASLI",
   "short_name": "INEXASLI",
-  "start_url": "/",
+  "start_url": "/ai/landing/landing.html",
   "scope": "/",  
   "id": "/",
   "display": "standalone",
