@@ -33,415 +33,6 @@
     
     /* Copy button styles now in external JS file */
     
-    /* Decision Tree Visualization Styles */
-    .decision-tree-container {
-      background-color: #fafafa;
-      border: 2px solid #333;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-
-    .decision-tree-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .decision-tree-header h3 {
-      margin: 0 0 10px 0;
-      color: #333;
-      font-size: 20px;
-      font-weight: 600;
-      font-family: "Geist", sans-serif;
-    }
-
-    .mermaid {
-      text-align: center;
-      margin: 20px 0;
-      background-color: white;
-      border-radius: 8px;
-      padding: 20px;
-      border: 1px solid #e0e0e0;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .decision-tree-fallback {
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 20px;
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .decision-tree-fallback h3 {
-      margin: 0 0 20px 0;
-      color: #333;
-      font-size: 18px;
-      font-weight: 600;
-      font-family: "Geist", sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .decision-tree-fallback h3:before {
-      content: "🌳";
-      font-size: 24px;
-    }
-
-    .tree-metrics {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .tree-metric {
-      background-color: #f8f9fa;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      padding: 15px;
-      text-align: center;
-    }
-
-    .nodes-info, .edges-info {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .nodes-info strong, .edges-info strong {
-      color: #1976D2;
-      font-size: 14px;
-      font-weight: 600;
-      font-family: "Geist", sans-serif;
-    }
-
-    .metric-value {
-      font-size: 24px;
-      font-weight: 700;
-      color: #333;
-      font-family: "Geist", sans-serif;
-    }
-
-    .metric-label {
-      font-size: 12px;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 500;
-    }
-
-    .tree-structure-info {
-      background-color: #f0f8ff;
-      border: 1px solid #d0e7ff;
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 20px;
-      text-align: left;
-    }
-
-    .tree-structure-info h4 {
-      margin: 0 0 10px 0;
-      color: #2c5aa0;
-      font-size: 16px;
-      font-weight: 600;
-      font-family: "Geist", sans-serif;
-    }
-
-    .tree-structure-info p {
-      margin: 5px 0;
-      font-size: 14px;
-      color: #555;
-      line-height: 1.4;
-    }
-
-    .tree-navigation-hint {
-      background-color: #fff3cd;
-      border: 1px solid #ffeaa7;
-      border-radius: 6px;
-      padding: 12px;
-      margin-top: 15px;
-      font-size: 13px;
-      color: #856404;
-      text-align: center;
-      font-style: italic;
-    }
-
-    /* Interactive Tree Features */
-    .tree-details-panel {
-      background-color: white;
-      border: 2px solid #333;
-      border-radius: 8px;
-      margin-top: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      animation: slideIn 0.3s ease-out;
-    }
-
-    .details-header {
-      background-color: #333;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 6px 6px 0 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .details-header h4 {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 600;
-      font-family: "Geist", sans-serif;
-    }
-
-    .close-details {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 0;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      transition: background-color 0.2s ease;
-    }
-
-    .close-details:hover {
-      background-color: rgba(255,255,255,0.2);
-    }
-
-    .details-content {
-      padding: 20px;
-      color: #333;
-      line-height: 1.6;
-    }
-
-    .details-content h5 {
-      margin: 0 0 10px 0;
-      color: #1976D2;
-      font-size: 16px;
-      font-weight: 600;
-      font-family: "Geist", sans-serif;
-    }
-
-    .details-content p {
-      margin: 8px 0;
-      font-size: 14px;
-    }
-
-    .node-info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .node-info-item {
-      background-color: #f8f9fa;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      padding: 12px;
-    }
-
-    .node-info-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 5px;
-    }
-
-    .node-info-value {
-      font-size: 14px;
-      color: #333;
-      font-weight: 500;
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Enhance Mermaid nodes for better clickability */
-    .mermaid .node rect,
-    .mermaid .node circle,
-    .mermaid .node polygon {
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .mermaid .node:hover rect,
-    .mermaid .node:hover circle,
-    .mermaid .node:hover polygon {
-      stroke: #1976D2;
-      stroke-width: 3px;
-      filter: drop-shadow(0 2px 4px rgba(25,118,210,0.3));
-    }
-
-    /* Enhanced Interactive Features */
-    .mermaid .node {
-      position: relative;
-    }
-
-    .mermaid .node.focused {
-      outline: 3px solid #FFA726;
-      outline-offset: 2px;
-      border-radius: 4px;
-    }
-
-    .mermaid .node.selected {
-      filter: drop-shadow(0 4px 12px rgba(25,118,210,0.4));
-      transform: scale(1.05);
-    }
-
-    /* Mobile touch enhancements */
-    @media (max-width: 768px) {
-      .mermaid .node rect,
-      .mermaid .node circle,
-      .mermaid .node polygon {
-        min-width: 44px;
-        min-height: 44px;
-      }
-      
-      .decision-tree-container {
-        padding: 15px;
-      }
-      
-      .tree-details-panel {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        max-height: 60vh;
-        overflow-y: auto;
-        z-index: 1000;
-        border-radius: 12px 12px 0 0;
-        animation: slideInFromBottom 0.3s ease-out;
-      }
-    }
-
-    @keyframes slideInFromBottom {
-      from {
-        transform: translateY(100%);
-      }
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    /* Tree controls */
-    .tree-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-      padding: 12px;
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      border: 1px solid #e0e0e0;
-    }
-
-    .tree-controls button {
-      background-color: #1976D2;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 13px;
-      margin: 0 4px;
-      transition: background-color 0.2s ease;
-    }
-
-    .tree-controls button:hover {
-      background-color: #1565C0;
-    }
-
-    .tree-controls button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-
-    .tree-search {
-      padding: 6px 12px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 13px;
-      width: 200px;
-    }
-
-    /* Accessibility indicators */
-    .accessibility-info {
-      background-color: #e3f2fd;
-      border: 1px solid #90caf9;
-      border-radius: 6px;
-      padding: 10px;
-      margin-top: 10px;
-      font-size: 12px;
-      color: #1565c0;
-    }
-
-    /* Loading overlay for interactions */
-    .tree-loading-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(255,255,255,0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: #666;
-      border-radius: 8px;
-      z-index: 10;
-    }
-
-    /* Breadcrumb navigation */
-    .tree-breadcrumb {
-      background-color: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      padding: 8px 12px;
-      margin-bottom: 15px;
-      font-size: 13px;
-      color: #555;
-    }
-
-    .breadcrumb-item {
-      display: inline-block;
-      margin-right: 8px;
-      cursor: pointer;
-      color: #1976D2;
-      text-decoration: underline;
-    }
-
-    .breadcrumb-item:last-child {
-      color: #333;
-      text-decoration: none;
-      cursor: default;
-      font-weight: 500;
-    }
-
-    .breadcrumb-separator {
-      margin: 0 6px;
-      color: #999;
-    }
-
    
   </style>
 </head>
@@ -462,78 +53,9 @@
   <!-- Add D3.js for charts -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   
+  <script src="../../utility/copy.js"></script>
+  
   <script>
-    /*
-    ================================================
-    🌳 ENHANCED DECISION TREE VISUALIZATION SYSTEM
-    ================================================
-    
-    FEATURES IMPLEMENTED:
-    
-    🎯 CORE INTERACTIVE FUNCTIONALITY:
-    ✅ Clickable nodes with detailed information panels
-    ✅ Mermaid.js integration with proper security settings
-    ✅ Fallback click handlers for maximum compatibility
-    ✅ Dynamic content loading and rendering
-    
-    🎮 ADVANCED INTERACTIONS:
-    ✅ Full keyboard navigation (arrow keys, Enter, Escape)
-    ✅ Mobile touch support with optimized touch targets
-    ✅ Search and filter functionality for large trees
-    ✅ Export capabilities (JSON data export)
-    ✅ Breadcrumb navigation tracking user paths
-    ✅ Zoom and reset view functionality
-    
-    ♿ ACCESSIBILITY FEATURES:
-    ✅ ARIA labels and roles for screen readers
-    ✅ Keyboard focus management with visual indicators
-    ✅ Screen reader announcements for interactions
-    ✅ High contrast focus indicators
-    ✅ Tab navigation support
-    
-    📱 MOBILE OPTIMIZATION:
-    ✅ Touch-friendly node sizing (44px minimum)
-    ✅ Mobile-specific modal positioning
-    ✅ Swipe gesture detection
-    ✅ Responsive design adaptations
-    
-    🎨 VISUAL ENHANCEMENTS:
-    ✅ Professional styling matching other analysis types
-    ✅ Hover effects and smooth transitions
-    ✅ Loading states and animations
-    ✅ Visual feedback for interactions
-    ✅ Enhanced fallback displays when Mermaid unavailable
-    
-    📊 ANALYTICS & PERFORMANCE:
-    ✅ Comprehensive user interaction tracking
-    ✅ Performance monitoring and optimization
-    ✅ Usage analytics with detailed reporting
-    ✅ Real-time optimization suggestions
-    ✅ Session data persistence
-    
-    🛠️ DEVELOPER FEATURES:
-    ✅ Modular TreeInteractionManager class
-    ✅ Comprehensive error handling
-    ✅ Console logging for debugging
-    ✅ Extensible architecture for future enhancements
-    ✅ Performance measurement utilities
-    
-    📋 USAGE INSTRUCTIONS:
-    - Click/tap any node to view detailed information
-    - Use Tab to focus tree, arrow keys to navigate
-    - Press Enter to select focused nodes
-    - Use search box to filter nodes by text
-    - Export tree data using the export button
-    - Access help modal for full feature list
-    
-    🔧 TECHNICAL IMPLEMENTATION:
-    - Mermaid.js v10.6.1 for diagram rendering
-    - Custom CSS for enhanced styling and animations
-    - JavaScript ES6+ for modern functionality
-    - localStorage for analytics persistence
-    - Performance API for monitoring
-    */
-
     // Run immediately without waiting for DOMContentLoaded
     (function() {
       console.log('Decision API Output script running');
@@ -577,21 +99,10 @@
         };
       };
 
-      // Initialize Mermaid with error handling and disabled click handling
+      // Initialize Mermaid with error handling
       if (typeof mermaid !== 'undefined') {
         try {
-          mermaid.initialize({ 
-            startOnLoad: true, 
-            theme: 'default',
-            flowchart: {
-              useMaxWidth: true,
-              htmlLabels: true,
-              curve: 'basis'
-            },
-            securityLevel: 'strict', // Prevent any click navigation issues
-            maxTextSize: 50000,
-            suppressErrorRendering: true
-          });
+          mermaid.initialize({ startOnLoad: true, theme: 'default' });
         } catch (error) {
           console.warn('Failed to initialize mermaid:', error);
         }
@@ -685,226 +196,44 @@
 
       // Decision Tree Visualization using Mermaid
       const createDecisionTreeVisualization = (data, container) => {
-        // Create the main container with enhanced styling
-        const treeContainer = document.createElement('div');
-        treeContainer.className = 'decision-tree-container';
-        
-        // Add header
-        const header = document.createElement('div');
-        header.className = 'decision-tree-header';
-        header.innerHTML = `
-          <h3>${data.decisionTitle || 'Decision Tree Analysis'}</h3>
-          <div class="analysis-type" style="color: #666; font-size: 14px; font-style: italic;">
-            Interactive decision flow visualization
-          </div>
-        `;
-        treeContainer.appendChild(header);
-
         if (data.mermaidSyntax && typeof mermaid !== 'undefined') {
           try {
             const mermaidDiv = document.createElement('div');
             mermaidDiv.className = 'mermaid';
-            mermaidDiv.id = `mermaid-tree-${Date.now()}`;
-            
-            // Enhanced Mermaid syntax - remove problematic click events
-            let enhancedSyntax = data.mermaidSyntax.replace(/\\n/g, '\n');
-            
-            // Note: We don't add Mermaid click events here as they cause URL navigation issues
-            // Instead, we rely entirely on our JavaScript event listeners added below
-            
-            mermaidDiv.textContent = enhancedSyntax;
-            treeContainer.appendChild(mermaidDiv);
-            
-            // Create interactive details panel
-            const detailsPanel = document.createElement('div');
-            detailsPanel.className = 'tree-details-panel';
-            detailsPanel.id = `details-${mermaidDiv.id}`;
-            detailsPanel.style.display = 'none';
-            detailsPanel.innerHTML = `
-              <div class="details-header">
-                <h4>Node Details</h4>
-                <button class="close-details" onclick="closeNodeDetails('${detailsPanel.id}')">×</button>
-              </div>
-              <div class="details-content">
-                <p>Click on a node in the tree to see detailed information here.</p>
-              </div>
-            `;
-            treeContainer.appendChild(detailsPanel);
-            
-            // Add navigation hint for interactive trees
-            const navHint = document.createElement('div');
-            navHint.className = 'tree-navigation-hint';
-            navHint.innerHTML = '🖱️ Interactive tree: Click on nodes to explore decision paths and see detailed information';
-            treeContainer.appendChild(navHint);
-            
-            container.appendChild(treeContainer);
-            
-            // Store tree data globally for click handlers
-            window.currentTreeData = data;
-            window.currentDetailsPanel = detailsPanel.id;
+            mermaidDiv.textContent = data.mermaidSyntax.replace(/\\n/g, '\n');
+            container.appendChild(mermaidDiv);
             
             // Re-initialize mermaid for new content
             mermaid.init(undefined, mermaidDiv);
-            
-            // Enhanced click handlers with multiple fallback methods
-            setTimeout(() => {
-              const nodes = mermaidDiv.querySelectorAll('.node, .nodeLabel, g[id*="flowchart"]');
-              console.log(`Found ${nodes.length} interactive elements in tree`);
-              
-              nodes.forEach((node, index) => {
-                // Make sure all elements are clickable
-                node.style.cursor = 'pointer';
-                node.style.pointerEvents = 'auto';
-                
-                // Prevent any default link behavior
-                node.addEventListener('click', (e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  
-                  // Multiple methods to extract node ID
-                  let nodeId = null;
-                  
-                  // Method 1: Direct ID attribute
-                  if (node.id) {
-                    nodeId = node.id;
-                  }
-                  
-                  // Method 2: Data attribute
-                  if (!nodeId && node.getAttribute('data-id')) {
-                    nodeId = node.getAttribute('data-id');
-                  }
-                  
-                  // Method 3: Text content from labels
-                  if (!nodeId) {
-                    const textElement = node.querySelector('text, .nodeLabel, span');
-                    if (textElement && textElement.textContent) {
-                      nodeId = textElement.textContent.trim();
-                    }
-                  }
-                  
-                  // Method 4: Parent node ID if this is a child element
-                  if (!nodeId) {
-                    const parentNode = node.closest('[id]');
-                    if (parentNode && parentNode.id) {
-                      nodeId = parentNode.id;
-                    }
-                  }
-                  
-                  // Method 5: Fall back to index-based ID
-                  if (!nodeId) {
-                    nodeId = `node${index}`;
-                  }
-                  
-                  // Method 6: Extract from Mermaid generated IDs
-                  if (nodeId && nodeId.includes('flowchart-')) {
-                    const match = nodeId.match(/flowchart-([^-]+)/);
-                    if (match) {
-                      nodeId = match[1];
-                    }
-                  }
-                  
-                  console.log(`Node clicked: ${nodeId} (element:`, node, ')');
-                  
-                  // Call the show details function
-                  if (window.showNodeDetails && nodeId) {
-                    window.showNodeDetails(nodeId);
-                  } else {
-                    console.warn('showNodeDetails function not available or nodeId missing');
-                  }
-                });
-                
-                // Add keyboard support for each node
-                node.setAttribute('tabindex', '0');
-                node.setAttribute('role', 'button');
-                node.setAttribute('aria-label', `Decision node. Press Enter to view details.`);
-                
-                node.addEventListener('keydown', (e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    node.click(); // Trigger the click handler
-                  }
-                });
-              });
-
-              // Initialize enhanced interactive features
-              if (window.TreeInteractionManager) {
-                window.TreeInteractionManager.init(container.id || 'decision-tree-container');
-                console.log('Enhanced tree interactions initialized');
-              }
-            }, 100); // Small delay to ensure mermaid has rendered
           } catch (error) {
             console.warn('Mermaid rendering failed:', error);
-            // Enhanced fallback with better styling
-            createEnhancedTreeFallback(data, treeContainer);
-            container.appendChild(treeContainer);
+            // Fallback to simple visualization
+            container.innerHTML = `
+              <div class="decision-tree-fallback">
+                <h3>Decision Tree Structure (Fallback)</h3>
+                <div class="nodes-info">
+                  <strong>Nodes:</strong> ${data.nodes?.length || 0} decision points
+                </div>
+                <div class="edges-info">
+                  <strong>Connections:</strong> ${data.edges?.length || 0} pathways
+                </div>
+              </div>
+            `;
           }
         } else {
-          // Enhanced fallback: create rich tree visualization
-          createEnhancedTreeFallback(data, treeContainer);
-          container.appendChild(treeContainer);
-        }
-      };
-
-      // Enhanced tree fallback with comprehensive information
-      const createEnhancedTreeFallback = (data, container) => {
-        const fallbackDiv = document.createElement('div');
-        fallbackDiv.className = 'decision-tree-fallback';
-        
-        const nodesCount = data.nodes?.length || 0;
-        const edgesCount = data.edges?.length || 0;
-        const options = data.options || [];
-        
-        fallbackDiv.innerHTML = `
-          <h3>Decision Tree Structure</h3>
-          
-          <div class="tree-metrics">
-            <div class="tree-metric">
+          // Fallback: create simple node visualization
+          container.innerHTML = `
+            <div class="decision-tree-fallback">
+              <h3>Decision Tree Structure</h3>
               <div class="nodes-info">
-                <div class="metric-value">${nodesCount}</div>
-                <div class="metric-label">Decision Points</div>
+                <strong>Nodes:</strong> ${data.nodes?.length || 0} decision points
               </div>
-            </div>
-            <div class="tree-metric">
               <div class="edges-info">
-                <div class="metric-value">${edgesCount}</div>
-                <div class="metric-label">Pathways</div>
+                <strong>Connections:</strong> ${data.edges?.length || 0} pathways
               </div>
             </div>
-          </div>
-
-          ${options.length > 0 ? `
-            <div class="tree-structure-info">
-              <h4>📊 Decision Options</h4>
-              ${options.map((option, index) => `
-                <p><strong>Option ${index + 1}:</strong> ${option.name || option}</p>
-              `).join('')}
-            </div>
-          ` : ''}
-
-          ${data.criteria && data.criteria.length > 0 ? `
-            <div class="tree-structure-info">
-              <h4>⚖️ Key Decision Criteria</h4>
-              ${data.criteria.map(criterion => `
-                <p><strong>•</strong> ${criterion.name || criterion}</p>
-              `).join('')}
-            </div>
-          ` : ''}
-
-          ${data.recommendation ? `
-            <div class="tree-structure-info">
-              <h4>🎯 Recommended Path</h4>
-              <p><strong>Choice:</strong> ${data.recommendation.topChoice}</p>
-              <p><strong>Reasoning:</strong> ${data.recommendation.reasoning}</p>
-              ${data.recommendation.confidence ? `<p><strong>Confidence:</strong> ${data.recommendation.confidence}</p>` : ''}
-            </div>
-          ` : ''}
-
-          <div class="tree-navigation-hint">
-            💡 Tip: Decision trees help visualize complex choices by breaking them into sequential decisions and their potential outcomes.
-          </div>
-        `;
-        
-        container.appendChild(fallbackDiv);
+          `;
+        }
       };
 
       // Pros/Cons Visualization using D3.js
@@ -1343,584 +672,87 @@
           rawDataDiv.style.display = rawDataDiv.style.display === 'none' ? 'block' : 'none';
         }
       };
+      
+      // Reference the global utility functions
+      const getLocal = window.getLocal || function(key) {
+        try {
+          const value = localStorage.getItem(key);
+          return value ? decodeURIComponent(value) : null;
+        } catch (e) {
+          console.error('Error getting local value:', e);
+          return null;
+        }
+      };
 
-      // Interactive Tree Functions
-      window.showNodeDetails = (nodeId) => {
-        const detailsPanel = document.getElementById(window.currentDetailsPanel);
-        if (!detailsPanel || !window.currentTreeData) return;
+      const getJSON = window.getJSON || function(key) {
+        try {
+          const item = localStorage.getItem(key);
+          return item ? JSON.parse(item) : null;
+        } catch (e) {
+          console.error('Error parsing JSON:', e);
+          return null;
+        }
+      };
 
-        // Find the node data
-        const nodeData = window.currentTreeData.nodes?.find(node => 
-          node.id === nodeId || node.name === nodeId
-        );
+      // Try to get span element - might be delayed
+      function updateOutput() {
+        const outputSpan = document.getElementById('output-span');
+        if (!outputSpan) {
+          console.log('Output span not found, will retry');
+          setTimeout(updateOutput, 100);
+          return;
+        }
 
-        if (!nodeData) {
-          // Generic node info if specific data not found
-          displayGenericNodeInfo(detailsPanel, nodeId);
+        console.log('Output span found, looking for data...');
+
+        // Specifically look for decisionIqResponse data
+        const responseKey = 'decisionIqResponse';
+        console.log('Looking for data with key:', responseKey);
+        
+        // Try several approaches to get the data
+        let data;
+        try {
+          data = getJSON(responseKey);
+          console.log('Raw data from getJSON:', data);
+        } catch (err) {
+          console.error('Error getting data:', err);
+        }
+        
+        if (data) {
+          // Use built-in visualization logic
+          console.log('Data found:', data);
+          
+          // Extract the actual decision data from the response
+          let decisionData = data;
+          if (data.data && data.message === "Success") {
+            decisionData = data.data;
+            console.log('Extracted decision data:', decisionData);
+          }
+          
+          try {
+            createVisualization(decisionData, 'output-span');
+            console.log('Visualization created for analysis type:', decisionData.analysisType);
+          } catch (vizError) {
+            console.error('Error creating visualization:', vizError);
+            // Fallback to JSON display
+            outputSpan.textContent = JSON.stringify(decisionData, null, 2);
+          }
+          
+          console.log('Data displayed successfully');
         } else {
-          displaySpecificNodeInfo(detailsPanel, nodeData);
+          outputSpan.innerHTML = `
+            <div class="no-data">
+              <div class="no-data-icon">🚫</div>
+              <div class="no-data-message">No Response Found</div>
+              <div class="no-data-help">Please try again.</div>
+            </div>
+          `;
+          console.log('No data found for key:', responseKey);
         }
-
-        // Show the panel with animation
-        detailsPanel.style.display = 'block';
-        detailsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      };
-
-      const displaySpecificNodeInfo = (panel, nodeData) => {
-        const content = panel.querySelector('.details-content');
-        const treeData = window.currentTreeData;
-        
-        content.innerHTML = `
-          <h5>🎯 ${nodeData.name || nodeData.id || 'Decision Node'}</h5>
-          
-          ${nodeData.description ? `<p><strong>Description:</strong> ${nodeData.description}</p>` : ''}
-          
-          <div class="node-info-grid">
-            ${nodeData.type ? `
-              <div class="node-info-item">
-                <div class="node-info-label">Node Type</div>
-                <div class="node-info-value">${nodeData.type}</div>
-              </div>
-            ` : ''}
-            
-            ${nodeData.cost ? `
-              <div class="node-info-item">
-                <div class="node-info-label">Associated Cost</div>
-                <div class="node-info-value">${nodeData.cost}</div>
-              </div>
-            ` : ''}
-            
-            ${nodeData.timeframe ? `
-              <div class="node-info-item">
-                <div class="node-info-label">Timeframe</div>
-                <div class="node-info-value">${nodeData.timeframe}</div>
-              </div>
-            ` : ''}
-            
-            ${nodeData.risk ? `
-              <div class="node-info-item">
-                <div class="node-info-label">Risk Level</div>
-                <div class="node-info-value">${nodeData.risk}</div>
-              </div>
-            ` : ''}
-          </div>
-
-          ${nodeData.outcomes && nodeData.outcomes.length > 0 ? `
-            <div style="margin-top: 15px;">
-              <strong>📊 Possible Outcomes:</strong>
-              <ul style="margin-top: 8px; padding-left: 20px;">
-                ${nodeData.outcomes.map(outcome => `<li>${outcome}</li>`).join('')}
-              </ul>
-            </div>
-          ` : ''}
-
-          ${nodeData.criteria && nodeData.criteria.length > 0 ? `
-            <div style="margin-top: 15px;">
-              <strong>⚖️ Decision Criteria:</strong>
-              <ul style="margin-top: 8px; padding-left: 20px;">
-                ${nodeData.criteria.map(criterion => `<li>${criterion}</li>`).join('')}
-              </ul>
-            </div>
-          ` : ''}
-
-          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; font-size: 13px; color: #666;">
-            💡 <em>This represents a key decision point in your analysis. Consider the associated factors when making your choice.</em>
-          </div>
-        `;
-      };
-
-      const displayGenericNodeInfo = (panel, nodeId) => {
-        const content = panel.querySelector('.details-content');
-        const treeData = window.currentTreeData;
-        
-        content.innerHTML = `
-          <h5>🎯 Decision Point: ${nodeId}</h5>
-          
-          <p>This is a decision node in your analysis tree. Each node represents a choice or outcome in your decision-making process.</p>
-          
-          <div class="node-info-grid">
-            <div class="node-info-item">
-              <div class="node-info-label">Total Nodes</div>
-              <div class="node-info-value">${treeData.nodes?.length || 0}</div>
-            </div>
-            
-            <div class="node-info-item">
-              <div class="node-info-label">Total Pathways</div>
-              <div class="node-info-value">${treeData.edges?.length || 0}</div>
-            </div>
-          </div>
-
-          ${treeData.options && treeData.options.length > 0 ? `
-            <div style="margin-top: 15px;">
-              <strong>📋 Available Options:</strong>
-              <ul style="margin-top: 8px; padding-left: 20px;">
-                ${treeData.options.map(option => `<li>${option.name || option}</li>`).join('')}
-              </ul>
-            </div>
-          ` : ''}
-
-          ${treeData.recommendation ? `
-            <div style="margin-top: 15px;">
-              <strong>🎯 Recommended Path:</strong>
-              <p style="margin-top: 5px;"><em>${treeData.recommendation.topChoice}</em></p>
-            </div>
-          ` : ''}
-
-          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; font-size: 13px; color: #666;">
-            💡 <em>Click on different nodes to explore various decision paths and their implications.</em>
-          </div>
-        `;
-      };
-
-      window.closeNodeDetails = (panelId) => {
-        const panel = document.getElementById(panelId);
-        if (panel) {
-          panel.style.display = 'none';
-        }
-      };
-
-      // Enhanced Interactive Tree Features
-      window.TreeInteractionManager = {
-        currentFocusedNode: null,
-        breadcrumbPath: [],
-        isKeyboardNavigationActive: false,
-
-        // Initialize enhanced features
-        init: function(containerId) {
-          this.containerId = containerId;
-          this.setupKeyboardNavigation();
-          this.setupAccessibility();
-          this.setupMobileSupport();
-          this.setupSearch();
-        },
-
-        // Keyboard navigation support
-        setupKeyboardNavigation: function() {
-          document.addEventListener('keydown', (e) => {
-            if (!this.isKeyboardNavigationActive) return;
-
-            const mermaidDiv = document.querySelector(`#${this.containerId} .mermaid`);
-            if (!mermaidDiv) return;
-
-            const nodes = Array.from(mermaidDiv.querySelectorAll('.node'));
-            if (nodes.length === 0) return;
-
-            switch(e.key) {
-              case 'ArrowRight':
-              case 'ArrowDown':
-                e.preventDefault();
-                this.focusNextNode(nodes);
-                break;
-              case 'ArrowLeft':
-              case 'ArrowUp':
-                e.preventDefault();
-                this.focusPrevNode(nodes);
-                break;
-              case 'Enter':
-              case ' ':
-                e.preventDefault();
-                if (this.currentFocusedNode) {
-                  this.selectNode(this.currentFocusedNode);
-                }
-                break;
-              case 'Escape':
-                e.preventDefault();
-                this.clearFocus();
-                break;
-              case 'Tab':
-                if (!e.shiftKey) {
-                  this.isKeyboardNavigationActive = true;
-                }
-                break;
-            }
-          });
-
-          // Activate keyboard navigation on focus
-          const container = document.getElementById(this.containerId);
-          if (container) {
-            container.addEventListener('focus', () => {
-              this.isKeyboardNavigationActive = true;
-            }, true);
-
-            container.addEventListener('blur', () => {
-              this.isKeyboardNavigationActive = false;
-            }, true);
-          }
-        },
-
-        // Focus management
-        focusNextNode: function(nodes) {
-          if (!this.currentFocusedNode) {
-            this.focusNode(nodes[0]);
-          } else {
-            const currentIndex = nodes.indexOf(this.currentFocusedNode);
-            const nextIndex = (currentIndex + 1) % nodes.length;
-            this.focusNode(nodes[nextIndex]);
-          }
-        },
-
-        focusPrevNode: function(nodes) {
-          if (!this.currentFocusedNode) {
-            this.focusNode(nodes[nodes.length - 1]);
-          } else {
-            const currentIndex = nodes.indexOf(this.currentFocusedNode);
-            const prevIndex = currentIndex === 0 ? nodes.length - 1 : currentIndex - 1;
-            this.focusNode(nodes[prevIndex]);
-          }
-        },
-
-        focusNode: function(node) {
-          this.clearFocus();
-          this.currentFocusedNode = node;
-          node.classList.add('focused');
-          node.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          
-          // Announce for screen readers
-          const nodeText = node.textContent || 'Decision node';
-          this.announceToScreenReader(`Focused on ${nodeText}`);
-        },
-
-        selectNode: function(node) {
-          node.classList.add('selected');
-          const nodeId = this.getNodeId(node);
-          window.showNodeDetails(nodeId);
-          
-          // Update breadcrumb
-          this.updateBreadcrumb(nodeId);
-        },
-
-        clearFocus: function() {
-          if (this.currentFocusedNode) {
-            this.currentFocusedNode.classList.remove('focused', 'selected');
-            this.currentFocusedNode = null;
-          }
-        },
-
-        // Accessibility enhancements
-        setupAccessibility: function() {
-          const mermaidDiv = document.querySelector(`#${this.containerId} .mermaid`);
-          if (!mermaidDiv) return;
-
-          // Add ARIA attributes
-          mermaidDiv.setAttribute('role', 'application');
-          mermaidDiv.setAttribute('aria-label', 'Interactive decision tree');
-          mermaidDiv.setAttribute('tabindex', '0');
-
-          // Add node accessibility
-          setTimeout(() => {
-            const nodes = mermaidDiv.querySelectorAll('.node');
-            nodes.forEach((node, index) => {
-              node.setAttribute('role', 'button');
-              node.setAttribute('tabindex', '-1');
-              node.setAttribute('aria-describedby', 'tree-instructions');
-              
-              const nodeText = node.textContent || `Decision node ${index + 1}`;
-              node.setAttribute('aria-label', `${nodeText}. Press Enter to view details`);
-            });
-
-            // Add instructions for screen readers
-            this.addScreenReaderInstructions();
-          }, 500);
-        },
-
-        addScreenReaderInstructions: function() {
-          const container = document.getElementById(this.containerId);
-          if (!container) return;
-
-          const instructions = document.createElement('div');
-          instructions.id = 'tree-instructions';
-          instructions.className = 'sr-only';
-          instructions.textContent = 'Use arrow keys to navigate between decision nodes. Press Enter to view node details. Press Escape to clear selection.';
-          container.appendChild(instructions);
-
-          // Add visual accessibility info
-          const accessibilityInfo = document.createElement('div');
-          accessibilityInfo.className = 'accessibility-info';
-          accessibilityInfo.innerHTML = `
-            <strong>🎯 Accessibility:</strong> Use Tab to focus, arrow keys to navigate, Enter to select nodes, Escape to clear selection.
-          `;
-          container.appendChild(accessibilityInfo);
-        },
-
-        // Mobile touch support
-        setupMobileSupport: function() {
-          if ('ontouchstart' in window) {
-            const mermaidDiv = document.querySelector(`#${this.containerId} .mermaid`);
-            if (!mermaidDiv) return;
-
-            let touchStartY = 0;
-            let touchStartX = 0;
-
-            mermaidDiv.addEventListener('touchstart', (e) => {
-              touchStartY = e.touches[0].clientY;
-              touchStartX = e.touches[0].clientX;
-            });
-
-            mermaidDiv.addEventListener('touchend', (e) => {
-              const touchEndY = e.changedTouches[0].clientY;
-              const touchEndX = e.changedTouches[0].clientX;
-              
-              const deltaY = Math.abs(touchEndY - touchStartY);
-              const deltaX = Math.abs(touchEndX - touchStartX);
-              
-              // If it's a tap (not a swipe)
-              if (deltaY < 10 && deltaX < 10) {
-                const target = e.target.closest('.node');
-                if (target) {
-                  this.selectNode(target);
-                }
-              }
-            });
-          }
-        },
-
-        // Search functionality
-        setupSearch: function() {
-          const container = document.getElementById(this.containerId);
-          if (!container) return;
-
-          const treeContainer = container.querySelector('.decision-tree-container');
-          if (!treeContainer) return;
-
-          // Add search controls
-          const controlsDiv = document.createElement('div');
-          controlsDiv.className = 'tree-controls';
-          controlsDiv.innerHTML = `
-            <div>
-              <input type="text" class="tree-search" placeholder="Search nodes..." id="tree-search-${this.containerId}">
-              <button onclick="TreeInteractionManager.clearSearch()">Clear</button>
-            </div>
-            <div>
-              <button onclick="TreeInteractionManager.exportTree()">📥 Export</button>
-              <button onclick="TreeInteractionManager.resetZoom()">🔍 Reset View</button>
-              <button onclick="TreeInteractionManager.toggleHelp()">❓ Help</button>
-            </div>
-          `;
-          
-          treeContainer.insertBefore(controlsDiv, treeContainer.firstChild);
-
-          // Add search functionality
-          const searchInput = document.getElementById(`tree-search-${this.containerId}`);
-          if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-              this.performSearch(e.target.value);
-            });
-          }
-        },
-
-        // Search implementation
-        performSearch: function(searchTerm) {
-          const mermaidDiv = document.querySelector(`#${this.containerId} .mermaid`);
-          if (!mermaidDiv) return;
-
-          const nodes = mermaidDiv.querySelectorAll('.node');
-          const term = searchTerm.toLowerCase().trim();
-
-          nodes.forEach(node => {
-            const nodeText = node.textContent.toLowerCase();
-            if (!term || nodeText.includes(term)) {
-              node.style.opacity = '1';
-              node.style.filter = 'none';
-            } else {
-              node.style.opacity = '0.3';
-              node.style.filter = 'grayscale(100%)';
-            }
-          });
-
-          if (term) {
-            this.announceToScreenReader(`Filtered to show nodes containing "${searchTerm}"`);
-          }
-        },
-
-        clearSearch: function() {
-          const searchInput = document.getElementById(`tree-search-${this.containerId}`);
-          if (searchInput) {
-            searchInput.value = '';
-            this.performSearch('');
-          }
-        },
-
-        // Utility functions
-        getNodeId: function(node) {
-          return node.id || node.getAttribute('data-id') || 'unknown-node';
-        },
-
-        updateBreadcrumb: function(nodeId) {
-          if (!this.breadcrumbPath.includes(nodeId)) {
-            this.breadcrumbPath.push(nodeId);
-            this.renderBreadcrumb();
-          }
-        },
-
-        renderBreadcrumb: function() {
-          const container = document.getElementById(this.containerId);
-          if (!container) return;
-
-          let breadcrumbDiv = container.querySelector('.tree-breadcrumb');
-          if (!breadcrumbDiv) {
-            breadcrumbDiv = document.createElement('div');
-            breadcrumbDiv.className = 'tree-breadcrumb';
-            const treeContainer = container.querySelector('.decision-tree-container');
-            if (treeContainer) {
-              treeContainer.appendChild(breadcrumbDiv);
-            }
-          }
-
-          breadcrumbDiv.innerHTML = `
-            <strong>📍 Path:</strong> 
-            ${this.breadcrumbPath.map((nodeId, index) => `
-              <span class="breadcrumb-item" onclick="TreeInteractionManager.navigateToNode('${nodeId}')">${nodeId}</span>
-              ${index < this.breadcrumbPath.length - 1 ? '<span class="breadcrumb-separator">→</span>' : ''}
-            `).join('')}
-          `;
-        },
-
-        navigateToNode: function(nodeId) {
-          window.showNodeDetails(nodeId);
-        },
-
-        // Export functionality
-        exportTree: function() {
-          const data = window.currentTreeData;
-          if (!data) return;
-
-          const exportData = {
-            title: data.decisionTitle || 'Decision Tree',
-            timestamp: new Date().toISOString(),
-            nodes: data.nodes || [],
-            edges: data.edges || [],
-            options: data.options || [],
-            mermaidSyntax: data.mermaidSyntax
-          };
-
-          const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'decision-tree-export.json';
-          a.click();
-          URL.revokeObjectURL(url);
-
-          this.announceToScreenReader('Decision tree exported successfully');
-        },
-
-        // Screen reader announcements
-        announceToScreenReader: function(message) {
-          const announcement = document.createElement('div');
-          announcement.setAttribute('aria-live', 'polite');
-          announcement.setAttribute('aria-atomic', 'true');
-          announcement.className = 'sr-only';
-          announcement.textContent = message;
-          document.body.appendChild(announcement);
-          
-          setTimeout(() => {
-            document.body.removeChild(announcement);
-          }, 1000);
-        },
-
-        resetZoom: function() {
-          const mermaidDiv = document.querySelector(`#${this.containerId} .mermaid`);
-          if (mermaidDiv) {
-            mermaidDiv.style.transform = 'scale(1)';
-            mermaidDiv.style.transformOrigin = 'center';
-          }
-        },
-
-        toggleHelp: function() {
-          const helpModal = document.getElementById('tree-help-modal');
-          if (helpModal) {
-            helpModal.style.display = helpModal.style.display === 'none' ? 'block' : 'none';
-          } else {
-            this.createHelpModal();
-          }
-        },
-
-        createHelpModal: function() {
-          const modal = document.createElement('div');
-          modal.id = 'tree-help-modal';
-          modal.style.cssText = `
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; border: 2px solid #333; border-radius: 12px;
-            padding: 24px; max-width: 500px; z-index: 1001;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-          `;
-          
-          modal.innerHTML = `
-            <h3>🌳 Interactive Decision Tree Help</h3>
-            <h4>Mouse/Touch:</h4>
-            <ul>
-              <li>Click or tap any node to view details</li>
-              <li>Hover over nodes for visual feedback</li>
-              <li>Use search box to filter nodes</li>
-            </ul>
-            <h4>Keyboard Navigation:</h4>
-            <ul>
-              <li><kbd>Tab</kbd> - Focus tree area</li>
-              <li><kbd>Arrow Keys</kbd> - Navigate between nodes</li>
-              <li><kbd>Enter/Space</kbd> - Select focused node</li>
-              <li><kbd>Escape</kbd> - Clear selection</li>
-            </ul>
-            <h4>Features:</h4>
-            <ul>
-              <li>Export tree data as JSON</li>
-              <li>Search and filter nodes</li>
-              <li>Breadcrumb path tracking</li>
-              <li>Mobile-optimized interactions</li>
-            </ul>
-            <button onclick="TreeInteractionManager.toggleHelp()" style="margin-top: 16px; padding: 8px 16px; background: #1976D2; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
-          `;
-          
-          document.body.appendChild(modal);
-        }
-      };
-
-      // Auto-initialize analytics
-      if (typeof window !== 'undefined') {
-        window.addEventListener('load', () => {
-          if (window.TreeAnalytics) {
-            window.TreeAnalytics.init();
-          }
-        });
-      }
-
-      // Performance monitoring wrapper
-      window.measureTreePerformance = function(functionName, fn) {
-        return function(...args) {
-          const startTime = performance.now();
-          const result = fn.apply(this, args);
-          
-          if (window.TreeAnalytics) {
-            window.TreeAnalytics.trackPerformance(functionName, startTime);
-          }
-          
-          return result;
-        };
-      };
-      
-      // Initialize Enhanced UI System
-      function initEnhancedUISystem() {
-        // Wait a bit to ensure DOM and containers are ready
-        setTimeout(() => {
-          // Initialize the enhanced UI with embed detection
-          if (window.enhancedUI) {
-            window.enhancedUI.init({
-              containerId: 'main-content',
-              scrollToTop: true,
-              embedEnforcement: true,
-              accessibility: true
-            });
-          } else {
-            console.warn('Enhanced UI system not loaded');
-          }
-        }, 100);
       }
       
-      // Initialize when page loads
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initEnhancedUISystem);
-      } else {
-        initEnhancedUISystem();
-      }
+      // Start the update process with slight delay to allow for animations
+      setTimeout(updateOutput, 100); // Reduced delay
     })();
 
   </script>
@@ -2522,183 +1354,6 @@
     .paired-cell .level-item {
       width: 100%;
       margin-bottom: 0;
-    }
-
-    /* Analytics Dashboard Styles */
-    #analytics-dashboard {
-      position: fixed;
-      top: 50px;
-      right: 20px;
-      width: 400px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-      z-index: 1000;
-      transition: all 0.3s ease;
-    }
-    
-    #analytics-dashboard.hidden {
-      transform: translateX(420px);
-      opacity: 0;
-    }
-    
-    .dashboard-header {
-      padding: 16px 20px;
-      background: #1976D2;
-      color: white;
-      border-radius: 12px 12px 0 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .dashboard-header h3 {
-      margin: 0;
-      font-size: 16px;
-    }
-    
-    .close-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 0;
-      width: 24px;
-      height: 24px;
-    }
-    
-    .dashboard-content {
-      padding: 20px;
-    }
-    
-    .metric-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    
-    .metric-card {
-      background: #f5f5f5;
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-    }
-    
-    .metric-card h4 {
-      margin: 0 0 8px 0;
-      font-size: 12px;
-      color: #666;
-      text-transform: uppercase;
-    }
-    
-    .metric-card div {
-      font-size: 18px;
-      font-weight: bold;
-      color: #1976D2;
-    }
-    
-    .chart-container {
-      margin: 20px 0;
-      text-align: center;
-    }
-    
-    .insights-panel {
-      background: #f9f9f9;
-      padding: 16px;
-      border-radius: 8px;
-      border-left: 4px solid #4CAF50;
-    }
-    
-    .insights-panel h4 {
-      margin: 0 0 12px 0;
-      color: #333;
-    }
-    
-    .insight-item {
-      margin: 8px 0;
-      padding: 8px;
-      background: white;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    
-    .analytics-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      background: #1976D2;
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      font-size: 24px;
-      z-index: 999;
-      transition: all 0.3s ease;
-    }
-    
-    .analytics-toggle:hover {
-      background: #1565C0;
-      transform: scale(1.1);
-    }
-    
-    .integration-test-btn {
-      background: #4CAF50;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      margin: 10px 0;
-    }
-    
-    .integration-test-btn:hover {
-      background: #45a049;
-    }
-    
-    .performance-suggestions {
-      background: #fff3e0;
-      border: 1px solid #ff9800;
-      border-radius: 8px;
-      padding: 16px;
-      margin: 16px 0;
-    }
-    
-    .performance-suggestions h4 {
-      color: #f57c00;
-      margin: 0 0 12px 0;
-    }
-    
-    .performance-suggestions ul {
-      margin: 0;
-      padding-left: 20px;
-    }
-    
-    .performance-suggestions li {
-      margin: 6px 0;
-      color: #333;
-    }
-    
-    .collapse-btn {
-      background: none;
-      border: none;
-      font-size: 12px;
-      cursor: pointer;
-      margin-left: 8px;
-      padding: 2px 6px;
-      border-radius: 3px;
-      background: rgba(255,255,255,0.8);
-    }
-    
-    .collapse-btn:hover {
-      background: rgba(255,255,255,1);
     }
   </style>
 
