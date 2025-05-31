@@ -154,6 +154,7 @@ textarea:focus {
   margin-bottom: 20px;
   padding: 10px;
   width: 100%; /* Ensure full width */
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 /* ====================
@@ -423,4 +424,93 @@ button:hover {
 
 .multifield-add-btn:hover {
   background-color: #333;
+}
+
+/* ====================
+   Guided Forms System Styles
+   ==================== */
+
+/* Form step transitions */
+.row1 {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Progress indicator styling refinements */
+#guided-form-progress {
+    font-family: "Inter", sans-serif !important;
+    user-select: none;
+}
+
+#guided-form-progress .progress-dot {
+    transition: all 0.2s ease;
+}
+
+#guided-form-progress .progress-dot:hover {
+    transform: scale(1.2);
+}
+
+/* Navigation button styling refinements */
+#guided-form-navigation button {
+    font-family: "Inter", sans-serif !important;
+    user-select: none;
+}
+
+#guided-form-navigation button:active {
+    transform: translate(1px, 1px) !important;
+    box-shadow: 1px 1px 0 #000 !important;
+}
+
+/* Focus states for guided mode */
+.guided-form-active .grid-item:focus,
+.guided-form-active input:focus,
+.guided-form-active textarea:focus,
+.guided-form-active select:focus {
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}
+
+/* Step completion indicators */
+.row1.step-completed::after {
+    content: "✓";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.row1 {
+    position: relative;
+}
+
+/* Mobile responsiveness for guided forms */
+@media (max-width: 480px) {
+    #guided-form-progress {
+        top: 5px;
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+    
+    #guided-form-navigation {
+        bottom: 10px;
+        gap: 8px;
+    }
+    
+    #guided-form-navigation button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .progress-dot {
+        width: 6px !important;
+        height: 6px !important;
+    }
 }

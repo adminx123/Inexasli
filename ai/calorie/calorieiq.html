@@ -11,7 +11,6 @@
 
 
 <div class="device-container">
-
 <div class="row1">
     <label class="category-label">Fitness Goal</label>
     <div class="grid-container" id="calorie-goal">
@@ -60,7 +59,8 @@
     <input id="calorie-height" type="text" placeholder="5'10">
     <input id="calorie-weight" type="text" placeholder="70 kg">
     <select id="calorie-sex">
-        <option value="man" selected>Man</option>
+        <option value="" disabled selected>Select Gender</option>
+        <option value="man">Man</option>
         <option value="woman">Woman</option>
     </select>
 </div>
@@ -487,6 +487,13 @@
       clearBtn.addEventListener('click', clearLocalStorage);
     }
     
+    // Set up guided forms toggle button
+    const guidedToggleBtn = document.getElementById('guided-forms-toggle');
+    if (guidedToggleBtn) {
+      guidedToggleBtn.removeEventListener('click', toggleGuidedForms); // Prevent duplicates
+      guidedToggleBtn.addEventListener('click', toggleGuidedForms);
+    }
+    
     // Set up grid item event listener
     document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove existing to prevent duplicates
     document.addEventListener('grid-item-toggled', handleGridItemToggled);
@@ -501,6 +508,44 @@
     setTimeout(() => {
       ensureAddButtonExists();
     }, 100); // Small delay to ensure all DOM operations are complete
+  }
+
+  // Toggle guided forms functionality
+  let guidedFormsInstance = null;
+  
+  function toggleGuidedForms() {
+    console.log('[CalorieIQ] Toggling guided forms');
+    const toggleBtn = document.getElementById('guided-forms-toggle');
+    
+    if (guidedFormsInstance) {
+      // Disable guided forms
+      guidedFormsInstance.destroy();
+      guidedFormsInstance = null;
+      toggleBtn.textContent = '🚀 Enable Guided Form';
+      toggleBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      console.log('[CalorieIQ] Guided forms disabled');
+    } else {
+      // Enable guided forms
+      if (window.GuidedFormSystem) {
+        guidedFormsInstance = new window.GuidedFormSystem({
+          autoAdvance: true,
+          showProgressIndicator: true,
+          smoothTransitions: true,
+          transitionDuration: 300,
+          autoAdvanceDelay: 800,
+          enableSkipping: true
+        });
+        
+        guidedFormsInstance.init('device-container');
+        
+        toggleBtn.textContent = '⏹️ Disable Guided Form';
+        toggleBtn.style.background = 'linear-gradient(135deg, #ea667e 0%, #a24b76 100%)';
+        console.log('[CalorieIQ] Guided forms enabled');
+      } else {
+        console.error('[CalorieIQ] GuidedFormSystem not available');
+        alert('Guided forms system is not loaded. Please refresh the page.');
+      }
+    }
   }
 
   // Initialize immediately
