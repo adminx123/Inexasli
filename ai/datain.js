@@ -139,15 +139,15 @@ document.addEventListener('DOMContentLoaded', async function () {
             /* Left container specific styling */
             .data-container-left {
                 position: fixed;
-                top: 50%;
-                left: 0;
-                transform: translateY(-50%);
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
                 background-color: #f5f5f5;
                 padding: 4px;
                 border: 2px solid #000;
-                border-left: none;
-                border-radius: 0 8px 8px 0;
-                box-shadow: 4px 4px 0 #000;
+                border-bottom: none;
+                border-radius: 8px 8px 0 0;
+                box-shadow: 4px -4px 0 #000;
                 z-index: 10000;
                 max-width: 34px;
                 min-height: 30px;
@@ -161,23 +161,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-left.initial, .data-container-left.collapsed {
-                max-width: 36px;
-                height: 120px;
-                display: flex;
-                justify-content: center;
-                min-height: 30px;
-                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, z-index 0.1s ease-in-out;
-                overflow: hidden;
-                font-family: "Inter", sans-serif;
-                visibility: visible;
-                opacity: 1;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .data-container-left.initial, .data-container-left.collapsed {
-                max-width: 36px;
-                height: 120px;
+                max-width: 240px;
+                width: 240px;
+                height: 36px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -188,15 +174,15 @@ document.addEventListener('DOMContentLoaded', async function () {
                 max-width: 100%;
                 width: 100%;
                 min-width: 100%;
-                height: 100vh;
-                top: 0;
+                height: 50vh;
+                bottom: 0;
                 left: 0;
                 transform: none;
                 z-index: 11000; /* Higher z-index when expanded to appear over grid */
                 overflow-y: auto; /* Changed to allow vertical scrolling */
-                border-radius: 0;
+                border-radius: 8px 8px 0 0; /* Rounded corners at the top */
                 border: none;
-                box-shadow: none;
+                box-shadow: 0 -4px 0 #000; /* 3D shadow along the top edge */
             }
 
             .data-container-left:hover {
@@ -240,7 +226,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 transition: color 0.2s ease;
                 line-height: 1.2;
                 font-family: "Geist", sans-serif;
-                writing-mode: vertical-rl;
+                writing-mode: horizontal-tb;
                 text-orientation: mixed;
                 z-index: 11001; /* Make sure it's above other content */
             }
