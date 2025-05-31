@@ -151,7 +151,11 @@ function initScrollToTopFAB() {
     });
 
     // Click handler
-    fab.addEventListener('click', scrollToTop);
+    fab.addEventListener('click', function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        scrollToTop();
+    });
 
     // Mobile responsiveness
     const mobileQuery = window.matchMedia("(max-width: 480px)");
