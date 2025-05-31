@@ -397,17 +397,18 @@
             </div>
           `;
         } else if (isNumericWeight) {
-          // Bar-based item with numeric weight
-          const maxWeight = 100; // Assume scale of 0-100
+          const maxWeight = 100;
           const percentage = Math.min((weight / maxWeight) * 100, 100);
-          
+
           return `
             <div class="bar-item">
-              <div class="bar-label">${point}</div>
+              <div class="bar-label-row">
+                <span class="bar-label">${point}</span>
+                <span class="bar-value-outside">${weight}</span>
+              </div>
               <div class="bar-background">
                 <div class="bar-fill" style="width: ${percentage}%; background-color: ${color};"></div>
               </div>
-              <div class="bar-value">${weight}</div>
             </div>
           `;
         } else {
@@ -675,16 +676,18 @@
               </div>
             `;
           } else {
-            // For numeric/quantitative data, show bars as before
+            // For numeric/quantitative data, show bars with label and value side by side
             barContainer.className = 'bar-item';
             const percentage = Math.max((value / maxValue) * 100, 5); // Minimum 5% for visibility
             const barColor = getWeightColor(item.weight, color);
             
             barContainer.innerHTML = `
-              <div class="bar-label">${label}</div>
+              <div class="bar-label-row">
+                <span class="bar-label">${label}</span>
+                <span class="bar-value-outside">${displayValue}</span>
+              </div>
               <div class="bar-background">
                 <div class="bar-fill" style="width: ${percentage}%; background-color: ${barColor};"></div>
-                <div class="bar-value" style="left: calc(${percentage}% + 4px);">${displayValue}</div>
               </div>
             `;
           }
@@ -1038,6 +1041,23 @@
       line-height: 1;
       white-space: nowrap;
       z-index: 2;
+    }
+
+    /* Just below existing styles */
+    .bar-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .bar-value-outside {
+      margin-left: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+    /* Ensure old .bar-value is hidden if present */
+    .bar-item .bar-value {
+      display: none;
     }
 
     /* Aligned items for proper T-chart row alignment */
