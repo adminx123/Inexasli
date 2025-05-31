@@ -53,6 +53,9 @@
   <!-- Add D3.js for charts -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   
+  <!-- Add svg-pan-zoom for interactivity -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
+  
   <script src="../../utility/copy.js"></script>
   
   <script>
@@ -142,6 +145,17 @@
         vizContainer.id = `viz-${containerId}`;
         container.appendChild(vizContainer);
 
+        // Add pathways count above the decision tree visualization
+        if (data.analysisType === 'decision-tree') {
+          const pathwayCount = Array.isArray(data.edges)
+            ? data.edges.length
+            : ((data.mermaidSyntax.match(/-->/g) || []).length);
+          const pathwaysInfo = document.createElement('div');
+          pathwaysInfo.className = 'pathways-info';
+          pathwaysInfo.textContent = `Pathways: ${pathwayCount}`;
+          container.insertBefore(pathwaysInfo, vizContainer);
+        }
+
         // Route to appropriate visualization (streamlined to top 5 analysis types)
         try {
           switch (data.analysisType) {
@@ -205,6 +219,20 @@
             
             // Re-initialize mermaid for new content
             mermaid.init(undefined, mermaidDiv);
+            
+            // Enable interactive pan/zoom on the rendered SVG
+            if (typeof svgPanZoom !== 'undefined') {
+              const svgElement = mermaidDiv.querySelector('svg');
+              if (svgElement) {
+                svgPanZoom(svgElement, {
+                  zoomEnabled: true,
+                  panEnabled: true,
+                  controlIconsEnabled: true,
+                  fit: true,
+                  center: true
+                });
+              }
+            }
           } catch (error) {
             console.warn('Mermaid rendering failed:', error);
             // Fallback to simple visualization
@@ -1355,6 +1383,75 @@
       width: 100%;
       margin-bottom: 0;
     }
+
+    /* Mermaid SVG styling for decision trees */
+    .mermaid svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      cursor: grab;
+    }
+
+    .mermaid svg:active {
+      cursor: grabbing;
+    }
+
+    .visualization-content {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Node hover highlighting and tooltips */
+    .mermaid g.node:hover path {
+      stroke: #007acc;
+      stroke-width: 2px;
+    }
+    .node-tooltip {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 5px;
+      border-radius: 3px;
+      pointer-events: none;
+      display: none;
+      font-size: 12px;
+      z-index: 10;
+    }
+    .zoom-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+    }
+    .zoom-controls button {
+      margin: 2px;
+      padding: 5px 8px;
+      font-size: 14px;
+    }
+    .selected path {
+      stroke: #e63946 !important;
+      stroke-width: 2px;
+    }
+
+    /* Pathways info styling */
+    .pathways-info {
+      font-size: 14px;
+      color: #333;
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #f0f8ff;
+      border: 1px solid #d0e7ff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pathways-info:before {
+      content: "🔗";
+      font-size: 18px;
+      color: #007acc;
+    }
   </style>
 
   <!-- Main content container with ID for accessibility -->
@@ -1384,4 +1481,34 @@
       } else {
         initEnhancedUISystem();
       }
+    </script>
+
+    <script>
+      // Modify createDecisionTreeVisualization to call enhance UX
+      const originalCreateTree = createDecisionTreeVisualization;
+      createDecisionTreeVisualization = (data, container) => {
+        // Compute and prepare pathways count
+        const pathwayCount = Array.isArray(data.edges)
+          ? data.edges.length
+          : ((data.mermaidSyntax.match(/-->/g) || []).length);
+        const pathwaysInfo = document.createElement('div');
+        pathwaysInfo.className = 'pathways-info';
+        pathwaysInfo.textContent = `Pathways: ${pathwayCount}`;
+
+        originalCreateTree(data, container);
+
+        // Insert pathways count before the visualization-content container
+        if (container.parentNode) {
+          container.parentNode.insertBefore(pathwaysInfo, container);
+        }
+
+        const mermaidDiv = container.querySelector('.mermaid');
+        if (mermaidDiv && typeof svgPanZoom !== 'undefined') {
+          const svgEl = mermaidDiv.querySelector('svg');
+          const panZoomInstance = svgPanZoom(svgEl, {
+            zoomEnabled: true, panEnabled: true, controlIconsEnabled: false, fit: true, center: true
+          });
+          enhanceDecisionTreeUX(mermaidDiv, panZoomInstance);
+        }
+      };
     </script>
