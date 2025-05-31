@@ -88,14 +88,14 @@ document.addEventListener('DOMContentLoaded', async function () {
             /* Right container specific styling */
             .data-container-right {
                 position: fixed;
-                top: 50%;
-                right: 0;
-                transform: translateY(-50%);
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
                 background-color: #f5f5f5;
                 padding: 4px;
                 border: 2px solid #000;
-                border-right: none;
-                border-radius: 8px 0 0 8px;
+                border-top: none;
+                border-radius: 0 0 8px 8px;
                 box-shadow: -4px 4px 0 #000;
                 z-index: 10000;
                 max-width: 34px;
@@ -108,8 +108,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-right.initial, .data-container-right.collapsed {
-                max-width: 36px;
-                height: 120px;
+                max-width: 240px;
+                width: 240px;
+                height: 36px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -128,7 +129,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 min-width: 100%;
                 height: 100vh;
                 top: 0;
-                right: 0;
+                left: 0;
                 transform: none;
                 z-index: 11000; /* Higher z-index when expanded to appear over grid */
                 border-radius: 0;
@@ -176,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 transition: color 0.2s ease;
                 line-height: 1.2;
                 font-family: "Geist", sans-serif;
-                writing-mode: vertical-rl;
+                writing-mode: horizontal-tb;
                 text-orientation: mixed;
             }
             
