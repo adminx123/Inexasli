@@ -62,43 +62,33 @@
       
       // Initialize the centralized copy button
       
-      // Built-in visualization logic
+      // Built-in visualization logic (streamlined to top 5 most useful analysis types)
       const getVisualizationHints = (analysisType) => {
         const hints = {
-          'pros-cons': {
+          'swot': {
             recommended: 'D3.js',
-            chartTypes: ['horizontal-bar-chart', 'grouped-bar-chart', 'comparison-table'],
-            description: 'Best visualized as comparative bar charts or tables showing pros vs cons'
+            chartTypes: ['quadrant-chart', 'matrix-visualization'],
+            description: 'Perfect for 2x2 matrix visualization with quadrants'
           },
           'cost-benefit': {
             recommended: 'D3.js',
             chartTypes: ['line-chart', 'bar-chart', 'waterfall-chart', 'roi-chart'],
             description: 'Financial data ideal for line charts showing ROI over time'
           },
-          'swot': {
+          'pros-cons': {
             recommended: 'D3.js',
-            chartTypes: ['quadrant-chart', 'matrix-visualization'],
-            description: 'Perfect for 2x2 matrix visualization with quadrants'
+            chartTypes: ['horizontal-bar-chart', 'grouped-bar-chart', 'comparison-table'],
+            description: 'Best visualized as comparative bar charts or tables showing pros vs cons'
+          },
+          'weighted-scoring': {
+            recommended: 'D3.js',
+            chartTypes: ['radar-chart', 'stacked-bar-chart', 'comparison-matrix'],
+            description: 'Radar charts or comparison matrices for scoring visualization'
           },
           'decision-tree': {
             recommended: 'Mermaid.js',
             chartTypes: ['flowchart', 'decision-tree'],
             description: 'Ideal for Mermaid flowchart or tree diagram'
-          },
-          'risk-analysis': {
-            recommended: 'D3.js',
-            chartTypes: ['heatmap', 'bubble-chart', 'risk-matrix'],
-            description: 'Heat maps and bubble charts for risk visualization'
-          },
-          'weighted-scoring': {
-            recommended: 'D3.js',
-            chartTypes: ['radar-chart', 'stacked-bar-chart', 'comparison-matrix'],
-            description: 'Radar charts or comparison matrices for multi-criteria scoring'
-          },
-          'stakeholder-analysis': {
-            recommended: 'D3.js',
-            chartTypes: ['network-diagram', 'influence-map', 'bubble-chart'],
-            description: 'Network diagrams or influence mapping for stakeholder relationships'
           }
         };
 
@@ -152,29 +142,23 @@
         vizContainer.id = `viz-${containerId}`;
         container.appendChild(vizContainer);
 
-        // Route to appropriate visualization
+        // Route to appropriate visualization (streamlined to top 5 analysis types)
         try {
           switch (data.analysisType) {
-            case 'decision-tree':
-              createDecisionTreeVisualization(data, vizContainer);
-              break;
-            case 'pros-cons':
-              createProsConsVisualization(data, vizContainer);
+            case 'swot':
+              createSwotVisualization(data, vizContainer);
               break;
             case 'cost-benefit':
               createCostBenefitVisualization(data, vizContainer);
               break;
-            case 'swot':
-              createSwotVisualization(data, vizContainer);
-              break;
-            case 'risk-analysis':
-              createRiskAnalysisVisualization(data, vizContainer);
+            case 'pros-cons':
+              createProsConsVisualization(data, vizContainer);
               break;
             case 'weighted-scoring':
               createWeightedScoringVisualization(data, vizContainer);
               break;
-            case 'stakeholder-analysis':
-              createStakeholderVisualization(data, vizContainer);
+            case 'decision-tree':
+              createDecisionTreeVisualization(data, vizContainer);
               break;
             default:
               // Fallback to JSON with hints
@@ -496,50 +480,6 @@
         `;
       };
 
-      // Risk Analysis Visualization
-      const createRiskAnalysisVisualization = (data, container) => {
-        if (!data.options || !data.options.length) {
-          container.innerHTML = '<p>No risk data available for visualization.</p>';
-          return;
-        }
-
-        const option = data.options[0];
-        
-        container.innerHTML = `
-          <div class="risk-analysis">
-            <h3>${option.name}</h3>
-            <div class="risk-overview">
-              <div class="risk-level ${option.overallRiskLevel?.toLowerCase()}">
-                Overall Risk: ${option.overallRiskLevel} (${option.riskScore}/10)
-              </div>
-            </div>
-            <div class="risks-list">
-              <h4>Identified Risks</h4>
-              <div id="risks-container"></div>
-            </div>
-          </div>
-        `;
-
-        const risksContainer = container.querySelector('#risks-container');
-        (option.risks || []).forEach(risk => {
-          const riskDiv = document.createElement('div');
-          riskDiv.className = `risk-item ${risk.probability?.toLowerCase()} ${risk.impact?.toLowerCase()}`;
-          riskDiv.innerHTML = `
-            <div class="risk-header">
-              <strong>${risk.risk}</strong>
-              <span class="risk-score">${risk.riskScore}/10</span>
-            </div>
-            <div class="risk-details">
-              <span class="category">${risk.category}</span>
-              <span class="probability">Probability: ${risk.probability}</span>
-              <span class="impact">Impact: ${risk.impact}</span>
-            </div>
-            <div class="mitigation">${risk.mitigation}</div>
-          `;
-          risksContainer.appendChild(riskDiv);
-        });
-      };
-
       // Weighted Scoring Visualization
       const createWeightedScoringVisualization = (data, container) => {
         if (!data.options || !data.options.length) {
@@ -589,37 +529,6 @@
           `;
           container.querySelector('#scores-chart').appendChild(optionDiv);
         });
-      };
-
-      // Stakeholder Analysis Visualization
-      const createStakeholderVisualization = (data, container) => {
-        if (!data.stakeholders || !data.stakeholders.length) {
-          container.innerHTML = '<p>No stakeholder data available for visualization.</p>';
-          return;
-        }
-
-        container.innerHTML = `
-          <div class="stakeholder-analysis">
-            <h3>Stakeholder Analysis</h3>
-            <div class="stakeholders-grid">
-              ${data.stakeholders.map(stakeholder => `
-                <div class="stakeholder-card ${stakeholder.attitude?.toLowerCase()}">
-                  <h4>${stakeholder.name}</h4>
-                  <div class="stakeholder-details">
-                    <div><strong>Type:</strong> ${stakeholder.type}</div>
-                    <div><strong>Influence:</strong> ${stakeholder.influence}</div>
-                    <div><strong>Impact:</strong> ${stakeholder.impact}</div>
-                    <div><strong>Attitude:</strong> ${stakeholder.attitude}</div>
-                    <div><strong>Strategy:</strong> ${stakeholder.managementStrategy}</div>
-                  </div>
-                  <div class="interests">
-                    <strong>Interests:</strong> ${(stakeholder.interests || []).join(', ')}
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
       };
 
       // Simple bar chart helper function - handles multiple data structures
@@ -1254,73 +1163,6 @@
       border-radius: 4px;
     }
 
-    /* Risk Analysis */
-    .risk-analysis {
-      margin: 20px 0;
-    }
-
-    .risk-overview {
-      margin-bottom: 20px;
-    }
-
-    .risk-level {
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 600;
-      text-align: center;
-    }
-
-    .risk-level.high {
-      background-color: #f0f0f0;
-      color: #333;
-      border: 2px solid #666;
-    }
-
-    .risk-level.medium {
-      background-color: #f5f5f5;
-      color: #666;
-      border: 2px solid #999;
-    }
-
-    .risk-level.low {
-      background-color: #f8f8f8;
-      color: #333;
-      border: 2px solid #333;
-    }
-
-    .risk-item {
-      margin-bottom: 15px;
-      padding: 15px;
-      border-radius: 8px;
-      border-left: 4px solid #ddd;
-    }
-
-    .risk-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .risk-score {
-      background-color: #f0f0f0;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-weight: 600;
-    }
-
-    .risk-details {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    .mitigation {
-      font-style: italic;
-      color: #666;
-    }
-
     /* Financial Metrics */
     .financial-metrics {
       display: flex;
@@ -1365,60 +1207,6 @@
       padding: 15px;
       background-color: #f8f9fa;
       border-radius: 8px;
-    }
-
-    /* Stakeholder Analysis */
-    .stakeholders-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 15px;
-      margin: 20px 0;
-    }
-
-    .stakeholder-card {
-      padding: 15px;
-      border-radius: 8px;
-      border: 2px solid #ddd;
-    }
-
-    .stakeholder-card.champion {
-      border-color: #333;
-      background-color: #f8f8f8;
-    }
-
-    .stakeholder-card.supporter {
-      border-color: #666;
-      background-color: #f5f5f5;
-    }
-
-    .stakeholder-card.neutral {
-      border-color: #9e9e9e;
-      background-color: #f5f5f5;
-    }
-
-    .stakeholder-card.skeptic {
-      border-color: #999;
-      background-color: #f0f0f0;
-    }
-
-    .stakeholder-card.blocker {
-      border-color: #666;
-      background-color: #f0f0f0;
-    }
-
-    .stakeholder-card h4 {
-      margin: 0 0 10px 0;
-      color: #333;
-    }
-
-    .stakeholder-details div {
-      margin-bottom: 5px;
-      font-size: 14px;
-    }
-
-    .interests {
-      margin-top: 10px;
-      font-size: 14px;
     }
 
     /* Weighted Scoring */
