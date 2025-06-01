@@ -97,7 +97,7 @@ const categoryManager = (function() {
     let isFilteringInProgress = false;
 
     // Function to handle category selection
-    function filterGridItems(category) {
+    function filterGridItems(category = 'all') {
         // Prevent recursive calls
         if (isFilteringInProgress) {
             console.log('Filtering already in progress, skipping recursive call');
@@ -527,13 +527,11 @@ const categoryManager = (function() {
         button.title = 'Open Categories'; // Add title for accessibility
         
         // Apply 3D tab styling - for top left corner
-        button.style.backgroundColor = '#f5f5f5';
+        button.style.backgroundColor = 'transparent';
         button.style.color = '#000';
-        button.style.border = '2px solid #000';
-        button.style.borderLeft = 'none'; // Remove left border to look tucked into corner
-        button.style.borderTop = 'none'; // Remove top border to look tucked into corner
-        button.style.borderRadius = '0 0 8px 0'; // Rounded only on bottom right corner
-        button.style.boxShadow = '4px 4px 0 #000'; // Shadow down and right
+        button.style.border = 'none';
+        button.style.borderRadius = '0';
+        button.style.boxShadow = 'none';
         button.style.padding = '0'; // Reduced padding
         button.style.width = '36px'; // Match other corner buttons
         button.style.height = '36px'; // Match other corner buttons
@@ -559,7 +557,7 @@ const categoryManager = (function() {
         });
         
         button.addEventListener('mouseout', function() {
-            button.style.backgroundColor = '#f5f5f5';
+            button.style.backgroundColor = 'transparent';
         });
         
         // Add active/click effect - adjusted for top left position
@@ -570,7 +568,7 @@ const categoryManager = (function() {
         
         button.addEventListener('mouseup', function() {
             button.style.transform = 'translate(0, 0)';
-            button.style.boxShadow = '4px 4px 0 #000'; // Restore shadow when released
+            button.style.boxShadow = 'none'; // Restore shadow when released
         });
         
         // Add click event to open the category modal
