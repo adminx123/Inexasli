@@ -596,22 +596,23 @@ document.addEventListener('DOMContentLoaded', async function () {
             const url = e.detail.url;
             
             setLocal('lastGridItemUrl', url);
-            if (dataContainer.dataset.state !== 'expanded') {
-                toggleDataContainer();
-            } else {
+            // Only expand and load content if container is already expanded
+            // If collapsed, just store the URL for later when user expands manually
+            if (dataContainer.dataset.state === 'expanded') {
                 loadStoredContent(url);
             }
+            // If collapsed, don't auto-expand - let user manually expand to see content
         });
 
         // Fallback: Monitor localStorage changes for lastGridItemUrl
         window.addEventListener('storage', function (e) {
             if (e.key === 'lastGridItemUrl' && e.newValue) {
                 
-                if (dataContainer.dataset.state !== 'expanded') {
-                    toggleDataContainer();
-                } else {
+                // Only auto-load if container is already expanded
+                if (dataContainer.dataset.state === 'expanded') {
                     loadStoredContent(e.newValue);
                 }
+                // If collapsed, just store the URL - user needs to manually expand to see content
             }
         });
 
