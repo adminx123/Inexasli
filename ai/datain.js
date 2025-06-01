@@ -10,6 +10,7 @@ import { getCookie } from '/utility/getcookie.js';
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 import { initializeSwipeFunctionality } from '/utility/swipeFunctionality.js';
+import FormPersistence from '/utility/formPersistence.js';
 
 
 function initializeGridItems() {
@@ -47,6 +48,62 @@ function initializeGridItems() {
     //     } catch (error) {
     //     }
     // }
+}
+
+// Centralized FormPersistence initialization function
+function initializeFormPersistence(url) {
+    console.log('[DataIn] Initializing FormPersistence for URL:', url);
+    
+    // Auto-detect module from URL patterns
+    let moduleType = 'default';
+    let moduleConfig = {};
+    
+    if (url.includes('/calorie/')) {
+        moduleType = 'calorie';
+        moduleConfig = {
+            singleSelection: ['calorie-activity', 'calorie-sex'],
+            multiSelection: ['calorie-goal', 'calorie-recommendations', 'calorie-diet-type']
+        };
+    } else if (url.includes('/fitness/')) {
+        moduleType = 'fitness';
+        moduleConfig = {
+            singleSelection: ['fitness-activity', 'fitness-experience', 'fitness-equipment', 'fitness-time', 'fitness-intensity', 'fitness-sex'],
+            multiSelection: []
+        };
+    } else if (url.includes('/decision/')) {
+        moduleType = 'decision';
+    } else if (url.includes('/enneagram/')) {
+        moduleType = 'enneagram';
+    } else if (url.includes('/event/')) {
+        moduleType = 'event';
+    } else if (url.includes('/philosophy/')) {
+        moduleType = 'philosophy';
+    } else if (url.includes('/quiz/')) {
+        moduleType = 'quiz';
+    } else if (url.includes('/research/')) {
+        moduleType = 'research';
+    } else if (url.includes('/social/')) {
+        moduleType = 'social';
+    } else {
+        // Try to detect from URL path
+        const pathParts = url.split('/');
+        for (let part of pathParts) {
+            if (part.endsWith('iq.html')) {
+                moduleType = part.replace('iq.html', '');
+                break;
+            }
+        }
+    }
+    
+    console.log(`[DataIn] Detected module type: ${moduleType}`);
+    
+    // Initialize FormPersistence with the detected module and configuration
+    try {
+        FormPersistence.init(moduleType, moduleConfig);
+        console.log('[DataIn] FormPersistence initialized successfully');
+    } catch (error) {
+        console.error('[DataIn] Error initializing FormPersistence:', error);
+    }
 }
 
 setTimeout(() => {
@@ -129,6 +186,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 // Function to show content after guided forms is ready
                 const showContentAfterGuidedForms = () => {
+                    // Initialize FormPersistence for this module
+                    initializeFormPersistence(url);
+                    
                     // Re-initialize grid items
                     initializeGridItems();
                     
@@ -204,6 +264,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     </div>
                     <div class="data-content">${content}</div>
                 `;
+                
+                // Initialize FormPersistence for this module
+                initializeFormPersistence(url);
                 
                 // Re-initialize grid items for non-form content
                 initializeGridItems();
