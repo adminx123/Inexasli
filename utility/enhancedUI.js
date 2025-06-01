@@ -74,7 +74,7 @@ function initEnhancedUI(options = {}) {
 
         // Initialize guided forms if enabled and form elements are present
         if (config.guidedForms && typeof window.initGuidedForms === 'function') {
-            const hasFormElements = document.querySelector('.row1, .grid-container, .mobile-container');
+            const hasFormElements = document.querySelector('.row1, .grid-container, device-container');
             if (hasFormElements) {
                 console.log('🎯 Initializing guided forms from Enhanced UI');
                 setTimeout(() => {

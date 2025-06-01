@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Check if content contains form elements that need guided forms
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = content;
-            const hasFormElements = tempDiv.querySelector('.row1, .grid-container, .mobile-container, .device-container');
+            const hasFormElements = tempDiv.querySelector('.row1, .grid-container, .device-container');
             
             if (hasFormElements) {
                 console.log('[DataIn] Form content detected, preparing guided forms initialization');
