@@ -1145,7 +1145,7 @@ window.toggleGuidedMode = toggleGuidedMode;
 document.addEventListener('DOMContentLoaded', () => {
     if (window.autoInitGuidedForms !== false) {
         // Check if we're in a form context
-        const hasFormElements = document.querySelector('.row1, .grid-container, .mobile-container, .device-container');
+        const hasFormElements = document.querySelector('.row1, .grid-container, .device-container');
         if (hasFormElements) {
             console.log('[GuidedForms] Auto-initializing guided forms on DOMContentLoaded');
             initGuidedForms({
@@ -1164,7 +1164,7 @@ document.addEventListener('data-in-loaded', (e) => {
     console.log('[GuidedForms] Received data-in-loaded event');
     setTimeout(() => {
         const container = e.detail?.container || document;
-        const hasFormElements = container.querySelector('.row1, .grid-container, .mobile-container, .device-container');
+        const hasFormElements = container.querySelector('.row1, .grid-container, .device-container');
         if (hasFormElements && window.autoInitGuidedForms !== false) {
             console.log('[GuidedForms] Reinitializing guided forms after data-in-loaded');
             initGuidedForms({
