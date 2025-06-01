@@ -34,76 +34,12 @@ Accepting things I cannot change"></textarea>
   (function() {
     console.log("Philosophy IQ script initializing");
 
-    // JSON storage helpers
-    const setJSON = window.setJSON || function(name, value) {
-      try {
-        if (!name) return false;
-        if (value === undefined) { localStorage.removeItem(name); return true; }
-        localStorage.setItem(name, JSON.stringify(value));
-        console.log(`[PhilosophyIQ] JSON saved ${name}`);
-        return true;
-      } catch (e) { console.error(`[PhilosophyIQ] Error storing JSON: ${e}`); return false; }
-    };
-    const getJSON = window.getJSON || function(name, defaultValue) {
-      try {
-        const item = localStorage.getItem(name);
-        return item ? JSON.parse(item) : defaultValue;
-      } catch (e) { console.error(`[PhilosophyIQ] Error retrieving JSON: ${e}`); return defaultValue; }
-    };
-
-    function saveFormData() {
-      console.log('[PhilosophyIQ] Saving form data to JSON');
-      setJSON('philosophyIqInput', collectFormData());
-    }
-
-    function collectFormData() {
-      const formData = { 
-        question: null,
-        // Hard-code the traditions we want to include
-        traditions: ["taoism", "buddhism", "islam", "christianity", "hermetic"]
-      };
-
-      // Get the philosophical question text
-      const questionEl = document.getElementById('philosophy-question');
-      if (questionEl) {
-        formData.question = (questionEl.value || '').trim() || null;
-      }
-
-      return formData;
-    }
-
-    function repopulateForm() {
-      console.log('[PhilosophyIQ] Repopulating form from JSON storage');
-      const data = getJSON('philosophyIqInput', null);
-      if (!data) return;
-      
-      // Handle text question field
-      if (data.question) {
-        document.getElementById('philosophy-question').value = data.question;
-      }
-    }
-
-    function setupInputHandlers() {
-      document.getElementById('philosophy-question').addEventListener('change', saveFormData);
-    }
-
-    function clearLocalStorage() {
-      if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
-      setJSON('philosophyIqInput', undefined);
-      setJSON('philosophyIqResponse', undefined);
-      document.getElementById('philosophy-question').value = '';
-    }
-
     // Handle the generate button click
     async function handleGeneratePhilosophyIq() {
       console.log('[PhilosophyIQ] Generate button clicked.');
       
       try {
-        // Save the current form data first
-        saveFormData();
-        
-        // Use what's stored in localStorage
-        const formData = getJSON('philosophyIqInput');
+        const formData = window.FormPersistence.getSavedFormData();
         if (!formData || !formData.question) {
           console.error('[PhilosophyIQ] No question found in input data.');
           alert('Please enter what you\'re seeking wisdom on before proceeding.');
@@ -143,8 +79,8 @@ Accepting things I cannot change"></textarea>
           }
         );
         
-        // Store the response using setJSON
-        setJSON('philosophyIqResponse', result);
+        // Store the response using centralized system
+        window.FormPersistence.saveResponseData(result);
         
         // Dispatch an event to notify dataout.js that a response was received
         const event = new CustomEvent('api-response-received', {
@@ -164,10 +100,10 @@ Accepting things I cannot change"></textarea>
     }
 
     // Initialization
-    repopulateForm();
-    setupInputHandlers();
     document.getElementById('generate-philosophy-btn').addEventListener('click', handleGeneratePhilosophyIq);
-    document.getElementById('clear-philosophy-btn').addEventListener('click', clearLocalStorage);
+    document.getElementById('clear-philosophy-btn').addEventListener('click', () => {
+        window.FormPersistence.clearLocalStorage();
+    });
   })();
   </script>
 </div> <!-- Close mobile-container -->
