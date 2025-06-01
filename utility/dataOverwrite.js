@@ -97,13 +97,11 @@ function createOverwriteButton() {
     button.title = 'Clear All Data'; // Add title for accessibility
     
     // Apply 3D tab styling - matching the bottom left corner style
-    button.style.backgroundColor = '#f5f5f5';
+    button.style.backgroundColor = 'transparent';
     button.style.color = '#000';
-    button.style.border = '2px solid #000';
-    button.style.borderLeft = 'none'; // Remove left border to look tucked into corner
-    button.style.borderBottom = 'none'; // Remove bottom border to look tucked into corner
-    button.style.borderRadius = '0 8px 0 0'; // Rounded only on top right corner
-    button.style.boxShadow = '4px -4px 0 #000'; // Shadow up and right
+    button.style.border = 'none';
+    button.style.borderRadius = '0';
+    button.style.boxShadow = 'none';
     button.style.padding = '0'; // Reduced padding
     button.style.width = '36px'; // Changed from 50px to 36px
     button.style.height = '36px'; // Changed from 50px to 36px
@@ -125,22 +123,22 @@ function createOverwriteButton() {
     
     // Add hover effect matching the tab style
     button.addEventListener('mouseover', function() {
-        button.style.backgroundColor = '#FFFFFF';
+        button.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
     });
     
     button.addEventListener('mouseout', function() {
-        button.style.backgroundColor = '#f5f5f5';
+        button.style.backgroundColor = 'transparent';
     });
     
     // Add active/click effect - adjusted for bottom left position
     button.addEventListener('mousedown', function() {
-        button.style.transform = 'translate(2px, -2px)'; // Move diagonally up-right when pressed
-        button.style.boxShadow = '2px -2px 0 #000'; // Smaller shadow when pressed
+        button.style.transform = 'scale(0.9)'; // Scale down when pressed
+        button.style.opacity = '0.7';
     });
     
     button.addEventListener('mouseup', function() {
-        button.style.transform = 'translate(0, 0)';
-        button.style.boxShadow = '4px -4px 0 #000'; // Restore shadow when released
+        button.style.transform = 'scale(1)';
+        button.style.opacity = '1';
     });
     
     // Add click event to open the modal

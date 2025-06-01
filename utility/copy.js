@@ -36,14 +36,12 @@ function createCopyButton(containerId, getContentCallback) {
     button.id = 'copyButton';
     button.title = 'Copy to clipboard';
     
-    // Apply 3D styling for bottom right corner
-    button.style.backgroundColor = '#f5f5f5';
+    // Apply styling for bottom right corner - borderless
+    button.style.backgroundColor = 'transparent';
     button.style.color = '#000';
-    button.style.border = '2px solid #000';
-    button.style.borderRight = 'none'; // Remove right border to look tucked into corner
-    button.style.borderBottom = 'none'; // Remove bottom border to look tucked into corner
-    button.style.borderRadius = '8px 0 0 0'; // Rounded only on top left corner
-    button.style.boxShadow = '-4px -4px 0 #000'; // Shadow up and left for right corner
+    button.style.border = 'none';
+    button.style.borderRadius = '0';
+    button.style.boxShadow = 'none';
     button.style.padding = '0';
     button.style.width = '36px';
     button.style.height = '36px';
@@ -79,22 +77,22 @@ function createCopyButton(containerId, getContentCallback) {
     
     // Add hover effect
     button.addEventListener('mouseover', function() {
-        button.style.backgroundColor = '#FFFFFF';
+        button.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
     });
     
     button.addEventListener('mouseout', function() {
-        button.style.backgroundColor = '#f5f5f5';
+        button.style.backgroundColor = 'transparent';
     });
     
     // Add active/click effect for bottom right position
     button.addEventListener('mousedown', function() {
-        button.style.transform = 'translate(-2px, -2px)'; // Move diagonally up-left when pressed
-        button.style.boxShadow = '-2px -2px 0 #000'; // Smaller shadow when pressed
+        button.style.transform = 'scale(0.9)'; // Scale down when pressed
+        button.style.opacity = '0.7';
     });
     
     button.addEventListener('mouseup', function() {
-        button.style.transform = 'translate(0, 0)';
-        button.style.boxShadow = '-4px -4px 0 #000'; // Restore shadow when released
+        button.style.transform = 'scale(1)';
+        button.style.opacity = '1';
     });
     
     // Add click event to open share modal
