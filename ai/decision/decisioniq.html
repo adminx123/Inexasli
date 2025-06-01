@@ -123,41 +123,10 @@ Need multilingual support for global offices"></textarea>
         </div>
  
 <script>
-/*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
-*/
 (function() {
     console.log("Decision IQ script initializing");
 
-    // JSON storage helpers
-    const setJSON = window.setJSON || function(name, value) {
-        try {
-            if (!name) return false;
-            if (value === undefined) { localStorage.removeItem(name); return true; }
-            localStorage.setItem(name, JSON.stringify(value));
-            console.log(`[DecisionIQ] JSON saved ${name}`);
-            return true;
-        } catch (e) { console.error(`[DecisionIQ] Error storing JSON: ${e}`); return false; }
-    };
-    const getJSON = window.getJSON || function(name, defaultValue) {
-        try {
-            const item = localStorage.getItem(name);
-            return item ? JSON.parse(item) : defaultValue;
-        } catch (e) { console.error(`[DecisionIQ] Error retrieving JSON: ${e}`); return defaultValue; }
-    };
-
-    function saveGridItem(item) {
-        console.log('[DecisionIQ] Saving all form data to JSON');
-        setJSON('decisionIqInput', collectFormData());
-    }
-    
-    // Listen for grid-item-toggled event from datain.js
+    // Handle grid toggle UI + constraint input behavior
     function handleGridItemToggled(event) {
         console.log('[DecisionIQ] Grid item toggled event received');
         const item = event.detail.item;
@@ -177,104 +146,20 @@ Need multilingual support for global offices"></textarea>
                 }
             }
         }
-        
-        saveGridItem(item);
     }
 
-    function saveInput(input) {
-        console.log('[DecisionIQ] Saving all form data to JSON');
-        setJSON('decisionIqInput', collectFormData());
-    }
-
-    function collectFormData() {
-        const formData = { 
-            goal: null, 
-            analysisType: null, 
-            priority: null, 
-            criteria: [], 
-            options: null, 
-            stakeholders: [], 
-            constraints: [], 
-            instructions: null 
-        };
-        
-        const g = document.getElementById('decisioniq-goal'); if (g && g.value.trim()) formData.goal = g.value.trim();
-        const at = document.getElementById('decisioniq-analysis-type'); if (at) formData.analysisType = at.value;
-        const pr = document.getElementById('decisioniq-priority'); if (pr) formData.priority = pr.value;
-        document.querySelectorAll('#decisioniq-criteria .grid-item.selected').forEach(i => formData.criteria.push(i.dataset.value));
-        const o = document.getElementById('decisioniq-options'); if (o && o.value.trim()) formData.options = o.value.trim();
-        document.querySelectorAll('#decisioniq-stakeholders .grid-item.selected').forEach(i => formData.stakeholders.push(i.dataset.value));
-        
-        // Collect constraints with their values
-        document.querySelectorAll('#decisioniq-constraint-types .grid-item.selected').forEach(item => {
-            const type = item.getAttribute('data-type');
-            const input = item.querySelector('.constraint-input');
-            const value = input ? input.value.trim() : '';
-            
-            if (type && value) {
-                formData.constraints.push({ type, value });
-            }
-        });
-        
-        const ins = document.getElementById('decisioniq-instructions'); if (ins && ins.value.trim()) formData.instructions = ins.value.trim();
-        return formData;
-    }
-
-    function repopulateForm() {
-        console.log('[DecisionIQ] Repopulating form from JSON storage');
-        const data = getJSON('decisionIqInput', null);
-        if (!data) return;
-        if (data.goal) document.getElementById('decisioniq-goal').value = data.goal;
-        if (data.analysisType) document.getElementById('decisioniq-analysis-type').value = data.analysisType;
-        if (data.priority) document.getElementById('decisioniq-priority').value = data.priority;
-        data.criteria?.forEach(v => document.querySelector(`#decisioniq-criteria .grid-item[data-value="${v}"]`)?.classList.add('selected'));
-        if (data.options) document.getElementById('decisioniq-options').value = data.options;
-        data.stakeholders?.forEach(v => document.querySelector(`#decisioniq-stakeholders .grid-item[data-value="${v}"]`)?.classList.add('selected'));
-        
-        // Repopulate constraints
-        data.constraints?.forEach(c => {
-            if (c.type && c.value) {
-                const gridItem = document.querySelector(`#decisioniq-constraint-types .grid-item[data-type="${c.type}"]`);
-                if (gridItem) {
-                    gridItem.classList.add('selected');
-                    const input = gridItem.querySelector('.constraint-input');
-                    if (input) {
-                        input.value = c.value;
-                        input.style.display = 'block';
-                    }
-                }
-            }
-        });
-        
-        if (data.instructions) document.getElementById('decisioniq-instructions').value = data.instructions;
-    }
-
-    function setupInputHandlers() {
-        document.querySelectorAll('textarea, select').forEach(el => el.addEventListener('change', () => saveInput(el)));
-    }
-
+    // Clear stored decision data
     function clearLocalStorage() {
-        if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
-        setJSON('decisionIqInput', undefined);
-        setJSON('decisionIqResponse', undefined);
-        document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
-        document.querySelectorAll('textarea').forEach(i => i.value = '');
-        document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
-        document.querySelectorAll('.constraint-input').forEach(input => {
-            input.value = '';
-            input.style.display = 'none';
-        });
+        return window.FormPersistence.clearLocalStorage();
     }
 
     async function handleGenerateDecisionIq() {
         try {
-            const formData = getJSON('decisionIqInput');
+            const formData = window.FormPersistence.getSavedFormData();
             if (!formData) { 
                 alert('Please complete the form before generating.'); 
                 return; 
             }
-            
-            // Use enhanced loading with educational facts
             const result = await window.enhancedLoading(
                 'generate-decision-btn',
                 'decision',
@@ -285,54 +170,33 @@ Need multilingual support for global offices"></textarea>
                         headers: {'Content-Type':'application/json'}, 
                         body: JSON.stringify(formData) 
                     });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                     return await response.json();
                 }
             );
-            
-            // Store the response
-            setJSON('decisionIqResponse', result);
-            
-            // Dispatch event to notify dataout.js
+            window.FormPersistence.saveResponseData(result);
             document.dispatchEvent(new CustomEvent('api-response-received', { 
                 detail: { module: 'decisioniq', type: 'worker-response', timestamp: Date.now() } 
             }));
-            
         } catch (e) {
             console.error('[DecisionIQ] Error:', e);
             alert('Error generating decision analysis.');
         }
     }
 
-    // We're no longer using these functions as the inputs are now directly in the grid items
-    function setupConstraintInputs() {
-        // Add change event listeners to all constraint inputs
-        document.querySelectorAll('.constraint-input').forEach(input => {
-            input.addEventListener('change', saveInput);
-            input.addEventListener('blur', function() {
-                // If input is empty when losing focus, deselect the constraint
-                if (!this.value.trim() && this.parentNode.classList.contains('selected')) {
-                    this.parentNode.classList.remove('selected');
-                    this.style.display = 'none';
-                }
-            });
-        });
+    // Simplified initialization for module
+    function initialize() {
+        document.addEventListener('grid-item-toggled', handleGridItemToggled);
+        const genBtn = document.getElementById('generate-decision-btn');
+        genBtn.removeEventListener('click', handleGenerateDecisionIq);
+        genBtn.addEventListener('click', handleGenerateDecisionIq);
+        const clearBtn = document.getElementById('clear-decision-btn');
+        clearBtn.removeEventListener('click', clearLocalStorage);
+        clearBtn.addEventListener('click', clearLocalStorage);
     }
 
-    // Initialization
-    // Instead of direct click handlers, listen for the custom event from datain.js
-    document.addEventListener('grid-item-toggled', handleGridItemToggled);
-    repopulateForm();
-    setupInputHandlers();
-    setupConstraintInputs();
-    document.getElementById('generate-decision-btn').addEventListener('click', handleGenerateDecisionIq);
-    document.getElementById('clear-decision-btn').addEventListener('click', clearLocalStorage);
-
-    window.decisionIq = { saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
+    initialize();
+    document.addEventListener('data-in-loaded', () => setTimeout(initialize, 100));
 })();
 </script>
     </div>
