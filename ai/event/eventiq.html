@@ -128,41 +128,10 @@ Need accommodations for 3 wheelchair users"></textarea>
 (function() {
     console.log("EventIQ script initializing");
 
-    // JSON storage helpers
-    const setJSON = window.setJSON || function(name, value) {
-        try {
-            if (!name) return false;
-            if (value === undefined) { localStorage.removeItem(name); return true; }
-            localStorage.setItem(name, JSON.stringify(value));
-            console.log(`[EventIQ] JSON saved ${name}`);
-            return true;
-        } catch (e) { console.error(`[EventIQ] Error storing JSON: ${e}`); return false; }
-    };
-    
-    const getJSON = window.getJSON || function(name, defaultValue) {
-        try {
-            const item = localStorage.getItem(name);
-            return item ? JSON.parse(item) : defaultValue;
-        } catch (e) { console.error(`[EventIQ] Error retrieving JSON: ${e}`); return defaultValue; }
-    };
-
-    function saveGridItem(item) {
-        console.log('[EventIQ] Saving all form data to JSON');
-        setJSON('eventIqInput', collectFormData());
-    }
-    
     // Listen for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
         console.log('[EventIQ] Grid item toggled event received');
-        const item = event.detail.item;
-        saveGridItem(item);
-    }
-
-    // Save input value
-    function saveInput(input) {
-        if (!input || !input.id) return;
-        console.log('[EventIQ] Saving all form data to JSON');
-        setJSON('eventIqInput', collectFormData());
+        // UI behavior only - persistence handled centrally
     }
 
     // Toggle visibility of indoor/outdoor setup based on event-location
@@ -172,170 +141,18 @@ Need accommodations for 3 wheelchair users"></textarea>
         const outdoorSection = document.getElementById('event-outdoors');
         
         if (locationSelect && indoorSection && outdoorSection) {
-            if (locationSelect.value === 'Indoor') {
+            if (locationSelect.value === 'indoors') {
                 indoorSection.classList.remove('hidden');
                 outdoorSection.classList.add('hidden');
-            } else if (locationSelect.value === 'Outdoor') {
+            } else if (locationSelect.value === 'outdoors') {
                 indoorSection.classList.add('hidden');
                 outdoorSection.classList.remove('hidden');
             } else {
-                // For "Both" or any other option
+                // For default or any other option, show indoor by default
                 indoorSection.classList.remove('hidden');
-                outdoorSection.classList.remove('hidden');
+                outdoorSection.classList.add('hidden');
             }
         }
-    }
-
-    // Collect form data
-    function collectFormData() {
-        const formData = {
-            eventTypes: [],
-            venue: null,
-            location: null,
-            indoorSetup: [],
-            outdoor: [],
-            elements: [],
-            guests: null,
-            budget: null,
-            startTime: null,
-            endTime: null,
-            specificLocation: null,
-            specificContext: null
-        };
-        
-        // Collect selected event types
-        document.querySelectorAll('#event-types .grid-item.selected').forEach(item => {
-            formData.eventTypes.push(item.dataset.value);
-        });
-        
-        // Get venue and location from select elements
-        const venue = document.getElementById('event-venue');
-        if (venue) formData.venue = venue.value;
-        
-        const location = document.getElementById('event-location');
-        if (location) {
-            formData.location = location.value;
-            // Conditionally collect indoor/outdoor setup based on location
-            if (location.value === 'Indoor' || location.value === 'Both') {
-                document.querySelectorAll('#event-indoor-setup .grid-item.selected').forEach(item => {
-                    formData.indoorSetup.push(item.dataset.value);
-                });
-            }
-            
-            if (location.value === 'Outdoor' || location.value === 'Both') {
-                document.querySelectorAll('#event-outdoor .grid-item.selected').forEach(item => {
-                    formData.outdoor.push(item.dataset.value);
-                });
-            }
-        }
-        
-        // Collect selected event elements
-        document.querySelectorAll('#event-elements .grid-item.selected').forEach(item => {
-            formData.elements.push(item.dataset.value);
-        });
-        
-        // Collect numeric inputs
-        const guests = document.getElementById('event-guests');
-        if (guests && guests.value.trim()) formData.guests = parseInt(guests.value.trim(), 10);
-        
-        const budget = document.getElementById('event-budget');
-        if (budget && budget.value.trim()) formData.budget = parseInt(budget.value.trim(), 10);
-        
-        // Collect time inputs
-        const startTime = document.getElementById('event-start');
-        if (startTime && startTime.value.trim()) formData.startTime = startTime.value.trim();
-        
-        const endTime = document.getElementById('event-end');
-        if (endTime && endTime.value.trim()) formData.endTime = endTime.value.trim();
-        
-        // Collect location and context
-        const specificLocation = document.getElementById('event-specific-location');
-        if (specificLocation && specificLocation.value.trim()) formData.specificLocation = specificLocation.value.trim();
-        
-        const specificContext = document.getElementById('event-specific-context');
-        if (specificContext && specificContext.value.trim()) formData.specificContext = specificContext.value.trim();
-        
-        return formData;
-    }
-
-    // Repopulate form from localStorage
-    function repopulateForm() {
-        console.log('[EventIQ] Repopulating form from JSON storage');
-        const data = getJSON('eventIqInput', null);
-        if (!data) return;
-        
-        // Repopulate event types
-        data.eventTypes?.forEach(v => {
-            const element = document.querySelector(`#event-types .grid-item[data-value="${v}"]`);
-            if (element) element.classList.add('selected');
-        });
-        
-        // Repopulate select elements
-        if (data.venue) document.getElementById('event-venue').value = data.venue;
-        if (data.location) {
-            document.getElementById('event-location').value = data.location;
-            toggleEventDetails(); // Update visibility based on selected location
-        }
-        
-        // Repopulate indoor setup
-        data.indoorSetup?.forEach(v => {
-            const element = document.querySelector(`#event-indoor-setup .grid-item[data-value="${v}"]`);
-            if (element) element.classList.add('selected');
-        });
-        
-        // Repopulate outdoor setup
-        data.outdoor?.forEach(v => {
-            const element = document.querySelector(`#event-outdoor .grid-item[data-value="${v}"]`);
-            if (element) element.classList.add('selected');
-        });
-        
-        // Repopulate event elements
-        data.elements?.forEach(v => {
-            const element = document.querySelector(`#event-elements .grid-item[data-value="${v}"]`);
-            if (element) element.classList.add('selected');
-        });
-        
-        // Repopulate numeric inputs
-        if (data.guests) document.getElementById('event-guests').value = data.guests;
-        if (data.budget) document.getElementById('event-budget').value = data.budget;
-        
-        // Repopulate time inputs
-        if (data.startTime) document.getElementById('event-start').value = data.startTime;
-        if (data.endTime) document.getElementById('event-end').value = data.endTime;
-        
-        // Repopulate location and context
-        if (data.specificLocation) document.getElementById('event-specific-location').value = data.specificLocation;
-        if (data.specificContext) document.getElementById('event-specific-context').value = data.specificContext;
-    }
-
-    // Handle input changes
-    function setupInputHandlers() {
-        document.querySelectorAll('input, textarea, select').forEach(element => {
-            element.addEventListener('change', function() {
-                saveInput(this);
-                
-                // Special handling for location select to toggle sections
-                if (this.id === 'event-location') {
-                    toggleEventDetails();
-                }
-            });
-        });
-    }
-
-    // Clear saved data from localStorage
-    function clearLocalStorage() {
-        if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
-        
-        setJSON('eventIqInput', undefined);
-        setJSON('eventIqResponse', undefined);
-        
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => item.classList.remove('selected'));
-        document.querySelectorAll('input:not([type="button"]):not([type="submit"])').forEach(input => input.value = '');
-        document.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
-        document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
-        
-        // Reset visibility
-        toggleEventDetails();
     }
 
     // Handle the generate button click
@@ -346,7 +163,7 @@ Need accommodations for 3 wheelchair users"></textarea>
             'generate-event-btn',
             'event',
             async () => {
-                const formData = getJSON('eventIqInput');
+                const formData = window.FormPersistence.getSavedFormData();
                 if (!formData) {
                     console.error('[EventIQ] No input data found in localStorage.');
                     throw new Error('Please complete the form before generating an event plan.');
@@ -376,7 +193,7 @@ Need accommodations for 3 wheelchair users"></textarea>
                 }
                 
                 // Store the response
-                setJSON('eventIqResponse', responseData);
+                window.FormPersistence.saveResponseData(responseData);
                 
                 // Dispatch an event to notify dataout.js that a response was received
                 const event = new CustomEvent('api-response-received', {
@@ -397,24 +214,20 @@ Need accommodations for 3 wheelchair users"></textarea>
         console.log('[EventIQ] Event plan generated successfully');
     }
 
-    // Initialization
-    // Instead of direct click handlers, listen for the custom event from datain.js
-    document.addEventListener('grid-item-toggled', handleGridItemToggled);
-    setupInputHandlers();
-    toggleEventDetails();
-    repopulateForm();
-    document.getElementById('generate-event-btn').addEventListener('click', handleGenerateEventIq);
-    document.getElementById('clear-event-btn').addEventListener('click', clearLocalStorage);
+    // Setup location select change handler for indoor/outdoor toggle
+    function setupLocationHandler() {
+        const locationSelect = document.getElementById('event-location');
+        if (locationSelect) {
+            locationSelect.addEventListener('change', toggleEventDetails);
+        }
+    }
 
-    // For external access if needed
-    window.eventIq = {
-        saveGridItem,
-        saveInput,
-        collectFormData,
-        clearLocalStorage
-    };
+    // Initialization
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    setupLocationHandler();
+    toggleEventDetails(); // Initialize visibility
+    document.getElementById('generate-event-btn').addEventListener('click', handleGenerateEventIq);
+    document.getElementById('clear-event-btn').addEventListener('click', window.FormPersistence.clearLocalStorage);
 })();
 </script>
-</div> <!-- Close mobile-container -->
-</body>
-</html>
+    </div>
