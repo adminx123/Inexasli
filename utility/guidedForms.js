@@ -10,7 +10,22 @@
 
 /**
  * Guided Form Completion System
- * Provides progressive disclosure, auto-advance, and smooth transitions for form completion
+ * Provides progressive disclosure, auto-advance, smooth transitions, and dynamic container sizing for form completion
+ * 
+ * Dynamic Sizing Features:
+ * - Automatically adjusts data container height based on current step content
+ * - Smooth transitions between different step sizes
+ * - Mobile-responsive height calculations
+ * - Configurable min/max height constraints
+ * - Restores original container size when exiting guided mode
+ * 
+ * Usage:
+ * const guidedForms = new GuidedFormSystem({
+ *   dynamicSizing: true,           // Enable dynamic sizing (default: true)
+ *   minContainerHeight: 200,       // Minimum height in pixels (default: 200)
+ *   maxContainerHeight: '80vh',    // Maximum height (default: '80vh')
+ *   sizingPadding: 60             // Extra padding for calculations (default: 60)
+ * });
  */
 
 class GuidedFormSystem {
@@ -24,6 +39,10 @@ class GuidedFormSystem {
             enableSkipping: true,
             preserveState: true,
             respectExistingPersistence: true, // Don't interfere with existing form persistence
+            dynamicSizing: true, // Enable dynamic container sizing
+            minContainerHeight: 200, // Minimum container height in pixels
+            maxContainerHeight: '80vh', // Maximum container height
+            sizingPadding: 60, // Extra padding for dynamic sizing calculations
             ...options
         };
         
@@ -32,6 +51,8 @@ class GuidedFormSystem {
         this.isInitialized = false;
         this.completedSteps = new Set();
         this.skippedSteps = new Set();
+        this.originalContainerHeight = null; // Store original container height
+        this.dataContainer = null; // Reference to the data container
         
         // Bind methods to preserve context
         this.handleGridItemToggled = this.handleGridItemToggled.bind(this);
@@ -63,6 +84,9 @@ class GuidedFormSystem {
             console.warn('[GuidedForms] Container not found:', containerId);
             return false;
         }
+
+        // Initialize data container reference for dynamic sizing
+        this.initializeDataContainerRef();
         
         console.log('[GuidedForms] Using container:', this.container.className || this.container.tagName);
         
@@ -74,6 +98,66 @@ class GuidedFormSystem {
         this.isInitialized = true;
         console.log(`[GuidedForms] Initialized with ${this.steps.length} steps`);
         return true;
+    }
+
+    /**
+     * Initialize data container reference for dynamic sizing
+     */
+    initializeDataContainerRef() {
+        // Find the data container that might need dynamic sizing
+        this.dataContainer = document.querySelector('.data-container-left.expanded') || 
+                           document.querySelector('.data-container-left') ||
+                           this.container.closest('.data-container-left');
+        
+        if (this.dataContainer && this.config.dynamicSizing) {
+            // Store original height for restoration later
+            const computedStyle = window.getComputedStyle(this.dataContainer);
+            this.originalContainerHeight = computedStyle.height;
+            console.log('[GuidedForms] Dynamic sizing enabled for data container:', this.originalContainerHeight);
+            
+            // Listen for data container state changes
+            this.setupDataContainerListeners();
+        }
+    }
+
+    /**
+     * Set up listeners for data container state changes
+     */
+    setupDataContainerListeners() {
+        // Listen for data-in state changes to reapply dynamic sizing
+        document.addEventListener('datain-state-changed', (event) => {
+            if (event.detail?.state === 'expanded' && this.isInitialized) {
+                console.log('[GuidedForms] Data container expanded, reapplying dynamic sizing');
+                // Update our reference to the expanded container
+                this.dataContainer = document.querySelector('.data-container-left.expanded');
+                
+                // Reapply sizing for current step
+                if (this.steps[this.currentStep]) {
+                    setTimeout(() => {
+                        this.adjustContainerSize(this.steps[this.currentStep]);
+                    }, 100);
+                }
+            }
+        });
+
+        // Listen for window resize to recalculate container sizes
+        window.addEventListener('resize', () => {
+            if (this.isInitialized && this.dataContainer && this.config.dynamicSizing) {
+                this.debounceResize();
+            }
+        });
+    }
+
+    /**
+     * Debounced resize handler to avoid excessive recalculations
+     */
+    debounceResize() {
+        clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(() => {
+            if (this.steps[this.currentStep]) {
+                this.adjustContainerSize(this.steps[this.currentStep]);
+            }
+        }, 250);
     }
     
     /**
@@ -449,6 +533,125 @@ class GuidedFormSystem {
         this.currentStep = stepIndex;
         this.displayStep(nextStep);
         this.updateProgressIndicator();
+        
+        // Apply dynamic sizing for new step
+        this.adjustContainerSize(nextStep);
+    }
+
+    /**
+     * Adjust container size to fit current step content
+     */
+    adjustContainerSize(step) {
+        if (!this.config.dynamicSizing || !this.dataContainer) {
+            return;
+        }
+
+        // Small delay to ensure step is fully rendered
+        setTimeout(() => {
+            try {
+                // Calculate the content height needed for this step
+                const stepHeight = this.calculateStepHeight(step);
+                const containerHeight = this.calculateOptimalContainerHeight(stepHeight);
+                
+                console.log(`[GuidedForms] Adjusting container height to ${containerHeight}px for step ${step.index}`);
+                
+                // Apply the new height with smooth transition
+                this.dataContainer.style.transition = 'height 0.3s ease-in-out';
+                this.dataContainer.style.height = `${containerHeight}px`;
+                
+                // Dispatch resize event for any listeners
+                window.dispatchEvent(new Event('resize'));
+                
+            } catch (error) {
+                console.warn('[GuidedForms] Error adjusting container size:', error);
+            }
+        }, 100);
+    }
+
+    /**
+     * Calculate the height needed for a specific step
+     */
+    calculateStepHeight(step) {
+        if (!step || !step.element) {
+            return this.config.minContainerHeight;
+        }
+
+        // Temporarily show the step to measure it
+        const wasVisible = step.isVisible;
+        const originalDisplay = step.element.style.display;
+        const originalOpacity = step.element.style.opacity;
+        const originalTransform = step.element.style.transform;
+        const originalPosition = step.element.style.position;
+        
+        // Make element visible but transparent for measurement
+        step.element.style.display = 'flex';
+        step.element.style.opacity = '0';
+        step.element.style.transform = 'none';
+        step.element.style.position = 'static';
+        step.element.style.visibility = 'hidden'; // Hidden but still takes up space
+        
+        // Force a reflow to ensure accurate measurements
+        step.element.offsetHeight;
+        
+        // Get the actual height including margins
+        const rect = step.element.getBoundingClientRect();
+        const computedStyle = window.getComputedStyle(step.element);
+        const marginTop = parseFloat(computedStyle.marginTop) || 0;
+        const marginBottom = parseFloat(computedStyle.marginBottom) || 0;
+        
+        const stepHeight = rect.height + marginTop + marginBottom;
+        
+        // Restore original styles
+        step.element.style.display = originalDisplay;
+        step.element.style.opacity = originalOpacity;
+        step.element.style.transform = originalTransform;
+        step.element.style.position = originalPosition;
+        step.element.style.visibility = '';
+        
+        // Handle edge cases
+        const finalHeight = Math.max(stepHeight, 50); // Minimum 50px for very small steps
+        
+        console.log(`[GuidedForms] Measured step ${step.index} height: ${finalHeight}px (base: ${rect.height}px, margins: ${marginTop + marginBottom}px)`);
+        
+        return finalHeight;
+    }
+
+    /**
+     * Calculate optimal container height based on step content
+     */
+    calculateOptimalContainerHeight(stepHeight) {
+        if (!stepHeight || stepHeight <= 0) {
+            return this.config.minContainerHeight;
+        }
+
+        // Add padding for progress indicator, close button, and general spacing
+        const totalHeight = stepHeight + this.config.sizingPadding;
+        
+        // Respect minimum height
+        const minHeight = this.config.minContainerHeight;
+        
+        // Respect maximum height with mobile considerations
+        let maxHeight;
+        if (typeof this.config.maxContainerHeight === 'string' && this.config.maxContainerHeight.endsWith('vh')) {
+            const vhValue = parseFloat(this.config.maxContainerHeight);
+            maxHeight = (window.innerHeight * vhValue) / 100;
+        } else {
+            maxHeight = parseInt(this.config.maxContainerHeight) || window.innerHeight * 0.8;
+        }
+        
+        // Mobile-specific adjustments
+        if (window.innerWidth <= 480) {
+            // On mobile, be more conservative with max height to ensure usability
+            maxHeight = Math.min(maxHeight, window.innerHeight * 0.7);
+            console.log('[GuidedForms] Mobile detected, adjusted max height to:', maxHeight);
+        }
+        
+        // Constrain to min/max bounds
+        const finalHeight = Math.max(minHeight, Math.min(totalHeight, maxHeight));
+        
+        console.log(`[GuidedForms] Optimal height calculation: step=${stepHeight}px, total=${totalHeight}px, final=${finalHeight}px`);
+        
+        return finalHeight;
     }
     
     /**
@@ -524,7 +727,12 @@ class GuidedFormSystem {
             }
         });
         
-        console.log('[GuidedForms] Initialized first step');
+        // Apply dynamic sizing for the first step
+        if (this.steps.length > 0) {
+            this.adjustContainerSize(this.steps[0]);
+        }
+        
+        console.log('[GuidedForms] Initialized first step with dynamic sizing');
     }
     
     /**
@@ -698,12 +906,33 @@ class GuidedFormSystem {
             step.isVisible = true;
         });
         
+        // Restore original container height
+        this.restoreOriginalContainerSize();
+        
         // Remove progress elements
         const progressIndicator = document.getElementById('guided-form-progress');
         
         if (progressIndicator) progressIndicator.remove();
         
         this.isInitialized = false;
+    }
+
+    /**
+     * Restore original container size when exiting guided mode
+     */
+    restoreOriginalContainerSize() {
+        if (this.dataContainer && this.originalContainerHeight && this.config.dynamicSizing) {
+            console.log('[GuidedForms] Restoring original container height:', this.originalContainerHeight);
+            this.dataContainer.style.transition = 'height 0.3s ease-in-out';
+            this.dataContainer.style.height = this.originalContainerHeight;
+            
+            // Remove the transition after completion
+            setTimeout(() => {
+                if (this.dataContainer) {
+                    this.dataContainer.style.transition = '';
+                }
+            }, 300);
+        }
     }
     
     /**
@@ -732,6 +961,9 @@ class GuidedFormSystem {
         // Remove event listeners
         document.removeEventListener('grid-item-toggled', this.handleGridItemToggled);
         
+        // Restore original container size
+        this.restoreOriginalContainerSize();
+        
         // Remove UI elements
         const progressIndicator = document.getElementById('guided-form-progress');
         
@@ -745,7 +977,63 @@ class GuidedFormSystem {
             clearTimeout(this.inputValidationTimeout);
         }
         
+        // Clear references
+        this.dataContainer = null;
+        this.originalContainerHeight = null;
+        
         this.isInitialized = false;
+    }
+    
+    /**
+     * Manually trigger container resize for current step
+     * Useful for developers who want to refresh sizing after dynamic content changes
+     */
+    refreshContainerSize() {
+        if (this.isInitialized && this.config.dynamicSizing && this.steps[this.currentStep]) {
+            console.log('[GuidedForms] Manually refreshing container size');
+            this.adjustContainerSize(this.steps[this.currentStep]);
+        }
+    }
+
+    /**
+     * Update dynamic sizing configuration
+     * @param {Object} sizingConfig - New sizing configuration
+     */
+    updateSizingConfig(sizingConfig) {
+        if (sizingConfig && typeof sizingConfig === 'object') {
+            this.config = { ...this.config, ...sizingConfig };
+            console.log('[GuidedForms] Updated sizing configuration:', sizingConfig);
+            
+            // Apply new configuration to current step
+            if (this.isInitialized && this.steps[this.currentStep]) {
+                this.adjustContainerSize(this.steps[this.currentStep]);
+            }
+        }
+    }
+
+    /**
+     * Get current dynamic sizing status and measurements
+     */
+    getSizingInfo() {
+        if (!this.config.dynamicSizing) {
+            return { enabled: false };
+        }
+
+        const currentStep = this.steps[this.currentStep];
+        const info = {
+            enabled: true,
+            currentStep: this.currentStep,
+            stepCount: this.steps.length,
+            dataContainer: !!this.dataContainer,
+            originalHeight: this.originalContainerHeight,
+        };
+
+        if (currentStep && this.dataContainer) {
+            info.currentStepHeight = this.calculateStepHeight(currentStep);
+            info.currentContainerHeight = this.dataContainer.style.height || window.getComputedStyle(this.dataContainer).height;
+        }
+
+        return info;
     }
 }
 
@@ -762,14 +1050,27 @@ function initGuidedForms(options = {}) {
         window.guidedForms.destroy();
     }
     
-    // Create new instance
-    window.guidedForms = new GuidedFormSystem(options);
+    // Create new instance with enhanced default options
+    const defaultOptions = {
+        autoAdvance: true,
+        showProgressIndicator: true,
+        smoothTransitions: true,
+        enableSkipping: true,
+        autoStart: true,
+        dynamicSizing: true, // Enable dynamic container sizing by default
+        minContainerHeight: 200,
+        maxContainerHeight: '80vh',
+        sizingPadding: 60,
+        ...options
+    };
+    
+    window.guidedForms = new GuidedFormSystem(defaultOptions);
     
     // Initialize after a short delay to ensure DOM is ready
     setTimeout(() => {
         const success = window.guidedForms.init();
         if (success) {
-            console.log('[GuidedForms] Successfully initialized guided forms');
+            console.log('[GuidedForms] Successfully initialized guided forms with dynamic sizing');
         }
     }, 100);
     

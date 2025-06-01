@@ -108,8 +108,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-right.initial, .data-container-right.collapsed {
-                width: calc(100vw - 160px);
-                max-width: calc(100vw - 160px);
+                width: 408px;
+                max-width: 408px;
                 min-width: 240px;
                 height: 36px;
                 display: flex;
