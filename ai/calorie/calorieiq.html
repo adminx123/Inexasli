@@ -70,7 +70,7 @@
    
 </div> 
 
-<script>
+<script type="module">
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
@@ -80,193 +80,103 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 */
+
+// Import the centralized form persistence system
+import FormPersistence from '../../utility/formPersistence.js';
+
 (function() {
   console.log("Calorie IQ script initializing");
 
-  // JSON storage helpers
-  const setJSON = window.setJSON || function(name, value) {
-    try {
-      if (!name) return false;
-      if (value === undefined) { localStorage.removeItem(name); return true; }
-      localStorage.setItem(name, JSON.stringify(value));
-      console.log(`[CalorieIQ] JSON saved ${name}`);
-      return true;
-    } catch (e) { console.error(`[CalorieIQ] Error storing JSON: ${e}`); return false; }
-  };
-  const getJSON = window.getJSON || function(name, defaultValue) {
-    try {
-      const item = localStorage.getItem(name);
-      return item ? JSON.parse(item) : defaultValue;
-    } catch (e) { console.error(`[CalorieIQ] Error retrieving JSON: ${e}`); return defaultValue; }
-  };
+  // Initialize form persistence with custom data collection for meal inputs
+  FormPersistence.init({
+    moduleName: 'calorie',
+    customFormDataCollector: collectFormData,
+    customFormRepopulator: repopulateForm
+  });
 
-  function saveGridItem(item) {
-    console.log('[CalorieIQ] Saving all form data to JSON');
-    setJSON('calorieIqInput', collectFormData());
-  }
-  
-  // Listen for grid-item-toggled event from datain.js
-  function handleGridItemToggled(event) {
-    console.log('[CalorieIQ] Grid item toggled event received');
-    const item = event.detail.item;
-    const container = item.closest('.grid-container');
-    
-    // Handle single-selection logic for specific containers if needed
-    // (No single-selection containers in calorieiq.html, but keeping structure for consistency)
-    
-    saveGridItem(item);
-  }
-
-  function saveInput(input) {
-    console.log('[CalorieIQ] Saving all form data to JSON');
-    setJSON('calorieIqInput', collectFormData());
-  }
-
+  // Custom form data collection for CalorieIQ including dynamic meal inputs
   function collectFormData() {
-    const formData = { 
-      goal: [], 
-      activity: [], 
-      recommendations: [], 
-      dietType: [], 
-      age: null, 
-      height: null, 
-      weight: null, 
-      sex: null, 
-      meals: []
+    const formData = {
+      age: null,
+      height: null,
+      weight: null,
+      sex: null,
+      meals: {}
     };
     
-    // Collect selected grid items
-    document.querySelectorAll('#calorie-goal .grid-item.selected').forEach(i => formData.goal.push(i.dataset.value));
-    document.querySelectorAll('#calorie-activity .grid-item.selected').forEach(i => formData.activity.push(i.dataset.value));
-    document.querySelectorAll('#calorie-recommendations .grid-item.selected').forEach(i => formData.recommendations.push(i.dataset.value));
-    document.querySelectorAll('#calorie-diet-type .grid-item.selected').forEach(i => formData.dietType.push(i.dataset.value));
+    // Collect basic personal information
+    const age = document.getElementById('calorie-age');
+    if (age && age.value) formData.age = parseInt(age.value, 10);
     
-    // Collect input fields
-    const ageEl = document.getElementById('calorie-age');
-    if (ageEl && ageEl.value.trim()) formData.age = ageEl.value.trim();
+    const height = document.getElementById('calorie-height');
+    if (height && height.value) formData.height = height.value;
     
-    const heightEl = document.getElementById('calorie-height');
-    if (heightEl && heightEl.value.trim()) formData.height = heightEl.value.trim();
+    const weight = document.getElementById('calorie-weight');
+    if (weight && weight.value) formData.weight = weight.value;
     
-    const weightEl = document.getElementById('calorie-weight');
-    if (weightEl && weightEl.value.trim()) formData.weight = weightEl.value.trim();
+    const sex = document.getElementById('calorie-sex');
+    if (sex && sex.value) formData.sex = sex.value;
     
-    const sexEl = document.getElementById('calorie-sex');
-    if (sexEl) formData.sex = sexEl.value;
-    
-    // Collect meal inputs
+    // Collect all meal inputs (including dynamic ones)
     document.querySelectorAll('input[data-meal]').forEach(input => {
       if (input.value.trim()) {
-        formData.meals.push({
-          type: input.dataset.meal || 'meal',
-          content: input.value.trim()
-        });
+        formData.meals[input.dataset.meal] = input.value.trim();
       }
     });
     
     return formData;
   }
 
-  function repopulateForm() {
-    console.log('[CalorieIQ] Repopulating form from JSON storage');
-    const data = getJSON('calorieIqInput', null);
+  // Custom form repopulation for CalorieIQ including dynamic meal inputs
+  function repopulateForm(data) {
     if (!data) return;
     
-    // Repopulate grid selections
-    if (data.goal && Array.isArray(data.goal)) {
-      data.goal.forEach(v => document.querySelector(`#calorie-goal .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+    // Repopulate basic fields
+    if (data.age) {
+      const ageField = document.getElementById('calorie-age');
+      if (ageField) ageField.value = data.age;
     }
     
-    if (data.activity && Array.isArray(data.activity)) {
-      data.activity.forEach(v => document.querySelector(`#calorie-activity .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+    if (data.height) {
+      const heightField = document.getElementById('calorie-height');
+      if (heightField) heightField.value = data.height;
     }
     
-    if (data.recommendations && Array.isArray(data.recommendations)) {
-      data.recommendations.forEach(v => document.querySelector(`#calorie-recommendations .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+    if (data.weight) {
+      const weightField = document.getElementById('calorie-weight');
+      if (weightField) weightField.value = data.weight;
     }
     
-    if (data.dietType && Array.isArray(data.dietType)) {
-      data.dietType.forEach(v => document.querySelector(`#calorie-diet-type .grid-item[data-value="${v}"]`)?.classList.add('selected'));
+    if (data.sex) {
+      const sexField = document.getElementById('calorie-sex');
+      if (sexField) sexField.value = data.sex;
     }
     
-    // Repopulate form fields
-    if (data.age) document.getElementById('calorie-age').value = data.age;
-    if (data.height) document.getElementById('calorie-height').value = data.height;
-    if (data.weight) document.getElementById('calorie-weight').value = data.weight;
-    if (data.sex) document.getElementById('calorie-sex').value = data.sex;
-    
-    // Repopulate meals
-    if (data.meals && Array.isArray(data.meals)) {
-      // Clear existing meal inputs first
-      document.querySelectorAll('input[data-meal]').forEach(input => input.value = '');
-      
-      data.meals.forEach((meal, index) => {
-        const existingInput = document.querySelector(`[data-meal="${meal.type}"]`);
-        if (existingInput) {
-          existingInput.value = meal.content;
-        } else {
-          // Add new meal input if it doesn't exist - NO repositioning during repopulation
-          addMealInput(meal.type, meal.content, true); // Pass skipRepositioning flag
+    // Repopulate meal inputs
+    if (data.meals) {
+      Object.entries(data.meals).forEach(([mealType, value]) => {
+        let input = document.querySelector(`input[data-meal="${mealType}"]`);
+        
+        if (!input && (mealType === 'breakfast' || mealType === 'lunch' || mealType === 'dinner')) {
+          // These are default inputs that should exist
+          console.warn(`[CalorieIQ] Default meal input not found: ${mealType}`);
+          return;
         }
-      });
-    }
-    
-    // Handle legacy foodLog format for backward compatibility
-    if (data.foodLog && !data.meals) {
-      const lines = data.foodLog.split('\n').filter(line => line.trim());
-      lines.forEach((line, index) => {
-        const mealTypes = ['breakfast', 'lunch', 'dinner'];
-        const mealType = mealTypes[index] || `meal${index + 1}`;
-        const existingInput = document.querySelector(`[data-meal="${mealType}"]`);
-        if (existingInput) {
-          existingInput.value = line.trim();
+        
+        if (!input) {
+          // This is a dynamic input that needs to be created
+          addMealInput(mealType, value, true); // true = skip repositioning during repopulation
         } else {
-          addMealInput(mealType, line.trim(), true); // Pass skipRepositioning flag
+          // Input exists, just set the value
+          input.value = value;
         }
       });
     }
   }
 
-  function setupInputHandlers() {
-    // Use event delegation to handle both existing and dynamically added inputs
-    document.addEventListener('change', function(event) {
-      if (event.target.matches('input, textarea, select')) {
-        saveInput(event.target);
-      }
-    });
-    
-    document.addEventListener('input', function(event) {
-      if (event.target.matches('input[data-meal], textarea')) {
-        saveInput(event.target);
-      }
-    });
-    
-    document.addEventListener('blur', function(event) {
-      if (event.target.matches('input[data-meal]')) {
-        saveInput(event.target);
-      }
-    });
-  }
-
+  // Clear local storage using the centralized system
   function clearLocalStorage() {
-    if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
-    setJSON('calorieIqInput', undefined);
-    setJSON('calorieIqResponse', undefined);
-    document.querySelectorAll('.grid-container .grid-item').forEach(i => i.classList.remove('selected'));
-    document.querySelectorAll('input, textarea').forEach(i => i.value = '');
-    document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
-    
-    // Remove any additional meal inputs (keep only breakfast, lunch, dinner)
-    const mealInputs = document.querySelectorAll('input[data-meal]');
-    mealInputs.forEach((input, index) => {
-      if (index >= 3) {
-        input.closest('div').remove();
-      }
-    });
-    
-    // Ensure the add button is recreated after clearing
-    console.log('[CalorieIQ] Recreating add button after clearing data');
-    ensureAddButtonExists();
+    return FormPersistence.clearLocalStorage();
   }
 
   // Reintroduce addMealInput for dynamic meal inputs
@@ -314,7 +224,7 @@
         ensureAddButtonExists();
       }
       // Save the current state after removing the input
-      setJSON('calorieIqInput', collectFormData());
+      FormPersistence.saveFormData();
     });
     removeBtn.addEventListener('mouseenter', () => { removeBtn.style.backgroundColor = '#e9e9e9'; });
     removeBtn.addEventListener('mouseleave', () => { removeBtn.style.backgroundColor = '#fff'; });
@@ -347,6 +257,9 @@
         ensureAddButtonExists();
       });
       input.focus();
+      
+      // Save form data after adding new input
+      FormPersistence.saveFormData();
     }
   }
 
@@ -431,7 +344,7 @@
 
   async function handleGenerateCalorieIq() {
     try {
-      const formData = getJSON('calorieIqInput');
+      const formData = FormPersistence.getSavedFormData();
       if (!formData) { 
         alert('Please complete the form before generating a calorie plan.'); 
         return;
@@ -443,24 +356,42 @@
         'calorie',
         async () => {
           const apiUrl = 'https://calorie.4hm7q4q75z.workers.dev/';
-          const resp = await fetch(apiUrl, { 
+          const response = await fetch(apiUrl, { 
             method: 'POST', 
             headers: {'Content-Type':'application/json'}, 
             body: JSON.stringify(formData) 
           });
-          if (!resp.ok) throw new Error(`HTTP error! Status: ${resp.status}`);
-          return await resp.json();
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          
+          const responseData = await response.json();
+          if (responseData.message !== 'Success') {
+            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+          }
+          
+          return responseData;
         }
       );
 
-      setJSON('calorieIqResponse', result);
-      document.dispatchEvent(new CustomEvent('api-response-received', { 
-        detail: { module: 'calorieiq', type: 'worker-response', timestamp: Date.now() } 
-      }));
+      // Store the response using centralized system
+      FormPersistence.saveResponseData(result);
       
-    } catch (e) {
-      console.error('[CalorieIQ] Error:', e);
-      alert('An error occurred while generating your calorie plan.');
+      // Dispatch an event to notify dataout.js that a response was received
+      const event = new CustomEvent('api-response-received', {
+        detail: {
+          module: 'calorieiq',
+          type: 'worker-response',
+          timestamp: Date.now()
+        }
+      });
+      document.dispatchEvent(event);
+      console.log('[CalorieIQ] Dispatched api-response-received event');
+      
+    } catch (error) {
+      console.error('[CalorieIQ] Error generating calorie plan:', error);
+      alert('An error occurred while generating your calorie plan. Please try again later.');
     }
   }
 
@@ -487,16 +418,6 @@
       guidedToggleBtn.removeEventListener('click', toggleGuidedForms); // Prevent duplicates
       guidedToggleBtn.addEventListener('click', toggleGuidedForms);
     }
-    
-    // Set up grid item event listener
-    document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove existing to prevent duplicates
-    document.addEventListener('grid-item-toggled', handleGridItemToggled);
-    
-    // Initialize form and handlers
-    setupInputHandlers();
-    
-    // Repopulate form BEFORE creating add button to avoid race conditions
-    repopulateForm();
     
     // Create the add button AFTER form is fully repopulated
     setTimeout(() => {
@@ -556,8 +477,13 @@
     setTimeout(initialize, 100); // Small delay to ensure DOM is updated
   });
   
-  // Export for potential external access
-  window.calorieIq = { saveGridItem, saveInput, clearLocalStorage, getFormData: collectFormData };
+  // Export functions for external access
+  window.calorieIq = { 
+    clearLocalStorage, 
+    addMealInput,
+    getFormData: () => FormPersistence.getSavedFormData(),
+    saveFormData: () => FormPersistence.saveFormData()
+  };
 })();
 </script>
 
