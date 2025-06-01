@@ -93,55 +93,94 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             const content = await response.text();
-            dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
-                <div class="data-content">${content}</div>
-            `;
-
-            // Re-initialize grid items after content load
-            initializeGridItems();
             
-            // Auto-initialize guided forms for all form content
-            setTimeout(() => {
-                const hasFormElements = dataContainer.querySelector('.row1, .grid-container, .mobile-container, .device-container');
-                if (hasFormElements) {
-                    console.log('[DataIn] Auto-initializing guided forms for loaded content');
+            // Check if content contains form elements that need guided forms
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            const hasFormElements = tempDiv.querySelector('.row1, .grid-container, .mobile-container, .device-container');
+            
+            if (hasFormElements) {
+                console.log('[DataIn] Form content detected, preparing guided forms initialization');
+                
+                // Insert content with initial hiding to prevent flash
+                dataContainer.innerHTML = `
+                    <span class="close-data-container">-</span>
+                    <div class="data-content" style="opacity: 0; transition: opacity 0.2s ease;">${content}</div>
+                `;
+                
+                // Function to show content after guided forms is ready
+                const showContentAfterGuidedForms = () => {
+                    // Re-initialize grid items
+                    initializeGridItems();
                     
-                    // Load guided forms script if not already loaded
-                    if (!window.GuidedFormSystem && !document.querySelector('script[src*="guidedForms.js"]')) {
-                        // Disable auto-initialization from the script itself
-                        window.autoInitGuidedForms = false;
-                        
-                        const guidedFormsScript = document.createElement('script');
-                        guidedFormsScript.src = '/utility/guidedForms.js';
-                        guidedFormsScript.onload = () => {
-                            console.log('[DataIn] Guided forms script loaded');
-                            // Auto-initialize guided forms immediately after script loads
-                            if (window.initGuidedForms) {
-                                console.log('[DataIn] Auto-starting guided forms');
-                                window.initGuidedForms({
-                                    autoAdvance: true,
-                                    showProgressIndicator: true,
-                                    smoothTransitions: true,
-                                    enableSkipping: true,
-                                    autoStart: true
-                                });
-                            }
-                        };
-                        document.head.appendChild(guidedFormsScript);
-                    } else if (window.initGuidedForms) {
-                        // Script already loaded, auto-initialize immediately
-                        console.log('[DataIn] Auto-starting guided forms (script already loaded)');
-                        window.initGuidedForms({
-                            autoAdvance: true,
-                            showProgressIndicator: true,
-                            smoothTransitions: true,
-                            enableSkipping: true,
-                            autoStart: true
-                        });
+                    // Show content with smooth transition
+                    const dataContent = dataContainer.querySelector('.data-content');
+                    if (dataContent) {
+                        dataContent.style.opacity = '1';
                     }
+                    
+                    console.log('[DataIn] Content revealed after guided forms initialization');
+                };
+                
+                // Load guided forms script if not already loaded
+                if (!window.GuidedFormSystem && !document.querySelector('script[src*="guidedForms.js"]')) {
+                    // Disable auto-initialization from the script itself
+                    window.autoInitGuidedForms = false;
+                    
+                    const guidedFormsScript = document.createElement('script');
+                    guidedFormsScript.src = '/utility/guidedForms.js';
+                    guidedFormsScript.onload = () => {
+                        console.log('[DataIn] Guided forms script loaded');
+                        // Initialize guided forms immediately after script loads
+                        if (window.initGuidedForms) {
+                            console.log('[DataIn] Auto-starting guided forms');
+                            const guidedFormsInstance = window.initGuidedForms({
+                                autoAdvance: true,
+                                showProgressIndicator: true,
+                                smoothTransitions: true,
+                                enableSkipping: true,
+                                autoStart: true
+                            });
+                            
+                            // Small delay to ensure guided forms has processed the content
+                            setTimeout(showContentAfterGuidedForms, 50);
+                        } else {
+                            // Fallback if guided forms fails to load
+                            showContentAfterGuidedForms();
+                        }
+                    };
+                    guidedFormsScript.onerror = () => {
+                        console.warn('[DataIn] Guided forms script failed to load, showing content without guided forms');
+                        showContentAfterGuidedForms();
+                    };
+                    document.head.appendChild(guidedFormsScript);
+                } else if (window.initGuidedForms) {
+                    // Script already loaded, initialize immediately
+                    console.log('[DataIn] Auto-starting guided forms (script already loaded)');
+                    const guidedFormsInstance = window.initGuidedForms({
+                        autoAdvance: true,
+                        showProgressIndicator: true,
+                        smoothTransitions: true,
+                        enableSkipping: true,
+                        autoStart: true
+                    });
+                    
+                    // Small delay to ensure guided forms has processed the content
+                    setTimeout(showContentAfterGuidedForms, 50);
+                } else {
+                    // No guided forms available, show content normally
+                    showContentAfterGuidedForms();
                 }
-            }, 300);
+            } else {
+                // No form elements, insert content normally without guided forms
+                dataContainer.innerHTML = `
+                    <span class="close-data-container">-</span>
+                    <div class="data-content">${content}</div>
+                `;
+                
+                // Re-initialize grid items for non-form content
+                initializeGridItems();
+            }
 
             // Dispatch custom event to notify that data-in content has loaded
             document.dispatchEvent(new CustomEvent('data-in-loaded', {
