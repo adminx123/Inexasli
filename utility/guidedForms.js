@@ -212,7 +212,7 @@ class GuidedFormSystem {
      * Analyze individual step to determine its characteristics
      */
     analyzeStep(row, index) {
-        const label = row.querySelector('.category-label');
+        const label = row.getAttribute('data-step-label') || row.id || `Step ${index + 1}`;
         const gridContainer = row.querySelector('.grid-container');
         const inputs = row.querySelectorAll('input:not([type="button"]):not([type="submit"])');
         const textareas = row.querySelectorAll('textarea');
@@ -312,7 +312,7 @@ class GuidedFormSystem {
         return {
             index: this.steps.length,
             element: row,
-            label: label ? label.textContent.trim() : `Step ${index + 1}`,
+            label: label,
             type: stepType,
             isRequired,
             validationRule,
