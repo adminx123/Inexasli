@@ -135,10 +135,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 left: 0;
                 transform: none;
                 z-index: 11000; /* Higher z-index when expanded to appear over grid */
-                border: 2px solid #000;
-                border-top: none;
-                border-radius: 0 0 8px 8px;
-                box-shadow: -4px 4px 0 #000;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
                 padding: 0;
             }
 
@@ -232,10 +231,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     top: 0;
                     right: 0;
                     transform: none;
-                    border: 2px solid #000;
-                    border-top: none;
-                    border-radius: 0 0 8px 8px;
-                    box-shadow: -4px 4px 0 #000;
+                    border-radius: 0;
+                    border: none;
+                    box-shadow: none;
                     padding: 0;
                 }
 
