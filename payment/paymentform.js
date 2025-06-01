@@ -418,13 +418,11 @@ function createPaymentCornerButton() {
     button.title = 'Premium Features'; // Add title for accessibility
     
     // Apply 3D tab styling - matching dataOverwrite button
-    button.style.backgroundColor = '#f5f5f5';
+    button.style.backgroundColor = 'transparent';
     button.style.color = '#000';
-    button.style.border = '2px solid #000';
-    button.style.borderRight = 'none'; // Remove right border to look tucked into corner
-    button.style.borderTop = 'none'; // Remove top border to look tucked into corner
-    button.style.borderRadius = '0 0 0 8px'; // Rounded only on bottom left corner
-    button.style.boxShadow = '-4px 4px 0 #000'; // Shadow on left side
+    button.style.border = 'none';
+    button.style.borderRadius = '0';
+    button.style.boxShadow = 'none';
     button.style.padding = '0'; // Reduced padding
     button.style.width = '36px'; // Match dataOverwrite button
     button.style.height = '36px'; // Match dataOverwrite button
