@@ -435,7 +435,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (dataLabel) {
             dataLabel.addEventListener('click', function (e) {
                 e.preventDefault();
-                toggleDataContainer();
+                e.stopPropagation(); // Stop event from bubbling up to container
+                
+                // Use the same logic as container click - call toggleDataContainer
+                if (dataContainer.dataset.state !== 'expanded') {
+                    toggleDataContainer();
+                }
             });
         } else {
             
@@ -535,7 +540,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (newLabel) {
                 newLabel.addEventListener('click', function (e) {
                     e.preventDefault();
-                    toggleDataContainer();
+                    e.stopPropagation(); // Stop event from bubbling up to container
+                    
+                    // Use the same logic as container click - call toggleDataContainer
+                    if (dataContainer.dataset.state !== 'expanded') {
+                        toggleDataContainer();
+                    }
                 });
             }
         }
