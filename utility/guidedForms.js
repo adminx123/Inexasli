@@ -105,17 +105,27 @@ class GuidedFormSystem {
      */
     initializeDataContainerRef() {
         // Find the data container that might need dynamic sizing
-        this.dataContainer = document.querySelector('.data-container-left.expanded') || 
-                           document.querySelector('.data-container-left') ||
-                           this.container.closest('.data-container-left');
+        this.dataContainer = document.querySelector('.data-container-left.expanded');
+        
+        // If no expanded container found, look for any data-container-left
+        if (!this.dataContainer) {
+            this.dataContainer = document.querySelector('.data-container-left') || 
+                               this.container.closest('.data-container-left');
+        }
         
         if (this.dataContainer && this.config.dynamicSizing) {
-            // Store original height for restoration later
-            const computedStyle = window.getComputedStyle(this.dataContainer);
-            this.originalContainerHeight = computedStyle.height;
-            console.log('[GuidedForms] Dynamic sizing enabled for data container:', this.originalContainerHeight);
+            // Only store original height if container is actually expanded
+            if (this.dataContainer.classList.contains('expanded')) {
+                const computedStyle = window.getComputedStyle(this.dataContainer);
+                this.originalContainerHeight = computedStyle.height;
+                console.log('[GuidedForms] Dynamic sizing enabled for expanded data container:', this.originalContainerHeight);
+            } else {
+                console.log('[GuidedForms] Data container found but not expanded, will wait for expansion');
+                // Clear reference until container is expanded
+                this.dataContainer = null;
+            }
             
-            // Listen for data container state changes
+            // Set up listeners regardless of current state
             this.setupDataContainerListeners();
         }
     }
@@ -126,7 +136,10 @@ class GuidedFormSystem {
     setupDataContainerListeners() {
         // Listen for data-in state changes to reapply dynamic sizing
         document.addEventListener('datain-state-changed', (event) => {
-            if (event.detail?.state === 'expanded' && this.isInitialized) {
+            const state = event.detail?.state;
+            console.log('[GuidedForms] Data container state changed to:', state);
+            
+            if (state === 'expanded' && this.isInitialized) {
                 console.log('[GuidedForms] Data container expanded, reapplying dynamic sizing');
                 // Update our reference to the expanded container
                 this.dataContainer = document.querySelector('.data-container-left.expanded');
@@ -137,6 +150,15 @@ class GuidedFormSystem {
                         this.adjustContainerSize(this.steps[this.currentStep]);
                     }, 100);
                 }
+            } else if (state === 'initial' || state === 'collapsed') {
+                console.log('[GuidedForms] Data container collapsed, removing dynamic height override');
+                // When collapsing, remove our height override to allow normal collapse behavior
+                if (this.dataContainer) {
+                    this.dataContainer.style.height = '';
+                    this.dataContainer.style.transition = '';
+                }
+                // Clear the reference since container is no longer expanded
+                this.dataContainer = null;
             }
         });
 
@@ -546,9 +568,21 @@ class GuidedFormSystem {
             return;
         }
 
+        // Only apply dynamic sizing if the container is actually expanded
+        if (!this.dataContainer.classList.contains('expanded')) {
+            console.log('[GuidedForms] Container not expanded, skipping dynamic sizing');
+            return;
+        }
+
         // Small delay to ensure step is fully rendered
         setTimeout(() => {
             try {
+                // Double-check the container is still expanded (user might have collapsed it)
+                if (!this.dataContainer || !this.dataContainer.classList.contains('expanded')) {
+                    console.log('[GuidedForms] Container collapsed during sizing, aborting');
+                    return;
+                }
+
                 // Calculate the content height needed for this step
                 const stepHeight = this.calculateStepHeight(step);
                 const containerHeight = this.calculateOptimalContainerHeight(stepHeight);
@@ -727,12 +761,12 @@ class GuidedFormSystem {
             }
         });
         
-        // Apply dynamic sizing for the first step
-        if (this.steps.length > 0) {
+        // Apply dynamic sizing for the first step only if container is expanded
+        if (this.steps.length > 0 && this.dataContainer && this.dataContainer.classList.contains('expanded')) {
             this.adjustContainerSize(this.steps[0]);
         }
         
-        console.log('[GuidedForms] Initialized first step with dynamic sizing');
+        console.log('[GuidedForms] Initialized first step with conditional dynamic sizing');
     }
     
     /**
@@ -918,20 +952,41 @@ class GuidedFormSystem {
     }
 
     /**
+     * Clean up dynamic sizing when container collapses
+     */
+    cleanupDynamicSizing() {
+        if (this.dataContainer) {
+            // Remove any height overrides
+            this.dataContainer.style.height = '';
+            this.dataContainer.style.transition = '';
+            console.log('[GuidedForms] Cleaned up dynamic sizing overrides');
+        }
+        
+        // Clear container reference
+        this.dataContainer = null;
+    }
+
+    /**
      * Restore original container size when exiting guided mode
      */
     restoreOriginalContainerSize() {
         if (this.dataContainer && this.originalContainerHeight && this.config.dynamicSizing) {
-            console.log('[GuidedForms] Restoring original container height:', this.originalContainerHeight);
-            this.dataContainer.style.transition = 'height 0.3s ease-in-out';
-            this.dataContainer.style.height = this.originalContainerHeight;
-            
-            // Remove the transition after completion
-            setTimeout(() => {
-                if (this.dataContainer) {
-                    this.dataContainer.style.transition = '';
-                }
-            }, 300);
+            // Only restore if container is still expanded
+            if (this.dataContainer.classList.contains('expanded')) {
+                console.log('[GuidedForms] Restoring original container height:', this.originalContainerHeight);
+                this.dataContainer.style.transition = 'height 0.3s ease-in-out';
+                this.dataContainer.style.height = this.originalContainerHeight;
+                
+                // Remove the transition after completion
+                setTimeout(() => {
+                    if (this.dataContainer) {
+                        this.dataContainer.style.transition = '';
+                    }
+                }, 300);
+            } else {
+                // Container is collapsed, just clean up
+                this.cleanupDynamicSizing();
+            }
         }
     }
     
