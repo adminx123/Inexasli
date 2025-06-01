@@ -101,69 +101,10 @@ I often took charge of group projects at school"></textarea>
 
 <script>
 (function(){
-    const setJSON = window.setJSON || function(name, value) {
-        try {
-            if (!name) return false;
-            if (value === undefined) { localStorage.removeItem(name); return true; }
-            localStorage.setItem(name, JSON.stringify(value));
-            console.log(`[EnneagramIQ] JSON saved ${name}`);
-            return true;
-        } catch (e) { console.error(`[EnneagramIQ] Error storing JSON: ${e}`); return false; }
-    };
-    const getJSON = window.getJSON || function(name, defaultValue) {
-        try {
-            const item = localStorage.getItem(name);
-            return item ? JSON.parse(item) : defaultValue;
-        } catch (e) { console.error(`[EnneagramIQ] Error retrieving JSON: ${e}`); return defaultValue; }
-    };
-
-    function collectFormData(){
-        const data={ self:null, traits:[], behaviors:[], motivations:null, fears:null, stress:null, growth:null, childhood:null };
-        const s=document.getElementById('enneagram-self'); if(s&&s.value.trim()) data.self=s.value.trim();
-        document.querySelectorAll('#enneagram-traits .grid-item.selected').forEach(i=>data.traits.push(i.dataset.value));
-        document.querySelectorAll('#enneagram-behaviors .grid-item.selected').forEach(i=>data.behaviors.push(i.dataset.value));
-        const m=document.getElementById('enneagram-motivations'); if(m&&m.value.trim()) data.motivations=m.value.trim();
-        const f=document.getElementById('enneagram-fears'); if(f&&f.value.trim()) data.fears=f.value.trim();
-        const st=document.getElementById('enneagram-stress'); if(st&&st.value.trim()) data.stress=st.value.trim();
-        const gr=document.getElementById('enneagram-growth'); if(gr&&gr.value.trim()) data.growth=gr.value.trim();
-        const c=document.getElementById('enneagram-childhood'); if(c&&c.value.trim()) data.childhood=c.value.trim();
-        return data;
-    }
-
-    function saveGridItem(item) {
-        console.log('[EnneagramIQ] Saving all form data to JSON');
-        setJSON('enneagramIqInput', collectFormData());
-    }
-    
     // Listen for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
         console.log('[EnneagramIQ] Grid item toggled event received');
-        const item = event.detail.item;
-        saveGridItem(item);
-    }
-
-    function repopulateForm(){
-        const d=getJSON('enneagramIqInput',null); if(!d) return;
-        if(d.self) document.getElementById('enneagram-self').value=d.self;
-        (d.traits||[]).forEach(v=>{const e=document.querySelector(`#enneagram-traits .grid-item[data-value="${v}"]`); if(e) e.classList.add('selected');});
-        (d.behaviors||[]).forEach(v=>{const e=document.querySelector(`#enneagram-behaviors .grid-item[data-value="${v}"]`); if(e) e.classList.add('selected');});
-        if(d.motivations) document.getElementById('enneagram-motivations').value=d.motivations;
-        if(d.fears) document.getElementById('enneagram-fears').value=d.fears;
-        if(d.stress) document.getElementById('enneagram-stress').value=d.stress;
-        if(d.growth) document.getElementById('enneagram-growth').value=d.growth;
-        if(d.childhood) document.getElementById('enneagram-childhood').value=d.childhood;
-    }
-
-    function saveAll(){ 
-        setJSON('enneagramIqInput', collectFormData()); 
-    }
-
-    function clearLocalStorage(){ 
-        if(!confirm('Clear all saved data?')) return; 
-        setJSON('enneagramIqInput', undefined); 
-        setJSON('enneagramIqResponse', undefined); 
-        document.querySelectorAll('.grid-item.selected').forEach(i=>i.classList.remove('selected')); 
-        document.querySelectorAll('textarea').forEach(t=>t.value=''); 
+        // UI behavior only - persistence handled centrally
     }
 
     async function generateEnneagram(){
@@ -173,7 +114,7 @@ I often took charge of group projects at school"></textarea>
             'generate-enneagram-btn',
             'enneagram',
             async () => {
-                const formData = getJSON('enneagramIqInput');
+                const formData = window.FormPersistence.getSavedFormData();
                 if (!formData) {
                     throw new Error('Please complete the form before generating.');
                 }
@@ -196,7 +137,7 @@ I often took charge of group projects at school"></textarea>
                     throw new Error(`An error occurred: ${data.message || data.error || ''}`);
                 }
                 
-                setJSON('enneagramIqResponse', data);
+                window.FormPersistence.saveResponseData(data);
                 
                 document.dispatchEvent(new CustomEvent('api-response-received', { 
                     detail: { module: 'enneagramiq', type: 'worker-response', timestamp: Date.now() } 
@@ -211,12 +152,9 @@ I often took charge of group projects at school"></textarea>
     }
 
     // Initialization
-    // Instead of direct click handlers, listen for the custom event from datain.js
     document.addEventListener('grid-item-toggled', handleGridItemToggled);
-    repopulateForm();
-    document.querySelectorAll('textarea').forEach(t=>t.addEventListener('change',saveAll));
     document.getElementById('generate-enneagram-btn').addEventListener('click',generateEnneagram);
-    document.getElementById('clear-enneagram-btn').addEventListener('click',clearLocalStorage);
+    document.getElementById('clear-enneagram-btn').addEventListener('click', window.FormPersistence.clearLocalStorage);
 })();
 </script>
 </div> <!-- Close mobile-container -->
