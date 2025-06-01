@@ -65,22 +65,13 @@ Lower back strain"></textarea>
  * jurisdictions worldwide.
 */
 
-// Import the centralized form persistence system
-import FormPersistence from '../../utility/formPersistence.js';
-
 (function() {
     console.log("Fitness IQ script initializing");
-
-    // Initialize form persistence with single-selection containers
-    FormPersistence.init({
-        moduleName: 'fitness',
-        singleSelection: ['fitness-level', 'fitness-home-exercises']
-    });
 
     // Handle the generate button click
     async function handleGenerateFitnessIq() {
         try {
-            const formData = FormPersistence.getSavedFormData();
+            const formData = window.FormPersistence.getSavedFormData();
             if (!formData) {
                 alert('Please complete the form before generating a fitness plan.');
                 return;
@@ -114,7 +105,7 @@ import FormPersistence from '../../utility/formPersistence.js';
             );
 
             // Store the response using centralized system
-            FormPersistence.saveResponseData(result);
+            window.FormPersistence.saveResponseData(result);
             
             // Dispatch an event to notify dataout.js that a response was received
             const event = new CustomEvent('api-response-received', {
@@ -136,211 +127,18 @@ import FormPersistence from '../../utility/formPersistence.js';
     // Initialization
     document.getElementById('generate-fitness-btn').addEventListener('click', handleGenerateFitnessIq);
     document.getElementById('clear-fitness-btn').addEventListener('click', () => {
-        FormPersistence.clearLocalStorage();
+        window.FormPersistence.clearLocalStorage();
     });
 
     // For external access if needed
     window.fitnessIq = {
-        getFormData: () => FormPersistence.getSavedFormData(),
-        saveFormData: () => FormPersistence.saveFormData(),
-        clearLocalStorage: () => FormPersistence.clearLocalStorage()
+        getFormData: () => window.FormPersistence.getSavedFormData(),
+        saveFormData: () => window.FormPersistence.saveFormData(),
+        clearLocalStorage: () => window.FormPersistence.clearLocalStorage()
     };
 })();
 </script>
 
-(function() {
-    console.log("Fitness IQ script initializing");
-
-    // Initialize form persistence with single-selection containers
-    FormPersistence.init({
-        moduleName: 'fitness',
-        singleSelection: ['fitness-level', 'fitness-home-exercises']
-    });
-
-    // Handle the generate button click
-    async function handleGenerateFitnessIq() {
-        try {
-            const formData = FormPersistence.getSavedFormData();
-            if (!formData) {
-                alert('Please complete the form before generating a fitness plan.');
-                return;
-            }
-
-            // Use enhanced loading with educational facts
-            const result = await window.enhancedLoading(
-                'generate-fitness-btn',
-                'fitness',
-                async () => {
-                    const apiUrl = 'https://fitness.4hm7q4q75z.workers.dev/';
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    
-                    const responseData = await response.json();
-                    if (responseData.message !== 'Success') {
-                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                    }
-                    
-                    return responseData;
-                }
-            );
-
-            // Store the response using centralized system
-            FormPersistence.saveResponseData(result);
-            
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'fitnessiq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
-                }
-            });
-            document.dispatchEvent(event);
-            console.log('[FitnessIQ] Dispatched api-response-received event');
-            
-        } catch (error) {
-            console.error('[FitnessIQ] Error generating fitness plan:', error);
-            alert('An error occurred while generating your fitness plan. Please try again later.');
-        }
-    }
-
-    // Initialization
-    document.getElementById('generate-fitness-btn').addEventListener('click', handleGenerateFitnessIq);
-    document.getElementById('clear-fitness-btn').addEventListener('click', () => {
-        FormPersistence.clearLocalStorage();
-    });
-
-    // For external access if needed
-    window.fitnessIq = {
-        getFormData: () => FormPersistence.getSavedFormData(),
-        saveFormData: () => FormPersistence.saveFormData(),
-        clearLocalStorage: () => FormPersistence.clearLocalStorage()
-    };
-})();
-        
-        // Repopulate multi-selection items
-        data.equipment?.forEach(item => {
-            const element = document.querySelector(`#fitness-equipment .grid-item[data-value="${item}"]`);
-            if (element) element.classList.add('selected');
-        });
-        
-        data.limitations?.forEach(item => {
-            const element = document.querySelector(`#fitness-limitations .grid-item[data-value="${item}"]`);
-            if (element) element.classList.add('selected');
-        });
-        
-        data.preferences?.forEach(item => {
-            const element = document.querySelector(`#fitness-preferences .grid-item[data-value="${item}"]`);
-            if (element) element.classList.add('selected');
-        });
-        
-        // Repopulate other numeric inputs
-        if (data.days) document.getElementById('fitness-days').value = data.days;
-        if (data.timePerSession) document.getElementById('fitness-time-per-session').value = data.timePerSession;
-    }
-
-    // Handle input changes
-    function setupInputHandlers() {
-        document.querySelectorAll('input, textarea, select').forEach(element => {
-            element.addEventListener('change', function() {
-                saveInput(this);
-            });
-        });
-    }
-
-    // Clear saved data from localStorage
-    function clearLocalStorage() {
-        if (!confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) return;
-        
-        setJSON('fitnessIqInput', undefined);
-        setJSON('fitnessIqResponse', undefined);
-        
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => item.classList.remove('selected'));
-        document.querySelectorAll('input:not([type="button"]):not([type="submit"])').forEach(input => input.value = '');
-        document.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
-        document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
-    }
-
-    // Handle the generate button click
-    async function handleGenerateFitnessIq() {
-        try {
-            const formData = getJSON('fitnessIqInput');
-            if (!formData) {
-                alert('Please complete the form before generating a fitness plan.');
-                return;
-            }
-
-            // Use enhanced loading with educational facts
-            const result = await window.enhancedLoading(
-                'generate-fitness-btn',
-                'fitness',
-                async () => {
-                    const apiUrl = 'https://fitness.4hm7q4q75z.workers.dev/';
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    
-                    const responseData = await response.json();
-                    if (responseData.message !== 'Success') {
-                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                    }
-                    
-                    return responseData;
-                }
-            );
-
-            // Store the response
-            setJSON('fitnessIqResponse', result);
-            
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'fitnessiq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
-                }
-            });
-            document.dispatchEvent(event);
-            console.log('[FitnessIQ] Dispatched api-response-received event');
-            
-        } catch (error) {
-            console.error('[FitnessIQ] Error generating fitness plan:', error);
-            alert('An error occurred while generating your fitness plan. Please try again later.');
-        }
-    }
-
-    // Initialization
-    // Instead of direct click handlers, listen for the custom event from datain.js
-    document.addEventListener('grid-item-toggled', handleGridItemToggled);
-    repopulateForm();
-    setupInputHandlers();
-    document.getElementById('generate-fitness-btn').addEventListener('click', handleGenerateFitnessIq);
-    document.getElementById('clear-fitness-btn').addEventListener('click', clearLocalStorage);
-
-    // For external access if needed
-    window.fitnessIq = {
-        saveGridItem,
-        saveInput,
-        collectFormData,
-        clearLocalStorage
-    };
 })();
 </script>
 </div> <!-- Close mobile-container -->

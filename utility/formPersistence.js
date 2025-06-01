@@ -227,50 +227,8 @@ class FormPersistence {
             return this.customFormDataCollector();
         }
 
-        // Generic form data collection
-        const formData = {};
-
-        // Collect from text inputs, textareas, and selects
-        document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], textarea, select').forEach(element => {
-            if (element.id && element.value) {
-                const fieldName = this.getFieldName(element.id);
-                
-                if (element.type === 'number') {
-                    formData[fieldName] = parseInt(element.value, 10) || parseFloat(element.value);
-                } else {
-                    formData[fieldName] = element.value;
-                }
-            }
-        });
-
-        // Collect from grid containers
-        document.querySelectorAll('.grid-container').forEach(container => {
-            const fieldName = this.getFieldName(container.id);
-            const selectedItems = container.querySelectorAll('.grid-item.selected');
-            
-            if (selectedItems.length > 0) {
-                if (this.singleSelectionContainers.has(container.id) || 
-                    this.isInferredSingleSelection(container)) {
-                    // Single selection - store the first selected value
-                    formData[fieldName] = selectedItems[0].dataset.value || selectedItems[0].textContent.trim();
-                } else {
-                    // Multi selection - store array of values
-                    formData[fieldName] = Array.from(selectedItems).map(item => 
-                        item.dataset.value || item.textContent.trim()
-                    );
-                }
-            } else {
-                // No items selected
-                if (this.singleSelectionContainers.has(container.id) || 
-                    this.isInferredSingleSelection(container)) {
-                    formData[fieldName] = null;
-                } else {
-                    formData[fieldName] = [];
-                }
-            }
-        });
-
-        return formData;
+        // Use generic collection logic
+        return this.collectGenericFormData();
     }
 
     /**
@@ -293,43 +251,17 @@ class FormPersistence {
     repopulateForm() {
         console.log(`[FormPersistence] Repopulating form from JSON storage for ${this.moduleName}`);
         
-        // Use custom repopulator if provided
-        if (this.customFormRepopulator) {
-            const data = getJSON(this.storageKeys.input, null);
-            if (data) {
-                this.customFormRepopulator(data);
-            }
-            return;
-        }
-
-        // Generic form repopulation
         const data = getJSON(this.storageKeys.input, null);
         if (!data) return;
 
-        // Repopulate text inputs, textareas, and selects
-        Object.entries(data).forEach(([fieldName, value]) => {
-            if (value === null || value === undefined) return;
+        // Use custom repopulator if provided
+        if (this.customFormRepopulator) {
+            this.customFormRepopulator(data);
+            return;
+        }
 
-            // Try to find direct element by ID with module prefix
-            const elementId = `${this.moduleName}-${fieldName}`;
-            let element = document.getElementById(elementId);
-            
-            // If not found, try without prefix
-            if (!element) {
-                element = document.getElementById(fieldName);
-            }
-
-            if (element && (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT')) {
-                element.value = value;
-                return;
-            }
-
-            // Handle grid containers
-            const containerElement = document.getElementById(elementId) || document.getElementById(fieldName);
-            if (containerElement && containerElement.classList.contains('grid-container')) {
-                this.repopulateGridContainer(containerElement, value);
-            }
-        });
+        // Use generic repopulation logic
+        this.repopulateGenericForm(data);
     }
 
     /**
@@ -447,6 +379,89 @@ class FormPersistence {
      */
     getStorageKeys() {
         return { ...this.storageKeys };
+    }
+
+    /**
+     * Generic form data collection (public method for use in custom collectors)
+     * @returns {Object} The collected form data using generic logic
+     */
+    collectGenericFormData() {
+        const formData = {};
+
+        // Collect from text inputs, textareas, and selects
+        document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], textarea, select').forEach(element => {
+            if (element.id && element.value) {
+                const fieldName = this.getFieldName(element.id);
+                
+                if (element.type === 'number') {
+                    formData[fieldName] = parseInt(element.value, 10) || parseFloat(element.value);
+                } else {
+                    formData[fieldName] = element.value;
+                }
+            }
+        });
+
+        // Collect from grid containers
+        document.querySelectorAll('.grid-container').forEach(container => {
+            const fieldName = this.getFieldName(container.id);
+            const selectedItems = container.querySelectorAll('.grid-item.selected');
+            
+            if (selectedItems.length > 0) {
+                if (this.singleSelectionContainers.has(container.id) || 
+                    this.isInferredSingleSelection(container)) {
+                    // Single selection - store the first selected value
+                    formData[fieldName] = selectedItems[0].dataset.value || selectedItems[0].textContent.trim();
+                } else {
+                    // Multi selection - store array of values
+                    formData[fieldName] = Array.from(selectedItems).map(item => 
+                        item.dataset.value || item.textContent.trim()
+                    );
+                }
+            } else {
+                // No items selected
+                if (this.singleSelectionContainers.has(container.id) || 
+                    this.isInferredSingleSelection(container)) {
+                    formData[fieldName] = null;
+                } else {
+                    formData[fieldName] = [];
+                }
+            }
+        });
+
+        return formData;
+    }
+
+    /**
+     * Generic form repopulation (public method for use in custom repopulators)
+     * @param {Object} data - The data to use for repopulation
+     */
+    repopulateGenericForm(data) {
+        if (!data) return;
+
+        // Repopulate text inputs, textareas, and selects
+        Object.entries(data).forEach(([fieldName, value]) => {
+            if (value === null || value === undefined) return;
+
+            // Try to find direct element by ID with module prefix
+            const elementId = `${this.moduleName}-${fieldName}`;
+            let element = document.getElementById(elementId);
+            
+            // If not found, try without prefix
+            if (!element) {
+                element = document.getElementById(fieldName);
+            }
+
+            if (element && (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT')) {
+                element.value = value;
+                return;
+            }
+
+            // Handle grid containers
+            const containerElement = document.getElementById(elementId) || document.getElementById(fieldName);
+            if (containerElement && containerElement.classList.contains('grid-container')) {
+                this.repopulateGridContainer(containerElement, value);
+            }
+        });
     }
 }
 
