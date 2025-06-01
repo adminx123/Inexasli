@@ -56,6 +56,14 @@ setTimeout(() => {
 }, 300);
 
 document.addEventListener('DOMContentLoaded', async function () {
+    // Load BoxIcons if not already loaded
+    if (!document.querySelector('link[href*="boxicons"]')) {
+        const boxIconsLink = document.createElement('link');
+        boxIconsLink.href = 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css';
+        boxIconsLink.rel = 'stylesheet';
+        document.head.appendChild(boxIconsLink);
+    }
+    
     // Check if the "prompt" cookie is more than 10 minutes old
     const promptCookie = getCookie("prompt");
     const currentTime = Date.now();
@@ -105,8 +113,19 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Insert content with initial hiding to prevent flash
                 dataContainer.innerHTML = `
                     <span class="close-data-container"></span>
+                    <div class="utility-buttons-container" style="position: absolute; top: 4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
+                        <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-trash" style="font-size: 14px;"></i>
+                        </button>
+                        <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-copy" style="font-size: 14px;"></i>
+                        </button>
+                    </div>
                     <div class="data-content" style="opacity: 0; transition: opacity 0.2s ease;">${content}</div>
                 `;
+                
+                // Setup utility buttons early
+                setupUtilityButtons();
                 
                 // Function to show content after guided forms is ready
                 const showContentAfterGuidedForms = () => {
@@ -175,11 +194,22 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // No form elements, insert content normally without guided forms
                 dataContainer.innerHTML = `
                     <span class="close-data-container"></span>
+                    <div class="utility-buttons-container" style="position: absolute; top: 4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
+                        <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-trash" style="font-size: 14px;"></i>
+                        </button>
+                        <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-copy" style="font-size: 14px;"></i>
+                        </button>
+                    </div>
                     <div class="data-content">${content}</div>
                 `;
                 
                 // Re-initialize grid items for non-form content
                 initializeGridItems();
+                
+                // Setup utility buttons
+                setupUtilityButtons();
             }
 
             // Dispatch custom event to notify that data-in content has loaded
@@ -521,8 +551,19 @@ document.addEventListener('DOMContentLoaded', async function () {
                 } else {
                     dataContainer.innerHTML = `
                         <span class="close-data-container"></span>
+                        <div class="utility-buttons-container" style="position: absolute; top: 4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
+                            <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                                <i class="bx bx-trash" style="font-size: 14px;"></i>
+                            </button>
+                            <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                                <i class="bx bx-copy" style="font-size: 14px;"></i>
+                            </button>
+                        </div>
                         <div class="data-content">No content selected. Please select a grid item.</div>
                     `;
+                    
+                    // Add event listeners for the utility buttons
+                    setupUtilityButtons();
                 }
             }
 
@@ -647,6 +688,100 @@ document.addEventListener('DOMContentLoaded', async function () {
         
         // Debug message to confirm initialization
         console.log('Swipe functionality initialized for datain container');
+    }
+
+    // Setup utility buttons within the datain container
+    function setupUtilityButtons() {
+        const overwriteBtn = document.getElementById('datain-overwrite-btn');
+        const copyBtn = document.getElementById('datain-copy-btn');
+        
+        if (overwriteBtn) {
+            // Add hover effects
+            overwriteBtn.addEventListener('mouseenter', () => {
+                overwriteBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+            });
+            overwriteBtn.addEventListener('mouseleave', () => {
+                overwriteBtn.style.backgroundColor = 'transparent';
+            });
+            
+            // Add click handler for data overwrite
+            overwriteBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Call the same modal functionality as dataOverwrite.js
+                if (window.openDataOverwriteModal) {
+                    window.openDataOverwriteModal();
+                } else {
+                    // Fallback confirmation
+                    if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+                        // Clear all localStorage data
+                        const keysToRemove = [];
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const key = localStorage.key(i);
+                            if (key) keysToRemove.push(key);
+                        }
+                        keysToRemove.forEach(key => localStorage.removeItem(key));
+                        
+                        // Clear cookies
+                        document.cookie.split(";").forEach(cookie => {
+                            const eqPos = cookie.indexOf("=");
+                            const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+                        });
+                        
+                        alert('All data has been cleared successfully.');
+                        location.reload();
+                    }
+                }
+            });
+        }
+        
+        if (copyBtn) {
+            // Add hover effects
+            copyBtn.addEventListener('mouseenter', () => {
+                copyBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+            });
+            copyBtn.addEventListener('mouseleave', () => {
+                copyBtn.style.backgroundColor = 'transparent';
+            });
+            
+            // Add click handler for copy functionality
+            copyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Get content from the data-content div
+                const dataContent = dataContainer.querySelector('.data-content');
+                if (dataContent) {
+                    const textContent = dataContent.innerText || dataContent.textContent;
+                    
+                    if (textContent && textContent.trim()) {
+                        navigator.clipboard.writeText(textContent).then(() => {
+                            // Show success feedback
+                            const originalTitle = copyBtn.title;
+                            copyBtn.title = 'Copied!';
+                            copyBtn.style.backgroundColor = 'rgba(0, 255, 0, 0.3)';
+                            
+                            setTimeout(() => {
+                                copyBtn.title = originalTitle;
+                                copyBtn.style.backgroundColor = 'transparent';
+                            }, 1000);
+                        }).catch(err => {
+                            console.error('Failed to copy text: ', err);
+                            copyBtn.title = 'Copy failed';
+                            setTimeout(() => {
+                                copyBtn.title = 'Copy to clipboard';
+                            }, 2000);
+                        });
+                    } else {
+                        alert('No content available to copy.');
+                    }
+                } else {
+                    alert('No content available to copy.');
+                }
+            });
+        }
     }
 
     async function initializeApp() {

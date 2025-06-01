@@ -80,16 +80,9 @@ const DATA_FIELDS = [
  * that triggers data overwrite when clicked
  */
 function createOverwriteButton() {
-    // Create button container
-    const buttonContainer = document.createElement('div');
-    buttonContainer.style.position = 'fixed';
-    buttonContainer.style.bottom = '0'; // Position at the very bottom
-    buttonContainer.style.left = '0'; // Position at the very left
-    buttonContainer.style.transform = 'none';
-    buttonContainer.style.zIndex = '12001'; // Higher than expanded datain/dataout containers (11000)
-    buttonContainer.style.padding = '0'; // Remove any padding
-    buttonContainer.style.margin = '0'; // Remove any margin
-    buttonContainer.style.display = 'block'; // Use block instead of flex
+    // Button is now integrated into datain.js - skip external creation
+    console.log('[DataOverwrite] Button creation skipped - integrated into datain.js');
+    return;
     
     // Create the button with the 3D tab styling
     const button = document.createElement('button');
@@ -112,7 +105,7 @@ function createOverwriteButton() {
     button.style.margin = '0'; // Remove any margin
     button.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease';
     button.style.position = 'relative'; // Add position relative
-    button.style.bottom = '0'; // Ensure it's at the very bottom
+    button.style.top = '0'; // Ensure it's at the very top
     button.style.left = '0'; // Ensure it's at the very left
     
     // Create just an icon (no text)

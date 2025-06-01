@@ -20,16 +20,9 @@
  * @returns {HTMLElement} - The created button
  */
 function createCopyButton(containerId, getContentCallback) {
-    // Create a container for the button
-    const buttonContainer = document.createElement('div');
-    buttonContainer.id = 'copyButtonContainer';
-    buttonContainer.style.position = 'fixed';
-    buttonContainer.style.bottom = '0'; // Position at the very bottom (snug in corner)
-    buttonContainer.style.right = '0'; // Position at the very right (snug in corner)
-    buttonContainer.style.zIndex = '12001'; // Use highest z-index to be visible with other components
-    buttonContainer.style.padding = '0';
-    buttonContainer.style.margin = '0';
-    buttonContainer.style.display = 'block';
+    // Button is now integrated into datain.js - skip external creation
+    console.log('[Copy] Button creation skipped - integrated into datain.js');
+    return;
     
     // Create the button with the 3D styling
     const button = document.createElement('button');
