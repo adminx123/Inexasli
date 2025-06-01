@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Insert content with initial hiding to prevent flash
                 dataContainer.innerHTML = `
                     <span class="close-data-container"></span>
-                    <div class="utility-buttons-container" style="position: absolute; top: 4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
+                    <div class="utility-buttons-container" style="position: absolute; top: -4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
                         <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-trash" style="font-size: 14px;"></i>
                         </button>
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // No form elements, insert content normally without guided forms
                 dataContainer.innerHTML = `
                     <span class="close-data-container"></span>
-                    <div class="utility-buttons-container" style="position: absolute; top: 4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
+                    <div class="utility-buttons-container" style="position: absolute; top: -4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
                         <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-trash" style="font-size: 14px;"></i>
                         </button>
@@ -551,7 +551,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 } else {
                     dataContainer.innerHTML = `
                         <span class="close-data-container"></span>
-                        <div class="utility-buttons-container" style="position: absolute; top: 4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
+                        <div class="utility-buttons-container" style="position: absolute; top: -4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
                             <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                                 <i class="bx bx-trash" style="font-size: 14px;"></i>
                             </button>

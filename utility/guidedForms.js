@@ -824,16 +824,14 @@ class GuidedFormSystem {
                                  targetContainer.classList.contains('data-container-left');
         
         if (isDataInContainer) {
-            // Position inside data-container-left at the top edge with pill shape
+            // Position inside data-container-left level with button centers - moved higher
             progressContainer.style.cssText = `
                 position: absolute;
-                top: -6px;
+                top: 10px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: rgba(255, 255, 255, 0.95);
-                border: 2px solid #000;
                 border-radius: 50px;
-                padding: 8px 16px;
+                padding: 4px 8px;
                 display: flex;
                 align-items: center;
                 gap: 8px;
@@ -841,21 +839,17 @@ class GuidedFormSystem {
                 font-size: 12px;
                 font-weight: 500;
                 z-index: 11003;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                backdrop-filter: blur(10px);
             `;
-            console.log('[GuidedForms] Using data-in container positioning');
+            console.log('[GuidedForms] Using data-in container positioning - moved higher for more space');
         } else {
-            // Use fixed positioning for other containers
+            // Use fixed positioning for other containers level with button centers - moved higher
             progressContainer.style.cssText = `
                 position: fixed;
                 top: 10px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: rgba(255, 255, 255, 0.95);
-                border: 2px solid #000;
                 border-radius: 20px;
-                padding: 8px 16px;
+                padding: 4px 8px;
                 display: flex;
                 align-items: center;
                 gap: 8px;
@@ -863,10 +857,8 @@ class GuidedFormSystem {
                 font-size: 12px;
                 font-weight: 500;
                 z-index: 10000;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                backdrop-filter: blur(10px);
             `;
-            console.log('[GuidedForms] Using fixed positioning');
+            console.log('[GuidedForms] Using fixed positioning - moved higher for more space');
         }
         
         // Progress dots
