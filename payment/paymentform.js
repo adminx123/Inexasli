@@ -417,14 +417,11 @@ function createPaymentCornerButton() {
     button.id = 'paymentButton';
     button.title = 'Premium Features'; // Add title for accessibility
     
-    // Apply 3D tab styling - matching dataOverwrite button
-    button.style.backgroundColor = '#f5f5f5';
+    // Apply styling - no borders, just icon
+    button.style.backgroundColor = 'transparent';
     button.style.color = '#000';
-    button.style.border = '2px solid #000';
-    button.style.borderRight = 'none'; // Remove right border to look tucked into corner
-    button.style.borderTop = 'none'; // Remove top border to look tucked into corner
-    button.style.borderRadius = '0 0 0 8px'; // Rounded only on bottom left corner
-    button.style.boxShadow = '-4px 4px 0 #000'; // Shadow on left side
+    button.style.border = 'none';
+    button.style.boxShadow = 'none';
     button.style.padding = '0'; // Reduced padding
     button.style.width = '36px'; // Match dataOverwrite button
     button.style.height = '36px'; // Match dataOverwrite button
@@ -445,24 +442,22 @@ function createPaymentCornerButton() {
     icon.style.fontWeight = 'bold';
     button.appendChild(icon);
     
-    // Add hover effect matching the tab style
+    // Add hover effect
     button.addEventListener('mouseover', function() {
         button.style.backgroundColor = '#FFFFFF';
     });
     
     button.addEventListener('mouseout', function() {
-        button.style.backgroundColor = '#f5f5f5';
+        button.style.backgroundColor = 'transparent';
     });
     
     // Add active/click effect
     button.addEventListener('mousedown', function() {
-        button.style.transform = 'translate(-2px, 2px)';
-        button.style.boxShadow = '-2px 2px 0 #000';
+        button.style.transform = 'scale(0.95)';
     });
     
     button.addEventListener('mouseup', function() {
-        button.style.transform = 'translate(0, 0)';
-        button.style.boxShadow = '-4px 4px 0 #000';
+        button.style.transform = 'scale(1)';
     });
     
     // Add click event to open payment modal
