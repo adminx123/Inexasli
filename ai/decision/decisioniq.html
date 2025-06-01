@@ -148,11 +148,6 @@ Need multilingual support for global offices"></textarea>
         }
     }
 
-    // Clear stored decision data
-    function clearLocalStorage() {
-        return window.FormPersistence.clearLocalStorage();
-    }
-
     async function handleGenerateDecisionIq() {
         try {
             const formData = window.FormPersistence.getSavedFormData();
@@ -191,8 +186,8 @@ Need multilingual support for global offices"></textarea>
         genBtn.removeEventListener('click', handleGenerateDecisionIq);
         genBtn.addEventListener('click', handleGenerateDecisionIq);
         const clearBtn = document.getElementById('clear-decision-btn');
-        clearBtn.removeEventListener('click', clearLocalStorage);
-        clearBtn.addEventListener('click', clearLocalStorage);
+        clearBtn.removeEventListener('click', window.FormPersistence.clearLocalStorage);
+        clearBtn.addEventListener('click', window.FormPersistence.clearLocalStorage);
     }
 
     initialize();
