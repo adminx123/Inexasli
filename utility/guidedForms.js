@@ -377,7 +377,7 @@ class GuidedFormSystem {
             // Auto-advance if enabled and not on last step
             if (this.config.autoAdvance && this.currentStep < this.steps.length - 1) {
                 setTimeout(() => {
-                    this.nextStep();
+                    this.showStep(this.currentStep + 1);
                 }, this.config.autoAdvanceDelay);
             }
         } else if (!isCompleted && step.isCompleted) {
@@ -427,24 +427,6 @@ class GuidedFormSystem {
     }
     
     /**
-     * Move to the next step
-     */
-    nextStep() {
-        if (this.currentStep < this.steps.length - 1) {
-            this.showStep(this.currentStep + 1);
-        }
-    }
-    
-    /**
-     * Move to the previous step
-     */
-    previousStep() {
-        if (this.currentStep > 0) {
-            this.showStep(this.currentStep - 1);
-        }
-    }
-    
-    /**
      * Show a specific step
      */
     showStep(stepIndex) {
@@ -467,7 +449,6 @@ class GuidedFormSystem {
         this.currentStep = stepIndex;
         this.displayStep(nextStep);
         this.updateProgressIndicator();
-        this.updateNavigationButtons();
     }
     
     /**
@@ -543,7 +524,6 @@ class GuidedFormSystem {
             }
         });
         
-        this.updateNavigationButtons();
         console.log('[GuidedForms] Initialized first step');
     }
     
@@ -559,33 +539,93 @@ class GuidedFormSystem {
             existingIndicator.remove();
         }
         
+        // Enhanced container detection for data-in system
+        let targetContainer = null;
+
+        // Priority 1: Device container within current container
+        targetContainer = this.container.querySelector('.device-container');
+        console.log('[GuidedForms] Device container check:', targetContainer);
+
+        // Priority 2: Data-in system containers - target the main container directly
+        if (!targetContainer) {
+            targetContainer = document.querySelector('.data-container-left');
+            if (targetContainer) {
+                console.log('[GuidedForms] Found data-container-left:', targetContainer.className);
+            }
+        }
+
+        // Priority 3: General data-content containers
+        if (!targetContainer) {
+            targetContainer = this.container.querySelector('.data-content');
+            console.log('[GuidedForms] Found data-content in current container:', targetContainer);
+        }
+
+        // Priority 4: Check if current container is already a data-content element
+        if (!targetContainer && this.container.classList.contains('data-content')) {
+            targetContainer = this.container;
+            console.log('[GuidedForms] Current container is data-content:', targetContainer);
+        }
+
+        // Priority 5: Fallback to current container
+        if (!targetContainer) {
+            targetContainer = this.container;
+            console.log('[GuidedForms] Using fallback container:', targetContainer);
+        }
+
+        console.log('[GuidedForms] Selected target container:', targetContainer.className || targetContainer.tagName);
+        
         const progressContainer = document.createElement('div');
         progressContainer.id = 'guided-form-progress';
-        progressContainer.style.cssText = `
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #000;
-            border-radius: 20px;
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: "Inter", sans-serif;
-            font-size: 12px;
-            font-weight: 500;
-            z-index: 10000;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-        `;
         
-        // Progress text
-        const progressText = document.createElement('span');
-        progressText.id = 'progress-text';
-        progressText.textContent = `Step ${this.currentStep + 1} of ${this.steps.length}`;
-        progressContainer.appendChild(progressText);
+        // Determine positioning based on container type
+        const isDataInContainer = targetContainer.closest('.data-container-left') || 
+                                 targetContainer.classList.contains('data-container-left');
+        
+        if (isDataInContainer) {
+            // Position inside data-container-left at the top edge with pill shape
+            progressContainer.style.cssText = `
+                position: absolute;
+                top: -6px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(255, 255, 255, 0.95);
+                border: 2px solid #000;
+                border-radius: 50px;
+                padding: 8px 16px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-family: "Inter", sans-serif;
+                font-size: 12px;
+                font-weight: 500;
+                z-index: 11003;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                backdrop-filter: blur(10px);
+            `;
+            console.log('[GuidedForms] Using data-in container positioning');
+        } else {
+            // Use fixed positioning for other containers
+            progressContainer.style.cssText = `
+                position: fixed;
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(255, 255, 255, 0.95);
+                border: 2px solid #000;
+                border-radius: 20px;
+                padding: 8px 16px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-family: "Inter", sans-serif;
+                font-size: 12px;
+                font-weight: 500;
+                z-index: 10000;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                backdrop-filter: blur(10px);
+            `;
+            console.log('[GuidedForms] Using fixed positioning');
+        }
         
         // Progress dots
         const dotsContainer = document.createElement('div');
@@ -615,7 +655,15 @@ class GuidedFormSystem {
         });
         
         progressContainer.appendChild(dotsContainer);
-        document.body.appendChild(progressContainer);
+        
+        // Append to the appropriate container
+        if (isDataInContainer) {
+            targetContainer.appendChild(progressContainer);
+            console.log('[GuidedForms] Progress indicator attached to data-in container');
+        } else {
+            document.body.appendChild(progressContainer);
+            console.log('[GuidedForms] Progress indicator attached to document body');
+        }
         
         console.log('[GuidedForms] Created progress indicator');
     }
@@ -624,126 +672,17 @@ class GuidedFormSystem {
      * Update progress indicator
      */
     updateProgressIndicator() {
-        const progressText = document.getElementById('progress-text');
         const dots = document.querySelectorAll('.progress-dot');
-        
-        if (progressText) {
-            progressText.textContent = `Step ${this.currentStep + 1} of ${this.steps.length}`;
-        }
         
         dots.forEach((dot, index) => {
             if (index === this.currentStep) {
                 dot.style.background = '#000';
             } else if (this.completedSteps.has(index)) {
-                dot.style.background = '#4CAF50';
+                dot.style.background = '#666';
             } else {
                 dot.style.background = '#ccc';
             }
         });
-    }
-    
-    /**
-     * Create and update navigation buttons
-     */
-    updateNavigationButtons() {
-        // Remove existing buttons
-        const existingNav = document.getElementById('guided-form-navigation');
-        if (existingNav) {
-            existingNav.remove();
-        }
-        
-        const navContainer = document.createElement('div');
-        navContainer.id = 'guided-form-navigation';
-        navContainer.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 12px;
-            z-index: 10000;
-        `;
-        
-        // Previous button
-        if (this.currentStep > 0) {
-            const prevButton = this.createNavButton('← Previous', () => this.previousStep());
-            navContainer.appendChild(prevButton);
-        }
-        
-        // Next button
-        if (this.currentStep < this.steps.length - 1) {
-            const nextButton = this.createNavButton('Next →', () => this.nextStep());
-            navContainer.appendChild(nextButton);
-        }
-        
-        // Skip button (if enabled and step is optional)
-        const currentStep = this.steps[this.currentStep];
-        if (this.config.enableSkipping && !currentStep.isRequired && !currentStep.isCompleted) {
-            const skipButton = this.createNavButton('Skip', () => {
-                this.skippedSteps.add(this.currentStep);
-                this.nextStep();
-            }, 'secondary');
-            navContainer.appendChild(skipButton);
-        }
-        
-        if (navContainer.children.length > 0) {
-            document.body.appendChild(navContainer);
-        }
-    }
-    
-    /**
-     * Create a navigation button
-     */
-    createNavButton(text, onClick, type = 'primary') {
-        const button = document.createElement('button');
-        button.textContent = text;
-        button.addEventListener('click', onClick);
-        
-        const baseStyles = `
-            padding: 8px 16px;
-            border: 2px solid #000;
-            border-radius: 6px;
-            font-family: "Inter", sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 2px 2px 0 #000;
-        `;
-        
-        if (type === 'primary') {
-            button.style.cssText = baseStyles + `
-                background: #000;
-                color: #fff;
-            `;
-            button.addEventListener('mouseenter', () => {
-                button.style.background = '#333';
-                button.style.transform = 'translate(-1px, -1px)';
-                button.style.boxShadow = '3px 3px 0 #000';
-            });
-            button.addEventListener('mouseleave', () => {
-                button.style.background = '#000';
-                button.style.transform = 'translate(0, 0)';
-                button.style.boxShadow = '2px 2px 0 #000';
-            });
-        } else {
-            button.style.cssText = baseStyles + `
-                background: #fff;
-                color: #000;
-            `;
-            button.addEventListener('mouseenter', () => {
-                button.style.background = '#f5f5f5';
-                button.style.transform = 'translate(-1px, -1px)';
-                button.style.boxShadow = '3px 3px 0 #000';
-            });
-            button.addEventListener('mouseleave', () => {
-                button.style.background = '#fff';
-                button.style.transform = 'translate(0, 0)';
-                button.style.boxShadow = '2px 2px 0 #000';
-            });
-        }
-        
-        return button;
     }
     
     /**
@@ -759,12 +698,10 @@ class GuidedFormSystem {
             step.isVisible = true;
         });
         
-        // Remove navigation and progress elements
+        // Remove progress elements
         const progressIndicator = document.getElementById('guided-form-progress');
-        const navigation = document.getElementById('guided-form-navigation');
         
         if (progressIndicator) progressIndicator.remove();
-        if (navigation) navigation.remove();
         
         this.isInitialized = false;
     }
@@ -797,10 +734,8 @@ class GuidedFormSystem {
         
         // Remove UI elements
         const progressIndicator = document.getElementById('guided-form-progress');
-        const navigation = document.getElementById('guided-form-navigation');
         
         if (progressIndicator) progressIndicator.remove();
-        if (navigation) navigation.remove();
         
         // Show all steps
         this.showAllSteps();
