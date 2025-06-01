@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.classList.add('expanded');
             dataContainer.dataset.state = 'expanded';
             dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
+                <span class="close-data-container"></span>
                 <div class="data-content">${content}</div>
             `;
 
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.className = `data-container-right initial`;
         dataContainer.dataset.state = 'initial';
         dataContainer.innerHTML = `
-            <span class="close-data-container">+</span>
+            <span class="close-data-container"></span>
             <span class="data-label">DATA OUT</span>
         `;
         document.body.appendChild(dataContainer);
@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dataContainer.dataset.state = 'initial';
                 setLocal('dataOutContainerState', 'initial');
                 dataContainer.innerHTML = `
-                    <span class="close-data-container">+</span>
+                    <span class="close-data-container"></span>
                     <span class="data-label">DATA OUT</span>
                 `;
                 
@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     loadStoredContent(outUrl);
                 } else {
                     dataContainer.innerHTML = `
-                        <span class="close-data-container">-</span>
+                        <span class="close-data-container"></span>
                         <span class="data-label">DATA OUT</span>
                         <div class="data-content">No relevant content available</div>
                     `;

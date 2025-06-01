@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function loadStoredContent(url) {
         try {
             dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
+                <span class="close-data-container"></span>
                 <div class="data-content">Loading...</div>
             `;
 
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 // Insert content with initial hiding to prevent flash
                 dataContainer.innerHTML = `
-                    <span class="close-data-container">-</span>
+                    <span class="close-data-container"></span>
                     <div class="data-content" style="opacity: 0; transition: opacity 0.2s ease;">${content}</div>
                 `;
                 
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             } else {
                 // No form elements, insert content normally without guided forms
                 dataContainer.innerHTML = `
-                    <span class="close-data-container">-</span>
+                    <span class="close-data-container"></span>
                     <div class="data-content">${content}</div>
                 `;
                 
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (error) {
             console.error('Error loading content:', error);
             dataContainer.innerHTML = `
-                <span class="close-data-container">-</span>
+                <span class="close-data-container"></span>
                 <div class="data-content">Error loading content. Please try again.</div>
             `;
             
@@ -406,7 +406,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.className = `data-container-left initial`;
         dataContainer.dataset.state = 'initial';
         dataContainer.innerHTML = `
-            <span class="close-data-container">+</span>
+            <span class="close-data-container"></span>
             <span class="data-label">DATA IN</span>
         `;
 
@@ -464,7 +464,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dataContainer.dataset.state = 'initial';
                 setLocal('dataContainerState', 'initial');
                 dataContainer.innerHTML = `
-                    <span class="close-data-container">+</span>
+                    <span class="close-data-container"></span>
                     <span class="data-label">DATA IN</span>
                 `;
                 
@@ -515,7 +515,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     loadStoredContent(storedUrl);
                 } else {
                     dataContainer.innerHTML = `
-                        <span class="close-data-container">-</span>
+                        <span class="close-data-container"></span>
                         <div class="data-content">No content selected. Please select a grid item.</div>
                     `;
                 }
