@@ -669,6 +669,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-trash" style="font-size: 14px;"></i>
                         </button>
+                        <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-copy" style="font-size: 14px;"></i>
+                        </button>
                     </div>
                 `;
                 
