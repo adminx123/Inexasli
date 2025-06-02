@@ -108,283 +108,27 @@ Results needed within two weeks"></textarea>
 (function() {
     console.log("ResearchIQ script initializing");
 
-    // Only using JSON for data storage now - more efficient approach
-    const setJSON = window.setJSON || function(name, value) {
-        try {
-            if (name === undefined || name === null || name === '') {
-                console.error('Invalid key name provided to setJSON');
-                return false;
-            }
-            
-            if (value === undefined) {
-                console.warn(`Warning: Storing undefined value for ${name} in localStorage`);
-                localStorage.removeItem(name);
-                return true;
-            }
-            
-            // Convert value to JSON string
-            const jsonString = JSON.stringify(value);
-            localStorage.setItem(name, jsonString);
-            console.log(`[ResearchIQ] JSON saved ${name}`);
-            return true;
-        } catch (error) {
-            console.error(`[ResearchIQ] Error storing JSON: ${error}`);
-            return false;
-        }
-    };
-    
-    const getJSON = window.getJSON || function(name, defaultValue) {
-        try {
-            const item = localStorage.getItem(name);
-            if (!item) return defaultValue;
-            const parsedValue = JSON.parse(item);
-            console.log(`[ResearchIQ] JSON retrieved ${name}`);
-            return parsedValue;
-        } catch (error) {
-            console.error(`[ResearchIQ] Error retrieving JSON: ${error}`);
-            return defaultValue;
-        }
-    };
+    // Using centralized FormPersistence system
 
     // Handler for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
         console.log('[ResearchIQ] Grid item toggled event received');
         const item = event.detail.item;
-        
-        // Save grid item selection
-        saveGridItem(item);
-    }
-    
-    // Save grid item selection - only using JSON for efficiency
-    function saveGridItem(item) {
-        // Directly save complete form data to JSON
-        console.log('[ResearchIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('researchIqInput', formData);
     }
 
-    // Save input value - only using JSON for efficiency
-    function saveInput(input) {
-        if (!input || !input.id) return;
-        
-        // Skip individual localStorage items and only use JSON
-        // Directly save complete form data to JSON
-        console.log('[ResearchIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('researchIqInput', formData);
-    }
 
-    // Collect form data without validation
-    function collectFormData() {
-        const formData = {
-            goal: null,
-            purpose: null,
-            type: null,
-            scope: null,
-            analysisPreference: null,
-            audience: null,
-            context: null,
-            deliverables: null,
-            outputFormat: null,
-            additionalDetails: null
-        };
-        
-        // Collect research goal
-        const goalInput = document.getElementById('research-goal');
-        if (goalInput && goalInput.value.trim()) {
-            formData.goal = goalInput.value.trim();
-        }
-        
-        // Collect research purpose
-        const purposeInput = document.getElementById('research-purpose');
-        if (purposeInput && purposeInput.value.trim()) {
-            formData.purpose = purposeInput.value.trim();
-        }
-        
-        // Collect research type
-        const typeSelect = document.getElementById('research-type');
-        if (typeSelect) {
-            formData.type = typeSelect.value;
-        }
-        
-        // Collect research scope
-        const scopeInput = document.getElementById('research-scope');
-        if (scopeInput && scopeInput.value.trim()) {
-            formData.scope = scopeInput.value.trim();
-        }
-        
-        // Collect analysis preference
-        const analysisPreferenceSelect = document.getElementById('analysis-preference');
-        if (analysisPreferenceSelect) {
-            formData.analysisPreference = analysisPreferenceSelect.value;
-        }
-        
-        // Collect target audience
-        const audienceInput = document.getElementById('research-audience');
-        if (audienceInput && audienceInput.value.trim()) {
-            formData.audience = audienceInput.value.trim();
-        }
-        
-        // Collect research context
-        const contextInput = document.getElementById('research-context');
-        if (contextInput && contextInput.value.trim()) {
-            formData.context = contextInput.value.trim();
-        }
-        
-        // Collect expected deliverables
-        const deliverablesSelect = document.getElementById('research-deliverables');
-        if (deliverablesSelect) {
-            formData.deliverables = deliverablesSelect.value;
-        }
-        
-        // Collect output format
-        const outputFormatSelect = document.getElementById('output-format');
-        if (outputFormatSelect) {
-            formData.outputFormat = outputFormatSelect.value;
-        }
-        
-        // Collect additional details
-        const additionalDetailsInput = document.getElementById('additional-details');
-        if (additionalDetailsInput && additionalDetailsInput.value.trim()) {
-            formData.additionalDetails = additionalDetailsInput.value.trim();
-        }
-        
-        return formData;
-    }
 
-    // Repopulate form from localStorage - simplified to only use JSON
-    function repopulateForm() {
-        console.log("[ResearchIQ] Repopulating form from JSON storage");
 
-        // Get stored JSON data
-        const storedData = getJSON('researchIqInput', null);
-        if (!storedData) {
-            console.log('[ResearchIQ] No stored form data found');
-            return;
-        }
-            
-        console.log('[ResearchIQ] Found stored JSON form data');
-        
-        // Populate research goal
-        const goalInput = document.getElementById('research-goal');
-        if (goalInput && storedData.goal) {
-            goalInput.value = storedData.goal;
-            console.log(`[ResearchIQ] Restored from JSON: research goal`);
-        }
-        
-        // Populate research purpose
-        const purposeInput = document.getElementById('research-purpose');
-        if (purposeInput && storedData.purpose) {
-            purposeInput.value = storedData.purpose;
-            console.log(`[ResearchIQ] Restored from JSON: research purpose`);
-        }
-        
-        // Populate research type
-        const typeSelect = document.getElementById('research-type');
-        if (typeSelect && storedData.type) {
-            typeSelect.value = storedData.type;
-            console.log(`[ResearchIQ] Restored from JSON: research type`);
-        }
-        
-        // Populate research scope
-        const scopeInput = document.getElementById('research-scope');
-        if (scopeInput && storedData.scope) {
-            scopeInput.value = storedData.scope;
-            console.log(`[ResearchIQ] Restored from JSON: research scope`);
-        }
-        
-        // Populate analysis preference
-        const analysisPreferenceSelect = document.getElementById('analysis-preference');
-        if (analysisPreferenceSelect && storedData.analysisPreference) {
-            analysisPreferenceSelect.value = storedData.analysisPreference;
-            console.log(`[ResearchIQ] Restored from JSON: analysis preference`);
-        }
-        
-        // Populate target audience
-        const audienceInput = document.getElementById('research-audience');
-        if (audienceInput && storedData.audience) {
-            audienceInput.value = storedData.audience;
-            console.log(`[ResearchIQ] Restored from JSON: target audience`);
-        }
-        
-        // Populate research context
-        const contextInput = document.getElementById('research-context');
-        if (contextInput && storedData.context) {
-            contextInput.value = storedData.context;
-            console.log(`[ResearchIQ] Restored from JSON: research context`);
-        }
-        
-        // Populate expected deliverables
-        const deliverablesSelect = document.getElementById('research-deliverables');
-        if (deliverablesSelect && storedData.deliverables) {
-            deliverablesSelect.value = storedData.deliverables;
-            console.log(`[ResearchIQ] Restored from JSON: expected deliverables`);
-        }
-        
-        // Populate output format
-        const outputFormatSelect = document.getElementById('output-format');
-        if (outputFormatSelect && storedData.outputFormat) {
-            outputFormatSelect.value = storedData.outputFormat;
-            console.log(`[ResearchIQ] Restored from JSON: output format`);
-        }
-        
-        // Populate additional details
-        const additionalDetailsInput = document.getElementById('additional-details');
-        if (additionalDetailsInput && storedData.additionalDetails) {
-            additionalDetailsInput.value = storedData.additionalDetails;
-            console.log(`[ResearchIQ] Restored from JSON: additional details`);
-        }
-    }
-
-    // Handle input changes
-    function setupInputHandlers() {
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            input.addEventListener('change', function() {
-                saveInput(this);
-            });
-        });
-    }
-
-    // Clear saved data from localStorage
-    function clearLocalStorage() {
-        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
-            return;
-        }
-        
-        try {
-            // Simply remove the JSON data - no need to iterate through individual keys
-            localStorage.removeItem('researchIqInput');
-            localStorage.removeItem('researchIqResponse');
-            
-            // Reset UI
-            document.querySelectorAll('input, textarea').forEach(input => {
-                input.value = '';
-            });
-            
-            // Reset select elements to default values
-            document.querySelectorAll('select').forEach(select => {
-                if (select.options.length > 0) {
-                    select.selectedIndex = 0;
-                }
-            });
-            
-            console.log('[ResearchIQ] All research data cleared');
-            alert("All research data has been cleared successfully.");
-        } catch (error) {
-            console.error('[ResearchIQ] Error clearing data:', error);
-            alert("Error clearing data: " + error.message);
-        }
-    }
 
     // Handle the generate button click - directly talking to worker
     async function handleGenerateResearchIq() {
         console.log('[ResearchIQ] Generate button clicked.');
         
         try {
-            // Use what's already in localStorage
-            const formData = getJSON('researchIqInput');
+            // Use centralized system to get form data
+            const formData = window.FormPersistence.getSavedFormData();
             if (!formData) {
-                console.error('[ResearchIQ] No input data found in localStorage.');
+                console.error('[ResearchIQ] No input data found.');
                 alert('Please complete the form before generating a research plan.');
                 return;
             }
@@ -403,7 +147,7 @@ Results needed within two weeks"></textarea>
                 async () => {
                     const apiUrl = 'https://research.4hm7q4q75z.workers.dev/'; 
                     
-                    console.log('[ResearchIQ] Sending researchIqInput directly from localStorage to worker');
+                    console.log('[ResearchIQ] Sending form data to worker');
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: {
@@ -427,8 +171,8 @@ Results needed within two weeks"></textarea>
                 }
             );
             
-            // Store the response using setJSON
-            setJSON('researchIqResponse', result);
+            // Store the response using centralized system
+            window.FormPersistence.saveResponseData(result);
             
             // Dispatch an event to notify dataout.js that a response was received
             const event = new CustomEvent('api-response-received', {
@@ -456,7 +200,7 @@ Results needed within two weeks"></textarea>
         
         const clearBtn = document.getElementById('clear-research-btn');
         if (clearBtn) {
-            clearBtn.addEventListener('click', clearLocalStorage);
+            clearBtn.addEventListener('click', () => window.FormPersistence.clearLocalStorage());
         }
     }
 

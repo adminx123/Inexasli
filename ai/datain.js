@@ -177,6 +177,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-copy" style="font-size: 14px;"></i>
                         </button>
+                        <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
+                        </button>
+                        <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <span style="font-size: 14px; font-weight: bold;">$</span>
+                        </button>
                     </div>
                     <div class="data-content" style="opacity: 0; transition: opacity 0.2s ease;">${content}</div>
                 `;
@@ -260,6 +266,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                         </button>
                         <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-copy" style="font-size: 14px;"></i>
+                        </button>
+                        <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
+                        </button>
+                        <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <span style="font-size: 14px; font-weight: bold;">$</span>
                         </button>
                     </div>
                     <div class="data-content">${content}</div>
@@ -621,6 +633,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                             <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                                 <i class="bx bx-copy" style="font-size: 14px;"></i>
                             </button>
+                            <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                                <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
+                            </button>
+                            <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                                <span style="font-size: 14px; font-weight: bold;">$</span>
+                            </button>
                         </div>
                         <div class="data-content">No content selected. Please select a grid item.</div>
                     `;
@@ -688,7 +706,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                                 e.target.id === 'copyButtonContainer' ||
                                 e.target.closest('[id^="toast-"]');
             
-            if (!isClickInside && !isCopyButton && dataContainer.dataset.state === 'expanded') {
+            // Check if click is on utility buttons
+            const isUtilityButton = e.target.closest('#datain-overwrite-btn, #datain-copy-btn, #datain-category-btn, #datain-payment-btn') ||
+                                   e.target.id === 'datain-overwrite-btn' ||
+                                   e.target.id === 'datain-copy-btn' ||
+                                   e.target.id === 'datain-category-btn' ||
+                                   e.target.id === 'datain-payment-btn';
+            
+            if (!isClickInside && !isCopyButton && !isUtilityButton && dataContainer.dataset.state === 'expanded') {
                 
                 toggleDataContainer();
             }
@@ -758,6 +783,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     function setupUtilityButtons() {
         const overwriteBtn = document.getElementById('datain-overwrite-btn');
         const copyBtn = document.getElementById('datain-copy-btn');
+        const categoryBtn = document.getElementById('datain-category-btn');
+        const paymentBtn = document.getElementById('datain-payment-btn');
         
         if (overwriteBtn) {
             // Add hover effects
@@ -843,6 +870,52 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }
                 } else {
                     alert('No content available to copy.');
+                }
+            });
+        }
+        
+        if (categoryBtn) {
+            // Add hover effects
+            categoryBtn.addEventListener('mouseenter', () => {
+                categoryBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+            });
+            categoryBtn.addEventListener('mouseleave', () => {
+                categoryBtn.style.backgroundColor = 'transparent';
+            });
+            
+            // Add click handler for category modal
+            categoryBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Call the category modal functionality
+                if (window.categoryManager && window.categoryManager.openModal) {
+                    window.categoryManager.openModal();
+                } else {
+                    console.error('Category manager not available');
+                }
+            });
+        }
+        
+        if (paymentBtn) {
+            // Add hover effects
+            paymentBtn.addEventListener('mouseenter', () => {
+                paymentBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+            });
+            paymentBtn.addEventListener('mouseleave', () => {
+                paymentBtn.style.backgroundColor = 'transparent';
+            });
+            
+            // Add click handler for payment modal
+            paymentBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Call the payment modal functionality
+                if (window.openPaymentModal) {
+                    window.openPaymentModal();
+                } else {
+                    console.error('Payment modal function not available');
                 }
             });
         }

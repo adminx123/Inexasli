@@ -510,6 +510,9 @@ const categoryManager = (function() {
     
     // Create button in bottom left corner
     function createCategoryButton() {
+        // Button is now integrated into datain.js - skip external creation
+        console.log('[Category] Button creation skipped - integrated into datain.js');
+        return;
         // Create button container
         const buttonContainer = document.createElement('div');
         buttonContainer.style.position = 'fixed';

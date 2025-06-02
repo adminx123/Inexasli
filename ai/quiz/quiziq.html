@@ -102,28 +102,7 @@ Add difficulty ratings to questions"></textarea>
 (function() {
     console.log("QuizIQ script initializing");
 
-    // Only using JSON for data storage now - more efficient approach
-    const setJSON = window.setJSON || function(name, value) {
-        try {
-            return true;
-        } catch (error) {
-            console.error(`[QuizIQ] Error storing JSON: ${error}`);
-            return false;
-        }
-    };
-    
-    const getJSON = window.getJSON || function(name, defaultValue) {
-        try {
-            const item = localStorage.getItem(name);
-            if (!item) return defaultValue;
-            const parsedValue = JSON.parse(item);
-            console.log(`[QuizIQ] JSON retrieved ${name}`);
-            return parsedValue;
-        } catch (error) {
-            console.error(`[QuizIQ] Error retrieving JSON: ${error}`);
-            return defaultValue;
-        }
-    };
+    // Using centralized FormPersistence system
 
     // Handler for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
@@ -131,30 +110,7 @@ Add difficulty ratings to questions"></textarea>
         const item = event.detail.item;
         const container = item.closest('.grid-container');
         
-        // Save using JSON approach
-        saveGridItem(item);
-        
         console.log(`[QuizIQ] Handled toggle for ${item.dataset.value} in ${container.id}: ${item.classList.contains('selected') ? 'selected' : 'deselected'}`);
-    }
-
-    // Save grid item selection - only using JSON for efficiency
-    function saveGridItem(item) {
-        // Skip individual localStorage items and only use JSON
-        // Directly save complete form data to JSON
-        console.log('[QuizIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('quizIqInput', formData);
-    }
-
-    // Save input value - only using JSON for efficiency
-    function saveInput(input) {
-        if (!input || !input.id) return;
-        
-        // Skip individual localStorage items and only use JSON
-        // Directly save complete form data to JSON
-        console.log('[QuizIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('quizIqInput', formData);
     }
 
     // Initialize our grid items
@@ -163,189 +119,7 @@ Add difficulty ratings to questions"></textarea>
         // No need to add click handlers - datain.js handles that now
     }
 
-    // Collect form data without validation
-    function collectFormData() {
-        const formData = {
-            subject: null,
-            objective: null,
-            difficultyTier: null,
-            formats: [],
-            questionCount: null,
-            focusAreas: null,
-            participants: [],
-            extraInstructions: null
-        };
-        
-        // Collect quiz subject
-        const subjectInput = document.getElementById('quiz-subject');
-        if (subjectInput && subjectInput.value.trim()) {
-            formData.subject = subjectInput.value.trim();
-        }
-        
-        // Collect quiz objective
-        const objectiveSelect = document.getElementById('quiz-objective');
-        if (objectiveSelect) {
-            formData.objective = objectiveSelect.value;
-        }
-        
-        // Collect difficulty tier
-        const difficultySelect = document.getElementById('quiz-difficulty-tier');
-        if (difficultySelect) {
-            formData.difficultyTier = difficultySelect.value;
-        }
-        
-        // Collect question formats (multi-selection grid)
-        document.querySelectorAll('#quiz-formats .grid-item.selected').forEach(item => {
-            formData.formats.push(item.dataset.value);
-        });
-        
-        // Collect question count
-        const questionCountSelect = document.getElementById('quiz-question-count');
-        if (questionCountSelect) {
-            formData.questionCount = questionCountSelect.value;
-        }
-        
-        // Collect focus areas
-        const focusAreasInput = document.getElementById('quiz-focus-areas');
-        if (focusAreasInput && focusAreasInput.value.trim()) {
-            formData.focusAreas = focusAreasInput.value.trim();
-        }
-        
-        // Collect participants (multi-selection grid)
-        document.querySelectorAll('#quiz-participants .grid-item.selected').forEach(item => {
-            formData.participants.push(item.dataset.value);
-        });
-        
-        // Collect extra instructions
-        const extraInstructionsInput = document.getElementById('quiz-extra-instructions');
-        if (extraInstructionsInput && extraInstructionsInput.value.trim()) {
-            formData.extraInstructions = extraInstructionsInput.value.trim();
-        }
-        
-        return formData;
-    }
 
-    // Repopulate form from localStorage - simplified to only use JSON
-    function repopulateForm() {
-        console.log("[QuizIQ] Repopulating form from JSON storage");
-
-        // Get stored JSON data
-        const storedData = getJSON('quizIqInput', null);
-        if (!storedData) {
-            console.log('[QuizIQ] No stored form data found');
-            return;
-        }
-            
-        console.log('[QuizIQ] Found stored JSON form data');
-        
-        // Populate quiz subject
-        const subjectInput = document.getElementById('quiz-subject');
-        if (subjectInput && storedData.subject) {
-            subjectInput.value = storedData.subject;
-            console.log(`[QuizIQ] Restored from JSON: quiz subject`);
-        }
-        
-        // Populate quiz objective
-        const objectiveSelect = document.getElementById('quiz-objective');
-        if (objectiveSelect && storedData.objective) {
-            objectiveSelect.value = storedData.objective;
-            console.log(`[QuizIQ] Restored from JSON: quiz objective`);
-        }
-        
-        // Populate difficulty tier
-        const difficultySelect = document.getElementById('quiz-difficulty-tier');
-        if (difficultySelect && storedData.difficultyTier) {
-            difficultySelect.value = storedData.difficultyTier;
-            console.log(`[QuizIQ] Restored from JSON: difficulty tier`);
-        }
-        
-        // Populate question formats
-        if (storedData.formats && Array.isArray(storedData.formats)) {
-            storedData.formats.forEach(format => {
-                const item = document.querySelector(`#quiz-formats .grid-item[data-value="${format}"]`);
-                if (item) {
-                    item.classList.add('selected');
-                    console.log(`[QuizIQ] Restored from JSON: format ${format}`);
-                }
-            });
-        }
-        
-        // Populate question count
-        const questionCountSelect = document.getElementById('quiz-question-count');
-        if (questionCountSelect && storedData.questionCount) {
-            questionCountSelect.value = storedData.questionCount;
-            console.log(`[QuizIQ] Restored from JSON: question count`);
-        }
-        
-        // Populate focus areas
-        const focusAreasInput = document.getElementById('quiz-focus-areas');
-        if (focusAreasInput && storedData.focusAreas) {
-            focusAreasInput.value = storedData.focusAreas;
-            console.log(`[QuizIQ] Restored from JSON: focus areas`);
-        }
-        
-        // Populate participants
-        if (storedData.participants && Array.isArray(storedData.participants)) {
-            storedData.participants.forEach(participant => {
-                const item = document.querySelector(`#quiz-participants .grid-item[data-value="${participant}"]`);
-                if (item) {
-                    item.classList.add('selected');
-                    console.log(`[QuizIQ] Restored from JSON: participant ${participant}`);
-                }
-            });
-        }
-        
-        // Populate extra instructions
-        const extraInstructionsInput = document.getElementById('quiz-extra-instructions');
-        if (extraInstructionsInput && storedData.extraInstructions) {
-            extraInstructionsInput.value = storedData.extraInstructions;
-            console.log(`[QuizIQ] Restored from JSON: extra instructions`);
-        }
-    }
-
-    // Handle input changes
-    function setupInputHandlers() {
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            input.addEventListener('change', function() {
-                saveInput(this);
-            });
-        });
-    }
-
-    // Clear saved data from localStorage
-    function clearLocalStorage() {
-        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
-            return;
-        }
-        
-        try {
-            // Simply remove the JSON data - no need to iterate through individual keys
-            localStorage.removeItem('quizIqInput');
-            localStorage.removeItem('quizIqResponse');
-            
-            // Reset UI
-            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            document.querySelectorAll('input, textarea').forEach(input => {
-                input.value = '';
-            });
-            
-            // Reset select elements to default values
-            document.querySelectorAll('select').forEach(select => {
-                if (select.options.length > 0) {
-                    select.selectedIndex = 0;
-                }
-            });
-            
-            console.log('[QuizIQ] All quiz data cleared');
-            alert("All quiz data has been cleared successfully.");
-        } catch (error) {
-            console.error('[QuizIQ] Error clearing data:', error);
-            alert("Error clearing data: " + error.message);
-        }
-    }
 
     // Handle the generate button click - directly talking to worker
     async function handleGenerateQuizIq() {
@@ -355,10 +129,10 @@ Add difficulty ratings to questions"></textarea>
             'generate-quiz-btn',
             'quiz',
             async () => {
-                // Use what's already in localStorage
-                const formData = getJSON('quizIqInput');
+                // Use centralized system to get form data
+                const formData = window.FormPersistence.getSavedFormData();
                 if (!formData) {
-                    console.error('[QuizIQ] No input data found in localStorage.');
+                    console.error('[QuizIQ] No input data found.');
                     throw new Error('Please complete the form before generating a quiz.');
                 }
                 
@@ -371,7 +145,7 @@ Add difficulty ratings to questions"></textarea>
                 // Send data to worker
                 const apiUrl = 'https://quiz.4hm7q4q75z.workers.dev/'; 
                 
-                console.log('[QuizIQ] Sending quizIqInput directly from localStorage to worker');
+                console.log('[QuizIQ] Sending form data to worker');
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
@@ -391,8 +165,8 @@ Add difficulty ratings to questions"></textarea>
                     throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
                 }
                 
-                // Store the response using setJSON
-                setJSON('quizIqResponse', responseData);
+                // Store the response using centralized system
+                window.FormPersistence.saveResponseData(responseData);
                 
                 // Dispatch an event to notify dataout.js that a response was received
                 const event = new CustomEvent('api-response-received', {
@@ -422,7 +196,7 @@ Add difficulty ratings to questions"></textarea>
         
         const clearBtn = document.getElementById('clear-quiz-btn');
         if (clearBtn) {
-            clearBtn.addEventListener('click', clearLocalStorage);
+            clearBtn.addEventListener('click', () => window.FormPersistence.clearLocalStorage());
         }
     }
 
@@ -430,9 +204,7 @@ Add difficulty ratings to questions"></textarea>
     function initialize() {
         console.log("[QuizIQ] Initializing...");
         initializeQuizGridItems();
-        setupInputHandlers();
         setupButtonHandlers();
-        repopulateForm();
         
         // Set up grid-item-toggled event listener
         document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
@@ -456,10 +228,7 @@ Add difficulty ratings to questions"></textarea>
     // For external access if needed
     window.quizIq = {
         initialize: initialize,
-        saveGridItem: saveGridItem,
-        saveInput: saveInput,
-        clearLocalStorage: clearLocalStorage,
-        getFormData: collectFormData
+        getFormData: () => window.FormPersistence.getSavedFormData()
     };
 })();
 </script>

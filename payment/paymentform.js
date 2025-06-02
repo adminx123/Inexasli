@@ -3,8 +3,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Import modal system
     await import('../utility/modal.js');
     
-    // Create payment corner button - this is now the primary payment interface
-    createPaymentCornerButton();
+    // Skip external button creation - now integrated into datain.js
+    console.log('[PaymentForm] Button creation skipped - integrated into datain.js');
+    // createPaymentCornerButton();
     
     // Inject CSS styles for payment interface
     const style = document.createElement('style');
@@ -401,6 +402,9 @@ document.addEventListener('DOMContentLoaded', async function() {
  * that triggers payment functionality when clicked
  */
 function createPaymentCornerButton() {
+    // Button is now integrated into datain.js - skip external creation
+    console.log('[PaymentForm] Button creation skipped - integrated into datain.js');
+    return;
     // Create button container
     const buttonContainer = document.createElement('div');
     buttonContainer.style.position = 'fixed';

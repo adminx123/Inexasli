@@ -110,28 +110,7 @@ Should I apologize first"></textarea>
 (function() {
     console.log("SocialIQ script initializing");
 
-    // Only using JSON for data storage now - more efficient approach
-    const setJSON = window.setJSON || function(name, value) {
-        try {
-            return true;
-        } catch (error) {
-            console.error(`[SocialIQ] Error storing JSON: ${error}`);
-            return false;
-        }
-    };
-    
-    const getJSON = window.getJSON || function(name, defaultValue) {
-        try {
-            const item = localStorage.getItem(name);
-            if (!item) return defaultValue;
-            const parsedValue = JSON.parse(item);
-            console.log(`[SocialIQ] JSON retrieved ${name}`);
-            return parsedValue;
-        } catch (error) {
-            console.error(`[SocialIQ] Error retrieving JSON: ${error}`);
-            return defaultValue;
-        }
-    };
+    // Using centralized FormPersistence module for data storage
 
     // Handler for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
@@ -147,30 +126,7 @@ Should I apologize first"></textarea>
             });
         }
         
-        // Save using JSON approach
-        saveGridItem(item);
-        
         console.log(`[SocialIQ] Handled toggle for ${item.dataset.value} in ${container.id}: ${item.classList.contains('selected') ? 'selected' : 'deselected'}`);
-    }
-
-    // Save grid item selection - only using JSON for efficiency
-    function saveGridItem(item) {
-        // Skip individual localStorage items and only use JSON
-        // Directly save complete form data to JSON
-        console.log('[SocialIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('socialIqInput', formData);
-    }
-
-    // Save input value - only using JSON for efficiency
-    function saveInput(input) {
-        if (!input || !input.id) return;
-        
-        // Skip individual localStorage items and only use JSON
-        // Directly save complete form data to JSON
-        console.log('[SocialIQ] Saving all form data to JSON');
-        const formData = collectFormData();
-        setJSON('socialIqInput', formData);
     }
 
     // Initialize our grid items
@@ -179,182 +135,19 @@ Should I apologize first"></textarea>
         // No need to add click handlers - datain.js handles that now
     }
 
-    // Collect form data without validation
-    function collectFormData() {
-        const formData = {
-            incidentArea: null,
-            analysisGoals: [],
-            incidentDetails: null,
-            keyMoments: null,
-            initialThoughts: null,
-            personalityTraits: [],
-            perceivedMood: []
-        };
-        
-        // Collect incident area (single selection)
-        const selectedArea = document.querySelector('#area-goal .grid-item.selected');
-        if (selectedArea) {
-            formData.incidentArea = selectedArea.dataset.value;
-        }
-        
-        // Collect analysis goals (multiple selection)
-        document.querySelectorAll('#incident-goal .grid-item.selected').forEach(item => {
-            formData.analysisGoals.push(item.dataset.value);
-        });
-        
-        // Collect incident details
-        const detailsInput = document.getElementById('incident-details');
-        if (detailsInput && detailsInput.value.trim()) {
-            formData.incidentDetails = detailsInput.value.trim();
-        }
-        
-        // Collect key moments
-        const momentsInput = document.getElementById('incident-moments');
-        if (momentsInput && momentsInput.value.trim()) {
-            formData.keyMoments = momentsInput.value.trim();
-        }
-        
-        // Collect initial thoughts
-        const thoughtsInput = document.getElementById('incident-thoughts');
-        if (thoughtsInput && thoughtsInput.value.trim()) {
-            formData.initialThoughts = thoughtsInput.value.trim();
-        }
-        
-        // Collect personality traits (multiple selection)
-        document.querySelectorAll('#incident-warnings .grid-item.selected').forEach(item => {
-            formData.personalityTraits.push(item.dataset.value);
-        });
-        
-        // Collect perceived mood (multiple selection)
-        document.querySelectorAll('#incident-mood .grid-item.selected').forEach(item => {
-            formData.perceivedMood.push(item.dataset.value);
-        });
-        
-        return formData;
-    }
+    // Form repopulation is now handled by the centralized FormPersistence module
 
-    // Repopulate form from localStorage - simplified to only use JSON
-    function repopulateForm() {
-        console.log("[SocialIQ] Repopulating form from JSON storage");
+    // Input change handling is now managed by the centralized FormPersistence module
 
-        // Get stored JSON data
-        const storedData = getJSON('socialIqInput', null);
-        if (!storedData) {
-            console.log('[SocialIQ] No stored form data found');
-            return;
-        }
-            
-        console.log('[SocialIQ] Found stored JSON form data');
-        
-        // Populate incident area (single selection)
-        if (storedData.incidentArea) {
-            const areaItem = document.querySelector(`#area-goal .grid-item[data-value="${storedData.incidentArea}"]`);
-            if (areaItem) {
-                document.querySelectorAll('#area-goal .grid-item').forEach(el => el.classList.remove('selected'));
-                areaItem.classList.add('selected');
-                console.log(`[SocialIQ] Restored from JSON: incident area`);
-            }
-        }
-        
-        // Populate analysis goals (multiple selection)
-        if (storedData.analysisGoals && Array.isArray(storedData.analysisGoals)) {
-            storedData.analysisGoals.forEach(goal => {
-                const goalItem = document.querySelector(`#incident-goal .grid-item[data-value="${goal}"]`);
-                if (goalItem) {
-                    goalItem.classList.add('selected');
-                    console.log(`[SocialIQ] Restored from JSON: analysis goal ${goal}`);
-                }
-            });
-        }
-        
-        // Populate incident details
-        const detailsInput = document.getElementById('incident-details');
-        if (detailsInput && storedData.incidentDetails) {
-            detailsInput.value = storedData.incidentDetails;
-            console.log(`[SocialIQ] Restored from JSON: incident details`);
-        }
-        
-        // Populate key moments
-        const momentsInput = document.getElementById('incident-moments');
-        if (momentsInput && storedData.keyMoments) {
-            momentsInput.value = storedData.keyMoments;
-            console.log(`[SocialIQ] Restored from JSON: key moments`);
-        }
-        
-        // Populate initial thoughts
-        const thoughtsInput = document.getElementById('incident-thoughts');
-        if (thoughtsInput && storedData.initialThoughts) {
-            thoughtsInput.value = storedData.initialThoughts;
-            console.log(`[SocialIQ] Restored from JSON: initial thoughts`);
-        }
-        
-        // Populate personality traits (multiple selection)
-        if (storedData.personalityTraits && Array.isArray(storedData.personalityTraits)) {
-            storedData.personalityTraits.forEach(trait => {
-                const traitItem = document.querySelector(`#incident-warnings .grid-item[data-value="${trait}"]`);
-                if (traitItem) {
-                    traitItem.classList.add('selected');
-                    console.log(`[SocialIQ] Restored from JSON: personality trait ${trait}`);
-                }
-            });
-        }
-        
-        // Populate perceived mood (multiple selection)
-        if (storedData.perceivedMood && Array.isArray(storedData.perceivedMood)) {
-            storedData.perceivedMood.forEach(mood => {
-                const moodItem = document.querySelector(`#incident-mood .grid-item[data-value="${mood}"]`);
-                if (moodItem) {
-                    moodItem.classList.add('selected');
-                    console.log(`[SocialIQ] Restored from JSON: perceived mood ${mood}`);
-                }
-            });
-        }
-    }
-
-    // Handle input changes
-    function setupInputHandlers() {
-        document.querySelectorAll('input, textarea, select').forEach(input => {
-            input.addEventListener('change', function() {
-                saveInput(this);
-            });
-        });
-    }
-
-    // Clear saved data from localStorage
-    function clearLocalStorage() {
-        if (!confirm("Are you sure you want to clear all saved data? This action cannot be undone.")) {
-            return;
-        }
-        
-        try {
-            // Simply remove the JSON data - no need to iterate through individual keys
-            localStorage.removeItem('socialIqInput');
-            localStorage.removeItem('socialIqResponse');
-            
-            // Reset UI
-            document.querySelectorAll('.grid-container .grid-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            document.querySelectorAll('input, textarea').forEach(input => {
-                input.value = '';
-            });
-            
-            console.log('[SocialIQ] All social data cleared');
-            alert("All social analysis data has been cleared successfully.");
-        } catch (error) {
-            console.error('[SocialIQ] Error clearing data:', error);
-            alert("Error clearing data: " + error.message);
-        }
-    }
+    // Clearing saved data is now handled by the centralized FormPersistence module
 
     // Handle the generate button click - directly talking to worker
     async function handleGenerateSocialIq() {
         try {
-            // Use what's already in localStorage
-            const formData = getJSON('socialIqInput');
+            // Use centralized FormPersistence to get form data
+            const formData = window.FormPersistence.getSavedFormData();
             if (!formData) {
-                console.error('[SocialIQ] No input data found in localStorage.');
+                console.error('[SocialIQ] No input data found.');
                 alert('Please complete the form before generating a social analysis.');
                 return;
             }
@@ -373,7 +166,7 @@ Should I apologize first"></textarea>
                 async () => {
                     const apiUrl = 'https://social.4hm7q4q75z.workers.dev/';
                     
-                    console.log('[SocialIQ] Sending socialIqInput directly from localStorage to worker');
+                    console.log('[SocialIQ] Sending form data to worker');
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: {
@@ -397,8 +190,8 @@ Should I apologize first"></textarea>
                 }
             );
             
-            // Store the response using setJSON
-            setJSON('socialIqResponse', result);
+            // Store the response using FormPersistence
+            window.FormPersistence.saveResponseData(result);
             
             // Dispatch an event to notify dataout.js that a response was received
             const event = new CustomEvent('api-response-received', {
@@ -421,12 +214,14 @@ Should I apologize first"></textarea>
     function setupButtonHandlers() {
         const generateBtn = document.getElementById('generate-social-btn');
         if (generateBtn) {
+            generateBtn.removeEventListener('click', handleGenerateSocialIq);
             generateBtn.addEventListener('click', handleGenerateSocialIq);
         }
         
         const clearBtn = document.getElementById('clear-social-btn');
         if (clearBtn) {
-            clearBtn.addEventListener('click', clearLocalStorage);
+            clearBtn.removeEventListener('click', () => window.FormPersistence.clearLocalStorage());
+            clearBtn.addEventListener('click', () => window.FormPersistence.clearLocalStorage());
         }
     }
 
@@ -434,9 +229,7 @@ Should I apologize first"></textarea>
     function initialize() {
         console.log("[SocialIQ] Initializing...");
         initializeSocialGridItems();
-        setupInputHandlers();
         setupButtonHandlers();
-        repopulateForm();
         
         // Set up grid-item-toggled event listener
         document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
@@ -459,11 +252,7 @@ Should I apologize first"></textarea>
 
     // For external access if needed
     window.socialIq = {
-        initialize: initialize,
-        saveGridItem: saveGridItem,
-        saveInput: saveInput,
-        clearLocalStorage: clearLocalStorage,
-        getFormData: collectFormData
+        initialize: initialize
     };
 })();
 </script>
