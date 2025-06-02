@@ -454,8 +454,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 box-sizing: border-box; /* Include padding in height calculation */
             }
 
-            /* Utility buttons styling for collapsed state */
-            .data-container-left .utility-buttons-collapsed {
+            /* Utility buttons styling for all states */
+            .data-container-left .utility-buttons-container {
                 display: flex;
                 flex-direction: row;
                 gap: 8px;
@@ -463,17 +463,62 @@ document.addEventListener('DOMContentLoaded', async function () {
                 z-index: 11003;
             }
 
-            .data-container-left.expanded .utility-buttons-collapsed {
+            /* Hide utility buttons only when expanded */
+            .data-container-left.expanded .utility-buttons-container {
                 display: none;
             }
 
-            .data-container-left.initial .utility-buttons-collapsed,
-            .data-container-left.collapsed .utility-buttons-collapsed {
+            /* Show utility buttons in all collapsed states */
+            .data-container-left.initial .utility-buttons-container,
+            .data-container-left.collapsed .utility-buttons-container,
+            .data-container-left.visually-collapsed .utility-buttons-container {
                 display: flex;
+            }
+            
+            /* Visual collapsed state - looks like collapsed but keeps expanded DOM structure */
+            .data-container-left.visually-collapsed {
+                max-width: 100%;
+                width: 100%;
+                min-width: 100%;
+                height: 36px;
+                left: 0;
+                transform: none;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                z-index: 10001;
+                margin-left: 0;
+                margin-right: 0;
+                padding-left: 10px;
+                padding-right: 10px;
+                overflow: hidden;
+            }
+            
+            /* Ensure utility buttons are visible and properly positioned in collapsed state */
+            .data-container-left.visually-collapsed .utility-buttons-container {
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+                align-items: center;
+                position: static;
+                top: auto;
+                right: auto;
+                padding: 0;
+                justify-content: flex-end;
+                margin-left: auto;
+            }
+            
+            /* Ensure data label takes up available space on the left */
+            .data-container-left.visually-collapsed .data-label {
+                display: block;
+                flex-grow: 1;
+                text-align: left;
+                margin-right: 10px;
             }
 
             /* Button hover effects for collapsed state */
-            .data-container-left .utility-buttons-collapsed button:hover {
+            .data-container-left .utility-buttons-container button:hover {
                 background-color: rgba(255, 255, 255, 0.8);
             }
 
@@ -499,22 +544,30 @@ document.addEventListener('DOMContentLoaded', async function () {
                     padding-left: 10px;
                     padding-right: 10px;
                 }
+                
+                .data-container-left.visually-collapsed {
+                    width: 100%;
+                    height: 36px;
+                    z-index: 10001;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
 
-                .data-container-left .utility-buttons-collapsed {
+                .data-container-left .utility-buttons-container {
                     gap: 6px;
                 }
 
-                .data-container-left .utility-buttons-collapsed button {
+                .data-container-left .utility-buttons-container button {
                     width: 24px;
                     height: 24px;
                     font-size: 12px;
                 }
 
-                .data-container-left .utility-buttons-collapsed button i {
+                .data-container-left .utility-buttons-container button i {
                     font-size: 12px;
                 }
 
-                .data-container-left .utility-buttons-collapsed button span {
+                .data-container-left .utility-buttons-container button span {
                     font-size: 12px;
                 }
 
@@ -565,12 +618,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.head.appendChild(style);
 
         dataContainer = document.createElement('div');
-        dataContainer.className = `data-container-left initial`;
+        dataContainer.className = `data-container-left visually-collapsed`;
         dataContainer.dataset.state = 'initial';
         dataContainer.innerHTML = `
-            <span class="close-data-container"></span>
+            <span class="close-data-container" style="display: none;"></span>
             <span class="data-label">DATA IN</span>
-            <div class="utility-buttons-collapsed">
+            <div class="utility-buttons-container">
                 <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                     <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                 </button>
@@ -584,6 +637,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <i class="bx bx-copy" style="font-size: 14px;"></i>
                 </button>
             </div>
+            <div class="data-content" style="display: none;">No content selected. Please select a grid item.</div>
         `;
 
         document.body.appendChild(dataContainer);
@@ -652,48 +706,44 @@ document.addEventListener('DOMContentLoaded', async function () {
             const dataOutContainer = document.querySelector('.data-container-right');
 
             if (isExpanded) {
+                // Collapse: Transform to visual collapsed state without changing DOM
                 dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('initial');
+                dataContainer.classList.add('visually-collapsed');
                 dataContainer.dataset.state = 'initial';
                 setLocal('dataContainerState', 'initial');
-                dataContainer.innerHTML = `
-                    <span class="close-data-container"></span>
-                    <span class="data-label">DATA IN</span>
-                    <div class="utility-buttons-collapsed">
-                        <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
-                        </button>
-                        <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <span style="font-size: 14px; font-weight: bold;">$</span>
-                        </button>
-                        <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <i class="bx bx-trash" style="font-size: 14px;"></i>
-                        </button>
-                        <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <i class="bx bx-copy" style="font-size: 14px;"></i>
-                        </button>
-                    </div>
-                `;
                 
-                // Setup utility buttons for collapsed state
-                setupUtilityButtons();
+                // Hide the data content and show collapsed elements
+                const dataContent = dataContainer.querySelector('.data-content');
+                const closeButton = dataContainer.querySelector('.close-data-container');
+                const utilityButtons = dataContainer.querySelector('.utility-buttons-container');
                 
-                // Re-add click listener to entire container for expansion, but exclude utility button clicks
-                dataContainer.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    
-                    // Check if click is on utility buttons
-                    const isUtilityButton = e.target.closest('#datain-overwrite-btn, #datain-copy-btn, #datain-category-btn, #datain-payment-btn') ||
-                                           e.target.id === 'datain-overwrite-btn' ||
-                                           e.target.id === 'datain-copy-btn' ||
-                                           e.target.id === 'datain-category-btn' ||
-                                           e.target.id === 'datain-payment-btn';
-                    
-                    // Only expand if it's not a utility button click and container is not expanded
-                    if (!isUtilityButton && dataContainer.dataset.state !== 'expanded') {
-                        toggleDataContainer();
-                    }
-                });
+                if (dataContent) {
+                    dataContent.style.display = 'none';
+                }
+                if (closeButton) {
+                    closeButton.style.display = 'none';
+                }
+                if (utilityButtons) {
+                    // Remove any inline styles and let CSS handle positioning
+                    utilityButtons.style.display = '';
+                    utilityButtons.style.position = '';
+                    utilityButtons.style.top = '';
+                    utilityButtons.style.right = '';
+                    utilityButtons.style.justifyContent = '';
+                    utilityButtons.style.padding = '';
+                    utilityButtons.style.marginLeft = '';
+                }
+                
+                // Create or show collapsed label
+                let dataLabel = dataContainer.querySelector('.data-label');
+                if (!dataLabel) {
+                    dataLabel = document.createElement('span');
+                    dataLabel.className = 'data-label';
+                    dataLabel.textContent = 'DATA IN';
+                    dataContainer.insertBefore(dataLabel, dataContainer.firstChild);
+                }
+                // Remove inline styles and let CSS handle display
+                dataLabel.style.display = '';
                 
                 // Reset dataout container z-index when datain collapses
                 if (dataOutContainer) {
@@ -706,9 +756,36 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }));
                 
             } else {
-                dataContainer.classList.remove('initial');
+                // Expand: Transform back to full expanded state
+                dataContainer.classList.remove('visually-collapsed');
                 dataContainer.classList.add('expanded');
                 dataContainer.dataset.state = 'expanded';
+                
+                // Show the data content and hide collapsed elements
+                const dataContent = dataContainer.querySelector('.data-content');
+                const closeButton = dataContainer.querySelector('.close-data-container');
+                const utilityButtons = dataContainer.querySelector('.utility-buttons-container');
+                const dataLabel = dataContainer.querySelector('.data-label');
+                
+                if (dataContent) {
+                    dataContent.style.display = 'block';
+                }
+                if (closeButton) {
+                    closeButton.style.display = 'block';
+                }
+                if (utilityButtons) {
+                    // Let CSS handle the expanded state positioning
+                    utilityButtons.style.display = '';
+                    utilityButtons.style.position = '';
+                    utilityButtons.style.top = '';
+                    utilityButtons.style.right = '';
+                    utilityButtons.style.justifyContent = '';
+                    utilityButtons.style.padding = '';
+                }
+                if (dataLabel) {
+                    // Remove inline styles and let CSS handle display
+                    dataLabel.style.display = '';
+                }
                 
                 // Set dataout container to higher z-index to appear above expanded datain
                 if (dataOutContainer) {
@@ -733,51 +810,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (storedUrl) {
                     loadStoredContent(storedUrl);
                 } else {
-                    dataContainer.innerHTML = `
-                        <span class="close-data-container"></span>
-                        <div class="utility-buttons-container" style="position: absolute; top: -4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
-                            <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                                <i class="bx bx-trash" style="font-size: 14px;"></i>
-                            </button>
-                            <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                                <i class="bx bx-copy" style="font-size: 14px;"></i>
-                            </button>
-                            <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                                <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
-                            </button>
-                            <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                                <span style="font-size: 14px; font-weight: bold;">$</span>
-                            </button>
-                        </div>
-                        <div class="data-content">No content selected. Please select a grid item.</div>
-                    `;
-                    
-                    // Add event listeners for the utility buttons
-                    setupUtilityButtons();
-                }
-            }
-
-            // Re-bind toggle listeners
-            const newClose = dataContainer.querySelector('.close-data-container');
-            const newLabel = dataContainer.querySelector('.data-label');
-
-            if (newClose) {
-                newClose.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
-
-            if (newLabel) {
-                newLabel.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation(); // Stop event from bubbling up to container
-                    
-                    // Use the same logic as container click - call toggleDataContainer
-                    if (dataContainer.dataset.state !== 'expanded') {
-                        toggleDataContainer();
+                    // Ensure data content shows default message
+                    const dataContentEl = dataContainer.querySelector('.data-content');
+                    if (dataContentEl) {
+                        dataContentEl.textContent = 'No content selected. Please select a grid item.';
                     }
-                });
+                }
             }
         }
 
