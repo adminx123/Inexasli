@@ -600,6 +600,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     async function initializeApp() {
+        // Always initialize the data container regardless of cookie state
+        // The cookie check was preventing initialization after consent modals
         initializeDataContainer();
 
         // Check if data-in is already expanded to adjust z-index appropriately
@@ -609,20 +611,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         try {
-            if (!isCookieExpired) {
-                initializeDataContainer();
-                
-                // Mobile device detection for debugging
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                console.log(`Device detected: ${isMobile ? 'Mobile' : 'Desktop'}`);
-                console.log(`User agent: ${navigator.userAgent}`);
-                
-                // Additional debug info for touch support
-                if (isMobile) {
-                    console.log('Touch events should be fully supported on this device');
-                    console.log(`Touch points supported: ${navigator.maxTouchPoints}`);
-                    console.log(`Screen size: ${window.screen.width}x${window.screen.height}`);
-                }
+            // Mobile device detection for debugging
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            console.log(`Device detected: ${isMobile ? 'Mobile' : 'Desktop'}`);
+            console.log(`User agent: ${navigator.userAgent}`);
+            
+            // Additional debug info for touch support
+            if (isMobile) {
+                console.log('Touch events should be fully supported on this device');
+                console.log(`Touch points supported: ${navigator.maxTouchPoints}`);
+                console.log(`Screen size: ${window.screen.width}x${window.screen.height}`);
             }
         } catch (error) {
             console.error('Error initializing right data container (dataout.js):', error);
