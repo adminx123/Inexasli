@@ -84,6 +84,12 @@ function initializeFormPersistence(url) {
         moduleType = 'research';
     } else if (url.includes('/social/')) {
         moduleType = 'social';
+    } else if (url.includes('/categories.html')) {
+        moduleType = 'categories';
+        moduleConfig = {
+            singleSelection: ['category-selection'],
+            multiSelection: []
+        };
     } else {
         // Try to detect from URL path
         const pathParts = url.split('/');
@@ -104,6 +110,75 @@ function initializeFormPersistence(url) {
     } catch (error) {
         console.error('[DataIn] Error initializing FormPersistence:', error);
     }
+    
+    // Add module-specific initialization
+    if (moduleType === 'categories') {
+        initializeCategoryModule();
+    }
+}
+
+// Category module initialization function
+function initializeCategoryModule() {
+    console.log('[DataIn] Initializing category module functionality');
+    
+    // Add category selection logic
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('grid-item') && e.target.closest('#category-selection')) {
+            const selectedCategory = e.target.getAttribute('data-value');
+            console.log('[DataIn] Category selected:', selectedCategory);
+            
+            if (selectedCategory) {
+                // Update grid item selection
+                document.querySelectorAll('#category-selection .grid-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                e.target.classList.add('selected');
+                
+                // Hide all product rows
+                document.querySelectorAll('.row1[data-show-for]').forEach(row => {
+                    row.classList.remove('show');
+                    row.style.display = 'none';
+                });
+                
+                // Show the selected category's products
+                const targetRow = document.querySelector(`.row1[data-show-for="${selectedCategory}"]`);
+                if (targetRow) {
+                    targetRow.classList.add('show');
+                    targetRow.style.display = 'block';
+                    console.log('[DataIn] Showing products for category:', selectedCategory);
+                }
+            }
+        }
+        
+        // Add product selection logic
+        if (e.target.classList.contains('grid-item') && e.target.getAttribute('data-value') && e.target.getAttribute('data-value').startsWith('/ai/')) {
+            const url = e.target.getAttribute('data-value');
+            console.log('[DataIn] Product selected:', url);
+            
+            // Detect if this is the intro/incomeIQ item
+            const isBudgetItem = url === '/ai/income/intro.html';
+            
+            // Toggle UI mode based on selection if the function exists
+            if (typeof window.toggleUiMode === 'function') {
+                window.toggleUiMode(isBudgetItem);
+            }
+            
+            if (!isBudgetItem) {
+                // For non-budget items, use regular content loading
+                const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
+                    detail: { url: url }
+                });
+                document.dispatchEvent(gridItemEvent);
+            }
+            
+            // Store the URL in localStorage for persistence
+            if (typeof window.setLocal === 'function') {
+                window.setLocal('lastGridItemUrl', url);
+            } else {
+                localStorage.setItem('lastGridItemUrl', url);
+            }
+        }
+    });
 }
 
 setTimeout(() => {
@@ -967,17 +1042,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 categoryBtn.style.backgroundColor = 'transparent';
             });
             
-            // Add click handler for category modal
+            // Add click handler to load categories.html
             categoryBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                // Call the category modal functionality
-                if (window.categoryManager && window.categoryManager.openModal) {
-                    window.categoryManager.openModal();
-                } else {
-                    console.error('Category manager not available');
-                }
+                // Load categories.html directly into the datain container
+                loadStoredContent('/ai/categories.html');
             });
         }
         
