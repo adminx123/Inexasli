@@ -116,8 +116,10 @@ const UIManager = {
         });
         
         if (isBudgetMode) {
-            // Hide data containers
+            // Hide data containers (excluding data-container-left to avoid overriding datain.js)
             dataContainers.forEach(element => {
+                // --- CHANGE: Skip data-container-left to prevent hiding it ---
+                if (element.classList.contains('data-container-left')) return;
                 if (element) {
                     element.style.setProperty('display', 'none', 'important');
                 }
@@ -132,7 +134,7 @@ const UIManager = {
                 }
             });
         } else {
-            // Hide budget tabs - use both display:none and visibility:hidden for belt-and-suspenders
+            // Hide budget tabs - use both display:none and visibility:hidden
             budgetContainers.forEach(element => {
                 if (element) {
                     element.style.setProperty('display', 'none', 'important');
@@ -144,7 +146,12 @@ const UIManager = {
             // Show data containers
             dataContainers.forEach(element => {
                 if (element) {
+                    // --- CHANGE: Explicitly ensure visibility for data-container-left ---
                     element.style.removeProperty('display');
+                    if (element.classList.contains('data-container-left')) {
+                        element.style.setProperty('visibility', 'visible');
+                        element.style.setProperty('opacity', '1');
+                    }
                 }
             });
         }
@@ -170,20 +177,22 @@ const UIManager = {
     hideAllInitially() {
         this.clearRules();
         
-        // Hide data containers with display:none
+        // --- CHANGE: Hide only data-container-right, not data-container-left ---
         SELECTORS.data.forEach(selector => {
-            this.styleSheet.insertRule(`${selector} { display: none !important; }`, 0);
+            if (selector !== '.data-container-left') {
+                this.styleSheet.insertRule(`${selector} { display: none !important; }`, 0);
+            }
         });
         
-        // Aggressively hide budget tabs (both display:none and visibility:hidden)
+        // Aggressively hide budget tabs
         SELECTORS.budget.forEach(selector => {
             this.styleSheet.insertRule(`${selector} { display: none !important; visibility: hidden !important; opacity: 0 !important; }`, 0);
         });
         
-        // Also apply direct DOM styles immediately
+        // Apply direct DOM styles for budget containers
         this.applyDOMStyles(false);
         
-        // Apply styles directly to DOM elements to ensure they're hidden
+        // Apply styles directly to budget elements to ensure they're hidden
         SELECTORS.budget.forEach(selector => {
             const elements = document.querySelectorAll(selector);
             elements.forEach(el => {
