@@ -8,7 +8,6 @@
 
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
-import { initializeSwipeFunctionality } from '/utility/swipeFunctionality.js';
 import FormPersistence from '/utility/formPersistence.js';
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
@@ -864,59 +863,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (lastState === 'expanded') {
             toggleDataContainer();
         }
-        
-        // Initialize swipe functionality for the datain container
-        let swipeHandler = null;
-        
-        // Observer to watch for state changes on the dataContainer
-        const dataContainerObserver = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'data-state') {
-                    const state = dataContainer.dataset.state;
-                    
-                    if (state === 'expanded') {
-                        // If expanded and swipe handler doesn't exist, create one
-                        if (!swipeHandler) {
-                            swipeHandler = initializeSwipeFunctionality(
-                                dataContainer, 
-                                'left', 
-                                toggleDataContainer, 
-                                { 
-                                    sessionStorageKey: 'swipeEducationShownLeft'
-                                }
-                            );
-                            console.log('Swipe functionality initialized for datain container');
-                        }
-                    } else {
-                        // If not expanded and swipe handler exists, destroy it
-                        if (swipeHandler) {
-                            swipeHandler.destroy();
-                            swipeHandler = null;
-                            console.log('Swipe functionality removed from datain container');
-                        }
-                    }
-                }
-            });
-        });
-        
-        // Start observing
-        dataContainerObserver.observe(dataContainer, { attributes: true });
-        
-        // Initialize swipe handler if container is already expanded
-        if (dataContainer.dataset.state === 'expanded') {
-            swipeHandler = initializeSwipeFunctionality(
-                dataContainer, 
-                'left', 
-                toggleDataContainer, 
-                { 
-                    sessionStorageKey: 'swipeEducationShownLeft' 
-                }
-            );
-            console.log('Initial swipe functionality initialized for datain container');
-        }
-        
-        // Debug message to confirm initialization
-        console.log('Swipe functionality initialized for datain container');
     }
 
     // Setup utility buttons within the datain container

@@ -619,5 +619,5 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    initializeApp();
+    initializeApp(); // Always initialize container after consent
 });
