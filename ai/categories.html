@@ -1,0 +1,167 @@
+<!-- /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */ -->
+
+<div class="device-container">
+<div class="row1" data-step-label="Select Category">
+    <div class="grid-container" id="category-selection">
+        <div class="grid-item" data-value="all">ALL CATEGORIES</div>
+        <div class="grid-item" data-value="health">HEALTH</div>
+        <div class="grid-item" data-value="business">BUSINESS</div>
+        <div class="grid-item" data-value="finance">FINANCE</div>
+        <div class="grid-item" data-value="lifestyle">LIFESTYLE</div>
+        <div class="grid-item" data-value="learning">LEARNING</div>
+        <div class="grid-item" data-value="productivity">PRODUCTIVITY</div>
+    </div>
+</div>
+
+<div class="row1" data-step-label="Available Products" style="display: none;" data-show-for="all">
+    <div class="grid-container" id="products-all">
+        <div class="grid-item" data-value="/ai/calorie/calorieiq.html">CalorieIQ™</div>
+        <div class="grid-item" data-value="/ai/decision/decisioniq.html">DecisionIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/enneagram/enneagramiq.html">EnneagramIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/event/eventiq.html">EventIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/fitness/fitnessiq.html">FitnessIQ™</div>
+        <div class="grid-item" data-value="/ai/income/intro.html">IncomeIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/philosophy/philosophyiq.html">PhilosophyIQ™</div>
+        <div class="grid-item" data-value="/ai/quiz/quiziq.html">QuizIQ™</div>
+        <div class="grid-item" data-value="/ai/research/researchiq.html">ResearchIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/social/socialiq.html">SocialIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/speculation/speculationiq.html">SpeculationIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/symptom/symptomiq.html">SymptomIQ™</div>
+    </div>
+</div>
+
+<div class="row1" data-step-label="Health Products" style="display: none;" data-show-for="health">
+    <div class="grid-container" id="products-health">
+        <div class="grid-item" data-value="/ai/calorie/calorieiq.html">CalorieIQ™</div>
+        <div class="grid-item" data-value="/ai/fitness/fitnessiq.html">FitnessIQ™</div>
+        <div class="grid-item" data-value="/ai/symptom/symptomiq.html">SymptomIQ™</div>
+    </div>
+</div>
+
+<div class="row1" data-step-label="Business Products" style="display: none;" data-show-for="business">
+    <div class="grid-container" id="products-business">
+        <div class="grid-item" data-value="/ai/decision/decisioniq.html">DecisionIQ™ <span class="premium-tag">Premium</span></div>
+    </div>
+</div>
+
+<div class="row1" data-step-label="Finance Products" style="display: none;" data-show-for="finance">
+    <div class="grid-container" id="products-finance">
+        <div class="grid-item" data-value="/ai/income/intro.html">IncomeIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/speculation/speculationiq.html">SpeculationIQ™ <span class="premium-tag">Premium</span></div>
+    </div>
+</div>
+
+<div class="row1" data-step-label="Lifestyle Products" style="display: none;" data-show-for="lifestyle">
+    <div class="grid-container" id="products-lifestyle">
+        <div class="grid-item" data-value="/ai/event/eventiq.html">EventIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/social/socialiq.html">SocialIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/philosophy/philosophyiq.html">PhilosophyIQ™</div>
+        <div class="grid-item" data-value="/ai/enneagram/enneagramiq.html">EnneagramIQ™ <span class="premium-tag">Premium</span></div>
+    </div>
+</div>
+
+<div class="row1" data-step-label="Learning Products" style="display: none;" data-show-for="learning">
+    <div class="grid-container" id="products-learning">
+        <div class="grid-item" data-value="/ai/research/researchiq.html">ResearchIQ™ <span class="premium-tag">Premium</span></div>
+        <div class="grid-item" data-value="/ai/quiz/quiziq.html">QuizIQ™</div>
+        <div class="grid-item" data-value="/ai/philosophy/philosophyiq.html">PhilosophyIQ™</div>
+    </div>
+</div>
+
+<div class="row1" data-step-label="Productivity Products" style="display: none;" data-show-for="productivity">
+    <div class="grid-container" id="products-productivity">
+        <div class="grid-item" data-value="/ai/decision/decisioniq.html">DecisionIQ™ <span class="premium-tag">Premium</span></div>
+    </div>
+</div>
+</div>
+
+<style>
+.premium-tag {
+    font-size: 10px;
+    color: #888;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+.grid-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Hide all product rows initially */
+.row1[data-show-for] {
+    display: none !important;
+}
+
+/* Show the row when its category is selected */
+.row1[data-show-for].show {
+    display: block !important;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add category selection logic
+    const categoryContainer = document.getElementById('category-selection');
+    
+    if (categoryContainer) {
+        categoryContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('grid-item')) {
+                const selectedCategory = e.target.getAttribute('data-value');
+                
+                // Hide all product rows
+                document.querySelectorAll('.row1[data-show-for]').forEach(row => {
+                    row.classList.remove('show');
+                    row.style.display = 'none';
+                });
+                
+                // Show the selected category's products
+                const targetRow = document.querySelector(`.row1[data-show-for="${selectedCategory}"]`);
+                if (targetRow) {
+                    targetRow.classList.add('show');
+                    targetRow.style.display = 'block';
+                }
+            }
+        });
+    }
+    
+    // Add product selection logic
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('grid-item') && e.target.getAttribute('data-value') && e.target.getAttribute('data-value').startsWith('/ai/')) {
+            const url = e.target.getAttribute('data-value');
+            
+            // Detect if this is the intro/incomeIQ item
+            const isBudgetItem = url === '/ai/income/intro.html';
+            
+            // Toggle UI mode based on selection if the function exists
+            if (typeof window.toggleUiMode === 'function') {
+                window.toggleUiMode(isBudgetItem);
+            }
+            
+            if (!isBudgetItem) {
+                // For non-budget items, use regular content loading
+                const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
+                    detail: { url: url }
+                });
+                document.dispatchEvent(gridItemEvent);
+            }
+            
+            // Store the URL in localStorage for persistence
+            if (typeof window.setLocal === 'function') {
+                window.setLocal('lastGridItemUrl', url);
+            } else {
+                localStorage.setItem('lastGridItemUrl', url);
+            }
+        }
+    });
+});
+</script>
