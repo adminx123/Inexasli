@@ -1024,5 +1024,7 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
     }
 };
 
+
+
 // Educational functionality has been moved to modal.js overlay system
 // The enhancedLoading function now uses window.showEducationalLoadingOverlay(moduleName)
