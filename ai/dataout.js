@@ -130,15 +130,15 @@ document.addEventListener('DOMContentLoaded', async function () {
                 max-width: 100%;
                 width: 100%;
                 min-width: 100%;
-                height: 95vh;
+                height: 50vh; /* 50% of viewport height */
                 top: 0;
                 left: 0;
                 transform: none;
-                z-index: 11000; /* Higher z-index when expanded to appear over grid */
-                border-radius: 0;
-                border: none;
-                box-shadow: none;
-                padding: 0;
+                border: 2px solid #000; /* Solid border */
+                border-top: none; /* Remove top border */
+                border-radius: 0 0 8px 8px; /* Rounded bottom corners */
+                box-shadow: -4px 4px 0 #000; /* 3D shadow effect */
+                padding: 4px; /* Keep padding */
             }
 
             .data-container-right:hover {
