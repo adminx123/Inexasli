@@ -227,7 +227,7 @@ Need accommodations for 3 wheelchair users"></textarea>
     setupLocationHandler();
     toggleEventDetails(); // Initialize visibility
     document.getElementById('generate-event-btn').addEventListener('click', handleGenerateEventIq);
-    document.getElementById('clear-event-btn').addEventListener('click', window.FormPersistence.clearLocalStorage);
+    document.getElementById('clear-event-btn').addEventListener('click', () => window.FormPersistence.clearLocalStorage());
 })();
 </script>
     </div>

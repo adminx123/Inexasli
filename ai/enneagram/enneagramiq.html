@@ -154,7 +154,7 @@ I often took charge of group projects at school"></textarea>
     // Initialization
     document.addEventListener('grid-item-toggled', handleGridItemToggled);
     document.getElementById('generate-enneagram-btn').addEventListener('click',generateEnneagram);
-    document.getElementById('clear-enneagram-btn').addEventListener('click', window.FormPersistence.clearLocalStorage);
+    document.getElementById('clear-enneagram-btn').addEventListener('click', () => window.FormPersistence.clearLocalStorage());
 })();
 </script>
 </div> <!-- Close mobile-container -->
