@@ -108,16 +108,18 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-right.initial, .data-container-right.collapsed {
-                width: 408px;
-                max-width: 408px;
-                min-width: 240px;
+                width: 100%;
+                max-width: 100%;
+                min-width: 100%;
                 height: 36px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 z-index: 12000; /* Ensure collapsed Data Out is above expanded Data In */
-                margin-left: 5px;
-                margin-right: 5px;
+                margin-left: 0;
+                margin-right: 0;
+                padding-left: 10px;
+                padding-right: 10px;
             }
             /* Explicit override to ensure tab stays above Data In */
             .data-container-right.initial {
