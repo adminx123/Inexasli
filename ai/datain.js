@@ -877,11 +877,28 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (storedUrl) {
                     loadStoredContent(storedUrl);
                 } else {
-                    // Ensure data content shows default message
-                    const dataContentEl = dataContainer.querySelector('.data-content');
-                    if (dataContentEl) {
-                        dataContentEl.textContent = 'No content selected. Please select a grid item.';
-                    }
+                    // Ensure proper expanded state when no content is loaded
+                    dataContainer.innerHTML = `
+                        <span class="close-data-container"></span>
+                        <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
+                            <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                                <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
+                            </button>
+                            <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                                <span style="font-size: 14px; font-weight: bold;">$</span>
+                            </button>
+                            <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                                <i class="bx bx-trash" style="font-size: 14px;"></i>
+                            </button>
+                            <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                                <i class="bx bx-copy" style="font-size: 14px;"></i>
+                            </button>
+                        </div>
+                        <div class="data-content">No content selected. Please select a grid item.</div>
+                    `;
+                    
+                    // Re-setup utility buttons after innerHTML change
+                    setupUtilityButtons();
                 }
             }
         }
