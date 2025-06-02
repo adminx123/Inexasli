@@ -11,6 +11,8 @@ import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 import { initializeSwipeFunctionality } from '/utility/swipeFunctionality.js';
 import FormPersistence from '/utility/formPersistence.js';
+import '/utility/enhancedUI.js';
+import '/utility/copy.js';
 
 
 function initializeGridItems() {
@@ -837,39 +839,44 @@ document.addEventListener('DOMContentLoaded', async function () {
                 copyBtn.style.backgroundColor = 'transparent';
             });
             
-            // Add click handler for copy functionality
+            // Add click handler for copy functionality - open modal from copy.js
             copyBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                // Get content from the data-content div
-                const dataContent = dataContainer.querySelector('.data-content');
-                if (dataContent) {
-                    const textContent = dataContent.innerText || dataContent.textContent;
-                    
-                    if (textContent && textContent.trim()) {
-                        navigator.clipboard.writeText(textContent).then(() => {
-                            // Show success feedback
-                            const originalTitle = copyBtn.title;
-                            copyBtn.title = 'Copied!';
-                            copyBtn.style.backgroundColor = 'rgba(0, 255, 0, 0.3)';
-                            
-                            setTimeout(() => {
-                                copyBtn.title = originalTitle;
-                                copyBtn.style.backgroundColor = 'transparent';
-                            }, 1000);
-                        }).catch(err => {
-                            console.error('Failed to copy text: ', err);
-                            copyBtn.title = 'Copy failed';
-                            setTimeout(() => {
-                                copyBtn.title = 'Copy to clipboard';
-                            }, 2000);
-                        });
+                // Use the modal functionality from copy.js
+                if (window.copyUtil && window.copyUtil.openShareModal) {
+                    // Find a suitable container ID - use the data-content div
+                    const dataContent = dataContainer.querySelector('.data-content');
+                    if (dataContent) {
+                        // Add a temporary ID if it doesn't have one
+                        if (!dataContent.id) {
+                            dataContent.id = 'datain-content-' + Date.now();
+                        }
+                        
+                        // Open the share modal using the copy.js functionality
+                        window.copyUtil.openShareModal(dataContent.id, null);
                     } else {
                         alert('No content available to copy.');
                     }
                 } else {
-                    alert('No content available to copy.');
+                    console.error('copyUtil not available - falling back to simple copy');
+                    // Fallback to simple copy if modal isn't available
+                    const dataContent = dataContainer.querySelector('.data-content');
+                    if (dataContent) {
+                        const textContent = dataContent.innerText || dataContent.textContent;
+                        if (textContent && textContent.trim()) {
+                            navigator.clipboard.writeText(textContent).then(() => {
+                                copyBtn.title = 'Copied!';
+                                setTimeout(() => copyBtn.title = 'Copy to clipboard', 1000);
+                            }).catch(err => {
+                                console.error('Failed to copy text: ', err);
+                                alert('Copy failed');
+                            });
+                        } else {
+                            alert('No content available to copy.');
+                        }
+                    }
                 }
             });
         }
