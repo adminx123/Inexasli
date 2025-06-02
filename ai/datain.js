@@ -6,7 +6,6 @@
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { getCookie } from '/utility/getcookie.js';
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 import { initializeSwipeFunctionality } from '/utility/swipeFunctionality.js';
@@ -123,12 +122,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.head.appendChild(boxIconsLink);
     }
     
-    // Check if the "prompt" cookie is more than 10 minutes old
-    const promptCookie = getCookie("prompt");
-    const currentTime = Date.now();
-    const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
-
     let dataContainer = null;
 
     // Listen for dataout expansion/collapse
@@ -961,13 +954,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                         }
                         keysToRemove.forEach(key => localStorage.removeItem(key));
                         
-                        // Clear cookies
-                        document.cookie.split(";").forEach(cookie => {
-                            const eqPos = cookie.indexOf("=");
-                            const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-                            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-                        });
-                        
                         alert('All data has been cleared successfully.');
                         location.reload();
                     }
@@ -1083,20 +1069,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         try {
-            if (!isCookieExpired) {
-                initializeDataContainer();
-                
-                // Mobile device detection for debugging
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                console.log(`Device detected: ${isMobile ? 'Mobile' : 'Desktop'}`);
-                console.log(`User agent: ${navigator.userAgent}`);
-                
-                // Additional debug info for touch support
-                if (isMobile) {
-                    console.log('Touch events should be fully supported on this device');
-                    console.log(`Touch points supported: ${navigator.maxTouchPoints}`);
-                    console.log(`Screen size: ${window.screen.width}x${window.screen.height}`);
-                }
+            // Mobile device detection for debugging
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            console.log(`Device detected: ${isMobile ? 'Mobile' : 'Desktop'}`);
+            console.log(`User agent: ${navigator.userAgent}`);
+            if (isMobile) {
+                console.log('Touch events should be fully supported on this device');
+                console.log(`Touch points supported: ${navigator.maxTouchPoints}`);
+                console.log(`Screen size: ${window.screen.width}x${window.screen.height}`);
             }
         } catch (error) {
             console.error('Error initializing left data container (datain.js):', error);
