@@ -70,7 +70,7 @@
    
 </div> 
 
-<script type="module">
+<script>
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
@@ -83,90 +83,6 @@
 
 (function() {
   console.log("Calorie IQ script initializing");
-
-  // Custom form data collection for CalorieIQ including dynamic meal inputs
-  function collectFormData() {
-    // Start with generic form data collection from centralized system
-    const formData = window.FormPersistence.collectGenericFormData();
-    
-    // Add CalorieIQ-specific personal information
-    const age = document.getElementById('calorie-age');
-    if (age && age.value) formData.age = parseInt(age.value, 10);
-    
-    const height = document.getElementById('calorie-height');
-    if (height && height.value) formData.height = height.value;
-    
-    const weight = document.getElementById('calorie-weight');
-    if (weight && weight.value) formData.weight = weight.value;
-    
-    const sex = document.getElementById('calorie-sex');
-    if (sex && sex.value) formData.sex = sex.value;
-    
-    // Add dynamic meal inputs (CalorieIQ-specific behavior)
-    formData.meals = {};
-    document.querySelectorAll('input[data-meal]').forEach(input => {
-      if (input.value.trim()) {
-        formData.meals[input.dataset.meal] = input.value.trim();
-      }
-    });
-    
-    return formData;
-  }
-
-  // Custom form repopulation for CalorieIQ including dynamic meal inputs
-  function repopulateForm(data) {
-    if (!data) return;
-    
-    // First, use the generic repopulation for grid items and standard form fields
-    window.FormPersistence.repopulateGenericForm(data);
-    
-    // Then handle CalorieIQ-specific fields
-    if (data.age) {
-      const ageField = document.getElementById('calorie-age');
-      if (ageField) ageField.value = data.age;
-    }
-    
-    if (data.height) {
-      const heightField = document.getElementById('calorie-height');
-      if (heightField) heightField.value = data.height;
-    }
-    
-    if (data.weight) {
-      const weightField = document.getElementById('calorie-weight');
-      if (weightField) weightField.value = data.weight;
-    }
-    
-    if (data.sex) {
-      const sexField = document.getElementById('calorie-sex');
-      if (sexField) sexField.value = data.sex;
-    }
-    
-    // Repopulate meal inputs (CalorieIQ-specific dynamic behavior)
-    if (data.meals) {
-      Object.entries(data.meals).forEach(([mealType, value]) => {
-        let input = document.querySelector(`input[data-meal="${mealType}"]`);
-        
-        if (!input && (mealType === 'breakfast' || mealType === 'lunch' || mealType === 'dinner')) {
-          // These are default inputs that should exist
-          console.warn(`[CalorieIQ] Default meal input not found: ${mealType}`);
-          return;
-        }
-        
-        if (!input) {
-          // This is a dynamic input that needs to be created
-          addMealInput(mealType, value, true); // true = skip repositioning during repopulation
-        } else {
-          // Input exists, just set the value
-          input.value = value;
-        }
-      });
-    }
-  }
-
-  // Clear local storage using the centralized system
-  function clearLocalStorage() {
-    return window.FormPersistence.clearLocalStorage();
-  }
 
   // Reintroduce addMealInput for dynamic meal inputs
   function addMealInput(mealType = null, value = '', skipRepositioning = false) {
@@ -397,8 +313,8 @@
     
     const clearBtn = document.getElementById('clear-calorie-btn');
     if (clearBtn) {
-      clearBtn.removeEventListener('click', clearLocalStorage); // Prevent duplicates
-      clearBtn.addEventListener('click', clearLocalStorage);
+      clearBtn.removeEventListener('click', () => window.FormPersistence.clearLocalStorage()); // Prevent duplicates
+      clearBtn.addEventListener('click', () => window.FormPersistence.clearLocalStorage());
     }
     
     // Set up guided forms toggle button
@@ -468,10 +384,10 @@
   
   // Export functions for external access
   window.calorieIq = { 
-    clearLocalStorage, 
     addMealInput,
     getFormData: () => window.FormPersistence.getSavedFormData(),
-    saveFormData: () => window.FormPersistence.saveFormData()
+    saveFormData: () => window.FormPersistence.saveFormData(),
+    clearLocalStorage: () => window.FormPersistence.clearLocalStorage()
   };
 })();
 </script>
