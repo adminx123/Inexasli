@@ -172,18 +172,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Insert content with initial hiding to prevent flash
                 dataContainer.innerHTML = `
                     <span class="close-data-container"></span>
-                    <div class="utility-buttons-container" style="position: absolute; top: -4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
-                        <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <i class="bx bx-trash" style="font-size: 14px;"></i>
-                        </button>
-                        <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <i class="bx bx-copy" style="font-size: 14px;"></i>
-                        </button>
+                    <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
                         <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                         </button>
                         <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <span style="font-size: 14px; font-weight: bold;">$</span>
+                        </button>
+                        <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-trash" style="font-size: 14px;"></i>
+                        </button>
+                        <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-copy" style="font-size: 14px;"></i>
                         </button>
                     </div>
                     <div class="data-content" style="opacity: 0; transition: opacity 0.2s ease;">${content}</div>
@@ -262,18 +262,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // No form elements, insert content normally without guided forms
                 dataContainer.innerHTML = `
                     <span class="close-data-container"></span>
-                    <div class="utility-buttons-container" style="position: absolute; top: -4px; left: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
-                        <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <i class="bx bx-trash" style="font-size: 14px;"></i>
-                        </button>
-                        <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <i class="bx bx-copy" style="font-size: 14px;"></i>
-                        </button>
+                    <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
                         <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                         </button>
                         <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <span style="font-size: 14px; font-weight: bold;">$</span>
+                        </button>
+                        <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-trash" style="font-size: 14px;"></i>
+                        </button>
+                        <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-copy" style="font-size: 14px;"></i>
                         </button>
                     </div>
                     <div class="data-content">${content}</div>
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 z-index: 10000;
                 max-width: 34px;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, z-index 0.1s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, z-index 0.1s ease-in-out, left 0.3s ease-in-out, transform 0.3s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
@@ -357,16 +357,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-left.initial, .data-container-left.collapsed {
-                width: 408px;
-                max-width: 408px;
-                min-width: 240px;
+                width: 100%;
+                max-width: 100%;
+                min-width: 100%;
                 height: 36px;
+                left: 0;
+                transform: none;
                 display: flex;
-                justify-content: center;
+                justify-content: space-between;
                 align-items: center;
                 z-index: 10001;
-                margin-left: 5px;
-                margin-right: 5px;
+                margin-left: 0;
+                margin-right: 0;
+                padding-left: 10px;
+                padding-right: 10px;
             }
 
             .data-container-left.expanded {
@@ -450,17 +454,68 @@ document.addEventListener('DOMContentLoaded', async function () {
                 box-sizing: border-box; /* Include padding in height calculation */
             }
 
+            /* Utility buttons styling for collapsed state */
+            .data-container-left .utility-buttons-collapsed {
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+                align-items: center;
+                z-index: 11003;
+            }
+
+            .data-container-left.expanded .utility-buttons-collapsed {
+                display: none;
+            }
+
+            .data-container-left.initial .utility-buttons-collapsed,
+            .data-container-left.collapsed .utility-buttons-collapsed {
+                display: flex;
+            }
+
+            /* Button hover effects for collapsed state */
+            .data-container-left .utility-buttons-collapsed button:hover {
+                background-color: rgba(255, 255, 255, 0.8);
+            }
+
+            /* Ensure data label doesn't interfere with button layout in collapsed state */
+            .data-container-left.initial .data-label,
+            .data-container-left.collapsed .data-label {
+                flex-grow: 1;
+                text-align: left;
+                margin-right: auto;
+            }
+
             /* Mobile responsiveness for left container */
             @media (max-width: 480px) {
                 .data-container-left {
-                    max-width: 28px;
+                    max-width: 100%;
                     padding: 3px;
                 }
 
                 .data-container-left.initial, .data-container-left.collapsed {
-                    width: 28px;
-                    height: 100px;
+                    width: 100%;
+                    height: 36px;
                     z-index: 10001;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+
+                .data-container-left .utility-buttons-collapsed {
+                    gap: 6px;
+                }
+
+                .data-container-left .utility-buttons-collapsed button {
+                    width: 24px;
+                    height: 24px;
+                    font-size: 12px;
+                }
+
+                .data-container-left .utility-buttons-collapsed button i {
+                    font-size: 12px;
+                }
+
+                .data-container-left .utility-buttons-collapsed button span {
+                    font-size: 12px;
                 }
 
                 .data-container-left.expanded {
@@ -515,14 +570,40 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.innerHTML = `
             <span class="close-data-container"></span>
             <span class="data-label">DATA IN</span>
+            <div class="utility-buttons-collapsed">
+                <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
+                </button>
+                <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <span style="font-size: 14px; font-weight: bold;">$</span>
+                </button>
+                <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <i class="bx bx-trash" style="font-size: 14px;"></i>
+                </button>
+                <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <i class="bx bx-copy" style="font-size: 14px;"></i>
+                </button>
+            </div>
         `;
 
         document.body.appendChild(dataContainer);
 
-        // Add click listener to entire container for expansion
+        // Setup utility buttons for initial state
+        setupUtilityButtons();
+
+        // Add click listener to entire container for expansion, but exclude utility button clicks
         dataContainer.addEventListener('click', function (e) {
             e.preventDefault();
-            if (dataContainer.dataset.state !== 'expanded') {
+            
+            // Check if click is on utility buttons
+            const isUtilityButton = e.target.closest('#datain-overwrite-btn, #datain-copy-btn, #datain-category-btn, #datain-payment-btn') ||
+                                   e.target.id === 'datain-overwrite-btn' ||
+                                   e.target.id === 'datain-copy-btn' ||
+                                   e.target.id === 'datain-category-btn' ||
+                                   e.target.id === 'datain-payment-btn';
+            
+            // Only expand if it's not a utility button click and container is not expanded
+            if (!isUtilityButton && dataContainer.dataset.state !== 'expanded') {
                 toggleDataContainer();
             }
         });
@@ -578,12 +659,35 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dataContainer.innerHTML = `
                     <span class="close-data-container"></span>
                     <span class="data-label">DATA IN</span>
+                    <div class="utility-buttons-collapsed">
+                        <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
+                        </button>
+                        <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <span style="font-size: 14px; font-weight: bold;">$</span>
+                        </button>
+                        <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-trash" style="font-size: 14px;"></i>
+                        </button>
+                    </div>
                 `;
                 
-                // Re-add click listener to entire container for expansion
+                // Setup utility buttons for collapsed state
+                setupUtilityButtons();
+                
+                // Re-add click listener to entire container for expansion, but exclude utility button clicks
                 dataContainer.addEventListener('click', function (e) {
                     e.preventDefault();
-                    if (dataContainer.dataset.state !== 'expanded') {
+                    
+                    // Check if click is on utility buttons
+                    const isUtilityButton = e.target.closest('#datain-overwrite-btn, #datain-copy-btn, #datain-category-btn, #datain-payment-btn') ||
+                                           e.target.id === 'datain-overwrite-btn' ||
+                                           e.target.id === 'datain-copy-btn' ||
+                                           e.target.id === 'datain-category-btn' ||
+                                           e.target.id === 'datain-payment-btn';
+                    
+                    // Only expand if it's not a utility button click and container is not expanded
+                    if (!isUtilityButton && dataContainer.dataset.state !== 'expanded') {
                         toggleDataContainer();
                     }
                 });
