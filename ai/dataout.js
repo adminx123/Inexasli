@@ -6,7 +6,6 @@ rotected under Canadian and international copyright laws.
  * is strictly prohibited. Violators will be prosecuted to the fullest extent of the law in British Columbia, Canada, and applicable jurisdictions worldwide.
  */
 
-import { getCookie } from '/utility/getcookie.js';
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 
@@ -18,11 +17,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.log('[DataOut] DEBUG: api-response-received event caught:', debugEvent.detail);
     });
     
-    // Check if the "prompt" cookie is more than 10 minutes old
-    const promptCookie = getCookie("prompt");
-    const currentTime = Date.now();
-    const cookieDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const isCookieExpired = !promptCookie || parseInt(promptCookie) + cookieDuration < currentTime;
 
     let dataContainer = null;
 
@@ -615,8 +609,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             console.log(`Device detected: ${isMobile ? 'Mobile' : 'Desktop'}`);
             console.log(`User agent: ${navigator.userAgent}`);
-            
-            // Additional debug info for touch support
             if (isMobile) {
                 console.log('Touch events should be fully supported on this device');
                 console.log(`Touch points supported: ${navigator.maxTouchPoints}`);
