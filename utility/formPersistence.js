@@ -59,17 +59,21 @@ class FormPersistence {
      */
     init(options = {}) {
         try {
-            // Auto-detect module name if not provided
+            // Always reset moduleName and storageKeys on each init
             this.moduleName = options.moduleName || this.detectModuleName();
-            
+            this.storageKeys = {
+                input: this.moduleName ? `${this.moduleName}IqInput` : null,
+                response: this.moduleName ? `${this.moduleName}IqResponse` : null
+            };
+
+            // Always reset selection containers
+            this.singleSelectionContainers = new Set();
+            this.multiSelectionContainers = new Set();
+
             if (!this.moduleName) {
                 console.error('[FormPersistence] Could not detect module name');
                 return false;
             }
-
-            // Set up storage keys
-            this.storageKeys.input = `${this.moduleName}IqInput`;
-            this.storageKeys.response = `${this.moduleName}IqResponse`;
 
             // Configure selection behavior
             if (options.singleSelection) {
@@ -190,30 +194,30 @@ class FormPersistence {
     }
 
     /**
-     * Get the current grid item key from localStorage (lastgridurl)
-     * @returns {string|null} The current grid item key
+     * Get the current grid item key for localStorage (module-wide key, e.g. calorieIqInput)
+     * @returns {string|null} The module-wide key for form data
      */
     getCurrentGridItemKey() {
-        try {
-            return localStorage.getItem('lastgridurl');
-        } catch (e) {
-            return null;
+        // Always use the same key as this.moduleName + 'IqInput', not this.storageKeys.input
+        // This ensures we use the module name as set in datain.js initialization
+        if (!this.moduleName) {
+            this.moduleName = this.detectModuleName();
         }
+        if (!this.moduleName) return null;
+        return `${this.moduleName}IqInput`;
     }
 
     /**
-     * Save all form data to localStorage under the current grid item key
+     * Save all form data to localStorage under the module-wide key (e.g. calorieIqInput)
      */
     saveFormData() {
         const gridKey = this.getCurrentGridItemKey();
         if (!gridKey) {
-            console.warn('[FormPersistence] No lastgridurl found, not saving form data.');
+            console.warn('[FormPersistence] No module key found, not saving form data.');
             return;
         }
         const formData = this.collectFormData();
         setJSON(gridKey, formData);
-        // Optionally: still save under module-wide key for legacy/backup
-        // setJSON(this.storageKeys.input, formData);
     }
 
     /**
@@ -264,12 +268,12 @@ class FormPersistence {
     }
 
     /**
-     * Repopulate form from saved data in localStorage for the current grid item
+     * Repopulate form from saved data in localStorage for the current module
      */
     repopulateForm() {
         const gridKey = this.getCurrentGridItemKey();
         if (!gridKey) {
-            console.warn('[FormPersistence] No lastgridurl found, cannot repopulate form.');
+            console.warn('[FormPersistence] No module key found, cannot repopulate form.');
             return;
         }
         const data = getJSON(gridKey, null);
@@ -323,12 +327,12 @@ class FormPersistence {
     }
 
     /**
-     * Clear all saved data for the current grid item from localStorage
+     * Clear all saved data for the current module from localStorage
      * @param {boolean} confirmFirst - Whether to show confirmation dialog
      * @returns {boolean} True if data was cleared
      */
     clearLocalStorage(confirmFirst = true) {
-        if (confirmFirst && !confirm('Are you sure you want to clear all saved data for this grid item? This action cannot be undone.')) {
+        if (confirmFirst && !confirm('Are you sure you want to clear all saved data for this module? This action cannot be undone.')) {
             return false;
         }
         const gridKey = this.getCurrentGridItemKey();
@@ -350,12 +354,12 @@ class FormPersistence {
             select.selectedIndex = 0;
         });
 
-        console.log(`[FormPersistence] Local storage cleared for grid item: ${gridKey}`);
+        console.log(`[FormPersistence] Local storage cleared for module: ${gridKey}`);
         return true;
     }
 
     /**
-     * Get saved form data for the current grid item
+     * Get saved form data for the current module
      * @returns {Object|null} The saved form data or null if none exists
      */
     getSavedFormData() {

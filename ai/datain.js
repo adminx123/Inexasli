@@ -80,7 +80,7 @@ function initializeFormPersistence(url) {
     } else if (url.includes('/philosophy/')) {
         moduleType = 'philosophy';
     } else if (url.includes('/quiz/')) {
-        moduleType = 'quiz';
+        moduleType = 'quiz'; // UNDO: revert to original key for quiz module
     } else if (url.includes('/research/')) {
         moduleType = 'research';
     } else if (url.includes('/social/')) {
