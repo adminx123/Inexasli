@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 left: 0;
                 transform: none;
                 z-index: 11000; /* Higher z-index when expanded to appear over grid */
-                overflow-y: auto; /* Changed to allow vertical scrolling */
+                overflow: hidden; /* Remove scrolling */
                 border-radius: 8px 8px 0 0; /* Rounded corners at the top */
                 border: none;
                 box-shadow: 0 -4px 0 #000; /* 3D shadow along the top edge */
@@ -458,8 +458,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-size: 14px;
                 height: calc(100% - 40px); /* Fixed height calculation */
                 max-height: none; /* Remove max-height limitation */
-                overflow-y: auto;
-                overflow-x: auto;
+                overflow: hidden;
                 font-family: "Inter", sans-serif;
                 width: 100%;
                 max-width: 100%;
@@ -602,11 +601,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 .data-container-left .data-content {
                     font-size: 12px;
                     padding: 8px;
-                    overflow-y: auto; /* Ensure vertical scrolling works */
-                    overflow-x: auto;
+                    overflow: hidden; /* Remove scrolling on mobile */
                     margin-top: 25px;
                     height: calc(100% - 35px); /* Adjusted for mobile */
-                    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
                 }
             }
         `;
