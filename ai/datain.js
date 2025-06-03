@@ -1104,6 +1104,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.style.zIndex = '12000';
         }
 
+        // Ensure lastGridItemUrl is set to categories.html if not present
+        let lastGridItemUrl = getLocal('lastGridItemUrl');
+        if (!lastGridItemUrl) {
+            if (typeof window.setLocal === 'function') {
+                window.setLocal('lastGridItemUrl', '/ai/categories.html');
+            } else {
+                localStorage.setItem('lastGridItemUrl', '/ai/categories.html');
+            }
+        }
+
         try {
             // Mobile device detection for debugging
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
