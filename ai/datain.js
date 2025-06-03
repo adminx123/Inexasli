@@ -14,44 +14,6 @@ import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
 
 
-function initializeGridItems() {
-    const gridItems = document.querySelectorAll('.grid-container .grid-item');
-    gridItems.forEach(item => {
-        if (!item.dataset.value) {
-            return;
-        }
-
-        item.removeEventListener('click', toggleGridItem);
-        item.addEventListener('click', toggleGridItem);
-    });
-
-    function toggleGridItem() {
-        const container = this.closest('.grid-container');
-        if ( container.id === 'calorie-activity' || container.id === 'calorie-diet-type') {
-            // Single-selection: deselect others
-            container.querySelectorAll('.grid-item').forEach(item => item.classList.remove('selected'));
-            this.classList.add('selected');
-        } else {
-            // Multi-selection: toggle
-            this.classList.toggle('selected');
-        }
-
-        const toggleEvent = new CustomEvent('grid-item-toggled', { detail: { item: this } });
-        document.dispatchEvent(toggleEvent);
-        // saveGridItem(this);
-    }
-
-    // function saveGridItem(item) {
-    //     const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-    //     const value = item.classList.contains('selected') ? 'true' : 'false';
-    //     try {
-    //         localStorage.setItem(key, value);
-    //     } catch (error) {
-    //     }
-    // }
-}
-
-// Centralized FormPersistence initialization function
 function initializeFormPersistence(url) {
     console.log('[DataIn] Initializing FormPersistence for URL:', url);
     
@@ -185,12 +147,6 @@ function initializeCategoryModule() {
     });
 }
 
-setTimeout(() => {
-    document.addEventListener('data-in-opened', () => {
-        initializeGridItems();
-    })
-}, 300);
-
 document.addEventListener('DOMContentLoaded', async function () {
     // Load BoxIcons if not already loaded
     if (!document.querySelector('link[href*="boxicons"]')) {
@@ -269,7 +225,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     initializeFormPersistence(url);
                     
                     // Re-initialize grid items
-                    initializeGridItems();
+                    // initializeGridItems();
                     
                     // Show content with smooth transition
                     const dataContent = dataContainer.querySelector('.data-content');
@@ -354,7 +310,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 initializeFormPersistence(url);
                 
                 // Re-initialize grid items for non-form content
-                initializeGridItems();
+                // initializeGridItems();
                 
                 // Setup utility buttons
                 setupUtilityButtons();
@@ -876,7 +832,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 document.dispatchEvent(leftSideBarOpen);
                 
-                initializeGridItems();
+                // initializeGridItems();
                 const storedUrl = getLocal('lastGridItemUrl');
                 if (storedUrl) {
                     loadStoredContent(storedUrl);
@@ -958,6 +914,29 @@ document.addEventListener('DOMContentLoaded', async function () {
             toggleDataContainer();
         }
     }
+
+    // Re-add grid item initialization logic, but delegate toggle and persistence to FormPersistence
+    // function initializeGridItems() {
+    //     const gridItems = document.querySelectorAll('.grid-container .grid-item');
+    //     gridItems.forEach(item => {
+    //         if (!item.dataset.value) return;
+    //         item.removeEventListener('click', handleGridItemClick);
+    //         item.addEventListener('click', handleGridItemClick);
+    //     });
+    //     function handleGridItemClick() {
+    //         // Let FormPersistence handle selection logic and persistence
+    //         const toggleEvent = new CustomEvent('grid-item-toggled', { detail: { item: this } });
+    //         document.dispatchEvent(toggleEvent);
+    //     }
+    // }
+
+    // Call initializeGridItems after content load and on DOMContentLoaded
+    // document.addEventListener('data-in-loaded', function() {
+    //     initializeGridItems();
+    // });
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     initializeGridItems();
+    // });
 
     // Setup utility buttons within the datain container
     function setupUtilityButtons() {
@@ -1130,6 +1109,41 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     initializeApp();
+
+    // After content load, rebind grid item events using FormPersistence
+    document.addEventListener('data-in-loaded', function() {
+        // Try to get the current FormPersistence instance and rebind events
+        if (window.calorieFormPersistence && typeof window.calorieFormPersistence.rebindGridItemEvents === 'function') {
+            window.calorieFormPersistence.rebindGridItemEvents();
+        }
+        if (window.fitnessFormPersistence && typeof window.fitnessFormPersistence.rebindGridItemEvents === 'function') {
+            window.fitnessFormPersistence.rebindGridItemEvents();
+        }
+        if (window.quizFormPersistence && typeof window.quizFormPersistence.rebindGridItemEvents === 'function') {
+            window.quizFormPersistence.rebindGridItemEvents();
+        }
+        if (window.decisionFormPersistence && typeof window.decisionFormPersistence.rebindGridItemEvents === 'function') {
+            window.decisionFormPersistence.rebindGridItemEvents();
+        }
+        if (window.enneagramFormPersistence && typeof window.enneagramFormPersistence.rebindGridItemEvents === 'function') {
+            window.enneagramFormPersistence.rebindGridItemEvents();
+        }
+        if (window.eventFormPersistence && typeof window.eventFormPersistence.rebindGridItemEvents === 'function') {
+            window.eventFormPersistence.rebindGridItemEvents();
+        }
+        if (window.philosophyFormPersistence && typeof window.philosophyFormPersistence.rebindGridItemEvents === 'function') {
+            window.philosophyFormPersistence.rebindGridItemEvents();
+        }
+        if (window.researchFormPersistence && typeof window.researchFormPersistence.rebindGridItemEvents === 'function') {
+            window.researchFormPersistence.rebindGridItemEvents();
+        }
+        if (window.socialFormPersistence && typeof window.socialFormPersistence.rebindGridItemEvents === 'function') {
+            window.socialFormPersistence.rebindGridItemEvents();
+        }
+        if (window.categoriesFormPersistence && typeof window.categoriesFormPersistence.rebindGridItemEvents === 'function') {
+            window.categoriesFormPersistence.rebindGridItemEvents();
+        }
+    });
 });
 
 // ====================
