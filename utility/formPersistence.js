@@ -109,6 +109,9 @@ class FormPersistence {
             // Set up event listeners
             this.setupEventListeners();
 
+            // Set up grid item event binding
+            this.bindGridItemEvents();
+
             // Repopulate form from saved data
             this.repopulateForm();
 
@@ -124,6 +127,38 @@ class FormPersistence {
             console.error('[FormPersistence] Initialization error:', error);
             return false;
         }
+    }
+
+    /**
+     * Bind click events to all grid items for selection and persistence
+     * This replaces the need for external grid-item-toggled events
+     */
+    bindGridItemEvents() {
+        const gridItems = document.querySelectorAll('.grid-container .grid-item');
+        gridItems.forEach(item => {
+            if (!item.dataset.value) return;
+            item.removeEventListener('click', item._fpGridClickHandler || (()=>{}));
+            const handler = (e) => {
+                e.preventDefault();
+                const container = item.closest('.grid-container');
+                if (!container) return;
+                if (this.singleSelectionContainers.has(container.id) || this.isInferredSingleSelection(container)) {
+                    container.querySelectorAll('.grid-item').forEach(i => {
+                        if (i !== item) i.classList.remove('selected');
+                    });
+                    item.classList.add('selected');
+                } else {
+                    item.classList.toggle('selected');
+                }
+                this.saveFormData();
+                // Dispatch event for next-stage logic (compatibility with guidedForms, etc)
+                const toggleEvent = new CustomEvent('grid-item-toggled', { detail: { item } });
+                document.dispatchEvent(toggleEvent);
+            };
+            item._fpGridClickHandler = handler;
+            item.addEventListener('click', handler);
+        });
+        console.log(`[FormPersistence] Grid item event binding complete for ${this.moduleName}`);
     }
 
     /**
