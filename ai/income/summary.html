@@ -26,9 +26,9 @@
    <!-- Import JSON utility scripts -->
    <script type="module">
      import { setJSON } from '/utility/setJSON.js';
-     import { getLocalJSON } from '/utility/getJSON.js';
+     import { getJSON } from '/utility/getJSON.js';
      window.setJSON = setJSON;
-     window.getJSON = getLocalJSON;
+     window.getJSON = getJSON;
    </script>
    <!-- frequencyChange.js is now loaded in budget.html -->
  </head>
@@ -512,14 +512,14 @@ function getCurrentCurrencySymbol() {
 function populateValuesFromLocalStorage() {
     console.log('Populating values from local storage');
     
-    // Try to import getLocalJSON
+    // Try to import getJSON
     import('/utility/getJSON.js').then(module => {
-        const getLocalJSON = module.getLocalJSON || module.default;
+        const getJSONFromModule = module.getJSON || module.default;
         
         // First try to get tax data from JSON storage
         let taxData = null;
         try {
-            taxData = getLocalJSON('taxResponse');
+            taxData = getJSONFromModule('taxResponse');
             console.log('Found tax data in JSON storage:', taxData);
         } catch (e) {
             console.warn('Could not retrieve tax data from JSON storage:', e);
@@ -643,7 +643,7 @@ function populateValuesFromLocalStorage() {
     });
 }
 
-// Fallback function if getLocalJSON is not available
+// Fallback function if getJSON is not available
 function populateValuesWithoutJSON() {
     // Get the current currency symbol
     const currencySymbol = getCurrentCurrencySymbol();
@@ -761,11 +761,10 @@ function updateTaxObligations() {
         import('/utility/setJSON.js')
     ])
     .then(([getJSONModule, setJSONModule]) => {
-        const getLocalJSON = getJSONModule.getLocalJSON || getJSONModule.default;
+        const getJSONFromModule = getJSONModule.getJSON || getJSONModule.default;
         const setJSON = setJSONModule.setJSON || setJSONModule.default;
-        
         // Get data from localStorage using the standardized JSON approach
-        const getJSON = window.getJSON || function(name, defaultValue) {
+        const getJSONFallback = window.getJSON || function(name, defaultValue) {
             try {
                 const item = localStorage.getItem(name);
                 if (!item) return defaultValue;
@@ -777,11 +776,10 @@ function updateTaxObligations() {
                 return defaultValue;
             }
         };
-        
         // Gather all data into a consolidated object for the worker
         const incomeIqInput = {
-            introData: getJSON('introInput', {}),
-            incomeData: getJSON('incomeInput', {})
+            introData: getJSONFallback('introInput', {}),
+            incomeData: getJSONFallback('incomeInput', {})
             // We're only sending the required fields per the updated worker
         };
         

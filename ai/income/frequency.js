@@ -7,19 +7,19 @@
  */
 
 import { setJSON } from '/utility/setJSON.js';
-import { getLocalJSON } from '/utility/getJSON.js';
+import { getJSON } from '/utility/getJSON.js';
 
 // Key for storing all frequency settings in a single JSON object
 const FREQUENCIES_STORAGE_KEY = 'frequencySettings';
 
 // Helper functions to get/set values in the JSON object
 function getFrequencySetting(frequencyId, defaultValue = 'annually') {
-    const settings = getLocalJSON(FREQUENCIES_STORAGE_KEY, {});
+    const settings = getJSON(FREQUENCIES_STORAGE_KEY, {});
     return settings[frequencyId] || defaultValue;
 }
 
 function saveFrequencySetting(frequencyId, value) {
-    const settings = getLocalJSON(FREQUENCIES_STORAGE_KEY, {});
+    const settings = getJSON(FREQUENCIES_STORAGE_KEY, {});
     settings[frequencyId] = value;
     setJSON(FREQUENCIES_STORAGE_KEY, settings);
     return value;
@@ -142,7 +142,7 @@ export function initializeFrequencyGroups() {
 
 // Save frequency group values
 export function saveFrequencyGroups() {
-    const settings = getLocalJSON(FREQUENCIES_STORAGE_KEY, {});
+    const settings = getJSON(FREQUENCIES_STORAGE_KEY, {});
     const frequencyGroups = Array.from(document.querySelectorAll('.checkbox-button-group')).map(el => el.id);
     
     frequencyGroups.forEach(frequencyId => {
