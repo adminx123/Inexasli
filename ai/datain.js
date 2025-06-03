@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 padding: 4px;
                 border: 2px solid #000;
                 border-bottom: none;
-                border-radius: 8px 8px 0 0;
+                border-radius: 24px 24px 0 0;
                 box-shadow: 4px -4px 0 #000;
                 z-index: 10000;
                 max-width: 34px;
@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 transform: none;
                 z-index: 11000; /* Higher z-index when expanded to appear over grid */
                 overflow: hidden; /* Remove scrolling */
-                border-radius: 8px 8px 0 0; /* Rounded corners at the top */
+                border-radius: 24px 24px 0 0; /* Rounded corners at the top */
                 border: none;
                 box-shadow: 0 -4px 0 #000; /* 3D shadow along the top edge */
             }

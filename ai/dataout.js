@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 padding: 4px;
                 border: 2px solid #000;
                 border-top: none;
-                border-radius: 0 0 8px 8px;
+                border-radius: 0 0 27px 27px;
                 box-shadow: -4px 4px 0 #000;
                 z-index: 10000;
                 max-width: 34px;
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 transform: none;
                 border: 2px solid #000; /* Solid border */
                 border-top: none; /* Remove top border */
-                border-radius: 0 0 8px 8px; /* Rounded bottom corners */
+                border-radius: 0 0 27px 27px; /* Rounded bottom corners */
                 box-shadow: -4px 4px 0 #000; /* 3D shadow effect */
                 padding: 4px; /* Keep padding */
             }
