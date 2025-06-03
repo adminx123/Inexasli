@@ -374,7 +374,7 @@ button:hover {
 
 /* Category Label for grouping related UI elements */
 .category-label {
-  display: block;
+  display: inline-block; /* Underline only text width */
   font-weight: 600;
   font-size: 16px;
   margin-bottom: 10px;
@@ -382,11 +382,6 @@ button:hover {
   font-family: "Geist", sans-serif;
   padding-bottom: 5px;
   border-bottom: 1px solid #000;
-  width: 100%;
-  max-width: 460px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
 }
 
 /* Invisible device-sized wrapper */
