@@ -190,12 +190,30 @@ class FormPersistence {
     }
 
     /**
-     * Save all form data to localStorage
+     * Get the current grid item key from localStorage (lastgridurl)
+     * @returns {string|null} The current grid item key
+     */
+    getCurrentGridItemKey() {
+        try {
+            return localStorage.getItem('lastgridurl');
+        } catch (e) {
+            return null;
+        }
+    }
+
+    /**
+     * Save all form data to localStorage under the current grid item key
      */
     saveFormData() {
-        console.log(`[FormPersistence] Saving all form data to JSON for ${this.moduleName}`);
+        const gridKey = this.getCurrentGridItemKey();
+        if (!gridKey) {
+            console.warn('[FormPersistence] No lastgridurl found, not saving form data.');
+            return;
+        }
         const formData = this.collectFormData();
-        setJSON(this.storageKeys.input, formData);
+        setJSON(gridKey, formData);
+        // Optionally: still save under module-wide key for legacy/backup
+        // setJSON(this.storageKeys.input, formData);
     }
 
     /**
@@ -246,21 +264,20 @@ class FormPersistence {
     }
 
     /**
-     * Repopulate form from saved data in localStorage
+     * Repopulate form from saved data in localStorage for the current grid item
      */
     repopulateForm() {
-        console.log(`[FormPersistence] Repopulating form from JSON storage for ${this.moduleName}`);
-        
-        const data = getJSON(this.storageKeys.input, null);
+        const gridKey = this.getCurrentGridItemKey();
+        if (!gridKey) {
+            console.warn('[FormPersistence] No lastgridurl found, cannot repopulate form.');
+            return;
+        }
+        const data = getJSON(gridKey, null);
         if (!data) return;
-
-        // Use custom repopulator if provided
         if (this.customFormRepopulator) {
             this.customFormRepopulator(data);
             return;
         }
-
-        // Use generic repopulation logic
         this.repopulateGenericForm(data);
     }
 
@@ -306,46 +323,45 @@ class FormPersistence {
     }
 
     /**
-     * Clear all saved data from localStorage
+     * Clear all saved data for the current grid item from localStorage
      * @param {boolean} confirmFirst - Whether to show confirmation dialog
      * @returns {boolean} True if data was cleared
      */
     clearLocalStorage(confirmFirst = true) {
-        if (confirmFirst && !confirm('Are you sure you want to clear all saved data? This action cannot be undone.')) {
+        if (confirmFirst && !confirm('Are you sure you want to clear all saved data for this grid item? This action cannot be undone.')) {
             return false;
         }
-        
-        // Clear stored data
-        setJSON(this.storageKeys.input, undefined);
-        setJSON(this.storageKeys.response, undefined);
+        const gridKey = this.getCurrentGridItemKey();
+        if (gridKey) {
+            setJSON(gridKey, undefined);
+        }
         
         // Clear UI elements
         document.querySelectorAll('.grid-container .grid-item').forEach(item => {
             item.classList.remove('selected');
         });
-        
         document.querySelectorAll('input:not([type="button"]):not([type="submit"])').forEach(input => {
             input.value = '';
         });
-        
         document.querySelectorAll('textarea').forEach(textarea => {
             textarea.value = '';
         });
-        
         document.querySelectorAll('select').forEach(select => {
             select.selectedIndex = 0;
         });
 
-        console.log(`[FormPersistence] Local storage cleared for ${this.moduleName}`);
+        console.log(`[FormPersistence] Local storage cleared for grid item: ${gridKey}`);
         return true;
     }
 
     /**
-     * Get saved form data
+     * Get saved form data for the current grid item
      * @returns {Object|null} The saved form data or null if none exists
      */
     getSavedFormData() {
-        return getJSON(this.storageKeys.input, null);
+        const gridKey = this.getCurrentGridItemKey();
+        if (!gridKey) return null;
+        return getJSON(gridKey, null);
     }
 
     /**
