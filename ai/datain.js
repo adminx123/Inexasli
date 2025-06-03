@@ -206,7 +206,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 // Insert content with initial hiding to prevent flash
                 dataContainer.innerHTML = `
-                    <span class="close-data-container"></span>
                     <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 11003;">
                         <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
@@ -399,7 +398,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 left: 0;
                 transform: none;
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-end;
                 align-items: center;
                 z-index: 10001;
                 margin-left: 0;
@@ -452,26 +451,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-radius: 4px;
             }
 
-            .data-container-left .data-label {
-                text-decoration: none;
-                color: #000;
-                font-size: 12px;
-                display: flex;
-                justify-content: center;
-                text-align: center;
-                padding: 4px;
-                cursor: pointer;
-                transition: color 0.2s ease;
-                line-height: 1.2;
-                font-family: "Geist", sans-serif;
-                writing-mode: horizontal-tb;
-                text-orientation: mixed;
-                z-index: 11001; /* Make sure it's above other content */
-            }
-            
-            .data-container-left.expanded .data-label {
-                display: none;
-            }
+
 
             .data-container-left .data-content {
                 padding: 10px;
@@ -520,7 +500,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 transform: none;
                 display: flex;
                 flex-direction: row;
-                justify-content: space-between;
+                justify-content: flex-end;
                 align-items: center;
                 z-index: 10001;
                 margin-left: 0;
@@ -541,31 +521,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                 right: auto;
                 padding: 0;
                 justify-content: flex-end;
-                margin-left: auto;
+                margin-left: 0;
             }
             
-            /* Ensure data label takes appropriate space on the left */
-            .data-container-left.visually-collapsed .data-label {
-                display: block;
-                width: auto;
-                text-align: left;
-                margin-right: 10px;
-                flex-shrink: 0;
-            }
+
 
             /* Button hover effects for collapsed state */
             .data-container-left .utility-buttons-container button:hover {
                 background-color: rgba(255, 255, 255, 0.8);
             }
 
-            /* Ensure data label doesn't interfere with button layout in collapsed state */
-            .data-container-left.initial .data-label,
-            .data-container-left.collapsed .data-label {
-                width: auto;
-                text-align: left;
-                margin-right: auto;
-                flex-shrink: 0;
-            }
+
 
             /* Mobile responsiveness for left container */
             @media (max-width: 480px) {
@@ -621,15 +587,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     box-shadow: none;
                 }
 
-                .data-container-left .data-label {
-                    font-size: 10px;
-                    padding: 3px;
-                }
-                
-                .data-container-left.expanded .data-label {
-                    font-size: 16px;
-                    padding: 4px;
-                }
+
 
                 .data-container-left .close-data-container {
                     font-size: 12px;
@@ -659,7 +617,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.dataset.state = 'initial';
         dataContainer.innerHTML = `
             <span class="close-data-container" style="display: none;"></span>
-            <span class="data-label">DATA IN</span>
             <div class="utility-buttons-container">
                 <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                     <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
@@ -700,7 +657,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
 
         const closeButton = dataContainer.querySelector('.close-data-container');
-        const dataLabel = dataContainer.querySelector('.data-label');
 
         if (closeButton) {
             closeButton.addEventListener('click', function (e) {
@@ -759,17 +715,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     utilityButtons.style.marginLeft = '';
                 }
                 
-                // Create or show collapsed label
-                let dataLabel = dataContainer.querySelector('.data-label');
-                if (!dataLabel) {
-                    dataLabel = document.createElement('span');
-                    dataLabel.className = 'data-label';
-                    dataLabel.textContent = 'DATA IN';
-                    dataContainer.insertBefore(dataLabel, dataContainer.firstChild);
-                }
-                // Remove inline styles and let CSS handle display
-                dataLabel.style.display = '';
-                
                 // Reset dataout container z-index when datain collapses
                 if (dataOutContainer) {
                     dataOutContainer.style.zIndex = '10000';
@@ -790,7 +735,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const dataContent = dataContainer.querySelector('.data-content');
                 const closeButton = dataContainer.querySelector('.close-data-container');
                 const utilityButtons = dataContainer.querySelector('.utility-buttons-container');
-                const dataLabel = dataContainer.querySelector('.data-label');
                 
                 if (dataContent) {
                     dataContent.style.display = 'block';
@@ -806,10 +750,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     utilityButtons.style.right = '';
                     utilityButtons.style.justifyContent = '';
                     utilityButtons.style.padding = '';
-                }
-                if (dataLabel) {
-                    // Remove inline styles and let CSS handle display
-                    dataLabel.style.display = '';
                 }
                 
                 // Set dataout container to higher z-index to appear above expanded datain
