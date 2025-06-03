@@ -108,6 +108,7 @@ Results needed within two weeks"></textarea>
     console.log("ResearchIQ script initializing");
 
     // Using centralized FormPersistence system
+    const formPersistence = window.researchFormPersistence || window['researchFormPersistence'] || (window.researchFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
 
     // Handler for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
@@ -125,7 +126,7 @@ Results needed within two weeks"></textarea>
         
         try {
             // Use centralized system to get form data
-            const formData = window.FormPersistence.getSavedFormData();
+            const formData = formPersistence.getSavedFormData();
             if (!formData) {
                 console.error('[ResearchIQ] No input data found.');
                 alert('Please complete the form before generating a research plan.');
@@ -171,7 +172,7 @@ Results needed within two weeks"></textarea>
             );
             
             // Store the response using centralized system
-            window.FormPersistence.saveResponseData(result);
+            formPersistence.saveResponseData(result);
             
             // Dispatch an event to notify dataout.js that a response was received
             const event = new CustomEvent('api-response-received', {
@@ -199,7 +200,7 @@ Results needed within two weeks"></textarea>
         
         const clearBtn = document.getElementById('clear-research-btn');
         if (clearBtn) {
-            clearBtn.addEventListener('click', () => window.FormPersistence.clearLocalStorage());
+            clearBtn.addEventListener('click', () => formPersistence.clearLocalStorage());
         }
     }
 

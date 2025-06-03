@@ -68,10 +68,15 @@ Lower back strain"></textarea>
 (function() {
     console.log("Fitness IQ script initializing");
 
+    // Replace all window.FormPersistence calls with per-module instance
+    const formPersistence = window.fitnessFormPersistence || window['fitnessFormPersistence'] || (window.fitnessFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
+    // If not found, fallback to getInstance
+    const instance = formPersistence || (window.fitnessFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
+
     // Handle the generate button click
     async function handleGenerateFitnessIq() {
         try {
-            const formData = window.FormPersistence.getSavedFormData();
+            const formData = window.fitnessFormPersistence.getSavedFormData();
             if (!formData) {
                 alert('Please complete the form before generating a fitness plan.');
                 return;
@@ -105,7 +110,7 @@ Lower back strain"></textarea>
             );
 
             // Store the response using centralized system
-            window.FormPersistence.saveResponseData(result);
+            window.fitnessFormPersistence.saveResponseData(result);
             
             // Dispatch an event to notify dataout.js that a response was received
             const event = new CustomEvent('api-response-received', {
@@ -127,14 +132,14 @@ Lower back strain"></textarea>
     // Initialization
     document.getElementById('generate-fitness-btn').addEventListener('click', handleGenerateFitnessIq);
     document.getElementById('clear-fitness-btn').addEventListener('click', () => {
-        window.FormPersistence.clearLocalStorage();
+        window.fitnessFormPersistence.clearLocalStorage();
     });
 
     // For external access if needed
     window.fitnessIq = {
-        getFormData: () => window.FormPersistence.getSavedFormData(),
-        saveFormData: () => window.FormPersistence.saveFormData(),
-        clearLocalStorage: () => window.FormPersistence.clearLocalStorage()
+        getFormData: () => window.fitnessFormPersistence.getSavedFormData(),
+        saveFormData: () => window.fitnessFormPersistence.saveFormData(),
+        clearLocalStorage: () => window.fitnessFormPersistence.clearLocalStorage()
     };
 })();
 </script>

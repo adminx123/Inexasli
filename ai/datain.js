@@ -8,7 +8,7 @@
 
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
-import FormPersistence from '/utility/formPersistence.js';
+import { FormPersistence } from '/utility/formPersistence.js';
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
@@ -104,10 +104,13 @@ function initializeFormPersistence(url) {
     
     console.log(`[DataIn] Detected module type: ${moduleType}`);
     
-    // Initialize FormPersistence with the detected module and configuration
+    // Initialize per-module FormPersistence instance
     try {
-        FormPersistence.init(moduleType, moduleConfig);
-        console.log('[DataIn] FormPersistence initialized successfully');
+        const formPersistence = FormPersistence.getInstance(moduleType, moduleConfig);
+        formPersistence.init({ moduleName: moduleType, ...moduleConfig });
+        // Attach to window for module scripts to use
+        window[`${moduleType}FormPersistence`] = formPersistence;
+        console.log('[DataIn] FormPersistence instance initialized for module:', moduleType);
     } catch (error) {
         console.error('[DataIn] Error initializing FormPersistence:', error);
     }

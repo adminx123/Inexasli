@@ -102,6 +102,7 @@ Add difficulty ratings to questions"></textarea>
     console.log("QuizIQ script initializing");
 
     // Using centralized FormPersistence system
+    const formPersistence = window.quizFormPersistence || window['quizFormPersistence'] || (window.quizFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
 
     // Handler for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
@@ -129,7 +130,7 @@ Add difficulty ratings to questions"></textarea>
             'quiz',
             async () => {
                 // Use centralized system to get form data
-                const formData = window.FormPersistence.getSavedFormData();
+                const formData = formPersistence.getSavedFormData();
                 if (!formData) {
                     console.error('[QuizIQ] No input data found.');
                     throw new Error('Please complete the form before generating a quiz.');
@@ -165,7 +166,7 @@ Add difficulty ratings to questions"></textarea>
                 }
                 
                 // Store the response using centralized system
-                window.FormPersistence.saveResponseData(responseData);
+                formPersistence.saveResponseData(responseData);
                 
                 // Dispatch an event to notify dataout.js that a response was received
                 const event = new CustomEvent('api-response-received', {
@@ -195,7 +196,7 @@ Add difficulty ratings to questions"></textarea>
         
         const clearBtn = document.getElementById('clear-quiz-btn');
         if (clearBtn) {
-            clearBtn.addEventListener('click', () => window.FormPersistence.clearLocalStorage());
+            clearBtn.addEventListener('click', () => formPersistence.clearLocalStorage());
         }
     }
 
@@ -227,7 +228,7 @@ Add difficulty ratings to questions"></textarea>
     // For external access if needed
     window.quizIq = {
         initialize: initialize,
-        getFormData: () => window.FormPersistence.getSavedFormData()
+        getFormData: () => formPersistence.getSavedFormData()
     };
 })();
 </script>

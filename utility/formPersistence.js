@@ -36,17 +36,35 @@ import { getLocal } from './getlocal.js';
  * Main FormPersistence class
  */
 class FormPersistence {
-    constructor() {
-        this.moduleName = null;
+    static _instances = {};
+    static getInstance(moduleName, options = {}) {
+        if (!moduleName) throw new Error('Module name required for FormPersistence instance');
+        if (!FormPersistence._instances[moduleName]) {
+            FormPersistence._instances[moduleName] = new FormPersistence(moduleName, options);
+        }
+        return FormPersistence._instances[moduleName];
+    }
+
+    constructor(moduleName = null, options = {}) {
+        this.moduleName = moduleName || options.moduleName || null;
         this.storageKeys = {
-            input: null,
-            response: null
+            input: this.moduleName ? `${this.moduleName}IqInput` : null,
+            response: this.moduleName ? `${this.moduleName}IqResponse` : null
         };
         this.initialized = false;
         this.singleSelectionContainers = new Set();
         this.multiSelectionContainers = new Set();
-        
-        console.log('[FormPersistence] Instance created');
+        this.customFormDataCollector = null;
+        this.customFormRepopulator = null;
+        if (options.singleSelection) {
+            options.singleSelection.forEach(id => this.singleSelectionContainers.add(id));
+        }
+        if (options.multiSelection) {
+            options.multiSelection.forEach(id => this.multiSelectionContainers.add(id));
+        }
+        if (options.customFormDataCollector) this.customFormDataCollector = options.customFormDataCollector;
+        if (options.customFormRepopulator) this.customFormRepopulator = options.customFormRepopulator;
+        console.log('[FormPersistence] Instance created for', this.moduleName);
     }
 
     /**
@@ -487,31 +505,6 @@ class FormPersistence {
     }
 }
 
-// Create and export a singleton instance
-const formPersistence = new FormPersistence();
-
-// Export both the instance and the class for flexibility
-export default formPersistence;
+// Remove legacy singleton/global export and window.FormPersistence
+// Only export the FormPersistence class
 export { FormPersistence };
-
-// Also make it available globally for backwards compatibility
-if (typeof window !== 'undefined') {
-    window.FormPersistence = formPersistence;
-    
-    // Legacy compatibility - expose common methods globally
-    window.saveGridItem = function(item) {
-        return formPersistence.saveGridItem(item);
-    };
-    
-    window.saveInput = function(input) {
-        return formPersistence.saveInput(input);
-    };
-    
-    window.collectFormData = function() {
-        return formPersistence.collectFormData();
-    };
-    
-    window.clearLocalStorage = function() {
-        return formPersistence.clearLocalStorage();
-    };
-}
