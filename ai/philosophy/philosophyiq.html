@@ -36,12 +36,14 @@ Accepting things I cannot change"></textarea>
   (function() {
     console.log("Philosophy IQ script initializing");
 
+    const formPersistence = window.philosophyFormPersistence || window['philosophyFormPersistence'] || (window.philosophyFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
+
     // Handle the generate button click
     async function handleGeneratePhilosophyIq() {
       console.log('[PhilosophyIQ] Generate button clicked.');
       
       try {
-        const formData = window.FormPersistence.getSavedFormData();
+        const formData = formPersistence.getSavedFormData();
         if (!formData || !formData.question) {
           console.error('[PhilosophyIQ] No question found in input data.');
           alert('Please enter what you\'re seeking wisdom on before proceeding.');
@@ -82,7 +84,7 @@ Accepting things I cannot change"></textarea>
         );
         
         // Store the response using centralized system
-        window.FormPersistence.saveResponseData(result);
+        formPersistence.saveResponseData(result);
         
         // Dispatch an event to notify dataout.js that a response was received
         const event = new CustomEvent('api-response-received', {
@@ -104,7 +106,7 @@ Accepting things I cannot change"></textarea>
     // Initialization
     document.getElementById('generate-philosophy-btn').addEventListener('click', handleGeneratePhilosophyIq);
     document.getElementById('clear-philosophy-btn').addEventListener('click', () => {
-        window.FormPersistence.clearLocalStorage();
+        formPersistence.clearLocalStorage();
     });
   })();
   </script>

@@ -110,6 +110,7 @@ Should I apologize first"></textarea>
     console.log("SocialIQ script initializing");
 
     // Using centralized FormPersistence module for data storage
+    const formPersistence = window.socialFormPersistence || window['socialFormPersistence'] || (window.socialFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
 
     // Handler for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
@@ -144,7 +145,7 @@ Should I apologize first"></textarea>
     async function handleGenerateSocialIq() {
         try {
             // Use centralized FormPersistence to get form data
-            const formData = window.FormPersistence.getSavedFormData();
+            const formData = formPersistence.getSavedFormData();
             if (!formData) {
                 console.error('[SocialIQ] No input data found.');
                 alert('Please complete the form before generating a social analysis.');
@@ -190,7 +191,7 @@ Should I apologize first"></textarea>
             );
             
             // Store the response using FormPersistence
-            window.FormPersistence.saveResponseData(result);
+            formPersistence.saveResponseData(result);
             
             // Dispatch an event to notify dataout.js that a response was received
             const event = new CustomEvent('api-response-received', {
@@ -219,8 +220,7 @@ Should I apologize first"></textarea>
         
         const clearBtn = document.getElementById('clear-social-btn');
         if (clearBtn) {
-            clearBtn.removeEventListener('click', () => window.FormPersistence.clearLocalStorage());
-            clearBtn.addEventListener('click', () => window.FormPersistence.clearLocalStorage());
+            clearBtn.addEventListener('click', () => formPersistence.clearLocalStorage());
         }
     }
 
