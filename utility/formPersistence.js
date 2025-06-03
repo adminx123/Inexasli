@@ -99,6 +99,7 @@ class FormPersistence {
 
             this.initialized = true;
             console.log(`[FormPersistence] Initialized for module: ${this.moduleName}`);
+            console.log(`[FormPersistence][DEBUG] init: moduleName=${this.moduleName}, storageKeys=`, this.storageKeys, 'options:', options);
             
             return true;
         } catch (error) {
@@ -198,7 +199,26 @@ class FormPersistence {
             console.warn('[FormPersistence] No module key found, not saving form data.');
             return;
         }
+        // Extra guard: Only save if DOM contains at least one field for this module
+        const modulePrefix = `${this.moduleName}-`;
+        const hasModuleField = !!document.querySelector(
+            `input[id^="${modulePrefix}"], textarea[id^="${modulePrefix}"], select[id^="${modulePrefix}"], .grid-container[id^="${modulePrefix}"]`
+        );
+        if (!hasModuleField) {
+            console.warn('[FormPersistence] No DOM fields found for module', this.moduleName, '- skipping save to avoid overwriting.');
+            return;
+        }
         const formData = this.collectFormData();
+        // Guard: Only save if at least one non-empty field for this module exists
+        const hasRelevantData = Object.entries(formData).some(([key, value]) => {
+            if (Array.isArray(value)) return value.length > 0;
+            if (typeof value === 'object' && value !== null) return Object.keys(value).length > 0;
+            return value !== null && value !== undefined && value !== '';
+        });
+        if (!hasRelevantData) {
+            console.warn('[FormPersistence] No relevant data found in DOM for module', this.moduleName, '- skipping save to avoid overwriting.');
+            return;
+        }
         setJSON(gridKey, formData);
     }
 
@@ -254,11 +274,13 @@ class FormPersistence {
      */
     repopulateForm() {
         const gridKey = this.getCurrentGridItemKey();
+        console.log(`[FormPersistence][DEBUG] repopulateForm: gridKey=${gridKey}`);
         if (!gridKey) {
             console.warn('[FormPersistence] No module key found, cannot repopulate form.');
             return;
         }
         const data = getJSON(gridKey, null);
+        console.log('[FormPersistence][DEBUG] repopulateForm: loaded data =', data);
         if (!data) return;
         if (this.customFormRepopulator) {
             this.customFormRepopulator(data);
@@ -277,6 +299,7 @@ class FormPersistence {
 
         const values = Array.isArray(value) ? value : [value];
         
+        console.log(`[FormPersistence][DEBUG] repopulateGridContainer: container.id=${container.id}, values=`, values);
         values.forEach(val => {
             // Try to find by data-value first
             let element = container.querySelector(`.grid-item[data-value="${val}"]`);
@@ -291,6 +314,9 @@ class FormPersistence {
             
             if (element) {
                 element.classList.add('selected');
+                console.log(`[FormPersistence][DEBUG] repopulateGridContainer: selected grid-item for value=`, val, 'element=', element);
+            } else {
+                console.warn(`[FormPersistence][DEBUG] repopulateGridContainer: No grid-item found for value=`, val, 'in container.id=', container.id);
             }
         });
     }
@@ -389,12 +415,12 @@ class FormPersistence {
      */
     collectGenericFormData() {
         const formData = {};
-
+        let foundRelevantField = false;
         // Collect from text inputs, textareas, and selects
         document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], textarea, select').forEach(element => {
             if (element.id && element.value) {
                 const fieldName = this.getFieldName(element.id);
-                
+                foundRelevantField = true;
                 if (element.type === 'number') {
                     formData[fieldName] = parseInt(element.value, 10) || parseFloat(element.value);
                 } else {
@@ -402,25 +428,21 @@ class FormPersistence {
                 }
             }
         });
-
         // Collect from grid containers
         document.querySelectorAll('.grid-container').forEach(container => {
             const fieldName = this.getFieldName(container.id);
             const selectedItems = container.querySelectorAll('.grid-item.selected');
-            
             if (selectedItems.length > 0) {
+                foundRelevantField = true;
                 if (this.singleSelectionContainers.has(container.id) || 
                     this.isInferredSingleSelection(container)) {
-                    // Single selection - store the first selected value
                     formData[fieldName] = selectedItems[0].dataset.value || selectedItems[0].textContent.trim();
                 } else {
-                    // Multi selection - store array of values
                     formData[fieldName] = Array.from(selectedItems).map(item => 
                         item.dataset.value || item.textContent.trim()
                     );
                 }
             } else {
-                // No items selected
                 if (this.singleSelectionContainers.has(container.id) || 
                     this.isInferredSingleSelection(container)) {
                     formData[fieldName] = null;
@@ -429,7 +451,8 @@ class FormPersistence {
                 }
             }
         });
-
+        // If no relevant fields found, return empty object
+        if (!foundRelevantField) return {};
         return formData;
     }
 
@@ -439,28 +462,25 @@ class FormPersistence {
      */
     repopulateGenericForm(data) {
         if (!data) return;
-
+        console.log('[FormPersistence][DEBUG] repopulateGenericForm: data =', data);
         // Repopulate text inputs, textareas, and selects
         Object.entries(data).forEach(([fieldName, value]) => {
             if (value === null || value === undefined) return;
-
-            // Try to find direct element by ID with module prefix
             const elementId = `${this.moduleName}-${fieldName}`;
             let element = document.getElementById(elementId);
-            
-            // If not found, try without prefix
             if (!element) {
                 element = document.getElementById(fieldName);
             }
-
+            console.log(`[FormPersistence][DEBUG] repopulateGenericForm: fieldName=${fieldName}, value=`, value, 'elementId=', elementId, 'element=', element);
             if (element && (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT')) {
                 element.value = value;
+                console.log(`[FormPersistence][DEBUG] Set value for element id=${element.id}`);
                 return;
             }
-
             // Handle grid containers
             const containerElement = document.getElementById(elementId) || document.getElementById(fieldName);
             if (containerElement && containerElement.classList.contains('grid-container')) {
+                console.log(`[FormPersistence][DEBUG] repopulateGenericForm: repopulating grid container id=${containerElement.id} with value=`, value);
                 this.repopulateGridContainer(containerElement, value);
             }
         });
