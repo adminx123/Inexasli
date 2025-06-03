@@ -910,8 +910,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Listen for grid item selection events from promptgrid.js
         document.addEventListener('promptGridItemSelected', function (e) {
             const url = e.detail.url;
-            
-            setLocal('lastGridItemUrl', url);
             // Only expand and load content if container is already expanded
             // If collapsed, just store the URL for later when user expands manually
             if (dataContainer.dataset.state === 'expanded') {
