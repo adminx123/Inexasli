@@ -9,11 +9,11 @@
  */ 
 
 // dataOverwrite.js
-// Handles modal functionality for deleting local storage related to lastgridurl
+// Handles modal functionality for deleting specific local storage data while preserving navigation state
 
 /**
  * Opens a confirmation modal asking if the user wants to delete
- * the local storage for the current lastgridurl input and response
+ * specific local storage data while preserving navigation state
  */
 function openDataOverwriteModal() {
     // Create modal element if it doesn't exist
@@ -24,7 +24,7 @@ function openDataOverwriteModal() {
         document.body.appendChild(modal);
     }
 
-    // Get current lastgridurl from localStorage
+    // Get current data from localStorage
     const currentGridUrl = localStorage.getItem('lastgridurl') || 'No URL stored';
     const hasInput = localStorage.getItem('lastgridurl_input');
     const hasResponse = localStorage.getItem('lastgridurl_response');
@@ -36,7 +36,7 @@ function openDataOverwriteModal() {
         <h2 class="data-overwrite-modal-title">Delete Local Storage Data</h2>
         
         <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 12px; margin-bottom: 15px; text-align: left; width: 100%;">
-            <p style="color: #555; font-size: 0.8rem; margin: 0 0 5px 0; font-weight: 600;">Current Grid URL:</p>
+            <p style="color: #555; font-size: 0.8rem; margin: 0 0 5px 0; font-weight: 600;">Current Data URL:</p>
             <p style="color: #333; font-size: 0.75rem; margin: 0; word-break: break-all; font-family: monospace;">${decodeURIComponent(currentGridUrl)}</p>
         </div>
 
@@ -45,10 +45,12 @@ function openDataOverwriteModal() {
                 This will permanently delete the following local storage items:
             </p>
             <ul style="text-align: left; color: #666; font-size: 0.8rem; margin: 0; padding-left: 20px;">
-                <li><strong>lastgridurl</strong> - Current grid URL</li>
                 <li><strong>lastgridurl_input</strong> - ${hasInput ? 'Stored input data' : 'No input data stored'}</li>
                 <li><strong>lastgridurl_response</strong> - ${hasResponse ? 'Stored response data' : 'No response data stored'}</li>
             </ul>
+            <p style="color: #28a745; font-size: 0.8rem; margin-top: 10px; font-weight: 500;">
+                ✓ Navigation state (lastgridurl) will be preserved
+            </p>
         </div>
 
         <p style="color: #dc3545; font-size: 0.8rem; margin-bottom: 20px; font-weight: 500;">
@@ -280,11 +282,11 @@ function cancelDataOverwrite() {
 }
 
 /**
- * Handles the confirm action - deletes the local storage data
+ * Handles the confirm action - deletes specific local storage data while preserving navigation state
  */
 function confirmDataOverwrite() {
     try {
-        // Remove the specific localStorage items
+        // Remove the specific localStorage items (preserves lastGridItemUrl navigation state)
         localStorage.removeItem('lastgridurl');
         localStorage.removeItem('lastgridurl_input');
         localStorage.removeItem('lastgridurl_response');
@@ -314,7 +316,7 @@ function showDataOverwriteSuccess() {
                 <div style="color: #28a745; font-size: 48px; margin-bottom: 20px;">✓</div>
                 <h2 style="color: #28a745; font-size: 1.3rem; margin-bottom: 15px; font-family: 'Geist', sans-serif; font-weight: 600;">Success!</h2>
                 <p style="color: #555; font-size: 0.95rem; margin: 0;">
-                    Local storage data has been successfully deleted.
+                    Data storage cleared successfully. Navigation state preserved.
                 </p>
             </div>
         `;
