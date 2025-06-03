@@ -156,6 +156,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.head.appendChild(boxIconsLink);
     }
     
+    // Load inputstyles.css if not already loaded
+    if (!document.querySelector('link[href*="inputstyles.css"]')) {
+        const inputStylesLink = document.createElement('link');
+        inputStylesLink.href = '/ai/styles/inputstyles.css';
+        inputStylesLink.rel = 'stylesheet';
+        document.head.appendChild(inputStylesLink);
+    }
+    
     let dataContainer = null;
 
     // Listen for dataout expansion/collapse
