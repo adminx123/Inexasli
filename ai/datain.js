@@ -515,6 +515,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 flex-direction: row;
                 gap: 8px;
                 align-items: center;
+                justify-content: flex-end;
                 z-index: 11003;
                 margin-left: 0;
                 margin-right: 0;
