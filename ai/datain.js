@@ -536,12 +536,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 margin-left: auto;
             }
             
-            /* Ensure data label takes up available space on the left */
+            /* Ensure data label takes appropriate space on the left */
             .data-container-left.visually-collapsed .data-label {
                 display: block;
-                flex-grow: 1;
+                width: auto;
                 text-align: left;
                 margin-right: 10px;
+                flex-shrink: 0;
             }
 
             /* Button hover effects for collapsed state */
@@ -552,9 +553,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             /* Ensure data label doesn't interfere with button layout in collapsed state */
             .data-container-left.initial .data-label,
             .data-container-left.collapsed .data-label {
-                flex-grow: 1;
+                width: auto;
                 text-align: left;
                 margin-right: auto;
+                flex-shrink: 0;
             }
 
             /* Mobile responsiveness for left container */
@@ -701,19 +703,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             
         }
 
-        if (dataLabel) {
-            dataLabel.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation(); // Stop event from bubbling up to container
-                
-                // Use the same logic as container click - call toggleDataContainer
-                if (dataContainer.dataset.state !== 'expanded') {
-                    toggleDataContainer();
-                }
-            });
-        } else {
-            
-        }
+        // dataLabel click handler removed - container click handler already covers this functionality
         
         // Listen for the special collapse event from dataout.js
         document.addEventListener('collapse-datain-container', function() {
@@ -908,9 +898,15 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         });
 
-        // Restore last state
+        // Restore last state OR auto-open for first-time visitors
         const lastState = getLocal('dataContainerState') || 'initial';
+        const lastGridItemUrl = getLocal('lastGridItemUrl');
+        
         if (lastState === 'expanded') {
+            // User had it expanded before, restore that state
+            toggleDataContainer();
+        } else if (lastGridItemUrl === '/ai/categories.html' && lastState === 'initial') {
+            // First visit or user hasn't interacted much - auto-open with categories
             toggleDataContainer();
         }
     }
@@ -1075,15 +1071,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     async function initializeApp() {
-        initializeDataContainer();
-
-        // Check if data-out is already expanded to adjust z-index appropriately
-        const dataOutContainer = document.querySelector('.data-container-right');
-        if (dataOutContainer && dataOutContainer.dataset.state === 'expanded') {
-            dataContainer.style.zIndex = '12000';
-        }
-
         // Ensure lastGridItemUrl is set to categories.html if not present
+        // Do this BEFORE initializing the container so the container can check for it
         let lastGridItemUrl = getLocal('lastGridItemUrl');
         if (!lastGridItemUrl) {
             if (typeof window.setLocal === 'function') {
@@ -1091,6 +1080,14 @@ document.addEventListener('DOMContentLoaded', async function () {
             } else {
                 localStorage.setItem('lastGridItemUrl', '/ai/categories.html');
             }
+        }
+
+        initializeDataContainer();
+
+        // Check if data-out is already expanded to adjust z-index appropriately
+        const dataOutContainer = document.querySelector('.data-container-right');
+        if (dataOutContainer && dataOutContainer.dataset.state === 'expanded') {
+            dataContainer.style.zIndex = '12000';
         }
 
         try {
