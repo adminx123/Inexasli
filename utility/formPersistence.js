@@ -30,6 +30,7 @@
 
 import { setJSON } from './setJSON.js';
 import { getJSON } from './getJSON.js';
+import { getLocal } from './getlocal.js';
 
 /**
  * Main FormPersistence class
@@ -60,7 +61,7 @@ class FormPersistence {
     init(options = {}) {
         try {
             // Always reset moduleName and storageKeys on each init
-            this.moduleName = options.moduleName || this.detectModuleName();
+            this.moduleName = options.moduleName || this.getModuleNameFromLastGridItemUrl();
             this.storageKeys = {
                 input: this.moduleName ? `${this.moduleName}IqInput` : null,
                 response: this.moduleName ? `${this.moduleName}IqResponse` : null
@@ -107,38 +108,21 @@ class FormPersistence {
     }
 
     /**
-     * Auto-detect module name from URL or context
-     * @returns {string|null} The detected module name
+     * Get module name from lastGridItemUrl using getLocal.js
+     * @returns {string|null} The module name
      */
-    detectModuleName() {
+    getModuleNameFromLastGridItemUrl() {
         try {
-            // First try to detect from URL path
-            const path = window.location.pathname;
-            const matches = path.match(/\/ai\/([^\/]+)\//);
+            const lastUrl = getLocal('lastGridItemUrl', null);
+            if (!lastUrl) return null;
+            // Example: /ai/calorie/calorieiq.html or /ai/fitness/fitnessiq.html
+            const matches = lastUrl.match(/\/ai\/([^\/]+)\//);
             if (matches && matches[1]) {
                 return matches[1].toLowerCase();
             }
-
-            // Try to detect from page title or other indicators
-            const title = document.title.toLowerCase();
-            const modules = ['calorie', 'fitness', 'decision', 'enneagram', 'event', 'quiz', 'research', 'social', 'philosophy'];
-            
-            for (const module of modules) {
-                if (title.includes(module) || path.includes(module)) {
-                    return module;
-                }
-            }
-
-            // Last resort: try to find elements with module-specific IDs
-            for (const module of modules) {
-                if (document.querySelector(`[id*="${module}"]`)) {
-                    return module;
-                }
-            }
-
             return null;
         } catch (error) {
-            console.error('[FormPersistence] Module detection error:', error);
+            console.error('[FormPersistence] Error extracting module name from lastGridItemUrl:', error);
             return null;
         }
     }
@@ -198,10 +182,8 @@ class FormPersistence {
      * @returns {string|null} The module-wide key for form data
      */
     getCurrentGridItemKey() {
-        // Always use the same key as this.moduleName + 'IqInput', not this.storageKeys.input
-        // This ensures we use the module name as set in datain.js initialization
         if (!this.moduleName) {
-            this.moduleName = this.detectModuleName();
+            this.moduleName = this.getModuleNameFromLastGridItemUrl();
         }
         if (!this.moduleName) return null;
         return `${this.moduleName}IqInput`;
