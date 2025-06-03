@@ -66,8 +66,6 @@ class GuidedFormSystem {
      * @param {string} containerId - The container ID holding the form
      */
     init(containerId = null) {
-        console.log('[GuidedForms] Initializing guided form system');
-        
         // Try multiple container selectors
         if (containerId) {
             this.container = document.querySelector(`.${containerId}`) || document.querySelector(`#${containerId}`);
@@ -81,14 +79,11 @@ class GuidedFormSystem {
         }
         
         if (!this.container) {
-            console.warn('[GuidedForms] Container not found:', containerId);
             return false;
         }
 
         // Initialize data container reference for dynamic sizing
         this.initializeDataContainerRef();
-        
-        console.log('[GuidedForms] Using container:', this.container.className || this.container.tagName);
         
         this.analyzeFormStructure();
         this.setupEventListeners();
@@ -96,7 +91,6 @@ class GuidedFormSystem {
         this.initializeFirstStep();
         
         this.isInitialized = true;
-        console.log(`[GuidedForms] Initialized with ${this.steps.length} steps`);
         return true;
     }
 
@@ -118,9 +112,7 @@ class GuidedFormSystem {
             if (this.dataContainer.classList.contains('expanded')) {
                 const computedStyle = window.getComputedStyle(this.dataContainer);
                 this.originalContainerHeight = computedStyle.height;
-                console.log('[GuidedForms] Dynamic sizing enabled for expanded data container:', this.originalContainerHeight);
             } else {
-                console.log('[GuidedForms] Data container found but not expanded, will wait for expansion');
                 // Clear reference until container is expanded
                 this.dataContainer = null;
             }
@@ -137,13 +129,10 @@ class GuidedFormSystem {
         // Listen for data-in state changes to reapply dynamic sizing
         document.addEventListener('datain-state-changed', (event) => {
             const state = event.detail?.state;
-            console.log('[GuidedForms] Data container state changed to:', state);
             
             if (state === 'expanded' && this.isInitialized) {
-                console.log('[GuidedForms] Data container expanded, reapplying dynamic sizing');
                 // Update our reference to the expanded container
                 this.dataContainer = document.querySelector('.data-container-left.expanded');
-                
                 // Reapply sizing for current step
                 if (this.steps[this.currentStep]) {
                     setTimeout(() => {
@@ -151,7 +140,6 @@ class GuidedFormSystem {
                     }, 100);
                 }
             } else if (state === 'initial' || state === 'collapsed') {
-                console.log('[GuidedForms] Data container collapsed, removing dynamic height override');
                 // When collapsing, remove our height override to allow normal collapse behavior
                 if (this.dataContainer) {
                     this.dataContainer.style.height = '';
@@ -193,19 +181,14 @@ class GuidedFormSystem {
             // Skip generate/clear button rows
             const hasOnlyButtons = row.querySelectorAll('button').length > 0 && 
                                  row.children.length === row.querySelectorAll('button').length;
-            
             if (hasOnlyButtons) {
-                console.log(`[GuidedForms] Skipping button-only row ${index}`);
                 return;
             }
-            
             const stepData = this.analyzeStep(row, index);
             if (stepData) {
                 this.steps.push(stepData);
             }
         });
-        
-        console.log(`[GuidedForms] Found ${this.steps.length} form steps`);
     }
     
     /**
@@ -242,14 +225,12 @@ class GuidedFormSystem {
                 stepType = 'single-selection';
                 validationRule = () => {
                     const selected = gridContainer.querySelector('.grid-item.selected');
-                    console.log(`[GuidedForms] Single-selection validation for ${containerId}: ${selected ? 'has selection' : 'no selection'}`);
                     return selected !== null;
                 };
             } else {
                 stepType = 'multi-selection';
                 validationRule = () => {
                     const selectedCount = gridContainer.querySelectorAll('.grid-item.selected').length;
-                    console.log(`[GuidedForms] Multi-selection validation for ${containerId}: ${selectedCount} selected`);
                     return selectedCount > 0;
                 };
             }
@@ -276,28 +257,17 @@ class GuidedFormSystem {
                     // If no explicitly required inputs found, treat all inputs as required
                     const inputsToCheck = requiredInputs.length > 0 ? requiredInputs : [...inputs, ...textareas, ...selects];
                     
-                    console.log(`[GuidedForms] Checking ${inputsToCheck.length} required inputs in step`);
-                    
                     // ALL required inputs must have values
                     const allInputsFilled = inputsToCheck.every(input => {
                         let hasValue = false;
-                        
                         if (input.tagName.toLowerCase() === 'select') {
                             // For select elements with disabled placeholders, just check if value is not empty
                             // This works perfectly with disabled placeholder pattern: <option value="" disabled selected>
                             hasValue = input.value && input.value.trim() !== '';
-                            
-                            if (!hasValue) {
-                                console.log(`[GuidedForms] Select ${input.id || input.name || 'unnamed'} has no selection (value: "${input.value}")`);
-                            }
                         } else {
                             // For other inputs, check if they have non-empty values
                             hasValue = input.value && input.value.trim().length > 0;
-                            if (!hasValue) {
-                                console.log(`[GuidedForms] Input ${input.id || input.name || 'unnamed'} is still empty`);
-                            }
                         }
-                        
                         return hasValue;
                     });
                     
@@ -348,8 +318,6 @@ class GuidedFormSystem {
         const step = this.findStepByElement(item);
         
         if (step && step.index === this.currentStep) {
-            console.log(`[GuidedForms] Grid item toggled in step ${step.index}`);
-            
             // Small delay to ensure DOM is updated
             setTimeout(() => {
                 this.checkStepCompletion(step);
@@ -368,8 +336,6 @@ class GuidedFormSystem {
             const step = this.findStepByElement(input);
             
             if (step && step.index === this.currentStep) {
-                console.log(`[GuidedForms] Input changed in step ${step.index}`);
-                
                 // Debounce the validation check
                 clearTimeout(this.inputValidationTimeout);
                 this.inputValidationTimeout = setTimeout(() => {
@@ -390,7 +356,6 @@ class GuidedFormSystem {
             const step = this.findStepByElement(select);
             
             if (step && step.index === this.currentStep) {
-                console.log(`[GuidedForms] Select changed in step ${step.index}:`, select.value);
                 this.checkStepCompletion(step);
             }
         }
@@ -407,7 +372,6 @@ class GuidedFormSystem {
             const step = this.findStepByElement(textarea);
             
             if (step && step.index === this.currentStep) {
-                console.log(`[GuidedForms] Textarea changed in step ${step.index}`);
                 this.checkStepCompletion(step);
             }
         }
@@ -424,8 +388,6 @@ class GuidedFormSystem {
             const step = this.findStepByElement(select);
             
             if (step && step.index === this.currentStep) {
-                console.log(`[GuidedForms] Select focused in step ${step.index}`, select.id);
-                
                 // Mark this element as interacted with
                 step.userInteracted = true;
                 step.interactedElements.add(select);
@@ -446,8 +408,6 @@ class GuidedFormSystem {
             const step = this.findStepByElement(select);
             
             if (step && step.index === this.currentStep) {
-                console.log(`[GuidedForms] Select clicked in step ${step.index}`, select.id);
-                
                 // Mark this element as interacted with
                 step.userInteracted = true;
                 step.interactedElements.add(select);
@@ -475,8 +435,6 @@ class GuidedFormSystem {
             this.completedSteps.add(step.index);
             this.updateProgressIndicator();
             
-            console.log(`[GuidedForms] Step ${step.index} completed`);
-            
             // Trigger existing form persistence if available
             this.triggerExistingPersistence();
             
@@ -490,8 +448,6 @@ class GuidedFormSystem {
             step.isCompleted = false;
             this.completedSteps.delete(step.index);
             this.updateProgressIndicator();
-            
-            console.log(`[GuidedForms] Step ${step.index} no longer completed`);
         }
     }
 
@@ -505,7 +461,6 @@ class GuidedFormSystem {
         try {
             // Check for CalorieIQ form persistence
             if (typeof setJSON === 'function' && typeof collectFormData === 'function') {
-                console.log('[GuidedForms] Triggering CalorieIQ persistence');
                 setJSON('calorieIqInput', collectFormData());
             }
             
@@ -518,17 +473,14 @@ class GuidedFormSystem {
                 
                 // Trigger any existing save functions if they exist
                 if (inputs.length > 0 && typeof saveInput === 'function') {
-                    console.log('[GuidedForms] Triggering existing input persistence');
                     inputs.forEach(input => saveInput(input));
                 }
                 
                 if (gridItems.length > 0 && typeof saveGridItem === 'function') {
-                    console.log('[GuidedForms] Triggering existing grid item persistence');
                     gridItems.forEach(item => saveGridItem(item));
                 }
             }
         } catch (error) {
-            console.warn('[GuidedForms] Error triggering existing persistence:', error);
         }
     }
     
@@ -537,14 +489,11 @@ class GuidedFormSystem {
      */
     showStep(stepIndex) {
         if (stepIndex < 0 || stepIndex >= this.steps.length) {
-            console.warn('[GuidedForms] Invalid step index:', stepIndex);
             return;
         }
         
         const previousStep = this.steps[this.currentStep];
         const nextStep = this.steps[stepIndex];
-        
-        console.log(`[GuidedForms] Moving from step ${this.currentStep} to step ${stepIndex}`);
         
         // Hide previous step
         if (previousStep) {
@@ -570,7 +519,6 @@ class GuidedFormSystem {
 
         // Only apply dynamic sizing if the container is actually expanded
         if (!this.dataContainer.classList.contains('expanded')) {
-            console.log('[GuidedForms] Container not expanded, skipping dynamic sizing');
             return;
         }
 
@@ -579,15 +527,12 @@ class GuidedFormSystem {
             try {
                 // Double-check the container is still expanded (user might have collapsed it)
                 if (!this.dataContainer || !this.dataContainer.classList.contains('expanded')) {
-                    console.log('[GuidedForms] Container collapsed during sizing, aborting');
                     return;
                 }
 
                 // Calculate the content height needed for this step
                 const stepHeight = this.calculateStepHeight(step);
                 const containerHeight = this.calculateOptimalContainerHeight(stepHeight);
-                
-                console.log(`[GuidedForms] Adjusting container height to ${containerHeight}px for step ${step.index}`);
                 
                 // Apply the new height with smooth transition
                 this.dataContainer.style.transition = 'height 0.3s ease-in-out';
@@ -597,7 +542,6 @@ class GuidedFormSystem {
                 window.dispatchEvent(new Event('resize'));
                 
             } catch (error) {
-                console.warn('[GuidedForms] Error adjusting container size:', error);
             }
         }, 100);
     }
@@ -645,8 +589,6 @@ class GuidedFormSystem {
         // Handle edge cases
         const finalHeight = Math.max(stepHeight, 50); // Minimum 50px for very small steps
         
-        console.log(`[GuidedForms] Measured step ${step.index} height: ${finalHeight}px (base: ${rect.height}px, margins: ${marginTop + marginBottom}px)`);
-        
         return finalHeight;
     }
 
@@ -677,13 +619,10 @@ class GuidedFormSystem {
         if (window.innerWidth <= 480) {
             // On mobile, be more conservative with max height to ensure usability
             maxHeight = Math.min(maxHeight, window.innerHeight * 0.7);
-            console.log('[GuidedForms] Mobile detected, adjusted max height to:', maxHeight);
         }
         
         // Constrain to min/max bounds
         const finalHeight = Math.max(minHeight, Math.min(totalHeight, maxHeight));
-        
-        console.log(`[GuidedForms] Optimal height calculation: step=${stepHeight}px, total=${totalHeight}px, final=${finalHeight}px`);
         
         return finalHeight;
     }
@@ -710,8 +649,6 @@ class GuidedFormSystem {
         
         // Focus first interactive element
         this.focusFirstElement(step);
-        
-        console.log(`[GuidedForms] Displayed step ${step.index}: ${step.label}`);
     }
     
     /**
@@ -730,8 +667,6 @@ class GuidedFormSystem {
         } else {
             step.element.style.display = 'none';
         }
-        
-        console.log(`[GuidedForms] Hidden step ${step.index}: ${step.label}`);
     }
     
     /**
@@ -765,8 +700,6 @@ class GuidedFormSystem {
         if (this.steps.length > 0 && this.dataContainer && this.dataContainer.classList.contains('expanded')) {
             this.adjustContainerSize(this.steps[0]);
         }
-        
-        console.log('[GuidedForms] Initialized first step with conditional dynamic sizing');
     }
     
     /**
@@ -786,36 +719,27 @@ class GuidedFormSystem {
 
         // Priority 1: Device container within current container
         targetContainer = this.container.querySelector('.device-container');
-        console.log('[GuidedForms] Device container check:', targetContainer);
 
         // Priority 2: Data-in system containers - target the main container directly
         if (!targetContainer) {
             targetContainer = document.querySelector('.data-container-left');
-            if (targetContainer) {
-                console.log('[GuidedForms] Found data-container-left:', targetContainer.className);
-            }
         }
 
         // Priority 3: General data-content containers
         if (!targetContainer) {
             targetContainer = this.container.querySelector('.data-content');
-            console.log('[GuidedForms] Found data-content in current container:', targetContainer);
         }
 
         // Priority 4: Check if current container is already a data-content element
         if (!targetContainer && this.container.classList.contains('data-content')) {
             targetContainer = this.container;
-            console.log('[GuidedForms] Current container is data-content:', targetContainer);
         }
 
         // Priority 5: Fallback to current container
         if (!targetContainer) {
             targetContainer = this.container;
-            console.log('[GuidedForms] Using fallback container:', targetContainer);
         }
 
-        console.log('[GuidedForms] Selected target container:', targetContainer.className || targetContainer.tagName);
-        
         const progressContainer = document.createElement('div');
         progressContainer.id = 'guided-form-progress';
         
@@ -840,7 +764,6 @@ class GuidedFormSystem {
                 font-weight: 500;
                 z-index: 11003;
             `;
-            console.log('[GuidedForms] Using data-in container positioning - moved higher for more space');
         } else {
             // Use fixed positioning for other containers level with button centers - moved higher
             progressContainer.style.cssText = `
@@ -858,7 +781,6 @@ class GuidedFormSystem {
                 font-weight: 500;
                 z-index: 10000;
             `;
-            console.log('[GuidedForms] Using fixed positioning - moved higher for more space');
         }
         
         // Progress dots
@@ -893,13 +815,9 @@ class GuidedFormSystem {
         // Append to the appropriate container
         if (isDataInContainer) {
             targetContainer.appendChild(progressContainer);
-            console.log('[GuidedForms] Progress indicator attached to data-in container');
         } else {
             document.body.appendChild(progressContainer);
-            console.log('[GuidedForms] Progress indicator attached to document body');
         }
-        
-        console.log('[GuidedForms] Created progress indicator');
     }
     
     /**
@@ -923,8 +841,6 @@ class GuidedFormSystem {
      * Show all steps (exit guided mode)
      */
     showAllSteps() {
-        console.log('[GuidedForms] Exiting guided mode, showing all steps');
-        
         this.steps.forEach(step => {
             step.element.style.display = 'flex';
             step.element.style.opacity = '1';
@@ -937,7 +853,6 @@ class GuidedFormSystem {
         
         // Remove progress elements
         const progressIndicator = document.getElementById('guided-form-progress');
-        
         if (progressIndicator) progressIndicator.remove();
         
         this.isInitialized = false;
@@ -951,7 +866,6 @@ class GuidedFormSystem {
             // Remove any height overrides
             this.dataContainer.style.height = '';
             this.dataContainer.style.transition = '';
-            console.log('[GuidedForms] Cleaned up dynamic sizing overrides');
         }
         
         // Clear container reference
@@ -965,7 +879,6 @@ class GuidedFormSystem {
         if (this.dataContainer && this.originalContainerHeight && this.config.dynamicSizing) {
             // Only restore if container is still expanded
             if (this.dataContainer.classList.contains('expanded')) {
-                console.log('[GuidedForms] Restoring original container height:', this.originalContainerHeight);
                 this.dataContainer.style.transition = 'height 0.3s ease-in-out';
                 this.dataContainer.style.height = this.originalContainerHeight;
                 
@@ -1003,8 +916,6 @@ class GuidedFormSystem {
      * Clean up event listeners and elements
      */
     destroy() {
-        console.log('[GuidedForms] Destroying guided form system');
-        
         // Remove event listeners
         document.removeEventListener('grid-item-toggled', this.handleGridItemToggled);
         
@@ -1013,7 +924,6 @@ class GuidedFormSystem {
         
         // Remove UI elements
         const progressIndicator = document.getElementById('guided-form-progress');
-        
         if (progressIndicator) progressIndicator.remove();
         
         // Show all steps
@@ -1037,7 +947,6 @@ class GuidedFormSystem {
      */
     refreshContainerSize() {
         if (this.isInitialized && this.config.dynamicSizing && this.steps[this.currentStep]) {
-            console.log('[GuidedForms] Manually refreshing container size');
             this.adjustContainerSize(this.steps[this.currentStep]);
         }
     }
@@ -1049,8 +958,6 @@ class GuidedFormSystem {
     updateSizingConfig(sizingConfig) {
         if (sizingConfig && typeof sizingConfig === 'object') {
             this.config = { ...this.config, ...sizingConfig };
-            console.log('[GuidedForms] Updated sizing configuration:', sizingConfig);
-            
             // Apply new configuration to current step
             if (this.isInitialized && this.steps[this.currentStep]) {
                 this.adjustContainerSize(this.steps[this.currentStep]);
@@ -1065,7 +972,6 @@ class GuidedFormSystem {
         if (!this.config.dynamicSizing) {
             return { enabled: false };
         }
-
         const currentStep = this.steps[this.currentStep];
         const info = {
             enabled: true,
@@ -1074,12 +980,10 @@ class GuidedFormSystem {
             dataContainer: !!this.dataContainer,
             originalHeight: this.originalContainerHeight,
         };
-
         if (currentStep && this.dataContainer) {
             info.currentStepHeight = this.calculateStepHeight(currentStep);
             info.currentContainerHeight = this.dataContainer.style.height || window.getComputedStyle(this.dataContainer).height;
         }
-
         return info;
     }
 }
@@ -1116,9 +1020,6 @@ function initGuidedForms(options = {}) {
     // Initialize after a short delay to ensure DOM is ready
     setTimeout(() => {
         const success = window.guidedForms.init();
-        if (success) {
-            console.log('[GuidedForms] Successfully initialized guided forms with dynamic sizing');
-        }
     }, 100);
     
     return window.guidedForms;
@@ -1130,10 +1031,8 @@ function initGuidedForms(options = {}) {
 function toggleGuidedMode() {
     if (window.guidedForms && window.guidedForms.isInitialized) {
         window.guidedForms.destroy();
-        console.log('[GuidedForms] Guided mode disabled');
     } else {
         initGuidedForms();
-        console.log('[GuidedForms] Guided mode enabled');
     }
 }
 
@@ -1147,7 +1046,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check if we're in a form context
         const hasFormElements = document.querySelector('.row1, .grid-container, .device-container');
         if (hasFormElements) {
-            console.log('[GuidedForms] Auto-initializing guided forms on DOMContentLoaded');
             initGuidedForms({
                 autoAdvance: true,
                 showProgressIndicator: true,
@@ -1158,15 +1056,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
-
-// Also listen for data-in-loaded events from datain.js
 document.addEventListener('data-in-loaded', (e) => {
-    console.log('[GuidedForms] Received data-in-loaded event');
     setTimeout(() => {
         const container = e.detail?.container || document;
         const hasFormElements = container.querySelector('.row1, .grid-container, .device-container');
         if (hasFormElements && window.autoInitGuidedForms !== false) {
-            console.log('[GuidedForms] Reinitializing guided forms after data-in-loaded');
             initGuidedForms({
                 autoAdvance: true,
                 showProgressIndicator: true,
