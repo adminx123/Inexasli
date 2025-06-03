@@ -24,39 +24,23 @@ function openDataOverwriteModal() {
         document.body.appendChild(modal);
     }
 
-    // Get current data from localStorage
-    const currentGridUrl = localStorage.getItem('lastgridurl') || 'No URL stored';
-    const hasInput = localStorage.getItem('lastgridurl_input');
-    const hasResponse = localStorage.getItem('lastgridurl_response');
+    // Check for stored data
+    const lastGridUrl = localStorage.getItem('lastgridurl');
 
-    // Create modal content with exact styling from payment modal
+    // Create modal content (centered, minimal, only show lastgridurl and what will be erased)
     const modalContent = document.createElement('div');
     modalContent.className = 'data-overwrite-modal-content';
     modalContent.innerHTML = `
         <h2 class="data-overwrite-modal-title">Delete Local Storage Data</h2>
-        
-        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 12px; margin-bottom: 15px; text-align: left; width: 100%;">
-            <p style="color: #555; font-size: 0.8rem; margin: 0 0 5px 0; font-weight: 600;">Current Data URL:</p>
-            <p style="color: #333; font-size: 0.75rem; margin: 0; word-break: break-all; font-family: monospace;">${decodeURIComponent(currentGridUrl)}</p>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <div style=\"font-size: 1.05rem; color: #333; font-family: 'Geist', sans-serif; margin-bottom: 8px;\"><strong>${lastGridUrl || ''}</strong></div>
+            <div style="font-size: 0.97rem; color: #666; margin-bottom: 0;">
+                The input and output for this item will be erased.
+            </div>
         </div>
-
-        <div style="margin-bottom: 15px;">
-            <p class="data-overwrite-modal-description" style="margin-bottom: 10px;">
-                This will permanently delete the following local storage items:
-            </p>
-            <ul style="text-align: left; color: #666; font-size: 0.8rem; margin: 0; padding-left: 20px;">
-                <li><strong>lastgridurl_input</strong> - ${hasInput ? 'Stored input data' : 'No input data stored'}</li>
-                <li><strong>lastgridurl_response</strong> - ${hasResponse ? 'Stored response data' : 'No response data stored'}</li>
-            </ul>
-            <p style="color: #28a745; font-size: 0.8rem; margin-top: 10px; font-weight: 500;">
-                ✓ Navigation state (lastgridurl) will be preserved
-            </p>
-        </div>
-
-        <p style="color: #dc3545; font-size: 0.8rem; margin-bottom: 20px; font-weight: 500;">
-            ⚠️ This action cannot be undone. Are you sure you want to continue?
+        <p style="color: #dc3545; font-size: 0.95rem; margin-bottom: 20px; font-weight: 500; text-align: center;">
+            This action cannot be undone. Are you sure you want to continue?
         </p>
-        
         <div class="data-overwrite-modal-buttons">
             <button onclick="cancelDataOverwrite()" class="data-overwrite-modal-button cancel">
                 Cancel
