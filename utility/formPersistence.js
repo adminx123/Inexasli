@@ -29,7 +29,7 @@
  */
 
 import { setJSON } from './setJSON.js';
-import { getLocalJSON as getJSON } from './getJSON.js';
+import { getJSON } from './getJSON.js';
 
 /**
  * Main FormPersistence class

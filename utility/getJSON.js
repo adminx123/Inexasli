@@ -5,10 +5,10 @@
  * @param {any} defaultValue - Optional default value to return if key doesn't exist
  * @returns {any} - The parsed JSON data or the defaultValue if not found or parsing fails
  */
-export function getLocalJSON(name, defaultValue = null) {
+export function getJSON(name, defaultValue = null) {
     try {
         if (name === undefined || name === null || name === '') {
-            console.error('Invalid key name provided to getLocalJSON');
+            console.error('Invalid key name provided to getJSON');
             return defaultValue;
         }
         
@@ -96,4 +96,4 @@ export function processJSONResponse(jsonResponse, prefix = '') {
 }
 
 // Set default exports
-export default getLocalJSON;
+export default getJSON;

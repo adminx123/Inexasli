@@ -304,7 +304,7 @@
      import { setLocal } from '/utility/setlocal.js';
      import { getLocal } from '/utility/getLocal.js';
      import { setJSON } from '/utility/setJSON.js';
-     import { getLocalJSON } from '/utility/getJSON.js';
+     import { getJSON } from '/utility/getJSON.js';
 
      // Define expenseCategories and totalOnlyCategories FIRST
      const expenseCategories = [
@@ -359,7 +359,7 @@
          console.log('Starting loadLocalStorage with JSON...');
          
          // Get all input values from JSON storage
-         const savedInputs = getLocalJSON(TRIP_INPUTS_KEY, {});
+         const savedInputs = getJSON(TRIP_INPUTS_KEY, {});
          formElementIds.forEach(id => {
              const element = document.getElementById(id);
              if (element) {
@@ -373,7 +373,7 @@
          });
          
          // Get all frequency selections from JSON storage
-         const savedFrequencies = getLocalJSON(TRIP_FREQUENCIES_KEY, {});
+         const savedFrequencies = getJSON(TRIP_FREQUENCIES_KEY, {});
          document.querySelectorAll('.checkbox-button-group').forEach(group => {
              const groupId = group.id;
              const savedFrequency = savedFrequencies[groupId] || 'total';
@@ -443,7 +443,7 @@
          if (checkedCheckbox) {
              frequency = checkedCheckbox.value;
          } else {
-             const savedFrequencies = getLocalJSON(TRIP_FREQUENCIES_KEY, {});
+             const savedFrequencies = getJSON(TRIP_FREQUENCIES_KEY, {});
              frequency = savedFrequencies[`trip_${category}_frequency`] || 'total';
          }
          
@@ -632,7 +632,7 @@
                          });
                          
                          // Get current frequencies from storage
-                         const savedFrequencies = getLocalJSON(TRIP_FREQUENCIES_KEY, {});
+                         const savedFrequencies = getJSON(TRIP_FREQUENCIES_KEY, {});
                          savedFrequencies[group.id] = this.value;
                          
                          // Update the frequencies object and save
