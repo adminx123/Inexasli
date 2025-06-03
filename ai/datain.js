@@ -331,6 +331,20 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             }));
 
+            // Execute scripts from the loaded content
+            const scripts = dataContainer.querySelectorAll('script');
+            scripts.forEach(script => {
+                const newScript = document.createElement('script');
+                if (script.src) {
+                    newScript.src = script.src;
+                } else {
+                    newScript.textContent = script.textContent;
+                }
+                // Replace the old script with the new one to trigger execution
+                script.parentNode.insertBefore(newScript, script);
+                script.remove();
+            });
+
             // Re-bind close button
             const closeButton = dataContainer.querySelector('.close-data-container');
             if (closeButton) {
@@ -499,9 +513,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 transform: none;
                 display: flex;
                 flex-direction: row;
-                justify-content: flex-end;
+                gap: 8px;
                 align-items: center;
-                z-index: 10001;
+                z-index: 11003;
                 margin-left: 0;
                 margin-right: 0;
                 padding-left: 10px;
