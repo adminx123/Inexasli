@@ -27,26 +27,43 @@ function openDataOverwriteModal() {
     // Check for stored data
     const lastGridUrl = localStorage.getItem('lastgridurl');
 
-    // Create modal content (centered, minimal, only show lastgridurl and what will be erased)
+    // Create modal content with copy.js styling - minimal text
     const modalContent = document.createElement('div');
     modalContent.className = 'data-overwrite-modal-content';
+    modalContent.style.cssText = `
+        background-color: #f2f9f3;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #4a7c59;
+        box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
+        max-width: 300px;
+        width: 90%;
+        text-align: center;
+        font-family: "Inter", sans-serif;
+    `;
+    
     modalContent.innerHTML = `
-        <h2 class="data-overwrite-modal-title">Delete Local Storage Data</h2>
-        <div style="text-align: center; margin-bottom: 20px;">
-            <div style=\"font-size: 1.05rem; color: #333; font-family: 'Geist', sans-serif; margin-bottom: 8px;\"><strong>${lastGridUrl || ''}</strong></div>
-            <div style="font-size: 0.97rem; color: #666; margin-bottom: 0;">
-                The input and output for this item will be erased.
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="text-align: center; margin-bottom: 8px; font-size: 13px; color: #666; font-family: 'Inter', sans-serif;">
+                Are you sure? This can't be undone.
             </div>
-        </div>
-        <p style="color: #dc3545; font-size: 0.95rem; margin-bottom: 20px; font-weight: 500; text-align: center;">
-            This action cannot be undone. Are you sure you want to continue?
-        </p>
-        <div class="data-overwrite-modal-buttons">
-            <button onclick="cancelDataOverwrite()" class="data-overwrite-modal-button cancel">
-                Cancel
-            </button>
-            <button onclick="confirmDataOverwrite()" class="data-overwrite-modal-button confirm">
-                Delete Data
+            <button onclick="confirmDataOverwrite()" class="data-overwrite-action-btn" style="
+                padding: 14px 20px;
+                background-color: #f2f9f3;
+                color: #2d5a3d;
+                border: 1px solid #4a7c59;
+                border-radius: 8px;
+                font-size: 14px;
+                cursor: pointer;
+                font-family: 'Geist', sans-serif;
+                font-weight: bold;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
+            ">
+                <i class="bx bx-trash" style="margin-right: 8px; font-size: 14px;"></i>Clear data
             </button>
         </div>
     `;
@@ -55,32 +72,61 @@ function openDataOverwriteModal() {
     modal.innerHTML = '';
     modal.appendChild(modalContent);
 
-    // Show modal with exact styling from payment modal
-    modal.style.display = 'flex';
-    modal.style.position = 'fixed';
-    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-    modal.style.top = '0';
-    modal.style.left = '0';
-    modal.style.right = '0';
-    modal.style.bottom = '0';
-    modal.style.justifyContent = 'center';
-    modal.style.alignItems = 'center';
-    modal.style.padding = '30px';
-    modal.style.zIndex = '20000';
-    modal.style.overflowY = 'auto';
-    modal.style.fontFamily = '"Inter", sans-serif';
-    modal.style.backdropFilter = 'blur(3px)';
-    modal.style.transition = 'background-color 0.3s ease';
-    modal.style.cursor = 'pointer';
+    // Show modal with copy.js styling
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 20000;
+        font-family: "Inter", sans-serif;
+    `;
 
-    // Add modal styles
-    addDataOverwriteModalStyles();
+    // Add hover effects like copy.js
+    addButtonHoverEffects();
 
     // Add modal-open class to disable tooltips
     document.body.classList.add('modal-open');
 
     // Add event listeners
     addDataOverwriteEventListeners(modal);
+}
+
+/**
+ * Add hover effects to buttons like copy.js
+ */
+function addButtonHoverEffects() {
+    const modal = document.querySelector('.data-overwrite-modal');
+    if (!modal) return;
+    
+    modal.querySelectorAll('.data-overwrite-action-btn').forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#eef7f0';
+            this.style.transform = 'translateY(-1px)';
+            this.style.boxShadow = '0 3px 8px rgba(74, 124, 89, 0.3)';
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '#f2f9f3';
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 2px 4px rgba(74, 124, 89, 0.2)';
+        });
+        
+        btn.addEventListener('mousedown', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 1px 2px rgba(74, 124, 89, 0.3)';
+        });
+        
+        btn.addEventListener('mouseup', function() {
+            this.style.transform = 'translateY(-1px)';
+            this.style.boxShadow = '0 3px 8px rgba(74, 124, 89, 0.3)';
+        });
+    });
 }
 
 /**
@@ -107,136 +153,6 @@ function addDataOverwriteEventListeners(modal) {
     // Store references for cleanup
     modal._keyDownHandler = handleKeyDown;
     modal._clickOutsideHandler = handleClickOutside;
-}
-
-/**
- * Add CSS styles for the data overwrite modal (matching payment modal)
- */
-function addDataOverwriteModalStyles() {
-    // Check if styles already exist
-    if (document.getElementById('data-overwrite-modal-styles')) {
-        return;
-    }
-    
-    const style = document.createElement('style');
-    style.id = 'data-overwrite-modal-styles';
-    style.textContent = `
-        .data-overwrite-modal {
-            display: none;
-            position: fixed;
-            background-color: rgba(0, 0, 0, 0.5);
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            justify-content: center;
-            align-items: center;
-            padding: 30px;
-            z-index: 20000;
-            overflow-y: auto;
-            font-family: "Inter", sans-serif;
-            backdrop-filter: blur(3px);
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .data-overwrite-modal-content {
-            background-color: #f2f9f3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 25px;
-            width: 90%;
-            max-width: 450px;
-            position: relative;
-            font-family: "Inter", sans-serif;
-            border: 2px solid #4a7c59;
-            border-radius: 8px;
-            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
-            cursor: default;
-        }
-        
-        .data-overwrite-modal-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            text-align: center;
-            font-family: "Geist", sans-serif;
-        }
-        
-        .data-overwrite-modal-description {
-            margin-bottom: 25px;
-            text-align: center;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-        
-        .data-overwrite-modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            width: 100%;
-        }
-        
-        .data-overwrite-modal-button {
-            padding: 10px 20px;
-            border: 2px solid #4a7c59;
-            border-radius: 6px;
-            font-family: "Geist", sans-serif;
-            font-weight: 500;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
-        }
-        
-        .data-overwrite-modal-button.confirm {
-            background-color: #ff5555;
-            color: white;
-        }
-        
-        .data-overwrite-modal-button.cancel {
-            background-color: #f2f9f3;
-            color: #2d5a3d;
-        }
-        
-        .data-overwrite-modal-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 4px 6px 0 rgba(74, 124, 89, 0.7);
-        }
-        
-        .data-overwrite-modal-button:active {
-            transform: translateY(0);
-            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
-        }
-        
-        @media (max-width: 480px) {
-            .data-overwrite-modal-content {
-                padding: 20px 15px;
-                width: 90%;
-                max-width: 320px;
-            }
-            
-            .data-overwrite-modal-title {
-                font-size: 1.1rem;
-            }
-            
-            .data-overwrite-modal-description {
-                font-size: 0.9rem;
-            }
-            
-            .data-overwrite-modal-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .data-overwrite-modal-button {
-                width: 100%;
-            }
-        }
-    `;
-    
-    document.head.appendChild(style);
 }
 
 /**
@@ -299,9 +215,8 @@ function showDataOverwriteSuccess() {
         modal.innerHTML = `
             <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
                 <div style="color: #28a745; font-size: 48px; margin-bottom: 20px;">✓</div>
-                <h2 style="color: #28a745; font-size: 1.3rem; margin-bottom: 15px; font-family: 'Geist', sans-serif; font-weight: 600;">Success!</h2>
                 <p style="color: #555; font-size: 0.95rem; margin: 0;">
-                    Data storage cleared successfully. Navigation state preserved.
+                    Cleared
                 </p>
             </div>
         `;
@@ -317,13 +232,11 @@ function showDataOverwriteError() {
         modal.innerHTML = `
             <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
                 <div style="color: #dc3545; font-size: 48px; margin-bottom: 20px;">✗</div>
-                <h2 style="color: #dc3545; font-size: 1.3rem; margin-bottom: 15px; font-family: 'Geist', sans-serif; font-weight: 600;">Error</h2>
                 <p style="color: #555; font-size: 0.95rem; margin-bottom: 20px;">
-                    An error occurred while deleting the data. Please try again.
+                    Error occurred. Try again.
                 </p>
                 <button onclick="closeDataOverwriteModal()" 
-                        class="data-overwrite-modal-button cancel"
-                        style="padding: 10px 20px; border: 1px solid #4a7c59; border-radius: 6px; font-family: 'Geist', sans-serif; font-weight: 500; font-size: 0.95rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2); background-color: #f2f9f3; color: #2d5a3d;">
+                        style="padding: 14px 20px; background-color: #f2f9f3; color: #2d5a3d; border: 1px solid #4a7c59; border-radius: 8px; font-family: 'Geist', sans-serif; font-weight: bold; font-size: 14px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);">
                     Close
                 </button>
             </div>
