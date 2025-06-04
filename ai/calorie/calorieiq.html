@@ -116,6 +116,9 @@
     // Always set data-meal attribute for proper data collection
     input.dataset.meal = mealType;
     
+    // Set id attribute for form persistence system
+    input.id = `calorie-${mealType}`;
+    
     inputGroup.appendChild(input);
     
     const removeBtn = document.createElement('button');
@@ -158,6 +161,11 @@
     if (!skipRepositioning) {
       ensureAddButton();
       input.focus();
+      
+      // Refresh input handlers to pick up the new input
+      if (window.calorieFormPersistence && window.calorieFormPersistence.refreshInputHandlers) {
+        window.calorieFormPersistence.refreshInputHandlers();
+      }
       
       // Save form data after adding new input
       window.calorieFormPersistence.saveFormData();
