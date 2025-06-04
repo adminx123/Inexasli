@@ -85,12 +85,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 top: 0;
                 left: 50%;
                 transform: translateX(-50%);
-                background-color: #f5f5f5;
+                background-color: #f2f9f3;
                 padding: 4px;
-                border: 2px solid #000;
+                border: 1px solid #4a7c59;
                 border-top: none;
                 border-radius: 0 0 27px 27px;
-                box-shadow: -4px 4px 0 #000;
+                box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
                 z-index: 10000;
                 max-width: 34px;
                 min-height: 30px;
@@ -131,15 +131,15 @@ document.addEventListener('DOMContentLoaded', async function () {
                 top: 0;
                 left: 0;
                 transform: none;
-                border: 2px solid #000; /* Solid border */
+                border: 1px solid #4a7c59; /* Green border */
                 border-top: none; /* Remove top border */
                 border-radius: 0 0 27px 27px; /* Rounded bottom corners */
-                box-shadow: -4px 4px 0 #000; /* 3D shadow effect */
+                box-shadow: 0 2px 6px rgba(74, 124, 89, 0.25); /* Soft shadow effect */
                 padding: 4px; /* Keep padding */
             }
 
             .data-container-right:hover {
-                background-color: rgb(255, 255, 255);
+                background-color: #eef7f0;
             }
 
             .data-container-right .close-data-container {
