@@ -23,7 +23,7 @@ function injectModalCSS() {
 }
 
 .modal-content {
-    background-color: white;
+    background-color: #f2f9f3;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -36,9 +36,9 @@ function injectModalCSS() {
     overflow: auto;
     position: relative;
     font-family: "Inter", sans-serif;
-    border: 2px solid #000;
+    border: 1px solid #4a7c59;
     border-radius: 8px;
-    box-shadow: 4px 4px 0 #000;
+    box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
 }
 
 .modal-content iframe {
@@ -55,18 +55,18 @@ function injectModalCSS() {
 }
 
 .modal-trigger:hover {
-    color: #444;
+    color: #4a7c59;
     text-decoration: none;
 }
 
 /* Button styling */
 .modal-content button {
     padding: 10px 20px;
-    background-color: #fff;
-    color: #000;
-    border: 2px solid #000;
+    background-color: #f2f9f3;
+    color: #2d5a3d;
+    border: 1px solid #4a7c59;
     border-radius: 6px;
-    box-shadow: 4px 4px 0 #000;
+    box-shadow: 2px 2px 4px rgba(74, 124, 89, 0.15);
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: bold;
@@ -75,7 +75,7 @@ function injectModalCSS() {
 }
 
 .modal-content button:hover {
-    background-color: #f5f5f5;
+    background-color: #eef7f0;
 }
 
 .modal-content button:active {

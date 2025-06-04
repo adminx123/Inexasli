@@ -46,13 +46,13 @@
         }
         
         .terms-container {
-            background-color: #fff;
+            background-color: #f2f9f3;
             max-width: 600px;
             width: 90%;
             border-radius: 8px;
-            border: 2px solid #000;
+            border: 2px solid #4a7c59;
             padding: 25px;
-            box-shadow: 4px 4px 0 #000;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
@@ -74,14 +74,14 @@
         }
 
         .terms-link {
-            color: #000;
+            color: #4a7c59;
             cursor: pointer;
             text-decoration: underline;
             font-weight: 500;
         }
         
         .terms-link:hover {
-            color: #444;
+            color: #3d6b4a;
         }
         
         .terms-checkbox-container {
@@ -109,11 +109,11 @@
         
         .terms-continue-btn {
             padding: 10px 20px;
-            background-color: #fff;
-            color: #000;
-            border: 2px solid #000;
+            background-color: #4a7c59;
+            color: #fff;
+            border: 2px solid #4a7c59;
             border-radius: 6px;
-            box-shadow: 4px 4px 0 #000;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
             cursor: pointer;
             font-size: 0.9rem;
             font-weight: bold;
@@ -131,21 +131,21 @@
         }
         
         .terms-continue-btn:not([disabled]):hover {
-            background-color: #f5f5f5;
+            background-color: #3d6b4a;
         }
         
         .terms-continue-btn:not([disabled]):active {
             transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #000;
+            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
         }
         
         .terms-leave-btn {
             padding: 10px 20px;
             background-color: #fff;
             color: #000;
-            border: 2px solid #000;
+            border: 2px solid #4a7c59;
             border-radius: 6px;
-            box-shadow: 4px 4px 0 #000;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
             cursor: pointer;
             font-size: 0.9rem;
             font-weight: bold;
@@ -154,12 +154,12 @@
         }
         
         .terms-leave-btn:hover {
-            background-color: #f5f5f5;
+            background-color: #eef7f0;
         }
         
         .terms-leave-btn:active {
             transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #000;
+            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
         }
         
         @media (max-width: 480px) {

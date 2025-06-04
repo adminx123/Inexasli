@@ -91,7 +91,6 @@ Should I apologize first"></textarea>
             </div>
      
             <button class="generate-btn" id="generate-social-btn">Generate Social Analysis Now!</button>
-            <button class="clear-btn" id="clear-social-btn">Clear All</button>
         </div>
 
 <script>
@@ -213,11 +212,6 @@ Should I apologize first"></textarea>
         if (generateBtn) {
             generateBtn.removeEventListener('click', handleGenerateSocialIq);
             generateBtn.addEventListener('click', handleGenerateSocialIq);
-        }
-        
-        const clearBtn = document.getElementById('clear-social-btn');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', () => window.socialFormPersistence.clearLocalStorage());
         }
     }
 

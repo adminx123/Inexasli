@@ -41,13 +41,13 @@
         }
         
         .data-consent-modal {
-            background-color: #fff;
+            background-color: #f2f9f3;
             max-width: 600px;
             width: 90%;
             border-radius: 8px;
-            border: 2px solid #000;
+            border: 2px solid #4a7c59;
             padding: 25px;
-            box-shadow: 4px 4px 0 #000;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
@@ -99,35 +99,35 @@
         }
         
         .data-consent-modal .accept-btn {
-            background-color: #fff;
-            color: #000;
-            border: 2px solid #000;
-            box-shadow: 4px 4px 0 #000;
+            background-color: #4a7c59;
+            color: #fff;
+            border: 2px solid #4a7c59;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
         }
         
         .data-consent-modal .accept-btn:hover {
-            background-color: #f5f5f5;
+            background-color: #3d6b4a;
         }
         
         .data-consent-modal .accept-btn:active {
             transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #000;
+            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
         }
         
         .data-consent-modal .reject-btn {
             background-color: #fff;
             color: #000;
-            border: 2px solid #000;
-            box-shadow: 4px 4px 0 #000;
+            border: 2px solid #4a7c59;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
         }
         
         .data-consent-modal .reject-btn:hover {
-            background-color: #f5f5f5;
+            background-color: #eef7f0;
         }
         
         .data-consent-modal .reject-btn:active {
             transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #000;
+            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
         }
         
         .data-consent-modal .decline-message {
@@ -150,33 +150,33 @@
         .data-consent-modal .reconsider-btn {
             background-color: #fff;
             color: #000;
-            border: 2px solid #000;
-            box-shadow: 4px 4px 0 #000;
+            border: 2px solid #4a7c59;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
         }
         
         .data-consent-modal .reconsider-btn:hover {
-            background-color: #f5f5f5;
+            background-color: #eef7f0;
         }
         
         .data-consent-modal .reconsider-btn:active {
             transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #000;
+            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
         }
         
         .data-consent-modal .leave-btn {
             background-color: #fff;
             color: #000;
-            border: 2px solid #000;
-            box-shadow: 4px 4px 0 #000;
+            border: 2px solid #4a7c59;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
         }
         
         .data-consent-modal .leave-btn:hover {
-            background-color: #f5f5f5;
+            background-color: #eef7f0;
         }
         
         .data-consent-modal .leave-btn:active {
             transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #000;
+            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
         }
         
         /* Disable specific elements that might still be clickable */
