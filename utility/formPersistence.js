@@ -335,11 +335,192 @@ class FormPersistence {
         const data = getJSON(gridKey, null);
         console.log('[FormPersistence][DEBUG] repopulateForm: loaded data =', data);
         if (!data) return;
+        
+        // Auto-detect and recreate dynamic inputs before repopulation
+        this.recreateDynamicInputs(data);
+        
         if (this.customFormRepopulator) {
             this.customFormRepopulator(data);
             return;
         }
         this.repopulateGenericForm(data);
+    }
+
+    /**
+     * Auto-detect and recreate dynamic inputs based on saved data patterns
+     * This method analyzes saved data to identify dynamic field patterns and 
+     * automatically calls the appropriate functions to recreate those DOM elements
+     * @param {Object} data - The saved form data
+     */
+    recreateDynamicInputs(data) {
+        if (!data || typeof data !== 'object') return;
+        
+        console.log('[FormPersistence] Auto-detecting dynamic inputs from saved data:', data);
+        
+        // Detect dynamic patterns in field names
+        const dynamicPatterns = this.detectDynamicPatterns(data);
+        
+        for (const pattern of dynamicPatterns) {
+            console.log('[FormPersistence] Found dynamic pattern:', pattern);
+            this.recreatePatternInputs(pattern);
+        }
+    }
+
+    /**
+     * Detect dynamic patterns in saved field names
+     * @param {Object} data - The saved form data
+     * @returns {Array} Array of detected patterns
+     */
+    detectDynamicPatterns(data) {
+        const patterns = [];
+        const fieldNames = Object.keys(data);
+        
+        // Look for numbered patterns like "snack4", "snack5", "meal2", etc.
+        const numberedPatternRegex = /^([a-zA-Z]+)(\d+)$/;
+        const numberedFields = {};
+        
+        fieldNames.forEach(fieldName => {
+            const match = fieldName.match(numberedPatternRegex);
+            if (match) {
+                const basePattern = match[1]; // e.g., "snack"
+                const number = parseInt(match[2], 10); // e.g., 4
+                
+                if (!numberedFields[basePattern]) {
+                    numberedFields[basePattern] = [];
+                }
+                numberedFields[basePattern].push(number);
+            }
+        });
+        
+        // Convert detected numbered fields to patterns
+        Object.entries(numberedFields).forEach(([basePattern, numbers]) => {
+            if (numbers.length > 0) {
+                const maxNumber = Math.max(...numbers);
+                patterns.push({
+                    type: 'numbered',
+                    basePattern: basePattern,
+                    maxNumber: maxNumber,
+                    detectedNumbers: numbers.sort((a, b) => a - b)
+                });
+            }
+        });
+        
+        return patterns;
+    }
+
+    /**
+     * Recreate dynamic inputs based on detected patterns
+     * @param {Object} pattern - The detected pattern object
+     */
+    recreatePatternInputs(pattern) {
+        if (pattern.type === 'numbered') {
+            this.recreateNumberedInputs(pattern);
+        }
+    }
+
+    /**
+     * Recreate numbered dynamic inputs (e.g., snack4, snack5)
+     * @param {Object} pattern - The numbered pattern object
+     */
+    recreateNumberedInputs(pattern) {
+        const { basePattern, maxNumber, detectedNumbers } = pattern;
+        
+        console.log('[FormPersistence] Recreating numbered inputs for pattern:', basePattern, 'up to number:', maxNumber);
+        
+        // CalorieIQ specific: handle meal inputs (snack, breakfast, lunch, dinner)
+        if (this.moduleName === 'calorie' && ['snack', 'breakfast', 'lunch', 'dinner'].includes(basePattern)) {
+            this.recreateCalorieMealInputs(basePattern, detectedNumbers);
+            return;
+        }
+        
+        // Generic numbered input recreation - look for add functions in the global scope
+        this.recreateGenericNumberedInputs(pattern);
+    }
+
+    /**
+     * Recreate CalorieIQ meal inputs by calling addMealInput function
+     * @param {string} basePattern - The base pattern (e.g., "snack")
+     * @param {Array} numbers - Array of numbers that need to be recreated
+     */
+    recreateCalorieMealInputs(basePattern, numbers) {
+        // Check if addMealInput function exists in global scope or window.calorieIq
+        let addMealInputFn = null;
+        
+        if (typeof window.addMealInput === 'function') {
+            addMealInputFn = window.addMealInput;
+        } else if (window.calorieIq && typeof window.calorieIq.addMealInput === 'function') {
+            addMealInputFn = window.calorieIq.addMealInput;
+        }
+        
+        if (!addMealInputFn) {
+            console.warn('[FormPersistence] addMealInput function not found in global scope for CalorieIQ');
+            return;
+        }
+        
+        // For CalorieIQ, we need to call addMealInput for each missing dynamic input
+        numbers.forEach(number => {
+            // Check if the DOM element already exists
+            const expectedElementId = `calorie-${basePattern}${number}`;
+            if (!document.getElementById(expectedElementId)) {
+                console.log('[FormPersistence] Recreating CalorieIQ meal input for:', basePattern, number);
+                try {
+                    // Call addMealInput with the specific meal type and skip repositioning during repopulation
+                    addMealInputFn(`${basePattern}${number}`, '', true);
+                } catch (error) {
+                    console.error('[FormPersistence] Error calling addMealInput:', error);
+                }
+            }
+        });
+    }
+
+    /**
+     * Generic recreation of numbered inputs by looking for appropriate functions
+     * @param {Object} pattern - The pattern object
+     */
+    recreateGenericNumberedInputs(pattern) {
+        const { basePattern, detectedNumbers } = pattern;
+        
+        // Look for common function naming patterns
+        const possibleFunctionNames = [
+            `add${basePattern.charAt(0).toUpperCase() + basePattern.slice(1)}Input`,
+            `add${basePattern.charAt(0).toUpperCase() + basePattern.slice(1)}`,
+            `addInput`,
+            `addField`,
+            `addDynamicInput`
+        ];
+        
+        let foundFunction = null;
+        for (const functionName of possibleFunctionNames) {
+            if (typeof window[functionName] === 'function') {
+                foundFunction = window[functionName];
+                console.log('[FormPersistence] Found recreation function:', functionName);
+                break;
+            }
+        }
+        
+        if (foundFunction) {
+            detectedNumbers.forEach(number => {
+                // Check if the DOM element already exists
+                const possibleElementIds = [
+                    `${this.moduleName}-${basePattern}${number}`,
+                    `${basePattern}${number}`,
+                    `${basePattern}-${number}`
+                ];
+                
+                const elementExists = possibleElementIds.some(id => document.getElementById(id));
+                
+                if (!elementExists) {
+                    console.log('[FormPersistence] Recreating generic numbered input for:', basePattern, number);
+                    try {
+                        foundFunction();
+                    } catch (error) {
+                        console.error('[FormPersistence] Error calling recreation function:', error);
+                    }
+                }
+            });
+        } else {
+            console.warn('[FormPersistence] No recreation function found for pattern:', basePattern);
+        }
     }
 
     /**
@@ -391,6 +572,18 @@ class FormPersistence {
         });
 
         console.log(`[FormPersistence] Input handlers set up for ${this.moduleName}`);
+    }
+
+    /**
+     * Public method to recreate dynamic inputs based on current saved data
+     * This can be called by external modules if they need to manually trigger
+     * dynamic input recreation
+     */
+    recreateDynamicInputsFromSavedData() {
+        const savedData = this.getSavedFormData();
+        if (savedData) {
+            this.recreateDynamicInputs(savedData);
+        }
     }
 
     /**
@@ -552,6 +745,9 @@ class FormPersistence {
                 this.repopulateGridContainer(containerElement, value);
             }
         });
+        
+        // Refresh input handlers to pick up any newly created dynamic inputs
+        this.refreshInputHandlers();
     }
 }
 
