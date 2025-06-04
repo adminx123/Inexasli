@@ -148,11 +148,9 @@ Need multilingual support for global offices"></textarea>
         }
     }
 
-    const formPersistence = window.decisionFormPersistence || window['decisionFormPersistence'] || (window.decisionFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
-
     async function handleGenerateDecisionIq() {
         try {
-            const formData = formPersistence.getSavedFormData();
+            const formData = window.decisionFormPersistence.getSavedFormData();
             if (!formData) { 
                 alert('Please complete the form before generating.'); 
                 return; 
@@ -171,7 +169,7 @@ Need multilingual support for global offices"></textarea>
                     return await response.json();
                 }
             );
-            formPersistence.saveResponseData(result);
+            window.decisionFormPersistence.saveResponseData(result);
             document.dispatchEvent(new CustomEvent('api-response-received', { 
                 detail: { module: 'decisioniq', type: 'worker-response', timestamp: Date.now() } 
             }));
@@ -188,8 +186,8 @@ Need multilingual support for global offices"></textarea>
         genBtn.removeEventListener('click', handleGenerateDecisionIq);
         genBtn.addEventListener('click', handleGenerateDecisionIq);
         const clearBtn = document.getElementById('clear-decision-btn');
-        clearBtn.removeEventListener('click', () => formPersistence.clearLocalStorage());
-        clearBtn.addEventListener('click', () => formPersistence.clearLocalStorage());
+        clearBtn.removeEventListener('click', () => window.decisionFormPersistence.clearLocalStorage());
+        clearBtn.addEventListener('click', () => window.decisionFormPersistence.clearLocalStorage());
     }
 
     initialize();

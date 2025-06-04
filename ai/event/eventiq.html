@@ -162,8 +162,7 @@ Need accommodations for 3 wheelchair users"></textarea>
             'generate-event-btn',
             'event',
             async () => {
-                const formPersistence = window.eventFormPersistence || window['eventFormPersistence'] || (window.eventFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
-                const formData = formPersistence.getSavedFormData();
+                const formData = window.eventFormPersistence.getSavedFormData();
                 if (!formData) {
                     console.error('[EventIQ] No input data found in localStorage.');
                     throw new Error('Please complete the form before generating an event plan.');
@@ -193,7 +192,7 @@ Need accommodations for 3 wheelchair users"></textarea>
                 }
                 
                 // Store the response
-                formPersistence.saveResponseData(responseData);
+                window.eventFormPersistence.saveResponseData(responseData);
                 
                 // Dispatch an event to notify dataout.js that a response was received
                 const event = new CustomEvent('api-response-received', {
@@ -227,7 +226,7 @@ Need accommodations for 3 wheelchair users"></textarea>
     setupLocationHandler();
     toggleEventDetails(); // Initialize visibility
     document.getElementById('generate-event-btn').addEventListener('click', handleGenerateEventIq);
-    document.getElementById('clear-event-btn').addEventListener('click', () => formPersistence.clearLocalStorage());
+    document.getElementById('clear-event-btn').addEventListener('click', () => window.eventFormPersistence.clearLocalStorage());
 })();
 </script>
     </div>

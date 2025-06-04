@@ -101,9 +101,6 @@ Add difficulty ratings to questions"></textarea>
 (function() {
     console.log("QuizIQ script initializing");
 
-    // Using centralized FormPersistence system
-    const formPersistence = window.quizFormPersistence || window['quizFormPersistence'] || (window.quizFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
-
     // Handler for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
         console.log('[QuizIQ] Grid item toggled event received');
@@ -130,7 +127,7 @@ Add difficulty ratings to questions"></textarea>
             'quiz',
             async () => {
                 // Use centralized system to get form data
-                const formData = formPersistence.getSavedFormData();
+                const formData = window.quizFormPersistence.getSavedFormData();
                 if (!formData) {
                     console.error('[QuizIQ] No input data found.');
                     throw new Error('Please complete the form before generating a quiz.');
@@ -166,7 +163,7 @@ Add difficulty ratings to questions"></textarea>
                 }
                 
                 // Store the response using centralized system
-                formPersistence.saveResponseData(responseData);
+                window.quizFormPersistence.saveResponseData(responseData);
                 
                 // Dispatch an event to notify dataout.js that a response was received
                 const event = new CustomEvent('api-response-received', {
@@ -196,7 +193,7 @@ Add difficulty ratings to questions"></textarea>
         
         const clearBtn = document.getElementById('clear-quiz-btn');
         if (clearBtn) {
-            clearBtn.addEventListener('click', () => formPersistence.clearLocalStorage());
+            clearBtn.addEventListener('click', () => window.quizFormPersistence.clearLocalStorage());
         }
     }
 
@@ -228,7 +225,7 @@ Add difficulty ratings to questions"></textarea>
     // For external access if needed
     window.quizIq = {
         initialize: initialize,
-        getFormData: () => formPersistence.getSavedFormData()
+        getFormData: () => window.quizFormPersistence.getSavedFormData()
     };
 })();
 </script>
