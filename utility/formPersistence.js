@@ -379,12 +379,27 @@ class FormPersistence {
      */
     setupInputHandlers() {
         document.querySelectorAll('input, textarea, select').forEach(element => {
+            // Skip if element already has our handler
+            if (element._fpHandlerAttached) return;
+            
             element.addEventListener('change', () => {
                 this.saveInput(element);
             });
+            
+            // Mark as having our handler to prevent duplicates
+            element._fpHandlerAttached = true;
         });
 
         console.log(`[FormPersistence] Input handlers set up for ${this.moduleName}`);
+    }
+
+    /**
+     * Refresh input handlers to pick up any dynamically added inputs
+     * This method can be called by modules after adding new form elements
+     */
+    refreshInputHandlers() {
+        console.log(`[FormPersistence] Refreshing input handlers for ${this.moduleName}`);
+        this.setupInputHandlers();
     }
 
     /**
