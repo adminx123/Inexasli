@@ -10,10 +10,7 @@
  * landing.js
  * Main functionality for the landing page
  * 
- * NOTE: This file works in conjunction with utility/category.js
- * - Product items and grid functionality have been moved to category.js
- * - This file provides core UI mode toggling and container visibility management
- * - It exports toggleUiMode and setLocal for use by category.js
+ * Core UI mode toggling and container visibility management
  */
 
 // Add initial style tag to prevent flash of content
@@ -234,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
     UIManager.initStyles();
     UIManager.hideAllInitially();
     
-    // Export functions for category.js to use
+    // Export functions for external use
     window.toggleUiMode = function(isBudgetMode) {
         UIManager.setMode(isBudgetMode);
     };
