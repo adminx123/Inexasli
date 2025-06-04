@@ -606,13 +606,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                     max-width: 100%;
                     width: 100%;
                     min-width: 100%;
-                    height: 100vh;
-                    top: 0;
+                    height: 60vh;
+                    bottom: 0;
                     left: 0;
                     transform: none;
-                    border-radius: 0;
+                    border-radius: 24px 24px 0 0;
                     border: none;
-                    box-shadow: none;
+                    box-shadow: 0 -2px 6px rgba(74, 124, 89, 0.25);
                 }
 
 

@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 .data-container-right.initial, .data-container-right.collapsed {
                     width: 28px;
-                    height: 100px;
+                    height: 36px;
                     z-index: 10001;
                 }
 
