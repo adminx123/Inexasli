@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Modal Test</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .test-button {
+            padding: 12px 24px;
+            background-color: #4a7c59;
+            color: white;
+            border: 2px solid #4a7c59;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
+            transition: all 0.2s ease;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 4px 6px 0 rgba(74, 124, 89, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <h1>Payment Modal Test</h1>
+    <button class="test-button" onclick="window.openPaymentModal()">Open Payment Modal</button>
+    
+    <p>This test demonstrates the new self-contained payment modal system that matches the styling patterns from dataOverwrite.js and copy.js.</p>
+    
+    <h3>Features tested:</h3>
+    <ul>
+        <li>Modal backdrop with blur effect</li>
+        <li>Consistent styling with green theme</li>
+        <li>Proper button styling with 3D effects</li>
+        <li>Responsive design for mobile</li>
+        <li>Click outside to close</li>
+        <li>Escape key to close</li>
+        <li>Proper event handling</li>
+    </ul>
+
+    <script src="paymentform.js"></script>
+</body>
+</html>
