@@ -50,12 +50,14 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Categories script loaded');
+// Execute immediately instead of waiting for DOMContentLoaded since this is dynamically loaded
+(function() {
+    console.log('[Categories] Script executing immediately');
     
     // Function to filter products using DIRECT INLINE STYLES (bypasses all CSS)
     function filterProducts(selectedCategory) {
         const products = document.querySelectorAll('.grid-item[data-category]');
+        console.log('[Categories] filterProducts called with:', selectedCategory, 'Found products:', products.length);
         
         products.forEach(product => {
             const categories = product.getAttribute('data-category').split(',');
@@ -63,42 +65,49 @@ document.addEventListener('DOMContentLoaded', function() {
             if (selectedCategory === 'all' || categories.includes(selectedCategory)) {
                 // FORCE SHOW with inline style (overrides everything)
                 product.style.display = 'flex';
-                console.log('Showing:', product.textContent);
+                console.log('[Categories] Showing:', product.textContent);
             } else {
                 // FORCE HIDE with inline style (overrides everything)
                 product.style.display = 'none';
-                console.log('Hiding:', product.textContent);
+                console.log('[Categories] Hiding:', product.textContent);
             }
         });
         
         // Store selection in localStorage for other modules to access
         localStorage.setItem('categoriesPageSelection', selectedCategory);
-        console.log('Category filtered:', selectedCategory, 'Total products found:', products.length);
+        console.log('[Categories] Category filtered:', selectedCategory, 'Total products found:', products.length);
     }
     
-    // Add category selection logic
-    const categoryContainer = document.getElementById('category-selection');
-    
-    if (categoryContainer) {
-        categoryContainer.addEventListener('click', function(e) {
-            if (e.target.classList.contains('grid-item')) {
-                const selectedCategory = e.target.getAttribute('data-value');
-                console.log('Category clicked:', selectedCategory);
-                
-                // Update active state
-                document.querySelectorAll('#category-selection .grid-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                e.target.classList.add('active');
-                
-                // Filter products with FORCE
-                filterProducts(selectedCategory);
-            }
-        });
+    // Wait a bit for DOM to be ready, then initialize
+    setTimeout(function() {
+        // Add category selection logic
+        const categoryContainer = document.getElementById('category-selection');
+        console.log('[Categories] Category container found:', !!categoryContainer);
         
-        // Initialize: FORCE HIDE all products first, then show 'all'
-        console.log('Initializing - hiding all products first');
-        const allProducts = document.querySelectorAll('.grid-item[data-category]');
+        if (categoryContainer) {
+            categoryContainer.addEventListener('click', function(e) {
+                console.log('[Categories] Click detected on:', e.target);
+                if (e.target.classList.contains('grid-item')) {
+                    const selectedCategory = e.target.getAttribute('data-value');
+                    console.log('[Categories] Category clicked:', selectedCategory);
+                    
+                    // Prevent event bubbling to avoid conflicts with datain.js
+                    e.stopPropagation();
+                    
+                    // Update active state
+                    document.querySelectorAll('#category-selection .grid-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    e.target.classList.add('active');
+                    
+                    // Filter products with FORCE
+                    filterProducts(selectedCategory);
+                }
+            });
+            
+            // Initialize: FORCE HIDE all products first, then show 'all'
+            console.log('[Categories] Initializing - hiding all products first');
+            const allProducts = document.querySelectorAll('.grid-item[data-category]');
         allProducts.forEach(product => {
             product.style.display = 'none';
         });

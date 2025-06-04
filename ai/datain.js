@@ -87,32 +87,46 @@ function initializeFormPersistence(url) {
 function initializeCategoryModule() {
     console.log('[DataIn] Initializing category module functionality');
     
-    // Add category selection logic
+    // Function to filter products using the same logic as categories.html
+    function filterProducts(selectedCategory) {
+        const products = document.querySelectorAll('.grid-item[data-category]');
+        console.log('[DataIn] Filtering products for category:', selectedCategory, 'Found products:', products.length);
+        
+        products.forEach(product => {
+            const categories = product.getAttribute('data-category').split(',');
+            
+            if (selectedCategory === 'all' || categories.includes(selectedCategory)) {
+                // FORCE SHOW with inline style (overrides everything)
+                product.style.display = 'flex';
+                console.log('[DataIn] Showing:', product.textContent);
+            } else {
+                // FORCE HIDE with inline style (overrides everything)
+                product.style.display = 'none';
+                console.log('[DataIn] Hiding:', product.textContent);
+            }
+        });
+        
+        // Store selection in localStorage for other modules to access
+        localStorage.setItem('categoriesPageSelection', selectedCategory);
+        console.log('[DataIn] Category filtered:', selectedCategory);
+    }
+    
+    // Add category selection logic - but don't conflict with categories.html
+    // This is a backup handler in case categories.html doesn't load properly
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('grid-item') && e.target.closest('#category-selection')) {
             const selectedCategory = e.target.getAttribute('data-value');
             console.log('[DataIn] Category selected:', selectedCategory);
             
             if (selectedCategory) {
-                // Update grid item selection
+                // Update active state (use 'active' class to match categories.html)
                 document.querySelectorAll('#category-selection .grid-item').forEach(item => {
-                    item.classList.remove('selected');
+                    item.classList.remove('active');
                 });
-                e.target.classList.add('selected');
+                e.target.classList.add('active');
                 
-                // Hide all product rows
-                document.querySelectorAll('.row1[data-show-for]').forEach(row => {
-                    row.classList.remove('show');
-                    row.style.display = 'none';
-                });
-                
-                // Show the selected category's products
-                const targetRow = document.querySelector(`.row1[data-show-for="${selectedCategory}"]`);
-                if (targetRow) {
-                    targetRow.classList.add('show');
-                    targetRow.style.display = 'block';
-                    console.log('[DataIn] Showing products for category:', selectedCategory);
-                }
+                // Filter products
+                filterProducts(selectedCategory);
             }
         }
         
