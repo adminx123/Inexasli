@@ -759,12 +759,11 @@ class GuidedFormSystem {
                                  targetContainer.classList.contains('data-container-left');
         
         if (isDataInContainer) {
-            // Position inside data-container-left level with button centers - moved higher
+            // Position on left side of data-container-left
             progressContainer.style.cssText = `
                 position: absolute;
                 top: 10px;
-                left: 50%;
-                transform: translateX(-50%);
+                left: 15px;
                 border-radius: 50px;
                 padding: 4px 8px;
                 display: flex;
