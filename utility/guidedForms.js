@@ -800,11 +800,9 @@ class GuidedFormSystem {
                 cursor: pointer;
             `;
             
-            // Allow clicking on dots to navigate (if step is accessible)
+            // Allow clicking on dots to navigate to any step (backward and forward)
             dot.addEventListener('click', () => {
-                if (index <= this.currentStep || this.completedSteps.has(index)) {
-                    this.showStep(index);
-                }
+                this.showStep(index);
             });
             
             dotsContainer.appendChild(dot);
