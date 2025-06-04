@@ -110,17 +110,40 @@ function initScrollToTopFAB() {
     // Create FAB container
     const fabContainer = document.createElement('div');
     fabContainer.id = 'scroll-fab-container';
-    fabContainer.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 12000;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        pointer-events: none;
-    `;
+    
+    // Find the device container to position relative to it
+    const deviceContainer = document.querySelector('.device-container');
+    
+    if (deviceContainer) {
+        // Position absolutely relative to device container
+        fabContainer.style.cssText = `
+            position: absolute;
+            bottom: 20px;
+            right: -50px;
+            z-index: 12000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        `;
+        
+        // Make device container relative if it's not already
+        if (getComputedStyle(deviceContainer).position === 'static') {
+            deviceContainer.style.position = 'relative';
+        }
+    } else {
+        // Fallback to fixed positioning
+        fabContainer.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 12000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        `;
+    }
 
     // Create FAB button
     const fab = document.createElement('button');
@@ -191,10 +214,16 @@ function initScrollToTopFAB() {
         fab.style.height = `${size}px`;
         fab.style.fontSize = query.matches ? '14px' : '18px';
         
-        // Keep button centered regardless of screen size
-        fabContainer.style.bottom = query.matches ? '15px' : '20px';
-        fabContainer.style.left = '50%';
-        fabContainer.style.transform = 'translateX(-50%)';
+        // Adjust positioning based on device container presence
+        if (deviceContainer) {
+            // Position relative to device container edge
+            fabContainer.style.bottom = query.matches ? '15px' : '20px';
+            fabContainer.style.right = query.matches ? '-45px' : '-50px';
+        } else {
+            // Fallback to viewport positioning
+            fabContainer.style.bottom = query.matches ? '15px' : '20px';
+            fabContainer.style.right = query.matches ? '15px' : '20px';
+        }
     };
 
     adjustFABForMobile(mobileQuery);
@@ -271,7 +300,13 @@ function initScrollToTopFAB() {
     });
 
     fabContainer.appendChild(fab);
-    document.body.appendChild(fabContainer);
+    
+    // Append to device container if it exists, otherwise to body
+    if (deviceContainer) {
+        deviceContainer.appendChild(fabContainer);
+    } else {
+        document.body.appendChild(fabContainer);
+    }
 }
 
 /**
