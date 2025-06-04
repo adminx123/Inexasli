@@ -129,7 +129,7 @@
         ensureAddButton();
       }
       // Save the current state after removing the input
-      formPersistence.saveFormData();
+      window.calorieFormPersistence.saveFormData();
     });
     removeBtn.addEventListener('mouseenter', () => { removeBtn.style.backgroundColor = '#e9e9e9'; });
     removeBtn.addEventListener('mouseleave', () => { removeBtn.style.backgroundColor = '#fff'; });
@@ -161,7 +161,7 @@
       input.focus();
       
       // Save form data after adding new input
-      formPersistence.saveFormData();
+      window.calorieFormPersistence.saveFormData();
     }
   }
 
@@ -216,7 +216,7 @@
 
   async function handleGenerateCalorieIq() {
     try {
-      const formData = formPersistence.getSavedFormData();
+      const formData = window.calorieFormPersistence.getSavedFormData();
       if (!formData) { 
         alert('Please complete the form before generating a calorie plan.'); 
         return;
@@ -248,7 +248,7 @@
       );
 
       // Store the response using centralized system
-      formPersistence.saveResponseData(result);
+      window.calorieFormPersistence.saveResponseData(result);
       
       // Dispatch an event to notify dataout.js that a response was received
       const event = new CustomEvent('api-response-received', {
@@ -280,8 +280,8 @@
     
     const clearBtn = document.getElementById('clear-calorie-btn');
     if (clearBtn) {
-      clearBtn.removeEventListener('click', () => formPersistence.clearLocalStorage());
-      clearBtn.addEventListener('click', () => formPersistence.clearLocalStorage());
+      clearBtn.removeEventListener('click', () => window.calorieFormPersistence.clearLocalStorage());
+      clearBtn.addEventListener('click', () => window.calorieFormPersistence.clearLocalStorage());
     }
     
     // Set up guided forms toggle button
@@ -363,9 +363,9 @@
   // Export functions for external access
   window.calorieIq = { 
     addMealInput,
-    getFormData: () => formPersistence.getSavedFormData(),
-    saveFormData: () => formPersistence.saveFormData(),
-    clearLocalStorage: () => formPersistence.clearLocalStorage()
+    getFormData: () => window.calorieFormPersistence.getSavedFormData(),
+    saveFormData: () => window.calorieFormPersistence.saveFormData(),
+    clearLocalStorage: () => window.calorieFormPersistence.clearLocalStorage()
   };
 })();
 </script>
