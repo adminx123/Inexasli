@@ -50,7 +50,7 @@
 </div>
 
 <div class="row1" data-step-label="Personal Information">
-    <input id="calorie-age" type="text" placeholder="34">
+    <input id="calorie-age" type="text" placeholder="Age">
     <input id="calorie-height" type="text" placeholder="5'10">
     <input id="calorie-weight" type="text" placeholder="70 kg">
     <select id="calorie-sex">
@@ -65,7 +65,6 @@
     <input type="text" data-meal="lunch" placeholder="Lunch: 200g chicken, 150g salad, 2 tbsp olive oil">
     <input type="text" data-meal="dinner" placeholder="Dinner: 6 oz salmon, 1/2 cup quinoa, 100g broccoli">
     <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
-    <button class="clear-btn" id="clear-calorie-btn">Clear All</button>
 </div>
    
 </div> 
@@ -278,12 +277,6 @@
       generateBtn.addEventListener('click', handleGenerateCalorieIq);
     }
     
-    const clearBtn = document.getElementById('clear-calorie-btn');
-    if (clearBtn) {
-      clearBtn.removeEventListener('click', () => window.calorieFormPersistence.clearLocalStorage());
-      clearBtn.addEventListener('click', () => window.calorieFormPersistence.clearLocalStorage());
-    }
-    
     // Set up guided forms toggle button
     const guidedToggleBtn = document.getElementById('guided-forms-toggle');
     if (guidedToggleBtn) {
@@ -364,8 +357,7 @@
   window.calorieIq = { 
     addMealInput,
     getFormData: () => window.calorieFormPersistence.getSavedFormData(),
-    saveFormData: () => window.calorieFormPersistence.saveFormData(),
-    clearLocalStorage: () => window.calorieFormPersistence.clearLocalStorage()
+    saveFormData: () => window.calorieFormPersistence.saveFormData()
   };
 })();
 </script>

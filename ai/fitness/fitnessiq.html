@@ -54,7 +54,6 @@ Asthma
 Lower back strain"></textarea>
       
         <button class="generate-btn" id="generate-fitness-btn">Generate Fitness Plan Now!</button>
-        <button class="clear-btn" id="clear-fitness-btn">Clear All</button>
 
 <script>
 /*
@@ -133,16 +132,7 @@ Lower back strain"></textarea>
 
     // Initialization
     document.getElementById('generate-fitness-btn').addEventListener('click', handleGenerateFitnessIq);
-    document.getElementById('clear-fitness-btn').addEventListener('click', () => {
-        window.fitnessFormPersistence.clearLocalStorage();
-    });
 
-    // For external access if needed
-    window.fitnessIq = {
-        getFormData: () => window.fitnessFormPersistence.getSavedFormData(),
-        saveFormData: () => window.fitnessFormPersistence.saveFormData(),
-        clearLocalStorage: () => window.fitnessFormPersistence.clearLocalStorage()
-    };
 })();
 </script>
 

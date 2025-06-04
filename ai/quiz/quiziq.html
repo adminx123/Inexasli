@@ -83,7 +83,6 @@ Focus on recent events
 Add difficulty ratings to questions"></textarea>
        
             <button class="generate-btn" id="generate-quiz-btn">Generate Quiz Now!</button>
-            <button class="clear-btn" id="clear-quiz-btn">Clear All</button>
         </div>
 
 <script>
@@ -189,11 +188,6 @@ Add difficulty ratings to questions"></textarea>
         const generateBtn = document.getElementById('generate-quiz-btn');
         if (generateBtn) {
             generateBtn.addEventListener('click', handleGenerateQuizIq);
-        }
-        
-        const clearBtn = document.getElementById('clear-quiz-btn');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', () => window.quizFormPersistence.clearLocalStorage());
         }
     }
 

@@ -58,12 +58,13 @@ document.addEventListener("DOMContentLoaded", () => {
   position: fixed; /* Changed from absolute to fixed */
   top: 50px; /* Adjusted to position below the fixed hamburger */
   left: 10px;
-  background-color: #FFF;
-  border-radius: 5px;
+  background-color: #f2f9f3;
+  border: 2px solid #4a7c59;
+  border-radius: 8px;
   padding: 5px 0;
   min-width: 200px;
   z-index: 90;
-  box-shadow: 0 4px 8px rgba(126, 4, 4, 0.3);
+  box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
 }
 /* Rest of your CSS remains the same */
 
@@ -84,16 +85,18 @@ document.addEventListener("DOMContentLoaded", () => {
       box-sizing: border-box;
     }
     .hamburger-menu-item:hover {
-      background-color: #444;
+      background-color: #3d6b4a;
+      color: #fff;
     }
     .hamburger-menu-item.active {
       font-weight: bold;
-      background-color: #fff;
+      background-color: #4a7c59;
+      color: #fff;
     }
     .hamburger-submenu {
       display: none;
       position: static; /* Keep in normal flow for vertical stacking */
-      background-color: #000;
+      background-color: #3d6b4a;
       padding: 5px 0;
       width: 100%;
       box-sizing: border-box;
@@ -113,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
       box-sizing: border-box;
     }
     .hamburger-submenu a:hover {
-      background-color: #555;
+      background-color: #2d5a3d;
     }
   `;
   document.head.appendChild(style);

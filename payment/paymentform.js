@@ -16,11 +16,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #f5f5f5;
+    background-color: #f2f9f3;
     padding: 15px;
-    border: 2px solid #000;
+    border: 2px solid #4a7c59;
     border-radius: 8px;
-    box-shadow: 4px 4px 0 #000;
+    box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
     z-index: 15000;
     width: 400px;
     font-family: "Inter", sans-serif;
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-size: 12px !important;
     color: #000 !important;
     background: #f9f9f9 !important;
-    border: 2px solid #7b7b7b !important;
+    border: 2px solid #4a7c59 !important;
     border-radius: 6px !important;
     outline: none !important;
     box-sizing: border-box !important;
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-size: 12px !important;
     font-family: "Inter", sans-serif !important;
     line-height: 1.2 !important;
-    border: 2px solid #7b7b7b !important;
+    border: 2px solid #4a7c59 !important;
     background: #f9f9f9 !important;
     color: #000 !important;
     height: 36px !important;
@@ -123,11 +123,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     margin: 10px 0;
     font-size: 14px;
     font-weight: bold;
-    color: #000 !important;
-    background: #fff !important;
-    border: 2px solid #000 !important;
+    color: #fff !important;
+    background: #4a7c59 !important;
+    border: 2px solid #4a7c59 !important;
     border-radius: 6px;
-    box-shadow: 4px 4px 0 #000 !important;
+    box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7) !important;
     cursor: pointer;
     font-family: "Geist", sans-serif;
     position: relative !important; /* Add positioning context */
@@ -135,12 +135,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .payment-form .pay-button:hover {
-    background-color: #f5f5f5 !important;
+    background-color: #3d6b4a !important;
 }
 
 .payment-form .pay-button:active {
     transform: translate(2px, 2px) !important;
-    box-shadow: 2px 2px 0 #000 !important;
+    box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7) !important;
 }
 
 /* Bottom buttons row */
@@ -158,9 +158,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     font-weight: bold;
     color: #000 !important;
     background: #fff !important;
-    border: 2px solid #000 !important;
+    border: 2px solid #4a7c59 !important;
     border-radius: 6px;
-    box-shadow: 4px 4px 0 #000 !important;
+    box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7) !important;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
@@ -175,14 +175,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 
 .payment-form .contact-support:hover {
-    background-color: #f5f5f5 !important;
+    background-color: #eef7f0 !important;
     color: #000 !important;
     text-decoration: none !important;
 }
 
 .payment-form .contact-support:active {
     transform: translate(2px, 2px) !important;
-    box-shadow: 2px 2px 0 #000 !important;
+    box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7) !important;
 }
 
 /* Responsive adjustments */

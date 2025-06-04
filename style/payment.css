@@ -7,10 +7,10 @@
     align-items: center;
     gap: 20px; /* Increased for breathing room */
     padding: 25px;
-    background: #ffffff;
-    border: 2px solid #000000;
+    background: #f2f9f3;
+    border: 2px solid #4a7c59;
     border-radius: 10px; /* Slightly softer corners */
-    box-shadow: 4px 4px 0 #000000;
+    box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
 }
 
 /* Input Group (for labels and inputs) */
@@ -34,15 +34,15 @@
     font-size: 16px;
     color: #000000;
     background: #f9f9f9; /* Light gray for subtle contrast */
-    border: 2px solid #7b7b7b;
+    border: 2px solid #4a7c59;
     border-radius: 6px;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
 }
 
 .payment-form .payment-input:focus {
-    border-color: #caa81f; /* Matches button border for consistency */
-    box-shadow: 0 0 6px rgba(202, 168, 31, 0.5);
+    border-color: #3d6b4a; /* Matches button border for consistency */
+    box-shadow: 0 0 6px rgba(74, 124, 89, 0.5);
     transform: scale(1.01); /* Subtle scale for feedback */
 }
 
@@ -53,22 +53,22 @@
     font-size: 16px;
     font-weight: bold;
     color: #ffffff;
-    background: #000000;
-    border: 2px solid #caa81f;
+    background: #4a7c59;
+    border: 2px solid #4a7c59;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
 }
 
 .payment-form .pay-button:hover {
-    background: #333333;
+    background: #3d6b4a;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
 }
 
 .payment-form .pay-button:active {
     transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 6px rgba(74, 124, 89, 0.15);
 }
 
 /* Status Message */
@@ -92,13 +92,13 @@
 /* Support Links */
 .payment-form .contact-support {
     font-size: 14px;
-    color: #ffffff; /* Changed from white for visibility on white bg */
+    color: #4a7c59; /* Changed from white for visibility on white bg */
     text-decoration: none;
     transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
 .payment-form .contact-support:hover {
-    color: #caa81f; /* Matches button border for theme */
+    color: #3d6b4a; /* Matches button border for theme */
     text-decoration: underline;
 }
 

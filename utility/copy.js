@@ -159,11 +159,11 @@ function openShareModal(containerId, getContentCallback) {
     const modalContent = document.createElement('div');
     modalContent.className = 'share-modal-content';
     modalContent.style.cssText = `
-        background-color: white;
+        background-color: #f2f9f3;
         padding: 20px;
         border-radius: 8px;
-        border: 2px solid #000;
-        box-shadow: 4px 4px 0 #000;
+        border: 1px solid #4a7c59;
+        box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
         max-width: 300px;
         width: 90%;
         text-align: center;
@@ -176,9 +176,9 @@ function openShareModal(containerId, getContentCallback) {
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 <button class="share-action-btn" data-action="share" style="
                     padding: 14px 20px;
-                    background-color: #f5f5f5;
-                    color: #000;
-                    border: 2px solid #000;
+                    background-color: #f2f9f3;
+                    color: #2d5a3d;
+                    border: 1px solid #4a7c59;
                     border-radius: 8px;
                     font-size: 14px;
                     cursor: pointer;
@@ -188,15 +188,15 @@ function openShareModal(containerId, getContentCallback) {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 2px 2px 0 #000;
+                    box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
                 ">
                     <i class="fas fa-share-alt" style="margin-right: 8px; font-size: 14px;"></i>Share as PDF
                 </button>
                 <button class="share-action-btn" data-action="print" style="
                     padding: 14px 20px;
-                    background-color: #f5f5f5;
-                    color: #000;
-                    border: 2px solid #000;
+                    background-color: #f2f9f3;
+                    color: #2d5a3d;
+                    border: 1px solid #4a7c59;
                     border-radius: 8px;
                     font-size: 14px;
                     cursor: pointer;
@@ -206,15 +206,15 @@ function openShareModal(containerId, getContentCallback) {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 2px 2px 0 #000;
+                    box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
                 ">
                     <i class="fas fa-print" style="margin-right: 8px; font-size: 14px;"></i>Print
                 </button>
                 <button class="share-action-btn" data-action="pdf" style="
                     padding: 14px 20px;
-                    background-color: #f5f5f5;
-                    color: #000;
-                    border: 2px solid #000;
+                    background-color: #f2f9f3;
+                    color: #2d5a3d;
+                    border: 1px solid #4a7c59;
                     border-radius: 8px;
                     font-size: 14px;
                     cursor: pointer;
@@ -224,7 +224,7 @@ function openShareModal(containerId, getContentCallback) {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 2px 2px 0 #000;
+                    box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
                 ">
                     <i class="fas fa-download" style="margin-right: 8px; font-size: 14px;"></i>Save as PDF
                 </button>
@@ -245,25 +245,25 @@ function openShareModal(containerId, getContentCallback) {
     function addButtonHoverEffects() {
         modalContent.querySelectorAll('.share-action-btn').forEach(btn => {
             btn.addEventListener('mouseenter', function() {
-                this.style.backgroundColor = '#FFFFFF';
-                this.style.transform = 'translate(-1px, -1px)';
-                this.style.boxShadow = '3px 3px 0 #000';
+                this.style.backgroundColor = '#eef7f0';
+                this.style.transform = 'translateY(-1px)';
+                this.style.boxShadow = '0 3px 8px rgba(74, 124, 89, 0.3)';
             });
             
             btn.addEventListener('mouseleave', function() {
-                this.style.backgroundColor = '#f5f5f5';
-                this.style.transform = 'translate(0, 0)';
-                this.style.boxShadow = '2px 2px 0 #000';
+                this.style.backgroundColor = '#f2f9f3';
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 2px 4px rgba(74, 124, 89, 0.2)';
             });
             
             btn.addEventListener('mousedown', function() {
-                this.style.transform = 'translate(1px, 1px)';
-                this.style.boxShadow = '1px 1px 0 #000';
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 1px 2px rgba(74, 124, 89, 0.3)';
             });
             
             btn.addEventListener('mouseup', function() {
-                this.style.transform = 'translate(-1px, -1px)';
-                this.style.boxShadow = '3px 3px 0 #000';
+                this.style.transform = 'translateY(-1px)';
+                this.style.boxShadow = '0 3px 8px rgba(74, 124, 89, 0.3)';
             });
         });
     }

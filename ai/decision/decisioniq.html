@@ -119,7 +119,6 @@ Need multilingual support for global offices"></textarea>
         
        
             <button class="generate-btn" id="generate-decision-btn">Generate Decision Analysis Now!</button>
-            <button class="clear-btn" id="clear-decision-btn">Clear All</button>
         </div>
  
 <script>
@@ -185,9 +184,6 @@ Need multilingual support for global offices"></textarea>
         const genBtn = document.getElementById('generate-decision-btn');
         genBtn.removeEventListener('click', handleGenerateDecisionIq);
         genBtn.addEventListener('click', handleGenerateDecisionIq);
-        const clearBtn = document.getElementById('clear-decision-btn');
-        clearBtn.removeEventListener('click', () => window.decisionFormPersistence.clearLocalStorage());
-        clearBtn.addEventListener('click', () => window.decisionFormPersistence.clearLocalStorage());
     }
 
     initialize();

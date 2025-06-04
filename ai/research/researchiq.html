@@ -97,7 +97,6 @@ Research must consider environmental impact
 Results needed within two weeks"></textarea>
        
             <button class="generate-btn" id="generate-research-btn">Generate Research Plan Now!</button>
-            <button class="clear-btn" id="clear-research-btn">Clear All</button>
         </div>
 
 <script>
@@ -194,11 +193,6 @@ Results needed within two weeks"></textarea>
         if (generateBtn) {
             generateBtn.addEventListener('click', handleGenerateResearchIq);
         }
-        
-        const clearBtn = document.getElementById('clear-research-btn');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', () => window.researchFormPersistence.clearLocalStorage());
-        }
     }
 
     // Main initialization function - called immediately and again after full load
@@ -231,7 +225,6 @@ Results needed within two weeks"></textarea>
     window.researchIq = {
         initialize: initialize,
         saveInput: saveInput,
-        clearLocalStorage: clearLocalStorage,
         getFormData: collectFormData
     };
 })();

@@ -141,7 +141,7 @@ function addDataOverwriteModalStyles() {
         }
         
         .data-overwrite-modal-content {
-            background-color: white;
+            background-color: #f2f9f3;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -150,9 +150,9 @@ function addDataOverwriteModalStyles() {
             max-width: 450px;
             position: relative;
             font-family: "Inter", sans-serif;
-            border: 2px solid #000;
+            border: 2px solid #4a7c59;
             border-radius: 8px;
-            box-shadow: 4px 4px 0 #000;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
             cursor: default;
         }
         
@@ -180,14 +180,14 @@ function addDataOverwriteModalStyles() {
         
         .data-overwrite-modal-button {
             padding: 10px 20px;
-            border: 2px solid #000;
+            border: 2px solid #4a7c59;
             border-radius: 6px;
             font-family: "Geist", sans-serif;
             font-weight: 500;
             font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 3px 3px 0 #000;
+            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
         }
         
         .data-overwrite-modal-button.confirm {
@@ -196,17 +196,18 @@ function addDataOverwriteModalStyles() {
         }
         
         .data-overwrite-modal-button.cancel {
-            background-color: #f5f5f5;
-            color: #000;
+            background-color: #f2f9f3;
+            color: #2d5a3d;
         }
         
         .data-overwrite-modal-button:hover {
             transform: translateY(-2px);
+            box-shadow: 4px 6px 0 rgba(74, 124, 89, 0.7);
         }
         
         .data-overwrite-modal-button:active {
             transform: translateY(0);
-            box-shadow: 1px 1px 0 #000;
+            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
         }
         
         @media (max-width: 480px) {
@@ -322,7 +323,7 @@ function showDataOverwriteError() {
                 </p>
                 <button onclick="closeDataOverwriteModal()" 
                         class="data-overwrite-modal-button cancel"
-                        style="padding: 10px 20px; border: 2px solid #000; border-radius: 6px; font-family: 'Geist', sans-serif; font-weight: 500; font-size: 0.95rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 3px 3px 0 #000; background-color: #f5f5f5; color: #000;">
+                        style="padding: 10px 20px; border: 1px solid #4a7c59; border-radius: 6px; font-family: 'Geist', sans-serif; font-weight: 500; font-size: 0.95rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2); background-color: #f2f9f3; color: #2d5a3d;">
                     Close
                 </button>
             </div>

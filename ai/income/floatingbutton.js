@@ -17,31 +17,31 @@ function injectStyles() {
   top: 2.5px;         /* move to top */
   right: 10px;       /* keep on right */
   z-index: 1000;
-  background-color: #f5f5f5;
+  background-color: #f2f9f3;
   padding: 5px;
-  border: 2px solid #000;
+  border: 2px solid #4a7c59;
   border-radius: 8px;
-  box-shadow: 4px 4px 0 #000;
+  box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
   display: inline-block;
   transition: background-color 0.3s ease;
 }
 
 #gotosummary:hover {
-  background-color: rgb(210, 210, 210);
+  background-color: #eef7f0;
 }
 
 #summary-btn {
   padding: 8px 8px;
-  background: #000;
+  background: #4a7c59;
   color: #fff;
-  border: 2px solid #000;
+  border: 2px solid #4a7c59;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.1s ease;
 }
 
 #summary-btn:hover {
-  background: #333;
+  background: #3d6b4a;
   transform: translateY(-2px);
 }
 
