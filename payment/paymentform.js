@@ -6,6 +6,15 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Create modal HTML for payment form using self-contained modal system
     if (!document.getElementById('payment-modal')) {
+        // Load Stripe script if not already loaded
+        if (!document.querySelector('script[src="https://js.stripe.com/v3/"]')) {
+            const stripeScript = document.createElement('script');
+            stripeScript.src = 'https://js.stripe.com/v3/';
+            stripeScript.async = true;
+            document.head.appendChild(stripeScript);
+            console.log('Stripe script added to page');
+        }
+
         // Add modal styles matching copy.js pattern
         addPaymentModalStyles();
         
@@ -39,17 +48,30 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         console.log('Payment modal created');
 
+        // Add debugging to the button immediately after creation
+        const debugButton = document.getElementById('pay-button');
+        if (debugButton) {
+            console.log('Subscribe button found:', debugButton);
+            console.log('Button type:', debugButton.type);
+            
+            // Add a simple test click handler
+            debugButton.addEventListener('click', function(e) {
+                console.log('🔥 BUTTON CLICKED! Event details:', e);
+                console.log('🔥 Button element:', this);
+                console.log('🔥 Form element:', document.getElementById('payment-form'));
+            });
+            console.log('Debug click handler added to button');
+        } else {
+            console.error('Subscribe button not found after modal creation!');
+        }
+
         // Set up modal functionality
         setupPaymentModalFunctionality(modal);
 
-        // Import and initialize payment.js
-        try {
-            const { initializePayment } = await import('./payment.js');
-            initializePayment();
-            console.log('payment.js initialized');
-        } catch (error) {
-            console.error('Failed to import and initialize payment.js:', error);
-        }
+        // Initialize payment processing directly (combined from payment.js)
+        initializePaymentProcessing();
+
+        console.log('Payment form and processing initialized');
     }
 
     // Create legal modal function - simple alert for now
@@ -439,4 +461,174 @@ function createPaymentCornerButton() {
     document.body.appendChild(buttonContainer);
     
     return buttonContainer;
+}
+
+// ===== PAYMENT PROCESSING (Combined from payment.js) =====
+
+// Wait for the Stripe script to load
+function waitForStripe() {
+    return new Promise((resolve, reject) => {
+        const startTime = Date.now();
+        const checkStripe = () => {
+            if (typeof Stripe !== "undefined") {
+                console.log("Stripe script loaded");
+                resolve();
+            } else if (Date.now() - startTime > 10000) { // 10-second timeout
+                console.error("Stripe script failed to load within 10 seconds");
+                reject(new Error("Stripe script failed to load"));
+            } else {
+                setTimeout(checkStripe, 100);
+            }
+        };
+        checkStripe();
+    });
+}
+
+// Combined payment initialization function
+async function initializePaymentProcessing() {
+    console.log("initializePaymentProcessing called");
+
+    try {
+        // Wait for Stripe to load
+        await waitForStripe();
+
+        // Payment endpoint and configuration
+        const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
+        const publicKey = "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
+        const payForm = document.querySelector("#payment-form");
+
+        if (!payForm) {
+            console.error("Payment form not found in DOM");
+            return;
+        }
+        console.log("Payment form found:", payForm);
+
+        const stripe = Stripe(publicKey);
+        console.log("Stripe initialized with public key:", publicKey);
+
+        // Add both form submit AND button click listeners for better debugging
+        
+        // Form submit listener (traditional way)
+        payForm.addEventListener("submit", async (e) => {
+            console.log("Form submit event triggered");
+            await handlePaymentSubmission(e, stripe, paymentEndpoint);
+        });
+
+        // Button click listener (backup way)
+        const payButton = document.querySelector("#pay-button");
+        if (payButton) {
+            payButton.addEventListener("click", async (e) => {
+                console.log("Pay button clicked directly");
+                e.preventDefault(); // Prevent any default behavior
+                
+                // Manually trigger form submission by creating a fake submit event
+                const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                payForm.dispatchEvent(submitEvent);
+            });
+            console.log("Pay button click listener added");
+        }
+
+    } catch (error) {
+        console.error("Error initializing payment processing:", error);
+    }
+}
+
+// Handle payment submission (extracted from payment.js)
+async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
+    e.preventDefault();
+    console.log("Processing payment submission");
+
+    const payButton = document.querySelector("#pay-button");
+    const nameInput = document.querySelector("#username");
+    const emailInput = document.querySelector("#useremail");
+    const payStatus = document.querySelector("#status");
+
+    console.log("Form elements:", { payButton, nameInput, emailInput, payStatus });
+
+    payStatus.innerHTML = "Please wait...";
+    const name = nameInput.value;
+    const email = emailInput.value;
+    console.log("Form data:", { name, email });
+
+    if (!name || !email) {
+        console.warn("Missing name or email");
+        payStatus.innerHTML = "Please enter your name and email.";
+        return;
+    }
+
+    nameInput.disabled = true;
+    emailInput.disabled = true;
+    payButton.disabled = true;
+
+    const payload = { task: "pay", client_email: email, client_name: name };
+    console.log("Sending payload to Cloudflare Worker:", payload);
+
+    try {
+        console.log("Initiating fetch to:", paymentEndpoint);
+        console.log("Current origin:", window.location.origin);
+        
+        // Increase timeout to 20 seconds
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+            console.error("Request timed out after 20 seconds");
+            controller.abort();
+        }, 20000);
+
+        const res = await fetch(paymentEndpoint, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Origin": window.location.origin
+            },
+            body: JSON.stringify(payload),
+            mode: "cors",
+            credentials: "omit",
+            signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+        console.log("Fetch response status:", res.status, res.statusText);
+        console.log("Fetch response headers:", [...res.headers.entries()]);
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error("Server returned error response:", errorText);
+            throw new Error(`HTTP error! Status: ${res.status}, Response: ${errorText}`);
+        }
+
+        const data = await res.json();
+        console.log("Fetch response data:", data);
+
+        if (data.id) {
+            console.log("Checkout session ID received:", data.id);
+            payStatus.innerHTML = "Redirecting to payment...";
+            await stripe.redirectToCheckout({ sessionId: data.id });
+            console.log("Redirect to Stripe checkout initiated");
+        } else {
+            console.warn("No session ID in response:", data);
+            payStatus.innerHTML = data.error || "Payment failed. Please try again.";
+            nameInput.disabled = false;
+            emailInput.disabled = false;
+            payButton.disabled = false;
+        }
+    } catch (error) {
+        console.error("Fetch failed with error:", error.message);
+        console.error("Error details:", error);
+        
+        // User-friendly error messages
+        if (error.name === 'AbortError') {
+            payStatus.innerHTML = "Request timed out. Please try again later.";
+        } else if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
+            payStatus.innerHTML = "Network error. Please check your internet connection and try again.";
+        } else if (error.message.includes('CORS')) {
+            payStatus.innerHTML = "Connection blocked by browser security. Please contact support.";
+        } else {
+            payStatus.innerHTML = "Unable to connect. Please try again or contact support.";
+        }
+        
+        nameInput.disabled = false;
+        emailInput.disabled = false;
+        payButton.disabled = false;
+    }
 }
