@@ -106,8 +106,6 @@ I often took charge of group projects at school"></textarea>
         // UI behavior only - persistence handled centrally
     }
 
-    const formPersistence = window.enneagramFormPersistence || window['enneagramFormPersistence'] || (window.enneagramFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
-
     async function generateEnneagram(){
         console.log('[EnneagramIQ] Generate button clicked.');
         
@@ -115,7 +113,7 @@ I often took charge of group projects at school"></textarea>
             'generate-enneagram-btn',
             'enneagram',
             async () => {
-                const formData = formPersistence.getSavedFormData();
+                const formData = window.enneagramFormPersistence.getSavedFormData();
                 if (!formData) {
                     throw new Error('Please complete the form before generating.');
                 }
@@ -138,7 +136,7 @@ I often took charge of group projects at school"></textarea>
                     throw new Error(`An error occurred: ${data.message || data.error || ''}`);
                 }
                 
-                formPersistence.saveResponseData(data);
+                window.enneagramFormPersistence.saveResponseData(data);
                 
                 document.dispatchEvent(new CustomEvent('api-response-received', { 
                     detail: { module: 'enneagramiq', type: 'worker-response', timestamp: Date.now() } 
@@ -155,7 +153,7 @@ I often took charge of group projects at school"></textarea>
     // Initialization
     document.addEventListener('grid-item-toggled', handleGridItemToggled);
     document.getElementById('generate-enneagram-btn').addEventListener('click',generateEnneagram);
-    document.getElementById('clear-enneagram-btn').addEventListener('click', () => formPersistence.clearLocalStorage());
+    document.getElementById('clear-enneagram-btn').addEventListener('click', () => window.enneagramFormPersistence.clearLocalStorage());
 })();
 </script>
 </div> <!-- Close mobile-container -->

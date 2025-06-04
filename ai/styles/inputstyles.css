@@ -8,8 +8,8 @@
 
 body {
   font-family: "Inter", sans-serif;
-  background-color: #ffffff;
-  color: #000;
+  background-color: #f6fdf9;
+  color: #2d4a3d;
   text-align: left;
   margin-bottom: 75px;
   padding-bottom: 25px;
@@ -24,7 +24,7 @@ body::before {
   transform: translateX(-50%);
   width: 96px;
   height: 96px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 50%);
+  background: radial-gradient(circle, rgba(146, 212, 179, 0.2) 0%, rgba(146, 212, 179, 0) 50%);
   animation: smallPulse 4s infinite ease-in-out;
   z-index: -1;
 }
@@ -63,10 +63,10 @@ textarea {
   margin: 8px auto; /* Centered with vertical spacing */
   font-size: 16px; /* Readable font size */
   line-height: 1.5; /* Improved readability */
-  border: 1px solid #7c7c7c;
+  border: 1px solid #92d4b3;
   border-radius: 6px; /* Modern rounded corners */
-  background-color: #f9f9f9; /* Subtle off-white background */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle depth */
+  background-color: #fefdfb; /* Warm cream background */
+  box-shadow: 0 2px 4px rgba(146, 212, 179, 0.1); /* Soft green shadow */
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   font-family: "Inter", sans-serif;
@@ -86,8 +86,8 @@ select {
 }
 
 select option {
-  color: #333;
-  background-color: #fff;
+  color: #2d4a3d;
+  background-color: #fefdfb;
   font-size: 16px;
   padding: 8px;
   font-family: "Inter", sans-serif;
@@ -108,20 +108,20 @@ input[type="number"]:focus,
 input[type="text"]:focus,
 select:focus,
 textarea:focus {
-  border-color: #000;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  border-color: #6bbf89;
+  box-shadow: 0 0 8px rgba(107, 191, 137, 0.2);
 }
 
 /* ====================
    Layout: Container
    ==================== */
 .container {
-  background-color: #f5f5f5;
-  color: #000;
+  background-color: #e8f5ed;
+  color: #2d4a3d;
   max-width: 800px;
   margin: 0 auto;
   border-radius: 0 0 5px 5px;
-  border: 2px solid #000;
+  border: 2px solid #92d4b3;
   text-align: left;
   display: flex;
   padding: 15px;
@@ -133,14 +133,14 @@ textarea:focus {
 
 .container:hover {
   transform: translateY(-5px);
-  background-color: rgb(255, 255, 255);
-  box-shadow: 4px 4px 0 #000;
+  background-color: #fefdfb;
+  box-shadow: 4px 4px 0 #92d4b3;
 }
 
 .container:active {
   transform: translateY(1px);
-  background-color: #f5f5f5;
-  box-shadow: 2px 2px 0 #000;
+  background-color: #e8f5ed;
+  box-shadow: 2px 2px 0 #92d4b3;
 }
 
 /* ====================
@@ -170,12 +170,12 @@ textarea:focus {
 }
 
 .grid-item {
-  background-color: #f5f5f5;
-  color: #000;
+  background-color: #e8f5ed;
+  color: #2d4a3d;
   padding: 1rem;
   border-radius: 5px;
-  border: 1.5px solid #000;
-  box-shadow: 3px 3px 0.5px #000;
+  border: 1.5px solid #92d4b3;
+  box-shadow: 3px 3px 0.5px #92d4b3;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -188,22 +188,22 @@ textarea:focus {
 
 .grid-item:hover {
   transform: translateY(-5px);
-  background-color: rgb(255, 255, 255);
-  box-shadow: 3px 3px 0.5px #000;
-  color: #000;
+  background-color: #fefdfb;
+  box-shadow: 3px 3px 0.5px #92d4b3;
+  color: #2d4a3d;
 }
 
 .grid-item:active {
   transform: translateY(1px);
-  background-color: #f5f5f5;
-  box-shadow: 1.5px 1.5px 0.5px #000;
+  background-color: #e8f5ed;
+  box-shadow: 1.5px 1.5px 0.5px #92d4b3;
 }
 
 .grid-item.selected {
-  background-color: #585858;
-  color: #fff;
-  box-shadow: 3px 3px 0.5px #000;
-  border: 1.5px solid #000;
+  background-color: #6bbf89;
+  color: #fefdfb;
+  box-shadow: 3px 3px 0.5px #92d4b3;
+  border: 1.5px solid #92d4b3;
 }
 
 /* Make the last grid item span two columns if the number of items is odd */
@@ -214,8 +214,8 @@ textarea:focus {
 
 /* Button */
 button {
-  background-color: #000000;
-  color: white;
+  background-color: #6bbf89;
+  color: #fefdfb;
   font-size: 16px;
   border: none;
   border-radius: 5px;
@@ -230,23 +230,23 @@ button {
 }
 
 button:hover {
-  background-color: #333;
+  background-color: #5ba877;
 }
 
 /* Generate Button */
 .generate-btn {
   align-self: center;
-  border: 1.5px solid #000;
-  box-shadow: 3px 3px 0.5px #000;
-  background-color: #fff;
-  color: #000;
+  border: 1.5px solid #92d4b3;
+  box-shadow: 3px 3px 0.5px #92d4b3;
+  background-color: #fefdfb;
+  color: #2d4a3d;
 }
 
 /* Clear Button */
 .clear-btn {
-  background-color: #fff;
-  color: #000;
-  border: 1.5px solid #000;
+  background-color: #fefdfb;
+  color: #2d4a3d;
+  border: 1.5px solid #92d4b3;
   font-family: "Geist", sans-serif;
   font-size: 16px;
   border-radius: 5px;
@@ -257,12 +257,12 @@ button:hover {
   max-width: 460px;
   display: block;
   transition: background-color 0.2s, color 0.2s;
-  box-shadow: 3px 3px 0.5px #000;
+  box-shadow: 3px 3px 0.5px #92d4b3;
 }
 
 .clear-btn:hover {
-  background-color: #f5f5f5;
-  color: #000;
+  background-color: #e8f5ed;
+  color: #2d4a3d;
 }
 
 /* Hidden Class */
@@ -319,11 +319,11 @@ button:hover {
   }
   
   .checkbox-wrapper-2 .ikxBAC:checked {
-    background-color: #000000;
+    background-color: #6bbf89;
   }
   
   .checkbox-wrapper-2 .ikxBAC:checked::after {
-    background-color: #fff;
+    background-color: #fefdfb;
     left: 13px;
   }
   
@@ -332,7 +332,7 @@ button:hover {
   }
   
   .checkbox-wrapper-2 .ikxBAC:checked:hover {
-    background-color: #000000;
+    background-color: #5ba877;
   }
   
 
@@ -346,10 +346,10 @@ button:hover {
   font-family: "Geist", sans-serif;
   font-weight: 600;
   font-size: 18px;
-  color: #000;
+  color: #2d4a3d;
   margin: 16px 0 8px 0;
   padding-bottom: 6px;
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid #92d4b3;
   width: 100%;
   max-width: 100%;
 }
@@ -358,7 +358,7 @@ button:hover {
 .section-description {
   font-family: "Inter", sans-serif;
   font-size: 14px;
-  color: #666;
+  color: #5a7a65;
   margin: 0 0 12px 0;
   padding: 0;
   line-height: 1.4;
@@ -378,10 +378,10 @@ button:hover {
   font-weight: 600;
   font-size: 16px;
   margin-bottom: 10px;
-  color: #000;
+  color: #2d4a3d;
   font-family: "Geist", sans-serif;
   padding-bottom: 5px;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #92d4b3;
 }
 
 /* Invisible device-sized wrapper */
@@ -405,8 +405,8 @@ button:hover {
 
 
 .multifield-add-btn {
-  background-color: #000000;
-  color: white;
+  background-color: #6bbf89;
+  color: #fefdfb;
   font-size: 16px;
   border: none;
   border-radius: 5px;
@@ -418,7 +418,7 @@ button:hover {
 }
 
 .multifield-add-btn:hover {
-  background-color: #333;
+  background-color: #5ba877;
 }
 
 /* ====================
@@ -460,7 +460,7 @@ button:hover {
 .guided-form-active input:focus,
 .guided-form-active textarea:focus,
 .guided-form-active select:focus {
-    outline: 2px solid #4CAF50;
+    outline: 2px solid #6bbf89;
     outline-offset: 2px;
 }
 
@@ -470,8 +470,8 @@ button:hover {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: #4CAF50;
-    color: white;
+    background: #6bbf89;
+    color: #fefdfb;
     border-radius: 50%;
     width: 20px;
     height: 20px;
