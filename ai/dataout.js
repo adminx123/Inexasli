@@ -126,7 +126,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 max-width: 100%;
                 width: 100%;
                 min-width: 100%;
-                height: 50vh; /* 50% of viewport height */
+                min-height: 50vh; /* Minimum 50% of viewport height, but can grow */
+                max-height: 90vh; /* Maximum 90% of viewport height */
                 top: 0;
                 left: 0;
                 transform: none;
@@ -196,8 +197,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-right .data-content {
                 padding: 0;
                 font-size: 14px;
-                height: calc(100% - 40px);
-                max-height: none;
+                min-height: calc(50vh - 40px); /* Minimum height based on container min-height */
+                max-height: calc(90vh - 40px); /* Maximum height based on container max-height */
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
@@ -223,7 +224,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     max-width: 100%;
                     width: 100%;
                     min-width: 100%;
-                    height: 95vh;
+                    min-height: 90vh; /* Minimum height for mobile */
+                    max-height: 95vh; /* Maximum height for mobile */
                     top: 0;
                     right: 0;
                     transform: none;
@@ -257,7 +259,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                     font-size: 12px;
                     padding: 0;
                     overflow-x: auto;
+                    overflow-y: auto;
                     margin-top: 25px;
+                    min-height: calc(90vh - 25px); /* Minimum height for mobile content */
+                    max-height: calc(95vh - 25px); /* Maximum height for mobile content */
                 }
             }
         `;
