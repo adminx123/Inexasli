@@ -133,6 +133,11 @@ class GuidedFormSystem {
             if (state === 'expanded' && this.isInitialized) {
                 // Update our reference to the expanded container
                 this.dataContainer = document.querySelector('.data-container-left.expanded');
+                // Show progress indicator when expanded
+                const progressIndicator = document.getElementById('guided-form-progress');
+                if (progressIndicator) {
+                    progressIndicator.style.display = 'flex';
+                }
                 // Reapply sizing for current step
                 if (this.steps[this.currentStep]) {
                     setTimeout(() => {
@@ -140,7 +145,13 @@ class GuidedFormSystem {
                     }, 100);
                 }
             } else if (state === 'initial' || state === 'collapsed') {
-                // When collapsing, remove our height override to allow normal collapse behavior
+                // When collapsing, hide the progress indicator to prevent it from showing
+                const progressIndicator = document.getElementById('guided-form-progress');
+                if (progressIndicator) {
+                    progressIndicator.style.display = 'none';
+                }
+                
+                // Remove our height override to allow normal collapse behavior
                 if (this.dataContainer) {
                     this.dataContainer.style.height = '';
                     this.dataContainer.style.transition = '';
