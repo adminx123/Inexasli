@@ -104,11 +104,23 @@ Should I apologize first"></textarea>
  * jurisdictions worldwide.
 */
 
-// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
 (function() {
     console.log("SocialIQ script initializing");
 
-    // Handler for grid-item-toggled event from datain.js
+    // Initialize FormPersistence for socialiq module
+    const fields = [
+        { id: 'area-goal', type: 'grid' },
+        { id: 'incident-goal', type: 'grid' },
+        { id: 'incident-details', type: 'textarea' },
+        { id: 'incident-moments', type: 'textarea' },
+        { id: 'incident-thoughts', type: 'textarea' },
+        { id: 'incident-warnings', type: 'grid' },
+        { id: 'incident-mood', type: 'grid' }
+    ];
+
+    window.socialFormPersistence = new FormPersistence('socialiq', fields);
+
+    // Listen for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
         console.log('[SocialIQ] Grid item toggled event received');
         const item = event.detail.item;
@@ -125,125 +137,73 @@ Should I apologize first"></textarea>
         console.log(`[SocialIQ] Handled toggle for ${item.dataset.value} in ${container.id}: ${item.classList.contains('selected') ? 'selected' : 'deselected'}`);
     }
 
-    // Initialize our grid items
-    function initializeSocialGridItems() {
-        console.log("[SocialIQ] Initializing social grid items");
-        // No need to add click handlers - datain.js handles that now
-    }
-
-    // Form repopulation is now handled by the centralized FormPersistence module
-
-    // Input change handling is now managed by the centralized FormPersistence module
-
-    // Clearing saved data is now handled by the centralized FormPersistence module
-
-    // Handle the generate button click - directly talking to worker
+    // Handle the generate button click
     async function handleGenerateSocialIq() {
-        try {
-            // Use centralized FormPersistence to get form data
-            const formData = window.socialFormPersistence.getSavedFormData();
-            if (!formData) {
-                console.error('[SocialIQ] No input data found.');
-                alert('Please complete the form before generating a social analysis.');
-                return;
-            }
-            
-            // Validate minimum requirements
-            if (!formData.incidentDetails) {
-                console.error('[SocialIQ] No incident details provided.');
-                alert('Please provide incident details before generating a social analysis.');
-                return;
-            }
-            
-            // Use enhanced loading with educational facts
-            const result = await window.enhancedLoading(
-                'generate-social-btn',
-                'social',
-                async () => {
-                    const apiUrl = 'https://social.4hm7q4q75z.workers.dev/';
-                    
-                    console.log('[SocialIQ] Sending form data to worker');
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    
-                    const responseData = await response.json();
-                    console.log('[SocialIQ] Worker response:', responseData);
-                    
-                    if (responseData.message !== 'Success') {
-                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                    }
-                    
-                    return responseData;
-                }
-            );
-            
-            // Store the response using FormPersistence
-            window.socialFormPersistence.saveResponseData(result);
-            
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'socialiq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
-                }
-            });
-            document.dispatchEvent(event);
-            console.log('[SocialIQ] Dispatched api-response-received event');
-            
-        } catch (error) {
-            console.error('[SocialIQ] Error generating social analysis:', error);
-            alert('An error occurred while generating your social analysis. Please try again later.');
-        }
-    }
-
-    // Attach event listeners to buttons
-    function setupButtonHandlers() {
-        const generateBtn = document.getElementById('generate-social-btn');
-        if (generateBtn) {
-            generateBtn.removeEventListener('click', handleGenerateSocialIq);
-            generateBtn.addEventListener('click', handleGenerateSocialIq);
-        }
-    }
-
-    // Main initialization function - called immediately and again after full load
-    function initialize() {
-        console.log("[SocialIQ] Initializing...");
-        initializeSocialGridItems();
-        setupButtonHandlers();
+        console.log('[SocialIQ] Generate button clicked.');
         
-        // Set up grid-item-toggled event listener
-        document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
-        document.addEventListener('grid-item-toggled', handleGridItemToggled);
+        const result = await window.enhancedLoading(
+            'generate-social-btn',
+            'social',
+            async () => {
+                const formData = window.socialFormPersistence.getSavedFormData();
+                if (!formData) {
+                    console.error('[SocialIQ] No input data found in localStorage.');
+                    throw new Error('Please complete the form before generating a social analysis.');
+                }
+                
+                // Send data to worker
+                const apiUrl = 'https://social.4hm7q4q75z.workers.dev/';
+                
+                console.log('[SocialIQ] Sending socialIqInput to worker');
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const responseData = await response.json();
+                console.log('[SocialIQ] Worker response:', responseData);
+                
+                if (responseData.message !== 'Success') {
+                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                }
+                
+                // Store the response
+                window.socialFormPersistence.saveResponseData(responseData);
+                
+                // Dispatch an event to notify dataout.js that a response was received
+                const event = new CustomEvent('api-response-received', {
+                    detail: {
+                        module: 'socialiq',
+                        type: 'worker-response',
+                        timestamp: Date.now()
+                    }
+                });
+                document.dispatchEvent(event);
+                console.log('[SocialIQ] Dispatched api-response-received event');
+                
+                return responseData;
+            }
+        );
+        
+        // Enhanced loading either returns result or throws error - no need to check result.success
+        console.log('[SocialIQ] Social analysis generated successfully');
     }
 
-    // Initialize immediately
-    initialize();
+    // Initialization
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    document.getElementById('generate-social-btn').addEventListener('click', handleGenerateSocialIq);
 
-    // Also initialize when DOM is fully loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initialize);
+    // Guided forms integration
+    if (typeof GuidedForms !== 'undefined' && GuidedForms.socialiq) {
+        new GuidedForms.socialiq();
     }
-
-    // Special handler for when this page is loaded through datain.js
-    document.addEventListener('data-in-loaded', function(e) {
-        console.log("[SocialIQ] Detected load through datain.js, reinitializing");
-        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
-    });
-
-    // For external access if needed
-    window.socialIq = {
-        initialize: initialize
-    };
 })();
 </script>
 </div> <!-- Close mobile-container -->

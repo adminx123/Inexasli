@@ -100,133 +100,108 @@ Results needed within two weeks"></textarea>
         </div>
 
 <script>
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
 
-
-// Direct script execution - not inside DOMContentLoaded - to ensure immediate execution when loaded by datain.js
 (function() {
     console.log("ResearchIQ script initializing");
 
-    // Handler for grid-item-toggled event from datain.js
+    // Initialize FormPersistence for researchiq module
+    const fields = [
+        { id: 'research-goal', type: 'textarea' },
+        { id: 'research-purpose', type: 'textarea' },
+        { id: 'research-type', type: 'dropdown' },
+        { id: 'research-scope', type: 'textarea' },
+        { id: 'analysis-preference', type: 'dropdown' },
+        { id: 'research-audience', type: 'textarea' },
+        { id: 'research-context', type: 'textarea' },
+        { id: 'research-deliverables', type: 'dropdown' },
+        { id: 'output-format', type: 'dropdown' },
+        { id: 'additional-details', type: 'textarea' }
+    ];
+
+    window.researchFormPersistence = new FormPersistence('researchiq', fields);
+
+    // Listen for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
         console.log('[ResearchIQ] Grid item toggled event received');
-        const item = event.detail.item;
+        // UI behavior only - persistence handled centrally
     }
 
-
-
-
-
-    // Handle the generate button click - directly talking to worker
+    // Handle the generate button click
     async function handleGenerateResearchIq() {
         console.log('[ResearchIQ] Generate button clicked.');
         
-        try {
-            // Use centralized system to get form data
-            const formData = window.researchFormPersistence.getSavedFormData();
-            if (!formData) {
-                console.error('[ResearchIQ] No input data found.');
-                alert('Please complete the form before generating a research plan.');
-                return;
-            }
-            
-            // Validate minimum requirements
-            if (!formData.goal) {
-                console.error('[ResearchIQ] No research goal provided.');
-                alert('Please provide a research goal before generating a research plan.');
-                return;
-            }
-            
-            // Use enhanced loading with educational facts
-            const result = await window.enhancedLoading(
-                'generate-research-btn',
-                'research',
-                async () => {
-                    const apiUrl = 'https://research.4hm7q4q75z.workers.dev/'; 
-                    
-                    console.log('[ResearchIQ] Sending form data to worker');
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    
-                    const responseData = await response.json();
-                    console.log('[ResearchIQ] Worker response:', responseData);
-                    
-                    if (responseData.message !== 'Success') {
-                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                    }
-                    
-                    return responseData;
+        const result = await window.enhancedLoading(
+            'generate-research-btn',
+            'research',
+            async () => {
+                const formData = window.researchFormPersistence.getSavedFormData();
+                if (!formData) {
+                    console.error('[ResearchIQ] No input data found in localStorage.');
+                    throw new Error('Please complete the form before generating a research plan.');
                 }
-            );
-            
-            // Store the response using centralized system
-            window.researchFormPersistence.saveResponseData(result);
-            
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'researchiq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
+                
+                // Send data to worker
+                const apiUrl = 'https://research.4hm7q4q75z.workers.dev/';
+                
+                console.log('[ResearchIQ] Sending researchIqInput to worker');
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-            });
-            document.dispatchEvent(event);
-            console.log('[ResearchIQ] Dispatched api-response-received event');
-            
-        } catch (error) {
-            console.error('[ResearchIQ] Error generating research plan:', error);
-            alert('An error occurred while generating your research plan. Please try again later.');
-        }
-    }
-
-    // Attach event listeners to buttons
-    function setupButtonHandlers() {
-        const generateBtn = document.getElementById('generate-research-btn');
-        if (generateBtn) {
-            generateBtn.addEventListener('click', handleGenerateResearchIq);
-        }
-    }
-
-    // Main initialization function - called immediately and again after full load
-    function initialize() {
-        console.log("[ResearchIQ] Initializing...");
-        setupInputHandlers();
-        setupButtonHandlers();
-        repopulateForm();
+                
+                const responseData = await response.json();
+                console.log('[ResearchIQ] Worker response:', responseData);
+                
+                if (responseData.message !== 'Success') {
+                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                }
+                
+                // Store the response
+                window.researchFormPersistence.saveResponseData(responseData);
+                
+                // Dispatch an event to notify dataout.js that a response was received
+                const event = new CustomEvent('api-response-received', {
+                    detail: {
+                        module: 'researchiq',
+                        type: 'worker-response',
+                        timestamp: Date.now()
+                    }
+                });
+                document.dispatchEvent(event);
+                console.log('[ResearchIQ] Dispatched api-response-received event');
+                
+                return responseData;
+            }
+        );
         
-        // Set up grid-item-toggled event listener
-        document.removeEventListener('grid-item-toggled', handleGridItemToggled); // Remove any existing to prevent duplicates
-        document.addEventListener('grid-item-toggled', handleGridItemToggled);
+        // Enhanced loading either returns result or throws error - no need to check result.success
+        console.log('[ResearchIQ] Research plan generated successfully');
     }
 
-    // Initialize immediately
-    initialize();
+    // Initialization
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    document.getElementById('generate-research-btn').addEventListener('click', handleGenerateResearchIq);
 
-    // Also initialize when DOM is fully loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initialize);
+    // Guided forms integration
+    if (typeof GuidedForms !== 'undefined' && GuidedForms.researchiq) {
+        new GuidedForms.researchiq();
     }
-
-    // Special handler for when this page is loaded through datain.js
-    document.addEventListener('data-in-loaded', function(e) {
-        console.log("[ResearchIQ] Detected load through datain.js, reinitializing");
-        setTimeout(initialize, 100); // Small delay to ensure DOM is updated
-    });
-
-    // For external access if needed
-    window.researchIq = {
-        initialize: initialize,
-        saveInput: saveInput,
-        getFormData: collectFormData
-    };
 })();
 </script>
 </div> <!-- Close mobile-container -->
