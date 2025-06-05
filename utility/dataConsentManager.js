@@ -426,6 +426,33 @@
                 e.preventDefault();
                 // Use modal.js to show the terms
                 if (typeof window.openModal === 'function') {
+                    // Hide the consent modal temporarily
+                    const consentOverlay = document.getElementById('dataConsentOverlay');
+                    if (consentOverlay) {
+                        consentOverlay.style.display = 'none';
+                        
+                        // Temporarily unfreeze the page for the legal modal
+                        unfreezePage();
+                        
+                        // Set up a one-time listener for when the modal closes
+                        const handleModalClosed = () => {
+                            // Show the consent modal again
+                            consentOverlay.style.display = 'flex';
+                            
+                            // Refreeze the page
+                            const newUnfreezePage = freezePage();
+                            
+                            // Update the unfreeze function reference for other event handlers
+                            Object.defineProperty(this, 'unfreezePage', { value: newUnfreezePage, writable: true });
+                            
+                            // Remove the event listener
+                            document.removeEventListener('modalClosed', handleModalClosed);
+                        };
+                        
+                        document.addEventListener('modalClosed', handleModalClosed);
+                    }
+                    
+                    // Open the legal modal
                     window.openModal('/legal.txt');
                 } else {
                     // Fallback - open in new tab
