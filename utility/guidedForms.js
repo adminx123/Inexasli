@@ -53,12 +53,14 @@ class GuidedFormSystem {
         this.skippedSteps = new Set();
         this.originalContainerHeight = null; // Store original container height
         this.dataContainer = null; // Reference to the data container
+        this.inputValidationTimeout = null; // Explicitly initialize
+        this.textareaValidationTimeout = null; // For textarea debounce
         
         // Bind methods to preserve context
         this.handleGridItemToggled = this.handleGridItemToggled.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
-        this.handleTextareaChange = this.handleTextareaChange.bind(this);
+        // this.handleTextareaChange = this.handleTextareaChange.bind(this); // No longer needed
     }
     
     /**
@@ -316,7 +318,7 @@ class GuidedFormSystem {
         // Listen for input changes
         this.container.addEventListener('input', this.handleInputChange);
         this.container.addEventListener('change', this.handleSelectChange);
-        this.container.addEventListener('blur', this.handleTextareaChange);
+        // this.container.addEventListener('blur', this.handleTextareaChange); // Removed: textarea blur listener
     }
     
     /**
@@ -342,16 +344,25 @@ class GuidedFormSystem {
     handleInputChange(event) {
         if (!this.isInitialized) return;
         
-        const input = event.target;
-        if (input.matches('input:not([type="button"]):not([type="submit"]), textarea')) {
-            const step = this.findStepByElement(input);
+        const element = event.target;
+        
+        if (element.matches('input:not([type="button"]):not([type="submit"])') && element.tagName.toLowerCase() !== 'textarea') {
+            const step = this.findStepByElement(element);
             
             if (step && step.index === this.currentStep) {
-                // Debounce the validation check
                 clearTimeout(this.inputValidationTimeout);
                 this.inputValidationTimeout = setTimeout(() => {
                     this.checkStepCompletion(step);
-                }, 300);
+                }, 1000); 
+            }
+        } else if (element.tagName.toLowerCase() === 'textarea') { // Handle textarea input events
+            const step = this.findStepByElement(element);
+            
+            if (step && step.index === this.currentStep) {
+                clearTimeout(this.textareaValidationTimeout); // Use separate timeout for textareas
+                this.textareaValidationTimeout = setTimeout(() => {
+                    this.checkStepCompletion(step);
+                }, 1000); // Debounce for textareas (1 second)
             }
         }
     }
@@ -372,21 +383,22 @@ class GuidedFormSystem {
         }
     }
     
-    /**
-     * Handle textarea changes (on blur for better UX)
-     */
-    handleTextareaChange(event) {
-        if (!this.isInitialized) return;
-        
-        const textarea = event.target;
-        if (textarea.matches('textarea')) {
-            const step = this.findStepByElement(textarea);
-            
-            if (step && step.index === this.currentStep) {
-                this.checkStepCompletion(step);
-            }
-        }
-    }
+    // Removed handleTextareaChange method as it's no longer used.
+    // /**
+    //  * Handle textarea changes (on blur for better UX)
+    //  */
+    // handleTextareaChange(event) {
+    //     if (!this.isInitialized) return;
+    //     
+    //     const textarea = event.target;
+    //     if (textarea.matches('textarea')) {
+    //         const step = this.findStepByElement(textarea);
+    //         
+    //         if (step && step.index === this.currentStep) {
+    //             this.checkStepCompletion(step);
+    //         }
+    //     }
+    // }
 
     /**
      * Handle select focus (user clicked or tabbed to select)

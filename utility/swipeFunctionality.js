@@ -25,7 +25,6 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     const defaultOptions = {
         threshold: 100,                // Minimum distance to trigger swipe action (px)
         showEducationIndicator: true,  // Show initial swipe education indicator
-        showSwipeHint: true,           // Show swipe hint animation on first view
         animationDuration: 300,        // Animation duration in ms
         sessionStorageKey: 'swipeEducationShown' + direction.charAt(0).toUpperCase() + direction.slice(1)
     };
@@ -185,12 +184,7 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
         // We don't need to prevent default here as that would block scrolling
         // This event listener is just for handling additional logic, not blocking scrolls
     }, { passive: true });
-    
-    // Show swipe hint if enabled
-    if (config.showSwipeHint) {
-        showSwipeHint(container, direction, config.animationDuration);
-    }
-    
+
     // Show initial swipe education indicator if enabled
     if (config.showEducationIndicator) {
         document.addEventListener('touchstart', () => {
@@ -214,76 +208,6 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
             console.log(`Swipe functionality removed from ${container.id || 'container'}`);
         }
     };
-}
-
-/**
- * Shows a temporary swipe hint animation
- */
-function showSwipeHint(container, direction, animationDuration) {
-    // Create swipe hint element
-    const swipeHint = document.createElement('div');
-    swipeHint.className = 'swipe-hint';
-    
-    // Set content based on direction
-    const arrowSymbol = direction === 'left' ? '←' : '→';
-    swipeHint.innerHTML = `${arrowSymbol} <span class="swipe-animation">Swipe ${direction} to close</span>`;
-    
-    // Apply styles
-    swipeHint.style.cssText = `
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 10px 15px;
-        border-radius: 20px;
-        font-family: "Geist", sans-serif;
-        font-size: 16px;
-        z-index: 12000;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-    `;
-    
-    // Add animation style for the swipe hint
-    const animClass = `swipe-${direction}-animation`;
-    if (!document.querySelector(`style[data-id="${animClass}"]`)) {
-        const animStyle = document.createElement('style');
-        animStyle.dataset.id = animClass;
-        animStyle.textContent = `
-            @keyframes pulse {
-                0% { opacity: 0.7; }
-                50% { opacity: 1; }
-                100% { opacity: 0.7; }
-            }
-            @keyframes swipe${direction.charAt(0).toUpperCase() + direction.slice(1)} {
-                0% { transform: translateX(0); }
-                50% { transform: translateX(${direction === 'left' ? '-' : ''}10px); }
-                100% { transform: translateX(0); }
-            }
-            .swipe-animation {
-                display: inline-block;
-                animation: pulse 1.5s infinite, swipe${direction.charAt(0).toUpperCase() + direction.slice(1)} 1.5s infinite;
-            }
-        `;
-        document.head.appendChild(animStyle);
-    }
-    
-    // Add to container
-    container.appendChild(swipeHint);
-    
-    // Fade in the hint and then fade it out after a few seconds
-    setTimeout(() => {
-        swipeHint.style.opacity = '1';
-        setTimeout(() => {
-            swipeHint.style.opacity = '0';
-            setTimeout(() => {
-                if (swipeHint.parentNode) {
-                    swipeHint.parentNode.removeChild(swipeHint);
-                }
-            }, 500);
-        }, 3000);
-    }, 500);
 }
 
 /**
