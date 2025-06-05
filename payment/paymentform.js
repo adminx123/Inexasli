@@ -278,6 +278,86 @@ function addPaymentModalStyles() {
             color: #333;
         }
         
+        /* Premium Section Styling */
+        .premium-blur {
+            filter: blur(3px);
+            color: #888;
+            pointer-events: none;
+            transition: filter 0.3s ease, color 0.3s ease;
+            font-family: "Inter", sans-serif;
+        }
+
+        /* Section1 Styling (Premium-specific) */
+        .section1 {
+            margin-bottom: 2px;
+            padding: 1px;
+            font-family: "Inter", sans-serif;
+        }
+
+        .section1-header {
+            display: flex;
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push .premium-notice to right */
+            cursor: pointer;
+            padding: 1px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #000000;
+            transition: background-color 0.3s ease;
+            font-family: "Geist", sans-serif;
+        }
+
+        .section1-header:hover {
+            background-color: rgba(211, 188, 15, 0.18); /* Gold hover */
+        }
+
+        .section1-header h2 {
+            margin: 0;
+            flex-grow: 1; /* Allow h2 to take available space */
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Space between text and toggle-icon */
+        }
+
+        .section1-content {
+            display: none; /* Hidden by default */
+            padding: 10px;
+            font-family: "Inter", sans-serif;
+        }
+
+        .section1.expanded .section1-content {
+            display: block; /* Shown when expanded */
+        }
+
+        .section1.expanded .toggle-icon {
+            transform: rotate(45deg);
+            font-family: "Inter", sans-serif;
+        }
+
+        .premium-notice {
+            padding: 4px 8px;
+            background-color: rgb(0, 0, 0);
+            color: #D4AF37;
+            font-size: 0.75em;
+            border-radius: 2px;
+            font-weight: bold;
+            font-family: "Geist", sans-serif;
+            margin-left: auto; /* Push to right in flex context */
+        }
+
+        .premium-notice1 {
+            padding: 4px 8px;
+            background-color: rgb(0, 0, 0);
+            color: #D4AF37;
+            font-size: 0.75em;
+            border-radius: 2px;
+            font-weight: bold;
+            font-family: "Geist", sans-serif;
+            margin-left: auto; /* Push to right in flex context */
+        }
+
         @media (max-width: 480px) {
             .payment-modal-content {
                 max-width: 280px;
@@ -292,6 +372,25 @@ function addPaymentModalStyles() {
             .payment-button-row {
                 flex-direction: column;
                 gap: 8px;
+            }
+
+            .premium-notice {
+                font-size: 0.65em;
+                padding: 3px 6px;
+            }
+
+            .premium-notice1 {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
+
+            .section1-header {
+                padding: 2px;
+                font-size: 11px;
+            }
+            
+            .section1-header h2 {
+                gap: 3px;
             }
         }
     `;
