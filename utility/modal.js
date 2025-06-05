@@ -227,6 +227,9 @@ function closeModal() {
         
         // Clean up event listeners
         removeExistingEventListeners();
+        
+        // Dispatch custom event when modal closes
+        document.dispatchEvent(new CustomEvent('modalClosed'));
     }
 }
 
