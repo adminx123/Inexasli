@@ -28,49 +28,47 @@
     const TERMS_FILE_PATH = "/legal.txt"; // Path to terms of service file
     const LAST_UPDATED_DATE = "April 6, 2025"; // Update this when terms change
 
-    // CSS for the terms overlay
+    // CSS for the terms modal (matching dataOverwrite.js style)
     const termsCSS = `
         .terms-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100%;
+            height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 99998; /* Just below dataConsent */
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            z-index: 99998;
             font-family: "Inter", sans-serif;
         }
         
         .terms-container {
             background-color: #f2f9f3;
-            max-width: 600px;
-            width: 90%;
+            padding: 20px;
             border-radius: 8px;
-            border: 2px solid #4a7c59;
-            padding: 25px;
-            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
+            border: 1px solid #4a7c59;
+            box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            font-family: "Inter", sans-serif;
         }
         
         .terms-container h2 {
-            font-size: 1.3rem;
-            color: #222;
+            font-size: 1.2rem;
+            color: #333;
             margin-top: 0;
             margin-bottom: 15px;
             font-family: "Geist", sans-serif;
         }
         
         .terms-container p {
-            font-size: 0.95rem;
+            font-size: 13px;
             line-height: 1.5;
-            color: #444;
-            margin-bottom: 20px;
+            color: #666;
+            margin-bottom: 15px;
         }
 
         .terms-link {
@@ -89,6 +87,7 @@
             align-items: flex-start;
             margin-bottom: 20px;
             gap: 10px;
+            text-align: left;
         }
         
         .terms-checkbox {
@@ -96,70 +95,50 @@
         }
         
         .terms-checkbox-label {
-            font-size: 0.9rem;
-            color: #333;
+            font-size: 13px;
+            color: #666;
             line-height: 1.4;
         }
         
         .terms-buttons {
             display: flex;
-            justify-content: space-between;
-            gap: 15px;
+            flex-direction: column;
+            gap: 12px;
         }
         
-        .terms-continue-btn {
-            padding: 10px 20px;
-            background-color: #4a7c59;
-            color: #fff;
-            border: 2px solid #4a7c59;
-            border-radius: 6px;
-            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
+        .terms-action-btn {
+            padding: 14px 20px;
+            background-color: #f2f9f3;
+            color: #2d5a3d;
+            border: 1px solid #4a7c59;
+            border-radius: 8px;
+            font-size: 14px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-family: 'Geist', sans-serif;
             font-weight: bold;
-            font-family: "Geist", sans-serif;
-            flex-grow: 1;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
         }
         
-        .terms-continue-btn[disabled] {
+        .terms-action-btn[disabled] {
             background-color: #f0f0f0;
             color: #999;
             cursor: not-allowed;
-            box-shadow: 2px 2px 0 #999;
-            border-color: #999;
+            border-color: #ccc;
         }
         
-        .terms-continue-btn:not([disabled]):hover {
-            background-color: #3d6b4a;
-        }
-        
-        .terms-continue-btn:not([disabled]):active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
-        }
-        
-        .terms-leave-btn {
-            padding: 10px 20px;
-            background-color: #fff;
-            color: #000;
-            border: 2px solid #4a7c59;
-            border-radius: 6px;
-            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: bold;
-            font-family: "Geist", sans-serif;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-        }
-        
-        .terms-leave-btn:hover {
+        .terms-action-btn:not([disabled]):hover {
             background-color: #eef7f0;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(74, 124, 89, 0.3);
         }
         
-        .terms-leave-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
+        .terms-action-btn:not([disabled]):active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(74, 124, 89, 0.3);
         }
         
         @media (max-width: 480px) {
@@ -171,20 +150,6 @@
             
             .terms-container h2 {
                 font-size: 1.1rem;
-            }
-            
-            .terms-container p {
-                font-size: 0.9rem;
-            }
-            
-            .terms-buttons {
-                flex-direction: column;
-            }
-            
-            .terms-continue-btn,
-            .terms-leave-btn {
-                width: 100%;
-                margin-bottom: 8px;
             }
         }
     `;
@@ -289,13 +254,23 @@
                 </label>
             </div>
             <div class="terms-buttons">
-                <button id="termsContinueBtn" class="terms-continue-btn" disabled>Continue</button>
-                <button id="termsLeaveBtn" class="terms-leave-btn">Leave Site</button>
+                <button id="termsContinueBtn" class="terms-action-btn" disabled>
+                    <i class="bx bx-check" style="margin-right: 8px; font-size: 14px;"></i>Continue
+                </button>
+                <button id="termsLeaveBtn" class="terms-action-btn">
+                    <i class="bx bx-exit" style="margin-right: 8px; font-size: 14px;"></i>Leave Site
+                </button>
             </div>
         `;
         
         overlay.appendChild(container);
         document.body.appendChild(overlay);
+        
+        // Add hover effects
+        addTermsButtonHoverEffects();
+        
+        // Add modal-open class to disable tooltips
+        document.body.classList.add('modal-open');
         
         // Set up event handlers
         const viewTermsLink = document.getElementById('viewTermsLink');
@@ -317,13 +292,12 @@
             continueBtn.addEventListener('click', function() {
                 if (termsCheckbox.checked) {
                     saveTermsAcceptance();
-                    overlay.remove();
+                    showTermsSuccess();
                     
-                    // Set global flag
-                    window.termsAccepted = true;
-                    
-                    // Trigger event
-                    document.dispatchEvent(new CustomEvent('termsAccepted'));
+                    // Close modal after brief delay
+                    setTimeout(() => {
+                        closeTermsModal();
+                    }, 1500);
                 }
             });
         }
@@ -334,6 +308,110 @@
                 // Redirect to a neutral site
                 window.location.href = 'https://www.google.com';
             });
+        }
+
+        // Add event listeners for modal
+        addTermsEventListeners(overlay);
+    }
+
+    // Add hover effects to buttons like dataOverwrite.js
+    function addTermsButtonHoverEffects() {
+        const modal = document.querySelector('.terms-overlay');
+        if (!modal) return;
+        
+        modal.querySelectorAll('.terms-action-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                if (!this.disabled) {
+                    this.style.backgroundColor = '#eef7f0';
+                    this.style.transform = 'translateY(-1px)';
+                    this.style.boxShadow = '0 3px 8px rgba(74, 124, 89, 0.3)';
+                }
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                if (!this.disabled) {
+                    this.style.backgroundColor = '#f2f9f3';
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 2px 4px rgba(74, 124, 89, 0.2)';
+                }
+            });
+            
+            btn.addEventListener('mousedown', function() {
+                if (!this.disabled) {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 1px 2px rgba(74, 124, 89, 0.3)';
+                }
+            });
+            
+            btn.addEventListener('mouseup', function() {
+                if (!this.disabled) {
+                    this.style.transform = 'translateY(-1px)';
+                    this.style.boxShadow = '0 3px 8px rgba(74, 124, 89, 0.3)';
+                }
+            });
+        });
+    }
+
+    // Add event listeners for the terms modal
+    function addTermsEventListeners(modal) {
+        // Close modal on Escape key
+        function handleKeyDown(event) {
+            if (event.key === 'Escape') {
+                closeTermsModal();
+            }
+        }
+
+        // Close modal when clicking outside
+        function handleClickOutside(event) {
+            if (event.target === modal) {
+                closeTermsModal();
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('click', handleClickOutside);
+
+        // Store references for cleanup
+        modal._keyDownHandler = handleKeyDown;
+        modal._clickOutsideHandler = handleClickOutside;
+    }
+
+    // Close the terms modal
+    function closeTermsModal() {
+        const modal = document.querySelector('.terms-overlay');
+        if (modal) {
+            // Remove event listeners
+            if (modal._keyDownHandler) {
+                document.removeEventListener('keydown', modal._keyDownHandler);
+            }
+            if (modal._clickOutsideHandler) {
+                document.removeEventListener('click', modal._clickOutsideHandler);
+            }
+
+            // Hide modal
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            
+            // Set global flag
+            window.termsAccepted = true;
+            
+            // Trigger event
+            document.dispatchEvent(new CustomEvent('termsAccepted'));
+        }
+    }
+
+    // Show success message after terms acceptance
+    function showTermsSuccess() {
+        const modal = document.querySelector('.terms-overlay .terms-container');
+        if (modal) {
+            modal.innerHTML = `
+                <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
+                    <div style="color: #28a745; font-size: 48px; margin-bottom: 20px;">✓</div>
+                    <p style="color: #555; font-size: 0.95rem; margin: 0;">
+                        Terms Accepted
+                    </p>
+                </div>
+            `;
         }
     }
 

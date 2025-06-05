@@ -23,41 +23,40 @@
     const CONSENT_LOCAL_STORAGE_KEY = "dataStorageConsent";
     const CONSENT_EXPIRY_DAYS = 365; // 1 year
 
-    // CSS for the consent modal
+    // CSS for the consent modal (matching dataOverwrite.js style)
     const modalCSS = `
         .data-consent-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100%;
+            height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999999; /* Extremely high z-index */
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            z-index: 999999;
             font-family: "Inter", sans-serif;
         }
         
         .data-consent-modal {
             background-color: #f2f9f3;
-            max-width: 600px;
-            width: 90%;
+            padding: 20px;
             border-radius: 8px;
-            border: 2px solid #4a7c59;
-            padding: 25px;
-            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
-            max-height: 90vh;
-            overflow-y: auto;
+            border: 1px solid #4a7c59;
+            box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            font-family: "Inter", sans-serif;
             position: relative;
-            z-index: 1000000; /* Even higher z-index */
-            pointer-events: auto !important; /* Ensure the modal receives events */
+            z-index: 1000000;
+            pointer-events: auto !important;
         }
         
         /* Disable all pointer events on the body when consent modal is active */
         body.consent-modal-active {
-            overflow: hidden !important; /* Prevent scrolling */
+            overflow: hidden !important;
             pointer-events: none !important;
         }
         
@@ -67,67 +66,41 @@
         }
         
         .data-consent-modal h2 {
-            font-size: 1.3rem;
-            color: #222;
+            font-size: 1.2rem;
+            color: #333;
             margin-top: 0;
             margin-bottom: 15px;
             font-family: "Geist", sans-serif;
         }
         
         .data-consent-modal p {
-            font-size: 0.95rem;
+            font-size: 13px;
             line-height: 1.5;
-            color: #444;
-            margin-bottom: 20px;
+            color: #666;
+            margin-bottom: 15px;
         }
         
         .data-consent-modal .buttons {
             display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
+            flex-direction: column;
+            gap: 12px;
         }
         
-        .data-consent-modal button {
-            padding: 10px 20px;
-            border-radius: 6px;
+        .consent-action-btn {
+            padding: 14px 20px;
+            background-color: #f2f9f3;
+            color: #2d5a3d;
+            border: 1px solid #4a7c59;
+            border-radius: 8px;
+            font-size: 14px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-family: 'Geist', sans-serif;
             font-weight: bold;
-            font-family: "Geist", sans-serif;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-        }
-        
-        .data-consent-modal .accept-btn {
-            background-color: #4a7c59;
-            color: #fff;
-            border: 2px solid #4a7c59;
-            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
-        }
-        
-        .data-consent-modal .accept-btn:hover {
-            background-color: #3d6b4a;
-        }
-        
-        .data-consent-modal .accept-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
-        }
-        
-        .data-consent-modal .reject-btn {
-            background-color: #fff;
-            color: #000;
-            border: 2px solid #4a7c59;
-            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
-        }
-        
-        .data-consent-modal .reject-btn:hover {
-            background-color: #eef7f0;
-        }
-        
-        .data-consent-modal .reject-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
         }
         
         .data-consent-modal .decline-message {
@@ -138,45 +111,14 @@
             border: 1px solid #f5c6cb;
             border-radius: 6px;
             color: #721c24;
+            font-size: 13px;
         }
         
         .data-consent-modal .decline-actions {
             display: none;
             margin-top: 15px;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .data-consent-modal .reconsider-btn {
-            background-color: #fff;
-            color: #000;
-            border: 2px solid #4a7c59;
-            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
-        }
-        
-        .data-consent-modal .reconsider-btn:hover {
-            background-color: #eef7f0;
-        }
-        
-        .data-consent-modal .reconsider-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
-        }
-        
-        .data-consent-modal .leave-btn {
-            background-color: #fff;
-            color: #000;
-            border: 2px solid #4a7c59;
-            box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
-        }
-        
-        .data-consent-modal .leave-btn:hover {
-            background-color: #eef7f0;
-        }
-        
-        .data-consent-modal .leave-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
+            flex-direction: column;
+            gap: 12px;
         }
         
         /* Disable specific elements that might still be clickable */
@@ -204,23 +146,6 @@
             
             .data-consent-modal h2 {
                 font-size: 1.1rem;
-            }
-            
-            .data-consent-modal p {
-                font-size: 0.9rem;
-            }
-            
-            .data-consent-modal .buttons {
-                flex-direction: column;
-            }
-            
-            .data-consent-modal button {
-                width: 100%;
-                margin-bottom: 8px;
-            }
-            
-            .data-consent-modal .decline-actions {
-                flex-direction: column;
             }
         }
     `;
@@ -395,16 +320,24 @@
             <p>No personal data is sent to or stored on our servers. All data remains on your device only.</p>
             <p>By clicking "Accept", you consent to the storage of this data in your browser's local storage. If you decline, you will not be able to use this website.</p>
             <div class="buttons">
-                <button class="accept-btn">Accept</button>
-                <button class="reject-btn">Decline</button>
+                <button class="consent-action-btn accept-btn">
+                    <i class="bx bx-check" style="margin-right: 8px; font-size: 14px;"></i>Accept
+                </button>
+                <button class="consent-action-btn reject-btn">
+                    <i class="bx bx-x" style="margin-right: 8px; font-size: 14px;"></i>Decline
+                </button>
             </div>
             <div class="decline-message">
                 <p>This website requires local data storage to function properly. Without your consent, we cannot provide you with the full functionality of this site.</p>
                 <p>You have the following options:</p>
             </div>
             <div class="decline-actions">
-                <button class="reconsider-btn">Reconsider & Accept</button>
-                <button class="leave-btn">Leave Site</button>
+                <button class="consent-action-btn reconsider-btn">
+                    <i class="bx bx-check" style="margin-right: 8px; font-size: 14px;"></i>Reconsider & Accept
+                </button>
+                <button class="consent-action-btn leave-btn">
+                    <i class="bx bx-exit" style="margin-right: 8px; font-size: 14px;"></i>Leave Site
+                </button>
             </div>
         `;
         
@@ -414,18 +347,22 @@
         // Freeze the page - get unfreeze function
         const unfreezePage = freezePage();
         
+        // Add hover effects
+        addConsentButtonHoverEffects();
+        
         // Add event listener for the accept button
         const acceptButton = modal.querySelector('.accept-btn');
         acceptButton.addEventListener('click', function() {
             saveConsent();
-            overlay.remove();
-            window.dataConsentGranted = true;
+            showConsentSuccess();
             
-            // Unfreeze the page
-            unfreezePage();
-            
-            // Trigger an event so other scripts can respond
-            document.dispatchEvent(new CustomEvent('dataConsentGranted'));
+            // Close modal after brief delay
+            setTimeout(() => {
+                closeConsentModal();
+                window.dataConsentGranted = true;
+                unfreezePage();
+                document.dispatchEvent(new CustomEvent('dataConsentGranted'));
+            }, 1500);
         });
         
         // Add event listener for the reject button
@@ -453,14 +390,15 @@
         const reconsiderButton = modal.querySelector('.reconsider-btn');
         reconsiderButton.addEventListener('click', function() {
             saveConsent();
-            overlay.remove();
-            window.dataConsentGranted = true;
+            showConsentSuccess();
             
-            // Unfreeze the page
-            unfreezePage();
-            
-            // Trigger an event so other scripts can respond
-            document.dispatchEvent(new CustomEvent('dataConsentGranted'));
+            // Close modal after brief delay
+            setTimeout(() => {
+                closeConsentModal();
+                window.dataConsentGranted = true;
+                unfreezePage();
+                document.dispatchEvent(new CustomEvent('dataConsentGranted'));
+            }, 1500);
         });
         
         // Add event listener for leave button
@@ -480,6 +418,60 @@
                 tab.setAttribute('href', 'javascript:void(0);');
             });
         }, 100);
+    }
+
+    // Add hover effects to buttons like dataOverwrite.js
+    function addConsentButtonHoverEffects() {
+        const modal = document.querySelector('.data-consent-overlay');
+        if (!modal) return;
+        
+        modal.querySelectorAll('.consent-action-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#eef7f0';
+                this.style.transform = 'translateY(-1px)';
+                this.style.boxShadow = '0 3px 8px rgba(74, 124, 89, 0.3)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '#f2f9f3';
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 2px 4px rgba(74, 124, 89, 0.2)';
+            });
+            
+            btn.addEventListener('mousedown', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 1px 2px rgba(74, 124, 89, 0.3)';
+            });
+            
+            btn.addEventListener('mouseup', function() {
+                this.style.transform = 'translateY(-1px)';
+                this.style.boxShadow = '0 3px 8px rgba(74, 124, 89, 0.3)';
+            });
+        });
+    }
+
+    // Close the consent modal
+    function closeConsentModal() {
+        const modal = document.querySelector('.data-consent-overlay');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.classList.remove('consent-modal-active');
+        }
+    }
+
+    // Show success message after consent acceptance
+    function showConsentSuccess() {
+        const modal = document.querySelector('.data-consent-overlay .data-consent-modal');
+        if (modal) {
+            modal.innerHTML = `
+                <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
+                    <div style="color: #28a745; font-size: 48px; margin-bottom: 20px;">✓</div>
+                    <p style="color: #555; font-size: 0.95rem; margin: 0;">
+                        Consent Granted
+                    </p>
+                </div>
+            `;
+        }
     }
 
     // Initialize the consent manager
