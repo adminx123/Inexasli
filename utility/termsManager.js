@@ -222,7 +222,25 @@
     // Show the terms modal using modal.js
     function showFullTerms() {
         if (typeof window.openModal === 'function') {
+            // Hide the terms manager modal temporarily
+            const termsOverlay = document.getElementById('termsOverlay');
+            if (termsOverlay) {
+                termsOverlay.style.display = 'none';
+                
+                // Set up a one-time listener for when the modal closes
+                const handleModalClosed = () => {
+                    // Show the terms manager modal again
+                    termsOverlay.style.display = 'flex';
+                    // Remove the event listener
+                    document.removeEventListener('modalClosed', handleModalClosed);
+                };
+                
+                document.addEventListener('modalClosed', handleModalClosed);
+            }
+            
+            // Open the terms modal
             window.openModal(TERMS_FILE_PATH);
+            
         } else {
             console.error('modal.js is not loaded. Cannot show terms.');
             // Fallback - open in new tab
