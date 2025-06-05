@@ -24,8 +24,8 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     // Default options
     const defaultOptions = {
         threshold: 100,                // Minimum distance to trigger swipe action (px)
-        showEducationIndicator: true,  // Show initial swipe education indicator
-        showSwipeHint: true,           // Show swipe hint animation on first view
+        showEducationIndicator: false, // Show initial swipe education indicator (disabled to prevent duplicates)
+        showSwipeHint: true,           // Show swipe hint animation on first view (3-second bottom hint)
         animationDuration: 300,        // Animation duration in ms
         sessionStorageKey: 'swipeEducationShown' + direction.charAt(0).toUpperCase() + direction.slice(1)
     };
@@ -88,51 +88,10 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
             // Add dynamic opacity effect based on swipe distance
             const opacityValue = Math.max(0.7, 1 - (Math.abs(diffX) / 300));
             container.style.opacity = opacityValue.toString();
-            
-            // Show swipe indicator if swipe distance is significant
-            if (Math.abs(diffX) > 50) {
-                if (!container.querySelector('.swipe-indicator')) {
-                    const indicator = document.createElement('div');
-                    indicator.className = 'swipe-indicator';
-                    indicator.innerHTML = direction === 'left' ? '← Swipe to close' : 'Swipe to close →';
-                    indicator.style.cssText = `
-                        position: absolute;
-                        top: 50%;
-                        left: ${direction === 'left' ? '20%' : '60%'};
-                        transform: translateY(-50%);
-                        background-color: rgba(0, 0, 0, 0.7);
-                        color: white;
-                        padding: 10px 15px;
-                        border-radius: 20px;
-                        font-family: "Geist", sans-serif;
-                        font-size: 16px;
-                        z-index: 12000;
-                        opacity: 0;
-                        transition: opacity 0.2s ease;
-                    `;
-                    container.appendChild(indicator);
-                    
-                    // Fade in the indicator
-                    setTimeout(() => {
-                        indicator.style.opacity = '1';
-                    }, 10);
-                }
-            }
         }
     }
     
     function handleTouchEnd(e) {
-        // Remove swipe indicator if it exists
-        const indicator = container.querySelector('.swipe-indicator');
-        if (indicator) {
-            indicator.style.opacity = '0';
-            setTimeout(() => {
-                if (indicator.parentNode) {
-                    indicator.parentNode.removeChild(indicator);
-                }
-            }, 200);
-        }
-        
         // Restore transition for smooth animation
         container.style.transition = `transform ${config.animationDuration}ms ease, opacity ${config.animationDuration}ms ease`;
         
@@ -220,13 +179,17 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
  * Shows a temporary swipe hint animation
  */
 function showSwipeHint(container, direction, animationDuration) {
+    // Check if swipe hint already exists to prevent duplicates
+    if (container.querySelector('.swipe-hint')) {
+        return;
+    }
+    
     // Create swipe hint element
     const swipeHint = document.createElement('div');
     swipeHint.className = 'swipe-hint';
     
-    // Set content based on direction
-    const arrowSymbol = direction === 'left' ? '←' : '→';
-    swipeHint.innerHTML = `${arrowSymbol} <span class="swipe-animation">Swipe ${direction} to close</span>`;
+    // Set content with both arrows for navigation
+    swipeHint.innerHTML = `<span class="swipe-animation">← Swipe to navigate →</span>`;
     
     // Apply styles
     swipeHint.style.cssText = `
@@ -246,24 +209,20 @@ function showSwipeHint(container, direction, animationDuration) {
     `;
     
     // Add animation style for the swipe hint
-    const animClass = `swipe-${direction}-animation`;
+    const animClass = `swipe-navigate-animation`;
     if (!document.querySelector(`style[data-id="${animClass}"]`)) {
         const animStyle = document.createElement('style');
         animStyle.dataset.id = animClass;
         animStyle.textContent = `
-            @keyframes pulse {
-                0% { opacity: 0.7; }
-                50% { opacity: 1; }
-                100% { opacity: 0.7; }
-            }
-            @keyframes swipe${direction.charAt(0).toUpperCase() + direction.slice(1)} {
-                0% { transform: translateX(0); }
-                50% { transform: translateX(${direction === 'left' ? '-' : ''}10px); }
-                100% { transform: translateX(0); }
+            @keyframes swipeNavigateHint {
+                0% { transform: translateX(0); opacity: 1; }
+                25% { transform: translateX(-8px); opacity: 0.9; }
+                75% { transform: translateX(8px); opacity: 0.9; }
+                100% { transform: translateX(0); opacity: 1; }
             }
             .swipe-animation {
                 display: inline-block;
-                animation: pulse 1.5s infinite, swipe${direction.charAt(0).toUpperCase() + direction.slice(1)} 1.5s infinite;
+                animation: swipeNavigateHint 3s ease-in-out infinite;
             }
         `;
         document.head.appendChild(animStyle);
