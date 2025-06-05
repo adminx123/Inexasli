@@ -14,12 +14,12 @@
 
         <div class="row1">
             <label class="category-label">Decision Goal</label>
-            <textarea id="decisioniq-goal" rows="2" placeholder="Choose a software vendor for our CRM system
+            <textarea id="decision-goal" rows="2" placeholder="Choose a software vendor for our CRM system
 Select new office location for regional headquarters"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Analysis Type</label>
-            <select id="decisioniq-analysis-type">
+            <select id="decision-analysis-type">
                 <option value="" disabled selected>Select Analysis Type</option>
                 <option value="swot">SWOT Analysis (90% usefulness)</option>
                 <option value="cost-benefit">Cost-Benefit Analysis (85% usefulness)</option>
@@ -30,7 +30,7 @@ Select new office location for regional headquarters"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Priority Focus</label>
-            <select id="decisioniq-priority">
+            <select id="decision-priority">
                 <option value="" disabled selected>Select Priority Focus</option>
                 <option value="speed">Speed - Quick implementation timeframe</option>
                 <option value="accuracy">Accuracy - Precise, reliable solution</option>
@@ -42,7 +42,7 @@ Select new office location for regional headquarters"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Decision Criteria</label>
-            <div class="grid-container" id="decisioniq-criteria">
+            <div class="grid-container" id="decision-criteria">
                 <div class="grid-item" data-value="Cost">Cost</div>
                 <div class="grid-item" data-value="Quality">Quality</div>
                 <div class="grid-item" data-value="Time">Timeline</div>
@@ -57,12 +57,12 @@ Select new office location for regional headquarters"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Decision Options</label>
-            <textarea id="decisioniq-options" rows="2" placeholder="Salesforce CRM Premium Package
+            <textarea id="decision-options" rows="2" placeholder="Salesforce CRM Premium Package
 HubSpot Enterprise Solution"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Stakeholders</label>
-            <div class="grid-container" id="decisioniq-stakeholders">
+            <div class="grid-container" id="decision-stakeholders">
                 <div class="grid-item" data-value="team-members">Team Members</div>
                 <div class="grid-item" data-value="executives">Executives</div>
                 <div class="grid-item" data-value="customers">Customers</div>
@@ -72,45 +72,31 @@ HubSpot Enterprise Solution"></textarea>
             </div>
         </div>
         <div class="row1">
-            <label class="category-label">Constraints</label>
-            <div class="grid-container" id="decisioniq-constraint-types">
-                <div class="grid-item constraint-item" data-value="Budget" data-type="Budget">
-                    <span class="constraint-label">Budget</span>
-                    <input type="text" class="constraint-input" placeholder="$10,000 USD" style="display:none;">
-                </div>
-                <div class="grid-item constraint-item" data-value="Timeline" data-type="Timeline">
-                    <span class="constraint-label">Timeline</span>
-                    <input type="text" class="constraint-input" placeholder="Implementation by Q3 2024" style="display:none;">
-                </div>
-                <div class="grid-item constraint-item" data-value="Resources" data-type="Resources">
-                    <span class="constraint-label">Resources</span>
-                    <input type="text" class="constraint-input" placeholder="Limited IT staff available" style="display:none;">
-                </div>
-                <div class="grid-item constraint-item" data-value="Technical" data-type="Technical">
-                    <span class="constraint-label">Technical</span>
-                    <input type="text" class="constraint-input" placeholder="Must integrate with existing Oracle database" style="display:none;">
-                </div>
-                <div class="grid-item constraint-item" data-value="Regulatory" data-type="Regulatory">
-                    <span class="constraint-label">Regulatory</span>
-                    <input type="text" class="constraint-input" placeholder="Regulatory constraints: compliance requirements" style="display:none;">
-                </div>
-                <div class="grid-item constraint-item" data-value="Location" data-type="Location">
-                    <span class="constraint-label">Location</span>
-                    <input type="text" class="constraint-input" placeholder="Location constraints: geographic limitations" style="display:none;">
-                </div>
-                <div class="grid-item constraint-item" data-value="Legal" data-type="Legal">
-                    <span class="constraint-label">Legal</span>
-                    <input type="text" class="constraint-input" placeholder="Legal constraints: contractual or liability issues" style="display:none;">
-                </div>
-                <div class="grid-item constraint-item" data-value="Other" data-type="Other">
-                    <span class="constraint-label">Other</span>
-                    <input type="text" class="constraint-input" placeholder="Other constraints: additional limiting factors" style="display:none;">
-                </div>
+            <label class="category-label">Constraints Selection</label>
+            <div class="grid-container" id="decision-constraint-types">
+                <div class="grid-item" data-value="Budget">Budget</div>
+                <div class="grid-item" data-value="Timeline">Timeline</div>
+                <div class="grid-item" data-value="Resources">Resources</div>
+                <div class="grid-item" data-value="Technical">Technical</div>
+                <div class="grid-item" data-value="Regulatory">Regulatory</div>
+                <div class="grid-item" data-value="Location">Location</div>
+                <div class="grid-item" data-value="Legal">Legal</div>
             </div>
         </div>
         <div class="row1">
+            <label class="category-label">Constraint Details</label>
+            <input id="decision-budget-constraint" type="text" placeholder="Budget: $10,000 USD">
+            <input id="decision-timeline-constraint" type="text" placeholder="Timeline: Implementation by Q3 2024">
+            <input id="decision-resources-constraint" type="text" placeholder="Resources: Limited IT staff available">
+            <input id="decision-technical-constraint" type="text" placeholder="Technical: Must integrate with existing Oracle database">
+            <input id="decision-regulatory-constraint" type="text" placeholder="Regulatory: Compliance requirements">
+            <input id="decision-location-constraint" type="text" placeholder="Location: Geographic limitations">
+            <input id="decision-legal-constraint" type="text" placeholder="Legal: Contractual or liability issues">
+            <input id="decision-other-constraint" type="text" placeholder="Other: Additional limiting factors">
+        </div>
+        <div class="row1">
             <label class="category-label">Specific Considerations</label>
-            <textarea id="decisioniq-instructions" rows="5" placeholder="Specific considerations: important details for decision
+            <textarea id="decision-instructions" rows="5" placeholder="Specific considerations: important details for decision
 Solution must support team of 250+ employees worldwide
 Need GDPR and HIPAA compliance for all data handling
 Budget constraints require financing options over 36 months
@@ -122,72 +108,49 @@ Need multilingual support for global offices"></textarea>
         </div>
  
 <script>
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
+
 (function() {
-    console.log("Decision IQ script initializing");
+  console.log("Decision IQ script initializing");
 
-    // Handle grid toggle UI + constraint input behavior
-    function handleGridItemToggled(event) {
-        console.log('[DecisionIQ] Grid item toggled event received');
-        const item = event.detail.item;
-        
-        // Check if this is a constraint item
-        if (item.closest('#decisioniq-constraint-types')) {
-            const input = item.querySelector('.constraint-input');
-            if (input) {
-                if (item.classList.contains('selected')) {
-                    // Show the input field
-                    input.style.display = 'block';
-                    input.focus();
-                } else {
-                    // Hide the input field and clear its value
-                    input.style.display = 'none';
-                    input.value = '';
-                }
-            }
-        }
-    }
+  // Initialize form persistence when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeDecisionIQ);
+  } else {
+    initializeDecisionIQ();
+  }
 
-    async function handleGenerateDecisionIq() {
-        try {
-            const formData = window.decisionFormPersistence.getSavedFormData();
-            if (!formData) { 
-                alert('Please complete the form before generating.'); 
-                return; 
-            }
-            const result = await window.enhancedLoading(
-                'generate-decision-btn',
-                'decision',
-                async () => {
-                    const apiUrl = 'https://decision.4hm7q4q75z.workers.dev/';
-                    const response = await fetch(apiUrl, { 
-                        method: 'POST', 
-                        headers: {'Content-Type':'application/json'}, 
-                        body: JSON.stringify(formData) 
-                    });
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                    return await response.json();
-                }
-            );
-            window.decisionFormPersistence.saveResponseData(result);
-            document.dispatchEvent(new CustomEvent('api-response-received', { 
-                detail: { module: 'decisioniq', type: 'worker-response', timestamp: Date.now() } 
-            }));
-        } catch (e) {
-            console.error('[DecisionIQ] Error:', e);
-            alert('Error generating decision analysis.');
-        }
-    }
+  function initializeDecisionIQ() {
+    console.log("Decision IQ DOM ready, initializing form persistence");
+    
+    // Import and initialize form persistence
+    import('../../utility/formPersistence.js').then(module => {
+      const FormPersistence = module.FormPersistence;
+      const persistence = FormPersistence.getInstance('decision', {
+        singleSelection: ['decision-analysis-type', 'decision-priority'], // Single selection containers  
+        multiSelection: ['decision-criteria', 'decision-constraint-types', 'decision-stakeholders'] // Multi selection containers
+      });
+      
+      persistence.init({
+        moduleName: 'decision',
+        singleSelection: ['decision-analysis-type', 'decision-priority'],
+        multiSelection: ['decision-criteria', 'decision-constraint-types', 'decision-stakeholders']
+      });
+      
+      console.log("Decision IQ form persistence initialized");
+    }).catch(error => {
+      console.error("Failed to initialize Decision IQ form persistence:", error);
+    });
+  }
 
-    // Simplified initialization for module
-    function initialize() {
-        document.addEventListener('grid-item-toggled', handleGridItemToggled);
-        const genBtn = document.getElementById('generate-decision-btn');
-        genBtn.removeEventListener('click', handleGenerateDecisionIq);
-        genBtn.addEventListener('click', handleGenerateDecisionIq);
-    }
-
-    initialize();
-    document.addEventListener('data-in-loaded', () => setTimeout(initialize, 100));
 })();
 </script>
     </div>
