@@ -262,12 +262,12 @@
         // Add content to the dialog
         container.innerHTML = `
             <h2>Terms of Service</h2>
-            <p>Before using IncomeIQ™, please read and accept our terms of service.</p>
+            <p>Before using INEXASLI AI Services, please read and accept our terms of service.</p>
             <div class="terms-checkbox-container">
                 <input type="checkbox" id="termsCheckbox" class="terms-checkbox">
                 <label for="termsCheckbox" class="terms-checkbox-label">
                     I have read, understand, and agree to the <span class="terms-link" id="viewTermsLink">Terms of Service</span> (last updated: ${LAST_UPDATED_DATE}). 
-                    By proceeding, I acknowledge that I use IncomeIQ™ at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. 
+                    By proceeding, I acknowledge that I use INEXASLI AI Services at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. 
                     All liability is capped as outlined in the Terms.
                 </label>
             </div>
