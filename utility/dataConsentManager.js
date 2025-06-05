@@ -79,6 +79,17 @@
             color: #666;
             margin-bottom: 15px;
         }
+
+        .terms-link {
+            color: #4a7c59;
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        
+        .terms-link:hover {
+            color: #3d6b4a;
+        }
         
         .data-consent-modal .buttons {
             display: flex;
@@ -315,10 +326,10 @@
         
         // Add content to the modal
         modal.innerHTML = `
-            <h2>Data Storage Consent</h2>
-            <p>This website stores data locally in your browser to provide essential functionality and improve your experience. This includes saving your preferences, calculations, and settings.</p>
-            <p>No personal data is sent to or stored on our servers. All data remains on your device only.</p>
-            <p>By clicking "Accept", you consent to the storage of this data in your browser's local storage. If you decline, you will not be able to use this website.</p>
+            <h2>Data Processing Consent</h2>
+            <p>This website processes your input data through secure third-party AI services and payment processors to provide functionality. Your data is transmitted via encrypted connections and stored locally in your browser.</p>
+            <p>Complete details are in our <span class="terms-link" id="viewTermsFromConsent">Terms of Service</span>. INEXASLI disclaims liability for AI-generated recommendations.</p>
+            <p>By clicking "Accept", you consent to this data processing. Declining will prevent website functionality.</p>
             <div class="buttons">
                 <button class="consent-action-btn accept-btn">
                     <i class="bx bx-check" style="margin-right: 8px; font-size: 14px;"></i>Accept
@@ -407,6 +418,21 @@
             // Redirect to a neutral site or just close the window
             window.location.href = 'https://www.google.com';
         });
+
+        // Add event listener for terms link
+        const viewTermsLink = document.getElementById('viewTermsFromConsent');
+        if (viewTermsLink) {
+            viewTermsLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Use modal.js to show the terms
+                if (typeof window.openModal === 'function') {
+                    window.openModal('/legal.txt');
+                } else {
+                    // Fallback - open in new tab
+                    window.open('/legal.txt', '_blank');
+                }
+            });
+        }
         
         // Specifically target and disable tabbed navigation
         setTimeout(() => {
