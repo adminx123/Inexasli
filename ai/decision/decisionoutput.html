@@ -198,14 +198,7 @@
 
         // Add raw data toggle
         const rawDataToggle = document.createElement('div');
-        rawDataToggle.className = 'raw-data-toggle';
-        rawDataToggle.innerHTML = `
-          <button onclick="toggleRawData('${containerId}')">Show/Hide Raw Data</button>
-          <div id="raw-data-${containerId}" class="raw-data" style="display: none;">
-            <pre>${JSON.stringify(data, null, 2)}</pre>
-          </div>
-        `;
-        container.appendChild(rawDataToggle);
+
       };
 
       // Decision Tree Visualization using Mermaid
@@ -696,13 +689,6 @@
         });
       };
 
-      // Toggle raw data function
-      window.toggleRawData = (containerId) => {
-        const rawDataDiv = document.getElementById(`raw-data-${containerId}`);
-        if (rawDataDiv) {
-          rawDataDiv.style.display = rawDataDiv.style.display === 'none' ? 'block' : 'none';
-        }
-      };
       
       // Reference the global utility functions
       const getLocal = window.getLocal || function(key) {
@@ -1293,37 +1279,6 @@
       background-color: white;
       border-radius: 4px;
       font-size: 14px;
-    }
-
-    /* Raw Data Toggle */
-    .raw-data-toggle {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid #ddd;
-    }
-
-    .raw-data-toggle button {
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .raw-data-toggle button:hover {
-      background-color: #5a6268;
-    }
-
-    .raw-data {
-      margin-top: 15px;
-      padding: 15px;
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      overflow-x: auto;
     }
     
     /* Card animation setup */
