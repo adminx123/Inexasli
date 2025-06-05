@@ -649,34 +649,26 @@ function extractVisibleContent(container) {
  * @param {Function} getContentCallback - Optional callback to get specific formatted content
  */
 function generatePDF(containerId, getContentCallback) {
-    console.log('🎯 Starting PDF generation with visual capture');
-    const progressToast = window.enhancedUI.showToast('📄 Preparing visual PDF...', 'info', 15000);
+    console.log('🎯 Starting PDF generation - targeting device-container');
+    const progressToast = window.enhancedUI.showToast('📄 Generating PDF...', 'info', 15000);
     
-    // Validate container exists first
-    const containerEl = document.getElementById(containerId);
-    if (!containerEl) {
+    // Always target the device-container instead of the passed containerId
+    const deviceContainer = document.querySelector('.device-container');
+    if (!deviceContainer) {
         window.enhancedUI.closeToast(progressToast);
-        window.enhancedUI.showToast('❌ Content container not found. Page may not be loaded.', 'error');
+        window.enhancedUI.showToast('❌ Device container not found.', 'error');
         return;
     }
     
-    // Check if content is ready
-    const hasCards = containerEl.querySelectorAll('.enneagram-card').length > 0;
-    const hasContent = containerEl.textContent.trim().length > 100;
-    
-    if (!hasCards && !hasContent) {
-        window.enhancedUI.closeToast(progressToast);
-        window.enhancedUI.showToast('❌ No content to export. Wait for analysis to complete.', 'warning');
-        return;
-    }
+    console.log('📱 Found device-container, generating PDF...');
     
     // Load required libraries
     Promise.all([
         loadLibrary('html2canvas', 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
         loadLibrary('jsPDF', 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
     ]).then(() => {
-        console.log('✅ Libraries loaded, starting visual capture');
-        captureAndCreatePDF(containerId, progressToast);
+        console.log('✅ Libraries loaded, capturing device-container');
+        captureDeviceContainer(deviceContainer, progressToast);
     }).catch(error => {
         console.error('❌ Failed to load libraries:', error);
         window.enhancedUI.closeToast(progressToast);
@@ -720,62 +712,51 @@ function loadLibrary(globalName, scriptUrl) {
 }
 
 /**
- * Capture content and create PDF with visual styling
- * @param {string} containerId - ID of the container element
+ * Capture device container and create PDF - Simple and reliable
+ * @param {HTMLElement} deviceContainer - The device container element
  * @param {string} progressToast - Progress toast ID
  */
-function captureAndCreatePDF(containerId, progressToast) {
-    console.log('📸 Starting visual capture process');
-    
-    const containerEl = document.getElementById(containerId);
-    const { jsPDF } = window.jspdf;
+function captureDeviceContainer(deviceContainer, progressToast) {
+    console.log('📸 Starting device container capture');
     
     // Update progress
     window.enhancedUI.closeToast(progressToast);
-    const captureToast = window.enhancedUI.showToast('📸 Capturing visual content...', 'info', 10000);
+    const captureToast = window.enhancedUI.showToast('📸 Capturing device container...', 'info', 10000);
     
-    // Prepare content for capture
-    prepareContentForCapture(containerEl);
+    // Prepare the device container for capture
+    prepareDeviceContainerForCapture(deviceContainer);
     
     // Wait a moment for any transitions to complete
     setTimeout(() => {
-        console.log('🎯 Executing html2canvas with optimized settings');
+        console.log('🎯 Executing html2canvas on device container');
         
-        html2canvas(containerEl, {
-            scale: 2, // Good quality without being too heavy
+        html2canvas(deviceContainer, {
+            scale: 2, // Good quality
             useCORS: true,
             allowTaint: true,
             backgroundColor: '#ffffff',
-            logging: false, // Reduce console noise
+            logging: false,
             imageTimeout: 15000,
             onclone: function(clonedDoc) {
                 // Clean up the cloned document
-                const clonedContainer = clonedDoc.getElementById(containerId);
+                const clonedContainer = clonedDoc.querySelector('.device-container');
                 if (clonedContainer) {
                     // Remove any unwanted elements
                     const elementsToRemove = clonedContainer.querySelectorAll(
-                        '#copyButtonContainer, #copyButton, .loading, .loading-spinner, script'
+                        '#copyButtonContainer, #copyButton, .loading, .loading-spinner, script, .share-modal-backdrop'
                     );
                     elementsToRemove.forEach(el => el.remove());
-                    
-                    // Ensure cards are visible
-                    const cards = clonedContainer.querySelectorAll('.enneagram-card');
-                    cards.forEach(card => {
-                        card.style.opacity = '1';
-                        card.style.visibility = 'visible';
-                        card.style.display = 'block';
-                    });
                 }
             }
         }).then(canvas => {
-            console.log('✅ Canvas captured successfully');
+            console.log('✅ Device container captured successfully');
             window.enhancedUI.closeToast(captureToast);
             
             // Validate canvas has content
             if (canvas.width === 0 || canvas.height === 0) {
                 console.error('❌ Canvas is empty');
-                window.enhancedUI.showToast('❌ Failed to capture content. Trying text fallback...', 'warning');
-                generateTextFallbackPDF(containerId);
+                window.enhancedUI.showToast('❌ Failed to capture device container. Using text fallback...', 'warning');
+                generateSimpleTextPDF();
                 return;
             }
             
@@ -785,50 +766,39 @@ function captureAndCreatePDF(containerId, progressToast) {
         }).catch(error => {
             console.error('❌ html2canvas failed:', error);
             window.enhancedUI.closeToast(captureToast);
-            window.enhancedUI.showToast('❌ Visual capture failed. Generating text-based PDF...', 'warning');
-            generateTextFallbackPDF(containerId);
+            window.enhancedUI.showToast('❌ Visual capture failed. Using text fallback...', 'warning');
+            generateSimpleTextPDF();
         });
     }, 1000);
 }
 
 /**
- * Prepare content for optimal visual capture
- * @param {HTMLElement} containerEl - Container element
+ * Prepare device container for optimal visual capture
+ * @param {HTMLElement} deviceContainer - Device container element
  */
-function prepareContentForCapture(containerEl) {
-    // Force all enneagram cards to be visible
-    const cards = containerEl.querySelectorAll('.enneagram-card');
-    console.log(`🎯 Preparing ${cards.length} cards for capture`);
+function prepareDeviceContainerForCapture(deviceContainer) {
+    console.log('🎯 Preparing device container for capture');
     
-    cards.forEach((card, index) => {
-        // Force full visibility and remove all animations/transitions
-        card.style.setProperty('opacity', '1', 'important');
-        card.style.setProperty('transform', 'translateY(0)', 'important');
-        card.style.setProperty('visibility', 'visible', 'important');
-        card.style.setProperty('display', 'block', 'important');
-        card.style.setProperty('animation', 'none', 'important');
-        card.style.setProperty('transition', 'none', 'important');
-        card.style.setProperty('animation-delay', '0s', 'important');
-        card.style.setProperty('transition-delay', '0s', 'important');
-        
-        // Also apply to child elements that might have opacity issues
-        const cardElements = card.querySelectorAll('*');
-        cardElements.forEach(el => {
-            // Don't override intentionally hidden elements
-            const computedStyle = window.getComputedStyle(el);
-            if (computedStyle.display !== 'none') {
-                el.style.setProperty('opacity', '1', 'important');
-                el.style.setProperty('animation', 'none', 'important');
-                el.style.setProperty('transition', 'none', 'important');
-            }
-        });
+    // Force all content to be visible and remove animations
+    const allElements = deviceContainer.querySelectorAll('*');
+    allElements.forEach(el => {
+        // Only modify elements that aren't intentionally hidden
+        const computedStyle = window.getComputedStyle(el);
+        if (computedStyle.display !== 'none' && !el.hasAttribute('hidden')) {
+            el.style.setProperty('opacity', '1', 'important');
+            el.style.setProperty('visibility', 'visible', 'important');
+            el.style.setProperty('animation', 'none', 'important');
+            el.style.setProperty('transition', 'none', 'important');
+        }
     });
     
     // Remove any loading indicators
-    const loadingElements = containerEl.querySelectorAll('.loading, .loading-spinner, .loading-text');
+    const loadingElements = deviceContainer.querySelectorAll('.loading, .loading-spinner, .loading-text');
     loadingElements.forEach(el => {
         el.style.display = 'none';
     });
+    
+    console.log('✅ Device container prepared for capture');
 }
 
 /**
@@ -1010,20 +980,20 @@ function createPDFFromCanvas(canvas) {
 
 /**
  * Generate simple text-based PDF as fallback
- * @param {string} containerId - ID of the container element
  */
-function generateTextFallbackPDF(containerId) {
-    console.log('📝 Generating text-based fallback PDF');
+function generateSimpleTextPDF() {
+    console.log('📝 Generating simple text-based fallback PDF');
     
     try {
         const { jsPDF } = window.jspdf;
-        const containerEl = document.getElementById(containerId);
+        const doc = new jsPDF();
         
-        if (!containerEl) {
-            throw new Error('Container not found');
+        // Find device container content
+        const deviceContainer = document.querySelector('.device-container');
+        if (!deviceContainer) {
+            throw new Error('Device container not found');
         }
         
-        const doc = new jsPDF();
         let yPosition = 20;
         const pageHeight = doc.internal.pageSize.height;
         const lineHeight = 6;
@@ -1032,40 +1002,26 @@ function generateTextFallbackPDF(containerId) {
         
         // Add title
         doc.setFontSize(16);
-        doc.text('Enneagram Analysis Report', margin, yPosition);
+        doc.text('Content Export', margin, yPosition);
         yPosition += 15;
         
-        // Extract text content from cards
-        const cards = containerEl.querySelectorAll('.enneagram-card');
-        doc.setFontSize(10);
+        // Extract and add text content
+        const textContent = deviceContainer.textContent || deviceContainer.innerText || '';
+        const cleanText = textContent
+            .replace(/\s+/g, ' ')
+            .replace(/\n\s+/g, '\n')
+            .trim();
         
-        cards.forEach((card, index) => {
+        doc.setFontSize(10);
+        const lines = doc.splitTextToSize(cleanText, maxWidth);
+        
+        lines.forEach(line => {
             if (yPosition > pageHeight - 30) {
                 doc.addPage();
                 yPosition = 20;
             }
-            
-            const cardTitle = card.querySelector('.card-header')?.textContent?.trim() || `Card ${index + 1}`;
-            const cardBody = card.querySelector('.card-body')?.textContent?.trim() || '';
-            
-            // Add card title
-            doc.setFontSize(12);
-            doc.text(cardTitle, margin, yPosition);
-            yPosition += 10;
-            
-            // Add card content
-            doc.setFontSize(10);
-            const lines = doc.splitTextToSize(cardBody, maxWidth);
-            lines.forEach(line => {
-                if (yPosition > pageHeight - 10) {
-                    doc.addPage();
-                    yPosition = 20;
-                }
-                doc.text(line, margin, yPosition);
-                yPosition += lineHeight;
-            });
-            
-            yPosition += 5; // Space between cards
+            doc.text(line, margin, yPosition);
+            yPosition += lineHeight;
         });
         
         // Add footer
@@ -1073,17 +1029,16 @@ function generateTextFallbackPDF(containerId) {
         doc.setTextColor(100, 100, 100);
         doc.text(`Generated by INEXASLI | ${new Date().toLocaleDateString()}`, margin, pageHeight - 10);
         
-        // Save PDF with dynamic filename
+        // Save PDF
         const timestamp = new Date().toISOString().split('T')[0];
-        const { analysisType, title } = getAnalysisTypeFromPage();
-        const filename = `${analysisType}-text-${timestamp}.pdf`;
+        const filename = `content-export-${timestamp}.pdf`;
         doc.save(filename);
         
-        console.log('📄 Text PDF generated successfully');
-        window.enhancedUI.showToast(`📄 Text-based PDF "${filename}" downloaded as fallback`, 'success', 5000);
+        console.log('📄 Simple text PDF generated successfully');
+        window.enhancedUI.showToast(`📄 Text-based PDF "${filename}" downloaded`, 'success', 5000);
         
     } catch (error) {
-        console.error('❌ Failed to generate text PDF:', error);
+        console.error('❌ Failed to generate simple text PDF:', error);
         window.enhancedUI.showToast('❌ Failed to generate PDF. Please try again.', 'error');
     }
 }
