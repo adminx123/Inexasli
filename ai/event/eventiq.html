@@ -113,6 +113,23 @@ Need accommodations for 3 wheelchair users"></textarea>
 (function() {
     console.log("EventIQ script initializing");
 
+    // Initialize FormPersistence for eventiq module
+    const fields = [
+        { id: 'event-types', type: 'grid' },
+        { id: 'event-venue', type: 'dropdown' },
+        { id: 'event-location', type: 'dropdown' },
+        { id: 'event-setup', type: 'grid' },
+        { id: 'event-elements', type: 'grid' },
+        { id: 'event-guests', type: 'input' },
+        { id: 'event-budget', type: 'input' },
+        { id: 'event-start', type: 'input' },
+        { id: 'event-end', type: 'input' },
+        { id: 'event-specific-location', type: 'textarea' },
+        { id: 'event-specific-context', type: 'textarea' }
+    ];
+
+    window.eventFormPersistence = new FormPersistence('eventiq', fields);
+
     // Listen for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
         console.log('[EventIQ] Grid item toggled event received');
@@ -181,6 +198,11 @@ Need accommodations for 3 wheelchair users"></textarea>
     // Initialization
     document.addEventListener('grid-item-toggled', handleGridItemToggled);
     document.getElementById('generate-event-btn').addEventListener('click', handleGenerateEventIq);
+
+    // Guided forms integration
+    if (typeof GuidedForms !== 'undefined' && GuidedForms.eventiq) {
+        new GuidedForms.eventiq();
+    }
 })();
 </script>
     </div>

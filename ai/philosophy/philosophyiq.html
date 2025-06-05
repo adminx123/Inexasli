@@ -32,76 +32,90 @@ Accepting things I cannot change"></textarea>
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 */
+
   (function() {
-    console.log("Philosophy IQ script initializing");
+    console.log("PhilosophyIQ script initializing");
+
+    // Initialize FormPersistence for philosophyiq module
+    const fields = [
+        { id: 'philosophy-question', type: 'textarea' }
+    ];
+
+    window.philosophyFormPersistence = new FormPersistence('philosophyiq', fields);
+
+    // Listen for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[PhilosophyIQ] Grid item toggled event received');
+        // UI behavior only - persistence handled centrally
+    }
 
     // Handle the generate button click
     async function handleGeneratePhilosophyIq() {
-      console.log('[PhilosophyIQ] Generate button clicked.');
-      
-      try {
-        const formData = window.philosophyFormPersistence.getSavedFormData();
-        if (!formData || !formData.question) {
-          console.error('[PhilosophyIQ] No question found in input data.');
-          alert('Please enter what you\'re seeking wisdom on before proceeding.');
-          return;
-        }
+        console.log('[PhilosophyIQ] Generate button clicked.');
         
-        // Use enhanced loading with educational facts
         const result = await window.enhancedLoading(
-          'generate-philosophy-btn',
-          'philosophy',
-          async () => {
-            // Send data to worker
-            const apiUrl = 'https://philosophy.4hm7q4q75z.workers.dev/'; 
-            
-            console.log('[PhilosophyIQ] Sending philosophyIqInput to worker');
-            const response = await fetch(apiUrl, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Inexasli-Api-Key': 'your-api-key' // Replace with actual API key mechanism
-              },
-              body: JSON.stringify(formData)
-            });
-            
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
+            'generate-philosophy-btn',
+            'philosophy',
+            async () => {
+                const formData = window.philosophyFormPersistence.getSavedFormData();
+                if (!formData) {
+                    console.error('[PhilosophyIQ] No input data found in localStorage.');
+                    throw new Error('Please enter what you\'re seeking wisdom on before proceeding.');
+                }
+                
+                // Send data to worker
+                const apiUrl = 'https://philosophy.4hm7q4q75z.workers.dev/';
+                
+                console.log('[PhilosophyIQ] Sending philosophyIqInput to worker');
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const responseData = await response.json();
+                console.log('[PhilosophyIQ] Worker response:', responseData);
+                
+                if (responseData.message !== 'Success') {
+                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                }
+                
+                // Store the response
+                window.philosophyFormPersistence.saveResponseData(responseData);
+                
+                // Dispatch an event to notify dataout.js that a response was received
+                const event = new CustomEvent('api-response-received', {
+                    detail: {
+                        module: 'philosophyiq',
+                        type: 'worker-response',
+                        timestamp: Date.now()
+                    }
+                });
+                document.dispatchEvent(event);
+                console.log('[PhilosophyIQ] Dispatched api-response-received event');
+                
+                return responseData;
             }
-            
-            const responseData = await response.json();
-            console.log('[PhilosophyIQ] Worker response:', responseData);
-            
-            if (responseData.message !== 'Success') {
-              throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-            
-            return responseData;
-          }
         );
         
-        // Store the response using centralized system
-        window.philosophyFormPersistence.saveResponseData(result);
-        
-        // Dispatch an event to notify dataout.js that a response was received
-        const event = new CustomEvent('api-response-received', {
-          detail: {
-            module: 'philosophyiq',
-            type: 'worker-response',
-            timestamp: Date.now()
-          }
-        });
-        document.dispatchEvent(event);
-        console.log('[PhilosophyIQ] Dispatched api-response-received event');
-        
-      } catch (error) {
-        console.error('[PhilosophyIQ] Error generating philosophical response:', error);
-        alert('An error occurred while seeking philosophical wisdom. Please try again later.');
-      }
+        // Enhanced loading either returns result or throws error - no need to check result.success
+        console.log('[PhilosophyIQ] Philosophical wisdom generated successfully');
     }
 
     // Initialization
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
     document.getElementById('generate-philosophy-btn').addEventListener('click', handleGeneratePhilosophyIq);
+
+    // Guided forms integration
+    if (typeof GuidedForms !== 'undefined' && GuidedForms.philosophyiq) {
+        new GuidedForms.philosophyiq();
+    }
   })();
   </script>
 </div> <!-- Close mobile-container -->

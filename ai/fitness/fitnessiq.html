@@ -67,75 +67,96 @@ Lower back strain"></textarea>
 */
 
 (function() {
-    console.log("Fitness IQ script initializing");
+    console.log("FitnessIQ script initializing");
 
-    // Replace all window.FormPersistence calls with per-module instance
-    const formPersistence = window.fitnessFormPersistence || window['fitnessFormPersistence'] || (window.fitnessFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
-    // If not found, fallback to getInstance
-    const instance = formPersistence || (window.fitnessFormPersistence = (window.FormPersistence ? window.FormPersistence : null));
+    // Initialize FormPersistence for fitnessiq module
+    const fields = [
+        { id: 'fitness-goal', type: 'grid' },
+        { id: 'fitness-frequency', type: 'input' },
+        { id: 'fitness-duration', type: 'input' },
+        { id: 'fitness-age', type: 'input' },
+        { id: 'fitness-height', type: 'input' },
+        { id: 'fitness-weight', type: 'input' },
+        { id: 'fitness-level', type: 'grid' },
+        { id: 'fitness-home-exercises', type: 'grid' },
+        { id: 'fitness-injuries', type: 'textarea' }
+    ];
+
+    window.fitnessFormPersistence = new FormPersistence('fitnessiq', fields);
+
+    // Listen for grid-item-toggled event from datain.js
+    function handleGridItemToggled(event) {
+        console.log('[FitnessIQ] Grid item toggled event received');
+        // UI behavior only - persistence handled centrally
+    }
 
     // Handle the generate button click
     async function handleGenerateFitnessIq() {
-        try {
-            const formData = window.fitnessFormPersistence.getSavedFormData();
-            if (!formData) {
-                alert('Please complete the form before generating a fitness plan.');
-                return;
+        console.log('[FitnessIQ] Generate button clicked.');
+        
+        const result = await window.enhancedLoading(
+            'generate-fitness-btn',
+            'fitness',
+            async () => {
+                const formData = window.fitnessFormPersistence.getSavedFormData();
+                if (!formData) {
+                    console.error('[FitnessIQ] No input data found in localStorage.');
+                    throw new Error('Please complete the form before generating a fitness plan.');
+                }
+                
+                // Send data to worker
+                const apiUrl = 'https://fitness.4hm7q4q75z.workers.dev/';
+                
+                console.log('[FitnessIQ] Sending fitnessIqInput to worker');
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const responseData = await response.json();
+                console.log('[FitnessIQ] Worker response:', responseData);
+                
+                if (responseData.message !== 'Success') {
+                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                }
+                
+                // Store the response
+                window.fitnessFormPersistence.saveResponseData(responseData);
+                
+                // Dispatch an event to notify dataout.js that a response was received
+                const event = new CustomEvent('api-response-received', {
+                    detail: {
+                        module: 'fitnessiq',
+                        type: 'worker-response',
+                        timestamp: Date.now()
+                    }
+                });
+                document.dispatchEvent(event);
+                console.log('[FitnessIQ] Dispatched api-response-received event');
+                
+                return responseData;
             }
-
-            // Use enhanced loading with educational facts
-            const result = await window.enhancedLoading(
-                'generate-fitness-btn',
-                'fitness',
-                async () => {
-                    const apiUrl = 'https://fitness.4hm7q4q75z.workers.dev/';
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    
-                    const responseData = await response.json();
-                    if (responseData.message !== 'Success') {
-                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                    }
-                    
-                    return responseData;
-                }
-            );
-
-            // Store the response using centralized system
-            window.fitnessFormPersistence.saveResponseData(result);
-            
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'fitnessiq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
-                }
-            });
-            document.dispatchEvent(event);
-            console.log('[FitnessIQ] Dispatched api-response-received event');
-            
-        } catch (error) {
-            console.error('[FitnessIQ] Error generating fitness plan:', error);
-            alert('An error occurred while generating your fitness plan. Please try again later.');
-        }
+        );
+        
+        // Enhanced loading either returns result or throws error - no need to check result.success
+        console.log('[FitnessIQ] Fitness plan generated successfully');
     }
 
     // Initialization
+    document.addEventListener('grid-item-toggled', handleGridItemToggled);
     document.getElementById('generate-fitness-btn').addEventListener('click', handleGenerateFitnessIq);
 
+    // Guided forms integration
+    if (typeof GuidedForms !== 'undefined' && GuidedForms.fitnessiq) {
+        new GuidedForms.fitnessiq();
+    }
 })();
-</script>
-
-
 </script>
 </div> <!-- Close mobile-container -->
