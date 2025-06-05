@@ -96,7 +96,7 @@ HubSpot Enterprise Solution"></textarea>
         </div>
         <div class="row1">
             <label class="category-label">Specific Considerations</label>
-            <textarea id="decision-instructions" rows="5" placeholder="Specific considerations: important details for decision
+            <textarea id="decision-instructions" rows="6" placeholder="Specific considerations: important details for decision
 Solution must support team of 250+ employees worldwide
 Need GDPR and HIPAA compliance for all data handling
 Budget constraints require financing options over 36 months
@@ -121,13 +121,127 @@ Need multilingual support for global offices"></textarea>
 (function() {
   console.log("Decision IQ script initializing");
 
-  // Initialize form persistence when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeDecisionIQ);
-  } else {
-    initializeDecisionIQ();
+  // Generate button handler - CRITICAL MISSING FUNCTIONALITY
+  async function handleGenerateDecisionIq() {
+    try {
+      const formData = window.decisionFormPersistence.getSavedFormData();
+      if (!formData) { 
+        alert('Please complete the form before generating a decision analysis.'); 
+        return;
+      }
+
+      // Use enhanced loading with educational facts
+      const result = await window.enhancedLoading(
+        'generate-decision-btn',
+        'decision',
+        async () => {
+          const apiUrl = 'https://decision.4hm7q4q75z.workers.dev/';
+          const response = await fetch(apiUrl, { 
+            method: 'POST', 
+            headers: {'Content-Type':'application/json'}, 
+            body: JSON.stringify(formData) 
+          });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          
+          const responseData = await response.json();
+          if (responseData.message !== 'Success') {
+            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+          }
+          
+          return responseData;
+        }
+      );
+
+      // Store the response using centralized system
+      window.decisionFormPersistence.saveResponseData(result);
+      
+      // Dispatch an event to notify dataout.js that a response was received
+      const event = new CustomEvent('api-response-received', {
+        detail: {
+          module: 'decisioniq',
+          type: 'worker-response',
+          timestamp: Date.now()
+        }
+      });
+      document.dispatchEvent(event);
+      console.log('[DecisionIQ] Dispatched api-response-received event');
+      
+    } catch (error) {
+      console.error('[DecisionIQ] Error generating decision analysis:', error);
+      alert('An error occurred while generating your decision analysis. Please try again later.');
+    }
   }
 
+  // Simple initialization - set up event listeners
+  function initialize() {
+    console.log("[DecisionIQ] Initializing...");
+    
+    // Set up generate button event listener - CRITICAL MISSING FUNCTIONALITY
+    const generateBtn = document.getElementById('generate-decision-btn');
+    if (generateBtn) {
+      generateBtn.removeEventListener('click', handleGenerateDecisionIq);
+      generateBtn.addEventListener('click', handleGenerateDecisionIq);
+      console.log("[DecisionIQ] Generate button event listener set up");
+    } else {
+      console.error("[DecisionIQ] Generate button not found!");
+    }
+    
+    // Set up guided forms toggle button
+    const guidedToggleBtn = document.getElementById('guided-forms-toggle');
+    if (guidedToggleBtn) {
+      guidedToggleBtn.removeEventListener('click', toggleGuidedForms);
+      guidedToggleBtn.addEventListener('click', toggleGuidedForms);
+    }
+  }
+
+  // Toggle guided forms functionality
+  let guidedFormsInstance = null;
+  
+  function toggleGuidedForms() {
+    console.log('[DecisionIQ] Toggling guided forms');
+    const toggleBtn = document.getElementById('guided-forms-toggle');
+    
+    if (guidedFormsInstance) {
+      // Disable guided forms
+      guidedFormsInstance.destroy();
+      guidedFormsInstance = null;
+      toggleBtn.textContent = '🚀 Enable Guided Form';
+      toggleBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      console.log('[DecisionIQ] Guided forms disabled');
+    } else {
+      // Enable guided forms
+      if (window.GuidedFormSystem) {
+        guidedFormsInstance = new window.GuidedFormSystem({
+          autoAdvance: true,
+          showProgressIndicator: true,
+          smoothTransitions: true,
+          transitionDuration: 300,
+          autoAdvanceDelay: 800,
+          enableSkipping: true
+        });
+        
+        guidedFormsInstance.init('device-container');
+        
+        toggleBtn.textContent = '⏹️ Disable Guided Form';
+        toggleBtn.style.background = 'linear-gradient(135deg, #ea667e 0%, #a24b76 100%)';
+        console.log('[DecisionIQ] Guided forms enabled');
+      } else {
+        console.error('[DecisionIQ] GuidedFormSystem not available');
+        alert('Guided forms system is not loaded. Please refresh the page.');
+      }
+    }
+  }
+
+  // Initialize with multiple triggers to ensure reliability
+  function runInitialization() {
+    // Use a small delay to ensure DOM is ready
+    setTimeout(initialize, 50);
+  }
+
+  // Initialize form persistence when DOM is ready
   function initializeDecisionIQ() {
     console.log("Decision IQ DOM ready, initializing form persistence");
     
@@ -146,10 +260,41 @@ Need multilingual support for global offices"></textarea>
       });
       
       console.log("Decision IQ form persistence initialized");
+      
+      // Initialize the rest of the functionality after form persistence is set up
+      runInitialization();
     }).catch(error => {
       console.error("Failed to initialize Decision IQ form persistence:", error);
     });
   }
+
+  // Initialize immediately if DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeDecisionIQ);
+  } else {
+    initializeDecisionIQ();
+  }
+
+  // Handle loading through datain.js
+  document.addEventListener('data-in-loaded', function(e) {
+    console.log("[DecisionIQ] Detected load through datain.js, reinitializing");
+    runInitialization();
+  });
+
+  // Additional safety net - try again after a short delay
+  setTimeout(() => {
+    const generateBtn = document.getElementById('generate-decision-btn');
+    if (generateBtn && !generateBtn.onclick) {
+      console.log("[DecisionIQ] Generate button found but no handler, trying initialization again");
+      initialize();
+    }
+  }, 200);
+  
+  // Export functions for external access
+  window.decisionIq = { 
+    getFormData: () => window.decisionFormPersistence.getSavedFormData(),
+    saveFormData: () => window.decisionFormPersistence.saveFormData()
+  };
 
 })();
 </script>
