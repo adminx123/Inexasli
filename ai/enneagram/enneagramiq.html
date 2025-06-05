@@ -1,10 +1,7 @@
 <!--
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
- * Unauthorized u    // Initialization
-    document.addEventListener('grid-item-toggled', handleGridItemToggled);
-    document.getElementById('generate-enneagram-btn').addEventListener('click', handleGenerateEnneagramIq);
-})();eproduction, distribution, or modification of this code 
+ * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
@@ -99,63 +96,196 @@ I often took charge of group projects at school"></textarea>
         </div>
   
 
+
 <script>
-(function(){
-    // Listen for grid-item-toggled event from datain.js
-    function handleGridItemToggled(event) {
-        console.log('[EnneagramIQ] Grid item toggled event received');
-        // UI behavior only - persistence handled centrally
-    }
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
 
-    async function generateEnneagram(){
-        console.log('[EnneagramIQ] Generate button clicked.');
-        
-        const result = await window.enhancedLoading(
-            'generate-enneagram-btn',
-            'enneagram',
-            async () => {
-                const formData = window.enneagramFormPersistence.getSavedFormData();
-                if (!formData) {
-                    throw new Error('Please complete the form before generating.');
-                }
-                
-                const apiUrl = 'https://enneagram.4hm7q4q75z.workers.dev/';
-                const res = await fetch(apiUrl, { 
-                    method: 'POST', 
-                    headers: {'Content-Type':'application/json'}, 
-                    body: JSON.stringify(formData) 
-                });
-                
-                if (!res.ok) {
-                    throw new Error(`HTTP error! Status: ${res.status}`);
-                }
-                
-                const data = await res.json();
-                
-                // Validate response format like other modules
-                if (data.message && data.message !== 'Success') {
-                    throw new Error(`An error occurred: ${data.message || data.error || ''}`);
-                }
-                
-                window.enneagramFormPersistence.saveResponseData(data);
-                
-                document.dispatchEvent(new CustomEvent('api-response-received', { 
-                    detail: { module: 'enneagramiq', type: 'worker-response', timestamp: Date.now() } 
-                }));
-                
-                return data;
-            }
-        );
-        
-        // Enhanced loading either returns result or throws error - no need to check result.success
-        console.log('[EnneagramIQ] Analysis generated successfully');
-    }
+(function() {
+  console.log("Enneagram IQ script initializing");
 
-    // Initialization
-    document.addEventListener('grid-item-toggled', handleGridItemToggled);
-    document.getElementById('generate-enneagram-btn').addEventListener('click',generateEnneagram);
+  // Generate button handler - IMPLEMENTING COMPLETE CALORIEIQ ARCHITECTURE
+  async function handleGenerateEnneagramIq() {
+    try {
+      const formData = window.enneagramFormPersistence.getSavedFormData();
+      if (!formData) { 
+        alert('Please complete the form before generating an enneagram analysis.'); 
+        return;
+      }
+
+      // Use enhanced loading with educational facts
+      const result = await window.enhancedLoading(
+        'generate-enneagram-btn',
+        'enneagram',
+        async () => {
+          const apiUrl = 'https://enneagram.4hm7q4q75z.workers.dev/';
+          const response = await fetch(apiUrl, { 
+            method: 'POST', 
+            headers: {'Content-Type':'application/json'}, 
+            body: JSON.stringify(formData) 
+          });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          
+          const responseData = await response.json();
+          if (responseData.message !== 'Success') {
+            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+          }
+          
+          return responseData;
+        }
+      );
+
+      // Store the response using centralized system
+      window.enneagramFormPersistence.saveResponseData(result);
+      
+      // Dispatch an event to notify dataout.js that a response was received
+      const event = new CustomEvent('api-response-received', {
+        detail: {
+          module: 'enneagramiq',
+          type: 'worker-response',
+          timestamp: Date.now()
+        }
+      });
+      document.dispatchEvent(event);
+      console.log('[EnneagramIQ] Dispatched api-response-received event');
+      
+    } catch (error) {
+      console.error('[EnneagramIQ] Error generating enneagram analysis:', error);
+      alert('An error occurred while generating your enneagram analysis. Please try again later.');
+    }
+  }
+
+  // Simple initialization - set up event listeners
+  function initialize() {
+    console.log("[EnneagramIQ] Initializing...");
+    
+    // Set up generate button event listener - CRITICAL FUNCTIONALITY FROM CALORIEIQ TEMPLATE
+    const generateBtn = document.getElementById('generate-enneagram-btn');
+    if (generateBtn) {
+      generateBtn.removeEventListener('click', handleGenerateEnneagramIq);
+      generateBtn.addEventListener('click', handleGenerateEnneagramIq);
+      console.log("[EnneagramIQ] Generate button event listener set up");
+    } else {
+      console.error("[EnneagramIQ] Generate button not found!");
+    }
+    
+    // Set up guided forms toggle button
+    const guidedToggleBtn = document.getElementById('guided-forms-toggle');
+    if (guidedToggleBtn) {
+      guidedToggleBtn.removeEventListener('click', toggleGuidedForms);
+      guidedToggleBtn.addEventListener('click', toggleGuidedForms);
+    }
+  }
+
+  // Toggle guided forms functionality
+  let guidedFormsInstance = null;
+  
+  function toggleGuidedForms() {
+    console.log('[EnneagramIQ] Toggling guided forms');
+    const toggleBtn = document.getElementById('guided-forms-toggle');
+    
+    if (guidedFormsInstance) {
+      // Disable guided forms
+      guidedFormsInstance.destroy();
+      guidedFormsInstance = null;
+      toggleBtn.textContent = '🚀 Enable Guided Form';
+      toggleBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      console.log('[EnneagramIQ] Guided forms disabled');
+    } else {
+      // Enable guided forms
+      if (window.GuidedFormSystem) {
+        guidedFormsInstance = new window.GuidedFormSystem({
+          autoAdvance: true,
+          showProgressIndicator: true,
+          smoothTransitions: true,
+          transitionDuration: 300,
+          autoAdvanceDelay: 800,
+          enableSkipping: true
+        });
+        
+        guidedFormsInstance.init('device-container');
+        
+        toggleBtn.textContent = '⏹️ Disable Guided Form';
+        toggleBtn.style.background = 'linear-gradient(135deg, #ea667e 0%, #a24b76 100%)';
+        console.log('[EnneagramIQ] Guided forms enabled');
+      } else {
+        console.error('[EnneagramIQ] GuidedFormSystem not available');
+        alert('Guided forms system is not loaded. Please refresh the page.');
+      }
+    }
+  }
+
+  // Initialize with multiple triggers to ensure reliability
+  function runInitialization() {
+    // Use a small delay to ensure DOM is ready
+    setTimeout(initialize, 50);
+  }
+
+  // Initialize form persistence when DOM is ready
+  function initializeEnneagramIQ() {
+    console.log("Enneagram IQ DOM ready, initializing form persistence");
+    
+    // Import and initialize form persistence
+    import('../../utility/formPersistence.js').then(module => {
+      const FormPersistence = module.FormPersistence;
+      const persistence = FormPersistence.getInstance('enneagram', {
+        singleSelection: [], // No single selection containers in enneagram
+        multiSelection: ['enneagram-traits', 'enneagram-behaviors'] // Multi selection containers
+      });
+      
+      persistence.init({
+        moduleName: 'enneagram',
+        singleSelection: [],
+        multiSelection: ['enneagram-traits', 'enneagram-behaviors']
+      });
+      
+      console.log("Enneagram IQ form persistence initialized");
+      
+      // Initialize the rest of the functionality after form persistence is set up
+      runInitialization();
+    }).catch(error => {
+      console.error("Failed to initialize Enneagram IQ form persistence:", error);
+    });
+  }
+
+  // Initialize immediately if DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeEnneagramIQ);
+  } else {
+    initializeEnneagramIQ();
+  }
+
+  // Handle loading through datain.js
+  document.addEventListener('data-in-loaded', function(e) {
+    console.log("[EnneagramIQ] Detected load through datain.js, reinitializing");
+    runInitialization();
+  });
+
+  // Additional safety net - try again after a short delay
+  setTimeout(() => {
+    const generateBtn = document.getElementById('generate-enneagram-btn');
+    if (generateBtn && !generateBtn.onclick) {
+      console.log("[EnneagramIQ] Generate button found but no handler, trying initialization again");
+      initialize();
+    }
+  }, 200);
+  
+  // Export functions for external access
+  window.enneagramIq = { 
+    getFormData: () => window.enneagramFormPersistence.getSavedFormData(),
+    saveFormData: () => window.enneagramFormPersistence.saveFormData()
+  };
+
 })();
 </script>
-</div> <!-- Close mobile-container -->
-</body>
-</html>
+    </div>
