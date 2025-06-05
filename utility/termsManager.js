@@ -43,6 +43,17 @@
             z-index: 99998;
             font-family: "Inter", sans-serif;
         }
+
+        /* Security: Disable pointer events on everything when modal is active */
+        body.terms-modal-active * {
+            pointer-events: none !important;
+        }
+
+        /* Re-enable pointer events only for the terms modal */
+        body.terms-modal-active .terms-overlay,
+        body.terms-modal-active .terms-overlay * {
+            pointer-events: auto !important;
+        }
         
         .terms-container {
             background-color: #f2f9f3;
@@ -219,6 +230,114 @@
         }
     }
 
+    // Freeze page interactions to prevent bypass (same security as dataConsentManager)
+    function freezePage() {
+        // Add class to disable pointer events on everything except the modal
+        document.body.classList.add('terms-modal-active');
+        
+        // Block all events that could allow interaction
+        const events = [
+            'click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mouseout', 'mousemove',
+            'touchstart', 'touchend', 'touchmove', 'touchcancel',
+            'keydown', 'keyup', 'keypress',
+            'scroll', 'wheel', 'resize',
+            'focus', 'blur', 'change', 'input', 'submit',
+            'contextmenu', 'selectstart', 'dragstart', 'drop'
+        ];
+        
+        events.forEach(eventType => {
+            document.addEventListener(eventType, blockEvent, { capture: true, passive: false });
+        });
+        
+        // Prevent navigation
+        window.addEventListener('beforeunload', preventNavigation, { capture: true });
+        window.addEventListener('unload', preventNavigation, { capture: true });
+        
+        // Trap tab focus within modal
+        document.addEventListener('keydown', trapTabFocus, { capture: true });
+    }
+
+    // Unfreeze page interactions
+    function unfreezePage() {
+        // Remove the blocking class
+        document.body.classList.remove('terms-modal-active');
+        
+        // Remove all event listeners
+        const events = [
+            'click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mouseout', 'mousemove',
+            'touchstart', 'touchend', 'touchmove', 'touchcancel',
+            'keydown', 'keyup', 'keypress',
+            'scroll', 'wheel', 'resize',
+            'focus', 'blur', 'change', 'input', 'submit',
+            'contextmenu', 'selectstart', 'dragstart', 'drop'
+        ];
+        
+        events.forEach(eventType => {
+            document.removeEventListener(eventType, blockEvent, { capture: true });
+        });
+        
+        window.removeEventListener('beforeunload', preventNavigation, { capture: true });
+        window.removeEventListener('unload', preventNavigation, { capture: true });
+        document.removeEventListener('keydown', trapTabFocus, { capture: true });
+    }
+
+    // Block events that could allow interaction outside the modal
+    function blockEvent(event) {
+        const termsOverlay = document.getElementById('termsOverlay');
+        if (!termsOverlay || !termsOverlay.contains(event.target)) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            return false;
+        }
+    }
+
+    // Prevent navigation away from page
+    function preventNavigation(event) {
+        event.preventDefault();
+        event.returnValue = '';
+        return '';
+    }
+
+    // Trap tab focus within the modal
+    function trapTabFocus(event) {
+        if (event.key === 'Tab') {
+            const termsOverlay = document.getElementById('termsOverlay');
+            if (!termsOverlay) return;
+            
+            const focusableElements = termsOverlay.querySelectorAll(
+                'button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+            );
+            
+            if (focusableElements.length === 0) {
+                event.preventDefault();
+                return;
+            }
+            
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            
+            if (event.shiftKey) {
+                if (document.activeElement === firstElement) {
+                    event.preventDefault();
+                    lastElement.focus();
+                }
+            } else {
+                if (document.activeElement === lastElement) {
+                    event.preventDefault();
+                    firstElement.focus();
+                }
+            }
+        }
+        
+        // Block escape key to prevent bypass
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+    }
+
     // Show the terms modal using modal.js
     function showFullTerms() {
         if (typeof window.openModal === 'function') {
@@ -227,10 +346,17 @@
             if (termsOverlay) {
                 termsOverlay.style.display = 'none';
                 
+                // Temporarily unfreeze the page for the legal modal
+                unfreezePage();
+                
                 // Set up a one-time listener for when the modal closes
                 const handleModalClosed = () => {
                     // Show the terms manager modal again
                     termsOverlay.style.display = 'flex';
+                    
+                    // Refreeze the page
+                    freezePage();
+                    
                     // Remove the event listener
                     document.removeEventListener('modalClosed', handleModalClosed);
                 };
@@ -250,6 +376,9 @@
 
     // Create and show the terms acceptance dialog
     function showTermsDialog() {
+        // Freeze the page to prevent bypass (same security as dataConsentManager)
+        freezePage();
+        
         // Create container
         const overlay = document.createElement('div');
         overlay.className = 'terms-overlay';
@@ -328,8 +457,8 @@
             });
         }
 
-        // Add event listeners for modal
-        addTermsEventListeners(overlay);
+        // NO EVENT LISTENERS FOR ESCAPE KEY OR OUTSIDE CLICKS - PREVENTS BYPASS
+        // Modal can only be closed by accepting terms or leaving site
     }
 
     // Add hover effects to buttons like dataOverwrite.js
@@ -370,41 +499,12 @@
         });
     }
 
-    // Add event listeners for the terms modal
-    function addTermsEventListeners(modal) {
-        // Close modal on Escape key
-        function handleKeyDown(event) {
-            if (event.key === 'Escape') {
-                closeTermsModal();
-            }
-        }
-
-        // Close modal when clicking outside
-        function handleClickOutside(event) {
-            if (event.target === modal) {
-                closeTermsModal();
-            }
-        }
-
-        document.addEventListener('keydown', handleKeyDown);
-        document.addEventListener('click', handleClickOutside);
-
-        // Store references for cleanup
-        modal._keyDownHandler = handleKeyDown;
-        modal._clickOutsideHandler = handleClickOutside;
-    }
-
     // Close the terms modal
     function closeTermsModal() {
         const modal = document.querySelector('.terms-overlay');
         if (modal) {
-            // Remove event listeners
-            if (modal._keyDownHandler) {
-                document.removeEventListener('keydown', modal._keyDownHandler);
-            }
-            if (modal._clickOutsideHandler) {
-                document.removeEventListener('click', modal._clickOutsideHandler);
-            }
+            // Unfreeze the page (remove security blocks)
+            unfreezePage();
 
             // Hide modal
             modal.style.display = 'none';
