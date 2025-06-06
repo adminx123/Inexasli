@@ -121,7 +121,8 @@ Should I apologize first"></textarea>
         { id: 'incident-mood', type: 'grid' }
     ];
 
-    window.socialFormPersistence = new FormPersistence('socialiq', fields);
+    // FormPersistence will be initialized by datain.js as window.socialFormPersistence
+    // No need to create a new instance here
 
     // Listen for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
