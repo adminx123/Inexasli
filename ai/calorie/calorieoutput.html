@@ -422,13 +422,13 @@
           <div style="margin: 0; font-size: 14px; line-height: 1.5;">
             Below you'll see three levels of detail:
             <div style="margin-top: 8px;">
-              <strong>①&nbsp;daily nutrition summary</strong>
+              <strong><i class="fas fa-chart-pie" style="margin-right: 6px; color: #f5f5dc;"></i>daily nutrition summary</strong>
             </div>
             <div>
-              <strong>②&nbsp;meal breakdowns with individual food contributions</strong>
+              <strong><i class="fas fa-utensils" style="margin-right: 6px; color: #f5f5dc;"></i>meal breakdowns with individual food contributions</strong>
             </div>
             <div>
-              <strong>③&nbsp;personalized recommendations</strong> with AI assumptions clearly documented
+              <strong><i class="fas fa-bullseye" style="margin-right: 6px; color: #f5f5dc;"></i>personalized recommendations</strong> with AI assumptions clearly documented
             </div>
           </div>
         </div>
@@ -447,7 +447,7 @@
       // Daily Totals Section (New enhanced section)
       if (calorieData.dailyTotals && Array.isArray(calorieData.dailyTotals)) {
         const dailySection = document.createElement('div');
-        dailySection.innerHTML = '<h3 style="color: #333; margin: 20px 0 15px 0; display: flex; align-items: center;">            <span style="background: #7a9b8a; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 14px; font-weight: bold;">1</span><i class="fas fa-chart-pie" style="margin-right: 10px;"></i>Daily Nutrition Summary</h3>';
+        dailySection.innerHTML = '<h3 style="color: #333; margin: 20px 0 15px 0; display: flex; align-items: center;"><i class="fas fa-chart-pie" style="margin-right: 10px; color: #7a9b8a;"></i>Daily Nutrition Summary</h3>';
         
         const nutrientsGrid = document.createElement('div');
         nutrientsGrid.className = 'nutrients-grid';
@@ -482,7 +482,7 @@
       // Meal Breakdown Section (Enhanced with integrated individual foods)
       if (calorieData.mealTotals && Array.isArray(calorieData.mealTotals)) {
         const mealSection = document.createElement('div');
-        mealSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><span style="background: #7a9b8a; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 14px; font-weight: bold;">2</span><i class="fas fa-utensils" style="margin-right: 10px;"></i>Meal Breakdown & Individual Foods</h3>';
+        mealSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><i class="fas fa-utensils" style="margin-right: 10px; color: #7a9b8a;"></i>Meal Breakdown &amp; Individual Foods</h3>';
         mealSection.innerHTML += '<p style="color: #666; font-size: 14px; margin-bottom: 20px;">Nutritional breakdown by meal with individual food contributions shown directly below each meal:</p>';
         
         // Group individual foods by meal type for integration
@@ -594,7 +594,7 @@
       // Recommendations Section (Enhanced)
       const recommendationsSection = document.createElement('div');
       recommendationsSection.className = 'meals-section';
-      recommendationsSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><span style="background: #7a9b8a; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 14px; font-weight: bold;">3</span><i class="fas fa-target" style="margin-right: 10px;"></i>Personalized Recommendations</h3>';
+      recommendationsSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><i class="fas fa-lightbulb" style="margin-right: 10px; color: #7a9b8a;"></i>Personalized Recommendations</h3>';
       
       if (calorieData.mealRecommendations1) {
         const rec1 = document.createElement('div');
