@@ -28,10 +28,11 @@
     }
     
     .bmi-section {
-      background: #2d5a3d;
-      color: white;
+      background: white;
+      color: #4a7c59;
+      border: 1px solid #4a7c59;
       padding: 15px;
-      border-radius: 10px;
+      border-radius: 5px;
       margin-bottom: 20px;
       text-align: center;
       font-weight: bold;
@@ -413,15 +414,23 @@
           <i class="fas fa-brain" style="margin-right: 12px; color: #7a9b8a;"></i>
           CalorieIQ AI Analysis
         </h2>
-        <div style="background: linear-gradient(135deg, #7a9b8a 0%, #6b8471 100%); color: white; padding: 15px; border-radius: 10px; margin: 15px 0 20px 0;">
-          <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <div style="background: #4a7c59; color: white; padding: 15px; border-radius: 5px; border: 1px solid #4a7c59; margin: 15px 0 20px 0;">
+          <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
             <i class="fas fa-lightbulb" style="margin-right: 8px; color: #f5f5dc;"></i>
             <strong>How AI Interpreted Your Input</strong>
           </div>
-          <p style="margin: 0; font-size: 14px; line-height: 1.5; opacity: 0.95;">
-            Below you'll see three levels of detail: <strong>①&nbsp;daily nutrition summary</strong>, <strong>②&nbsp;meal breakdowns with individual food contributions</strong>, 
-            and <strong>③&nbsp;personalized recommendations</strong> with AI assumptions clearly documented.
-          </p>
+          <div style="margin: 0; font-size: 14px; line-height: 1.5;">
+            Below you'll see three levels of detail:
+            <div style="margin-top: 8px;">
+              <strong>①&nbsp;daily nutrition summary</strong>
+            </div>
+            <div>
+              <strong>②&nbsp;meal breakdowns with individual food contributions</strong>
+            </div>
+            <div>
+              <strong>③&nbsp;personalized recommendations</strong> with AI assumptions clearly documented
+            </div>
+          </div>
         </div>
         ${summaryText}
       `;
