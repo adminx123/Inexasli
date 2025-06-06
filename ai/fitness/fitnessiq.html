@@ -82,7 +82,8 @@ Lower back strain"></textarea>
         { id: 'fitness-injuries', type: 'textarea' }
     ];
 
-    window.fitnessFormPersistence = new FormPersistence('fitnessiq', fields);
+    // FormPersistence will be initialized by datain.js as window.fitnessFormPersistence
+    // No need to create a new instance here
 
     // Listen for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
