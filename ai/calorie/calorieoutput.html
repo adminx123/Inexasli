@@ -591,7 +591,7 @@
         const rec1 = document.createElement('div');
         rec1.className = 'meal-card';
         rec1.innerHTML = `
-          <div class="meal-title" style="color: #a67c7c;">🔴 Priority Nutritional Needs</div>
+          <div class="meal-title" style="color: #a67c7c;"><i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>Priority Nutritional Needs</div>
           <div class="meal-content">${calorieData.mealRecommendations1}</div>
         `;
         recommendationsSection.appendChild(rec1);
@@ -601,7 +601,7 @@
         const rec2 = document.createElement('div');
         rec2.className = 'meal-card';
         rec2.innerHTML = `
-          <div class="meal-title" style="color: #b8956d;">🟠 Secondary Nutrient Goals</div>
+          <div class="meal-title" style="color: #b8956d;"><i class="fas fa-balance-scale" style="margin-right: 8px;"></i>Secondary Nutrient Goals</div>
           <div class="meal-content">${calorieData.mealRecommendations2}</div>
         `;
         recommendationsSection.appendChild(rec2);
@@ -611,7 +611,7 @@
         const rec3 = document.createElement('div');
         rec3.className = 'meal-card';
         rec3.innerHTML = `
-          <div class="meal-title" style="color: #7a9b8a;">🟢 Complete Your Daily Goals</div>
+          <div class="meal-title" style="color: #7a9b8a;"><i class="fas fa-check-circle" style="margin-right: 8px;"></i>Complete Your Daily Goals</div>
           <div class="meal-content">${calorieData.mealRecommendations3}</div>
         `;
         recommendationsSection.appendChild(rec3);
@@ -655,13 +655,13 @@
     
     function getMealIcon(mealType) {
       const icons = {
-        'Breakfast': '🌅',
-        'Lunch': '☀️',
-        'Dinner': '🌙',
-        'Snack': '🍇',
-        'Snacks': '🍇'
+        'Breakfast': '<i class="fas fa-coffee" style="margin-right: 8px; color: #7a9b8a;"></i>',
+        'Lunch': '<i class="fas fa-sun" style="margin-right: 8px; color: #7a9b8a;"></i>',
+        'Dinner': '<i class="fas fa-moon" style="margin-right: 8px; color: #7a9b8a;"></i>',
+        'Snack': '<i class="fas fa-apple-alt" style="margin-right: 8px; color: #7a9b8a;"></i>',
+        'Snacks': '<i class="fas fa-apple-alt" style="margin-right: 8px; color: #7a9b8a;"></i>'
       };
-      return icons[mealType] || '🍽️';
+      return icons[mealType] || '<i class="fas fa-utensils" style="margin-right: 8px; color: #7a9b8a;"></i>';
     }
 
     // ...existing code...
