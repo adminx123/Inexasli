@@ -21,20 +21,21 @@ document.addEventListener('DOMContentLoaded', async function () {
     let dataContainer = null;
 
     // Listen for datain expansion/collapse
-    document.addEventListener('datain-state-changed', function(event) {
-        if (!dataContainer) return;
+    // REMOVED datain-state-changed event listener block to simplify z-index management
+    // document.addEventListener('datain-state-changed', function(event) {
+    //     if (!dataContainer) return;
         
-        const dataInState = event.detail.state;
-        if (dataInState === 'expanded') {
-            // When datain is expanded, make dataout appear above it
-            dataContainer.style.zIndex = '12000';
-        } else {
-            // When datain is collapsed, reset dataout's z-index
-            if (dataContainer.dataset.state !== 'expanded') {
-                dataContainer.style.zIndex = '10000';
-            }
-        }
-    });
+    //     const dataInState = event.detail.state;
+    //     if (dataInState === 'expanded') {
+    //         // When datain is expanded, make dataout appear above it
+    //         dataContainer.style.zIndex = '12000';
+    //     } else {
+    //         // When datain is collapsed, reset dataout's z-index
+    //         if (dataContainer.dataset.state !== 'expanded') {
+    //             dataContainer.style.zIndex = '10000';
+    //         }
+    //     }
+    // });
 
     async function loadStoredContent(url) {
         try {
@@ -91,7 +92,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-top: none;
                 border-radius: 0 0 27px 27px;
                 box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
-                z-index: 10000;
+                z-index: 100; /* Simplified base z-index */
                 max-width: 34px;
                 min-height: 30px;
                 transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, z-index 0.1s ease-in-out;
@@ -109,7 +110,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                z-index: 12000; /* Ensure collapsed Data Out is above expanded Data In */
+                z-index: 150; /* Simplified z-index for initial/collapsed state */
                 margin-left: 0;
                 margin-right: 0;
                 padding-left: 10px;
@@ -117,10 +118,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             /* Explicit override to ensure tab stays above Data In */
             .data-container-right.initial {
-                z-index: 20000 !important;
+                z-index: 150; /* Removed !important, simplified z-index */
             }
             .data-container-right.collapsed {
-                z-index: 20000 !important;
+                z-index: 150; /* Removed !important, simplified z-index */
             }
             .data-container-right.expanded {
                 max-width: 100%;
@@ -136,6 +137,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-radius: 0 0 27px 27px; /* Rounded bottom corners */
                 box-shadow: 0 2px 6px rgba(74, 124, 89, 0.25); /* Soft shadow effect */
                 padding: 4px; /* Keep padding */
+                z-index: 200; /* Added z-index for expanded state */
             }
 
             .data-container-right:hover {
@@ -160,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 right: 10px;
                 font-size: 18px;
                 padding: 5px;
-                z-index: 11002;
+                z-index: 10; /* Simplified z-index relative to parent */
                 background-color: #f5f5f5;
                 border-radius: 4px;
             }
@@ -189,7 +191,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 transform: translateX(-50%);
                 font-size: 18px;
                 padding: 5px;
-                z-index: 11002;
+                z-index: 10; /* Simplified z-index relative to parent */
                 background-color: #f5f5f5;
                 border-radius: 4px;
             }
@@ -217,7 +219,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 .data-container-right.initial, .data-container-right.collapsed {
                     width: 28px;
                     height: 36px;
-                    z-index: 10001;
+                    z-index: 150; /* Simplified z-index for mobile initial/collapsed */
                 }
 
                 .data-container-right.expanded {
@@ -366,10 +368,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }
                 });
                 
-                // Reset datain container z-index when dataout collapses
-                if (dataInContainer) {
-                    dataInContainer.style.zIndex = '10000';
-                }
+                // REMOVED: Reset datain container z-index when dataout collapses
+                // if (dataInContainer) {
+                //     dataInContainer.style.zIndex = '10000';
+                // }
                 
                 // Dispatch state change event
                 document.dispatchEvent(new CustomEvent('dataout-state-changed', {
@@ -383,10 +385,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dataContainer.dataset.state = 'expanded';
                 setLocal('dataOutContainerState', 'expanded');
                 
-                // Set datain container to higher z-index to appear above expanded dataout
-                if (dataInContainer) {
-                    dataInContainer.style.zIndex = '12000';
-                }
+                // REMOVED: Set datain container to higher z-index to appear above expanded dataout
+                // if (dataInContainer) {
+                //     dataInContainer.style.zIndex = '12000';
+                // }
                 
                 // Dispatch state change event
                 document.dispatchEvent(new CustomEvent('dataout-state-changed', {
@@ -603,11 +605,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         // The cookie check was preventing initialization after consent modals
         initializeDataContainer();
 
-        // Check if data-in is already expanded to adjust z-index appropriately
-        const dataInContainer = document.querySelector('.data-container-left');
-        if (dataInContainer && dataInContainer.dataset.state === 'expanded') {
-            dataContainer.style.zIndex = '12000';
-        }
+        // REMOVED: Check if data-in is already expanded to adjust z-index appropriately
+        // const dataInContainer = document.querySelector('.data-container-left');
+        // if (dataInContainer && dataInContainer.dataset.state === 'expanded') {
+        //     dataContainer.style.zIndex = '12000';
+        // }
 
         try {
             // Mobile device detection for debugging
