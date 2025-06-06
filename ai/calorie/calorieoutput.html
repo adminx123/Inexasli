@@ -419,8 +419,8 @@
             <strong>How AI Interpreted Your Input</strong>
           </div>
           <p style="margin: 0; font-size: 14px; line-height: 1.5; opacity: 0.95;">
-            Below you'll see three levels of detail: <strong>①&nbsp;daily nutrition summary</strong>, <strong>②&nbsp;meal breakdowns</strong>, 
-            and <strong>③&nbsp;individual food interpretations</strong> with AI assumptions clearly documented.
+            Below you'll see three levels of detail: <strong>①&nbsp;daily nutrition summary</strong>, <strong>②&nbsp;meal breakdowns with individual food contributions</strong>, 
+            and <strong>③&nbsp;personalized recommendations</strong> with AI assumptions clearly documented.
           </p>
         </div>
         ${summaryText}
@@ -470,16 +470,28 @@
         container.appendChild(dailySection);
       }
       
-      // Meal Breakdown Section (Enhanced)
+      // Meal Breakdown Section (Enhanced with integrated individual foods)
       if (calorieData.mealTotals && Array.isArray(calorieData.mealTotals)) {
         const mealSection = document.createElement('div');
-        mealSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><i class="fas fa-utensils" style="margin-right: 10px;"></i>Meal Breakdown</h3>';
-        mealSection.innerHTML += '<p style="color: #666; font-size: 14px; margin-bottom: 20px;">Nutritional breakdown by meal type compared to daily targets:</p>';
+        mealSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><span style="background: #7a9b8a; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 14px; font-weight: bold;">2</span><i class="fas fa-utensils" style="margin-right: 10px;"></i>Meal Breakdown & Individual Foods</h3>';
+        mealSection.innerHTML += '<p style="color: #666; font-size: 14px; margin-bottom: 20px;">Nutritional breakdown by meal with individual food contributions shown directly below each meal:</p>';
+        
+        // Group individual foods by meal type for integration
+        const foodsByMeal = {};
+        if (calorieData.individualFoods && Array.isArray(calorieData.individualFoods)) {
+          calorieData.individualFoods.forEach(food => {
+            const mealType = food.mealType || 'Other';
+            if (!foodsByMeal[mealType]) {
+              foodsByMeal[mealType] = [];
+            }
+            foodsByMeal[mealType].push(food);
+          });
+        }
         
         calorieData.mealTotals.forEach(meal => {
           const mealCard = document.createElement('div');
           mealCard.className = 'meal-card';
-          mealCard.style.marginBottom = '15px';
+          mealCard.style.marginBottom = '20px';
           
           const mealIcon = getMealIcon(meal.mealType);
           
@@ -492,66 +504,74 @@
           if (avgPercentage < 70) progressColor = '#b8956d'; // Muted warm brown
           if (avgPercentage < 50) progressColor = '#a67c7c'; // Muted rose
           
+          // Get foods for this meal
+          const mealFoods = foodsByMeal[meal.mealType] || [];
+          const foodCountText = mealFoods.length > 0 ? ` (${mealFoods.length} items)` : '';
+          
           mealCard.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
               <div class="meal-title" style="display: flex; align-items: center; margin: 0;">
-                ${mealIcon} ${meal.mealType}
+                ${mealIcon} ${meal.mealType}${foodCountText}
               </div>
               <div style="background: ${progressColor}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">
                 ${Math.round(avgPercentage)}% of targets
               </div>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
-              ${meal.calories ? `
-                <div style="background: rgba(0,0,0,0.03); padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                    <div style="font-weight: bold; color: #333; margin-bottom: 2px;">Calories</div>
-                    <div style="font-size: 12px; color: #666;">Target: ${meal.calories.target}</div>
-                  </div>
-                  <div style="text-align: right;">
-                    <div style="font-size: 18px; color: #6b8471; font-weight: bold;">${meal.calories.intake}</div>
-                    <div style="font-size: 12px; color: #333; font-weight: 500;">${meal.calories.percentage}</div>
-                  </div>
-                </div>
-              ` : ''}
-              ${meal.protein ? `
-                <div style="background: rgba(0,0,0,0.03); padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                    <div style="font-weight: bold; color: #333; margin-bottom: 2px;">Protein</div>
-                    <div style="font-size: 12px; color: #666;">Target: ${meal.protein.target}</div>
-                  </div>
-                  <div style="text-align: right;">
-                    <div style="font-size: 18px; color: #7d6668; font-weight: bold;">${meal.protein.intake}</div>
-                    <div style="font-size: 12px; color: #333; font-weight: 500;">${meal.protein.percentage}</div>
-                  </div>
-                </div>
-              ` : ''}
-              ${meal.carbs ? `
-                <div style="background: rgba(0,0,0,0.03); padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                    <div style="font-weight: bold; color: #333; margin-bottom: 2px;">Carbs</div>
-                    <div style="font-size: 12px; color: #666;">Target: ${meal.carbs.target}</div>
-                  </div>
-                  <div style="text-align: right;">
-                    <div style="font-size: 18px; color: #6a7d6e; font-weight: bold;">${meal.carbs.intake}</div>
-                    <div style="font-size: 12px; color: #333; font-weight: 500;">${meal.carbs.percentage}</div>
-                  </div>
-                </div>
-              ` : ''}
-              ${meal.fat ? `
-                <div style="background: rgba(0,0,0,0.03); padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                    <div style="font-weight: bold; color: #333; margin-bottom: 2px;">Fat</div>
-                    <div style="font-size: 12px; color: #666;">Target: ${meal.fat.target}</div>
-                  </div>
-                  <div style="text-align: right;">
-                    <div style="font-size: 18px; color: #7a717a; font-weight: bold;">${meal.fat.intake}</div>
-                    <div style="font-size: 12px; color: #333; font-weight: 500;">${meal.fat.percentage}</div>
-                  </div>
-                </div>
-              ` : ''}
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; font-size: 13px; background: #f2f9f3; padding: 8px; border-radius: 4px; margin-bottom: ${mealFoods.length > 0 ? '15px' : '0'};">
+              ${meal.calories ? `<div style="text-align: center;"><strong>Calories</strong><br>${meal.calories.intake}/${meal.calories.target}<br><small style="color: #666;">${meal.calories.percentage}</small></div>` : ''}
+              ${meal.protein ? `<div style="text-align: center;"><strong>Protein</strong><br>${meal.protein.intake}/${meal.protein.target}<br><small style="color: #666;">${meal.protein.percentage}</small></div>` : ''}
+              ${meal.carbs ? `<div style="text-align: center;"><strong>Carbs</strong><br>${meal.carbs.intake}/${meal.carbs.target}<br><small style="color: #666;">${meal.carbs.percentage}</small></div>` : ''}
+              ${meal.fat ? `<div style="text-align: center;"><strong>Fat</strong><br>${meal.fat.intake}/${meal.fat.target}<br><small style="color: #666;">${meal.fat.percentage}</small></div>` : ''}
             </div>
           `;
+          
+          // Add individual foods directly under this meal's totals
+          if (mealFoods.length > 0) {
+            const foodsContainer = document.createElement('div');
+            foodsContainer.style.cssText = 'margin-top: 12px; padding-top: 12px; border-top: 1px solid #e9ecef;';
+            
+            const foodsHeader = document.createElement('div');
+            foodsHeader.style.cssText = 'font-size: 12px; color: #666; margin-bottom: 8px; font-weight: 500; display: flex; align-items: center;';
+            foodsHeader.innerHTML = '<i class="fas fa-brain" style="margin-right: 6px; color: #7a9b8a; font-size: 11px;"></i>Individual Foods:';
+            foodsContainer.appendChild(foodsHeader);
+            
+            mealFoods.forEach((food, index) => {
+              const foodItem = document.createElement('div');
+              foodItem.style.cssText = 'background: white; border: 1px solid #e9ecef; border-radius: 4px; padding: 6px; margin-bottom: 6px; font-size: 11px;';
+              
+              // Handle different possible field names for nutritional values
+              const calories = food.calories || food.caloriesPerServing || food.cal || '—';
+              const protein = food.protein || food.proteinPerServing || '—';
+              const carbs = food.carbs || food.carbsPerServing || food.carbohydrates || '—';
+              const fat = food.fat || food.fatPerServing || '—';
+              const quantity = food.quantity || food.servingSize || food.amount || '1 serving';
+              
+              foodItem.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                  <div style="flex: 1;">
+                    <strong style="color: #333; font-size: 12px;">${food.foodItem || food.name || 'Unknown Food'}</strong>
+                    <div style="color: #666; font-size: 10px; margin-top: 1px;">${quantity}</div>
+                  </div>
+                  <div style="background: #f8f9fa; padding: 1px 4px; border-radius: 2px; font-size: 9px; color: #666;">
+                    #${index + 1}
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; font-size: 10px; background: #f8f9fa; padding: 4px; border-radius: 2px;">
+                  <div style="text-align: center;"><strong>Cal</strong><br>${calories}</div>
+                  <div style="text-align: center;"><strong>Pro</strong><br>${protein}</div>
+                  <div style="text-align: center;"><strong>Carb</strong><br>${carbs}</div>
+                  <div style="text-align: center;"><strong>Fat</strong><br>${fat}</div>
+                </div>
+                ${food.notes ? `<div style="background: #e8f0ec; padding: 4px; border-radius: 2px; font-size: 10px; color: #4a6b52; line-height: 1.3; margin-top: 4px;">
+                  <strong style="color: #7a9b8a;">AI:</strong> ${food.notes}
+                </div>` : ''}
+              `;
+              
+              foodsContainer.appendChild(foodItem);
+            });
+            
+            mealCard.appendChild(foodsContainer);
+          }
           
           mealSection.appendChild(mealCard);
         });
@@ -559,91 +579,13 @@
         container.appendChild(mealSection);
       }
       
-      // AI Food Interpretation Section (Enhanced)
-      if (calorieData.individualFoods && Array.isArray(calorieData.individualFoods)) {
-        const foodSection = document.createElement('div');
-        foodSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><i class="fas fa-brain" style="margin-right: 10px;"></i>AI Food Interpretation</h3>';
-        foodSection.innerHTML += '<p style="color: #666; font-size: 14px; margin-bottom: 20px;">See how the AI interpreted your food entries and what assumptions were made:</p>';
-        
-        // Group foods by meal type
-        const foodsByMeal = {};
-        calorieData.individualFoods.forEach(food => {
-          const mealType = food.mealType || 'Other';
-          if (!foodsByMeal[mealType]) {
-            foodsByMeal[mealType] = [];
-          }
-          foodsByMeal[mealType].push(food);
-        });
-        
-        // Sort meal types in logical order
-        const mealOrder = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Snacks', 'Other'];
-        const sortedMealTypes = mealOrder.filter(meal => foodsByMeal[meal]);
-        
-        sortedMealTypes.forEach(mealType => {
-          const mealFoodSection = document.createElement('div');
-          mealFoodSection.className = 'meal-card';
-          mealFoodSection.style.marginBottom = '20px';
-          
-          const mealIcon = getMealIcon(mealType);
-          mealFoodSection.innerHTML = `
-            <div class="meal-title" style="display: flex; align-items: center; margin-bottom: 15px;">
-              ${mealIcon} ${mealType} <span style="color: #666; font-weight: normal; margin-left: 10px;">(${foodsByMeal[mealType].length} items)</span>
-            </div>
-          `;
-          
-          const foodList = document.createElement('div');
-          foodsByMeal[mealType].forEach((food, index) => {
-            const foodItem = document.createElement('div');
-            foodItem.style.cssText = 'background: white; border: 1px solid #e9ecef; border-radius: 6px; padding: 12px; margin-bottom: 10px; transition: background-color 0.2s ease;';
-            foodItem.onmouseenter = () => foodItem.style.backgroundColor = '#f8f9fa';
-            foodItem.onmouseleave = () => foodItem.style.backgroundColor = 'white';
-            
-            // Handle different possible field names for nutritional values
-            const calories = food.calories || food.caloriesPerServing || food.cal || '—';
-            const protein = food.protein || food.proteinPerServing || '—';
-            const carbs = food.carbs || food.carbsPerServing || food.carbohydrates || '—';
-            const fat = food.fat || food.fatPerServing || '—';
-            const quantity = food.quantity || food.servingSize || food.amount || '1 serving';
-            
-            foodItem.innerHTML = `
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                <div style="flex: 1;">
-                  <strong style="color: #333; font-size: 15px;">${food.foodItem || food.name || 'Unknown Food'}</strong>
-                  <div style="color: #666; font-size: 13px; margin-top: 2px;">${quantity}</div>
-                </div>
-                <div style="background: #f2f9f3; padding: 4px 8px; border-radius: 3px; font-size: 12px; color: #666;">
-                  Item #${index + 1}
-                </div>
-              </div>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; font-size: 13px; margin-bottom: 8px; background: #f2f9f3; padding: 8px; border-radius: 4px;">
-                <div style="text-align: center;"><strong>Calories</strong><br>${calories}</div>
-                <div style="text-align: center;"><strong>Protein</strong><br>${protein}</div>
-                <div style="text-align: center;"><strong>Carbs</strong><br>${carbs}</div>
-                <div style="text-align: center;"><strong>Fat</strong><br>${fat}</div>
-              </div>
-              ${food.notes ? `<div style="background: #e8f0ec; padding: 10px; border-radius: 4px; font-size: 13px; color: #4a6b52; line-height: 1.5;">
-                <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                  <i class="fas fa-brain" style="margin-right: 8px; color: #7a9b8a;"></i>
-                  <strong>AI Processing Notes:</strong>
-                </div>
-                <div style="color: #333;">${food.notes}</div>
-              </div>` : ''}
-            `;
-            
-            foodList.appendChild(foodItem);
-          });
-          
-          mealFoodSection.appendChild(foodList);
-          foodSection.appendChild(mealFoodSection);
-        });
-        
-        container.appendChild(foodSection);
-      }
+      // Individual foods are now integrated directly under each meal's breakdown above
+      // This eliminates the separate section and improves UX flow
       
       // Recommendations Section (Enhanced)
       const recommendationsSection = document.createElement('div');
       recommendationsSection.className = 'meals-section';
-      recommendationsSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><i class="fas fa-target" style="margin-right: 10px;"></i>Personalized Recommendations</h3>';
+      recommendationsSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><span style="background: #7a9b8a; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 14px; font-weight: bold;">3</span><i class="fas fa-target" style="margin-right: 10px;"></i>Personalized Recommendations</h3>';
       
       if (calorieData.mealRecommendations1) {
         const rec1 = document.createElement('div');
