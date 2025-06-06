@@ -36,12 +36,8 @@ Accepting things I cannot change"></textarea>
   (function() {
     console.log("PhilosophyIQ script initializing");
 
-    // Initialize FormPersistence for philosophyiq module
-    const fields = [
-        { id: 'philosophy-question', type: 'textarea' }
-    ];
-
-    window.philosophyFormPersistence = new FormPersistence('philosophyiq', fields);
+    // FormPersistence is initialized by datain.js and available as window.philosophyFormPersistence
+    // No need to create it here - just ensure it's available when we need it
 
     // Listen for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
