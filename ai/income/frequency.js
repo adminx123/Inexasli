@@ -12,6 +12,97 @@ import { getJSON } from '/utility/getJSON.js';
 // Key for storing all frequency settings in a single JSON object
 const FREQUENCIES_STORAGE_KEY = 'frequencySettings';
 
+// Inject CSS styles for frequency buttons
+function injectFrequencyStyles() {
+    // Check if styles already exist
+    if (document.getElementById('frequency-styles')) {
+        return;
+    }
+
+    const style = document.createElement('style');
+    style.id = 'frequency-styles';
+    style.textContent = `
+        /* Frequency checkbox button styling */
+        .checkboxrow .checkbox-button-group {
+            flex: 1;
+            height: 32px;
+        }
+
+        .checkbox-button-group {
+            display: flex;
+            gap: 2px;
+            max-width: 100%;
+        }
+
+        .checkbox-button-group input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            height: 32px;
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            font-weight: normal;
+            user-select: none;
+            transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+            color: #333;
+            min-width: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
+
+        .checkbox-button:hover {
+            background-color: #e8e8e8;
+            border-color: #999;
+        }
+
+        .checkbox-button-group input[type="checkbox"]:checked + .checkbox-button {
+            background-color: #333;
+            border-color: #333;
+            color: white;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 700px) {
+            .checkboxrow {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+
+            .checkboxrow input[type="number"] {
+                width: 100%;
+                max-width: none;
+                height: 32px !important;
+                padding: 0 8px !important;
+            }
+
+            .checkboxrow .checkbox-button-group {
+                width: 100%;
+                display: flex;
+                gap: 4px;
+            }
+
+            .checkbox-button {
+                font-size: 12px;
+                height: 32px;
+                padding: 0 6px;
+            }
+        }
+    `;
+    
+    document.head.appendChild(style);
+    console.log('Frequency styles injected');
+}
+
 // Helper functions to get/set values in the JSON object
 function getFrequencySetting(frequencyId, defaultValue = 'annually') {
     const settings = getJSON(FREQUENCIES_STORAGE_KEY, {});
@@ -130,6 +221,9 @@ function initializeFrequencyGroup(frequencyId) {
 
 // Initialize all frequency groups on page load
 export function initializeFrequencyGroups() {
+    // First, inject the required CSS styles
+    injectFrequencyStyles();
+    
     const frequencyGroups = Array.from(document.querySelectorAll('[data-frequency-id]')).map(el => el.getAttribute('data-frequency-id'));
     if (frequencyGroups.length === 0) {
         console.warn('No frequency groups found to initialize.');
@@ -158,16 +252,6 @@ export function saveFrequencyGroups() {
     setJSON(FREQUENCIES_STORAGE_KEY, settings);
 }
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
-    initializeFrequencyGroups();
-    observeDOMChanges();
-});
-
-function observeDOMChanges() {
-    const observer = new MutationObserver(() => {
-        initializeFrequencyGroups();
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-}
+// Make functions globally available for reliable access
+window.initializeFrequencyGroups = initializeFrequencyGroups;
+window.saveFrequencyGroups = saveFrequencyGroups;
