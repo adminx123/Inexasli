@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-top: none;
                 border-radius: 0 0 27px 27px;
                 box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
-                z-index: 1000;
+                z-index: 500;
                 max-width: 34px;
                 min-height: 30px;
                 transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
