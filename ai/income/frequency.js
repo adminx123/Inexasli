@@ -14,8 +14,11 @@ const FREQUENCIES_STORAGE_KEY = 'frequencySettings';
 
 // Inject CSS styles for frequency buttons
 function injectFrequencyStyles() {
+    console.log('🔧 injectFrequencyStyles called');
+    
     // Check if styles already exist
     if (document.getElementById('frequency-styles')) {
+        console.log('✅ Frequency styles already exist, skipping injection');
         return;
     }
 
@@ -100,7 +103,7 @@ function injectFrequencyStyles() {
     `;
     
     document.head.appendChild(style);
-    console.log('Frequency styles injected');
+    console.log('✅ Frequency styles injected successfully');
 }
 
 // Helper functions to get/set values in the JSON object
@@ -151,30 +154,44 @@ function createFrequencyGroup(frequencyId) {
 
 // Initialize a single frequency group
 function initializeFrequencyGroup(frequencyId) {
+    console.log(`🔧 initializeFrequencyGroup called for: ${frequencyId}`);
+    
     const placeholder = document.querySelector(`[data-frequency-id="${frequencyId}"]`);
     if (!placeholder) {
-        console.warn(`Placeholder not found for frequency ID: ${frequencyId}`);
+        console.warn(`❌ Placeholder not found for frequency ID: ${frequencyId}`);
         return;
     }
+    
+    console.log(`✅ Found placeholder for ${frequencyId}:`, placeholder);
 
     // Replace placeholder with frequency group
     const group = createFrequencyGroup(frequencyId);
+    console.log(`🔧 Created frequency group for ${frequencyId}:`, group);
+    
     placeholder.replaceWith(group);
+    console.log(`🔧 Replaced placeholder with group for ${frequencyId}`);
 
     const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+    console.log(`🔧 Found ${checkboxes.length} checkboxes in group ${frequencyId}`);
+    
     if (checkboxes.length === 0) {
-        console.warn(`No checkboxes created for group: ${frequencyId}`);
+        console.warn(`❌ No checkboxes created for group: ${frequencyId}`);
         return;
     }
 
     const savedFrequency = getFrequencySetting(frequencyId);
     const defaultFrequency = 'annually';
     const frequencyToSet = savedFrequency || defaultFrequency;
+    
+    console.log(`🔧 Setting frequency for ${frequencyId} to: ${frequencyToSet} (saved: ${savedFrequency})`);
 
     let checkedCount = 0;
     checkboxes.forEach(checkbox => {
         checkbox.checked = checkbox.value === frequencyToSet;
-        if (checkbox.checked) checkedCount++;
+        if (checkbox.checked) {
+            checkedCount++;
+            console.log(`✅ Checked checkbox: ${checkbox.value} for ${frequencyId}`);
+        }
     });
 
     // Ensure only one checkbox is checked
@@ -183,55 +200,78 @@ function initializeFrequencyGroup(frequencyId) {
             checkbox.checked = checkbox.value === defaultFrequency;
         });
         saveFrequencySetting(frequencyId, defaultFrequency);
-        console.log(`Corrected multiple selections in ${frequencyId}, set to ${defaultFrequency}`);
+        console.log(`🔧 Corrected multiple selections in ${frequencyId}, set to ${defaultFrequency}`);
     } else if (checkedCount === 0) {
         checkboxes.forEach(checkbox => {
             checkbox.checked = checkbox.value === defaultFrequency;
         });
         saveFrequencySetting(frequencyId, defaultFrequency);
+        console.log(`🔧 No selection found in ${frequencyId}, set to ${defaultFrequency}`);
     }
 
     // Save the selected frequency
     saveFrequencySetting(frequencyId, frequencyToSet);
 
-    // Add event listeners for checkbox changes
+    // Add event listeners for label clicks (better UX than checkbox changes)
     checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
-            if (this.checked) {
-                checkboxes.forEach(otherCheckbox => {
-                    if (otherCheckbox !== this) {
-                        otherCheckbox.checked = false;
-                    }
+        const label = group.querySelector(`label[for="${checkbox.id}"]`);
+        console.log(`🔧 Setting up event listener for ${checkbox.id}, label:`, label);
+        
+        if (label) {
+            label.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent default label behavior
+                console.log(`🔧 Label clicked for ${checkbox.value} in ${frequencyId}`);
+                
+                // Uncheck all checkboxes in this group
+                checkboxes.forEach(cb => {
+                    cb.checked = false;
+                    console.log(`🔧 Unchecked: ${cb.value}`);
                 });
-                saveFrequencySetting(frequencyId, this.value);
-                console.log(`Set frequency for ${frequencyId} to ${this.value}`);
+                
+                // Check the clicked checkbox
+                checkbox.checked = true;
+                console.log(`✅ Checked: ${checkbox.value}`);
+                
+                saveFrequencySetting(frequencyId, checkbox.value);
+                console.log(`💾 Saved frequency for ${frequencyId}: ${checkbox.value}`);
+                
                 // Trigger calculation if needed
                 if (typeof calculateAll === 'function') {
                     calculateAll();
                 }
-            } else {
-                // Prevent unchecking the only selected checkbox
-                this.checked = true;
-            }
-        });
+            });
+        } else {
+            console.warn(`❌ No label found for checkbox: ${checkbox.id}`);
+        }
     });
 
-    console.log(`Initialized group: ${frequencyId}, set to: ${frequencyToSet}`);
+    console.log(`✅ Initialized group: ${frequencyId}, set to: ${frequencyToSet}`);
 }
 
 // Initialize all frequency groups on page load
 export function initializeFrequencyGroups() {
+    console.log('🔧 initializeFrequencyGroups called');
+    
     // First, inject the required CSS styles
     injectFrequencyStyles();
     
-    const frequencyGroups = Array.from(document.querySelectorAll('[data-frequency-id]')).map(el => el.getAttribute('data-frequency-id'));
-    if (frequencyGroups.length === 0) {
+    const frequencyPlaceholders = document.querySelectorAll('[data-frequency-id]');
+    console.log(`🔧 Found ${frequencyPlaceholders.length} frequency placeholders`);
+    
+    if (frequencyPlaceholders.length === 0) {
         console.warn('No frequency groups found to initialize.');
         return;
     }
+    
+    const frequencyGroups = Array.from(frequencyPlaceholders).map(el => el.getAttribute('data-frequency-id'));
+    console.log('🔧 Frequency groups to initialize:', frequencyGroups);
+    
     frequencyGroups.forEach(frequencyId => {
+        console.log(`🔧 Initializing group: ${frequencyId}`);
         initializeFrequencyGroup(frequencyId);
     });
+    
+    console.log('🔧 All frequency groups initialized');
 }
 
 // Save frequency group values
@@ -255,3 +295,24 @@ export function saveFrequencyGroups() {
 // Make functions globally available for reliable access
 window.initializeFrequencyGroups = initializeFrequencyGroups;
 window.saveFrequencyGroups = saveFrequencyGroups;
+
+// Auto-initialize if DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🔧 frequency.js DOMContentLoaded event fired');
+        setTimeout(() => {
+            if (document.querySelectorAll('[data-frequency-id]').length > 0) {
+                console.log('🔧 Auto-initializing frequency groups from frequency.js');
+                initializeFrequencyGroups();
+            }
+        }, 100);
+    });
+} else {
+    console.log('🔧 frequency.js loaded, DOM already ready');
+    setTimeout(() => {
+        if (document.querySelectorAll('[data-frequency-id]').length > 0) {
+            console.log('🔧 Auto-initializing frequency groups from frequency.js');
+            initializeFrequencyGroups();
+        }
+    }, 100);
+}
