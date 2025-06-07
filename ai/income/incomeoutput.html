@@ -1,0 +1,263 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ -->
+
+<div class="device-container">
+    <!-- Results Header -->
+    <div class="benefit-card">
+        <h2 style="text-align:center">| IncomeIQ™ Results |</h2>
+        <h2 style="text-align:center">Your Financial Snapshot</h2>
+        <p>Based on your financial information, here's your personalized income analysis and recommendations.</p>
+    </div>
+
+    <!-- Loading State -->
+    <div id="income-loading" style="text-align: center; padding: 20px;">
+        <p>Analyzing your financial data...</p>
+        <div class="loading-spinner" style="margin: 20px auto; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    </div>
+
+    <!-- Results Content -->
+    <div id="income-results" style="display: none;">
+        <!-- Financial Summary -->
+        <div class="row1">
+            <h3>Financial Summary</h3>
+            <div id="income-summary-content">
+                <!-- Content will be populated by AI response -->
+            </div>
+        </div>
+
+        <!-- Income Analysis -->
+        <div class="row1">
+            <h3>Income Analysis</h3>
+            <div id="income-analysis-content">
+                <!-- Content will be populated by AI response -->
+            </div>
+        </div>
+
+        <!-- Expense Breakdown -->
+        <div class="row1">
+            <h3>Expense Analysis</h3>
+            <div id="expense-analysis-content">
+                <!-- Content will be populated by AI response -->
+            </div>
+        </div>
+
+        <!-- Asset & Liability Review -->
+        <div class="row1">
+            <h3>Net Worth Analysis</h3>
+            <div id="networth-analysis-content">
+                <!-- Content will be populated by AI response -->
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="row1">
+            <h3>Personalized Recommendations</h3>
+            <div id="recommendations-content">
+                <!-- Content will be populated by AI response -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="income-error" style="display: none; text-align: center; padding: 20px; color: #e74c3c;">
+        <h3>Unable to Generate Report</h3>
+        <p id="income-error-message">There was an issue processing your financial data. Please try again.</p>
+        <button onclick="window.history.back()" class="generate-btn">Go Back</button>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="text-align: center; margin-top: 30px;">
+        <button id="save-report-btn" class="generate-btn" style="margin-right: 10px; display: none;">Save Report</button>
+        <button id="new-analysis-btn" class="generate-btn" onclick="window.location.href='/ai/income/incomeiq.html'">New Analysis</button>
+    </div>
+</div>
+
+<style>
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.row1 {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.row1 h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+}
+
+.generate-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.generate-btn:hover {
+    background-color: #0056b3;
+}
+</style>
+
+<script type="module">
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
+
+// Import FormPersistence for accessing saved data
+import { FormPersistence } from '/utility/formPersistence.js';
+
+(function() {
+    console.log("[IncomeOutput] Initializing results page");
+
+    let formPersistence = null;
+
+    function init() {
+        try {
+            // Initialize FormPersistence to access saved data and responses
+            formPersistence = FormPersistence.getInstance('income');
+            
+            // Check for saved response data
+            const responseData = formPersistence.getSavedResponseData();
+            
+            if (responseData) {
+                console.log("[IncomeOutput] Found saved response data:", responseData);
+                displayResults(responseData);
+            } else {
+                console.log("[IncomeOutput] No saved response data found, checking for input data");
+                
+                // Check if we have input data to process
+                const inputData = formPersistence.getSavedFormData();
+                if (inputData && Object.keys(inputData).length > 0) {
+                    console.log("[IncomeOutput] Found input data, waiting for AI response");
+                    // Keep loading state - AI response should come via dataout.js
+                    waitForAiResponse();
+                } else {
+                    showError("No financial data found. Please complete the IncomeIQ form first.");
+                }
+            }
+        } catch (error) {
+            console.error("[IncomeOutput] Initialization error:", error);
+            showError("Unable to load your financial analysis. Please try again.");
+        }
+    }
+
+    function waitForAiResponse() {
+        // Listen for AI response from dataout.js
+        document.addEventListener('ai-response-received', function(event) {
+            if (event.detail && event.detail.module === 'income') {
+                console.log("[IncomeOutput] Received AI response:", event.detail.response);
+                displayResults(event.detail.response);
+                
+                // Save the response for future viewing
+                if (formPersistence) {
+                    formPersistence.saveResponseData(event.detail.response);
+                }
+            }
+        });
+
+        // Timeout after 30 seconds
+        setTimeout(() => {
+            const loadingDiv = document.getElementById('income-loading');
+            if (loadingDiv && loadingDiv.style.display !== 'none') {
+                showError("Analysis timed out. Please try again.");
+            }
+        }, 30000);
+    }
+
+    function displayResults(responseData) {
+        console.log("[IncomeOutput] Displaying results:", responseData);
+        
+        // Hide loading state
+        document.getElementById('income-loading').style.display = 'none';
+        
+        // Show results container
+        document.getElementById('income-results').style.display = 'block';
+        
+        // Show save button
+        document.getElementById('save-report-btn').style.display = 'inline-block';
+
+        try {
+            // Parse response if it's a string
+            const data = typeof responseData === 'string' ? JSON.parse(responseData) : responseData;
+            
+            // Populate content sections
+            populateSection('income-summary-content', data.summary || data.financial_summary || 'Financial summary not available.');
+            populateSection('income-analysis-content', data.income_analysis || data.income || 'Income analysis not available.');
+            populateSection('expense-analysis-content', data.expense_analysis || data.expenses || 'Expense analysis not available.');
+            populateSection('networth-analysis-content', data.networth_analysis || data.net_worth || 'Net worth analysis not available.');
+            populateSection('recommendations-content', data.recommendations || data.advice || 'Recommendations not available.');
+            
+        } catch (error) {
+            console.error("[IncomeOutput] Error parsing response data:", error);
+            
+            // Fallback: display raw response
+            document.getElementById('income-summary-content').innerHTML = '<p>Raw AI Response:</p><pre>' + JSON.stringify(responseData, null, 2) + '</pre>';
+        }
+    }
+
+    function populateSection(elementId, content) {
+        const element = document.getElementById(elementId);
+        if (element && content) {
+            if (typeof content === 'string') {
+                element.innerHTML = '<p>' + content.replace(/\n/g, '</p><p>') + '</p>';
+            } else {
+                element.innerHTML = '<pre>' + JSON.stringify(content, null, 2) + '</pre>';
+            }
+        }
+    }
+
+    function showError(message) {
+        console.error("[IncomeOutput] Error:", message);
+        
+        // Hide loading and results
+        document.getElementById('income-loading').style.display = 'none';
+        document.getElementById('income-results').style.display = 'none';
+        
+        // Show error
+        document.getElementById('income-error').style.display = 'block';
+        document.getElementById('income-error-message').textContent = message;
+    }
+
+    // Setup save report functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const saveBtn = document.getElementById('save-report-btn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', function() {
+                // Implement save functionality (could save as PDF, download, etc.)
+                alert('Save functionality will be implemented here.');
+            });
+        }
+    });
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+})();
+</script>

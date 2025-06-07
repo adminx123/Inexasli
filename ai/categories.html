@@ -90,7 +90,7 @@
         <div class="grid-item" data-category="business,productivity" data-value="/ai/decision/decisioniq.html">DecisionIQ™ <span class="premium-tag">$</span></div>
         
         <!-- Finance Products -->
-        <div class="grid-item" data-category="finance" data-value="/ai/income/intro.html">IncomeIQ™ <span class="premium-tag">$</span></div>
+        <div class="grid-item" data-category="finance" data-value="/ai/income/incomeiq.html">IncomeIQ™ <span class="premium-tag">$</span></div>
         
         <!-- Lifestyle Products -->
         <div class="grid-item" data-category="lifestyle" data-value="/ai/event/eventiq.html">EventIQ™ <span class="premium-tag">$</span></div>
@@ -184,21 +184,11 @@
         if (e.target.classList.contains('grid-item') && e.target.getAttribute('data-value') && e.target.getAttribute('data-value').startsWith('/ai/')) {
             const url = e.target.getAttribute('data-value');
             
-            // Detect if this is the intro/incomeIQ item
-            const isBudgetItem = url === '/ai/income/intro.html';
-            
-            // Toggle UI mode based on selection if the function exists
-            if (typeof window.toggleUiMode === 'function') {
-                window.toggleUiMode(isBudgetItem);
-            }
-            
-            if (!isBudgetItem) {
-                // For non-budget items, use regular content loading
-                const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
-                    detail: { url: url }
-                });
-                document.dispatchEvent(gridItemEvent);
-            }
+            // Use regular content loading for all modules
+            const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
+                detail: { url: url }
+            });
+            document.dispatchEvent(gridItemEvent);
             
             // Store the URL in localStorage for persistence
             if (typeof window.setLocal === 'function') {
