@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 // Insert content with initial hiding to prevent flash
                 dataContainer.innerHTML = `
-                    <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 10;">
+                    <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px;">
                         <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                         </button>
@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // No form elements, insert content normally without guided forms
                 dataContainer.innerHTML = `
                     <span class="close-data-container"></span>
-                    <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 10;">
+                    <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px;">
                         <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                         </button>
@@ -434,10 +434,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-bottom: none;
                 border-radius: 24px 24px 0 0;
                 box-shadow: 0 -2px 4px rgba(74, 124, 89, 0.2);
-                z-index: 100; /* Simplified base z-index */
+                z-index: 500;
                 max-width: 34px;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, z-index 0.1s ease-in-out, left 0.3s ease-in-out, transform 0.3s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, left 0.3s ease-in-out, transform 0.3s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
@@ -456,7 +456,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
-                z-index: 150; /* Simplified z-index for initial/collapsed state */
                 margin-left: 0;
                 margin-right: 0;
                 padding-left: 10px;
@@ -471,7 +470,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 bottom: 0;
                 left: 0;
                 transform: none;
-                z-index: 200; /* Simplified z-index for expanded state */
                 overflow: hidden; /* Remove scrolling */
                 border-radius: 24px 24px 0 0; /* Rounded corners at the top */
                 border: none;
@@ -493,7 +491,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 cursor: pointer;
                 font-weight: bold;
                 font-family: "Inter", sans-serif;
-                z-index: 10; /* Simplified z-index relative to parent */
             }
             
             .data-container-in.expanded .close-data-container {
@@ -502,7 +499,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 left: auto;
                 font-size: 18px;
                 padding: 5px;
-                z-index: 11002;
                 background-color: #f5f5f5;
                 border-radius: 4px;
             }
@@ -530,7 +526,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 flex-direction: row;
                 gap: 8px;
                 align-items: center;
-                z-index: 11003;
             }
 
             /* Hide utility buttons only when expanded */
@@ -558,7 +553,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 gap: 8px;
                 align-items: center;
                 justify-content: flex-end;
-                z-index: 11003;
                 margin-left: 0;
                 margin-right: 0;
                 padding-left: 10px;
@@ -599,7 +593,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 .data-container-in.initial, .data-container-in.collapsed {
                     width: 100%;
                     height: 36px;
-                    z-index: 10001;
                     padding-left: 10px;
                     padding-right: 10px;
                 }
@@ -607,7 +600,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 .data-container-in.visually-collapsed {
                     width: 100%;
                     height: 36px;
-                    z-index: 10001;
                     padding-left: 10px;
                     padding-right: 10px;
                 }
@@ -851,10 +843,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 utilityButtons.style.marginLeft = '';
             }
             
-            // Reset dataout container z-index when datain collapses
-            if (dataOutContainer) {
-                dataOutContainer.style.zIndex = '10000';
-            }
+            // REMOVED: Reset dataout container z-index when datain collapses
+            // if (dataOutContainer) {
+            //     dataOutContainer.style.zIndex = '10000';
+            // }
             
             // Dispatch state change event
             document.dispatchEvent(new CustomEvent('datain-state-changed', {
@@ -888,10 +880,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 utilityButtons.style.padding = '';
             }
             
-            // Set dataout container to higher z-index to appear above expanded datain
-            if (dataOutContainer) {
-                dataOutContainer.style.zIndex = '12000';
-            }
+            // REMOVED: Set dataout container to higher z-index to appear above expanded datain
+            // if (dataOutContainer) {
+            //     dataOutContainer.style.zIndex = '12000';
+            // }
             
             // Dispatch state change event
             document.dispatchEvent(new CustomEvent('datain-state-changed', {
@@ -914,7 +906,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Ensure proper expanded state when no content is loaded
                 dataContainer.innerHTML = `
                     <span class="close-data-container"></span>
-                    <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px; z-index: 10;">
+                    <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px;">
                         <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                         </button>
@@ -1097,11 +1089,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         initializeDataContainer();
 
-        // Check if data-out is already expanded to adjust z-index appropriately
-        const dataOutContainer = document.querySelector('.data-container-out');
-        if (dataOutContainer && dataOutContainer.dataset.state === 'expanded') {
-            dataContainer.style.zIndex = '12000';
-        }
+        // REMOVED: Check if data-out is already expanded to adjust z-index appropriately
+        // const dataOutContainer = document.querySelector('.data-container-out');
+        // if (dataOutContainer && dataOutContainer.dataset.state === 'expanded') {
+        //     dataContainer.style.zIndex = '12000';
+        // }
 
         try {
             // Mobile device detection for debugging

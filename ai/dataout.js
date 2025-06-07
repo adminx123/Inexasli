@@ -92,10 +92,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-top: none;
                 border-radius: 0 0 27px 27px;
                 box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
-                z-index: 100; /* Simplified base z-index */
+                z-index: 1000;
                 max-width: 34px;
                 min-height: 30px;
-                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, z-index 0.1s ease-in-out;
+                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
@@ -110,19 +110,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                z-index: 150; /* Simplified z-index for initial/collapsed state */
                 margin-left: 0;
                 margin-right: 0;
                 padding-left: 10px;
                 padding-right: 10px;
             }
-            /* Explicit override to ensure tab stays above Data In */
-            .data-container-out.initial {
-                z-index: 150; /* Removed !important, simplified z-index */
-            }
-            .data-container-out.collapsed {
-                z-index: 150; /* Removed !important, simplified z-index */
-            }
+
             .data-container-out.expanded {
                 max-width: 100%;
                 width: 100%;
@@ -137,7 +130,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-radius: 0 0 27px 27px; /* Rounded bottom corners */
                 box-shadow: 0 2px 6px rgba(74, 124, 89, 0.25); /* Soft shadow effect */
                 padding: 4px; /* Keep padding */
-                z-index: 200; /* Added z-index for expanded state */
             }
 
             .data-container-out:hover {
@@ -162,7 +154,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 right: 10px;
                 font-size: 18px;
                 padding: 5px;
-                z-index: 10; /* Simplified z-index relative to parent */
                 background-color: #f5f5f5;
                 border-radius: 4px;
             }
@@ -191,7 +182,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 transform: translateX(-50%);
                 font-size: 18px;
                 padding: 5px;
-                z-index: 10; /* Simplified z-index relative to parent */
                 background-color: #f5f5f5;
                 border-radius: 4px;
             }
@@ -219,7 +209,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 .data-container-out.initial, .data-container-out.collapsed {
                     width: 28px;
                     height: 36px;
-                    z-index: 150; /* Simplified z-index for mobile initial/collapsed */
                 }
 
                 .data-container-out.expanded {
