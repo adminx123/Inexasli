@@ -176,6 +176,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.head.appendChild(inputStylesLink);
     }
     
+    // Load incomestyles.css if not already loaded
+    if (!document.querySelector('link[href*="incomestyles.css"]')) {
+        const incomeStylesLink = document.createElement('link');
+        incomeStylesLink.href = '/ai/styles/incomestyles.css';
+        incomeStylesLink.rel = 'stylesheet';
+        document.head.appendChild(incomeStylesLink);
+    }
+    
     let dataContainer = null;
 
     // Listen for dataout expansion/collapse
