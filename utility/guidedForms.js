@@ -99,12 +99,12 @@ class GuidedFormSystem {
      */
     initializeDataContainerRef() {
         // Find the data container that might need dynamic sizing
-        this.dataContainer = document.querySelector('.data-container-left.expanded');
+        this.dataContainer = document.querySelector('.data-container-in.expanded');
         
-        // If no expanded container found, look for any data-container-left
+        // If no expanded container found, look for any data-container-in
         if (!this.dataContainer) {
-            this.dataContainer = document.querySelector('.data-container-left') || 
-                               this.container.closest('.data-container-left');
+            this.dataContainer = document.querySelector('.data-container-in') || 
+                               this.container.closest('.data-container-in');
         }
         
         if (this.dataContainer && this.config.dynamicSizing) {
@@ -132,7 +132,7 @@ class GuidedFormSystem {
             
             if (state === 'expanded' && this.isInitialized) {
                 // Update our reference to the expanded container
-                this.dataContainer = document.querySelector('.data-container-left.expanded');
+                this.dataContainer = document.querySelector('.data-container-in.expanded');
                 // Show progress indicator when expanded
                 const progressIndicator = document.getElementById('guided-form-progress');
                 if (progressIndicator) {
@@ -733,7 +733,7 @@ class GuidedFormSystem {
 
         // Priority 2: Data-in system containers - target the main container directly
         if (!targetContainer) {
-            targetContainer = document.querySelector('.data-container-left');
+            targetContainer = document.querySelector('.data-container-in');
         }
 
         // Priority 3: General data-content containers
@@ -755,11 +755,11 @@ class GuidedFormSystem {
         progressContainer.id = 'guided-form-progress';
         
         // Determine positioning based on container type
-        const isDataInContainer = targetContainer.closest('.data-container-left') || 
-                                 targetContainer.classList.contains('data-container-left');
+        const isDataInContainer = targetContainer.closest('.data-container-in') || 
+                                 targetContainer.classList.contains('data-container-in');
         
         if (isDataInContainer) {
-            // Position on left side of data-container-left
+            // Position on left side of data-container-in
             progressContainer.style.cssText = `
                 position: absolute;
                 top: 10px;

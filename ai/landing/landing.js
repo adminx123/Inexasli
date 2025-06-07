@@ -42,8 +42,8 @@ const SELECTORS = {
         '.data-container-summary'
     ],
     data: [
-        '.data-container-left',
-        '.data-container-right'
+        '.data-container-in',
+        '.data-container-out'
     ]
 };
 
@@ -113,10 +113,10 @@ const UIManager = {
         });
         
         if (isBudgetMode) {
-            // Hide data containers (excluding data-container-left to avoid overriding datain.js)
+            // Hide data containers (excluding data-container-in to avoid overriding datain.js)
             dataContainers.forEach(element => {
-                // --- CHANGE: Skip data-container-left to prevent hiding it ---
-                if (element.classList.contains('data-container-left')) return;
+                // --- CHANGE: Skip data-container-in to prevent hiding it ---
+                if (element.classList.contains('data-container-in')) return;
                 if (element) {
                     element.style.setProperty('display', 'none', 'important');
                 }
@@ -143,9 +143,9 @@ const UIManager = {
             // Show data containers
             dataContainers.forEach(element => {
                 if (element) {
-                    // --- CHANGE: Explicitly ensure visibility for data-container-left ---
+                    // --- CHANGE: Explicitly ensure visibility for data-container-in ---
                     element.style.removeProperty('display');
-                    if (element.classList.contains('data-container-left')) {
+                    if (element.classList.contains('data-container-in')) {
                         element.style.setProperty('visibility', 'visible');
                         element.style.setProperty('opacity', '1');
                     }
@@ -174,9 +174,9 @@ const UIManager = {
     hideAllInitially() {
         this.clearRules();
         
-        // --- CHANGE: Hide only data-container-right, not data-container-left ---
+        // --- CHANGE: Hide only data-container-out, not data-container-in ---
         SELECTORS.data.forEach(selector => {
-            if (selector !== '.data-container-left') {
+            if (selector !== '.data-container-in') {
                 this.styleSheet.insertRule(`${selector} { display: none !important; }`, 0);
             }
         });

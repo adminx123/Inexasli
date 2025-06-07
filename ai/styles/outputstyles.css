@@ -168,8 +168,8 @@ body {
 /* Each output.txt file can include additional CSS that works within the device-container constraints */
 
 /* DataOut panel background overrides */
-.data-container-right,
-.data-container-right:hover {
+.data-container-out,
+.data-container-out:hover {
   background-color: transparent !important;
   box-shadow: none !important;
   border-color: transparent !important;

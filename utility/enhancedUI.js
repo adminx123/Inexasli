@@ -235,7 +235,7 @@ function initScrollToTopFAB() {
         let scrollY = window.scrollY || document.documentElement.scrollTop;
         
         // Check if we're in a dataout.js context and get container scroll position
-        const dataContainer = document.querySelector('.data-container-right.expanded .data-content');
+        const dataContainer = document.querySelector('.data-container-out.expanded .data-content');
         if (dataContainer) {
             scrollY = dataContainer.scrollTop;
         }
@@ -270,7 +270,7 @@ function initScrollToTopFAB() {
 
     // Monitor for data container creation and add scroll listener
     const observeDataContainers = () => {
-        const dataContainer = document.querySelector('.data-container-right.expanded .data-content');
+        const dataContainer = document.querySelector('.data-container-out.expanded .data-content');
         if (dataContainer) {
             dataContainer.addEventListener('scroll', () => {
                 if (scrollTimeout) return;
@@ -314,7 +314,7 @@ function initScrollToTopFAB() {
  */
 function scrollToTop() {
     // Check if we're in a dataout.js context with an expanded data container
-    const dataContainer = document.querySelector('.data-container-right.expanded .data-content');
+    const dataContainer = document.querySelector('.data-container-out.expanded .data-content');
     
     if (dataContainer) {
         // Scroll the content container to top
@@ -551,7 +551,7 @@ function checkIfEmbedded() {
         
         // Check if we're being loaded into a data container (dataout.js integration)
         // This is the primary indicator for landing page integration
-        if (document.querySelector('.data-container-right') || 
+        if (document.querySelector('.data-container-out') || 
             document.querySelector('.data-content') ||
             (document.body && document.body.parentElement && document.body.parentElement.querySelector('.data-content'))) {
             console.log('✅ Detected dataout.js integration - allowing content');
