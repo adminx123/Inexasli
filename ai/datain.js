@@ -469,11 +469,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 max-width: 100%;
                 width: 100%;
                 min-width: 100%;
-                height: 50vh;
+                height: 70vh; /* Increased from 50vh to 70vh for more space */
                 bottom: 0;
                 left: 0;
                 transform: none;
-                overflow: hidden; /* Remove scrolling */
+                overflow: hidden; /* Keep container overflow hidden, but allow content scrolling */
                 border-radius: 24px 24px 0 0; /* Rounded corners at the top */
                 border: none;
                 box-shadow: 0 -2px 6px rgba(74, 124, 89, 0.25); /* Soft shadow along the top edge */
@@ -513,7 +513,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-size: 14px;
                 height: calc(100% - 40px); /* Fixed height calculation */
                 max-height: none; /* Remove max-height limitation */
-                overflow: hidden;
+                overflow-y: auto; /* Enable vertical scrolling for content */
+                overflow-x: hidden; /* Hide horizontal overflow */
                 font-family: "Inter", sans-serif;
                 width: 100%;
                 max-width: 100%;
@@ -521,6 +522,29 @@ document.addEventListener('DOMContentLoaded', async function () {
                 position: relative; /* Add positioning context */
                 display: block; /* Ensure proper display */
                 box-sizing: border-box; /* Include padding in height calculation */
+                /* Add smooth scrolling */
+                scroll-behavior: smooth;
+                /* Custom scrollbar styling */
+                scrollbar-width: thin;
+                scrollbar-color: rgba(74, 124, 89, 0.3) transparent;
+            }
+
+            /* Custom scrollbar for webkit browsers */
+            .data-container-in .data-content::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .data-container-in .data-content::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .data-container-in .data-content::-webkit-scrollbar-thumb {
+                background-color: rgba(74, 124, 89, 0.3);
+                border-radius: 3px;
+            }
+
+            .data-container-in .data-content::-webkit-scrollbar-thumb:hover {
+                background-color: rgba(74, 124, 89, 0.5);
             }
 
             /* Utility buttons styling for all states */
@@ -629,7 +653,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     max-width: 100%;
                     width: 100%;
                     min-width: 100%;
-                    height: 60vh;
+                    height: 75vh; /* Increased from 60vh to 75vh for better mobile experience */
                     bottom: 0;
                     left: 0;
                     transform: none;
@@ -653,7 +677,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 .data-container-in .data-content {
                     font-size: 12px;
                     padding: 8px;
-                    overflow: hidden; /* Remove scrolling on mobile */
+                    overflow-y: auto; /* Enable scrolling on mobile */
+                    overflow-x: hidden; /* Hide horizontal overflow on mobile */
                     margin-top: 25px;
                     height: calc(100% - 35px); /* Adjusted for mobile */
                 }
