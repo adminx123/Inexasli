@@ -999,3 +999,30 @@ import { FormPersistence } from '/utility/formPersistence.js';
 
 })();
 </script>
+
+<!-- Load frequency.js module for frequency dropdown functionality -->
+<script src="/ai/income/frequency.js" type="module"></script>
+
+<!-- Initialize frequency dropdowns -->
+<script>
+(function() {
+    // Function to initialize frequency dropdowns with fallback
+    function initFrequencyDropdowns() {
+        if (typeof window.initializeFrequencyGroups === 'function') {
+            console.log('Initializing frequency groups...');
+            window.initializeFrequencyGroups();
+        } else {
+            console.warn('initializeFrequencyGroups not available, retrying in 100ms...');
+            setTimeout(initFrequencyDropdowns, 100);
+        }
+    }
+
+    // Wait for DOM and modules to be ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFrequencyDropdowns);
+    } else {
+        // DOM already loaded, try immediately with small delay for modules
+        setTimeout(initFrequencyDropdowns, 50);
+    }
+})();
+</script>
