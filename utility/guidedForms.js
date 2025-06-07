@@ -41,7 +41,7 @@ class GuidedFormSystem {
             respectExistingPersistence: true, // Don't interfere with existing form persistence
             dynamicSizing: true, // Enable dynamic container sizing
             minContainerHeight: 200, // Minimum container height in pixels
-            maxContainerHeight: '80vh', // Maximum container height
+            maxContainerHeight: '90vh', // Maximum container height - increased for better content expansion
             sizingPadding: 60, // Extra padding for dynamic sizing calculations
             ...options
         };
@@ -617,23 +617,36 @@ class GuidedFormSystem {
         // Respect minimum height
         const minHeight = this.config.minContainerHeight;
         
-        // Respect maximum height with mobile considerations
-        let maxHeight;
+        // Calculate preferred maximum height
+        let preferredMaxHeight;
         if (typeof this.config.maxContainerHeight === 'string' && this.config.maxContainerHeight.endsWith('vh')) {
             const vhValue = parseFloat(this.config.maxContainerHeight);
-            maxHeight = (window.innerHeight * vhValue) / 100;
+            preferredMaxHeight = (window.innerHeight * vhValue) / 100;
         } else {
-            maxHeight = parseInt(this.config.maxContainerHeight) || window.innerHeight * 0.8;
+            preferredMaxHeight = parseInt(this.config.maxContainerHeight) || window.innerHeight * 0.8;
         }
         
-        // Mobile-specific adjustments
+        // Mobile-specific adjustments for preferred max height
         if (window.innerWidth <= 480) {
-            // On mobile, be more conservative with max height to ensure usability
-            maxHeight = Math.min(maxHeight, window.innerHeight * 0.7);
+            preferredMaxHeight = Math.min(preferredMaxHeight, window.innerHeight * 0.9);
+        }
+        
+        // Allow content-driven expansion beyond preferred max when needed
+        // Use a reasonable absolute maximum to prevent excessive heights
+        const absoluteMaxHeight = window.innerHeight * 0.95; // Never exceed 95% of viewport
+        
+        // If content needs more space than preferred max, allow it up to absolute max
+        let effectiveMaxHeight;
+        if (totalHeight > preferredMaxHeight && totalHeight <= absoluteMaxHeight) {
+            effectiveMaxHeight = totalHeight; // Allow content to dictate height
+        } else if (totalHeight > absoluteMaxHeight) {
+            effectiveMaxHeight = absoluteMaxHeight; // Cap at absolute maximum
+        } else {
+            effectiveMaxHeight = preferredMaxHeight; // Use preferred max
         }
         
         // Constrain to min/max bounds
-        const finalHeight = Math.max(minHeight, Math.min(totalHeight, maxHeight));
+        const finalHeight = Math.max(minHeight, Math.min(totalHeight, effectiveMaxHeight));
         
         return finalHeight;
     }
