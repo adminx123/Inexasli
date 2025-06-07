@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 max-width: 100%;
                 width: 100%;
                 min-width: 100%;
-                height: 70vh; /* Increased from 50vh to 70vh for more space */
+                height: 90vh; /* Increased to 90vh for maximum expansion */
                 bottom: 0;
                 left: 0;
                 transform: none;
@@ -653,7 +653,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     max-width: 100%;
                     width: 100%;
                     min-width: 100%;
-                    height: 75vh; /* Increased from 60vh to 75vh for better mobile experience */
+                    height: 90vh; /* Increased to 90vh for maximum mobile expansion */
                     bottom: 0;
                     left: 0;
                     transform: none;
