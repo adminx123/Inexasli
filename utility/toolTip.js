@@ -272,10 +272,12 @@ function initializeTooltips(container = document) {
   };
 }
 
-// Make the function available globally immediately when module loads
+// Make the function available globally for both module and non-module loading
 window.initializeTooltips = initializeTooltips;
 window.injectTooltipStyles = injectTooltipStyles;
-console.log("[ToolTip] Module loaded, functions available on window object");
+console.log("[ToolTip] Script loaded, functions available on window object");
 
-// Export for ES modules
-export { initializeTooltips, injectTooltipStyles };
+// Export for ES modules (only if module loading is supported)
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { initializeTooltips, injectTooltipStyles };
+}
