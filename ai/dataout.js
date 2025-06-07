@@ -73,15 +73,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function initializeDataContainer() {
-        if (document.querySelector('.data-container-right')) {
-            console.log('Right data container already exists, skipping initialization (dataout.js)');
+        if (document.querySelector('.data-container-out')) {
+            console.log('Data out container already exists, skipping initialization (dataout.js)');
             return;
         }
 
         const style = document.createElement('style');
         style.textContent = `
-            /* Right container specific styling */
-            .data-container-right {
+            /* Data out container specific styling */
+            .data-container-out {
                 position: fixed;
                 top: 0;
                 left: 50%;
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 opacity: 1;
             }
 
-            .data-container-right.initial, .data-container-right.collapsed {
+            .data-container-out.initial, .data-container-out.collapsed {
                 width: 100%;
                 max-width: 100%;
                 min-width: 100%;
@@ -117,13 +117,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 padding-right: 10px;
             }
             /* Explicit override to ensure tab stays above Data In */
-            .data-container-right.initial {
+            .data-container-out.initial {
                 z-index: 150; /* Removed !important, simplified z-index */
             }
-            .data-container-right.collapsed {
+            .data-container-out.collapsed {
                 z-index: 150; /* Removed !important, simplified z-index */
             }
-            .data-container-right.expanded {
+            .data-container-out.expanded {
                 max-width: 100%;
                 width: 100%;
                 min-width: 100%;
@@ -140,11 +140,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 z-index: 200; /* Added z-index for expanded state */
             }
 
-            .data-container-right:hover {
+            .data-container-out:hover {
                 background-color: #eef7f0;
             }
 
-            .data-container-right .close-data-container {
+            .data-container-out .close-data-container {
                 position: absolute;
                 top: 4px;
                 right: 10px;
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-family: "Inter", sans-serif;
             }
             
-            .data-container-right.expanded .close-data-container {
+            .data-container-out.expanded .close-data-container {
                 top: 4px;
                 right: 10px;
                 font-size: 18px;
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-radius: 4px;
             }
 
-            .data-container-right .data-label {
+            .data-container-out .data-label {
                 text-decoration: none;
                 color: #000;
                 font-size: 12px;
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 text-orientation: mixed;
             }
             
-            .data-container-right.expanded .data-label {
+            .data-container-out.expanded .data-label {
                 writing-mode: horizontal-tb;
                 position: absolute;
                 top: 4px;
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 border-radius: 4px;
             }
 
-            .data-container-right .data-content {
+            .data-container-out .data-content {
                 padding: 0;
                 font-size: 14px;
                 min-height: calc(50vh - 40px); /* Minimum height based on container min-height */
@@ -209,20 +209,20 @@ document.addEventListener('DOMContentLoaded', async function () {
                 margin-top: 30px;
             }
 
-            /* Mobile responsiveness for right container */
+            /* Mobile responsiveness for data out container */
             @media (max-width: 480px) {
-                .data-container-right {
+                .data-container-out {
                     max-width: 28px;
                     padding: 3px;
                 }
 
-                .data-container-right.initial, .data-container-right.collapsed {
+                .data-container-out.initial, .data-container-out.collapsed {
                     width: 28px;
                     height: 36px;
                     z-index: 150; /* Simplified z-index for mobile initial/collapsed */
                 }
 
-                .data-container-right.expanded {
+                .data-container-out.expanded {
                     max-width: 100%;
                     width: 100%;
                     min-width: 100%;
@@ -237,27 +237,27 @@ document.addEventListener('DOMContentLoaded', async function () {
                     padding: 0;
                 }
 
-                .data-container-right .data-label {
+                .data-container-out .data-label {
                     font-size: 10px;
                     padding: 3px;
                 }
                 
-                .data-container-right.expanded .data-label {
+                .data-container-out.expanded .data-label {
                     font-size: 16px;
                     padding: 4px;
                 }
 
-                .data-container-right .close-data-container {
+                .data-container-out .close-data-container {
                     font-size: 12px;
                     padding: 4px;
                 }
                 
-                .data-container-right.expanded .close-data-container {
+                .data-container-out.expanded .close-data-container {
                     font-size: 16px;
                     padding: 4px;
                 }
 
-                .data-container-right .data-content {
+                .data-container-out .data-content {
                     font-size: 12px;
                     padding: 0;
                     overflow-x: auto;
@@ -271,14 +271,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.head.appendChild(style);
 
         dataContainer = document.createElement('div');
-        dataContainer.className = `data-container-right initial`;
+        dataContainer.className = `data-container-out initial`;
         dataContainer.dataset.state = 'initial';
         dataContainer.innerHTML = `
             <span class="close-data-container"></span>
             <span class="data-label">DATA OUT</span>
         `;
         document.body.appendChild(dataContainer);
-        console.log('Right data container injected with state: initial (dataout.js)');
+        console.log('Data out container injected with state: initial (dataout.js)');
 
         // Add click listener to entire container for expansion
         dataContainer.addEventListener('click', function (e) {
@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 toggleDataContainer();
             });
         } else {
-            console.error('Right close button not found (dataout.js)');
+            console.error('Data out close button not found (dataout.js)');
         }
 
         if (dataLabel) {
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 toggleDataContainer();
             });
         } else {
-            console.error('Right data label not found (dataout.js)');
+            console.error('Data out label not found (dataout.js)');
         }
 
         function initializeGridItems() {
@@ -348,7 +348,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.log(`[DataOut] Current state: ${isExpanded ? 'expanded' : 'initial/collapsed'}`);
             
             // Get reference to datain container
-            const dataInContainer = document.querySelector('.data-container-left');
+            const dataInContainer = document.querySelector('.data-container-in');
         
             if (isExpanded) {
                 dataContainer.classList.remove('expanded');
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     detail: { state: 'initial' }
                 }));
                 
-                console.log('[DataOut] Right data container collapsed and reset');
+                console.log('[DataOut] Data out container collapsed and reset');
             } else {
                 dataContainer.classList.remove('initial');
                 dataContainer.classList.add('expanded');
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     detail: { state: 'expanded' }
                 }));
                 
-                console.log('[DataOut] Right data container expanded');
+                console.log('[DataOut] Data out container expanded');
         
                 const lastGridItemUrl = getLocal('lastGridItemUrl');
                 const outputMap = {
@@ -522,7 +522,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 console.log('[DataOut] Forcing data container to open for API response');
                 
                 // Get reference to the datain container and collapse it first
-                const dataInContainer = document.querySelector('.data-container-left');
+                const dataInContainer = document.querySelector('.data-container-in');
                 if (dataInContainer && dataInContainer.dataset.state === 'expanded') {
                     console.log('[DataOut] Collapsing datain container first');
                     // Create a custom event to trigger datain collapse
@@ -586,7 +586,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                                 e.target.closest('[id^="toast-"]');
             
             if (!isClickInside && !isCopyButton && dataContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside right data container, collapsing (dataout.js)');
+                console.log('Clicked outside data out container, collapsing (dataout.js)');
                 toggleDataContainer();
             }
         });
@@ -606,7 +606,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         initializeDataContainer();
 
         // REMOVED: Check if data-in is already expanded to adjust z-index appropriately
-        // const dataInContainer = document.querySelector('.data-container-left');
+        // const dataInContainer = document.querySelector('.data-container-in');
         // if (dataInContainer && dataInContainer.dataset.state === 'expanded') {
         //     dataContainer.style.zIndex = '12000';
         // }

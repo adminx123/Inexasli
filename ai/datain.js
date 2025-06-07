@@ -416,14 +416,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function initializeDataContainer() {
-        if (document.querySelector('.data-container-left')) {
+        if (document.querySelector('.data-container-in')) {
             return;
         }
 
         const style = document.createElement('style');
         style.textContent = `
-            /* Left container specific styling */
-            .data-container-left {
+            /* Data in container specific styling */
+            .data-container-in {
                 position: fixed;
                 bottom: 0;
                 left: 50%;
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 flex-direction: column;
             }
 
-            .data-container-left.initial, .data-container-left.collapsed {
+            .data-container-in.initial, .data-container-in.collapsed {
                 width: 100%;
                 max-width: 100%;
                 min-width: 100%;
@@ -463,7 +463,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 padding-right: 10px;
             }
 
-            .data-container-left.expanded {
+            .data-container-in.expanded {
                 max-width: 100%;
                 width: 100%;
                 min-width: 100%;
@@ -478,11 +478,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 box-shadow: 0 -2px 6px rgba(74, 124, 89, 0.25); /* Soft shadow along the top edge */
             }
 
-            .data-container-left:hover {
+            .data-container-in:hover {
                 background-color: #eef7f0;
             }
 
-            .data-container-left .close-data-container {
+            .data-container-in .close-data-container {
                 position: absolute;
                 top: 4px;
                 left: 10px;
@@ -496,7 +496,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 z-index: 10; /* Simplified z-index relative to parent */
             }
             
-            .data-container-left.expanded .close-data-container {
+            .data-container-in.expanded .close-data-container {
                 top: 4px;
                 right: 10px;
                 left: auto;
@@ -509,7 +509,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 
-            .data-container-left .data-content {
+            .data-container-in .data-content {
                 padding: 10px;
                 font-size: 14px;
                 height: calc(100% - 40px); /* Fixed height calculation */
@@ -525,7 +525,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             /* Utility buttons styling for all states */
-            .data-container-left .utility-buttons-container {
+            .data-container-in .utility-buttons-container {
                 display: flex;
                 flex-direction: row;
                 gap: 8px;
@@ -534,19 +534,19 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             /* Hide utility buttons only when expanded */
-            .data-container-left.expanded .utility-buttons-container {
+            .data-container-in.expanded .utility-buttons-container {
                 display: none;
             }
 
             /* Show utility buttons in all collapsed states */
-            .data-container-left.initial .utility-buttons-container,
-            .data-container-left.collapsed .utility-buttons-container,
-            .data-container-left.visually-collapsed .utility-buttons-container {
+            .data-container-in.initial .utility-buttons-container,
+            .data-container-in.collapsed .utility-buttons-container,
+            .data-container-in.visually-collapsed .utility-buttons-container {
                 display: flex;
             }
             
             /* Visual collapsed state - looks like collapsed but keeps expanded DOM structure */
-            .data-container-left.visually-collapsed {
+            .data-container-in.visually-collapsed {
                 max-width: 100%;
                 width: 100%;
                 min-width: 100%;
@@ -567,7 +567,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             
             /* Ensure utility buttons are visible and properly positioned in collapsed state */
-            .data-container-left.visually-collapsed .utility-buttons-container {
+            .data-container-in.visually-collapsed .utility-buttons-container {
                 display: flex;
                 flex-direction: row;
                 gap: 8px;
@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
             /* Button hover effects for collapsed state */
-            .data-container-left .utility-buttons-container button:hover {
+            .data-container-in .utility-buttons-container button:hover {
                 background-color: rgba(255, 255, 255, 0.8);
             }
 
@@ -591,12 +591,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             /* Mobile responsiveness for left container */
             @media (max-width: 480px) {
-                .data-container-left {
+                .data-container-in {
                     max-width: 100%;
                     padding: 3px;
                 }
 
-                .data-container-left.initial, .data-container-left.collapsed {
+                .data-container-in.initial, .data-container-in.collapsed {
                     width: 100%;
                     height: 36px;
                     z-index: 10001;
@@ -604,7 +604,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     padding-right: 10px;
                 }
                 
-                .data-container-left.visually-collapsed {
+                .data-container-in.visually-collapsed {
                     width: 100%;
                     height: 36px;
                     z-index: 10001;
@@ -612,25 +612,25 @@ document.addEventListener('DOMContentLoaded', async function () {
                     padding-right: 10px;
                 }
 
-                .data-container-left .utility-buttons-container {
+                .data-container-in .utility-buttons-container {
                     gap: 6px;
                 }
 
-                .data-container-left .utility-buttons-container button {
+                .data-container-in .utility-buttons-container button {
                     width: 24px;
                     height: 24px;
                     font-size: 12px;
                 }
 
-                .data-container-left .utility-buttons-container button i {
+                .data-container-in .utility-buttons-container button i {
                     font-size: 12px;
                 }
 
-                .data-container-left .utility-buttons-container button span {
+                .data-container-in .utility-buttons-container button span {
                     font-size: 12px;
                 }
 
-                .data-container-left.expanded {
+                .data-container-in.expanded {
                     max-width: 100%;
                     width: 100%;
                     min-width: 100%;
@@ -645,17 +645,17 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 
-                .data-container-left .close-data-container {
+                .data-container-in .close-data-container {
                     font-size: 12px;
                     padding: 4px;
                 }
                 
-                .data-container-left.expanded .close-data-container {
+                .data-container-in.expanded .close-data-container {
                     font-size: 16px;
                     padding: 4px;
                 }
 
-                .data-container-left .data-content {
+                .data-container-in .data-content {
                     font-size: 12px;
                     padding: 8px;
                     overflow: hidden; /* Remove scrolling on mobile */
@@ -667,7 +667,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.head.appendChild(style);
 
         dataContainer = document.createElement('div');
-        dataContainer.className = `data-container-left visually-collapsed`;
+        dataContainer.className = `data-container-in visually-collapsed`;
         dataContainer.dataset.state = 'initial';
         dataContainer.innerHTML = `
             <span class="close-data-container" style="display: none;"></span>
@@ -820,7 +820,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const isExpanded = dataContainer.dataset.state === 'expanded';
         
         // Get reference to dataout container
-        const dataOutContainer = document.querySelector('.data-container-right');
+        const dataOutContainer = document.querySelector('.data-container-out');
 
         if (isExpanded) {
             // Collapse: Transform to visual collapsed state without changing DOM
@@ -1098,7 +1098,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         initializeDataContainer();
 
         // Check if data-out is already expanded to adjust z-index appropriately
-        const dataOutContainer = document.querySelector('.data-container-right');
+        const dataOutContainer = document.querySelector('.data-container-out');
         if (dataOutContainer && dataOutContainer.dataset.state === 'expanded') {
             dataContainer.style.zIndex = '12000';
         }
