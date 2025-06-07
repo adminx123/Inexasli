@@ -34,6 +34,13 @@ function initializeFormPersistence(url) {
             singleSelection: ['fitness-activity', 'fitness-experience', 'fitness-equipment', 'fitness-time', 'fitness-intensity', 'fitness-sex'],
             multiSelection: []
         };
+    } else if (url.includes('/income/')) {
+        moduleType = 'income';
+        moduleConfig = {
+            singleSelection: [],
+            multiSelection: [],
+            frequencyFields: ['income-country', 'income-subregion', 'filing-status']
+        };
     } else if (url.includes('/decision/')) {
         moduleType = 'decision';
     } else if (url.includes('/enneagram/')) {
@@ -136,21 +143,11 @@ function initializeCategoryModule() {
             const url = e.target.getAttribute('data-value');
             console.log('[DataIn] Product selected:', url);
             
-            // Detect if this is the intro/incomeIQ item
-            const isBudgetItem = url === '/ai/income/intro.html';
-            
-            // Toggle UI mode based on selection if the function exists
-            if (typeof window.toggleUiMode === 'function') {
-                window.toggleUiMode(isBudgetItem);
-            }
-            
-            if (!isBudgetItem) {
-                // For non-budget items, use regular content loading
-                const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
-                    detail: { url: url }
-                });
-                document.dispatchEvent(gridItemEvent);
-            }
+            // Use regular content loading for all modules
+            const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
+                detail: { url: url }
+            });
+            document.dispatchEvent(gridItemEvent);
             
             // Store the URL in localStorage for persistence
             if (typeof window.setLocal === 'function') {
@@ -382,6 +379,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 } else {
                     newScript.textContent = script.textContent;
                 }
+                
+                // Preserve script type attribute (important for modules)
+                if (script.type) {
+                    newScript.type = script.type;
+                }
+                
                 // Replace the old script with the new one to trigger execution
                 script.parentNode.insertBefore(newScript, script);
                 script.remove();

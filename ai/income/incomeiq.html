@@ -1,0 +1,1001 @@
+<!--
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ -->
+
+<div class="device-container">
+
+<!-- Stage 1: Tax Residency & Personal Details -->
+<div class="row1" data-step-label="Tax Residency">
+    <div class="benefit-card">
+        <h2 style="text-align:center">| IncomeIQ™ |</h2>
+        <h2 style="text-align:center">Ready to Unlock the Power of Financial Clarity?</h2>
+        <p>Save time and find relief—master your money fast with a free tool that cuts the bullshit and shows how income, expenses, and more click together.</p>       
+        <p>Embrace the confidence of financial smarts with deeper insights into the four pillars of personal finances to play with—for education only, so you're ready to team up with a pro for the real moves.</p>
+    </div>  
+
+    <h3 class="tooltip1" data-tooltip="Where you're legally considered to live for tax purposes, based on factors like time spent or ties to the country.">
+        Select Tax Residency<span class="tooltip1-content"></span>
+    </h3>
+    
+    <select id="income-country" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;">
+        <option value="">Select Country</option>
+        <option value="CAN">Canada</option>
+        <option value="USA">USA</option>
+        <option value="UK">United Kingdom</option>
+        <option value="AUS">Australia</option>
+        <option value="OTHER">Other</option>
+    </select>
+
+    <div id="income-subregionContainer" style="display: block;">
+        <select id="income-subregion" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
+            <option value="">Select Tax Subregion</option>
+        </select>
+    </div>
+
+    <div id="income-residencyStatus" style="display: block;">
+        <select id="income-residency" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
+            <option value="">Select Residency Status</option>
+            <option value="Full_Resident">Full Resident (Lived entire year, full taxes)</option>
+            <option value="Part_Year_Resident">Part-Year Resident (Lived part-year, partial taxes)</option>
+            <option value="Non_Resident">Non Resident (Not living here, some taxes)</option>
+            <option value="Temporary_Resident">Temporary Resident (Temporary stay, tax exemptions)</option>
+        </select>
+    </div>
+
+    <h3 class="tooltip1" data-tooltip="What your legally status is for tax purposes">
+        Select Filing Status<span class="tooltip1-content"></span>
+    </h3>
+    
+    <select id="income-filingStatus" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;">
+        <option value="">Select Filing Status</option>
+    </select>
+
+    <div id="income-specifics" style="display: none;">
+        <h3 class="tooltip1" data-tooltip="Relevant personal information.">
+            Select Personal Details<span class="tooltip1-content"></span>
+        </h3>
+
+        <input type="number" placeholder="Your Age" inputmode="numeric" id="income-ageSelf" min="0" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;">
+
+        <select id="income-employmentStatus" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
+            <option value="">Select Your Employment Status</option>
+            <option value="employed">Employed</option>
+            <option value="self_employed">Self-Employed</option>
+            <option value="unemployed">Unemployed</option>
+            <option value="retired">Retired</option>
+            <option value="student">Student</option>
+        </select>
+        
+        <div class="income-spouseFields">
+            <input type="number" placeholder="Spouse Age" inputmode="numeric" id="income-ageSpouse" min="0" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
+            
+            <select id="income-employmentStatusSpouse" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
+                <option value="">Select Spouse Employment Status</option>
+                <option value="employed">Employed</option>
+                <option value="self_employed">Self-Employed</option>
+                <option value="unemployed">Unemployed</option>
+                <option value="retired">Retired</option>
+                <option value="student">Student</option>
+            </select>
+        </div>
+
+        <div class="income-dependantsContainer">
+            <label for="income-birthYearDisabledDependants" class="category-label tooltip" data-tooltip="Enter the birth years of disabled dependants, separated by commas.">
+                Birth Years of Disabled Dependants<span class="tooltip-content"></span>
+            </label>
+            <textarea id="income-birthYearDisabledDependants" placeholder="e.g., 2005, 2010, 2015" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;"></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- Stage 2: Income Information -->
+<div class="row1" data-step-label="Income Sources">
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px;" class="tooltip1" data-tooltip="Employment involves working under a contract for an employer, receiving a regular salary or wage, and generally includes benefits like health insurance. Self-employment means working for oneself, where income might fluctuate based on work volume, with the individual handling their own taxes, benefits, and business expenses.">
+        Input Employment - Self Employment Income<span class="tooltip1-content"></span>
+    </h3>
+
+    <div class="checkboxrow">
+        <label for="income-salary-wages" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+            <span class="tooltip-content"></span>
+            Salary/Wages:
+        </label>
+        <input type="number" inputmode="numeric" id="income-salary-wages">
+        <div data-frequency-id="income-salary-wages-frequency"></div>
+        <span id="income-salary-wages-annual"></span>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="income-tips" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+            <span class="tooltip-content"></span>
+            Tips:
+        </label>
+        <input type="number" inputmode="numeric" id="income-tips">
+        <div data-frequency-id="income-tips-frequency"></div>
+        <span id="income-tips-annual"></span>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="income-bonuses" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+            <span class="tooltip-content"></span>
+            Bonus:
+        </label>
+        <input type="number" inputmode="numeric" id="income-bonuses">
+        <div data-frequency-id="income-bonuses-frequency"></div>
+        <span id="income-bonuses-annual"></span>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="income-sole-prop" style="font-size: unset;" class="tooltip" data-tooltip="Enter net income after business expenses but before taxes.">
+            <span class="tooltip-content"></span>
+            Self Employment:
+        </label>
+        <input type="number" inputmode="numeric" id="income-sole-prop">
+        <div data-frequency-id="income-sole-prop-frequency"></div>
+        <span id="income-sole-prop-annual"></span>
+    </div>
+
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="Retirement income refers to the money received by individuals after they stop working, sourced from personal savings, pensions, or investment plans. Social benefit income encompasses payments from government welfare programs providing financial assistance based on criteria like age, unemployment, or disability, aimed at supporting those in need when they cannot earn through regular employment.">
+        Input Retirement - Social Benefit Income<span class="tooltip1-content"></span>
+    </h3>
+
+    <div class="checkboxrow">
+        <label for="income-federal-pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+            <span class="tooltip-content"></span>
+            Pension, Federal:
+        </label>
+        <input type="number" inputmode="numeric" id="income-federal-pension">
+        <div data-frequency-id="income-federal-pension-frequency"></div>
+        <span id="income-federal-pension-annual"></span>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="income-provincial-pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+            <span class="tooltip-content"></span>
+            Pension, Provincial:
+        </label>
+        <input type="number" inputmode="numeric" id="income-provincial-pension">
+        <div data-frequency-id="income-provincial-pension-frequency"></div>
+        <span id="income-provincial-pension-annual"></span>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="income-private-pension" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+            <span class="tooltip-content"></span>
+            Pension, Private:
+        </label>
+        <input type="number" inputmode="numeric" id="income-private-pension">
+        <div data-frequency-id="income-private-pension-frequency"></div>
+        <span id="income-private-pension-annual"></span>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="income-old-age-security" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+            <span class="tooltip-content"></span>
+            Old Age Security:
+        </label>
+        <input type="number" inputmode="numeric" id="income-old-age-security">
+        <div data-frequency-id="income-old-age-security-frequency"></div>
+        <span id="income-old-age-security-annual"></span>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="income-employment-insurance" style="font-size: unset;" class="tooltip" data-tooltip="Enter gross amount before tax and contributions.">
+            <span class="tooltip-content"></span>
+            Employment Insurance:
+        </label>
+        <input type="number" inputmode="numeric" id="income-employment-insurance">
+        <div data-frequency-id="income-employment-insurance-frequency"></div>
+        <span id="income-employment-insurance-annual"></span>
+    </div>
+</div>
+
+<!-- Stage 3: Expenses -->
+<div class="row1" data-step-label="Expenses">
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="Expenses that are necessary for basic living, health, and safety, without which one's quality of life or ability to function would be significantly compromised. These are non-negotiable costs like food, housing, healthcare, and utilities.">
+        Input Essentials Expenses<span class="tooltip1-content"></span>
+    </h3>
+
+    <div class="checkboxrow">
+        <label for="expenses-grocery">Grocery:</label>
+        <input type="number" inputmode="numeric" id="expenses-grocery">
+        <div data-frequency-id="expenses-grocery-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-fitness">Fitness:</label>
+        <input type="number" inputmode="numeric" id="expenses-fitness">
+        <div data-frequency-id="expenses-fitness-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-hygiene">Hygiene:</label>
+        <input type="number" inputmode="numeric" id="expenses-hygiene">
+        <div data-frequency-id="expenses-hygiene-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-medical-dental">Medical, Dental & Insurance:</label>
+        <input type="number" inputmode="numeric" id="expenses-medical-dental">
+        <div data-frequency-id="expenses-medical-dental-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-perscription">Prescription:</label>
+        <input type="number" inputmode="numeric" id="expenses-perscription">
+        <div data-frequency-id="expenses-perscription-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-clothing">Clothing:</label>
+        <input type="number" inputmode="numeric" id="expenses-clothing">
+        <div data-frequency-id="expenses-clothing-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-cellphone-service">Cellphone:</label>
+        <input type="number" inputmode="numeric" id="expenses-cellphone-service">
+        <div data-frequency-id="expenses-cellphone-service-frequency"></div>
+    </div>
+
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="Expenses that are not essential for survival or basic functioning but are related to lifestyle choices, comfort, entertainment, or luxury. These are costs you have control over and can adjust or eliminate without affecting your basic needs, such as dining out, vacations, subscriptions for entertainment, and non-essentials.">
+        Input Discretionary Expenses<span class="tooltip1-content"></span>
+    </h3>
+    
+    <div class="checkboxrow">
+        <label for="expenses-retirement">Retirement Plan Contribution:</label>
+        <input type="number" inputmode="numeric" id="expenses-retirement">
+        <div data-frequency-id="expenses-retirement-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-dining">Dining:</label>
+        <input type="number" inputmode="numeric" id="expenses-dining">
+        <div data-frequency-id="expenses-dining-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-entertainment" style="font-size: unset;" class="tooltip" data-tooltip="Concert tickets, movies, sporting events, nightlife, video games.">
+            <span class="tooltip-content"></span>
+            Entertainment:</label>
+        <input type="number" inputmode="numeric" id="expenses-entertainment">
+        <div data-frequency-id="expenses-entertainment-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-vacation">Vacation:</label>
+        <input type="number" inputmode="numeric" id="expenses-vacation">
+        <div data-frequency-id="expenses-vacation-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-travel-life-insurance">Life & Travel Insurance:</label>
+        <input type="number" inputmode="numeric" id="expenses-travel-life-insurance">
+        <div data-frequency-id="expenses-travel-life-insurance-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-subscriptions">Subscriptions:</label>
+        <input type="number" inputmode="numeric" id="expenses-subscriptions">
+        <div data-frequency-id="expenses-subscriptions-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="expenses-beauty" style="font-size: unset;" class="tooltip" data-tooltip="Include all salon services such as hair, makeup, nails, waxing, eyebrows, teeth whitening, and more.">
+            <span class="tooltip-content"></span>
+            Beauty:</label>
+        <input type="number" inputmode="numeric" id="expenses-beauty">
+        <div data-frequency-id="expenses-beauty-frequency"></div>
+    </div>
+
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="This heading covers all costs related to your living space, including rent or mortgage, utilities, property taxes, insurance, and home maintenance or improvements. It's the foundation of your expense tracking, ensuring your home sweet home remains a sanctuary, not a financial burden.">
+        Input Housing Expenses<span class="tooltip1-content"></span>
+    </h3>
+
+    <div class="checkboxrow">
+        <label for="housing-mortgage-payment">Mortgage Payment:</label>
+        <input type="number" inputmode="numeric" id="housing-mortgage-payment">
+        <div data-frequency-id="housing-mortgage-payment-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="housing-rent-payment">Rent:</label>
+        <input type="number" inputmode="numeric" id="housing-rent-payment">
+        <div data-frequency-id="housing-rent-payment-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="housing-property-tax">Property Tax:</label>
+        <input type="number" inputmode="numeric" id="housing-property-tax">
+        <div data-frequency-id="housing-property-tax-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="housing-condo-fee">Condo Fee:</label>
+        <input type="number" inputmode="numeric" id="housing-condo-fee">
+        <div data-frequency-id="housing-condo-fee-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="housing-hydro">Hydro:</label>
+        <input type="number" inputmode="numeric" id="housing-hydro">
+        <div data-frequency-id="housing-hydro-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="housing-water">Water:</label>
+        <input type="number" inputmode="numeric" id="housing-water">
+        <div data-frequency-id="housing-water-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="housing-gas" style="font-size: unset;" class="tooltip1" data-tooltip="Natural gas, propane, wood, oil.">
+            <span class="tooltip1-content"></span>
+            Heating:</label>
+        <input type="number" inputmode="numeric" id="housing-gas">
+        <div data-frequency-id="housing-gas-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="housing-insurance">Insurance:</label>
+        <input type="number" inputmode="numeric" id="housing-insurance">
+        <div data-frequency-id="housing-insurance-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="housing-repairs">Repairs:</label>
+        <input type="number" inputmode="numeric" id="housing-repairs">
+        <div data-frequency-id="housing-repairs-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="housing-internet">Internet:</label>
+        <input type="number" inputmode="numeric" id="housing-internet">
+        <div data-frequency-id="housing-internet-frequency"></div>
+    </div>
+
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="Transportation costs including vehicle payments, fuel, insurance, public transit, and maintenance to get you where you need to go.">
+        Input Transportation Expenses<span class="tooltip1-content"></span>
+    </h3>
+
+    <div class="checkboxrow">
+        <label for="transportation-car-payment">Car Payment:</label>
+        <input type="number" inputmode="numeric" id="transportation-car-payment">
+        <div data-frequency-id="transportation-car-payment-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="transportation-gas">Gas:</label>
+        <input type="number" inputmode="numeric" id="transportation-gas">
+        <div data-frequency-id="transportation-gas-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="transportation-insurance">Car Insurance:</label>
+        <input type="number" inputmode="numeric" id="transportation-insurance">
+        <div data-frequency-id="transportation-insurance-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="transportation-maintenance">Car Maintenance:</label>
+        <input type="number" inputmode="numeric" id="transportation-maintenance">
+        <div data-frequency-id="transportation-maintenance-frequency"></div>
+    </div>
+
+    <div class="checkboxrow">
+        <label for="transportation-public-transit">Public Transit:</label>
+        <input type="number" inputmode="numeric" id="transportation-public-transit">
+        <div data-frequency-id="transportation-public-transit-frequency"></div>
+    </div>
+</div>
+
+<!-- Stage 4: Assets -->
+<div class="row1" data-step-label="Assets">
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="Assets that an individual can readily convert to cash or use to pay for immediate needs within a short period, typically within one year.">
+        Input Current Assets<span class="tooltip1-content"></span>
+    </h3>
+
+    <div class="row">
+        <label for="assets-checking-accounts">Checking Account:</label>
+        <input type='number' inputmode="numeric" id="assets-checking-accounts">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-checking-accounts-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="assets-savings-accounts">Savings Account:</label>
+        <input type='number' inputmode="numeric" id="assets-savings-accounts">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-savings-accounts-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="assets-other-liquid-accounts">Other Liquid Account:</label>
+        <input type='number' inputmode="numeric" id="assets-other-liquid-accounts">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-other-liquid-accounts-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="assets-money-lent-out" style="font-size: unset;" class="tooltip1" data-tooltip="Include money owed to you from both personal sources (like loans to friends) and business activities (like sales on credit) that you haven't accounted for elsewhere. As a sole proprietor, these are all considered your assets.">
+            <span class="tooltip1-content"></span>
+            Accounts Receivable:</label>
+        <input type='number' inputmode="numeric" id="assets-money-lent-out">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-money-lent-out-percent" inputmode="numeric">
+    </div>
+
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="Assets in personal finance that are not expected to be converted into cash or used up within one year. These assets might provide value over a longer period.">
+        Input Non-Current/Long Term Assets<span class="tooltip1-content"></span>
+    </h3>
+
+    <div class="row">
+        <label for="assets-long-term-investment-accounts">Long Term Investment Account:</label>
+        <input type='number' inputmode="numeric" id="assets-long-term-investment-accounts">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-long-term-investment-accounts-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="assets-retirement-accounts">Retirement Account:</label>
+        <input type='number' inputmode="numeric" id="assets-retirement-accounts">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-retirement-accounts-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="assets-primary-residence">Primary Residence:</label>
+        <input type='number' inputmode="numeric" id="assets-primary-residence">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-primary-residence-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="assets-investment-properties">Investment Property:</label>
+        <input type='number' inputmode="numeric" id="assets-investment-properties">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-investment-properties-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="assets-vehicles">Vehicle:</label>
+        <input type='number' inputmode="numeric" id="assets-vehicles">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-vehicles-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="assets-business-assets">Business Assets:</label>
+        <input type='number' inputmode="numeric" id="assets-business-assets">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-business-assets-percent" inputmode="numeric">
+    </div>
+</div>
+
+<!-- Stage 5: Liabilities -->
+<div class="row1" data-step-label="Liabilities">
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="A type of debt where the borrower receives a fixed amount of money upfront, which they repay over time through regular payments until the loan is fully paid off. Once the loan is settled, the account is closed, and the borrower must apply for a new loan if they need more funds.">
+        Input Non-Revolving Liabilities<span class="tooltip1-content"></span>
+    </h3>
+
+    <div class="row">
+        <label for="liabilities-small-business-loan">Small Business Loan:</label>
+        <input type='number' inputmode="numeric" id="liabilities-small-business-loan">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-small-business-loan-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="liabilities-primary-residence">Primary Residence, Mortgage:</label>
+        <input type='number' inputmode="numeric" id="liabilities-primary-residence">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-primary-residence-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="liabilities-investment-properties">Investment Property, Mortgage:</label>
+        <input type='number' inputmode="numeric" id="liabilities-investment-properties">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-investment-properties-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="liabilities-vehicle-loan">Vehicle Loan:</label>
+        <input type='number' inputmode="numeric" id="liabilities-vehicle-loan">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-vehicle-loan-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="liabilities-personal-debt" style="font-size: unset;" class="tooltip1" data-tooltip="List money you owe, whether it's to personal connections (like borrowing from family) or business suppliers that hasn't been accounted for elsewhere. In a sole proprietorship, these liabilities are part of your personal financial responsibility.">
+            <span class="tooltip1-content"></span>
+            Accounts Payable:</label>
+        <input type='number' inputmode="numeric" id="liabilities-personal-debt">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-personal-debt-percent" inputmode="numeric">
+    </div>
+
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px" class="tooltip1" data-tooltip="Debts where you can borrow money up to a certain limit, pay it back, and borrow again. The amount you can borrow revolves as you pay off what you owe.">
+        Input Revolving Liabilities<span class="tooltip1-content"></span>
+    </h3>
+
+    <div class="row">
+        <label for="liabilities-student-loan">Student Loan:</label>
+        <input type='number' inputmode="numeric" id="liabilities-student-loan">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-student-loan-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="liabilities-line-of-credit">Line of Credit:</label>
+        <input type='number' inputmode="numeric" id="liabilities-line-of-credit">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-line-of-credit-percent" inputmode="numeric">
+    </div>
+
+    <div class="row">
+        <label for="liabilities-credit-card">Credit Card, Current Balance:</label>
+        <input type='number' inputmode="numeric" id="liabilities-credit-card">
+        <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-credit-card-percent" inputmode="numeric">
+    </div>
+
+    <button class="generate-btn" id="generate-income-btn">Generate IncomeIQ Report!</button>
+</div>
+
+</div>
+
+<script type="module">
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
+
+import { FormPersistence } from '/utility/formPersistence.js';
+
+(function() {
+    console.log("Income IQ script initializing");
+
+    // Initialize FormPersistence for income module
+    let incomeFormPersistence = null;
+
+    // Subregion mapping for different countries
+    const subregionMap = {
+        CAN: ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Northwest Territories", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"],
+        USA: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
+        UK: ["England", "Scotland", "Wales", "Northern Ireland", "Greater London", "West Midlands", "South East", "North West", "East of England", "Yorkshire and The Humber", "South West", "East Midlands", "North East"],
+        AUS: ["New South Wales", "Victoria", "Queensland", "South Australia", "Western Australia", "Tasmania", "Australian Capital Territory", "Northern Territory"],
+        OTHER: ["Province", "State", "Region", "District", "Territory", "Prefecture", "County", "Municipality"]
+    };
+
+    // Filing status mapping by country
+    const filingStatusMap = {
+        CAN: [
+            { value: "single_no_dependants", text: "Single, No Dependants" },
+            { value: "single_with_dependants", text: "Single with Dependants" },
+            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants" },
+            { value: "single_self_disabled", text: "Single, Self-Disabled" },
+            { value: "single_caregiver", text: "Single, Caregiver" },
+            { value: "common_law_no_dependants", text: "Common-Law, No Dependants" },
+            { value: "common_law_with_dependants", text: "Common-Law with Dependants" },
+            { value: "common_law_with_disabled_dependants", text: "Common-Law with Disabled Dependants" },
+            { value: "common_law_self_disabled", text: "Common-Law, Self-Disabled" },
+            { value: "common_law_spouse_disabled", text: "Common-Law, Spouse-Disabled" },
+            { value: "common_law_caregiver", text: "Common-Law, Caregiver" },
+            { value: "married_no_dependants", text: "Married, No Dependants" },
+            { value: "married_with_dependants", text: "Married with Dependants" },
+            { value: "married_with_disabled_dependants", text: "Married with Disabled Dependants" },
+            { value: "married_self_disabled", text: "Married, Self-Disabled" },
+            { value: "married_spouse_disabled", text: "Married, Spouse-Disabled" },
+            { value: "married_caregiver", text: "Married, Caregiver" },
+            { value: "widowed_no_dependants", text: "Widowed, No Dependants" },
+            { value: "widowed_with_dependants", text: "Widowed with Dependants" },
+            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants" },
+            { value: "separated_no_dependants", text: "Separated, No Dependants" },
+            { value: "separated_with_dependants", text: "Separated with Dependants" },
+            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants" }
+        ],
+        USA: [
+            { value: "single_no_dependants", text: "Single, No Dependants" },
+            { value: "single_with_dependants", text: "Single with Dependants" },
+            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants" },
+            { value: "single_self_disabled", text: "Single, Self-Disabled" },
+            { value: "single_caregiver", text: "Single, Caregiver" },
+            { value: "married_filing_jointly_no_dependants", text: "Married Filing Jointly, No Dependants" },
+            { value: "married_filing_jointly_with_dependants", text: "Married Filing Jointly with Dependants" },
+            { value: "married_filing_jointly_with_disabled_dependants", text: "Married Filing Jointly with Disabled Dependants" },
+            { value: "married_filing_jointly_self_disabled", text: "Married Filing Jointly, Self-Disabled" },
+            { value: "married_filing_jointly_spouse_disabled", text: "Married Filing Jointly, Spouse-Disabled" },
+            { value: "married_filing_jointly_caregiver", text: "Married Filing Jointly, Caregiver" },
+            { value: "married_filing_separately_no_dependants", text: "Married Filing Separately, No Dependants" },
+            { value: "married_filing_separately_with_dependants", text: "Married Filing Separately with Dependants" },
+            { value: "married_filing_separately_with_disabled_dependants", text: "Married Filing Separately with Disabled Dependants" },
+            { value: "married_filing_separately_self_disabled", text: "Married Filing Separately, Self-Disabled" },
+            { value: "head_of_household_no_dependants", text: "Head of Household, No Dependants" },
+            { value: "head_of_household_with_dependants", text: "Head of Household with Dependants" },
+            { value: "head_of_household_with_disabled_dependants", text: "Head of Household with Disabled Dependants" },
+            { value: "head_of_household_caregiver", text: "Head of Household, Caregiver" },
+            { value: "qualifying_widow_no_dependants", text: "Qualifying Widow(er), No Dependants" },
+            { value: "qualifying_widow_with_dependants", text: "Qualifying Widow(er) with Dependants" },
+            { value: "qualifying_widow_with_disabled_dependants", text: "Qualifying Widow(er) with Disabled Dependants" }
+        ],
+        UK: [
+            { value: "single_no_dependants", text: "Single, No Dependants" },
+            { value: "single_with_dependants", text: "Single with Dependants" },
+            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants" },
+            { value: "single_self_disabled", text: "Single, Self-Disabled" },
+            { value: "single_caregiver", text: "Single, Caregiver" },
+            { value: "married_or_civil_partnership_no_dependants", text: "Married or Civil Partnership, No Dependants" },
+            { value: "married_or_civil_partnership_with_dependants", text: "Married or Civil Partnership with Dependants" },
+            { value: "married_or_civil_partnership_with_disabled_dependants", text: "Married or Civil Partnership with Disabled Dependants" },
+            { value: "married_or_civil_partnership_self_disabled", text: "Married or Civil Partnership, Self-Disabled" },
+            { value: "married_or_civil_partnership_spouse_disabled", text: "Married or Civil Partnership, Spouse-Disabled" },
+            { value: "married_or_civil_partnership_caregiver", text: "Married or Civil Partnership, Caregiver" },
+            { value: "widowed_no_dependants", text: "Widowed, No Dependants" },
+            { value: "widowed_with_dependants", text: "Widowed with Dependants" },
+            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants" },
+            { value: "separated_no_dependants", text: "Separated, No Dependants" },
+            { value: "separated_with_dependants", text: "Separated with Dependants" },
+            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants" }
+        ],
+        AUS: [
+            { value: "single_no_dependants", text: "Single, No Dependants" },
+            { value: "single_with_dependants", text: "Single with Dependants" },
+            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants" },
+            { value: "single_self_disabled", text: "Single, Self-Disabled" },
+            { value: "single_caregiver", text: "Single, Caregiver" },
+            { value: "married_or_de_facto_no_dependants", text: "Married or De Facto, No Dependants" },
+            { value: "married_or_de_facto_with_dependants", text: "Married or De Facto with Dependants" },
+            { value: "married_or_de_facto_with_disabled_dependants", text: "Married or De Facto with Disabled Dependants" },
+            { value: "married_or_de_facto_self_disabled", text: "Married or De Facto, Self-Disabled" },
+            { value: "married_or_de_facto_spouse_disabled", text: "Married or De Facto, Spouse-Disabled" },
+            { value: "married_or_de_facto_caregiver", text: "Married or De Facto, Caregiver" },
+            { value: "widowed_no_dependants", text: "Widowed, No Dependants" },
+            { value: "widowed_with_dependants", text: "Widowed with Dependants" },
+            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants" },
+            { value: "separated_no_dependants", text: "Separated, No Dependants" },
+            { value: "separated_with_dependants", text: "Separated with Dependants" },
+            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants" }
+        ],
+        OTHER: [
+            { value: "single_no_dependants", text: "Single, No Dependants" },
+            { value: "single_with_dependants", text: "Single with Dependants" },
+            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants" },
+            { value: "single_self_disabled", text: "Single, Self-Disabled" },
+            { value: "single_caregiver", text: "Single, Caregiver" },
+            { value: "coupled_no_dependants", text: "Coupled, No Dependants" },
+            { value: "coupled_with_dependants", text: "Coupled with Dependants" },
+            { value: "coupled_with_disabled_dependants", text: "Coupled with Disabled Dependants" },
+            { value: "coupled_self_disabled", text: "Coupled, Self-Disabled" },
+            { value: "coupled_spouse_disabled", text: "Coupled, Spouse-Disabled" },
+            { value: "coupled_caregiver", text: "Coupled, Caregiver" },
+            { value: "widowed_no_dependants", text: "Widowed, No Dependants" },
+            { value: "widowed_with_dependants", text: "Widowed with Dependants" },
+            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants" },
+            { value: "separated_no_dependants", text: "Separated, No Dependants" },
+            { value: "separated_with_dependants", text: "Separated with Dependants" },
+            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants" }
+        ]
+    };
+
+    // Status arrays for logic
+    const singleStatuses = [
+        'single_no_dependants', 'single_with_dependants', 'single_with_disabled_dependants', 'single_self_disabled', 'single_caregiver',
+        'widowed_no_dependants', 'widowed_with_dependants', 'widowed_with_disabled_dependants', 'separated_no_dependants',
+        'separated_with_dependants', 'separated_with_disabled_dependants', 'head_of_household_no_dependants',
+        'head_of_household_with_dependants', 'head_of_household_with_disabled_dependants', 'head_of_household_caregiver',
+        'qualifying_widow_no_dependants', 'qualifying_widow_with_dependants', 'qualifying_widow_with_disabled_dependants'
+    ];
+
+    const statusesWithDisabledDependants = [
+        'single_with_disabled_dependants', 'widowed_with_disabled_dependants', 'separated_with_disabled_dependants',
+        'married_with_disabled_dependants', 'common_law_with_disabled_dependants', 'coupled_with_disabled_dependants',
+        'qualifying_widow_with_disabled_dependants', 'married_filing_jointly_with_disabled_dependants',
+        'married_filing_separately_with_disabled_dependants', 'head_of_household_with_disabled_dependants',
+        'married_or_civil_partnership_with_disabled_dependants', 'married_or_de_facto_with_disabled_dependants'
+    ];
+
+    // Initialize form functionality
+    function initIncomeForm() {
+        console.log("[IncomeIQ] Initializing form functionality");
+        
+        // Initialize FormPersistence
+        try {
+            incomeFormPersistence = FormPersistence.getInstance('income', {
+                customFormRepopulator: customFormRepopulator
+            });
+            if (incomeFormPersistence.init()) {
+                console.log("[IncomeIQ] FormPersistence initialized successfully");
+            } else {
+                console.error("[IncomeIQ] FormPersistence initialization failed");
+            }
+        } catch (error) {
+            console.error("[IncomeIQ] Error initializing FormPersistence:", error);
+        }
+        
+        const countryDropdown = document.getElementById('income-country');
+        const subregionDropdown = document.getElementById('income-subregion');
+        const filingStatusDropdown = document.getElementById('income-filingStatus');
+        const specificsDiv = document.getElementById('income-specifics');
+
+        // Setup country dropdown
+        if (countryDropdown) {
+            console.log("[IncomeIQ] Setting up country dropdown event listener");
+            countryDropdown.addEventListener('change', function() {
+                const selectedCountry = this.value;
+                console.log("[IncomeIQ] Country changed to:", selectedCountry);
+                updateSubregionDropdown(selectedCountry);
+                updateFilingStatusOptions(selectedCountry);
+                updateSpecificsVisibility();
+                // After updating dropdown options, repopulate saved values
+                repopulateFromSavedData();
+                saveFormData(); // Save when country changes
+            });
+        } else {
+            console.error("[IncomeIQ] Country dropdown not found!");
+        }
+
+        // Setup subregion dropdown to save when changed
+        if (subregionDropdown) {
+            subregionDropdown.addEventListener('change', function() {
+                saveFormData(); // Save when subregion changes
+            });
+        }
+
+        // Setup filing status dropdown
+        if (filingStatusDropdown) {
+            filingStatusDropdown.addEventListener('change', function() {
+                updateDependantsVisibility();
+                updateMaritalStatusVisibility();
+                updateSpecificsVisibility();
+                saveFormData(); // Save when filing status changes
+            });
+        }
+
+        // Setup input change handlers for all form fields
+        setupInputHandlers();
+
+        // Load saved data and repopulate form
+        loadSavedData();
+
+        // Setup generate button
+        const generateBtn = document.getElementById('generate-income-btn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', function() {
+                collectAndSubmitData();
+            });
+        }
+    }
+
+    // Update subregion dropdown based on country selection
+    function updateSubregionDropdown(country) {
+        console.log("[IncomeIQ] updateSubregionDropdown called with country:", country);
+        const subregionDropdown = document.getElementById('income-subregion');
+        const subregionContainer = document.getElementById('income-subregionContainer');
+        
+        if (!subregionDropdown) {
+            console.error("[IncomeIQ] subregion dropdown not found");
+            return;
+        }
+
+        subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
+
+        if (country && subregionMap[country]) {
+            console.log("[IncomeIQ] Adding subregions for", country, ":", subregionMap[country].length, "options");
+            subregionMap[country].forEach(subregionName => {
+                const option = document.createElement('option');
+                option.text = subregionName;
+                option.value = subregionName;
+                subregionDropdown.appendChild(option);
+            });
+            subregionContainer.style.display = 'block';
+        } else {
+            console.log("[IncomeIQ] No subregions found for country:", country);
+            subregionContainer.style.display = 'none';
+        }
+    }
+
+    // FormPersistence integration functions
+    function saveFormData() {
+        if (incomeFormPersistence) {
+            console.log("[IncomeIQ] Saving form data via FormPersistence");
+            incomeFormPersistence.saveFormData();
+        } else {
+            console.warn("[IncomeIQ] FormPersistence not initialized, cannot save data");
+        }
+    }
+
+    function loadSavedData() {
+        if (incomeFormPersistence) {
+            console.log("[IncomeIQ] Loading saved data via FormPersistence");
+            // FormPersistence will automatically repopulate during init
+            // But we need to trigger dropdown updates for dependent fields
+            const countryDropdown = document.getElementById('income-country');
+            if (countryDropdown && countryDropdown.value) {
+                updateSubregionDropdown(countryDropdown.value);
+                updateFilingStatusOptions(countryDropdown.value);
+                updateSpecificsVisibility();
+                // Re-populate after dropdown updates
+                setTimeout(() => repopulateFromSavedData(), 100);
+            }
+        } else {
+            console.warn("[IncomeIQ] FormPersistence not initialized, cannot load data");
+        }
+    }
+
+    function repopulateFromSavedData() {
+        if (incomeFormPersistence) {
+            console.log("[IncomeIQ] Re-populating form from saved data");
+            const savedData = incomeFormPersistence.getSavedFormData();
+            if (savedData) {
+                customFormRepopulator(savedData);
+            }
+        }
+    }
+
+    function customFormRepopulator(data) {
+        if (!data) return;
+        console.log("[IncomeIQ] Custom form repopulator called with data:", data);
+        
+        // Repopulate form fields using standard FormPersistence method
+        if (incomeFormPersistence) {
+            incomeFormPersistence.repopulateGenericForm(data);
+        }
+        
+        // Handle special logic for dependent dropdowns
+        if (data.country) {
+            const countryDropdown = document.getElementById('income-country');
+            if (countryDropdown) {
+                countryDropdown.value = data.country;
+                updateSubregionDropdown(data.country);
+                updateFilingStatusOptions(data.country);
+                
+                // Set subregion after dropdown is populated
+                if (data.subregion) {
+                    setTimeout(() => {
+                        const subregionDropdown = document.getElementById('income-subregion');
+                        if (subregionDropdown) {
+                            console.log("[IncomeIQ] Setting subregion to:", data.subregion);
+                            subregionDropdown.value = data.subregion;
+                        }
+                    }, 50);
+                }
+                
+                // Set filing status after dropdown is populated
+                if (data.filingStatus) {
+                    setTimeout(() => {
+                        const filingStatusDropdown = document.getElementById('income-filingStatus');
+                        if (filingStatusDropdown) {
+                            console.log("[IncomeIQ] Setting filing status to:", data.filingStatus);
+                            filingStatusDropdown.value = data.filingStatus;
+                            updateDependantsVisibility();
+                            updateMaritalStatusVisibility();
+                            updateSpecificsVisibility();
+                        }
+                    }, 50);
+                }
+            }
+        }
+    }
+
+    function setupInputHandlers() {
+        // FormPersistence will handle this automatically
+        console.log("[IncomeIQ] Input handlers setup delegated to FormPersistence");
+    }
+
+    // Update filing status options based on country
+    function updateFilingStatusOptions(country) {
+        const filingStatusDropdown = document.getElementById('income-filingStatus');
+        if (!filingStatusDropdown) return;
+
+        filingStatusDropdown.innerHTML = '<option value="">Select Filing Status</option>';
+
+        if (country && filingStatusMap[country]) {
+            filingStatusMap[country].forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.value;
+                optionElement.text = option.text;
+                filingStatusDropdown.appendChild(optionElement);
+            });
+        }
+    }
+
+    // Show/hide dependants container based on filing status
+    function updateDependantsVisibility() {
+        const dependantsContainer = document.querySelector('.income-dependantsContainer');
+        const filingStatusDropdown = document.getElementById('income-filingStatus');
+        
+        if (!dependantsContainer || !filingStatusDropdown) return;
+        
+        const selectedFilingStatus = filingStatusDropdown.value;
+        dependantsContainer.style.display = statusesWithDisabledDependants.includes(selectedFilingStatus) ? 'block' : 'none';
+    }
+
+    // Show/hide spouse fields based on filing status
+    function updateMaritalStatusVisibility() {
+        const spouseFields = document.querySelector('.income-spouseFields');
+        const filingStatusDropdown = document.getElementById('income-filingStatus');
+        
+        if (!spouseFields || !filingStatusDropdown) return;
+        
+        const selectedFilingStatus = filingStatusDropdown.value;
+        const isSingle = singleStatuses.includes(selectedFilingStatus);
+        spouseFields.style.display = isSingle || !selectedFilingStatus ? 'none' : 'block';
+    }
+
+    // Show/hide personal details section
+    function updateSpecificsVisibility() {
+        const specificsDiv = document.getElementById('income-specifics');
+        const filingStatusDropdown = document.getElementById('income-filingStatus');
+        
+        if (!specificsDiv || !filingStatusDropdown) return;
+        
+        specificsDiv.style.display = filingStatusDropdown.value ? 'block' : 'none';
+    }
+
+    // Collect all form data and submit
+    function collectAndSubmitData() {
+        console.log("[IncomeIQ] Collecting and submitting data");
+        
+        // Manually collect form data
+        const formData = {};
+        
+        // Collect all input fields
+        document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], textarea, select').forEach(element => {
+            if (element.id && element.value) {
+                const fieldName = element.id.replace('income-', ''); // Remove income- prefix
+                if (element.type === 'number') {
+                    formData[fieldName] = parseInt(element.value, 10) || parseFloat(element.value);
+                } else {
+                    formData[fieldName] = element.value;
+                }
+            }
+        });
+        
+        if (Object.keys(formData).length === 0) {
+            alert('Please fill out at least some form fields before generating your report.');
+            return;
+        }
+
+        console.log('[IncomeIQ] Collected form data:', formData);
+        
+        // TODO: Integrate with AI submission logic via datain/dataout
+        // This will dispatch an event that datain.js will pick up
+        const submitEvent = new CustomEvent('ai-submit-request', {
+            detail: {
+                module: 'income',
+                data: formData,
+                outputUrl: '/ai/income/incomeoutput.html'
+            }
+        });
+        document.dispatchEvent(submitEvent);
+        
+        // For now, show the collected data
+        alert('Income IQ data collected! Ready for AI analysis.\n\nData keys: ' + Object.keys(formData).join(', '));
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initIncomeForm);
+    } else {
+        initIncomeForm();
+    }
+
+    // Listen for datain.js events
+    document.addEventListener('data-in-loaded', function(e) {
+        console.log("[IncomeIQ] Detected load through datain.js, reinitializing");
+        initIncomeForm();
+    });
+
+    // Additional safety net - try again after a short delay
+    setTimeout(() => {
+        const generateBtn = document.getElementById('generate-income-btn');
+        if (generateBtn && !generateBtn.onclick) {
+            console.log("[IncomeIQ] Generate button found but no handler, trying initialization again");
+            initIncomeForm();
+        }
+    }, 200);
+
+    // Export functions for external access
+    window.incomeFormPersistence = incomeFormPersistence;
+    window.incomeIq = { 
+        getFormData: () => incomeFormPersistence ? incomeFormPersistence.getSavedFormData() : null,
+        saveFormData: () => incomeFormPersistence ? incomeFormPersistence.saveFormData() : null,
+        loadSavedData: loadSavedData,
+        customFormRepopulator: customFormRepopulator
+    };
+
+})();
+</script>
