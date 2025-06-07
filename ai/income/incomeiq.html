@@ -1246,27 +1246,71 @@ import { FormPersistence } from '/utility/formPersistence.js';
 
 <!-- Load frequency.js module for frequency dropdown functionality -->
 <script src="/ai/income/frequency.js" type="module"></script>
+<script src="/utility/toolTip.js" type="module"></script>
 
-<!-- Initialize frequency dropdowns -->
+
+<!-- Initialize frequency dropdowns and tooltips -->
 <script>
 (function() {
+    let tooltipInitAttempts = 0;
+    let frequencyInitAttempts = 0;
+    const maxAttempts = 20; // Try for up to 2 seconds
+    
     // Function to initialize frequency dropdowns with fallback
     function initFrequencyDropdowns() {
+        frequencyInitAttempts++;
+        console.log(`[IncomeIQ] Frequency init attempt ${frequencyInitAttempts}`);
+        
         if (typeof window.initializeFrequencyGroups === 'function') {
-            console.log('Initializing frequency groups...');
+            console.log('[IncomeIQ] Initializing frequency groups...');
             window.initializeFrequencyGroups();
-        } else {
-            console.warn('initializeFrequencyGroups not available, retrying in 100ms...');
+        } else if (frequencyInitAttempts < maxAttempts) {
+            console.warn('[IncomeIQ] initializeFrequencyGroups not available, retrying in 100ms...');
             setTimeout(initFrequencyDropdowns, 100);
+        } else {
+            console.error('[IncomeIQ] Failed to initialize frequency groups after maximum attempts');
+        }
+    }
+
+    // Function to initialize tooltips with fallback
+    function initTooltips() {
+        tooltipInitAttempts++;
+        console.log(`[IncomeIQ] Tooltip init attempt ${tooltipInitAttempts}`);
+        console.log("[IncomeIQ] window.initializeTooltips exists:", typeof window.initializeTooltips);
+        
+        if (typeof window.initializeTooltips === 'function') {
+            console.log('[IncomeIQ] Initializing tooltips...');
+            try {
+                window.initializeTooltips(document);
+                console.log('[IncomeIQ] Tooltips initialized successfully');
+            } catch (error) {
+                console.error('[IncomeIQ] Error initializing tooltips:', error);
+            }
+        } else if (tooltipInitAttempts < maxAttempts) {
+            console.warn('[IncomeIQ] initializeTooltips not available, retrying in 100ms...');
+            setTimeout(initTooltips, 100);
+        } else {
+            console.error('[IncomeIQ] Failed to initialize tooltips after maximum attempts');
         }
     }
 
     // Wait for DOM and modules to be ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initFrequencyDropdowns);
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[IncomeIQ] DOM loaded, starting initialization...');
+            // Give modules a moment to load
+            setTimeout(() => {
+                initFrequencyDropdowns();
+                initTooltips();
+            }, 50);
+        });
     } else {
-        // DOM already loaded, try immediately with small delay for modules
-        setTimeout(initFrequencyDropdowns, 50);
+        // DOM already loaded, try immediately with delay for modules
+        console.log('[IncomeIQ] DOM already loaded, starting initialization...');
+        setTimeout(function() {
+            initFrequencyDropdowns();
+            initTooltips();
+        }, 100);
     }
 })();
 </script>
