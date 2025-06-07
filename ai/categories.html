@@ -17,6 +17,46 @@
     margin-left: auto !important;
 }
 
+/* Target grid containers within data-container-in to ensure higher specificity */
+.data-container-in .device-container .grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+/* Mobile-specific override for data-container-in context */
+@media (max-width: 480px) {
+    .data-container-in .device-container .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        max-width: 360px;
+    }
+    
+    .data-container-in .device-container .grid-item {
+        min-height: 50px;
+        padding: 0.75rem;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 375px) {
+    .data-container-in .device-container .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        max-width: 340px;
+    }
+}
+
+@media (max-width: 320px) {
+    .data-container-in .device-container .grid-container {
+        grid-template-columns: 1fr;
+        max-width: 280px;
+    }
+}
+
 
 </style>
 
