@@ -1364,11 +1364,7 @@ import { FormPersistence } from '/utility/formPersistence.js';
                 const frequencyId = `${fieldId}-frequency`;
                 const frequency = getFrequencySetting(frequencyId, 'annually');
                 const annualValue = calculateAnnual(element.value, frequency);
-                normalizedIncome[fieldId] = {
-                    original: parseFloat(element.value),
-                    frequency: frequency,
-                    annual: annualValue
-                };
+                normalizedIncome[fieldId] = annualValue;
                 console.log(`Income ${fieldId}: $${element.value} ${frequency} = $${annualValue} annually`);
             }
         });
@@ -1381,18 +1377,14 @@ import { FormPersistence } from '/utility/formPersistence.js';
                 const frequencyId = `${fieldId}-frequency`;
                 const frequency = getFrequencySetting(frequencyId, 'annually');
                 const annualValue = calculateAnnual(element.value, frequency);
-                normalizedExpenses[fieldId] = {
-                    original: parseFloat(element.value),
-                    frequency: frequency,
-                    annual: annualValue
-                };
+                normalizedExpenses[fieldId] = annualValue;
                 console.log(`Expense ${fieldId}: $${element.value} ${frequency} = $${annualValue} annually`);
             }
         });
 
         // Calculate totals
-        const totalAnnualIncome = Object.values(normalizedIncome).reduce((sum, item) => sum + item.annual, 0);
-        const totalAnnualExpenses = Object.values(normalizedExpenses).reduce((sum, item) => sum + item.annual, 0);
+        const totalAnnualIncome = Object.values(normalizedIncome).reduce((sum, value) => sum + value, 0);
+        const totalAnnualExpenses = Object.values(normalizedExpenses).reduce((sum, value) => sum + value, 0);
 
         console.log(`Total Annual Income: $${totalAnnualIncome.toFixed(2)}`);
         console.log(`Total Annual Expenses: $${totalAnnualExpenses.toFixed(2)}`);
