@@ -28,12 +28,6 @@ function initializeFormPersistence(url) {
             singleSelection: ['calorie-activity', 'calorie-sex'],
             multiSelection: ['calorie-goal', 'calorie-recommendations', 'calorie-diet-type']
         };
-    } else if (url.includes('/fitness/')) {
-        moduleType = 'fitness';
-        moduleConfig = {
-            singleSelection: ['fitness-activity', 'fitness-experience', 'fitness-equipment', 'fitness-time', 'fitness-intensity', 'fitness-sex'],
-            multiSelection: []
-        };
     } else if (url.includes('/income/')) {
         moduleType = 'income';
         moduleConfig = {
