@@ -338,40 +338,49 @@
         }
     }
 
-    // Show the terms modal using modal.js
+    // Show the terms modal using modal.js with retry mechanism for race conditions
     function showFullTerms() {
-        if (typeof window.openModal === 'function') {
-            // Hide the terms manager modal temporarily
-            const termsOverlay = document.getElementById('termsOverlay');
-            if (termsOverlay) {
-                termsOverlay.style.display = 'none';
-                
-                // Temporarily unfreeze the page for the legal modal
-                unfreezePage();
-                
-                // Set up a one-time listener for when the modal closes
-                const handleModalClosed = () => {
-                    // Show the terms manager modal again
-                    termsOverlay.style.display = 'flex';
+        // Function to attempt opening the modal
+        const attemptOpenModal = (retryCount = 0) => {
+            if (typeof window.openModal === 'function') {
+                // Hide the terms manager modal temporarily
+                const termsOverlay = document.getElementById('termsOverlay');
+                if (termsOverlay) {
+                    termsOverlay.style.display = 'none';
                     
-                    // Refreeze the page
-                    freezePage();
+                    // Temporarily unfreeze the page for the legal modal
+                    unfreezePage();
                     
-                    // Remove the event listener
-                    document.removeEventListener('modalClosed', handleModalClosed);
-                };
+                    // Set up a one-time listener for when the modal closes
+                    const handleModalClosed = () => {
+                        // Show the terms manager modal again
+                        termsOverlay.style.display = 'flex';
+                        
+                        // Refreeze the page
+                        freezePage();
+                        
+                        // Remove the event listener
+                        document.removeEventListener('modalClosed', handleModalClosed);
+                    };
+                    
+                    document.addEventListener('modalClosed', handleModalClosed);
+                }
                 
-                document.addEventListener('modalClosed', handleModalClosed);
+                // Open the terms modal
+                window.openModal(TERMS_FILE_PATH);
+                
+            } else if (retryCount < 5) {
+                // Modal not ready yet, retry after a short delay (up to 5 times)
+                setTimeout(() => attemptOpenModal(retryCount + 1), 50);
+            } else {
+                console.warn('modal.js not available after retries. Using fallback.');
+                // Final fallback - open in new tab
+                window.open(TERMS_FILE_PATH, '_blank');
             }
-            
-            // Open the terms modal
-            window.openModal(TERMS_FILE_PATH);
-            
-        } else {
-            console.error('modal.js is not loaded. Cannot show terms.');
-            // Fallback - open in new tab
-            window.open(TERMS_FILE_PATH, '_blank');
-        }
+        };
+        
+        // Start the attempt
+        attemptOpenModal();
     }
 
     // Create and show the terms acceptance dialog
@@ -541,26 +550,39 @@
             return;
         }
         
+        // Function to safely show terms dialog with modal dependency check
+        const safeShowTerms = () => {
+            // Ensure modal.js is loaded before proceeding
+            const checkModalAndShow = (retryCount = 0) => {
+                if (typeof window.openModal === 'function' || retryCount >= 10) {
+                    // Modal is ready or we've waited long enough
+                    injectTermsCSS();
+                    showTermsDialog();
+                } else {
+                    // Wait a bit more for modal.js to load
+                    setTimeout(() => checkModalAndShow(retryCount + 1), 100);
+                }
+            };
+            checkModalAndShow();
+        };
+        
         // If dataConsentManager exists, we need to wait for consent before showing terms
         if (window.dataConsentManager) {
             // If consent already granted, show terms now
             if (window.dataConsentGranted === true) {
-                injectTermsCSS();
-                showTermsDialog();
+                safeShowTerms();
             } else {
                 // Wait for consent to be granted
                 document.addEventListener('dataConsentGranted', function() {
                     // Only show terms if they haven't been accepted yet
                     if (!hasAcceptedTerms()) {
-                        injectTermsCSS();
-                        showTermsDialog();
+                        safeShowTerms();
                     }
                 });
             }
         } else {
             // No dataConsentManager, show terms directly
-            injectTermsCSS();
-            showTermsDialog();
+            safeShowTerms();
         }
     }
 
