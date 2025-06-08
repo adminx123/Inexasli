@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fashion Analysis Output</title>
+  
+  <!-- Preconnect and font links -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/outputstyles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
+    
+    .fashion-display {
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: normal;
+    }
+    
+    .fashion-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    .style-score-section {
+      background: white;
+      color: #4a7c59;
+      border: 1px solid #4a7c59;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .outfit-analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .outfit-card {
+      background: #f2f9f3;
+      border: 1px solid #4a7c59;
+      border-radius: 8px;
+      padding: 15px;
+      transition: transform 0.2s ease;
+    }
+    
+    .outfit-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(74, 124, 89, 0.15);
+    }
+    
+    .outfit-title {
+      font-weight: 600;
+      color: #2d5d3d;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    
+    .outfit-rating {
+      background: #4a7c59;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 14px;
+      font-weight: 500;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    
+    .color-palette-section {
+      background: #f8fdf9;
+      border: 1px solid #4a7c59;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .color-palette-title {
+      font-weight: 600;
+      color: #2d5d3d;
+      margin-bottom: 15px;
+      font-size: 20px;
+      text-align: center;
+    }
+    
+    .color-recommendations {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    
+    .color-category {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+    }
+    
+    .color-category-title {
+      font-weight: 600;
+      color: #2d5d3d;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+    
+    .styling-tips-section {
+      background: #fff;
+      border: 1px solid #4a7c59;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .tips-title {
+      font-weight: 600;
+      color: #2d5d3d;
+      margin-bottom: 15px;
+      font-size: 20px;
+      text-align: center;
+    }
+    
+    .tip-item {
+      background: #f2f9f3;
+      border-left: 4px solid #4a7c59;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 0 6px 6px 0;
+    }
+    
+    .tip-icon {
+      color: #4a7c59;
+      margin-right: 10px;
+      font-size: 18px;
+    }
+    
+    .fit-analysis-section {
+      background: #f8fdf9;
+      border: 1px solid #4a7c59;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .fit-title {
+      font-weight: 600;
+      color: #2d5d3d;
+      margin-bottom: 15px;
+      font-size: 20px;
+      text-align: center;
+    }
+    
+    .improvement-suggestions {
+      background: #fff4e6;
+      border: 1px solid #ff9800;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .improvement-title {
+      font-weight: 600;
+      color: #e65100;
+      margin-bottom: 15px;
+      font-size: 20px;
+      text-align: center;
+    }
+    
+    .suggestion-item {
+      background: white;
+      border: 1px solid #ffcc80;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .star-rating {
+      color: #ffd700;
+      margin-right: 5px;
+    }
+    
+    .data-section {
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .data-label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .uploaded-images-display {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .outfit-image {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .outfit-image img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="device-container">
+    <div class="output-wrapper">
+      <div class="api-output">
+        
+        <div class="fashion-header">
+          <h1><i class="fas fa-tshirt"></i> Your Fashion Analysis</h1>
+          <p>AI-powered style critique and recommendations</p>
+        </div>
+
+        <div class="uploaded-images-display" id="images-display">
+          <!-- Images will be populated by JavaScript -->
+        </div>
+
+        <div class="style-score-section" id="overall-score">
+          <i class="fas fa-star star-rating"></i>
+          Loading your fashion analysis...
+        </div>
+
+        <div class="fashion-display" id="fashion-content">
+          <!-- AI response will be populated here -->
+        </div>
+
+        <div class="data-section">
+          <div class="data-label">Your Style Profile:</div>
+          <div id="style-data"></div>
+        </div>
+
+        <div class="button-container">
+          <button onclick="tryAgain()" class="action-btn secondary">
+            <i class="fas fa-redo"></i> Try Again
+          </button>
+          
+          <button onclick="saveResults()" class="action-btn primary">
+            <i class="fas fa-save"></i> Save Results
+          </button>
+          
+          <button onclick="shareResults()" class="action-btn secondary">
+            <i class="fas fa-share"></i> Share
+          </button>
+          
+          <button onclick="goHome()" class="action-btn primary">
+            <i class="fas fa-home"></i> Back to Home
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  /*
+   * Copyright (c) 2025 INEXASLI. All rights reserved.
+   * This code is protected under Canadian and international copyright laws.
+   * Unauthorized use, reproduction, distribution, or modification of this code 
+   * without explicit written permission via email from info@inexasli.com 
+   * is strictly prohibited. Violators will be pursued and prosecuted to the 
+   * fullest extent of the law in British Columbia, Canada, and applicable 
+   * jurisdictions worldwide.
+   */
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAndDisplayResults();
+    });
+
+    function loadAndDisplayResults() {
+      try {
+        // Load the API response
+        const response = localStorage.getItem('fashionIQResponse');
+        const inputData = localStorage.getItem('fashionIQData');
+        
+        if (!response) {
+          document.getElementById('fashion-content').innerHTML = `
+            <div class="error-message">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>No Results Found</h3>
+              <p>No fashion analysis results were found. Please go back and try again.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const fashionData = JSON.parse(response);
+        const userData = inputData ? JSON.parse(inputData) : null;
+
+        // Display uploaded images
+        if (userData && userData.images) {
+          displayUploadedImages(userData.images);
+        }
+
+        // Display user style profile
+        if (userData) {
+          displayStyleProfile(userData);
+        }
+
+        // Format and display the AI response
+        if (fashionData.choices && fashionData.choices[0] && fashionData.choices[0].message) {
+          const content = fashionData.choices[0].message.content;
+          displayFormattedResponse(content);
+        } else if (fashionData.content) {
+          displayFormattedResponse(fashionData.content);
+        } else {
+          document.getElementById('fashion-content').innerHTML = `
+            <div class="error-message">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Invalid Response Format</h3>
+              <p>The response format was not recognized. Please try again.</p>
+            </div>
+          `;
+        }
+
+      } catch (error) {
+        console.error('Error loading results:', error);
+        document.getElementById('fashion-content').innerHTML = `
+          <div class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Error Loading Results</h3>
+            <p>There was an error loading your fashion analysis. Please try again.</p>
+          </div>
+        `;
+      }
+    }
+
+    function displayUploadedImages(images) {
+      const imagesDisplay = document.getElementById('images-display');
+      if (!images || images.length === 0) return;
+
+      imagesDisplay.innerHTML = images.map((imageData, index) => `
+        <div class="outfit-image">
+          <img src="${imageData}" alt="Outfit ${index + 1}">
+        </div>
+      `).join('');
+    }
+
+    function displayStyleProfile(userData) {
+      const styleData = document.getElementById('style-data');
+      const profile = [
+        userData.stylePreference && `Style: ${userData.stylePreference}`,
+        userData.bodyType && `Body Type: ${userData.bodyType}`,
+        userData.skinTone && `Skin Tone: ${userData.skinTone}`,
+        userData.hairColor && `Hair Color: ${userData.hairColor}`,
+        userData.occasion && `Occasion: ${userData.occasion}`,
+        userData.age && `Age: ${userData.age}`,
+        userData.height && `Height: ${userData.height}`,
+        userData.gender && `Gender: ${userData.gender}`
+      ].filter(Boolean).join(' • ');
+
+      styleData.textContent = profile || 'No profile data available';
+    }
+
+    function displayFormattedResponse(content) {
+      const fashionContent = document.getElementById('fashion-content');
+      
+      // Try to extract an overall score if present
+      const scoreMatch = content.match(/(?:overall|total|style)\s*(?:score|rating):\s*(\d+(?:\.\d+)?(?:\/\d+)?|\d+\s*(?:out of|\/)\s*\d+)/i);
+      if (scoreMatch) {
+        document.getElementById('overall-score').innerHTML = `
+          <i class="fas fa-star star-rating"></i>
+          Overall Style Score: ${scoreMatch[1]}
+        `;
+      }
+
+      // Format the content with proper sections
+      let formattedContent = content;
+
+      // Create structured sections for better readability
+      const sections = [
+        {
+          title: 'Outfit Analysis',
+          icon: 'fas fa-tshirt',
+          regex: /(outfit\s*analysis|individual\s*outfits?|outfit\s*breakdown)/i,
+          className: 'outfit-analysis-grid'
+        },
+        {
+          title: 'Color Recommendations',
+          icon: 'fas fa-palette',
+          regex: /(color\s*recommendations?|color\s*palette|best\s*colors?)/i,
+          className: 'color-palette-section'
+        },
+        {
+          title: 'Styling Tips',
+          icon: 'fas fa-lightbulb',
+          regex: /(styling\s*tips?|style\s*advice|recommendations?)/i,
+          className: 'styling-tips-section'
+        },
+        {
+          title: 'Fit Analysis',
+          icon: 'fas fa-ruler-combined',
+          regex: /(fit\s*analysis|how.*fits?|body\s*type)/i,
+          className: 'fit-analysis-section'
+        },
+        {
+          title: 'Areas for Improvement',
+          icon: 'fas fa-chart-line',
+          regex: /(improvement|suggestions?|could\s*be\s*better|consider)/i,
+          className: 'improvement-suggestions'
+        }
+      ];
+
+      // Apply formatting for better readability
+      formattedContent = formattedContent
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/(\d+)\.\s/g, '<br><strong>$1.</strong> ')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+
+      fashionContent.innerHTML = `<div class="formatted-response"><p>${formattedContent}</p></div>`;
+    }
+
+    function tryAgain() {
+      if (confirm('Are you sure you want to start a new fashion analysis? Your current results will be lost.')) {
+        localStorage.removeItem('fashionIQResponse');
+        localStorage.removeItem('fashionIQData');
+        window.location.href = 'fashioniq.html';
+      }
+    }
+
+    function saveResults() {
+      const response = localStorage.getItem('fashionIQResponse');
+      if (!response) {
+        alert('No results to save.');
+        return;
+      }
+
+      try {
+        const blob = new Blob([response], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `fashion-analysis-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        alert('Fashion analysis saved successfully!');
+      } catch (error) {
+        console.error('Error saving results:', error);
+        alert('Error saving results. Please try again.');
+      }
+    }
+
+    function shareResults() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'My Fashion Analysis',
+          text: 'Check out my AI-powered fashion analysis!',
+          url: window.location.href
+        }).catch(console.error);
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+          alert('Link copied to clipboard!');
+        }).catch(() => {
+          alert('Unable to share. Please copy the URL manually.');
+        });
+      }
+    }
+
+    function goHome() {
+      window.location.href = '/';
+    }
+
+    // Auto-save to localStorage periodically
+    setInterval(() => {
+      const timestamp = new Date().toISOString();
+      localStorage.setItem('fashionIQ_lastViewed', timestamp);
+    }, 30000);
+  </script>
+</body>
+</html>
