@@ -10,6 +10,11 @@
 /**
  * Initializes swipe functionality for a container element
  * 
+ * Features:
+ * - Global swipe hint tracking: Shows swipe hint only ONCE across the entire website
+ * - Once a user sees the swipe hint on any module, they won't see it again anywhere
+ * - Uses localStorage key 'inexasli_global_swipe_hint_seen' for persistence
+ * 
  * @param {HTMLElement} container - The container element to add swipe functionality to
  * @param {string} direction - The direction to swipe ('left' or 'right')
  * @param {Function} onSwipeComplete - Callback function to execute when swipe is complete
@@ -25,7 +30,7 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     const defaultOptions = {
         threshold: 100,                // Minimum distance to trigger swipe action (px)
         showEducationIndicator: false, // Show initial swipe education indicator (disabled to prevent duplicates)
-        showSwipeHint: true,           // Show swipe hint animation on first view (3-second bottom hint)
+        showSwipeHint: true,           // Show swipe hint animation on first view (3-second bottom hint) - GLOBAL TRACKING
         animationDuration: 300,        // Animation duration in ms
         sessionStorageKey: 'swipeEducationShown' + direction.charAt(0).toUpperCase() + direction.slice(1)
     };
@@ -176,20 +181,55 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
 }
 
 /**
+ * Check if user has already seen the global swipe hint
+ * Uses localStorage to persist across sessions and modules
+ */
+function hasSeenGlobalSwipeHint() {
+    try {
+        return localStorage.getItem('inexasli_global_swipe_hint_seen') === 'true';
+    } catch (error) {
+        console.warn('[SwipeFunctionality] Could not access localStorage for swipe tracking:', error);
+        return false;
+    }
+}
+
+/**
+ * Mark that user has seen the global swipe hint
+ * This prevents it from showing again across all modules
+ */
+function markGlobalSwipeHintSeen() {
+    try {
+        localStorage.setItem('inexasli_global_swipe_hint_seen', 'true');
+        console.log('[SwipeFunctionality] Global swipe hint marked as seen');
+    } catch (error) {
+        console.warn('[SwipeFunctionality] Could not save swipe tracking to localStorage:', error);
+    }
+}
+
+/**
  * Shows a temporary swipe hint animation
  */
 function showSwipeHint(container, direction, animationDuration) {
+    // Global check: Only show if user has never seen it before
+    if (hasSeenGlobalSwipeHint()) {
+        console.log('[SwipeFunctionality] Swipe hint already seen globally, skipping');
+        return;
+    }
+    
     // Check if swipe hint already exists to prevent duplicates
     if (container.querySelector('.swipe-hint')) {
         return;
     }
     
+    // Mark as seen immediately when we decide to show it
+    markGlobalSwipeHintSeen();
+    
     // Create swipe hint element
     const swipeHint = document.createElement('div');
     swipeHint.className = 'swipe-hint';
     
-    // Set content with both arrows for navigation
-    swipeHint.innerHTML = `<span class="swipe-animation">← Swipe to navigate →</span>`;
+    // Set content with just SWIPE and arrows
+    swipeHint.innerHTML = `<span class="swipe-animation">← SWIPE →</span>`;
     
     // Apply styles
     swipeHint.style.cssText = `
@@ -231,7 +271,7 @@ function showSwipeHint(container, direction, animationDuration) {
     // Add to container
     container.appendChild(swipeHint);
     
-    // Fade in the hint and then fade it out after a few seconds
+    // Fade in the hint and then fade it out after 15% less time (2.55 seconds instead of 3)
     setTimeout(() => {
         swipeHint.style.opacity = '1';
         setTimeout(() => {
@@ -241,7 +281,7 @@ function showSwipeHint(container, direction, animationDuration) {
                     swipeHint.parentNode.removeChild(swipeHint);
                 }
             }, 500);
-        }, 3000);
+        }, 2550); // 15% reduction: 3000ms * 0.85 = 2550ms
     }, 500);
 }
 
@@ -249,6 +289,15 @@ function showSwipeHint(container, direction, animationDuration) {
  * Adds a one-time education indicator to help users understand the swipe gesture
  */
 function addSwipeEducationIndicator(container, direction) {
+    // Global check: Only show if user has never seen swipe functionality before
+    if (hasSeenGlobalSwipeHint()) {
+        console.log('[SwipeFunctionality] Swipe education already seen globally, skipping');
+        return;
+    }
+    
+    // Mark as seen immediately when we decide to show it
+    markGlobalSwipeHintSeen();
+    
     // Create indicator element
     const indicator = document.createElement('div');
     indicator.className = 'swipe-education';
@@ -310,4 +359,42 @@ function addSwipeEducationIndicator(container, direction) {
             }, 500);
         }, 3000);
     }, 1000);
+}
+
+/**
+ * Reset the global swipe hint tracking (useful for testing)
+ * This will allow the swipe hint to show again
+ */
+export function resetGlobalSwipeTracking() {
+    try {
+        localStorage.removeItem('inexasli_global_swipe_hint_seen');
+        console.log('[SwipeFunctionality] Global swipe tracking reset');
+        return true;
+    } catch (error) {
+        console.warn('[SwipeFunctionality] Could not reset swipe tracking:', error);
+        return false;
+    }
+}
+
+/**
+ * Check if user has seen the global swipe hint (exported for external use)
+ */
+export function hasUserSeenSwipeHint() {
+    return hasSeenGlobalSwipeHint();
+}
+
+/**
+ * Manually mark swipe hint as seen (exported for external use)
+ */
+export function markSwipeHintSeen() {
+    markGlobalSwipeHintSeen();
+}
+
+// Export to window for global access and debugging
+if (typeof window !== 'undefined') {
+    window.swipeUtils = {
+        hasUserSeenSwipeHint,
+        markSwipeHintSeen,
+        resetGlobalSwipeTracking
+    };
 }
