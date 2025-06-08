@@ -1036,6 +1036,15 @@ import { FormPersistence } from '/utility/formPersistence.js';
         if (incomeFormPersistence) {
             console.log("[IncomeIQ] Saving form data via FormPersistence");
             incomeFormPersistence.saveFormData();
+            
+            // Also normalize and save income/expense data when form is saved
+            if (typeof window.normalizeIncomeExpenses === 'function') {
+                console.log("[IncomeIQ] Auto-normalizing data on form save");
+                const result = window.normalizeIncomeExpenses();
+                if (result.success) {
+                    console.log("[IncomeIQ] Auto-normalization completed");
+                }
+            }
         } else {
             console.warn("[IncomeIQ] FormPersistence not initialized, cannot save data");
         }
@@ -1239,6 +1248,201 @@ import { FormPersistence } from '/utility/formPersistence.js';
         saveFormData: () => incomeFormPersistence ? incomeFormPersistence.saveFormData() : null,
         loadSavedData: loadSavedData,
         customFormRepopulator: customFormRepopulator
+    };
+
+    // Normalize income and expenses function
+    window.normalizeIncomeExpenses = function() {
+        console.log("[IncomeIQ] Starting normalization of income and expenses");
+        
+        // Get frequency settings from localStorage
+        const getFrequencySetting = (frequencyId, defaultValue = 'annually') => {
+            try {
+                const settings = JSON.parse(localStorage.getItem('frequencySettings')) || {};
+                return settings[frequencyId] || defaultValue;
+            } catch (error) {
+                console.warn(`Error getting frequency setting for ${frequencyId}:`, error);
+                return defaultValue;
+            }
+        };
+
+        // Calculate annual value based on frequency
+        const calculateAnnual = (value, frequency) => {
+            const numValue = parseFloat(value) || 0;
+            switch (frequency) {
+                case 'annually': return numValue * 1;
+                case 'quarterly': return numValue * 4;
+                case 'monthly': return numValue * 12;
+                case 'weekly': return numValue * 52;
+                default: return numValue;
+            }
+        };
+
+        // Income fields to normalize
+        const incomeFields = [
+            'income-salary-wages',
+            'income-tips',
+            'income-bonuses',
+            'income-sole-prop',
+            'income-federal-pension',
+            'income-provincial-pension',
+            'income-private-pension',
+            'income-old-age-security',
+            'income-employment-insurance',
+            'income-investment-property',
+            'income-capital-gains-losses',
+            'income-venture-capital',
+            'income-public-dividend',
+            'income-owner-dividend',
+            'income-interest',
+            'income-royalties',
+            'income-peer-to-peer-lending',
+            'income-trust',
+            'income-alimony',
+            'income-scholarships-grants',
+            'income-tax-free-income',
+            'income-gambling-winnings'
+        ];
+
+        // Expense fields to normalize
+        const expenseFields = [
+            // Essential expenses
+            'expenses-grocery',
+            'expenses-fitness',
+            'expenses-hygiene',
+            'expenses-medical-dental',
+            'expenses-perscription',
+            'expenses-clothing',
+            'expenses-cellphone-service',
+            // Discretionary expenses
+            'expenses-retirement',
+            'expenses-dining',
+            'expenses-entertainment',
+            'expenses-vacation',
+            'expenses-travel-life-insurance',
+            'expenses-subscriptions',
+            'expenses-beauty',
+            // Housing expenses
+            'housing-mortgage-payment',
+            'housing-rent-payment',
+            'housing-property-tax',
+            'housing-condo-fee',
+            'housing-hydro',
+            'housing-water',
+            'housing-gas',
+            'housing-insurance',
+            'housing-repairs',
+            'housing-internet',
+            // Transportation expenses
+            'transportation-car-loan-payment',
+            'transportation-fuel',
+            'transportation-insurance',
+            'transportation-maintenance',
+            'transportation-public-transit',
+            'transportation-ride-hailing',
+            // Debt expenses
+            'expenses-line-of-credit-payment',
+            'expenses-student-loan-payment',
+            'expenses-credit-card-payment',
+            'expenses-tax-arrears-payment',
+            'expenses-small-business-loan-payment',
+            // Dependents expenses
+            'dependant-day-care',
+            'dependant-medical-dental',
+            'dependant-clothing',
+            'dependant-sports-recreation',
+            'dependant-transportation',
+            'dependant-tuition',
+            'dependant-housing',
+            'dependant-cellular-service'
+        ];
+
+        // Normalize income data
+        const normalizedIncome = {};
+        incomeFields.forEach(fieldId => {
+            const element = document.getElementById(fieldId);
+            if (element && element.value) {
+                const frequencyId = `${fieldId}-frequency`;
+                const frequency = getFrequencySetting(frequencyId, 'annually');
+                const annualValue = calculateAnnual(element.value, frequency);
+                normalizedIncome[fieldId] = {
+                    original: parseFloat(element.value),
+                    frequency: frequency,
+                    annual: annualValue
+                };
+                console.log(`Income ${fieldId}: $${element.value} ${frequency} = $${annualValue} annually`);
+            }
+        });
+
+        // Normalize expense data
+        const normalizedExpenses = {};
+        expenseFields.forEach(fieldId => {
+            const element = document.getElementById(fieldId);
+            if (element && element.value) {
+                const frequencyId = `${fieldId}-frequency`;
+                const frequency = getFrequencySetting(frequencyId, 'annually');
+                const annualValue = calculateAnnual(element.value, frequency);
+                normalizedExpenses[fieldId] = {
+                    original: parseFloat(element.value),
+                    frequency: frequency,
+                    annual: annualValue
+                };
+                console.log(`Expense ${fieldId}: $${element.value} ${frequency} = $${annualValue} annually`);
+            }
+        });
+
+        // Calculate totals
+        const totalAnnualIncome = Object.values(normalizedIncome).reduce((sum, item) => sum + item.annual, 0);
+        const totalAnnualExpenses = Object.values(normalizedExpenses).reduce((sum, item) => sum + item.annual, 0);
+
+        console.log(`Total Annual Income: $${totalAnnualIncome.toFixed(2)}`);
+        console.log(`Total Annual Expenses: $${totalAnnualExpenses.toFixed(2)}`);
+
+        // Save normalized data to localStorage using setJSON function
+        try {
+            const incomeData = {
+                ...normalizedIncome,
+                _meta: {
+                    totalAnnual: totalAnnualIncome,
+                    lastUpdated: new Date().toISOString(),
+                    fieldsCount: Object.keys(normalizedIncome).length
+                }
+            };
+
+            const expenseData = {
+                ...normalizedExpenses,
+                _meta: {
+                    totalAnnual: totalAnnualExpenses,
+                    lastUpdated: new Date().toISOString(),
+                    fieldsCount: Object.keys(normalizedExpenses).length
+                }
+            };
+
+            // Save to localStorage
+            localStorage.setItem('incomeIqIncome', JSON.stringify(incomeData));
+            localStorage.setItem('incomeIqExpense', JSON.stringify(expenseData));
+
+            console.log("[IncomeIQ] ✅ Successfully saved normalized data to localStorage");
+            console.log("Income data saved to 'incomeIqIncome':", incomeData);
+            console.log("Expense data saved to 'incomeIqExpense':", expenseData);
+
+            return {
+                success: true,
+                income: incomeData,
+                expenses: expenseData,
+                summary: {
+                    totalIncome: totalAnnualIncome,
+                    totalExpenses: totalAnnualExpenses,
+                    netIncome: totalAnnualIncome - totalAnnualExpenses
+                }
+            };
+
+        } catch (error) {
+            console.error("[IncomeIQ] ❌ Error saving normalized data:", error);
+            return {
+                success: false,
+                error: error.message
+            };
+        }
     };
 
 })();

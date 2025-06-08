@@ -239,6 +239,17 @@ function initializeFrequencyGroup(frequencyId) {
                 if (typeof calculateAll === 'function') {
                     calculateAll();
                 }
+                
+                // Trigger normalization when frequency changes
+                if (typeof window.normalizeIncomeExpenses === 'function') {
+                    console.log(`🔧 Triggering normalization after frequency change: ${checkbox.value}`);
+                    const normalizationResult = window.normalizeIncomeExpenses();
+                    if (normalizationResult.success) {
+                        console.log(`✅ Normalization completed for frequency change`);
+                    } else {
+                        console.warn(`⚠️ Normalization failed for frequency change:`, normalizationResult.error);
+                    }
+                }
             });
         } else {
             console.warn(`❌ No label found for checkbox: ${checkbox.id}`);
