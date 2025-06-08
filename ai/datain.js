@@ -9,7 +9,7 @@
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 import { FormPersistence } from '/utility/formPersistence.js';
-import { initializeSwipeFunctionality } from '/utility/swipeFunctionality.js';
+import { initializeBidirectionalSwipe } from '/utility/swipeFunctionality.js';
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
@@ -267,23 +267,23 @@ document.addEventListener('DOMContentLoaded', async function () {
                     if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
                         const swipeTargetElement = dataContainer.querySelector('.data-content');
                         if (swipeTargetElement) {
-                            console.log('[DataIn] Initializing swipe for guided forms on .data-content');
+                            console.log('[DataIn] Initializing bidirectional swipe for guided forms on .data-content');
                             
-                            // Swipe Right (to go to Previous Step)
-                            initializeSwipeFunctionality(swipeTargetElement, 'right', () => {
-                                if (window.guidedForms && window.guidedForms.currentStep > 0) {
-                                    console.log('[DataIn] Swipe Right detected, going to previous step.');
-                                    window.guidedForms.showStep(window.guidedForms.currentStep - 1);
+                            // Initialize both left and right swipe handlers with a single call
+                            initializeBidirectionalSwipe(swipeTargetElement, {
+                                right: () => {
+                                    if (window.guidedForms && window.guidedForms.currentStep > 0) {
+                                        console.log('[DataIn] Swipe Right detected, going to previous step.');
+                                        window.guidedForms.showStep(window.guidedForms.currentStep - 1);
+                                    }
+                                },
+                                left: () => {
+                                    if (window.guidedForms && window.guidedForms.steps && window.guidedForms.currentStep < window.guidedForms.steps.length - 1) {
+                                        console.log('[DataIn] Swipe Left detected, going to next step.');
+                                        window.guidedForms.showStep(window.guidedForms.currentStep + 1);
+                                    }
                                 }
-                            }, { sessionStorageKey: 'swipeRightEducationShownDatain' });
-
-                            // Swipe Left (to go to Next Step)
-                            initializeSwipeFunctionality(swipeTargetElement, 'left', () => {
-                                if (window.guidedForms && window.guidedForms.steps && window.guidedForms.currentStep < window.guidedForms.steps.length - 1) {
-                                    console.log('[DataIn] Swipe Left detected, going to next step.');
-                                    window.guidedForms.showStep(window.guidedForms.currentStep + 1);
-                                }
-                            }, { sessionStorageKey: 'swipeLeftEducationShownDatain' });
+                            }, { sessionStorageKey: 'swipeEducationShownDatain' });
                         } else {
                             console.warn('[DataIn] Could not find .data-content to initialize swipe for guided forms.');
                         }
