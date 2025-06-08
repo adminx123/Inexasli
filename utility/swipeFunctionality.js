@@ -14,6 +14,7 @@
  * - Global swipe hint tracking: Shows swipe hint only ONCE across the entire website
  * - Once a user sees the swipe hint on any module, they won't see it again anywhere
  * - Uses localStorage key 'inexasli_global_swipe_hint_seen' for persistence
+ * - Prevents multiple event handlers and race conditions
  * 
  * @param {HTMLElement} container - The container element to add swipe functionality to
  * @param {string} direction - The direction to swipe ('left' or 'right')
@@ -24,6 +25,13 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     if (!container) {
         console.error('Container element is required for swipe functionality');
         return;
+    }
+    
+    // Check if this container already has swipe functionality to prevent conflicts
+    if (container._swipeData) {
+        console.log(`Adding ${direction} swipe to existing swipe handler on ${container.id || 'container'}`);
+        container._swipeData.handlers[direction] = onSwipeComplete;
+        return container._swipeData.destroyFunction;
     }
     
     // Default options
@@ -42,39 +50,63 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     let touchStartX = 0;
     let touchStartY = 0;
     let currentTranslate = 0;
+    let isProcessingSwipe = false; // Prevent multiple simultaneous swipes
+    
+    // Initialize swipe data structure for this container
+    const swipeData = {
+        handlers: { [direction]: onSwipeComplete },
+        config,
+        touchStartX: 0,
+        touchStartY: 0,
+        currentTranslate: 0,
+        isProcessingSwipe: false
+    };
     
     // Event handlers
     function handleTouchStart(e) {
+        if (swipeData.isProcessingSwipe) {
+            console.log('Swipe already in progress, ignoring new touch start');
+            return;
+        }
+        
         console.log(`Touch start detected on ${container.id || 'container'}`);
         
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        console.log(`Touch coordinates: X=${touchStartX}, Y=${touchStartY}`);
+        swipeData.touchStartX = e.touches[0].clientX;
+        swipeData.touchStartY = e.touches[0].clientY;
+        console.log(`Touch coordinates: X=${swipeData.touchStartX}, Y=${swipeData.touchStartY}`);
         
         // Remove transition temporarily during the swipe
         container.style.transition = 'none';
         
-        // Add event listeners for swipe gestures
-        container.addEventListener('touchmove', handleTouchMove, { passive: true });
+        // Add event listeners for swipe gestures (non-passive for preventDefault)
+        container.addEventListener('touchmove', handleTouchMove, { passive: false });
         container.addEventListener('touchend', handleTouchEnd);
         container.addEventListener('touchcancel', handleTouchEnd);
-        
-        // Don't prevent default here to allow scrolling to work
     }
     
     function handleTouchMove(e) {
+        if (swipeData.isProcessingSwipe) {
+            return;
+        }
+        
         const touchX = e.touches[0].clientX;
         const touchY = e.touches[0].clientY;
         
         // Calculate horizontal and vertical distances moved
-        const diffX = touchX - touchStartX;
-        const diffY = touchY - touchStartY;
+        const diffX = touchX - swipeData.touchStartX;
+        const diffY = touchY - swipeData.touchStartY;
         
-        // If this appears to be primarily a horizontal swipe AND in the correct direction
-        const isCorrectDirection = (direction === 'left' && diffX < 0) || (direction === 'right' && diffX > 0);
+        // Determine which direction this swipe is going
+        const isLeftSwipe = diffX < 0;
+        const isRightSwipe = diffX > 0;
+        const detectedDirection = isLeftSwipe ? 'left' : 'right';
         
-        if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && isCorrectDirection) {
-            // Only prevent default for intentional horizontal swipes in the correct direction
+        // Check if we have a handler for this direction
+        const hasHandler = swipeData.handlers[detectedDirection];
+        
+        // If this appears to be primarily a horizontal swipe AND we have a handler for this direction
+        if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && hasHandler) {
+            // Only prevent default for intentional horizontal swipes that we can handle
             e.preventDefault();
             e.stopPropagation();
         } else if (Math.abs(diffY) > 10) {
@@ -82,11 +114,11 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
             return;
         }
         
-        console.log(`Touch move: diffX=${diffX}, diffY=${diffY}`);
+        console.log(`Touch move: diffX=${diffX}, diffY=${diffY}, detected: ${detectedDirection}, hasHandler: ${!!hasHandler}`);
         
-        // Only apply transform for swipes in the correct direction
-        if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && isCorrectDirection) {
-            currentTranslate = diffX;
+        // Only apply transform for swipes we can handle
+        if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && hasHandler) {
+            swipeData.currentTranslate = diffX;
             container.style.transform = `translateX(${diffX}px)`;
             console.log(`Applied transform: translateX(${diffX}px)`);
             
@@ -97,20 +129,31 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     }
     
     function handleTouchEnd(e) {
+        if (swipeData.isProcessingSwipe) {
+            console.log('Swipe already being processed, ignoring touch end');
+            return;
+        }
+        
         // Restore transition for smooth animation
         container.style.transition = `transform ${config.animationDuration}ms ease, opacity ${config.animationDuration}ms ease`;
         
-        // Check swipe direction and threshold
-        const swipeThresholdMet = direction === 'left' 
-            ? currentTranslate < -config.threshold 
-            : currentTranslate > config.threshold;
+        // Determine swipe direction based on current translate
+        const swipeDirection = swipeData.currentTranslate < 0 ? 'left' : 'right';
+        const handler = swipeData.handlers[swipeDirection];
         
-        // Check if the swipe was significant enough
-        if (swipeThresholdMet) {
+        // Check if the swipe was significant enough and we have a handler
+        const swipeThresholdMet = Math.abs(swipeData.currentTranslate) > config.threshold;
+        
+        if (swipeThresholdMet && handler) {
+            // Mark as processing to prevent multiple executions
+            swipeData.isProcessingSwipe = true;
+            
             // Complete the swipe animation
-            const translateValue = direction === 'left' ? '-100%' : '100%';
+            const translateValue = swipeDirection === 'left' ? '-100%' : '100%';
             container.style.transform = `translateX(${translateValue})`;
             container.style.opacity = '0';
+            
+            console.log(`Executing ${swipeDirection} swipe callback`);
             
             // Trigger callback after animation completes
             setTimeout(() => {
@@ -119,12 +162,21 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
                 container.style.transition = '';
                 
                 // Execute the callback if provided
-                if (typeof onSwipeComplete === 'function') {
-                    onSwipeComplete();
+                if (typeof handler === 'function') {
+                    try {
+                        handler();
+                    } catch (error) {
+                        console.error('Error executing swipe callback:', error);
+                    }
                 }
+                
+                // Reset processing flag after a small delay to prevent rapid-fire swipes
+                setTimeout(() => {
+                    swipeData.isProcessingSwipe = false;
+                }, 100);
             }, config.animationDuration);
         } else {
-            // Reset position if swipe wasn't far enough
+            // Reset position if swipe wasn't far enough or no handler
             container.style.transform = '';
             container.style.opacity = '1';
             setTimeout(() => {
@@ -137,22 +189,29 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
         container.removeEventListener('touchend', handleTouchEnd);
         container.removeEventListener('touchcancel', handleTouchEnd);
         
-        currentTranslate = 0;
+        swipeData.currentTranslate = 0;
     }
     
     // Add touch event listeners to container
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
     
-    // Also add touch events to handle nested scrollable content
-    container.addEventListener('touchmove', (e) => {
-        // For nested scrollable content, we want to allow default scrolling behavior
-        // We don't need to prevent default here as that would block scrolling
-        // This event listener is just for handling additional logic, not blocking scrolls
-    }, { passive: true });
+    // Store swipe data on the container to prevent conflicts
+    const destroyFunction = () => {
+        container.removeEventListener('touchstart', handleTouchStart);
+        container.removeEventListener('touchmove', handleTouchMove);
+        container.removeEventListener('touchend', handleTouchEnd);
+        container.removeEventListener('touchcancel', handleTouchEnd);
+        delete container._swipeData;
+        console.log(`Swipe functionality removed from ${container.id || 'container'}`);
+    };
     
-    // Show swipe hint if enabled
-    if (config.showSwipeHint) {
+    swipeData.destroyFunction = destroyFunction;
+    container._swipeData = swipeData;
+    
+    // Show swipe hint if enabled (only for the first direction)
+    if (config.showSwipeHint && !container._swipeHintShown) {
         showSwipeHint(container, direction, config.animationDuration);
+        container._swipeHintShown = true;
     }
     
     // Show initial swipe education indicator if enabled
@@ -169,15 +228,7 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     // Debug message to confirm initialization
     console.log(`Swipe ${direction} functionality initialized for ${container.id || 'container'}`);
     
-    return {
-        destroy: () => {
-            container.removeEventListener('touchstart', handleTouchStart);
-            container.removeEventListener('touchmove', handleTouchMove);
-            container.removeEventListener('touchend', handleTouchEnd);
-            container.removeEventListener('touchcancel', handleTouchEnd);
-            console.log(`Swipe functionality removed from ${container.id || 'container'}`);
-        }
-    };
+    return destroyFunction;
 }
 
 /**
@@ -228,8 +279,15 @@ function showSwipeHint(container, direction, animationDuration) {
     const swipeHint = document.createElement('div');
     swipeHint.className = 'swipe-hint';
     
+    // Show bidirectional swipe hint if container supports both directions
+    const hasMultipleDirections = container._swipeData && 
+        Object.keys(container._swipeData.handlers).length > 1;
+    
+    const hintText = hasMultipleDirections ? '← SWIPE →' : 
+        (direction === 'left' ? '← SWIPE' : 'SWIPE →');
+    
     // Set content with just SWIPE and arrows
-    swipeHint.innerHTML = `<span class="swipe-animation">← SWIPE →</span>`;
+    swipeHint.innerHTML = `<span class="swipe-animation">${hintText}</span>`;
     
     // Apply styles
     swipeHint.style.cssText = `
@@ -362,6 +420,52 @@ function addSwipeEducationIndicator(container, direction) {
 }
 
 /**
+ * Initializes bidirectional swipe functionality for a container element
+ * This is a convenience function for adding both left and right swipe handlers
+ * 
+ * @param {HTMLElement} container - The container element to add swipe functionality to
+ * @param {Object} handlers - Object containing left and/or right callback functions
+ * @param {Function} handlers.left - Callback for left swipe
+ * @param {Function} handlers.right - Callback for right swipe
+ * @param {Object} options - Additional configuration options
+ */
+export function initializeBidirectionalSwipe(container, handlers, options = {}) {
+    if (!container) {
+        console.error('Container element is required for swipe functionality');
+        return;
+    }
+    
+    if (!handlers || (!handlers.left && !handlers.right)) {
+        console.error('At least one swipe handler (left or right) must be provided');
+        return;
+    }
+    
+    let destroyFunctions = [];
+    
+    // Initialize left swipe if handler provided
+    if (handlers.left) {
+        const destroyLeft = initializeSwipeFunctionality(container, 'left', handlers.left, options);
+        destroyFunctions.push(destroyLeft);
+    }
+    
+    // Initialize right swipe if handler provided
+    if (handlers.right) {
+        const destroyRight = initializeSwipeFunctionality(container, 'right', handlers.right, options);
+        destroyFunctions.push(destroyRight);
+    }
+    
+    // Return a function to destroy all swipe handlers
+    return () => {
+        destroyFunctions.forEach(destroy => {
+            if (typeof destroy === 'function') {
+                destroy();
+            }
+        });
+        console.log(`Bidirectional swipe functionality removed from ${container.id || 'container'}`);
+    };
+}
+
+/**
  * Reset the global swipe hint tracking (useful for testing)
  * This will allow the swipe hint to show again
  */
@@ -390,11 +494,38 @@ export function markSwipeHintSeen() {
     markGlobalSwipeHintSeen();
 }
 
+/**
+ * Debug utility to check swipe handler status on an element
+ */
+export function debugSwipeHandlers(container) {
+    if (!container) {
+        console.log('No container provided for debug');
+        return null;
+    }
+    
+    const swipeData = container._swipeData;
+    if (!swipeData) {
+        console.log(`No swipe handlers found on ${container.id || 'container'}`);
+        return null;
+    }
+    
+    const debug = {
+        hasHandlers: Object.keys(swipeData.handlers).length > 0,
+        directions: Object.keys(swipeData.handlers),
+        isProcessing: swipeData.isProcessingSwipe,
+        currentTranslate: swipeData.currentTranslate
+    };
+    
+    console.log(`Swipe debug for ${container.id || 'container'}:`, debug);
+    return debug;
+}
+
 // Export to window for global access and debugging
 if (typeof window !== 'undefined') {
     window.swipeUtils = {
         hasUserSeenSwipeHint,
         markSwipeHintSeen,
-        resetGlobalSwipeTracking
+        resetGlobalSwipeTracking,
+        debugSwipeHandlers
     };
 }
