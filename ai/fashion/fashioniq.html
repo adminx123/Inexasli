@@ -23,8 +23,8 @@
     </p>
 </div>
 
-<div class="row1" data-step-label="Style Preference">
-    <div class="grid-container" id="fashion-style">
+<div class="row1" data-step-label="Personal Style">
+    <div class="grid-container" id="fashion-personal-style">
         <div class="grid-item" data-value="Casual">Casual & Comfortable</div>
         <div class="grid-item" data-value="Business">Business & Professional</div>
         <div class="grid-item" data-value="Formal">Formal & Elegant</div>
@@ -36,42 +36,9 @@
     </div>
 </div>
 
-<div class="row1" data-step-label="Body Type">
-    <div class="grid-container" id="fashion-body-type">
-        <div class="grid-item" data-value="Apple">Apple (fuller midsection)</div>
-        <div class="grid-item" data-value="Pear">Pear (wider hips)</div>
-        <div class="grid-item" data-value="Hourglass">Hourglass (balanced curves)</div>
-        <div class="grid-item" data-value="Rectangle">Rectangle (straight lines)</div>
-        <div class="grid-item" data-value="Inverted Triangle">Inverted Triangle (broader shoulders)</div>
-        <div class="grid-item" data-value="Athletic">Athletic (muscular build)</div>
-        <div class="grid-item" data-value="Petite">Petite (smaller frame)</div>
-        <div class="grid-item" data-value="Plus Size">Plus Size (curvy & fuller)</div>
-    </div>
-</div>
 
-<div class="row1" data-step-label="Skin Tone">
-    <div class="grid-container" id="fashion-skin-tone">
-        <div class="grid-item" data-value="Fair Cool">Fair with Cool Undertones</div>
-        <div class="grid-item" data-value="Fair Warm">Fair with Warm Undertones</div>
-        <div class="grid-item" data-value="Light Cool">Light with Cool Undertones</div>
-        <div class="grid-item" data-value="Light Warm">Light with Warm Undertones</div>
-        <div class="grid-item" data-value="Medium Cool">Medium with Cool Undertones</div>
-        <div class="grid-item" data-value="Medium Warm">Medium with Warm Undertones</div>
-        <div class="grid-item" data-value="Deep Cool">Deep with Cool Undertones</div>
-        <div class="grid-item" data-value="Deep Warm">Deep with Warm Undertones</div>
-    </div>
-</div>
 
-<div class="row1" data-step-label="Hair Color">
-    <div class="grid-container" id="fashion-hair-color">
-        <div class="grid-item" data-value="Blonde">Blonde</div>
-        <div class="grid-item" data-value="Brunette">Brunette</div>
-        <div class="grid-item" data-value="Black">Black</div>
-        <div class="grid-item" data-value="Red">Red/Auburn</div>
-        <div class="grid-item" data-value="Gray">Gray/Silver</div>
-        <div class="grid-item" data-value="Colored">Fashion Colors (pink, blue, etc.)</div>
-    </div>
-</div>
+
 
 <div class="row1" data-step-label="Personal Information">
     <input id="fashion-age" type="text" placeholder="Age">
@@ -84,7 +51,18 @@
     </select>
 </div>
 
-<div class="row1" data-step-label="Outfit Context">
+<div class="row1" data-step-label="Climate/Weather Context">
+    <div class="grid-container" id="fashion-climate">
+        <div class="grid-item" data-value="Cold Climate">Cold Climate (snow, freezing temperatures)</div>
+        <div class="grid-item" data-value="Temperate Climate">Temperate Climate (four seasons, moderate weather)</div>
+        <div class="grid-item" data-value="Warm Climate">Warm Climate (mild winters, no snow)</div>
+        <div class="grid-item" data-value="Hot & Dry Climate">Hot & Dry Climate (desert-like, sun protection)</div>
+        <div class="grid-item" data-value="Hot & Humid Climate">Hot & Humid Climate (tropical, breathable fabrics)</div>
+        <div class="grid-item" data-value="Indoor/Climate Controlled">Indoor/Climate Controlled (no weather concerns)</div>
+    </div>
+</div>
+
+<div class="row1" data-step-label="Event/Occasion">
     <div class="grid-container" id="fashion-occasion">
         <div class="grid-item" data-value="Work">Work/Office</div>
         <div class="grid-item" data-value="Casual Day">Casual Day Out</div>
@@ -94,6 +72,10 @@
         <div class="grid-item" data-value="Exercise">Gym/Exercise</div>
         <div class="grid-item" data-value="Formal Event">Formal Event</div>
         <div class="grid-item" data-value="Everyday">Everyday Wear</div>
+        <div class="grid-item" data-value="Special Occasion">Special Occasion</div>
+        <div class="grid-item" data-value="Interview">Job Interview</div>
+        <div class="grid-item" data-value="Wedding">Wedding Guest</div>
+        <div class="grid-item" data-value="Brunch">Brunch/Social</div>
     </div>
 </div>
 
@@ -251,10 +233,8 @@
   // Collect all form data
   function collectFormData() {
     return {
-      stylePreference: selections['fashion-style'] || '',
-      bodyType: selections['fashion-body-type'] || '',
-      skinTone: selections['fashion-skin-tone'] || '',
-      hairColor: selections['fashion-hair-color'] || '',
+      personalStyle: selections['fashion-personal-style'] || '',
+      climate: selections['fashion-climate'] || '',
       occasion: selections['fashion-occasion'] || '',
       age: document.getElementById('fashion-age').value,
       height: document.getElementById('fashion-height').value,

@@ -1,7 +1,13 @@
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
+ * Unauthorized use,3. **SEASONAL & LOCATION APPROPRIATENESS**: Consider my location and season:
+   - Are these outfits appropriate for the current season/climate I'm in?
+   - Any weather-specific considerations (layering, fabric weight, breathability)?
+   - Regional fashion norms that might apply to my location
+   - Seasonal color palette considerations
+
+4. **INDIVIDUAL OUTFIT ANALYSIS**: For each outfit, provide:uction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
@@ -104,11 +110,9 @@ function validateRequest(data) {
 // Build fashion analysis prompt
 function buildFashionPrompt(data) {
   const {
-    stylePreference,
-    bodyType,
-    skinTone,
-    hairColor,
+    personalStyle,
     occasion,
+    climate,
     age,
     height,
     gender,
@@ -124,47 +128,77 @@ PERSONAL PROFILE:
   if (age) prompt += `- Age: ${age}\n`;
   if (height) prompt += `- Height: ${height}\n`;
   if (gender) prompt += `- Gender: ${gender}\n`;
-  if (skinTone) prompt += `- Skin Tone: ${skinTone}\n`;
-  if (hairColor) prompt += `- Hair Color: ${hairColor}\n`;
-  if (bodyType) prompt += `- Body Type: ${bodyType}\n`;
-  if (stylePreference) prompt += `- Style Preference: ${stylePreference}\n`;
+  if (personalStyle) prompt += `- Personal Style Preference: ${personalStyle}\n`;
+  if (climate) prompt += `- Climate Zone: ${climate}\n`;
   if (occasion) prompt += `- Intended Occasion: ${occasion}\n`;
 
   prompt += `
 ANALYSIS REQUESTED:
 I've uploaded ${images.length} outfit photo${images.length > 1 ? 's' : ''} for your analysis. Please provide:
 
-1. **INDIVIDUAL OUTFIT ANALYSIS**: For each outfit, provide:
+1. **BODY TYPE ANALYSIS**: First, analyze my body type from the photos:
+   - Determine my body shape (apple, pear, hourglass, rectangle, inverted triangle, athletic, etc.)
+   - Explain what visual cues you used to make this assessment
+   - This will inform all subsequent styling advice
+
+2. **SKIN TONE & HAIR COLOR ANALYSIS**: Analyze my coloring from the photos:
+   - Determine my skin tone and undertones (fair/light/medium/deep with cool/warm/neutral undertones)
+   - Identify my hair color and any highlights or variations
+   - Explain what visual cues you used for this assessment
+   - This will inform color recommendations and styling advice
+
+2. **SKIN TONE & HAIR COLOR ANALYSIS**: Analyze my coloring from the photos:
+   - Determine my skin tone and undertones (fair/light/medium/deep with cool/warm/neutral undertones)
+   - Identify my hair color and any highlights or variations
+   - Explain what visual cues you used for this assessment
+   - This will inform color recommendations and styling advice
+
+3. **SEASONAL & LOCATION APPROPRIATENESS**: Consider my location and season:
+   - Are these outfits appropriate for the current season/climate I'm in?
+   - Any weather-specific considerations (layering, fabric weight, breathability)?
+   - Regional fashion norms that might apply to my location
+   - Seasonal color palette considerations
+
+4. **INDIVIDUAL OUTFIT ANALYSIS**: For each outfit, provide:
    - Overall rating (1-10) and why
    - What works well about this outfit
    - What doesn't work and why
-   - How well it suits my body type and personal features
+   - How well it suits my analyzed body type and personal features
    - Fit assessment (too loose, too tight, just right)
-   - Whether it's appropriate for the intended occasion
+   - Whether it's appropriate for the intended occasion AND season/location
+   - Personal style alignment (how well it matches my stated preference)
 
-2. **COLOR ANALYSIS**: Based on my skin tone and hair color:
+5. **COLOR ANALYSIS**: Based on my analyzed skin tone and hair color:
    - Which colors in my outfits complement me best
    - Which colors should I avoid
    - Specific color recommendations for my complexion
+   - Seasonal color suggestions for my current location/climate
    - How to incorporate my best colors into my wardrobe
 
-3. **STYLING RECOMMENDATIONS**: 
+6. **STYLING RECOMMENDATIONS**: 
    - How to improve each outfit with simple changes
-   - Accessory suggestions that would enhance the looks
-   - Alternative ways to style the same pieces
-   - Shopping recommendations for missing wardrobe pieces
+   - Season-appropriate accessory suggestions
+   - Alternative ways to style the same pieces for different occasions
+   - Shopping recommendations for missing wardrobe pieces (with season in mind)
 
-4. **BODY TYPE OPTIMIZATION**: Based on my body type:
+7. **BODY TYPE OPTIMIZATION**: Based on your analysis of my body type:
    - Which silhouettes are most flattering on me
    - What styles to emphasize or avoid
    - How the current outfits do or don't flatter my figure
    - Specific fit advice for my body type
 
-5. **OVERALL STYLE ASSESSMENT**:
+8. **PERSONAL STYLE & OCCASION ALIGNMENT**:
+   - How well do these outfits reflect my personal style preference?
+   - Are they appropriate for the stated occasion?
+   - How to better align future outfits with both my style AND the occasions I dress for
+   - Versatility tips for transitioning outfits between occasions
+
+9. **OVERALL STYLE ASSESSMENT**:
    - How cohesive is my style across outfits
-   - Whether my clothes align with my stated style preference
    - Areas where I could elevate my look
-   - Budget-friendly ways to improve my wardrobe
+   - Budget-friendly ways to improve my wardrobe for my climate/location
+   - Seasonal wardrobe planning suggestions
+   - Seasonal wardrobe planning suggestions
 
 `;
 
