@@ -106,20 +106,47 @@
 */
 
 (function() {
-  console.log("Fashion IQ script initializing");
+  console.log("Fashion IQ script: Starting"); // New log
 
   let uploadedImages = [];
 
   // Initialize upload functionality
   function initializeImageUpload() {
+    console.log("Fashion IQ: Initializing image upload."); // Changed log
     const uploadArea = document.getElementById('fashion-upload-area');
     const fileInput = document.getElementById('fashion-image-input');
     const uploadedImagesContainer = document.getElementById('fashion-uploaded-images');
     const generateBtn = document.getElementById('generate-fashion-btn');
 
+    // console.log("Fashion IQ: uploadArea element:", uploadArea); // Kept for now
+    // console.log("Fashion IQ: fileInput element:", fileInput);   // Kept for now
+
+    if (!uploadArea) {
+        console.error("Fashion IQ: Critical element 'fashion-upload-area' not found.");
+        return;
+    }
+    if (!fileInput) {
+        console.error("Fashion IQ: Critical element 'fashion-image-input' not found.");
+        return;
+    }
+    console.log("Fashion IQ: uploadArea and fileInput elements seem to be found by the IDs.");
+
+
     // Click to upload
     uploadArea.addEventListener('click', () => {
-      fileInput.click();
+      console.log('Fashion IQ: Upload area clicked.');
+      const freshFileInput = document.getElementById('fashion-image-input');
+      if (freshFileInput) {
+        console.log('Fashion IQ: Found freshFileInput. ID:', freshFileInput.id, 'Parent Node:', freshFileInput.parentNode); // Detailed log
+        try {
+          freshFileInput.click();
+          console.log('Fashion IQ: freshFileInput.click() was called.'); // Confirmation log
+        } catch (e) {
+          console.error('Fashion IQ: Error occurred when calling freshFileInput.click():', e); // Error catching
+        }
+      } else {
+        console.error('Fashion IQ: freshFileInput (id: fashion-image-input) not found at time of click!');
+      }
     });
 
     // Drag and drop functionality
@@ -280,19 +307,14 @@
   }
 
   // Initialize everything when DOM is ready
-  document.addEventListener('DOMContentLoaded', function() {
-    initializeImageUpload();
-    initializeGenerateButton();
-  });
+  // Removing DOMContentLoaded and readyState check for now, assuming script runs when its DOM is ready.
+  // The multiple "Fashion IQ script initializing" logs suggest this IIFE itself runs multiple times.
+  // This needs to be addressed at a higher level.
+  console.log("Fashion IQ: Attempting direct initialization of upload and generate button functions.");
+  initializeImageUpload();
+  initializeGenerateButton();
+  console.log("Fashion IQ script: Initialization functions called.");
 
-  // Also run immediately in case DOMContentLoaded already fired
-  if (document.readyState === 'loading') {
-    // DOM hasn't finished loading yet
-  } else {
-    // DOM is ready
-    initializeImageUpload();
-    initializeGenerateButton();
-  }
 
 })();
 </script>
