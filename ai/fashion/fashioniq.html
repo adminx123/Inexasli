@@ -109,7 +109,6 @@
   console.log("Fashion IQ script initializing");
 
   let uploadedImages = [];
-  let selections = {};
 
   // Initialize upload functionality
   function initializeImageUpload() {
@@ -203,44 +202,26 @@
     }
   }
 
-  // Grid selection functionality (reused from calorie module)
-  function initializeGridSelections() {
-    const gridContainers = document.querySelectorAll('.grid-container');
-    
-    gridContainers.forEach(container => {
-      const items = container.querySelectorAll('.grid-item');
-      
-      items.forEach(item => {
-        item.addEventListener('click', function() {
-          // Remove selection from siblings
-          items.forEach(sibling => sibling.classList.remove('selected'));
-          
-          // Add selection to clicked item
-          this.classList.add('selected');
-          
-          // Store selection
-          const containerId = container.id;
-          const value = this.dataset.value;
-          selections[containerId] = value;
-          
-          console.log('Selection updated:', containerId, value);
-        });
-      });
-    });
-  }
-
-  // Collect all form data
+  // Collect all form data using FormPersistence
   function collectFormData() {
-    return {
-      personalStyle: selections['fashion-personal-style'] || '',
-      climate: selections['fashion-climate'] || '',
-      occasion: selections['fashion-occasion'] || '',
-      age: document.getElementById('fashion-age').value,
-      height: document.getElementById('fashion-height').value,
-      gender: document.getElementById('fashion-gender').value,
-      additionalContext: document.getElementById('fashion-additional-context').value,
-      images: uploadedImages.map(img => img.data)
-    };
+    if (window.fashionFormPersistence) {
+      const formData = window.fashionFormPersistence.collectFormData();
+      // Add uploaded images to the form data
+      formData.images = uploadedImages.map(img => img.data);
+      return formData;
+    } else {
+      // Fallback to manual collection if FormPersistence not available
+      return {
+        personalStyle: document.querySelector('#fashion-personal-style .grid-item.selected')?.dataset.value || '',
+        climate: document.querySelector('#fashion-climate .grid-item.selected')?.dataset.value || '',
+        occasion: document.querySelector('#fashion-occasion .grid-item.selected')?.dataset.value || '',
+        age: document.getElementById('fashion-age').value,
+        height: document.getElementById('fashion-height').value,
+        gender: document.getElementById('fashion-gender').value,
+        additionalContext: document.getElementById('fashion-additional-context').value,
+        images: uploadedImages.map(img => img.data)
+      };
+    }
   }
 
   // Generate button functionality
@@ -301,7 +282,6 @@
   // Initialize everything when DOM is ready
   document.addEventListener('DOMContentLoaded', function() {
     initializeImageUpload();
-    initializeGridSelections();
     initializeGenerateButton();
   });
 
@@ -311,7 +291,6 @@
   } else {
     // DOM is ready
     initializeImageUpload();
-    initializeGridSelections();
     initializeGenerateButton();
   }
 
