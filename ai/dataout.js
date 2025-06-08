@@ -230,13 +230,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/calorie/calorieiq.html': '/ai/calorie/calorieoutput.html',
                 '/ai/symptom/symptomiq.html': '/ai/symptom/symptomoutput.html',
                 '/ai/book/bookiq.html': '/ai/book/bookoutput.html',
-                '/ai/fitness/fitnessiq.html': '/ai/fitness/fitnessoutput.html',
                 '/ai/adventure/adventureiq.html': '/ai/adventure/adventureoutput.html',
                 '/ai/decision/decisioniq.html': '/ai/decision/decisionoutput.html',
                 '/ai/enneagram/enneagramiq.html': '/ai/enneagram/enneagramoutput.html',
                 '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
                 '/ai/income/incomeiq.html': '/ai/income/incomeoutput.html',
-                '/ai/newbiz/newbiziq.html': '/ai/newbiz/newbizoutput.html',
                 '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
                 '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
                 '/ai/social/socialiq.html': '/ai/social/socialoutput.html',
@@ -262,7 +260,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             const moduleName = e.detail.module;
             const moduleOutputMap = {
-                'fitnessiq': '/ai/fitness/fitnessoutput.html',
                 'calorieiq': '/ai/calorie/calorieoutput.html',
                 'symptomiq': '/ai/symptom/symptomoutput.html',
                 'adventureiq': '/ai/adventure/adventureoutput.html',
@@ -270,7 +267,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'enneagramiq': '/ai/enneagram/enneagramoutput.html',
                 'eventiq': '/ai/event/eventoutput.html',
                 'incomeiq': '/ai/income/incomeoutput.html',
-                'newbiziq': '/ai/newbiz/newbizoutput.html', // Added newbiziq
                 'quiziq': '/ai/quiz/quizoutput.html',
                 'researchiq': '/ai/research/researchoutput.html',
                 'socialiq': '/ai/social/socialoutput.html',
