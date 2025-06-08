@@ -351,6 +351,13 @@
                     // Temporarily unfreeze the page for the legal modal
                     unfreezePage();
                     
+                    // Temporarily remove body.modal-open if it's present, as modal.js might not expect it
+                    // or it might cause conflicts.
+                    const bodyHadModalOpenClass = document.body.classList.contains('modal-open');
+                    if (bodyHadModalOpenClass) {
+                        document.body.classList.remove('modal-open');
+                    }
+                    
                     // Set up a one-time listener for when the modal closes
                     const handleModalClosed = () => {
                         // Show the terms manager modal again
@@ -358,6 +365,11 @@
                         
                         // Refreeze the page
                         freezePage();
+                        
+                        // Restore body.modal-open if it was removed
+                        if (bodyHadModalOpenClass) {
+                            document.body.classList.add('modal-open');
+                        }
                         
                         // Remove the event listener
                         document.removeEventListener('modalClosed', handleModalClosed);
