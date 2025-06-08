@@ -20,22 +20,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let dataContainer = null;
 
-    // Listen for datain expansion/collapse
-    // REMOVED datain-state-changed event listener block to simplify z-index management
-    // document.addEventListener('datain-state-changed', function(event) {
-    //     if (!dataContainer) return;
-        
-    //     const dataInState = event.detail.state;
-    //     if (dataInState === 'expanded') {
-    //         // When datain is expanded, make dataout appear above it
-    //         dataContainer.style.zIndex = '12000';
-    //     } else {
-    //         // When datain is collapsed, reset dataout's z-index
-    //         if (dataContainer.dataset.state !== 'expanded') {
-    //             dataContainer.style.zIndex = '10000';
-    //         }
-    //     }
-    // });
+
 
     async function loadStoredContent(url) {
         try {
