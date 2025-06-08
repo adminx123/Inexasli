@@ -20,21 +20,27 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let dataContainer = null;
 
-
-
     async function loadStoredContent(url) {
+        if (!dataContainer) {
+            console.error('[DataOut] loadStoredContent called before dataContainer is initialized.');
+            return;
+        }
         try {
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
             const content = await response.text();
 
-            dataContainer.classList.remove('initial');
+            // Ensure container is in the expanded state visually
+            dataContainer.classList.remove('initial'); // Ensure 'initial' is removed if it was ever set
             dataContainer.classList.add('expanded');
-            dataContainer.dataset.state = 'expanded';
+            dataContainer.dataset.state = 'expanded'; // Keep state for CSS and potential future logic
+            // No need to setLocal for 'dataOutContainerState' as it's always expanded
+
             dataContainer.innerHTML = `
-                <span class="close-data-container"></span>
+                <span class="data-label">DATA OUT</span> 
                 <div class="data-content">${content}</div>
             `;
+            // Removed close-data-container span
 
             dataContainer.querySelectorAll('script').forEach(oldScript => {
                 const newScript = document.createElement('script');
@@ -43,23 +49,35 @@ document.addEventListener('DOMContentLoaded', async function () {
                 } else {
                     newScript.textContent = oldScript.textContent;
                 }
-
                 oldScript.replaceWith(newScript);
             });
-
-          
         } catch (error) {
             console.error(`Error loading stored content (dataout.js):`, error);
             dataContainer.innerHTML = `
-                <span class="close-data-container"></span>
+                <span class="data-label">DATA OUT</span>
                 <div class="data-content">Error loading content: ${error.message}</div>
             `;
+            // Removed close-data-container span
         }
     }
 
     function initializeDataContainer() {
         if (document.querySelector('.data-container-out')) {
             console.log('Data out container already exists, skipping initialization (dataout.js)');
+            dataContainer = document.querySelector('.data-container-out'); // Assign existing
+            // Ensure it's in the correct state if re-initializing somehow
+            dataContainer.className = 'data-container-out expanded';
+            dataContainer.dataset.state = 'expanded';
+            // Load initial content if a lastDataOutUrl exists
+            const lastUrl = getLocal('lastDataOutUrl');
+            if (lastUrl) {
+                loadStoredContent(lastUrl);
+            } else {
+                 dataContainer.innerHTML = `
+                    <span class="data-label">DATA OUT</span>
+                    <div class="data-content">No content loaded yet.</div>
+                `;
+            }
             return;
         }
 
@@ -69,140 +87,96 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-out {
                 position: fixed;
                 top: 0;
-                left: 50%;
-                transform: translateX(-50%);
+                left: 0; /* Changed from 50% */
+                transform: none; /* Changed from translateX(-50%) */
                 background-color: #f2f9f3;
                 padding: 4px;
                 border: 1px solid #4a7c59;
                 border-top: none;
                 border-radius: 0 0 27px 27px;
                 box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
-                z-index: 500;
-                max-width: 34px;
-                min-height: 30px;
-                transition: max-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out;
+                z-index: 500; /* Adjusted z-index if needed, ensure it's below datain when datain is active */
+                width: 100%; /* Always full width */
+                min-height: 50vh; /* Minimum 50% of viewport height */
+                max-height: 98vh; /* Maximum 98% of viewport height */
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
                 opacity: 1;
+                /* Removed transition as it's always open */
             }
 
-            .data-container-out.initial, .data-container-out.collapsed {
-                width: 100%;
-                max-width: 100%;
-                min-width: 100%;
-                height: 36px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-left: 0;
-                margin-right: 0;
-                padding-left: 10px;
-                padding-right: 10px;
-            }
+            /* REMOVED .initial and .collapsed styles as they are no longer needed */
 
-            .data-container-out.expanded {
+            .data-container-out.expanded { /* This is now the default and only state */
                 max-width: 100%;
                 width: 100%;
                 min-width: 100%;
-                min-height: 50vh; /* Minimum 50% of viewport height, but can grow */
-                max-height: 98vh; /* Maximum 98% of viewport height */
+                min-height: 50vh; 
+                max-height: 98vh; 
                 top: 0;
                 left: 0;
                 transform: none;
-                border: 1px solid #4a7c59; /* Green border */
-                border-top: none; /* Remove top border */
-                border-radius: 0 0 27px 27px; /* Rounded bottom corners */
-                box-shadow: 0 2px 6px rgba(74, 124, 89, 0.25); /* Soft shadow effect */
-                padding: 4px; /* Keep padding */
+                border: 1px solid #4a7c59; 
+                border-top: none; 
+                border-radius: 0 0 27px 27px; 
+                box-shadow: 0 2px 6px rgba(74, 124, 89, 0.25); 
+                padding: 4px; 
             }
 
             .data-container-out:hover {
-                background-color: #eef7f0;
+                background-color: #eef7f0; /* Keep hover effect if desired */
             }
 
-            .data-container-out .close-data-container {
-                position: absolute;
-                top: 4px;
-                right: 10px;
-                padding: 5px;
-                font-size: 14px;
-                line-height: 1;
-                color: #000;
-                cursor: pointer;
-                font-weight: bold;
-                font-family: "Inter", sans-serif;
-            }
+            /* REMOVED .close-data-container styles as it's removed */
             
-            .data-container-out.expanded .close-data-container {
-                top: 4px;
-                right: 10px;
-                font-size: 18px;
-                padding: 5px;
-                background-color: #f5f5f5;
-                border-radius: 4px;
-            }
-
             .data-container-out .data-label {
                 text-decoration: none;
                 color: #000;
-                font-size: 12px;
+                font-size: 12px; /* Adjusted from expanded specific */
                 display: flex;
                 justify-content: center;
                 text-align: center;
                 padding: 4px;
-                cursor: pointer;
+                /* cursor: pointer; REMOVED - no longer clickable to toggle */
                 transition: color 0.2s ease;
                 line-height: 1.2;
                 font-family: "Geist", sans-serif;
-                writing-mode: horizontal-tb;
-                text-orientation: mixed;
-            }
-            
-            .data-container-out.expanded .data-label {
-                writing-mode: horizontal-tb;
-                position: absolute;
+                writing-mode: horizontal-tb; /* Keep as is */
+                text-orientation: mixed; /* Keep as is */
+                position: absolute; /* To position it like before in expanded state */
                 top: 4px;
                 left: 50%;
                 transform: translateX(-50%);
-                font-size: 18px;
-                padding: 5px;
                 background-color: #f5f5f5;
                 border-radius: 4px;
             }
+            
+            /* REMOVED .data-container-out.expanded .data-label as it's merged above */
 
             .data-container-out .data-content {
                 padding: 0;
                 font-size: 14px;
-                min-height: calc(50vh - 40px); /* Minimum height based on container min-height */
-                max-height: calc(98vh - 40px); /* Maximum height based on container max-height */
+                min-height: calc(50vh - 40px); 
+                max-height: calc(98vh - 40px); 
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
                 width: 100%;
                 max-width: 100%;
-                margin-top: 30px;
+                margin-top: 30px; /* To clear the data-label */
             }
 
             /* Mobile responsiveness for data out container */
             @media (max-width: 480px) {
-                .data-container-out {
-                    max-width: 28px;
-                    padding: 3px;
-                }
-
-                .data-container-out.initial, .data-container-out.collapsed {
-                    width: 28px;
-                    height: 36px;
-                }
-
-                .data-container-out.expanded {
+                .data-container-out { /* Simplified, as it's always expanded */
                     max-width: 100%;
                     width: 100%;
                     min-width: 100%;
-                    min-height: 90vh; /* Minimum height for mobile */
-                    max-height: 95vh; /* Maximum height for mobile */
+                    min-height: 90vh; 
+                    max-height: 95vh; 
                     top: 0;
+                    left:0; /* ensure it takes full width */
                     right: 0;
                     transform: none;
                     border-radius: 0;
@@ -211,222 +185,47 @@ document.addEventListener('DOMContentLoaded', async function () {
                     padding: 0;
                 }
 
-                .data-container-out .data-label {
-                    font-size: 10px;
-                    padding: 3px;
-                }
-                
-                .data-container-out.expanded .data-label {
-                    font-size: 16px;
-                    padding: 4px;
-                }
+                /* REMOVED .initial, .collapsed mobile styles */
 
-                .data-container-out .close-data-container {
-                    font-size: 12px;
-                    padding: 4px;
-                }
-                
-                .data-container-out.expanded .close-data-container {
+                .data-container-out .data-label { /* Adjusted from expanded specific */
                     font-size: 16px;
                     padding: 4px;
                 }
+                
+                /* REMOVED .close-data-container mobile styles */
 
                 .data-container-out .data-content {
                     font-size: 12px;
                     padding: 0;
                     overflow-x: auto;
                     overflow-y: auto;
-                    margin-top: 25px;
-                    min-height: calc(90vh - 25px); /* Minimum height for mobile content */
-                    max-height: calc(95vh - 25px); /* Maximum height for mobile content */
+                    margin-top: 25px; /* To clear data-label */
+                    min-height: calc(90vh - 25px); 
+                    max-height: calc(95vh - 25px); 
                 }
             }
         `;
         document.head.appendChild(style);
 
         dataContainer = document.createElement('div');
-        dataContainer.className = `data-container-out initial`;
-        dataContainer.dataset.state = 'initial';
+        // Set to expanded state directly
+        dataContainer.className = 'data-container-out expanded'; 
+        dataContainer.dataset.state = 'expanded';
         dataContainer.innerHTML = `
-            <span class="close-data-container"></span>
             <span class="data-label">DATA OUT</span>
+            <div class="data-content">Initializing Data Out...</div> 
         `;
         document.body.appendChild(dataContainer);
-        console.log('Data out container injected with state: initial (dataout.js)');
+        console.log('Data out container injected and set to always expanded (dataout.js)');
 
-        // Add click listener to entire container for expansion
-        dataContainer.addEventListener('click', function (e) {
-            e.preventDefault();
-            if (dataContainer.dataset.state !== 'expanded') {
-                toggleDataContainer();
-            }
-        });
-
-        const closeButton = dataContainer.querySelector('.close-data-container');
-        const dataLabel = dataContainer.querySelector('.data-label');
-
-        if (closeButton) {
-            closeButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                toggleDataContainer();
-            });
-        } else {
-            console.error('Data out close button not found (dataout.js)');
-        }
-
-        if (dataLabel) {
-            dataLabel.addEventListener('click', function (e) {
-                e.preventDefault();
-                toggleDataContainer();
-            });
-        } else {
-            console.error('Data out label not found (dataout.js)');
-        }
-
-        function initializeGridItems() {
-            const gridItems = document.querySelectorAll('.grid-container .grid-item');
-            gridItems.forEach(item => {
-                if (!item.dataset.value) {
-                    console.warn('Grid item is missing data-value attribute:', item);
-                    return;
-                }
-
-                const key = `grid_${item.parentElement.id}_${item.dataset.value.replace(/\s+/g, '_')}`;
-                const value = localStorage.getItem(key);
-                if (value === 'true') {
-                    item.classList.add('selected');
-                    console.log(`Restored ${key}: true`);
-                } else if (value === 'false') {
-                    item.classList.remove('selected');
-                    console.log(`Restored ${key}: false`);
-                }
-                item.removeEventListener('click', toggleGridItem);
-                item.addEventListener('click', toggleGridItem);
-            });
-
-            function toggleGridItem() {
-                this.classList.toggle('selected');
-                const key = `grid_${this.parentElement.id}_${this.dataset.value.replace(/\s+/g, '_')}`;
-                localStorage.setItem(key, this.classList.contains('selected') ? 'true' : 'false');
-            }
-        }
-
-        function toggleDataContainer() {
-            console.log('[DataOut] toggleDataContainer called');
-            if (!dataContainer) {
-                console.error('[DataOut] ERROR: dataContainer is null/undefined!');
-                return;
-            }
-            
-            const isExpanded = dataContainer.dataset.state === 'expanded';
-            console.log(`[DataOut] Current state: ${isExpanded ? 'expanded' : 'initial/collapsed'}`);
-            
-            // Get reference to datain container
-            const dataInContainer = document.querySelector('.data-container-in');
-        
-            if (isExpanded) {
-                dataContainer.classList.remove('expanded');
-                dataContainer.classList.add('initial');
-                dataContainer.dataset.state = 'initial';
-                setLocal('dataOutContainerState', 'initial');
-                dataContainer.innerHTML = `
-                    <span class="close-data-container"></span>
-                    <span class="data-label">DATA OUT</span>
-                `;
-                
-                // Re-add click listener to entire container for expansion
-                dataContainer.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    if (dataContainer.dataset.state !== 'expanded') {
-                        toggleDataContainer();
-                    }
-                });
-                
-                // REMOVED: Reset datain container z-index when dataout collapses
-                // if (dataInContainer) {
-                //     dataInContainer.style.zIndex = '10000';
-                // }
-                
-                // Dispatch state change event
-                document.dispatchEvent(new CustomEvent('dataout-state-changed', {
-                    detail: { state: 'initial' }
-                }));
-                
-                console.log('[DataOut] Data out container collapsed and reset');
-            } else {
-                dataContainer.classList.remove('initial');
-                dataContainer.classList.add('expanded');
-                dataContainer.dataset.state = 'expanded';
-                setLocal('dataOutContainerState', 'expanded');
-                
-                // REMOVED: Set datain container to higher z-index to appear above expanded dataout
-                // if (dataInContainer) {
-                //     dataInContainer.style.zIndex = '12000';
-                // }
-                
-                // Dispatch state change event
-                document.dispatchEvent(new CustomEvent('dataout-state-changed', {
-                    detail: { state: 'expanded' }
-                }));
-                
-                console.log('[DataOut] Data out container expanded');
-        
-                const lastGridItemUrl = getLocal('lastGridItemUrl');
-                const outputMap = {
-                    '/ai/calorie/calorieiq.html': '/ai/calorie/calorieoutput.html',
-                    '/ai/symptom/symptomiq.html': '/ai/symptom/symptomoutput.html',
-                    '/ai/fitness/fitnessiq.html': '/ai/fitness/fitnessoutput.html',
-                    '/ai/adventure/adventureiq.html': '/ai/adventure/adventureoutput.html',
-                    '/ai/decision/decisioniq.html': '/ai/decision/decisionoutput.html',
-                    '/ai/enneagram/enneagramiq.html': '/ai/enneagram/enneagramoutput.html',
-                    '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
-                    '/ai/income/incomeiq.html': '/ai/income/incomeoutput.html',
-                    '/ai/newbiz/newbiziq.html': '/ai/newbiz/newbizoutput.html',
-                    '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
-                    '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
-                    '/ai/social/socialiq.html': '/ai/social/socialoutput.html',
-                    '/ai/speculation/speculationiq.html': '/ai/speculation/speculationoutput.html',
-                    '/ai/philosophy/philosophyiq.html': '/ai/philosophy/philosophyoutput.html'
-                };
-                const outUrl = outputMap[lastGridItemUrl];
-        
-                if (outUrl) {
-                    setLocal('lastDataOutUrl', outUrl);
-                    loadStoredContent(outUrl);
-                } else {
-                    dataContainer.innerHTML = `
-                        <span class="close-data-container"></span>
-                        <span class="data-label">DATA OUT</span>
-                        <div class="data-content">No relevant content available</div>
-                    `;
-                }
-            }
-        
-            const newClose = dataContainer.querySelector('.close-data-container');
-            const newLabel = dataContainer.querySelector('.data-label');
-        
-            if (newClose) {
-                newClose.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
-        
-            if (newLabel) {
-                newLabel.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    toggleDataContainer();
-                });
-            }
-        }
-        
+        // REMOVED click listeners for container, close button, and data label for toggling
+        // REMOVED initializeGridItems function as it seems unrelated to dataout toggling
+        // REMOVED toggleDataContainer function entirely
 
         // Listen for grid item selection or output events
         document.addEventListener('promptGridItemSelected', function (e) {
             const url = e.detail.url;
             console.log(`Received promptGridItemSelected event with URL: ${url} (dataout.js)`);
-
-            // Special handling for URLs that have output templates
             const outputMap = {
                 '/ai/calorie/calorieiq.html': '/ai/calorie/calorieoutput.html',
                 '/ai/symptom/symptomiq.html': '/ai/symptom/symptomoutput.html',
@@ -437,40 +236,31 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/enneagram/enneagramiq.html': '/ai/enneagram/enneagramoutput.html',
                 '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
                 '/ai/income/incomeiq.html': '/ai/income/incomeoutput.html',
+                '/ai/newbiz/newbiziq.html': '/ai/newbiz/newbizoutput.html',
                 '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
                 '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
                 '/ai/social/socialiq.html': '/ai/social/socialoutput.html',
                 '/ai/speculation/speculationiq.html': '/ai/speculation/speculationoutput.html',
                 '/ai/philosophy/philosophyiq.html': '/ai/philosophy/philosophyoutput.html'
             };
-
-            // Just store the mapping but don't auto-open DataOut 
-            // We'll let users manually open it when they want to see output
             const outUrl = outputMap[url];
             if (outUrl) {
                 setLocal('lastDataOutUrl', outUrl);
-
-                // Don't automatically open the dataout container for any product
-                // (removed the auto-opening logic that was here previously)
+                // Directly load content when a new product is selected
+                console.log(`[DataOut] Product switched. Loading content for: ${outUrl}`);
+                loadStoredContent(outUrl); 
+            } else {
+                console.warn(`[DataOut] No output URL mapping found in promptGridItemSelected for URL: ${url}`);
             }
         });
 
-        // Listen for API response events from various modules
         document.addEventListener('api-response-received', function (e) {
             console.log('[DataOut] Received api-response-received event (dataout.js):', e.detail);
-
-            // Add debug information
             if (!dataContainer) {
                 console.error('[DataOut] ERROR: dataContainer not initialized when event received!');
                 return;
             }
-            console.log('[DataOut] Current data container state:', dataContainer.dataset.state);
-
-            // Get the module name and corresponding output URL
             const moduleName = e.detail.module;
-            const responseType = e.detail.type || 'default';
-
-            // Map of module names to their module-specific output URLs
             const moduleOutputMap = {
                 'fitnessiq': '/ai/fitness/fitnessoutput.html',
                 'calorieiq': '/ai/calorie/calorieoutput.html',
@@ -480,100 +270,58 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'enneagramiq': '/ai/enneagram/enneagramoutput.html',
                 'eventiq': '/ai/event/eventoutput.html',
                 'incomeiq': '/ai/income/incomeoutput.html',
+                'newbiziq': '/ai/newbiz/newbizoutput.html', // Added newbiziq
                 'quiziq': '/ai/quiz/quizoutput.html',
                 'researchiq': '/ai/research/researchoutput.html',
                 'socialiq': '/ai/social/socialoutput.html',
                 'speculationiq': '/ai/speculation/speculationoutput.html',
                 'philosophyiq': '/ai/philosophy/philosophyoutput.html'
-                // Add more modules as needed
             };
-
             const outUrl = moduleOutputMap[moduleName];
             if (outUrl) {
-                console.log(`[DataOut] Opening data container for ${moduleName} response with URL: ${outUrl}`);
+                console.log(`[DataOut] Loading content for ${moduleName} into always-open container. URL: ${outUrl}`);
                 setLocal('lastDataOutUrl', outUrl);
-
-                // Force toggle data container to show the content
-                // This is the fix for the automatic opening issue
-                console.log('[DataOut] Forcing data container to open for API response');
                 
-                // Get reference to the datain container and collapse it first
                 const dataInContainer = document.querySelector('.data-container-in');
                 if (dataInContainer && dataInContainer.dataset.state === 'expanded') {
                     console.log('[DataOut] Collapsing datain container first');
-                    // Create a custom event to trigger datain collapse
                     const collapseDatinEvent = new CustomEvent('collapse-datain-container');
                     document.dispatchEvent(collapseDatinEvent);
                     
-                    // Add a small delay to ensure datain collapse animation has started
                     setTimeout(() => {
-                        // Now expand the dataout container
-                        if (dataContainer.dataset.state !== 'expanded') {
-                            console.log('[DataOut] Container not expanded, expanding now...');
-                            toggleDataContainer();
-                            // Load content after a delay to ensure container is fully ready
-                            setTimeout(() => {
-                                console.log('[DataOut] Loading content after delay:', outUrl);
-                                loadStoredContent(outUrl);
-                            }, 300);
-                        } else {
-                            console.log('[DataOut] Container already expanded, loading content...');
-                            loadStoredContent(outUrl);
-                        }
-                    }, 100);
-                } else {
-                    // No need to collapse datain, just expand dataout
-                    if (dataContainer.dataset.state !== 'expanded') {
-                        console.log('[DataOut] Container not expanded, expanding now...');
-                        toggleDataContainer();
-                        // Load content after a delay to ensure container is fully ready
-                        setTimeout(() => {
-                            console.log('[DataOut] Loading content after delay:', outUrl);
-                            loadStoredContent(outUrl);
-                        }, 300);
-                    } else {
-                        console.log('[DataOut] Container already expanded, loading content...');
                         loadStoredContent(outUrl);
-                    }
+                    }, 100); // Delay to allow datain to collapse
+                } else {
+                    loadStoredContent(outUrl);
                 }
             } else {
                 console.warn(`[DataOut] No output URL mapping found for module: ${moduleName}`);
             }
         });
 
-        // Fallback: Monitor localStorage changes for lastDataOutUrl
         window.addEventListener('storage', function (e) {
             if (e.key === 'lastDataOutUrl' && e.newValue) {
                 console.log(`Detected lastDataOutUrl change to: ${e.newValue} (dataout.js)`);
-                if (dataContainer.dataset.state !== 'expanded') {
-                    toggleDataContainer();
-                } else {
-                    loadStoredContent(e.newValue);
-                }
+                // Since dataContainer is always open, just load the new content.
+                loadStoredContent(e.newValue);
             }
         });
 
-        document.addEventListener('click', function (e) {
-            const isClickInside = dataContainer.contains(e.target);
-            // Check if click is on copy button or its modal/toast elements
-            const isCopyButton = e.target.closest('#copyButtonContainer, #copyButton, .share-modal-backdrop, .share-modal-content, .share-action-btn') ||
-                                e.target.id === 'copyButton' ||
-                                e.target.id === 'copyButtonContainer' ||
-                                e.target.closest('[id^="toast-"]');
-            
-            if (!isClickInside && !isCopyButton && dataContainer.dataset.state === 'expanded') {
-                console.log('Clicked outside data out container, collapsing (dataout.js)');
-                toggleDataContainer();
-            }
-        });
-
-        // Restore last state
-        const lastState = getLocal('dataOutContainerState') || 'initial';
-        if (lastState === 'expanded') {
-            toggleDataContainer();
-        }
+        // REMOVED click listener for document (click outside)
+        // REMOVED Restore last state logic (it's always expanded)
+        // REMOVED Swipe functionality (if any was here)
         
-        // Swipe functionality has been removed to fix automatic opening issues
+        // Load initial content if a lastDataOutUrl exists from a previous session
+        const initialUrl = getLocal('lastDataOutUrl');
+        if (initialUrl) {
+            console.log('[DataOut] Loading initial content from localStorage:', initialUrl);
+            loadStoredContent(initialUrl);
+        } else {
+            // Optionally, load a default page or show a default message
+             if(dataContainer && dataContainer.querySelector('.data-content')) {
+                dataContainer.querySelector('.data-content').innerHTML = 'No data loaded yet. Select a module to see output.';
+             }
+        }
     }
 
     async function initializeApp() {
