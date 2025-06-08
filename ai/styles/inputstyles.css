@@ -509,3 +509,54 @@ button:hover {
         height: 6px !important;
     }
 }
+
+/* ====================
+   Product Description Styling
+   ==================== */
+
+/* Product description container */
+.product-description-container {
+  padding: 20px;
+  text-align: center;
+  background-color: #f0f8ff;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+/* Product description heading */
+.product-description-heading {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+/* Product description text */
+.product-description-text {
+  color: #555;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+/* Product description disclaimer */
+.product-description-disclaimer {
+  color: #777;
+  font-size: 12px;
+  line-height: 1.5;
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  background-color: #fff9e6;
+  border-radius: 5px;
+}
+
+/* Product description final text */
+.product-description-final {
+  color: #555;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-top: 15px;
+}
+
+/* ====================
+   Existing Styles Continue Below
+   ==================== */
