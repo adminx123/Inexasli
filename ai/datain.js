@@ -49,6 +49,12 @@ function initializeFormPersistence(url) {
         moduleType = 'research';
     } else if (url.includes('/social/')) {
         moduleType = 'social';
+    } else if (url.includes('/fashion/')) {
+        moduleType = 'fashion';
+        moduleConfig = {
+            singleSelection: ['fashion-personal-style', 'fashion-climate', 'fashion-occasion'],
+            multiSelection: []
+        };
     } else if (url.includes('/categories.html')) {
         moduleType = 'categories';
         moduleConfig = {
@@ -1174,6 +1180,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
         if (window.categoriesFormPersistence && typeof window.categoriesFormPersistence.rebindGridItemEvents === 'function') {
             window.categoriesFormPersistence.rebindGridItemEvents();
+        }
+        if (window.fashionFormPersistence && typeof window.fashionFormPersistence.rebindGridItemEvents === 'function') {
+            window.fashionFormPersistence.rebindGridItemEvents();
         }
     });
 });
