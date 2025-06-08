@@ -363,11 +363,12 @@
     function displayStyleProfile(userData) {
       const styleData = document.getElementById('style-data');
       const profile = [
-        userData.stylePreference && `Style: ${userData.stylePreference}`,
-        userData.bodyType && `Body Type: ${userData.bodyType}`,
+        userData.personalStyle && `Personal Style: ${userData.personalStyle}`,
         userData.skinTone && `Skin Tone: ${userData.skinTone}`,
         userData.hairColor && `Hair Color: ${userData.hairColor}`,
         userData.occasion && `Occasion: ${userData.occasion}`,
+        userData.location && `Location: ${userData.location}`,
+        userData.season && `Season: ${userData.season}`,
         userData.age && `Age: ${userData.age}`,
         userData.height && `Height: ${userData.height}`,
         userData.gender && `Gender: ${userData.gender}`
