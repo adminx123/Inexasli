@@ -279,12 +279,8 @@ function showSwipeHint(container, direction, animationDuration) {
     const swipeHint = document.createElement('div');
     swipeHint.className = 'swipe-hint';
     
-    // Show bidirectional swipe hint if container supports both directions
-    const hasMultipleDirections = container._swipeData && 
-        Object.keys(container._swipeData.handlers).length > 1;
-    
-    const hintText = hasMultipleDirections ? '← SWIPE →' : 
-        (direction === 'left' ? '← SWIPE' : 'SWIPE →');
+    // Always show bidirectional swipe hint for consistency
+    const hintText = '← SWIPE →';
     
     // Set content with just SWIPE and arrows
     swipeHint.innerHTML = `<span class="swipe-animation">${hintText}</span>`;
