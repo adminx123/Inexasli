@@ -935,19 +935,29 @@ import { FormPersistence } from '/utility/formPersistence.js';
     function initIncomeForm() {
         console.log("[IncomeIQ] Initializing form functionality");
         
-        // Initialize FormPersistence
-        try {
-            incomeFormPersistence = FormPersistence.getInstance('income', {
-                customFormRepopulator: customFormRepopulator
-            });
-            if (incomeFormPersistence.init()) {
-                console.log("[IncomeIQ] FormPersistence initialized successfully");
+        // Use FormPersistence instance created by datain.js, or create our own if not available
+        incomeFormPersistence = window.incomeFormPersistence;
+        if (!incomeFormPersistence) {
+            console.warn("[IncomeIQ] FormPersistence not found from datain.js, creating our own instance");
+            
+            // Create our own FormPersistence instance
+            if (typeof FormPersistence !== 'undefined') {
+                incomeFormPersistence = FormPersistence.getInstance('income', {
+                    singleSelection: [],
+                    multiSelection: [],
+                    customFormDataCollector: null,
+                    customFormRepopulator: customFormRepopulator
+                });
             } else {
-                console.error("[IncomeIQ] FormPersistence initialization failed");
+                console.error("[IncomeIQ] FormPersistence class not available");
+                return;
             }
-        } catch (error) {
-            console.error("[IncomeIQ] Error initializing FormPersistence:", error);
         }
+        
+        console.log("[IncomeIQ] Using FormPersistence instance:", incomeFormPersistence);
+        
+        // Set up additional input handlers for normalization
+        setupAdditionalInputHandlers();
         
         const countryDropdown = document.getElementById('income-country');
         const subregionDropdown = document.getElementById('income-subregion');
@@ -1001,6 +1011,10 @@ import { FormPersistence } from '/utility/formPersistence.js';
                 collectAndSubmitData();
             });
         }
+        
+        // Export the FormPersistence instance for external access
+        window.incomeFormPersistence = incomeFormPersistence;
+        console.log("[IncomeIQ] FormPersistence instance exported to window");
     }
 
     // Update subregion dropdown based on country selection
@@ -1124,8 +1138,47 @@ import { FormPersistence } from '/utility/formPersistence.js';
     }
 
     function setupInputHandlers() {
-        // FormPersistence will handle this automatically
-        console.log("[IncomeIQ] Input handlers setup delegated to FormPersistence");
+        // FormPersistence handles basic saving, but we need additional logic for normalization
+        console.log("[IncomeIQ] Setting up additional input handlers for normalization");
+        setupAdditionalInputHandlers();
+    }
+
+    function setupAdditionalInputHandlers() {
+        // Add normalization triggers for income and expense fields
+        const allIncomeExpenseInputs = document.querySelectorAll(
+            'input[id^="income-"], input[id^="expenses-"], input[id^="housing-"], input[id^="transportation-"], input[id^="dependant-"]'
+        );
+        
+        allIncomeExpenseInputs.forEach(input => {
+            // Remove existing listeners to avoid duplicates
+            input.removeEventListener('input', handleIncomeExpenseInput);
+            input.removeEventListener('change', handleIncomeExpenseInput);
+            
+            // Add new listeners
+            input.addEventListener('input', handleIncomeExpenseInput);
+            input.addEventListener('change', handleIncomeExpenseInput);
+        });
+        
+        console.log("[IncomeIQ] Set up normalization handlers for", allIncomeExpenseInputs.length, "inputs");
+    }
+
+    function handleIncomeExpenseInput(event) {
+        console.log("[IncomeIQ] Income/expense input changed:", event.target.id);
+        
+        // Save form data first
+        if (incomeFormPersistence) {
+            incomeFormPersistence.saveFormData();
+        }
+        
+        // Then normalize data
+        if (typeof window.normalizeIncomeExpenses === 'function') {
+            const result = window.normalizeIncomeExpenses();
+            if (result.success) {
+                console.log("[IncomeIQ] ✅ Data normalized and saved to localStorage");
+            } else {
+                console.error("[IncomeIQ] ❌ Failed to normalize data:", result.error);
+            }
+        }
     }
 
     // Update filing status options based on country
@@ -1242,7 +1295,6 @@ import { FormPersistence } from '/utility/formPersistence.js';
     }, 200);
 
     // Export functions for external access
-    window.incomeFormPersistence = incomeFormPersistence;
     window.incomeIq = { 
         getFormData: () => incomeFormPersistence ? incomeFormPersistence.getSavedFormData() : null,
         saveFormData: () => incomeFormPersistence ? incomeFormPersistence.saveFormData() : null,
@@ -1389,38 +1441,20 @@ import { FormPersistence } from '/utility/formPersistence.js';
         console.log(`Total Annual Income: $${totalAnnualIncome.toFixed(2)}`);
         console.log(`Total Annual Expenses: $${totalAnnualExpenses.toFixed(2)}`);
 
-        // Save normalized data to localStorage using setJSON function
+        // Save normalized data to localStorage
         try {
-            const incomeData = {
-                ...normalizedIncome,
-                _meta: {
-                    totalAnnual: totalAnnualIncome,
-                    lastUpdated: new Date().toISOString(),
-                    fieldsCount: Object.keys(normalizedIncome).length
-                }
-            };
-
-            const expenseData = {
-                ...normalizedExpenses,
-                _meta: {
-                    totalAnnual: totalAnnualExpenses,
-                    lastUpdated: new Date().toISOString(),
-                    fieldsCount: Object.keys(normalizedExpenses).length
-                }
-            };
-
             // Save to localStorage
-            localStorage.setItem('incomeIqIncome', JSON.stringify(incomeData));
-            localStorage.setItem('incomeIqExpense', JSON.stringify(expenseData));
+            localStorage.setItem('incomeIqIncome', JSON.stringify(normalizedIncome));
+            localStorage.setItem('incomeIqExpense', JSON.stringify(normalizedExpenses));
 
             console.log("[IncomeIQ] ✅ Successfully saved normalized data to localStorage");
-            console.log("Income data saved to 'incomeIqIncome':", incomeData);
-            console.log("Expense data saved to 'incomeIqExpense':", expenseData);
+            console.log("Income data saved to 'incomeIqIncome':", normalizedIncome);
+            console.log("Expense data saved to 'incomeIqExpense':", normalizedExpenses);
 
             return {
                 success: true,
-                income: incomeData,
-                expenses: expenseData,
+                income: normalizedIncome,
+                expenses: normalizedExpenses,
                 summary: {
                     totalIncome: totalAnnualIncome,
                     totalExpenses: totalAnnualExpenses,
