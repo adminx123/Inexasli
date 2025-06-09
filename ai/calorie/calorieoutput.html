@@ -269,7 +269,9 @@
           }
           console.log('Data displayed successfully');
         } else {
-          outputSpan.textContent = `No ${responseKey} data found in localStorage`;
+          outputSpan.innerHTML = `<div style="text-align: center; padding: 20px;">
+            <img src="/images/apple-touch-icon.png" alt="No data available" style="max-width: 200px; height: auto; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          </div>`;
           console.log('No data found for key:', responseKey);
         }
       }
