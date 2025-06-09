@@ -279,17 +279,90 @@
       padding: 32px 24px 24px 24px;
       margin-top: 0;
     }
-    @media (max-width: 600px) {
-      .magazine-cover, .magazine-article-section {
-        padding: 16px 6px;
-      }
-      .cover-image, .cover-placeholder {
-        width: 120px;
-        height: 120px;
-      }
-      .magazine-title {
-        font-size: 1.6rem;
-      }
+    /* Magazine masthead and date */
+    .magazine-masthead {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      color: #1a2e22;
+      text-shadow: 0 4px 18px rgba(44,62,80,0.10);
+      margin-bottom: 0.2em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+    .magazine-date {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      color: #6b7c7c;
+      margin-bottom: 0.5em;
+      letter-spacing: 0.08em;
+    }
+    .magazine-tagline {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: #4a7c59;
+      font-style: italic;
+      margin-bottom: 1.2em;
+      letter-spacing: 0.04em;
+    }
+    /* Drop cap for first letter */
+    .formatted-response p:first-of-type::first-letter {
+      float: left;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8em;
+      line-height: 1;
+      font-weight: 700;
+      color: #2d5d3d;
+      margin-right: 0.12em;
+      margin-top: 0.05em;
+    }
+    /* Pull quote style */
+    .pull-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: #e65100;
+      border-left: 4px solid #e65100;
+      padding-left: 18px;
+      margin: 2em 0 2em 0;
+      font-style: italic;
+      background: #fff4e6;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 2px 8px rgba(230,81,0,0.04);
+    }
+    /* Section divider */
+    .section-divider {
+      border: none;
+      border-top: 2px solid #e0e7ef;
+      margin: 2.5em 0 2em 0;
+    }
+    /* Sidebar for quick tips */
+    .sidebar-tips {
+      background: linear-gradient(120deg, #f8f9fa 80%, #e0e7ef 100%);
+      border-left: 4px solid #4a7c59;
+      padding: 18px 20px;
+      border-radius: 0 12px 12px 0;
+      margin: 2em 0 2em 0;
+      font-size: 1.05rem;
+      color: #2d5d3d;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+    }
+    /* Footer magazine style */
+    .magazine-footer {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      color: #6b7c7c;
+      font-size: 1rem;
+      margin-top: 3em;
+      padding-top: 2em;
+      border-top: 1px solid #e0e7ef;
+      letter-spacing: 0.04em;
+    }
+    .magazine-footer a {
+      color: #4a7c59;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 0.5em;
     }
   </style>
 </head>
@@ -304,7 +377,9 @@
         </div>
 
         <div class="magazine-cover">
-          <div class="magazine-title">FashionIQ</div>
+          <div class="magazine-masthead">FashionIQ</div>
+          <div class="magazine-date">June 2025</div>
+          <div class="magazine-tagline">Your Style, Curated. AI-Driven Fashion Insights.</div>
           <div class="cover-image-section" id="cover-image-section"></div>
         </div>
         <div class="magazine-article-section">
@@ -315,10 +390,17 @@
           <div class="fashion-display" id="fashion-content">
             <!-- AI response will be populated here -->
           </div>
+          <hr class="section-divider">
+          <div class="sidebar-tips" id="sidebar-tips" style="display:none;"></div>
           <div class="data-section">
             <div class="data-label">Your Style Profile:</div>
             <div id="style-data"></div>
           </div>
+        </div>
+        <div class="magazine-footer">
+          <span>Next Issue: Summer Trends 2025</span> &bull;
+          <a href="https://inexasli.com" target="_blank">Visit inexasli.com</a> &bull;
+          <span>Follow us <i class="fab fa-instagram"></i> <i class="fab fa-x-twitter"></i></span>
         </div>
 
       </div>
@@ -388,10 +470,21 @@
       let formattedContent = content
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n\n\"(.+?)\"\n\n/g, '<div class="pull-quote">$1</div>') // Pull quote if AI outputs quoted lines
         .replace(/(\d+)\.\s/g, '<br><strong>$1.</strong> ')
         .replace(/\n\n/g, '</p><p>')
         .replace(/\n/g, '<br>');
       fashionContent.innerHTML = `<div class=\"formatted-response\"><p>${formattedContent}</p></div>`;
+      // Sidebar quick tips (show if recommendations exist)
+      const sidebar = document.getElementById('sidebar-tips');
+      if (data && data.fashionAnalysis && data.fashionAnalysis.specificRecommendations) {
+        sidebar.style.display = '';
+        sidebar.innerHTML = '<strong>Quick Tips:</strong><ul style="margin-top:0.5em;">' +
+          data.fashionAnalysis.specificRecommendations.map(r => `<li><b>${r.item}</b>: <span style='color:#4a7c59;'>${r.reason}</span></li>`).join('') +
+          '</ul>';
+      } else {
+        sidebar.style.display = 'none';
+      }
       // Images
       const userData = getJSON('fashionIqInput');
       const imagesDisplay = document.getElementById('images-display');
