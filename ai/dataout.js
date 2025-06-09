@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             // No need to setLocal for 'dataOutContainerState' as it's always expanded
 
             dataContainer.innerHTML = `
-                <span class="data-label">DATA OUT</span> 
                 <div class="data-content">${content}</div>
             `;
             // Removed close-data-container span
@@ -54,7 +53,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (error) {
             console.error(`Error loading stored content (dataout.js):`, error);
             dataContainer.innerHTML = `
-                <span class="data-label">DATA OUT</span>
                 <div class="data-content">Error loading content: ${error.message}</div>
             `;
             // Removed close-data-container span
@@ -74,7 +72,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 loadStoredContent(lastUrl);
             } else {
                  dataContainer.innerHTML = `
-                    <span class="data-label">DATA OUT</span>
                     <div class="data-content">No content loaded yet.</div>
                 `;
             }
@@ -212,7 +209,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.className = 'data-container-out expanded'; 
         dataContainer.dataset.state = 'expanded';
         dataContainer.innerHTML = `
-            <span class="data-label">DATA OUT</span>
             <div class="data-content">Initializing Data Out...</div> 
         `;
         document.body.appendChild(dataContainer);
