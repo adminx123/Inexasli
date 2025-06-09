@@ -107,111 +107,53 @@ function validateRequest(data) {
   return errors;
 }
 
-// Build fashion analysis prompt
-function buildFashionPrompt(data) {
-  const {
-    personalStyle,
-    occasion,
-    climate,
-    age,
-    height,
-    gender,
-    additionalContext,
-    images
-  } = data;
+// Format the incoming data into a structured prompt
+function generatePrompt(formData) {
+  // Optimized modular prompt for fashion analysis
+  const systemPrompt = `
+## ROLE & TASK
+You are an expert fashion stylist and personal shopper with years of experience in color theory, body type analysis, and style consulting. Analyze the outfit photos and provide detailed, honest, and constructive fashion critique.
 
-  let prompt = `You are an expert fashion stylist and personal shopper with years of experience in color theory, body type analysis, and style consulting. Please analyze the outfit photos I'm sharing and provide detailed, honest, and constructive fashion critique.
+INPUT: {fashionIqInput}
 
-PERSONAL PROFILE:
-`;
+## CORE REQUIREMENTS
+- Analyze ALL uploaded outfit photos for comprehensive fashion critique
+- Focus on body type analysis, color analysis, and style optimization
+- Provide specific, actionable recommendations for improvement
+- Consider seasonal appropriateness and occasion suitability
 
-  if (age) prompt += `- Age: ${age}\n`;
-  if (height) prompt += `- Height: ${height}\n`;
-  if (gender) prompt += `- Gender: ${gender}\n`;
-  if (personalStyle) prompt += `- Personal Style Preference: ${personalStyle}\n`;
-  if (climate) prompt += `- Climate Zone: ${climate}\n`;
-  if (occasion) prompt += `- Intended Occasion: ${occasion}\n`;
+## ANALYSIS FRAMEWORK
+1. **BODY TYPE ANALYSIS**: Determine body shape and explain visual cues used
+2. **SKIN TONE & HAIR COLOR ANALYSIS**: Analyze coloring and undertones from photos
+3. **SEASONAL & LOCATION APPROPRIATENESS**: Consider climate and regional norms
+4. **INDIVIDUAL OUTFIT ANALYSIS**: Rate each outfit (1-10) with detailed feedback
+5. **COLOR ANALYSIS**: Identify best/worst colors for user's complexion
+6. **STYLING RECOMMENDATIONS**: Suggest improvements and accessories
+7. **BODY TYPE OPTIMIZATION**: Recommend flattering silhouettes and fits
+8. **PERSONAL STYLE & OCCASION ALIGNMENT**: Assess style consistency
+9. **OVERALL STYLE ASSESSMENT**: Provide cohesive improvement strategy
 
-  prompt += `
-ANALYSIS REQUESTED:
-I've uploaded ${images.length} outfit photo${images.length > 1 ? 's' : ''} for your analysis. Please provide:
+## OUTPUT REQUIREMENTS
+- Be honest but constructive in feedback
+- Provide specific, actionable advice over generic compliments
+- Format with clear sections and bullet points
+- Include specific examples and detailed recommendations
+- Consider current fashion trends and timeless style principles
+    `;
 
-1. **BODY TYPE ANALYSIS**: First, analyze my body type from the photos:
-   - Determine my body shape (apple, pear, hourglass, rectangle, inverted triangle, athletic, etc.)
-   - Explain what visual cues you used to make this assessment
-   - This will inform all subsequent styling advice
-
-2. **SKIN TONE & HAIR COLOR ANALYSIS**: Analyze my coloring from the photos:
-   - Determine my skin tone and undertones (fair/light/medium/deep with cool/warm/neutral undertones)
-   - Identify my hair color and any highlights or variations
-   - Explain what visual cues you used for this assessment
-   - This will inform color recommendations and styling advice
-
-2. **SKIN TONE & HAIR COLOR ANALYSIS**: Analyze my coloring from the photos:
-   - Determine my skin tone and undertones (fair/light/medium/deep with cool/warm/neutral undertones)
-   - Identify my hair color and any highlights or variations
-   - Explain what visual cues you used for this assessment
-   - This will inform color recommendations and styling advice
-
-3. **SEASONAL & LOCATION APPROPRIATENESS**: Consider my location and season:
-   - Are these outfits appropriate for the current season/climate I'm in?
-   - Any weather-specific considerations (layering, fabric weight, breathability)?
-   - Regional fashion norms that might apply to my location
-   - Seasonal color palette considerations
-
-4. **INDIVIDUAL OUTFIT ANALYSIS**: For each outfit, provide:
-   - Overall rating (1-10) and why
-   - What works well about this outfit
-   - What doesn't work and why
-   - How well it suits my analyzed body type and personal features
-   - Fit assessment (too loose, too tight, just right)
-   - Whether it's appropriate for the intended occasion AND season/location
-   - Personal style alignment (how well it matches my stated preference)
-
-5. **COLOR ANALYSIS**: Based on my analyzed skin tone and hair color:
-   - Which colors in my outfits complement me best
-   - Which colors should I avoid
-   - Specific color recommendations for my complexion
-   - Seasonal color suggestions for my current location/climate
-   - How to incorporate my best colors into my wardrobe
-
-6. **STYLING RECOMMENDATIONS**: 
-   - How to improve each outfit with simple changes
-   - Season-appropriate accessory suggestions
-   - Alternative ways to style the same pieces for different occasions
-   - Shopping recommendations for missing wardrobe pieces (with season in mind)
-
-7. **BODY TYPE OPTIMIZATION**: Based on your analysis of my body type:
-   - Which silhouettes are most flattering on me
-   - What styles to emphasize or avoid
-   - How the current outfits do or don't flatter my figure
-   - Specific fit advice for my body type
-
-8. **PERSONAL STYLE & OCCASION ALIGNMENT**:
-   - How well do these outfits reflect my personal style preference?
-   - Are they appropriate for the stated occasion?
-   - How to better align future outfits with both my style AND the occasions I dress for
-   - Versatility tips for transitioning outfits between occasions
-
-9. **OVERALL STYLE ASSESSMENT**:
-   - How cohesive is my style across outfits
-   - Areas where I could elevate my look
-   - Budget-friendly ways to improve my wardrobe for my climate/location
-   - Seasonal wardrobe planning suggestions
-   - Seasonal wardrobe planning suggestions
-
-`;
-
-  if (additionalContext) {
-    prompt += `\nADDITIONAL CONTEXT: ${additionalContext}\n`;
-  }
-
-  prompt += `
-Please be honest but constructive in your feedback. I want to improve my style, so specific, actionable advice is more valuable than generic compliments. Consider seasonal appropriateness, current fashion trends, and timeless style principles. 
-
-Format your response with clear sections and bullet points for easy reading. Include specific examples and be as detailed as possible in your recommendations.`;
-
-  return prompt;
+  // Replace the placeholder with the actual JSON data
+  const promptWithData = systemPrompt.replace('{fashionIqInput}', JSON.stringify(formData, null, 2));
+  
+  // Focused user message
+  const userMessage = "Analyze my outfit photos and provide comprehensive fashion critique and styling recommendations.";
+  
+  // Log optimization details
+  console.log("Using optimized modular prompt structure for fashion analysis");
+  
+  return {
+    systemPrompt: promptWithData,
+    userMessage: userMessage
+  };
 }
 
 // Process images for API
@@ -290,8 +232,8 @@ export default {
       }
       
       // Build the prompt
-      const prompt = buildFashionPrompt(data);
-      console.log('Built fashion prompt, length:', prompt.length);
+      const prompt = generatePrompt(data);
+      console.log('Built fashion prompt, length:', prompt.systemPrompt.length);
       
       // Process images for API
       const processedImages = processImagesForAPI(data.images);
@@ -299,11 +241,15 @@ export default {
       // Prepare API request with images
       const messages = [
         {
+          role: "system",
+          content: prompt.systemPrompt
+        },
+        {
           role: "user",
           content: [
             {
               type: "text",
-              text: prompt
+              text: prompt.userMessage
             },
             ...processedImages
           ]
