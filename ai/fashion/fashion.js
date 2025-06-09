@@ -69,9 +69,10 @@ const Responses = {
 const Headers = {
   cors(origin) {
     return {
-      'Access-Control-Allow-Origin': origin || '*',
+      'Access-Control-Allow-Origin': '*', // Always allow for now to debug
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+      'Access-Control-Max-Age': '86400', // Cache preflight for 24 hours
       'Content-Type': 'application/json'
     };
   }
@@ -103,49 +104,39 @@ function validateRequest(data) {
 
 // Format the incoming data into a structured prompt
 function generatePrompt(formData) {
-  // Optimized modular prompt for fashion analysis
-  const systemPrompt = `
-## ROLE & TASK
-You are an expert fashion stylist and personal shopper with years of experience in color theory, body type analysis, and style consulting. Analyze the outfit photos and provide detailed, honest, and constructive fashion critique.
+  // Create a concise prompt without including image data
+  const systemPrompt = `You are an expert fashion stylist and personal shopper. Analyze the outfit photos and provide comprehensive fashion critique and styling recommendations.
 
-INPUT: {fashionIqInput}
+## USER CONTEXT
+- Gender: ${formData.gender || 'not specified'}
+- Age: ${formData.age || 'not specified'}
+- Height: ${formData.height || 'not specified'}
+- Occasion: ${formData.occasion || 'general'}
+- Climate: ${formData.climate || 'not specified'}
+- Personal Style: ${formData['personal-style'] || 'not specified'}
 
-## CORE REQUIREMENTS
-- Analyze ALL uploaded outfit photos for comprehensive fashion critique
-- Focus on body type analysis, color analysis, and style optimization
-- Provide specific, actionable recommendations for improvement
-- Consider seasonal appropriateness and occasion suitability
+## ANALYSIS REQUIREMENTS
+1. **BODY TYPE ANALYSIS**: Determine body shape and styling recommendations
+2. **COLOR ANALYSIS**: Assess colors that complement skin tone and hair
+3. **FIT & SILHOUETTE**: Evaluate garment fit and suggest improvements
+4. **STYLE CONSISTENCY**: Rate outfit coherence and personal style alignment
+5. **OCCASION APPROPRIATENESS**: Assess suitability for stated occasion and climate
+6. **IMPROVEMENT SUGGESTIONS**: Provide specific, actionable recommendations
 
-## ANALYSIS FRAMEWORK
-1. **BODY TYPE ANALYSIS**: Determine body shape and explain visual cues used
-2. **SKIN TONE & HAIR COLOR ANALYSIS**: Analyze coloring and undertones from photos
-3. **SEASONAL & LOCATION APPROPRIATENESS**: Consider climate and regional norms
-4. **INDIVIDUAL OUTFIT ANALYSIS**: Rate each outfit (1-10) with detailed feedback
-5. **COLOR ANALYSIS**: Identify best/worst colors for user's complexion
-6. **STYLING RECOMMENDATIONS**: Suggest improvements and accessories
-7. **BODY TYPE OPTIMIZATION**: Recommend flattering silhouettes and fits
-8. **PERSONAL STYLE & OCCASION ALIGNMENT**: Assess style consistency
-9. **OVERALL STYLE ASSESSMENT**: Provide cohesive improvement strategy
-
-## OUTPUT REQUIREMENTS
+## OUTPUT FORMAT
+- Rate each outfit (1-10) with detailed explanation
+- Provide specific improvement suggestions
+- Recommend complementary pieces and accessories
 - Be honest but constructive in feedback
-- Provide specific, actionable advice over generic compliments
-- Format with clear sections and bullet points
-- Include specific examples and detailed recommendations
-- Consider current fashion trends and timeless style principles
-    `;
-
-  // Replace the placeholder with the actual JSON data
-  const promptWithData = systemPrompt.replace('{fashionIqInput}', JSON.stringify(formData, null, 2));
+- Focus on actionable advice over generic compliments`;
   
   // Focused user message
-  const userMessage = "Analyze my outfit photos and provide comprehensive fashion critique and styling recommendations.";
+  const userMessage = "Please analyze my outfit photos and provide detailed fashion critique and styling recommendations based on my profile.";
   
-  // Log optimization details
-  console.log("Using optimized modular prompt structure for fashion analysis");
+  console.log("Using optimized concise prompt structure for fashion analysis");
   
   return {
-    systemPrompt: promptWithData,
+    systemPrompt: systemPrompt,
     userMessage: userMessage
   };
 }
@@ -162,11 +153,13 @@ function processImagesForAPI(images) {
     const mimeType = matches[1];
     const base64Data = matches[2];
     
+    // Try X.AI's specific format - maybe they want just the base64 without data URL
     return {
-      type: "image_url",
-      image_url: {
-        url: imageData,
-        detail: "high" // Request high detail analysis
+      type: "image",
+      source: {
+        type: "base64",
+        media_type: mimeType,
+        data: base64Data
       }
     };
   });
@@ -176,9 +169,13 @@ function processImagesForAPI(images) {
 export default {
   async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin');
+    const method = request.method;
+    
+    console.log(`Incoming ${method} request from origin: ${origin}`);
     
     // Handle CORS preflight
     if (request.method === 'OPTIONS') {
+      console.log('Handling OPTIONS preflight request');
       return new Response(null, {
         status: 200,
         headers: Headers.cors(origin)
@@ -187,8 +184,11 @@ export default {
     
     // Only allow POST requests
     if (request.method !== 'POST') {
+      console.log(`Method ${method} not allowed`);
       return Responses.methodNotAllowed(origin);
     }
+    
+    console.log('Processing POST request...');
     
     // Validate origin (temporarily more permissive for debugging)
     console.log('Request origin:', origin);
@@ -245,7 +245,7 @@ export default {
       // Process images for API
       const processedImages = processImagesForAPI(data.images);
       
-      // Prepare API request with images
+      // Prepare API request with images - try simpler structure for X.AI
       const messages = [
         {
           role: "system",
@@ -262,13 +262,13 @@ export default {
           ]
         }
       ];
-      
+
       const apiRequestBody = {
         model: CONFIG.MODEL,
         messages: messages,
         max_tokens: CONFIG.MAX_TOKENS,
-        temperature: 0.7,
-        stream: false
+        temperature: 0.7
+        // Remove stream parameter as it might not be supported
       };
       
       console.log('Making API request with', processedImages.length, 'images');
