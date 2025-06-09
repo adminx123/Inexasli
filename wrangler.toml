@@ -181,3 +181,11 @@ main = "./ai/fashion/fashion.js"
 [[env.fashion.services]]
 binding = "secret_binding"
 service = "secretworker"
+
+[env.quiz]
+name = "quiz"
+main = "./ai/quiz/quiz.js"
+
+[[env.quiz.services]]
+binding = "secret_binding"
+service = "secretworker"

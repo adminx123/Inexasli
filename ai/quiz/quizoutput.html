@@ -104,6 +104,265 @@
           return null;
         }
       };
+      function parseQuizContent(content) {
+        console.log('Parsing quiz content:', content.substring(0, 200) + '...');
+        console.log('Content length:', content.length);
+        
+        const lines = content.split('\n');
+        const quiz = {
+          title: 'Technical Analysis Quiz',
+          introduction: '',
+          instructions: '',
+          questions: []
+        };
+
+        let currentSection = '';
+        let currentQuestion = null;
+        let questionCounter = 0;
+        let collectingQuestion = false;
+
+        for (let i = 0; i < lines.length; i++) {
+          let line = lines[i].trim();
+          
+          // Skip empty lines
+          if (!line) continue;
+          
+          console.log(`Line ${i}: "${line}"`);
+          
+          // Check for quiz title - more flexible matching
+          if (line.includes('Quiz Title') || line.includes('quiz') && line.includes('title')) {
+            quiz.title = line.replace(/\*\*Quiz Title:\*\*/, '').replace('Quiz Title:', '').replace(/\*\*/g, '').trim();
+            console.log('Found title:', quiz.title);
+            continue;
+          }
+          
+          // Check for sections
+          if (line.includes('Introduction') && !line.includes('**Questions')) {
+            currentSection = 'introduction';
+            console.log('Switched to introduction section');
+            continue;
+          } else if (line.includes('Instructions')) {
+            currentSection = 'instructions';
+            console.log('Switched to instructions section');
+            continue;
+          } else if (line.includes('Questions') && !line.includes('Instructions')) {
+            currentSection = 'questions';
+            console.log('Switched to questions section');
+            continue;
+          }
+          
+          // Parse questions - look for numbered questions more flexibly
+          const questionMatch = line.match(/^(\d+)[\.\)]\s*(.+)/) || line.match(/Question\s*(\d+)[:\.]?\s*(.+)/i);
+          if (questionMatch && (currentSection === 'questions' || line.includes('Question'))) {
+            // Save previous question
+            if (currentQuestion) {
+              console.log('Saving previous question:', currentQuestion);
+              quiz.questions.push(currentQuestion);
+            }
+            
+            questionCounter++;
+            currentQuestion = {
+              number: parseInt(questionMatch[1]),
+              text: questionMatch[2],
+              options: []
+            };
+            collectingQuestion = true;
+            console.log('Started new question:', currentQuestion.number, currentQuestion.text.substring(0, 50));
+            continue;
+          }
+          
+          // Parse options - more flexible matching
+          const optionMatch = line.match(/^\s*([A-D])\)\s*(.+)/) || line.match(/^\s*([A-D])[\.\:]?\s*(.+)/);
+          if (optionMatch && currentQuestion && collectingQuestion) {
+            currentQuestion.options.push({
+              letter: optionMatch[1],
+              text: optionMatch[2]
+            });
+            console.log('Added option:', optionMatch[1], optionMatch[2].substring(0, 30));
+            continue;
+          }
+          
+          // Collect other content
+          if (currentSection === 'introduction' && !line.includes('**') && !line.includes('Quiz Title')) {
+            quiz.introduction += line + ' ';
+          } else if (currentSection === 'instructions' && !line.includes('**')) {
+            if (line.startsWith('-')) {
+              quiz.instructions += '\n• ' + line.substring(1).trim();
+            } else {
+              quiz.instructions += line + ' ';
+            }
+          } else if (collectingQuestion && currentQuestion && !optionMatch && !questionMatch) {
+            // Continue collecting question text if it spans multiple lines
+            if (!line.includes('A)') && !line.includes('B)') && !line.includes('C)') && !line.includes('D)')) {
+              currentQuestion.text += ' ' + line;
+              console.log('Extended question text:', currentQuestion.text.substring(0, 50));
+            }
+          }
+        }
+
+        // Add the last question
+        if (currentQuestion) {
+          console.log('Saving final question:', currentQuestion);
+          quiz.questions.push(currentQuestion);
+        }
+
+        console.log('Final parsed quiz:', quiz);
+        console.log('Questions found:', quiz.questions.length);
+        
+        // If no questions found, try a different approach
+        if (quiz.questions.length === 0) {
+          console.log('No questions found with standard parsing, trying fallback...');
+          return parseQuizContentFallback(content);
+        }
+        
+        return quiz;
+      }
+      
+      function parseQuizContentFallback(content) {
+        console.log('Using fallback parsing method...');
+        const quiz = {
+          title: 'Technical Analysis Quiz',
+          introduction: 'Advanced quiz on stock market technical analysis focusing on chart patterns.',
+          instructions: 'Select the best answer for each question.',
+          questions: []
+        };
+        
+        // Split by numbers followed by period to find questions
+        const sections = content.split(/\n\s*(\d+)\.\s*/);
+        
+        for (let i = 1; i < sections.length; i += 2) {
+          if (i + 1 < sections.length) {
+            const questionNum = parseInt(sections[i]);
+            const questionContent = sections[i + 1];
+            
+            // Split the content to separate question from options
+            const lines = questionContent.split('\n').filter(line => line.trim());
+            
+            if (lines.length > 0) {
+              const question = {
+                number: questionNum,
+                text: '',
+                options: []
+              };
+              
+              let questionText = '';
+              let foundOptions = false;
+              
+              for (const line of lines) {
+                const optionMatch = line.trim().match(/^\s*([A-D])\)\s*(.+)/);
+                if (optionMatch) {
+                  foundOptions = true;
+                  question.options.push({
+                    letter: optionMatch[1],
+                    text: optionMatch[2]
+                  });
+                } else if (!foundOptions) {
+                  questionText += line.trim() + ' ';
+                }
+              }
+              
+              question.text = questionText.trim();
+              
+              if (question.text && question.options.length > 0) {
+                quiz.questions.push(question);
+                console.log('Fallback found question:', questionNum, question.text.substring(0, 50));
+              }
+            }
+          }
+        }
+        
+        console.log('Fallback parsing result:', quiz.questions.length, 'questions found');
+        return quiz;
+      }
+
+      function createQuizHTML(quizData) {
+        console.log('Creating quiz HTML from data:', quizData);
+        const quiz = parseQuizContent(quizData.quizContent);
+        
+        let html = `
+          <div style="max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 24px; text-align: center;">
+              <h1 style="margin: 0; font-size: 24px; font-weight: 600;"><i class="fas fa-brain"></i> ${quiz.title}</h1>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 16px 24px; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 8px; color: #6c757d; font-size: 14px; font-weight: 500;">
+                  <i class="fas fa-calendar"></i>
+                  <span>${new Date(quizData.generatedDate).toLocaleDateString()}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; color: #6c757d; font-size: 14px; font-weight: 500;">
+                  <i class="fas fa-question-circle"></i>
+                  <span>${quiz.questions.length} Questions</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; color: #6c757d; font-size: 14px; font-weight: 500;">
+                  <i class="fas fa-clock"></i>
+                  <span>15-20 minutes</span>
+                </div>
+              </div>
+            </div>
+            
+            <div style="height: 4px; background: #e9ecef; position: relative; overflow: hidden;">
+              <div id="progress-fill" style="height: 100%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); width: 0%; transition: width 0.3s ease;"></div>
+            </div>
+            
+            <div style="padding: 32px 24px;">
+        `;
+
+        if (quiz.introduction || quiz.instructions) {
+          html += `
+            <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 20px; margin-bottom: 32px; border-radius: 0 8px 8px 0;">
+              <h3 style="margin: 0 0 12px 0; color: #1976d2; font-weight: 600;"><i class="fas fa-info-circle"></i> Instructions</h3>
+              ${quiz.introduction ? `<p style="margin: 0 0 12px 0; color: #424242; line-height: 1.6;"><strong>About:</strong> ${quiz.introduction.trim()}</p>` : ''}
+              ${quiz.instructions ? `<p style="margin: 0; color: #424242; line-height: 1.6;"><strong>Instructions:</strong> ${quiz.instructions.trim()}</p>` : ''}
+            </div>
+          `;
+        }
+
+        // Add questions
+        quiz.questions.forEach((question, index) => {
+          html += `
+            <div class="question-card" data-question="${index}" style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 24px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+              <div style="background: #f8f9fa; padding: 16px 20px; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; gap: 12px;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px;">${question.number}</div>
+                <span style="font-weight: 600; color: #495057;">Question ${question.number}</span>
+              </div>
+              <div style="padding: 20px; font-size: 16px; line-height: 1.6; color: #2c3e50; font-weight: 500;">${question.text}</div>
+              <div style="padding: 0 20px 20px 20px;">
+          `;
+
+          question.options.forEach(option => {
+            html += `
+              <div class="option" data-option="${option.letter}" onclick="selectOption(this)" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: flex-start; gap: 12px;">
+                <div class="option-letter" style="background: #6c757d; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px; flex-shrink: 0; margin-top: 2px;">${option.letter}</div>
+                <div style="flex: 1; line-height: 1.5;">${option.text}</div>
+              </div>
+            `;
+          });
+
+          html += `
+              </div>
+            </div>
+          `;
+        });
+
+        html += `
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 24px; border-top: 1px solid #e9ecef; display: flex; justify-content: center; gap: 16px;">
+              <button onclick="resetQuiz()" style="padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 14px; background: #6c757d; color: white;">
+                <i class="fas fa-redo"></i> Reset Quiz
+              </button>
+              <button onclick="submitQuiz()" style="padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <i class="fas fa-check"></i> Submit Answers
+              </button>
+            </div>
+          </div>
+        `;
+
+        return html;
+      }
+
       function updateOutput() {
         const outputSpan = document.getElementById('output-span');
         if (!outputSpan) {
@@ -111,21 +370,201 @@
           return;
         }
         const responseKey = 'quizIqResponse';
+        console.log('Looking for data with key:', responseKey);
+        
+        // First, let's check what's actually in localStorage
+        const rawItem = localStorage.getItem(responseKey);
+        console.log('Raw localStorage item:', rawItem);
+        console.log('Raw item length:', rawItem ? rawItem.length : 'null');
+        
         let data;
         try {
           data = getJSON(responseKey);
-        } catch (err) {}
-        if (data) {
-          outputSpan.textContent = JSON.stringify(data, null, 2);
+          console.log('Parsed data:', data);
+          
+          if (data) {
+            console.log('Data structure check:');
+            console.log('- Has data property:', !!data.data);
+            console.log('- Has message:', data.message);
+            console.log('- Has quizContent:', !!(data.data && data.data.quizContent));
+            
+            if (data.data && data.data.quizContent) {
+              console.log('Quiz content length:', data.data.quizContent.length);
+              console.log('Quiz content preview:', data.data.quizContent.substring(0, 500));
+              console.log('Quiz content ends with:', data.data.quizContent.slice(-200));
+            }
+          }
+        } catch (err) {
+          console.error('Error parsing JSON:', err);
+          console.log('Attempting to display raw content...');
+          
+          // If JSON parsing fails, show the raw content for debugging
+          outputSpan.innerHTML = `
+            <div style="padding: 20px; font-family: monospace; background: #f8f9fa; border-radius: 8px; margin: 20px;">
+              <h3 style="color: #dc3545;">JSON Parse Error</h3>
+              <p><strong>Error:</strong> ${err.message}</p>
+              <p><strong>Raw Content (first 1000 chars):</strong></p>
+              <pre style="background: white; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 12px;">${rawItem ? rawItem.substring(0, 1000) : 'No data found'}</pre>
+              ${rawItem && rawItem.length > 1000 ? `<p><em>...and ${rawItem.length - 1000} more characters</em></p>` : ''}
+            </div>
+          `;
+          return;
+        }
+        
+        if (data && data.data && data.data.quizContent) {
+          console.log('Quiz data found, creating HTML...');
+          try {
+            // Check if content appears to be truncated
+            const content = data.data.quizContent;
+            const contentLength = content.length;
+            const seemsTruncated = contentLength < 1000 || !content.includes('1.') || content.includes('Difficulty Tier"') || content.endsWith('Tier');
+            
+            if (seemsTruncated) {
+              console.warn('Quiz content is definitively truncated!');
+              outputSpan.innerHTML = `
+                <div style="max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px;">
+                  <div style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 24px; text-align: center;">
+                    <h1 style="margin: 0; font-size: 24px; font-weight: 600;"><i class="fas fa-exclamation-triangle"></i> Response Truncated</h1>
+                  </div>
+                  
+                  <div style="padding: 32px 24px;">
+                    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin-bottom: 24px; border-radius: 0 8px 8px 0;">
+                      <h3 style="margin: 0 0 12px 0; color: #856404; font-weight: 600;"><i class="fas fa-info-circle"></i> Issue Detected</h3>
+                      <p style="margin: 0 0 12px 0; color: #856404; line-height: 1.6;">The quiz response has been truncated to only <strong>${contentLength} characters</strong>. A complete quiz typically contains 2000+ characters with multiple questions and options.</p>
+                      <p style="margin: 0; color: #856404; line-height: 1.6;">This is likely due to response size limits from the worker or XAI API.</p>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                      <h4 style="margin: 0 0 16px 0; color: #495057; font-weight: 600;"><i class="fas fa-eye"></i> Partial Content Received:</h4>
+                      <pre style="background: white; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 12px; line-height: 1.4; margin: 0; white-space: pre-wrap; color: #495057;">${content}</pre>
+                    </div>
+                    
+                    <div style="background: #d1ecf1; border-left: 4px solid #17a2b8; padding: 20px; border-radius: 0 8px 8px 0;">
+                      <h4 style="margin: 0 0 12px 0; color: #0c5460; font-weight: 600;"><i class="fas fa-lightbulb"></i> Suggested Solutions:</h4>
+                      <ul style="margin: 0; padding-left: 20px; color: #0c5460; line-height: 1.6;">
+                        <li>Try requesting a shorter quiz (e.g., 5 questions instead of 10)</li>
+                        <li>Use simpler question formats (True/False instead of Multiple Choice)</li>
+                        <li>Reduce the difficulty level to "beginner" or "intermediate"</li>
+                        <li>Check if there are response size limits in your worker configuration</li>
+                        <li>Consider splitting the request into multiple smaller quizzes</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div style="background: #f8f9fa; padding: 24px; border-top: 1px solid #e9ecef; display: flex; justify-content: center; gap: 16px;">
+                    <button onclick="window.location.reload()" style="padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 14px; background: #6c757d; color: white;">
+                      <i class="fas fa-redo"></i> Retry
+                    </button>
+                    <button onclick="window.history.back()" style="padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                      <i class="fas fa-arrow-left"></i> Back to Form
+                    </button>
+                  </div>
+                </div>
+              `;
+              return;
+            }
+            
+            const quizHTML = createQuizHTML(data.data);
+            outputSpan.innerHTML = quizHTML;
+            setupQuizInteractivity();
+            console.log('Quiz displayed successfully');
+          } catch (error) {
+            console.error('Error creating quiz HTML:', error);
+            outputSpan.innerHTML = `
+              <div class="no-data">
+                <div class="no-data-icon">⚠️</div>
+                <div class="no-data-message">Error parsing quiz data</div>
+                <div class="no-data-help">Error: ${error.message}</div>
+                <details style="margin-top: 15px;">
+                  <summary style="cursor: pointer;">View Raw Content</summary>
+                  <pre style="background: white; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 12px; margin-top: 10px;">${data.data.quizContent}</pre>
+                </details>
+              </div>
+            `;
+          }
         } else {
+          console.log('No quiz data found in expected format');
+          
+          // Show what we actually found for debugging
+          const debugInfo = data ? JSON.stringify(data, null, 2) : 'null';
           outputSpan.innerHTML = `
             <div class="no-data">
-              <div class="no-data-icon">🚫</div>
-              <div class="no-data-message">No Response Found</div>
-              <div class="no-data-help">Please try again.</div>
+              <div class="no-data-icon">📝</div>
+              <div class="no-data-message">No Quiz Found</div>
+              <div class="no-data-help">Please generate a quiz first to see it here.</div>
+              <details style="margin-top: 15px;">
+                <summary style="cursor: pointer;">Debug Info</summary>
+                <pre style="background: white; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 12px; margin-top: 10px;">${debugInfo}</pre>
+              </details>
             </div>
           `;
         }
+      }
+
+      function setupQuizInteractivity() {
+        let selectedAnswers = {};
+        const questions = document.querySelectorAll('.question-card');
+
+        window.selectOption = function(optionElement) {
+          const questionCard = optionElement.closest('.question-card');
+          const questionIndex = questionCard.dataset.question;
+          const optionValue = optionElement.dataset.option;
+          
+          // Remove selected class from other options in this question
+          questionCard.querySelectorAll('.option').forEach(opt => {
+            opt.style.background = '#f8f9fa';
+            opt.style.borderColor = '#e9ecef';
+            opt.style.color = 'inherit';
+            opt.querySelector('.option-letter').style.background = '#6c757d';
+          });
+          
+          // Add selected style to clicked option
+          optionElement.style.background = '#e3f2fd';
+          optionElement.style.borderColor = '#2196f3';
+          optionElement.style.color = '#1976d2';
+          optionElement.querySelector('.option-letter').style.background = '#2196f3';
+          
+          // Store the answer
+          selectedAnswers[questionIndex] = optionValue;
+          
+          // Update progress
+          updateProgress();
+        };
+
+        function updateProgress() {
+          const totalQuestions = questions.length;
+          const answeredQuestions = Object.keys(selectedAnswers).length;
+          const progressPercent = (answeredQuestions / totalQuestions) * 100;
+          
+          const progressFill = document.getElementById('progress-fill');
+          if (progressFill) {
+            progressFill.style.width = progressPercent + '%';
+          }
+        }
+
+        window.resetQuiz = function() {
+          selectedAnswers = {};
+          document.querySelectorAll('.option').forEach(option => {
+            option.style.background = '#f8f9fa';
+            option.style.borderColor = '#e9ecef';
+            option.style.color = 'inherit';
+            option.querySelector('.option-letter').style.background = '#6c757d';
+          });
+          updateProgress();
+        };
+
+        window.submitQuiz = function() {
+          const totalQuestions = questions.length;
+          const answeredQuestions = Object.keys(selectedAnswers).length;
+          
+          if (answeredQuestions < totalQuestions) {
+            alert(`Please answer all questions. You have answered ${answeredQuestions} out of ${totalQuestions} questions.`);
+            return;
+          }
+          
+          console.log('Quiz submitted with answers:', selectedAnswers);
+          alert('Quiz submitted successfully! Check the console for your answers.');
+        };
       }
       setTimeout(updateOutput, 100);
       
