@@ -821,6 +821,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.dataset.state = 'initial';
             setLocal('dataContainerState', 'initial');
             
+            // Restore background scrolling when collapsed
+            document.body.style.overflow = '';
+            
             // Hide the data content and show collapsed elements
             const dataContent = dataContainer.querySelector('.data-content');
             const closeButton = dataContainer.querySelector('.close-data-container');
@@ -858,6 +861,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.classList.remove('visually-collapsed');
             dataContainer.classList.add('expanded');
             dataContainer.dataset.state = 'expanded';
+            
+            // Prevent background scrolling when expanded
+            document.body.style.overflow = 'hidden';
             
             // Show the data content and hide collapsed elements
             const dataContent = dataContainer.querySelector('.data-content');
