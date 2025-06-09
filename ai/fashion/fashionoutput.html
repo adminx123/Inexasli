@@ -260,241 +260,97 @@
   </div>
 
   <script>
-  /*
-   * Copyright (c) 2025 INEXASLI. All rights reserved.
-   * This code is protected under Canadian and international copyright laws.
-   * Unauthorized use, reproduction, distribution, or modification of this code 
-   * without explicit written permission via email from info@inexasli.com 
-   * is strictly prohibited. Violators will be pursued and prosecuted to the 
-   * fullest extent of the law in British Columbia, Canada, and applicable 
-   * jurisdictions worldwide.
-   */
-
-    document.addEventListener('DOMContentLoaded', function() {
-      loadAndDisplayResults();
-    });
-
-    function loadAndDisplayResults() {
+  (function() {
+    // Helper to safely get and parse JSON from localStorage
+    function getJSON(key) {
       try {
-        // Define the getJSON helper function
-        const getJSON = window.getJSON || function(key) {
-          try {
-            const item = localStorage.getItem(key);
-            return item ? JSON.parse(item) : null;
-          } catch (e) {
-            console.error('Error parsing JSON:', e);
-            return null;
-          }
-        };
-
-        // Look for fashion response with correct key (lowercase 'q')
-        const responseKey = 'fashionIqResponse';
-        console.log('Looking for data with key:', responseKey);
-        
-        // Try several approaches to get the data
-        let fashionData;
-        try {
-          fashionData = getJSON(responseKey);
-          if (!fashionData) {
-            // Fallback to direct localStorage access
-            const rawData = localStorage.getItem(responseKey);
-            if (rawData) {
-              fashionData = JSON.parse(rawData);
-              console.log('Retrieved fashion data directly from localStorage');
-            }
-          }
-          
-          // Handle nested response format if present
-          if (fashionData && fashionData.message === 'Success' && fashionData.data) {
-            console.log('Found nested data structure, using the data property');
-            fashionData = fashionData.data;
-          }
-        } catch (err) {
-          console.error('Error getting fashion data:', err);
-        }
-        
-        if (!fashionData) {
-          document.getElementById('fashion-content').innerHTML = `
-            <div class="error-message">
-              <i class="fas fa-exclamation-triangle"></i>
-              <h3>No Results Found</h3>
-              <p>No fashion analysis results were found. Please go back and try again.</p>
-            </div>
-          `;
-          return;
-        }
-
-        // Get user input data
-        const userData = getJSON('fashionIQData');
-
-        // Display uploaded images
-        if (userData && userData.images) {
-          displayUploadedImages(userData.images);
-        }
-
-        // Display user style profile
-        if (userData) {
-          displayStyleProfile(userData);
-        }
-
-        // Debug: Log the response structure
-        console.log('Fashion response structure:', fashionData);
-        
-        // Format and display the AI response - handle multiple formats
-        let content = null;
-        
-        if (fashionData.choices && fashionData.choices[0] && fashionData.choices[0].message) {
-          // OpenAI/X.AI format
-          content = fashionData.choices[0].message.content;
-          console.log('Using OpenAI format response');
-        } else if (fashionData.content) {
-          // Direct content format
-          content = fashionData.content;
-          console.log('Using direct content format');
-        } else if (fashionData.fashionAnalysis) {
-          // Custom fashion analysis format
-          content = fashionData.fashionAnalysis;
-          console.log('Using fashion analysis format');
-        } else if (typeof fashionData === 'string') {
-          // String response
-          content = fashionData;
-          console.log('Using string response format');
-        }
-        
-        if (content) {
-          displayFormattedResponse(content);
-        } else {
-          console.error('No valid content found in response:', fashionData);
-          document.getElementById('fashion-content').innerHTML = `
-            <div class="error-message">
-              <i class="fas fa-exclamation-triangle"></i>
-              <h3>Invalid Response Format</h3>
-              <p>The response format was not recognized. Please try again.</p>
-              <div class="data-section">
-                <div class="data-label">Debug Info:</div>
-                <pre>${JSON.stringify(fashionData, null, 2)}</pre>
-              </div>
-            </div>
-          `;
-        }
-
-      } catch (error) {
-        console.error('Error loading results:', error);
-        document.getElementById('fashion-content').innerHTML = `
-          <div class="error-message">
-            <i class="fas fa-exclamation-triangle"></i>
-            <h3>Error Loading Results</h3>
-            <p>There was an error loading your fashion analysis. Please try again.</p>
-          </div>
-        `;
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : null;
+      } catch (e) {
+        console.error('[FashionOutput] Error parsing JSON for key', key, e);
+        return null;
       }
     }
 
-    function displayUploadedImages(images) {
-      const imagesDisplay = document.getElementById('images-display');
-      if (!images || images.length === 0) return;
-
-      imagesDisplay.innerHTML = images.map((imageData, index) => `
-        <div class="outfit-image">
-          <img src="${imageData}" alt="Outfit ${index + 1}">
-        </div>
-      `).join('');
-    }
-
-    function displayStyleProfile(userData) {
-      const styleData = document.getElementById('style-data');
-      const profile = [
-        userData.personalStyle && `Personal Style: ${userData.personalStyle}`,
-        userData.skinTone && `Skin Tone: ${userData.skinTone}`,
-        userData.hairColor && `Hair Color: ${userData.hairColor}`,
-        userData.occasion && `Occasion: ${userData.occasion}`,
-        userData.location && `Location: ${userData.location}`,
-        userData.season && `Season: ${userData.season}`,
-        userData.age && `Age: ${userData.age}`,
-        userData.height && `Height: ${userData.height}`,
-        userData.gender && `Gender: ${userData.gender}`
-      ].filter(Boolean).join(' • ');
-
-      styleData.textContent = profile || 'No profile data available';
-    }
-
-    function displayFormattedResponse(content) {
+    function updateOutput() {
       const fashionContent = document.getElementById('fashion-content');
-      
-      // Try to extract an overall score if present
+      const scoreSection = document.getElementById('overall-score');
+      if (!fashionContent || !scoreSection) {
+        setTimeout(updateOutput, 100);
+        return;
+      }
+      let data = getJSON('fashionIqResponse');
+      if (!data) {
+        // Fallback: try direct parse
+        const raw = localStorage.getItem('fashionIqResponse');
+        if (raw) {
+          try { data = JSON.parse(raw); } catch (e) { data = null; }
+        }
+      }
+      if (data && data.message === 'Success' && data.data) {
+        data = data.data;
+      }
+      if (!data) {
+        fashionContent.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i><h3>No Results Found</h3><p>No fashion analysis results were found. Please try again.</p></div>`;
+        scoreSection.innerHTML = `<i class="fas fa-star star-rating"></i> No Score`;
+        return;
+      }
+      // Try to extract content
+      let content = null;
+      if (data.choices && data.choices[0] && data.choices[0].message) {
+        content = data.choices[0].message.content;
+      } else if (data.content) {
+        content = data.content;
+      } else if (data.fashionAnalysis) {
+        content = data.fashionAnalysis;
+      } else if (typeof data === 'string') {
+        content = data;
+      }
+      if (!content) {
+        fashionContent.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i><h3>Invalid Response Format</h3><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+        scoreSection.innerHTML = `<i class="fas fa-star star-rating"></i> No Score`;
+        return;
+      }
+      // Score extraction
       const scoreMatch = content.match(/(?:overall|total|style)\s*(?:score|rating):\s*(\d+(?:\.\d+)?(?:\/\d+)?|\d+\s*(?:out of|\/)\s*\d+)/i);
       if (scoreMatch) {
-        document.getElementById('overall-score').innerHTML = `
-          <i class="fas fa-star star-rating"></i>
-          Overall Style Score: ${scoreMatch[1]}
-        `;
+        scoreSection.innerHTML = `<i class=\"fas fa-star star-rating\"></i> Overall Style Score: ${scoreMatch[1]}`;
+      } else {
+        scoreSection.innerHTML = `<i class=\"fas fa-star star-rating\"></i> Style Analysis`;
       }
-
-      // Format the content with proper sections
-      let formattedContent = content;
-
-      // Create structured sections for better readability
-      const sections = [
-        {
-          title: 'Outfit Analysis',
-          icon: 'fas fa-tshirt',
-          regex: /(outfit\s*analysis|individual\s*outfits?|outfit\s*breakdown)/i,
-          className: 'outfit-analysis-grid'
-        },
-        {
-          title: 'Color Recommendations',
-          icon: 'fas fa-palette',
-          regex: /(color\s*recommendations?|color\s*palette|best\s*colors?)/i,
-          className: 'color-palette-section'
-        },
-        {
-          title: 'Styling Tips',
-          icon: 'fas fa-lightbulb',
-          regex: /(styling\s*tips?|style\s*advice|recommendations?)/i,
-          className: 'styling-tips-section'
-        },
-        {
-          title: 'Fit Analysis',
-          icon: 'fas fa-ruler-combined',
-          regex: /(fit\s*analysis|how.*fits?|body\s*type)/i,
-          className: 'fit-analysis-section'
-        },
-        {
-          title: 'Areas for Improvement',
-          icon: 'fas fa-chart-line',
-          regex: /(improvement|suggestions?|could\s*be\s*better|consider)/i,
-          className: 'improvement-suggestions'
-        }
-      ];
-
-      // Apply formatting for better readability
-      formattedContent = formattedContent
+      // Format content
+      let formattedContent = content
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
         .replace(/(\d+)\.\s/g, '<br><strong>$1.</strong> ')
         .replace(/\n\n/g, '</p><p>')
         .replace(/\n/g, '<br>');
-
-      fashionContent.innerHTML = `<div class="formatted-response"><p>${formattedContent}</p></div>`;
+      fashionContent.innerHTML = `<div class=\"formatted-response\"><p>${formattedContent}</p></div>`;
+      // Images
+      const userData = getJSON('fashionIQData');
+      const imagesDisplay = document.getElementById('images-display');
+      if (userData && userData.images && imagesDisplay) {
+        imagesDisplay.innerHTML = userData.images.map((img, i) => `<div class=\"outfit-image\"><img src=\"${img}\" alt=\"Outfit ${i+1}\"></div>`).join('');
+      }
+      // Style profile
+      const styleData = document.getElementById('style-data');
+      if (userData && styleData) {
+        const profile = [
+          userData.personalStyle && `Personal Style: ${userData.personalStyle}`,
+          userData.skinTone && `Skin Tone: ${userData.skinTone}`,
+          userData.hairColor && `Hair Color: ${userData.hairColor}`,
+          userData.occasion && `Occasion: ${userData.occasion}`,
+          userData.location && `Location: ${userData.location}`,
+          userData.season && `Season: ${userData.season}`,
+          userData.age && `Age: ${userData.age}`,
+          userData.height && `Height: ${userData.height}`,
+          userData.gender && `Gender: ${userData.gender}`
+        ].filter(Boolean).join(' • ');
+        styleData.textContent = profile || 'No profile data available';
+      }
     }
-
-    // REMOVED tryAgain function
-    // function tryAgain() { ... }
-
-    // REMOVED saveResults function
-    // function saveResults() { ... }
-
-    // REMOVED shareResults function
-    // function shareResults() { ... }
-
-    // REMOVED goHome function
-    // function goHome() { ... }
-
-    // Auto-save to localStorage periodically
-    setInterval(() => {
-      const timestamp = new Date().toISOString();
-      localStorage.setItem('fashionIQ_lastViewed', timestamp);
-    }, 30000);
+    setTimeout(updateOutput, 50);
+  })();
   </script>
 </body>
 </html>
