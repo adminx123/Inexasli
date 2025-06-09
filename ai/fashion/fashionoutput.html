@@ -225,6 +225,72 @@
       object-fit: cover;
       display: block;
     }
+    
+    /* Add magazine cover and article styles */
+    .magazine-cover {
+      background: linear-gradient(135deg, #f8f9fa 60%, #e0e7ef 100%);
+      border-radius: 18px 18px 0 0;
+      box-shadow: 0 6px 24px rgba(44,62,80,0.08);
+      padding: 32px 24px 16px 24px;
+      text-align: center;
+      position: relative;
+      margin-bottom: 0;
+    }
+    .magazine-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #2d5d3d;
+      margin-bottom: 18px;
+      text-shadow: 0 2px 8px rgba(44,62,80,0.08);
+    }
+    .cover-image-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 220px;
+      margin-bottom: 0;
+    }
+    .cover-image {
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(44,62,80,0.13);
+      width: 220px;
+      height: 220px;
+      object-fit: cover;
+      border: 4px solid #fff;
+    }
+    .cover-placeholder {
+      width: 220px;
+      height: 220px;
+      background: #e0e7ef;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-size: 1.2rem;
+      border: 4px solid #fff;
+    }
+    .magazine-article-section {
+      background: #fff;
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+      padding: 32px 24px 24px 24px;
+      margin-top: 0;
+    }
+    @media (max-width: 600px) {
+      .magazine-cover, .magazine-article-section {
+        padding: 16px 6px;
+      }
+      .cover-image, .cover-placeholder {
+        width: 120px;
+        height: 120px;
+      }
+      .magazine-title {
+        font-size: 1.6rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -237,22 +303,22 @@
           <p>AI-powered style critique and recommendations</p>
         </div>
 
-        <div class="uploaded-images-display" id="images-display">
-          <!-- Images will be populated by JavaScript -->
+        <div class="magazine-cover">
+          <div class="magazine-title">FashionIQ</div>
+          <div class="cover-image-section" id="cover-image-section"></div>
         </div>
-
-        <div class="style-score-section" id="overall-score">
-          <i class="fas fa-star star-rating"></i>
-          Loading your fashion analysis...
-        </div>
-
-        <div class="fashion-display" id="fashion-content">
-          <!-- AI response will be populated here -->
-        </div>
-
-        <div class="data-section">
-          <div class="data-label">Your Style Profile:</div>
-          <div id="style-data"></div>
+        <div class="magazine-article-section">
+          <div class="style-score-section" id="overall-score">
+            <i class="fas fa-star star-rating"></i>
+            Loading your fashion analysis...
+          </div>
+          <div class="fashion-display" id="fashion-content">
+            <!-- AI response will be populated here -->
+          </div>
+          <div class="data-section">
+            <div class="data-label">Your Style Profile:</div>
+            <div id="style-data"></div>
+          </div>
         </div>
 
       </div>
@@ -331,6 +397,13 @@
       const imagesDisplay = document.getElementById('images-display');
       if (userData && userData.images && imagesDisplay) {
         imagesDisplay.innerHTML = userData.images.map((img, i) => `<div class=\"outfit-image\"><img src=\"${img}\" alt=\"Outfit ${i+1}\"></div>`).join('');
+      }
+      // Images for magazine cover (first image as cover)
+      const coverImageSection = document.getElementById('cover-image-section');
+      if (userData && userData.images && userData.images.length && coverImageSection) {
+        coverImageSection.innerHTML = `<img class="cover-image" src="${userData.images[0]}" alt="Magazine Cover">`;
+      } else if (coverImageSection) {
+        coverImageSection.innerHTML = '<div class="cover-placeholder">No Image Uploaded</div>';
       }
       // Style profile
       const styleData = document.getElementById('style-data');
