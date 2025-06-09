@@ -273,7 +273,7 @@
 
       try {
         // Store data for output page
-        localStorage.setItem('fashionIqData', JSON.stringify(formData));
+        localStorage.setItem('fashionIqInput', JSON.stringify(formData));
         
         // Make API call to worker
         const response = await fetch('https://fashion.4hm7q4q75z.workers.dev/', {

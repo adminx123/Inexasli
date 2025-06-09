@@ -327,7 +327,7 @@
         .replace(/\n/g, '<br>');
       fashionContent.innerHTML = `<div class=\"formatted-response\"><p>${formattedContent}</p></div>`;
       // Images
-      const userData = getJSON('fashionIQData');
+      const userData = getJSON('fashionIqInput');
       const imagesDisplay = document.getElementById('images-display');
       if (userData && userData.images && imagesDisplay) {
         imagesDisplay.innerHTML = userData.images.map((img, i) => `<div class=\"outfit-image\"><img src=\"${img}\" alt=\"Outfit ${i+1}\"></div>`).join('');
