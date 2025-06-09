@@ -153,13 +153,11 @@ function processImagesForAPI(images) {
     const mimeType = matches[1];
     const base64Data = matches[2];
     
-    // Try X.AI's specific format - maybe they want just the base64 without data URL
+    // Try X.AI's expected format - similar to OpenAI vision format
     return {
-      type: "image",
-      source: {
-        type: "base64",
-        media_type: mimeType,
-        data: base64Data
+      type: "image_url",
+      image_url: {
+        url: imageData  // Send the full data URL
       }
     };
   });
