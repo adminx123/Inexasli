@@ -82,7 +82,7 @@
     <div class="image-upload-container">
         <div class="upload-area" id="fashion-upload-area">
             <i class="fas fa-camera upload-icon"></i>
-            <p>Drop your outfit photos here or click to upload</p>
+            <p>Click here to upload photos or drag and drop</p>
             <p class="upload-hint">Upload 1-5 photos of yourself in different outfits</p>
             <input type="file" id="fashion-image-input" multiple accept="image/*" style="display: none;">
         </div>
@@ -276,7 +276,7 @@
         localStorage.setItem('fashionIqData', JSON.stringify(formData));
         
         // Make API call to worker
-        const response = await fetch('https://fashion.inexasli.workers.dev', {
+        const response = await fetch('https://fashion.4hm7q4q75z.workers.dev/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

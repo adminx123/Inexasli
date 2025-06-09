@@ -1,13 +1,7 @@
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
- * Unauthorized use,3. **SEASONAL & LOCATION APPROPRIATENESS**: Consider my location and season:
-   - Are these outfits appropriate for the current season/climate I'm in?
-   - Any weather-specific considerations (layering, fabric weight, breathability)?
-   - Regional fashion norms that might apply to my location
-   - Seasonal color palette considerations
-
-4. **INDIVIDUAL OUTFIT ANALYSIS**: For each outfit, provide:uction, distribution, or modification of this code 
+ * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
@@ -22,7 +16,7 @@ const CONFIG = {
     'https://inexasli.com'
   ],
   XAI_API_ENDPOINT: "https://api.x.ai/v1/chat/completions",
-  MODEL: "grok-3-mini-beta",
+  MODEL: "grok-2-vision-1212",
   MAX_TOKENS: 4000,
   RESPONSE_KEY: "fashionIQResponse"
 };
@@ -196,8 +190,9 @@ export default {
       return Responses.methodNotAllowed(origin);
     }
     
-    // Validate origin
-    if (!CONFIG.ALLOWED_ORIGINS.includes(origin)) {
+    // Validate origin (temporarily more permissive for debugging)
+    console.log('Request origin:', origin);
+    if (origin && !CONFIG.ALLOWED_ORIGINS.includes(origin) && !origin.includes('127.0.0.1') && !origin.includes('localhost')) {
       console.log('Unauthorized origin:', origin);
       return Responses.unauthorized();
     }
@@ -217,10 +212,22 @@ export default {
       }
       
       // Get API key from secret service
-      const secretResponse = await env.secret_binding.fetch('https://secret-worker.inexasli.workers.dev/secret/xai_key');
+      console.log('Attempting to fetch API key from secret service...');
+      const secretResponse = await env.secret_binding.fetch(new Request("https://placeholder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          secretName: "XAI_API_KEY"
+        })
+      }));
+      
       if (!secretResponse.ok) {
-        console.error('Failed to get API key');
-        return Responses.apiError('Failed to get API key', origin);
+        console.error('Failed to get API key. Status:', secretResponse.status);
+        const errorText = await secretResponse.text();
+        console.error('Secret service error:', errorText);
+        return Responses.apiError(`Failed to get API key: ${secretResponse.status}`, origin);
       }
       
       const secretData = await secretResponse.json();
