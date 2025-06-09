@@ -757,13 +757,7 @@
           
           console.log('Data displayed successfully');
         } else {
-          outputSpan.innerHTML = `
-            <div class="no-data">
-              <div class="no-data-icon">🚫</div>
-              <div class="no-data-message">No Response Found</div>
-              <div class="no-data-help">Please try again.</div>
-            </div>
-          `;
+          outputSpan.innerHTML = '';
           console.log('No data found for key:', responseKey);
         }
       }
