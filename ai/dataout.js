@@ -234,6 +234,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/decision/decisioniq.html': '/ai/decision/decisionoutput.html',
                 '/ai/enneagram/enneagramiq.html': '/ai/enneagram/enneagramoutput.html',
                 '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
+                '/ai/fashion/fashioniq.html': '/ai/fashion/fashionoutput.html', // Added this line
                 '/ai/income/incomeiq.html': '/ai/income/incomeoutput.html',
                 '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
                 '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
