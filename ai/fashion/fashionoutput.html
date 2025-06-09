@@ -293,11 +293,44 @@
 
     function loadAndDisplayResults() {
       try {
-        // Load the API response
-        const response = localStorage.getItem('fashionIQResponse');
-        const inputData = localStorage.getItem('fashionIQData');
+        // Define the getJSON helper function
+        const getJSON = window.getJSON || function(key) {
+          try {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+          } catch (e) {
+            console.error('Error parsing JSON:', e);
+            return null;
+          }
+        };
+
+        // Look for fashion response with correct key (lowercase 'q')
+        const responseKey = 'fashionIqResponse';
+        console.log('Looking for data with key:', responseKey);
         
-        if (!response) {
+        // Try several approaches to get the data
+        let fashionData;
+        try {
+          fashionData = getJSON(responseKey);
+          if (!fashionData) {
+            // Fallback to direct localStorage access
+            const rawData = localStorage.getItem(responseKey);
+            if (rawData) {
+              fashionData = JSON.parse(rawData);
+              console.log('Retrieved fashion data directly from localStorage');
+            }
+          }
+          
+          // Handle nested response format if present
+          if (fashionData && fashionData.message === 'Success' && fashionData.data) {
+            console.log('Found nested data structure, using the data property');
+            fashionData = fashionData.data;
+          }
+        } catch (err) {
+          console.error('Error getting fashion data:', err);
+        }
+        
+        if (!fashionData) {
           document.getElementById('fashion-content').innerHTML = `
             <div class="error-message">
               <i class="fas fa-exclamation-triangle"></i>
@@ -308,8 +341,8 @@
           return;
         }
 
-        const fashionData = JSON.parse(response);
-        const userData = inputData ? JSON.parse(inputData) : null;
+        // Get user input data
+        const userData = getJSON('fashionIQData');
 
         // Display uploaded images
         if (userData && userData.images) {
@@ -321,18 +354,43 @@
           displayStyleProfile(userData);
         }
 
-        // Format and display the AI response
+        // Debug: Log the response structure
+        console.log('Fashion response structure:', fashionData);
+        
+        // Format and display the AI response - handle multiple formats
+        let content = null;
+        
         if (fashionData.choices && fashionData.choices[0] && fashionData.choices[0].message) {
-          const content = fashionData.choices[0].message.content;
-          displayFormattedResponse(content);
+          // OpenAI/X.AI format
+          content = fashionData.choices[0].message.content;
+          console.log('Using OpenAI format response');
         } else if (fashionData.content) {
-          displayFormattedResponse(fashionData.content);
+          // Direct content format
+          content = fashionData.content;
+          console.log('Using direct content format');
+        } else if (fashionData.fashionAnalysis) {
+          // Custom fashion analysis format
+          content = fashionData.fashionAnalysis;
+          console.log('Using fashion analysis format');
+        } else if (typeof fashionData === 'string') {
+          // String response
+          content = fashionData;
+          console.log('Using string response format');
+        }
+        
+        if (content) {
+          displayFormattedResponse(content);
         } else {
+          console.error('No valid content found in response:', fashionData);
           document.getElementById('fashion-content').innerHTML = `
             <div class="error-message">
               <i class="fas fa-exclamation-triangle"></i>
               <h3>Invalid Response Format</h3>
               <p>The response format was not recognized. Please try again.</p>
+              <div class="data-section">
+                <div class="data-label">Debug Info:</div>
+                <pre>${JSON.stringify(fashionData, null, 2)}</pre>
+              </div>
             </div>
           `;
         }
@@ -439,14 +497,14 @@
 
     function tryAgain() {
       if (confirm('Are you sure you want to start a new fashion analysis? Your current results will be lost.')) {
-        localStorage.removeItem('fashionIQResponse');
+        localStorage.removeItem('fashionIqResponse');
         localStorage.removeItem('fashionIQData');
         window.location.href = 'fashioniq.html';
       }
     }
 
     function saveResults() {
-      const response = localStorage.getItem('fashionIQResponse');
+      const response = localStorage.getItem('fashionIqResponse');
       if (!response) {
         alert('No results to save.');
         return;
