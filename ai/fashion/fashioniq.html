@@ -291,10 +291,19 @@
         const result = await response.json();
         console.log('API response:', result);
 
-        // Store response and redirect
+        // Store response
         localStorage.setItem('fashionIqResponse', JSON.stringify(result));
-        // Force absolute path to prevent context issues
-        window.location.href = '/ai/fashion/fashionoutput.html?t=' + Date.now();
+
+        // Dispatch an event to notify dataout.js that a response was received
+        const event = new CustomEvent('api-response-received', {
+          detail: {
+            module: 'fashioniq', // Ensure this matches the key in moduleOutputMap in dataout.js
+            type: 'worker-response',
+            timestamp: Date.now()
+          }
+        });
+        document.dispatchEvent(event);
+        console.log('[FashionIQ] Dispatched api-response-received event');
 
       } catch (error) {
         console.error('Error calling API:', error);
