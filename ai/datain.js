@@ -186,22 +186,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     let dataContainer = null;
 
-    // Listen for dataout expansion/collapse
-    // REMOVED dataout-state-changed event listener block to simplify z-index management
-    // document.addEventListener('dataout-state-changed', function(event) {
-    //     if (!dataContainer) return;
-        
-    //     const dataOutState = event.detail.state;
-    //     if (dataOutState === 'expanded') {
-    //         // When dataout is expanded, make datain appear above it
-    //         dataContainer.style.zIndex = '12000';
-    //     } else {
-    //         // When dataout is collapsed, reset datain's z-index
-    //         if (dataContainer.dataset.state !== 'expanded') {
-    //             dataContainer.style.zIndex = '10000';
-    //         }
-    //     }
-    // });
+
 
     async function loadStoredContent(url) {
         try {
@@ -818,28 +803,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    // Re-add grid item initialization logic, but delegate toggle and persistence to FormPersistence
-    // function initializeGridItems() {
-    //     const gridItems = document.querySelectorAll('.grid-container .grid-item');
-    //     gridItems.forEach(item => {
-    //         if (!item.dataset.value) return;
-    //         item.removeEventListener('click', handleGridItemClick);
-    //         item.addEventListener('click', handleGridItemClick);
-    //     });
-    //     function handleGridItemClick() {
-    //         // Let FormPersistence handle selection logic and persistence
-    //         const toggleEvent = new CustomEvent('grid-item-toggled', { detail: { item: this } });
-    //         document.dispatchEvent(toggleEvent);
-    //     }
-    // }
 
-    // Call initializeGridItems after content load and on DOMContentLoaded
-    // document.addEventListener('data-in-loaded', function() {
-    //     initializeGridItems();
-    // });
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     initializeGridItems();
-    // });
 
     // Toggle function for the data container - moved to broader scope for utility buttons
     function toggleDataContainer() {
