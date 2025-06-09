@@ -101,7 +101,7 @@ function validateRequest(data) {
   
   return errors;
 }
-  
+
 // Format the incoming data into a structured prompt
 function generatePrompt(formData) {
   // Create a concise prompt without including image data
@@ -116,12 +116,12 @@ function generatePrompt(formData) {
 - Personal Style: ${formData['personal-style'] || 'not specified'}
 
 ## ANALYSIS REQUIREMENTS
-1. BODY TYPE ANALYSIS: Determine body shape and styling recommendations
-2. COLOR ANALYSIS: Assess colors that complement skin tone and hair
-3. FIT & SILHOUETTE: Evaluate garment fit and suggest improvements
-4. STYLE CONSISTENCY: Rate outfit coherence and personal style alignment
-5. OCCASION APPROPRIATENESS: Assess suitability for stated occasion and climate
-6. IMPROVEMENT SUGGESTIONS: Provide specific, actionable recommendations
+1. **BODY TYPE ANALYSIS**: Determine body shape and styling recommendations
+2. **COLOR ANALYSIS**: Assess colors that complement skin tone and hair
+3. **FIT & SILHOUETTE**: Evaluate garment fit and suggest improvements
+4. **STYLE CONSISTENCY**: Rate outfit coherence and personal style alignment
+5. **OCCASION APPROPRIATENESS**: Assess suitability for stated occasion and climate
+6. **IMPROVEMENT SUGGESTIONS**: Provide specific, actionable recommendations
 
 ## OUTPUT FORMAT
 - Rate each outfit (1-10) with detailed explanation
