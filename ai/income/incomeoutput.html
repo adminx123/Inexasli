@@ -1,3 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IncomeIQ Analysis Results</title>
+  
+  <!-- Preconnect and font links -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/outputstyles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
+    
+    .income-display {
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: normal;
+    }
+    
+    .income-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    /* Professional Financial Report Styling */
+    .summary-container, .summary-container1 {
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .summary-container details, .summary-container1 details {
+      margin: 0;
+    }
+    
+    .summary-container summary, .summary-container1 summary {
+      padding: 15px 20px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+      background: #f8f9fa;
+      border-radius: 8px 8px 0 0;
+      font-weight: 600;
+      transition: background-color 0.2s ease;
+    }
+    
+    .summary-container summary:hover, .summary-container1 summary:hover {
+      background: #e9ecef;
+    }
+    
+    .summary-container details[open] summary, .summary-container1 details[open] summary {
+      border-radius: 8px 8px 0 0;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .summary-container h2, .summary-container1 h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+    }
+    
+    /* Subsection styling */
+    .summary-container details details summary,
+    .summary-container1 details details summary {
+      padding: 10px 15px;
+      background: #f1f3f4;
+      border-radius: 4px;
+      margin: 5px 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .summary-container details details summary:hover,
+    .summary-container1 details details summary:hover {
+      background: #e8eaed;
+    }
+    
+    /* Content areas */
+    .summary-container div[style*="margin-left: 21px"],
+    .summary-container1 div[style*="margin-left: 21px"],
+    .summary-container div[style*="margin-left: 34px"],
+    .summary-container1 div[style*="margin-left: 34px"] {
+      padding: 15px 20px;
+    }
+    
+    /* Financial metrics styling */
+    .financial-metric {
+      background: white;
+      color: #2c5530;
+      border: 2px solid #4a7c59;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(74, 124, 89, 0.15);
+    }
+    
+    /* Recommendation cards */
+    .recommendation-highlight {
+      background: linear-gradient(135deg, #fff9e6 0%, #fef3cd 100%);
+      border-left: 5px solid #ffc107;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 2px 6px rgba(255, 193, 7, 0.2);
+    }
+    
+    .ai-insight {
+      background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+      border-left: 5px solid #007bff;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+    }
+    
+    .action-item {
+      background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+      border-left: 5px solid #28a745;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
+    }
+    
+    /* Icon styling */
+    .section-icon {
+      font-size: 1.2em;
+      margin-right: 10px;
+      color: #4a7c59;
+    }
+    
+    /* Methodology section */
+    .methodology-content {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 20px;
+      font-size: 0.9em;
+      line-height: 1.6;
+      color: #6c757d;
+    }
+    
+    /* Professional typography */
+    h2 {
+      font-family: "Playfair Display", serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    
+    h3 {
+      font-family: "Inter", sans-serif;
+      font-weight: 500;
+    }
+    
+    p {
+      font-family: "Inter", sans-serif;
+      line-height: 1.6;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .summary-container summary, .summary-container1 summary {
+        padding: 12px 15px;
+      }
+      
+      .summary-container h2, .summary-container1 h2 {
+        font-size: 16px;
+      }
+      
+      .recommendation-highlight,
+      .ai-insight,
+      .action-item {
+        padding: 15px;
+        margin: 10px 0;
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+   
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- include centralized copy utility -->
+  <script src="../../utility/copy.js"></script>
+  <script src="../../utility/enhancedUI.js"></script>
+</head>
+<body>
+  <!-- Main content container with ID for accessibility -->
+  <div id="main-content" class="device-container income-container">
+    <div class="output-wrapper">
+      <div id="output-span" class="api-output">Loading...</div>
+    </div>
+  </div>
+
 <!--
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
@@ -8,7 +215,8 @@
  * jurisdictions worldwide.
  -->
 
-<div class="device-container">
+<!-- Legacy content for reference -->
+<div class="device-container" style="display: none;">
     <!-- Results Header -->
     <div class="benefit-card">
         <h2 style="text-align:center">| IncomeIQ™ Results |</h2>
@@ -126,138 +334,549 @@
  * jurisdictions worldwide.
 */
 
-// Import FormPersistence for accessing saved data
-import { FormPersistence } from '/utility/formPersistence.js';
-
 (function() {
-    console.log("[IncomeOutput] Initializing results page");
+    console.log('IncomeIQ API Output script running');
+    
+    // Reference the global utility functions
+    const getLocal = window.getLocal || function(key) {
+      try {
+        const value = localStorage.getItem(key);
+        return value ? decodeURIComponent(value) : null;
+      } catch (e) {
+        console.error('Error getting local value:', e);
+        return null;
+      }
+    };
 
-    let formPersistence = null;
+    const getJSON = window.getJSON || function(key) {
+      try {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : null;
+      } catch (e) {
+        console.error('Error parsing JSON:', e);
+        return null;
+      }
+    };
 
-    function init() {
-        try {
-            // Initialize FormPersistence to access saved data and responses
-            formPersistence = FormPersistence.getInstance('income');
+    // Try to get span element - might be delayed
+    function updateOutput() {
+      const outputSpan = document.getElementById('output-span');
+      if (!outputSpan) {
+        console.log('Output span not found, will retry');
+        setTimeout(updateOutput, 100);
+        return;
+      }
+
+      // Specifically look for incomeIqResponse data
+      const responseKey = 'incomeIqResponse';
+      console.log('Looking for data with key:', responseKey);
+      
+      // Try several approaches to get the data
+      let data;
+      try {
+        data = getJSON(responseKey);
+        if (!data) {
+          // Fallback to direct localStorage access
+          const rawData = localStorage.getItem(responseKey);
+          if (rawData) {
+            data = JSON.parse(rawData);
+            console.log('Retrieved data directly from localStorage');
+          }
+        }
+        
+        // Handle nested response format if present
+        if (data && data.message === 'Success' && data.data) {
+          console.log('Found nested data structure, using the data property');
+          data = data.data;
+        }
+      } catch (err) {
+        console.error('Error getting data:', err);
+      }
+      
+      if (data) {
+        if (data.incomeAnalysis) {
+          try {
+            // incomeAnalysis is now a parsed object from the worker
+            let incomeAnalysis = data.incomeAnalysis;
             
-            // Check for saved response data
-            const responseData = formPersistence.getSavedResponseData();
-            
-            if (responseData) {
-                console.log("[IncomeOutput] Found saved response data:", responseData);
-                displayResults(responseData);
-            } else {
-                console.log("[IncomeOutput] No saved response data found, checking for input data");
+            // Handle both old (string) and new (object) formats for backward compatibility
+            if (typeof incomeAnalysis === 'string') {
+              console.log('Legacy format detected - parsing JSON string');
+              console.log('Raw incomeAnalysis string length:', incomeAnalysis.length);
+              console.log('Raw incomeAnalysis string (first 500 chars):', incomeAnalysis.substring(0, 500));
+              
+              // Check if the string appears to be truncated
+              if (!incomeAnalysis.endsWith('}')) {
+                console.warn('JSON appears to be truncated - attempting to fix...');
                 
-                // Check if we have input data to process
-                const inputData = formPersistence.getSavedFormData();
-                if (inputData && Object.keys(inputData).length > 0) {
-                    console.log("[IncomeOutput] Found input data, waiting for AI response");
-                    // Keep loading state - AI response should come via dataout.js
-                    waitForAiResponse();
+                // Try to find the last complete object and truncate there
+                let lastCompleteObject = incomeAnalysis.lastIndexOf('}}');
+                if (lastCompleteObject > 0) {
+                  incomeAnalysis = incomeAnalysis.substring(0, lastCompleteObject + 2);
+                  console.log('Truncated to last complete object');
                 } else {
-                    showError("No financial data found. Please complete the IncomeIQ form first.");
+                  // If that doesn't work, try to close with a basic structure
+                  if (incomeAnalysis.includes('"recommendations"')) {
+                    incomeAnalysis = incomeAnalysis.split('"recommendations"')[0] + '"recommendations": []}';
+                  } else if (incomeAnalysis.includes('"summary"')) {
+                    incomeAnalysis = incomeAnalysis.split('"summary"')[0] + '"summary": "Analysis complete"}';
+                  } else {
+                    incomeAnalysis += '}';
+                  }
+                  console.log('Applied basic JSON closure');
                 }
-            }
-        } catch (error) {
-            console.error("[IncomeOutput] Initialization error:", error);
-            showError("Unable to load your financial analysis. Please try again.");
-        }
-    }
-
-    function waitForAiResponse() {
-        // Listen for AI response from dataout.js
-        document.addEventListener('ai-response-received', function(event) {
-            if (event.detail && event.detail.module === 'income') {
-                console.log("[IncomeOutput] Received AI response:", event.detail.response);
-                displayResults(event.detail.response);
-                
-                // Save the response for future viewing
-                if (formPersistence) {
-                    formPersistence.saveResponseData(event.detail.response);
-                }
-            }
-        });
-
-        // Timeout after 30 seconds
-        setTimeout(() => {
-            const loadingDiv = document.getElementById('income-loading');
-            if (loadingDiv && loadingDiv.style.display !== 'none') {
-                showError("Analysis timed out. Please try again.");
-            }
-        }, 30000);
-    }
-
-    function displayResults(responseData) {
-        console.log("[IncomeOutput] Displaying results:", responseData);
-        
-        // Hide loading state
-        document.getElementById('income-loading').style.display = 'none';
-        
-        // Show results container
-        document.getElementById('income-results').style.display = 'block';
-        
-        // Show save button
-        document.getElementById('save-report-btn').style.display = 'inline-block';
-
-        try {
-            // Parse response if it's a string
-            const data = typeof responseData === 'string' ? JSON.parse(responseData) : responseData;
-            
-            // Populate content sections
-            populateSection('income-summary-content', data.summary || data.financial_summary || 'Financial summary not available.');
-            populateSection('income-analysis-content', data.income_analysis || data.income || 'Income analysis not available.');
-            populateSection('expense-analysis-content', data.expense_analysis || data.expenses || 'Expense analysis not available.');
-            populateSection('networth-analysis-content', data.networth_analysis || data.net_worth || 'Net worth analysis not available.');
-            populateSection('recommendations-content', data.recommendations || data.advice || 'Recommendations not available.');
-            
-        } catch (error) {
-            console.error("[IncomeOutput] Error parsing response data:", error);
-            
-            // Fallback: display raw response
-            document.getElementById('income-summary-content').innerHTML = '<p>Raw AI Response:</p><pre>' + JSON.stringify(responseData, null, 2) + '</pre>';
-        }
-    }
-
-    function populateSection(elementId, content) {
-        const element = document.getElementById(elementId);
-        if (element && content) {
-            if (typeof content === 'string') {
-                element.innerHTML = '<p>' + content.replace(/\n/g, '</p><p>') + '</p>';
+              }
+              
+              incomeAnalysis = JSON.parse(incomeAnalysis);
+            } else if (typeof incomeAnalysis === 'object' && incomeAnalysis !== null) {
+              console.log('New format detected - using parsed object directly');
             } else {
-                element.innerHTML = '<pre>' + JSON.stringify(content, null, 2) + '</pre>';
+              throw new Error('Invalid incomeAnalysis format - expected object or JSON string');
             }
+            
+            console.log('Final income analysis object:', incomeAnalysis);
+            displayEnhancedIncomeAnalysis(incomeAnalysis, outputSpan);
+            
+          } catch (parseError) {
+            console.error('Error processing incomeAnalysis:', parseError);
+            
+            // Enhanced error display with better diagnostics
+            const isString = typeof data.incomeAnalysis === 'string';
+            const dataPreview = isString ? 
+              data.incomeAnalysis.substring(0, 500) : 
+              JSON.stringify(data.incomeAnalysis, null, 2).substring(0, 500);
+            
+            outputSpan.innerHTML = `<div style="color: red; padding: 20px;">
+              <h3>Error processing financial data:</h3>
+              <p><strong>Error:</strong> ${parseError.message}</p>
+              <h4>Data Type:</h4>
+              <p>${typeof data.incomeAnalysis} ${isString ? `(${data.incomeAnalysis.length} characters)` : ''}</p>
+              <h4>Data Preview (first 500 characters):</h4>
+              <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; max-height: 200px;">${dataPreview}</pre>
+              ${isString ? `<h4>Last 200 characters:</h4>
+              <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; max-height: 200px;">${data.incomeAnalysis.substring(data.incomeAnalysis.length - 200)}</pre>` : ''}
+              <p style="margin-top: 15px; padding: 10px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px;">
+                <strong>💡 Status:</strong> The worker now returns parsed objects instead of JSON strings. 
+                ${isString ? 'This appears to be an old format response.' : 'This should be a parsed object but processing failed.'}
+              </p>
+            </div>`;
+          }
+        } else if (typeof data === 'object' && data !== null) {
+          // Use pretty formatting for other complex objects
+          outputSpan.textContent = JSON.stringify(data, null, 2);
+        } else {
+          outputSpan.textContent = data;
         }
+        console.log('Data displayed successfully');
+      } else {
+        outputSpan.innerHTML = '';
+        console.log('No data found for key:', responseKey);
+      }
     }
-
-    function showError(message) {
-        console.error("[IncomeOutput] Error:", message);
-        
-        // Hide loading and results
-        document.getElementById('income-loading').style.display = 'none';
-        document.getElementById('income-results').style.display = 'none';
-        
-        // Show error
-        document.getElementById('income-error').style.display = 'block';
-        document.getElementById('income-error-message').textContent = message;
-    }
-
-    // Setup save report functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const saveBtn = document.getElementById('save-report-btn');
-        if (saveBtn) {
-            saveBtn.addEventListener('click', function() {
-                // Implement save functionality (could save as PDF, download, etc.)
-                alert('Save functionality will be implemented here.');
-            });
+    
+    // Start the update process
+    updateOutput();
+    // Initialize copy button as image download
+    copyUtil.init({ containerId: 'output-span', mode: 'image' });
+    
+    // Initialize enhanced UI system
+    function initEnhancedUISystem() {
+      // Wait a bit to ensure DOM and containers are ready
+      setTimeout(() => {
+        // Initialize the enhanced UI with embed detection
+        if (window.enhancedUI) {
+          window.enhancedUI.init({
+            containerId: 'output-span',
+            scrollToTop: true,
+            embedEnforcement: true,
+            accessibility: true
+          });
+        } else {
+          console.warn('Enhanced UI system not loaded');
         }
-    });
-
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
+      }, 100);
+    }
+    
+    // Initialize enhanced UI system after content loads
+    initEnhancedUISystem();
+    
+    // Currency symbol function (from summary.html)
+    function getCurrencySymbol(country) {
+      const currencyMap = {
+        'USA': '$', 'CAN': '$', 'GBR': '£', 'EUR': '€', 'JPN': '¥', 'CHN': '¥',
+        'AUS': '$', 'NZL': '$', 'IND': '₹', 'BRA': 'R$', 'ZAF': 'R', 'RUS': '₽',
+        'MEX': '$', 'SGP': '$', 'CHE': 'CHF'
+      };
+      return currencyMap[country] || '$';
     }
 
+    function getCurrentCurrencySymbol() {
+      let country;
+      try {
+        const introData = JSON.parse(localStorage.getItem('introDataJSON'));
+        if (introData && introData.country) {
+          country = introData.country;
+        }
+      } catch (e) {
+        console.error('Error parsing introDataJSON:', e);
+      }
+      if (!country) {
+        country = getLocal('RegionDropdown') || 'USA';
+      }
+      return getCurrencySymbol(country);
+    }
+
+    function displayEnhancedIncomeAnalysis(incomeData, outputElement) {
+      outputElement.innerHTML = '';
+      outputElement.classList.add('income-display');
+      
+      const container = document.createElement('div');
+      container.style.cssText = 'max-width: 480px; margin: 0 auto; font-family: "Inter", sans-serif;';
+      
+      // Get currency symbol and financial metrics from localStorage
+      const currencySymbol = getCurrentCurrencySymbol();
+      const financialMetrics = {
+        totalTaxes: parseFloat(getLocal('total_taxes')) || 0,
+        totalContributions: parseFloat(getLocal('total_contributions')) || 0,
+        annualIncome: parseFloat(getLocal('ANNUALINCOME')) || 0,
+        annualExpenses: parseFloat(getLocal('ANNUALEXPENSESUM')) || 0,
+        disposableIncome: parseFloat(getLocal('DISPOSABLEINCOME')) || 0,
+        assets: parseFloat(getLocal('ASSETS')) || 0,
+        liabilities: parseFloat(getLocal('LIABILITIES')) || 0,
+        netWorth: (parseFloat(getLocal('ASSETS')) || 0) - (parseFloat(getLocal('LIABILITIES')) || 0),
+        debtToIncome: parseFloat(getLocal('DEBTTOINCOME')) || 0,
+        fireRatio: parseFloat(getLocal('FIRERATIO')) || 0,
+        housingToIncome: parseFloat(getLocal('HOUSINGTOINCOME')) || 0,
+        savingsToDebt: parseFloat(getLocal('SAVINGSTODEBT')) || 0
+      };
+      
+      // Header with AI branding
+      const header = document.createElement('div');
+      header.innerHTML = `
+        <h3 style="text-align: center; font-size: 20px; color: rgb(0, 0, 0); margin-bottom: 10px; font-weight: bold;">
+          <i class="fas fa-brain" style="margin-right: 8px; color: #4a7c59;"></i>
+          IncomeIQ™ AI Financial Report
+        </h3>
+        <div style="text-align: center; font-size: 0.9em; color: #fff; background: #333; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+          AI-generated insights based on your financial data. Not financial advice. Consult professionals for major decisions.
+        </div>
+      `;
+      container.appendChild(header);
+
+      // Financial Summary Section with Metrics
+      const summaryContainer = document.createElement('div');
+      summaryContainer.className = 'summary-container';
+      summaryContainer.style.cssText = 'margin-bottom: 20px;';
+      
+      // Calculate key metrics
+      const netCashFlow = financialMetrics.annualIncome - financialMetrics.annualExpenses - financialMetrics.totalTaxes - financialMetrics.totalContributions;
+      
+      summaryContainer.innerHTML = `
+        <details style="margin-top:10px;" open>
+          <summary>
+            <h2 style="display: inline; color: #333;">
+              <i class="fas fa-chart-line" style="margin-right: 8px; color: #4a7c59;"></i>
+              FINANCIAL OVERVIEW
+            </h2>
+          </summary>
+          
+          <!-- Key Financial Metrics -->
+          <div style="margin-left: 21px; margin-top: 15px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px;">
+              <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; text-align: center; border-left: 4px solid #4a7c59;">
+                <strong style="display: block; color: #4a7c59; font-size: 0.9em;">ANNUAL INCOME</strong>
+                <span style="font-size: 1.1em; font-weight: bold;">${currencySymbol}${financialMetrics.annualIncome.toFixed(2)}</span>
+              </div>
+              <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; text-align: center; border-left: 4px solid #dc3545;">
+                <strong style="display: block; color: #dc3545; font-size: 0.9em;">ANNUAL EXPENSES</strong>
+                <span style="font-size: 1.1em; font-weight: bold;">${currencySymbol}${financialMetrics.annualExpenses.toFixed(2)}</span>
+              </div>
+              <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; text-align: center; border-left: 4px solid ${netCashFlow >= 0 ? '#28a745' : '#dc3545'};">
+                <strong style="display: block; color: ${netCashFlow >= 0 ? '#28a745' : '#dc3545'}; font-size: 0.9em;">NET CASH FLOW</strong>
+                <span style="font-size: 1.1em; font-weight: bold;">${currencySymbol}${netCashFlow.toFixed(2)}</span>
+              </div>
+            </div>
+            
+            ${incomeData.summary || incomeData.financial_summary ? `
+              <div style="padding: 15px; background: #e8f5e8; border-radius: 5px; border-left: 4px solid #4a7c59;">
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                  <i class="fas fa-robot" style="margin-right: 8px; color: #4a7c59;"></i>
+                  <strong style="color: #333;">AI Financial Summary</strong>
+                </div>
+                <p style="margin: 0; line-height: 1.6; color: #555;">
+                  ${incomeData.summary || incomeData.financial_summary}
+                </p>
+              </div>
+            ` : ''}
+          </div>
+        </details>
+      `;
+      container.appendChild(summaryContainer);
+
+      // Income & Expenses Section
+      const incomeExpenseContainer = document.createElement('div');
+      incomeExpenseContainer.className = 'summary-container1';
+      incomeExpenseContainer.style.cssText = 'margin-bottom: 20px;';
+      
+      incomeExpenseContainer.innerHTML = `
+        <details style="margin-top:10px;" open>
+          <summary>
+            <h2 style="display: inline; color: #333;">
+              <i class="fas fa-money-bill-wave" style="margin-right: 8px; color: #4a7c59;"></i>
+              INCOME & EXPENSES
+            </h2>
+          </summary>
+          
+          ${incomeData.income_analysis || incomeData.income ? `
+            <details style="margin-top:10px;">
+              <summary>
+                <p style="margin-left:21px;">
+                  <u><strong>Income Analysis:</strong></u>
+                </p>
+              </summary>
+              <div style="margin-left: 34px; padding: 10px; background: #f2f9f3; border-radius: 5px; margin-top: 5px;">
+                <p style="margin: 0; line-height: 1.6; color: #555;">
+                  ${incomeData.income_analysis || incomeData.income}
+                </p>
+              </div>
+            </details>
+          ` : ''}
+          
+          ${incomeData.expense_analysis || incomeData.expenses ? `
+            <details style="margin-top:10px;">
+              <summary>
+                <p style="margin-left:21px;">
+                  <u><strong>Expense Analysis:</strong></u>
+                </p>
+              </summary>
+              <div style="margin-left: 34px; padding: 10px; background: #fff3cd; border-radius: 5px; margin-top: 5px;">
+                <p style="margin: 0; line-height: 1.6; color: #555;">
+                  ${incomeData.expense_analysis || incomeData.expenses}
+                </p>
+              </div>
+            </details>
+          ` : ''}
+        </details>
+      `;
+      container.appendChild(incomeExpenseContainer);
+
+      // Wealth Section with Metrics
+      const wealthContainer = document.createElement('div');
+      wealthContainer.className = 'summary-container';
+      wealthContainer.style.cssText = 'margin-bottom: 20px;';
+      
+      wealthContainer.innerHTML = `
+        <details style="margin-top:10px;" open>
+          <summary>
+            <h2 style="display: inline; color: #333;">
+              <i class="fas fa-chart-pie" style="margin-right: 8px; color: #4a7c59;"></i>
+              WEALTH ANALYSIS
+            </h2>
+          </summary>
+          
+          <!-- Wealth Metrics Grid -->
+          <div style="margin-left: 21px; margin-top: 15px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 15px;">
+              <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; text-align: center; border-left: 4px solid #28a745;">
+                <strong style="display: block; color: #28a745; font-size: 0.9em;">ASSETS</strong>
+                <span style="font-size: 1.1em; font-weight: bold;">${currencySymbol}${financialMetrics.assets.toFixed(2)}</span>
+              </div>
+              <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; text-align: center; border-left: 4px solid #dc3545;">
+                <strong style="display: block; color: #dc3545; font-size: 0.9em;">LIABILITIES</strong>
+                <span style="font-size: 1.1em; font-weight: bold;">${currencySymbol}${financialMetrics.liabilities.toFixed(2)}</span>
+              </div>
+              <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; text-align: center; border-left: 4px solid ${financialMetrics.netWorth >= 0 ? '#4a7c59' : '#dc3545'};">
+                <strong style="display: block; color: ${financialMetrics.netWorth >= 0 ? '#4a7c59' : '#dc3545'}; font-size: 0.9em;">NET WORTH</strong>
+                <span style="font-size: 1.1em; font-weight: bold;">${currencySymbol}${financialMetrics.netWorth.toFixed(2)}</span>
+              </div>
+            </div>
+            
+            ${incomeData.networth_analysis || incomeData.net_worth ? `
+              <div style="padding: 15px; background: #e8f5e8; border-radius: 5px; border-left: 4px solid #4a7c59;">
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                  <i class="fas fa-robot" style="margin-right: 8px; color: #4a7c59;"></i>
+                  <strong style="color: #333;">AI Wealth Analysis</strong>
+                </div>
+                <p style="margin: 0; line-height: 1.6; color: #555;">
+                  ${incomeData.networth_analysis || incomeData.net_worth}
+                </p>
+              </div>
+            ` : ''}
+          </div>
+        </details>
+      `;
+      container.appendChild(wealthContainer);
+
+      // Financial Ratios Section (with calculated metrics)
+      const ratiosContainer = document.createElement('div');
+      ratiosContainer.className = 'summary-container';
+      ratiosContainer.style.cssText = 'margin-bottom: 20px;';
+      
+      ratiosContainer.innerHTML = `
+        <details style="margin-top:10px;">
+          <summary>
+            <h2 style="display: inline; color: #333;">
+              <i class="fas fa-calculator" style="margin-right: 8px; color: #4a7c59;"></i>
+              FINANCIAL RATIOS
+            </h2>
+          </summary>
+          
+          <!-- Ratios Grid -->
+          <div style="margin-left: 21px; margin-top: 15px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 15px;">
+              <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; text-align: center; border-left: 4px solid ${financialMetrics.debtToIncome > 0.36 ? '#dc3545' : financialMetrics.debtToIncome > 0.20 ? '#ffc107' : '#28a745'};">
+                <strong style="display: block; color: #333; font-size: 0.9em;">DEBT TO INCOME</strong>
+                <span style="font-size: 1.1em; font-weight: bold;">${financialMetrics.debtToIncome.toFixed(2)}</span>
+                <div style="font-size: 0.8em; color: #666; margin-top: 2px;">
+                  ${financialMetrics.debtToIncome > 0.36 ? 'High Risk' : financialMetrics.debtToIncome > 0.20 ? 'Moderate' : 'Healthy'}
+                </div>
+              </div>
+              <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; text-align: center; border-left: 4px solid ${financialMetrics.fireRatio >= 1.0 ? '#28a745' : financialMetrics.fireRatio >= 0.25 ? '#ffc107' : '#dc3545'};">
+                <strong style="display: block; color: #333; font-size: 0.9em;">FIRE RATIO</strong>
+                <span style="font-size: 1.1em; font-weight: bold;">${financialMetrics.fireRatio.toFixed(2)}</span>
+                <div style="font-size: 0.8em; color: #666; margin-top: 2px;">
+                  ${financialMetrics.fireRatio >= 1.0 ? 'Independent' : financialMetrics.fireRatio >= 0.25 ? 'Progress' : 'Early Stage'}
+                </div>
+              </div>
+              <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; text-align: center; border-left: 4px solid ${financialMetrics.housingToIncome > 0.35 ? '#dc3545' : financialMetrics.housingToIncome > 0.28 ? '#ffc107' : '#28a745'};">
+                <strong style="display: block; color: #333; font-size: 0.9em;">HOUSING TO INCOME</strong>
+                <span style="font-size: 1.1em; font-weight: bold;">${financialMetrics.housingToIncome.toFixed(2)}</span>
+                <div style="font-size: 0.8em; color: #666; margin-top: 2px;">
+                  ${financialMetrics.housingToIncome > 0.35 ? 'High Burden' : financialMetrics.housingToIncome > 0.28 ? 'Typical' : 'Affordable'}
+                </div>
+              </div>
+              <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; text-align: center; border-left: 4px solid ${financialMetrics.savingsToDebt >= 2.0 ? '#28a745' : financialMetrics.savingsToDebt >= 1.0 ? '#ffc107' : '#dc3545'};">
+                <strong style="display: block; color: #333; font-size: 0.9em;">SAVINGS TO DEBT</strong>
+                <span style="font-size: 1.1em; font-weight: bold;">${financialMetrics.savingsToDebt.toFixed(2)}</span>
+                <div style="font-size: 0.8em; color: #666; margin-top: 2px;">
+                  ${financialMetrics.savingsToDebt >= 2.0 ? 'Strong' : financialMetrics.savingsToDebt >= 1.0 ? 'Typical' : 'Concern'}
+                </div>
+              </div>
+            </div>
+            
+            ${incomeData.ratios || incomeData.financial_ratios ? `
+              <div style="padding: 15px; background: #f0f8ff; border-radius: 5px; border-left: 4px solid #007bff;">
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                  <i class="fas fa-robot" style="margin-right: 8px; color: #4a7c59;"></i>
+                  <strong style="color: #333;">AI Ratio Analysis</strong>
+                </div>
+                <p style="margin: 0; line-height: 1.6; color: #555;">
+                  ${incomeData.ratios || incomeData.financial_ratios}
+                </p>
+              </div>
+            ` : ''}
+          </div>
+        </details>
+      `;
+      container.appendChild(ratiosContainer);
+
+      // AI Recommendations Section
+      if (incomeData.recommendations || incomeData.advice) {
+        const recommendationsContainer = document.createElement('div');
+        recommendationsContainer.className = 'summary-container';
+        recommendationsContainer.style.cssText = 'margin-bottom: 20px;';
+        
+        recommendationsContainer.innerHTML = `
+          <details style="margin-top:10px;" open>
+            <summary>
+              <h2 style="display: inline; color: #333;">
+                <i class="fas fa-lightbulb" style="margin-right: 8px; color: #4a7c59;"></i>
+                AI RECOMMENDATIONS
+              </h2>
+            </summary>
+            <div style="margin-left: 21px;">
+              <div style="padding: 15px; background: #fff9e6; border-left: 4px solid #ffc107; margin-top: 10px; border-radius: 0 5px 5px 0;">
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                  <i class="fas fa-robot" style="margin-right: 8px; color: #4a7c59;"></i>
+                  <strong style="color: #333;">Personalized Financial Guidance</strong>
+                </div>
+                <p style="margin: 0; line-height: 1.6; color: #555;">
+                  ${incomeData.recommendations || incomeData.advice}
+                </p>
+              </div>
+            </div>
+          </details>
+        `;
+        container.appendChild(recommendationsContainer);
+      }
+
+      // Key Insights Section (if available)
+      if (incomeData.insights || incomeData.key_findings) {
+        const insightsContainer = document.createElement('div');
+        insightsContainer.className = 'summary-container';
+        insightsContainer.style.cssText = 'margin-bottom: 20px;';
+        
+        insightsContainer.innerHTML = `
+          <details style="margin-top:10px;">
+            <summary>
+              <h2 style="display: inline; color: #333;">
+                <i class="fas fa-search" style="margin-right: 8px; color: #4a7c59;"></i>
+                KEY INSIGHTS
+              </h2>
+            </summary>
+            <div style="margin-left: 21px; padding: 15px; background: #f8f9fa; border-radius: 5px; margin-top: 10px; border-left: 4px solid #007bff;">
+              <p style="margin: 0; line-height: 1.6; color: #555;">
+                ${incomeData.insights || incomeData.key_findings}
+              </p>
+            </div>
+          </details>
+        `;
+        container.appendChild(insightsContainer);
+      }
+
+      // Action Items Section (if available)
+      if (incomeData.action_items || incomeData.next_steps) {
+        const actionContainer = document.createElement('div');
+        actionContainer.className = 'summary-container';
+        actionContainer.style.cssText = 'margin-bottom: 20px;';
+        
+        actionContainer.innerHTML = `
+          <details style="margin-top:10px;">
+            <summary>
+              <h2 style="display: inline; color: #333;">
+                <i class="fas fa-tasks" style="margin-right: 8px; color: #4a7c59;"></i>
+                RECOMMENDED ACTIONS
+              </h2>
+            </summary>
+            <div style="margin-left: 21px; padding: 15px; background: #e8f5e8; border-radius: 5px; margin-top: 10px; border-left: 4px solid #28a745;">
+              <p style="margin: 0; line-height: 1.6; color: #555;">
+                ${incomeData.action_items || incomeData.next_steps}
+              </p>
+            </div>
+          </details>
+        `;
+        container.appendChild(actionContainer);
+      }
+
+      // AI Methodology Section
+      const methodologyContainer = document.createElement('div');
+      methodologyContainer.className = 'summary-container';
+      methodologyContainer.style.cssText = 'margin-bottom: 20px;';
+      
+      methodologyContainer.innerHTML = `
+        <details style="margin-top:10px;">
+          <summary>
+            <h2 style="display: inline; color: #333;">
+              <i class="fas fa-cog" style="margin-right: 8px; color: #4a7c59;"></i>
+              AI ANALYSIS METHODOLOGY
+            </h2>
+          </summary>
+          <div style="margin-left: 21px; padding: 15px; background: #f8f9fa; border-radius: 5px; margin-top: 10px;">
+            <p style="margin: 0; line-height: 1.6; color: #666; font-size: 0.9em;">
+              This analysis was generated using advanced AI algorithms that processed your financial inputs including income sources, 
+              expense categories, assets, and liabilities. The AI considered industry-standard financial ratios, best practices, 
+              and personalized factors based on your specific situation. All calculations and recommendations are for educational 
+              purposes and should not replace professional financial advice.
+            </p>
+          </div>
+        </details>
+      `;
+      container.appendChild(methodologyContainer);
+      
+      outputElement.appendChild(container);
+    }
+    
 })();
 </script>
+</body>
+</html>
