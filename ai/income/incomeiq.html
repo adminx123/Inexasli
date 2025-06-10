@@ -1022,11 +1022,6 @@ import setJSON from '/utility/setJSON.js';
         // Export the FormPersistence instance for external access
         window.incomeFormPersistence = incomeFormPersistence;
         console.log("[IncomeIQ] FormPersistence instance exported to window");
-
-        // Setup intro section handlers
-        setupIntroSectionHandlers();
-        // Save initial state of intro section
-        saveIntroSectionToLocalStorage();
     }
 
     // Update subregion dropdown based on country selection
@@ -1055,40 +1050,6 @@ import setJSON from '/utility/setJSON.js';
             console.log("[IncomeIQ] No subregions found for country:", country);
             subregionContainer.style.display = 'none';
         }
-    }
-
-    // Save only the intro/personal details section to localStorage
-    function saveIntroSectionToLocalStorage() {
-        const country = document.getElementById('income-country')?.value || '';
-        const subregion = document.getElementById('income-subregion')?.value || '';
-        const residency = document.getElementById('income-residency')?.value || '';
-        const filingStatus = document.getElementById('income-filingStatus')?.value || '';
-        const ageSelf = document.getElementById('income-ageSelf')?.value || '';
-        const employmentStatus = document.getElementById('income-employmentStatus')?.value || '';
-        const ageSpouse = document.getElementById('income-ageSpouse')?.value || '';
-        const employmentStatusSpouse = document.getElementById('income-employmentStatusSpouse')?.value || '';
-        const birthYearDisabledDependants = document.getElementById('income-birthYearDisabledDependants')?.value || '';
-
-        // Use singleStatuses and statusesWithDisabledDependants from the main script
-        const isSingle = singleStatuses.includes(filingStatus);
-        const hasDisabledDependants = statusesWithDisabledDependants.includes(filingStatus);
-
-        const introData = {
-            country,
-            subregion,
-            residency,
-            filingStatus,
-            ageSelf,
-            employmentStatus
-        };
-        if (!isSingle && filingStatus) {
-            introData.ageSpouse = ageSpouse;
-            introData.employmentStatusSpouse = employmentStatusSpouse;
-        }
-        if (hasDisabledDependants && filingStatus) {
-            introData.birthYearDisabledDependants = birthYearDisabledDependants;
-        }
-        setJSON('incomeIqIntro', introData);
     }
 
     // Attach listeners to all relevant intro fields
