@@ -75,9 +75,9 @@
 </div>
 
 <div class="row1" data-step-label="Food Log">
-    <input type="text" id="calorie-breakfast" data-meal="breakfast" placeholder="Breakfast: 1 cup oatmeal, 0.5 cup berries, 1 tbsp honey">
-    <input type="text" id="calorie-lunch" data-meal="lunch" placeholder="Lunch: 200g chicken, 150g salad, 2 tbsp olive oil">
-    <input type="text" id="calorie-dinner" data-meal="dinner" placeholder="Dinner: 6 oz salmon, 1/2 cup quinoa, 100g broccoli">
+    <textarea id="calorie-breakfast" data-meal="breakfast" placeholder="Breakfast: 1 cup oatmeal, 0.5 cup berries, 1 tbsp honey" rows="2"></textarea>
+    <textarea id="calorie-lunch" data-meal="lunch" placeholder="Lunch: 200g chicken, 150g salad, 2 tbsp olive oil" rows="2"></textarea>
+    <textarea id="calorie-dinner" data-meal="dinner" placeholder="Dinner: 6 oz salmon, 1/2 cup quinoa, 100g broccoli" rows="2"></textarea>
     <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
 </div>
    
@@ -99,41 +99,56 @@
 
   // Reintroduce addMealInput for dynamic meal inputs
   function addMealInput(mealType = null, value = '', skipRepositioning = false) {
+    // If mealType is not provided, generate a unique snackN id
+    if (!mealType) {
+      // Find all existing dynamic meal/snack textareas
+      const existing = Array.from(document.querySelectorAll('textarea[id^="calorie-snack"]'));
+      let maxNum = 0;
+      existing.forEach(el => {
+        const match = el.id.match(/^calorie-snack(\d+)$/);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      });
+      mealType = `snack${maxNum + 1}`;
+    }
+    
     const inputGroup = document.createElement('div');
     inputGroup.style.cssText = 'display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 460px; width: 100%;';
     
-    const input = document.createElement('input');
-    input.type = 'text';
-    
-    // Generate a unique meal type if none provided
-    if (!mealType) {
-      const existingMeals = document.querySelectorAll('input[data-meal]');
-      mealType = `snack${existingMeals.length + 1}`;
-    }
-    
-    // Set placeholder with measurement suggestions
-    let placeholderText = '';
-    if (mealType === 'breakfast') {
-      placeholderText = 'Breakfast: 1 cup oatmeal, 0.5 cup berries, 1 tbsp honey';
-    } else if (mealType === 'lunch') {
-      placeholderText = 'Lunch: 200g chicken, 150g salad, 2 tbsp olive oil';
-    } else if (mealType === 'dinner') {
-      placeholderText = 'Dinner: 6 oz salmon, 1/2 cup quinoa, 100g broccoli';
-    } else if (mealType && mealType.startsWith('snack')) {
-      placeholderText = `${mealType.charAt(0).toUpperCase()+mealType.slice(1)}: 30g nuts, 1 medium apple`;
-    } else {
-      placeholderText = `${mealType ? mealType.charAt(0).toUpperCase()+mealType.slice(1) : 'Meal'}: 100g yogurt, 2 oz crackers`;
-    }
-    input.placeholder = placeholderText;
-    input.style.cssText = 'flex: 1; margin: 0; width: 100%; height: 40px; padding: 8px 12px; font-size: 16px; line-height: 1.5; border: 1px solid #7c7c7c; border-radius: 6px; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease; font-family: "Inter", sans-serif; box-sizing: border-box;';
-    
-    // Always set data-meal attribute for proper data collection
-    input.dataset.meal = mealType;
-    
-    // Set id attribute for form persistence system
-    input.id = `calorie-${mealType}`;
-    
-    inputGroup.appendChild(input);
+    const textarea = document.createElement('textarea');
+    textarea.rows = 2;
+    textarea.style.flex = '1';
+    textarea.style.margin = '0';
+    textarea.style.width = '100%';
+    textarea.style.fontSize = '16px';
+    textarea.style.lineHeight = '1.5';
+    textarea.style.border = '1px solid #7c7c7c';
+    textarea.style.borderRadius = '6px';
+    textarea.style.backgroundColor = '#f9f9f9';
+    textarea.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+    textarea.style.outline = 'none';
+    textarea.style.transition = 'border-color 0.2s ease, box-shadow 0.2s ease';
+    textarea.style.fontFamily = '"Inter", sans-serif';
+    textarea.style.boxSizing = 'border-box';
+    textarea.style.padding = '12px';
+    textarea.minHeight = '40px';
+    textarea.setAttribute('data-meal', mealType || '');
+    textarea.id = `calorie-${mealType}`;
+    textarea.placeholder = mealType ? mealType.charAt(0).toUpperCase() + mealType.slice(1) + ': 100g yogurt, 2 oz crackers' : 'Meal: 100g yogurt, 2 oz crackers';
+    if (value) textarea.value = value;
+    inputGroup.appendChild(textarea);
+    // Auto-expand textarea as user types
+    textarea.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+      if (window.calorieFormPersistence) window.calorieFormPersistence.saveFormData();
+    });
+    setTimeout(() => {
+      textarea.style.height = 'auto';
+      textarea.style.height = (textarea.scrollHeight) + 'px';
+    }, 0);
     
     const removeBtn = document.createElement('button');
     removeBtn.innerText = '×';
@@ -169,12 +184,9 @@
       console.log('[CalorieIQ] Added new meal input at end of food log section');
     }
     
-    if (value) input.value = value;
-    
-    // Only trigger button management if not during form repopulation
     if (!skipRepositioning) {
       ensureAddButton();
-      input.focus();
+      textarea.focus();
       
       // Refresh input handlers to pick up the new input
       if (window.calorieFormPersistence && window.calorieFormPersistence.refreshInputHandlers) {
@@ -196,27 +208,29 @@
       return;
     }
     
-    // Find the dinner input
-    const dinnerInput = document.querySelector('input[data-meal="dinner"]');
+    // Find the dinner input (now a textarea)
+    const dinnerInput = document.querySelector('textarea[data-meal="dinner"]');
     if (!dinnerInput) {
       console.error('[CalorieIQ] No dinner input found');
       return;
     }
     
-    // Check if dinner input is already in a flex container
-    if (dinnerInput.parentNode.style.display === 'flex') {
-      console.log('[CalorieIQ] Dinner input already in flex container');
+    // Check if dinner textarea is already in a flex container
+    if (dinnerInput.parentNode && dinnerInput.parentNode.classList && dinnerInput.parentNode.classList.contains('flex-meal-container')) {
+      console.log('[CalorieIQ] Dinner textarea already in flex container');
       return;
     }
     
     // Create flex container wrapper
     const flexContainer = document.createElement('div');
+    flexContainer.className = 'flex-meal-container';
     flexContainer.style.cssText = 'display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 460px; width: 100%;';
     
-    // Insert flex container before dinner input
-    dinnerInput.parentNode.insertBefore(flexContainer, dinnerInput);
+    // Insert flex container after dinner textarea
+    const foodLogSection = dinnerInput.parentNode;
+    foodLogSection.insertBefore(flexContainer, dinnerInput.nextSibling);
     
-    // Move dinner input into flex container and make it flex
+    // Move dinner textarea into flex container and make it flex
     flexContainer.appendChild(dinnerInput);
     dinnerInput.style.flex = '1';
     
@@ -225,15 +239,14 @@
     addBtn.id = 'multifield-add-btn';
     addBtn.title = 'Add another meal/snack';
     addBtn.innerText = '+';
-    // Apply styles similar to .generate-btn from inputstyles.css, but keep existing size
     addBtn.style.cssText = 'width: 40px; height: 40px; align-self: center; border: 1px solid #4a7c59; box-shadow: 2px 2px 4px rgba(74, 124, 89, 0.15); background-color: #f2f9f3; color: #2d5a3d; border-radius: 5px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0; font-family: "Geist", sans-serif;';
     addBtn.onclick = () => addMealInput();
     addBtn.onmouseenter = () => {
-      addBtn.style.backgroundColor = '#eef7f0'; // Slightly darker shade on hover, consistent with .grid-item:hover
+      addBtn.style.backgroundColor = '#eef7f0';
       addBtn.style.color = '#2d5a3d';
     };
     addBtn.onmouseleave = () => {
-      addBtn.style.backgroundColor = '#f2f9f3'; // Original background
+      addBtn.style.backgroundColor = '#f2f9f3';
       addBtn.style.color = '#2d5a3d';
     };
     
