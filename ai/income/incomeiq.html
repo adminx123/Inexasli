@@ -1513,12 +1513,34 @@ import setJSON from '/utility/setJSON.js';
 
         // Save normalized data to localStorage
         try {
-            // Save to localStorage
-            localStorage.setItem('incomeIqIncome', JSON.stringify(normalizedIncome));
+            // Collect all Tax Residency & Personal Details fields
+            const taxResidencyFields = [
+                'income-country',
+                'income-subregion',
+                'income-residency',
+                'income-filingStatus',
+                'income-ageSelf',
+                'income-employmentStatus',
+                'income-ageSpouse',
+                'income-employmentStatusSpouse',
+                'income-birthYearDisabledDependants'
+            ];
+            const taxResidencyData = {};
+            taxResidencyFields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) taxResidencyData[id.replace('income-', '')] = el.value;
+            });
+
+            // Save to localStorage as a single object
+            const incomeIqinput1 = {
+                ...taxResidencyData,
+                normalizedIncome,
+            };
+            localStorage.setItem('incomeIqinput1', JSON.stringify(incomeIqinput1));
             localStorage.setItem('incomeIqExpense', JSON.stringify(normalizedExpenses));
 
             console.log("[IncomeIQ] ✅ Successfully saved normalized data to localStorage");
-            console.log("Income data saved to 'incomeIqIncome':", normalizedIncome);
+            console.log("Income data saved to 'incomeIqinput1':", incomeIqinput1);
             console.log("Expense data saved to 'incomeIqExpense':", normalizedExpenses);
 
             return {
