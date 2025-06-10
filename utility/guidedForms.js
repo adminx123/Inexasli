@@ -515,7 +515,50 @@ class GuidedFormSystem {
         this.currentStep = stepIndex;
         this.displayStep(nextStep);
         this.updateProgressIndicator();
-        
+
+        // --- SCROLL TO TOP LOGIC (robust debug) ---
+        setTimeout(() => {
+            // Log all .data-content containers and their scrollTop
+            const allContents = document.querySelectorAll('.data-content');
+            allContents.forEach((el, idx) => {
+                console.log(`[GuidedForms][Debug] .data-content[${idx}] scrollTop BEFORE:`, el.scrollTop, el);
+            });
+
+            // Try to scroll all .data-content inside expanded containers
+            let didScroll = false;
+            const expandedContainers = document.querySelectorAll('.data-container-income.expanded, .data-container-in.expanded');
+            expandedContainers.forEach((container, cidx) => {
+                const content = container.querySelector('.data-content');
+                if (content) {
+                    content.scrollTop = 0;
+                    if (typeof content.scrollTo === 'function') content.scrollTo(0, 0);
+                    console.log(`[GuidedForms] Scrolled .data-content in expanded container[${cidx}] to top`, content);
+                    didScroll = true;
+                }
+            });
+
+            // Fallback: scroll all .data-content
+            if (!didScroll) {
+                allContents.forEach((el, idx) => {
+                    el.scrollTop = 0;
+                    if (typeof el.scrollTo === 'function') el.scrollTo(0, 0);
+                    console.log(`[GuidedForms] Fallback: Scrolled .data-content[${idx}] to top`, el);
+                });
+            }
+
+            // Fallback: scroll window
+            if (!didScroll && allContents.length === 0) {
+                window.scrollTo(0, 0);
+                console.log('[GuidedForms] Fallback: Scrolled window to top');
+            }
+
+            // Log after scroll
+            document.querySelectorAll('.data-content').forEach((el, idx) => {
+                console.log(`[GuidedForms][Debug] .data-content[${idx}] scrollTop AFTER:`, el.scrollTop, el);
+            });
+        }, this.config.transitionDuration + 80); // Wait for transition to finish
+        // --- END SCROLL TO TOP LOGIC ---
+
         // Apply dynamic sizing for new step
         this.adjustContainerSize(nextStep);
     }
