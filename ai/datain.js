@@ -392,6 +392,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                     toggleDataContainer();
                 });
             }
+
+            // At the end of all form/content initialization (after content is revealed):
+            if (window.enablePremiumFeatures) {
+              window.enablePremiumFeatures();
+            }
         } catch (error) {
             console.error('Error loading content:', error);
             dataContainer.innerHTML = `

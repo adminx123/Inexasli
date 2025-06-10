@@ -460,6 +460,46 @@ function removePaymentModalEventListeners(modal) {
 }
 
 
+// --- PREMIUM ACCESS LOGIC ---
+function enablePremiumFeatures() {
+    const auth = localStorage.getItem('authenticated');
+    console.log('[Premium][Debug] localStorage.authenticated =', auth);
+    const premiumElements = document.querySelectorAll('.premium-blur');
+    console.log('[Premium][Debug] Found', premiumElements.length, 'elements with .premium-blur:', premiumElements);
+    if (auth === 'paid') {
+        premiumElements.forEach(el => {
+            console.log('[Premium][Debug] Unblurring element:', el);
+            el.classList.remove('premium-blur');
+            el.style.pointerEvents = '';
+            el.style.filter = '';
+            el.style.color = '';
+        });
+        // Optionally, enable any disabled buttons/inputs inside premium sections
+        document.querySelectorAll('[data-premium-disabled]')?.forEach(el => {
+            el.removeAttribute('disabled');
+        });
+        // Log after unblurring
+        const stillBlurred = document.querySelectorAll('.premium-blur');
+        console.log('[Premium][Debug] After unblur, still blurred:', stillBlurred.length, stillBlurred);
+        console.log('[Premium] Premium features enabled for paid user.');
+    } else {
+        console.log('[Premium][Debug] User is not paid, premium features remain blurred.');
+    }
+}
+// Run on load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', enablePremiumFeatures);
+} else {
+    enablePremiumFeatures();
+}
+// Observe DOM for dynamically added premium-blur elements
+const observer = new MutationObserver(() => enablePremiumFeatures());
+observer.observe(document.body, { childList: true, subtree: true });
+// Expose for other scripts
+window.enablePremiumFeatures = enablePremiumFeatures;
+// After successful payment, set localStorage and call enablePremiumFeatures
+// ...existing code...
+
 // ===== PAYMENT PROCESSING (Combined from payment.js) =====
 
 // Wait for the Stripe script to load
