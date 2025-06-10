@@ -12,7 +12,6 @@
 
 
 <div class="device-container">
-
   <div class="row1 product-description-container">
     <h2 class="product-description-heading">Unlock Personalized Calorie Insights!</h2>
     <p class="product-description-text">
@@ -24,64 +23,64 @@
     <p class="product-description-final">
         Let's get started!
     </p>
-</div>
-<div class="row1" data-step-label="Fitness Goal">
-    <div class="grid-container" id="calorie-goal">
-        <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
-        <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
-        <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
-        <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
-    </div>
-</div>
+  </div>
+  <!-- Jump to Food Log button is injected by JS if calorieIqResponse exists -->
 
-<div class="row1" data-step-label="Activity Level">
-    <div class="grid-container" id="calorie-activity">
-        <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
-        <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
-        <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5 days/week)</div>
-        <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
-        <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
-    </div>
-</div>
-
-<div class="row1" data-step-label="Meal Planning">
-    <div class="grid-container" id="calorie-recommendations">
-        <div class="grid-item" data-value="Meal Recommendations">Need meal recommendations to make up deficit</div>
-    </div>
-</div>
-
-<div class="row1" data-step-label="Dietary Preferences">
-    <div class="grid-container" id="calorie-diet-type">
-        <div class="grid-item" data-value="None">No Restrictions</div>
-        <div class="grid-item" data-value="Vegetarian">Vegetarian</div>
-        <div class="grid-item" data-value="Vegan">Vegan</div>
-        <div class="grid-item" data-value="Gluten-Free">Gluten-Free</div>
-        <div class="grid-item" data-value="Keto">Keto</div>
-        <div class="grid-item" data-value="Paleo">Paleo</div>
-        <div class="grid-item" data-value="Low-Carb">Low-Carb</div>
-        <div class="grid-item" data-value="Mediterranean">Mediterranean</div>
-    </div>
-</div>
-
-<div class="row1" data-step-label="Personal Information">
+  <div class="row1" data-step-label="Personal Information">
     <input id="calorie-age" type="text" placeholder="Age">
     <input id="calorie-height" type="text" placeholder="5'10">
     <input id="calorie-weight" type="text" placeholder="70 kg">
     <select id="calorie-sex">
-        <option value="" disabled selected>Select Gender</option>
-        <option value="man">Man</option>
-        <option value="woman">Woman</option>
+      <option value="" disabled selected>Select Gender</option>
+      <option value="man">Man</option>
+      <option value="woman">Woman</option>
     </select>
-</div>
+  </div>
 
-<div class="row1" data-step-label="Food Log">
+  <div class="row1" data-step-label="Fitness Goal">
+    <div class="grid-container" id="calorie-goal">
+      <div class="grid-item" data-value="Lose Weight">I want to lose weight</div>
+      <div class="grid-item" data-value="Gain Muscle">I want gain muscle</div>
+      <div class="grid-item" data-value="Maintain Weight">I want maintain weight</div>
+      <div class="grid-item" data-value="Improve Endurance">I want improve endurance</div>
+    </div>
+  </div>
+
+  <div class="row1" data-step-label="Activity Level">
+    <div class="grid-container" id="calorie-activity">
+      <div class="grid-item" data-value="Sedentary">Sedentary (little to no exercise)</div>
+      <div class="grid-item" data-value="Lightly Active">Lightly Active (light exercise 1-3 days/week)</div>
+      <div class="grid-item" data-value="Moderately Active">Moderately Active (moderate exercise 3-5 days/week)</div>
+      <div class="grid-item" data-value="Very Active">Very Active (hard exercise 6-7 days/week)</div>
+      <div class="grid-item" data-value="Athlete">Athlete (intense training daily)</div>
+    </div>
+  </div>
+
+  <div class="row1" data-step-label="Dietary Preferences">
+    <div class="grid-container" id="calorie-diet-type">
+      <div class="grid-item" data-value="None">No Restrictions</div>
+      <div class="grid-item" data-value="Vegetarian">Vegetarian</div>
+      <div class="grid-item" data-value="Vegan">Vegan</div>
+      <div class="grid-item" data-value="Gluten-Free">Gluten-Free</div>
+      <div class="grid-item" data-value="Keto">Keto</div>
+      <div class="grid-item" data-value="Paleo">Paleo</div>
+      <div class="grid-item" data-value="Low-Carb">Low-Carb</div>
+      <div class="grid-item" data-value="Mediterranean">Mediterranean</div>
+    </div>
+  </div>
+
+  <div class="row1" data-step-label="Food Log">
     <textarea id="calorie-breakfast" data-meal="breakfast" placeholder="Breakfast: 1 cup oatmeal, 0.5 cup berries, 1 tbsp honey" rows="2"></textarea>
     <textarea id="calorie-lunch" data-meal="lunch" placeholder="Lunch: 200g chicken, 150g salad, 2 tbsp olive oil" rows="2"></textarea>
     <textarea id="calorie-dinner" data-meal="dinner" placeholder="Dinner: 6 oz salmon, 1/2 cup quinoa, 100g broccoli" rows="2"></textarea>
+    <div class="grid-container">
+      <div class="grid-item" id="meal-recommend-grid-item" tabindex="0">Need meal recommendations?</div>
+    </div>
     <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
-</div>
-   
+  </div>
 </div> 
+
+<!-- Jump to Food Log button (conditionally rendered by JS) -->
 
 <script>
 /*
@@ -402,6 +401,54 @@
     }
   }, 200);
   
+  // Add Jump to Food Log button if calorieIqResponse exists
+  document.addEventListener('DOMContentLoaded', function() {
+    if (localStorage.getItem('calorieIqResponse')) {
+      const btn = document.createElement('button');
+      btn.textContent = 'Jump to Food Log';
+      btn.className = 'jump-to-foodlog-btn';
+      btn.style.cssText = 'width: 180px; height: 40px; align-self: center; border: 1px solid #4a7c59; box-shadow: 2px 2px 4px rgba(74, 124, 89, 0.15); background-color: #f2f9f3; color: #2d5a3d; border-radius: 5px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0; font-family: "Geist", sans-serif; margin: 18px auto 24px auto;';
+      btn.onmouseenter = function() {
+        btn.style.backgroundColor = '#eef7f0';
+        btn.style.color = '#2d5a3d';
+      };
+      btn.onmouseleave = function() {
+        btn.style.backgroundColor = '#f2f9f3';
+        btn.style.color = '#2d5a3d';
+      };
+      btn.onclick = function() {
+        const foodLog = document.querySelector('[data-step-label="Food Log"]');
+        if (foodLog) foodLog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
+      const intro = document.querySelector('.product-description-container');
+      if (intro) intro.after(btn);
+    }
+  });
+
+  // Add event listener for "Need meal recommendations" grid item
+  document.addEventListener('DOMContentLoaded', function() {
+    const recommendGridItem = document.getElementById('meal-recommend-grid-item');
+    if (recommendGridItem) {
+      recommendGridItem.onclick = function() {
+        // Placeholder: replace with custom logic if available
+        alert('Meal recommendations coming soon!');
+      };
+      recommendGridItem.onmouseenter = function() {
+        recommendGridItem.style.backgroundColor = '#eef7f0';
+        recommendGridItem.style.color = '#2d5a3d';
+      };
+      recommendGridItem.onmouseleave = function() {
+        recommendGridItem.style.backgroundColor = '';
+        recommendGridItem.style.color = '';
+      };
+      recommendGridItem.onkeydown = function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          recommendGridItem.click();
+        }
+      };
+    }
+  });
+
   // Export functions for external access
   window.calorieIq = { 
     addMealInput,

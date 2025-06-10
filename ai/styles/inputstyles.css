@@ -242,6 +242,10 @@ button:hover {
   color: #2d5a3d;
 }
 
+.generate-btn#meal-recommend-btn {
+  margin-top: 24px !important;
+}
+
 /* Clear Button */
 .clear-btn {
   background-color: #f2f9f3;
@@ -556,7 +560,3 @@ button:hover {
   line-height: 1.6;
   margin-top: 15px;
 }
-
-/* ====================
-   Existing Styles Continue Below
-   ==================== */
