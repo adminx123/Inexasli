@@ -152,7 +152,8 @@
     
     const removeBtn = document.createElement('button');
     removeBtn.innerText = '×';
-    removeBtn.style.cssText = 'width: 40px; height: 40px; border: 1.5px solid #000; border-radius: 6px; background-color: #fff; color: #000; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 3px 3px 0.5px #000;';
+    removeBtn.title = 'Remove this meal/snack';
+    removeBtn.style.cssText = 'width: 40px; height: 40px; align-self: center; border: 1px solid #4a7c59; box-shadow: 2px 2px 4px rgba(74, 124, 89, 0.15); background-color: #f2f9f3; color: #2d5a3d; border-radius: 5px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0; font-family: "Geist", sans-serif; margin-left: 0;';
     removeBtn.addEventListener('click', () => { 
       inputGroup.remove(); 
       // Only reposition button if not during form repopulation
@@ -162,8 +163,14 @@
       // Save the current state after removing the input
       window.calorieFormPersistence.saveFormData();
     });
-    removeBtn.addEventListener('mouseenter', () => { removeBtn.style.backgroundColor = '#e9e9e9'; });
-    removeBtn.addEventListener('mouseleave', () => { removeBtn.style.backgroundColor = '#fff'; });
+    removeBtn.onmouseenter = () => {
+      removeBtn.style.backgroundColor = '#eef7f0';
+      removeBtn.style.color = '#2d5a3d';
+    };
+    removeBtn.onmouseleave = () => {
+      removeBtn.style.backgroundColor = '#f2f9f3';
+      removeBtn.style.color = '#2d5a3d';
+    };
     inputGroup.appendChild(removeBtn);
     
     // Find the main food log container (row1) to add the new input below the existing ones
