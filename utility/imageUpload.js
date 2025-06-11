@@ -32,12 +32,17 @@ class ImageUpload {
    * Initialize the upload functionality for a container
    */
   initialize(containerId, config = {}) {
+    console.log('ImageUpload: Attempting to initialize for container:', containerId);
+    
     const container = document.getElementById(containerId);
     if (!container) {
       console.error('ImageUpload: Container not found:', containerId);
+      console.error('ImageUpload: Available elements with IDs:', 
+        Array.from(document.querySelectorAll('[id]')).map(el => el.id));
       return false;
     }
 
+    console.log('ImageUpload: Successfully found container:', containerId);
     console.log('ImageUpload: Initializing for container:', containerId);
 
     // Auto-detect module and connect to FormPersistence
