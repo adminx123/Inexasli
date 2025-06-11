@@ -82,12 +82,26 @@
     <div id="fashion-upload-container"></div>
     <textarea id="fashion-additional-context" placeholder="Any additional context about the outfits, specific concerns, or what you'd like feedback on? (Optional)"></textarea>
     <button class="generate-btn" id="generate-fashion-btn" disabled>Analyze My Style!</button>
+    
+    <!-- Guided Forms Toggle Button -->
+    <div style="text-align: center; margin-top: 15px;">
+        <button id="guided-forms-toggle" onclick="toggleGuidedForms()" style="
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        ">🚀 Enable Guided Form</button>
+    </div>
 </div>
    
 </div> 
 
-<script src="../../utility/imageUpload.js"></script>
-<script>
+<script type="module">
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
@@ -97,6 +111,8 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 */
+
+import { ImageUpload } from '../../utility/imageUpload.js';
 
 (function() {
   console.log("Fashion IQ script: Starting");
@@ -149,10 +165,8 @@
   // Collect all form data using FormPersistence
   function collectFormData() {
     if (window.fashionFormPersistence) {
-      const formData = window.fashionFormPersistence.collectFormData();
-      // Add uploaded images to the form data
-      formData.images = imageUploader ? imageUploader.getImages() : [];
-      return formData;
+      // FormPersistence now automatically includes images from ImageUpload utility
+      return window.fashionFormPersistence.collectFormData();
     } else {
       // Fallback to manual collection if FormPersistence not available
       return {
@@ -233,22 +247,104 @@
     });
   }
 
-  // Initialize everything when DOM is ready
-  console.log("Fashion IQ: Attempting direct initialization");
+  // Guided forms functionality
+  let guidedFormsInstance = null;
   
-  // Wait for ImageUpload utility to be available
-  function waitForImageUpload() {
-    if (window.ImageUpload) {
-      initializeImageUpload();
-      initializeGenerateButton();
-      console.log("Fashion IQ script: Initialization complete");
+  function toggleGuidedForms() {
+    console.log('[FashionIQ] Toggling guided forms');
+    const toggleBtn = document.getElementById('guided-forms-toggle');
+    
+    if (guidedFormsInstance) {
+      // Disable guided forms
+      guidedFormsInstance.destroy();
+      guidedFormsInstance = null;
+      toggleBtn.textContent = '🚀 Enable Guided Form';
+      toggleBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      console.log('[FashionIQ] Guided forms disabled');
     } else {
-      console.log("Fashion IQ: Waiting for ImageUpload utility...");
-      setTimeout(waitForImageUpload, 100);
+      // Enable guided forms
+      if (window.GuidedFormSystem) {
+        guidedFormsInstance = new window.GuidedFormSystem({
+          autoAdvance: true,
+          showProgressIndicator: true,
+          smoothTransitions: true,
+          transitionDuration: 300,
+          autoAdvanceDelay: 800,
+          enableSkipping: true
+        });
+        
+        guidedFormsInstance.init('device-container');
+        
+        toggleBtn.textContent = '⏹️ Disable Guided Form';
+        toggleBtn.style.background = 'linear-gradient(135deg, #ea667e 0%, #a24b76 100%)';
+        console.log('[FashionIQ] Guided forms enabled');
+      } else {
+        console.error('[FashionIQ] GuidedFormSystem not available');
+        alert('Guided forms system is not loaded. Please refresh the page.');
+      }
     }
   }
-  
-  waitForImageUpload();
+
+  // Make toggleGuidedForms globally accessible
+  window.toggleGuidedForms = toggleGuidedForms;
+
+  // Initialize with multiple triggers to ensure reliability
+  function runInitialization() {
+    // Use a small delay to ensure DOM is ready
+    setTimeout(initialize, 50);
+  }
+
+  // Main initialization function
+  function initialize() {
+    console.log("Fashion IQ: Attempting direct initialization");
+    
+    // Wait for ImageUpload utility to be available
+    function waitForImageUpload() {
+      if (window.ImageUpload) {
+        initializeImageUpload();
+        initializeGenerateButton();
+        console.log("Fashion IQ script: Initialization complete");
+        
+        // Initialize guided forms if available
+        if (typeof window.initGuidedForms === 'function') {
+          console.log('[FashionIQ] Auto-initializing guided forms');
+          window.initGuidedForms({
+            autoAdvance: true,
+            showProgressIndicator: true,
+            smoothTransitions: true,
+            enableSkipping: true,
+            autoStart: true
+          });
+        }
+      } else {
+        console.log("Fashion IQ: Waiting for ImageUpload utility...");
+        setTimeout(waitForImageUpload, 100);
+      }
+    }
+    
+    waitForImageUpload();
+  }
+
+  // Initialize immediately if DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialize);
+  } else {
+    initialize();
+  }
+
+  // Handle loading through datain.js
+  document.addEventListener('data-in-loaded', function(e) {
+    console.log("[FashionIQ] Detected load through datain.js, reinitializing");
+    runInitialization();
+  });
+
+  // Additional safety net - try again after a short delay
+  setTimeout(() => {
+    if (!guidedFormsInstance && window.GuidedFormSystem) {
+      console.log("[FashionIQ] Safety net initialization");
+      runInitialization();
+    }
+  }, 1000);
 
 })();
 </script>
@@ -269,5 +365,118 @@
 .generate-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+/* ====================
+   DataIn Container Compatibility Fixes
+   ==================== */
+
+/* When fashioniq.html is loaded inside datain container, ensure proper sizing and layout */
+.data-container-in .device-container {
+  width: 100% !important;
+  max-width: 480px !important; /* Maintain device-container constraint like other modules */
+  margin: 0 auto !important; /* Center the device container */
+  padding: 0 !important;
+  background-color: transparent !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix row1 containers within datain */
+.data-container-in .device-container .row1 {
+  width: 100% !important;
+  max-width: 460px !important; /* Match standard input max-width */
+  margin: 0 auto 15px auto !important; /* Center within device-container */
+  padding: 8px !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix product description container */
+.data-container-in .product-description-container {
+  padding: 15px 8px !important;
+  margin-bottom: 15px !important;
+  background-color: #f0f8ff !important;
+  border-radius: 8px !important;
+}
+
+/* Fix grid containers within datain */
+.data-container-in .grid-container {
+  width: 100% !important;
+  max-width: 460px !important; /* Match standard input max-width like other modules */
+  margin: 0 auto !important;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+  gap: 8px !important;
+}
+
+/* Fix grid items within datain */
+.data-container-in .grid-item {
+  padding: 0.75rem !important;
+  font-size: 13px !important;
+  min-height: 45px !important;
+  word-wrap: break-word !important;
+}
+
+/* Fix form inputs within datain */
+.data-container-in input, 
+.data-container-in select, 
+.data-container-in textarea {
+  width: 100% !important;
+  max-width: 460px !important; /* Match standard input max-width like other modules */
+  box-sizing: border-box !important;
+  margin-bottom: 10px !important;
+}
+
+/* Fix image upload container within datain */
+.data-container-in #fashion-upload-container {
+  width: 100% !important;
+  max-width: 460px !important; /* Match standard input max-width like other modules */
+  margin: 0 auto 15px auto !important;
+}
+
+/* Fix generate button within datain */
+.data-container-in .generate-btn {
+  width: 100% !important;
+  max-width: 300px !important;
+  margin: 15px auto !important;
+  display: block !important;
+}
+
+/* Fix guided forms toggle button within datain */
+.data-container-in #guided-forms-toggle {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+/* Fix textarea specific to fashion context within datain */
+.data-container-in #fashion-additional-context {
+  width: 100% !important;
+  max-width: 460px !important; /* Match standard input max-width like other modules */
+  min-height: 60px !important;
+  padding: 10px !important;
+  font-size: 14px !important;
+  margin: 0 auto 15px auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Mobile specific fixes for datain context */
+@media (max-width: 480px) {
+  .data-container-in .device-container .row1 {
+    padding: 6px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  .data-container-in .grid-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+  
+  .data-container-in .grid-item {
+    padding: 0.5rem !important;
+    font-size: 12px !important;
+    min-height: 40px !important;
+  }
+  
+  .data-container-in .product-description-container {
+    padding: 10px 6px !important;
+  }
 }
 </style>

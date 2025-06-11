@@ -8,9 +8,12 @@
  * jurisdictions worldwide.
  */
 
+// Import setJSON utility for localStorage operations
+import { setJSON } from './setJSON.js';
+
 /**
- * ImageUpload Utility
- * Handles camera and gallery image uploads with mobile device support
+ * ImageUpload Utility - Safari Compatible Version
+ * Uses HTML labels for file inputs to ensure cross-platform compatibility
  */
 class ImageUpload {
   constructor(options = {}) {
@@ -19,14 +22,14 @@ class ImageUpload {
     this.onFilesSelected = options.onFilesSelected || null;
     this.onError = options.onError || null;
     this.uploadedImages = [];
+    this.formPersistenceInstance = null;
+    this.moduleType = null;
     
     console.log('ImageUpload: Initialized with options:', options);
   }
 
   /**
    * Initialize the upload functionality for a container
-   * @param {string} containerId - ID of the container element
-   * @param {Object} config - Configuration object
    */
   initialize(containerId, config = {}) {
     const container = document.getElementById(containerId);
@@ -37,15 +40,122 @@ class ImageUpload {
 
     console.log('ImageUpload: Initializing for container:', containerId);
 
+    // Auto-detect module and connect to FormPersistence
+    this.detectModuleAndConnectFormPersistence();
+
     // Create the upload interface
     this.createUploadInterface(container, config);
     this.setupEventListeners(container);
+    
+    // Load previously saved images
+    this.loadImagesFromFormPersistence(container);
     
     return true;
   }
 
   /**
-   * Create the upload interface HTML
+   * Auto-detect module context and connect to FormPersistence
+   */
+  detectModuleAndConnectFormPersistence() {
+    // Try to detect module from URL
+    const url = window.location.href;
+    const modulePatterns = {
+      '/fashion/': 'fashion',
+      '/calorie/': 'calorie',
+      '/fitness/': 'fitness',
+      '/income/': 'income',
+      '/social/': 'social',
+      '/research/': 'research'
+    };
+
+    for (const [pattern, module] of Object.entries(modulePatterns)) {
+      if (url.includes(pattern)) {
+        this.moduleType = module;
+        break;
+      }
+    }
+
+    // Try to get FormPersistence instance
+    if (this.moduleType) {
+      const instanceName = `${this.moduleType}FormPersistence`;
+      this.formPersistenceInstance = window[instanceName];
+      
+      if (this.formPersistenceInstance) {
+        console.log(`ImageUpload: Connected to ${instanceName}`);
+      } else {
+        console.warn(`ImageUpload: ${instanceName} not found on window`);
+      }
+    }
+    
+    console.log('ImageUpload: Auto-detected module:', this.moduleType);
+  }
+
+  /**
+   * Save images to FormPersistence localStorage
+   */
+  saveImagesToFormPersistence() {
+    if (!this.formPersistenceInstance) {
+      console.warn('ImageUpload: No FormPersistence instance available');
+      return;
+    }
+
+    try {
+      // Get current form data
+      const currentData = this.formPersistenceInstance.getSavedFormData() || {};
+      
+      // Add images to the data
+      currentData.images = this.uploadedImages.map(img => ({
+        id: img.id,
+        data: img.data,
+        name: img.name,
+        size: img.size,
+        type: img.type
+      }));
+
+      // Save back to FormPersistence
+      const storageKey = this.formPersistenceInstance.getCurrentGridItemKey();
+      if (storageKey) {
+        // Use imported setJSON function
+        setJSON(storageKey, currentData);
+        console.log('ImageUpload: Images saved to FormPersistence:', storageKey);
+      }
+    } catch (error) {
+      console.error('ImageUpload: Error saving to FormPersistence:', error);
+    }
+  }
+
+  /**
+   * Load images from FormPersistence localStorage
+   */
+  loadImagesFromFormPersistence(container) {
+    if (!this.formPersistenceInstance) {
+      console.warn('ImageUpload: No FormPersistence instance available for loading');
+      return;
+    }
+
+    try {
+      const savedData = this.formPersistenceInstance.getSavedFormData();
+      if (savedData && savedData.images && Array.isArray(savedData.images)) {
+        this.uploadedImages = savedData.images;
+        
+        // Display loaded images
+        savedData.images.forEach(imageData => {
+          this.displayUploadedImage(imageData, container);
+        });
+        
+        console.log('ImageUpload: Loaded', savedData.images.length, 'images from FormPersistence');
+        
+        if (this.onFilesSelected) {
+          this.onFilesSelected(this.uploadedImages);
+        }
+      }
+    } catch (error) {
+      console.error('ImageUpload: Error loading from FormPersistence:', error);
+    }
+  }
+
+  /**
+   * Create the upload interface HTML - Safari Compatible
    */
   createUploadInterface(container, config) {
     const cameraText = config.cameraText || 'Take Photo';
@@ -53,25 +163,28 @@ class ImageUpload {
     const dragText = config.dragText || 'Or drag and drop photos here';
     const hintText = config.hintText || `Upload 1-${this.maxFiles} photos`;
 
+    // Detect if we're on a mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
     container.innerHTML = `
       <div class="image-upload-container">
         <div class="upload-options">
-          <button class="upload-btn camera-btn" data-action="camera">
+          <label class="upload-btn camera-btn">
+            <input type="file" accept="${this.acceptedTypes}" ${isMobile ? 'capture="environment"' : ''} style="display: none;">
             <i class="fas fa-camera"></i>
             <span>${cameraText}</span>
-          </button>
-          <button class="upload-btn gallery-btn" data-action="gallery">
+          </label>
+          <label class="upload-btn gallery-btn">
+            <input type="file" accept="${this.acceptedTypes}" multiple style="display: none;">
             <i class="fas fa-images"></i>
             <span>${galleryText}</span>
-          </button>
+          </label>
         </div>
-        <div class="upload-area" data-action="drag">
+        <div class="upload-area">
           <i class="fas fa-cloud-upload-alt upload-icon"></i>
           <p>${dragText}</p>
           <p class="upload-hint">${hintText}</p>
         </div>
-        <input type="file" class="camera-input" accept="${this.acceptedTypes}" capture="environment" style="display: none;">
-        <input type="file" class="gallery-input" multiple accept="${this.acceptedTypes}" style="display: none;">
         <div class="uploaded-images"></div>
       </div>
     `;
@@ -84,44 +197,28 @@ class ImageUpload {
    * Setup event listeners
    */
   setupEventListeners(container) {
-    const cameraBtn = container.querySelector('.camera-btn');
-    const galleryBtn = container.querySelector('.gallery-btn');
+    const cameraInput = container.querySelector('.camera-btn input');
+    const galleryInput = container.querySelector('.gallery-btn input');
     const uploadArea = container.querySelector('.upload-area');
-    const cameraInput = container.querySelector('.camera-input');
-    const galleryInput = container.querySelector('.gallery-input');
 
-    if (!cameraBtn || !galleryBtn || !uploadArea || !cameraInput || !galleryInput) {
+    if (!cameraInput || !galleryInput || !uploadArea) {
       console.error('ImageUpload: Required elements not found in container');
       return;
     }
 
-    // Camera button events
-    cameraBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('ImageUpload: Camera button clicked');
-      this.triggerInput(cameraInput);
+    console.log('ImageUpload: Setting up event listeners');
+
+    // File input change events
+    cameraInput.addEventListener('change', (e) => {
+      console.log('ImageUpload: Camera input changed');
+      this.handleFiles(e.target.files, container);
+      e.target.value = ''; // Reset for reuse
     });
 
-    cameraBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      console.log('ImageUpload: Camera button touched');
-      // Use setTimeout to ensure iOS processes the touch properly
-      setTimeout(() => this.triggerInput(cameraInput), 100);
-    });
-
-    // Gallery button events
-    galleryBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('ImageUpload: Gallery button clicked');
-      this.triggerInput(galleryInput);
-    });
-
-    galleryBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      console.log('ImageUpload: Gallery button touched');
-      setTimeout(() => this.triggerInput(galleryInput), 100);
+    galleryInput.addEventListener('change', (e) => {
+      console.log('ImageUpload: Gallery input changed');
+      this.handleFiles(e.target.files, container);
+      e.target.value = ''; // Reset for reuse
     });
 
     // Drag and drop events
@@ -140,45 +237,7 @@ class ImageUpload {
       this.handleFiles(e.dataTransfer.files, container);
     });
 
-    // File input change events
-    cameraInput.addEventListener('change', (e) => {
-      console.log('ImageUpload: Camera input changed');
-      this.handleFiles(e.target.files, container);
-      e.target.value = ''; // Reset for repeated use
-    });
-
-    galleryInput.addEventListener('change', (e) => {
-      console.log('ImageUpload: Gallery input changed');
-      this.handleFiles(e.target.files, container);
-      e.target.value = ''; // Reset for repeated use
-    });
-  }
-
-  /**
-   * Trigger file input click with proper iOS handling
-   */
-  triggerInput(input) {
-    try {
-      // Create a new event to ensure iOS compatibility
-      const event = new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: true
-      });
-      
-      console.log('ImageUpload: Triggering input click');
-      input.dispatchEvent(event);
-      
-      // Fallback for older browsers/devices
-      if (input.click) {
-        input.click();
-      }
-    } catch (error) {
-      console.error('ImageUpload: Error triggering input:', error);
-      if (this.onError) {
-        this.onError('Failed to open file selector');
-      }
-    }
+    console.log('ImageUpload: Event listeners setup complete');
   }
 
   /**
@@ -234,6 +293,9 @@ class ImageUpload {
       
       console.log('ImageUpload: Image processed:', imageData.name);
       
+      // Automatically save to FormPersistence
+      this.saveImagesToFormPersistence();
+      
       if (this.onFilesSelected) {
         this.onFilesSelected(this.uploadedImages);
       }
@@ -285,13 +347,16 @@ class ImageUpload {
     
     console.log('ImageUpload: Image removed:', imageId);
     
+    // Automatically save to FormPersistence after removal
+    this.saveImagesToFormPersistence();
+    
     if (this.onFilesSelected) {
       this.onFilesSelected(this.uploadedImages);
     }
   }
 
   /**
-   * Get all uploaded images
+   * Get all uploaded images as base64 strings
    */
   getImages() {
     return this.uploadedImages.map(img => img.data);
@@ -315,6 +380,9 @@ class ImageUpload {
         uploadedImagesContainer.innerHTML = '';
       }
     }
+    
+    // Automatically save to FormPersistence after clearing
+    this.saveImagesToFormPersistence();
     
     if (this.onFilesSelected) {
       this.onFilesSelected(this.uploadedImages);
@@ -480,5 +548,6 @@ class ImageUpload {
   }
 }
 
-// Make it available globally
+// Make it available globally and export for ES modules
 window.ImageUpload = ImageUpload;
+export { ImageUpload };
