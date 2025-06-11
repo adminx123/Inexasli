@@ -4,432 +4,255 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fashion Analysis Output</title>
-  
-  <!-- Preconnect and font links -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles/outputstyles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
-    
-    .fashion-display {
-      font-family: "Inter", sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      white-space: normal;
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
     }
-    
-    .fashion-header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-    
-    .style-score-section {
-      background: white;
-      color: #4a7c59;
-      border: 1px solid #4a7c59;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 18px;
-    }
-    
-    .outfit-analysis-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-    
-    .outfit-card {
-      background: #f2f9f3;
-      border: 1px solid #4a7c59;
-      border-radius: 8px;
-      padding: 15px;
-      transition: transform 0.2s ease;
-    }
-    
-    .outfit-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(74, 124, 89, 0.15);
-    }
-    
-    .outfit-title {
-      font-weight: 600;
-      color: #2d5d3d;
-      margin-bottom: 10px;
-      font-size: 18px;
-    }
-    
-    .outfit-rating {
-      background: #4a7c59;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 15px;
-      font-size: 14px;
-      font-weight: 500;
-      display: inline-block;
-      margin-bottom: 10px;
-    }
-    
-    .color-palette-section {
-      background: #f8fdf9;
-      border: 1px solid #4a7c59;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 25px;
-    }
-    
-    .color-palette-title {
-      font-weight: 600;
-      color: #2d5d3d;
-      margin-bottom: 15px;
-      font-size: 20px;
-      text-align: center;
-    }
-    
-    .color-recommendations {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-    }
-    
-    .color-category {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 15px;
-    }
-    
-    .color-category-title {
-      font-weight: 600;
-      color: #2d5d3d;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-    }
-    
-    .styling-tips-section {
+    .device-container {
+      max-width: 420px;
+      margin: 32px auto;
       background: #fff;
-      border: 1px solid #4a7c59;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 25px;
-    }
-    
-    .tips-title {
-      font-weight: 600;
-      color: #2d5d3d;
-      margin-bottom: 15px;
-      font-size: 20px;
-      text-align: center;
-    }
-    
-    .tip-item {
-      background: #f2f9f3;
-      border-left: 4px solid #4a7c59;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 0 6px 6px 0;
-    }
-    
-    .tip-icon {
-      color: #4a7c59;
-      margin-right: 10px;
-      font-size: 18px;
-    }
-    
-    .fit-analysis-section {
-      background: #f8fdf9;
-      border: 1px solid #4a7c59;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 25px;
-    }
-    
-    .fit-title {
-      font-weight: 600;
-      color: #2d5d3d;
-      margin-bottom: 15px;
-      font-size: 20px;
-      text-align: center;
-    }
-    
-    .improvement-suggestions {
-      background: #fff4e6;
-      border: 1px solid #ff9800;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 25px;
-    }
-    
-    .improvement-title {
-      font-weight: 600;
-      color: #e65100;
-      margin-bottom: 15px;
-      font-size: 20px;
-      text-align: center;
-    }
-    
-    .suggestion-item {
-      background: white;
-      border: 1px solid #ffcc80;
-      border-radius: 6px;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
-    
-    .star-rating {
-      color: #ffd700;
-      margin-right: 5px;
-    }
-    
-    .data-section {
-      background: #f5f5f5;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 15px;
-      margin-top: 20px;
-      font-size: 14px;
-      color: #666;
-    }
-    
-    .data-label {
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 5px;
-    }
-    
-    .uploaded-images-display {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    
-    .outfit-image {
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    
-    .outfit-image img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      display: block;
-    }
-    
-    /* Add magazine cover and article styles */
-    .magazine-cover {
-      background: linear-gradient(135deg, #f8f9fa 60%, #e0e7ef 100%);
-      border-radius: 18px 18px 0 0;
+      border-radius: 18px;
       box-shadow: 0 6px 24px rgba(44,62,80,0.08);
-      padding: 32px 24px 16px 24px;
-      text-align: center;
-      position: relative;
-      margin-bottom: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
     }
-    .magazine-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: #2d5d3d;
-      margin-bottom: 18px;
-      text-shadow: 0 2px 8px rgba(44,62,80,0.08);
-    }
-    .cover-image-section {
+    .photo-frame {
+      width: 100%;
+      max-width: 420px;
+      aspect-ratio: 1/1;
+      background: #e0e7ef;
       display: flex;
       justify-content: center;
       align-items: center;
+      border-bottom: 1px solid #e0e7ef;
+      margin: 0 auto;
       min-height: 220px;
-      margin-bottom: 0;
+      max-height: 420px;
+      overflow: hidden;
     }
-    .cover-image {
-      border-radius: 12px;
-      box-shadow: 0 4px 18px rgba(44,62,80,0.13);
-      width: 220px;
-      height: 220px;
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      border: 4px solid #fff;
-    }
-    .cover-placeholder {
-      width: 220px;
-      height: 220px;
+      border-radius: 0 0 18px 18px;
       background: #e0e7ef;
-      border-radius: 12px;
+      display: block;
+    }
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      background: #e0e7ef;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #aaa;
       font-size: 1.2rem;
-      border: 4px solid #fff;
     }
-    .magazine-article-section {
-      background: #fff;
-      border-radius: 0 0 18px 18px;
-      box-shadow: 0 2px 8px rgba(44,62,80,0.04);
-      padding: 32px 24px 24px 24px;
-      margin-top: 0;
-    }
-    /* Magazine masthead and date */
-    .magazine-masthead {
-      font-family: 'Playfair Display', serif;
-      font-size: 3.2rem;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      color: #1a2e22;
-      text-shadow: 0 4px 18px rgba(44,62,80,0.10);
-      margin-bottom: 0.2em;
-      text-transform: uppercase;
-      line-height: 1.1;
-    }
-    .magazine-date {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.1rem;
-      color: #6b7c7c;
-      margin-bottom: 0.5em;
-      letter-spacing: 0.08em;
-    }
-    .magazine-tagline {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      color: #4a7c59;
-      font-style: italic;
-      margin-bottom: 1.2em;
-      letter-spacing: 0.04em;
-    }
-    /* Drop cap for first letter */
-    .formatted-response p:first-of-type::first-letter {
-      float: left;
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8em;
-      line-height: 1;
-      font-weight: 700;
-      color: #2d5d3d;
-      margin-right: 0.12em;
-      margin-top: 0.05em;
-    }
-    /* Pull quote style */
-    .pull-quote {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      color: #e65100;
-      border-left: 4px solid #e65100;
-      padding-left: 18px;
-      margin: 2em 0 2em 0;
-      font-style: italic;
-      background: #fff4e6;
-      border-radius: 0 8px 8px 0;
-      box-shadow: 0 2px 8px rgba(230,81,0,0.04);
-    }
-    /* Section divider */
-    .section-divider {
-      border: none;
-      border-top: 2px solid #e0e7ef;
-      margin: 2.5em 0 2em 0;
-    }
-    /* Sidebar for quick tips */
-    .sidebar-tips {
-      background: linear-gradient(120deg, #f8f9fa 80%, #e0e7ef 100%);
-      border-left: 4px solid #4a7c59;
-      padding: 18px 20px;
-      border-radius: 0 12px 12px 0;
-      margin: 2em 0 2em 0;
-      font-size: 1.05rem;
-      color: #2d5d3d;
-      box-shadow: 0 2px 8px rgba(44,62,80,0.04);
-    }
-    /* Footer magazine style */
-    .magazine-footer {
+    .score-section {
       text-align: center;
-      font-family: 'Inter', sans-serif;
-      color: #6b7c7c;
-      font-size: 1rem;
-      margin-top: 3em;
-      padding-top: 2em;
-      border-top: 1px solid #e0e7ef;
-      letter-spacing: 0.04em;
-    }
-    .magazine-footer a {
-      color: #4a7c59;
-      text-decoration: none;
       font-weight: 600;
-      margin: 0 0.5em;
+      font-size: 1.1rem;
+      color: #4a7c59;
+      margin: 18px 0 8px 0;
+      letter-spacing: 0.02em;
+    }
+    .fashion-content {
+      padding: 0 18px 18px 18px;
+      font-size: 1rem;
+      color: #222;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .analysis-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+      padding: 18px 14px;
+      margin-top: 8px;
+      width: 100%;
+      max-width: 340px;
+      min-height: 60px;
+      text-align: left;
+      font-size: 1.02rem;
+      color: #2d5d3d;
+      word-break: break-word;
+    }
+    .analysis-title {
+      font-weight: 700;
+      font-size: 1.08rem;
+      margin-bottom: 6px;
+      color: #4a7c59;
+    }
+    .json-warning {
+      color: #e65100;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="device-container">
-    <div class="output-wrapper">
-      <div class="api-output">
-        
-        <div class="fashion-header">
-          <h1><i class="fas fa-tshirt"></i> Your Fashion Analysis</h1>
-          <p>AI-powered style critique and recommendations</p>
-        </div>
-
-        <div class="magazine-cover">
-          <div class="magazine-masthead">FashionIQ</div>
-          <div class="magazine-date">June 2025</div>
-          <div class="magazine-tagline">Your Style, Curated. AI-Driven Fashion Insights.</div>
-          <div class="cover-image-section" id="cover-image-section"></div>
-        </div>
-        <div class="magazine-article-section">
-          <div class="style-score-section" id="overall-score">
-            <i class="fas fa-star star-rating"></i>
-            Loading your fashion analysis...
-          </div>
-          <div class="fashion-display" id="fashion-content">
-            <!-- AI response will be populated here -->
-          </div>
-          <hr class="section-divider">
-          <div class="sidebar-tips" id="sidebar-tips" style="display:none;"></div>
-          <div class="data-section">
-            <div class="data-label">Your Style Profile:</div>
-            <div id="style-data"></div>
-          </div>
-        </div>
-        <div class="magazine-footer">
-          <span>Next Issue: Summer Trends 2025</span> &bull;
-          <a href="https://inexasli.com" target="_blank">Visit inexasli.com</a> &bull;
-          <span>Follow us <i class="fab fa-instagram"></i> <i class="fab fa-x-twitter"></i></span>
-        </div>
-
-      </div>
+    <div class="photo-frame" id="photo-frame">
+      <!-- Photo will be inserted here -->
     </div>
+    <div class="score-section" id="overall-score">Loading...</div>
+    <div class="fashion-content" id="fashion-content"></div>
   </div>
-
   <script>
   (function() {
-    // Helper to safely get and parse JSON from localStorage
     function getJSON(key) {
       try {
         const item = localStorage.getItem(key);
         return item ? JSON.parse(item) : null;
       } catch (e) {
-        console.error('[FashionOutput] Error parsing JSON for key', key, e);
         return null;
       }
     }
-
+    function displayFashionAnalysis(data, container) {
+      container.innerHTML = '';
+      container.classList.add('fashion-display');
+      // If string, just show it
+      if (typeof data === 'string') {
+        const div = document.createElement('div');
+        div.className = 'analysis-card';
+        div.innerHTML = data
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*\*/g, '<em>$1</em>')
+          .replace(/\n\n/g, '</p><p>')
+          .replace(/\n/g, '<br>');
+        container.appendChild(div);
+        return;
+      }
+      // If object, show key fields in a beautiful, minimalist, user-captivating way
+      const card = document.createElement('div');
+      card.className = 'analysis-card';
+      // --- Overall Score ---
+      if (data.overallRating && typeof data.overallRating.score !== 'undefined') {
+        const scoreDiv = document.createElement('div');
+        scoreDiv.style.cssText = 'font-size:2.2rem;font-weight:700;color:#4a7c59;text-align:center;margin-bottom:8px;';
+        scoreDiv.innerHTML = `<i class=\"fas fa-star star-rating\"></i> ${data.overallRating.score} / 10`;
+        card.appendChild(scoreDiv);
+        if (data.overallRating.explanation) {
+          const expl = document.createElement('div');
+          expl.style.cssText = 'color:#555;font-size:1.05rem;text-align:center;margin-bottom:16px;';
+          expl.textContent = data.overallRating.explanation;
+          card.appendChild(expl);
+        }
+      }
+      // --- Category Scores ---
+      if (Array.isArray(data.analysisScores) && data.analysisScores.length) {
+        const catSection = document.createElement('div');
+        catSection.style.cssText = 'margin-bottom:16px;';
+        data.analysisScores.forEach(s => {
+          const row = document.createElement('div');
+          row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:1rem;';
+          row.innerHTML = `<span style='color:#2d5d3d;font-weight:500;'>${s.category}</span><span style='color:#4a7c59;font-weight:600;'>${s.score}/10</span>`;
+          catSection.appendChild(row);
+          if (s.feedback) {
+            const fb = document.createElement('div');
+            fb.style.cssText = 'color:#888;font-size:0.97rem;margin-bottom:6px;margin-left:2px;';
+            fb.textContent = s.feedback;
+            catSection.appendChild(fb);
+          }
+        });
+        card.appendChild(catSection);
+      }
+      // --- Outfit Breakdown ---
+      if (Array.isArray(data.outfitBreakdown) && data.outfitBreakdown.length) {
+        const ob = data.outfitBreakdown[0];
+        const obDiv = document.createElement('div');
+        obDiv.style.cssText = 'margin-bottom:16px;';
+        obDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Outfit</div><div style='color:#222;margin-bottom:4px;'>${ob.garments.join(', ')}</div>`;
+        if (ob.strengths && ob.strengths.length) {
+          obDiv.innerHTML += `<div style='color:#2d5d3d;font-size:0.98rem;margin-bottom:2px;'><b>Strengths:</b> ${ob.strengths.join('; ')}</div>`;
+        }
+        if (ob.improvements && ob.improvements.length) {
+          obDiv.innerHTML += `<div style='color:#e65100;font-size:0.98rem;'><b>Improvements:</b> ${ob.improvements.join('; ')}</div>`;
+        }
+        card.appendChild(obDiv);
+      }
+      // --- Body Type Analysis ---
+      if (data.bodyTypeAnalysis) {
+        const bta = data.bodyTypeAnalysis;
+        const btaDiv = document.createElement('div');
+        btaDiv.style.cssText = 'margin-bottom:16px;';
+        btaDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Body Type: <span style='color:#2d5d3d;'>${bta.estimatedBodyType}</span></div>`;
+        if (bta.strengths && bta.strengths.length) {
+          btaDiv.innerHTML += `<div style='color:#2d5d3d;font-size:0.98rem;'><b>Strengths:</b> ${bta.strengths.join('; ')}</div>`;
+        }
+        if (bta.recommendedStyles && bta.recommendedStyles.length) {
+          btaDiv.innerHTML += `<div style='color:#4a7c59;font-size:0.98rem;'><b>Recommended Styles:</b> ${bta.recommendedStyles.join('; ')}</div>`;
+        }
+        if (bta.avoidStyles && bta.avoidStyles.length) {
+          btaDiv.innerHTML += `<div style='color:#e65100;font-size:0.98rem;'><b>Avoid:</b> ${bta.avoidStyles.join('; ')}</div>`;
+        }
+        card.appendChild(btaDiv);
+      }
+      // --- Color Analysis ---
+      if (data.colorAnalysis) {
+        const ca = data.colorAnalysis;
+        const caDiv = document.createElement('div');
+        caDiv.style.cssText = 'margin-bottom:16px;';
+        caDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Color Analysis</div>`;
+        if (ca.skinTone) caDiv.innerHTML += `<div style='color:#2d5d3d;'>Skin Tone: ${ca.skinTone}</div>`;
+        if (ca.bestColors && ca.bestColors.length) caDiv.innerHTML += `<div style='color:#4a7c59;font-size:0.98rem;'><b>Best Colors:</b> ${ca.bestColors.join(', ')}</div>`;
+        if (ca.avoidColors && ca.avoidColors.length) caDiv.innerHTML += `<div style='color:#e65100;font-size:0.98rem;'><b>Avoid:</b> ${ca.avoidColors.join(', ')}</div>`;
+        if (ca.seasonalPalette) caDiv.innerHTML += `<div style='color:#2d5d3d;'>Palette: ${ca.seasonalPalette}</div>`;
+        card.appendChild(caDiv);
+      }
+      // --- Specific Recommendations ---
+      if (Array.isArray(data.specificRecommendations) && data.specificRecommendations.length) {
+        const srDiv = document.createElement('div');
+        srDiv.style.cssText = 'margin-bottom:16px;';
+        srDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Quick Tips</div>`;
+        data.specificRecommendations.forEach(r => {
+          srDiv.innerHTML += `<div style='color:#2d5d3d;font-size:0.98rem;margin-bottom:2px;'><b>${r.item}:</b> <span style='color:#4a7c59;'>${r.reason}</span> <span style='color:#888;font-size:0.95em;'>(${r.priority}, ${r.cost})</span></div>`;
+        });
+        card.appendChild(srDiv);
+      }
+      // --- Shopping List ---
+      if (Array.isArray(data.shoppingList) && data.shoppingList.length) {
+        const shopDiv = document.createElement('div');
+        shopDiv.style.cssText = 'margin-bottom:16px;';
+        shopDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Shopping List</div>`;
+        data.shoppingList.forEach(item => {
+          shopDiv.innerHTML += `<div style='color:#2d5d3d;font-size:0.98rem;margin-bottom:2px;'><b>${item.item}</b> <span style='color:#888;font-size:0.95em;'>(${item.priceRange}, ${item.priority})</span></div>`;
+        });
+        card.appendChild(shopDiv);
+      }
+      // --- Style Evolution ---
+      if (data.styleEvolution) {
+        const se = data.styleEvolution;
+        const seDiv = document.createElement('div');
+        seDiv.style.cssText = 'margin-bottom:16px;';
+        seDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Style Evolution</div>`;
+        if (se.currentLevel) seDiv.innerHTML += `<div style='color:#2d5d3d;'>Current: ${se.currentLevel}</div>`;
+        if (se.nextSteps && se.nextSteps.length) seDiv.innerHTML += `<div style='color:#4a7c59;font-size:0.98rem;'><b>Next Steps:</b> ${se.nextSteps.join('; ')}</div>`;
+        if (se.longTermGoals && se.longTermGoals.length) seDiv.innerHTML += `<div style='color:#2d5d3d;font-size:0.98rem;'><b>Long Term Goals:</b> ${se.longTermGoals.join('; ')}</div>`;
+        card.appendChild(seDiv);
+      }
+      container.appendChild(card);
+    }
     function updateOutput() {
       const fashionContent = document.getElementById('fashion-content');
       const scoreSection = document.getElementById('overall-score');
-      if (!fashionContent || !scoreSection) {
-        setTimeout(updateOutput, 100);
-        return;
-      }
+      const photoFrame = document.getElementById('photo-frame');
       let data = getJSON('fashionIqResponse');
       if (!data) {
-        // Fallback: try direct parse
         const raw = localStorage.getItem('fashionIqResponse');
         if (raw) {
           try { data = JSON.parse(raw); } catch (e) { data = null; }
@@ -438,81 +261,35 @@
       if (data && data.message === 'Success' && data.data) {
         data = data.data;
       }
-      if (!data) {
-        fashionContent.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i><h3>No Results Found</h3><p>No fashion analysis results were found. Please try again.</p></div>`;
-        scoreSection.innerHTML = `<i class="fas fa-star star-rating"></i> No Score`;
-        return;
-      }
-      // Try to extract content
+      // Extract content
       let content = null;
-      if (data.choices && data.choices[0] && data.choices[0].message) {
+      if (data && data.choices && data.choices[0] && data.choices[0].message) {
         content = data.choices[0].message.content;
-      } else if (data.content) {
+      } else if (data && data.content) {
         content = data.content;
-      } else if (data.fashionAnalysis) {
+      } else if (data && data.fashionAnalysis) {
         content = data.fashionAnalysis;
       } else if (typeof data === 'string') {
         content = data;
       }
-      if (!content) {
-        fashionContent.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i><h3>Invalid Response Format</h3><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
-        scoreSection.innerHTML = `<i class="fas fa-star star-rating"></i> No Score`;
-        return;
-      }
       // Score extraction
-      const scoreMatch = content.match(/(?:overall|total|style)\s*(?:score|rating):\s*(\d+(?:\.\d+)?(?:\/\d+)?|\d+\s*(?:out of|\/)\s*\d+)/i);
+      let scoreMatch = null;
+      if (typeof content === 'string') {
+        scoreMatch = content.match(/(?:overall|total|style)\s*(?:score|rating):\s*(\d+(?:\.\d+)?(?:\/\d+)?|\d+\s*(?:out of|\/)\s*\d+)/i);
+      }
       if (scoreMatch) {
         scoreSection.innerHTML = `<i class=\"fas fa-star star-rating\"></i> Overall Style Score: ${scoreMatch[1]}`;
       } else {
         scoreSection.innerHTML = `<i class=\"fas fa-star star-rating\"></i> Style Analysis`;
       }
-      // Format content
-      let formattedContent = content
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/\n\n\"(.+?)\"\n\n/g, '<div class="pull-quote">$1</div>') // Pull quote if AI outputs quoted lines
-        .replace(/(\d+)\.\s/g, '<br><strong>$1.</strong> ')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/\n/g, '<br>');
-      fashionContent.innerHTML = `<div class=\"formatted-response\"><p>${formattedContent}</p></div>`;
-      // Sidebar quick tips (show if recommendations exist)
-      const sidebar = document.getElementById('sidebar-tips');
-      if (data && data.fashionAnalysis && data.fashionAnalysis.specificRecommendations) {
-        sidebar.style.display = '';
-        sidebar.innerHTML = '<strong>Quick Tips:</strong><ul style="margin-top:0.5em;">' +
-          data.fashionAnalysis.specificRecommendations.map(r => `<li><b>${r.item}</b>: <span style='color:#4a7c59;'>${r.reason}</span></li>`).join('') +
-          '</ul>';
-      } else {
-        sidebar.style.display = 'none';
-      }
-      // Images
+      // Render content
+      displayFashionAnalysis(content, fashionContent);
+      // Photo
       const userData = getJSON('fashionIqInput');
-      const imagesDisplay = document.getElementById('images-display');
-      if (userData && userData.images && imagesDisplay) {
-        imagesDisplay.innerHTML = userData.images.map((img, i) => `<div class=\"outfit-image\"><img src=\"${img}\" alt=\"Outfit ${i+1}\"></div>`).join('');
-      }
-      // Images for magazine cover (first image as cover)
-      const coverImageSection = document.getElementById('cover-image-section');
-      if (userData && userData.images && userData.images.length && coverImageSection) {
-        coverImageSection.innerHTML = `<img class="cover-image" src="${userData.images[0]}" alt="Magazine Cover">`;
-      } else if (coverImageSection) {
-        coverImageSection.innerHTML = '<div class="cover-placeholder">No Image Uploaded</div>';
-      }
-      // Style profile
-      const styleData = document.getElementById('style-data');
-      if (userData && styleData) {
-        const profile = [
-          userData.personalStyle && `Personal Style: ${userData.personalStyle}`,
-          userData.skinTone && `Skin Tone: ${userData.skinTone}`,
-          userData.hairColor && `Hair Color: ${userData.hairColor}`,
-          userData.occasion && `Occasion: ${userData.occasion}`,
-          userData.location && `Location: ${userData.location}`,
-          userData.season && `Season: ${userData.season}`,
-          userData.age && `Age: ${userData.age}`,
-          userData.height && `Height: ${userData.height}`,
-          userData.gender && `Gender: ${userData.gender}`
-        ].filter(Boolean).join(' • ');
-        styleData.textContent = profile || 'No profile data available';
+      if (userData && userData.images && userData.images.length) {
+        photoFrame.innerHTML = `<img src="${userData.images[0]}" alt="Outfit Photo">`;
+      } else {
+        photoFrame.innerHTML = '<div class="photo-placeholder">No Image Uploaded</div>';
       }
     }
     setTimeout(updateOutput, 50);
