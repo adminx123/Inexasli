@@ -7,27 +7,98 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: #f8f9fa;
+      background: #f5f5f5;
       margin: 0;
       padding: 0;
     }
     .device-container {
-      max-width: 420px;
-      margin: 32px auto;
+      max-width: 480px;
+      margin: 40px auto;
       background: #fff;
       border-radius: 18px;
-      box-shadow: 0 6px 24px rgba(44,62,80,0.08);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.10);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: stretch;
     }
+    .magazine-header {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #181818;
+      letter-spacing: 0.04em;
+      text-align: center;
+      margin: 32px 0 8px 0;
+      line-height: 1.1;
+    }
+    .magazine-subhead {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      color: #444;
+      text-align: center;
+      margin-bottom: 24px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+    .score-section {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #181818;
+      text-align: center;
+      margin: 18px 0 8px 0;
+      letter-spacing: 0.02em;
+    }
+    .magazine-section {
+      margin: 0 0 32px 0;
+      padding: 0 18px;
+      background: #f5f5f5;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .magazine-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: #181818;
+      margin-bottom: 8px;
+      letter-spacing: 0.03em;
+      border-left: 4px solid #181818;
+      padding-left: 10px;
+      background: #fff;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+    }
+    .magazine-section-content {
+      font-size: 1.08rem;
+      color: #222;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      margin-bottom: 6px;
+    }
+    .magazine-section-list {
+      margin: 8px 0 0 0;
+      padding-left: 22px;
+      color: #181818;
+      font-size: 1.01rem;
+    }
+    .magazine-section-list li {
+      margin-bottom: 4px;
+      list-style: disc;
+    }
+    .magazine-divider {
+      border: none;
+      border-top: 1.5px solid #e5e5e5;
+      margin: 32px 0 24px 0;
+    }
     .photo-frame {
       width: 100%;
-      max-width: 420px;
+      max-width: 480px;
       aspect-ratio: 1/1;
       background: #f2f9f3; /* Muted green background */
       display: flex;
@@ -35,8 +106,8 @@
       align-items: center;
       border-bottom: 1px solid #e0e7ef;
       margin: 0 auto;
-      min-height: 220px;
-      max-height: 420px;
+      min-height: 240px;
+      max-height: 480px;
       overflow: hidden;
     }
     .photo-border-wrapper {
@@ -64,7 +135,7 @@
     .photo-placeholder {
       width: 100%;
       height: 100%;
-      min-height: 220px;
+      min-height: 240px;
       background: #e0e7ef;
       display: flex;
       align-items: center;
@@ -72,16 +143,8 @@
       color: #aaa;
       font-size: 1.2rem;
     }
-    .score-section {
-      text-align: center;
-      font-weight: 600;
-      font-size: 1.1rem;
-      color: #4a7c59;
-      margin: 18px 0 8px 0;
-      letter-spacing: 0.02em;
-    }
     .fashion-content {
-      padding: 0 18px 18px 18px;
+      padding: 0 18px 24px 18px;
       font-size: 1rem;
       color: #222;
       min-height: 80px;
@@ -89,20 +152,23 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      width: 100%;
+      box-sizing: border-box;
     }
     .analysis-card {
       background: #f8f9fa;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(44,62,80,0.04);
-      padding: 18px 14px;
+      padding: 18px 10px;
       margin-top: 8px;
       width: 100%;
-      max-width: 340px;
+      max-width: 100%;
       min-height: 60px;
       text-align: left;
       font-size: 1.02rem;
       color: #2d5d3d;
       word-break: break-word;
+      box-sizing: border-box;
     }
     .analysis-title {
       font-weight: 700;
@@ -116,7 +182,131 @@
       margin-bottom: 6px;
       text-align: center;
     }
-  </style>
+    .fashion-cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      background: transparent;
+      padding: 0 0 24px 0;
+      margin-top: 18px;
+      width: 100%;
+      align-items: center;
+    }
+    .fashion-card {
+      background: linear-gradient(120deg, #fff 85%, #f2f9f3 100%);
+      border-radius: 28px 28px 22px 22px;
+      padding: 32px 28px 26px 28px;
+      margin-bottom: 0;
+      position: relative;
+      transition: box-shadow 0.3s cubic-bezier(.4,1.4,.6,1), transform 0.3s cubic-bezier(.4,1.4,.6,1);
+      box-shadow: 0 10px 40px 0 rgba(74,124,89,0.13), 0 2px 12px 0 rgba(44,62,80,0.07);
+      border-left: 8px solid #4a7c59;
+      border-right: 2.5px solid #e0e7ef;
+      border-bottom: 2.5px solid #e0e7ef;
+      border-top: none;
+      opacity: 0;
+      transform: translateY(32px) scale(0.98);
+      font-family: 'Playfair Display', serif;
+      overflow: hidden;
+      min-width: 0;
+      max-width: 420px;
+      width: 100%;
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .fashion-card.female {
+      border-left-color: #181818 !important;
+      box-shadow: 0 12px 48px 0 rgba(230,81,0,0.13), 0 2px 12px 0 rgba(44,62,80,0.07);
+    }
+    .fashion-card.male {
+      border-left-color: #2d5d3d;
+      box-shadow: 0 12px 48px 0 rgba(45,93,61,0.13), 0 2px 12px 0 rgba(44,62,80,0.07);
+    }
+    .fashion-card .section-title {
+      font-size: 1.38rem;
+      font-weight: 900;
+      color: #2d5d3d;
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+      font-family: 'Playfair Display', serif;
+      text-transform: uppercase;
+      border-bottom: 2px solid #e0e7ef;
+      padding-bottom: 8px;
+      background: linear-gradient(90deg, #f2f9f3 60%, #fff 100%);
+      border-radius: 0 0 14px 14px;
+      box-shadow: 0 1.5px 0 rgba(44,62,80,0.03);
+      width: 100%;
+      text-align: left;
+    }
+    .fashion-card .section-content {
+      font-size: 1.13rem;
+      color: #222;
+      font-family: 'Inter', sans-serif;
+      margin-top: 10px;
+      line-height: 1.8;
+      letter-spacing: 0.01em;
+      width: 100%;
+    }
+    .fashion-card .section-list {
+      margin: 12px 0 0 0;
+      padding-left: 22px;
+      color: #2d5d3d;
+      font-size: 1.09rem;
+    }
+    .fashion-card .section-list li {
+      margin-bottom: 7px;
+      padding-left: 2px;
+      position: relative;
+    }
+    .fashion-card .section-list li:before {
+      content: '\2022';
+      color: #4a7c59;
+      font-size: 1.13em;
+      position: absolute;
+      left: -18px;
+      top: 0.1em;
+    }
+    .fashion-card .section-content b {
+      color: #4a7c59;
+      font-weight: 700;
+    }
+    .fashion-card .section-content span[style*='color:#e65100'] {
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .fashion-card .section-content span[style*='color:#4a7c59'] {
+      font-weight: 600;
+    }
+    .fashion-card .section-content em {
+      color: #e65100;
+      font-style: italic;
+    }
+    .fashion-card .section-content {
+      background: none;
+    }
+    .fashion-card:hover {
+      transform: translateY(-6px) scale(1.012);
+      box-shadow: 0 20px 60px 0 rgba(74,124,89,0.16), 0 3px 16px 0 rgba(44,62,80,0.09);
+    }
+    /* Remove all orange color references */
+    /* .photo-border-img, .fashion-card.female, .fashion-card .section-content em, etc. */
+    .photo-border-img,
+    .fashion-card.female,
+    .fashion-card .section-content em,
+    .fashion-card .section-content span[style*='color:#e65100'],
+    .magazine-section-content span[style*='color:#e65100'],
+    .magazine-section-list li span[style*='color:#e65100'] {
+      color: #181818 !important;
+      border-left-color: #181818 !important;
+      box-shadow: none !important;
+    }
+    /* Remove any border-left-color: #e65100; from .fashion-card.female */
+    .fashion-card.female {
+      border-left-color: #181818 !important;
+    }
+    </style>
 </head>
 <body>
   <div class="device-container">
@@ -138,128 +328,168 @@
     }
     function displayFashionAnalysis(data, container) {
       container.innerHTML = '';
-      container.classList.add('fashion-display');
-      // If string, just show it
-      if (typeof data === 'string') {
-        const div = document.createElement('div');
-        div.className = 'analysis-card';
-        div.innerHTML = data
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*\*/g, '<em>$1</em>')
-          .replace(/\n\n/g, '</p><p>')
-          .replace(/\n/g, '<br>');
-        container.appendChild(div);
-        return;
-      }
-      // If object, show key fields in a beautiful, minimalist, user-captivating way
-      const card = document.createElement('div');
-      card.className = 'analysis-card';
-      // --- Overall Score ---
+      // Magazine-style header
+      const header = document.createElement('div');
+      header.className = 'magazine-header';
+      header.textContent = 'Your Look, Reviewed';
+      container.appendChild(header);
+      const subhead = document.createElement('div');
+      subhead.className = 'magazine-subhead';
+      subhead.textContent = 'Expert AI Style Critique & Recommendations';
+      container.appendChild(subhead);
+      // Score
       if (data.overallRating && typeof data.overallRating.score !== 'undefined') {
         const scoreDiv = document.createElement('div');
-        scoreDiv.style.cssText = 'font-size:2.2rem;font-weight:700;color:#4a7c59;text-align:center;margin-bottom:8px;';
+        scoreDiv.className = 'score-section';
         scoreDiv.innerHTML = `<i class=\"fas fa-star star-rating\"></i> ${data.overallRating.score} / 10`;
-        card.appendChild(scoreDiv);
-        if (data.overallRating.explanation) {
-          const expl = document.createElement('div');
-          expl.style.cssText = 'color:#555;font-size:1.05rem;text-align:center;margin-bottom:16px;';
-          expl.textContent = data.overallRating.explanation;
-          card.appendChild(expl);
-        }
+        container.appendChild(scoreDiv);
       }
-      // --- Category Scores ---
+      // Summary/Explanation
+      if (data.overallRating && data.overallRating.explanation) {
+        const section = document.createElement('section');
+        section.className = 'magazine-section';
+        const title = document.createElement('div');
+        title.className = 'magazine-section-title';
+        title.textContent = 'Summary';
+        section.appendChild(title);
+        const content = document.createElement('div');
+        content.className = 'magazine-section-content';
+        content.textContent = data.overallRating.explanation;
+        section.appendChild(content);
+        container.appendChild(section);
+      }
+      // Divider
+      container.appendChild(document.createElement('hr')).className = 'magazine-divider';
+      // Category Scores
       if (Array.isArray(data.analysisScores) && data.analysisScores.length) {
-        const catSection = document.createElement('div');
-        catSection.style.cssText = 'margin-bottom:16px;';
+        const section = document.createElement('section');
+        section.className = 'magazine-section';
+        const title = document.createElement('div');
+        title.className = 'magazine-section-title';
+        title.textContent = 'Category Scores';
+        section.appendChild(title);
+        const list = document.createElement('ul');
+        list.className = 'magazine-section-list';
         data.analysisScores.forEach(s => {
-          const row = document.createElement('div');
-          row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:1rem;';
-          row.innerHTML = `<span style='color:#2d5d3d;font-weight:500;'>${s.category}</span><span style='color:#4a7c59;font-weight:600;'>${s.score}/10</span>`;
-          catSection.appendChild(row);
-          if (s.feedback) {
-            const fb = document.createElement('div');
-            fb.style.cssText = 'color:#888;font-size:0.97rem;margin-bottom:6px;margin-left:2px;';
-            fb.textContent = s.feedback;
-            catSection.appendChild(fb);
-          }
+          const li = document.createElement('li');
+          li.innerHTML = `<b>${s.category}:</b> ${s.score}/10 <span style='color:#888;font-weight:400;'>${s.feedback || ''}</span>`;
+          list.appendChild(li);
         });
-        card.appendChild(catSection);
+        section.appendChild(list);
+        container.appendChild(section);
       }
-      // --- Outfit Breakdown ---
+      // Outfit Breakdown
       if (Array.isArray(data.outfitBreakdown) && data.outfitBreakdown.length) {
         const ob = data.outfitBreakdown[0];
-        const obDiv = document.createElement('div');
-        obDiv.style.cssText = 'margin-bottom:16px;';
-        obDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Outfit</div><div style='color:#222;margin-bottom:4px;'>${ob.garments.join(', ')}</div>`;
-        if (ob.strengths && ob.strengths.length) {
-          obDiv.innerHTML += `<div style='color:#2d5d3d;font-size:0.98rem;margin-bottom:2px;'><b>Strengths:</b> ${ob.strengths.join('; ')}</div>`;
-        }
-        if (ob.improvements && ob.improvements.length) {
-          obDiv.innerHTML += `<div style='color:#e65100;font-size:0.98rem;'><b>Improvements:</b> ${ob.improvements.join('; ')}</div>`;
-        }
-        card.appendChild(obDiv);
+        const section = document.createElement('section');
+        section.className = 'magazine-section';
+        const title = document.createElement('div');
+        title.className = 'magazine-section-title';
+        title.textContent = 'Outfit Breakdown';
+        section.appendChild(title);
+        let html = `<b>Garments:</b> ${ob.garments.join(', ')}<br>`;
+        if (ob.strengths && ob.strengths.length) html += `<b>Strengths:</b> ${ob.strengths.join('; ')}<br>`;
+        if (ob.improvements && ob.improvements.length) html += `<b>Improvements:</b> <span style='color:#e65100;'>${ob.improvements.join('; ')}</span>`;
+        const content = document.createElement('div');
+        content.className = 'magazine-section-content';
+        content.innerHTML = html;
+        section.appendChild(content);
+        container.appendChild(section);
       }
-      // --- Body Type Analysis ---
+      // Body Type Analysis
       if (data.bodyTypeAnalysis) {
         const bta = data.bodyTypeAnalysis;
-        const btaDiv = document.createElement('div');
-        btaDiv.style.cssText = 'margin-bottom:16px;';
-        btaDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Body Type: <span style='color:#2d5d3d;'>${bta.estimatedBodyType}</span></div>`;
-        if (bta.strengths && bta.strengths.length) {
-          btaDiv.innerHTML += `<div style='color:#2d5d3d;font-size:0.98rem;'><b>Strengths:</b> ${bta.strengths.join('; ')}</div>`;
-        }
-        if (bta.recommendedStyles && bta.recommendedStyles.length) {
-          btaDiv.innerHTML += `<div style='color:#4a7c59;font-size:0.98rem;'><b>Recommended Styles:</b> ${bta.recommendedStyles.join('; ')}</div>`;
-        }
-        if (bta.avoidStyles && bta.avoidStyles.length) {
-          btaDiv.innerHTML += `<div style='color:#e65100;font-size:0.98rem;'><b>Avoid:</b> ${bta.avoidStyles.join('; ')}</div>`;
-        }
-        card.appendChild(btaDiv);
+        const section = document.createElement('section');
+        section.className = 'magazine-section';
+        const title = document.createElement('div');
+        title.className = 'magazine-section-title';
+        title.textContent = 'Body Type Analysis';
+        section.appendChild(title);
+        let html = `<b>Type:</b> ${bta.estimatedBodyType}<br>`;
+        if (bta.strengths && bta.strengths.length) html += `<b>Strengths:</b> ${bta.strengths.join('; ')}<br>`;
+        if (bta.recommendedStyles && bta.recommendedStyles.length) html += `<b>Recommended:</b> ${bta.recommendedStyles.join('; ')}<br>`;
+        if (bta.avoidStyles && bta.avoidStyles.length) html += `<b>Avoid:</b> <span style='color:#e65100;'>${bta.avoidStyles.join('; ')}</span>`;
+        const content = document.createElement('div');
+        content.className = 'magazine-section-content';
+        content.innerHTML = html;
+        section.appendChild(content);
+        container.appendChild(section);
       }
-      // --- Color Analysis ---
+      // Color Analysis
       if (data.colorAnalysis) {
         const ca = data.colorAnalysis;
-        const caDiv = document.createElement('div');
-        caDiv.style.cssText = 'margin-bottom:16px;';
-        caDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Color Analysis</div>`;
-        if (ca.skinTone) caDiv.innerHTML += `<div style='color:#2d5d3d;'>Skin Tone: ${ca.skinTone}</div>`;
-        if (ca.bestColors && ca.bestColors.length) caDiv.innerHTML += `<div style='color:#4a7c59;font-size:0.98rem;'><b>Best Colors:</b> ${ca.bestColors.join(', ')}</div>`;
-        if (ca.avoidColors && ca.avoidColors.length) caDiv.innerHTML += `<div style='color:#e65100;font-size:0.98rem;'><b>Avoid:</b> ${ca.avoidColors.join(', ')}</div>`;
-        if (ca.seasonalPalette) caDiv.innerHTML += `<div style='color:#2d5d3d;'>Palette: ${ca.seasonalPalette}</div>`;
-        card.appendChild(caDiv);
+        const section = document.createElement('section');
+        section.className = 'magazine-section';
+        const title = document.createElement('div');
+        title.className = 'magazine-section-title';
+        title.textContent = 'Color Analysis';
+        section.appendChild(title);
+        let html = '';
+        if (ca.skinTone) html += `<b>Skin Tone:</b> ${ca.skinTone}<br>`;
+        if (ca.bestColors && ca.bestColors.length) html += `<b>Best Colors:</b> <span style='color:#4a7c59;'>${ca.bestColors.join(', ')}</span><br>`;
+        if (ca.avoidColors && ca.avoidColors.length) html += `<b>Avoid:</b> <span style='color:#e65100;'>${ca.avoidColors.join(', ')}</span><br>`;
+        if (ca.seasonalPalette) html += `<b>Palette:</b> ${ca.seasonalPalette}`;
+        const content = document.createElement('div');
+        content.className = 'magazine-section-content';
+        content.innerHTML = html;
+        section.appendChild(content);
+        container.appendChild(section);
       }
-      // --- Specific Recommendations ---
+      // Quick Tips
       if (Array.isArray(data.specificRecommendations) && data.specificRecommendations.length) {
-        const srDiv = document.createElement('div');
-        srDiv.style.cssText = 'margin-bottom:16px;';
-        srDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Quick Tips</div>`;
+        const section = document.createElement('section');
+        section.className = 'magazine-section';
+        const title = document.createElement('div');
+        title.className = 'magazine-section-title';
+        title.textContent = 'Quick Tips';
+        section.appendChild(title);
+        const list = document.createElement('ul');
+        list.className = 'magazine-section-list';
         data.specificRecommendations.forEach(r => {
-          srDiv.innerHTML += `<div style='color:#2d5d3d;font-size:0.98rem;margin-bottom:2px;'><b>${r.item}:</b> <span style='color:#4a7c59;'>${r.reason}</span> <span style='color:#888;font-size:0.95em;'>(${r.priority}, ${r.cost})</span></div>`;
+          const li = document.createElement('li');
+          li.innerHTML = `<b>${r.item}:</b> <span style='color:#4a7c59;'>${r.reason}</span> <span style='color:#888;font-size:0.95em;'>(${r.priority}, ${r.cost})</span>`;
+          list.appendChild(li);
         });
-        card.appendChild(srDiv);
+        section.appendChild(list);
+        container.appendChild(section);
       }
-      // --- Shopping List ---
+      // Shopping List
       if (Array.isArray(data.shoppingList) && data.shoppingList.length) {
-        const shopDiv = document.createElement('div');
-        shopDiv.style.cssText = 'margin-bottom:16px;';
-        shopDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Shopping List</div>`;
+        const section = document.createElement('section');
+        section.className = 'magazine-section';
+        const title = document.createElement('div');
+        title.className = 'magazine-section-title';
+        title.textContent = 'Shopping List';
+        section.appendChild(title);
+        const list = document.createElement('ul');
+        list.className = 'magazine-section-list';
         data.shoppingList.forEach(item => {
-          shopDiv.innerHTML += `<div style='color:#2d5d3d;font-size:0.98rem;margin-bottom:2px;'><b>${item.item}</b> <span style='color:#888;font-size:0.95em;'>(${item.priceRange}, ${item.priority})</span></div>`;
+          const li = document.createElement('li');
+          li.innerHTML = `<b>${item.item}</b> <span style='color:#888;font-size:0.95em;'>(${item.priceRange}, ${item.priority})</span>`;
+          list.appendChild(li);
         });
-        card.appendChild(shopDiv);
+        section.appendChild(list);
+        container.appendChild(section);
       }
-      // --- Style Evolution ---
+      // Style Evolution
       if (data.styleEvolution) {
         const se = data.styleEvolution;
-        const seDiv = document.createElement('div');
-        seDiv.style.cssText = 'margin-bottom:16px;';
-        seDiv.innerHTML = `<div style='font-weight:600;color:#4a7c59;margin-bottom:4px;'>Style Evolution</div>`;
-        if (se.currentLevel) seDiv.innerHTML += `<div style='color:#2d5d3d;'>Current: ${se.currentLevel}</div>`;
-        if (se.nextSteps && se.nextSteps.length) seDiv.innerHTML += `<div style='color:#4a7c59;font-size:0.98rem;'><b>Next Steps:</b> ${se.nextSteps.join('; ')}</div>`;
-        if (se.longTermGoals && se.longTermGoals.length) seDiv.innerHTML += `<div style='color:#2d5d3d;font-size:0.98rem;'><b>Long Term Goals:</b> ${se.longTermGoals.join('; ')}</div>`;
-        card.appendChild(seDiv);
+        const section = document.createElement('section');
+        section.className = 'magazine-section';
+        const title = document.createElement('div');
+        title.className = 'magazine-section-title';
+        title.textContent = 'Style Evolution';
+        section.appendChild(title);
+        let html = '';
+        if (se.currentLevel) html += `<b>Current:</b> ${se.currentLevel}<br>`;
+        if (se.nextSteps && se.nextSteps.length) html += `<b>Next Steps:</b> ${se.nextSteps.join('; ')}<br>`;
+        if (se.longTermGoals && se.longTermGoals.length) html += `<b>Long Term Goals:</b> ${se.longTermGoals.join('; ')}`;
+        const content = document.createElement('div');
+        content.className = 'magazine-section-content';
+        content.innerHTML = html;
+        section.appendChild(content);
+        container.appendChild(section);
       }
-      container.appendChild(card);
     }
     function updateOutput() {
       const fashionContent = document.getElementById('fashion-content');
