@@ -492,8 +492,19 @@ if (document.readyState === 'loading') {
 } else {
     enablePremiumFeatures();
 }
+
+// Throttled observer to prevent infinite loops
+let premiumCheckTimeout = null;
+function throttledPremiumCheck() {
+    if (premiumCheckTimeout) return; // Already scheduled
+    premiumCheckTimeout = setTimeout(() => {
+        enablePremiumFeatures();
+        premiumCheckTimeout = null;
+    }, 250); // Only run once every 250ms
+}
+
 // Observe DOM for dynamically added premium-blur elements
-const observer = new MutationObserver(() => enablePremiumFeatures());
+const observer = new MutationObserver(throttledPremiumCheck);
 observer.observe(document.body, { childList: true, subtree: true });
 // Expose for other scripts
 window.enablePremiumFeatures = enablePremiumFeatures;
