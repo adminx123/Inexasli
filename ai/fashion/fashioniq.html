@@ -82,7 +82,7 @@
     <div class="image-upload-container">
         <div class="upload-area" id="fashion-upload-area">
             <i class="fas fa-camera upload-icon"></i>
-            <p>Click here to upload photos or drag and drop</p>
+            <p>Tap here to upload photos or drag and drop</p>
             <p class="upload-hint">Upload 1-5 photos of yourself in different outfits</p>
             <input type="file" id="fashion-image-input" multiple accept="image/*" style="display: none;">
         </div>
@@ -132,20 +132,37 @@
     console.log("Fashion IQ: uploadArea and fileInput elements seem to be found by the IDs.");
 
 
-    // Click to upload
-    uploadArea.addEventListener('click', () => {
+    // Click/tap to upload - Enhanced for mobile devices
+    uploadArea.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       console.log('Fashion IQ: Upload area clicked.');
       const freshFileInput = document.getElementById('fashion-image-input');
       if (freshFileInput) {
-        console.log('Fashion IQ: Found freshFileInput. ID:', freshFileInput.id, 'Parent Node:', freshFileInput.parentNode); // Detailed log
+        console.log('Fashion IQ: Found freshFileInput. ID:', freshFileInput.id, 'Parent Node:', freshFileInput.parentNode);
         try {
           freshFileInput.click();
-          console.log('Fashion IQ: freshFileInput.click() was called.'); // Confirmation log
+          console.log('Fashion IQ: freshFileInput.click() was called.');
         } catch (e) {
-          console.error('Fashion IQ: Error occurred when calling freshFileInput.click():', e); // Error catching
+          console.error('Fashion IQ: Error occurred when calling freshFileInput.click():', e);
         }
       } else {
         console.error('Fashion IQ: freshFileInput (id: fashion-image-input) not found at time of click!');
+      }
+    });
+
+    // Touch event for better mobile support
+    uploadArea.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      console.log('Fashion IQ: Upload area touched.');
+      const freshFileInput = document.getElementById('fashion-image-input');
+      if (freshFileInput) {
+        try {
+          freshFileInput.click();
+          console.log('Fashion IQ: freshFileInput.click() called from touch event.');
+        } catch (e) {
+          console.error('Fashion IQ: Error occurred when calling freshFileInput.click() from touch:', e);
+        }
       }
     });
 
@@ -345,12 +362,29 @@
   transition: all 0.3s ease;
   background-color: #f9f9f9;
   margin-bottom: 20px;
+  /* Enhanced for mobile touch */
+  -webkit-tap-highlight-color: rgba(74, 124, 89, 0.2);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .upload-area:hover,
-.upload-area.drag-over {
+.upload-area.drag-over,
+.upload-area:active {
   border-color: #2d5d3d;
   background-color: #f0f8f0;
+}
+
+/* Additional mobile touch feedback */
+.upload-area:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(74, 124, 89, 0.3);
 }
 
 .upload-icon {
