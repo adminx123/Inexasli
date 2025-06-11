@@ -35,7 +35,7 @@ class GuidedFormSystem {
             showProgressIndicator: true,
             smoothTransitions: true,
             transitionDuration: 300,
-            autoAdvanceDelay: 500,
+            autoAdvanceDelay: 625,
             enableSkipping: true,
             preserveState: true,
             respectExistingPersistence: true, // Don't interfere with existing form persistence
