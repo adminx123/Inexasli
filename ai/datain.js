@@ -51,10 +51,6 @@ function initializeFormPersistence(url) {
         moduleType = 'social';
     } else if (url.includes('/fashion/')) {
         moduleType = 'fashion';
-        moduleConfig = {
-            singleSelection: ['fashion-personal-style', 'fashion-climate', 'fashion-occasion'],
-            multiSelection: []
-        };
     } else if (url.includes('/categories.html')) {
         moduleType = 'categories';
         moduleConfig = {
@@ -76,6 +72,15 @@ function initializeFormPersistence(url) {
     
     // Initialize per-module FormPersistence instance
     try {
+        // For fashion, manually specify singleSelection containers to match other modules
+        if (moduleType === 'fashion') {
+            moduleConfig.singleSelection = [
+                'fashion-personal-style',
+                'fashion-climate',
+                'fashion-occasion'
+            ];
+            moduleConfig.multiSelection = [];
+        }
         const formPersistence = FormPersistence.getInstance(moduleType, moduleConfig);
         formPersistence.init({ moduleName: moduleType, ...moduleConfig });
         // Attach to window for module scripts to use

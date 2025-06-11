@@ -171,11 +171,6 @@ import { ImageUpload } from '../../utility/imageUpload.js';
   function initializeGenerateButton() {
     const generateBtn = document.getElementById('generate-fashion-btn');
     
-    if (!generateBtn) {
-      console.error('Fashion IQ: Generate button not found');
-      return;
-    }
-    
     generateBtn.addEventListener('click', async function() {
       console.log('Generate button clicked');
       
@@ -247,21 +242,6 @@ import { ImageUpload } from '../../utility/imageUpload.js';
   function initialize() {
     console.log("Fashion IQ: Attempting direct initialization");
     
-    // First check if DOM elements exist
-    function checkDOMReady() {
-      const uploadContainer = document.getElementById('fashion-upload-container');
-      const generateBtn = document.getElementById('generate-fashion-btn');
-      
-      if (!uploadContainer || !generateBtn) {
-        console.log("Fashion IQ: DOM elements not ready, waiting...");
-        setTimeout(checkDOMReady, 100);
-        return;
-      }
-      
-      console.log("Fashion IQ: DOM elements found, proceeding with initialization");
-      waitForImageUpload();
-    }
-    
     // Wait for ImageUpload utility to be available
     function waitForImageUpload() {
       if (window.ImageUpload) {
@@ -286,35 +266,20 @@ import { ImageUpload } from '../../utility/imageUpload.js';
       }
     }
     
-    checkDOMReady();
+    waitForImageUpload();
   }
 
-  // Initialize immediately if DOM is ready, otherwise wait
-  function safeInitialize() {
-    // Add a longer delay to ensure all DOM elements are available
-    setTimeout(() => {
-      const uploadContainer = document.getElementById('fashion-upload-container');
-      const generateBtn = document.getElementById('generate-fashion-btn');
-      
-      if (uploadContainer && generateBtn) {
-        initialize();
-      } else {
-        console.log("Fashion IQ: Elements still not ready, trying again...");
-        setTimeout(safeInitialize, 200);
-      }
-    }, 100);
-  }
-
+  // Initialize immediately if DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', safeInitialize);
+    document.addEventListener('DOMContentLoaded', initialize);
   } else {
-    safeInitialize();
+    initialize();
   }
 
   // Handle loading through datain.js
   document.addEventListener('data-in-loaded', function(e) {
     console.log("[FashionIQ] Detected load through datain.js, reinitializing");
-    safeInitialize();
+    runInitialization();
   });
 
 })();
