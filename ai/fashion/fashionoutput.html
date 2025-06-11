@@ -29,7 +29,7 @@
       width: 100%;
       max-width: 420px;
       aspect-ratio: 1/1;
-      background: #e0e7ef;
+      background: #f2f9f3; /* Muted green background */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -39,13 +39,27 @@
       max-height: 420px;
       overflow: hidden;
     }
-    .photo-frame img {
+    .photo-border-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      border-radius: 0 0 18px 18px;
-      background: #e0e7ef;
+      background: #f2f9f3; /* Muted green background */
+      border: none;
+      box-shadow: none;
+    }
+    .photo-border-img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #fff;
       display: block;
+      border: 2.5px solid #4a7c59;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.06);
     }
     .photo-placeholder {
       width: 100%;
@@ -287,7 +301,7 @@
       // Photo
       const userData = getJSON('fashionIqInput');
       if (userData && userData.images && userData.images.length) {
-        photoFrame.innerHTML = `<img src="${userData.images[0]}" alt="Outfit Photo">`;
+        photoFrame.innerHTML = `<div class="photo-border-wrapper"><img class="photo-border-img" src="${userData.images[0]}" alt="Outfit Photo"></div>`;
       } else {
         photoFrame.innerHTML = '<div class="photo-placeholder">No Image Uploaded</div>';
       }
