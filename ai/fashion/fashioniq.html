@@ -79,38 +79,19 @@
 </div>
 
 <div class="row1" data-step-label="Upload Outfit Photos">
-    <div class="image-upload-container">
-        <div class="upload-options">
-            <button class="upload-btn camera-btn" id="fashion-camera-btn">
-                <i class="fas fa-camera"></i>
-                <span>Take Photo</span>
-            </button>
-            <button class="upload-btn gallery-btn" id="fashion-gallery-btn">
-                <i class="fas fa-images"></i>
-                <span>Choose from Gallery</span>
-            </button>
-        </div>
-        <div class="upload-area" id="fashion-upload-area">
-            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-            <p>Or drag and drop photos here</p>
-            <p class="upload-hint">Upload 1-5 photos of yourself in different outfits</p>
-        </div>
-        <!-- Hidden file inputs for different sources -->
-        <input type="file" id="fashion-camera-input" accept="image/*" capture="environment" style="display: none;">
-        <input type="file" id="fashion-gallery-input" multiple accept="image/*" style="display: none;">
-        <div class="uploaded-images" id="fashion-uploaded-images"></div>
-    </div>
+    <div id="fashion-upload-container"></div>
     <textarea id="fashion-additional-context" placeholder="Any additional context about the outfits, specific concerns, or what you'd like feedback on? (Optional)"></textarea>
     <button class="generate-btn" id="generate-fashion-btn" disabled>Analyze My Style!</button>
 </div>
    
 </div> 
 
+<script src="../../utility/imageUpload.js"></script>
 <script>
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
+ * Unauthorized use, reproduction, distribution, or modification of this code
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
@@ -118,146 +99,49 @@
 */
 
 (function() {
-  console.log("Fashion IQ script: Starting"); // New log
+  console.log("Fashion IQ script: Starting");
 
+  let imageUploader = null;
   let uploadedImages = [];
 
-  // Initialize upload functionality
+  // Initialize image upload functionality
   function initializeImageUpload() {
-    console.log("Fashion IQ: Initializing image upload.");
-    const uploadArea = document.getElementById('fashion-upload-area');
-    const cameraBtn = document.getElementById('fashion-camera-btn');
-    const galleryBtn = document.getElementById('fashion-gallery-btn');
-    const cameraInput = document.getElementById('fashion-camera-input');
-    const galleryInput = document.getElementById('fashion-gallery-input');
-    const uploadedImagesContainer = document.getElementById('fashion-uploaded-images');
-    const generateBtn = document.getElementById('generate-fashion-btn');
-
-    if (!uploadArea || !cameraBtn || !galleryBtn || !cameraInput || !galleryInput) {
-        console.error("Fashion IQ: Critical upload elements not found.");
-        return;
-    }
-    console.log("Fashion IQ: All upload elements found successfully.");
-
-    // Camera button click
-    cameraBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      console.log('Fashion IQ: Camera button clicked.');
-      try {
-        cameraInput.click();
-        console.log('Fashion IQ: Camera input triggered.');
-      } catch (error) {
-        console.error('Fashion IQ: Error triggering camera input:', error);
-      }
-    });
-
-    // Gallery button click
-    galleryBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      console.log('Fashion IQ: Gallery button clicked.');
-      try {
-        galleryInput.click();
-        console.log('Fashion IQ: Gallery input triggered.');
-      } catch (error) {
-        console.error('Fashion IQ: Error triggering gallery input:', error);
-      }
-    });
-
-    // Touch events for better mobile support
-    cameraBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      setTimeout(() => cameraInput.click(), 0);
-    });
-
-    galleryBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      setTimeout(() => galleryInput.click(), 0);
-    });
-
-    // Drag and drop functionality on upload area
-    uploadArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadArea.classList.add('drag-over');
-    });
-
-    uploadArea.addEventListener('dragleave', () => {
-      uploadArea.classList.remove('drag-over');
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadArea.classList.remove('drag-over');
-      handleFiles(e.dataTransfer.files);
-    });
-
-    // File input change events
-    cameraInput.addEventListener('change', (e) => {
-      handleFiles(e.target.files);
-      // Reset input so same file can be selected again
-      e.target.value = '';
-    });
-
-    galleryInput.addEventListener('change', (e) => {
-      handleFiles(e.target.files);
-      // Reset input so same file can be selected again
-      e.target.value = '';
-    });
-
-    function handleFiles(files) {
-      const maxFiles = 5;
-      const currentCount = uploadedImages.length;
-      const remainingSlots = maxFiles - currentCount;
-
-      if (remainingSlots <= 0) {
-        alert('Maximum 5 images allowed. Please remove some images first.');
-        return;
-      }
-
-      const filesToProcess = Math.min(files.length, remainingSlots);
-
-      for (let i = 0; i < filesToProcess; i++) {
-        const file = files[i];
-        
-        if (!file.type.startsWith('image/')) {
-          continue;
-        }
-
-        // Convert to base64
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const imageData = {
-            id: Date.now() + i,
-            data: e.target.result,
-            name: file.name
-          };
-          
-          uploadedImages.push(imageData);
-          displayUploadedImage(imageData);
-          updateGenerateButtonState();
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function displayUploadedImage(imageData) {
-      const imageElement = document.createElement('div');
-      imageElement.className = 'uploaded-image';
-      imageElement.innerHTML = `
-        <img src="${imageData.data}" alt="${imageData.name}">
-        <button class="remove-image" data-id="${imageData.id}">×</button>
-      `;
-
-      uploadedImagesContainer.appendChild(imageElement);
-
-      // Add remove functionality
-      imageElement.querySelector('.remove-image').addEventListener('click', () => {
-        uploadedImages = uploadedImages.filter(img => img.id !== imageData.id);
-        imageElement.remove();
+    console.log("Fashion IQ: Initializing image upload with utility");
+    
+    // Create ImageUpload instance
+    imageUploader = new ImageUpload({
+      maxFiles: 5,
+      acceptedTypes: 'image/*',
+      onFilesSelected: (images) => {
+        uploadedImages = images;
         updateGenerateButtonState();
-      });
-    }
+        console.log('Fashion IQ: Files selected, count:', images.length);
+      },
+      onError: (message) => {
+        console.error('Fashion IQ: Upload error:', message);
+        alert(message);
+      }
+    });
 
-    function updateGenerateButtonState() {
+    // Initialize the upload interface
+    const success = imageUploader.initialize('fashion-upload-container', {
+      cameraText: 'Take Photo',
+      galleryText: 'Choose from Gallery',
+      dragText: 'Or drag and drop photos here',
+      hintText: 'Upload 1-5 photos of yourself in different outfits'
+    });
+
+    if (!success) {
+      console.error('Fashion IQ: Failed to initialize image upload');
+    } else {
+      console.log('Fashion IQ: Image upload initialized successfully');
+    }
+  }
+
+  // Update generate button state
+  function updateGenerateButtonState() {
+    const generateBtn = document.getElementById('generate-fashion-btn');
+    if (generateBtn) {
       generateBtn.disabled = uploadedImages.length === 0;
     }
   }
@@ -267,7 +151,7 @@
     if (window.fashionFormPersistence) {
       const formData = window.fashionFormPersistence.collectFormData();
       // Add uploaded images to the form data
-      formData.images = uploadedImages.map(img => img.data);
+      formData.images = imageUploader ? imageUploader.getImages() : [];
       return formData;
     } else {
       // Fallback to manual collection if FormPersistence not available
@@ -279,7 +163,7 @@
         height: document.getElementById('fashion-height').value,
         gender: document.getElementById('fashion-gender').value,
         additionalContext: document.getElementById('fashion-additional-context').value,
-        images: uploadedImages.map(img => img.data)
+        images: imageUploader ? imageUploader.getImages() : []
       };
     }
   }
@@ -291,7 +175,7 @@
     generateBtn.addEventListener('click', async function() {
       console.log('Generate button clicked');
       
-      if (uploadedImages.length === 0) {
+      if (!imageUploader || imageUploader.getImages().length === 0) {
         alert('Please upload at least one outfit photo before analyzing.');
         return;
       }
@@ -330,7 +214,7 @@
         // Dispatch an event to notify dataout.js that a response was received
         const event = new CustomEvent('api-response-received', {
           detail: {
-            module: 'fashioniq', // Ensure this matches the key in moduleOutputMap in dataout.js
+            module: 'fashioniq',
             type: 'worker-response',
             timestamp: Date.now()
           }
@@ -350,162 +234,26 @@
   }
 
   // Initialize everything when DOM is ready
-  // Removing DOMContentLoaded and readyState check for now, assuming script runs when its DOM is ready.
-  // The multiple "Fashion IQ script initializing" logs suggest this IIFE itself runs multiple times.
-  // This needs to be addressed at a higher level.
-  console.log("Fashion IQ: Attempting direct initialization of upload and generate button functions.");
-  initializeImageUpload();
-  initializeGenerateButton();
-  console.log("Fashion IQ script: Initialization functions called.");
-
+  console.log("Fashion IQ: Attempting direct initialization");
+  
+  // Wait for ImageUpload utility to be available
+  function waitForImageUpload() {
+    if (window.ImageUpload) {
+      initializeImageUpload();
+      initializeGenerateButton();
+      console.log("Fashion IQ script: Initialization complete");
+    } else {
+      console.log("Fashion IQ: Waiting for ImageUpload utility...");
+      setTimeout(waitForImageUpload, 100);
+    }
+  }
+  
+  waitForImageUpload();
 
 })();
 </script>
 
 <style>
-/* Upload area styles */
-.image-upload-container {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.upload-options {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
-  justify-content: center;
-}
-
-.upload-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 30px;
-  border: 2px solid #4a7c59;
-  border-radius: 12px;
-  background-color: #4a7c59;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
-  font-size: 16px;
-  min-width: 120px;
-  -webkit-tap-highlight-color: rgba(74, 124, 89, 0.2);
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.upload-btn:hover {
-  background-color: #2d5d3d;
-  border-color: #2d5d3d;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(74, 124, 89, 0.3);
-}
-
-.upload-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(74, 124, 89, 0.3);
-}
-
-.upload-btn i {
-  font-size: 2em;
-  margin-bottom: 8px;
-}
-
-.upload-btn span {
-  font-weight: 500;
-}
-
-/* Responsive design for mobile */
-@media (max-width: 480px) {
-  .upload-options {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .upload-btn {
-    width: 100%;
-    max-width: 250px;
-  }
-}
-
-.upload-area {
-  border: 2px dashed #4a7c59;
-  border-radius: 10px;
-  padding: 30px 20px;
-  text-align: center;
-  transition: all 0.3s ease;
-  background-color: #f9f9f9;
-  margin-bottom: 20px;
-  min-height: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.upload-area.drag-over {
-  border-color: #2d5d3d;
-  background-color: #f0f8f0;
-}
-
-.upload-icon {
-  font-size: 3em;
-  color: #4a7c59;
-  margin-bottom: 15px;
-}
-
-.upload-hint {
-  font-size: 0.9em;
-  color: #666;
-  margin-top: 5px;
-}
-
-.uploaded-images {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.uploaded-image {
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.uploaded-image img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  display: block;
-}
-
-.remove-image {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: rgba(255, 0, 0, 0.8);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.remove-image:hover {
-  background: rgba(255, 0, 0, 1);
-}
-
 #fashion-additional-context {
   width: 100%;
   min-height: 80px;
