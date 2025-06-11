@@ -82,21 +82,6 @@
     <div id="fashion-upload-container"></div>
     <textarea id="fashion-additional-context" rows="3" placeholder="Any additional context about the outfits, specific concerns, or what you'd like feedback on? (Optional)"></textarea>
     <button class="generate-btn" id="generate-fashion-btn" disabled>Analyze My Style!</button>
-    
-    <!-- Guided Forms Toggle Button -->
-    <div style="text-align: center; margin-top: 15px;">
-        <button id="guided-forms-toggle" onclick="toggleGuidedForms()" style="
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        ">🚀 Enable Guided Form</button>
-    </div>
 </div>
    
 </div> 
@@ -247,47 +232,6 @@ import { ImageUpload } from '../../utility/imageUpload.js';
     });
   }
 
-  // Guided forms functionality
-  let guidedFormsInstance = null;
-  
-  function toggleGuidedForms() {
-    console.log('[FashionIQ] Toggling guided forms');
-    const toggleBtn = document.getElementById('guided-forms-toggle');
-    
-    if (guidedFormsInstance) {
-      // Disable guided forms
-      guidedFormsInstance.destroy();
-      guidedFormsInstance = null;
-      toggleBtn.textContent = '🚀 Enable Guided Form';
-      toggleBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-      console.log('[FashionIQ] Guided forms disabled');
-    } else {
-      // Enable guided forms
-      if (window.GuidedFormSystem) {
-        guidedFormsInstance = new window.GuidedFormSystem({
-          autoAdvance: true,
-          showProgressIndicator: true,
-          smoothTransitions: true,
-          transitionDuration: 300,
-          autoAdvanceDelay: 800,
-          enableSkipping: true
-        });
-        
-        guidedFormsInstance.init('device-container');
-        
-        toggleBtn.textContent = '⏹️ Disable Guided Form';
-        toggleBtn.style.background = 'linear-gradient(135deg, #ea667e 0%, #a24b76 100%)';
-        console.log('[FashionIQ] Guided forms enabled');
-      } else {
-        console.error('[FashionIQ] GuidedFormSystem not available');
-        alert('Guided forms system is not loaded. Please refresh the page.');
-      }
-    }
-  }
-
-  // Make toggleGuidedForms globally accessible
-  window.toggleGuidedForms = toggleGuidedForms;
-
   // Initialize with multiple triggers to ensure reliability
   function runInitialization() {
     // Use a small delay to ensure DOM is ready
@@ -305,7 +249,7 @@ import { ImageUpload } from '../../utility/imageUpload.js';
         initializeGenerateButton();
         console.log("Fashion IQ script: Initialization complete");
         
-        // Initialize guided forms if available
+        // Auto-enable guided forms for files listed in input.txt
         if (typeof window.initGuidedForms === 'function') {
           console.log('[FashionIQ] Auto-initializing guided forms');
           window.initGuidedForms({
@@ -337,14 +281,6 @@ import { ImageUpload } from '../../utility/imageUpload.js';
     console.log("[FashionIQ] Detected load through datain.js, reinitializing");
     runInitialization();
   });
-
-  // Additional safety net - try again after a short delay
-  setTimeout(() => {
-    if (!guidedFormsInstance && window.GuidedFormSystem) {
-      console.log("[FashionIQ] Safety net initialization");
-      runInitialization();
-    }
-  }, 1000);
 
 })();
 </script>
