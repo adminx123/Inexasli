@@ -336,15 +336,28 @@ class ImageUpload {
     // Enhanced camera input handling
     const handleCameraClick = (e) => {
       console.log('ImageUpload: Camera button clicked');
+      console.log('ImageUpload: Event type:', e.type);
+      console.log('ImageUpload: Event target:', e.target.tagName, e.target.className);
+      console.log('ImageUpload: Camera input element:', cameraInput);
+      console.log('ImageUpload: Camera input attributes:', cameraInput.outerHTML);
       
-      // For touch events, prevent default to avoid double-firing
-      // For click events, let the browser handle the label-to-input connection naturally
-      if (e.type === 'touchend') {
-        e.preventDefault();
-        // For touch events, manually trigger the input
+      // Always trigger the input manually for better cross-platform compatibility
+      // Prevent default to avoid potential double-firing
+      e.preventDefault();
+      
+      console.log('ImageUpload: Triggering camera input');
+      
+      try {
+        // Try focusing first (sometimes helps on iOS)
+        cameraInput.focus();
+        
+        // Then click
         cameraInput.click();
+        
+        console.log('ImageUpload: Camera input click executed successfully');
+      } catch (error) {
+        console.error('ImageUpload: Error clicking camera input:', error);
       }
-      // For regular click events, do nothing - browser handles it automatically
     };
 
     // Multiple event types for better compatibility
@@ -363,16 +376,11 @@ class ImageUpload {
     const handleGalleryClick = (e) => {
       console.log('ImageUpload: Gallery button clicked');
       
-      // Only prevent default for touch events to avoid double-firing
-      if (e.type === 'touchend') {
-        e.preventDefault();
-      }
+      // Always trigger the input manually for better cross-platform compatibility
+      e.preventDefault();
       
-      // Let the browser handle the label-to-input connection naturally
-      // Only manually click if needed
-      if (e.type === 'touchend') {
-        galleryInput.click();
-      }
+      console.log('ImageUpload: Triggering gallery input');
+      galleryInput.click();
     };
 
     galleryLabel.addEventListener('click', handleGalleryClick);
