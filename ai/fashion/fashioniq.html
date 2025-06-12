@@ -1,27 +1,6 @@
 <!-- /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyr  async function handleGenerateFashionIq() {
-    console.log('[FashionIQ] Generate button clicked');
-    
-    try {
-      // Check if images are available through centralized system
-      const hasImages = window.getImageUploadImages && window.getImageUploadImages().length > 0;
-      if (!hasImages) {
-        alert('Please upload at least one outfit photo before analyzing.');
-        return;
-      }
-
-      // Get form data using FormPersistence system
-      const formData = window.fashionFormPersistence.collectFormData();
-      console.log('[FashionIQ] Form data collected:', formData);
-      
-      if (!formData) {
-        alert('Please complete the form before generating your fashion analysis.');
-        return;
-      }
-
-      // Debug: Log the data being sent to API
-      console.log('[FashionIQ] Data being sent to API:', JSON.stringify(formData, null, 2));horized use, reproduction, distribution, or modification of this code 
+ * This code is protected under Canadian and international copyright laws.
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
