@@ -8,8 +8,9 @@
  * jurisdictions worldwide.
  */
 
-// Import setJSON utility for localStorage operations
+// Import utilities for localStorage operations and module detection
 import { setJSON } from './setJSON.js';
+import { getLocal } from './getlocal.js';
 
 /**
  * ImageUpload Utility - Safari Compatible Version
@@ -51,8 +52,8 @@ class ImageUpload {
       this.createUploadInterface(container, config);
       this.setupEventListeners(container);
       
-      // Load previously saved images
-      this.loadImagesFromFormPersistence(container);
+      // Load previously saved images (try module storage first, then FormPersistence)
+      this.loadImagesFromModuleStorage(container);
       
       // Show appropriate warnings if needed
       this.showCameraWarnings(container, capabilities);
@@ -134,24 +135,53 @@ class ImageUpload {
   }
 
   /**
-   * Auto-detect module context and connect to FormPersistence
+   * Auto-detect module context using lastGridItemUrl and connect to FormPersistence
    */
   detectModuleAndConnectFormPersistence() {
-    // Try to detect module from URL
-    const url = window.location.href;
-    const modulePatterns = {
-      '/fashion/': 'fashion',
-      '/calorie/': 'calorie',
-      '/fitness/': 'fitness',
-      '/income/': 'income',
-      '/social/': 'social',
-      '/research/': 'research'
-    };
+    // Primary method: detect module from lastGridItemUrl
+    const lastGridItemUrl = getLocal('lastGridItemUrl');
+    if (lastGridItemUrl) {
+      const modulePatterns = {
+        '/ai/fashion/': 'fashion',
+        '/ai/calorie/': 'calorie',
+        '/ai/fitness/': 'fitness',
+        '/ai/income/': 'income',
+        '/ai/social/': 'social',
+        '/ai/research/': 'research',
+        '/ai/event/': 'event',
+        '/ai/decision/': 'decision',
+        '/ai/enneagram/': 'enneagram',
+        '/ai/philosophy/': 'philosophy',
+        '/ai/quiz/': 'quiz'
+      };
 
-    for (const [pattern, module] of Object.entries(modulePatterns)) {
-      if (url.includes(pattern)) {
-        this.moduleType = module;
-        break;
+      for (const [pattern, module] of Object.entries(modulePatterns)) {
+        if (lastGridItemUrl.includes(pattern)) {
+          this.moduleType = module;
+          console.log('ImageUpload: Detected module from lastGridItemUrl:', module);
+          break;
+        }
+      }
+    }
+
+    // Fallback: detect module from current URL
+    if (!this.moduleType) {
+      const url = window.location.href;
+      const modulePatterns = {
+        '/fashion/': 'fashion',
+        '/calorie/': 'calorie',
+        '/fitness/': 'fitness',
+        '/income/': 'income',
+        '/social/': 'social',
+        '/research/': 'research'
+      };
+
+      for (const [pattern, module] of Object.entries(modulePatterns)) {
+        if (url.includes(pattern)) {
+          this.moduleType = module;
+          console.log('ImageUpload: Detected module from URL fallback:', module);
+          break;
+        }
       }
     }
 
@@ -171,12 +201,41 @@ class ImageUpload {
   }
 
   /**
-   * Save images to FormPersistence localStorage
+   * Save images directly to module's localStorage (primary method)
+   */
+  saveToModuleStorage() {
+    if (!this.moduleType) {
+      console.warn('ImageUpload: No module type detected, cannot save to module storage');
+      return;
+    }
+
+    try {
+      const storageKey = `${this.moduleType}IqInput`;
+      const existingData = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      
+      // Add images to the data
+      existingData.images = this.uploadedImages.map(img => ({
+        id: img.id,
+        data: img.data,
+        name: img.name,
+        size: img.size,
+        type: img.type
+      }));
+
+      // Save back to localStorage
+      localStorage.setItem(storageKey, JSON.stringify(existingData));
+      console.log(`ImageUpload: Saved ${this.uploadedImages.length} images to ${storageKey}`);
+    } catch (error) {
+      console.error('ImageUpload: Error saving to module storage:', error);
+    }
+  }
+
+  /**
+   * Save images to FormPersistence localStorage (fallback method)
    */
   saveImagesToFormPersistence() {
     if (!this.formPersistenceInstance) {
-      console.warn('ImageUpload: No FormPersistence instance available');
-      return;
+      return; // No warning since this is fallback
     }
 
     try {
@@ -205,12 +264,43 @@ class ImageUpload {
   }
 
   /**
-   * Load images from FormPersistence localStorage
+   * Load images from module localStorage (primary method)
+   */
+  loadImagesFromModuleStorage(container) {
+    if (!this.moduleType) {
+      console.warn('ImageUpload: No module type detected, cannot load from module storage');
+      return;
+    }
+
+    try {
+      const storageKey = `${this.moduleType}IqInput`;
+      const savedData = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      
+      if (savedData.images && Array.isArray(savedData.images)) {
+        this.uploadedImages = savedData.images;
+        
+        // Display loaded images
+        savedData.images.forEach(imageData => {
+          this.displayUploadedImage(imageData, container);
+        });
+        
+        console.log(`ImageUpload: Loaded ${savedData.images.length} images from ${storageKey}`);
+        
+        if (this.onFilesSelected) {
+          this.onFilesSelected(this.uploadedImages);
+        }
+      }
+    } catch (error) {
+      console.error('ImageUpload: Error loading from module storage:', error);
+    }
+  }
+
+  /**
+   * Load images from FormPersistence localStorage (fallback method)
    */
   loadImagesFromFormPersistence(container) {
     if (!this.formPersistenceInstance) {
-      console.warn('ImageUpload: No FormPersistence instance available for loading');
-      return;
+      return; // No warning since this is fallback
     }
 
     try {
@@ -597,7 +687,8 @@ class ImageUpload {
       
       console.log('ImageUpload: Image processed:', imageData.name);
       
-      // Automatically save to FormPersistence
+      // Save to both storage systems
+      this.saveToModuleStorage();
       this.saveImagesToFormPersistence();
       
       if (this.onFilesSelected) {
@@ -926,6 +1017,351 @@ class ImageUpload {
   }
 }
 
-// Make it available globally and export for ES modules
+// Global instance for centralized image management
+let globalImageUploader = null;
+let autoInitialized = false;
+
+/**
+ * Module-specific configurations
+ */
+const MODULE_CONFIGS = {
+  fashion: {
+    containerId: 'fashion-upload-container',
+    generateBtnId: 'generate-fashion-btn',
+    maxFiles: 5,
+    cameraText: 'Take Photo',
+    galleryText: 'Choose from Gallery',
+    dragText: 'Or drag and drop photos here',
+    hintText: 'Upload 1-5 photos of yourself in different outfits',
+    requiredForGenerate: true
+  },
+  calorie: {
+    containerId: 'calorie-upload-container',
+    generateBtnId: 'generate-calorie-btn',
+    maxFiles: 3,
+    cameraText: 'Take Photo',
+    galleryText: 'Choose from Gallery',
+    dragText: 'Or drag and drop photos here',
+    hintText: 'Upload 1-3 photos of your food',
+    requiredForGenerate: true
+  },
+  fitness: {
+    containerId: 'fitness-upload-container',
+    generateBtnId: 'generate-fitness-btn',
+    maxFiles: 5,
+    cameraText: 'Take Photo',
+    galleryText: 'Choose from Gallery',
+    dragText: 'Or drag and drop photos here',
+    hintText: 'Upload photos for fitness analysis',
+    requiredForGenerate: false
+  },
+  // Add more modules as needed
+  income: {
+    containerId: 'income-upload-container',
+    generateBtnId: 'generate-income-btn',
+    maxFiles: 10,
+    cameraText: 'Take Photo',
+    galleryText: 'Choose from Gallery',
+    dragText: 'Or drag and drop photos here',
+    hintText: 'Upload financial documents or receipts',
+    requiredForGenerate: false
+  }
+};
+
+/**
+ * Auto-detect and initialize image upload for the current module
+ * This function runs automatically and handles everything
+ */
+function autoInitializeImageUpload() {
+  if (autoInitialized) {
+    console.log('ImageUpload: Already auto-initialized, skipping');
+    return; // Already initialized
+  }
+
+  console.log('ImageUpload: Starting auto-initialization...');
+
+  // Detect module type
+  let moduleType = null;
+  const lastGridItemUrl = getLocal('lastGridItemUrl');
+  
+  console.log('ImageUpload: lastGridItemUrl:', lastGridItemUrl);
+  
+  if (lastGridItemUrl) {
+    const modulePatterns = {
+      '/ai/fashion/': 'fashion',
+      '/ai/calorie/': 'calorie',
+      '/ai/fitness/': 'fitness',
+      '/ai/income/': 'income',
+      '/ai/social/': 'social',
+      '/ai/research/': 'research',
+      '/ai/event/': 'event',
+      '/ai/decision/': 'decision'
+    };
+    
+    for (const [pattern, module] of Object.entries(modulePatterns)) {
+      if (lastGridItemUrl.includes(pattern)) {
+        moduleType = module;
+        console.log('ImageUpload: Detected module from lastGridItemUrl:', moduleType);
+        break;
+      }
+    }
+  }
+
+  // Fallback: detect from current URL
+  if (!moduleType) {
+    const url = window.location.href;
+    console.log('ImageUpload: Trying URL fallback:', url);
+    
+    if (url.includes('/fashion/')) moduleType = 'fashion';
+    else if (url.includes('/calorie/')) moduleType = 'calorie';
+    else if (url.includes('/fitness/')) moduleType = 'fitness';
+    else if (url.includes('/income/')) moduleType = 'income';
+    
+    if (moduleType) {
+      console.log('ImageUpload: Detected module from URL fallback:', moduleType);
+    }
+  }
+
+  // Extra fallback: check for specific container IDs in the DOM
+  if (!moduleType) {
+    console.log('ImageUpload: Trying container ID detection...');
+    
+    if (document.getElementById('fashion-upload-container')) moduleType = 'fashion';
+    else if (document.getElementById('calorie-upload-container')) moduleType = 'calorie';
+    else if (document.getElementById('fitness-upload-container')) moduleType = 'fitness';
+    else if (document.getElementById('income-upload-container')) moduleType = 'income';
+    
+    if (moduleType) {
+      console.log('ImageUpload: Detected module from container ID:', moduleType);
+    }
+  }
+
+  if (!moduleType || !MODULE_CONFIGS[moduleType]) {
+    console.log('ImageUpload: No supported module detected, available modules:', Object.keys(MODULE_CONFIGS));
+    console.log('ImageUpload: Current URL:', window.location.href);
+    console.log('ImageUpload: Available containers in DOM:', 
+      Object.keys(MODULE_CONFIGS).map(m => MODULE_CONFIGS[m].containerId).filter(id => document.getElementById(id))
+    );
+    return;
+  }
+
+  console.log('ImageUpload: Auto-detected module:', moduleType);
+
+  const config = MODULE_CONFIGS[moduleType];
+  console.log('ImageUpload: Using config:', config);
+  
+  // Wait for DOM elements to be available
+  const waitForElements = () => {
+    const container = document.getElementById(config.containerId);
+    const generateBtn = document.getElementById(config.generateBtnId);
+    
+    console.log('ImageUpload: Looking for container:', config.containerId, 'Found:', !!container);
+    console.log('ImageUpload: Looking for generate button:', config.generateBtnId, 'Found:', !!generateBtn);
+    
+    if (!container) {
+      console.log('ImageUpload: Container not found yet, retrying in 100ms...');
+      setTimeout(waitForElements, 100);
+      return;
+    }
+
+    console.log('ImageUpload: Found container, proceeding with initialization...');
+
+    // Create global instance
+    if (!globalImageUploader) {
+      console.log('ImageUpload: Creating new global instance...');
+      globalImageUploader = new ImageUpload({
+        maxFiles: config.maxFiles,
+        acceptedTypes: 'image/*',
+        onFilesSelected: (images) => {
+          console.log(`ImageUpload: ${moduleType} - Files selected:`, images.length);
+          updateGenerateButtonState(moduleType);
+          updateGlobalImageState();
+        },
+        onError: (message) => {
+          console.error(`ImageUpload: ${moduleType} - Error:`, message);
+          alert(message);
+        }
+      });
+    }
+
+    // Initialize the upload interface
+    console.log('ImageUpload: Initializing upload interface...');
+    const success = globalImageUploader.initialize(config.containerId, {
+      cameraText: config.cameraText,
+      galleryText: config.galleryText,
+      dragText: config.dragText,
+      hintText: config.hintText
+    });
+
+    if (success) {
+      console.log(`ImageUpload: ${moduleType} - Auto-initialized successfully`);
+      autoInitialized = true;
+      
+      // Set initial generate button state
+      updateGenerateButtonState(moduleType);
+      
+      console.log('ImageUpload: Auto-initialization complete!');
+    } else {
+      console.error(`ImageUpload: ${moduleType} - Auto-initialization failed`);
+    }
+  };
+
+  // Start waiting for elements
+  waitForElements();
+}
+
+/**
+ * Update generate button state for a specific module
+ */
+function updateGenerateButtonState(moduleType) {
+  const config = MODULE_CONFIGS[moduleType];
+  if (!config) return;
+
+  const generateBtn = document.getElementById(config.generateBtnId);
+  if (!generateBtn) return;
+
+  const images = getImageUploadImages();
+  const hasImages = images.length > 0;
+
+  // If images are required for this module, disable button when no images
+  if (config.requiredForGenerate) {
+    generateBtn.disabled = !hasImages;
+  }
+
+  console.log(`ImageUpload: ${moduleType} - Generate button state updated (${hasImages ? 'enabled' : 'disabled'})`);
+}
+
+/**
+ * Manual initialization function (for custom cases)
+ * @param {string} containerId - ID of the container element
+ * @param {Object} options - Configuration options
+ * @returns {boolean} - Success status
+ */
+function initImageUpload(containerId, options = {}) {
+  console.log('ImageUpload: Manual initialization for container:', containerId);
+  
+  try {
+    // Create global instance if it doesn't exist
+    if (!globalImageUploader) {
+      globalImageUploader = new ImageUpload({
+        maxFiles: options.maxFiles || 5,
+        acceptedTypes: options.acceptedTypes || 'image/*',
+        onFilesSelected: (images) => {
+          console.log('ImageUpload: Manual - Files selected:', images.length);
+          if (options.onFilesSelected) {
+            options.onFilesSelected(images);
+          }
+          updateGlobalImageState();
+        },
+        onError: (message) => {
+          console.error('ImageUpload: Manual - Error:', message);
+          if (options.onError) {
+            options.onError(message);
+          } else {
+            alert(message);
+          }
+        }
+      });
+    }
+
+    // Initialize the upload interface
+    const success = globalImageUploader.initialize(containerId, {
+      cameraText: options.cameraText || 'Take Photo',
+      galleryText: options.galleryText || 'Choose from Gallery',
+      dragText: options.dragText || 'Or drag and drop photos here',
+      hintText: options.hintText || 'Upload photos for analysis'
+    });
+
+    if (success) {
+      console.log('ImageUpload: Manual initialization successful');
+      return true;
+    } else {
+      console.error('ImageUpload: Manual initialization failed');
+      return false;
+    }
+  } catch (error) {
+    console.error('ImageUpload: Manual initialization error:', error);
+    return false;
+  }
+}
+
+/**
+ * Get images from the global uploader instance
+ * @returns {Array} - Array of uploaded images
+ */
+function getImageUploadImages() {
+  if (globalImageUploader) {
+    return globalImageUploader.getImages();
+  }
+  return [];
+}
+
+/**
+ * Update global state when images change
+ */
+function updateGlobalImageState() {
+  // Notify any listening components about image state changes
+  const event = new CustomEvent('global-images-changed', {
+    detail: {
+      count: globalImageUploader ? globalImageUploader.getImages().length : 0,
+      images: globalImageUploader ? globalImageUploader.getImages() : []
+    }
+  });
+  document.dispatchEvent(event);
+}
+
+/**
+ * Clear all uploaded images
+ */
+function clearImageUpload() {
+  if (globalImageUploader) {
+    // Note: clearImages expects a container parameter, but we don't have access to it here
+    // So we'll clear the internal array and update state
+    globalImageUploader.uploadedImages = [];
+    
+    // Save the cleared state to both storage systems
+    globalImageUploader.saveToModuleStorage();
+    globalImageUploader.saveImagesToFormPersistence();
+    
+    // Trigger callbacks
+    if (globalImageUploader.onFilesSelected) {
+      globalImageUploader.onFilesSelected([]);
+    }
+    
+    updateGlobalImageState();
+    
+    // Manually clear any existing uploaded images containers in the DOM
+    const uploadedContainers = document.querySelectorAll('.uploaded-images');
+    uploadedContainers.forEach(container => {
+      container.innerHTML = '';
+    });
+  }
+}
+
+// Make everything available globally and auto-initialize
 window.ImageUpload = ImageUpload;
-export { ImageUpload };
+window.initImageUpload = initImageUpload;
+window.getImageUploadImages = getImageUploadImages;
+window.clearImageUpload = clearImageUpload;
+window.autoInitializeImageUpload = autoInitializeImageUpload; // Expose for manual triggering
+
+// Auto-initialize when the DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('ImageUpload: DOMContentLoaded triggered, auto-initializing...');
+    autoInitializeImageUpload();
+  });
+} else {
+  // DOM is already ready
+  console.log('ImageUpload: DOM already ready, auto-initializing...');
+  setTimeout(autoInitializeImageUpload, 50);
+}
+
+// Also auto-initialize when loaded through datain.js
+document.addEventListener('data-in-loaded', function(e) {
+  console.log('ImageUpload: Detected load through datain.js, auto-initializing');
+  setTimeout(autoInitializeImageUpload, 100);
+});
+
+// Export for ES modules
+export { ImageUpload, initImageUpload, getImageUploadImages, clearImageUpload };
