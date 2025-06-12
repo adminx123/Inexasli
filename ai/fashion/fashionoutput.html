@@ -310,10 +310,12 @@
 </head>
 <body>
   <div class="device-container">
+    <div class="magazine-header">Your Look, Reviewed</div>
+    <div class="magazine-subhead">Expert AI Style Critique & Recommendations</div>
+    <div class="score-section" id="overall-score">Loading...</div>
     <div class="photo-frame" id="photo-frame">
       <!-- Photo will be inserted here -->
     </div>
-    <div class="score-section" id="overall-score">Loading...</div>
     <div class="fashion-content" id="fashion-content"></div>
   </div>
   <script>
@@ -328,23 +330,7 @@
     }
     function displayFashionAnalysis(data, container) {
       container.innerHTML = '';
-      // Magazine-style header
-      const header = document.createElement('div');
-      header.className = 'magazine-header';
-      header.textContent = 'Your Look, Reviewed';
-      container.appendChild(header);
-      const subhead = document.createElement('div');
-      subhead.className = 'magazine-subhead';
-      subhead.textContent = 'Expert AI Style Critique & Recommendations';
-      container.appendChild(subhead);
-      // Score
-      if (data.overallRating && typeof data.overallRating.score !== 'undefined') {
-        const scoreDiv = document.createElement('div');
-        scoreDiv.className = 'score-section';
-        scoreDiv.innerHTML = `<i class=\"fas fa-star star-rating\"></i> ${data.overallRating.score} / 10`;
-        container.appendChild(scoreDiv);
-      }
-      // Summary/Explanation
+      // Only render analysis content, not header, subhead, or score
       if (data.overallRating && data.overallRating.explanation) {
         const section = document.createElement('section');
         section.className = 'magazine-section';
