@@ -208,16 +208,47 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.head.appendChild(boxIconsLink);
     }
     
-    // Load inputstyles.css if not already loaded
-    if (!document.querySelector('link[href*="inputstyles.css"]')) {
+    // Define files that should use inputstyles.css
+    const inputFiles = [
+        '/ai/calorie/calorieiq.html',
+        '/ai/decision/decisioniq.html',
+        '/ai/enneagram/enneagramiq.html',
+        '/ai/event/eventiq.html',
+        '/ai/fashion/fashioniq.html',
+        '/ai/fitness/fitnessiq.html',
+        '/ai/philosophy/philosophyiq.html',
+        '/ai/quiz/quiziq.html',
+        '/ai/research/researchiq.html',
+        '/ai/social/socialiq.html',
+        '/ai/categories.html'
+    ];
+    
+    // Define files that should use incomestyles.css
+    const incomeFiles = ['/ai/income/incomeiq.html'];
+    
+    // Function to check if current page needs specific CSS
+    function shouldLoadInputStyles() {
+        const currentPath = window.location.pathname;
+        return inputFiles.some(file => currentPath.includes(file.replace('.html', ''))) || 
+               document.querySelector('[data-value*="/ai/calorie/"], [data-value*="/ai/decision/"], [data-value*="/ai/enneagram/"], [data-value*="/ai/event/"], [data-value*="/ai/fashion/"], [data-value*="/ai/fitness/"], [data-value*="/ai/philosophy/"], [data-value*="/ai/quiz/"], [data-value*="/ai/research/"], [data-value*="/ai/social/"], [data-value*="/ai/categories.html"]');
+    }
+    
+    function shouldLoadIncomeStyles() {
+        const currentPath = window.location.pathname;
+        return incomeFiles.some(file => currentPath.includes(file.replace('.html', ''))) ||
+               document.querySelector('[data-value*="/ai/income/"]');
+    }
+    
+    // Load inputstyles.css only for input files
+    if (shouldLoadInputStyles() && !document.querySelector('link[href*="inputstyles.css"]')) {
         const inputStylesLink = document.createElement('link');
         inputStylesLink.href = '/ai/styles/inputstyles.css';
         inputStylesLink.rel = 'stylesheet';
         document.head.appendChild(inputStylesLink);
     }
     
-    // Load incomestyles.css if not already loaded
-    if (!document.querySelector('link[href*="incomestyles.css"]')) {
+    // Load incomestyles.css only for income files
+    if (shouldLoadIncomeStyles() && !document.querySelector('link[href*="incomestyles.css"]')) {
         const incomeStylesLink = document.createElement('link');
         incomeStylesLink.href = '/ai/styles/incomestyles.css';
         incomeStylesLink.rel = 'stylesheet';
@@ -228,8 +259,49 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 
+    
+    // Function to load appropriate CSS based on URL
+    function loadCSSForUrl(url) {
+        const inputFiles = [
+            '/ai/calorie/calorieiq.html',
+            '/ai/decision/decisioniq.html',
+            '/ai/enneagram/enneagramiq.html',
+            '/ai/event/eventiq.html',
+            '/ai/fashion/fashioniq.html',
+            '/ai/fitness/fitnessiq.html',
+            '/ai/philosophy/philosophyiq.html',
+            '/ai/quiz/quiziq.html',
+            '/ai/research/researchiq.html',
+            '/ai/social/socialiq.html',
+            '/ai/categories.html'
+        ];
+        
+        const incomeFiles = ['/ai/income/incomeiq.html'];
+        
+        // Check if URL matches input files and load inputstyles.css
+        if (inputFiles.includes(url) && !document.querySelector('link[href*="inputstyles.css"]')) {
+            const inputStylesLink = document.createElement('link');
+            inputStylesLink.href = '/ai/styles/inputstyles.css';
+            inputStylesLink.rel = 'stylesheet';
+            document.head.appendChild(inputStylesLink);
+            console.log('[DataIn] Loaded inputstyles.css for:', url);
+        }
+        
+        // Check if URL matches income files and load incomestyles.css
+        if (incomeFiles.includes(url) && !document.querySelector('link[href*="incomestyles.css"]')) {
+            const incomeStylesLink = document.createElement('link');
+            incomeStylesLink.href = '/ai/styles/incomestyles.css';
+            incomeStylesLink.rel = 'stylesheet';
+            document.head.appendChild(incomeStylesLink);
+            console.log('[DataIn] Loaded incomestyles.css for:', url);
+        }
+    }
+
     async function loadStoredContent(url) {
         try {
+            // Load appropriate CSS based on the URL being loaded
+            loadCSSForUrl(url);
+            
             dataContainer.innerHTML = `
                 <span class="close-data-container"></span>
                 <div class="data-content">Loading...</div>
