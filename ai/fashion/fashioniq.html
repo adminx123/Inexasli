@@ -86,7 +86,10 @@
    
 </div> 
 
-<script type="module">
+<!-- Load the centralized image upload system -->
+<script src="../../utility/imageUpload.js"></script>
+
+<script>
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
@@ -96,9 +99,6 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 */
-
-// Import the centralized image upload system (this will auto-initialize)
-import '../../utility/imageUpload.js';
 
 (function() {
   console.log("Fashion IQ script: Starting");
@@ -203,6 +203,20 @@ import '../../utility/imageUpload.js';
     // Initialize generate button
     if (!initializeGenerateButton()) {
       console.error('Fashion IQ: Failed to initialize generate button');
+    }
+
+    // Manually initialize image upload for fashion container
+    if (typeof window.initializeImageUpload === 'function') {
+      console.log('[FashionIQ] Manually triggering image upload initialization');
+      window.initializeImageUpload();
+    } else {
+      console.log('[FashionIQ] initializeImageUpload not available yet, will retry...');
+      setTimeout(() => {
+        if (typeof window.initializeImageUpload === 'function') {
+          console.log('[FashionIQ] Retrying image upload initialization');
+          window.initializeImageUpload();
+        }
+      }, 500);
     }
 
     // Auto-enable guided forms for files listed in input.txt
