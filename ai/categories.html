@@ -106,6 +106,16 @@
 </div>
 
 <script>
+// Prevent swipe hint from showing on this page only
+try {
+  localStorage.setItem('inexasli_global_swipe_hint_seen', 'true');
+  console.log('[Categories] Swipe hint forcibly disabled for this page');
+} catch (e) {
+  console.warn('[Categories] Could not set swipe hint localStorage:', e);
+}
+</script>
+
+<script>
 // Execute immediately instead of waiting for DOMContentLoaded since this is dynamically loaded
 (function() {
     console.log('[Categories] Script executing immediately');
