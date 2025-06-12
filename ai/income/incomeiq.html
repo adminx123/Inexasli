@@ -1015,7 +1015,7 @@ import setJSON from '/utility/setJSON.js';
         const generateBtn = document.getElementById('generate-income-btn');
         if (generateBtn) {
             generateBtn.addEventListener('click', function() {
-                collectAndSubmitData();
+                handleGenerateIncomeIq();
             });
         }
         
@@ -1262,45 +1262,79 @@ import setJSON from '/utility/setJSON.js';
         specificsDiv.style.display = filingStatusDropdown.value ? 'block' : 'none';
     }
 
-    // Collect all form data and submit
-    function collectAndSubmitData() {
-        console.log("[IncomeIQ] Collecting and submitting data");
-        
-        // Manually collect form data
-        const formData = {};
-        
-        // Collect all input fields
-        document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], textarea, select').forEach(element => {
-            if (element.id && element.value) {
-                const fieldName = element.id.replace('income-', ''); // Remove income- prefix
-                if (element.type === 'number') {
-                    formData[fieldName] = parseInt(element.value, 10) || parseFloat(element.value);
-                } else {
-                    formData[fieldName] = element.value;
-                }
+    // Generate IncomeIQ report - mirrors CalorieIQ flow
+    async function handleGenerateIncomeIq() {
+        try {
+            const formData = window.incomeFormPersistence ? window.incomeFormPersistence.getSavedFormData() : null;
+            if (!formData) {
+                alert('Please complete the form before generating your report.');
+                return;
             }
-        });
-        
-        if (Object.keys(formData).length === 0) {
-            alert('Please fill out at least some form fields before generating your report.');
-            return;
-        }
 
-        console.log('[IncomeIQ] Collected form data:', formData);
-        
-        // TODO: Integrate with AI submission logic via datain/dataout
-        // This will dispatch an event that datain.js will pick up
-        const submitEvent = new CustomEvent('ai-submit-request', {
-            detail: {
-                module: 'income',
-                data: formData,
-                outputUrl: '/ai/income/incomeoutput.html'
+            // --- PATCH: Transform formData to match worker expectations ---
+            // If formData is in the flat incomeIqinput1 style, convert it
+            let payloadToSend;
+            if (formData.normalizedIncome) {
+                // Remove normalizedIncome from introData
+                const { normalizedIncome, ...introData } = formData;
+                payloadToSend = {
+                    introData,
+                    incomeData: normalizedIncome
+                };
+            } else if (formData.introData && formData.incomeData) {
+                // Already in correct format
+                payloadToSend = formData;
+            } else {
+                // Fallback: send as-is
+                payloadToSend = formData;
             }
-        });
-        document.dispatchEvent(submitEvent);
-        
-        // For now, show the collected data
-        alert('Income IQ data collected! Ready for AI analysis.\n\nData keys: ' + Object.keys(formData).join(', '));
+                                             // --- END PATCH ---
+
+            // Use enhanced loading with educational facts
+            const result = await window.enhancedLoading(
+                'generate-income-btn',
+                'income',
+                async () => {
+                    const apiUrl = 'https://income.4hm7q4q75z.workers.dev/';
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payloadToSend)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    const responseData = await response.json();
+                    if (responseData.message !== 'Success') {
+                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                    }
+
+                    return responseData;
+                }
+            );
+
+            // Store the response using centralized system
+            if (window.incomeFormPersistence) {
+                window.incomeFormPersistence.saveResponseData(result);
+            }
+
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'incomeiq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[IncomeIQ] Dispatched api-response-received event');
+
+        } catch (error) {
+            console.error('[IncomeIQ] Error generating income report:', error);
+            alert('An error occurred while generating your income report. Please try again later.');
+        }
     }
 
     // Initialize when DOM is ready
@@ -1492,10 +1526,10 @@ import setJSON from '/utility/setJSON.js';
                 if (el) taxResidencyData[id.replace('income-', '')] = el.value;
             });
 
-            // Save to localStorage as a single object
+            // Save to localStorage in the correct structure for the worker
             const incomeIqinput1 = {
-                ...taxResidencyData,
-                normalizedIncome,
+                introData: taxResidencyData,
+                incomeData: normalizedIncome
             };
             localStorage.setItem('incomeIqinput1', JSON.stringify(incomeIqinput1));
             localStorage.setItem('incomeIqExpense', JSON.stringify(normalizedExpenses));
