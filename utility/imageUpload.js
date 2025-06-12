@@ -62,34 +62,34 @@ class ImageUpload {
   }
 
   /**
-   * Check camera capabilities and constraints
+   * Check camera capabilities and constraints (without requesting permission)
    */
   async checkCameraCapabilities() {
     const capabilities = {
       hasGetUserMedia: !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia),
       isSecureContext: window.isSecureContext || window.location.protocol === 'https:' || window.location.hostname === 'localhost',
       isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
-      canAccessCamera: false,
+      canAccessCamera: null, // null = unknown, don't test until user action
       error: null
     };
 
-    // Only test actual camera access if we're in a secure context and on mobile
-    if (capabilities.hasGetUserMedia && capabilities.isSecureContext && capabilities.isMobile) {
+    // Check if permissions API is available to query existing permissions
+    if ('permissions' in navigator && capabilities.hasGetUserMedia) {
       try {
-        // Quick test to see if camera permission is available
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-          video: { width: 1, height: 1 } 
-        });
+        const permissionStatus = await navigator.permissions.query({ name: 'camera' });
+        capabilities.permissionState = permissionStatus.state;
         
-        // If we get here, camera access is possible
-        capabilities.canAccessCamera = true;
-        
-        // Stop the stream immediately
-        stream.getTracks().forEach(track => track.stop());
+        // Only set canAccessCamera to true if already granted
+        if (permissionStatus.state === 'granted') {
+          capabilities.canAccessCamera = true;
+        } else if (permissionStatus.state === 'denied') {
+          capabilities.canAccessCamera = false;
+          capabilities.error = 'NotAllowedError';
+        }
+        // If 'prompt', leave canAccessCamera as null
         
       } catch (error) {
-        console.log('ImageUpload: Camera access test failed:', error.name, error.message);
-        capabilities.error = error.name;
+        console.log('ImageUpload: Permissions API not available:', error.message);
       }
     }
 
@@ -110,11 +110,13 @@ class ImageUpload {
       warningMessage = '⚠️ Camera access requires HTTPS. The "Take Photo" button may open your gallery instead.';
     } else if (!capabilities.hasGetUserMedia) {
       warningMessage = '⚠️ Your browser doesn\'t support camera access. The "Take Photo" button will open your gallery.';
-    } else if (capabilities.error === 'NotAllowedError') {
+    } else if (capabilities.permissionState === 'denied') {
       warningMessage = '⚠️ Camera permission denied. You can grant permission in your browser settings, or use "Choose from Gallery".';
-    } else if (capabilities.error && capabilities.error !== 'NotFoundError') {
-      warningMessage = '⚠️ Camera may not be available. The "Take Photo" button will open your gallery if camera fails.';
+    } else if (capabilities.permissionState === 'granted') {
+      // Camera is available and permission already granted - no warning needed
+      return;
     }
+    // For 'prompt' or unknown states, don't show a warning - let the user try
 
     if (warningMessage) {
       // Add the warning message to the container
