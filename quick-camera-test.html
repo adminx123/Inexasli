@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Permission Timing Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #f8f9fa;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            margin: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover { background: #0056b3; }
+        .highlight {
+            background: #e7f3ff;
+            border: 2px solid #2196f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h1>📱 Camera Permission Timing Test</h1>
+    
+    <div class="highlight">
+        <strong>🎯 Testing Fix:</strong> Camera permission should <strong>only</strong> be requested when you click the "Take Photo" button, not when the page loads.
+    </div>
+
+    <div class="test-section">
+        <h3>Step 1: Page Load Check</h3>
+        <div class="step">
+            <strong>Expected:</strong> No camera permission prompt should have appeared when this page loaded.
+        </div>
+        <div id="pageLoadStatus"></div>
+        <button onclick="confirmPageLoadBehavior()">✅ Confirm - No permission prompt on page load</button>
+        <button onclick="reportPageLoadIssue()">❌ Report - Permission prompt DID appear on page load</button>
+    </div>
+
+    <div class="test-section">
+        <h3>Step 2: Initialize ImageUpload</h3>
+        <div class="step">
+            <strong>Expected:</strong> ImageUpload initializes without requesting camera permission.
+        </div>
+        <button onclick="initTest()">Initialize Camera Test</button>
+        <div id="initStatus"></div>
+        <div id="testContainer"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Step 3: Click Camera Button</h3>
+        <div class="step">
+            <strong>Expected:</strong> Camera permission prompt should appear <strong>only when</strong> you click the "Take Photo" button.
+        </div>
+        <div id="cameraClickStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Test Results Summary</h3>
+        <div id="testSummary"></div>
+    </div>
+
+    <script type="module">
+        import { ImageUpload } from './utility/imageUpload.js';
+        
+        let testImageUpload = null;
+        let testResults = {
+            pageLoad: null,
+            initialization: null,
+            cameraClick: null
+        };
+        
+        // Monitor for camera access attempts
+        let originalGetUserMedia = null;
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+            navigator.mediaDevices.getUserMedia = function(...args) {
+                console.log('🚨 getUserMedia called!', args);
+                updateCameraAccessLog('getUserMedia called during: ' + getCurrentPhase());
+                return originalGetUserMedia(...args);
+            };
+        }
+        
+        let currentPhase = 'page-load';
+        let cameraAccessLog = [];
+        
+        function getCurrentPhase() {
+            return currentPhase;
+        }
+        
+        function updateCameraAccessLog(message) {
+            cameraAccessLog.push({
+                time: new Date().toLocaleTimeString(),
+                phase: currentPhase,
+                message: message
+            });
+            console.log('Camera access log:', cameraAccessLog);
+        }
+        
+        window.confirmPageLoadBehavior = function() {
+            testResults.pageLoad = true;
+            document.getElementById('pageLoadStatus').innerHTML = 
+                '<div class="success">✅ Good! No camera permission prompt on page load.</div>';
+            updateTestSummary();
+        };
+        
+        window.reportPageLoadIssue = function() {
+            testResults.pageLoad = false;
+            document.getElementById('pageLoadStatus').innerHTML = 
+                '<div class="error">❌ Issue: Camera permission was requested on page load. This needs fixing.</div>';
+            updateTestSummary();
+        };
+        
+        window.initTest = function() {
+            currentPhase = 'initialization';
+            const container = document.getElementById('testContainer');
+            const status = document.getElementById('initStatus');
+            
+            container.innerHTML = '';
+            status.innerHTML = '<div class="info">🔄 Initializing ImageUpload...</div>';
+            
+            try {
+                testImageUpload = new ImageUpload({
+                    maxFiles: 2,
+                    onFilesSelected: (files) => {
+                        currentPhase = 'file-selected';
+                        const clickStatus = document.getElementById('cameraClickStatus');
+                        clickStatus.innerHTML = `<div class="success">✅ SUCCESS! Camera button worked - ${files.length} file(s) selected</div>`;
+                        testResults.cameraClick = true;
+                        updateTestSummary();
+                    },
+                    onError: (error) => {
+                        const clickStatus = document.getElementById('cameraClickStatus');
+                        clickStatus.innerHTML = `<div class="error">❌ Error: ${error}</div>`;
+                        console.error('Test error:', error);
+                    }
+                });
+                
+                const success = testImageUpload.initialize('testContainer', {
+                    cameraText: '📸 Test Camera Button',
+                    galleryText: '🖼️ Test Gallery'
+                });
+                
+                if (success !== false) {
+                    status.innerHTML = '<div class="success">✅ ImageUpload initialized successfully</div>';
+                    testResults.initialization = true;
+                    
+                    setTimeout(() => {
+                        currentPhase = 'waiting-for-user-action';
+                        const clickStatus = document.getElementById('cameraClickStatus');
+                        clickStatus.innerHTML = `
+                            <div class="info">
+                                <strong>📱 Now click the "Test Camera Button" above</strong><br>
+                                The camera permission prompt should appear <strong>only when you click it</strong>.
+                            </div>
+                        `;
+                    }, 1000);
+                } else {
+                    status.innerHTML = '<div class="error">❌ Failed to initialize ImageUpload</div>';
+                    testResults.initialization = false;
+                }
+                
+                updateTestSummary();
+                
+            } catch (error) {
+                status.innerHTML = `<div class="error">❌ Exception: ${error.message}</div>`;
+                testResults.initialization = false;
+                updateTestSummary();
+                console.error('Initialization error:', error);
+            }
+        };
+        
+        function updateTestSummary() {
+            const summary = document.getElementById('testSummary');
+            const results = [];
+            
+            if (testResults.pageLoad === true) {
+                results.push('✅ Page Load: No unwanted permission prompt');
+            } else if (testResults.pageLoad === false) {
+                results.push('❌ Page Load: Permission prompt appeared (BAD)');
+            } else {
+                results.push('⏳ Page Load: Not yet confirmed');
+            }
+            
+            if (testResults.initialization === true) {
+                results.push('✅ Initialization: Successful without permission request');
+            } else if (testResults.initialization === false) {
+                results.push('❌ Initialization: Failed');
+            } else {
+                results.push('⏳ Initialization: Not yet tested');
+            }
+            
+            if (testResults.cameraClick === true) {
+                results.push('✅ Camera Button: Works correctly');
+            } else if (testResults.cameraClick === false) {
+                results.push('❌ Camera Button: Failed');
+            } else {
+                results.push('⏳ Camera Button: Not yet tested');
+            }
+            
+            // Show camera access log
+            if (cameraAccessLog.length > 0) {
+                results.push('<br><strong>Camera Access Log:</strong>');
+                cameraAccessLog.forEach(log => {
+                    results.push(`${log.time} [${log.phase}]: ${log.message}`);
+                });
+            }
+            
+            summary.innerHTML = results.join('<br>');
+        }
+        
+        // Initialize the page load check
+        setTimeout(() => {
+            currentPhase = 'page-loaded';
+            updateTestSummary();
+        }, 100);
+    </script>
+</body>
+</html>

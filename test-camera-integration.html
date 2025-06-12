@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Integration Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status.warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .status.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        #imageUploadContainer {
+            min-height: 200px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Camera Integration Test</h1>
+    
+    <div class="test-container">
+        <div class="test-title">Environment Check</div>
+        <div id="environmentStatus"></div>
+        <button onclick="checkEnvironment()">Check Environment</button>
+    </div>
+
+    <div class="test-container">
+        <div class="test-title">Camera Permissions</div>
+        <div id="cameraStatus"></div>
+        <button onclick="testCameraAccess()">Test Camera Access</button>
+    </div>
+
+    <div class="test-container">
+        <div class="test-title">ImageUpload Integration</div>
+        <div id="integrationStatus"></div>
+        <button onclick="initializeImageUpload()">Initialize ImageUpload</button>
+        <div id="imageUploadContainer"></div>
+    </div>
+
+    <div class="test-container">
+        <div class="test-title">Test Results</div>
+        <div id="testResults"></div>
+    </div>
+
+    <script type="module">
+        // Import the ImageUpload utility
+        import { ImageUpload } from './utility/imageUpload.js';
+        
+        let imageUploadInstance = null;
+        
+        window.checkEnvironment = function() {
+            const status = document.getElementById('environmentStatus');
+            const results = [];
+            
+            // Check HTTPS
+            if (location.protocol === 'https:') {
+                results.push('<div class="status success">✓ HTTPS enabled</div>');
+            } else {
+                results.push('<div class="status warning">⚠ Using HTTP (Camera may not work on mobile)</div>');
+            }
+            
+            // Check getUserMedia support
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                results.push('<div class="status success">✓ getUserMedia supported</div>');
+            } else {
+                results.push('<div class="status error">✗ getUserMedia not supported</div>');
+            }
+            
+            // Check device type
+            const userAgent = navigator.userAgent;
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+            const isAndroid = /Android/.test(userAgent);
+            const isMobile = /Mobi|Android/i.test(userAgent);
+            
+            if (isIOS) {
+                results.push('<div class="status info">📱 iOS device detected</div>');
+            } else if (isAndroid) {
+                results.push('<div class="status info">🤖 Android device detected</div>');
+            } else if (isMobile) {
+                results.push('<div class="status info">📱 Mobile device detected</div>');
+            } else {
+                results.push('<div class="status info">💻 Desktop device detected</div>');
+            }
+            
+            // Check browser
+            const isSafari = /Safari/i.test(userAgent) && !/Chrome/i.test(userAgent);
+            const isChrome = /Chrome/i.test(userAgent);
+            const isFirefox = /Firefox/i.test(userAgent);
+            
+            if (isSafari) {
+                results.push('<div class="status info">🧭 Safari browser</div>');
+            } else if (isChrome) {
+                results.push('<div class="status info">🔍 Chrome browser</div>');
+            } else if (isFirefox) {
+                results.push('<div class="status info">🦊 Firefox browser</div>');
+            }
+            
+            status.innerHTML = results.join('');
+        };
+        
+        window.testCameraAccess = async function() {
+            const status = document.getElementById('cameraStatus');
+            
+            try {
+                status.innerHTML = '<div class="status info">Testing camera access...</div>';
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' } 
+                });
+                
+                status.innerHTML = '<div class="status success">✓ Camera access granted</div>';
+                
+                // Stop the stream
+                stream.getTracks().forEach(track => track.stop());
+                
+            } catch (error) {
+                console.error('Camera access error:', error);
+                status.innerHTML = `<div class="status error">✗ Camera access failed: ${error.message}</div>`;
+            }
+        };
+        
+        window.initializeImageUpload = function() {
+            const status = document.getElementById('integrationStatus');
+            const container = document.getElementById('imageUploadContainer');
+            
+            try {
+                status.innerHTML = '<div class="status info">Initializing ImageUpload...</div>';
+                
+                imageUploadInstance = new ImageUpload({
+                    maxFiles: 3,
+                    onFilesSelected: (files) => {
+                        console.log('Files selected:', files);
+                        const results = document.getElementById('testResults');
+                        results.innerHTML = `<div class="status success">✓ Files selected: ${files.length} file(s)</div>`;
+                    },
+                    onError: (error) => {
+                        console.error('ImageUpload error:', error);
+                        const results = document.getElementById('testResults');
+                        results.innerHTML = `<div class="status error">✗ Error: ${error.message}</div>`;
+                    }
+                });
+                
+                const success = imageUploadInstance.initialize('imageUploadContainer');
+                
+                if (success !== false) {
+                    status.innerHTML = '<div class="status success">✓ ImageUpload initialized successfully</div>';
+                } else {
+                    status.innerHTML = '<div class="status error">✗ ImageUpload initialization failed</div>';
+                }
+                
+            } catch (error) {
+                console.error('ImageUpload initialization error:', error);
+                status.innerHTML = `<div class="status error">✗ Initialization error: ${error.message}</div>`;
+            }
+        };
+        
+        // Auto-run environment check
+        window.addEventListener('load', () => {
+            checkEnvironment();
+        });
+    </script>
+</body>
+</html>
