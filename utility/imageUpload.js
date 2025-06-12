@@ -337,20 +337,14 @@ class ImageUpload {
     const handleCameraClick = (e) => {
       console.log('ImageUpload: Camera button clicked');
       
-      // Don't prevent default - let the browser handle the label-to-input connection naturally
-      // Only prevent default for touch events to avoid double-firing
+      // For touch events, prevent default to avoid double-firing
+      // For click events, let the browser handle the label-to-input connection naturally
       if (e.type === 'touchend') {
         e.preventDefault();
+        // For touch events, manually trigger the input
+        cameraInput.click();
       }
-      
-      // For most cases, the browser will automatically trigger the input
-      // Only manually click if we detect the input didn't trigger
-      setTimeout(() => {
-        if (!cameraInput.value) {
-          console.log('ImageUpload: Manually triggering camera input');
-          cameraInput.click();
-        }
-      }, 100);
+      // For regular click events, do nothing - browser handles it automatically
     };
 
     // Multiple event types for better compatibility
