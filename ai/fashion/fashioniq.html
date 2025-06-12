@@ -244,7 +244,6 @@
     }, 1000);
 
     ensureImageUpload();
-    enableGuidedForms();
 
     console.log("[FashionIQ] Initialization complete");
   }
@@ -262,20 +261,6 @@
           window.initializeImageUpload();
         }
       }, 500);
-    }
-  }
-
-  function enableGuidedForms() {
-    // Auto-enable guided forms for files listed in input.txt
-    if (typeof window.initGuidedForms === 'function') {
-      console.log('[FashionIQ] Auto-initializing guided forms');
-      window.initGuidedForms({
-        autoAdvance: true,
-        showProgressIndicator: true,
-        smoothTransitions: true,
-        enableSkipping: true,
-        autoStart: true
-      });
     }
   }
 

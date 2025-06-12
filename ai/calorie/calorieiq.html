@@ -320,54 +320,13 @@
       generateBtn.addEventListener('click', handleGenerateCalorieIq);
     }
     
-    // Set up guided forms toggle button
-    const guidedToggleBtn = document.getElementById('guided-forms-toggle');
-    if (guidedToggleBtn) {
-      guidedToggleBtn.removeEventListener('click', toggleGuidedForms);
-      guidedToggleBtn.addEventListener('click', toggleGuidedForms);
-    }
+
     
     // Simply ensure the add button exists
     ensureAddButton();
   }
 
-  // Toggle guided forms functionality
-  let guidedFormsInstance = null;
-  
-  function toggleGuidedForms() {
-    console.log('[CalorieIQ] Toggling guided forms');
-    const toggleBtn = document.getElementById('guided-forms-toggle');
-    
-    if (guidedFormsInstance) {
-      // Disable guided forms
-      guidedFormsInstance.destroy();
-      guidedFormsInstance = null;
-      toggleBtn.textContent = '🚀 Enable Guided Form';
-      toggleBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-      console.log('[CalorieIQ] Guided forms disabled');
-    } else {
-      // Enable guided forms
-      if (window.GuidedFormSystem) {
-        guidedFormsInstance = new window.GuidedFormSystem({
-          autoAdvance: true,
-          showProgressIndicator: true,
-          smoothTransitions: true,
-          transitionDuration: 300,
-          autoAdvanceDelay: 800,
-          enableSkipping: true
-        });
-        
-        guidedFormsInstance.init('device-container');
-        
-        toggleBtn.textContent = '⏹️ Disable Guided Form';
-        toggleBtn.style.background = 'linear-gradient(135deg, #ea667e 0%, #a24b76 100%)';
-        console.log('[CalorieIQ] Guided forms enabled');
-      } else {
-        console.error('[CalorieIQ] GuidedFormSystem not available');
-        alert('Guided forms system is not loaded. Please refresh the page.');
-      }
-    }
-  }
+
 
   // Initialize with multiple triggers to ensure reliability
   function runInitialization() {
