@@ -1,7 +1,27 @@
 <!-- /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
+ * This code is protected under Canadian and international copyr  async function handleGenerateFashionIq() {
+    console.log('[FashionIQ] Generate button clicked');
+    
+    try {
+      // Check if images are available through centralized system
+      const hasImages = window.getImageUploadImages && window.getImageUploadImages().length > 0;
+      if (!hasImages) {
+        alert('Please upload at least one outfit photo before analyzing.');
+        return;
+      }
+
+      // Get form data using FormPersistence system
+      const formData = window.fashionFormPersistence.collectFormData();
+      console.log('[FashionIQ] Form data collected:', formData);
+      
+      if (!formData) {
+        alert('Please complete the form before generating your fashion analysis.');
+        return;
+      }
+
+      // Debug: Log the data being sent to API
+      console.log('[FashionIQ] Data being sent to API:', JSON.stringify(formData, null, 2));horized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
@@ -89,6 +109,27 @@
 <!-- Load the centralized image upload system -->
 <script src="../../utility/imageUpload.js"></script>
 
+<style>
+#generate-fashion-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #cccccc !important;
+  color: #666 !important;
+  border-color: #cccccc !important;
+}
+
+#generate-fashion-btn:not(:disabled) {
+  opacity: 1;
+  cursor: pointer;
+}
+
+#generate-fashion-btn:not(:disabled):hover {
+  background-color: #eef7f0;
+  transform: translateY(-1px);
+  box-shadow: 2px 2px 6px rgba(74, 124, 89, 0.2);
+}
+</style>
+
 <script>
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
@@ -101,39 +142,11 @@
 */
 
 (function() {
-  console.log("Fashion IQ script: Starting");
-
-  // Collect all form data using FormPersistence
-  function collectFormData() {
-    if (window.fashionFormPersistence) {
-      // FormPersistence automatically includes images from centralized ImageUpload utility
-      return window.fashionFormPersistence.collectFormData();
-    } else {
-      // Fallback to manual collection if FormPersistence not available
-      return {
-        personalStyle: document.querySelector('#fashion-personal-style .grid-item.selected')?.dataset.value || '',
-        climate: document.querySelector('#fashion-climate .grid-item.selected')?.dataset.value || '',
-        occasion: document.querySelector('#fashion-occasion .grid-item.selected')?.dataset.value || '',
-        age: document.getElementById('fashion-age').value,
-        height: document.getElementById('fashion-height').value,
-        gender: document.getElementById('fashion-gender').value,
-        additionalContext: document.getElementById('fashion-additional-context').value,
-        images: window.getImageUploadImages ? window.getImageUploadImages() : []
-      };
-    }
-  }
-
-  // Generate button functionality
-  function initializeGenerateButton() {
-    const generateBtn = document.getElementById('generate-fashion-btn');
-    if (!generateBtn) {
-      console.error('Fashion IQ: Generate button not found');
-      return false;
-    }
+  console.log("[FashionIQ] Script starting");  // Generate button functionality
+  async function handleGenerateFashionIq() {
+    console.log('[FashionIQ] Generate button clicked');
     
-    generateBtn.addEventListener('click', async function() {
-      console.log('Generate button clicked');
-      
+    try {
       // Check if images are available through centralized system
       const hasImages = window.getImageUploadImages && window.getImageUploadImages().length > 0;
       if (!hasImages) {
@@ -141,70 +154,123 @@
         return;
       }
 
-      const formData = collectFormData();
-      console.log('Collected form data:', formData);
-
-      // Show loading state
-      const originalText = generateBtn.textContent;
-      generateBtn.textContent = 'Analyzing...';
-      generateBtn.disabled = true;
-
-      try {
-        // Store data for output page
-        localStorage.setItem('fashionIqInput', JSON.stringify(formData));
-        
-        // Make API call to worker
-        const response = await fetch('https://fashion.4hm7q4q75z.workers.dev/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData)
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log('API response:', result);
-
-        // Store response
-        localStorage.setItem('fashionIqResponse', JSON.stringify(result));
-
-        // Dispatch an event to notify dataout.js that a response was received
-        const event = new CustomEvent('api-response-received', {
-          detail: {
-            module: 'fashioniq',
-            type: 'worker-response',
-            timestamp: Date.now()
-          }
-        });
-        document.dispatchEvent(event);
-        console.log('[FashionIQ] Dispatched api-response-received event');
-
-      } catch (error) {
-        console.error('Error calling API:', error);
-        alert('Sorry, there was an error analyzing your outfits. Please try again.');
-        
-        // Reset button
-        generateBtn.textContent = originalText;
-        // Note: Button state is now managed automatically by imageUpload.js
+      const formData = window.fashionFormPersistence.getSavedFormData();
+      if (!formData) {
+        alert('Please complete the form before generating your fashion analysis.');
+        return;
       }
-    });
+
+      // Debug: Log the data being sent
+      console.log('[FashionIQ] Data being sent to API:', JSON.stringify(formData, null, 2));
+
+      // Use enhanced loading with educational facts
+      const result = await window.enhancedLoading(
+        'generate-fashion-btn',
+        'fashion',
+        async () => {
+          const apiUrl = 'https://fashion.4hm7q4q75z.workers.dev/';
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          
+          const responseData = await response.json();
+          if (responseData.message !== 'Success') {
+            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+          }
+          
+          return responseData;
+        }
+      );
+
+      // Store the response using centralized system
+      window.fashionFormPersistence.saveResponseData(result);
+      
+      // Dispatch an event to notify dataout.js that a response was received
+      const event = new CustomEvent('api-response-received', {
+        detail: {
+          module: 'fashioniq',
+          type: 'worker-response',
+          timestamp: Date.now()
+        }
+      });
+      document.dispatchEvent(event);
+      console.log('[FashionIQ] Dispatched api-response-received event');
+      
+    } catch (error) {
+      console.error('[FashionIQ] Error generating fashion analysis:', error);
+      alert('An error occurred while analyzing your fashion. Please try again later.');
+    }
+  }
+
+  // Button state management for image requirements
+  function updateButtonState() {
+    const generateBtn = document.getElementById('generate-fashion-btn');
+    if (!generateBtn) return;
     
-    return true;
+    const hasImages = window.getImageUploadImages && window.getImageUploadImages().length > 0;
+    console.log('[FashionIQ] Updating button state, hasImages:', hasImages);
+    
+    if (hasImages) {
+      generateBtn.disabled = false;
+      generateBtn.style.opacity = '1';
+      generateBtn.style.cursor = 'pointer';
+    } else {
+      generateBtn.disabled = true;
+      generateBtn.style.opacity = '0.6';
+      generateBtn.style.cursor = 'not-allowed';
+    }
   }
 
   // Main initialization function
   function initialize() {
-    console.log("Fashion IQ: Initializing (image upload handled automatically by imageUpload.js)");
+    console.log("[FashionIQ] Initializing...");
     
-    // Initialize generate button
-    if (!initializeGenerateButton()) {
-      console.error('Fashion IQ: Failed to initialize generate button');
+    // Set up event listeners for the generate button
+    const generateBtn = document.getElementById('generate-fashion-btn');
+    if (generateBtn) {
+      generateBtn.removeEventListener('click', handleGenerateFashionIq);
+      generateBtn.addEventListener('click', handleGenerateFashionIq);
     }
 
+    // Initial button state check
+    updateButtonState();
+
+    // Listen for image upload changes
+    document.addEventListener('imageUploadChanged', function(event) {
+      console.log('[FashionIQ] Image upload changed event received:', event.detail);
+      updateButtonState();
+    });
+
+    // Also listen for the container-specific event
+    const uploadContainer = document.getElementById('fashion-upload-container');
+    if (uploadContainer) {
+      uploadContainer.addEventListener('imagesChanged', function(event) {
+        console.log('[FashionIQ] Container images changed event received:', event.detail);
+        updateButtonState();
+      });
+    }
+
+    // Periodic check for images (fallback in case events don't fire)
+    setInterval(updateButtonState, 2000);
+
+    // Delayed button state check in case image upload initializes after this
+    setTimeout(() => {
+      updateButtonState();
+    }, 1000);
+
+    ensureImageUpload();
+    enableGuidedForms();
+
+    console.log("[FashionIQ] Initialization complete");
+  }
+
+  function ensureImageUpload() {
     // Manually initialize image upload for fashion container
     if (typeof window.initializeImageUpload === 'function') {
       console.log('[FashionIQ] Manually triggering image upload initialization');
@@ -218,7 +284,9 @@
         }
       }, 500);
     }
+  }
 
+  function enableGuidedForms() {
     // Auto-enable guided forms for files listed in input.txt
     if (typeof window.initGuidedForms === 'function') {
       console.log('[FashionIQ] Auto-initializing guided forms');
@@ -230,8 +298,6 @@
         autoStart: true
       });
     }
-
-    console.log("Fashion IQ script: Initialization complete");
   }
 
   // Initialize immediately if DOM is ready
@@ -244,8 +310,24 @@
   // Handle loading through datain.js
   document.addEventListener('data-in-loaded', function(e) {
     console.log("[FashionIQ] Detected load through datain.js, reinitializing");
-    setTimeout(initialize, 50);
+    initialize();
   });
+
+  // Additional safety net - try again after a short delay
+  setTimeout(() => {
+    const generateBtn = document.getElementById('generate-fashion-btn');
+    if (generateBtn && !generateBtn.onclick) {
+      console.log("[FashionIQ] Generate button found but no handler, trying initialization again");
+      initialize();
+    }
+  }, 200);
+
+  // Export functions for external access
+  window.fashionIq = { 
+    getFormData: () => window.fashionFormPersistence ? window.fashionFormPersistence.getSavedFormData() : null,
+    saveFormData: () => window.fashionFormPersistence ? window.fashionFormPersistence.saveFormData() : null,
+    updateButtonState: updateButtonState
+  };
 
 })();
 </script>

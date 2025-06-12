@@ -80,6 +80,41 @@ function initializeFormPersistence(url) {
                 'fashion-occasion'
             ];
             moduleConfig.multiSelection = [];
+            
+            // Custom form data collector for Fashion IQ (includes images)
+            moduleConfig.customFormDataCollector = function() {
+                console.log('[DataIn] Fashion custom collector called');
+                
+                // Get basic form data using the generic collector
+                const formPersistence = window.fashionFormPersistence;
+                const basicFormData = formPersistence ? formPersistence.collectGenericFormData() : {};
+                console.log('[DataIn] Basic form data:', basicFormData);
+                
+                // Add images from the centralized image upload system
+                const imageObjects = window.getImageUploadImages ? window.getImageUploadImages() : [];
+                console.log('[DataIn] Image objects from getImageUploadImages:', imageObjects);
+                
+                // Extract just the dataUrl strings that the worker expects
+                const images = Array.isArray(imageObjects) && imageObjects.length > 0 
+                    ? imageObjects.map(img => img.dataUrl).filter(dataUrl => dataUrl && dataUrl.startsWith('data:image/'))
+                    : [];
+                console.log('[DataIn] Processed images for worker:', images.length, 'images');
+                
+                // Map field names to match what the fashion worker expects
+                const finalData = {
+                    'personal-style': basicFormData['personal-style'] || '',
+                    climate: basicFormData.climate || '',
+                    occasion: basicFormData.occasion || '',
+                    age: basicFormData.age || '',
+                    height: basicFormData.height || '',
+                    gender: basicFormData.gender || '',
+                    additionalContext: basicFormData['additional-context'] || '',
+                    images: images
+                };
+                
+                console.log('[DataIn] Final data for worker:', finalData);
+                return finalData;
+            };
         }
         const formPersistence = FormPersistence.getInstance(moduleType, moduleConfig);
         formPersistence.init({ moduleName: moduleType, ...moduleConfig });

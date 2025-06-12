@@ -190,6 +190,12 @@ class FormPersistence {
             this.handleGridItemToggled(event);
         });
 
+        // Listen for image upload changes to auto-save form data
+        document.addEventListener('imageUploadChanged', (event) => {
+            console.log(`[FormPersistence] Image upload changed, auto-saving form data for ${this.moduleName}`);
+            this.saveFormData();
+        });
+
         console.log(`[FormPersistence] Event listeners set up for ${this.moduleName}`);
     }
 
