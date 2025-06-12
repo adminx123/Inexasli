@@ -97,60 +97,16 @@
  * jurisdictions worldwide.
 */
 
-import { ImageUpload } from '../../utility/imageUpload.js';
+// Import the centralized image upload system (this will auto-initialize)
+import '../../utility/imageUpload.js';
 
 (function() {
   console.log("Fashion IQ script: Starting");
 
-  let imageUploader = null;
-  let uploadedImages = [];
-
-  // Initialize image upload functionality
-  function initializeImageUpload() {
-    console.log("Fashion IQ: Initializing image upload with utility");
-    
-    // Create ImageUpload instance
-    imageUploader = new ImageUpload({
-      maxFiles: 5,
-      acceptedTypes: 'image/*',
-      onFilesSelected: (images) => {
-        uploadedImages = images;
-        updateGenerateButtonState();
-        console.log('Fashion IQ: Files selected, count:', images.length);
-      },
-      onError: (message) => {
-        console.error('Fashion IQ: Upload error:', message);
-        alert(message);
-      }
-    });
-
-    // Initialize the upload interface
-    const success = imageUploader.initialize('fashion-upload-container', {
-      cameraText: 'Take Photo',
-      galleryText: 'Choose from Gallery',
-      dragText: 'Or drag and drop photos here',
-      hintText: 'Upload 1-5 photos of yourself in different outfits'
-    });
-
-    if (!success) {
-      console.error('Fashion IQ: Failed to initialize image upload');
-    } else {
-      console.log('Fashion IQ: Image upload initialized successfully');
-    }
-  }
-
-  // Update generate button state
-  function updateGenerateButtonState() {
-    const generateBtn = document.getElementById('generate-fashion-btn');
-    if (generateBtn) {
-      generateBtn.disabled = uploadedImages.length === 0;
-    }
-  }
-
   // Collect all form data using FormPersistence
   function collectFormData() {
     if (window.fashionFormPersistence) {
-      // FormPersistence now automatically includes images from ImageUpload utility
+      // FormPersistence automatically includes images from centralized ImageUpload utility
       return window.fashionFormPersistence.collectFormData();
     } else {
       // Fallback to manual collection if FormPersistence not available
@@ -162,7 +118,7 @@ import { ImageUpload } from '../../utility/imageUpload.js';
         height: document.getElementById('fashion-height').value,
         gender: document.getElementById('fashion-gender').value,
         additionalContext: document.getElementById('fashion-additional-context').value,
-        images: imageUploader ? imageUploader.getImages() : []
+        images: window.getImageUploadImages ? window.getImageUploadImages() : []
       };
     }
   }
@@ -170,11 +126,17 @@ import { ImageUpload } from '../../utility/imageUpload.js';
   // Generate button functionality
   function initializeGenerateButton() {
     const generateBtn = document.getElementById('generate-fashion-btn');
+    if (!generateBtn) {
+      console.error('Fashion IQ: Generate button not found');
+      return false;
+    }
     
     generateBtn.addEventListener('click', async function() {
       console.log('Generate button clicked');
       
-      if (!imageUploader || imageUploader.getImages().length === 0) {
+      // Check if images are available through centralized system
+      const hasImages = window.getImageUploadImages && window.getImageUploadImages().length > 0;
+      if (!hasImages) {
         alert('Please upload at least one outfit photo before analyzing.');
         return;
       }
@@ -227,46 +189,35 @@ import { ImageUpload } from '../../utility/imageUpload.js';
         
         // Reset button
         generateBtn.textContent = originalText;
-        generateBtn.disabled = uploadedImages.length === 0;
+        // Note: Button state is now managed automatically by imageUpload.js
       }
     });
-  }
-
-  // Initialize with multiple triggers to ensure reliability
-  function runInitialization() {
-    // Use a small delay to ensure DOM is ready
-    setTimeout(initialize, 50);
+    
+    return true;
   }
 
   // Main initialization function
   function initialize() {
-    console.log("Fashion IQ: Attempting direct initialization");
+    console.log("Fashion IQ: Initializing (image upload handled automatically by imageUpload.js)");
     
-    // Wait for ImageUpload utility to be available
-    function waitForImageUpload() {
-      if (window.ImageUpload) {
-        initializeImageUpload();
-        initializeGenerateButton();
-        console.log("Fashion IQ script: Initialization complete");
-        
-        // Auto-enable guided forms for files listed in input.txt
-        if (typeof window.initGuidedForms === 'function') {
-          console.log('[FashionIQ] Auto-initializing guided forms');
-          window.initGuidedForms({
-            autoAdvance: true,
-            showProgressIndicator: true,
-            smoothTransitions: true,
-            enableSkipping: true,
-            autoStart: true
-          });
-        }
-      } else {
-        console.log("Fashion IQ: Waiting for ImageUpload utility...");
-        setTimeout(waitForImageUpload, 100);
-      }
+    // Initialize generate button
+    if (!initializeGenerateButton()) {
+      console.error('Fashion IQ: Failed to initialize generate button');
     }
-    
-    waitForImageUpload();
+
+    // Auto-enable guided forms for files listed in input.txt
+    if (typeof window.initGuidedForms === 'function') {
+      console.log('[FashionIQ] Auto-initializing guided forms');
+      window.initGuidedForms({
+        autoAdvance: true,
+        showProgressIndicator: true,
+        smoothTransitions: true,
+        enableSkipping: true,
+        autoStart: true
+      });
+    }
+
+    console.log("Fashion IQ script: Initialization complete");
   }
 
   // Initialize immediately if DOM is ready
@@ -279,7 +230,7 @@ import { ImageUpload } from '../../utility/imageUpload.js';
   // Handle loading through datain.js
   document.addEventListener('data-in-loaded', function(e) {
     console.log("[FashionIQ] Detected load through datain.js, reinitializing");
-    runInitialization();
+    setTimeout(initialize, 50);
   });
 
 })();
