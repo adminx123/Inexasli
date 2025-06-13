@@ -2,14 +2,14 @@ account_id = "b70c309587ed8ba2bfa06320792ea457"
 workers_dev = true
 compatibility_date = "2025-05-11"
 
-# Global logging configuration that applies to all workers
+# Upload and logging configuration
+upload.format = "modules"
+log_level = "debug"
+
+# Global build configuration that applies to all workers
 [build]
 command = ""
 watch_dir = "build/worker"
-upload.format = "modules"
-
-# Set to "info" for normal logs, "debug" for verbose logs
-log_level = "debug"
 
 
 
