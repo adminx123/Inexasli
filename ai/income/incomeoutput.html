@@ -784,17 +784,42 @@
             outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc3545;">Error loading income analysis. Please try again.</div>';
         }
     } else {
-        // Get data from localStorage if available
-        const storedAnalysis = getLocal('INCOMEIQ_OUTPUT');
-        if (storedAnalysis) {
+        // Get data from localStorage using the FormPersistence pattern
+        const responseKey = 'incomeIqResponse';
+        const storedResponse = getLocal(responseKey);
+        if (storedResponse) {
             try {
-                const incomeAnalysis = JSON.parse(storedAnalysis);
+                let responseData = JSON.parse(storedResponse);
+                
+                // Handle the worker response format - check if it's nested in a response object
+                if (responseData && responseData.message === 'Success' && responseData.data) {
+                    responseData = responseData.data;
+                }
+                
+                console.log('Found stored income response:', responseData);
+                
+                // Create a mock incomeAnalysis object from the worker response data
+                const incomeAnalysis = {
+                    summary: responseData.calculation_summary || "Financial analysis completed",
+                    financial_summary: responseData.calculation_summary,
+                    total_taxes_calculated: responseData.total_taxes || 0,
+                    total_contributions_calculated: responseData.total_contributions || 0,
+                    recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations.",
+                    insights: "Your tax calculations have been completed. Review the financial metrics below for a comprehensive overview of your financial health."
+                };
+                
                 const outputSpan = document.getElementById('output-span');
                 outputSpan.innerHTML = '';
                 displayEnhancedIncomeAnalysis(incomeAnalysis, outputSpan);
             } catch (error) {
-                console.error('Error parsing stored analysis:', error);
+                console.error('Error parsing stored response:', error);
+                const outputSpan = document.getElementById('output-span');
+                outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc3545;">Error loading stored income data. Please try again.</div>';
             }
+        } else {
+            // No data found, show initial message
+            const outputSpan = document.getElementById('output-span');
+            outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">No income analysis data found. Please complete the IncomeIQ form to see your financial dashboard.</div>';
         }
     }
 
@@ -874,12 +899,35 @@
       metricsGrid.className = 'dashboard-grid';
       metricsGrid.style.cssText = 'margin-bottom: 30px;';
       
+      // Add calculated tax data if available
+      const taxesCalculated = incomeData.total_taxes_calculated || 0;
+      const contributionsCalculated = incomeData.total_contributions_calculated || 0;
+      const adjustedNetCashFlow = netCashFlow - taxesCalculated - contributionsCalculated;
+      
       metricsGrid.innerHTML = `
         <div class="dashboard-card">
           <h3><i class="fas fa-dollar-sign"></i>Annual Income</h3>
           <div class="metric-card positive">
             <div class="metric-label">Gross Income</div>
             <div class="metric-value">${currencySymbol}${financialMetrics.annualIncome.toLocaleString()}</div>
+          </div>
+        </div>
+        
+        <div class="dashboard-card">
+          <h3><i class="fas fa-receipt"></i>Calculated Taxes</h3>
+          <div class="metric-card ${taxesCalculated > 0 ? 'negative' : 'warning'}">
+            <div class="metric-label">AI Estimated Taxes</div>
+            <div class="metric-value">${currencySymbol}${taxesCalculated.toLocaleString()}</div>
+            <div class="metric-description">Educational estimate only</div>
+          </div>
+        </div>
+        
+        <div class="dashboard-card">
+          <h3><i class="fas fa-hands-helping"></i>Contributions</h3>
+          <div class="metric-card ${contributionsCalculated > 0 ? 'warning' : 'positive'}">
+            <div class="metric-label">Social Security & Benefits</div>
+            <div class="metric-value">${currencySymbol}${contributionsCalculated.toLocaleString()}</div>
+            <div class="metric-description">Mandatory contributions</div>
           </div>
         </div>
         
@@ -893,10 +941,10 @@
         
         <div class="dashboard-card">
           <h3><i class="fas fa-chart-line"></i>Net Cash Flow</h3>
-          <div class="metric-card ${netCashFlow >= 0 ? 'positive' : 'negative'}">
-            <div class="metric-label">Monthly: ${currencySymbol}${(netCashFlow / 12).toLocaleString()}</div>
-            <div class="metric-value">${currencySymbol}${netCashFlow.toLocaleString()}</div>
-            <div class="metric-description">${netCashFlow >= 0 ? 'Surplus' : 'Deficit'}</div>
+          <div class="metric-card ${adjustedNetCashFlow >= 0 ? 'positive' : 'negative'}">
+            <div class="metric-label">After taxes & expenses</div>
+            <div class="metric-value">${currencySymbol}${adjustedNetCashFlow.toLocaleString()}</div>
+            <div class="metric-description">${adjustedNetCashFlow >= 0 ? 'Surplus' : 'Deficit'}</div>
           </div>
         </div>
         
