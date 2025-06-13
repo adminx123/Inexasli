@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Chart.js CDN for interactive charts -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
   
   <style>
     /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
@@ -830,26 +830,82 @@
       const container = document.createElement('div');
       container.style.cssText = 'max-width: 1200px; margin: 0 auto; font-family: "Inter", sans-serif; padding: 20px;';
       
-      // Get currency symbol and financial metrics from localStorage
+      // Load all data from localStorage and perform calculations
       const currencySymbol = getCurrentCurrencySymbol();
+      
+      // Load normalized income and expenses data
+      const storedIncomeData = JSON.parse(getLocal('incomeIqinput1') || '{}');
+      const expenseData = JSON.parse(getLocal('incomeIqInput2') || '{}');
+      const assetsData = JSON.parse(getLocal('incomeIqAssets') || '{}');
+      const liabilitiesData = JSON.parse(getLocal('incomeIqLiabilities') || '{}');
+      
+      // Calculate totals from normalized data
+      const normalizedIncome = storedIncomeData.incomeData || {};
+      const normalizedExpenses = expenseData.expenseData || {};
+      
+      const totalAnnualIncome = Object.values(normalizedIncome).reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
+      const totalAnnualExpenses = Object.values(normalizedExpenses).reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
+      const totalAssets = Object.values(assetsData).reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
+      const totalLiabilities = Object.values(liabilitiesData).reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
+      
+      // Get taxes and contributions from worker response
+      const workerResponse = JSON.parse(getLocal('incomeIqResponse') || '{}');
+      let totalTaxes = 0;
+      let totalContributions = 0;
+      
+      if (workerResponse && workerResponse.message === 'Success' && workerResponse.data) {
+        totalTaxes = workerResponse.data.total_taxes || 0;
+        totalContributions = workerResponse.data.total_contributions || 0;
+      } else if (workerResponse && workerResponse.total_taxes) {
+        // Direct format
+        totalTaxes = workerResponse.total_taxes || 0;
+        totalContributions = workerResponse.total_contributions || 0;
+      }
+      
+      // Also check incomeData parameter for backward compatibility
+      if (incomeData && incomeData.total_taxes_calculated) {
+        totalTaxes = incomeData.total_taxes_calculated;
+        totalContributions = incomeData.total_contributions_calculated || 0;
+      }
+      
+      // Calculate net cash flow: income - taxes - contributions - expenses
+      const netCashFlow = totalAnnualIncome - totalTaxes - totalContributions - totalAnnualExpenses;
+      const netWorth = totalAssets - totalLiabilities;
+      
+      // Calculate key ratios
+      const debtToIncome = totalAnnualIncome > 0 ? totalLiabilities / totalAnnualIncome : 0;
+      const savingsRate = totalAnnualIncome > 0 ? netCashFlow / totalAnnualIncome : 0;
+      const fireTarget = totalAnnualExpenses * 25; // 4% rule
+      const fireRatio = fireTarget > 0 ? totalAssets / fireTarget : 0;
+      
+      // Calculate housing expenses for housing-to-income ratio
+      const housingExpenses = Object.entries(normalizedExpenses)
+        .filter(([key]) => key.includes('housing'))
+        .reduce((sum, [, value]) => sum + (parseFloat(value) || 0), 0);
+      const housingToIncome = totalAnnualIncome > 0 ? housingExpenses / totalAnnualIncome : 0;
+      
+      // Calculate savings to debt ratio
+      const savingsToDebt = totalLiabilities > 0 ? totalAssets / totalLiabilities : (totalAssets > 0 ? 999 : 0);
+      
       const financialMetrics = {
-        totalTaxes: parseFloat(getLocal('total_taxes')) || 0,
-        totalContributions: parseFloat(getLocal('total_contributions')) || 0,
-        annualIncome: parseFloat(getLocal('ANNUALINCOME')) || 0,
-        annualExpenses: parseFloat(getLocal('ANNUALEXPENSESUM')) || 0,
-        disposableIncome: parseFloat(getLocal('DISPOSABLEINCOME')) || 0,
-        assets: parseFloat(getLocal('ASSETS')) || 0,
-        liabilities: parseFloat(getLocal('LIABILITIES')) || 0,
-        netWorth: (parseFloat(getLocal('ASSETS')) || 0) - (parseFloat(getLocal('LIABILITIES')) || 0),
-        debtToIncome: parseFloat(getLocal('DEBTTOINCOME')) || 0,
-        fireRatio: parseFloat(getLocal('FIRERATIO')) || 0,
-        housingToIncome: parseFloat(getLocal('HOUSINGTOINCOME')) || 0,
-        savingsToDebt: parseFloat(getLocal('SAVINGSTODEBT')) || 0
+        totalTaxes,
+        totalContributions,
+        annualIncome: totalAnnualIncome,
+        annualExpenses: totalAnnualExpenses,
+        netCashFlow,
+        assets: totalAssets,
+        liabilities: totalLiabilities,
+        netWorth,
+        debtToIncome,
+        fireRatio,
+        housingToIncome,
+        savingsRate,
+        savingsToDebt
       };
       
+      console.log('Calculated financial metrics:', financialMetrics);
+      
       // Calculate additional metrics
-      const netCashFlow = financialMetrics.annualIncome - financialMetrics.annualExpenses - financialMetrics.totalTaxes - financialMetrics.totalContributions;
-      const savingsRate = financialMetrics.annualIncome > 0 ? (netCashFlow / financialMetrics.annualIncome) : 0;
       const healthScore = calculateFinancialHealthScore(financialMetrics, netCashFlow, savingsRate);
       
       // Header with AI branding
@@ -900,8 +956,8 @@
       metricsGrid.style.cssText = 'margin-bottom: 30px;';
       
       // Add calculated tax data if available
-      const taxesCalculated = incomeData.total_taxes_calculated || 0;
-      const contributionsCalculated = incomeData.total_contributions_calculated || 0;
+      const taxesCalculated = totalTaxes;
+      const contributionsCalculated = totalContributions;
       const adjustedNetCashFlow = netCashFlow - taxesCalculated - contributionsCalculated;
       
       metricsGrid.innerHTML = `

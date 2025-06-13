@@ -1504,12 +1504,60 @@ import setJSON from '/utility/setJSON.js';
             }
         });
 
+        // Collect assets data (straight numbers, no normalization needed)
+        const assetFields = [
+            'assets-checking-accounts',
+            'assets-savings-accounts', 
+            'assets-other-liquid-accounts',
+            'assets-money-lent-out',
+            'assets-investment-accounts',
+            'assets-primary-residence',
+            'assets-investment-properties',
+            'assets-vehicle-value',
+            'assets-other-assets'
+        ];
+        
+        const assetsData = {};
+        assetFields.forEach(fieldId => {
+            const element = document.getElementById(fieldId);
+            if (element && element.value) {
+                assetsData[fieldId] = parseFloat(element.value) || 0;
+                console.log(`Asset ${fieldId}: $${element.value}`);
+            }
+        });
+
+        // Collect liabilities data (straight numbers, no normalization needed)
+        const liabilityFields = [
+            'liabilities-small-business-loan',
+            'liabilities-primary-residence',
+            'liabilities-investment-properties',
+            'liabilities-vehicle-loan',
+            'liabilities-personal-debt',
+            'liabilities-line-of-credit',
+            'liabilities-student-loan',
+            'liabilities-credit-card',
+            'liabilities-tax-arrears'
+        ];
+        
+        const liabilitiesData = {};
+        liabilityFields.forEach(fieldId => {
+            const element = document.getElementById(fieldId);
+            if (element && element.value) {
+                liabilitiesData[fieldId] = parseFloat(element.value) || 0;
+                console.log(`Liability ${fieldId}: $${element.value}`);
+            }
+        });
+
         // Calculate totals
         const totalAnnualIncome = Object.values(normalizedIncome).reduce((sum, value) => sum + value, 0);
         const totalAnnualExpenses = Object.values(normalizedExpenses).reduce((sum, value) => sum + value, 0);
+        const totalAssets = Object.values(assetsData).reduce((sum, value) => sum + value, 0);
+        const totalLiabilities = Object.values(liabilitiesData).reduce((sum, value) => sum + value, 0);
 
         console.log(`Total Annual Income: $${totalAnnualIncome.toFixed(2)}`);
         console.log(`Total Annual Expenses: $${totalAnnualExpenses.toFixed(2)}`);
+        console.log(`Total Assets: $${totalAssets.toFixed(2)}`);
+        console.log(`Total Liabilities: $${totalLiabilities.toFixed(2)}`);
 
         // Save normalized data to localStorage
         try {
@@ -1546,19 +1594,30 @@ import setJSON from '/utility/setJSON.js';
             localStorage.setItem('incomeIqInput2', JSON.stringify(incomeIqInput2));
             // Keep the original for backward compatibility
             localStorage.setItem('incomeIqExpense', JSON.stringify(normalizedExpenses));
+            
+            // Store assets and liabilities separately
+            localStorage.setItem('incomeIqAssets', JSON.stringify(assetsData));
+            localStorage.setItem('incomeIqLiabilities', JSON.stringify(liabilitiesData));
 
             console.log("[IncomeIQ] ✅ Successfully saved normalized data to localStorage");
             console.log("Income data saved to 'incomeIqinput1':", incomeIqinput1);
             console.log("Expense data saved to 'incomeIqInput2':", incomeIqInput2);
             console.log("Expense data also saved to 'incomeIqExpense':", normalizedExpenses);
+            console.log("Assets data saved to 'incomeIqAssets':", assetsData);
+            console.log("Liabilities data saved to 'incomeIqLiabilities':", liabilitiesData);
 
             return {
                 success: true,
                 income: normalizedIncome,
                 expenses: normalizedExpenses,
+                assets: assetsData,
+                liabilities: liabilitiesData,
                 summary: {
                     totalIncome: totalAnnualIncome,
                     totalExpenses: totalAnnualExpenses,
+                    totalAssets: totalAssets,
+                    totalLiabilities: totalLiabilities,
+                    netWorth: totalAssets - totalLiabilities,
                     netIncome: totalAnnualIncome - totalAnnualExpenses
                 }
             };
