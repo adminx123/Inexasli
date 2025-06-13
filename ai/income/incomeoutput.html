@@ -1173,7 +1173,7 @@
       // Add calculated tax data if available
       const taxesCalculated = totalTaxes;
       const contributionsCalculated = totalContributions;
-      const adjustedNetCashFlow = netCashFlow - taxesCalculated - contributionsCalculated;
+      const adjustedNetCashFlow = netCashFlow; // netCashFlow already has taxes and contributions subtracted
       
       metricsGrid.innerHTML = `
         <div class="dashboard-card">
