@@ -1611,6 +1611,25 @@ import setJSON from '/utility/setJSON.js';
         }
     }
 
+    // Debug function to test percentage calculations
+    function testPercentageCalculation() {
+        console.log("=== Testing Percentage Calculations ===");
+        
+        // Test asset calculation
+        const testAssetValue = 100000; // $100,000
+        const testAssetPercent = 50; // 50%
+        const calculatedAsset = testAssetValue * (testAssetPercent / 100);
+        console.log(`Asset Test: $${testAssetValue} * ${testAssetPercent}% = $${calculatedAsset}`);
+        
+        // Test liability calculation  
+        const testLiabilityValue = 200000; // $200,000
+        const testLiabilityPercent = 75; // 75%
+        const calculatedLiability = testLiabilityValue * (testLiabilityPercent / 100);
+        console.log(`Liability Test: $${testLiabilityValue} * ${testLiabilityPercent}% = $${calculatedLiability}`);
+        
+        console.log("=== Percentage Calculation Tests Complete ===");
+    }
+
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initIncomeForm);
@@ -1773,15 +1792,19 @@ import setJSON from '/utility/setJSON.js';
             }
         });
 
-        // Collect assets data (straight numbers, no normalization needed)
+        // Collect assets data with percentage calculation
         const assetFields = [
             'assets-checking-accounts',
             'assets-savings-accounts', 
             'assets-other-liquid-accounts',
             'assets-money-lent-out',
-            'assets-investment-accounts',
-            'assets-primary-residence',
+            'assets-long-term-investment-accounts',
             'assets-investment-properties',
+            'assets-art-jewelry',
+            'assets-primary-residence',
+            'assets-small-business',
+            'assets-vehicles',
+            'assets-investment-accounts',
             'assets-vehicle-value',
             'assets-other-assets'
         ];
@@ -1790,12 +1813,23 @@ import setJSON from '/utility/setJSON.js';
         assetFields.forEach(fieldId => {
             const element = document.getElementById(fieldId);
             if (element && element.value) {
-                assetsData[fieldId] = parseFloat(element.value) || 0;
-                console.log(`Asset ${fieldId}: $${element.value}`);
+                let assetValue = parseFloat(element.value) || 0;
+                
+                // Check for percentage input
+                const percentElement = document.getElementById(`${fieldId}-percent`);
+                if (percentElement && percentElement.value) {
+                    const percentValue = parseFloat(percentElement.value) || 100;
+                    assetValue = assetValue * (percentValue / 100);
+                    console.log(`Asset ${fieldId}: $${element.value} * ${percentValue}% = $${assetValue.toFixed(2)}`);
+                } else {
+                    console.log(`Asset ${fieldId}: $${element.value}`);
+                }
+                
+                assetsData[fieldId] = assetValue;
             }
         });
 
-        // Collect liabilities data (straight numbers, no normalization needed)
+        // Collect liabilities data with percentage calculation
         const liabilityFields = [
             'liabilities-small-business-loan',
             'liabilities-primary-residence',
@@ -1812,8 +1846,19 @@ import setJSON from '/utility/setJSON.js';
         liabilityFields.forEach(fieldId => {
             const element = document.getElementById(fieldId);
             if (element && element.value) {
-                liabilitiesData[fieldId] = parseFloat(element.value) || 0;
-                console.log(`Liability ${fieldId}: $${element.value}`);
+                let liabilityValue = parseFloat(element.value) || 0;
+                
+                // Check for percentage input
+                const percentElement = document.getElementById(`${fieldId}-percent`);
+                if (percentElement && percentElement.value) {
+                    const percentValue = parseFloat(percentElement.value) || 100;
+                    liabilityValue = liabilityValue * (percentValue / 100);
+                    console.log(`Liability ${fieldId}: $${element.value} * ${percentValue}% = $${liabilityValue.toFixed(2)}`);
+                } else {
+                    console.log(`Liability ${fieldId}: $${element.value}`);
+                }
+                
+                liabilitiesData[fieldId] = liabilityValue;
             }
         });
 
