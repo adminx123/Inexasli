@@ -1536,12 +1536,21 @@ import setJSON from '/utility/setJSON.js';
                 introData: taxResidencyData,
                 incomeData: normalizedIncome
             };
+            
+            // Save expenses to incomeIqInput2 as requested (no introData needed)
+            const incomeIqInput2 = {
+                expenseData: normalizedExpenses
+            };
+            
             localStorage.setItem('incomeIqinput1', JSON.stringify(incomeIqinput1));
+            localStorage.setItem('incomeIqInput2', JSON.stringify(incomeIqInput2));
+            // Keep the original for backward compatibility
             localStorage.setItem('incomeIqExpense', JSON.stringify(normalizedExpenses));
 
             console.log("[IncomeIQ] ✅ Successfully saved normalized data to localStorage");
             console.log("Income data saved to 'incomeIqinput1':", incomeIqinput1);
-            console.log("Expense data saved to 'incomeIqExpense':", normalizedExpenses);
+            console.log("Expense data saved to 'incomeIqInput2':", incomeIqInput2);
+            console.log("Expense data also saved to 'incomeIqExpense':", normalizedExpenses);
 
             return {
                 success: true,
