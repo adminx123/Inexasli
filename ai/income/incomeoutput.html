@@ -619,10 +619,84 @@
         };
     }
 
-    // Global chart management
+    // Global chart management with robust destruction
     let chartInitializationInProgress = false;
     let chartInitializationPending = false;
     let chartInitTimeout = null;
+    let activeChartInstances = {
+        cashFlow: null,
+        expense: null,
+        netWorth: null
+    };
+
+    function destroyAllCharts() {
+        console.log('[Charts] Starting chart destruction...');
+        let destroyedCount = 0;
+        
+        // Destroy tracked instances first
+        if (activeChartInstances.cashFlow) {
+            try {
+                activeChartInstances.cashFlow.destroy();
+                activeChartInstances.cashFlow = null;
+                destroyedCount++;
+                console.log('[Charts] Destroyed tracked cash flow chart');
+            } catch (error) {
+                console.warn('[Charts] Error destroying tracked cash flow chart:', error);
+            }
+        }
+        
+        if (activeChartInstances.expense) {
+            try {
+                activeChartInstances.expense.destroy();
+                activeChartInstances.expense = null;
+                destroyedCount++;
+                console.log('[Charts] Destroyed tracked expense chart');
+            } catch (error) {
+                console.warn('[Charts] Error destroying tracked expense chart:', error);
+            }
+        }
+        
+        if (activeChartInstances.netWorth) {
+            try {
+                activeChartInstances.netWorth.destroy();
+                activeChartInstances.netWorth = null;
+                destroyedCount++;
+                console.log('[Charts] Destroyed tracked net worth chart');
+            } catch (error) {
+                console.warn('[Charts] Error destroying tracked net worth chart:', error);
+            }
+        }
+        
+        // Also destroy any charts Chart.js might be tracking
+        try {
+            const cashFlowChart = Chart.getChart('cashFlowChart');
+            const expenseChart = Chart.getChart('expenseChart');
+            const netWorthChart = Chart.getChart('netWorthChart');
+            
+            if (cashFlowChart && cashFlowChart !== activeChartInstances.cashFlow) {
+                cashFlowChart.destroy();
+                destroyedCount++;
+                console.log('[Charts] Destroyed untracked cash flow chart');
+            }
+            
+            if (expenseChart && expenseChart !== activeChartInstances.expense) {
+                expenseChart.destroy();
+                destroyedCount++;
+                console.log('[Charts] Destroyed untracked expense chart');
+            }
+            
+            if (netWorthChart && netWorthChart !== activeChartInstances.netWorth) {
+                netWorthChart.destroy();
+                destroyedCount++;
+                console.log('[Charts] Destroyed untracked net worth chart');
+            }
+        } catch (error) {
+            console.warn('[Charts] Error during Chart.js cleanup:', error);
+        }
+        
+        console.log(`[Charts] Chart destruction complete. Destroyed ${destroyedCount} charts.`);
+        return destroyedCount;
+    }
 
     function initializeFinancialCharts(metrics, expenseData, currency) {
         // Clear any pending timeout
@@ -631,27 +705,28 @@
             chartInitTimeout = null;
         }
         
-        // Debounce rapid calls
+        // Debounce rapid calls with longer delay
         chartInitTimeout = setTimeout(() => {
             initializeFinancialChartsInternal(metrics, expenseData, currency);
-        }, 50);
+        }, 200); // Increased debounce time
     }
 
     function initializeFinancialChartsInternal(metrics, expenseData, currency) {
         // Prevent multiple simultaneous initializations
         if (chartInitializationInProgress) {
-            console.log('Chart initialization already in progress, marking as pending...');
+            console.log('[Charts] Initialization already in progress, marking as pending...');
             chartInitializationPending = true;
             return;
         }
 
         chartInitializationInProgress = true;
+        console.log('[Charts] Starting chart initialization...');
         
         // Check if Chart.js is available
         if (typeof Chart === 'undefined') {
-            console.warn('Chart.js not loaded yet, retrying in 100ms...');
+            console.warn('[Charts] Chart.js not loaded yet, retrying in 200ms...');
             chartInitializationInProgress = false;
-            setTimeout(() => initializeFinancialChartsInternal(metrics, expenseData, currency), 100);
+            setTimeout(() => initializeFinancialChartsInternal(metrics, expenseData, currency), 200);
             return;
         }
 
@@ -661,50 +736,49 @@
         const netWorthCanvas = document.getElementById('netWorthChart');
         
         if (!cashFlowCanvas || !expenseCanvas || !netWorthCanvas) {
-            console.warn('Chart canvas elements not ready yet, retrying in 50ms...');
+            console.warn('[Charts] Canvas elements not ready yet, retrying in 100ms...');
             chartInitializationInProgress = false;
-            setTimeout(() => initializeFinancialChartsInternal(metrics, expenseData, currency), 50);
+            setTimeout(() => initializeFinancialChartsInternal(metrics, expenseData, currency), 100);
             return;
         }
 
-        // Destroy existing charts if they exist - with additional safety
-        try {
-            const existingCashFlow = Chart.getChart('cashFlowChart');
-            const existingExpense = Chart.getChart('expenseChart');
-            const existingNetWorth = Chart.getChart('netWorthChart');
-            
-            if (existingCashFlow) {
-                console.log('Destroying existing cash flow chart');
-                existingCashFlow.destroy();
-            }
-            if (existingExpense) {
-                console.log('Destroying existing expense chart');
-                existingExpense.destroy();
-            }
-            if (existingNetWorth) {
-                console.log('Destroying existing net worth chart');
-                existingNetWorth.destroy();
-            }
-            
-            // Small delay to ensure destruction is complete
-            setTimeout(() => createCharts(metrics, expenseData, currency), 50);
-        } catch (error) {
-            console.error('Error destroying existing charts:', error);
-            // Continue with chart creation anyway
+        // Destroy existing charts with proper delay
+        const destroyedCount = destroyAllCharts();
+        
+        // Wait longer before creating new charts to ensure destruction is complete
+        const delay = destroyedCount > 0 ? 150 : 50;
+        setTimeout(() => {
             createCharts(metrics, expenseData, currency);
-        }
+        }, delay);
     }
 
     function createCharts(metrics, expenseData, currency) {
+        console.log('[Charts] Creating new charts...');
         const cashFlowCanvas = document.getElementById('cashFlowChart');
         const expenseCanvas = document.getElementById('expenseChart');
         const netWorthCanvas = document.getElementById('netWorthChart');
+
+        // Verify canvas elements are still available and clean
+        if (!cashFlowCanvas || !expenseCanvas || !netWorthCanvas) {
+            console.error('[Charts] Canvas elements missing during creation');
+            chartInitializationInProgress = false;
+            return;
+        }
+
+        // Clear any existing 2D contexts
+        try {
+            cashFlowCanvas.getContext('2d').clearRect(0, 0, cashFlowCanvas.width, cashFlowCanvas.height);
+            expenseCanvas.getContext('2d').clearRect(0, 0, expenseCanvas.width, expenseCanvas.height);
+            netWorthCanvas.getContext('2d').clearRect(0, 0, netWorthCanvas.width, netWorthCanvas.height);
+        } catch (error) {
+            console.warn('[Charts] Error clearing canvas contexts:', error);
+        }
 
         // Cash Flow Waterfall Chart
         const cashFlowCtx = cashFlowCanvas.getContext('2d');
         if (cashFlowCtx) {
             try {
-                new Chart(cashFlowCtx, {
+                activeChartInstances.cashFlow = new Chart(cashFlowCtx, {
                 type: 'bar',
                 data: {
                     labels: ['Gross Income', 'Taxes', 'Contributions', 'Expenses', 'Net Cash Flow'],
@@ -751,8 +825,10 @@
                     }
                 }
             });
+            console.log('[Charts] ✅ Cash flow chart created successfully');
             } catch (error) {
-                console.error('Error creating cash flow chart:', error);
+                console.error('[Charts] ❌ Error creating cash flow chart:', error);
+                activeChartInstances.cashFlow = null;
             }
         }
 
@@ -760,7 +836,7 @@
         const expenseCtx = expenseCanvas.getContext('2d');
         if (expenseCtx) {
             try {
-                new Chart(expenseCtx, {
+                activeChartInstances.expense = new Chart(expenseCtx, {
                 type: 'doughnut',
                 data: {
                     labels: Object.keys(expenseData).map(key => key.charAt(0).toUpperCase() + key.slice(1)),
@@ -788,8 +864,10 @@
                     }
                 }
             });
+            console.log('[Charts] ✅ Expense chart created successfully');
             } catch (error) {
-                console.error('Error creating expense chart:', error);
+                console.error('[Charts] ❌ Error creating expense chart:', error);
+                activeChartInstances.expense = null;
             }
         }
 
@@ -797,7 +875,7 @@
         const netWorthCtx = netWorthCanvas.getContext('2d');
         if (netWorthCtx) {
             try {
-                new Chart(netWorthCtx, {
+                activeChartInstances.netWorth = new Chart(netWorthCtx, {
                 type: 'doughnut',
                 data: {
                     labels: ['Assets', 'Liabilities'],
@@ -822,20 +900,22 @@
                     }
                 }
             });
+            console.log('[Charts] ✅ Net worth chart created successfully');
             } catch (error) {
-                console.error('Error creating net worth chart:', error);
+                console.error('[Charts] ❌ Error creating net worth chart:', error);
+                activeChartInstances.netWorth = null;
             }
         }
         
         // Mark initialization as complete
         chartInitializationInProgress = false;
-        console.log('Chart initialization completed');
+        console.log('[Charts] Chart initialization completed successfully');
         
         // Check if we need to reinitialize due to pending requests
         if (chartInitializationPending) {
             chartInitializationPending = false;
-            console.log('Reinitializing charts due to pending request...');
-            setTimeout(() => initializeFinancialChartsInternal(metrics, expenseData, currency), 100);
+            console.log('[Charts] Reinitializing charts due to pending request...');
+            setTimeout(() => initializeFinancialChartsInternal(metrics, expenseData, currency), 300);
         }
     }
 
@@ -1480,14 +1560,8 @@
         console.log('[IncomeOutput] Dashboard update requested, updateAllMetrics:', updateAllMetrics);
         
         // Force destroy any existing charts before refreshing dashboard
-        try {
-            Chart.getChart('cashFlowChart')?.destroy();
-            Chart.getChart('expenseChart')?.destroy();
-            Chart.getChart('netWorthChart')?.destroy();
-            console.log('[IncomeOutput] Existing charts destroyed for dashboard refresh');
-        } catch (error) {
-            console.warn('[IncomeOutput] Error destroying charts during refresh:', error);
-        }
+        console.log('[IncomeOutput] Destroying charts for dashboard refresh...');
+        destroyAllCharts();
         
         // Re-run the display function to refresh the dashboard
         const outputSpan = document.getElementById('output-span');
