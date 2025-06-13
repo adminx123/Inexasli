@@ -1190,7 +1190,22 @@ import setJSON from '/utility/setJSON.js';
             input.addEventListener('change', handleIncomeExpenseInput);
         });
         
-        console.log("[IncomeIQ] Set up normalization handlers for", allIncomeExpenseInputs.length, "inputs");
+        // Add normalization triggers for assets and liabilities fields
+        const allAssetsLiabilitiesInputs = document.querySelectorAll(
+            'input[id^="assets-"], input[id^="liabilities-"]'
+        );
+        
+        allAssetsLiabilitiesInputs.forEach(input => {
+            // Remove existing listeners to avoid duplicates
+            input.removeEventListener('input', handleAssetsLiabilitiesInput);
+            input.removeEventListener('change', handleAssetsLiabilitiesInput);
+            
+            // Add new listeners
+            input.addEventListener('input', handleAssetsLiabilitiesInput);
+            input.addEventListener('change', handleAssetsLiabilitiesInput);
+        });
+        
+        console.log("[IncomeIQ] Set up normalization handlers for", allIncomeExpenseInputs.length, "income/expense inputs and", allAssetsLiabilitiesInputs.length, "assets/liabilities inputs");
     }
 
     function handleIncomeExpenseInput(event) {
@@ -1208,6 +1223,25 @@ import setJSON from '/utility/setJSON.js';
                 console.log("[IncomeIQ] ✅ Data normalized and saved to localStorage");
             } else {
                 console.error("[IncomeIQ] ❌ Failed to normalize data:", result.error);
+            }
+        }
+    }
+
+    function handleAssetsLiabilitiesInput(event) {
+        console.log("[IncomeIQ] Assets/liabilities input changed:", event.target.id);
+        
+        // Save form data first
+        if (incomeFormPersistence) {
+            incomeFormPersistence.saveFormData();
+        }
+        
+        // Then normalize data (this will include assets and liabilities)
+        if (typeof window.normalizeIncomeExpenses === 'function') {
+            const result = window.normalizeIncomeExpenses();
+            if (result.success) {
+                console.log("[IncomeIQ] ✅ Assets/liabilities data normalized and saved to localStorage");
+            } else {
+                console.error("[IncomeIQ] ❌ Failed to normalize assets/liabilities data:", result.error);
             }
         }
     }

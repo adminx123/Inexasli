@@ -839,14 +839,32 @@
       const assetsData = JSON.parse(getLocal('incomeIqAssets') || '{}');
       const liabilitiesData = JSON.parse(getLocal('incomeIqLiabilities') || '{}');
       
+      // Debug logging
+      console.log('Debug - localStorage data:');
+      console.log('storedIncomeData:', storedIncomeData);
+      console.log('expenseData:', expenseData);
+      console.log('assetsData:', assetsData);
+      console.log('liabilitiesData:', liabilitiesData);
+      
       // Calculate totals from normalized data
       const normalizedIncome = storedIncomeData.incomeData || {};
       const normalizedExpenses = expenseData.expenseData || {};
+      
+      console.log('normalizedIncome:', normalizedIncome);
+      console.log('normalizedExpenses:', normalizedExpenses);
       
       const totalAnnualIncome = Object.values(normalizedIncome).reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
       const totalAnnualExpenses = Object.values(normalizedExpenses).reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
       const totalAssets = Object.values(assetsData).reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
       const totalLiabilities = Object.values(liabilitiesData).reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
+      
+      // Fallback to legacy localStorage keys if new keys are empty
+      let finalAnnualExpenses = totalAnnualExpenses;
+      if (totalAnnualExpenses === 0) {
+        const legacyExpenses = JSON.parse(getLocal('incomeIqExpense') || '{}');
+        finalAnnualExpenses = Object.values(legacyExpenses).reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
+        console.log('Using legacy expenses:', legacyExpenses, 'Total:', finalAnnualExpenses);
+      }
       
       // Get taxes and contributions from worker response
       const workerResponse = JSON.parse(getLocal('incomeIqResponse') || '{}');
@@ -868,18 +886,29 @@
         totalContributions = incomeData.total_contributions_calculated || 0;
       }
       
+      console.log('Calculated totals:');
+      console.log('totalAnnualIncome:', totalAnnualIncome);
+      console.log('finalAnnualExpenses:', finalAnnualExpenses);
+      console.log('totalAssets:', totalAssets);
+      console.log('totalLiabilities:', totalLiabilities);
+      console.log('totalTaxes:', totalTaxes);
+      console.log('totalContributions:', totalContributions);
+      console.log('netCashFlow calculation:', totalAnnualIncome, '-', totalTaxes, '-', totalContributions, '-', finalAnnualExpenses, '=', (totalAnnualIncome - totalTaxes - totalContributions - finalAnnualExpenses));
+      console.log('netWorth calculation:', totalAssets, '-', totalLiabilities, '=', (totalAssets - totalLiabilities));
+      
       // Calculate net cash flow: income - taxes - contributions - expenses
-      const netCashFlow = totalAnnualIncome - totalTaxes - totalContributions - totalAnnualExpenses;
+      const netCashFlow = totalAnnualIncome - totalTaxes - totalContributions - finalAnnualExpenses;
       const netWorth = totalAssets - totalLiabilities;
       
       // Calculate key ratios
       const debtToIncome = totalAnnualIncome > 0 ? totalLiabilities / totalAnnualIncome : 0;
       const savingsRate = totalAnnualIncome > 0 ? netCashFlow / totalAnnualIncome : 0;
-      const fireTarget = totalAnnualExpenses * 25; // 4% rule
+      const fireTarget = finalAnnualExpenses * 25; // 4% rule
       const fireRatio = fireTarget > 0 ? totalAssets / fireTarget : 0;
       
       // Calculate housing expenses for housing-to-income ratio
-      const housingExpenses = Object.entries(normalizedExpenses)
+      const normalizedExpensesForHousing = finalAnnualExpenses > 0 ? normalizedExpenses : JSON.parse(getLocal('incomeIqExpense') || '{}');
+      const housingExpenses = Object.entries(normalizedExpensesForHousing)
         .filter(([key]) => key.includes('housing'))
         .reduce((sum, [, value]) => sum + (parseFloat(value) || 0), 0);
       const housingToIncome = totalAnnualIncome > 0 ? housingExpenses / totalAnnualIncome : 0;
@@ -891,7 +920,7 @@
         totalTaxes,
         totalContributions,
         annualIncome: totalAnnualIncome,
-        annualExpenses: totalAnnualExpenses,
+        annualExpenses: finalAnnualExpenses,
         netCashFlow,
         assets: totalAssets,
         liabilities: totalLiabilities,
