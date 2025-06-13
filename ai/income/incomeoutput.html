@@ -619,11 +619,39 @@
         };
     }
 
+    // Global chart management
+    let chartInitializationInProgress = false;
+    let chartInitializationPending = false;
+    let chartInitTimeout = null;
+
     function initializeFinancialCharts(metrics, expenseData, currency) {
+        // Clear any pending timeout
+        if (chartInitTimeout) {
+            clearTimeout(chartInitTimeout);
+            chartInitTimeout = null;
+        }
+        
+        // Debounce rapid calls
+        chartInitTimeout = setTimeout(() => {
+            initializeFinancialChartsInternal(metrics, expenseData, currency);
+        }, 50);
+    }
+
+    function initializeFinancialChartsInternal(metrics, expenseData, currency) {
+        // Prevent multiple simultaneous initializations
+        if (chartInitializationInProgress) {
+            console.log('Chart initialization already in progress, marking as pending...');
+            chartInitializationPending = true;
+            return;
+        }
+
+        chartInitializationInProgress = true;
+        
         // Check if Chart.js is available
         if (typeof Chart === 'undefined') {
             console.warn('Chart.js not loaded yet, retrying in 100ms...');
-            setTimeout(() => initializeFinancialCharts(metrics, expenseData, currency), 100);
+            chartInitializationInProgress = false;
+            setTimeout(() => initializeFinancialChartsInternal(metrics, expenseData, currency), 100);
             return;
         }
 
@@ -634,9 +662,43 @@
         
         if (!cashFlowCanvas || !expenseCanvas || !netWorthCanvas) {
             console.warn('Chart canvas elements not ready yet, retrying in 50ms...');
-            setTimeout(() => initializeFinancialCharts(metrics, expenseData, currency), 50);
+            chartInitializationInProgress = false;
+            setTimeout(() => initializeFinancialChartsInternal(metrics, expenseData, currency), 50);
             return;
         }
+
+        // Destroy existing charts if they exist - with additional safety
+        try {
+            const existingCashFlow = Chart.getChart('cashFlowChart');
+            const existingExpense = Chart.getChart('expenseChart');
+            const existingNetWorth = Chart.getChart('netWorthChart');
+            
+            if (existingCashFlow) {
+                console.log('Destroying existing cash flow chart');
+                existingCashFlow.destroy();
+            }
+            if (existingExpense) {
+                console.log('Destroying existing expense chart');
+                existingExpense.destroy();
+            }
+            if (existingNetWorth) {
+                console.log('Destroying existing net worth chart');
+                existingNetWorth.destroy();
+            }
+            
+            // Small delay to ensure destruction is complete
+            setTimeout(() => createCharts(metrics, expenseData, currency), 50);
+        } catch (error) {
+            console.error('Error destroying existing charts:', error);
+            // Continue with chart creation anyway
+            createCharts(metrics, expenseData, currency);
+        }
+    }
+
+    function createCharts(metrics, expenseData, currency) {
+        const cashFlowCanvas = document.getElementById('cashFlowChart');
+        const expenseCanvas = document.getElementById('expenseChart');
+        const netWorthCanvas = document.getElementById('netWorthChart');
 
         // Cash Flow Waterfall Chart
         const cashFlowCtx = cashFlowCanvas.getContext('2d');
@@ -763,6 +825,17 @@
             } catch (error) {
                 console.error('Error creating net worth chart:', error);
             }
+        }
+        
+        // Mark initialization as complete
+        chartInitializationInProgress = false;
+        console.log('Chart initialization completed');
+        
+        // Check if we need to reinitialize due to pending requests
+        if (chartInitializationPending) {
+            chartInitializationPending = false;
+            console.log('Reinitializing charts due to pending request...');
+            setTimeout(() => initializeFinancialChartsInternal(metrics, expenseData, currency), 100);
         }
     }
 
@@ -1400,6 +1473,111 @@
         setupInteractiveControls(financialMetrics, currencySymbol);
       }, 100);
     }
+
+    // Listen for dashboard update events from the form
+    document.addEventListener('dashboard-update-needed', function(event) {
+        const updateAllMetrics = event.detail.updateAllMetrics;
+        console.log('[IncomeOutput] Dashboard update requested, updateAllMetrics:', updateAllMetrics);
+        
+        // Force destroy any existing charts before refreshing dashboard
+        try {
+            Chart.getChart('cashFlowChart')?.destroy();
+            Chart.getChart('expenseChart')?.destroy();
+            Chart.getChart('netWorthChart')?.destroy();
+            console.log('[IncomeOutput] Existing charts destroyed for dashboard refresh');
+        } catch (error) {
+            console.warn('[IncomeOutput] Error destroying charts during refresh:', error);
+        }
+        
+        // Re-run the display function to refresh the dashboard
+        const outputSpan = document.getElementById('output-span');
+        if (outputSpan) {
+            // Get fresh data from localStorage
+            const responseKey = 'incomeIqResponse';
+            const storedResponse = getLocal(responseKey);
+            
+            if (storedResponse) {
+                try {
+                    let responseData = JSON.parse(storedResponse);
+                    
+                    // Handle the worker response format
+                    if (responseData && responseData.message === 'Success' && responseData.data) {
+                        responseData = responseData.data;
+                    }
+                    
+                    // Create analysis object
+                    const incomeAnalysis = {
+                        summary: responseData.calculation_summary || "Financial analysis completed",
+                        financial_summary: responseData.calculation_summary,
+                        total_taxes_calculated: responseData.total_taxes || 0,
+                        total_contributions_calculated: responseData.total_contributions || 0,
+                        tax_treatment_details: responseData.tax_treatment_details || {},
+                        assumptions_made: responseData.assumptions_made || [],
+                        taxable_income_total: responseData.taxable_income_total || 0,
+                        recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations.",
+                        insights: "Your tax calculations have been completed. Review the financial metrics below for a comprehensive overview of your financial health."
+                    };
+                    
+                    outputSpan.innerHTML = '';
+                    displayEnhancedIncomeAnalysis(incomeAnalysis, outputSpan);
+                    
+                } catch (error) {
+                    console.error('Error refreshing dashboard:', error);
+                }
+            }
+        }
+    });
+
+    // Check if tax calculations are stale on load
+    function checkTaxCalculationsStale() {
+        const isStale = localStorage.getItem('taxCalculationsStale') === 'true';
+        const staleTimestamp = localStorage.getItem('taxCalculationsStaleTimestamp');
+        
+        if (isStale && staleTimestamp) {
+            const staleTime = new Date(parseInt(staleTimestamp));
+            const now = new Date();
+            const minutesStale = Math.floor((now - staleTime) / (1000 * 60));
+            
+            console.log(`[IncomeOutput] Tax calculations are ${minutesStale} minutes stale`);
+            showStaleWarning(minutesStale);
+        }
+    }
+
+    function showStaleWarning(minutesStale) {
+        // Add a warning banner to the dashboard
+        const outputSpan = document.getElementById('output-span');
+        if (outputSpan && outputSpan.querySelector('.stale-warning') === null) {
+            const warningBanner = document.createElement('div');
+            warningBanner.className = 'stale-warning';
+            warningBanner.style.cssText = `
+                background: linear-gradient(135deg, #fef3c7, #fcd34d);
+                border: 2px solid #f59e0b;
+                border-radius: 12px;
+                padding: 15px 20px;
+                margin: 20px 0;
+                text-align: center;
+                font-family: "Inter", sans-serif;
+            `;
+            
+            warningBanner.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                    <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.5em;"></i>
+                    <div>
+                        <h4 style="margin: 0; color: #92400e; font-size: 1.1em;">Tax Calculations May Be Outdated</h4>
+                        <p style="margin: 5px 0 0 0; color: #92400e; font-size: 0.95em;">
+                            Income or tax residency changed ${minutesStale} minute${minutesStale !== 1 ? 's' : ''} ago. 
+                            <strong>Submit the form to refresh tax calculations.</strong>
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            outputSpan.insertBefore(warningBanner, outputSpan.firstChild);
+        }
+    }
+
+    // Check for stale calculations when dashboard loads
+    setTimeout(checkTaxCalculationsStale, 500);
     
 })();
 </script>
