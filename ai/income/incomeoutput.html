@@ -620,10 +620,29 @@
     }
 
     function initializeFinancialCharts(metrics, expenseData, currency) {
+        // Check if Chart.js is available
+        if (typeof Chart === 'undefined') {
+            console.warn('Chart.js not loaded yet, retrying in 100ms...');
+            setTimeout(() => initializeFinancialCharts(metrics, expenseData, currency), 100);
+            return;
+        }
+
+        // Check if required canvas elements exist
+        const cashFlowCanvas = document.getElementById('cashFlowChart');
+        const expenseCanvas = document.getElementById('expenseChart');
+        const netWorthCanvas = document.getElementById('netWorthChart');
+        
+        if (!cashFlowCanvas || !expenseCanvas || !netWorthCanvas) {
+            console.warn('Chart canvas elements not ready yet, retrying in 50ms...');
+            setTimeout(() => initializeFinancialCharts(metrics, expenseData, currency), 50);
+            return;
+        }
+
         // Cash Flow Waterfall Chart
-        const cashFlowCtx = document.getElementById('cashFlowChart');
+        const cashFlowCtx = cashFlowCanvas.getContext('2d');
         if (cashFlowCtx) {
-            new Chart(cashFlowCtx, {
+            try {
+                new Chart(cashFlowCtx, {
                 type: 'bar',
                 data: {
                     labels: ['Gross Income', 'Taxes', 'Contributions', 'Expenses', 'Net Cash Flow'],
@@ -670,12 +689,16 @@
                     }
                 }
             });
+            } catch (error) {
+                console.error('Error creating cash flow chart:', error);
+            }
         }
 
         // Expense Breakdown Pie Chart
-        const expenseCtx = document.getElementById('expenseChart');
+        const expenseCtx = expenseCanvas.getContext('2d');
         if (expenseCtx) {
-            new Chart(expenseCtx, {
+            try {
+                new Chart(expenseCtx, {
                 type: 'doughnut',
                 data: {
                     labels: Object.keys(expenseData).map(key => key.charAt(0).toUpperCase() + key.slice(1)),
@@ -703,12 +726,16 @@
                     }
                 }
             });
+            } catch (error) {
+                console.error('Error creating expense chart:', error);
+            }
         }
 
         // Net Worth Composition Chart
-        const netWorthCtx = document.getElementById('netWorthChart');
+        const netWorthCtx = netWorthCanvas.getContext('2d');
         if (netWorthCtx) {
-            new Chart(netWorthCtx, {
+            try {
+                new Chart(netWorthCtx, {
                 type: 'doughnut',
                 data: {
                     labels: ['Assets', 'Liabilities'],
@@ -733,6 +760,9 @@
                     }
                 }
             });
+            } catch (error) {
+                console.error('Error creating net worth chart:', error);
+            }
         }
     }
 
