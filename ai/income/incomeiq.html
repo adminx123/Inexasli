@@ -1262,33 +1262,38 @@ import setJSON from '/utility/setJSON.js';
         specificsDiv.style.display = filingStatusDropdown.value ? 'block' : 'none';
     }
 
-    // Generate IncomeIQ report - mirrors CalorieIQ flow
+    // Generate IncomeIQ report - ONLY send normalized incomeIqinput1 data
     async function handleGenerateIncomeIq() {
         try {
-            const formData = window.incomeFormPersistence ? window.incomeFormPersistence.getSavedFormData() : null;
-            if (!formData) {
-                alert('Please complete the form before generating your report.');
+            // Force normalization to ensure we have fresh normalized data
+            console.log("[IncomeIQ] Running normalization before sending to worker");
+            const normalizationResult = window.normalizeIncomeExpenses();
+            if (!normalizationResult.success) {
+                console.error("[IncomeIQ] Failed to normalize data:", normalizationResult.error);
+                alert('Failed to process your form data. Please check your inputs and try again.');
+                return;
+            }
+            
+            // Get ONLY the normalized data from localStorage
+            const incomeIqinput1Raw = localStorage.getItem('incomeIqinput1');
+            if (!incomeIqinput1Raw) {
+                console.error("[IncomeIQ] No normalized data found in incomeIqinput1");
+                alert('No normalized data available. Please fill out the form and try again.');
                 return;
             }
 
-            // --- PATCH: Transform formData to match worker expectations ---
-            // If formData is in the flat incomeIqinput1 style, convert it
             let payloadToSend;
-            if (formData.normalizedIncome) {
-                // Remove normalizedIncome from introData
-                const { normalizedIncome, ...introData } = formData;
-                payloadToSend = {
-                    introData,
-                    incomeData: normalizedIncome
-                };
-            } else if (formData.introData && formData.incomeData) {
-                // Already in correct format
-                payloadToSend = formData;
-            } else {
-                // Fallback: send as-is
-                payloadToSend = formData;
+            try {
+                payloadToSend = JSON.parse(incomeIqinput1Raw);
+                console.log("[IncomeIQ] ✅ Using ONLY normalized data from incomeIqinput1");
+            } catch (e) {
+                console.error("[IncomeIQ] Error parsing incomeIqinput1:", e);
+                alert('Error processing normalized data. Please try again.');
+                return;
             }
-                                             // --- END PATCH ---
+            
+            // DEBUG: Log the final payload
+            console.log("[IncomeIQ] Final payload being sent to worker:", JSON.stringify(payloadToSend, null, 2));
 
             // Use enhanced loading with educational facts
             const result = await window.enhancedLoading(

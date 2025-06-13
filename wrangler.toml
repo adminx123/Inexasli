@@ -71,7 +71,7 @@ service = "secretworker"
 
 [env.income]
 name = "income"
-main = "./ai/income/incomeiqworker.js"
+main = "./ai/income/income.js"
 
 # Service bindings for the income worker
 [[env.income.services]]
