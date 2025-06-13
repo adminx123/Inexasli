@@ -25,16 +25,11 @@ function injectFrequencyStyles() {
     const style = document.createElement('style');
     style.id = 'frequency-styles';
     style.textContent = `
-        /* Frequency checkbox button styling */
-        .checkboxrow .checkbox-button-group {
-            flex: 1;
-            height: 32px;
-        }
-
+        /* Frequency checkbox button base styling */
         .checkbox-button-group {
             display: flex;
-            gap: 2px;
-            max-width: 100%;
+            gap: 4px;
+            width: 100%;
         }
 
         .checkbox-button-group input[type="checkbox"] {
@@ -46,14 +41,10 @@ function injectFrequencyStyles() {
             align-items: center;
             justify-content: center;
             flex: 1;
-            height: 32px;
             background-color: #f8f8f8;
             border: 1px solid #ccc;
-            border-radius: 4px;
             cursor: pointer;
             text-align: center;
-            font-size: 13px;
-            font-weight: normal;
             user-select: none;
             transition: background-color 0.2s, border-color 0.2s, color 0.2s;
             color: #333;
@@ -71,34 +62,6 @@ function injectFrequencyStyles() {
             background-color: #333;
             border-color: #333;
             color: white;
-        }
-
-        /* Mobile adjustments */
-        @media (max-width: 700px) {
-            .checkboxrow {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 15px;
-            }
-
-            .checkboxrow input[type="number"] {
-                width: 100%;
-                max-width: none;
-                height: 32px !important;
-                padding: 0 8px !important;
-            }
-
-            .checkboxrow .checkbox-button-group {
-                width: 100%;
-                display: flex;
-                gap: 4px;
-            }
-
-            .checkbox-button {
-                font-size: 12px;
-                height: 32px;
-                padding: 0 6px;
-            }
         }
     `;
     
