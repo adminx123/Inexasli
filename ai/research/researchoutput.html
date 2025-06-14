@@ -10,30 +10,255 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="../../utility/enhancedUI.js"></script>
   <style>
-    /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
-    
+    /* Clean, professional research output styling - matching site's muted color scheme */
     .research-header {
-      font-size: 18px; /* Adjusted size */
-      font-weight: 500; /* Adjusted weight */
+      font-size: 24px;
+      font-weight: 600;
       margin: 0;
-      color: #333; /* Standard text color */
-      font-family: "Inter", sans-serif; /* Standard font */
-      padding: 15px; /* Adjusted padding */
-      border-bottom: 1px solid #eee; /* Lighter border */
+      color: #2d5a3d;
+      font-family: "Geist", sans-serif;
+      padding: 20px;
+      background: #f2f9f3;
       text-align: center;
-      width: 100%;
-      box-sizing: border-box;
+      border: 1px solid #4a7c59;
+      border-radius: 5px 5px 0 0;
     }
     
-    /* Using output-wrapper styles from outputstyles.css */
-    
-    /* Custom styles for research output */
     .api-output {
-      white-space: pre-wrap; /* For JSON display */
-      background-color: #f9f9f9; /* Light background for content area */
+      background-color: #ffffff;
+      padding: 0;
+      border-radius: 0 0 5px 5px;
+      border: 1px solid #4a7c59;
+      border-top: none;
     }
     
+    /* Research content styling - professional muted design */
+    .research-visualization {
+      padding: 20px;
+      line-height: 1.6;
+      font-family: "Inter", sans-serif;
+      color: #333;
+    }
     
+    .research-visualization h2 {
+      color: #2d5a3d;
+      font-size: 20px;
+      font-weight: 600;
+      font-family: "Geist", sans-serif;
+      margin: 0 0 20px 0;
+      text-align: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .research-visualization h3 {
+      color: #2d5a3d;
+      font-size: 18px;
+      font-weight: 600;
+      font-family: "Geist", sans-serif;
+      margin: 20px 0 12px 0;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #f2f9f3;
+    }
+    
+    .research-visualization h4 {
+      color: #2d5a3d;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: "Geist", sans-serif;
+      margin: 16px 0 8px 0;
+    }
+    
+    .research-visualization h5 {
+      color: #2d5a3d;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: "Geist", sans-serif;
+      margin: 12px 0 6px 0;
+    }
+    
+    /* Simple section styling - matching site's card style */
+    .research-section {
+      background: #f2f9f3;
+      padding: 15px;
+      margin: 12px 0;
+      border-radius: 5px;
+      border: 1px solid #4a7c59;
+    }
+    
+    /* Card styling matching CalorieIQ's professional look */
+    .source-card, .theme-card, .hypothesis-card, .method-card, 
+    .phase-card, .gap-card, .finding-card, .chart-card, 
+    .kpi-card, .section-card, .checklist-card {
+      background: #ffffff;
+      border: 1px solid #7c7c7c;
+      border-radius: 5px;
+      padding: 12px;
+      margin: 8px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .source-card:hover, .theme-card:hover, .hypothesis-card:hover, 
+    .method-card:hover, .phase-card:hover, .gap-card:hover, 
+    .finding-card:hover, .chart-card:hover, .kpi-card:hover, 
+    .section-card:hover, .checklist-card:hover {
+      background-color: #f9f9f9;
+      border-color: #4a7c59;
+    }
+    
+    /* Clean text styling for sources and themes */
+    .source-text, .theme-text {
+      margin: 16px 0;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .source-text:last-child, .theme-text:last-child {
+      border-bottom: none;
+    }
+    
+    .gap-text {
+      color: #a67c7c;
+      font-weight: 500;
+      margin: 8px 0;
+      padding-left: 16px;
+    }
+    
+    /* Meta info styling */
+    .source-meta, .theme-support {
+      color: #666;
+      font-size: 14px;
+      margin: 6px 0;
+    }
+    
+    /* Badge styling - professional muted colors */
+    .relevance-badge, .impact-badge, .priority-badge, .significance-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 3px;
+      margin: 4px 4px 4px 0;
+      font-family: "Inter", sans-serif;
+    }
+    
+    /* Muted professional colors */
+    .relevance-high, .impact-high, .priority-high, .significance-high { 
+      background: #7a9b8a; color: white; 
+    }
+    .relevance-medium, .impact-medium, .priority-medium, .significance-medium { 
+      background: #b8956d; color: white; 
+    }
+    .relevance-low, .impact-low, .priority-low, .significance-low { 
+      background: #a67c7c; color: white; 
+    }
+    
+    /* Simple list items */
+    .gap-item {
+      background: #ffffff;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #7c7c7c;
+      border-left: 4px solid #a67c7c;
+      border-radius: 3px;
+      color: #333;
+    }
+    
+    /* Synthesis content layout */
+    .synthesis-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 12px 0;
+    }
+    
+    .findings-card {
+      background: #ffffff;
+      border: 1px solid #7c7c7c;
+      border-radius: 5px;
+      padding: 12px;
+      border-left: 4px solid #7a9b8a;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .findings-text {
+      margin: 12px 0;
+    }
+    
+    .findings-text h4 {
+      color: #2d5a3d;
+      border-bottom: 1px solid #e9ecef;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+    }
+    
+    /* Simple table styling */
+    .comparison-table table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      background: #ffffff;
+      border: 1px solid #7c7c7c;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    
+    .comparison-table th, .comparison-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e9ecef;
+      font-size: 14px;
+    }
+    
+    .comparison-table th {
+      background-color: #f2f9f3;
+      font-weight: 600;
+      color: #2d5a3d;
+      font-family: "Geist", sans-serif;
+    }
+    
+    .comparison-table td {
+      color: #333;
+    }
+    
+    /* Professional paragraph styling */
+    .research-visualization p {
+      color: #333;
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 8px 0;
+    }
+    
+    /* Strong text styling */
+    .research-visualization strong {
+      color: #2d5a3d;
+      font-weight: 600;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .research-visualization {
+        padding: 15px;
+      }
+      
+      .synthesis-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .research-visualization h2 {
+        font-size: 18px;
+      }
+      
+      .research-visualization h3 {
+        font-size: 16px;
+      }
+      
+      .source-card, .theme-card, .hypothesis-card, .method-card, 
+      .phase-card, .gap-card, .finding-card, .chart-card, 
+      .kpi-card, .section-card, .checklist-card {
+        padding: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -91,80 +316,66 @@
         const html = `
           <div class="research-visualization literature-review">
             <h2>${data.researchTitle || 'Literature Review'}</h2>
-            <div class="executive-summary">
+            
+            <div class="research-section">
               <h3>Executive Summary</h3>
               <p>${data.executiveSummary || 'Summary not available'}</p>
             </div>
             
             ${data.searchStrategy ? `
-            <div class="search-strategy">
+            <div class="research-section">
               <h3>Search Strategy</h3>
-              <div class="strategy-grid">
-                <div><strong>Databases:</strong> ${data.searchStrategy.databases?.join(', ') || 'Not specified'}</div>
-                <div><strong>Keywords:</strong> ${data.searchStrategy.keywords?.join(', ') || 'Not specified'}</div>
-                <div><strong>Timeframe:</strong> ${data.searchStrategy.timeframe || 'Not specified'}</div>
-              </div>
+              <p><strong>Databases:</strong> ${data.searchStrategy.databases?.join(', ') || 'Not specified'}</p>
+              <p><strong>Keywords:</strong> ${data.searchStrategy.keywords?.join(', ') || 'Not specified'}</p>
+              <p><strong>Timeframe:</strong> ${data.searchStrategy.timeframe || 'Not specified'}</p>
             </div>
             ` : ''}
             
             ${data.literatureSources ? `
-            <div class="literature-sources">
+            <div class="research-section">
               <h3>Literature Sources (${data.literatureSources.length})</h3>
-              <div class="sources-grid">
-                ${data.literatureSources.map(source => `
-                  <div class="source-item">
-                    <div class="source-title">${source.title}</div>
-                    <div class="source-meta">${source.authors} (${source.year})</div>
-                    <div class="source-relevance relevance-${source.relevance?.toLowerCase()}">${source.relevance} Relevance</div>
-                    <div class="source-findings">${source.keyFindings}</div>
-                  </div>
-                `).join('')}
-              </div>
+              ${data.literatureSources.map(source => `
+                <div class="source-text">
+                  <h4>${source.title}</h4>
+                  <p class="source-meta">${source.authors} (${source.year}) • <span class="relevance-badge relevance-${source.relevance?.toLowerCase()}">${source.relevance} Relevance</span></p>
+                  <p>${source.keyFindings}</p>
+                </div>
+              `).join('')}
             </div>
             ` : ''}
             
             ${data.thematicAnalysis ? `
-            <div class="thematic-analysis">
+            <div class="research-section">
               <h3>Thematic Analysis</h3>
               ${data.thematicAnalysis.majorThemes ? `
-                <div class="themes">
-                  <h4>Major Themes</h4>
-                  ${data.thematicAnalysis.majorThemes.map(theme => `
-                    <div class="theme-item">
-                      <div class="theme-name">${theme.theme}</div>
-                      <div class="theme-description">${theme.description}</div>
-                      <div class="theme-support">${theme.supportingStudies} supporting studies</div>
-                    </div>
-                  `).join('')}
-                </div>
+                <h4>Major Themes</h4>
+                ${data.thematicAnalysis.majorThemes.map(theme => `
+                  <div class="theme-text">
+                    <h5>${theme.theme}</h5>
+                    <p>${theme.description}</p>
+                    <p class="theme-support">${theme.supportingStudies} supporting studies</p>
+                  </div>
+                `).join('')}
               ` : ''}
               
               ${data.thematicAnalysis.researchGaps ? `
-                <div class="research-gaps">
-                  <h4>Research Gaps</h4>
-                  <ul>
-                    ${data.thematicAnalysis.researchGaps.map(gap => `<li>${gap}</li>`).join('')}
-                  </ul>
-                </div>
+                <h4>Research Gaps</h4>
+                ${data.thematicAnalysis.researchGaps.map(gap => `<p class="gap-text">⚠ ${gap}</p>`).join('')}
               ` : ''}
             </div>
             ` : ''}
             
             ${data.synthesis ? `
-            <div class="synthesis">
+            <div class="research-section">
               <h3>Synthesis</h3>
-              <div class="findings-grid">
-                <div class="key-findings">
+              <div class="synthesis-content">
+                <div class="findings-text">
                   <h4>Key Findings</h4>
-                  <ul>
-                    ${data.synthesis.keyFindings?.map(finding => `<li>${finding}</li>`).join('') || '<li>No findings available</li>'}
-                  </ul>
+                  ${data.synthesis.keyFindings?.map(finding => `<p>✓ ${finding}</p>`).join('') || '<p>No findings available</p>'}
                 </div>
-                <div class="implications">
+                <div class="findings-text">
                   <h4>Implications</h4>
-                  <ul>
-                    ${data.synthesis.implications?.map(implication => `<li>${implication}</li>`).join('') || '<li>No implications available</li>'}
-                  </ul>
+                  ${data.synthesis.implications?.map(implication => `<p>→ ${implication}</p>`).join('') || '<p>No implications available</p>'}
                 </div>
               </div>
             </div>
@@ -178,96 +389,87 @@
         const html = `
           <div class="research-visualization empirical-research">
             <h2>${data.researchTitle || 'Empirical Research'}</h2>
-            <div class="abstract">
+            
+            <div class="research-section">
               <h3>Abstract</h3>
               <p>${data.abstract || 'Abstract not available'}</p>
             </div>
             
             ${data.researchDesign ? `
-            <div class="research-design">
+            <div class="research-section">
               <h3>Research Design</h3>
-              <div class="design-grid">
-                <div><strong>Approach:</strong> ${data.researchDesign.approach}</div>
-                <div><strong>Design:</strong> ${data.researchDesign.design}</div>
-                <div><strong>Timeline:</strong> ${data.researchDesign.timeline}</div>
-                <div><strong>Setting:</strong> ${data.researchDesign.setting}</div>
-              </div>
+              <p><strong>Approach:</strong> ${data.researchDesign.approach}</p>
+              <p><strong>Design:</strong> ${data.researchDesign.design}</p>
+              <p><strong>Timeline:</strong> ${data.researchDesign.timeline}</p>
+              <p><strong>Setting:</strong> ${data.researchDesign.setting}</p>
             </div>
             ` : ''}
             
             ${data.hypotheses ? `
-            <div class="hypotheses">
+            <div class="research-section">
               <h3>Hypotheses</h3>
-              <div class="hypothesis-list">
-                ${data.hypotheses.map(hyp => `
-                  <div class="hypothesis-item">
-                    <div class="hypothesis-statement">${hyp.hypothesis}</div>
-                    <div class="hypothesis-rationale">${hyp.rationale}</div>
-                  </div>
-                `).join('')}
-              </div>
+              ${data.hypotheses.map(hyp => `
+                <div class="hypothesis-card">
+                  <h4>Hypothesis</h4>
+                  <p>${hyp.hypothesis}</p>
+                  <p><strong>Rationale:</strong> ${hyp.rationale}</p>
+                </div>
+              `).join('')}
             </div>
             ` : ''}
             
             ${data.methodology ? `
-            <div class="methodology">
+            <div class="research-section">
               <h3>Methodology</h3>
               ${data.methodology.participants ? `
-                <div class="participants">
+                <div class="method-card">
                   <h4>Participants</h4>
-                  <div class="participant-info">
-                    <div><strong>Target Population:</strong> ${data.methodology.participants.targetPopulation}</div>
-                    <div><strong>Sample Size:</strong> ${data.methodology.participants.sampleSize}</div>
-                    <div><strong>Sampling Method:</strong> ${data.methodology.participants.samplingMethod}</div>
-                  </div>
+                  <p><strong>Target Population:</strong> ${data.methodology.participants.targetPopulation}</p>
+                  <p><strong>Sample Size:</strong> ${data.methodology.participants.sampleSize}</p>
+                  <p><strong>Sampling Method:</strong> ${data.methodology.participants.samplingMethod}</p>
                 </div>
               ` : ''}
               
               ${data.methodology.variables ? `
-                <div class="variables">
+                <div class="method-card">
                   <h4>Variables</h4>
-                  <div class="variables-grid">
-                    <div><strong>Dependent:</strong> ${data.methodology.variables.dependent?.join(', ')}</div>
-                    <div><strong>Independent:</strong> ${data.methodology.variables.independent?.join(', ')}</div>
-                    <div><strong>Control:</strong> ${data.methodology.variables.control?.join(', ')}</div>
-                  </div>
+                  <p><strong>Dependent:</strong> ${data.methodology.variables.dependent?.join(', ')}</p>
+                  <p><strong>Independent:</strong> ${data.methodology.variables.independent?.join(', ')}</p>
+                  <p><strong>Control:</strong> ${data.methodology.variables.control?.join(', ')}</p>
                 </div>
               ` : ''}
             </div>
             ` : ''}
             
             ${data.timeline ? `
-            <div class="timeline">
+            <div class="research-section">
               <h3>Timeline</h3>
-              <div class="timeline-phases">
-                ${data.timeline.phases?.map(phase => `
-                  <div class="phase-item">
-                    <div class="phase-name">${phase.phase}</div>
-                    <div class="phase-duration">${phase.duration}</div>
-                    <div class="phase-activities">${phase.activities?.join(', ')}</div>
-                  </div>
-                `).join('') || '<div>No timeline phases available</div>'}
-              </div>
+              ${data.timeline.phases?.map(phase => `
+                <div class="phase-card">
+                  <h4>${phase.phase}</h4>
+                  <p><strong>Duration:</strong> ${phase.duration}</p>
+                  <p><strong>Activities:</strong> ${phase.activities?.join(', ')}</p>
+                </div>
+              `).join('') || '<p>No timeline phases available</p>'}
             </div>
             ` : ''}
           </div>
         `;
         container.innerHTML = html;
-      }
-
-      function createAnalyticalFrameworkViz(data, container) {
+      }      function createAnalyticalFrameworkViz(data, container) {
         const html = `
           <div class="research-visualization analytical-framework">
             <h2>${data.researchTitle || 'Analytical Framework'}</h2>
-            <div class="framework-overview">
+            
+            <div class="research-section">
               <h3>Framework Overview</h3>
               <p>${data.frameworkOverview || 'Overview not available'}</p>
             </div>
             
             ${data.comparisonMatrix ? `
-            <div class="comparison-matrix">
+            <div class="research-section">
               <h3>Comparison Matrix</h3>
-              <div class="matrix-table">
+              <div class="comparison-table">
                 <table>
                   <thead>
                     <tr>
@@ -291,48 +493,40 @@
             ` : ''}
             
             ${data.gapAnalysis ? `
-            <div class="gap-analysis">
+            <div class="research-section">
               <h3>Gap Analysis</h3>
-              <div class="gap-comparison">
-                <div class="current-state">
-                  <h4>Current State</h4>
-                  <div><strong>Strengths:</strong> ${data.gapAnalysis.currentState?.strengths?.join(', ')}</div>
-                  <div><strong>Weaknesses:</strong> ${data.gapAnalysis.currentState?.weaknesses?.join(', ')}</div>
-                </div>
-                <div class="desired-state">
-                  <h4>Desired State</h4>
-                  <div><strong>Goals:</strong> ${data.gapAnalysis.desiredState?.goals?.join(', ')}</div>
-                  <div><strong>Requirements:</strong> ${data.gapAnalysis.desiredState?.requirements?.join(', ')}</div>
-                </div>
+              <div class="gap-card">
+                <h4>Current State</h4>
+                <p><strong>Strengths:</strong> ${data.gapAnalysis.currentState?.strengths?.join(', ')}</p>
+                <p><strong>Weaknesses:</strong> ${data.gapAnalysis.currentState?.weaknesses?.join(', ')}</p>
+              </div>
+              <div class="gap-card">
+                <h4>Desired State</h4>
+                <p><strong>Goals:</strong> ${data.gapAnalysis.desiredState?.goals?.join(', ')}</p>
+                <p><strong>Requirements:</strong> ${data.gapAnalysis.desiredState?.requirements?.join(', ')}</p>
               </div>
               ${data.gapAnalysis.identifiedGaps ? `
-                <div class="identified-gaps">
-                  <h4>Identified Gaps</h4>
-                  ${data.gapAnalysis.identifiedGaps.map(gap => `
-                    <div class="gap-item">
-                      <div class="gap-description">${gap.gap}</div>
-                      <div class="gap-meta">
-                        <span class="impact impact-${gap.impact?.toLowerCase()}">${gap.impact} Impact</span>
-                        <span class="priority priority-${gap.priority?.toLowerCase()}">${gap.priority} Priority</span>
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
+                <h4>Identified Gaps</h4>
+                ${data.gapAnalysis.identifiedGaps.map(gap => `
+                  <div class="gap-item">
+                    <p>${gap.gap}</p>
+                    <span class="impact-badge impact-${gap.impact?.toLowerCase()}">${gap.impact} Impact</span>
+                    <span class="priority-badge priority-${gap.priority?.toLowerCase()}">${gap.priority} Priority</span>
+                  </div>
+                `).join('')}
               ` : ''}
             </div>
             ` : ''}
             
             ${data.keyFindings ? `
-            <div class="key-findings">
+            <div class="research-section">
               <h3>Key Findings</h3>
-              <div class="findings-list">
-                ${data.keyFindings.map(finding => `
-                  <div class="finding-item">
-                    <div class="finding-text">${finding.finding}</div>
-                    <div class="finding-significance significance-${finding.significance?.toLowerCase()}">${finding.significance} Significance</div>
-                  </div>
-                `).join('')}
-              </div>
+              ${data.keyFindings.map(finding => `
+                <div class="finding-card">
+                  <p>${finding.finding}</p>
+                  <span class="significance-badge significance-${finding.significance?.toLowerCase()}">${finding.significance} Significance</span>
+                </div>
+              `).join('')}
             </div>
             ` : ''}
           </div>
@@ -344,70 +538,57 @@
         const html = `
           <div class="research-visualization data-visualization">
             <h2>${data.researchTitle || 'Data Visualization Strategy'}</h2>
-            <div class="viz-strategy">
+            
+            <div class="research-section">
               <h3>Visualization Strategy</h3>
               <p>${data.visualizationStrategy || 'Strategy not available'}</p>
             </div>
             
             ${data.dataRequirements ? `
-            <div class="data-requirements">
+            <div class="research-section">
               <h3>Data Requirements</h3>
-              <div class="requirements-grid">
-                <div><strong>Primary Sources:</strong> ${data.dataRequirements.primaryDataSources?.join(', ')}</div>
-                <div><strong>Data Types:</strong> ${data.dataRequirements.dataTypes?.join(', ')}</div>
-                <div><strong>Update Frequency:</strong> ${data.dataRequirements.updateFrequency}</div>
-              </div>
+              <p><strong>Primary Sources:</strong> ${data.dataRequirements.primaryDataSources?.join(', ')}</p>
+              <p><strong>Data Types:</strong> ${data.dataRequirements.dataTypes?.join(', ')}</p>
+              <p><strong>Update Frequency:</strong> ${data.dataRequirements.updateFrequency}</p>
             </div>
             ` : ''}
             
             ${data.visualizationDashboard ? `
-            <div class="dashboard-design">
+            <div class="research-section">
               <h3>Dashboard Design</h3>
-              <div class="dashboard-layout">
-                <div><strong>Layout:</strong> ${data.visualizationDashboard.layout}</div>
-              </div>
+              <p><strong>Layout:</strong> ${data.visualizationDashboard.layout}</p>
               
               ${data.visualizationDashboard.charts ? `
-                <div class="charts">
-                  <h4>Charts & Visualizations</h4>
-                  <div class="chart-grid">
-                    ${data.visualizationDashboard.charts.map(chart => `
-                      <div class="chart-item">
-                        <div class="chart-title">${chart.title}</div>
-                        <div class="chart-type">${chart.chartType}</div>
-                        <div class="chart-purpose">${chart.purpose}</div>
-                        <div class="chart-priority priority-${chart.priority?.toLowerCase()}">${chart.priority} Priority</div>
-                      </div>
-                    `).join('')}
+                <h4>Charts & Visualizations</h4>
+                ${data.visualizationDashboard.charts.map(chart => `
+                  <div class="chart-card">
+                    <h5>${chart.title}</h5>
+                    <p><strong>Type:</strong> ${chart.chartType}</p>
+                    <p><strong>Purpose:</strong> ${chart.purpose}</p>
+                    <span class="priority-badge priority-${chart.priority?.toLowerCase()}">${chart.priority} Priority</span>
                   </div>
-                </div>
+                `).join('')}
               ` : ''}
               
               ${data.visualizationDashboard.kpis ? `
-                <div class="kpis">
-                  <h4>Key Performance Indicators</h4>
-                  <div class="kpi-grid">
-                    ${data.visualizationDashboard.kpis.map(kpi => `
-                      <div class="kpi-item">
-                        <div class="kpi-metric">${kpi.metric}</div>
-                        <div class="kpi-calculation">${kpi.calculation}</div>
-                        <div class="kpi-visualization">${kpi.visualization}</div>
-                      </div>
-                    `).join('')}
+                <h4>Key Performance Indicators</h4>
+                ${data.visualizationDashboard.kpis.map(kpi => `
+                  <div class="kpi-card">
+                    <h5>${kpi.metric}</h5>
+                    <p><strong>Calculation:</strong> ${kpi.calculation}</p>
+                    <p><strong>Visualization:</strong> ${kpi.visualization}</p>
                   </div>
-                </div>
+                `).join('')}
               ` : ''}
             </div>
             ` : ''}
             
             ${data.technicalImplementation ? `
-            <div class="technical-implementation">
+            <div class="research-section">
               <h3>Technical Implementation</h3>
-              <div class="tech-grid">
-                <div><strong>Platforms:</strong> ${data.technicalImplementation.platforms?.join(', ')}</div>
-                <div><strong>Data Processing:</strong> ${data.technicalImplementation.dataProcessing}</div>
-                <div><strong>Performance:</strong> ${data.technicalImplementation.performance}</div>
-              </div>
+              <p><strong>Platforms:</strong> ${data.technicalImplementation.platforms?.join(', ')}</p>
+              <p><strong>Data Processing:</strong> ${data.technicalImplementation.dataProcessing}</p>
+              <p><strong>Performance:</strong> ${data.technicalImplementation.performance}</p>
             </div>
             ` : ''}
           </div>
@@ -421,71 +602,57 @@
             <h2>${data.researchTitle || 'Academic Report Structure'}</h2>
             
             ${data.documentStructure ? `
-            <div class="document-structure">
+            <div class="research-section">
               <h3>Document Structure</h3>
-              <div class="sections-list">
-                ${data.documentStructure.sections?.map(section => `
-                  <div class="section-item">
-                    <div class="section-header">
-                      <span class="section-number">${section.sectionNumber}</span>
-                      <span class="section-title">${section.title}</span>
-                      <span class="section-length">${section.length}</span>
-                    </div>
-                    <div class="section-purpose">${section.purpose}</div>
-                    <div class="section-elements">
-                      <strong>Key Elements:</strong> ${section.keyElements?.join(', ')}
-                    </div>
-                    <div class="section-audience">
-                      <strong>Audience:</strong> ${section.audience}
-                    </div>
-                  </div>
-                `).join('') || '<div>No sections available</div>'}
-              </div>
+              ${data.documentStructure.sections?.map(section => `
+                <div class="section-card">
+                  <h4>${section.sectionNumber}. ${section.title}</h4>
+                  <p><strong>Length:</strong> ${section.length}</p>
+                  <p><strong>Purpose:</strong> ${section.purpose}</p>
+                  <p><strong>Key Elements:</strong> ${section.keyElements?.join(', ')}</p>
+                  <p><strong>Audience:</strong> ${section.audience}</p>
+                </div>
+              `).join('') || '<p>No sections available</p>'}
             </div>
             ` : ''}
             
             ${data.writingGuidelines ? `
-            <div class="writing-guidelines">
+            <div class="research-section">
               <h3>Writing Guidelines</h3>
-              <div class="guidelines-grid">
-                <div><strong>Tone:</strong> ${data.writingGuidelines.tone}</div>
-                <div><strong>Person:</strong> ${data.writingGuidelines.person}</div>
-                <div><strong>Citation Style:</strong> ${data.writingGuidelines.citationStyle}</div>
-                ${data.writingGuidelines.lengthGuidance ? `
-                  <div><strong>Length:</strong> ${data.writingGuidelines.lengthGuidance.totalPages} (${data.writingGuidelines.lengthGuidance.wordCount})</div>
-                ` : ''}
-              </div>
+              <p><strong>Tone:</strong> ${data.writingGuidelines.tone}</p>
+              <p><strong>Person:</strong> ${data.writingGuidelines.person}</p>
+              <p><strong>Citation Style:</strong> ${data.writingGuidelines.citationStyle}</p>
+              ${data.writingGuidelines.lengthGuidance ? `
+                <p><strong>Length:</strong> ${data.writingGuidelines.lengthGuidance.totalPages} pages (${data.writingGuidelines.lengthGuidance.wordCount} words)</p>
+              ` : ''}
             </div>
             ` : ''}
             
             ${data.timeline ? `
-            <div class="project-timeline">
+            <div class="research-section">
               <h3>Project Timeline</h3>
-              <div class="timeline-phases">
-                ${data.timeline.phases?.map(phase => `
-                  <div class="phase-item">
-                    <div class="phase-name">${phase.phase}</div>
-                    <div class="phase-duration">${phase.duration}</div>
-                    <div class="phase-deliverables">${phase.deliverables?.join(', ')}</div>
-                  </div>
-                `).join('') || '<div>No timeline phases available</div>'}
-              </div>
+              ${data.timeline.phases?.map(phase => `
+                <div class="phase-card">
+                  <h4>${phase.phase}</h4>
+                  <p><strong>Duration:</strong> ${phase.duration}</p>
+                  <p><strong>Deliverables:</strong> ${phase.deliverables?.join(', ')}</p>
+                </div>
+              `).join('') || '<p>No timeline phases available</p>'}
             </div>
             ` : ''}
             
             ${data.qualityChecklist ? `
-            <div class="quality-checklist">
+            <div class="research-section">
               <h3>Quality Checklist</h3>
-              <div class="checklist-categories">
-                ${Object.entries(data.qualityChecklist).map(([category, items]) => `
-                  <div class="checklist-category">
-                    <h4>${category.charAt(0).toUpperCase() + category.slice(1)}</h4>
-                    <ul>
-                      ${Array.isArray(items) ? items.map(item => `<li>${item}</li>`).join('') : `<li>${items}</li>`}
-                    </ul>
-                  </div>
-                `).join('')}
-              </div>
+              ${Object.entries(data.qualityChecklist).map(([category, items]) => `
+                <div class="checklist-card">
+                  <h4>${category.charAt(0).toUpperCase() + category.slice(1)}</h4>
+                  ${Array.isArray(items) 
+                    ? items.map(item => `<p>✓ ${item}</p>`).join('') 
+                    : `<p>✓ ${items}</p>`
+                  }
+                </div>
+              `).join('')}
             </div>
             ` : ''}
           </div>
