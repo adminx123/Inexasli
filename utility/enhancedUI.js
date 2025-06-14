@@ -352,12 +352,11 @@ let toastCounter = 0;
 if (typeof window.activeToasts === 'undefined') {
     window.activeToasts = new Set();
 }
-const activeToasts = window.activeToasts;
 
 function showToast(message, type = 'info', duration = ENHANCED_UI_CONFIG.toast.defaultDuration) {
     // Limit number of toasts
-    if (activeToasts.size >= ENHANCED_UI_CONFIG.toast.maxToasts) {
-        const oldestToast = Array.from(activeToasts)[0];
+    if (window.activeToasts.size >= ENHANCED_UI_CONFIG.toast.maxToasts) {
+        const oldestToast = Array.from(window.activeToasts)[0];
         closeToast(oldestToast);
     }
 
@@ -379,7 +378,7 @@ function showToast(message, type = 'info', duration = ENHANCED_UI_CONFIG.toast.d
 
     toast.style.cssText = `
         position: fixed;
-        top: ${20 + (activeToasts.size * 80)}px;
+        top: ${20 + (window.activeToasts.size * 80)}px;
         right: 20px;
         background: ${style.bg};
         color: white;
@@ -419,7 +418,7 @@ function showToast(message, type = 'info', duration = ENHANCED_UI_CONFIG.toast.d
     `;
 
     document.body.appendChild(toast);
-    activeToasts.add(toastId);
+    window.activeToasts.add(toastId);
 
     // Animate in
     setTimeout(() => {
@@ -437,7 +436,7 @@ function showToast(message, type = 'info', duration = ENHANCED_UI_CONFIG.toast.d
 
 function closeToast(toastId) {
     const toast = document.getElementById(toastId);
-    if (toast && activeToasts.has(toastId)) {
+    if (toast && window.activeToasts.has(toastId)) {
         toast.style.opacity = '0';
         toast.style.transform = 'translateX(100%)';
         
@@ -445,7 +444,7 @@ function closeToast(toastId) {
             if (toast.parentNode) {
                 toast.parentNode.removeChild(toast);
             }
-            activeToasts.delete(toastId);
+            window.activeToasts.delete(toastId);
             repositionToasts();
         }, 400);
     }
@@ -453,7 +452,7 @@ function closeToast(toastId) {
 
 function repositionToasts() {
     let index = 0;
-    activeToasts.forEach(toastId => {
+    window.activeToasts.forEach(toastId => {
         const toast = document.getElementById(toastId);
         if (toast) {
             toast.style.top = `${20 + (index * 80)}px`;
