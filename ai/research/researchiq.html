@@ -1,3 +1,7 @@
+<head>
+  <script src="../../ai/datain.js" type="module"></script>
+  <!-- inputstyles.css will be loaded dynamically by datain.js -->
+</head>
 <!--
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
@@ -21,42 +25,32 @@
   </div>
 
   <div class="row1">
-    <div class="row">
-      <h3 class="tooltip1" data-tooltip="What do you want the AI to research for you?">
-        Research Topic or Question<span class="tooltip1-content"></span>
-      </h3>
-      <textarea id="research-topic" rows="3" placeholder="e.g. The impact of remote work on productivity in tech companies"></textarea>
-    </div>
+    <h3 class="tooltip1" data-tooltip="What do you want the AI to research for you?">
+      Research Topic or Question<span class="tooltip1-content"></span>
+    </h3>
+    <textarea id="research-topic" rows="3" placeholder="e.g. The impact of remote work on productivity in tech companies"></textarea>
   </div>
 
   <div class="row1">
-    <div class="row">
-      <h3 class="tooltip1" data-tooltip="Add any extra details or context to help the AI with your research.">
-        Additional Details (optional)<span class="tooltip1-content"></span>
-      </h3>
-      <textarea id="additional-details" rows="3" placeholder="e.g. Focus on studies from 2020 onward, include both US and Europe, summarize key findings"></textarea>
-    </div>
+    <h3 class="tooltip1" data-tooltip="Add any extra details or context to help the AI with your research.">
+      Additional Details (optional)<span class="tooltip1-content"></span>
+    </h3>
+    <textarea id="additional-details" rows="3" placeholder="e.g. Focus on studies from 2020 onward, include both US and Europe, summarize key findings"></textarea>
   </div>
 
   <div class="row1">
-    <div class="row">
-      <h3 class="tooltip1" data-tooltip="Choose the format for your research report.">
-        Report Format<span class="tooltip1-content"></span>
-      </h3>
-      <select id="output-format">
-        <option value="structured-report">Structured Research Report</option>
-        <option value="executive-summary">Executive Summary</option>
-        <option value="academic-paper">Academic Paper Format</option>
-        <option value="presentation">Presentation Slides/Outline (includes charts if possible)</option>
-        <option value="data-dashboard">Data Visualization Dashboard (includes charts)</option>
-      </select>
-    </div>
-  </div>
+    <h3 class="tooltip1" data-tooltip="Choose the format for your research report.">
+      Report Format<span class="tooltip1-content"></span>
+    </h3>
+    <select id="output-format">
+      <option value="structured-report">Structured Research Report</option>
+      <option value="executive-summary">Executive Summary</option>
+      <option value="academic-paper">Academic Paper Format</option>
+      <option value="presentation">Presentation Slides/Outline (includes charts if possible)</option>
+      <option value="data-dashboard">Data Visualization Dashboard (includes charts)</option>
+    </select>
+      <button class="generate-btn" id="generate-research-btn">Generate Research Report</button>
 
-  <div class="row1">
-    <div class="row">
-          <button class="generate-btn" id="generate-research-btn">Generate Research Report</button>
-    </div>
   </div>
 
 </div>
