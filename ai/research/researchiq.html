@@ -29,134 +29,37 @@
 <div class="premium-blur">
 
         <div class="row1">
-            <h3 class="tooltip1" data-tooltip="What is your main research question or objective?">
-      Research Goal<span class="tooltip1-content"></span>
+            <h3 class="tooltip1" data-tooltip="What do you want the AI to research for you?">
+      Research Topic or Question<span class="tooltip1-content"></span>
     </h3>
-            <textarea id="research-goal" rows="2" placeholder="Understand market trends in renewable energy
-Analyze Gen Z customer purchasing behaviors"></textarea>
+            <textarea id="research-topic" rows="3" placeholder="e.g. The impact of remote work on productivity in tech companies"></textarea>
         </div>
         <div class="row1">
-            <h3 class="tooltip1" data-tooltip="Why are you conducting this research? What do you hope to achieve?">
-      Research Purpose<span class="tooltip1-content"></span>
+            <h3 class="tooltip1" data-tooltip="Add any extra details or context to help the AI with your research.">
+      Additional Details (optional)<span class="tooltip1-content"></span>
     </h3>
-            <textarea id="research-purpose" rows="2" placeholder="Inform new product development strategy
-Identify untapped market opportunities"></textarea>
+            <textarea id="additional-details" rows="3" placeholder="e.g. Focus on studies from 2020 onward, include both US and Europe, summarize key findings"></textarea>
         </div>
         <div class="row1">
-            <h3 class="tooltip1" data-tooltip="Choose the overall approach: qualitative, quantitative, or mixed methods.">
-      Research Type<span class="tooltip1-content"></span>
+            <h3 class="tooltip1" data-tooltip="Choose the format for your research report.">
+      Report Format<span class="tooltip1-content"></span>
     </h3>
-            <select id="research-type">
-                <option value="" disabled selected>Select Research Type</option>
-                <option value="qualitative">Qualitative Research</option>
-                <option value="quantitative">Quantitative Research</option>
-                <option value="mixed-methods">Mixed Methods</option>
-            </select>
+    <select id="output-format">
+        <option value="structured-report">Structured Research Report</option>
+        <option value="executive-summary">Executive Summary</option>
+        <option value="academic-paper">Academic Paper Format</option>
+        <option value="presentation">Presentation Slides/Outline</option>
+        <option value="data-dashboard">Data Visualization Dashboard</option>
+    </select>
         </div>
         <div class="row1">
-            <h3 class="tooltip1" data-tooltip="What is the scope or boundaries of your research? (e.g., region, age group)">
-      Research Scope<span class="tooltip1-content"></span>
-    </h3>
-            <textarea id="research-scope" rows="2" placeholder="North American market only
-Adults 25-40 years old"></textarea>
+            <label style="display: flex; align-items: center; gap: 8px;">
+        <input type="checkbox" id="include-charts" />
+        <span>Include charts/visualizations if possible</span>
+    </label>
         </div>
         <div class="row1">
-            <h3 class="tooltip1" data-tooltip="Select the main research methodology (e.g., literature review, empirical research, etc.)">
-      Research Methodology<span class="tooltip1-content"></span>
-    </h3>
-            <select id="research-methodology">
-                <option value="" disabled selected>Select Research Methodology</option>
-                <option value="literature-review">Literature Review (90% usefulness)</option>
-                <option value="empirical-research">Empirical Research (88% usefulness)</option>
-                <option value="analytical-framework">Analytical Framework (85% usefulness)</option>
-                <option value="data-visualization">Data Visualization (82% usefulness)</option>
-                <option value="academic-report">Academic Report (80% usefulness)</option>
-            </select>
-        </div>
-        <div class="row1">
-            <h3 class="tooltip1" data-tooltip="What type of analysis do you prefer? (e.g., comparative, statistical, etc.)">
-      Analysis Preference<span class="tooltip1-content"></span>
-    </h3>
-            <select id="analysis-preference">
-                <option value="" disabled selected>Select Analysis Preference</option>
-                <option value="comparative">Comparative Analysis</option>
-                <option value="statistical">Statistical Analysis</option>
-                <option value="historical">Historical Trends Analysis</option>
-                <option value="competitive">Competitive Research</option>
-                <option value="demographic">Market Demographics</option>
-                <option value="cost-benefit">Cost-Benefit Analysis</option>
-                <option value="case-studies">Case Studies</option>
-                <option value="trend-analysis">Trend Analysis</option>
-                <option value="gap-analysis">Gap Analysis</option>
-                <option value="stakeholder-analysis">Stakeholder Analysis</option>
-            </select>
-        </div>
-        <div class="row1">
-            <h3 class="tooltip1" data-tooltip="Who is the intended audience for this research?">
-      Target Audience<span class="tooltip1-content"></span>
-    </h3>
-            <textarea id="research-audience" rows="2" placeholder="Tech professionals in urban areas
-Small business owners with 5-50 employees"></textarea>
-        </div>
-        <div class="row1">
-            <h3 class="tooltip1" data-tooltip="What background or context should be considered for this research?">
-      Research Context<span class="tooltip1-content"></span>
-    </h3>
-            <textarea id="research-context" rows="3" placeholder="Recent industry shift toward sustainability
-Competitor launched similar product last quarter
-Economic downturn affecting consumer spending"></textarea>
-        </div>
-        <div class="row1">
-            <h3 class="tooltip1" data-tooltip="What are the expected deliverables or outputs? (e.g., report, dashboard, etc.)">
-      Expected Deliverables<span class="tooltip1-content"></span>
-    </h3>
-            <select id="research-deliverables">
-                <option value="" disabled selected>Select Expected Deliverables</option>
-                <option value="systematic-review">Systematic Review</option>
-                <option value="meta-analysis">Meta-Analysis</option>
-                <option value="narrative-review">Narrative Review</option>
-                <option value="scoping-review">Scoping Review</option>
-                <option value="experimental-design">Experimental Design</option>
-                <option value="survey-research">Survey Research</option>
-                <option value="case-study">Case Study</option>
-                <option value="longitudinal-study">Longitudinal Study</option>
-                <option value="comparative-analysis">Comparative Analysis</option>
-                <option value="gap-analysis">Gap Analysis</option>
-                <option value="trend-analysis">Trend Analysis</option>
-                <option value="stakeholder-analysis">Stakeholder Analysis</option>
-                <option value="data-visualization">Data Visualization</option>
-                <option value="executive-summary">Executive Summary</option>
-                <option value="technical-report">Technical Report</option>
-                <option value="policy-brief">Policy Brief</option>
-                <option value="research-proposal">Research Proposal</option>
-            </select>
-        </div>
-        <div class="row1">
-            <h3 class="tooltip1" data-tooltip="Choose the preferred output format for your research results.">
-      Output Format<span class="tooltip1-content"></span>
-    </h3>
-            <select id="output-format">
-                <option value="" disabled selected>Select Output Format</option>
-                <option value="structured-report">Structured Research Report</option>
-                <option value="executive-summary">Executive Summary</option>
-                <option value="academic-paper">Academic Paper Format</option>
-                <option value="data-dashboard">Data Visualization Dashboard</option>
-                <option value="presentation">Presentation Structure</option>
-                <option value="annotated-bibliography">Annotated Bibliography</option>
-                <option value="evidence-map">Evidence Map</option>
-                <option value="knowledge-graph">Knowledge Graph</option>
-                <option value="policy-brief">Policy Brief Format</option>
-                <option value="technical-documentation">Technical Documentation</option>
-            </select>
-        </div>
-        <div class="row1">
-            <h3 class="tooltip1" data-tooltip="Add any extra details, requirements, or constraints for your research.">
-      Additional Details<span class="tooltip1-content"></span>
-    </h3>
-            <textarea id="additional-details" rows="3" placeholder="Need privacy-compliant data collection methods
-Research must consider environmental impact
-Results needed within two weeks"></textarea>
-            <button class="generate-btn" id="generate-research-btn">Generate Research Plan Now!</button>
+            <button class="generate-btn" id="generate-research-btn">Generate Research Report</button>
         </div>
 
 <script>
@@ -172,49 +75,6 @@ Results needed within two weeks"></textarea>
 
 (function() {
     console.log("ResearchIQ script initializing");
-
-    // Mapping of methodology to allowed options
-    const methodologyMap = {
-        'literature-review': {
-            deliverables: ['systematic-review','meta-analysis','narrative-review','scoping-review','executive-summary','annotated-bibliography','evidence-map'],
-            outputFormats: ['structured-report','executive-summary','academic-paper','annotated-bibliography','evidence-map'],
-            analysis: ['comparative','historical','case-studies','trend-analysis','gap-analysis']
-        },
-        'empirical-research': {
-            deliverables: ['experimental-design','survey-research','case-study','longitudinal-study','comparative-analysis','trend-analysis','gap-analysis','stakeholder-analysis'],
-            outputFormats: ['structured-report','academic-paper','data-dashboard','presentation','technical-documentation'],
-            analysis: ['statistical','comparative','trend-analysis','demographic','cost-benefit','case-studies']
-        },
-        'analytical-framework': {
-            deliverables: ['comparative-analysis','gap-analysis','stakeholder-analysis','policy-brief','executive-summary'],
-            outputFormats: ['structured-report','policy-brief','presentation','knowledge-graph'],
-            analysis: ['comparative','gap-analysis','stakeholder-analysis','cost-benefit']
-        },
-        'data-visualization': {
-            deliverables: ['data-visualization','trend-analysis','executive-summary'],
-            outputFormats: ['data-dashboard','presentation','knowledge-graph'],
-            analysis: ['trend-analysis','demographic','statistical']
-        },
-        'academic-report': {
-            deliverables: ['technical-report','executive-summary','policy-brief','research-proposal'],
-            outputFormats: ['structured-report','academic-paper','policy-brief','technical-documentation'],
-            analysis: ['comparative','case-studies','stakeholder-analysis']
-        }
-    };
-
-    // Utility to filter dropdown options
-    function filterDropdown(selectId, allowedValues) {
-        const select = document.getElementById(selectId);
-        if (!select) return;
-        Array.from(select.options).forEach(opt => {
-            if (!opt.value) return; // skip placeholder
-            opt.style.display = allowedValues.includes(opt.value) ? '' : 'none';
-        });
-        // Reset selection if current value is not allowed
-        if (!allowedValues.includes(select.value)) {
-            select.value = '';
-        }
-    }
 
     // Listen for methodology changes
     document.getElementById('research-methodology').addEventListener('change', function(e) {
@@ -263,7 +123,11 @@ Results needed within two weeks"></textarea>
             'generate-research-btn',
             'research',
             async () => {
-                const formData = window.researchFormPersistence.getSavedFormData();
+                // Collect form data
+                const formData = window.researchFormPersistence.getSavedFormData() || {};
+                // Add chart/visualization preference
+                formData.includeCharts = document.getElementById('include-charts')?.checked || false;
+                
                 if (!formData) {
                     console.error('[ResearchIQ] No input data found in localStorage.');
                     throw new Error('Please complete the form before generating a research plan.');
