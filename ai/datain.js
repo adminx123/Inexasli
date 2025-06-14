@@ -940,135 +940,47 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (!dataContainer) return;
 
         const isExpanded = dataContainer.dataset.state === 'expanded';
-        
-        // Get reference to dataout container
-        const dataOutContainer = document.querySelector('.data-container-out');
+
+        // Always clear all sizing classes and inline height
+        dataContainer.classList.remove('expanded', 'initial', 'collapsed', 'visually-collapsed');
+        dataContainer.style.height = '';
 
         if (isExpanded) {
-            // Collapse: Transform to visual collapsed state without changing DOM
-            dataContainer.classList.remove('expanded');
+            // COLLAPSE: Only visually-collapsed class, height 36px
             dataContainer.classList.add('visually-collapsed');
             dataContainer.dataset.state = 'initial';
             setLocal('dataContainerState', 'initial');
-            
-            // Restore background scrolling when collapsed
             document.body.style.overflow = '';
-            
-            // Hide the data content and show collapsed elements
-            const dataContent = dataContainer.querySelector('.data-content');
-            const closeButton = dataContainer.querySelector('.close-data-container');
-            const utilityButtons = dataContainer.querySelector('.utility-buttons-container');
-            
-            if (dataContent) {
-                dataContent.style.display = 'none';
-            }
-            if (closeButton) {
-                closeButton.style.display = 'none';
-            }
-            if (utilityButtons) {
-                // Remove any inline styles and let CSS handle positioning
-                utilityButtons.style.display = '';
-                utilityButtons.style.position = '';
-                utilityButtons.style.top = '';
-                utilityButtons.style.right = '';
-                utilityButtons.style.justifyContent = '';
-                utilityButtons.style.padding = '';
-                utilityButtons.style.marginLeft = '';
-            }
-            
-            // REMOVED: Reset dataout container z-index when datain collapses
-            // if (dataOutContainer) {
-            //     dataOutContainer.style.zIndex = '10000';
-            // }
-            
+            // Hide content and close button
+            dataContainer.querySelectorAll('.data-content, .close-data-container').forEach(el => el.style.display = 'none');
+            // Show utility buttons
+            dataContainer.querySelectorAll('.utility-buttons-container').forEach(el => el.style.display = 'flex');
             // Dispatch state change event
-            document.dispatchEvent(new CustomEvent('datain-state-changed', {
-                detail: { state: 'initial' }
-            }));
-            
+            document.dispatchEvent(new CustomEvent('datain-state-changed', { detail: { state: 'initial' } }));
         } else {
-            // Expand: Transform back to full expanded state
-            dataContainer.classList.remove('visually-collapsed');
+            // EXPAND: Only expanded class, height 90vh
             dataContainer.classList.add('expanded');
             dataContainer.dataset.state = 'expanded';
-            
-            // Prevent background scrolling when expanded
             document.body.style.overflow = 'hidden';
-            
-            // Show the data content and hide collapsed elements
-            const dataContent = dataContainer.querySelector('.data-content');
-            const closeButton = dataContainer.querySelector('.close-data-container');
-            const utilityButtons = dataContainer.querySelector('.utility-buttons-container');
-            
-            if (dataContent) {
-                dataContent.style.display = 'block';
-            }
-            if (closeButton) {
-                closeButton.style.display = 'block';
-            }
-            if (utilityButtons) {
-                // Let CSS handle the expanded state positioning
-                utilityButtons.style.display = '';
-                utilityButtons.style.position = '';
-                utilityButtons.style.top = '';
-                utilityButtons.style.right = '';
-                utilityButtons.style.justifyContent = '';
-                utilityButtons.style.padding = '';
-            }
-            
-            // REMOVED: Set dataout container to higher z-index to appear above expanded datain
-            // if (dataOutContainer) {
-            //     dataOutContainer.style.zIndex = '12000';
-            // }
-            
+            // Show content and close button
+            dataContainer.querySelectorAll('.data-content, .close-data-container').forEach(el => el.style.display = 'block');
+            // Hide utility buttons
+            dataContainer.querySelectorAll('.utility-buttons-container').forEach(el => el.style.display = 'none');
             // Dispatch state change event
-            document.dispatchEvent(new CustomEvent('datain-state-changed', {
-                detail: { state: 'expanded' }
-            }));
-            
-            // Auto-adjust container size when expanded
+            document.dispatchEvent(new CustomEvent('datain-state-changed', { detail: { state: 'expanded' } }));
+            // Auto-adjust container size if needed
             setTimeout(() => {
+                const dataContent = dataContainer.querySelector('.data-content');
                 const currentContent = dataContent ? dataContent.querySelector('.row1:not([style*="display: none"])') : null;
                 if (currentContent) {
                     adjustContainerSize(currentContent);
                 }
             }, 50);
-            
-            const leftSideBarOpen = new CustomEvent('left-sidebar-open', {
-                detail: {
-                    state: 'expanded'
-                }
-            });
-
+            const leftSideBarOpen = new CustomEvent('left-sidebar-open', { detail: { state: 'expanded' } });
             document.dispatchEvent(leftSideBarOpen);
-            
-            // initializeGridItems();
             const storedUrl = getLocal('lastGridItemUrl');
             if (storedUrl) {
                 loadStoredContent(storedUrl);
-            } else {
-                // Ensure proper expanded state when no content is loaded
-                dataContainer.innerHTML = `
-                    <span class="close-data-container"></span>
-                    <div class="utility-buttons-container" style="position: absolute; top: -4px; right: 10px; display: flex; flex-direction: row; gap: 8px;">
-                        <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
-                        </button>
-                        <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <span style="font-size: 14px; font-weight: bold;">$</span>
-                        </button>
-                        <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <i class="bx bx-trash" style="font-size: 14px;"></i>
-                        </button>
-                        <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                            <i class="bx bx-copy" style="font-size: 14px;"></i>
-                        </button>
-                    </div>
-                    <div class="data-content">No content selected. Please select a grid item.</div>
-                `;
-                
-                // Re-setup utility buttons after innerHTML change
-                setupUtilityButtons();
             }
         }
     }
