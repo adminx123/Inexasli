@@ -58,39 +58,76 @@
 <script src="../../utility/toolTip.js" type="module"></script>
 <script src="../../payment/paymentform.js"></script>
 <script>
-(function() {
-    document.getElementById('generate-research-btn').addEventListener('click', async function() {
-        const topic = document.getElementById('research-topic').value.trim();
-        const details = document.getElementById('additional-details').value.trim();
-        const outputFormat = document.getElementById('output-format').value;
-        // Only request charts if format is presentation or data-dashboard
-        const includeCharts = (outputFormat === 'presentation' || outputFormat === 'data-dashboard');
-        if (!topic) {
-            alert('Please enter a research topic or question.');
+async function handleGenerateResearchIq() {
+    try {
+        const formData = window.researchFormPersistence.getSavedFormData();
+        if (!formData) { 
+            alert('Please complete the form before generating a research report.'); 
             return;
         }
-        const formData = {
-            "research-topic": topic,
-            "additional-details": details,
-            outputFormat,
-            includeCharts
-        };
-        const apiUrl = 'https://research.4hm7q4q75z.workers.dev/';
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-            if (!response.ok) throw new Error('Network error');
-            const responseData = await response.json();
-            alert('Research report generated!');
-            // Optionally, redirect or update UI here
-        } catch (error) {
-            alert('Error generating research report: ' + error.message);
-        }
-    });
-})();
+
+        // Use enhanced loading with educational facts
+        const result = await window.enhancedLoading(
+            'generate-research-btn',
+            'research',
+            async () => {
+                const apiUrl = 'https://research.4hm7q4q75z.workers.dev/';
+                const response = await fetch(apiUrl, { 
+                    method: 'POST', 
+                    headers: {'Content-Type':'application/json'}, 
+                    body: JSON.stringify(formData) 
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const responseData = await response.json();
+                if (responseData.message !== 'Success') {
+                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                }
+                
+                return responseData;
+            }
+        );
+
+        // Store the response using centralized system
+        window.researchFormPersistence.saveResponseData(result);
+        
+        // Dispatch an event to notify dataout.js that a response was received
+        const event = new CustomEvent('api-response-received', {
+            detail: {
+                module: 'researchiq',
+                type: 'worker-response',
+                timestamp: Date.now()
+            }
+        });
+        document.dispatchEvent(event);
+        console.log('[ResearchIQ] Dispatched api-response-received event');
+        
+    } catch (error) {
+        console.error('[ResearchIQ] Error generating research report:', error);
+        alert('An error occurred while generating your research report. Please try again later.');
+    }
+}
+
+function runResearchInitialization() {
+    console.log("[ResearchIQ] Initializing...");
+    
+    // Set up event listeners
+    const generateBtn = document.getElementById('generate-research-btn');
+    if (generateBtn) {
+        generateBtn.removeEventListener('click', handleGenerateResearchIq);
+        generateBtn.addEventListener('click', handleGenerateResearchIq);
+    }
+}
+
+// Initialize with multiple triggers to ensure reliability
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runResearchInitialization);
+} else {
+    runResearchInitialization();
+}
 (function() {
     let tooltipInitAttempts = 0;
     const maxAttempts = 20;
