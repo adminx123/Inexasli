@@ -388,10 +388,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 };
                 
                 // Load guided forms script if not already loaded
-                if (!window.GuidedFormSystem && !document.querySelector('script[src*="guidedForms.js"]')) {
+                if (!window.GuidedFormSystem && !window.initGuidedForms && !document.querySelector('script[src*="guidedForms.js"]')) {
                     // Disable auto-initialization from the script itself
                     window.autoInitGuidedForms = false;
-                    
                     const guidedFormsScript = document.createElement('script');
                     guidedFormsScript.src = '/utility/guidedForms.js';
                     guidedFormsScript.onload = () => {
@@ -406,7 +405,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                                 enableSkipping: true,
                                 autoStart: true
                             });
-                            
                             // Small delay to ensure guided forms has processed the content
                             setTimeout(showContentAfterGuidedForms, 50);
                         } else {
@@ -429,7 +427,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                         enableSkipping: true,
                         autoStart: true
                     });
-                    
                     // Small delay to ensure guided forms has processed the content
                     setTimeout(showContentAfterGuidedForms, 50);
                 } else {

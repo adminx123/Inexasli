@@ -168,6 +168,11 @@ try {
                     
                     // Filter products with FORCE
                     filterProducts(selectedCategory);
+                    
+                    // Advance guided form step if available (auto-advance for this page only)
+                    if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
+                        window.guidedForms.showStep(1);
+                    }
                 }
             });
             
@@ -209,4 +214,19 @@ try {
         }
     });
 })();
+</script>
+
+<script src="/utility/guidedForms.js"></script>
+<script>
+  // Only enable autoAdvance for categories.html
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.GuidedFormSystem) {
+      const guidedForms = new GuidedFormSystem({
+        autoAdvance: true,
+        showProgressIndicator: true,
+        smoothTransitions: true
+      });
+      guidedForms.init('device-container');
+    }
+  });
 </script>
