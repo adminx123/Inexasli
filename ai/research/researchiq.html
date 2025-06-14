@@ -8,7 +8,7 @@
  * jurisdictions worldwide.
 -->
 
-<script src="../../utility/toolTip.js"></script>
+<script src="../../utility/toolTip.js" type="module"></script>
 <script src="../../payment/paymentform.js"></script>
 
 <div class="device-container">
@@ -324,19 +324,31 @@ Results needed within two weeks"></textarea>
     }
 })();
 
-document.addEventListener('DOMContentLoaded', function() {
-  if (window.initializeTooltips) {
-    window.initializeTooltips(document);
-  }
-});
-
-document.addEventListener('data-in-loaded', function(e) {
-  if (window.initializeTooltips) {
-    // If a container is provided, use it; otherwise, use document
-    const container = (e && e.detail && e.detail.container) ? e.detail.container : document;
-    window.initializeTooltips(container);
-  }
-});
+(function() {
+    let tooltipInitAttempts = 0;
+    const maxAttempts = 20;
+    function initTooltips() {
+        tooltipInitAttempts++;
+        if (typeof window.initializeTooltips === 'function') {
+            try {
+                window.initializeTooltips(document);
+            } catch (error) {
+                console.error('[ResearchIQ] Error initializing tooltips:', error);
+            }
+        } else if (tooltipInitAttempts < maxAttempts) {
+            setTimeout(initTooltips, 100);
+        } else {
+            console.error('[ResearchIQ] Failed to initialize tooltips after maximum attempts');
+        }
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initTooltips, 50);
+        });
+    } else {
+        setTimeout(initTooltips, 100);
+    }
+})();
 </script>
 </div>
 </div> <!-- Close mobile-container -->
