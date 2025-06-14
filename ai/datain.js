@@ -955,6 +955,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.querySelectorAll('.data-content, .close-data-container').forEach(el => el.style.display = 'none');
             // Show utility buttons
             dataContainer.querySelectorAll('.utility-buttons-container').forEach(el => el.style.display = 'flex');
+            // Hide progress bar on collapse
+            const progressBar = dataContainer.querySelector('#guided-form-progress');
+            if (progressBar) progressBar.style.display = 'none';
             // Dispatch state change event
             document.dispatchEvent(new CustomEvent('datain-state-changed', { detail: { state: 'initial' } }));
         } else {
@@ -966,6 +969,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.querySelectorAll('.data-content, .close-data-container').forEach(el => el.style.display = 'block');
             // Hide utility buttons
             dataContainer.querySelectorAll('.utility-buttons-container').forEach(el => el.style.display = 'none');
+            // Show progress bar on expand
+            const progressBar = dataContainer.querySelector('#guided-form-progress');
+            if (progressBar) progressBar.style.display = '';
             // Dispatch state change event
             document.dispatchEvent(new CustomEvent('datain-state-changed', { detail: { state: 'expanded' } }));
             // Auto-adjust container size if needed
