@@ -74,6 +74,44 @@
   margin-top: 4px;
 }
 
+/* Assets and Liabilities checkboxrow styling - 2 inputs layout */
+.checkboxrow .percent-input {
+  width: 120px;
+  min-width: 120px;
+  text-align: center;
+  background-color: #f5f5f5;
+  border: 1px solid #999;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* Modify checkboxrow layout for assets/liabilities (dual-input class) */
+.checkboxrow.dual-input {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  grid-template-rows: auto auto;
+  gap: 8px 12px;
+  grid-template-areas: 
+    "label label"
+    "amount percent";
+  margin-bottom: 20px;
+}
+
+.checkboxrow.dual-input label {
+  grid-area: label;
+  margin-bottom: 0;
+}
+
+.checkboxrow.dual-input input[type="number"]:not(.percent-input) {
+  grid-area: amount;
+  width: 100%;
+}
+
+.checkboxrow.dual-input .percent-input {
+  grid-area: percent;
+  width: 100%;
+}
+
 /* Desktop layout - horizontal arrangement for input and frequency */
 @media (min-width: 701px) {
   .checkboxrow {
@@ -142,5 +180,22 @@
   .checkboxrow .checkbox-button {
     height: 36px !important;
     font-size: 13px !important;
+  }
+  
+  /* Mobile layout for assets/liabilities */
+  .checkboxrow.dual-input {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .checkboxrow.dual-input input[type="number"] {
+    width: 100%;
+    order: unset;
+  }
+  
+  .checkboxrow.dual-input .percent-input {
+    width: 100%;
+    text-align: left;
   }
 }
