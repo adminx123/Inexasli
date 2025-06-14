@@ -1,27 +1,19 @@
+# NOTE: For multi-worker projects, deploy each worker using:
+#   npx wrangler deploy --env <worker>
+# Example for research worker:
+#   npx wrangler deploy --env research
+# This ensures the correct script, bindings, and environment are used.
+
 account_id = "b70c309587ed8ba2bfa06320792ea457"
 workers_dev = true
 compatibility_date = "2025-05-11"
-
-# Upload and logging configuration
-upload.format = "modules"
-log_level = "debug"
 
 # Global build configuration that applies to all workers
 [build]
 command = ""
 watch_dir = "build/worker"
 
-
-
-[env.symptom]
-name = "symptom"
-main = "./ai/symptom/symptom.js"
-
-[[env.symptom.services]]
-binding = "secret_binding"
-service = "secretworker"
-
-
+# --- Worker Environments ---
 
 [env.research]
 name = "research"
@@ -39,7 +31,13 @@ service = "secretworker"
 
 
 
+[env.symptom]
+name = "symptom"
+main = "./ai/symptom/symptom.js"
 
+[[env.symptom.services]]
+binding = "secret_binding"
+service = "secretworker"
 
 
 

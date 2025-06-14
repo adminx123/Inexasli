@@ -52,6 +52,17 @@ Identify untapped market opportunities"></textarea>
 Adults 25-40 years old"></textarea>
         </div>
         <div class="row1">
+            <label class="category-label">Research Methodology</label>
+            <select id="research-methodology">
+                <option value="" disabled selected>Select Research Methodology</option>
+                <option value="literature-review">Literature Review (90% usefulness)</option>
+                <option value="empirical-research">Empirical Research (88% usefulness)</option>
+                <option value="analytical-framework">Analytical Framework (85% usefulness)</option>
+                <option value="data-visualization">Data Visualization (82% usefulness)</option>
+                <option value="academic-report">Academic Report (80% usefulness)</option>
+            </select>
+        </div>
+        <div class="row1">
             <label class="category-label">Analysis Preference</label>
             <select id="analysis-preference">
                 <option value="" disabled selected>Select Analysis Preference</option>
@@ -61,8 +72,10 @@ Adults 25-40 years old"></textarea>
                 <option value="competitive">Competitive Research</option>
                 <option value="demographic">Market Demographics</option>
                 <option value="cost-benefit">Cost-Benefit Analysis</option>
-                <option value="literature">Literature Review</option>
                 <option value="case-studies">Case Studies</option>
+                <option value="trend-analysis">Trend Analysis</option>
+                <option value="gap-analysis">Gap Analysis</option>
+                <option value="stakeholder-analysis">Stakeholder Analysis</option>
             </select>
         </div>
         <div class="row1">
@@ -80,30 +93,39 @@ Economic downturn affecting consumer spending"></textarea>
             <label class="category-label">Expected Deliverables</label>
             <select id="research-deliverables">
                 <option value="" disabled selected>Select Expected Deliverables</option>
-                <option value="report">Detailed Research Report</option>
-                <option value="analysis">Data Analysis</option>
-                <option value="recommendations">Strategic Recommendations</option>
+                <option value="systematic-review">Systematic Review</option>
+                <option value="meta-analysis">Meta-Analysis</option>
+                <option value="narrative-review">Narrative Review</option>
+                <option value="scoping-review">Scoping Review</option>
+                <option value="experimental-design">Experimental Design</option>
+                <option value="survey-research">Survey Research</option>
                 <option value="case-study">Case Study</option>
-                <option value="white-paper">White Paper</option>
-                <option value="market-analysis">Market Analysis</option>
-                <option value="competitive-analysis">Competitive Analysis</option>
-                <option value="trend-forecast">Trend Forecast</option>
-                <option value="literature-summary">Literature Summary</option>
-                <option value="infographic">Infographic Content</option>
+                <option value="longitudinal-study">Longitudinal Study</option>
+                <option value="comparative-analysis">Comparative Analysis</option>
+                <option value="gap-analysis">Gap Analysis</option>
+                <option value="trend-analysis">Trend Analysis</option>
+                <option value="stakeholder-analysis">Stakeholder Analysis</option>
+                <option value="data-visualization">Data Visualization</option>
+                <option value="executive-summary">Executive Summary</option>
+                <option value="technical-report">Technical Report</option>
+                <option value="policy-brief">Policy Brief</option>
+                <option value="research-proposal">Research Proposal</option>
             </select>
         </div>
         <div class="row1">
             <label class="category-label">Output Format</label>
             <select id="output-format">
                 <option value="" disabled selected>Select Output Format</option>
-                <option value="technical-report">Technical Report</option>
+                <option value="structured-report">Structured Research Report</option>
                 <option value="executive-summary">Executive Summary</option>
-                <option value="data-visualization">Data Visualization Dashboard</option>
+                <option value="academic-paper">Academic Paper Format</option>
+                <option value="data-dashboard">Data Visualization Dashboard</option>
                 <option value="presentation">Presentation Structure</option>
-                <option value="literature-review">Literature Review</option>
-                <option value="comprehensive">Comprehensive Research Document</option>
-                <option value="bullet-points">Bullet Point Summary</option>
-                <option value="tabular">Tabular Data</option>
+                <option value="annotated-bibliography">Annotated Bibliography</option>
+                <option value="evidence-map">Evidence Map</option>
+                <option value="knowledge-graph">Knowledge Graph</option>
+                <option value="policy-brief">Policy Brief Format</option>
+                <option value="technical-documentation">Technical Documentation</option>
             </select>
         </div>
         <div class="row1">
@@ -134,6 +156,7 @@ Results needed within two weeks"></textarea>
         { id: 'research-goal', type: 'textarea' },
         { id: 'research-purpose', type: 'textarea' },
         { id: 'research-type', type: 'dropdown' },
+        { id: 'research-methodology', type: 'dropdown' },
         { id: 'research-scope', type: 'textarea' },
         { id: 'analysis-preference', type: 'dropdown' },
         { id: 'research-audience', type: 'textarea' },

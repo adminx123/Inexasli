@@ -49,21 +49,24 @@
     </div>
   </div>
 
-  <!-- Copy utility is already included in the head -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script src="../../utility/copy.js"></script>
   
   <script>
+    // Initialize Mermaid
+    if (typeof mermaid !== 'undefined') {
+      try {
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+      } catch (error) {
+        console.warn('Failed to initialize mermaid:', error);
+      }
+    }
+
     // Run immediately without waiting for DOMContentLoaded
     (function() {
       console.log('Research API Output script running');
-      const getLocal = window.getLocal || function(key) {
-        try {
-          const value = localStorage.getItem(key);
-          return value ? decodeURIComponent(value) : null;
-        } catch (e) {
-          console.error('Error getting local value:', e);
-          return null;
-        }
-      };
+      
       const getJSON = window.getJSON || function(key) {
         try {
           const item = localStorage.getItem(key);
@@ -73,6 +76,422 @@
           return null;
         }
       };
+
+      // Research methodology visualization creators
+      const researchVisualizers = {
+        'literature-review': createLiteratureReviewViz,
+        'empirical-research': createEmpiricalResearchViz,
+        'analytical-framework': createAnalyticalFrameworkViz,
+        'data-visualization': createDataVisualizationViz,
+        'academic-report': createAcademicReportViz
+      };
+
+      function createLiteratureReviewViz(data, container) {
+        const html = `
+          <div class="research-visualization literature-review">
+            <h2>${data.researchTitle || 'Literature Review'}</h2>
+            <div class="executive-summary">
+              <h3>Executive Summary</h3>
+              <p>${data.executiveSummary || 'Summary not available'}</p>
+            </div>
+            
+            ${data.searchStrategy ? `
+            <div class="search-strategy">
+              <h3>Search Strategy</h3>
+              <div class="strategy-grid">
+                <div><strong>Databases:</strong> ${data.searchStrategy.databases?.join(', ') || 'Not specified'}</div>
+                <div><strong>Keywords:</strong> ${data.searchStrategy.keywords?.join(', ') || 'Not specified'}</div>
+                <div><strong>Timeframe:</strong> ${data.searchStrategy.timeframe || 'Not specified'}</div>
+              </div>
+            </div>
+            ` : ''}
+            
+            ${data.literatureSources ? `
+            <div class="literature-sources">
+              <h3>Literature Sources (${data.literatureSources.length})</h3>
+              <div class="sources-grid">
+                ${data.literatureSources.map(source => `
+                  <div class="source-item">
+                    <div class="source-title">${source.title}</div>
+                    <div class="source-meta">${source.authors} (${source.year})</div>
+                    <div class="source-relevance relevance-${source.relevance?.toLowerCase()}">${source.relevance} Relevance</div>
+                    <div class="source-findings">${source.keyFindings}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+            
+            ${data.thematicAnalysis ? `
+            <div class="thematic-analysis">
+              <h3>Thematic Analysis</h3>
+              ${data.thematicAnalysis.majorThemes ? `
+                <div class="themes">
+                  <h4>Major Themes</h4>
+                  ${data.thematicAnalysis.majorThemes.map(theme => `
+                    <div class="theme-item">
+                      <div class="theme-name">${theme.theme}</div>
+                      <div class="theme-description">${theme.description}</div>
+                      <div class="theme-support">${theme.supportingStudies} supporting studies</div>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+              
+              ${data.thematicAnalysis.researchGaps ? `
+                <div class="research-gaps">
+                  <h4>Research Gaps</h4>
+                  <ul>
+                    ${data.thematicAnalysis.researchGaps.map(gap => `<li>${gap}</li>`).join('')}
+                  </ul>
+                </div>
+              ` : ''}
+            </div>
+            ` : ''}
+            
+            ${data.synthesis ? `
+            <div class="synthesis">
+              <h3>Synthesis</h3>
+              <div class="findings-grid">
+                <div class="key-findings">
+                  <h4>Key Findings</h4>
+                  <ul>
+                    ${data.synthesis.keyFindings?.map(finding => `<li>${finding}</li>`).join('') || '<li>No findings available</li>'}
+                  </ul>
+                </div>
+                <div class="implications">
+                  <h4>Implications</h4>
+                  <ul>
+                    ${data.synthesis.implications?.map(implication => `<li>${implication}</li>`).join('') || '<li>No implications available</li>'}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            ` : ''}
+          </div>
+        `;
+        container.innerHTML = html;
+      }
+
+      function createEmpiricalResearchViz(data, container) {
+        const html = `
+          <div class="research-visualization empirical-research">
+            <h2>${data.researchTitle || 'Empirical Research'}</h2>
+            <div class="abstract">
+              <h3>Abstract</h3>
+              <p>${data.abstract || 'Abstract not available'}</p>
+            </div>
+            
+            ${data.researchDesign ? `
+            <div class="research-design">
+              <h3>Research Design</h3>
+              <div class="design-grid">
+                <div><strong>Approach:</strong> ${data.researchDesign.approach}</div>
+                <div><strong>Design:</strong> ${data.researchDesign.design}</div>
+                <div><strong>Timeline:</strong> ${data.researchDesign.timeline}</div>
+                <div><strong>Setting:</strong> ${data.researchDesign.setting}</div>
+              </div>
+            </div>
+            ` : ''}
+            
+            ${data.hypotheses ? `
+            <div class="hypotheses">
+              <h3>Hypotheses</h3>
+              <div class="hypothesis-list">
+                ${data.hypotheses.map(hyp => `
+                  <div class="hypothesis-item">
+                    <div class="hypothesis-statement">${hyp.hypothesis}</div>
+                    <div class="hypothesis-rationale">${hyp.rationale}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+            
+            ${data.methodology ? `
+            <div class="methodology">
+              <h3>Methodology</h3>
+              ${data.methodology.participants ? `
+                <div class="participants">
+                  <h4>Participants</h4>
+                  <div class="participant-info">
+                    <div><strong>Target Population:</strong> ${data.methodology.participants.targetPopulation}</div>
+                    <div><strong>Sample Size:</strong> ${data.methodology.participants.sampleSize}</div>
+                    <div><strong>Sampling Method:</strong> ${data.methodology.participants.samplingMethod}</div>
+                  </div>
+                </div>
+              ` : ''}
+              
+              ${data.methodology.variables ? `
+                <div class="variables">
+                  <h4>Variables</h4>
+                  <div class="variables-grid">
+                    <div><strong>Dependent:</strong> ${data.methodology.variables.dependent?.join(', ')}</div>
+                    <div><strong>Independent:</strong> ${data.methodology.variables.independent?.join(', ')}</div>
+                    <div><strong>Control:</strong> ${data.methodology.variables.control?.join(', ')}</div>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+            ` : ''}
+            
+            ${data.timeline ? `
+            <div class="timeline">
+              <h3>Timeline</h3>
+              <div class="timeline-phases">
+                ${data.timeline.phases?.map(phase => `
+                  <div class="phase-item">
+                    <div class="phase-name">${phase.phase}</div>
+                    <div class="phase-duration">${phase.duration}</div>
+                    <div class="phase-activities">${phase.activities?.join(', ')}</div>
+                  </div>
+                `).join('') || '<div>No timeline phases available</div>'}
+              </div>
+            </div>
+            ` : ''}
+          </div>
+        `;
+        container.innerHTML = html;
+      }
+
+      function createAnalyticalFrameworkViz(data, container) {
+        const html = `
+          <div class="research-visualization analytical-framework">
+            <h2>${data.researchTitle || 'Analytical Framework'}</h2>
+            <div class="framework-overview">
+              <h3>Framework Overview</h3>
+              <p>${data.frameworkOverview || 'Overview not available'}</p>
+            </div>
+            
+            ${data.comparisonMatrix ? `
+            <div class="comparison-matrix">
+              <h3>Comparison Matrix</h3>
+              <div class="matrix-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Entity</th>
+                      ${data.comparisonMatrix.criteria?.map(criterion => `<th>${criterion.criterion}</th>`).join('') || '<th>No criteria</th>'}
+                      <th>Overall Rating</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${data.comparisonMatrix.assessmentResults?.map(result => `
+                      <tr>
+                        <td><strong>${result.entity}</strong></td>
+                        ${result.scores?.map(score => `<td>${score.score}</td>`).join('') || '<td>No scores</td>'}
+                        <td><strong>${result.overallRating}</strong></td>
+                      </tr>
+                    `).join('') || '<tr><td colspan="100%">No assessment results available</td></tr>'}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            ` : ''}
+            
+            ${data.gapAnalysis ? `
+            <div class="gap-analysis">
+              <h3>Gap Analysis</h3>
+              <div class="gap-comparison">
+                <div class="current-state">
+                  <h4>Current State</h4>
+                  <div><strong>Strengths:</strong> ${data.gapAnalysis.currentState?.strengths?.join(', ')}</div>
+                  <div><strong>Weaknesses:</strong> ${data.gapAnalysis.currentState?.weaknesses?.join(', ')}</div>
+                </div>
+                <div class="desired-state">
+                  <h4>Desired State</h4>
+                  <div><strong>Goals:</strong> ${data.gapAnalysis.desiredState?.goals?.join(', ')}</div>
+                  <div><strong>Requirements:</strong> ${data.gapAnalysis.desiredState?.requirements?.join(', ')}</div>
+                </div>
+              </div>
+              ${data.gapAnalysis.identifiedGaps ? `
+                <div class="identified-gaps">
+                  <h4>Identified Gaps</h4>
+                  ${data.gapAnalysis.identifiedGaps.map(gap => `
+                    <div class="gap-item">
+                      <div class="gap-description">${gap.gap}</div>
+                      <div class="gap-meta">
+                        <span class="impact impact-${gap.impact?.toLowerCase()}">${gap.impact} Impact</span>
+                        <span class="priority priority-${gap.priority?.toLowerCase()}">${gap.priority} Priority</span>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+            </div>
+            ` : ''}
+            
+            ${data.keyFindings ? `
+            <div class="key-findings">
+              <h3>Key Findings</h3>
+              <div class="findings-list">
+                ${data.keyFindings.map(finding => `
+                  <div class="finding-item">
+                    <div class="finding-text">${finding.finding}</div>
+                    <div class="finding-significance significance-${finding.significance?.toLowerCase()}">${finding.significance} Significance</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+          </div>
+        `;
+        container.innerHTML = html;
+      }
+
+      function createDataVisualizationViz(data, container) {
+        const html = `
+          <div class="research-visualization data-visualization">
+            <h2>${data.researchTitle || 'Data Visualization Strategy'}</h2>
+            <div class="viz-strategy">
+              <h3>Visualization Strategy</h3>
+              <p>${data.visualizationStrategy || 'Strategy not available'}</p>
+            </div>
+            
+            ${data.dataRequirements ? `
+            <div class="data-requirements">
+              <h3>Data Requirements</h3>
+              <div class="requirements-grid">
+                <div><strong>Primary Sources:</strong> ${data.dataRequirements.primaryDataSources?.join(', ')}</div>
+                <div><strong>Data Types:</strong> ${data.dataRequirements.dataTypes?.join(', ')}</div>
+                <div><strong>Update Frequency:</strong> ${data.dataRequirements.updateFrequency}</div>
+              </div>
+            </div>
+            ` : ''}
+            
+            ${data.visualizationDashboard ? `
+            <div class="dashboard-design">
+              <h3>Dashboard Design</h3>
+              <div class="dashboard-layout">
+                <div><strong>Layout:</strong> ${data.visualizationDashboard.layout}</div>
+              </div>
+              
+              ${data.visualizationDashboard.charts ? `
+                <div class="charts">
+                  <h4>Charts & Visualizations</h4>
+                  <div class="chart-grid">
+                    ${data.visualizationDashboard.charts.map(chart => `
+                      <div class="chart-item">
+                        <div class="chart-title">${chart.title}</div>
+                        <div class="chart-type">${chart.chartType}</div>
+                        <div class="chart-purpose">${chart.purpose}</div>
+                        <div class="chart-priority priority-${chart.priority?.toLowerCase()}">${chart.priority} Priority</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+              
+              ${data.visualizationDashboard.kpis ? `
+                <div class="kpis">
+                  <h4>Key Performance Indicators</h4>
+                  <div class="kpi-grid">
+                    ${data.visualizationDashboard.kpis.map(kpi => `
+                      <div class="kpi-item">
+                        <div class="kpi-metric">${kpi.metric}</div>
+                        <div class="kpi-calculation">${kpi.calculation}</div>
+                        <div class="kpi-visualization">${kpi.visualization}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+            ` : ''}
+            
+            ${data.technicalImplementation ? `
+            <div class="technical-implementation">
+              <h3>Technical Implementation</h3>
+              <div class="tech-grid">
+                <div><strong>Platforms:</strong> ${data.technicalImplementation.platforms?.join(', ')}</div>
+                <div><strong>Data Processing:</strong> ${data.technicalImplementation.dataProcessing}</div>
+                <div><strong>Performance:</strong> ${data.technicalImplementation.performance}</div>
+              </div>
+            </div>
+            ` : ''}
+          </div>
+        `;
+        container.innerHTML = html;
+      }
+
+      function createAcademicReportViz(data, container) {
+        const html = `
+          <div class="research-visualization academic-report">
+            <h2>${data.researchTitle || 'Academic Report Structure'}</h2>
+            
+            ${data.documentStructure ? `
+            <div class="document-structure">
+              <h3>Document Structure</h3>
+              <div class="sections-list">
+                ${data.documentStructure.sections?.map(section => `
+                  <div class="section-item">
+                    <div class="section-header">
+                      <span class="section-number">${section.sectionNumber}</span>
+                      <span class="section-title">${section.title}</span>
+                      <span class="section-length">${section.length}</span>
+                    </div>
+                    <div class="section-purpose">${section.purpose}</div>
+                    <div class="section-elements">
+                      <strong>Key Elements:</strong> ${section.keyElements?.join(', ')}
+                    </div>
+                    <div class="section-audience">
+                      <strong>Audience:</strong> ${section.audience}
+                    </div>
+                  </div>
+                `).join('') || '<div>No sections available</div>'}
+              </div>
+            </div>
+            ` : ''}
+            
+            ${data.writingGuidelines ? `
+            <div class="writing-guidelines">
+              <h3>Writing Guidelines</h3>
+              <div class="guidelines-grid">
+                <div><strong>Tone:</strong> ${data.writingGuidelines.tone}</div>
+                <div><strong>Person:</strong> ${data.writingGuidelines.person}</div>
+                <div><strong>Citation Style:</strong> ${data.writingGuidelines.citationStyle}</div>
+                ${data.writingGuidelines.lengthGuidance ? `
+                  <div><strong>Length:</strong> ${data.writingGuidelines.lengthGuidance.totalPages} (${data.writingGuidelines.lengthGuidance.wordCount})</div>
+                ` : ''}
+              </div>
+            </div>
+            ` : ''}
+            
+            ${data.timeline ? `
+            <div class="project-timeline">
+              <h3>Project Timeline</h3>
+              <div class="timeline-phases">
+                ${data.timeline.phases?.map(phase => `
+                  <div class="phase-item">
+                    <div class="phase-name">${phase.phase}</div>
+                    <div class="phase-duration">${phase.duration}</div>
+                    <div class="phase-deliverables">${phase.deliverables?.join(', ')}</div>
+                  </div>
+                `).join('') || '<div>No timeline phases available</div>'}
+              </div>
+            </div>
+            ` : ''}
+            
+            ${data.qualityChecklist ? `
+            <div class="quality-checklist">
+              <h3>Quality Checklist</h3>
+              <div class="checklist-categories">
+                ${Object.entries(data.qualityChecklist).map(([category, items]) => `
+                  <div class="checklist-category">
+                    <h4>${category.charAt(0).toUpperCase() + category.slice(1)}</h4>
+                    <ul>
+                      ${Array.isArray(items) ? items.map(item => `<li>${item}</li>`).join('') : `<li>${items}</li>`}
+                    </ul>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+          </div>
+        `;
+        container.innerHTML = html;
+      }
+
       function updateOutput() {
         const outputSpan = document.getElementById('output-span');
         if (!outputSpan) {
@@ -80,26 +499,61 @@
           setTimeout(updateOutput, 100);
           return;
         }
+
         const responseKey = 'researchIqResponse';
         console.log('Looking for data with key:', responseKey);
+        
         let data;
         try {
           data = getJSON(responseKey);
         } catch (err) {
           console.error('Error getting data:', err);
         }
+
         if (data) {
-          outputSpan.textContent = JSON.stringify(data, null, 2);
-          console.log('Data displayed successfully');
+          console.log('Research data found:', data);
+          
+          // Check if it's already processed response data
+          if (data.data) {
+            data = data.data;
+          }
+          
+          // Determine research type and create appropriate visualization
+          const researchType = data.researchType || 'literature-review';
+          console.log('Creating visualization for research type:', researchType);
+          
+          const visualizer = researchVisualizers[researchType] || researchVisualizers['literature-review'];
+          
+          try {
+            visualizer(data, outputSpan);
+            console.log('Research visualization created successfully');
+            
+            // Initialize copy functionality
+            if (window.initializeCopyButtons) {
+              window.initializeCopyButtons();
+            }
+          } catch (vizError) {
+            console.error('Error creating visualization:', vizError);
+            outputSpan.innerHTML = `
+              <div class="error-display">
+                <h3>Visualization Error</h3>
+                <p>Could not create visualization for ${researchType}</p>
+                <details>
+                  <summary>Raw Data</summary>
+                  <pre>${JSON.stringify(data, null, 2)}</pre>
+                </details>
+              </div>
+            `;
+          }
         } else {
           outputSpan.innerHTML = `
             <div class="no-data">
-              <div class="no-data-icon">🚫</div>
-              <div class="no-data-message">No Response Found</div>
-              <div class="no-data-help">Please try again.</div>
+              <div class="no-data-icon">�</div>
+              <div class="no-data-message">No Research Analysis Found</div>
+              <div class="no-data-help">Please generate a research analysis first.</div>
             </div>
           `;
-          console.log('No data found for key:', responseKey);
+          console.log('No research data found');
         }
       }
       setTimeout(updateOutput, 100);
@@ -197,5 +651,15 @@
       }
     </script>
   </div>
+
+  <!-- Call updateOutput on load -->
+  <script>
+    (function() {
+      // Call updateOutput on load
+      updateOutput();
+      // Optionally, listen for storage events to auto-update if needed
+      window.addEventListener('storage', updateOutput);
+    })();
+  </script>
 </body>
 </html>
