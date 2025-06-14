@@ -102,10 +102,10 @@
 */
 
 (function() {
-  console.log("[FashionIQ] Script starting");  // Generate button functionality
+  console.log("[FashionIQ] Script starting");
+
+  // Generate button handler
   async function handleGenerateFashionIq() {
-    console.log('[FashionIQ] Generate button clicked');
-    
     try {
       // Check if images are available through centralized system
       const hasImages = window.getImageUploadImages && window.getImageUploadImages().length > 0;
@@ -119,9 +119,6 @@
         alert('Please complete the form before generating your fashion analysis.');
         return;
       }
-
-      // Debug: Log the data being sent
-      console.log('[FashionIQ] Data being sent to API:', JSON.stringify(formData, null, 2));
 
       // Use enhanced loading with educational facts
       const result = await window.enhancedLoading(
@@ -160,7 +157,6 @@
         }
       });
       document.dispatchEvent(event);
-      console.log('[FashionIQ] Dispatched api-response-received event');
       
     } catch (error) {
       console.error('[FashionIQ] Error generating fashion analysis:', error);
@@ -174,7 +170,6 @@
     if (!generateBtn) return;
     
     const hasImages = window.getImageUploadImages && window.getImageUploadImages().length > 0;
-    console.log('[FashionIQ] Updating button state, hasImages:', hasImages);
     
     if (hasImages) {
       generateBtn.disabled = false;
@@ -187,62 +182,25 @@
     }
   }
 
-  // Main initialization function
+  // Simple initialization - set up event listeners
   function initialize() {
     console.log("[FashionIQ] Initializing...");
     
-    // Set up event listeners for the generate button
+    // Set up generate button event listener
     const generateBtn = document.getElementById('generate-fashion-btn');
     if (generateBtn) {
       generateBtn.removeEventListener('click', handleGenerateFashionIq);
       generateBtn.addEventListener('click', handleGenerateFashionIq);
+      console.log("[FashionIQ] Generate button event listener set up");
+    } else {
+      console.error("[FashionIQ] Generate button not found!");
     }
 
     // Initial button state check
     updateButtonState();
 
     // Listen for image upload changes
-    document.addEventListener('imageUploadChanged', function(event) {
-      console.log('[FashionIQ] Image upload changed event received:', event.detail);
-      updateButtonState();
-    });
-
-    // Also listen for the container-specific event
-    const uploadContainer = document.getElementById('fashion-upload-container');
-    if (uploadContainer) {
-      uploadContainer.addEventListener('imagesChanged', function(event) {
-        console.log('[FashionIQ] Container images changed event received:', event.detail);
-        updateButtonState();
-      });
-    }
-
-    // Periodic check for images (fallback in case events don't fire)
-    setInterval(updateButtonState, 2000);
-
-    // Delayed button state check in case image upload initializes after this
-    setTimeout(() => {
-      updateButtonState();
-    }, 1000);
-
-    ensureImageUpload();
-
-    console.log("[FashionIQ] Initialization complete");
-  }
-
-  function ensureImageUpload() {
-    // Manually initialize image upload for fashion container
-    if (typeof window.initializeImageUpload === 'function') {
-      console.log('[FashionIQ] Manually triggering image upload initialization');
-      window.initializeImageUpload();
-    } else {
-      console.log('[FashionIQ] initializeImageUpload not available yet, will retry...');
-      setTimeout(() => {
-        if (typeof window.initializeImageUpload === 'function') {
-          console.log('[FashionIQ] Retrying image upload initialization');
-          window.initializeImageUpload();
-        }
-      }, 500);
-    }
+    document.addEventListener('imageUploadChanged', updateButtonState);
   }
 
   // Initialize immediately if DOM is ready
@@ -257,15 +215,6 @@
     console.log("[FashionIQ] Detected load through datain.js, reinitializing");
     initialize();
   });
-
-  // Additional safety net - try again after a short delay
-  setTimeout(() => {
-    const generateBtn = document.getElementById('generate-fashion-btn');
-    if (generateBtn && !generateBtn.onclick) {
-      console.log("[FashionIQ] Generate button found but no handler, trying initialization again");
-      initialize();
-    }
-  }, 200);
 
   // Export functions for external access
   window.fashionIq = { 
