@@ -72,7 +72,7 @@ class ImageUploadUtility {
                         font-family: 'Inter', sans-serif;
                         border: 2px dashed #4a7c59;
                         border-radius: 8px;
-                        background: #f2f9f3;
+                        background:rgb(73, 94, 76);
                         padding: 16px;
                         box-sizing: border-box;
                         transition: all 0.3s ease;
@@ -80,7 +80,7 @@ class ImageUploadUtility {
                     
                     .image-upload-utility.drag-over {
                         border-color: #2d5a3d;
-                        background: #eef7f0;
+                        background:rgb(76, 102, 82);
                         transform: scale(1.02);
                     }
                     
