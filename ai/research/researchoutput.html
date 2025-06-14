@@ -492,11 +492,11 @@
         container.innerHTML = html;
       }
 
-      function updateOutput() {
+      window.updateOutput = function updateOutput() {
         const outputSpan = document.getElementById('output-span');
         if (!outputSpan) {
           console.log('Output span not found, will retry');
-          setTimeout(updateOutput, 100);
+          setTimeout(window.updateOutput, 100);
           return;
         }
 
@@ -555,8 +555,8 @@
           `;
           console.log('No research data found');
         }
-      }
-      setTimeout(updateOutput, 100);
+      };
+      setTimeout(window.updateOutput, 100);
     })();
   </script>
   <script src="../../utility/copy.js"></script>

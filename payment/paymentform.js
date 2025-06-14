@@ -493,8 +493,10 @@ if (document.readyState === 'loading') {
     enablePremiumFeatures();
 }
 // Observe DOM for dynamically added premium-blur elements
-const observer = new MutationObserver(() => enablePremiumFeatures());
-observer.observe(document.body, { childList: true, subtree: true });
+if (!window.premiumPaymentObserver) {
+    window.premiumPaymentObserver = new MutationObserver(() => enablePremiumFeatures());
+    window.premiumPaymentObserver.observe(document.body, { childList: true, subtree: true });
+}
 // Expose for other scripts
 window.enablePremiumFeatures = enablePremiumFeatures;
 // After successful payment, set localStorage and call enablePremiumFeatures

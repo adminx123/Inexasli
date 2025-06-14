@@ -283,22 +283,23 @@ function initScrollToTopFAB() {
     };
 
     // Use MutationObserver to watch for data container changes
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === 'childList' || mutation.type === 'attributes') {
-                observeDataContainers();
-                toggleFABVisibility(); // Recheck visibility when DOM changes
-            }
+    if (!window.enhancedUIObserver) {
+        window.enhancedUIObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList' || mutation.type === 'attributes') {
+                    observeDataContainers();
+                    toggleFABVisibility(); // Recheck visibility when DOM changes
+                }
+            });
         });
-    });
+        window.enhancedUIObserver.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['class', 'data-state']
+        });
+    }
     
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['class', 'data-state']
-    });
-
     fabContainer.appendChild(fab);
     
     // Append to device container if it exists, otherwise to body
