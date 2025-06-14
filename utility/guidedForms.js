@@ -21,10 +21,9 @@
  * 
  * Usage:
  * const guidedForms = new GuidedFormSystem({
- *   dynamicSizing: true,           // Enable dynamic sizing (default: true)
- *   minContainerHeight: 200,       // Minimum height in pixels (default: 200)
- *   maxContainerHeight: '80vh',    // Maximum height (default: '80vh')
- *   sizingPadding: 60             // Extra padding for calculations (default: 60)
+ *   smoothTransitions: true,       // Enable smooth transitions (default: true)
+ *   autoAdvance: true,            // Auto advance on selection (default: true)
+ *   showProgressIndicator: true   // Show progress dots (default: true)
  * });
  */
 
@@ -39,10 +38,6 @@ class GuidedFormSystem {
             enableSkipping: true,
             preserveState: true,
             respectExistingPersistence: true, // Don't interfere with existing form persistence
-            dynamicSizing: true, // Enable dynamic container sizing
-            minContainerHeight: 200, // Minimum container height in pixels
-            maxContainerHeight: '90vh', // Maximum container height - increased for better content expansion
-            sizingPadding: 60, // Extra padding for dynamic sizing calculations
             ...options
         };
         
@@ -51,8 +46,6 @@ class GuidedFormSystem {
         this.isInitialized = false;
         this.completedSteps = new Set();
         this.skippedSteps = new Set();
-        this.originalContainerHeight = null; // Store original container height
-        this.dataContainer = null; // Reference to the data container
         
         // Bind methods to preserve context
         this.handleGridItemToggled = this.handleGridItemToggled.bind(this);
@@ -81,9 +74,6 @@ class GuidedFormSystem {
         if (!this.container) {
             return false;
         }
-
-        // Initialize data container reference for dynamic sizing
-        this.initializeDataContainerRef();
         
         this.analyzeFormStructure();
         this.setupEventListeners();
@@ -92,81 +82,6 @@ class GuidedFormSystem {
         
         this.isInitialized = true;
         return true;
-    }
-
-    /**
-     * Initialize data container reference for dynamic sizing
-     */
-    initializeDataContainerRef() {
-        // Find the data container that might need dynamic sizing
-        this.dataContainer = document.querySelector('.data-container-in.expanded');
-        
-        // If no expanded container found, look for any data-container-in
-        if (!this.dataContainer) {
-            this.dataContainer = document.querySelector('.data-container-in') || 
-                               this.container.closest('.data-container-in');
-        }
-        
-        if (this.dataContainer && this.config.dynamicSizing) {
-            // Only store original height if container is actually expanded
-            if (this.dataContainer.classList.contains('expanded')) {
-                const computedStyle = window.getComputedStyle(this.dataContainer);
-                this.originalContainerHeight = computedStyle.height;
-            } else {
-                // Clear reference until container is expanded
-                this.dataContainer = null;
-            }
-            
-            // Set up listeners regardless of current state
-            this.setupDataContainerListeners();
-        }
-    }
-
-    /**
-     * Set up listeners for data container state changes
-     */
-    setupDataContainerListeners() {
-        // Listen for data-in state changes to reapply dynamic sizing
-        document.addEventListener('datain-state-changed', (event) => {
-            const state = event.detail?.state;
-            
-            if (state === 'expanded' && this.isInitialized) {
-                // Update our reference to the expanded container
-                this.dataContainer = document.querySelector('.data-container-in.expanded');
-                // Show progress indicator when expanded
-                const progressIndicator = document.getElementById('guided-form-progress');
-                if (progressIndicator) {
-                    progressIndicator.style.display = 'flex';
-                }
-                // Reapply sizing for current step
-                if (this.steps[this.currentStep]) {
-                    setTimeout(() => {
-                        this.adjustContainerSize(this.steps[this.currentStep]);
-                    }, 100);
-                }
-            } else if (state === 'initial' || state === 'collapsed') {
-                // When collapsing, hide the progress indicator to prevent it from showing
-                const progressIndicator = document.getElementById('guided-form-progress');
-                if (progressIndicator) {
-                    progressIndicator.style.display = 'none';
-                }
-                
-                // Remove our height override to allow normal collapse behavior
-                if (this.dataContainer) {
-                    this.dataContainer.style.height = '';
-                    this.dataContainer.style.transition = '';
-                }
-                // Clear the reference since container is no longer expanded
-                this.dataContainer = null;
-            }
-        });
-
-        // Listen for window resize to recalculate container sizes
-        window.addEventListener('resize', () => {
-            if (this.isInitialized && this.dataContainer && this.config.dynamicSizing) {
-                this.debounceResize();
-            }
-        });
     }
 
     /**
@@ -558,142 +473,18 @@ class GuidedFormSystem {
             });
         }, this.config.transitionDuration + 80); // Wait for transition to finish
         // --- END SCROLL TO TOP LOGIC ---
-
-        // Apply dynamic sizing for new step
-        this.adjustContainerSize(nextStep);
     }
 
     /**
      * Adjust container size to fit current step content
      */
     adjustContainerSize(step) {
-        if (!this.config.dynamicSizing || !this.dataContainer) {
-            return;
+        // Direct call to datain container manager - no delays needed here
+        if (window.dataInContainerManager && window.dataInContainerManager.adjustContainerSize) {
+            window.dataInContainerManager.adjustContainerSize(step.element);
         }
-
-        // Only apply dynamic sizing if the container is actually expanded
-        if (!this.dataContainer.classList.contains('expanded')) {
-            return;
-        }
-
-        // Small delay to ensure step is fully rendered
-        setTimeout(() => {
-            try {
-                // Double-check the container is still expanded (user might have collapsed it)
-                if (!this.dataContainer || !this.dataContainer.classList.contains('expanded')) {
-                    return;
-                }
-
-                // Calculate the content height needed for this step
-                const stepHeight = this.calculateStepHeight(step);
-                const containerHeight = this.calculateOptimalContainerHeight(stepHeight);
-                
-                // Apply the new height with smooth transition
-                this.dataContainer.style.transition = 'height 0.3s ease-in-out';
-                this.dataContainer.style.height = `${containerHeight}px`;
-                
-                // Dispatch resize event for any listeners
-                window.dispatchEvent(new Event('resize'));
-                
-            } catch (error) {
-            }
-        }, 100);
     }
 
-    /**
-     * Calculate the height needed for a specific step
-     */
-    calculateStepHeight(step) {
-        if (!step || !step.element) {
-            return this.config.minContainerHeight;
-        }
-
-        // Temporarily show the step to measure it
-        const wasVisible = step.isVisible;
-        const originalDisplay = step.element.style.display;
-        const originalOpacity = step.element.style.opacity;
-        const originalTransform = step.element.style.transform;
-        const originalPosition = step.element.style.position;
-        
-        // Make element visible but transparent for measurement
-        step.element.style.display = 'flex';
-        step.element.style.opacity = '0';
-        step.element.style.transform = 'none';
-        step.element.style.position = 'static';
-        step.element.style.visibility = 'hidden'; // Hidden but still takes up space
-        
-        // Force a reflow to ensure accurate measurements
-        step.element.offsetHeight;
-        
-        // Get the actual height including margins
-        const rect = step.element.getBoundingClientRect();
-        const computedStyle = window.getComputedStyle(step.element);
-        const marginTop = parseFloat(computedStyle.marginTop) || 0;
-        const marginBottom = parseFloat(computedStyle.marginBottom) || 0;
-        
-        const stepHeight = rect.height + marginTop + marginBottom;
-        
-        // Restore original styles
-        step.element.style.display = originalDisplay;
-        step.element.style.opacity = originalOpacity;
-        step.element.style.transform = originalTransform;
-        step.element.style.position = originalPosition;
-        step.element.style.visibility = '';
-        
-        // Handle edge cases
-        const finalHeight = Math.max(stepHeight, 50); // Minimum 50px for very small steps
-        
-        return finalHeight;
-    }
-
-    /**
-     * Calculate optimal container height based on step content
-     */
-    calculateOptimalContainerHeight(stepHeight) {
-        if (!stepHeight || stepHeight <= 0) {
-            return this.config.minContainerHeight;
-        }
-
-        // Add padding for progress indicator, close button, and general spacing
-        const totalHeight = stepHeight + this.config.sizingPadding;
-        
-        // Respect minimum height
-        const minHeight = this.config.minContainerHeight;
-        
-        // Calculate preferred maximum height
-        let preferredMaxHeight;
-        if (typeof this.config.maxContainerHeight === 'string' && this.config.maxContainerHeight.endsWith('vh')) {
-            const vhValue = parseFloat(this.config.maxContainerHeight);
-            preferredMaxHeight = (window.innerHeight * vhValue) / 100;
-        } else {
-            preferredMaxHeight = parseInt(this.config.maxContainerHeight) || window.innerHeight * 0.8;
-        }
-        
-        // Mobile-specific adjustments for preferred max height
-        if (window.innerWidth <= 480) {
-            preferredMaxHeight = Math.min(preferredMaxHeight, window.innerHeight * 0.9);
-        }
-        
-        // Allow content-driven expansion beyond preferred max when needed
-        // Use a reasonable absolute maximum to prevent excessive heights
-        const absoluteMaxHeight = window.innerHeight * 0.95; // Never exceed 95% of viewport
-        
-        // If content needs more space than preferred max, allow it up to absolute max
-        let effectiveMaxHeight;
-        if (totalHeight > preferredMaxHeight && totalHeight <= absoluteMaxHeight) {
-            effectiveMaxHeight = totalHeight; // Allow content to dictate height
-        } else if (totalHeight > absoluteMaxHeight) {
-            effectiveMaxHeight = absoluteMaxHeight; // Cap at absolute maximum
-        } else {
-            effectiveMaxHeight = preferredMaxHeight; // Use preferred max
-        }
-        
-        // Constrain to min/max bounds
-        const finalHeight = Math.max(minHeight, Math.min(totalHeight, effectiveMaxHeight));
-        
-        return finalHeight;
-    }
-    
     /**
      * Display a step with smooth transition
      */
@@ -707,11 +498,19 @@ class GuidedFormSystem {
             step.element.style.transform = 'translateY(20px)';
             step.element.style.transition = `opacity ${this.config.transitionDuration}ms ease, transform ${this.config.transitionDuration}ms ease`;
             
-            // Trigger animation
+            // Trigger animation and then adjust container size
             requestAnimationFrame(() => {
                 step.element.style.opacity = '1';
                 step.element.style.transform = 'translateY(0)';
+                
+                // Adjust container size after transition completes
+                setTimeout(() => {
+                    this.adjustContainerSize(step);
+                }, this.config.transitionDuration);
             });
+        } else {
+            // No transitions - adjust size immediately
+            this.adjustContainerSize(step);
         }
         
         // Focus first interactive element
@@ -763,8 +562,8 @@ class GuidedFormSystem {
             }
         });
         
-        // Apply dynamic sizing for the first step only if container is expanded
-        if (this.steps.length > 0 && this.dataContainer && this.dataContainer.classList.contains('expanded')) {
+        // Apply dynamic sizing for the first step
+        if (this.steps.length > 0) {
             this.adjustContainerSize(this.steps[0]);
         }
     }
@@ -931,32 +730,14 @@ class GuidedFormSystem {
             this.dataContainer.style.height = '';
             this.dataContainer.style.transition = '';
         }
-        
-        // Clear container reference
-        this.dataContainer = null;
     }
 
     /**
      * Restore original container size when exiting guided mode
      */
     restoreOriginalContainerSize() {
-        if (this.dataContainer && this.originalContainerHeight && this.config.dynamicSizing) {
-            // Only restore if container is still expanded
-            if (this.dataContainer.classList.contains('expanded')) {
-                this.dataContainer.style.transition = 'height 0.3s ease-in-out';
-                this.dataContainer.style.height = this.originalContainerHeight;
-                
-                // Remove the transition after completion
-                setTimeout(() => {
-                    if (this.dataContainer) {
-                        this.dataContainer.style.transition = '';
-                    }
-                }, 300);
-            } else {
-                // Container is collapsed, just clean up
-                this.cleanupDynamicSizing();
-            }
-        }
+        // Container sizing is now handled by datain.js
+        // No action needed here
     }
     
     /**
@@ -998,10 +779,6 @@ class GuidedFormSystem {
             clearTimeout(this.inputValidationTimeout);
         }
         
-        // Clear references
-        this.dataContainer = null;
-        this.originalContainerHeight = null;
-        
         this.isInitialized = false;
     }
     
@@ -1010,7 +787,7 @@ class GuidedFormSystem {
      * Useful for developers who want to refresh sizing after dynamic content changes
      */
     refreshContainerSize() {
-        if (this.isInitialized && this.config.dynamicSizing && this.steps[this.currentStep]) {
+        if (this.isInitialized && this.steps[this.currentStep]) {
             this.adjustContainerSize(this.steps[this.currentStep]);
         }
     }
@@ -1033,21 +810,12 @@ class GuidedFormSystem {
      * Get current dynamic sizing status and measurements
      */
     getSizingInfo() {
-        if (!this.config.dynamicSizing) {
-            return { enabled: false };
-        }
         const currentStep = this.steps[this.currentStep];
         const info = {
-            enabled: true,
+            enabled: !!window.dataInContainerManager,
             currentStep: this.currentStep,
             stepCount: this.steps.length,
-            dataContainer: !!this.dataContainer,
-            originalHeight: this.originalContainerHeight,
         };
-        if (currentStep && this.dataContainer) {
-            info.currentStepHeight = this.calculateStepHeight(currentStep);
-            info.currentContainerHeight = this.dataContainer.style.height || window.getComputedStyle(this.dataContainer).height;
-        }
         return info;
     }
 }
@@ -1072,10 +840,6 @@ function initGuidedForms(options = {}) {
         smoothTransitions: true,
         enableSkipping: true,
         autoStart: true,
-        dynamicSizing: true, // Enable dynamic container sizing by default
-        minContainerHeight: 200,
-        maxContainerHeight: '80vh',
-        sizingPadding: 60,
         ...options
     };
     

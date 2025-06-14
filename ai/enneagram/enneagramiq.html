@@ -282,10 +282,13 @@ I often took charge of group projects at school"></textarea>
     initializeEnneagramIQ();
   }
 
-  // Handle loading through datain.js
+  // Handle loading through datain.js - only initialize if enneagram module is loaded
   document.addEventListener('data-in-loaded', function(e) {
-    console.log("[EnneagramIQ] Detected load through datain.js, reinitializing");
-    runInitialization();
+    const moduleType = e.detail?.moduleType;
+    if (moduleType === 'enneagram') {
+      console.log("[EnneagramIQ] Enneagram module loaded through datain.js, reinitializing");
+      runInitialization();
+    }
   });
 
   // Additional safety net - try again after a short delay

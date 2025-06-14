@@ -1637,10 +1637,13 @@ import setJSON from '/utility/setJSON.js';
         initIncomeForm();
     }
 
-    // Listen for datain.js events
+    // Listen for datain.js events - only initialize if income module is loaded
     document.addEventListener('data-in-loaded', function(e) {
-        console.log("[IncomeIQ] Detected load through datain.js, reinitializing");
-        initIncomeForm();
+        const moduleType = e.detail?.moduleType;
+        if (moduleType === 'income') {
+            console.log("[IncomeIQ] Income module loaded through datain.js, reinitializing");
+            initIncomeForm();
+        }
     });
 
     // Additional safety net - try again after a short delay

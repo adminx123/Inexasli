@@ -468,10 +468,23 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             // Dispatch custom event to notify that data-in content has loaded
+            const moduleType = url.includes('/fashion/') ? 'fashion' :
+                              url.includes('/calorie/') ? 'calorie' :
+                              url.includes('/decision/') ? 'decision' :
+                              url.includes('/enneagram/') ? 'enneagram' :
+                              url.includes('/event/') ? 'event' :
+                              url.includes('/philosophy/') ? 'philosophy' :
+                              url.includes('/quiz/') ? 'quiz' :
+                              url.includes('/research/') ? 'research' :
+                              url.includes('/social/') ? 'social' :
+                              url.includes('/income/') ? 'income' :
+                              'unknown';
+                              
             document.dispatchEvent(new CustomEvent('data-in-loaded', {
                 detail: {
                     url: url,
-                    container: dataContainer
+                    container: dataContainer,
+                    moduleType: moduleType
                 }
             }));
 
@@ -1013,6 +1026,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                 detail: { state: 'expanded' }
             }));
             
+            // Auto-adjust container size when expanded
+            setTimeout(() => {
+                const currentContent = dataContent ? dataContent.querySelector('.row1:not([style*="display: none"])') : null;
+                if (currentContent) {
+                    adjustContainerSize(currentContent);
+                }
+            }, 50);
+            
             const leftSideBarOpen = new CustomEvent('left-sidebar-open', {
                 detail: {
                     state: 'expanded'
@@ -1344,7 +1365,165 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
     }
 };
 
+// ====================
+// Container Sizing Management
+// ====================
 
+/**
+ * Container sizing configuration
+ */
+const containerSizingConfig = {
+    minContainerHeight: 300,
+    maxContainerHeight: '80vh',
+    sizingPadding: 100,
+    transitionDuration: 300,
+    dynamicSizing: true
+};
 
-// Educational functionality has been moved to modal.js overlay system
-// The enhancedLoading function now uses window.showEducationalLoadingOverlay(moduleName)
+/**
+ * Calculate the height needed for a specific step/content
+ */
+function calculateStepHeight(stepElement) {
+    if (!stepElement) {
+        return containerSizingConfig.minContainerHeight;
+    }
+
+    // Temporarily show the step to measure it
+    const originalDisplay = stepElement.style.display;
+    const originalOpacity = stepElement.style.opacity;
+    const originalTransform = stepElement.style.transform;
+    const originalPosition = stepElement.style.position;
+    
+    // Make element visible but transparent for measurement
+    stepElement.style.display = 'flex';
+    stepElement.style.opacity = '0';
+    stepElement.style.transform = 'none';
+    stepElement.style.position = 'static';
+    stepElement.style.visibility = 'hidden'; // Hidden but still takes up space
+    
+    // Force a reflow to ensure accurate measurements
+    stepElement.offsetHeight;
+    
+    // Get the actual height including margins
+    const rect = stepElement.getBoundingClientRect();
+    const computedStyle = window.getComputedStyle(stepElement);
+    const marginTop = parseFloat(computedStyle.marginTop) || 0;
+    const marginBottom = parseFloat(computedStyle.marginBottom) || 0;
+    
+    const stepHeight = rect.height + marginTop + marginBottom;
+    
+    // Restore original styles
+    stepElement.style.display = originalDisplay;
+    stepElement.style.opacity = originalOpacity;
+    stepElement.style.transform = originalTransform;
+    stepElement.style.position = originalPosition;
+    stepElement.style.visibility = '';
+    
+    // Handle edge cases
+    const finalHeight = Math.max(stepHeight, 50); // Minimum 50px for very small steps
+    
+    return finalHeight;
+}
+
+/**
+ * Calculate optimal container height based on content
+ */
+function calculateOptimalContainerHeight(contentHeight) {
+    if (!contentHeight || contentHeight <= 0) {
+        return containerSizingConfig.minContainerHeight;
+    }
+
+    // Add padding for progress indicator, close button, and general spacing
+    const totalHeight = contentHeight + containerSizingConfig.sizingPadding;
+    
+    // Respect minimum height
+    const minHeight = containerSizingConfig.minContainerHeight;
+    
+    // Calculate preferred maximum height
+    let preferredMaxHeight;
+    if (typeof containerSizingConfig.maxContainerHeight === 'string' && containerSizingConfig.maxContainerHeight.endsWith('vh')) {
+        const vhValue = parseFloat(containerSizingConfig.maxContainerHeight);
+        preferredMaxHeight = (window.innerHeight * vhValue) / 100;
+    } else {
+        preferredMaxHeight = parseInt(containerSizingConfig.maxContainerHeight) || window.innerHeight * 0.8;
+    }
+    
+    // Mobile-specific adjustments for preferred max height
+    if (window.innerWidth <= 480) {
+        preferredMaxHeight = Math.min(preferredMaxHeight, window.innerHeight * 0.9);
+    }
+    
+    // Allow content-driven expansion beyond preferred max when needed
+    // Use a reasonable absolute maximum to prevent excessive heights
+    const absoluteMaxHeight = window.innerHeight * 0.95; // Never exceed 95% of viewport
+    
+    // If content needs more space than preferred max, allow it up to absolute max
+    let effectiveMaxHeight;
+    if (totalHeight > preferredMaxHeight && totalHeight <= absoluteMaxHeight) {
+        effectiveMaxHeight = totalHeight; // Allow content to dictate height
+    } else if (totalHeight > absoluteMaxHeight) {
+        effectiveMaxHeight = absoluteMaxHeight; // Cap at absolute maximum
+    } else {
+        effectiveMaxHeight = preferredMaxHeight; // Use preferred max
+    }
+    
+    // Constrain to min/max bounds
+    const finalHeight = Math.max(minHeight, Math.min(totalHeight, effectiveMaxHeight));
+    
+    return finalHeight;
+}
+
+/**
+ * Adjust container size to fit content
+ */
+function adjustContainerSize(contentElement) {
+    if (!containerSizingConfig.dynamicSizing) {
+        return;
+    }
+
+    const dataContainer = document.querySelector('.data-container-in');
+    if (!dataContainer) {
+        return;
+    }
+
+    // Only apply dynamic sizing if the container is actually expanded
+    if (!dataContainer.classList.contains('expanded')) {
+        return;
+    }
+
+    // Small delay to ensure content is fully rendered
+    setTimeout(() => {
+        try {
+            // Double-check the container is still expanded (user might have collapsed it)
+            if (!dataContainer || !dataContainer.classList.contains('expanded')) {
+                return;
+            }
+
+            // Calculate the content height needed
+            const contentHeight = contentElement ? calculateStepHeight(contentElement) : 0;
+            const containerHeight = calculateOptimalContainerHeight(contentHeight);
+            
+            // Apply the new height with smooth transition
+            dataContainer.style.transition = `height ${containerSizingConfig.transitionDuration}ms ease-in-out`;
+            dataContainer.style.height = `${containerHeight}px`;
+            
+            // Dispatch resize event for any listeners
+            window.dispatchEvent(new Event('resize'));
+            
+            console.log(`[DataIn] Container resized to ${containerHeight}px for content`);
+            
+        } catch (error) {
+            console.error('[DataIn] Error adjusting container size:', error);
+        }
+    }, 100);
+}
+
+/**
+ * Global API for container sizing - accessible to other utilities
+ */
+window.dataInContainerManager = {
+    calculateStepHeight,
+    calculateOptimalContainerHeight,
+    adjustContainerSize,
+    config: containerSizingConfig
+};

@@ -347,7 +347,11 @@ function scrollToTop() {
  * Toast Notification System
  */
 let toastCounter = 0;
-const activeToasts = new Set();
+// Initialize activeToasts only if not already defined
+if (typeof window.activeToasts === 'undefined') {
+    window.activeToasts = new Set();
+}
+const activeToasts = window.activeToasts;
 
 function showToast(message, type = 'info', duration = ENHANCED_UI_CONFIG.toast.defaultDuration) {
     // Limit number of toasts

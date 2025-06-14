@@ -341,10 +341,13 @@
     runInitialization();
   }
 
-  // Handle loading through datain.js
+  // Handle loading through datain.js - only initialize if calorie module is loaded
   document.addEventListener('data-in-loaded', function(e) {
-    console.log("[CalorieIQ] Detected load through datain.js, reinitializing");
-    runInitialization();
+    const moduleType = e.detail?.moduleType;
+    if (moduleType === 'calorie') {
+      console.log("[CalorieIQ] Calorie module loaded through datain.js, reinitializing");
+      runInitialization();
+    }
   });
 
   // Additional safety net - try again after a short delay

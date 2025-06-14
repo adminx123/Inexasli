@@ -206,10 +206,13 @@
     initialize();
   }
 
-  // Handle loading through datain.js
+  // Handle loading through datain.js - only initialize if fashion module is loaded
   document.addEventListener('data-in-loaded', function(e) {
-    console.log("[FashionIQ] Detected load through datain.js, reinitializing");
-    initialize();
+    const moduleType = e.detail?.moduleType;
+    if (moduleType === 'fashion') {
+      console.log("[FashionIQ] Fashion module loaded through datain.js, reinitializing");
+      initialize();
+    }
   });
 
   // Export functions for external access
