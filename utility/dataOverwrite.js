@@ -45,7 +45,7 @@ function openDataOverwriteModal() {
     modalContent.innerHTML = `
         <div style="display: flex; flex-direction: column; gap: 12px;">
             <div style="text-align: center; margin-bottom: 8px; font-size: 13px; color: #666; font-family: 'Inter', sans-serif;">
-                Are you sure? This can't be undone.
+                Delete all stored data? This can't be undone.
             </div>
             <button onclick="confirmDataOverwrite()" class="data-overwrite-action-btn" style="
                 padding: 14px 20px;
@@ -63,7 +63,7 @@ function openDataOverwriteModal() {
                 justify-content: center;
                 box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
             ">
-                <i class="bx bx-trash" style="margin-right: 8px; font-size: 14px;"></i>Clear data
+                <i class="bx bx-trash" style="margin-right: 8px; font-size: 14px;"></i>Clear all data
             </button>
         </div>
     `;
@@ -187,10 +187,72 @@ function cancelDataOverwrite() {
  */
 function confirmDataOverwrite() {
     try {
-        // Remove the specific localStorage items (preserves lastGridItemUrl navigation state)
-        localStorage.removeItem('lastgridurl');
-        localStorage.removeItem('lastgridurl_input');
-        localStorage.removeItem('lastgridurl_response');
+        // Define all the localStorage keys that should be cleared
+        const keysToRemove = [
+            // Navigation/grid state
+            'lastgridurl',
+            'lastgridurl_input', 
+            'lastgridurl_response',
+            'lastGridItemUrl',
+            'categoriesPageSelection',
+            
+            // AI module inputs and responses
+            'calorieIqInput',
+            'calorieIqResponse',
+            'decisionIqInput',
+            'decisionIqResponse',
+            'enneagramIqInput',
+            'enneagramIqResponse',
+            'eventIqInput',
+            'eventIqResponse',
+            'fashionIqInput',
+            'fashionIQResponse',
+            'incomeIqinput1',
+            'incomeIqInput2',
+            'incomeIqExpense',
+            'incomeIqAssets',
+            'incomeIqLiabilities',
+            'incomeIqResponse',
+            'philosophyIqInput',
+            'philosophyIqResponse',
+            'quizIqInput',
+            'quizIqResponse',
+            'researchIqInput',
+            'researchIqResponse',
+            'socialIqInput',
+            'socialIqResponse',
+            
+            // Future modules
+            'adventureIqInput',
+            'adventureIqResponse',
+            'speculationIqInput',
+            'speculationIqResponse',
+            'symptomIqInput',
+            'symptomIqResponse',
+            
+            // Income-specific data
+            'taxCalculationsStale',
+            'taxCalculationsStaleTimestamp',
+            'frequencySettings',
+            'currencySymbol',
+            
+            // UI preferences that should be cleared
+            'inexasli_global_swipe_hint_seen',
+            
+            // Authentication
+            'authenticated'
+        ];
+
+        // Remove all specified localStorage items
+        let removedCount = 0;
+        keysToRemove.forEach(key => {
+            if (localStorage.getItem(key) !== null) {
+                localStorage.removeItem(key);
+                removedCount++;
+            }
+        });
+
+        console.log(`Data overwrite completed: removed ${removedCount} localStorage items`);
 
         // Show success message
         showDataOverwriteSuccess();
@@ -216,7 +278,7 @@ function showDataOverwriteSuccess() {
             <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
                 <div style="color: #28a745; font-size: 48px; margin-bottom: 20px;">✓</div>
                 <p style="color: #555; font-size: 0.95rem; margin: 0;">
-                    Cleared
+                    All data cleared successfully
                 </p>
             </div>
         `;
