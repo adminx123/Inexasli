@@ -216,10 +216,10 @@ try {
 })();
 </script>
 
-<script src="/utility/guidedForms.js"></script>
 <script>
   // Only enable autoAdvance for categories.html
-  document.addEventListener('DOMContentLoaded', function() {
+  // Wait for guidedForms to be loaded by datain.js
+  function initGuidedFormsForCategories() {
     if (window.GuidedFormSystem) {
       const guidedForms = new GuidedFormSystem({
         autoAdvance: true,
@@ -227,6 +227,16 @@ try {
         smoothTransitions: true
       });
       guidedForms.init('device-container');
+    } else {
+      // Retry after a short delay if not loaded yet
+      setTimeout(initGuidedFormsForCategories, 100);
     }
-  });
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGuidedFormsForCategories);
+  } else {
+    initGuidedFormsForCategories();
+  }
 </script>
