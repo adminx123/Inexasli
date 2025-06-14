@@ -256,17 +256,18 @@ class GuidedFormSystem {
      */
     handleInputChange(event) {
         if (!this.isInitialized) return;
-        
+
         const input = event.target;
         if (input.matches('input:not([type="button"]):not([type="submit"]), textarea')) {
             const step = this.findStepByElement(input);
-            
+
             if (step && step.index === this.currentStep) {
-                // Debounce the validation check
+                // Debounce the validation check with a longer delay (e.g., 1200ms)
                 clearTimeout(this.inputValidationTimeout);
                 this.inputValidationTimeout = setTimeout(() => {
+                    // Only check completion if the input value hasn't changed in the last 1200ms
                     this.checkStepCompletion(step);
-                }, 300);
+                }, 1200); // Increased delay to allow for user thinking/pausing
             }
         }
     }
@@ -351,25 +352,17 @@ class GuidedFormSystem {
     }
     
     /**
-     * Check if current step is completed and handle auto-advance
+     * Check if current step is completed (no auto-advance)
      */
     checkStepCompletion(step) {
         const isCompleted = step.validationRule();
-        
+
         if (isCompleted && !step.isCompleted) {
             step.isCompleted = true;
             this.completedSteps.add(step.index);
             this.updateProgressIndicator();
-            
-            // Trigger existing form persistence if available
             this.triggerExistingPersistence();
-            
-            // Auto-advance if enabled and not on last step
-            if (this.config.autoAdvance && this.currentStep < this.steps.length - 1) {
-                setTimeout(() => {
-                    this.showStep(this.currentStep + 1);
-                }, this.config.autoAdvanceDelay);
-            }
+            // No auto-advance: user must use progress bar or swipe to navigate
         } else if (!isCompleted && step.isCompleted) {
             step.isCompleted = false;
             this.completedSteps.delete(step.index);
@@ -611,7 +604,7 @@ class GuidedFormSystem {
         
         // Determine positioning based on container type
         const isDataInContainer = targetContainer.closest('.data-container-in') || 
-                                 targetContainer.classList.contains('data-container-in');
+                                 targetContainer.classList.contains('.data-container-in');
         
         if (isDataInContainer) {
             // Position on left side of data-container-in
@@ -651,36 +644,66 @@ class GuidedFormSystem {
         // Progress dots
         const dotsContainer = document.createElement('div');
         dotsContainer.id = 'progress-dots';
-        dotsContainer.style.cssText = 'display: flex; gap: 4px;';
-        
+        dotsContainer.style.cssText = 'display: flex; gap: 12px; touch-action: pan-x;'; // Larger gap for touch
+
         this.steps.forEach((_, index) => {
             const dot = document.createElement('div');
             dot.className = 'progress-dot';
             dot.style.cssText = `
-                width: 8px;
-                height: 8px;
+                width: 18px;
+                height: 18px;
                 border-radius: 50%;
                 background: ${index === this.currentStep ? '#000' : '#ccc'};
-                transition: background 0.2s ease;
+                transition: background 0.2s ease, box-shadow 0.2s;
                 cursor: pointer;
+                box-shadow: ${index === this.currentStep ? '0 0 0 3px #aaa' : 'none'};
             `;
-            
-            // Allow clicking on dots to navigate to any step (backward and forward)
+            dot.title = this.steps[index]?.label || `Step ${index + 1}`;
             dot.addEventListener('click', () => {
                 this.showStep(index);
             });
-            
             dotsContainer.appendChild(dot);
         });
-        
+        // Swipe support for mobile
+        let touchStartX = null;
+        dotsContainer.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+            }
+        });
+        dotsContainer.addEventListener('touchend', (e) => {
+            if (touchStartX !== null && e.changedTouches.length === 1) {
+                const dx = e.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(dx) > 40) {
+                    if (dx < 0 && this.currentStep < this.steps.length - 1) {
+                        this.showStep(this.currentStep + 1);
+                    } else if (dx > 0 && this.currentStep > 0) {
+                        this.showStep(this.currentStep - 1);
+                    }
+                }
+            }
+            touchStartX = null;
+        });
         progressContainer.appendChild(dotsContainer);
         
-        // Append to the appropriate container
-        if (isDataInContainer) {
-            targetContainer.appendChild(progressContainer);
-        } else {
-            document.body.appendChild(progressContainer);
+        // Always append to the bottom center of the main data-in container using flexbox for layout
+        let mainContainer = document.querySelector('.data-container-in') || document.querySelector('.device-container') || this.container;
+        // Remove any existing progress bar in the DOM to avoid duplicates
+        const oldBar = document.getElementById('guided-form-progress');
+        if (oldBar && oldBar.parentNode) oldBar.parentNode.removeChild(oldBar);
+        // Ensure the container uses flex column layout
+        if (mainContainer) {
+            mainContainer.style.display = 'flex';
+            mainContainer.style.flexDirection = 'column';
+            mainContainer.style.justifyContent = 'flex-end';
+            mainContainer.style.alignItems = 'center';
         }
+        progressContainer.style.position = 'static';
+        progressContainer.style.margin = '24px 0 12px 0';
+        progressContainer.style.left = '';
+        progressContainer.style.bottom = '';
+        progressContainer.style.transform = '';
+        mainContainer.appendChild(progressContainer);
     }
     
     /**
