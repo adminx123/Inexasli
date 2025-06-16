@@ -567,79 +567,34 @@ class GuidedFormSystem {
     createProgressIndicator() {
         if (!this.config.showProgressIndicator) return;
         
+        // Don't show progress indicator when datain is collapsed
+        const datainContainer = document.querySelector('.data-container-in');
+        if (datainContainer && (datainContainer.classList.contains('collapsed') || datainContainer.classList.contains('visually-collapsed'))) {
+            return;
+        }
+        
         // Remove existing indicator
         const existingIndicator = document.getElementById('guided-form-progress');
         if (existingIndicator) {
             existingIndicator.remove();
         }
-        
-        // Enhanced container detection for data-in system
-        let targetContainer = null;
-
-        // Priority 1: Device container within current container
-        targetContainer = this.container.querySelector('.device-container');
-
-        // Priority 2: Data-in system containers - target the main container directly
-        if (!targetContainer) {
-            targetContainer = document.querySelector('.data-container-in');
-        }
-
-        // Priority 3: General data-content containers
-        if (!targetContainer) {
-            targetContainer = this.container.querySelector('.data-content');
-        }
-
-        // Priority 4: Check if current container is already a data-content element
-        if (!targetContainer && this.container.classList.contains('data-content')) {
-            targetContainer = this.container;
-        }
-
-        // Priority 5: Fallback to current container
-        if (!targetContainer) {
-            targetContainer = this.container;
-        }
 
         const progressContainer = document.createElement('div');
         progressContainer.id = 'guided-form-progress';
-        
-        // Determine positioning based on container type
-        const isDataInContainer = targetContainer.closest('.data-container-in') || 
-                                 targetContainer.classList.contains('.data-container-in');
-        
-        if (isDataInContainer) {
-            // Position on left side of data-container-in
-            progressContainer.style.cssText = `
-                position: absolute;
-                top: 10px;
-                left: 15px;
-                border-radius: 50px;
-                padding: 4px 8px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                font-family: "Inter", sans-serif;
-                font-size: 12px;
-                font-weight: 500;
-                z-index: 11003;
-            `;
-        } else {
-            // Use fixed positioning for other containers level with button centers - moved higher
-            progressContainer.style.cssText = `
-                position: fixed;
-                top: 10px;
-                left: 50%;
-                transform: translateX(-50%);
-                border-radius: 20px;
-                padding: 4px 8px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                font-family: "Inter", sans-serif;
-                font-size: 12px;
-                font-weight: 500;
-                z-index: 10000;
-            `;
-        }
+        progressContainer.style.cssText = `
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            border-radius: 50px;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: "Inter", sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            z-index: 11003;
+        `;
         
         // Progress dots
         const dotsContainer = document.createElement('div');
@@ -686,24 +641,8 @@ class GuidedFormSystem {
         });
         progressContainer.appendChild(dotsContainer);
         
-        // Always append to the bottom center of the main data-in container using flexbox for layout
-        let mainContainer = document.querySelector('.data-container-in') || document.querySelector('.device-container') || this.container;
-        // Remove any existing progress bar in the DOM to avoid duplicates
-        const oldBar = document.getElementById('guided-form-progress');
-        if (oldBar && oldBar.parentNode) oldBar.parentNode.removeChild(oldBar);
-        // Ensure the container uses flex column layout
-        if (mainContainer) {
-            mainContainer.style.display = 'flex';
-            mainContainer.style.flexDirection = 'column';
-            mainContainer.style.justifyContent = 'flex-end';
-            mainContainer.style.alignItems = 'center';
-        }
-        progressContainer.style.position = 'static';
-        progressContainer.style.margin = '24px 0 12px 0';
-        progressContainer.style.left = '';
-        progressContainer.style.bottom = '';
-        progressContainer.style.transform = '';
-        mainContainer.appendChild(progressContainer);
+        // Append to datain container since we know it exists and is expanded
+        datainContainer.appendChild(progressContainer);
     }
     
     /**
