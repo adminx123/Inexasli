@@ -462,6 +462,195 @@ export function initializeBidirectionalSwipe(container, handlers, options = {}) 
 }
 
 /**
+ * Initializes vertical swipe functionality for a container element
+ * Specifically designed for opening/closing containers with up/down swipes
+ * 
+ * @param {HTMLElement} container - The container element to add vertical swipe functionality to
+ * @param {Object} handlers - Object containing up and/or down callback functions
+ * @param {Function} handlers.up - Callback for upward swipe (typically to close/minimize)
+ * @param {Function} handlers.down - Callback for downward swipe (typically to open/expand)
+ * @param {Object} options - Additional configuration options
+ */
+export function initializeVerticalSwipe(container, handlers, options = {}) {
+    if (!container) {
+        console.error('Container element is required for vertical swipe functionality');
+        return;
+    }
+    
+    if (!handlers || (!handlers.up && !handlers.down)) {
+        console.error('At least one vertical swipe handler (up or down) must be provided');
+        return;
+    }
+    
+    // Default options for vertical swipes
+    const defaultOptions = {
+        threshold: 80,                 // Minimum distance to trigger swipe action (px)
+        animationDuration: 300,        // Animation duration in ms
+        preventHorizontalSwipe: true,  // Prevent horizontal scrolling during vertical swipes
+    };
+    
+    const config = { ...defaultOptions, ...options };
+    
+    // Touch tracking variables
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let currentTranslateY = 0;
+    let isProcessingVerticalSwipe = false;
+    
+    // Event handlers for vertical swipes
+    function handleVerticalTouchStart(e) {
+        if (isProcessingVerticalSwipe) {
+            return;
+        }
+        
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        console.log(`[VerticalSwipe] Touch start at X: ${touchStartX}, Y: ${touchStartY}`);
+        
+        // Remove transition temporarily during the swipe
+        container.style.transition = 'none';
+        
+        // Add event listeners for vertical swipe gestures
+        container.addEventListener('touchmove', handleVerticalTouchMove, { passive: false });
+        container.addEventListener('touchend', handleVerticalTouchEnd);
+        container.addEventListener('touchcancel', handleVerticalTouchEnd);
+    }
+    
+    function handleVerticalTouchMove(e) {
+        if (isProcessingVerticalSwipe) {
+            return;
+        }
+        
+        const touchX = e.touches[0].clientX;
+        const touchY = e.touches[0].clientY;
+        
+        // Calculate horizontal and vertical distances moved
+        const diffX = touchX - touchStartX;
+        const diffY = touchY - touchStartY;
+        
+        // Determine if this is primarily a vertical swipe
+        const isVerticalSwipe = Math.abs(diffY) > Math.abs(diffX) * 0.6; // Even more lenient ratio
+        
+        console.log(`[VerticalSwipe] Move - diffX: ${diffX}, diffY: ${diffY}, isVertical: ${isVerticalSwipe}, absY: ${Math.abs(diffY)}, absX: ${Math.abs(diffX)}`);
+        
+        if (isVerticalSwipe && Math.abs(diffY) > 3) { // Even lower minimum movement threshold
+            // Determine direction
+            const isUpSwipe = diffY < 0;
+            const isDownSwipe = diffY > 0;
+            const detectedDirection = isUpSwipe ? 'up' : 'down';
+            const hasHandler = handlers[detectedDirection];
+            
+            console.log(`[VerticalSwipe] Direction: ${detectedDirection}, hasHandler: ${!!hasHandler}`);
+            
+            if (hasHandler) {
+                // Prevent default scrolling for vertical swipes we can handle
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Apply visual feedback with vertical transform
+                currentTranslateY = diffY;
+                container.style.transform = `translateY(${diffY}px)`;
+                
+                // Add dynamic opacity effect based on swipe distance
+                const opacityValue = Math.max(0.7, 1 - (Math.abs(diffY) / 200));
+                container.style.opacity = opacityValue.toString();
+                
+                console.log(`Vertical swipe detected: ${detectedDirection}, distance: ${Math.abs(diffY)}px`);
+            }
+        }
+    }
+    
+    function handleVerticalTouchEnd(e) {
+        if (isProcessingVerticalSwipe) {
+            return;
+        }
+        
+        console.log(`[VerticalSwipe] Touch end - currentTranslateY: ${currentTranslateY}, absoluteDistance: ${Math.abs(currentTranslateY)}, threshold: ${config.threshold}`);
+        
+        // Restore transition for smooth animation
+        container.style.transition = `transform ${config.animationDuration}ms ease, opacity ${config.animationDuration}ms ease`;
+        
+        // Determine swipe direction and check threshold
+        const swipeDirection = currentTranslateY < 0 ? 'up' : 'down';
+        const handler = handlers[swipeDirection];
+        const swipeThresholdMet = Math.abs(currentTranslateY) > config.threshold;
+        
+        console.log(`[VerticalSwipe] Direction: ${swipeDirection}, threshold met: ${swipeThresholdMet} (${Math.abs(currentTranslateY)} > ${config.threshold}), hasHandler: ${!!handler}`);
+        
+        if (swipeThresholdMet && handler) {
+            // Mark as processing to prevent multiple executions
+            isProcessingVerticalSwipe = true;
+            
+            console.log(`[VerticalSwipe] *** EXECUTING ${swipeDirection} swipe callback ***`);
+            
+            // Complete the swipe animation
+            const translateValue = swipeDirection === 'up' ? '-100%' : '100%';
+            container.style.transform = `translateY(${translateValue})`;
+            container.style.opacity = '0';
+            
+            // Trigger callback after animation completes
+            setTimeout(() => {
+                console.log(`[VerticalSwipe] Animation complete, calling handler...`);
+                
+                // Reset visual state
+                container.style.transform = '';
+                container.style.opacity = '1';
+                container.style.transition = '';
+                
+                // Execute the callback if provided
+                if (typeof handler === 'function') {
+                    try {
+                        console.log(`[VerticalSwipe] About to call handler function...`);
+                        handler();
+                        console.log(`[VerticalSwipe] Handler function completed successfully`);
+                    } catch (error) {
+                        console.error('[VerticalSwipe] Error executing vertical swipe callback:', error);
+                    }
+                } else {
+                    console.error(`[VerticalSwipe] Handler is not a function:`, typeof handler, handler);
+                }
+                
+                // Reset processing flag
+                setTimeout(() => {
+                    isProcessingVerticalSwipe = false;
+                    console.log(`[VerticalSwipe] Processing flag reset`);
+                }, 100);
+            }, config.animationDuration);
+        } else {
+            // Reset position if swipe wasn't far enough or no handler
+            console.log(`[VerticalSwipe] Resetting position - threshold not met or no handler`);
+            container.style.transform = '';
+            container.style.opacity = '1';
+            setTimeout(() => {
+                container.style.transition = '';
+            }, config.animationDuration);
+        }
+        
+        // Remove event listeners
+        container.removeEventListener('touchmove', handleVerticalTouchMove);
+        container.removeEventListener('touchend', handleVerticalTouchEnd);
+        container.removeEventListener('touchcancel', handleVerticalTouchEnd);
+        
+        currentTranslateY = 0;
+    }
+    
+    // Add touch event listeners to container
+    container.addEventListener('touchstart', handleVerticalTouchStart, { passive: true });
+    
+    // Return destroy function
+    const destroyVerticalSwipe = () => {
+        container.removeEventListener('touchstart', handleVerticalTouchStart);
+        container.removeEventListener('touchmove', handleVerticalTouchMove);
+        container.removeEventListener('touchend', handleVerticalTouchEnd);
+        container.removeEventListener('touchcancel', handleVerticalTouchEnd);
+        console.log(`Vertical swipe functionality removed from ${container.id || 'container'}`);
+    };
+    
+    console.log(`Vertical swipe functionality initialized for ${container.id || 'container'}`);
+    return destroyVerticalSwipe;
+}
+
+/**
  * Reset the global swipe hint tracking (useful for testing)
  * This will allow the swipe hint to show again
  */
@@ -524,4 +713,87 @@ if (typeof window !== 'undefined') {
         resetGlobalSwipeTracking,
         debugSwipeHandlers
     };
+}
+
+/**
+ * Simple vertical swipe for container toggle - clean and minimal
+ * 
+ * @param {HTMLElement} container - The container element
+ * @param {Function} toggleFunction - Function to call when swipe is detected
+ */
+export function initializeSimpleVerticalSwipe(container, toggleFunction) {
+    if (!container || typeof toggleFunction !== 'function') {
+        console.error('[SimpleVerticalSwipe] Invalid container or toggle function');
+        return;
+    }
+
+    let touchStartY = 0;
+    let touchStartX = 0;
+    let touchStartTime = 0;
+    let isTouching = false;
+    let hasMoved = false;
+
+    container.addEventListener('touchstart', function(e) {
+        touchStartY = e.touches[0].clientY;
+        touchStartX = e.touches[0].clientX;
+        touchStartTime = Date.now();
+        isTouching = true;
+        hasMoved = false;
+        console.log('[SimpleVerticalSwipe] Touch start - Y:', touchStartY);
+    }, { passive: true });
+
+    container.addEventListener('touchmove', function(e) {
+        if (!isTouching) return;
+        
+        const touchY = e.touches[0].clientY;
+        const touchX = e.touches[0].clientX;
+        const deltaY = touchY - touchStartY;
+        const deltaX = touchX - touchStartX;
+        
+        // Mark that user has moved (not just a tap)
+        if (Math.abs(deltaY) > 5 || Math.abs(deltaX) > 5) {
+            hasMoved = true;
+        }
+        
+        // Only handle if it's primarily vertical movement
+        if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 10) {
+            e.preventDefault(); // Prevent scrolling
+            console.log('[SimpleVerticalSwipe] Vertical movement detected - deltaY:', deltaY);
+        }
+    }, { passive: false });
+
+    container.addEventListener('touchend', function(e) {
+        if (!isTouching) return;
+        isTouching = false;
+        
+        const touchEndY = e.changedTouches[0].clientY;
+        const deltaY = touchEndY - touchStartY;
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        const touchDuration = Date.now() - touchStartTime;
+        
+        console.log('[SimpleVerticalSwipe] Touch end - deltaY:', deltaY, 'deltaX:', deltaX, 'duration:', touchDuration, 'hasMoved:', hasMoved);
+        
+        // Only trigger swipe if user actually moved (not just a tap)
+        // and it's primarily vertical and meets threshold
+        if (hasMoved && Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 40) {
+            const isUpSwipe = deltaY < 0;
+            const isDownSwipe = deltaY > 0;
+            
+            console.log('[SimpleVerticalSwipe] Swipe detected:', isUpSwipe ? 'UP' : 'DOWN');
+            console.log('[SimpleVerticalSwipe] Current container state:', container.dataset.state);
+            
+            if (isUpSwipe && container.dataset.state !== 'expanded') {
+                console.log('[SimpleVerticalSwipe] Expanding container via swipe up');
+                toggleFunction();
+            } else if (isDownSwipe && container.dataset.state === 'expanded') {
+                console.log('[SimpleVerticalSwipe] Collapsing container via swipe down');
+                toggleFunction();
+            }
+        } else if (!hasMoved && touchDuration < 300) {
+            // This was a tap/click - let the normal click handlers deal with it
+            console.log('[SimpleVerticalSwipe] Tap detected - letting click handlers handle it');
+        }
+    }, { passive: true });
+
+    console.log('[SimpleVerticalSwipe] Initialized for container');
 }

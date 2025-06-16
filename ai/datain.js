@@ -9,7 +9,7 @@
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 import { FormPersistence } from '/utility/formPersistence.js';
-import { initializeBidirectionalSwipe } from '/utility/swipeFunctionality.js';
+import { initializeBidirectionalSwipe, initializeSimpleVerticalSwipe } from '/utility/swipeFunctionality.js';
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
@@ -799,7 +799,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Setup utility buttons for initial state
         setupUtilityButtons();
 
-        // Add click listener to entire container for expansion, but exclude utility button clicks
+        // Initialize simple vertical swipe for container toggle
+        initializeSimpleVerticalSwipe(dataContainer, toggleDataContainer);
+
+        // Add click listener to entire container for toggle (expand when collapsed, collapse when expanded)
         dataContainer.addEventListener('click', function (e) {
             e.preventDefault();
             
@@ -810,8 +813,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                                    e.target.id === 'datain-category-btn' ||
                                    e.target.id === 'datain-payment-btn';
             
-            // Only expand if it's not a utility button click and container is not expanded
-            if (!isUtilityButton && dataContainer.dataset.state !== 'expanded') {
+            // Check if click is on close button (let that handle it)
+            const isCloseButton = e.target.closest('.close-data-container') || 
+                                 e.target.classList.contains('close-data-container');
+            
+            // Only toggle if it's not a utility button or close button click
+            if (!isUtilityButton && !isCloseButton) {
+                console.log('[DataIn] Container clicked - current state:', dataContainer.dataset.state);
                 toggleDataContainer();
             }
         });
