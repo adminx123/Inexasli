@@ -820,6 +820,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Add click listener to container - smart behavior based on state and click location
         dataContainer.addEventListener('click', function (e) {
+            // Check if click is on progress bar dots first - let them handle their own clicks
+            const isProgressDot = e.target.closest('.progress-dot') || 
+                                 e.target.classList.contains('progress-dot') ||
+                                 e.target.closest('#guided-form-progress') ||
+                                 e.target.id === 'guided-form-progress';
+            
+            if (isProgressDot) {
+                return; // Let progress dots handle their own clicks without interference
+            }
+            
             e.preventDefault();
             
             // Check if click is on utility buttons
