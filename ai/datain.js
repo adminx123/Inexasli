@@ -14,9 +14,25 @@ import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
 
+// Prevent zoom/pinch on content containers
+function preventZoom() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .device-container, .row1, .grid-container {
+            touch-action: manipulation !important;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+        html { -webkit-text-size-adjust: 100% !important; }
+    `;
+    document.head.appendChild(style);
+}
 
 function initializeFormPersistence(url) {
     console.log('[DataIn] Initializing FormPersistence for URL:', url);
+    
+    // Prevent zoom on load
+    preventZoom();
     
     // Auto-detect module from URL patterns
     let moduleType = 'default';
@@ -802,7 +818,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Initialize simple vertical swipe for container toggle
         initializeSimpleVerticalSwipe(dataContainer, toggleDataContainer);
 
-        // Add click listener to entire container for toggle (expand when collapsed, collapse when expanded)
+        // Add click listener to container - smart behavior based on state and click location
         dataContainer.addEventListener('click', function (e) {
             e.preventDefault();
             
@@ -817,10 +833,26 @@ document.addEventListener('DOMContentLoaded', async function () {
             const isCloseButton = e.target.closest('.close-data-container') || 
                                  e.target.classList.contains('close-data-container');
             
-            // Only toggle if it's not a utility button or close button click
+            // Check if click is within the data-content area (form content)
+            const isDataContent = e.target.closest('.data-content') || 
+                                 e.target.classList.contains('data-content');
+            
+            const currentState = dataContainer.dataset.state;
+            
+            // Smart click behavior:
             if (!isUtilityButton && !isCloseButton) {
-                console.log('[DataIn] Container clicked - current state:', dataContainer.dataset.state);
-                toggleDataContainer();
+                if (currentState !== 'expanded') {
+                    // If collapsed, any click should expand
+                    console.log('[DataIn] Container clicked while collapsed - expanding');
+                    toggleDataContainer();
+                } else if (currentState === 'expanded' && !isDataContent) {
+                    // If expanded, only collapse if clicking outside the content area (on header/border)
+                    console.log('[DataIn] Container header clicked while expanded - collapsing');
+                    toggleDataContainer();
+                } else {
+                    // If expanded and clicking on content area, do nothing (let user interact with forms)
+                    console.log('[DataIn] Content area clicked while expanded - allowing interaction');
+                }
             }
         });
 
