@@ -312,72 +312,12 @@
     }
     
     /* Loading and Empty States */
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 300px;
-      color: #888;
-    }
-    
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(0,0,0,0.1);
-      border-left: 4px solid #667eea;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    .loading-text {
-      margin-top: 20px;
-      font-size: 18px;
-      font-family: "Playfair Display", serif;
-    }
-    
-    .no-data {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 300px;
-      text-align: center;
-      color: #666;
-    }
-    
-    .no-data-icon {
-      font-size: 50px;
-      margin-bottom: 20px;
-      opacity: 0.6;
-    }
-    
-    .no-data-message {
-      font-size: 18px;
-      margin-bottom: 10px;
-      font-weight: 600;
-    }
-    
-    .no-data-help {
-      font-size: 14px;
-      opacity: 0.8;
-    }
   </style>
 </head>
 <body>
   <div id="main-content" class="device-container">
     <div class="output-wrapper">
-      <div id="output-span" class="api-output">
-        <div class="loading">
-          <div class="loading-spinner"></div>
-          <div class="loading-text">Loading quiz data...</div>
-        </div>
-      </div>
+      <div id="output-span" class="api-output"></div>
     </div>
   </div>
   
@@ -967,34 +907,11 @@
             console.log('Quiz displayed successfully');
           } catch (error) {
             console.error('Error creating quiz HTML:', error);
-            outputSpan.innerHTML = `
-              <div class="no-data">
-                <div class="no-data-icon">⚠️</div>
-                <div class="no-data-message">Error parsing quiz data</div>
-                <div class="no-data-help">Error: ${error.message}</div>
-                <details style="margin-top: 15px;">
-                  <summary style="cursor: pointer;">View Raw Content</summary>
-                  <pre style="background: white; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 12px; margin-top: 10px;">${data.data.quizContent}</pre>
-                </details>
-              </div>
-            `;
+            outputSpan.innerHTML = '';
           }
         } else {
           console.log('No quiz data found in expected format');
-          
-          // Show what we actually found for debugging
-          const debugInfo = data ? JSON.stringify(data, null, 2) : 'null';
-          outputSpan.innerHTML = `
-            <div class="no-data">
-              <div class="no-data-icon">📝</div>
-              <div class="no-data-message">No Quiz Found</div>
-              <div class="no-data-help">Please generate a quiz first to see it here.</div>
-              <details style="margin-top: 15px;">
-                <summary style="cursor: pointer;">Debug Info</summary>
-                <pre style="background: white; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 12px; margin-top: 10px;">${debugInfo}</pre>
-              </details>
-            </div>
-          `;
+          outputSpan.innerHTML = '';
         }
       }
 

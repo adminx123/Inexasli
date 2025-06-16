@@ -12,19 +12,6 @@
   <style>
     /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
     
-    .social-header {
-      font-size: 18px; /* Adjusted size */
-      font-weight: 500; /* Adjusted weight */
-      margin: 0;
-      color: #333; /* Standard text color */
-      font-family: "Inter", sans-serif; /* Standard font */
-      padding: 15px; /* Adjusted padding */
-      border-bottom: 1px solid #eee; /* Lighter border */
-      text-align: center;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    
     /* Using output-wrapper styles from outputstyles.css */
     
     /* Custom styles for social output */
@@ -40,13 +27,7 @@
   <!-- Main content container with ID for accessibility -->
   <div id="main-content" class="device-container social-container">
     <div class="output-wrapper">
-      <div class="social-header">Social Analysis Output</div>
-      <div id="output-span" class="api-output">
-        <div class="loading">
-          <div class="loading-text">Loading data...</div>
-          <div class="loading-spinner"></div>
-        </div>
-      </div>
+      <div id="output-span" class="api-output"></div>
     </div>
   </div>
 
@@ -93,13 +74,7 @@
           outputSpan.textContent = JSON.stringify(data, null, 2);
           console.log('Data displayed successfully');
         } else {
-          outputSpan.innerHTML = `
-            <div class="no-data">
-              <div class="no-data-icon">🚫</div>
-              <div class="no-data-message">No Response Found</div>
-              <div class="no-data-help">Please try again.</div>
-            </div>
-          `;
+          outputSpan.innerHTML = '';
           console.log('No data found for key:', responseKey);
         }
       }
@@ -130,57 +105,6 @@
   <script src="../../utility/copy.js"></script>
   <style>
     /* Additional styles for loading and empty state */
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 20px;
-      color: #888; /* Lighter text for loading/empty states */
-    }
-    .loading-text {
-      margin-bottom: 20px;
-      font-size: 18px;
-      font-family: "Playfair Display", serif;
-      letter-spacing: 0.5px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(0,0,0,0.1);
-      border-left: 4px solid #555;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    .no-data {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 20px;
-      text-align: center;
-    }
-    .no-data-icon {
-      font-size: 50px;
-      margin-bottom: 20px;
-      opacity: 0.6;
-    }
-    .no-data-message {
-      font-size: 18px;
-      margin-bottom: 10px;
-      font-weight: 600;
-      color: #555;
-    }
-    .no-data-help {
-      font-size: 14px;
-      color: #777;
-    }
     /* Card animation setup */
     .quote-card {
       opacity: 0;

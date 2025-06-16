@@ -479,11 +479,6 @@
         margin: 10px 0;
       }
     }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
    
   </style>
 </head>
@@ -491,7 +486,7 @@
   <!-- Main content container with ID for accessibility -->
   <div id="main-content" class="device-container income-container">
     <div class="output-wrapper">
-      <div id="output-span" class="api-output">Loading...</div>
+      <div id="output-span" class="api-output"></div>
     </div>
   </div>
 
@@ -1003,9 +998,9 @@
                 outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc3545;">Error loading stored income data. Please try again.</div>';
             }
         } else {
-            // No data found, show initial message
+            // No data found, show empty content for dataout.js to handle
             const outputSpan = document.getElementById('output-span');
-            outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">No income analysis data found. Please complete the IncomeIQ form to see your financial dashboard.</div>';
+            outputSpan.innerHTML = '';
         }
     }
 

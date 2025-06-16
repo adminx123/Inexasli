@@ -9,26 +9,22 @@
   <link rel="stylesheet" href="../styles/outputstyles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Clean, professional research output styling - matching site's muted color scheme */
-    .research-header {
-      font-size: 24px;
-      font-weight: 600;
-      margin: 0;
-      color: #2d5a3d;
-      font-family: "Geist", sans-serif;
-      padding: 20px;
-      background: #f2f9f3;
-      text-align: center;
-      border: 1px solid #4a7c59;
-      border-radius: 5px 5px 0 0;
-    }
-    
+    /* Clean, professional resea               } else {
+          outputSpan.innerHTML = '';
+          console.log('No research data found');
+        }outputSpan.innerHTML = '';
+          console.log('No research data found');se {
+          outputSpan.innerHTML = '';
+          console.log('No research data found');
+        }e {
+          outputSpan.innerHTML = '';
+          console.log('No research data found');
+        } styling site's muted color scheme */
     .api-output {
       background-color: #ffffff;
       padding: 0;
-      border-radius: 0 0 5px 5px;
+      border-radius: 5px;
       border: 1px solid #4a7c59;
-      border-top: none;
     }
     
     /* Research content styling - professional muted design */
@@ -263,13 +259,7 @@
 <body>
   <div class="device-container">
     <div class="output-wrapper">
-      <div class="research-header">Research Analysis Output</div>
-      <div id="output-span" class="api-output">
-        <div class="loading">
-          <div class="loading-text">Loading data...</div>
-          <div class="loading-spinner"></div>
-        </div>
-      </div>
+      <div id="output-span" class="api-output"></div>
     </div>
   </div>
 
@@ -729,57 +719,6 @@
   <script src="../../utility/copy.js"></script>
   <style>
     /* Additional styles for loading and empty state */
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 20px;
-      color: #888; /* Lighter text for loading/empty states */
-    }
-    .loading-text {
-      margin-bottom: 20px;
-      font-size: 18px;
-      font-family: "Playfair Display", serif;
-      letter-spacing: 0.5px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(0,0,0,0.1);
-      border-left: 4px solid #555;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    .no-data {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 20px;
-      text-align: center;
-    }
-    .no-data-icon {
-      font-size: 50px;
-      margin-bottom: 20px;
-      opacity: 0.6;
-    }
-    .no-data-message {
-      font-size: 18px;
-      margin-bottom: 10px;
-      font-weight: 600;
-      color: #555;
-    }
-    .no-data-help {
-      font-size: 14px;
-      color: #777;
-    }
     /* Card animation setup */
     .quote-card {
       opacity: 0;
