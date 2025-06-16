@@ -146,7 +146,7 @@ class ImageUploadUtility {
                     .camera-video {
                         width: 100%;
                         height: 240px;
-                        object-fit: cover;
+                        object-fit: contain;
                         display: block;
                     }
                     
