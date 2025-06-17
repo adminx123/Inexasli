@@ -350,6 +350,8 @@ class FormPersistence {
             return;
         }
         this.repopulateGenericForm(data);
+        // Dispatch a custom event to signal repopulation is complete
+        document.dispatchEvent(new Event('formpersistence:repopulated'));
     }
 
     /**
@@ -742,6 +744,10 @@ class FormPersistence {
             if (element && (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT')) {
                 element.value = value;
                 console.log(`[FormPersistence][DEBUG] Set value for element id=${element.id}`);
+                // If textarea, trigger autoExpandTextarea if available
+                if (element.tagName === 'TEXTAREA' && typeof window.autoExpandTextarea === 'function') {
+                    window.autoExpandTextarea(element);
+                }
                 return;
             }
             // Handle grid containers
