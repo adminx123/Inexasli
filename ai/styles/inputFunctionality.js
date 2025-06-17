@@ -11,13 +11,20 @@ console.log('[Input Functionality] Script loaded');
 
 function autoExpandTextarea(textarea) {
     console.log('[Input Functionality] Auto-expanding textarea:', textarea.id || 'unnamed');
-    // Remove any inline height/minHeight that could interfere
     textarea.style.minHeight = '';
     textarea.style.height = 'auto';
-    // Force a reflow to ensure scrollHeight is correct
     void textarea.offsetHeight;
-    // Set height to fit content, even if value is set programmatically
     textarea.style.height = textarea.scrollHeight + 'px';
+    // Advanced debugging: log computed style and parent info
+    const computed = window.getComputedStyle(textarea);
+    const parent = textarea.parentElement;
+    console.log('[InputFunctionality][DEBUG] Computed height:', computed.height, 'Inline style.height:', textarea.style.height, 'Parent:', parent ? parent.className : null, 'Parent computed height:', parent ? window.getComputedStyle(parent).height : null);
+    // Force reflow on parent container if present
+    if (parent) {
+        parent.style.display = 'none';
+        void parent.offsetHeight;
+        parent.style.display = '';
+    }
 }
 
 function initAutoExpandTextareas() {
@@ -153,7 +160,16 @@ export function addDynamicTextareaInput({
   // Append to container
   const container = document.querySelector(containerSelector);
   if (container) {
-    container.appendChild(inputGroup);
+    // Insert above the add (+) button if it exists, otherwise above the generate button
+    const addBtn = container.querySelector('.dynamic-add-btn');
+    const generateBtn = container.querySelector('#generate-calorie-btn');
+    if (addBtn) {
+      container.insertBefore(inputGroup, addBtn);
+    } else if (generateBtn) {
+      container.insertBefore(inputGroup, generateBtn);
+    } else {
+      container.appendChild(inputGroup);
+    }
   } else {
     console.error('[InputFunctionality] Container not found:', containerSelector);
   }
@@ -208,7 +224,13 @@ function addDynamicTextareaAddButton({
       placeholder
     });
   };
-  container.appendChild(addBtn);
+  // Insert above the Generate Now button if it exists
+  const generateBtn = container.querySelector('#generate-calorie-btn');
+  if (generateBtn) {
+    container.insertBefore(addBtn, generateBtn);
+  } else {
+    container.appendChild(addBtn);
+  }
 }
 window.addDynamicTextareaAddButton = addDynamicTextareaAddButton;
 
@@ -251,17 +273,18 @@ window.addMealInput = function(mealType = null, value = '', skipRepositioning = 
 window.autoExpandTextarea = autoExpandTextarea;
 
 // On DOMContentLoaded, add the button for CalorieIQ food log
+const foodLogSelector = '.row1[data-step-label="Food Log"]';
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     window.addDynamicTextareaAddButton({
-      containerSelector: '.row1:last-child',
+      containerSelector: foodLogSelector,
       baseId: 'calorie-',
       placeholder: 'Snack: 100g yogurt, 2 oz crackers'
     });
   });
 } else {
   window.addDynamicTextareaAddButton({
-    containerSelector: '.row1:last-child',
+    containerSelector: foodLogSelector,
     baseId: 'calorie-',
     placeholder: 'Snack: 100g yogurt, 2 oz crackers'
   });
@@ -269,9 +292,8 @@ if (document.readyState === 'loading') {
 
 // MutationObserver to ensure the add button is always present in the food log section
 (function ensureAddButtonObserver() {
-  const targetSelector = '.row1:last-child';
+  const targetSelector = foodLogSelector;
   const config = { childList: true, subtree: true };
-  let lastButtonInjected = false;
   function checkAndInject() {
     const container = document.querySelector(targetSelector);
     if (container && !container.querySelector('.dynamic-add-btn')) {
@@ -280,7 +302,6 @@ if (document.readyState === 'loading') {
         baseId: 'calorie-',
         placeholder: 'Snack: 100g yogurt, 2 oz crackers'
       });
-      lastButtonInjected = true;
     }
   }
   // Initial check
@@ -291,4 +312,25 @@ if (document.readyState === 'loading') {
   });
   observer.observe(document.body, config);
 })();
+
+// Listen for a custom event from formPersistence.js to trigger textarea expansion
+function debugTextareaExpansionSequence() {
+    console.log('[InputFunctionality][DEBUG] --- Expansion Debug Sequence Start ---');
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach((ta, i) => {
+        console.log(`[InputFunctionality][DEBUG] Before expand [${i}] id=${ta.id} value=`, JSON.stringify(ta.value), 'scrollHeight=', ta.scrollHeight, 'offsetHeight=', ta.offsetHeight, 'style.height=', ta.style.height);
+    });
+    textareas.forEach(autoExpandTextarea);
+    textareas.forEach((ta, i) => {
+        console.log(`[InputFunctionality][DEBUG] After expand [${i}] id=${ta.id} value=`, JSON.stringify(ta.value), 'scrollHeight=', ta.scrollHeight, 'offsetHeight=', ta.offsetHeight, 'style.height=', ta.style.height);
+    });
+    console.log('[InputFunctionality][DEBUG] --- Expansion Debug Sequence End ---');
+}
+window.debugTextareaExpansionSequence = debugTextareaExpansionSequence;
+
+// Call debug sequence after repopulation event
+function triggerTextareaExpansion() {
+    debugTextareaExpansionSequence();
+}
+document.addEventListener('formpersistence:repopulated', triggerTextareaExpansion);
 
