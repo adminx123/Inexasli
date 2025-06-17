@@ -160,6 +160,58 @@ export function addDynamicTextareaInput({
   return textarea;
 }
 
+/**
+ * Adds a generic "Add" button for dynamic textarea inputs to a container.
+ * @param {Object} options
+ * @param {string} options.containerSelector - CSS selector for the container
+ * @param {string} options.baseId - Base id for the textarea (e.g. 'calorie-snack')
+ * @param {string} [options.placeholder] - Optional placeholder text
+ */
+function addDynamicTextareaAddButton({
+  containerSelector,
+  baseId,
+  placeholder = ''
+}) {
+  const container = document.querySelector(containerSelector);
+  if (!container) {
+    console.error('[InputFunctionality] Container not found for add button:', containerSelector);
+    return;
+  }
+  // Prevent duplicate add buttons
+  if (container.querySelector('.dynamic-add-btn')) return;
+
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.className = 'dynamic-add-btn';
+  addBtn.innerText = '+';
+  addBtn.title = 'Add another input';
+  addBtn.style.cssText = [
+    'width: 40px',
+    'height: 40px',
+    'margin: 8px auto',
+    'display: flex',
+    'align-items: center',
+    'justify-content: center',
+    'border: 1px solid #4a7c59',
+    'background: #f2f9f3',
+    'color: #2d5a3d',
+    'border-radius: 5px',
+    'font-size: 22px',
+    'cursor: pointer',
+    'font-family: inherit',
+    'box-sizing: border-box'
+  ].join(';');
+  addBtn.onclick = () => {
+    window.addDynamicTextareaInput({
+      containerSelector,
+      baseId,
+      placeholder
+    });
+  };
+  container.appendChild(addBtn);
+}
+window.addDynamicTextareaAddButton = addDynamicTextareaAddButton;
+
 // Initialize immediately if DOM is already ready
 if (document.readyState === 'loading') {
     console.log('[Text Functionality] DOM still loading, waiting for DOMContentLoaded...');
@@ -197,4 +249,46 @@ window.addMealInput = function(mealType = null, value = '', skipRepositioning = 
 
 // Expose autoExpandTextarea globally for use by formPersistence and other modules
 window.autoExpandTextarea = autoExpandTextarea;
+
+// On DOMContentLoaded, add the button for CalorieIQ food log
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    window.addDynamicTextareaAddButton({
+      containerSelector: '.row1:last-child',
+      baseId: 'calorie-',
+      placeholder: 'Snack: 100g yogurt, 2 oz crackers'
+    });
+  });
+} else {
+  window.addDynamicTextareaAddButton({
+    containerSelector: '.row1:last-child',
+    baseId: 'calorie-',
+    placeholder: 'Snack: 100g yogurt, 2 oz crackers'
+  });
+}
+
+// MutationObserver to ensure the add button is always present in the food log section
+(function ensureAddButtonObserver() {
+  const targetSelector = '.row1:last-child';
+  const config = { childList: true, subtree: true };
+  let lastButtonInjected = false;
+  function checkAndInject() {
+    const container = document.querySelector(targetSelector);
+    if (container && !container.querySelector('.dynamic-add-btn')) {
+      window.addDynamicTextareaAddButton({
+        containerSelector: targetSelector,
+        baseId: 'calorie-',
+        placeholder: 'Snack: 100g yogurt, 2 oz crackers'
+      });
+      lastButtonInjected = true;
+    }
+  }
+  // Initial check
+  checkAndInject();
+  // Observe DOM changes
+  const observer = new MutationObserver(() => {
+    checkAndInject();
+  });
+  observer.observe(document.body, config);
+})();
 
