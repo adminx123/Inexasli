@@ -26,7 +26,7 @@
     const TERMS_LOCAL_STORAGE_KEY = "termsAccepted";
     const TERMS_EXPIRY_DAYS = 365; // 1 year
     const TERMS_FILE_PATH = "/legal.txt"; // Path to terms of service file
-    const LAST_UPDATED_DATE = "April 6, 2025"; // Update this when terms change
+    const LAST_UPDATED_DATE = "June 17, 2025"; // Update this when terms change
 
     // CSS for the terms modal (matching dataOverwrite.js style)
     const termsCSS = `
