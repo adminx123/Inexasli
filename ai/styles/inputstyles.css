@@ -96,9 +96,11 @@ select option {
 textarea {
   height: auto; /* Let the rows attribute determine height */
   max-width: 460px; /* Match inputs/selects */
-  resize: vertical; /* Allow vertical resize only */
+  resize: none; /* Disable manual resize since we're auto-expanding */
   padding: 12px;
   min-height: 40px; /* Minimum height for small textareas */
+  overflow: hidden; /* Hide scrollbar for auto-expanding */
+  transition: height 0.1s ease; /* Smooth height transitions */
 }
 
 /* ====================
@@ -560,3 +562,4 @@ button:hover {
   line-height: 1.6;
   margin-top: 15px;
 }
+
