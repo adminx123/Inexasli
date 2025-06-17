@@ -1,4 +1,12 @@
 // filepath: /Users/dallasp/Library/Mobile Documents/com~apple~CloudDocs/Finance/Inexasli/utility/modal.js
+//
+// Main modal system for the application. Direct uses:
+// - /ai/datain.js - Uses showEducationalLoadingOverlay() for AI generation loading (includes "this may take a moment" message)
+// - /utility/termsManager.js - Uses window.openModal() for displaying terms and conditions
+// - /utility/dataConsentManager.js - Uses window.openModal() for legal/consent displays
+//
+// Note: dataOverwrite.js and paymentform.js have their own separate modal systems and do NOT use this file.
+
 // Define global variables to track active event listeners
 let activeKeyDownHandler = null;
 let activeClickOutsideHandler = null;
@@ -279,7 +287,7 @@ function showEducationalLoadingOverlay(moduleName) {
         <div class="waiting-content">
             <div class="simple-spinner"></div>
             <div class="wait-title">Generating your ${moduleName} report...</div>
-            <div class="wait-subtitle">This will take a moment</div>
+            <div class="wait-subtitle">This may take up to 25 seconds</div>
             <div class="learning-fact">
                 <div class="fact-text">Loading...</div>
             </div>
