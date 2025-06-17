@@ -36,7 +36,7 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     
     // Default options
     const defaultOptions = {
-        threshold: 100,                // Minimum distance to trigger swipe action (px)
+        threshold: 150,                // Minimum distance to trigger swipe action (px) - increased for less sensitivity
         showEducationIndicator: false, // Show initial swipe education indicator (disabled to prevent duplicates)
         showSwipeHint: true,           // Show swipe hint animation on first view (3-second bottom hint) - GLOBAL TRACKING
         animationDuration: 300,        // Animation duration in ms
@@ -105,19 +105,19 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
         const hasHandler = swipeData.handlers[detectedDirection];
         
         // If this appears to be primarily a horizontal swipe AND we have a handler for this direction
-        if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && hasHandler) {
+        if (Math.abs(diffX) > Math.abs(diffY) * 1.5 && hasHandler) {
             // Only prevent default for intentional horizontal swipes that we can handle
             e.preventDefault();
             e.stopPropagation();
-        } else if (Math.abs(diffY) > 10) {
-            // This appears to be a vertical scroll, so don't interfere
+        } else if (Math.abs(diffY) > 15) {
+            // This appears to be a vertical scroll, so don't interfere - increased threshold
             return;
         }
         
         console.log(`Touch move: diffX=${diffX}, diffY=${diffY}, detected: ${detectedDirection}, hasHandler: ${!!hasHandler}`);
         
         // Only apply transform for swipes we can handle
-        if (Math.abs(diffX) > Math.abs(diffY) * 0.8 && hasHandler) {
+        if (Math.abs(diffX) > Math.abs(diffY) * 1.5 && hasHandler) {
             swipeData.currentTranslate = diffX;
             container.style.transform = `translateX(${diffX}px)`;
             console.log(`Applied transform: translateX(${diffX}px)`);
@@ -484,7 +484,7 @@ export function initializeVerticalSwipe(container, handlers, options = {}) {
     
     // Default options for vertical swipes
     const defaultOptions = {
-        threshold: 80,                 // Minimum distance to trigger swipe action (px)
+        threshold: 120,                // Minimum distance to trigger swipe action (px) - increased for less sensitivity
         animationDuration: 300,        // Animation duration in ms
         preventHorizontalSwipe: true,  // Prevent horizontal scrolling during vertical swipes
     };
@@ -529,11 +529,11 @@ export function initializeVerticalSwipe(container, handlers, options = {}) {
         const diffY = touchY - touchStartY;
         
         // Determine if this is primarily a vertical swipe
-        const isVerticalSwipe = Math.abs(diffY) > Math.abs(diffX) * 0.6; // Even more lenient ratio
+        const isVerticalSwipe = Math.abs(diffY) > Math.abs(diffX) * 2.0; // Much stricter ratio - requires 2x more vertical than horizontal
         
         console.log(`[VerticalSwipe] Move - diffX: ${diffX}, diffY: ${diffY}, isVertical: ${isVerticalSwipe}, absY: ${Math.abs(diffY)}, absX: ${Math.abs(diffX)}`);
         
-        if (isVerticalSwipe && Math.abs(diffY) > 3) { // Even lower minimum movement threshold
+        if (isVerticalSwipe && Math.abs(diffY) > 30) { // Much higher minimum movement threshold to avoid interference with scroll
             // Determine direction
             const isUpSwipe = diffY < 0;
             const isDownSwipe = diffY > 0;

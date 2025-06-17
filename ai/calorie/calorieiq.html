@@ -68,9 +68,6 @@
     <textarea id="calorie-breakfast" data-meal="breakfast" placeholder="Breakfast: 1 cup oatmeal, 0.5 cup berries, 1 tbsp honey" rows="2"></textarea>
     <textarea id="calorie-lunch" data-meal="lunch" placeholder="Lunch: 200g chicken, 150g salad, 2 tbsp olive oil" rows="2"></textarea>
     <textarea id="calorie-dinner" data-meal="dinner" placeholder="Dinner: 6 oz salmon, 1/2 cup quinoa, 100g broccoli" rows="2"></textarea>
-    <div class="grid-container">
-      <div class="grid-item" id="meal-recommend-grid-item" tabindex="0">Need meal recommendations?</div>
-    </div>
     <button class="generate-btn" id="generate-calorie-btn">Generate Now!</button>
   </div>
 </div> 
@@ -379,30 +376,6 @@
       };
       const intro = document.querySelector('.product-description-container');
       if (intro) intro.after(btn);
-    }
-  });
-
-  // Add event listener for "Need meal recommendations" grid item
-  document.addEventListener('DOMContentLoaded', function() {
-    const recommendGridItem = document.getElementById('meal-recommend-grid-item');
-    if (recommendGridItem) {
-      recommendGridItem.onclick = function() {
-        // Placeholder: replace with custom logic if available
-        alert('Meal recommendations coming soon!');
-      };
-      recommendGridItem.onmouseenter = function() {
-        recommendGridItem.style.backgroundColor = '#eef7f0';
-        recommendGridItem.style.color = '#2d5a3d';
-      };
-      recommendGridItem.onmouseleave = function() {
-        recommendGridItem.style.backgroundColor = '';
-        recommendGridItem.style.color = '';
-      };
-      recommendGridItem.onkeydown = function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          recommendGridItem.click();
-        }
-      };
     }
   });
 
