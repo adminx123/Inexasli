@@ -13,6 +13,12 @@
  * Provides: Scroll-to-top FAB, Toast notifications, Embed-only enforcement, Accessibility features
  */
 
+// Prevent duplicate loading
+if (window.ENHANCED_UI_LOADED) {
+    console.log('[EnhancedUI] Already loaded, skipping initialization');
+} else {
+    window.ENHANCED_UI_LOADED = true;
+
 // Global configuration
 const ENHANCED_UI_CONFIG = {
     scrollFab: {
@@ -688,3 +694,5 @@ if (document.readyState === 'loading') {
 } else {
     console.log('🎯 Enhanced UI ready for initialization');
 }
+
+} // End of duplicate loading check
