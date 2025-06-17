@@ -312,10 +312,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.log('[DataOut] Loading initial content from localStorage:', initialUrl);
             loadStoredContent(initialUrl);
         } else {
-            // Optionally, load a default page or show a default message
-             if(dataContainer && dataContainer.querySelector('.data-content')) {
-                dataContainer.querySelector('.data-content').innerHTML = 'No data loaded yet. Select a module to see output.';
-             }
+            // No default message - leave content area empty
         }
     }
 
