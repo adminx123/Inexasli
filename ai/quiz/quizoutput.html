@@ -259,24 +259,6 @@
       line-height: 1.5;
     }
     
-    /* Short Answer */
-    .short-answer-input {
-      width: 100%;
-      min-height: 80px;
-      padding: 12px;
-      border: 1px solid #e9ecef;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 14px;
-      resize: vertical;
-      transition: border-color 0.2s ease;
-    }
-    
-    .short-answer-input:focus {
-      outline: none;
-      border-color: #2196f3;
-    }
-    
     /* Fill in the Blank */
     .blank-input {
       border: none;
@@ -616,19 +598,6 @@
               <div class="option" data-option="false" onclick="selectOption(this)" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 12px;">
                 <div class="option-letter" style="background: #6c757d; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px;">F</div>
                 <div style="flex: 1; line-height: 1.5;">False</div>
-              </div>
-            `;
-            break;
-            
-          case 'short-answer':
-            optionsHTML = `
-              <div style="margin: 16px 0;">
-                <textarea class="short-answer-input" data-question="${index}" onchange="updateShortAnswer(this)" placeholder="Enter your answer here..." style="width: 100%; min-height: 80px; padding: 12px; border: 1px solid #e9ecef; border-radius: 8px; font-family: inherit; font-size: 14px; resize: vertical; outline: none; transition: border-color 0.2s ease;" onfocus="this.style.borderColor='#2196f3'" onblur="this.style.borderColor='#e9ecef'"></textarea>
-              </div>
-              <div style="margin-top: 12px; padding: 12px; background: #e8f5e8; border-radius: 8px; border-left: 4px solid #4caf50;">
-                <small style="color: #2e7d32; font-weight: 500;">
-                  <i class="fas fa-pencil-alt"></i> Provide a detailed answer in your own words
-                </small>
               </div>
             `;
             break;
@@ -1054,15 +1023,6 @@
               }
               break;
 
-            case 'short-answer':
-              questionResult.userAnswer = submittedAnswers.shortAnswers[questionIndex] || null;
-              questionResult.correctAnswer = question.expectedAnswer || question.keyPoints || 'See explanation for details.';
-              questionResult.wasAnswered = !!(questionResult.userAnswer && questionResult.userAnswer.length > 0);
-              // For short answers, we'll mark as correct if user provided a substantial answer (manual grading needed)
-              questionResult.isCorrect = questionResult.userAnswer && questionResult.userAnswer.length > 10;
-              questionResult.requiresManualGrading = true;
-              break;
-
             case 'matching':
               questionResult.userAnswer = submittedAnswers.matchingAnswers[questionIndex] || {};
               questionResult.correctAnswer = question.correctMatches;
@@ -1307,9 +1267,6 @@
           case 'true-false':
             return answerText ? `<strong>${answer}:</strong> ${answerText}` : answer;
           
-          case 'short-answer':
-            return answer.length > 100 ? answer.substring(0, 100) + '...' : answer;
-          
           case 'matching':
             if (typeof answer === 'object') {
               const matches = Object.entries(answer).map(([from, to]) => `${from} → ${to}`).join(', ');
@@ -1332,7 +1289,6 @@
       function setupQuizInteractivity() {
         let selectedAnswers = {};
         let matchingAnswers = {};
-        let shortAnswers = {};
         let blankAnswers = {};
         let selectedMatchItem = null;
         
@@ -1432,13 +1388,6 @@
           updateProgress();
         };
 
-        // Short answer updates
-        window.updateShortAnswer = function(textareaElement) {
-          const questionIndex = textareaElement.dataset.question;
-          shortAnswers[questionIndex] = textareaElement.value.trim();
-          updateProgress();
-        };
-
         // Fill-in-the-blank updates
         window.updateBlankAnswer = function(inputElement) {
           const questionIndex = inputElement.dataset.question;
@@ -1513,7 +1462,6 @@
         window.resetQuiz = function() {
           selectedAnswers = {};
           matchingAnswers = {};
-          shortAnswers = {};
           blankAnswers = {};
           selectedMatchItem = null;
           
@@ -1535,10 +1483,6 @@
               selection.style.display = 'none';
               selection.textContent = '';
             }
-          });
-          
-          document.querySelectorAll('.short-answer-input').forEach(textarea => {
-            textarea.value = '';
           });
           
           document.querySelectorAll('.blank-input').forEach(input => {
@@ -1568,13 +1512,6 @@
                   answeredQuestions++;
                 } else {
                   incompleteQuestions.push(`Question ${questionNumber} (${questionType.replace('-', ' ')})`);
-                }
-                break;
-              case 'short-answer':
-                if (shortAnswers[questionIndex] && shortAnswers[questionIndex].length > 0) {
-                  answeredQuestions++;
-                } else {
-                  incompleteQuestions.push(`Question ${questionNumber} (short answer)`);
                 }
                 break;
               case 'matching':
@@ -1621,7 +1558,6 @@
           const allAnswers = {
             selectedAnswers,
             matchingAnswers,
-            shortAnswers,
             blankAnswers,
             submittedAt: new Date().toISOString(),
             totalQuestions: totalQuestions
