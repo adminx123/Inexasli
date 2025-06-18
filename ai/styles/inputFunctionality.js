@@ -360,19 +360,31 @@ if (typeof window !== 'undefined') {
 }
 
 // ==========================================
-// AUTO-INITIALIZATION
+// AUTO-INITIALIZATION (Only when not imported as ES6 module)
 // ==========================================
 
-// Initialize immediately if DOM is already ready, otherwise wait for DOMContentLoaded
-if (document.readyState === 'loading') {
-    console.log('[Text Functionality] DOM still loading, waiting for DOMContentLoaded...');
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('[Text Functionality] DOM loaded, initializing...');
+// Detect if this script is being used as an ES6 module by checking import.meta
+let isES6Module = false;
+try {
+    // This will throw an error if not in a module context
+    isES6Module = typeof import.meta !== 'undefined';
+} catch (e) {
+    isES6Module = false;
+}
+
+// Only auto-initialize if NOT being imported as an ES6 module
+if (!isES6Module) {
+    // Initialize immediately if DOM is already ready, otherwise wait for DOMContentLoaded
+    if (document.readyState === 'loading') {
+        console.log('[Text Functionality] DOM still loading, waiting for DOMContentLoaded...');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[Text Functionality] DOM loaded, initializing...');
+            initInputFunctionality();
+        });
+    } else {
+        console.log('[Text Functionality] DOM already ready, initializing immediately...');
         initInputFunctionality();
-    });
-} else {
-    console.log('[Text Functionality] DOM already ready, initializing immediately...');
-    initInputFunctionality();
+    }
 }
 
 // ==========================================
@@ -408,18 +420,21 @@ function initGenericAddButtons() {
     });
 }
 
-// Initialize generic add buttons
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGenericAddButtons);
-} else {
-    initGenericAddButtons();
-}
-
-// MutationObserver to ensure add buttons are present when content loads dynamically
-(function ensureGenericAddButtons() {
-    const observer = new MutationObserver(() => {
+// Only auto-initialize add buttons if NOT being imported as an ES6 module
+if (!isES6Module) {
+    // Initialize generic add buttons
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGenericAddButtons);
+    } else {
         initGenericAddButtons();
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-})();
+    }
+
+    // MutationObserver to ensure add buttons are present when content loads dynamically
+    (function ensureGenericAddButtons() {
+        const observer = new MutationObserver(() => {
+            initGenericAddButtons();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    })();
+}
 
