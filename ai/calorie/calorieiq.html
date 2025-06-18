@@ -75,22 +75,14 @@
 
 <!-- Jump to Food Log button (conditionally rendered by JS) -->
 
-<script type="module" src="../styles/inputFunctionality.js"></script>
-<script>
-/*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
-*/
+<script type="module">
+import { initAutoExpandTextareas } from '../styles/inputFunctionality.js';
 
 (function() {
   console.log("Calorie IQ script initializing");
 
-  // Listen for generic textarea changes from inputFunctionality.js
+  // Initialize textarea auto-expand
+  initAutoExpandTextareas();
   document.addEventListener('textarea:changed', function(e) {
     // Save form data when any textarea changes
     if (window.calorieFormPersistence) {
