@@ -276,50 +276,6 @@
       border-bottom-color: #2196f3;
     }
     
-    /* Matching */
-    .matching-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin: 16px 0;
-    }
-    
-    .matching-column h4 {
-      margin: 0 0 12px 0;
-      color: #495057;
-      font-weight: 600;
-    }
-    
-    .match-item, .match-target {
-      background: #f8f9fa;
-      border: 1px solid #e9ecef;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .match-item:hover, .match-target:hover {
-      background: #e3f2fd;
-    }
-    
-    .match-item.selected {
-      background: #e3f2fd;
-      border-color: #2196f3;
-    }
-    
-    .match-item.matched {
-      background: #d4edda;
-      border-color: #28a745;
-      opacity: 0.7;
-    }
-    
-    .match-target.filled {
-      background: #d4edda;
-      border-color: #28a745;
-    }
-    
     /* Action Buttons */
     .quiz-actions {
       background: #f8f9fa;
@@ -600,37 +556,6 @@
                 <div style="flex: 1; line-height: 1.5;">False</div>
               </div>
             `;
-            break;
-            
-          case 'matching':
-            if (question.columnA && question.columnB) {
-              optionsHTML = `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 16px 0;">
-                  <div>
-                    <h4 style="margin: 0 0 12px 0; color: #495057;">Column A</h4>
-                    ${question.columnA.map(item => `
-                      <div class="match-item" data-question="${index}" data-id="${item.id}" onclick="selectMatchItem(this)" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 12px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s ease; user-select: none;">
-                        ${cleanText(item.text)}
-                      </div>
-                    `).join('')}
-                  </div>
-                  <div>
-                    <h4 style="margin: 0 0 12px 0; color: #495057;">Column B</h4>
-                    ${question.columnB.map(item => `
-                      <div class="match-target" data-question="${index}" data-id="${item.id}" onclick="selectMatchTarget(this)" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 12px; margin-bottom: 8px; min-height: 44px; cursor: pointer; transition: all 0.2s ease; user-select: none; position: relative;">
-                        <div class="match-content">${cleanText(item.text)}</div>
-                        <div class="match-selection" style="display: none; position: absolute; top: 4px; right: 8px; background: #28a745; color: white; border-radius: 12px; padding: 2px 8px; font-size: 12px; font-weight: 600;"></div>
-                      </div>
-                    `).join('')}
-                  </div>
-                </div>
-                <div style="margin-top: 16px; padding: 12px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3;">
-                  <small style="color: #1976d2; font-weight: 500;">
-                    <i class="fas fa-info-circle"></i> Click an item in Column A, then click its match in Column B
-                  </small>
-                </div>
-              `;
-            }
             break;
             
           case 'fill-in-the-blank':
@@ -1023,27 +948,6 @@
               }
               break;
 
-            case 'matching':
-              questionResult.userAnswer = submittedAnswers.matchingAnswers[questionIndex] || {};
-              questionResult.correctAnswer = question.correctMatches;
-              questionResult.wasAnswered = !!(questionResult.userAnswer && Object.keys(questionResult.userAnswer).length > 0);
-              
-              // Check if all matches are correct
-              let correctMatches = 0;
-              let totalMatches = question.correctMatches ? question.correctMatches.length : 0;
-              
-              if (question.correctMatches && questionResult.userAnswer) {
-                question.correctMatches.forEach(correctMatch => {
-                  if (questionResult.userAnswer[correctMatch.from] === correctMatch.to) {
-                    correctMatches++;
-                  }
-                });
-              }
-              
-              questionResult.isCorrect = correctMatches === totalMatches && totalMatches > 0;
-              questionResult.partialCredit = totalMatches > 0 ? correctMatches / totalMatches : 0;
-              break;
-
             case 'fill-in-the-blank':
               questionResult.userAnswer = submittedAnswers.blankAnswers[questionIndex] || {};
               questionResult.correctAnswer = {};
@@ -1288,9 +1192,7 @@
 
       function setupQuizInteractivity() {
         let selectedAnswers = {};
-        let matchingAnswers = {};
         let blankAnswers = {};
-        let selectedMatchItem = null;
         
         const questions = document.querySelectorAll('.question-card');
 
@@ -1318,73 +1220,6 @@
           selectedAnswers[questionIndex] = optionValue;
           
           // Update progress
-          updateProgress();
-        };
-
-        // Matching question interactions
-        window.selectMatchItem = function(itemElement) {
-          const questionIndex = itemElement.dataset.question;
-          
-          // Clear previous selections in this question
-          const questionCard = itemElement.closest('.question-card');
-          questionCard.querySelectorAll('.match-item').forEach(item => {
-            item.style.background = '#f8f9fa';
-            item.style.borderColor = '#e9ecef';
-            item.style.transform = 'scale(1)';
-          });
-          
-          // Highlight selected item
-          itemElement.style.background = '#e3f2fd';
-          itemElement.style.borderColor = '#2196f3';
-          itemElement.style.transform = 'scale(1.02)';
-          
-          selectedMatchItem = {
-            questionIndex: questionIndex,
-            itemId: itemElement.dataset.id,
-            element: itemElement
-          };
-        };
-
-        window.selectMatchTarget = function(targetElement) {
-          if (!selectedMatchItem) {
-            // Show hint if no item selected
-            targetElement.style.background = '#fff3cd';
-            targetElement.style.borderColor = '#ffc107';
-            setTimeout(() => {
-              targetElement.style.background = '#f8f9fa';
-              targetElement.style.borderColor = '#e9ecef';
-            }, 1000);
-            return;
-          }
-          
-          const questionIndex = targetElement.dataset.question;
-          const targetId = targetElement.dataset.id;
-          
-          // Ensure we're matching within the same question
-          if (selectedMatchItem.questionIndex !== questionIndex) {
-            return;
-          }
-          
-          // Initialize matching answers for this question if needed
-          if (!matchingAnswers[questionIndex]) {
-            matchingAnswers[questionIndex] = {};
-          }
-          
-          // Store the match
-          matchingAnswers[questionIndex][selectedMatchItem.itemId] = targetId;
-          
-          // Visual feedback
-          targetElement.style.background = '#d4edda';
-          targetElement.style.borderColor = '#28a745';
-          const selectionDiv = targetElement.querySelector('.match-selection');
-          selectionDiv.style.display = 'block';
-          selectionDiv.textContent = selectedMatchItem.element.textContent.substring(0, 20) + '...';
-          
-          // Reset selected item
-          selectedMatchItem.element.style.background = '#d4edda';
-          selectedMatchItem.element.style.borderColor = '#28a745';
-          selectedMatchItem = null;
-          
           updateProgress();
         };
 
@@ -1456,7 +1291,6 @@
 
         window.resetQuiz = function() {
           selectedAnswers = {};
-          matchingAnswers = {};
           blankAnswers = {};
           selectedMatchItem = null;
           
@@ -1509,15 +1343,6 @@
                   incompleteQuestions.push(`Question ${questionNumber} (${questionType.replace('-', ' ')})`);
                 }
                 break;
-              case 'matching':
-                const questionMatches = matchingAnswers[questionIndex];
-                const itemsInQuestion = question.querySelectorAll('.match-item').length;
-                if (questionMatches && Object.keys(questionMatches).length === itemsInQuestion) {
-                  answeredQuestions++;
-                } else {
-                  incompleteQuestions.push(`Question ${questionNumber} (matching)`);
-                }
-                break;
               case 'fill-in-the-blank':
                 const questionBlanks = blankAnswers[questionIndex];
                 const blanksInQuestion = question.querySelectorAll('.blank-input').length;
@@ -1552,7 +1377,6 @@
           // Compile all answers
           const allAnswers = {
             selectedAnswers,
-            matchingAnswers,
             blankAnswers,
             submittedAt: new Date().toISOString(),
             totalQuestions: totalQuestions
