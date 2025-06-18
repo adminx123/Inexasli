@@ -558,36 +558,6 @@
             `;
             break;
             
-          case 'fill-in-the-blank':
-            // Replace blanks with input fields
-            let questionWithBlanks = cleanQuestionText;
-            if (question.blanks) {
-              question.blanks.forEach((blank, blankIndex) => {
-                const inputId = `blank-${index}-${blankIndex}`;
-                questionWithBlanks = questionWithBlanks.replace('_____', 
-                  `<input type="text" id="${inputId}" class="blank-input" data-question="${index}" data-blank="${blankIndex}" onchange="updateBlankAnswer(this)" style="border: none; border-bottom: 2px solid #6c757d; background: transparent; padding: 4px 8px; margin: 0 4px; min-width: 100px; font-size: inherit; font-family: inherit; outline: none; transition: border-color 0.2s ease;" placeholder="...">`
-                );
-              });
-            } else {
-              // Fallback: replace all _____ with inputs
-              let blankIndex = 0;
-              questionWithBlanks = questionWithBlanks.replace(/_____/g, () => {
-                const inputId = `blank-${index}-${blankIndex}`;
-                const input = `<input type="text" id="${inputId}" class="blank-input" data-question="${index}" data-blank="${blankIndex}" onchange="updateBlankAnswer(this)" style="border: none; border-bottom: 2px solid #6c757d; background: transparent; padding: 4px 8px; margin: 0 4px; min-width: 100px; font-size: inherit; font-family: inherit; outline: none; transition: border-color 0.2s ease;" placeholder="...">`;
-                blankIndex++;
-                return input;
-              });
-            }
-            optionsHTML = `
-              <div style="margin: 16px 0; font-size: 16px; line-height: 1.8;">${questionWithBlanks}</div>
-              <div style="margin-top: 16px; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
-                <small style="color: #856404; font-weight: 500;">
-                  <i class="fas fa-edit"></i> Fill in the blanks with appropriate words or phrases
-                </small>
-              </div>
-            `;
-            break;
-            
           default:
             // Default to multiple choice format
             optionsHTML = question.options ? question.options.map(option => `
@@ -605,9 +575,9 @@
               <span style="font-weight: 600; color: #495057;">Question ${question.questionNumber} (${questionType.replace('-', ' ')})</span>
             </div>
             <div style="padding: 20px; font-size: 16px; line-height: 1.6; color: #2c3e50; font-weight: 500;">
-              ${questionType === 'fill-in-the-blank' ? optionsHTML : cleanQuestionText}
+              ${cleanQuestionText}
             </div>
-            ${questionType !== 'fill-in-the-blank' ? `<div style="padding: 0 20px 20px 20px;">${optionsHTML}</div>` : ''}
+            <div style="padding: 0 20px 20px 20px;">${optionsHTML}</div>
           </div>
         `;
       }
@@ -1192,7 +1162,6 @@
 
       function setupQuizInteractivity() {
         let selectedAnswers = {};
-        let blankAnswers = {};
         
         const questions = document.querySelectorAll('.question-card');
 
@@ -1220,29 +1189,6 @@
           selectedAnswers[questionIndex] = optionValue;
           
           // Update progress
-          updateProgress();
-        };
-
-        // Fill-in-the-blank updates
-        window.updateBlankAnswer = function(inputElement) {
-          const questionIndex = inputElement.dataset.question;
-          const blankIndex = inputElement.dataset.blank;
-          
-          if (!blankAnswers[questionIndex]) {
-            blankAnswers[questionIndex] = {};
-          }
-          
-          blankAnswers[questionIndex][blankIndex] = inputElement.value.trim();
-          
-          // Visual feedback
-          if (inputElement.value.trim()) {
-            inputElement.style.borderColor = '#28a745';
-            inputElement.style.background = '#f8fff8';
-          } else {
-            inputElement.style.borderColor = '#6c757d';
-            inputElement.style.background = 'transparent';
-          }
-          
           updateProgress();
         };
 
@@ -1291,7 +1237,6 @@
 
         window.resetQuiz = function() {
           selectedAnswers = {};
-          blankAnswers = {};
           selectedMatchItem = null;
           
           // Reset visual states
@@ -1343,20 +1288,6 @@
                   incompleteQuestions.push(`Question ${questionNumber} (${questionType.replace('-', ' ')})`);
                 }
                 break;
-              case 'fill-in-the-blank':
-                const questionBlanks = blankAnswers[questionIndex];
-                const blanksInQuestion = question.querySelectorAll('.blank-input').length;
-                if (questionBlanks && Object.keys(questionBlanks).length === blanksInQuestion) {
-                  const filledBlanks = Object.values(questionBlanks).filter(val => val && val.length > 0).length;
-                  if (filledBlanks === blanksInQuestion) {
-                    answeredQuestions++;
-                  } else {
-                    incompleteQuestions.push(`Question ${questionNumber} (fill-in-the-blank - ${blanksInQuestion - filledBlanks} blanks remaining)`);
-                  }
-                } else {
-                  incompleteQuestions.push(`Question ${questionNumber} (fill-in-the-blank)`);
-                }
-                break;
             }
           });
           
@@ -1377,7 +1308,6 @@
           // Compile all answers
           const allAnswers = {
             selectedAnswers,
-            blankAnswers,
             submittedAt: new Date().toISOString(),
             totalQuestions: totalQuestions
           };
