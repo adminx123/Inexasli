@@ -410,23 +410,6 @@ button:hover {
 /* Removed multi-field input container and related styles */
 
 
-.multifield-add-btn {
-  background-color: #4a7c59;
-  color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 12px 24px;
-  margin: 8px auto;
-  font-family: "Geist", sans-serif;
-  width: fit-content; /* Fit to content */
-}
-
-.multifield-add-btn:hover {
-  background-color: #3d6b4a;
-}
-
 /* ====================
    Guided Forms System Styles
    ==================== */
