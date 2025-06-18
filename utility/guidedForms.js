@@ -482,7 +482,8 @@ class GuidedFormSystem {
      * Display a step with smooth transition
      */
     displayStep(step) {
-        step.element.style.display = 'flex';
+        step.element.style.visibility = 'visible';
+        step.element.style.pointerEvents = 'auto';
         step.isVisible = true;
         
         if (this.config.smoothTransitions) {
@@ -502,7 +503,9 @@ class GuidedFormSystem {
                 }, this.config.transitionDuration);
             });
         } else {
-            // No transitions - adjust size immediately
+            // No transitions - show immediately
+            step.element.style.opacity = '1';
+            step.element.style.transform = 'translateY(0)';
             this.adjustContainerSize(step);
         }
         
@@ -515,16 +518,18 @@ class GuidedFormSystem {
      */
     hideStep(step) {
         step.isVisible = false;
+        step.element.style.pointerEvents = 'none';
         
         if (this.config.smoothTransitions) {
             step.element.style.opacity = '0';
             step.element.style.transform = 'translateY(-20px)';
             
             setTimeout(() => {
-                step.element.style.display = 'none';
+                step.element.style.visibility = 'hidden';
             }, this.config.transitionDuration);
         } else {
-            step.element.style.display = 'none';
+            step.element.style.opacity = '0';
+            step.element.style.visibility = 'hidden';
         }
     }
     
@@ -545,12 +550,14 @@ class GuidedFormSystem {
      * Initialize the first step
      */
     initializeFirstStep() {
-        // Hide all steps initially
+        // Hide all steps initially using opacity/visibility
         this.steps.forEach((step, index) => {
             if (index === 0) {
                 this.displayStep(step);
             } else {
-                step.element.style.display = 'none';
+                step.element.style.opacity = '0';
+                step.element.style.visibility = 'hidden';
+                step.element.style.pointerEvents = 'none';
                 step.isVisible = false;
             }
         });

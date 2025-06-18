@@ -431,6 +431,13 @@ button:hover {
    Guided Forms System Styles
    ==================== */
 
+/* Hidden steps should not take up space but maintain element dimensions */
+.row1[style*="visibility: hidden"] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
 /* Form step transitions */
 .row1 {
     transition: opacity 0.3s ease, transform 0.3s ease;
