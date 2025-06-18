@@ -269,19 +269,19 @@ function triggerTextareaExpansion() {
 }
 
 /**
- * Legacy compatibility function for CalorieIQ
- * @param {string} mealType - Type of meal
+ * Generic dynamic input creation function
+ * @param {string} inputType - Type of input (for placeholder)
  * @param {string} value - Initial value
  * @param {boolean} skipRepositioning - Skip repositioning logic
  * @returns {HTMLTextAreaElement} The created textarea
  */
-function addMealInput(mealType = null, value = '', skipRepositioning = false) {
-  // Use calorie- as baseId for all dynamic meal/snack textareas
+function addDynamicInput(inputType = null, value = '', skipRepositioning = false) {
+  // Generic dynamic input that works for any module
   return addDynamicTextareaInput({
     containerSelector: '.row1:last-child',
-    baseId: 'calorie-',
+    baseId: 'dynamic-',
     value,
-    placeholder: mealType ? mealType.charAt(0).toUpperCase() + mealType.slice(1) + ': 100g yogurt, 2 oz crackers' : '',
+    placeholder: inputType ? `${inputType}: Enter details here` : 'Enter details here',
     skipRepositioning
   });
 }
@@ -330,8 +330,11 @@ if (typeof window !== 'undefined') {
     window.autoExpandTextarea = autoExpandTextarea;
     window.addDynamicTextareaInput = addDynamicTextareaInput;
     window.addDynamicTextareaAddButton = addDynamicTextareaAddButton;
-    window.addMealInput = addMealInput;
+    window.addDynamicInput = addDynamicInput;
     window.debugTextareaExpansionSequence = debugTextareaExpansionSequence;
+    
+    // Legacy wrapper for backward compatibility
+    window.addMealInput = (mealType, value, skip) => addDynamicInput(mealType, value, skip);
 }
 
 // ==========================================
