@@ -159,10 +159,10 @@ function initScrollToTopFAB() {
     
     fab.style.cssText = `
         background-color: #f5f5f5;
-        color: #000;
-        border: 2px solid #000;
+        color: #4a7c59;
+        border: 2px solid #2d5a3d;
         border-radius: 50%;
-        box-shadow: 4px 4px 0 #000;
+        box-shadow: 4px 4px 0 #4a7c59;
         width: ${ENHANCED_UI_CONFIG.scrollFab.desktopSize}px;
         height: ${ENHANCED_UI_CONFIG.scrollFab.desktopSize}px;
         display: flex;
@@ -182,24 +182,24 @@ function initScrollToTopFAB() {
     fab.addEventListener('mouseenter', function() {
         this.style.backgroundColor = '#FFFFFF';
         this.style.transform = 'translate(-2px, -2px)';
-        this.style.boxShadow = '6px 6px 0 #000';
+        this.style.boxShadow = '6px 6px 0 #4a7c59';
     });
 
     fab.addEventListener('mouseleave', function() {
         this.style.backgroundColor = '#f5f5f5';
         this.style.transform = 'translate(0, 0)';
-        this.style.boxShadow = '4px 4px 0 #000';
+        this.style.boxShadow = '4px 4px 0 #4a7c59';
     });
 
     // Click effect
     fab.addEventListener('mousedown', function() {
         this.style.transform = 'translate(2px, 2px)';
-        this.style.boxShadow = '2px 2px 0 #000';
+        this.style.boxShadow = '2px 2px 0 #4a7c59';
     });
 
     fab.addEventListener('mouseup', function() {
         this.style.transform = 'translate(-2px, -2px)';
-        this.style.boxShadow = '6px 6px 0 #000';
+        this.style.boxShadow = '6px 6px 0 #4a7c59';
     });
 
     // Click handler
