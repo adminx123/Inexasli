@@ -1575,13 +1575,15 @@
             }
           });
           
+          // Show warning and confirmation before submitting
+          let confirmMessage;
           if (answeredQuestions < totalQuestions) {
-            alert(`Please complete all questions before submitting.\n\nIncomplete questions:\n${incompleteQuestions.join('\n')}\n\nProgress: ${answeredQuestions}/${totalQuestions} questions completed.`);
-            return;
+            confirmMessage = `⚠️ INCOMPLETE QUIZ WARNING ⚠️\n\nYou have only answered ${answeredQuestions} out of ${totalQuestions} questions.\n\nUnanswered questions:\n${incompleteQuestions.join('\n')}\n\nYour score will be calculated based on answered questions only.\nUnanswered questions will be marked as incorrect.\n\nDo you want to submit anyway?`;
+          } else {
+            confirmMessage = `✅ COMPLETE QUIZ\n\nYou have answered all ${totalQuestions} questions!\n\nOnce submitted, you cannot change your answers.\n\nSubmit your quiz now?`;
           }
           
-          // Show confirmation before submitting
-          const confirmSubmit = confirm(`Are you sure you want to submit your quiz?\n\nYou have answered ${answeredQuestions} out of ${totalQuestions} questions.\n\nOnce submitted, you cannot change your answers.`);
+          const confirmSubmit = confirm(confirmMessage);
           
           if (!confirmSubmit) {
             return;
