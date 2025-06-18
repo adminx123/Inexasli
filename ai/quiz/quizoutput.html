@@ -88,14 +88,82 @@
       transition: width 0.3s ease;
     }
     
-    .question-card {
+    .answer-feedback {
+      font-size: 14px;
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .answer-feedback.correct {
+      background: #e8f5e8;
+      border-left: 4px solid #4caf50;
+      color: #2e7d32;
+    }
+    
+    .answer-feedback.incorrect {
+      background: #ffebee;
+      border-left: 4px solid #f44336;
+      color: #c62828;
+    }
+    
+    .quiz-results-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    
+    .results-card {
       background: white;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      margin-bottom: 24px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: all 0.3s ease;
+    }
+    
+    .results-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .results-card p {
+      margin: 0;
+      font-size: 14px;
+      color: #6c757d;
+    }
+    
+    @media print {
+      .quiz-display button {
+        display: none !important;
+      }
+      
+      .device-container {
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      
+      .quiz-header {
+        background: #667eea !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+    
+    .question-card.answered {
+      border-color: #28a745;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+    }
+    
+    .question-card.incorrect {
+      border-color: #dc3545;
+      box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
     }
     
     .question-card:hover {
@@ -915,6 +983,324 @@
         }
       }
 
+      function evaluateQuiz(submittedAnswers) {
+        const results = {
+          totalQuestions: submittedAnswers.totalQuestions,
+          correctAnswers: 0,
+          incorrectAnswers: 0,
+          score: 0,
+          percentage: 0,
+          questionResults: [],
+          submittedAt: submittedAnswers.submittedAt
+        };
+
+        // Get the original quiz data to compare answers
+        const responseKey = "quizIqResponse";
+        const originalData = getJSON(responseKey);
+        if (!originalData || !originalData.data || !originalData.data.quizContent) {
+          console.error('Cannot evaluate quiz: original quiz data not found');
+          return results;
+        }
+
+        let quizContent;
+        if (typeof originalData.data.quizContent === 'string') {
+          try {
+            quizContent = JSON.parse(originalData.data.quizContent);
+          } catch (e) {
+            console.error('Cannot parse quiz content for evaluation');
+            return results;
+          }
+        } else {
+          quizContent = originalData.data.quizContent;
+        }
+
+        if (!quizContent.questions) {
+          console.error('Quiz content has no questions array');
+          return results;
+        }
+
+        // Evaluate each question
+        quizContent.questions.forEach((question, index) => {
+          const questionIndex = index.toString();
+          const questionResult = {
+            questionNumber: question.questionNumber || (index + 1),
+            questionText: question.questionText,
+            type: question.type,
+            userAnswer: null,
+            correctAnswer: null,
+            isCorrect: false,
+            explanation: question.explanation || 'No explanation provided.',
+            points: 1
+          };
+
+          // Evaluate based on question type
+          switch (question.type) {
+            case 'multiple-choice':
+            case 'true-false':
+              questionResult.userAnswer = submittedAnswers.selectedAnswers[questionIndex];
+              questionResult.correctAnswer = question.correctAnswer;
+              questionResult.isCorrect = questionResult.userAnswer === questionResult.correctAnswer;
+              
+              // For display purposes, get the full text of selected option
+              if (question.options && questionResult.userAnswer) {
+                const selectedOption = question.options.find(opt => opt.letter === questionResult.userAnswer);
+                questionResult.userAnswerText = selectedOption ? selectedOption.text : questionResult.userAnswer;
+              }
+              if (question.options && questionResult.correctAnswer) {
+                const correctOption = question.options.find(opt => opt.letter === questionResult.correctAnswer);
+                questionResult.correctAnswerText = correctOption ? correctOption.text : questionResult.correctAnswer;
+              }
+              break;
+
+            case 'short-answer':
+              questionResult.userAnswer = submittedAnswers.shortAnswers[questionIndex];
+              questionResult.correctAnswer = question.expectedAnswer || question.keyPoints || 'See explanation for details.';
+              // For short answers, we'll mark as correct if user provided an answer (manual grading needed)
+              questionResult.isCorrect = questionResult.userAnswer && questionResult.userAnswer.length > 10;
+              questionResult.requiresManualGrading = true;
+              break;
+
+            case 'matching':
+              questionResult.userAnswer = submittedAnswers.matchingAnswers[questionIndex];
+              questionResult.correctAnswer = question.correctMatches;
+              
+              // Check if all matches are correct
+              let correctMatches = 0;
+              let totalMatches = question.correctMatches ? question.correctMatches.length : 0;
+              
+              if (question.correctMatches && questionResult.userAnswer) {
+                question.correctMatches.forEach(correctMatch => {
+                  if (questionResult.userAnswer[correctMatch.from] === correctMatch.to) {
+                    correctMatches++;
+                  }
+                });
+              }
+              
+              questionResult.isCorrect = correctMatches === totalMatches && totalMatches > 0;
+              questionResult.partialCredit = totalMatches > 0 ? correctMatches / totalMatches : 0;
+              break;
+
+            case 'fill-in-the-blank':
+              questionResult.userAnswer = submittedAnswers.blankAnswers[questionIndex];
+              questionResult.correctAnswer = {};
+              
+              // Check each blank
+              let correctBlanks = 0;
+              let totalBlanks = question.blanks ? question.blanks.length : 0;
+              
+              if (question.blanks) {
+                question.blanks.forEach(blank => {
+                  const blankPos = blank.position.toString();
+                  questionResult.correctAnswer[blankPos] = blank.correctAnswer;
+                  
+                  if (questionResult.userAnswer && questionResult.userAnswer[blankPos]) {
+                    const userBlank = questionResult.userAnswer[blankPos].toLowerCase().trim();
+                    const correctBlank = blank.correctAnswer.toLowerCase().trim();
+                    const alternatives = blank.alternatives ? blank.alternatives.map(alt => alt.toLowerCase().trim()) : [];
+                    
+                    if (userBlank === correctBlank || alternatives.includes(userBlank)) {
+                      correctBlanks++;
+                    }
+                  }
+                });
+              }
+              
+              questionResult.isCorrect = correctBlanks === totalBlanks && totalBlanks > 0;
+              questionResult.partialCredit = totalBlanks > 0 ? correctBlanks / totalBlanks : 0;
+              break;
+          }
+
+          // Add to results
+          results.questionResults.push(questionResult);
+          
+          if (questionResult.isCorrect) {
+            results.correctAnswers++;
+          } else {
+            results.incorrectAnswers++;
+          }
+        });
+
+        // Calculate overall score
+        results.score = results.correctAnswers;
+        results.percentage = results.totalQuestions > 0 ? Math.round((results.correctAnswers / results.totalQuestions) * 100) : 0;
+
+        return results;
+      }
+
+      function createResultsHTML(results, submittedAnswers) {
+        const scoreClass = results.percentage >= 80 ? 'excellent' : results.percentage >= 70 ? 'good' : results.percentage >= 60 ? 'average' : 'needs-improvement';
+        const scoreColor = results.percentage >= 80 ? '#4caf50' : results.percentage >= 70 ? '#ff9800' : results.percentage >= 60 ? '#2196f3' : '#f44336';
+        const scoreIcon = results.percentage >= 80 ? 'fa-trophy' : results.percentage >= 70 ? 'fa-thumbs-up' : results.percentage >= 60 ? 'fa-check-circle' : 'fa-times-circle';
+
+        let resultsHTML = `
+          <div style="max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px;">
+            <!-- Results Header -->
+            <div style="background: linear-gradient(135deg, ${scoreColor} 0%, ${scoreColor}dd 100%); color: white; padding: 32px 24px; text-align: center;">
+              <h1 style="margin: 0 0 16px 0; font-size: 28px; font-weight: 600;">
+                <i class="fas ${scoreIcon}"></i> Quiz Results
+              </h1>
+              <div style="display: flex; justify-content: center; align-items: center; gap: 24px; flex-wrap: wrap;">
+                <div style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 16px 24px; backdrop-filter: blur(10px);">
+                  <div style="font-size: 32px; font-weight: 700; margin-bottom: 4px;">${results.percentage}%</div>
+                  <div style="font-size: 14px; opacity: 0.9;">Overall Score</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 16px 24px; backdrop-filter: blur(10px);">
+                  <div style="font-size: 24px; font-weight: 600; margin-bottom: 4px;">${results.correctAnswers}/${results.totalQuestions}</div>
+                  <div style="font-size: 14px; opacity: 0.9;">Correct Answers</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Performance Summary -->
+            <div style="padding: 24px;">
+              <div style="background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                <h3 style="margin: 0 0 16px 0; color: #495057; font-weight: 600;">
+                  <i class="fas fa-chart-line"></i> Performance Summary
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                  <div style="text-align: center; padding: 16px; background: white; border-radius: 8px; border: 1px solid #e9ecef;">
+                    <div style="font-size: 24px; font-weight: 600; color: #4caf50; margin-bottom: 4px;">
+                      <i class="fas fa-check-circle"></i> ${results.correctAnswers}
+                    </div>
+                    <div style="font-size: 14px; color: #6c757d;">Correct</div>
+                  </div>
+                  <div style="text-align: center; padding: 16px; background: white; border-radius: 8px; border: 1px solid #e9ecef;">
+                    <div style="font-size: 24px; font-weight: 600; color: #f44336; margin-bottom: 4px;">
+                      <i class="fas fa-times-circle"></i> ${results.incorrectAnswers}
+                    </div>
+                    <div style="font-size: 14px; color: #6c757d;">Incorrect</div>
+                  </div>
+                  <div style="text-align: center; padding: 16px; background: white; border-radius: 8px; border: 1px solid #e9ecef;">
+                    <div style="font-size: 24px; font-weight: 600; color: #2196f3; margin-bottom: 4px;">
+                      <i class="fas fa-clock"></i> ${new Date(results.submittedAt).toLocaleTimeString()}
+                    </div>
+                    <div style="font-size: 14px; color: #6c757d;">Completed</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Question-by-Question Results -->
+              <div style="margin-bottom: 24px;">
+                <h3 style="margin: 0 0 16px 0; color: #495057; font-weight: 600;">
+                  <i class="fas fa-list-check"></i> Detailed Results
+                </h3>
+        `;
+
+        // Add each question result
+        results.questionResults.forEach((questionResult, index) => {
+          const isCorrect = questionResult.isCorrect;
+          const statusColor = isCorrect ? '#4caf50' : '#f44336';
+          const statusIcon = isCorrect ? 'fa-check-circle' : 'fa-times-circle';
+          const statusText = isCorrect ? 'Correct' : 'Incorrect';
+
+          resultsHTML += `
+            <div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 16px; overflow: hidden;">
+              <!-- Question Header -->
+              <div style="background: ${isCorrect ? '#e8f5e8' : '#ffebee'}; padding: 16px; border-bottom: 1px solid #e0e0e0;">
+                <div style="display: flex; justify-content: between; align-items: center; gap: 16px;">
+                  <div style="flex: 1;">
+                    <h4 style="margin: 0; color: #495057; font-weight: 600; font-size: 16px;">
+                      Question ${questionResult.questionNumber}
+                    </h4>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px; color: ${statusColor}; font-weight: 600;">
+                    <i class="fas ${statusIcon}"></i>
+                    <span>${statusText}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Question Content -->
+              <div style="padding: 20px;">
+                <div style="margin-bottom: 16px;">
+                  <p style="margin: 0; font-weight: 500; color: #495057; line-height: 1.6;">
+                    ${questionResult.questionText}
+                  </p>
+                </div>
+
+                <!-- Answer Comparison -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                  <div>
+                    <h5 style="margin: 0 0 8px 0; color: #6c757d; font-size: 14px; font-weight: 600;">YOUR ANSWER:</h5>
+                    <div style="background: #f8f9fa; border-radius: 6px; padding: 12px; border-left: 4px solid ${isCorrect ? '#4caf50' : '#f44336'};">
+                      ${formatAnswer(questionResult.userAnswer, questionResult.type, questionResult.userAnswerText)}
+                    </div>
+                  </div>
+                  <div>
+                    <h5 style="margin: 0 0 8px 0; color: #6c757d; font-size: 14px; font-weight: 600;">CORRECT ANSWER:</h5>
+                    <div style="background: #e8f5e8; border-radius: 6px; padding: 12px; border-left: 4px solid #4caf50;">
+                      ${formatAnswer(questionResult.correctAnswer, questionResult.type, questionResult.correctAnswerText)}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Explanation -->
+                <div style="background: #e3f2fd; border-radius: 8px; padding: 16px; border-left: 4px solid #2196f3;">
+                  <h5 style="margin: 0 0 8px 0; color: #1976d2; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-lightbulb"></i> EXPLANATION:
+                  </h5>
+                  <p style="margin: 0; color: #424242; line-height: 1.6; font-size: 14px;">
+                    ${questionResult.explanation}
+                  </p>
+                  ${questionResult.requiresManualGrading ? '<p style="margin: 8px 0 0 0; color: #ff9800; font-size: 12px; font-style: italic;"><i class="fas fa-info-circle"></i> Short answers require manual review for accuracy.</p>' : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        resultsHTML += `
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="background: #f8f9fa; padding: 24px; border-top: 1px solid #e9ecef; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                <button onclick="window.location.reload()" style="padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 14px; background: #6c757d; color: white;">
+                  <i class="fas fa-redo"></i> Take Quiz Again
+                </button>
+                <button onclick="window.history.back()" style="padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                  <i class="fas fa-arrow-left"></i> Back to Quiz Form
+                </button>
+                <button onclick="window.print()" style="padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 14px; background: #28a745; color: white;">
+                  <i class="fas fa-print"></i> Print Results
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        return resultsHTML;
+      }
+
+      function formatAnswer(answer, type, answerText) {
+        if (!answer) return '<em style="color: #999;">No answer provided</em>';
+
+        switch (type) {
+          case 'multiple-choice':
+          case 'true-false':
+            return answerText ? `<strong>${answer}:</strong> ${answerText}` : answer;
+          
+          case 'short-answer':
+            return answer.length > 100 ? answer.substring(0, 100) + '...' : answer;
+          
+          case 'matching':
+            if (typeof answer === 'object') {
+              const matches = Object.entries(answer).map(([from, to]) => `${from} → ${to}`).join(', ');
+              return matches || '<em style="color: #999;">No matches made</em>';
+            }
+            return answer;
+          
+          case 'fill-in-the-blank':
+            if (typeof answer === 'object') {
+              const blanks = Object.entries(answer).map(([pos, val]) => `Blank ${pos}: ${val}`).join(', ');
+              return blanks || '<em style="color: #999;">No blanks filled</em>';
+            }
+            return answer;
+          
+          default:
+            return answer;
+        }
+      }
+
       function setupQuizInteractivity() {
         let selectedAnswers = {};
         let matchingAnswers = {};
@@ -1194,6 +1580,13 @@
             return;
           }
           
+          // Show confirmation before submitting
+          const confirmSubmit = confirm(`Are you sure you want to submit your quiz?\n\nYou have answered ${answeredQuestions} out of ${totalQuestions} questions.\n\nOnce submitted, you cannot change your answers.`);
+          
+          if (!confirmSubmit) {
+            return;
+          }
+          
           // Compile all answers
           const allAnswers = {
             selectedAnswers,
@@ -1207,30 +1600,11 @@
           console.log('Quiz submitted successfully!');
           console.log('All answers:', allAnswers);
           
-          // Show success message
-          const successHTML = `
-            <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px;">
-              <div style="background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: white; padding: 24px; text-align: center;">
-                <h1 style="margin: 0; font-size: 24px; font-weight: 600;"><i class="fas fa-check-circle"></i> Quiz Completed!</h1>
-              </div>
-              <div style="padding: 32px 24px; text-align: center;">
-                <div style="background: #e8f5e8; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
-                  <h3 style="margin: 0 0 12px 0; color: #2e7d32; font-weight: 600;">Submission Successful</h3>
-                  <p style="margin: 0; color: #424242; line-height: 1.6;">You have successfully completed all ${totalQuestions} questions. Your answers have been recorded.</p>
-                </div>
-                <div style="display: flex; justify-content: center; gap: 16px; margin-top: 24px;">
-                  <button onclick="window.location.reload()" style="padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 14px; background: #6c757d; color: white;">
-                    <i class="fas fa-redo"></i> Take Again
-                  </button>
-                  <button onclick="window.history.back()" style="padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                    <i class="fas fa-arrow-left"></i> Back to Form
-                  </button>
-                </div>
-              </div>
-            </div>
-          `;
+          // Evaluate quiz and show results
+          const results = evaluateQuiz(allAnswers);
+          const resultsHTML = createResultsHTML(results, allAnswers);
           
-          document.getElementById('output-span').innerHTML = successHTML;
+          document.getElementById('output-span').innerHTML = resultsHTML;
         };
       }
       
