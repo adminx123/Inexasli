@@ -418,19 +418,19 @@
         </h2>
         <div style="background: #4a7c59; color: white; padding: 15px; border-radius: 5px; border: 1px solid #4a7c59; margin: 15px 0 20px 0;">
           <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <i class="fas fa-lightbulb" style="margin-right: 8px; color: #f5f5dc;"></i>
-            <strong>How AI Interpreted Your Input</strong>
+            <i class="fas fa-calculator" style="margin-right: 8px; color: #f5f5dc;"></i>
+            <strong>Consistent Nutrition Analysis</strong>
           </div>
           <div style="margin: 0; font-size: 14px; line-height: 1.5;">
-            Below you'll see three levels of detail:
+            AI-powered food analysis with mathematically consistent totals:
             <div style="margin-top: 8px;">
-              <strong><i class="fas fa-chart-pie" style="margin-right: 6px; color: #f5f5dc;"></i>daily nutrition summary</strong>
+              <strong><i class="fas fa-chart-pie" style="margin-right: 6px; color: #f5f5dc;"></i>daily totals</strong> calculated by summing individual foods
             </div>
             <div>
-              <strong><i class="fas fa-utensils" style="margin-right: 6px; color: #f5f5dc;"></i>meal breakdowns with individual food contributions</strong>
+              <strong><i class="fas fa-utensils" style="margin-right: 6px; color: #f5f5dc;"></i>meal totals</strong> calculated by summing foods within each meal
             </div>
             <div>
-              <strong><i class="fas fa-bullseye" style="margin-right: 6px; color: #f5f5dc;"></i>personalized recommendations</strong> with AI assumptions clearly documented
+              <strong><i class="fas fa-brain" style="margin-right: 6px; color: #f5f5dc;"></i>individual foods</strong> analyzed by AI for nutritional content
             </div>
           </div>
         </div>
@@ -446,10 +446,93 @@
         container.appendChild(bmiSection);
       }
       
-      // Daily Totals Section (New enhanced section)
-      if (calorieData.dailyTotals && Array.isArray(calorieData.dailyTotals)) {
+      // Daily Totals Section (Calculated from individual foods for accuracy)
+      if (calorieData.individualFoods && Array.isArray(calorieData.individualFoods)) {
         const dailySection = document.createElement('div');
         dailySection.innerHTML = '<h3 style="color: #333; margin: 20px 0 15px 0; display: flex; align-items: center;"><i class="fas fa-chart-pie" style="margin-right: 10px; color: #7a9b8a;"></i>Daily Nutrition Summary</h3>';
+        
+        // Calculate total daily nutrition from individual foods
+        let totalCalories = 0;
+        let totalProtein = 0;
+        let totalCarbs = 0;
+        let totalFat = 0;
+        
+        calorieData.individualFoods.forEach(food => {
+          const calories = parseFloat(String(food.calories || food.caloriesPerServing || food.cal || '0').replace(/[^\d.]/g, '')) || 0;
+          const protein = parseFloat(String(food.protein || food.proteinPerServing || '0').replace(/[^\d.]/g, '')) || 0;
+          const carbs = parseFloat(String(food.carbs || food.carbsPerServing || food.carbohydrates || '0').replace(/[^\d.]/g, '')) || 0;
+          const fat = parseFloat(String(food.fat || food.fatPerServing || '0').replace(/[^\d.]/g, '')) || 0;
+          
+          totalCalories += calories;
+          totalProtein += protein;
+          totalCarbs += carbs;
+          totalFat += fat;
+        });
+        
+        // Create calculated daily totals with approximate targets (these could be enhanced with user-specific targets)
+        const calculatedDailyTotals = [
+          {
+            name: "Calories",
+            target: "2000 kcal",
+            intake: `${Math.round(totalCalories)} kcal`,
+            percentage: `${Math.round((totalCalories / 2000) * 100)}%`,
+            calculated: true
+          },
+          {
+            name: "Protein", 
+            target: "150g",
+            intake: `${Math.round(totalProtein * 10) / 10}g`,
+            percentage: `${Math.round((totalProtein / 150) * 100)}%`,
+            calculated: true
+          },
+          {
+            name: "Carbohydrates",
+            target: "225g", 
+            intake: `${Math.round(totalCarbs * 10) / 10}g`,
+            percentage: `${Math.round((totalCarbs / 225) * 100)}%`,
+            calculated: true
+          },
+          {
+            name: "Fat",
+            target: "65g",
+            intake: `${Math.round(totalFat * 10) / 10}g`, 
+            percentage: `${Math.round((totalFat / 65) * 100)}%`,
+            calculated: true
+          }
+        ];
+        
+        const nutrientsGrid = document.createElement('div');
+        nutrientsGrid.className = 'nutrients-grid';
+        
+        calculatedDailyTotals.forEach(nutrient => {
+          const card = document.createElement('div');
+          card.className = 'nutrient-card';
+          
+          const percentage = parseInt(nutrient.percentage);
+          let progressClass = 'percentage-good';
+          if (percentage < 85) progressClass = 'percentage-warning';
+          if (percentage < 70) progressClass = 'percentage-low';
+          
+          card.innerHTML = `
+            <div class="nutrient-name">${nutrient.name}</div>
+            <div class="nutrient-progress">
+              <div class="nutrient-progress-bar ${progressClass}" style="width: ${Math.min(percentage, 100)}%"></div>
+            </div>
+            <div class="nutrient-details">
+              <span>${nutrient.intake} / ${nutrient.target}</span>
+              <span style="font-weight: bold; color: #000">${nutrient.percentage}</span>
+            </div>
+          `;
+          
+          nutrientsGrid.appendChild(card);
+        });
+        
+        dailySection.appendChild(nutrientsGrid);
+        container.appendChild(dailySection);
+      } else if (calorieData.dailyTotals && Array.isArray(calorieData.dailyTotals)) {
+        // Fallback to AI daily totals if no individual foods available
+        const dailySection = document.createElement('div');
+        dailySection.innerHTML = '<h3 style="color: #333; margin: 20px 0 15px 0; display: flex; align-items: center;"><i class="fas fa-chart-pie" style="margin-right: 10px; color: #7a9b8a;"></i>Daily Nutrition Summary (AI)</h3>';
         
         const nutrientsGrid = document.createElement('div');
         nutrientsGrid.className = 'nutrients-grid';
@@ -481,62 +564,105 @@
         container.appendChild(dailySection);
       }
       
-      // Meal Breakdown Section (Enhanced with integrated individual foods)
-      if (calorieData.mealTotals && Array.isArray(calorieData.mealTotals)) {
+      // Meal Breakdown Section (Enhanced with frontend-calculated totals)
+      if (calorieData.individualFoods && Array.isArray(calorieData.individualFoods)) {
         const mealSection = document.createElement('div');
         mealSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><i class="fas fa-utensils" style="margin-right: 10px; color: #7a9b8a;"></i>Meal Breakdown &amp; Individual Foods</h3>';
-        mealSection.innerHTML += '<p style="color: #666; font-size: 14px; margin-bottom: 20px;">Nutritional breakdown by meal with individual food contributions shown directly below each meal:</p>';
+        mealSection.innerHTML += '<p style="color: #666; font-size: 14px; margin-bottom: 20px;">Nutritional breakdown calculated from individual food contributions for maximum accuracy:</p>';
         
-        // Group individual foods by meal type for integration
+        // Group individual foods by meal type and calculate totals
         const foodsByMeal = {};
-        if (calorieData.individualFoods && Array.isArray(calorieData.individualFoods)) {
-          calorieData.individualFoods.forEach(food => {
-            const mealType = food.mealType || 'Other';
-            if (!foodsByMeal[mealType]) {
-              foodsByMeal[mealType] = [];
-            }
-            foodsByMeal[mealType].push(food);
-          });
-        }
+        const calculatedMealTotals = {};
         
-        calorieData.mealTotals.forEach(meal => {
+        calorieData.individualFoods.forEach(food => {
+          const mealType = food.mealType || 'Other';
+          if (!foodsByMeal[mealType]) {
+            foodsByMeal[mealType] = [];
+            calculatedMealTotals[mealType] = {
+              calories: 0,
+              protein: 0,
+              carbs: 0,
+              fat: 0
+            };
+          }
+          foodsByMeal[mealType].push(food);
+          
+          // Extract numeric values from individual foods and sum them
+          const calories = parseFloat(String(food.calories || food.caloriesPerServing || food.cal || '0').replace(/[^\d.]/g, '')) || 0;
+          const protein = parseFloat(String(food.protein || food.proteinPerServing || '0').replace(/[^\d.]/g, '')) || 0;
+          const carbs = parseFloat(String(food.carbs || food.carbsPerServing || food.carbohydrates || '0').replace(/[^\d.]/g, '')) || 0;
+          const fat = parseFloat(String(food.fat || food.fatPerServing || '0').replace(/[^\d.]/g, '')) || 0;
+          
+          calculatedMealTotals[mealType].calories += calories;
+          calculatedMealTotals[mealType].protein += protein;
+          calculatedMealTotals[mealType].carbs += carbs;
+          calculatedMealTotals[mealType].fat += fat;
+        });
+        
+        // Create meal cards from calculated totals instead of AI-provided totals
+        Object.entries(calculatedMealTotals).forEach(([mealType, totals]) => {
           const mealCard = document.createElement('div');
           mealCard.className = 'meal-card';
           mealCard.style.marginBottom = '20px';
           
-          const mealIcon = getMealIcon(meal.mealType);
-          
-          // Calculate overall meal completion percentage for visual indicator
-          const macros = [meal.calories, meal.protein, meal.carbs, meal.fat].filter(m => m);
-          const avgPercentage = macros.length > 0 ? 
-            macros.reduce((sum, macro) => sum + parseInt(macro.percentage), 0) / macros.length : 0;
-          
-          let progressColor = '#7a9b8a'; // Muted sage green
-          if (avgPercentage < 70) progressColor = '#b8956d'; // Muted warm brown
-          if (avgPercentage < 50) progressColor = '#a67c7c'; // Muted rose
+          const mealIcon = getMealIcon(mealType);
           
           // Get foods for this meal
-          const mealFoods = foodsByMeal[meal.mealType] || [];
+          const mealFoods = foodsByMeal[mealType] || [];
           const foodCountText = mealFoods.length > 0 ? ` (${mealFoods.length} items)` : '';
+          
+          // Format calculated totals with proper units
+          const formattedCalories = Math.round(totals.calories);
+          const formattedProtein = Math.round(totals.protein * 10) / 10;
+          const formattedCarbs = Math.round(totals.carbs * 10) / 10;
+          const formattedFat = Math.round(totals.fat * 10) / 10;
+          
+          // Calculate what percentage of daily calorie goal this meal represents
+          // First, calculate total daily calories from all foods to determine the user's actual intake goal
+          let totalDailyCalories = 0;
+          Object.values(calculatedMealTotals).forEach(meal => {
+            totalDailyCalories += meal.calories;
+          });
+          
+          // Use the total daily calories as the goal (what they're actually eating)
+          // Or fall back to 2000 if very low intake
+          const dailyGoal = Math.max(totalDailyCalories, 1200);
+          const mealCaloriePercentage = Math.round((formattedCalories / dailyGoal) * 100);
+          
+          // Determine meal size category and color based on typical meal distribution
+          let mealSizeLabel, badgeColor;
+          if (mealCaloriePercentage < 15) {
+            mealSizeLabel = `${mealCaloriePercentage}% of daily calorie goal`;
+            badgeColor = '#b8956d'; // Muted warm brown
+          } else if (mealCaloriePercentage < 25) {
+            mealSizeLabel = `${mealCaloriePercentage}% of daily calorie goal`;
+            badgeColor = '#7a9b8a'; // Muted sage green  
+          } else if (mealCaloriePercentage < 40) {
+            mealSizeLabel = `${mealCaloriePercentage}% of daily calorie goal`;
+            badgeColor = '#7a9b8a'; // Muted sage green
+          } else {
+            mealSizeLabel = `${mealCaloriePercentage}% of daily calorie goal`;
+            badgeColor = '#a67c7c'; // Muted rose for very large portions
+          }
           
           mealCard.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
               <div class="meal-title" style="display: flex; align-items: center; margin: 0;">
-                ${mealIcon} ${meal.mealType}${foodCountText}
+                ${mealIcon} ${mealType}${foodCountText}
               </div>
-              <div style="background: ${progressColor}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">
-                ${Math.round(avgPercentage)}% of targets
+              <div style="background: ${badgeColor}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">
+                ${mealSizeLabel}
               </div>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; font-size: 13px; background: #f2f9f3; padding: 8px; border-radius: 4px; margin-bottom: ${mealFoods.length > 0 ? '15px' : '0'};">
-              ${meal.calories ? `<div style="text-align: center;"><strong>Calories</strong><br>${meal.calories.intake}/${meal.calories.target}<br><small style="color: #666;">${meal.calories.percentage}</small></div>` : ''}
-              ${meal.protein ? `<div style="text-align: center;"><strong>Protein</strong><br>${meal.protein.intake}/${meal.protein.target}<br><small style="color: #666;">${meal.protein.percentage}</small></div>` : ''}
-              ${meal.carbs ? `<div style="text-align: center;"><strong>Carbs</strong><br>${meal.carbs.intake}/${meal.carbs.target}<br><small style="color: #666;">${meal.carbs.percentage}</small></div>` : ''}
-              ${meal.fat ? `<div style="text-align: center;"><strong>Fat</strong><br>${meal.fat.intake}/${meal.fat.target}<br><small style="color: #666;">${meal.fat.percentage}</small></div>` : ''}
+              <div style="text-align: center;"><strong>Calories</strong><br>${formattedCalories} kcal</div>
+              <div style="text-align: center;"><strong>Protein</strong><br>${formattedProtein}g</div>
+              <div style="text-align: center;"><strong>Carbs</strong><br>${formattedCarbs}g</div>
+              <div style="text-align: center;"><strong>Fat</strong><br>${formattedFat}g</div>
             </div>
           `;
           
-          // Add individual foods directly under this meal's totals
+          // Add individual foods directly under this meal's totals (existing code preserved)
           if (mealFoods.length > 0) {
             const foodsContainer = document.createElement('div');
             foodsContainer.style.cssText = 'margin-top: 12px; padding-top: 12px; border-top: 1px solid #e9ecef;';
