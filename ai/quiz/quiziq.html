@@ -157,6 +157,7 @@ Key Battles"></textarea>
                 const apiUrl = 'https://quiz.4hm7q4q75z.workers.dev/';
                 
                 console.log('[QuizIQ] Sending quizIqInput to worker');
+                console.log('[QuizIQ] FormData being sent:', JSON.stringify(formData, null, 2));
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
