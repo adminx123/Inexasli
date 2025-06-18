@@ -354,65 +354,50 @@ if (document.readyState === 'loading') {
 }
 
 // ==========================================
-// CALORIE-SPECIFIC INITIALIZATION (Legacy Support)
+// GENERIC ADD FIELD INITIALIZATION
 // ==========================================
 
-// Form persistence initialization for calorie module
-if (typeof window !== 'undefined') {
-    try {
-        // Dynamically import formPersistence if available
-        import('../../utility/formPersistence.js').then(({ FormPersistence }) => {
-            window.calorieFormPersistence = FormPersistence.getInstance('calorie');
-            window.calorieFormPersistence.init();
-        }).catch(err => {
-            console.log('[InputFunctionality] FormPersistence not available:', err.message);
-        });
-    } catch (err) {
-        console.log('[InputFunctionality] Could not load FormPersistence:', err.message);
-    }
-}
-
-// CalorieIQ-specific add button initialization
-const foodLogSelector = '.row1[data-step-label="Food Log"]';
-
-function initCalorieAddButton() {
-    addDynamicTextareaAddButton({
-        containerSelector: foodLogSelector,
-        baseId: 'calorie-',
-        placeholder: 'Snack: 100g yogurt, 2 oz crackers'
-    });
-}
-
-// Initialize CalorieIQ add button
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCalorieAddButton);
-} else {
-    initCalorieAddButton();
-}
-
-// MutationObserver to ensure the add button is always present in the food log section
-(function ensureAddButtonObserver() {
-    const targetSelector = foodLogSelector;
-    const config = { childList: true, subtree: true };
+/**
+ * Auto-detect and initialize add buttons for any module
+ */
+function initGenericAddButtons() {
+    // Look for any .row1 containers that could benefit from add buttons
+    const containers = document.querySelectorAll('.row1');
     
-    function checkAndInject() {
-        const container = document.querySelector(targetSelector);
-        if (container && !container.querySelector('.dynamic-add-btn')) {
+    containers.forEach(container => {
+        // Skip if already has an add button
+        if (container.querySelector('.dynamic-add-btn')) return;
+        
+        // Check if container has textareas (potential for dynamic fields)
+        const hasTextareas = container.querySelectorAll('textarea').length > 0;
+        
+        if (hasTextareas) {
+            // Auto-detect module from URL or container attributes
+            const moduleFromUrl = window.location.pathname.match(/\/(\w+)\//)?.[1] || 'generic';
+            const stepLabel = container.getAttribute('data-step-label') || '';
+            
+            // Add generic add button
             addDynamicTextareaAddButton({
-                containerSelector: targetSelector,
-                baseId: 'calorie-',
-                placeholder: 'Snack: 100g yogurt, 2 oz crackers'
+                containerSelector: `[data-step-label="${stepLabel}"]`,
+                baseId: `${moduleFromUrl}-`,
+                placeholder: 'Additional item: Enter details here'
             });
         }
-    }
-    
-    // Initial check
-    checkAndInject();
-    
-    // Observe DOM changes
-    const observer = new MutationObserver(() => {
-        checkAndInject();
     });
-    observer.observe(document.body, config);
+}
+
+// Initialize generic add buttons
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGenericAddButtons);
+} else {
+    initGenericAddButtons();
+}
+
+// MutationObserver to ensure add buttons are present when content loads dynamically
+(function ensureGenericAddButtons() {
+    const observer = new MutationObserver(() => {
+        initGenericAddButtons();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
 })();
 
