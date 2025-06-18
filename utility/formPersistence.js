@@ -571,9 +571,17 @@ class FormPersistence {
             // Skip if element already has our handler
             if (element._fpHandlerAttached) return;
             
+            // Add change event for all elements
             element.addEventListener('change', () => {
                 this.saveInput(element);
             });
+            
+            // Add input event for textareas and text inputs for real-time saving
+            if (element.tagName === 'TEXTAREA' || element.type === 'text') {
+                element.addEventListener('input', () => {
+                    this.saveInput(element);
+                });
+            }
             
             // Mark as having our handler to prevent duplicates
             element._fpHandlerAttached = true;
@@ -687,13 +695,21 @@ class FormPersistence {
         let foundRelevantField = false;
         // Collect from text inputs, textareas, and selects
         document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], textarea, select').forEach(element => {
-            if (element.id && element.value) {
-                const fieldName = this.getFieldName(element.id);
-                foundRelevantField = true;
-                if (element.type === 'number') {
-                    formData[fieldName] = parseInt(element.value, 10) || parseFloat(element.value);
-                } else {
-                    formData[fieldName] = element.value;
+            if (element.id) {
+                // Only collect fields that belong to this module (have the module prefix) or are in the device-container
+                const modulePrefix = `${this.moduleName}-`;
+                const isModuleField = element.id.startsWith(modulePrefix);
+                const isInDeviceContainer = element.closest('.device-container');
+                
+                if (isModuleField || isInDeviceContainer) {
+                    const fieldName = this.getFieldName(element.id);
+                    foundRelevantField = true;
+                    // Save all values, including empty ones for textareas (to preserve user's intention to clear)
+                    if (element.type === 'number') {
+                        formData[fieldName] = element.value ? (parseInt(element.value, 10) || parseFloat(element.value)) : '';
+                    } else {
+                        formData[fieldName] = element.value || '';
+                    }
                 }
             }
         });
