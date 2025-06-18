@@ -1425,11 +1425,6 @@
               case 'true-false':
                 if (selectedAnswers[questionIndex]) answeredQuestions++;
                 break;
-              case 'short-answer':
-                if (shortAnswers[questionIndex] && shortAnswers[questionIndex].length > 0) {
-                  answeredQuestions++;
-                }
-                break;
               case 'matching':
                 const questionMatches = matchingAnswers[questionIndex];
                 const itemsInQuestion = question.querySelectorAll('.match-item').length;
