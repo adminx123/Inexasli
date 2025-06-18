@@ -89,6 +89,14 @@
 (function() {
   console.log("Calorie IQ script initializing");
 
+  // Listen for generic textarea changes from inputFunctionality.js
+  document.addEventListener('textarea:changed', function(e) {
+    // Save form data when any textarea changes
+    if (window.calorieFormPersistence) {
+      window.calorieFormPersistence.saveFormData();
+    }
+  });
+
   async function handleGenerateCalorieIq() {
     try {
       const formData = window.calorieFormPersistence.getSavedFormData();

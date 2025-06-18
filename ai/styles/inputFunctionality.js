@@ -156,8 +156,21 @@ function addDynamicTextareaInput({
 
   // Auto-expand and add listeners
   autoExpandTextarea(textarea);
-  textarea.addEventListener('input', () => autoExpandTextarea(textarea));
-  textarea.addEventListener('paste', () => setTimeout(() => autoExpandTextarea(textarea), 0));
+  textarea.addEventListener('input', () => {
+    autoExpandTextarea(textarea);
+    // Dispatch generic save event for modules to handle
+    document.dispatchEvent(new CustomEvent('textarea:changed', {
+      detail: { textarea, id: newId, value: textarea.value }
+    }));
+  });
+  textarea.addEventListener('paste', () => {
+    setTimeout(() => {
+      autoExpandTextarea(textarea);
+      document.dispatchEvent(new CustomEvent('textarea:changed', {
+        detail: { textarea, id: newId, value: textarea.value }
+      }));
+    }, 0);
+  });
 
   // Remove button
   const removeBtn = document.createElement('button');
@@ -175,7 +188,7 @@ function addDynamicTextareaInput({
   if (container) {
     // Insert above the add (+) button if it exists, otherwise above the generate button
     const addBtn = container.querySelector('.dynamic-add-btn');
-    const generateBtn = container.querySelector('#generate-calorie-btn');
+    const generateBtn = container.querySelector('button[id*="generate"]');
     if (addBtn) {
       container.insertBefore(inputGroup, addBtn);
     } else if (generateBtn) {
