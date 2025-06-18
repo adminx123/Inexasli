@@ -177,9 +177,18 @@ function addDynamicTextareaInput({
   removeBtn.innerText = '×';
   removeBtn.title = 'Remove this input';
   removeBtn.style.cssText = 'width: 40px; height: 40px; align-self: center; border: 1px solid #4a7c59; box-shadow: 2px 2px 4px rgba(74, 124, 89, 0.15); background-color: #f2f9f3; color: #2d5a3d; border-radius: 5px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0; font-family: "Geist", sans-serif; margin-left: 0;';
-  removeBtn.addEventListener('click', () => {
+  removeBtn.addEventListener('click', (e) => {
+    // Prevent event bubbling to avoid closing parent containers
+    e.preventDefault();
+    e.stopPropagation();
+    
     inputGroup.remove();
     if (typeof onRemove === 'function') onRemove(newId);
+    
+    // Trigger form data save after removal to update localStorage
+    document.dispatchEvent(new CustomEvent('textarea:changed', {
+      detail: { textarea: null, id: newId, value: '', action: 'removed' }
+    }));
   });
   inputGroup.appendChild(removeBtn);
 
