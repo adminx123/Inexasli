@@ -97,6 +97,60 @@
     }
   });
 
+  // Recreate dynamic fields from localStorage on page load
+  function recreateDynamicFields() {
+    const savedData = localStorage.getItem('calorieIqInput');
+    console.log('[CalorieIQ] Checking for saved data:', savedData);
+    
+    if (!savedData) {
+      console.log('[CalorieIQ] No saved data found');
+      return;
+    }
+    
+    try {
+      const data = JSON.parse(savedData);
+      console.log('[CalorieIQ] Parsed saved data:', data);
+      
+      // Look for dynamic field IDs - auto-detect the pattern based on URL
+      const moduleFromUrl = window.location.pathname.match(/\/(\w+)\//)?.[1] || 'generic';
+      const dynamicFieldPattern = new RegExp(`^${moduleFromUrl}-\\d+$`);
+      const dynamicFields = Object.keys(data).filter(fieldId => fieldId.match(dynamicFieldPattern));
+      console.log('[CalorieIQ] Module from URL:', moduleFromUrl);
+      console.log('[CalorieIQ] Dynamic field pattern:', dynamicFieldPattern);
+      console.log('[CalorieIQ] Found dynamic fields:', dynamicFields);
+      
+      dynamicFields.forEach(fieldId => {
+        // Check if field already exists
+        if (!document.getElementById(fieldId)) {
+          console.log('[CalorieIQ] Recreating field:', fieldId, 'with value:', data[fieldId]);
+          
+          // Create the dynamic field using the same function as the add button
+          if (window.addDynamicTextareaInput) {
+            const textarea = window.addDynamicTextareaInput({
+              containerSelector: '.row1[data-step-label="Food Log"]',
+              baseId: `${moduleFromUrl}-`,
+              value: data[fieldId],
+              placeholder: 'Snack: 100g yogurt, 2 oz crackers',
+              skipRepositioning: true
+            });
+            
+            if (textarea) {
+              // Override the auto-generated ID with the saved one
+              textarea.id = fieldId;
+              console.log('[CalorieIQ] Created textarea with ID:', textarea.id);
+            }
+          } else {
+            console.error('[CalorieIQ] addDynamicTextareaInput function not available');
+          }
+        } else {
+          console.log('[CalorieIQ] Field already exists:', fieldId);
+        }
+      });
+    } catch (error) {
+      console.error('[CalorieIQ] Error recreating dynamic fields:', error);
+    }
+  }
+
   async function handleGenerateCalorieIq() {
     try {
       const formData = window.calorieFormPersistence.getSavedFormData();
@@ -161,7 +215,11 @@
       generateBtn.addEventListener('click', handleGenerateCalorieIq);
     }
     
-
+    // Recreate any saved dynamic fields
+    setTimeout(() => {
+      console.log('[CalorieIQ] Attempting to recreate dynamic fields...');
+      recreateDynamicFields();
+    }, 500); // Increased delay to ensure inputFunctionality.js is loaded
     
     // Simply ensure the add button exists
     // ensureAddButton(); // Removed: dynamic add button logic should be handled in inputFunctionality.js if needed
