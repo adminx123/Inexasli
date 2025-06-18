@@ -27,6 +27,9 @@
   <!-- Jump to Food Log button is injected by JS if calorieIqResponse exists -->
 
   <div class="row1" data-step-label="Personal Information">
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px; border-bottom: 2px solid black; padding-bottom: 5px;" class="tooltip1" data-tooltip="Basic physical information needed to calculate your personalized calorie requirements.">
+      Personal Information<span class="tooltip1-content"></span>
+    </h3>
     <input id="calorie-age" type="text" placeholder="Age">
     <input id="calorie-height" type="text" placeholder="5'10">
     <input id="calorie-weight" type="text" placeholder="70 kg">
@@ -38,6 +41,9 @@
   </div>
 
   <div class="row1" data-step-label="Fitness Goal">
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px; border-bottom: 2px solid black; padding-bottom: 5px;" class="tooltip1" data-tooltip="Choose your primary fitness objective to receive customized calorie recommendations.">
+      Fitness Goal<span class="tooltip1-content"></span>
+    </h3>
     <div class="grid-container" id="calorie-goal">
       <div class="grid-item" data-value="Lose Weight">Lose weight</div>
       <div class="grid-item" data-value="Gain Muscle">Gain muscle</div>
@@ -47,11 +53,17 @@
   </div>
 
   <div class="row1" data-step-label="Activity Details">
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px; border-bottom: 2px solid black; padding-bottom: 5px;" class="tooltip1" data-tooltip="Describe your weekly physical activity to help calculate your daily calorie needs based on your lifestyle.">
+      Activity Details<span class="tooltip1-content"></span>
+    </h3>
     <label for="calorie-activity-level" style="display:block; text-align:center; margin-bottom:4px;">Describe your weekly activity in your own words (voice or text):</label>
     <textarea id="calorie-activity-level" rows="2" style="width:100%;max-width:460px;display:block;margin:0 auto;" placeholder="E.g. 'I do cardio 3 times, weights 2 times, and yoga once a week. Each session is about 45 minutes.'"></textarea>
   </div>
 
   <div class="row1" data-step-label="Dietary Preferences">
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px; border-bottom: 2px solid black; padding-bottom: 5px;" class="tooltip1" data-tooltip="Select your dietary preferences or restrictions to receive personalized meal recommendations that fit your lifestyle.">
+      Dietary Preferences<span class="tooltip1-content"></span>
+    </h3>
     <div class="grid-container" id="calorie-diet-type">
       <div class="grid-item" data-value="None">No Restrictions</div>
       <div class="grid-item" data-value="Vegetarian">Vegetarian</div>
@@ -65,6 +77,9 @@
   </div>
 
   <div class="row1" data-step-label="Food Log">
+    <h3 style="text-align: center; font-size: 18px; margin-bottom:15px; border-bottom: 2px solid black; padding-bottom: 5px;" class="tooltip1" data-tooltip="Record what you typically eat throughout the day to get personalized nutritional analysis and recommendations.">
+      Food Log<span class="tooltip1-content"></span>
+    </h3>
     <textarea id="calorie-breakfast" data-meal="breakfast" placeholder="Breakfast:&#10;1 cup oatmeal&#10;0.5 cup berries&#10;1 tbsp honey" rows="3"></textarea>
     <textarea id="calorie-lunch" data-meal="lunch" placeholder="Lunch:&#10;200g chicken breast&#10;150g mixed salad&#10;2 tbsp olive oil" rows="3"></textarea>
     <textarea id="calorie-dinner" data-meal="dinner" placeholder="Dinner:&#10;6 oz salmon&#10;1/2 cup quinoa&#10;100g broccoli" rows="3"></textarea>
