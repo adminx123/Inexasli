@@ -1,24 +1,30 @@
 /**
  * Input Functionality Module
- * This script contains various input-related functionality including:
+ * Reusable module for various input-related functionality including:
  * - Auto-expanding textareas
+ * - Dynamic textarea management
  * - Input validation enhancements
  * - Form field behavior improvements
- * - Future input-related features can be added here
  */
 
 console.log('[Input Functionality] Script loaded');
 
+/**
+ * Auto-expands a textarea to fit its content
+ * @param {HTMLTextAreaElement} textarea - The textarea element to expand
+ */
 function autoExpandTextarea(textarea) {
     console.log('[Input Functionality] Auto-expanding textarea:', textarea.id || 'unnamed');
     textarea.style.minHeight = '';
     textarea.style.height = 'auto';
     void textarea.offsetHeight;
     textarea.style.height = textarea.scrollHeight + 'px';
+    
     // Advanced debugging: log computed style and parent info
     const computed = window.getComputedStyle(textarea);
     const parent = textarea.parentElement;
     console.log('[InputFunctionality][DEBUG] Computed height:', computed.height, 'Inline style.height:', textarea.style.height, 'Parent:', parent ? parent.className : null, 'Parent computed height:', parent ? window.getComputedStyle(parent).height : null);
+    
     // Force reflow on parent container if present
     if (parent) {
         parent.style.display = 'none';
@@ -27,6 +33,9 @@ function autoExpandTextarea(textarea) {
     }
 }
 
+/**
+ * Initializes auto-expanding functionality for all textareas
+ */
 function initAutoExpandTextareas() {
     const textareas = document.querySelectorAll('textarea');
     console.log('[Text Functionality] Found textareas:', textareas.length);
@@ -64,6 +73,10 @@ function initAutoExpandTextareas() {
     });
 }
 
+/**
+ * Initializes a mutation observer to handle dynamically added textareas
+ * @returns {MutationObserver} The mutation observer instance
+ */
 function initMutationObserver() {
     // Also handle dynamically added textareas
     const textareaObserver = new MutationObserver(function(mutations) {
@@ -110,7 +123,7 @@ function initMutationObserver() {
  * @param {boolean} [options.skipRepositioning] - Skip repositioning logic (for repopulation)
  * @returns {HTMLTextAreaElement} The created textarea
  */
-export function addDynamicTextareaInput({
+function addDynamicTextareaInput({
   containerSelector,
   baseId,
   value = '',
@@ -218,7 +231,7 @@ function addDynamicTextareaAddButton({
     'box-sizing: border-box'
   ].join(';');
   addBtn.onclick = () => {
-    window.addDynamicTextareaInput({
+    addDynamicTextareaInput({
       containerSelector,
       baseId,
       placeholder
@@ -232,88 +245,9 @@ function addDynamicTextareaAddButton({
     container.appendChild(addBtn);
   }
 }
-window.addDynamicTextareaAddButton = addDynamicTextareaAddButton;
-
-// Initialize immediately if DOM is already ready
-if (document.readyState === 'loading') {
-    console.log('[Text Functionality] DOM still loading, waiting for DOMContentLoaded...');
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('[Text Functionality] DOM loaded, initializing...');
-        console.log('[Text Functionality] Initializing auto-expand for existing textareas...');
-        initAutoExpandTextareas();
-        initMutationObserver();
-    });
-} else {
-    console.log('[Text Functionality] DOM already ready, initializing immediately...');
-    console.log('[Text Functionality] Initializing auto-expand for existing textareas...');
-    initAutoExpandTextareas();
-    initMutationObserver();
-}
-
-// Ensure this script imports and initializes formPersistence for the calorie module
-import { FormPersistence } from '../../utility/formPersistence.js';
-window.calorieFormPersistence = FormPersistence.getInstance('calorie');
-window.calorieFormPersistence.init();
-
-// Expose a generic addDynamicTextareaInput for use by formPersistence and other modules
-window.addDynamicTextareaInput = addDynamicTextareaInput;
-// For backward compatibility, alias addMealInput for CalorieIQ
-window.addMealInput = function(mealType = null, value = '', skipRepositioning = false) {
-  // Use calorie- as baseId for all dynamic meal/snack textareas
-  return addDynamicTextareaInput({
-    containerSelector: '.row1:last-child',
-    baseId: 'calorie-',
-    value,
-    placeholder: mealType ? mealType.charAt(0).toUpperCase() + mealType.slice(1) + ': 100g yogurt, 2 oz crackers' : '',
-    skipRepositioning
-  });
-};
-
-// Expose autoExpandTextarea globally for use by formPersistence and other modules
-window.autoExpandTextarea = autoExpandTextarea;
-
-// On DOMContentLoaded, add the button for CalorieIQ food log
-const foodLogSelector = '.row1[data-step-label="Food Log"]';
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    window.addDynamicTextareaAddButton({
-      containerSelector: foodLogSelector,
-      baseId: 'calorie-',
-      placeholder: 'Snack: 100g yogurt, 2 oz crackers'
-    });
-  });
-} else {
-  window.addDynamicTextareaAddButton({
-    containerSelector: foodLogSelector,
-    baseId: 'calorie-',
-    placeholder: 'Snack: 100g yogurt, 2 oz crackers'
-  });
-}
-
-// MutationObserver to ensure the add button is always present in the food log section
-(function ensureAddButtonObserver() {
-  const targetSelector = foodLogSelector;
-  const config = { childList: true, subtree: true };
-  function checkAndInject() {
-    const container = document.querySelector(targetSelector);
-    if (container && !container.querySelector('.dynamic-add-btn')) {
-      window.addDynamicTextareaAddButton({
-        containerSelector: targetSelector,
-        baseId: 'calorie-',
-        placeholder: 'Snack: 100g yogurt, 2 oz crackers'
-      });
-    }
-  }
-  // Initial check
-  checkAndInject();
-  // Observe DOM changes
-  const observer = new MutationObserver(() => {
-    checkAndInject();
-  });
-  observer.observe(document.body, config);
-})();
-
-// Listen for a custom event from formPersistence.js to trigger textarea expansion
+/**
+ * Debugging function for textarea expansion sequence
+ */
 function debugTextareaExpansionSequence() {
     console.log('[InputFunctionality][DEBUG] --- Expansion Debug Sequence Start ---');
     const textareas = document.querySelectorAll('textarea');
@@ -326,11 +260,156 @@ function debugTextareaExpansionSequence() {
     });
     console.log('[InputFunctionality][DEBUG] --- Expansion Debug Sequence End ---');
 }
-window.debugTextareaExpansionSequence = debugTextareaExpansionSequence;
 
-// Call debug sequence after repopulation event
+/**
+ * Triggers textarea expansion after form repopulation
+ */
 function triggerTextareaExpansion() {
     debugTextareaExpansionSequence();
 }
-document.addEventListener('formpersistence:repopulated', triggerTextareaExpansion);
+
+/**
+ * Legacy compatibility function for CalorieIQ
+ * @param {string} mealType - Type of meal
+ * @param {string} value - Initial value
+ * @param {boolean} skipRepositioning - Skip repositioning logic
+ * @returns {HTMLTextAreaElement} The created textarea
+ */
+function addMealInput(mealType = null, value = '', skipRepositioning = false) {
+  // Use calorie- as baseId for all dynamic meal/snack textareas
+  return addDynamicTextareaInput({
+    containerSelector: '.row1:last-child',
+    baseId: 'calorie-',
+    value,
+    placeholder: mealType ? mealType.charAt(0).toUpperCase() + mealType.slice(1) + ': 100g yogurt, 2 oz crackers' : '',
+    skipRepositioning
+  });
+}
+
+/**
+ * Main initialization function
+ */
+function initInputFunctionality() {
+    console.log('[Text Functionality] Initializing auto-expand for existing textareas...');
+    initAutoExpandTextareas();
+    initMutationObserver();
+    
+    // Listen for form repopulation events
+    document.addEventListener('formpersistence:repopulated', triggerTextareaExpansion);
+}
+
+// ==========================================
+// MODULE EXPORTS AND GLOBAL EXPOSURES
+// ==========================================
+
+// Core API exports for ES6 modules
+export {
+    autoExpandTextarea,
+    addDynamicTextareaInput,
+    addDynamicTextareaAddButton,
+    initAutoExpandTextareas,
+    initMutationObserver,
+    debugTextareaExpansionSequence,
+    initInputFunctionality
+};
+
+// Global window exposures for backward compatibility and direct script usage
+if (typeof window !== 'undefined') {
+    window.InputFunctionality = {
+        autoExpandTextarea,
+        addDynamicTextareaInput,
+        addDynamicTextareaAddButton,
+        initAutoExpandTextareas,
+        initMutationObserver,
+        debugTextareaExpansionSequence,
+        triggerTextareaExpansion,
+        init: initInputFunctionality
+    };
+    
+    // Legacy global functions for existing code compatibility
+    window.autoExpandTextarea = autoExpandTextarea;
+    window.addDynamicTextareaInput = addDynamicTextareaInput;
+    window.addDynamicTextareaAddButton = addDynamicTextareaAddButton;
+    window.addMealInput = addMealInput;
+    window.debugTextareaExpansionSequence = debugTextareaExpansionSequence;
+}
+
+// ==========================================
+// AUTO-INITIALIZATION
+// ==========================================
+
+// Initialize immediately if DOM is already ready, otherwise wait for DOMContentLoaded
+if (document.readyState === 'loading') {
+    console.log('[Text Functionality] DOM still loading, waiting for DOMContentLoaded...');
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('[Text Functionality] DOM loaded, initializing...');
+        initInputFunctionality();
+    });
+} else {
+    console.log('[Text Functionality] DOM already ready, initializing immediately...');
+    initInputFunctionality();
+}
+
+// ==========================================
+// CALORIE-SPECIFIC INITIALIZATION (Legacy Support)
+// ==========================================
+
+// Form persistence initialization for calorie module
+if (typeof window !== 'undefined') {
+    try {
+        // Dynamically import formPersistence if available
+        import('../../utility/formPersistence.js').then(({ FormPersistence }) => {
+            window.calorieFormPersistence = FormPersistence.getInstance('calorie');
+            window.calorieFormPersistence.init();
+        }).catch(err => {
+            console.log('[InputFunctionality] FormPersistence not available:', err.message);
+        });
+    } catch (err) {
+        console.log('[InputFunctionality] Could not load FormPersistence:', err.message);
+    }
+}
+
+// CalorieIQ-specific add button initialization
+const foodLogSelector = '.row1[data-step-label="Food Log"]';
+
+function initCalorieAddButton() {
+    addDynamicTextareaAddButton({
+        containerSelector: foodLogSelector,
+        baseId: 'calorie-',
+        placeholder: 'Snack: 100g yogurt, 2 oz crackers'
+    });
+}
+
+// Initialize CalorieIQ add button
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCalorieAddButton);
+} else {
+    initCalorieAddButton();
+}
+
+// MutationObserver to ensure the add button is always present in the food log section
+(function ensureAddButtonObserver() {
+    const targetSelector = foodLogSelector;
+    const config = { childList: true, subtree: true };
+    
+    function checkAndInject() {
+        const container = document.querySelector(targetSelector);
+        if (container && !container.querySelector('.dynamic-add-btn')) {
+            addDynamicTextareaAddButton({
+                containerSelector: targetSelector,
+                baseId: 'calorie-',
+                placeholder: 'Snack: 100g yogurt, 2 oz crackers'
+            });
+        }
+    }
+    
+    // Initial check
+    checkAndInject();
+    
+    // Observe DOM changes
+    const observer = new MutationObserver(() => {
+        checkAndInject();
+    });
+    observer.observe(document.body, config);
+})();
 
