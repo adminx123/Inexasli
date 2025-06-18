@@ -102,15 +102,7 @@ Key Battles"></textarea>
                 <div class="grid-item" data-value="certification-trainees">Certification Trainees</div>
                 <div class="grid-item" data-value="other">Other</div>
             </div>
-        </div>
-        <div class="row1">
-            <h3 style="text-align: center; font-size: 18px; margin-bottom:15px; border-bottom: 2px solid black; padding-bottom: 5px;" class="tooltip1" data-tooltip="Provide any additional requirements or specifications for your quiz generation.">
-                Additional Instructions<span class="tooltip1-content"></span>
-            </h3>
-            <textarea id="quiz-extra-instructions" rows="3" placeholder="Include answers
-Focus on recent events
-Add difficulty ratings to questions"></textarea>
-       
+            
             <button class="generate-btn" id="generate-quiz-btn">Generate Quiz Now!</button>
         </div>
 
@@ -136,8 +128,7 @@ Add difficulty ratings to questions"></textarea>
         { id: 'quiz-formats', type: 'grid' },
         { id: 'quiz-question-count', type: 'dropdown' },
         { id: 'quiz-focus-areas', type: 'textarea' },
-        { id: 'quiz-participants', type: 'grid' },
-        { id: 'quiz-extra-instructions', type: 'textarea' }
+        { id: 'quiz-participants', type: 'grid' }
     ];
 
     // FormPersistence will be initialized by datain.js as window.quizFormPersistence
