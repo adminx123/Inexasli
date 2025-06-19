@@ -964,7 +964,7 @@
                   min="5" 
                   max="60" 
                   value="${criterion.weight}" 
-                  step="5"
+                  step="1"
                   data-criterion="${criterion.name}"
                 >
               </div>
@@ -1000,37 +1000,40 @@
           valueSpans[criterion] = document.getElementById(`weight-value-${criterion.toLowerCase()}`);
         });
 
-        function redistributeWeights(changedSlider, newValue) {
+        function redistributeWeights(changedSlider, newValue, startValue) {
           const changedCriterion = changedSlider.dataset.criterion;
-          const oldValue = parseInt(changedSlider.getAttribute('data-old-value') || changedSlider.value);
+          const oldValue = startValue || parseInt(changedSlider.getAttribute('data-old-value') || changedSlider.value);
           const difference = newValue - oldValue;
 
-          if (Math.abs(difference) === 0) return;
+          console.log(`Redistributing: ${changedCriterion} changed from ${oldValue} to ${newValue}, difference: ${difference}`);
+
+          if (difference === 0) return;
+
+          // Update the changed slider
+          changedSlider.value = newValue;
 
           // Get other sliders
           const otherSliders = sliders.filter(s => s !== changedSlider);
-          const totalOtherWeight = otherSliders.reduce((sum, s) => sum + parseInt(s.value), 0);
           
-          if (totalOtherWeight > 0) {
-            let remainingDifference = -difference;
-
-            otherSliders.forEach((slider, index) => {
-              const currentWeight = parseInt(slider.value);
-              const proportion = currentWeight / totalOtherWeight;
-              
-              if (index === otherSliders.length - 1) {
-                // Last slider gets remainder
-                const newWeight = Math.max(5, Math.min(60, currentWeight + remainingDifference));
-                slider.value = newWeight;
-                remainingDifference = 0;
-              } else {
-                const adjustment = Math.round(proportion * remainingDifference);
-                const newWeight = Math.max(5, Math.min(60, currentWeight + adjustment));
-                slider.value = newWeight;
-                remainingDifference -= (newWeight - currentWeight);
-              }
-            });
+          if (otherSliders.length === 0) {
+            updateDisplays();
+            recalculateScores(originalData);
+            return;
           }
+
+          // DEAD SIMPLE: divide the opposite change equally among all other sliders
+          const changePerOtherSlider = -difference / otherSliders.length;
+          
+          console.log(`Each of the ${otherSliders.length} other sliders gets: ${changePerOtherSlider}`);
+
+          // Apply the EXACT same change to every other slider
+          otherSliders.forEach((slider, index) => {
+            const currentValue = parseInt(slider.value);
+            const newWeight = currentValue + changePerOtherSlider;
+            const constrainedWeight = Math.max(5, Math.min(60, newWeight));
+            slider.value = Math.round(constrainedWeight);
+            console.log(`${slider.dataset.criterion}: ${currentValue} + ${changePerOtherSlider} = ${slider.value}`);
+          });
 
           updateDisplays();
           recalculateScores(originalData);
@@ -1045,9 +1048,11 @@
               valueSpans[criterion].textContent = `${weight}%`;
             }
             total += weight;
+            // Update old value for all sliders
             slider.setAttribute('data-old-value', weight);
           });
 
+          console.log(`Total weight: ${total}%`);
           sumDisplay.textContent = `${total}%`;
           sumDisplay.style.color = total === 100 ? '#22c55e' : '#ef4444';
           warning.style.display = total === 100 ? 'none' : 'inline';
@@ -1103,11 +1108,46 @@
           });
         }
 
-        // Event listeners
+        // Event listeners with proper debouncing
+        let redistributionTimeout;
         sliders.forEach(slider => {
           slider.setAttribute('data-old-value', slider.value);
+          
+          // Store the value when user starts dragging
+          slider.addEventListener('mousedown', (e) => {
+            slider.setAttribute('data-start-value', slider.value);
+            console.log(`Started dragging ${slider.dataset.criterion} at ${slider.value}%`);
+          });
+          
+          // Store the value when user starts touching (mobile)
+          slider.addEventListener('touchstart', (e) => {
+            slider.setAttribute('data-start-value', slider.value);
+            console.log(`Started touching ${slider.dataset.criterion} at ${slider.value}%`);
+          });
+          
           slider.addEventListener('input', (e) => {
-            redistributeWeights(slider, parseInt(e.target.value));
+            // Clear previous timeout
+            if (redistributionTimeout) {
+              clearTimeout(redistributionTimeout);
+            }
+            
+            // Debounce the redistribution
+            redistributionTimeout = setTimeout(() => {
+              console.log(`Input event: ${slider.dataset.criterion} = ${e.target.value}`);
+              const startValue = parseInt(slider.getAttribute('data-start-value') || slider.getAttribute('data-old-value'));
+              redistributeWeights(slider, parseInt(e.target.value), startValue);
+            }, 50); // 50ms debounce
+          });
+          
+          // When user releases, update the start value for next time
+          slider.addEventListener('mouseup', (e) => {
+            slider.setAttribute('data-start-value', slider.value);
+            slider.setAttribute('data-old-value', slider.value);
+          });
+          
+          slider.addEventListener('touchend', (e) => {
+            slider.setAttribute('data-start-value', slider.value);
+            slider.setAttribute('data-old-value', slider.value);
           });
         });
 
