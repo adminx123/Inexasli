@@ -697,22 +697,7 @@
               </div>
             ` : ''}
             
-            <div class="criteria-weights">
-              <h4>Criteria Weights</h4>
-              <div class="criteria-grid">
-                ${(data.criteria || []).map(c => `
-                  <div class="criteria-item">
-                    <div class="criteria-header">
-                      <span class="criteria-name">${c.name}</span>
-                      <span class="criteria-weight">${c.weight}%</span>
-                    </div>
-                    <div class="criteria-description">${c.description}</div>
-                    ${c.reasoning ? `<div class="criteria-reasoning">${c.reasoning}</div>` : ''}
-                  </div>
-                `).join('')}
-              </div>
-              <div id="criteria-chart"></div>
-            </div>
+            <div id="weight-sliders-container"></div>
             
             <div class="options-scores">
               <h4>Option Comparison</h4>
@@ -760,60 +745,61 @@
           </div>
         `;
 
-        // Show criteria weights chart
-        if (data.criteria) {
-          const criteriaForChart = data.criteria.map(c => ({
-            point: c.name,
-            weight: `${c.weight}%`,
-            category: c.weight
-          }));
-          console.log('Criteria data for chart:', criteriaForChart);
-          createSimpleBarChart(criteriaForChart, 'criteria-chart', '#4a7c59');
-        }
-
         // Show detailed option scores with enhanced information
         data.options.forEach((option, index) => {
           const optionDiv = document.createElement('div');
           optionDiv.className = 'option-score';
           optionDiv.innerHTML = `
             <div class="option-header">
-              <h5>${option.name}</h5>
-              <span class="total-score">Total Score: ${option.totalScore}</span>
-              <span class="rank">Rank: #${option.rank}</span>
+              <div class="option-title">
+                <h5>${option.name}</h5>
+                <div class="option-metrics">
+                  <span class="rank">Rank: #${option.rank}</span>
+                  <span class="total-score">Score: ${option.totalScore}</span>
+                </div>
+              </div>
             </div>
             
             <div class="scores-breakdown">
-              ${(option.scores || []).map(s => `
-                <div class="score-item">
-                  <div class="score-main">
-                    <span class="criterion-name">${s.criterion}:</span>
-                    <span class="scores">${s.rawScore}/10 (weighted: ${s.weightedScore})</span>
+              <h6>Detailed Scores</h6>
+              <div class="scores-grid">
+                ${(option.scores || []).map(s => `
+                  <div class="score-item">
+                    <div class="score-header">
+                      <span class="criterion-name">${s.criterion}</span>
+                      <span class="scores">${s.rawScore}/10 (weighted: ${s.weightedScore})</span>
+                    </div>
+                    ${s.reasoning ? `<div class="score-reasoning">${s.reasoning}</div>` : ''}
                   </div>
-                  ${s.reasoning ? `<div class="score-reasoning">${s.reasoning}</div>` : ''}
-                </div>
-              `).join('')}
+                `).join('')}
+              </div>
             </div>
             
-            ${option.strengths ? `
-              <div class="option-strengths">
-                <strong>Strengths:</strong>
-                <ul>
-                  ${option.strengths.map(strength => `<li>${strength}</li>`).join('')}
-                </ul>
-              </div>
-            ` : ''}
-            
-            ${option.weaknesses ? `
-              <div class="option-weaknesses">
-                <strong>Weaknesses:</strong>
-                <ul>
-                  ${option.weaknesses.map(weakness => `<li>${weakness}</li>`).join('')}
-                </ul>
-              </div>
-            ` : ''}
+            <div class="option-analysis">
+              ${option.strengths ? `
+                <div class="option-strengths">
+                  <h6><i class="fas fa-plus-circle" style="color: #22c55e; margin-right: 6px;"></i>Strengths</h6>
+                  <ul>
+                    ${option.strengths.map(strength => `<li>${strength}</li>`).join('')}
+                  </ul>
+                </div>
+              ` : ''}
+              
+              ${option.weaknesses ? `
+                <div class="option-weaknesses">
+                  <h6><i class="fas fa-minus-circle" style="color: #ef4444; margin-right: 6px;"></i>Weaknesses</h6>
+                  <ul>
+                    ${option.weaknesses.map(weakness => `<li>${weakness}</li>`).join('')}
+                  </ul>
+                </div>
+              ` : ''}
+            </div>
           `;
           container.querySelector('#scores-chart').appendChild(optionDiv);
         });
+
+        // Add interactive weight sliders first (before option details)
+        addWeightSliders(data, container);
       };
 
       // Simple bar chart helper function - handles multiple data structures
@@ -951,6 +937,183 @@
           container.appendChild(barContainer);
         });
       };
+
+      // Interactive Weight Slider Functions
+      function addWeightSliders(data, container) {
+        if (!data.criteria || data.criteria.length === 0) return;
+
+        // Create slider section
+        const sliderSection = document.createElement('div');
+        sliderSection.className = 'weight-sliders-section';
+        sliderSection.innerHTML = `
+          <h4 style="margin: 15px 0 10px 0; color: #1f2937; font-size: 16px;">
+            <i class="fas fa-sliders-h" style="margin-right: 8px; color: #4a7c59;"></i>
+            Adjust Criteria Weights
+          </h4>
+          <div class="weight-sliders-compact">
+            ${data.criteria.map(criterion => `
+              <div class="weight-slider-compact">
+                <label class="weight-label-compact">
+                  ${criterion.name}
+                  <span id="weight-value-${criterion.name.toLowerCase()}" class="weight-value-compact">${criterion.weight}%</span>
+                </label>
+                <input 
+                  type="range" 
+                  id="weight-slider-${criterion.name.toLowerCase()}" 
+                  class="weight-slider-input" 
+                  min="5" 
+                  max="60" 
+                  value="${criterion.weight}" 
+                  step="5"
+                  data-criterion="${criterion.name}"
+                >
+              </div>
+            `).join('')}
+          </div>
+          <div class="weight-sum-compact">
+            Total: <span id="weight-sum">100%</span>
+            <span id="weight-warning" class="weight-warning" style="display: none;">⚠️ Must equal 100%</span>
+          </div>
+        `;
+
+        // Add to the dedicated sliders container
+        const slidersContainer = container.querySelector('#weight-sliders-container');
+        if (slidersContainer) {
+          slidersContainer.appendChild(sliderSection);
+        } else {
+          container.appendChild(sliderSection);
+        }
+
+        // Setup interactions
+        setupSliderLogic(data);
+      }
+
+      function setupSliderLogic(originalData) {
+        const sliders = Array.from(document.querySelectorAll('.weight-slider-input'));
+        const valueSpans = {};
+        const sumDisplay = document.getElementById('weight-sum');
+        const warning = document.getElementById('weight-warning');
+
+        // Map value displays
+        sliders.forEach(slider => {
+          const criterion = slider.dataset.criterion;
+          valueSpans[criterion] = document.getElementById(`weight-value-${criterion.toLowerCase()}`);
+        });
+
+        function redistributeWeights(changedSlider, newValue) {
+          const changedCriterion = changedSlider.dataset.criterion;
+          const oldValue = parseInt(changedSlider.getAttribute('data-old-value') || changedSlider.value);
+          const difference = newValue - oldValue;
+
+          if (Math.abs(difference) === 0) return;
+
+          // Get other sliders
+          const otherSliders = sliders.filter(s => s !== changedSlider);
+          const totalOtherWeight = otherSliders.reduce((sum, s) => sum + parseInt(s.value), 0);
+          
+          if (totalOtherWeight > 0) {
+            let remainingDifference = -difference;
+
+            otherSliders.forEach((slider, index) => {
+              const currentWeight = parseInt(slider.value);
+              const proportion = currentWeight / totalOtherWeight;
+              
+              if (index === otherSliders.length - 1) {
+                // Last slider gets remainder
+                const newWeight = Math.max(5, Math.min(60, currentWeight + remainingDifference));
+                slider.value = newWeight;
+                remainingDifference = 0;
+              } else {
+                const adjustment = Math.round(proportion * remainingDifference);
+                const newWeight = Math.max(5, Math.min(60, currentWeight + adjustment));
+                slider.value = newWeight;
+                remainingDifference -= (newWeight - currentWeight);
+              }
+            });
+          }
+
+          updateDisplays();
+          recalculateScores(originalData);
+        }
+
+        function updateDisplays() {
+          let total = 0;
+          sliders.forEach(slider => {
+            const criterion = slider.dataset.criterion;
+            const weight = parseInt(slider.value);
+            if (valueSpans[criterion]) {
+              valueSpans[criterion].textContent = `${weight}%`;
+            }
+            total += weight;
+            slider.setAttribute('data-old-value', weight);
+          });
+
+          sumDisplay.textContent = `${total}%`;
+          sumDisplay.style.color = total === 100 ? '#22c55e' : '#ef4444';
+          warning.style.display = total === 100 ? 'none' : 'inline';
+        }
+
+        function recalculateScores(data) {
+          const optionElements = document.querySelectorAll('.option-score');
+          const newScores = [];
+          
+          data.options.forEach((originalOption, index) => {
+            if (optionElements[index]) {
+              let newTotalScore = 0;
+              
+              originalOption.scores.forEach(score => {
+                const slider = document.querySelector(`[data-criterion="${score.criterion}"]`);
+                if (slider) {
+                  const newWeight = parseInt(slider.value);
+                  const newWeightedScore = (score.rawScore * newWeight) / 10;
+                  newTotalScore += newWeightedScore;
+                }
+              });
+
+              newScores.push({ index, score: newTotalScore, element: optionElements[index] });
+
+              // Update total score display
+              const totalScoreSpan = optionElements[index].querySelector('.total-score');
+              if (totalScoreSpan) {
+                totalScoreSpan.textContent = `Total Score: ${newTotalScore.toFixed(1)}`;
+              }
+
+              // Update individual weighted scores
+              const scoreElements = optionElements[index].querySelectorAll('.scores');
+              originalOption.scores.forEach((score, scoreIndex) => {
+                if (scoreElements[scoreIndex]) {
+                  const slider = document.querySelector(`[data-criterion="${score.criterion}"]`);
+                  if (slider) {
+                    const newWeight = parseInt(slider.value);
+                    const newWeightedScore = (score.rawScore * newWeight) / 10;
+                    scoreElements[scoreIndex].textContent = `${score.rawScore}/10 (weighted: ${newWeightedScore.toFixed(1)})`;
+                  }
+                }
+              });
+            }
+          });
+
+          // Update rankings
+          newScores.sort((a, b) => b.score - a.score);
+          newScores.forEach((item, newRank) => {
+            const rankSpan = item.element.querySelector('.rank');
+            if (rankSpan) {
+              rankSpan.textContent = `Rank: #${newRank + 1}`;
+            }
+          });
+        }
+
+        // Event listeners
+        sliders.forEach(slider => {
+          slider.setAttribute('data-old-value', slider.value);
+          slider.addEventListener('input', (e) => {
+            redistributeWeights(slider, parseInt(e.target.value));
+          });
+        });
+
+        // Initial display
+        updateDisplays();
+      }
 
       
       // Reference the global utility functions
@@ -1533,23 +1696,36 @@
 
     .option-header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      padding-bottom: 8px;
+      flex-direction: column;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
       border-bottom: 2px solid #4a7c59;
     }
 
-    .option-header h5 {
+    .option-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .option-title h5 {
       margin: 0;
       color: #333;
       font-weight: 600;
+      font-size: 18px;
+    }
+
+    .option-metrics {
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
 
     .total-score {
       background-color: #4a7c59;
       color: white;
-      padding: 4px 12px;
+      padding: 6px 12px;
       border-radius: 15px;
       font-weight: 600;
       font-size: 14px;
@@ -1558,16 +1734,66 @@
     .rank {
       background-color: #f0f0f0;
       color: #333;
-      padding: 4px 10px;
+      padding: 6px 10px;
       border-radius: 12px;
       font-size: 12px;
       font-weight: 600;
     }
 
-    .score-main {
+    .scores-breakdown {
+      margin-bottom: 20px;
+    }
+
+    .scores-breakdown h6 {
+      display: inline-block;
+      margin: 0 0 8px 0;
+      color: #555;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 0;
+    }
+
+    .scores-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .score-header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       margin-bottom: 4px;
+    }
+
+    .criterion-name {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .option-analysis {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    .option-analysis h6 {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .option-strengths ul, .option-weaknesses ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .option-strengths li, .option-weaknesses li {
+      margin-bottom: 4px;
+      font-size: 13px;
+      line-height: 1.4;
     }
 
     .criterion-name {
@@ -1855,6 +2081,120 @@
     .mermaid svg {
       width: 100%;
       height: 100%;
+    }
+
+    /* Interactive Weight Sliders - Compact Version */
+    .weight-sliders-section {
+      margin: 15px 0;
+      padding: 15px;
+      background-color: #f8f9ff;
+      border: 1px solid #e0e0f0;
+      border-radius: 8px;
+      border-left: 3px solid #4a7c59;
+    }
+
+    .weight-sliders-compact {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .weight-slider-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .weight-label-compact {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .weight-value-compact {
+      background-color: #4a7c59;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      min-width: 35px;
+      text-align: center;
+    }
+
+    .weight-slider-input {
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: #e0e0e0;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .weight-slider-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #4a7c59;
+      cursor: pointer;
+      border: 1px solid white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .weight-slider-input::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #4a7c59;
+      cursor: pointer;
+      border: 1px solid white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .weight-slider-input::-webkit-slider-track {
+      background: linear-gradient(to right, #22c55e, #4a7c59, #ef4444);
+      height: 4px;
+      border-radius: 2px;
+    }
+
+    .weight-slider-input::-moz-range-track {
+      background: linear-gradient(to right, #22c55e, #4a7c59, #ef4444);
+      height: 4px;
+      border-radius: 2px;
+    }
+
+    .weight-sum-compact {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      padding: 8px;
+      background-color: white;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .weight-warning {
+      color: #ef4444;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+
+    /* Smooth transitions for score updates */
+    .total-score, .scores {
+      transition: all 0.3s ease;
+    }
+
+    .rank {
+      transition: all 0.3s ease;
     }
   </style>
 
