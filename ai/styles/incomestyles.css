@@ -1,20 +1,3 @@
-/* Invisible device-sized wrapper */
-.device-container {
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  background-color: transparent;
-}
-
-/* Ensure all children of device-container fill its width, excluding grid-container and multi-field inputs */
-.device-container .row1,
-.device-container table,
-.device-container button {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
 /* Checkboxrow styling for symmetrical layout */
 .checkboxrow {
   display: flex;
