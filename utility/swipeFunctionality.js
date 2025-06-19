@@ -36,7 +36,7 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     
     // Default options
     const defaultOptions = {
-        threshold: 150,                // Minimum distance to trigger swipe action (px) - increased for less sensitivity
+        threshold: 100,                // Minimum distance to trigger swipe action (px) - balanced for good UX
         showEducationIndicator: false, // Show initial swipe education indicator (disabled to prevent duplicates)
         showSwipeHint: true,           // Show swipe hint animation on first view (3-second bottom hint) - GLOBAL TRACKING
         animationDuration: 300,        // Animation duration in ms
