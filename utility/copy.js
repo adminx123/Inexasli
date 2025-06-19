@@ -649,26 +649,34 @@ function extractVisibleContent(container) {
  * @param {Function} getContentCallback - Optional callback to get specific formatted content
  */
 function generatePDF(containerId, getContentCallback) {
-    console.log('🎯 Starting PDF generation - targeting device-container');
+    console.log('🎯 Starting PDF generation - checking for output content');
     const progressToast = window.enhancedUI.showToast('📄 Generating PDF...', 'info', 15000);
     
-    // Always target the device-container instead of the passed containerId
-    const deviceContainer = document.querySelector('.device-container');
-    if (!deviceContainer) {
+    // Only target output content - do not capture input forms
+    const outputContainer = document.querySelector('.data-container-out');
+    if (!outputContainer) {
         window.enhancedUI.closeToast(progressToast);
-        window.enhancedUI.showToast('❌ Device container not found.', 'error');
+        window.enhancedUI.showToast('⚠️ No analysis results to save. Please complete the form and generate your analysis first.', 'warning', 6000);
         return;
     }
     
-    console.log('📱 Found device-container, generating PDF...');
+    // Check if output container has actual content (not just "No content loaded yet")
+    const outputContent = outputContainer.textContent || outputContainer.innerText || '';
+    if (outputContent.includes('No content loaded yet') || outputContent.trim().length < 50) {
+        window.enhancedUI.closeToast(progressToast);
+        window.enhancedUI.showToast('⚠️ No analysis results found. Please generate your analysis first.', 'warning', 6000);
+        return;
+    }
+    
+    console.log('📱 Found output content, generating PDF...');
     
     // Load required libraries
     Promise.all([
         loadLibrary('html2canvas', 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
         loadLibrary('jsPDF', 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
     ]).then(() => {
-        console.log('✅ Libraries loaded, capturing device-container');
-        captureDeviceContainer(deviceContainer, progressToast);
+        console.log('✅ Libraries loaded, capturing output content');
+        captureOutputContainer(outputContainer, progressToast);
     }).catch(error => {
         console.error('❌ Failed to load libraries:', error);
         window.enhancedUI.closeToast(progressToast);
@@ -712,25 +720,25 @@ function loadLibrary(globalName, scriptUrl) {
 }
 
 /**
- * Capture device container and create PDF - Simple and reliable
- * @param {HTMLElement} deviceContainer - The device container element
+ * Capture output container and create PDF - Simple and reliable
+ * @param {HTMLElement} outputContainer - The output container element
  * @param {string} progressToast - Progress toast ID
  */
-function captureDeviceContainer(deviceContainer, progressToast) {
-    console.log('📸 Starting device container capture');
+function captureOutputContainer(outputContainer, progressToast) {
+    console.log('📸 Starting output container capture');
     
     // Update progress
     window.enhancedUI.closeToast(progressToast);
-    const captureToast = window.enhancedUI.showToast('📸 Capturing device container...', 'info', 10000);
+    const captureToast = window.enhancedUI.showToast('📸 Capturing analysis results...', 'info', 10000);
     
-    // Prepare the device container for capture
-    prepareDeviceContainerForCapture(deviceContainer);
+    // Prepare the output container for capture
+    prepareOutputContainerForCapture(outputContainer);
     
     // Wait a moment for any transitions to complete
     setTimeout(() => {
-        console.log('🎯 Executing html2canvas on device container');
+        console.log('🎯 Executing html2canvas on output container');
         
-        html2canvas(deviceContainer, {
+        html2canvas(outputContainer, {
             scale: 2, // Good quality
             useCORS: true,
             allowTaint: true,
@@ -739,7 +747,7 @@ function captureDeviceContainer(deviceContainer, progressToast) {
             imageTimeout: 15000,
             onclone: function(clonedDoc) {
                 // Clean up the cloned document
-                const clonedContainer = clonedDoc.querySelector('.device-container');
+                const clonedContainer = clonedDoc.querySelector('.data-container-out');
                 if (clonedContainer) {
                     // Remove any unwanted elements
                     const elementsToRemove = clonedContainer.querySelectorAll(
@@ -749,13 +757,13 @@ function captureDeviceContainer(deviceContainer, progressToast) {
                 }
             }
         }).then(canvas => {
-            console.log('✅ Device container captured successfully');
+            console.log('✅ Output container captured successfully');
             window.enhancedUI.closeToast(captureToast);
             
             // Validate canvas has content
             if (canvas.width === 0 || canvas.height === 0) {
                 console.error('❌ Canvas is empty');
-                window.enhancedUI.showToast('❌ Failed to capture device container. Using text fallback...', 'warning');
+                window.enhancedUI.showToast('❌ Failed to capture analysis results. Using text fallback...', 'warning');
                 generateSimpleTextPDF();
                 return;
             }
@@ -773,14 +781,14 @@ function captureDeviceContainer(deviceContainer, progressToast) {
 }
 
 /**
- * Prepare device container for optimal visual capture
- * @param {HTMLElement} deviceContainer - Device container element
+ * Prepare output container for optimal visual capture
+ * @param {HTMLElement} outputContainer - Output container element
  */
-function prepareDeviceContainerForCapture(deviceContainer) {
-    console.log('🎯 Preparing device container for capture');
+function prepareOutputContainerForCapture(outputContainer) {
+    console.log('🎯 Preparing output container for capture');
     
     // Force all content to be visible and remove animations
-    const allElements = deviceContainer.querySelectorAll('*');
+    const allElements = outputContainer.querySelectorAll('*');
     allElements.forEach(el => {
         // Only modify elements that aren't intentionally hidden
         const computedStyle = window.getComputedStyle(el);
@@ -793,12 +801,12 @@ function prepareDeviceContainerForCapture(deviceContainer) {
     });
     
     // Remove any loading indicators
-    const loadingElements = deviceContainer.querySelectorAll('.loading, .loading-spinner, .loading-text');
+    const loadingElements = outputContainer.querySelectorAll('.loading, .loading-spinner, .loading-text');
     loadingElements.forEach(el => {
         el.style.display = 'none';
     });
     
-    console.log('✅ Device container prepared for capture');
+    console.log('✅ Output container prepared for capture');
 }
 
 /**
@@ -988,10 +996,10 @@ function generateSimpleTextPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         
-        // Find device container content
-        const deviceContainer = document.querySelector('.device-container');
-        if (!deviceContainer) {
-            throw new Error('Device container not found');
+        // Find output container content
+        const outputContainer = document.querySelector('.data-container-out');
+        if (!outputContainer) {
+            throw new Error('Output container not found');
         }
         
         let yPosition = 20;
@@ -1002,11 +1010,11 @@ function generateSimpleTextPDF() {
         
         // Add title
         doc.setFontSize(16);
-        doc.text('Content Export', margin, yPosition);
+        doc.text('Analysis Results', margin, yPosition);
         yPosition += 15;
         
         // Extract and add text content
-        const textContent = deviceContainer.textContent || deviceContainer.innerText || '';
+        const textContent = outputContainer.textContent || outputContainer.innerText || '';
         const cleanText = textContent
             .replace(/\s+/g, ' ')
             .replace(/\n\s+/g, '\n')
@@ -1031,7 +1039,7 @@ function generateSimpleTextPDF() {
         
         // Save PDF
         const timestamp = new Date().toISOString().split('T')[0];
-        const filename = `content-export-${timestamp}.pdf`;
+        const filename = `analysis-results-${timestamp}.pdf`;
         doc.save(filename);
         
         console.log('📄 Simple text PDF generated successfully');
