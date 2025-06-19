@@ -135,30 +135,70 @@ class FormPersistence {
      */
     bindGridItemEvents() {
         const gridItems = document.querySelectorAll('.grid-container .grid-item');
+        let lastSelectionTime = 0;
+        const SELECTION_DEBOUNCE = 150; // ms debounce for rapid selections
+        
         gridItems.forEach(item => {
             if (!item.dataset.value) return;
             item.removeEventListener('click', item._fpGridClickHandler || (()=>{}));
             const handler = (e) => {
-                e.preventDefault();
-                const container = item.closest('.grid-container');
-                if (!container) return;
-                if (this.singleSelectionContainers.has(container.id) || this.isInferredSingleSelection(container)) {
-                    container.querySelectorAll('.grid-item').forEach(i => {
-                        if (i !== item) i.classList.remove('selected');
-                    });
-                    item.classList.add('selected');
-                } else {
-                    item.classList.toggle('selected');
+                // Enhanced debouncing to prevent rapid-fire selections
+                const now = Date.now();
+                if (now - lastSelectionTime < SELECTION_DEBOUNCE) {
+                    console.log('[FormPersistence] Grid selection debounced');
+                    return;
                 }
-                this.saveFormData();
-                // Dispatch event for next-stage logic (compatibility with guidedForms, etc)
-                const toggleEvent = new CustomEvent('grid-item-toggled', { detail: { item } });
-                document.dispatchEvent(toggleEvent);
+                lastSelectionTime = now;
+                
+                // Check if this touch was monitored by swipe functionality
+                if (e._swipeMonitoring) {
+                    console.log('[FormPersistence] Touch was monitored by swipe, adding small delay');
+                    // Small delay to ensure swipe processing is complete
+                    setTimeout(() => {
+                        this.processGridSelection(e, item);
+                    }, 50);
+                } else {
+                    // Process immediately if no swipe monitoring
+                    this.processGridSelection(e, item);
+                }
             };
             item._fpGridClickHandler = handler;
             item.addEventListener('click', handler);
         });
         console.log(`[FormPersistence] Grid item event binding complete for ${this.moduleName}`);
+    }
+    
+    /**
+     * Process grid item selection with enhanced safety checks
+     */
+    processGridSelection(e, item) {
+        e.preventDefault();
+        const container = item.closest('.grid-container');
+        if (!container) return;
+        
+        // Verify the item is still the intended target
+        const rect = item.getBoundingClientRect();
+        const clickX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+        const clickY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+        
+        // Check if click/touch coordinates are within the item bounds
+        if (clickX < rect.left || clickX > rect.right || clickY < rect.top || clickY > rect.bottom) {
+            console.log('[FormPersistence] Click coordinates outside target item, ignoring');
+            return;
+        }
+        
+        if (this.singleSelectionContainers.has(container.id) || this.isInferredSingleSelection(container)) {
+            container.querySelectorAll('.grid-item').forEach(i => {
+                if (i !== item) i.classList.remove('selected');
+            });
+            item.classList.add('selected');
+        } else {
+            item.classList.toggle('selected');
+        }
+        this.saveFormData();
+        // Dispatch event for next-stage logic (compatibility with guidedForms, etc)
+        const toggleEvent = new CustomEvent('grid-item-toggled', { detail: { item } });
+        document.dispatchEvent(toggleEvent);
     }
 
     /**

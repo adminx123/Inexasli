@@ -36,11 +36,12 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
     
     // Default options
     const defaultOptions = {
-        threshold: 100,                // Minimum distance to trigger swipe action (px) - balanced for good UX
+        threshold: 120,                // Increased minimum distance to trigger swipe action (was 100)
         showEducationIndicator: false, // Show initial swipe education indicator (disabled to prevent duplicates)
         showSwipeHint: true,           // Show swipe hint animation on first view (3-second bottom hint) - GLOBAL TRACKING
         animationDuration: 300,        // Animation duration in ms
-        sessionStorageKey: 'swipeEducationShown' + direction.charAt(0).toUpperCase() + direction.slice(1)
+        sessionStorageKey: 'swipeEducationShown' + direction.charAt(0).toUpperCase() + direction.slice(1),
+        gridItemSafeMode: true         // Enhanced protection for grid item interactions
     };
     
     // Merge default options with user options
@@ -59,7 +60,10 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
         touchStartX: 0,
         touchStartY: 0,
         currentTranslate: 0,
-        isProcessingSwipe: false
+        isProcessingSwipe: false,
+        originalTouchTarget: null, // Track the original element touched
+        gridItemTouched: false, // Flag for grid item touches
+        lastTouchTime: 0 // Debouncing for rapid touches
     };
     
     // Event handlers
@@ -69,7 +73,26 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
             return;
         }
         
+        // Debounce rapid touches
+        const now = Date.now();
+        if (now - swipeData.lastTouchTime < 100) {
+            console.log('Rapid touch detected, ignoring');
+            return;
+        }
+        swipeData.lastTouchTime = now;
+        
         console.log(`Touch start detected on ${container.id || 'container'}`);
+        
+        // Check if touch started on a grid item - if so, be more careful
+        const touchTarget = e.target.closest('.grid-item');
+        swipeData.originalTouchTarget = touchTarget;
+        swipeData.gridItemTouched = !!touchTarget;
+        
+        if (touchTarget) {
+            console.log('Touch started on grid item, using careful mode');
+            // Mark the touch event for coordination
+            e._swipeMonitoring = true;
+        }
         
         swipeData.touchStartX = e.touches[0].clientX;
         swipeData.touchStartY = e.touches[0].clientY;
@@ -95,6 +118,16 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
         // Calculate horizontal and vertical distances moved
         const diffX = touchX - swipeData.touchStartX;
         const diffY = touchY - swipeData.touchStartY;
+        
+        // Use dynamic threshold - higher for grid items to prevent accidental swipes
+        const dynamicThreshold = swipeData.gridItemTouched ? 
+            config.threshold * 1.8 : // Increase threshold significantly for grid items
+            config.threshold;
+        
+        // Check if movement exceeds threshold
+        if (Math.abs(diffX) < dynamicThreshold && Math.abs(diffY) < dynamicThreshold) {
+            return; // Not enough movement yet
+        }
         
         // Determine which direction this swipe is going
         const isLeftSwipe = diffX < 0;
@@ -132,6 +165,22 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
         if (swipeData.isProcessingSwipe) {
             console.log('Swipe already being processed, ignoring touch end');
             return;
+        }
+        
+        // Enhanced touch target verification for grid items
+        if (swipeData.gridItemTouched && swipeData.originalTouchTarget) {
+            const endTarget = document.elementFromPoint(
+                e.changedTouches[0].clientX, 
+                e.changedTouches[0].clientY
+            );
+            
+            // If touch ended on a different grid item, this might be an accidental swipe
+            if (endTarget && endTarget.closest('.grid-item') !== swipeData.originalTouchTarget) {
+                console.log('Touch target changed from original grid item, treating as click not swipe');
+                // Clean up without triggering swipe
+                cleanupTouchEnd();
+                return;
+            }
         }
         
         // Restore transition for smooth animation
@@ -190,10 +239,40 @@ export function initializeSwipeFunctionality(container, direction = 'left', onSw
         container.removeEventListener('touchcancel', handleTouchEnd);
         
         swipeData.currentTranslate = 0;
+        // Reset touch tracking variables
+        swipeData.originalTouchTarget = null;
+        swipeData.gridItemTouched = false;
+    }
+    
+    // Helper function to clean up touch events without triggering swipe
+    function cleanupTouchEnd() {
+        // Reset styles without animation
+        container.style.transform = '';
+        container.style.opacity = '1';
+        container.style.transition = '';
+        
+        // Remove event listeners
+        container.removeEventListener('touchmove', handleTouchMove);
+        container.removeEventListener('touchend', handleTouchEnd);
+        container.removeEventListener('touchcancel', handleTouchEnd);
+        
+        // Reset tracking variables
+        swipeData.currentTranslate = 0;
+        swipeData.originalTouchTarget = null;
+        swipeData.gridItemTouched = false;
     }
     
     // Add touch event listeners to container
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    
+    // Add coordination listener for grid item interaction
+    container.addEventListener('touchstart', (e) => {
+        // Mark touch events for coordination with grid item handlers
+        if (e.target.closest('.grid-item')) {
+            e._swipeMonitoring = true;
+            console.log('Touch event marked for swipe monitoring');
+        }
+    }, { passive: true, capture: true });
     
     // Store swipe data on the container to prevent conflicts
     const destroyFunction = () => {
