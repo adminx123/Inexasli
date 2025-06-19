@@ -1603,6 +1603,13 @@
         const staleTimestamp = localStorage.getItem('taxCalculationsStaleTimestamp');
         
         if (isStale && staleTimestamp) {
+            // Check if there's an existing AI response - only show warning if user has already completed the form
+            const existingResponse = localStorage.getItem('incomeIqResponse');
+            if (!existingResponse) {
+                console.log(`[IncomeOutput] ℹ️ No existing AI response found, skipping stale tax calculations warning`);
+                return;
+            }
+            
             const staleTime = new Date(parseInt(staleTimestamp));
             const now = new Date();
             const minutesStale = Math.floor((now - staleTime) / (1000 * 60));

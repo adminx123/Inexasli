@@ -1270,6 +1270,13 @@ import setJSON from '/utility/setJSON.js';
     }
 
     function showTaxRecalculationNeeded(changedElement) {
+        // Check if there's an existing AI response - only show warning if user has already completed the form
+        const existingResponse = window.incomeFormPersistence?.getSavedResponseData();
+        if (!existingResponse) {
+            console.log(`[IncomeIQ] ℹ️ No existing AI response found, skipping tax recalculation notification`);
+            return;
+        }
+        
         // Remove any existing notification
         const existingNotification = document.querySelector('.tax-recalc-notification');
         if (existingNotification) {
@@ -1366,6 +1373,13 @@ import setJSON from '/utility/setJSON.js';
     }
 
     function showIncomeRecalculationNeeded(changedElement) {
+        // Check if there's an existing AI response - only show warning if user has already completed the form
+        const existingResponse = window.incomeFormPersistence?.getSavedResponseData();
+        if (!existingResponse) {
+            console.log(`[IncomeIQ] ℹ️ No existing AI response found, skipping income recalculation notification`);
+            return;
+        }
+        
         // Remove any existing notification
         const existingNotification = document.querySelector('.income-recalc-notification');
         if (existingNotification) {
@@ -1458,6 +1472,13 @@ import setJSON from '/utility/setJSON.js';
     }
 
     function markTaxCalculationsStale() {
+        // Check if there's an existing AI response - only mark as stale if user has already completed the form
+        const existingResponse = window.incomeFormPersistence?.getSavedResponseData() || localStorage.getItem('incomeIqResponse');
+        if (!existingResponse) {
+            console.log("[IncomeIQ] ℹ️ No existing AI response found, skipping tax calculations stale marking");
+            return;
+        }
+        
         // Set a flag indicating tax calculations are outdated
         localStorage.setItem('taxCalculationsStale', 'true');
         localStorage.setItem('taxCalculationsStaleTimestamp', Date.now().toString());
