@@ -135,7 +135,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   
   <!-- Add svg-pan-zoom for interactivity -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
+  <script src="https://unpkg.com/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
   
   <script src="../../utility/copy.js"></script>
   
@@ -190,7 +190,7 @@
       }
       
       // Create visualization based on analysis type
-      const createVisualization = (data, containerId) => {
+      var createVisualization = (data, containerId) => {
         const container = document.getElementById(containerId);
         if (!container) return;
 
@@ -246,7 +246,11 @@
               createWeightedScoringVisualization(data, vizContainer);
               break;
             case 'decision-tree':
-              createDecisionTreeVisualization(data, vizContainer);
+              if (typeof createDecisionTreeVisualization !== 'undefined') {
+                createDecisionTreeVisualization(data, vizContainer);
+              } else {
+                vizContainer.innerHTML = '<p>Decision tree visualization function not available.</p>';
+              }
               break;
             default:
               // Fallback to JSON with hints
@@ -276,7 +280,8 @@
       };
 
       // Decision Tree Visualization using Mermaid
-      const createDecisionTreeVisualization = (data, container) => {
+      if (typeof createDecisionTreeVisualization === 'undefined') {
+        var createDecisionTreeVisualization = (data, container) => {
         if (data.mermaidSyntax && typeof mermaid !== 'undefined') {
           try {
             const mermaidDiv = document.createElement('div');
@@ -330,9 +335,10 @@
           `;
         }
       };
+      }
 
       // Pros/Cons Visualization using D3.js
-      const createProsConsVisualization = (data, container) => {
+      var createProsConsVisualization = (data, container) => {
         if (!data.options || !data.options.length) {
           container.innerHTML = '<p>No options data available for visualization.</p>';
           return;
@@ -393,7 +399,7 @@
       };
 
       // Comprehensive Decision Analysis - Merges Cost-Benefit + Pros-Cons
-      const createComprehensiveDecisionAnalysis = (data, container) => {
+      var createComprehensiveDecisionAnalysis = (data, container) => {
         if (!data.options || !data.options.length) {
           container.innerHTML = '<p>No options data available for visualization.</p>';
           return;
@@ -490,7 +496,7 @@
       };
 
       // Aligned bar charts helper function for pros/cons T-chart with proper alignment
-      const createAlignedBarCharts = (prosData, consData, prosContainerId, consContainerId) => {
+      var createAlignedBarCharts = (prosData, consData, prosContainerId, consContainerId) => {
         const prosContainer = document.getElementById(prosContainerId);
         const consContainer = document.getElementById(consContainerId);
         if (!prosContainer || !consContainer) return;
@@ -540,7 +546,7 @@
       };
       
       // Helper function to create consistent item HTML
-      const createItemHTML = (item, color) => {
+      var createItemHTML = (item, color) => {
         const point = item.point || item.factor || item.text || 'Unknown';
         const weight = parseFloat(item.weight) || 0;
         const category = item.category || weight;
@@ -588,7 +594,7 @@
       };
 
       // Cost-Benefit Visualization
-      const createCostBenefitVisualization = (data, container) => {
+      var createCostBenefitVisualization = (data, container) => {
         if (!data.options || !data.options.length) {
           container.innerHTML = '<p>No options data available for visualization.</p>';
           return;
@@ -643,7 +649,7 @@
       };
 
       // SWOT Visualization
-      const createSwotVisualization = (data, container) => {
+      var createSwotVisualization = (data, container) => {
         if (!data.swotMatrix) {
           container.innerHTML = '<p>No SWOT matrix data available for visualization.</p>';
           return;
@@ -674,7 +680,7 @@
       };
 
       // Weighted Scoring Visualization
-      const createWeightedScoringVisualization = (data, container) => {
+      var createWeightedScoringVisualization = (data, container) => {
         if (!data.options || !data.options.length) {
           container.innerHTML = '<p>No scoring data available for visualization.</p>';
           return;
@@ -683,18 +689,78 @@
         container.innerHTML = `
           <div class="weighted-scoring">
             <h3>Weighted Scoring Analysis</h3>
+            
+            ${data.analysis?.methodology ? `
+              <div class="methodology-section">
+                <h4>Methodology</h4>
+                <p class="methodology-text">${data.analysis.methodology}</p>
+              </div>
+            ` : ''}
+            
             <div class="criteria-weights">
               <h4>Criteria Weights</h4>
+              <div class="criteria-grid">
+                ${(data.criteria || []).map(c => `
+                  <div class="criteria-item">
+                    <div class="criteria-header">
+                      <span class="criteria-name">${c.name}</span>
+                      <span class="criteria-weight">${c.weight}%</span>
+                    </div>
+                    <div class="criteria-description">${c.description}</div>
+                    ${c.reasoning ? `<div class="criteria-reasoning">${c.reasoning}</div>` : ''}
+                  </div>
+                `).join('')}
+              </div>
               <div id="criteria-chart"></div>
             </div>
+            
             <div class="options-scores">
-              <h4>Option Scores</h4>
+              <h4>Option Comparison</h4>
               <div id="scores-chart"></div>
             </div>
+            
+            ${data.analysis ? `
+              <div class="analysis-summary">
+                <h4>Analysis Summary</h4>
+                
+                ${data.analysis.keyInsights ? `
+                  <div class="key-insights">
+                    <h5>Key Insights</h5>
+                    <ul>
+                      ${data.analysis.keyInsights.map(insight => `<li>${insight}</li>`).join('')}
+                    </ul>
+                  </div>
+                ` : ''}
+                
+                ${data.analysis.recommendation ? `
+                  <div class="recommendation">
+                    <h5>Recommendation</h5>
+                    <div class="rec-choice"><strong>${data.analysis.recommendation.topChoice}</strong></div>
+                    <div class="rec-reasoning">${data.analysis.recommendation.reasoning}</div>
+                    <div class="rec-confidence">Confidence: <span class="confidence-${data.analysis.recommendation.confidence?.toLowerCase()}">${data.analysis.recommendation.confidence}</span></div>
+                    ${data.analysis.recommendation.caveats ? `
+                      <div class="rec-caveats">
+                        <strong>Important Considerations:</strong>
+                        <ul>
+                          ${data.analysis.recommendation.caveats.map(caveat => `<li>${caveat}</li>`).join('')}
+                        </ul>
+                      </div>
+                    ` : ''}
+                  </div>
+                ` : ''}
+                
+                ${data.analysis.sensitivityAnalysis ? `
+                  <div class="sensitivity-analysis">
+                    <h5>Sensitivity Analysis</h5>
+                    <p>${data.analysis.sensitivityAnalysis}</p>
+                  </div>
+                ` : ''}
+              </div>
+            ` : ''}
           </div>
         `;
 
-        // Show criteria weights
+        // Show criteria weights chart
         if (data.criteria) {
           const criteriaForChart = data.criteria.map(c => ({
             point: c.name,
@@ -702,30 +768,56 @@
             category: c.weight
           }));
           console.log('Criteria data for chart:', criteriaForChart);
-          createSimpleBarChart(criteriaForChart, 'criteria-chart', '#333');
+          createSimpleBarChart(criteriaForChart, 'criteria-chart', '#4a7c59');
         }
 
-        // Show option scores
+        // Show detailed option scores with enhanced information
         data.options.forEach((option, index) => {
           const optionDiv = document.createElement('div');
           optionDiv.className = 'option-score';
           optionDiv.innerHTML = `
-            <h5>${option.name} - Total: ${option.totalScore}</h5>
+            <div class="option-header">
+              <h5>${option.name}</h5>
+              <span class="total-score">Total Score: ${option.totalScore}</span>
+              <span class="rank">Rank: #${option.rank}</span>
+            </div>
+            
             <div class="scores-breakdown">
               ${(option.scores || []).map(s => `
                 <div class="score-item">
-                  <span>${s.criterion}:</span>
-                  <span>${s.rawScore}/10 (weighted: ${s.weightedScore})</span>
+                  <div class="score-main">
+                    <span class="criterion-name">${s.criterion}:</span>
+                    <span class="scores">${s.rawScore}/10 (weighted: ${s.weightedScore})</span>
+                  </div>
+                  ${s.reasoning ? `<div class="score-reasoning">${s.reasoning}</div>` : ''}
                 </div>
               `).join('')}
             </div>
+            
+            ${option.strengths ? `
+              <div class="option-strengths">
+                <strong>Strengths:</strong>
+                <ul>
+                  ${option.strengths.map(strength => `<li>${strength}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+            
+            ${option.weaknesses ? `
+              <div class="option-weaknesses">
+                <strong>Weaknesses:</strong>
+                <ul>
+                  ${option.weaknesses.map(weakness => `<li>${weakness}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
           `;
           container.querySelector('#scores-chart').appendChild(optionDiv);
         });
       };
 
       // Simple bar chart helper function - handles multiple data structures
-      const createSimpleBarChart = (data, containerId, color) => {
+      var createSimpleBarChart = (data, containerId, color) => {
         const container = document.getElementById(containerId);
         if (!container) return;
         
@@ -1376,6 +1468,237 @@
       border-radius: 4px;
       font-size: 14px;
     }
+
+    /* Enhanced Weighted Scoring Styles */
+    .methodology-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f8f9ff;
+      border-left: 4px solid #4a7c59;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .methodology-text {
+      margin: 0;
+      font-style: italic;
+      color: #555;
+    }
+
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .criteria-item {
+      padding: 12px;
+      background-color: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+
+    .criteria-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .criteria-name {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .criteria-weight {
+      background-color: #4a7c59;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .criteria-description {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .criteria-reasoning {
+      font-size: 12px;
+      color: #888;
+      font-style: italic;
+    }
+
+    .option-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #4a7c59;
+    }
+
+    .option-header h5 {
+      margin: 0;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .total-score {
+      background-color: #4a7c59;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .rank {
+      background-color: #f0f0f0;
+      color: #333;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .score-main {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .criterion-name {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .scores {
+      color: #4a7c59;
+      font-weight: 600;
+    }
+
+    .score-reasoning {
+      font-size: 12px;
+      color: #888;
+      font-style: italic;
+      margin-left: 10px;
+    }
+
+    .option-strengths, .option-weaknesses {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .option-strengths {
+      background-color: #f0fdf4;
+      border-left: 3px solid #22c55e;
+    }
+
+    .option-weaknesses {
+      background-color: #fef2f2;
+      border-left: 3px solid #ef4444;
+    }
+
+    .option-strengths ul, .option-weaknesses ul {
+      margin: 5px 0 0 0;
+      padding-left: 20px;
+    }
+
+    .option-strengths li, .option-weaknesses li {
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .analysis-summary {
+      margin-top: 25px;
+      padding: 20px;
+      background-color: #fafafa;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .key-insights ul {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+
+    .key-insights li {
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    .recommendation {
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #4a7c59;
+      margin-top: 15px;
+    }
+
+    .rec-choice {
+      font-size: 16px;
+      color: #4a7c59;
+      margin-bottom: 8px;
+    }
+
+    .rec-reasoning {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .rec-confidence {
+      margin-bottom: 10px;
+    }
+
+    .confidence-high {
+      color: #22c55e;
+      font-weight: 600;
+    }
+
+    .confidence-medium {
+      color: #f59e0b;
+      font-weight: 600;
+    }
+
+    .confidence-low {
+      color: #ef4444;
+      font-weight: 600;
+    }
+
+    .rec-caveats {
+      background-color: #fffbeb;
+      padding: 10px;
+      border-radius: 6px;
+      border-left: 3px solid #f59e0b;
+    }
+
+    .rec-caveats ul {
+      margin: 5px 0 0 0;
+      padding-left: 20px;
+    }
+
+    .rec-caveats li {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .sensitivity-analysis {
+      background-color: #f0f9ff;
+      padding: 12px;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+      margin-top: 15px;
+    }
+
+    .sensitivity-analysis p {
+      margin: 0;
+      color: #555;
+      font-size: 14px;
+    }
     
     /* Card animation setup */
     .quote-card {
@@ -1566,17 +1889,18 @@
 
     <script>
       // Modify createDecisionTreeVisualization to call enhance UX
-      const originalCreateTree = createDecisionTreeVisualization;
-      createDecisionTreeVisualization = (data, container) => {
-        // Compute and prepare pathways count
-        const pathwayCount = Array.isArray(data.edges)
-          ? data.edges.length
-          : ((data.mermaidSyntax.match(/-->/g) || []).length);
-        const pathwaysInfo = document.createElement('div');
-        pathwaysInfo.className = 'pathways-info';
-        pathwaysInfo.textContent = `Pathways: ${pathwayCount}`;
+      if (typeof originalCreateTree === 'undefined' && typeof createDecisionTreeVisualization !== 'undefined') {
+        var originalCreateTree = createDecisionTreeVisualization;
+        createDecisionTreeVisualization = (data, container) => {
+          // Compute and prepare pathways count
+          const pathwayCount = Array.isArray(data.edges)
+            ? data.edges.length
+            : ((data.mermaidSyntax.match(/-->/g) || []).length);
+          const pathwaysInfo = document.createElement('div');
+          pathwaysInfo.className = 'pathways-info';
+          pathwaysInfo.textContent = `Pathways: ${pathwayCount}`;
 
-        originalCreateTree(data, container);
+          originalCreateTree(data, container);
 
         // Insert pathways count before the visualization-content container
         if (container.parentNode) {
@@ -1592,4 +1916,5 @@
           enhanceDecisionTreeUX(mermaidDiv, panZoomInstance);
         }
       };
+      }
     </script>
