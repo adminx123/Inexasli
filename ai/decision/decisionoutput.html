@@ -31,6 +31,92 @@
     
     /* Using output-wrapper and api-output styles from outputstyles.css */
     
+    /* Comprehensive Decision Analysis Styles */
+    .comprehensive-analysis-chart {
+      margin-bottom: 25px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      background: #fafafa;
+    }
+    
+    .financial-metrics {
+      background: #f0f9ff;
+      border: 1px solid #0ea5e9;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .financial-metrics h4 {
+      margin: 0 0 10px 0;
+      color: #0369a1;
+      font-size: 16px;
+    }
+    
+    .metrics-grid {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .metric {
+      background: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      border: 1px solid #bae6fd;
+    }
+    
+    .metric .label {
+      font-weight: 500;
+      color: #0369a1;
+      margin-right: 8px;
+    }
+    
+    .metric .value {
+      font-weight: 600;
+      color: #1e40af;
+    }
+    
+    .decision-analysis {
+      margin-top: 15px;
+    }
+    
+    .analysis-headers {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    
+    .positive-header, .negative-header {
+      flex: 1;
+      padding: 10px;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 4px;
+      margin: 0 5px;
+    }
+    
+    .positive-header {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+    
+    .negative-header {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+    
+    .analysis-content {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .positive-side, .negative-side {
+      flex: 1;
+    }
+    
     /* Copy button styles now in external JS file */
     
    
@@ -70,13 +156,13 @@
           },
           'cost-benefit': {
             recommended: 'D3.js',
-            chartTypes: ['line-chart', 'bar-chart', 'waterfall-chart', 'roi-chart'],
-            description: 'Financial data ideal for line charts showing ROI over time'
+            chartTypes: ['comprehensive-analysis', 'financial-metrics', 'comparison-charts'],
+            description: 'Comprehensive decision analysis with financial metrics and qualitative factors'
           },
           'pros-cons': {
             recommended: 'D3.js',
-            chartTypes: ['horizontal-bar-chart', 'grouped-bar-chart', 'comparison-table'],
-            description: 'Best visualized as comparative bar charts or tables showing pros vs cons'
+            chartTypes: ['comprehensive-analysis', 'comparison-table', 'scoring-matrix'],
+            description: 'Comprehensive decision analysis with scoring and recommendations'
           },
           'weighted-scoring': {
             recommended: 'D3.js',
@@ -158,10 +244,8 @@
               createSwotVisualization(data, vizContainer);
               break;
             case 'cost-benefit':
-              createCostBenefitVisualization(data, vizContainer);
-              break;
             case 'pros-cons':
-              createProsConsVisualization(data, vizContainer);
+              createComprehensiveDecisionAnalysis(data, vizContainer);
               break;
             case 'weighted-scoring':
               createWeightedScoringVisualization(data, vizContainer);
@@ -310,6 +394,103 @@
         // Create bar charts for each option with alignment
         data.options.forEach((option, index) => {
           createAlignedBarCharts(option.pros || [], option.cons || [], `pros-bars-${index}`, `cons-bars-${index}`);
+        });
+      };
+
+      // Comprehensive Decision Analysis - Merges Cost-Benefit + Pros-Cons
+      const createComprehensiveDecisionAnalysis = (data, container) => {
+        if (!data.options || !data.options.length) {
+          container.innerHTML = '<p>No options data available for visualization.</p>';
+          return;
+        }
+
+        // Check if this is a financial decision (has cost/benefit data)
+        const hasFinancialData = data.options.some(option => 
+          option.roi || option.netPresentValue || option.paybackPeriod || 
+          (option.costs && option.costs.length) || (option.benefits && option.benefits.length)
+        );
+
+        let optionsHTML = '';
+        
+        data.options.forEach((option, index) => {
+          // Financial metrics section (only if financial data exists)
+          let financialSection = '';
+          if (hasFinancialData && (option.roi || option.netPresentValue || option.paybackPeriod)) {
+            financialSection = `
+              <div class="financial-metrics">
+                <h4>💰 Financial Analysis</h4>
+                <div class="metrics-grid">
+                  ${option.roi ? `<div class="metric"><span class="label">ROI:</span><span class="value">${option.roi}</span></div>` : ''}
+                  ${option.netPresentValue ? `<div class="metric"><span class="label">NPV:</span><span class="value">$${option.netPresentValue.toLocaleString()}</span></div>` : ''}
+                  ${option.paybackPeriod ? `<div class="metric"><span class="label">Payback:</span><span class="value">${option.paybackPeriod}</span></div>` : ''}
+                </div>
+              </div>
+            `;
+          }
+
+          // Build the main analysis section
+          optionsHTML += `
+            <div class="comprehensive-analysis-chart option-chart">
+              <h3 class="option-title">
+                ${option.name} 
+                ${option.overallScore ? `<span class="score-badge">Score: ${option.overallScore}/100</span>` : ''}
+              </h3>
+              
+              ${financialSection}
+              
+              <div class="decision-analysis">
+                <div class="analysis-headers">
+                  <div class="positive-header">
+                    ${hasFinancialData ? '💚 BENEFITS' : '✓ PROS'} 
+                    (${(option.benefits || option.pros || []).length})
+                  </div>
+                  <div class="negative-header">
+                    ${hasFinancialData ? '💸 COSTS' : '✗ CONS'} 
+                    (${(option.costs || option.cons || []).length})
+                  </div>
+                </div>
+                <div class="analysis-content">
+                  <div class="positive-side">
+                    <div id="positive-bars-${index}" class="positive-bars"></div>
+                  </div>
+                  <div class="negative-side">
+                    <div id="negative-bars-${index}" class="negative-bars"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        // Add recommendation section if available
+        if (data.recommendation) {
+          optionsHTML += `
+            <div class="recommendation-section">
+              <h3>🎯 Recommendation</h3>
+              <div class="top-choice">
+                <strong>Top Choice:</strong> ${data.recommendation.topChoice}
+              </div>
+              <div class="reasoning">
+                <strong>Reasoning:</strong> ${data.recommendation.reasoning}
+              </div>
+              <div class="confidence">
+                <strong>Confidence:</strong> ${data.recommendation.confidence}
+              </div>
+            </div>
+          `;
+        }
+        
+        container.innerHTML = `
+          <div class="all-options-container">
+            ${optionsHTML}
+          </div>
+        `;
+
+        // Create bar charts for each option
+        data.options.forEach((option, index) => {
+          const positiveData = option.benefits || option.pros || [];
+          const negativeData = option.costs || option.cons || [];
+          createAlignedBarCharts(positiveData, negativeData, `positive-bars-${index}`, `negative-bars-${index}`);
         });
       };
 
