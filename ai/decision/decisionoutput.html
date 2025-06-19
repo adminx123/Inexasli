@@ -940,7 +940,12 @@
 
       // Interactive Weight Slider Functions
       function addWeightSliders(data, container) {
-        if (!data.criteria || data.criteria.length === 0) return;
+        console.log('🎛️ Adding weight sliders for criteria:', data.criteria);
+        
+        if (!data.criteria || data.criteria.length === 0) {
+          console.warn('⚠️ No criteria found, skipping sliders');
+          return;
+        }
 
         // Create slider section
         const sliderSection = document.createElement('div');
@@ -980,16 +985,26 @@
         const slidersContainer = container.querySelector('#weight-sliders-container');
         if (slidersContainer) {
           slidersContainer.appendChild(sliderSection);
+          console.log('✅ Sliders added to dedicated container');
         } else {
           container.appendChild(sliderSection);
+          console.log('✅ Sliders added to main container');
         }
 
+        console.log('🔧 About to setup slider logic...');
         // Setup interactions
         setupSliderLogic(data);
       }
 
       function setupSliderLogic(originalData) {
         const sliders = Array.from(document.querySelectorAll('.weight-slider-input'));
+        console.log(`🔍 Found ${sliders.length} sliders:`, sliders.map(s => s.dataset.criterion));
+        
+        if (sliders.length === 0) {
+          console.error('❌ No sliders found! Check if sliders were created properly.');
+          return;
+        }
+        
         const valueSpans = {};
         const sumDisplay = document.getElementById('weight-sum');
         const warning = document.getElementById('weight-warning');
@@ -998,46 +1013,8 @@
         sliders.forEach(slider => {
           const criterion = slider.dataset.criterion;
           valueSpans[criterion] = document.getElementById(`weight-value-${criterion.toLowerCase()}`);
+          console.log(`📊 Mapped ${criterion} to span:`, valueSpans[criterion]);
         });
-
-        function redistributeWeights(changedSlider, newValue, startValue) {
-          const changedCriterion = changedSlider.dataset.criterion;
-          const oldValue = startValue || parseInt(changedSlider.getAttribute('data-old-value') || changedSlider.value);
-          const difference = newValue - oldValue;
-
-          console.log(`Redistributing: ${changedCriterion} changed from ${oldValue} to ${newValue}, difference: ${difference}`);
-
-          if (difference === 0) return;
-
-          // Update the changed slider
-          changedSlider.value = newValue;
-
-          // Get other sliders
-          const otherSliders = sliders.filter(s => s !== changedSlider);
-          
-          if (otherSliders.length === 0) {
-            updateDisplays();
-            recalculateScores(originalData);
-            return;
-          }
-
-          // DEAD SIMPLE: divide the opposite change equally among all other sliders
-          const changePerOtherSlider = -difference / otherSliders.length;
-          
-          console.log(`Each of the ${otherSliders.length} other sliders gets: ${changePerOtherSlider}`);
-
-          // Apply the EXACT same change to every other slider
-          otherSliders.forEach((slider, index) => {
-            const currentValue = parseInt(slider.value);
-            const newWeight = currentValue + changePerOtherSlider;
-            const constrainedWeight = Math.max(5, Math.min(60, newWeight));
-            slider.value = Math.round(constrainedWeight);
-            console.log(`${slider.dataset.criterion}: ${currentValue} + ${changePerOtherSlider} = ${slider.value}`);
-          });
-
-          updateDisplays();
-          recalculateScores(originalData);
-        }
 
         function updateDisplays() {
           let total = 0;
@@ -1048,14 +1025,20 @@
               valueSpans[criterion].textContent = `${weight}%`;
             }
             total += weight;
-            // Update old value for all sliders
-            slider.setAttribute('data-old-value', weight);
           });
 
           console.log(`Total weight: ${total}%`);
           sumDisplay.textContent = `${total}%`;
-          sumDisplay.style.color = total === 100 ? '#22c55e' : '#ef4444';
-          warning.style.display = total === 100 ? 'none' : 'inline';
+          
+          // Show warning if not 100%
+          if (total === 100) {
+            sumDisplay.style.color = '#22c55e'; // Green
+            warning.style.display = 'none';
+          } else {
+            sumDisplay.style.color = '#ef4444'; // Red
+            warning.style.display = 'inline';
+            warning.textContent = `⚠️ Total must equal 100% (currently ${total}%)`;
+          }
         }
 
         function recalculateScores(data) {
@@ -1108,51 +1091,29 @@
           });
         }
 
-        // Event listeners with proper debouncing
-        let redistributionTimeout;
-        sliders.forEach(slider => {
-          slider.setAttribute('data-old-value', slider.value);
-          
-          // Store the value when user starts dragging
-          slider.addEventListener('mousedown', (e) => {
-            slider.setAttribute('data-start-value', slider.value);
-            console.log(`Started dragging ${slider.dataset.criterion} at ${slider.value}%`);
-          });
-          
-          // Store the value when user starts touching (mobile)
-          slider.addEventListener('touchstart', (e) => {
-            slider.setAttribute('data-start-value', slider.value);
-            console.log(`Started touching ${slider.dataset.criterion} at ${slider.value}%`);
-          });
+        // Simple event listeners - just update displays and scores
+        sliders.forEach((slider, index) => {
+          console.log(`🎛️ Setting up listener ${index + 1}/${sliders.length} for ${slider.dataset.criterion}`);
           
           slider.addEventListener('input', (e) => {
-            // Clear previous timeout
-            if (redistributionTimeout) {
-              clearTimeout(redistributionTimeout);
-            }
+            console.log(`🎯 ${slider.dataset.criterion} changed to ${e.target.value}%`);
             
-            // Debounce the redistribution
-            redistributionTimeout = setTimeout(() => {
-              console.log(`Input event: ${slider.dataset.criterion} = ${e.target.value}`);
-              const startValue = parseInt(slider.getAttribute('data-start-value') || slider.getAttribute('data-old-value'));
-              redistributeWeights(slider, parseInt(e.target.value), startValue);
-            }, 50); // 50ms debounce
-          });
-          
-          // When user releases, update the start value for next time
-          slider.addEventListener('mouseup', (e) => {
-            slider.setAttribute('data-start-value', slider.value);
-            slider.setAttribute('data-old-value', slider.value);
-          });
-          
-          slider.addEventListener('touchend', (e) => {
-            slider.setAttribute('data-start-value', slider.value);
-            slider.setAttribute('data-old-value', slider.value);
+            // Just update displays and recalculate - no redistribution
+            updateDisplays();
+            recalculateScores(originalData);
           });
         });
 
         // Initial display
         updateDisplays();
+        
+        // Add a global debug function
+        window.debugSliders = () => {
+          console.log('🔄 Current slider values:');
+          sliders.forEach(slider => {
+            console.log(`${slider.dataset.criterion}: ${slider.value}%`);
+          });
+        };
       }
 
       
