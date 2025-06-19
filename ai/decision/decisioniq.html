@@ -1,5 +1,7 @@
 <!--
- * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * Copyright (c) 2025 INEXASLI. All rights reserv            <textarea id="decision-options" rows="3" placeholder="Option 1: Salesforce CRM Premium Package - $150/user/month
+Option 2: HubSpot Enterprise Solution - $120/user/month
+Option 3: Build custom solution in-house"></textarea>
  * This code is protected under Canadian and international copyright laws.
  * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
@@ -49,85 +51,23 @@ Select new office location for regional headquarters"></textarea>
             </select>
         </div>
         <div class="row1">
-            <h3 style="text-align: center; font-size: 18px; margin-bottom:15px; border-bottom: 2px solid black; padding-bottom: 5px;" class="tooltip1" data-tooltip="Select what matters most in making this decision to help prioritize the analysis.">
-                Priority Focus<span class="tooltip1-content"></span>
-            </h3>
-            <select id="decision-priority">
-                <option value="" disabled selected>Select Priority Focus</option>
-                <option value="speed">Speed - Quick implementation timeframe</option>
-                <option value="accuracy">Accuracy - Precise, reliable solution</option>
-                <option value="cost">Cost - Budget efficiency</option>
-                <option value="long-term-impact">Long-Term Impact - Future benefits</option>
-                <option value="simplicity">Simplicity - Ease of use/adoption</option>
-                <option value="other">Other - Specified in considerations</option>
-            </select>
-        </div>
-        <div class="row1">
-            <h3 style="text-align: center; font-size: 18px; margin-bottom:15px; border-bottom: 2px solid black; padding-bottom: 5px;" class="tooltip1" data-tooltip="Select the key factors that will influence your decision-making process.">
-                Decision Criteria<span class="tooltip1-content"></span>
-            </h3>
-            <div class="grid-container" id="decision-criteria">
-                <div class="grid-item" data-value="Cost">Cost</div>
-                <div class="grid-item" data-value="Quality">Quality</div>
-                <div class="grid-item" data-value="Time">Timeline</div>
-                <div class="grid-item" data-value="Risk">Risk</div>
-                <div class="grid-item" data-value="Features">Features</div>
-                <div class="grid-item" data-value="Scalability">Scalability</div>
-                <div class="grid-item" data-value="Compatibility">Compatibility</div>
-                <div class="grid-item" data-value="Reliability">Reliability</div>
-                <div class="grid-item" data-value="User Experience">User Experience</div>
-                <div class="grid-item" data-value="Custom">Custom (specify in instructions)</div>
-            </div>
-        </div>
-        <div class="row1">
             <h3 style="text-align: center; font-size: 18px; margin-bottom:15px; border-bottom: 2px solid black; padding-bottom: 5px;" class="tooltip1" data-tooltip="List all the potential options or alternatives you're considering for this decision.">
                 Decision Options<span class="tooltip1-content"></span>
             </h3>
-            <textarea id="decision-options" rows="2" placeholder="Salesforce CRM Premium Package
-HubSpot Enterprise Solution"></textarea>
+            <textarea id="decision-options" rows="5" placeholder="Option 1: Salesforce CRM Premium Package - $150/user/month
+Option 2: HubSpot Enterprise Solution - $120/user/month  
+Option 3: Build custom solution in-house"></textarea>
         </div>
         <div class="row1">
-            <label class="category-label">Stakeholders</label>
-            <div class="grid-container" id="decision-stakeholders">
-                <div class="grid-item" data-value="team-members">Team Members</div>
-                <div class="grid-item" data-value="executives">Executives</div>
-                <div class="grid-item" data-value="customers">Customers</div>
-                <div class="grid-item" data-value="partners">Partners</div>
-                <div class="grid-item" data-value="regulators">Regulators</div>
-                <div class="grid-item" data-value="personal">Personal</div>
-            </div>
-        </div>
-        <div class="row1">
-            <label class="category-label">Primary Constraint</label>
-            <div class="grid-container" id="decision-constraint-types">
-                <div class="grid-item" data-value="Budget">Budget</div>
-                <div class="grid-item" data-value="Timeline">Timeline</div>
-                <div class="grid-item" data-value="Resources">Resources</div>
-                <div class="grid-item" data-value="Technical">Technical</div>
-                <div class="grid-item" data-value="Regulatory">Regulatory</div>
-                <div class="grid-item" data-value="Location">Location</div>
-                <div class="grid-item" data-value="Legal">Legal</div>
-            </div>
-        </div>
-        <div class="row1">
-            <label class="category-label">Constraint Details</label>
-            <input id="decision-budget-constraint" type="text" placeholder="Budget: $10,000 USD">
-            <input id="decision-timeline-constraint" type="text" placeholder="Timeline: Implementation by Q3 2024">
-            <input id="decision-resources-constraint" type="text" placeholder="Resources: Limited IT staff available">
-            <input id="decision-technical-constraint" type="text" placeholder="Technical: Must integrate with existing Oracle database">
-            <input id="decision-regulatory-constraint" type="text" placeholder="Regulatory: Compliance requirements">
-            <input id="decision-location-constraint" type="text" placeholder="Location: Geographic limitations">
-            <input id="decision-legal-constraint" type="text" placeholder="Legal: Contractual or liability issues">
-            <input id="decision-other-constraint" type="text" placeholder="Other: Additional limiting factors">
-        </div>
-        <div class="row1">
-            <label class="category-label">Specific Considerations</label>
-            <textarea id="decision-instructions" rows="6" placeholder="Specific considerations: important details for decision
-Solution must support team of 250+ employees worldwide
-Need GDPR and HIPAA compliance for all data handling
-Budget constraints require financing options over 36 months
-Must integrate with existing Microsoft systems
-Need multilingual support for global offices"></textarea>
+            <h3 style="text-align: center; font-size: 18px; margin-bottom:15px; border-bottom: 2px solid black; padding-bottom: 5px;" class="tooltip1" data-tooltip="Describe your priorities, constraints, and any important context for this decision.">
+                Priorities & Context<span class="tooltip1-content"></span>
+            </h3>
+            <textarea id="decision-context" rows="10" placeholder="Priority: Cost effectiveness is our top priority
+Constraint: Budget limit $50,000 total implementation cost
+Timeline: Must be implemented within 6 months
+Technical: Must integrate with existing Oracle database
+Stakeholders: IT team and executive leadership must approve
+Compliance: GDPR compliance required for European customers"></textarea>
         
        
             <button class="generate-btn" id="generate-decision-btn">Generate Decision Analysis Now!</button>
