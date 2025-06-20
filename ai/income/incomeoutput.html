@@ -505,6 +505,12 @@
 (function() {
     console.log('IncomeIQ API Output script running');
 
+    // Dynamic import for getJSON utility
+    let getJSON;
+    import('/utility/getJSON.js').then(module => {
+        getJSON = module.default || module.getJSON;
+    });
+
     // Get the parameters from the URL if this is standalone, or check local storage
     const params = new URLSearchParams(window.location.search);
     const inputData = params.get('input');
@@ -964,18 +970,24 @@
         }
     } else {
         // Get data from localStorage using the FormPersistence pattern
-        const responseKey = 'incomeIqResponse';
-        const storedResponse = getLocal(responseKey);
-        if (storedResponse) {
-            try {
-                let responseData = JSON.parse(storedResponse);
-                
-                // Handle the worker response format - check if it's nested in a response object
-                if (responseData && responseData.message === 'Success' && responseData.data) {
-                    responseData = responseData.data;
-                }
-                
-                console.log('Found stored income response:', responseData);
+        async function loadStoredResponse() {
+            if (!getJSON) {
+                const module = await import('/utility/getJSON.js');
+                getJSON = module.default || module.getJSON;
+            }
+            
+            const responseKey = 'incomeIqResponse';
+            const storedResponse = getJSON(responseKey);
+            if (storedResponse) {
+                try {
+                    let responseData = storedResponse;
+                    
+                    // Handle the worker response format - check if it's nested in a response object
+                    if (responseData && responseData.message === 'Success' && responseData.data) {
+                        responseData = responseData.data;
+                    }
+                    
+                    console.log('Found stored income response:', responseData);
                 
                 // Create a mock incomeAnalysis object from the worker response data
                 const incomeAnalysis = {
@@ -993,16 +1005,20 @@
                 const outputSpan = document.getElementById('output-span');
                 outputSpan.innerHTML = '';
                 displayEnhancedIncomeAnalysis(incomeAnalysis, outputSpan);
-            } catch (error) {
-                console.error('Error parsing stored response:', error);
+                } catch (error) {
+                    console.error('Error parsing stored response:', error);
+                    const outputSpan = document.getElementById('output-span');
+                    outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc3545;">Error loading stored income data. Please try again.</div>';
+                }
+            } else {
+                // No data found, show empty content for dataout.js to handle
                 const outputSpan = document.getElementById('output-span');
-                outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc3545;">Error loading stored income data. Please try again.</div>';
+                outputSpan.innerHTML = '';
             }
-        } else {
-            // No data found, show empty content for dataout.js to handle
-            const outputSpan = document.getElementById('output-span');
-            outputSpan.innerHTML = '';
         }
+        
+        // Call the async function
+        loadStoredResponse();
     }
 
     function displayEnhancedIncomeAnalysis(incomeData, outputElement) {
