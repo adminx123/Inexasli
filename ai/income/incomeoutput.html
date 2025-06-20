@@ -479,10 +479,179 @@
         margin: 10px 0;
       }
     }
+    
+    /* Stale Calculations Modal */
+    .stale-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .stale-modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .stale-modal {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      max-width: 520px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .stale-modal-overlay.show .stale-modal {
+      transform: scale(1) translateY(0);
+    }
+    
+    .stale-modal-header {
+      background: linear-gradient(135deg, #fef3c7, #fcd34d);
+      padding: 24px;
+      border-radius: 16px 16px 0 0;
+      text-align: center;
+      border-bottom: 2px solid #f59e0b;
+    }
+    
+    .stale-modal-icon {
+      font-size: 3em;
+      color: #f59e0b;
+      margin-bottom: 12px;
+    }
+    
+    .stale-modal-title {
+      margin: 0 0 8px 0;
+      color: #92400e;
+      font-size: 1.4em;
+      font-weight: 600;
+    }
+    
+    .stale-modal-subtitle {
+      margin: 0;
+      color: #92400e;
+      font-size: 1em;
+      opacity: 0.9;
+    }
+    
+    .stale-modal-body {
+      padding: 24px;
+    }
+    
+    .stale-modal-message {
+      color: #374151;
+      font-size: 1.1em;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    
+    .stale-modal-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .stale-modal-btn {
+      padding: 14px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      text-align: center;
+      display: block;
+    }
+    
+    .stale-modal-btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+    
+    .stale-modal-btn-primary:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+    
+    .stale-modal-btn-secondary {
+      background: #6b7280;
+      color: white;
+    }
+    
+    .stale-modal-btn-secondary:hover {
+      background: #4b5563;
+      transform: translateY(-1px);
+    }
+    
+    .stale-modal-btn-tertiary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+    
+    .stale-modal-btn-tertiary:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+    
+    @media (min-width: 640px) {
+      .stale-modal-buttons {
+        flex-direction: row;
+        justify-content: center;
+      }
+      
+      .stale-modal-btn {
+        flex: 1;
+        max-width: 150px;
+      }
+    }
    
   </style>
 </head>
 <body>
+  <!-- Stale Calculations Modal -->
+  <div id="staleModal" class="stale-modal-overlay">
+    <div class="stale-modal">
+      <div class="stale-modal-header">
+        <i class="fas fa-exclamation-triangle stale-modal-icon"></i>
+        <h2 class="stale-modal-title">Tax Calculations May Be Outdated</h2>
+        <p class="stale-modal-subtitle">Changes detected that affect your financial analysis</p>
+      </div>
+      <div class="stale-modal-body">
+        <p class="stale-modal-message">
+          You've made changes to your income or tax residency information that will have 
+          <strong>material implications</strong> on your tax and contribution calculations. 
+          The current report may no longer be accurate.
+        </p>
+        <div class="stale-modal-buttons">
+          <button id="regenerateBtn" class="stale-modal-btn stale-modal-btn-primary">
+            <i class="fas fa-sync-alt"></i> Regenerate Report
+          </button>
+          <button id="makeChangesBtn" class="stale-modal-btn stale-modal-btn-secondary">
+            <i class="fas fa-edit"></i> Make More Changes
+          </button>
+          <button id="viewAnywayBtn" class="stale-modal-btn stale-modal-btn-tertiary">
+            <i class="fas fa-eye"></i> View Current Report
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Main content container with ID for accessibility -->
   <div id="main-content" class="device-container income-container">
     <div class="output-wrapper">
@@ -1603,10 +1772,10 @@
         const staleTimestamp = localStorage.getItem('taxCalculationsStaleTimestamp');
         
         if (isStale && staleTimestamp) {
-            // Check if there's an existing AI response - only show warning if user has already completed the form
+            // Check if there's an existing AI response - only show modal if user has already completed the form
             const existingResponse = localStorage.getItem('incomeIqResponse');
             if (!existingResponse) {
-                console.log(`[IncomeOutput] ℹ️ No existing AI response found, skipping stale tax calculations warning`);
+                console.log(`[IncomeOutput] ℹ️ No existing AI response found, skipping stale tax calculations modal`);
                 return;
             }
             
@@ -1614,36 +1783,85 @@
             const now = new Date();
             const minutesStale = Math.floor((now - staleTime) / (1000 * 60));
             
-            console.log(`[IncomeOutput] Tax calculations are ${minutesStale} minutes stale`);
-            showStaleWarning(minutesStale);
+            console.log(`[IncomeOutput] Tax calculations are ${minutesStale} minutes stale - showing modal`);
+            showStaleModal(minutesStale);
         }
     }
 
-    function showStaleWarning(minutesStale) {
-        // Add a warning banner to the dashboard
+    function showStaleModal(minutesStale) {
+        const modal = document.getElementById('staleModal');
+        if (!modal) return;
+        
+        // Update the modal message with timing info
+        const messageEl = modal.querySelector('.stale-modal-message');
+        if (messageEl && minutesStale > 0) {
+            messageEl.innerHTML = `
+                You've made changes to your income or tax residency information 
+                <strong>${minutesStale} minute${minutesStale !== 1 ? 's' : ''} ago</strong> that will have 
+                <strong>material implications</strong> on your tax and contribution calculations. 
+                The current report may no longer be accurate.
+            `;
+        }
+        
+        // Show modal
+        modal.classList.add('show');
+        
+        // Set up button handlers
+        const regenerateBtn = document.getElementById('regenerateBtn');
+        const makeChangesBtn = document.getElementById('makeChangesBtn');
+        const viewAnywayBtn = document.getElementById('viewAnywayBtn');
+        
+        // Remove existing listeners
+        regenerateBtn.replaceWith(regenerateBtn.cloneNode(true));
+        makeChangesBtn.replaceWith(makeChangesBtn.cloneNode(true));
+        viewAnywayBtn.replaceWith(viewAnywayBtn.cloneNode(true));
+        
+        // Get fresh references
+        const newRegenerateBtn = document.getElementById('regenerateBtn');
+        const newMakeChangesBtn = document.getElementById('makeChangesBtn');
+        const newViewAnywayBtn = document.getElementById('viewAnywayBtn');
+        
+        newRegenerateBtn.addEventListener('click', () => {
+            // Go back to input page to regenerate
+            window.location.href = './incomeiq.html';
+        });
+        
+        newMakeChangesBtn.addEventListener('click', () => {
+            // Go back to input page to make more changes
+            window.location.href = './incomeiq.html';
+        });
+        
+        newViewAnywayBtn.addEventListener('click', () => {
+            // Hide modal and show persistent warning banner
+            modal.classList.remove('show');
+            showPersistentWarning(minutesStale);
+        });
+    }
+    
+    function showPersistentWarning(minutesStale) {
+        // Add a smaller persistent warning banner to the dashboard
         const outputSpan = document.getElementById('output-span');
-        if (outputSpan && outputSpan.querySelector('.stale-warning') === null) {
+        if (outputSpan && outputSpan.querySelector('.persistent-warning') === null) {
             const warningBanner = document.createElement('div');
-            warningBanner.className = 'stale-warning';
+            warningBanner.className = 'persistent-warning';
             warningBanner.style.cssText = `
                 background: linear-gradient(135deg, #fef3c7, #fcd34d);
                 border: 2px solid #f59e0b;
                 border-radius: 12px;
-                padding: 15px 20px;
+                padding: 12px 16px;
                 margin: 20px 0;
                 text-align: center;
                 font-family: "Inter", sans-serif;
             `;
             
             warningBanner.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
-                    <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.5em;"></i>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.2em;"></i>
                     <div>
-                        <h4 style="margin: 0; color: #92400e; font-size: 1.1em;">Tax Calculations May Be Outdated</h4>
-                        <p style="margin: 5px 0 0 0; color: #92400e; font-size: 0.95em;">
-                            Income or tax residency changed ${minutesStale} minute${minutesStale !== 1 ? 's' : ''} ago. 
-                            <strong>Generate the IncomeIQ report again to refresh tax calculations.</strong>
-                        </p>
+                        <strong style="color: #92400e; font-size: 0.95em;">
+                            Tax calculations may be outdated (${minutesStale} min ago) - 
+                            <a href="./incomeiq.html" style="color: #1e40af; text-decoration: underline;">Generate updated report</a>
+                        </strong>
                     </div>
                 </div>
             `;
@@ -1654,6 +1872,20 @@
 
     // Check for stale calculations when dashboard loads
     setTimeout(checkTaxCalculationsStale, 500);
+    
+    // Listen for localStorage changes to detect when calculations become stale
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'taxCalculationsStale' && e.newValue === 'true') {
+            console.log('[IncomeOutput] Detected tax calculations became stale, checking...');
+            setTimeout(checkTaxCalculationsStale, 100); // Small delay to ensure timestamp is also set
+        }
+    });
+    
+    // Also listen for custom events from the same page (storage events don't fire on same page)
+    window.addEventListener('taxCalculationsMarkedStale', function() {
+        console.log('[IncomeOutput] Received taxCalculationsMarkedStale event');
+        setTimeout(checkTaxCalculationsStale, 100);
+    });
     
 })();
 </script>

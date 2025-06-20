@@ -10,22 +10,6 @@
 
 <div class="device-container">
 
-<style>
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.tax-recalc-notification {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-</style>
 
 <div class="row1 product-description-container">
     <h2 class="product-description-heading">Organize Your Finances & Understand Your Tax Position</h2>
@@ -1262,84 +1246,8 @@ import setJSON from '/utility/setJSON.js';
         // But also mark tax calculations as stale
         markTaxCalculationsStale();
         
-        // Show a user-friendly notification about tax calculation impact
-        showTaxRecalculationNeeded(event.target);
-        
         // Note: We don't trigger dashboard update here because intro changes
         // need to be processed by the AI worker, not just local calculations
-    }
-
-    function showTaxRecalculationNeeded(changedElement) {
-        // Check if there's an existing AI response - only show warning if user has already completed the form
-        const existingResponse = window.incomeFormPersistence?.getSavedResponseData();
-        if (!existingResponse) {
-            console.log(`[IncomeIQ] ℹ️ No existing AI response found, skipping tax recalculation notification`);
-            return;
-        }
-        
-        // Remove any existing notification
-        const existingNotification = document.querySelector('.tax-recalc-notification');
-        if (existingNotification) {
-            existingNotification.remove();
-        }
-        
-        const fieldName = getFieldDisplayName(changedElement);
-        console.log(`[IncomeIQ] 🔔 Showing tax recalculation notification for: ${fieldName}`);
-        
-        // Create notification banner
-        const notification = document.createElement('div');
-        notification.className = 'tax-recalc-notification';
-        notification.style.cssText = `
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            border: 2px solid #3b82f6;
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin: 15px 0;
-            text-align: center;
-            font-family: "Inter", sans-serif;
-            animation: slideIn 0.3s ease-out;
-        `;
-        
-        notification.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
-                <i class="fas fa-calculator" style="color: #3b82f6; font-size: 1.5em;"></i>
-                <div>
-                    <h4 style="margin: 0; color: #1e40af; font-size: 1.1em;">Tax Calculation Update Needed</h4>
-                    <p style="margin: 5px 0 0 0; color: #1e40af; font-size: 0.95em;">
-                        Changing <strong>${fieldName}</strong> affects your tax calculations. 
-                        <strong>Generate the IncomeIQ report again</strong> to get updated tax estimates.
-                    </p>
-                </div>
-            </div>
-        `;
-        
-        // Insert notification at the top of the form
-        const formContainer = document.querySelector('.device-container') || document.body;
-        if (formContainer) {
-            formContainer.insertBefore(notification, formContainer.firstChild);
-            
-            // Auto-remove after 8 seconds
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.style.opacity = '0';
-                    notification.style.transform = 'translateY(-20px)';
-                    setTimeout(() => notification.remove(), 300);
-                }
-            }, 8000);
-        }
-    }
-
-    function getFieldDisplayName(element) {
-        const fieldNames = {
-            'income-country': 'tax country',
-            'income-subregion': 'province/state',
-            'income-residency': 'residency status',
-            'income-filingStatus': 'filing status',
-            'income-dependants': 'number of dependants',
-            'income-maritalStatus': 'marital status'
-        };
-        
-        return fieldNames[element.id] || 'this field';
     }
 
     function handleXAIDependentInput(event) {
@@ -1359,94 +1267,12 @@ import setJSON from '/utility/setJSON.js';
                 // Mark tax calculations as stale
                 markTaxCalculationsStale();
                 
-                // Show notification for income changes (not already covered by intro changes)
-                if (event.target.id.startsWith('income-') && !event.target.id.includes('country') && !event.target.id.includes('subregion') && !event.target.id.includes('residency') && !event.target.id.includes('filingStatus')) {
-                    showIncomeRecalculationNeeded(event.target);
-                }
-                
                 // Trigger dashboard update for XAI-independent metrics only
                 triggerDashboardUpdate(false); // false = don't update tax-dependent metrics
             } else {
                 console.error("[IncomeIQ] ❌ Failed to normalize data:", result.error);
             }
         }
-    }
-
-    function showIncomeRecalculationNeeded(changedElement) {
-        // Check if there's an existing AI response - only show warning if user has already completed the form
-        const existingResponse = window.incomeFormPersistence?.getSavedResponseData();
-        if (!existingResponse) {
-            console.log(`[IncomeIQ] ℹ️ No existing AI response found, skipping income recalculation notification`);
-            return;
-        }
-        
-        // Remove any existing notification
-        const existingNotification = document.querySelector('.income-recalc-notification');
-        if (existingNotification) {
-            existingNotification.remove();
-        }
-        
-        const fieldName = getIncomeFieldDisplayName(changedElement);
-        console.log(`[IncomeIQ] 💰 Showing income recalculation notification for: ${fieldName}`);
-        
-        // Create notification banner
-        const notification = document.createElement('div');
-        notification.className = 'income-recalc-notification';
-        notification.style.cssText = `
-            background: linear-gradient(135deg, #fef3c7, #fcd34d);
-            border: 2px solid #f59e0b;
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin: 15px 0;
-            text-align: center;
-            font-family: "Inter", sans-serif;
-            animation: slideIn 0.3s ease-out;
-        `;
-        
-        notification.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
-                <i class="fas fa-dollar-sign" style="color: #f59e0b; font-size: 1.5em;"></i>
-                <div>
-                    <h4 style="margin: 0; color: #92400e; font-size: 1.1em;">Income Change Affects Tax Calculations</h4>
-                    <p style="margin: 5px 0 0 0; color: #92400e; font-size: 0.95em;">
-                        Changing <strong>${fieldName}</strong> may affect your tax calculations. 
-                        <strong>Generate the IncomeIQ report again</strong> to get updated estimates.
-                    </p>
-                </div>
-            </div>
-        `;
-        
-        // Insert notification at the top of the form
-        const formContainer = document.querySelector('.device-container') || document.body;
-        if (formContainer) {
-            formContainer.insertBefore(notification, formContainer.firstChild);
-            
-            // Auto-remove after 6 seconds (shorter for income changes)
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.style.opacity = '0';
-                    notification.style.transform = 'translateY(-20px)';
-                    setTimeout(() => notification.remove(), 300);
-                }
-            }, 6000);
-        }
-    }
-
-    function getIncomeFieldDisplayName(element) {
-        const fieldNames = {
-            'income-salary': 'salary',
-            'income-tips': 'tips',
-            'income-bonus': 'bonus',
-            'income-commission': 'commission',
-            'income-overtime': 'overtime',
-            'income-selfEmployed': 'self-employment income',
-            'income-rental': 'rental income',
-            'income-investment': 'investment income',
-            'income-pension': 'pension income',
-            'income-other': 'other income'
-        };
-        
-        return fieldNames[element.id] || 'income';
     }
 
     function handleXAIIndependentInput(event) {
@@ -1483,6 +1309,9 @@ import setJSON from '/utility/setJSON.js';
         localStorage.setItem('taxCalculationsStale', 'true');
         localStorage.setItem('taxCalculationsStaleTimestamp', Date.now().toString());
         console.log("[IncomeIQ] 🔄 Tax calculations marked as stale");
+        
+        // Dispatch custom event to notify output page immediately
+        window.dispatchEvent(new CustomEvent('taxCalculationsMarkedStale'));
     }
 
     function triggerDashboardUpdate(updateAllMetrics) {
