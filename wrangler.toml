@@ -35,36 +35,6 @@ service = "rate-limiter"
 
 
 
-[env.symptom]
-name = "symptom"
-main = "./ai/symptom/symptom.js"
-
-[[env.symptom.services]]
-binding = "secret_binding"
-service = "secretworker"
-
-[[env.symptom.services]]
-binding = "rate_limiter_binding"
-service = "rate-limiter"
-
-
-
-[env.adventure]
-name = "adventure"
-main = "./ai/adventure/adventure.js"
-
-# Enable debug logs specifically for the adventure worker
-[env.adventure.build]
-log_level = "debug"
-
-[[env.adventure.services]]
-binding = "secret_binding"
-service = "secretworker"
-
-[[env.adventure.services]]
-binding = "rate_limiter_binding"
-service = "rate-limiter"
-
 [env.calorie]
 name = "calorie"
 main = "./ai/calorie/calorie.js"
@@ -86,6 +56,12 @@ service = "rate-limiter"
 [env.income]
 name = "income"
 main = "./ai/income/income.js"
+
+# KV namespace for AI-generated facts
+[[env.income.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 
 # Service bindings for the income worker
 [[env.income.services]]
@@ -132,6 +108,12 @@ service = "rate-limiter"
 name = "enneagram"
 main = "./ai/enneagram/enneagram.js"
 
+# KV namespace for AI-generated facts
+[[env.enneagram.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
+
 [[env.enneagram.services]]
 binding = "secret_binding"
 service = "secretworker"
@@ -143,6 +125,12 @@ service = "rate-limiter"
 [env.event]
 name = "event"
 main = "./ai/event/event.js"
+
+# KV namespace for AI-generated facts
+[[env.event.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 
 [[env.event.services]]
 binding = "secret_binding"
@@ -173,6 +161,12 @@ service = "rate-limiter"
 [env.philosophy]
 name = "philosophy"
 main = "./ai/philosophy/philosophy.js"
+
+# KV namespace for AI-generated facts
+[[env.philosophy.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 
 [[env.philosophy.services]]
 binding = "secret_binding"
@@ -228,6 +222,12 @@ service = "rate-limiter"
 name = "fashion"
 main = "./ai/fashion/fashion.js"
 
+# KV namespace for AI-generated facts
+[[env.fashion.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
+
 [[env.fashion.services]]
 binding = "secret_binding"
 service = "secretworker"
@@ -239,6 +239,12 @@ service = "rate-limiter"
 [env.quiz]
 name = "quiz"
 main = "./ai/quiz/quiz.js"
+
+# KV namespace for AI-generated facts
+[[env.quiz.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 
 [[env.quiz.services]]
 binding = "secret_binding"

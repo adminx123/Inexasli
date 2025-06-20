@@ -822,7 +822,7 @@
 
 import { FormPersistence } from '/utility/formPersistence.js';
 import setJSON from '/utility/setJSON.js';
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/fingerprint.js';
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/rateLimiter.js';
 
 (function() {
     console.log("Income IQ script initializing");

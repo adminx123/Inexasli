@@ -8,7 +8,7 @@
  * @param {string} moduleName - Name of the module for targeted facts
  * @returns {Object} Control object with close() method
  */
-function showEducationalLoadingOverlay(moduleName) {
+async function showEducationalLoadingOverlay(moduleName) {
     // Create overlay element
     const overlay = document.createElement('div');
     overlay.className = 'educational-loading-overlay';
@@ -105,8 +105,8 @@ function showEducationalLoadingOverlay(moduleName) {
     // Add to body
     document.body.appendChild(overlay);
     
-    // Start fact rotation
-    const factRotation = startFactRotation(overlay, moduleName);
+    // Start fact rotation (await it to handle async facts loading)
+    const factRotation = await startFactRotation(overlay, moduleName);
     
     return {
         close: () => {
@@ -129,11 +129,19 @@ function showEducationalLoadingOverlay(moduleName) {
  * @param {string} moduleName - Module name for targeted facts
  * @returns {Object} Control object with interval ID
  */
-function startFactRotation(overlay, moduleName) {
+async function startFactRotation(overlay, moduleName) {
     const factText = overlay.querySelector('.fact-text');
     
     let factIndex = 0;
-    const facts = getFactsForModule(moduleName);
+    let facts = [];
+    
+    // Load facts asynchronously
+    try {
+        facts = await getFactsForModule(moduleName);
+    } catch (error) {
+        console.warn('[Educational Overlay] Failed to load facts, using fallback');
+        facts = getFallbackFactsForModule(moduleName);
+    }
     
     // Start with first fact
     if (facts.length > 0) {
@@ -159,10 +167,61 @@ function startFactRotation(overlay, moduleName) {
 
 /**
  * Returns educational facts for a specific module
+ * Now fetches facts from KV storage via API calls instead of hardcoded facts
+ * @param {string} moduleName - The module name
+ * @returns {Promise<Array>} Array of educational facts
+ */
+async function getFactsForModule(moduleName) {
+    try {
+        // Try to fetch facts from the module's API endpoint
+        const apiUrl = getModuleApiUrl(moduleName);
+        if (apiUrl) {
+            const response = await fetch(`${apiUrl}/facts`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.facts && Array.isArray(data.facts) && data.facts.length > 0) {
+                    console.log(`[Educational Overlay] Fetched ${data.facts.length} facts from KV for ${moduleName}`);
+                    return data.facts;
+                }
+            }
+        }
+    } catch (error) {
+        console.warn(`[Educational Overlay] Failed to fetch facts for ${moduleName} from KV:`, error.message);
+    }
+    
+    // Fallback to hardcoded facts if KV fetch fails
+    console.log(`[Educational Overlay] Using fallback hardcoded facts for ${moduleName}`);
+    return getFallbackFactsForModule(moduleName);
+}
+
+/**
+ * Gets the API URL for a specific module
+ * @param {string} moduleName - The module name
+ * @returns {string|null} The API URL or null if not found
+ */
+function getModuleApiUrl(moduleName) {
+    const moduleUrls = {
+        'calorie': 'https://calorie.4hm7q4q75z.workers.dev',
+        'decision': 'https://decision.4hm7q4q75z.workers.dev',
+        'research': 'https://research.4hm7q4q75z.workers.dev',
+        'social': 'https://social.4hm7q4q75z.workers.dev',
+        'enneagram': 'https://enneagram.4hm7q4q75z.workers.dev',
+        'philosophy': 'https://philosophy.4hm7q4q75z.workers.dev',
+        'event': 'https://event.4hm7q4q75z.workers.dev',
+        'fashion': 'https://fashion.4hm7q4q75z.workers.dev',
+        'quiz': 'https://quiz.4hm7q4q75z.workers.dev',
+        'income': 'https://income.4hm7q4q75z.workers.dev'
+    };
+    
+    return moduleUrls[moduleName] || null;
+}
+
+/**
+ * Fallback hardcoded facts (kept as backup)
  * @param {string} moduleName - The module name
  * @returns {Array} Array of educational facts
  */
-function getFactsForModule(moduleName) {
+function getFallbackFactsForModule(moduleName) {
     const modulesFacts = {
         'calorie': [
             "Your brain uses 20% of daily calories",
@@ -170,13 +229,6 @@ function getFactsForModule(moduleName) {
             "Muscle burns 3x more calories than fat",
             "Green tea boosts metabolism by 4-5%",
             "Eating slowly reduces overeating by 25%"
-        ],
-        'fitness': [
-            "HIIT boosts metabolism for 24 hours",
-            "Walking 10,000 steps burns ~400 calories",
-            "Recovery is when muscles grow stronger",
-            "Consistency beats intensity long-term",
-            "Proper form prevents 90% of injuries"
         ],
         'emotion': [
             "Deep breathing activates your calming system",
@@ -233,6 +285,27 @@ function getFactsForModule(moduleName) {
             "Simple logistics work better than complex",
             "Preparation enables spontaneous moments",
             "Guest experience matters more than perfection"
+        ],
+        'fashion': [
+            "Confidence is the best accessory you can wear",
+            "Good fit matters more than expensive brands",
+            "Color psychology affects mood and perception",
+            "Classic pieces create timeless style",
+            "Personal style reflects authentic self-expression"
+        ],
+        'income': [
+            "Compound interest works best over long periods",
+            "Diversification reduces investment risk",
+            "Emergency funds provide financial security",
+            "Small consistent savings create wealth",
+            "Financial literacy empowers better decisions"
+        ],
+        'quiz': [
+            "Testing yourself is better than re-reading",
+            "Spaced repetition improves retention",
+            "Mistakes help strengthen neural pathways",
+            "Active recall beats passive review",
+            "Teaching others reinforces learning"
         ]
     };
     

@@ -1,10 +1,16 @@
 /**
- * Digital Fingerprint Utility for Rate Limiting
- * Generates and manages user fingerprints for request tracking
+ * Rate Limiting and Fingerprint Utility
+ * Combined client-side rate limiting with device fingerprinting
+ * Works with centralized rate-limiter worker for robust protection
  */
 
-// Fingerprint storage key
-const FINGERPRINT_KEY = '_userFingerprint';
+// Configuration
+const RATE_LIMIT_CONFIG = {
+  FINGERPRINT_KEY: '_userFingerprint',
+  // Simple client-side limits (real enforcement happens server-side)
+  MAX_REQUESTS_PER_MINUTE: 5,
+  REQUEST_WINDOW: 60000 // 1 minute
+};
 
 /**
  * Generate a device fingerprint based on browser characteristics
@@ -54,7 +60,7 @@ function generateSessionId() {
  */
 export function getFingerprint() {
     try {
-        const stored = localStorage.getItem(FINGERPRINT_KEY);
+        const stored = localStorage.getItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY);
         let fingerprintData;
         
         if (stored) {
@@ -81,7 +87,7 @@ export function getFingerprint() {
         }
         
         // Save updated fingerprint
-        localStorage.setItem(FINGERPRINT_KEY, JSON.stringify(fingerprintData));
+        localStorage.setItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY, JSON.stringify(fingerprintData));
         return fingerprintData;
         
     } catch (error) {
@@ -99,65 +105,67 @@ export function getFingerprint() {
 }
 
 /**
- * Update request count for a module
- * @param {string} module - The module name (income, calorie, etc.)
+ * Get fingerprint for worker requests
+ * @returns {string} Combined fingerprint string
  */
-export function incrementRequestCount(module) {
+export function getFingerprintForWorker() {
+    const fingerprint = getFingerprint();
+    return `${fingerprint.deviceId}_${fingerprint.sessionId}`;
+}
+
+/**
+ * Simple client-side rate limit check
+ * This is a quick pre-check; real enforcement happens server-side
+ * @returns {boolean} True if rate limited
+ */
+export function isRateLimited() {
     try {
         const fingerprint = getFingerprint();
-        fingerprint.requestCounts[module] = (fingerprint.requestCounts[module] || 0) + 1;
-        fingerprint.lastRequestTimes[module] = new Date().toISOString();
-        localStorage.setItem(FINGERPRINT_KEY, JSON.stringify(fingerprint));
+        const now = Date.now();
+        const windowStart = now - RATE_LIMIT_CONFIG.REQUEST_WINDOW;
+        
+        // Clean old request times
+        if (fingerprint.lastRequestTimes) {
+            const recentRequests = fingerprint.lastRequestTimes.filter(time => time > windowStart);
+            fingerprint.lastRequestTimes = recentRequests;
+            
+            // Check if over limit
+            if (recentRequests.length >= RATE_LIMIT_CONFIG.MAX_REQUESTS_PER_MINUTE) {
+                return true;
+            }
+        }
+        
+        return false;
+    } catch (error) {
+        console.error('Error checking rate limit:', error);
+        return false; // Don't block on error
+    }
+}
+
+/**
+ * Increment request count after successful API call
+ */
+export function incrementRequestCount() {
+    try {
+        const fingerprint = getFingerprint();
+        const now = Date.now();
+        
+        // Initialize if needed
+        if (!fingerprint.lastRequestTimes) {
+            fingerprint.lastRequestTimes = [];
+        }
+        
+        // Add this request time
+        fingerprint.lastRequestTimes.push(now);
+        
+        // Keep only recent requests (last hour for cleanup)
+        const oneHourAgo = now - (60 * 60 * 1000);
+        fingerprint.lastRequestTimes = fingerprint.lastRequestTimes.filter(time => time > oneHourAgo);
+        
+        // Save updated fingerprint
+        localStorage.setItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY, JSON.stringify(fingerprint));
+        
     } catch (error) {
         console.error('Error incrementing request count:', error);
     }
 }
-
-/**
- * Check if user has exceeded rate limits for a module
- * @param {string} module - The module name
- * @param {number} maxRequests - Maximum requests allowed (default 10)
- * @param {number} timeWindow - Time window in milliseconds (default 1 hour)
- * @returns {boolean} True if rate limit exceeded
- */
-export function isRateLimited(module, maxRequests = 10, timeWindow = 60 * 60 * 1000) {
-    try {
-        const fingerprint = getFingerprint();
-        const requestCount = fingerprint.requestCounts[module] || 0;
-        const lastRequestTime = fingerprint.lastRequestTimes[module];
-        
-        if (!lastRequestTime) return false;
-        
-        const timeSinceLastRequest = Date.now() - new Date(lastRequestTime).getTime();
-        
-        // Reset count if outside time window
-        if (timeSinceLastRequest > timeWindow) {
-            fingerprint.requestCounts[module] = 0;
-            localStorage.setItem(FINGERPRINT_KEY, JSON.stringify(fingerprint));
-            return false;
-        }
-        
-        return requestCount >= maxRequests;
-        
-    } catch (error) {
-        console.error('Error checking rate limit:', error);
-        return false; // Allow request if check fails
-    }
-}
-
-/**
- * Get fingerprint data for sending to worker
- * @returns {Object} Clean fingerprint data for worker
- */
-export function getFingerprintForWorker() {
-    const fingerprint = getFingerprint();
-    return {
-        deviceId: fingerprint.deviceId,
-        sessionId: fingerprint.sessionId,
-        requestCounts: fingerprint.requestCounts,
-        lastRequestTimes: fingerprint.lastRequestTimes
-    };
-}
-
-// Set default export
-export default { getFingerprint, incrementRequestCount, isRateLimited, getFingerprintForWorker };

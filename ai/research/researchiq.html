@@ -59,7 +59,7 @@
 <script src="../../payment/paymentform.js"></script>
 <script type="module">
 // Import fingerprint utilities
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/fingerprint.js';
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/rateLimiter.js';
 async function handleGenerateResearchIq() {
     try {
         const formData = window.researchFormPersistence.getSavedFormData();

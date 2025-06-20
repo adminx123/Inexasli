@@ -1255,9 +1255,9 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
         // Start the main API call immediately (before showing overlay)
         const apiPromise = apiCall();
         
-        // Show educational modal overlay while API processes
+        // Show educational modal overlay while API processes (await since it's now async)
         if (window.showEducationalLoadingOverlay) {
-            overlayControl = window.showEducationalLoadingOverlay(moduleName);
+            overlayControl = await window.showEducationalLoadingOverlay(moduleName);
         }
         
         // Wait for API to complete
