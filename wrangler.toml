@@ -29,6 +29,10 @@ preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 binding = "secret_binding"
 service = "secretworker"
 
+[[env.research.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
 
 
 [env.symptom]
@@ -38,6 +42,10 @@ main = "./ai/symptom/symptom.js"
 [[env.symptom.services]]
 binding = "secret_binding"
 service = "secretworker"
+
+[[env.symptom.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
 
 
 
@@ -53,6 +61,10 @@ log_level = "debug"
 binding = "secret_binding"
 service = "secretworker"
 
+[[env.adventure.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
 [env.calorie]
 name = "calorie"
 main = "./ai/calorie/calorie.js"
@@ -67,6 +79,10 @@ preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 binding = "secret_binding"
 service = "secretworker"
 
+[[env.calorie.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
 [env.income]
 name = "income"
 main = "./ai/income/income.js"
@@ -76,6 +92,10 @@ main = "./ai/income/income.js"
 binding = "secret_binding"
 service = "secretworker"
 
+[[env.income.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
 [env.book]
 name = "book"
 main = "./ai/book/book.js"
@@ -83,6 +103,10 @@ main = "./ai/book/book.js"
 [[env.book.services]]
 binding = "secret_binding"
 service = "secretworker"
+
+[[env.book.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
 
 
 
@@ -100,6 +124,10 @@ preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 binding = "secret_binding"
 service = "secretworker"
 
+[[env.decision.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
 [env.enneagram]
 name = "enneagram"
 main = "./ai/enneagram/enneagram.js"
@@ -108,6 +136,10 @@ main = "./ai/enneagram/enneagram.js"
 binding = "secret_binding"
 service = "secretworker"
 
+[[env.enneagram.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
 [env.event]
 name = "event"
 main = "./ai/event/event.js"
@@ -115,6 +147,10 @@ main = "./ai/event/event.js"
 [[env.event.services]]
 binding = "secret_binding"
 service = "secretworker"
+
+[[env.event.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
 
 [env.fitness]
 name = "fitness"
@@ -130,6 +166,10 @@ preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 binding = "secret_binding"
 service = "secretworker"
 
+[[env.fitness.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
 [env.philosophy]
 name = "philosophy"
 main = "./ai/philosophy/philosophy.js"
@@ -137,6 +177,10 @@ main = "./ai/philosophy/philosophy.js"
 [[env.philosophy.services]]
 binding = "secret_binding"
 service = "secretworker"
+
+[[env.philosophy.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
 
 [env.fact-generator]
 name = "fact-generator"
@@ -156,6 +200,10 @@ preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 binding = "secret_binding"
 service = "secretworker"
 
+[[env.fact-generator.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
 
 
 [env.social]
@@ -172,6 +220,10 @@ preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 binding = "secret_binding"
 service = "secretworker"
 
+[[env.social.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
 [env.fashion]
 name = "fashion"
 main = "./ai/fashion/fashion.js"
@@ -180,6 +232,10 @@ main = "./ai/fashion/fashion.js"
 binding = "secret_binding"
 service = "secretworker"
 
+[[env.fashion.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
 [env.quiz]
 name = "quiz"
 main = "./ai/quiz/quiz.js"
@@ -187,3 +243,20 @@ main = "./ai/quiz/quiz.js"
 [[env.quiz.services]]
 binding = "secret_binding"
 service = "secretworker"
+
+[[env.quiz.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"
+
+# --- Rate Limiter Worker (CRITICAL - Deploy First) ---
+[env.rate-limiter]
+name = "rate-limiter"
+main = "./ai/rate-limiter/rate-limiter.js"
+
+# KV namespace for rate limiting data storage
+[[env.rate-limiter.kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "2da5e6f46847458a9aa83ffe54dea66e"
+preview_id = "2da5e6f46847458a9aa83ffe54dea66e"
+
+# --- Worker Environments ---

@@ -822,6 +822,7 @@
 
 import { FormPersistence } from '/utility/formPersistence.js';
 import setJSON from '/utility/setJSON.js';
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/fingerprint.js';
 
 (function() {
     console.log("Income IQ script initializing");
@@ -1546,6 +1547,12 @@ import setJSON from '/utility/setJSON.js';
                 return;
             }
 
+            // Check rate limiting before proceeding
+            if (isRateLimited('income', 10, 60 * 60 * 1000)) { // 10 requests per hour
+                alert('You have exceeded the request limit for income analysis. Please try again later.');
+                return;
+            }
+
             let payloadToSend;
             try {
                 payloadToSend = JSON.parse(incomeIqinput1Raw);
@@ -1555,20 +1562,39 @@ import setJSON from '/utility/setJSON.js';
                 alert('Error processing normalized data. Please try again.');
                 return;
             }
+
+            // Get fingerprint data for rate limiting
+            const fingerprintData = getFingerprintForWorker();
             
-            // DEBUG: Log the final payload
-            console.log("[IncomeIQ] Final payload being sent to worker:", JSON.stringify(payloadToSend, null, 2));
+            // Create combined payload with both form data and fingerprint
+            const workerPayload = {
+                formData: payloadToSend,
+                fingerprint: fingerprintData
+            };
+            
+            // DEBUG: Log the final payload (hide sensitive fingerprint details)
+            console.log("[IncomeIQ] Final payload being sent to worker:", JSON.stringify({
+                formData: payloadToSend,
+                fingerprint: { 
+                    deviceId: fingerprintData.deviceId.slice(0, 8) + '...', 
+                    sessionId: fingerprintData.sessionId.slice(0, 8) + '...',
+                    requestCount: Object.keys(fingerprintData.requestCounts).length 
+                }
+            }, null, 2));
 
             // Use enhanced loading with educational facts
             const result = await window.enhancedLoading(
                 'generate-income-btn',
                 'income',
                 async () => {
+                    // Increment request count
+                    incrementRequestCount('income');
+                    
                     const apiUrl = 'https://income.4hm7q4q75z.workers.dev/';
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payloadToSend)
+                        body: JSON.stringify(workerPayload)
                     });
 
                     if (!response.ok) {
