@@ -276,33 +276,6 @@ class MakeChangesModal {
         }
     }
 
-    getInputPageUrl() {
-        switch (this.moduleName) {
-            case 'income':
-                return './incomeiq.html';
-            case 'calorie':
-                return './calorieiq.html';
-            case 'decision':
-                return './decisioniq.html';
-            case 'enneagram':
-                return './enneagramiq.html';
-            case 'event':
-                return './eventiq.html';
-            case 'fashion':
-                return './fashioniq.html';
-            case 'philosophy':
-                return './philosophyiq.html';
-            case 'quiz':
-                return './quiziq.html';
-            case 'research':
-                return './researchiq.html';
-            case 'social':
-                return './socialiq.html';
-            default:
-                return './input.html';
-        }
-    }
-
     setupEventListeners() {
         // Set up button click handlers
         this.modal.addEventListener('click', (e) => {
@@ -320,13 +293,17 @@ class MakeChangesModal {
     }
 
     handleRegenerate() {
-        // Navigate back to input page to regenerate
-        window.location.href = this.getInputPageUrl();
+        // Dispatch event to expand datain container - NO navigation, NO file loading
+        console.log('[MakeChanges] Dispatching expandDatain event for regenerate');
+        document.dispatchEvent(new CustomEvent('expandDatain'));
+        this.hideModal();
     }
 
     handleMakeChanges() {
-        // Navigate back to input page to make more changes
-        window.location.href = this.getInputPageUrl();
+        // Dispatch event to expand datain container - NO navigation, NO file loading
+        console.log('[MakeChanges] Dispatching expandDatain event');
+        document.dispatchEvent(new CustomEvent('expandDatain'));
+        this.hideModal();
     }
 
     handleViewAnyway() {

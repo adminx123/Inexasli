@@ -19,8 +19,14 @@ export function setJSON(name, value) {
             return true;
         }
         
+        // Add timestamp to the data
+        const dataWithTimestamp = {
+            data: value,
+            timestamp: new Date().toISOString()
+        };
+        
         // Convert value to JSON string
-        const jsonString = JSON.stringify(value);
+        const jsonString = JSON.stringify(dataWithTimestamp);
         
         // Store in localStorage directly (no URL encoding)
         localStorage.setItem(name, jsonString);
