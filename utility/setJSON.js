@@ -19,18 +19,8 @@ export function setJSON(name, value) {
             return true;
         }
         
-        // Add metadata structure with timestamp
-        const dataWithMetadata = {
-            payload: value,
-            metadata: {
-                timestamp: new Date().toISOString(),
-                version: "1.0",
-                source: "setJSON"
-            }
-        };
-        
         // Convert value to JSON string
-        const jsonString = JSON.stringify(dataWithMetadata);
+        const jsonString = JSON.stringify(value);
         
         // Store in localStorage directly (no URL encoding)
         localStorage.setItem(name, jsonString);

@@ -483,7 +483,6 @@
   </style>
 </head>
 <body>
-
   <!-- Main content container with ID for accessibility -->
   <div id="main-content" class="device-container income-container">
     <div class="output-wrapper">
@@ -504,12 +503,6 @@
 
 (function() {
     console.log('IncomeIQ API Output script running');
-
-    // Dynamic import for getJSON utility
-    let getJSON;
-    import('/utility/getJSON.js').then(module => {
-        getJSON = module.default || module.getJSON;
-    });
 
     // Get the parameters from the URL if this is standalone, or check local storage
     const params = new URLSearchParams(window.location.search);
@@ -970,24 +963,18 @@
         }
     } else {
         // Get data from localStorage using the FormPersistence pattern
-        async function loadStoredResponse() {
-            if (!getJSON) {
-                const module = await import('/utility/getJSON.js');
-                getJSON = module.default || module.getJSON;
-            }
-            
-            const responseKey = 'incomeIqResponse';
-            const storedResponse = getJSON(responseKey);
-            if (storedResponse) {
-                try {
-                    let responseData = storedResponse;
-                    
-                    // Handle the worker response format - check if it's nested in a response object
-                    if (responseData && responseData.message === 'Success' && responseData.data) {
-                        responseData = responseData.data;
-                    }
-                    
-                    console.log('Found stored income response:', responseData);
+        const responseKey = 'incomeIqResponse';
+        const storedResponse = getLocal(responseKey);
+        if (storedResponse) {
+            try {
+                let responseData = JSON.parse(storedResponse);
+                
+                // Handle the worker response format - check if it's nested in a response object
+                if (responseData && responseData.message === 'Success' && responseData.data) {
+                    responseData = responseData.data;
+                }
+                
+                console.log('Found stored income response:', responseData);
                 
                 // Create a mock incomeAnalysis object from the worker response data
                 const incomeAnalysis = {
@@ -997,26 +984,24 @@
                     total_contributions_calculated: responseData.total_contributions || 0,
                     tax_treatment_details: responseData.tax_treatment_details || {},
                     assumptions_made: responseData.assumptions_made || [],
-                    taxable_income_total: responseData.taxable_income_total || 0
+                    taxable_income_total: responseData.taxable_income_total || 0,
+                    recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations.",
+                    insights: "Your tax calculations have been completed. Review the financial metrics below for a comprehensive overview of your financial health."
                 };
                 
                 const outputSpan = document.getElementById('output-span');
                 outputSpan.innerHTML = '';
                 displayEnhancedIncomeAnalysis(incomeAnalysis, outputSpan);
-                } catch (error) {
-                    console.error('Error parsing stored response:', error);
-                    const outputSpan = document.getElementById('output-span');
-                    outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc3545;">Error loading stored income data. Please try again.</div>';
-                }
-            } else {
-                // No data found, show empty content for dataout.js to handle
+            } catch (error) {
+                console.error('Error parsing stored response:', error);
                 const outputSpan = document.getElementById('output-span');
-                outputSpan.innerHTML = '';
+                outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc3545;">Error loading stored income data. Please try again.</div>';
             }
+        } else {
+            // No data found, show empty content for dataout.js to handle
+            const outputSpan = document.getElementById('output-span');
+            outputSpan.innerHTML = '';
         }
-        
-        // Call the async function
-        loadStoredResponse();
     }
 
     function displayEnhancedIncomeAnalysis(incomeData, outputElement) {
@@ -1144,10 +1129,9 @@
           <div style="font-size: 1.1em; color: #6b7280; margin-bottom: 20px;">
             AI-powered financial analysis and insights
           </div>
-          <div style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 24px; border-radius: 8px; display: inline-block; font-size: 0.9em; max-width: 500px; line-height: 1.4;">
+          <div style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 24px; border-radius: 8px; display: inline-block; font-size: 0.9em;">
             <i class="fas fa-shield-alt" style="margin-right: 8px;"></i>
-            For educational and illustrative purposes only • Consult professionals for major decisions<br>
-            <span style="font-size: 0.85em; opacity: 0.9;">AI exploration tool using industry-standard financial metrics</span>
+            Educational purposes only • Consult professionals for major decisions
           </div>
         </div>
       `;
@@ -1516,6 +1500,7 @@
         { key: 'income_analysis', title: 'Income Analysis', icon: 'fas fa-money-bill-wave', color: '#10b981' },
         { key: 'expense_analysis', title: 'Expense Analysis', icon: 'fas fa-shopping-cart', color: '#ef4444' },
         { key: 'networth_analysis', title: 'Net Worth Analysis', icon: 'fas fa-chart-pie', color: '#3b82f6' },
+        { key: 'insights', title: 'Key Insights', icon: 'fas fa-eye', color: '#8b5cf6' },
         { key: 'action_items', title: 'Action Items', icon: 'fas fa-tasks', color: '#06b6d4' }
       ];
 
@@ -1537,6 +1522,23 @@
         }
       });
 
+      // Footer with methodology
+      const footer = document.createElement('div');
+      footer.innerHTML = `
+        <div style="margin: 40px 0 20px 0; padding: 20px; background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb;">
+          <h4 style="margin: 0 0 12px 0; color: #374151; font-size: 1.1em;">
+            <i class="fas fa-info-circle" style="margin-right: 8px; color: #6b7280;"></i>
+            Analysis Methodology
+          </h4>
+          <p style="margin: 0; color: #6b7280; font-size: 0.95em; line-height: 1.6;">
+            This analysis uses advanced AI algorithms and industry-standard financial metrics to evaluate your financial health. 
+            The health score considers cash flow, debt ratios, savings rate, net worth, and FIRE progress. All recommendations 
+            are for educational purposes and should not replace professional financial advice.
+          </p>
+        </div>
+      `;
+      container.appendChild(footer);
+      
       outputElement.appendChild(container);
       
       // Initialize charts and controls after DOM is ready
@@ -1580,7 +1582,9 @@
                         total_contributions_calculated: responseData.total_contributions || 0,
                         tax_treatment_details: responseData.tax_treatment_details || {},
                         assumptions_made: responseData.assumptions_made || [],
-                        taxable_income_total: responseData.taxable_income_total || 0
+                        taxable_income_total: responseData.taxable_income_total || 0,
+                        recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations.",
+                        insights: "Your tax calculations have been completed. Review the financial metrics below for a comprehensive overview of your financial health."
                     };
                     
                     outputSpan.innerHTML = '';
@@ -1593,18 +1597,58 @@
         }
     });
 
-    // Initialize makeChanges modal system
-    import('/utility/makeChanges.js').then(module => {
-        const modal = module.MakeChangesModal.create();
-        console.log('[IncomeOutput] MakeChanges modal system initialized');
-    }).catch(error => {
-        console.error('[IncomeOutput] Failed to load makeChanges module:', error);
-    });
+    // Check if tax calculations are stale on load
+    function checkTaxCalculationsStale() {
+        const isStale = localStorage.getItem('taxCalculationsStale') === 'true';
+        const staleTimestamp = localStorage.getItem('taxCalculationsStaleTimestamp');
+        
+        if (isStale && staleTimestamp) {
+            const staleTime = new Date(parseInt(staleTimestamp));
+            const now = new Date();
+            const minutesStale = Math.floor((now - staleTime) / (1000 * 60));
+            
+            console.log(`[IncomeOutput] Tax calculations are ${minutesStale} minutes stale`);
+            showStaleWarning(minutesStale);
+        }
+    }
 
+    function showStaleWarning(minutesStale) {
+        // Add a warning banner to the dashboard
+        const outputSpan = document.getElementById('output-span');
+        if (outputSpan && outputSpan.querySelector('.stale-warning') === null) {
+            const warningBanner = document.createElement('div');
+            warningBanner.className = 'stale-warning';
+            warningBanner.style.cssText = `
+                background: linear-gradient(135deg, #fef3c7, #fcd34d);
+                border: 2px solid #f59e0b;
+                border-radius: 12px;
+                padding: 15px 20px;
+                margin: 20px 0;
+                text-align: center;
+                font-family: "Inter", sans-serif;
+            `;
+            
+            warningBanner.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                    <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.5em;"></i>
+                    <div>
+                        <h4 style="margin: 0; color: #92400e; font-size: 1.1em;">Tax Calculations May Be Outdated</h4>
+                        <p style="margin: 5px 0 0 0; color: #92400e; font-size: 0.95em;">
+                            Income or tax residency changed ${minutesStale} minute${minutesStale !== 1 ? 's' : ''} ago. 
+                            <strong>Submit the form to refresh tax calculations.</strong>
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            outputSpan.insertBefore(warningBanner, outputSpan.firstChild);
+        }
+    }
+
+    // Check for stale calculations when dashboard loads
+    setTimeout(checkTaxCalculationsStale, 500);
+    
 })();
-</script>
-</body>
-</html>
 </script>
 </body>
 </html>

@@ -21,19 +21,7 @@ export function getJSON(name, defaultValue = null) {
         }
         
         // Parse JSON string back to JavaScript object/array/value
-        const parsedData = JSON.parse(jsonString);
-        
-        // Check if the data has the new metadata structure
-        // If it has both 'payload' and 'metadata' properties, extract the payload
-        if (parsedData && 
-            typeof parsedData === 'object' && 
-            parsedData.hasOwnProperty('payload') && 
-            parsedData.hasOwnProperty('metadata')) {
-            return parsedData.payload;
-        }
-        
-        // Otherwise return the parsed data as-is
-        return parsedData;
+        return JSON.parse(jsonString);
     } catch (error) {
         console.error(`Error retrieving or parsing JSON from localStorage (${name}):`, error);
         return defaultValue;
