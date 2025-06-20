@@ -1307,16 +1307,16 @@ import setJSON from '/utility/setJSON.js';
                     <h4 style="margin: 0; color: #1e40af; font-size: 1.1em;">Tax Calculation Update Needed</h4>
                     <p style="margin: 5px 0 0 0; color: #1e40af; font-size: 0.95em;">
                         Changing <strong>${fieldName}</strong> affects your tax calculations. 
-                        <strong>Submit the form</strong> to get updated tax estimates.
+                        <strong>Generate the IncomeIQ report again</strong> to get updated tax estimates.
                     </p>
                 </div>
             </div>
         `;
         
-        // Insert notification after the changed element's container
-        const container = changedElement.closest('.row1') || changedElement.closest('div');
-        if (container) {
-            container.parentNode.insertBefore(notification, container.nextSibling);
+        // Insert notification at the top of the form
+        const formContainer = document.querySelector('.device-container') || document.body;
+        if (formContainer) {
+            formContainer.insertBefore(notification, formContainer.firstChild);
             
             // Auto-remove after 8 seconds
             setTimeout(() => {
@@ -1410,16 +1410,16 @@ import setJSON from '/utility/setJSON.js';
                     <h4 style="margin: 0; color: #92400e; font-size: 1.1em;">Income Change Affects Tax Calculations</h4>
                     <p style="margin: 5px 0 0 0; color: #92400e; font-size: 0.95em;">
                         Changing <strong>${fieldName}</strong> may affect your tax calculations. 
-                        <strong>Submit the form</strong> to get updated estimates.
+                        <strong>Generate the IncomeIQ report again</strong> to get updated estimates.
                     </p>
                 </div>
             </div>
         `;
         
-        // Insert notification after the changed element's container
-        const container = changedElement.closest('.row1') || changedElement.closest('div');
-        if (container) {
-            container.parentNode.insertBefore(notification, container.nextSibling);
+        // Insert notification at the top of the form
+        const formContainer = document.querySelector('.device-container') || document.body;
+        if (formContainer) {
+            formContainer.insertBefore(notification, formContainer.firstChild);
             
             // Auto-remove after 6 seconds (shorter for income changes)
             setTimeout(() => {
