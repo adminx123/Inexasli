@@ -1766,128 +1766,18 @@
         }
     });
 
-    // Check if tax calculations are stale on load
-    function checkTaxCalculationsStale() {
-        const isStale = localStorage.getItem('taxCalculationsStale') === 'true';
-        const staleTimestamp = localStorage.getItem('taxCalculationsStaleTimestamp');
-        
-        if (isStale && staleTimestamp) {
-            // Check if there's an existing AI response - only show modal if user has already completed the form
-            const existingResponse = localStorage.getItem('incomeIqResponse');
-            if (!existingResponse) {
-                console.log(`[IncomeOutput] ℹ️ No existing AI response found, skipping stale tax calculations modal`);
-                return;
-            }
-            
-            const staleTime = new Date(parseInt(staleTimestamp));
-            const now = new Date();
-            const minutesStale = Math.floor((now - staleTime) / (1000 * 60));
-            
-            console.log(`[IncomeOutput] Tax calculations are ${minutesStale} minutes stale - showing modal`);
-            showStaleModal(minutesStale);
-        }
-    }
-
-    function showStaleModal(minutesStale) {
-        const modal = document.getElementById('staleModal');
-        if (!modal) return;
-        
-        // Update the modal message with timing info
-        const messageEl = modal.querySelector('.stale-modal-message');
-        if (messageEl && minutesStale > 0) {
-            messageEl.innerHTML = `
-                You've made changes to your income or tax residency information 
-                <strong>${minutesStale} minute${minutesStale !== 1 ? 's' : ''} ago</strong> that will have 
-                <strong>material implications</strong> on your tax and contribution calculations. 
-                The current report may no longer be accurate.
-            `;
-        }
-        
-        // Show modal
-        modal.classList.add('show');
-        
-        // Set up button handlers
-        const regenerateBtn = document.getElementById('regenerateBtn');
-        const makeChangesBtn = document.getElementById('makeChangesBtn');
-        const viewAnywayBtn = document.getElementById('viewAnywayBtn');
-        
-        // Remove existing listeners
-        regenerateBtn.replaceWith(regenerateBtn.cloneNode(true));
-        makeChangesBtn.replaceWith(makeChangesBtn.cloneNode(true));
-        viewAnywayBtn.replaceWith(viewAnywayBtn.cloneNode(true));
-        
-        // Get fresh references
-        const newRegenerateBtn = document.getElementById('regenerateBtn');
-        const newMakeChangesBtn = document.getElementById('makeChangesBtn');
-        const newViewAnywayBtn = document.getElementById('viewAnywayBtn');
-        
-        newRegenerateBtn.addEventListener('click', () => {
-            // Go back to input page to regenerate
-            window.location.href = './incomeiq.html';
-        });
-        
-        newMakeChangesBtn.addEventListener('click', () => {
-            // Go back to input page to make more changes
-            window.location.href = './incomeiq.html';
-        });
-        
-        newViewAnywayBtn.addEventListener('click', () => {
-            // Hide modal and show persistent warning banner
-            modal.classList.remove('show');
-            showPersistentWarning(minutesStale);
-        });
-    }
-    
-    function showPersistentWarning(minutesStale) {
-        // Add a smaller persistent warning banner to the dashboard
-        const outputSpan = document.getElementById('output-span');
-        if (outputSpan && outputSpan.querySelector('.persistent-warning') === null) {
-            const warningBanner = document.createElement('div');
-            warningBanner.className = 'persistent-warning';
-            warningBanner.style.cssText = `
-                background: linear-gradient(135deg, #fef3c7, #fcd34d);
-                border: 2px solid #f59e0b;
-                border-radius: 12px;
-                padding: 12px 16px;
-                margin: 20px 0;
-                text-align: center;
-                font-family: "Inter", sans-serif;
-            `;
-            
-            warningBanner.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.2em;"></i>
-                    <div>
-                        <strong style="color: #92400e; font-size: 0.95em;">
-                            Tax calculations may be outdated (${minutesStale} min ago) - 
-                            <a href="./incomeiq.html" style="color: #1e40af; text-decoration: underline;">Generate updated report</a>
-                        </strong>
-                    </div>
-                </div>
-            `;
-            
-            outputSpan.insertBefore(warningBanner, outputSpan.firstChild);
-        }
-    }
-
-    // Check for stale calculations when dashboard loads
-    setTimeout(checkTaxCalculationsStale, 500);
-    
-    // Listen for localStorage changes to detect when calculations become stale
-    window.addEventListener('storage', function(e) {
-        if (e.key === 'taxCalculationsStale' && e.newValue === 'true') {
-            console.log('[IncomeOutput] Detected tax calculations became stale, checking...');
-            setTimeout(checkTaxCalculationsStale, 100); // Small delay to ensure timestamp is also set
-        }
+    // Initialize makeChanges modal system
+    import('/utility/makeChanges.js').then(module => {
+        const modal = module.MakeChangesModal.create();
+        console.log('[IncomeOutput] MakeChanges modal system initialized');
+    }).catch(error => {
+        console.error('[IncomeOutput] Failed to load makeChanges module:', error);
     });
-    
-    // Also listen for custom events from the same page (storage events don't fire on same page)
-    window.addEventListener('taxCalculationsMarkedStale', function() {
-        console.log('[IncomeOutput] Received taxCalculationsMarkedStale event');
-        setTimeout(checkTaxCalculationsStale, 100);
-    });
-    
+
 })();
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
