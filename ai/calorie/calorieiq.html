@@ -92,6 +92,7 @@
 
 <script type="module">
 import { initAutoExpandTextareas } from '../styles/inputFunctionality.js';
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/fingerprint.js';
 
 (function() {
   console.log("Calorie IQ script initializing");
@@ -115,6 +116,21 @@ import { initAutoExpandTextareas } from '../styles/inputFunctionality.js';
         return;
       }
 
+      // Check rate limiting before proceeding
+      if (isRateLimited('calorie', 8, 60 * 60 * 1000)) { // 8 requests per hour (as per rate-limiter config)
+        alert('You have exceeded the request limit for calorie analysis. Please try again later.');
+        return;
+      }
+
+      // Get fingerprint data for rate limiting
+      const fingerprintData = getFingerprintForWorker();
+      
+      // Create combined payload with both form data and fingerprint
+      const workerPayload = {
+        formData: formData,
+        fingerprint: fingerprintData
+      };
+
       // Use enhanced loading with educational facts
       const result = await window.enhancedLoading(
         'generate-calorie-btn',
@@ -124,7 +140,7 @@ import { initAutoExpandTextareas } from '../styles/inputFunctionality.js';
           const response = await fetch(apiUrl, { 
             method: 'POST', 
             headers: {'Content-Type':'application/json'}, 
-            body: JSON.stringify(formData) 
+            body: JSON.stringify(workerPayload) // Use new payload structure
           });
           
           if (!response.ok) {
@@ -139,6 +155,9 @@ import { initAutoExpandTextareas } from '../styles/inputFunctionality.js';
           return responseData;
         }
       );
+
+      // Increment request count after successful response
+      incrementRequestCount('calorie');
 
       // Store the response using centralized system
       window.calorieFormPersistence.saveResponseData(result);

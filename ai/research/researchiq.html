@@ -57,7 +57,9 @@
 
 <script src="../../utility/toolTip.js" type="module"></script>
 <script src="../../payment/paymentform.js"></script>
-<script>
+<script type="module">
+// Import fingerprint utilities
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/fingerprint.js';
 async function handleGenerateResearchIq() {
     try {
         const formData = window.researchFormPersistence.getSavedFormData();
@@ -65,6 +67,15 @@ async function handleGenerateResearchIq() {
             alert('Please complete the form before generating a research report.'); 
             return;
         }
+
+        // Check rate limits before proceeding
+        if (isRateLimited()) {
+            alert('Rate limit exceeded. Please wait before making another request.');
+            return;
+        }
+
+        // Get fingerprint for the request
+        const fingerprint = getFingerprintForWorker();
 
         // Use enhanced loading with educational facts
         const result = await window.enhancedLoading(
@@ -75,7 +86,7 @@ async function handleGenerateResearchIq() {
                 const response = await fetch(apiUrl, { 
                     method: 'POST', 
                     headers: {'Content-Type':'application/json'}, 
-                    body: JSON.stringify(formData) 
+                    body: JSON.stringify({ formData, fingerprint })
                 });
                 
                 if (!response.ok) {
@@ -91,6 +102,9 @@ async function handleGenerateResearchIq() {
             }
         );
 
+        // Increment request count after successful response
+        incrementRequestCount();
+        
         // Store the response using centralized system
         window.researchFormPersistence.saveResponseData(result);
         

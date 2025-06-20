@@ -123,7 +123,7 @@ Should I apologize first"></textarea>
             <button class="generate-btn" id="generate-social-btn">Generate Social Analysis Now!</button>
         </div>
 
-<script>
+<script type="module">
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
@@ -133,6 +133,9 @@ Should I apologize first"></textarea>
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 */
+
+// Import fingerprint utilities
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/fingerprint.js';
 
 (function() {
     console.log("SocialIQ script initializing");
@@ -172,16 +175,32 @@ Should I apologize first"></textarea>
     async function handleGenerateSocialIq() {
         console.log('[SocialIQ] Generate button clicked.');
         
+        const formData = window.socialFormPersistence.getSavedFormData();
+        if (!formData) {
+            console.error('[SocialIQ] No input data found in localStorage.');
+            alert('Please complete the form before generating a social analysis.');
+            return;
+        }
+
+        // Check rate limiting before proceeding
+        if (isRateLimited('social', 10, 60 * 60 * 1000)) { // 10 requests per hour (as per rate-limiter config)
+            alert('You have exceeded the request limit for social analysis. Please try again later.');
+            return;
+        }
+
+        // Get fingerprint data for rate limiting
+        const fingerprintData = getFingerprintForWorker();
+        
+        // Create combined payload with both form data and fingerprint
+        const workerPayload = {
+            formData: formData,
+            fingerprint: fingerprintData
+        };
+        
         const result = await window.enhancedLoading(
             'generate-social-btn',
             'social',
             async () => {
-                const formData = window.socialFormPersistence.getSavedFormData();
-                if (!formData) {
-                    console.error('[SocialIQ] No input data found in localStorage.');
-                    throw new Error('Please complete the form before generating a social analysis.');
-                }
-                
                 // Send data to worker
                 const apiUrl = 'https://social.4hm7q4q75z.workers.dev/';
                 
@@ -191,7 +210,7 @@ Should I apologize first"></textarea>
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(workerPayload) // Use new payload structure
                 });
                 
                 if (!response.ok) {
@@ -222,6 +241,9 @@ Should I apologize first"></textarea>
                 return responseData;
             }
         );
+        
+        // Increment request count after successful response
+        incrementRequestCount('social');
         
         // Enhanced loading either returns result or throws error - no need to check result.success
         console.log('[SocialIQ] Social analysis generated successfully');

@@ -1,11 +1,17 @@
-<!-- /*
+<!--
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
  * without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
- */ -->
+-->
+
+<head>
+  <script src="../../ai/datain.js" type="module"></script>
+  <!-- inputstyles.css will be loaded dynamically by datain.js -->
+</head>
 
 <div class="device-container">
 
@@ -37,10 +43,6 @@
         <div class="grid-item" data-value="Eclectic">Eclectic & Unique</div>
     </div>
 </div>
-
-
-
-
 
 <div class="row1" data-step-label="Personal Information">
     <h3 class="tooltip1" data-tooltip="Basic information to help provide age-appropriate and body-type-conscious fashion advice.">
@@ -89,6 +91,199 @@
     </div>
 </div>
 
+<div class="row1" data-step-label="Color Preferences">
+    <h3 class="tooltip1" data-tooltip="Let us know your color preferences to provide personalized color recommendations and outfit critiques.">
+        Color Preferences<span class="tooltip1-content"></span>
+    </h3>
+    <div class="grid-container" id="fashion-color-preferences">
+        <div class="grid-item" data-value="Neutrals">Neutrals (black, white, gray, beige)</div>
+        <div class="grid-item" data-value="Earth Tones">Earth Tones (brown, tan, olive, rust)</div>
+        <div class="grid-item" data-value="Bold & Bright">Bold & Bright (red, blue, yellow, green)</div>
+        <div class="grid-item" data-value="Pastels">Pastels (soft pink, lavender, mint, cream)</div>
+        <div class="grid-item" data-value="Jewel Tones">Jewel Tones (emerald, sapphire, ruby, amethyst)</div>
+        <div class="grid-item" data-value="Monochromatic">Monochromatic (single color schemes)</div>
+        <div class="grid-item" data-value="No Preference">No Preference</div>
+    </div>
+</div>
+
+<div class="row1" data-step-label="Upload Outfit Photos">
+    <h3 class="tooltip1" data-tooltip="Upload clear photos of yourself wearing different outfits. Our AI will analyze fit, color coordination, and overall style. Maximum 5 photos.">
+        Upload Outfit Photos (Required)<span class="tooltip1-content"></span>
+    </h3>
+    <div id="image-upload-container" data-module="fashion" data-max-images="5"></div>
+</div>
+
+<div class="row1" data-step-label="Additional Details">
+    <h3 class="tooltip1" data-tooltip="Any specific areas you want feedback on or additional context about your outfits.">
+        Additional Details (Optional)<span class="tooltip1-content"></span>
+    </h3>
+    <textarea id="fashion-additional-details" rows="3" placeholder="e.g., 'Focus on color coordination', 'Looking for professional feedback', 'Help with styling tips'"></textarea>
+</div>
+
+<div class="row1">
+    <button class="generate-btn" id="generate-fashion-btn" disabled>Generate Fashion Analysis</button>
+</div>
+
+</div>
+
+<script src="../../utility/toolTip.js" type="module"></script>
+<script src="../../payment/paymentform.js"></script>
+
+<script type="module">
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
+
+// Import fingerprint utilities
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/fingerprint.js';
+
+(function() {
+  console.log("[FashionIQ] Module initialized");
+
+  async function handleGenerateFashionIq() {
+    try {
+      const formData = window.fashionFormPersistence.getSavedFormData();
+      if (!formData) {
+        alert('Please complete the form before generating a fashion analysis.');
+        return;
+      }
+
+      // Check if images are uploaded
+      const images = window.getImageUploadImages ? window.getImageUploadImages() : [];
+      if (!images || images.length === 0) {
+        alert('Please upload at least one outfit photo before generating analysis.');
+        return;
+      }
+
+      // Check rate limits before proceeding
+      if (isRateLimited()) {
+        alert('Rate limit exceeded. Please wait before making another request.');
+        return;
+      }
+
+      // Get fingerprint for the request
+      const fingerprint = getFingerprintForWorker();
+
+      // Fashion module needs special payload structure with images
+      const fashionFormData = {
+        ...formData,
+        images: images // Add images to the form data
+      };
+
+      // Use enhanced loading with educational facts
+      const result = await window.enhancedLoading(
+        'generate-fashion-btn',
+        'fashion',
+        async () => {
+          const apiUrl = 'https://fashion.4hm7q4q75z.workers.dev/';
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ formData: fashionFormData, fingerprint })
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const responseData = await response.json();
+          if (responseData.message !== 'Success') {
+            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+          }
+
+          return responseData;
+        }
+      );
+
+      // Increment request count after successful response
+      incrementRequestCount();
+
+      // Store the response using centralized system
+      window.fashionFormPersistence.saveResponseData(result);
+
+      // Dispatch an event to notify dataout.js that a response was received
+      const event = new CustomEvent('api-response-received', {
+        detail: {
+          module: 'fashioniq',
+          type: 'worker-response',
+          timestamp: Date.now()
+        }
+      });
+      document.dispatchEvent(event);
+      
+    } catch (error) {
+      console.error('[FashionIQ] Error generating fashion analysis:', error);
+      alert('An error occurred while analyzing your fashion. Please try again later.');
+    }
+  }
+
+  // Button state management for image requirements
+  function updateButtonState() {
+    const generateBtn = document.getElementById('generate-fashion-btn');
+    if (!generateBtn) return;
+    
+    const hasImages = window.getImageUploadImages && window.getImageUploadImages().length > 0;
+    
+    if (hasImages) {
+      generateBtn.disabled = false;
+    } else {
+      generateBtn.disabled = true;
+    }
+  }
+
+  // Simple initialization - set up event listeners
+  function initialize() {
+    console.log("[FashionIQ] Initializing...");
+    
+    // Set up generate button event listener
+    const generateBtn = document.getElementById('generate-fashion-btn');
+    if (generateBtn) {
+      generateBtn.removeEventListener('click', handleGenerateFashionIq);
+      generateBtn.addEventListener('click', handleGenerateFashionIq);
+      console.log("[FashionIQ] Generate button event listener set up");
+    } else {
+      console.error("[FashionIQ] Generate button not found!");
+    }
+
+    // Initial button state check
+    updateButtonState();
+
+    // Listen for image upload changes
+    document.addEventListener('imageUploadChanged', updateButtonState);
+  }
+
+  // Initialize immediately if DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialize);
+  } else {
+    initialize();
+  }
+
+  // Handle loading through datain.js - only initialize if fashion module is loaded
+  document.addEventListener('data-in-loaded', function(e) {
+    const moduleType = e.detail?.moduleType;
+    if (moduleType === 'fashion') {
+      console.log("[FashionIQ] Fashion module loaded through datain.js, reinitializing");
+      initialize();
+    }
+  });
+
+  // Export functions for external access
+  window.fashionIq = { 
+    getFormData: () => window.fashionFormPersistence ? window.fashionFormPersistence.getSavedFormData() : null,
+    saveFormData: () => window.fashionFormPersistence ? window.fashionFormPersistence.saveFormData() : null,
+    updateButtonState: updateButtonState
+  };
+
+})();
+</script>
+
 <div class="row1" data-step-label="Upload Outfit Photos">
     <div id="fashion-upload-container"></div>
     <textarea id="fashion-additional-context" rows="3" placeholder="Any additional context about the outfits, specific concerns, or what you'd like feedback on? (Optional)"></textarea>
@@ -132,6 +327,21 @@
         return;
       }
 
+      // Check rate limiting before proceeding
+      if (isRateLimited('fashion', 10, 60 * 60 * 1000)) { // 10 requests per hour (as per rate-limiter config)
+        alert('You have exceeded the request limit for fashion analysis. Please try again later.');
+        return;
+      }
+
+      // Get fingerprint data for rate limiting
+      const fingerprintData = getFingerprintForWorker();
+      
+      // Create combined payload with both form data and fingerprint
+      const workerPayload = {
+        formData: formData,
+        fingerprint: fingerprintData
+      };
+
       // Use enhanced loading with educational facts
       const result = await window.enhancedLoading(
         'generate-fashion-btn',
@@ -141,7 +351,7 @@
           const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(workerPayload) // Use new payload structure
           });
           
           if (!response.ok) {
@@ -156,6 +366,9 @@
           return responseData;
         }
       );
+
+      // Increment request count after successful response
+      incrementRequestCount('fashion');
 
       // Store the response using centralized system
       window.fashionFormPersistence.saveResponseData(result);

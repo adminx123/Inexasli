@@ -102,7 +102,7 @@ Key Battles"></textarea>
             <button class="generate-btn" id="generate-quiz-btn">Generate Quiz Now!</button>
         </div>
 
-<script>
+<script type="module">
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
@@ -112,6 +112,9 @@ Key Battles"></textarea>
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
 */
+
+// Import fingerprint utilities
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/fingerprint.js';
 
 (function() {
     console.log("QuizIQ script initializing");
@@ -140,16 +143,32 @@ Key Battles"></textarea>
     async function handleGenerateQuizIq() {
         console.log('[QuizIQ] Generate button clicked.');
         
+        const formData = window.quizFormPersistence.getSavedFormData();
+        if (!formData) {
+            console.error('[QuizIQ] No input data found in localStorage.');
+            alert('Please complete the form before generating a quiz.');
+            return;
+        }
+
+        // Check rate limiting before proceeding
+        if (isRateLimited('quiz', 15, 60 * 60 * 1000)) { // 15 requests per hour (as per rate-limiter config)
+            alert('You have exceeded the request limit for quiz generation. Please try again later.');
+            return;
+        }
+
+        // Get fingerprint data for rate limiting
+        const fingerprintData = getFingerprintForWorker();
+        
+        // Create combined payload with both form data and fingerprint
+        const workerPayload = {
+            formData: formData,
+            fingerprint: fingerprintData
+        };
+        
         const result = await window.enhancedLoading(
             'generate-quiz-btn',
             'quiz',
             async () => {
-                const formData = window.quizFormPersistence.getSavedFormData();
-                if (!formData) {
-                    console.error('[QuizIQ] No input data found in localStorage.');
-                    throw new Error('Please complete the form before generating a quiz.');
-                }
-                
                 // Send data to worker
                 const apiUrl = 'https://quiz.4hm7q4q75z.workers.dev/';
                 
@@ -160,7 +179,7 @@ Key Battles"></textarea>
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(workerPayload) // Use new payload structure
                 });
                 
                 if (!response.ok) {
@@ -191,6 +210,9 @@ Key Battles"></textarea>
                 return responseData;
             }
         );
+        
+        // Increment request count after successful response
+        incrementRequestCount('quiz');
         
         // Enhanced loading either returns result or throws error - no need to check result.success
         console.log('[QuizIQ] Quiz generated successfully');
