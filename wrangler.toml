@@ -1,8 +1,20 @@
-# NOTE: For multi-worker projects, deploy each worker using:
+# NOTE: For multi-worker projects, deploy each worker individually using:
 #   npx wrangler deploy --env <worker>
-# Example for research worker:
-#   npx wrangler deploy --env research
-# This ensures the correct script, bindings, and environment are used.
+# Example for the 'event' worker:
+#   npx wrangler deploy --env event
+#
+# This ensures the correct script, bindings, and environment are used for each worker.
+# Always run these commands from the main project directory (where this wrangler.toml is located).
+#
+# To deploy all main module workers with FACT_STORE KV binding, run:
+#   npx wrangler deploy --env event
+#   npx wrangler deploy --env enneagram
+#   npx wrangler deploy --env fashion
+#   npx wrangler deploy --env income
+#   npx wrangler deploy --env quiz
+#   npx wrangler deploy --env philosophy
+#
+# (Repeat for any other worker as needed.)
 
 account_id = "b70c309587ed8ba2bfa06320792ea457"
 workers_dev = true
