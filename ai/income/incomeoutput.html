@@ -997,8 +997,7 @@
                     total_contributions_calculated: responseData.total_contributions || 0,
                     tax_treatment_details: responseData.tax_treatment_details || {},
                     assumptions_made: responseData.assumptions_made || [],
-                    taxable_income_total: responseData.taxable_income_total || 0,
-                    recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations."
+                    taxable_income_total: responseData.taxable_income_total || 0
                 };
                 
                 const outputSpan = document.getElementById('output-span');
@@ -1147,8 +1146,8 @@
           </div>
           <div style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 24px; border-radius: 8px; display: inline-block; font-size: 0.9em; max-width: 500px; line-height: 1.4;">
             <i class="fas fa-shield-alt" style="margin-right: 8px;"></i>
-            Educational purposes only • Consult professionals for major decisions<br>
-            <span style="font-size: 0.85em; opacity: 0.9;">AI analysis using industry-standard financial metrics</span>
+            For educational and illustrative purposes only • Consult professionals for major decisions<br>
+            <span style="font-size: 0.85em; opacity: 0.9;">AI exploration tool using industry-standard financial metrics</span>
           </div>
         </div>
       `;
@@ -1581,8 +1580,7 @@
                         total_contributions_calculated: responseData.total_contributions || 0,
                         tax_treatment_details: responseData.tax_treatment_details || {},
                         assumptions_made: responseData.assumptions_made || [],
-                        taxable_income_total: responseData.taxable_income_total || 0,
-                        recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations."
+                        taxable_income_total: responseData.taxable_income_total || 0
                     };
                     
                     outputSpan.innerHTML = '';
