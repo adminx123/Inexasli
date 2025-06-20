@@ -998,8 +998,7 @@
                     tax_treatment_details: responseData.tax_treatment_details || {},
                     assumptions_made: responseData.assumptions_made || [],
                     taxable_income_total: responseData.taxable_income_total || 0,
-                    recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations.",
-                    insights: "Your tax calculations have been completed. Review the financial metrics below for a comprehensive overview of your financial health."
+                    recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations."
                 };
                 
                 const outputSpan = document.getElementById('output-span');
@@ -1146,9 +1145,10 @@
           <div style="font-size: 1.1em; color: #6b7280; margin-bottom: 20px;">
             AI-powered financial analysis and insights
           </div>
-          <div style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 24px; border-radius: 8px; display: inline-block; font-size: 0.9em;">
+          <div style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 24px; border-radius: 8px; display: inline-block; font-size: 0.9em; max-width: 500px; line-height: 1.4;">
             <i class="fas fa-shield-alt" style="margin-right: 8px;"></i>
-            Educational purposes only • Consult professionals for major decisions
+            Educational purposes only • Consult professionals for major decisions<br>
+            <span style="font-size: 0.85em; opacity: 0.9;">AI analysis using industry-standard financial metrics</span>
           </div>
         </div>
       `;
@@ -1517,7 +1517,6 @@
         { key: 'income_analysis', title: 'Income Analysis', icon: 'fas fa-money-bill-wave', color: '#10b981' },
         { key: 'expense_analysis', title: 'Expense Analysis', icon: 'fas fa-shopping-cart', color: '#ef4444' },
         { key: 'networth_analysis', title: 'Net Worth Analysis', icon: 'fas fa-chart-pie', color: '#3b82f6' },
-        { key: 'insights', title: 'Key Insights', icon: 'fas fa-eye', color: '#8b5cf6' },
         { key: 'action_items', title: 'Action Items', icon: 'fas fa-tasks', color: '#06b6d4' }
       ];
 
@@ -1539,23 +1538,6 @@
         }
       });
 
-      // Footer with methodology
-      const footer = document.createElement('div');
-      footer.innerHTML = `
-        <div style="margin: 40px 0 20px 0; padding: 20px; background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb;">
-          <h4 style="margin: 0 0 12px 0; color: #374151; font-size: 1.1em;">
-            <i class="fas fa-info-circle" style="margin-right: 8px; color: #6b7280;"></i>
-            Analysis Methodology
-          </h4>
-          <p style="margin: 0; color: #6b7280; font-size: 0.95em; line-height: 1.6;">
-            This analysis uses advanced AI algorithms and industry-standard financial metrics to evaluate your financial health. 
-            The health score considers cash flow, debt ratios, savings rate, net worth, and FIRE progress. All recommendations 
-            are for educational purposes and should not replace professional financial advice.
-          </p>
-        </div>
-      `;
-      container.appendChild(footer);
-      
       outputElement.appendChild(container);
       
       // Initialize charts and controls after DOM is ready
@@ -1600,8 +1582,7 @@
                         tax_treatment_details: responseData.tax_treatment_details || {},
                         assumptions_made: responseData.assumptions_made || [],
                         taxable_income_total: responseData.taxable_income_total || 0,
-                        recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations.",
-                        insights: "Your tax calculations have been completed. Review the financial metrics below for a comprehensive overview of your financial health."
+                        recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations."
                     };
                     
                     outputSpan.innerHTML = '';
