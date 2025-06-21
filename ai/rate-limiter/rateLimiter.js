@@ -98,8 +98,9 @@ async function getRateLimitStatus(rateLimiterUrl, action = 'check') {
  * Render the RateLimit display in a container
  * @param {HTMLElement} container - The container to inject the display into
  * @param {string} rateLimiterUrl - The endpoint for the rate limiter worker
+ * @param {string} moduleName - The display name for the module (e.g., 'PhilosophyIQ', 'CalorieIQ')
  */
-async function renderRateLimitDisplay(container, rateLimiterUrl) {
+async function renderRateLimitDisplay(container, rateLimiterUrl, moduleName = 'Module') {
     let utilityBar = container.querySelector('.utility-buttons-container');
     if (!utilityBar) utilityBar = container;
     let display = utilityBar.querySelector('.rate-limit-display');
@@ -109,16 +110,16 @@ async function renderRateLimitDisplay(container, rateLimiterUrl) {
         display.style = 'margin-right: 12px; align-items: center; display: flex; font-size: 13px; color: #444; font-weight: 500; height: 28px;';
         utilityBar.insertBefore(display, utilityBar.firstChild);
     }
-    display.textContent = 'PhilosophyIQ Uses Left: ...';
+    display.textContent = `${moduleName} Uses Left: ...`;
     try {
         const status = await getRateLimitStatus(rateLimiterUrl, 'check');
         if (status && status.remaining && status.limits) {
-            display.textContent = `PhilosophyIQ Uses Left: ${status.remaining.perDay} / ${status.limits.perDay} today`;
+            display.textContent = `${moduleName} Uses Left: ${status.remaining.perDay} / ${status.limits.perDay} today`;
         } else {
-            display.textContent = 'PhilosophyIQ Uses Left: unavailable';
+            display.textContent = `${moduleName} Uses Left: unavailable`;
         }
     } catch (e) {
-        display.textContent = 'PhilosophyIQ Uses Left: error';
+        display.textContent = `${moduleName} Uses Left: error`;
     }
 }
 
@@ -145,8 +146,9 @@ export async function consumeRateLimit(fingerprint, module, rateLimiterUrl) {
  * @param {HTMLElement} container - The container to update the display in
  * @param {Object} response - The backend response (success or error JSON)
  * @param {boolean} [showError=true] - Whether to show an error message if rate limited
+ * @param {string} moduleName - The display name for the module (e.g., 'PhilosophyIQ', 'CalorieIQ')
  */
-export function handleRateLimitResponse(container, response, showError = true) {
+export function handleRateLimitResponse(container, response, showError = true, moduleName = 'Module') {
     console.log('[RateLimit][Debug] handleRateLimitResponse called with:', response);
     // Find the utility buttons container
     let utilityBar = container.querySelector('.utility-buttons-container');
@@ -172,9 +174,9 @@ export function handleRateLimitResponse(container, response, showError = true) {
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
         console.log('[RateLimit][Debug] localStorage.rateLimitStatus set to:', dailyStatus);
-        display.textContent = `PhilosophyIQ Uses Left: ${dailyStatus.remaining.perDay} / ${dailyStatus.limits.perDay} today`;
+        display.textContent = `${moduleName} Uses Left: ${dailyStatus.remaining.perDay} / ${dailyStatus.limits.perDay} today`;
     } else {
-        display.textContent = 'PhilosophyIQ Uses Left: unavailable';
+        display.textContent = `${moduleName} Uses Left: unavailable`;
     }
     // Show error if present
     if (showError && response && (response.error || response.message) && response.error === 'Rate limit exceeded') {
