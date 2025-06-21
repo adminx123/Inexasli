@@ -84,17 +84,7 @@ service = "secretworker"
 binding = "rate_limiter_binding"
 service = "rate-limiter"
 
-[env.book]
-name = "book"
-main = "./ai/book/book.js"
 
-[[env.book.services]]
-binding = "secret_binding"
-service = "secretworker"
-
-[[env.book.services]]
-binding = "rate_limiter_binding"
-service = "rate-limiter"
 
 
 

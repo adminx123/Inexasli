@@ -38,9 +38,17 @@ const CONFIG = {
 // CORS headers helper
 const Headers = {
   cors(origin) {
+    // Fix: handle null/undefined/empty origin safely
+    if (typeof origin !== 'string' || !origin) {
+      return {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Content-Type": "application/json"
+      };
+    }
     const matchedOrigin = CONFIG.ALLOWED_ORIGINS.find(allowed => 
       origin.startsWith(allowed)) || "*";
-    
     return {
       "Access-Control-Allow-Origin": matchedOrigin,
       "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -249,6 +257,14 @@ async function validateRateLimit(fingerprint, module, env) {
 // Main worker handler
 export default {
   async fetch(request, env) {
+    // Log every incoming request for debugging
+    console.log('[RateLimiter] Incoming request:', {
+      method: request.method,
+      url: request.url,
+      headers: Object.fromEntries(request.headers),
+      time: Date.now()
+    });
+    
     // Handle CORS preflight
     if (request.method === 'OPTIONS') {
       return Responses.cors(request);
