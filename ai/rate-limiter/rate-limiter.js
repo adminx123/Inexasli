@@ -19,7 +19,7 @@ const CONFIG = {
   GLOBAL_RATE_LIMITS: {
     perMinute: 5,
     perHour: 30,
-    perDay: 100
+    perDay: 10 // changed from 100 to 10
   },
   SUSPICIOUS_ACTIVITY: {
     rapidRequestsThreshold: 5,

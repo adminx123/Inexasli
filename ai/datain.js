@@ -13,6 +13,7 @@ import { initializeBidirectionalSwipe, initializeSimpleVerticalSwipe } from '/ut
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
+import { getRateLimitStatus, renderRateLimitDisplay } from '/ai/rate-limiter/rateLimiter.js';
 
 // Prevent zoom/pinch on content containers
 function preventZoom() {
@@ -811,6 +812,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         `;
 
         document.body.appendChild(dataContainer);
+
+        // Inject RateLimit display at the top of the data container
+        renderRateLimitDisplay(dataContainer, 'https://rate-limiter.4hm7q4q75z.workers.dev');
 
         // Setup utility buttons for initial state
         setupUtilityButtons();
