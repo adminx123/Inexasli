@@ -19,7 +19,7 @@ const CONFIG = {
   GLOBAL_RATE_LIMITS: {
     perMinute: 5,
     perHour: 30,
-    perDay: 10 // changed from 100 to 10
+    perDay: 13 // increased from 10 to 13 for testing
   },
   SUSPICIOUS_ACTIVITY: {
     rapidRequestsThreshold: 5,
@@ -60,12 +60,13 @@ const Responses = {
     });
   },
   
-  rateLimited(message, resetTime, origin) {
+  rateLimited(message, resetTime, origin, rateLimitStatus) {
     return new Response(JSON.stringify({
       allowed: false,
       message,
       resetTime,
-      retryAfter: Math.ceil((resetTime - Date.now()) / 1000)
+      retryAfter: Math.ceil((resetTime - Date.now()) / 1000),
+      rateLimitStatus // always include latest status
     }), {
       status: 429,
       headers: Headers.cors(origin)
@@ -256,7 +257,12 @@ export default {
       
       if (!result.allowed) {
         if (result.code === "RATE_LIMITED" || result.code === "SUSPICIOUS_ACTIVITY") {
-          return Responses.rateLimited(result.error, result.resetTime, origin);
+          // Get latest status for response
+          const latestStatus = await validateRateLimit(requestData.fingerprint, requestData.module, env, 'check');
+          return Responses.rateLimited(result.error, result.resetTime, origin, {
+            limits: latestStatus.limits,
+            remaining: latestStatus.remaining
+          });
         } else {
           return Responses.badRequest(result.error, origin);
         }
