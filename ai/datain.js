@@ -1460,9 +1460,6 @@ window.dataInContainerManager = {
     config: containerSizingConfig
 };
 
-// Import rate limit functions from rateLimiter.js
-import { getRateLimitStatus, renderRateLimitDisplay } from './rate-limiter/rateLimiter.js';
-
 // Utility to update rate limit display from localStorage
 function updateRateLimitDisplayFromLocal(container) {
     let display = container.querySelector('.rate-limit-display');
