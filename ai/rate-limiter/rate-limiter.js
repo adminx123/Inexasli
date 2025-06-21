@@ -15,18 +15,11 @@ const CONFIG = {
     'https://rate-limiter.4hm7q4q75z.workers.dev'
     // Add other AI module worker URLs
   ],
-  RATE_LIMITS: {
-    // Per module limits
-    income: { perMinute: 2, perHour: 10, perDay: 50 },
-    calorie: { perMinute: 2, perHour: 8, perDay: 40 },
-    decision: { perMinute: 2, perHour: 12, perDay: 60 },
-    enneagram: { perMinute: 1, perHour: 5, perDay: 25 },
-    event: { perMinute: 2, perHour: 8, perDay: 40 },
-    fashion: { perMinute: 2, perHour: 10, perDay: 50 },
-    philosophy: { perMinute: 1, perHour: 6, perDay: 30 },
-    quiz: { perMinute: 3, perHour: 15, perDay: 75 },
-    research: { perMinute: 2, perHour: 8, perDay: 40 },
-    social: { perMinute: 2, perHour: 10, perDay: 50 }
+  // Global rate limit config (adjust as needed)
+  GLOBAL_RATE_LIMITS: {
+    perMinute: 5,
+    perHour: 30,
+    perDay: 100
   },
   SUSPICIOUS_ACTIVITY: {
     rapidRequestsThreshold: 5,
@@ -115,61 +108,33 @@ async function validateRateLimit(fingerprint, module, env) {
         code: "INVALID_FINGERPRINT"
       };
     }
-    
-    // Validate module
-    if (!CONFIG.RATE_LIMITS[module]) {
-      return {
-        allowed: false,
-        error: `Unknown module: ${module}`,
-        code: "INVALID_MODULE"
-      };
-    }
-    
-    // Create secure hash of fingerprint for privacy
-    const fingerprintString = `${fingerprint.deviceId}:${fingerprint.sessionId}:${module}`;
+
+    // Use only deviceId and sessionId for global limit
+    const fingerprintString = `${fingerprint.deviceId}:${fingerprint.sessionId}`;
     const encoder = new TextEncoder();
     const data = encoder.encode(fingerprintString);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashString = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    
-    const limits = CONFIG.RATE_LIMITS[module];
+
+    const limits = CONFIG.GLOBAL_RATE_LIMITS;
     const now = Date.now();
-    
-    // Define rate limiting windows
+
+    // Define global rate limiting windows
     const rateLimitChecks = [
-      { 
-        key: `m:${hashString}`, 
-        limit: limits.perMinute, 
-        ttl: 60, 
-        window: 60000,
-        name: "per minute"
-      },
-      { 
-        key: `h:${hashString}`, 
-        limit: limits.perHour, 
-        ttl: 3600, 
-        window: 3600000,
-        name: "per hour"
-      },
-      { 
-        key: `d:${hashString}`, 
-        limit: limits.perDay, 
-        ttl: 86400, 
-        window: 86400000,
-        name: "per day"
-      }
+      { key: `m:${hashString}`, limit: limits.perMinute, ttl: 60, window: 60000, name: "per minute" },
+      { key: `h:${hashString}`, limit: limits.perHour, ttl: 3600, window: 3600000, name: "per hour" },
+      { key: `d:${hashString}`, limit: limits.perDay, ttl: 86400, window: 86400000, name: "per day" }
     ];
-    
+
     // Check each rate limit
     for (const check of rateLimitChecks) {
       const count = parseInt(await env.RATE_LIMIT_KV.get(check.key)) || 0;
-      
       if (count >= check.limit) {
         const resetTime = now + check.window;
         return {
           allowed: false,
-          error: `Rate limit exceeded: ${check.limit} requests ${check.name}`,
+          error: `Global rate limit exceeded: ${check.limit} requests ${check.name}`,
           code: "RATE_LIMITED",
           limit: check.limit,
           window: check.name,
@@ -178,7 +143,7 @@ async function validateRateLimit(fingerprint, module, env) {
         };
       }
     }
-    
+
     // Check for suspicious activity patterns
     const timesKey = `times:${hashString}`;
     const requestTimesStr = await env.RATE_LIMIT_KV.get(timesKey);
@@ -201,7 +166,7 @@ async function validateRateLimit(fingerprint, module, env) {
         resetTime: now + 300000 // 5 minute cooldown
       };
     }
-    
+
     // All checks passed - increment counters
     const promises = [];
     
@@ -235,7 +200,6 @@ async function validateRateLimit(fingerprint, module, env) {
     return {
       allowed: true,
       message: "Request allowed",
-      module,
       limits,
       remaining,
       fingerprint: {
@@ -243,7 +207,6 @@ async function validateRateLimit(fingerprint, module, env) {
         sessionId: fingerprint.sessionId.slice(0, 8) + '...'
       }
     };
-    
   } catch (error) {
     console.error('Rate limiting error:', error);
     return {
