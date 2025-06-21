@@ -13,7 +13,7 @@ import { initializeBidirectionalSwipe, initializeSimpleVerticalSwipe } from '/ut
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
-import { getRateLimitStatus, renderRateLimitDisplay } from '/ai/rate-limiter/rateLimiter.js';
+import { getRateLimitStatus, renderRateLimitDisplay, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 // Prevent zoom/pinch on content containers
 function preventZoom() {
@@ -1491,10 +1491,12 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         const dataContainer = document.querySelector('.data-container-in');
         if (dataContainer) {
-            updateRateLimitDisplayFromLocal(dataContainer);
+            // Use handleRateLimitResponse to update from localStorage first
+            const status = JSON.parse(localStorage.getItem('rateLimitStatus') || 'null') || {};
+            handleRateLimitResponse(dataContainer, status, false);
             // Fetch latest from backend and update
             getRateLimitStatus('https://rate-limiter.4hm7q4q75z.workers.dev', 'check').then(status => {
-                window.updateRateLimitStatus(dataContainer, status);
+                handleRateLimitResponse(dataContainer, status, false);
             }).catch(() => {
                 // fallback: keep local value
             });
@@ -1503,5 +1505,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // After each backend generation or rate limit check, call:
-// window.updateRateLimitStatus(dataContainer, backendResponse.rateLimitStatus)
-// (You may need to pass the correct container and backend response object.)
+// handleRateLimitResponse(dataContainer, backendResponse)

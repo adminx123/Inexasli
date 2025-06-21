@@ -138,5 +138,38 @@ export async function consumeRateLimit(fingerprint, module, rateLimiterUrl) {
     return await response.json();
 }
 
+/**
+ * Handle a backend rate limit response: update localStorage, display, and show error if needed
+ * @param {HTMLElement} container - The container to update the display in
+ * @param {Object} response - The backend response (success or error JSON)
+ * @param {boolean} [showError=true] - Whether to show an error message if rate limited
+ */
+export function handleRateLimitResponse(container, response, showError = true) {
+    let display = container.querySelector('.rate-limit-display');
+    if (!display) {
+        display = document.createElement('div');
+        display.className = 'rate-limit-display';
+        display.style = 'padding: 4px 0; font-size: 13px; color: #444; font-weight: 500;';
+        container.prepend(display);
+    }
+    // Prefer rateLimitStatus, fallback to response itself
+    const status = response && (response.rateLimitStatus || response);
+    if (status && status.remaining && status.limits) {
+        // Only store and display daily values
+        const dailyStatus = {
+            remaining: { perDay: status.remaining.perDay },
+            limits: { perDay: status.limits.perDay }
+        };
+        localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
+        display.textContent = `PhilosophyIQ Uses Left: ${dailyStatus.remaining.perDay} / ${dailyStatus.limits.perDay} today`;
+    } else {
+        display.textContent = 'PhilosophyIQ Uses Left: unavailable';
+    }
+    // Show error if present
+    if (showError && response && (response.error || response.message) && response.error === 'Rate limit exceeded') {
+        alert(response.message || 'You have reached your rate limit. Please try again later.');
+    }
+}
+
 // Export for use in other modules
 export { getRateLimitStatus, renderRateLimitDisplay };

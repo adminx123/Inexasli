@@ -51,6 +51,7 @@ Accepting things I cannot change"></textarea>
 
   // Import fingerprint utilities
   import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/rateLimiter.js';
+  import { handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
   (function() {
     console.log("PhilosophyIQ script initializing");
@@ -90,56 +91,66 @@ Accepting things I cannot change"></textarea>
             fingerprint: fingerprintData
         };
         
-        const result = await window.enhancedLoading(
-            'generate-philosophy-btn',
-            'philosophy',
-            async () => {
-                // Send data to worker
-                const apiUrl = 'https://philosophy.4hm7q4q75z.workers.dev/';
-                
-                console.log('[PhilosophyIQ] Sending philosophyIqInput to worker');
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(workerPayload) // Use new payload structure
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                
-                const responseData = await response.json();
-                console.log('[PhilosophyIQ] Worker response:', responseData);
-                
-                if (responseData.message !== 'Success') {
-                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                }
-                
-                // Store the response
-                window.philosophyFormPersistence.saveResponseData(responseData);
-                
-                // Dispatch an event to notify dataout.js that a response was received
-                const event = new CustomEvent('api-response-received', {
-                    detail: {
-                        module: 'philosophyiq',
-                        type: 'worker-response',
-                        timestamp: Date.now()
+        const dataContainer = document.querySelector('.data-container-in');
+        let backendResponse = null;
+        try {
+            backendResponse = await window.enhancedLoading(
+                'generate-philosophy-btn',
+                'philosophy',
+                async () => {
+                    // Send data to worker
+                    const apiUrl = 'https://philosophy.4hm7q4q75z.workers.dev/';
+                    
+                    console.log('[PhilosophyIQ] Sending philosophyIqInput to worker');
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(workerPayload)
+                    });
+                    let responseData;
+                    try {
+                        responseData = await response.json();
+                    } catch (e) {
+                        responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
                     }
-                });
-                document.dispatchEvent(event);
-                console.log('[PhilosophyIQ] Dispatched api-response-received event');
-                
-                return responseData;
+                    // Always call handleRateLimitResponse with backend response
+                    handleRateLimitResponse(dataContainer, responseData, !response.ok);
+                    if (!response.ok) {
+                        throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+                    }
+                    if (responseData.message !== 'Success') {
+                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                    }
+                    
+                    // Store the response
+                    window.philosophyFormPersistence.saveResponseData(responseData);
+                    
+                    // Dispatch an event to notify dataout.js that a response was received
+                    const event = new CustomEvent('api-response-received', {
+                        detail: {
+                            module: 'philosophyiq',
+                            type: 'worker-response',
+                            timestamp: Date.now()
+                        }
+                    });
+                    document.dispatchEvent(event);
+                    console.log('[PhilosophyIQ] Dispatched api-response-received event');
+                    
+                    return responseData;
+                }
+            );
+            incrementRequestCount('philosophy');
+            console.log('[PhilosophyIQ] Philosophical wisdom generated successfully');
+        } catch (error) {
+            // If backendResponse is available, update rate limit display and show error
+            if (backendResponse && dataContainer) {
+                handleRateLimitResponse(dataContainer, backendResponse, true);
             }
-        );
-        
-        // Increment request count after successful response
-        incrementRequestCount('philosophy');
-        
-        // Enhanced loading either returns result or throws error - no need to check result.success
-        console.log('[PhilosophyIQ] Philosophical wisdom generated successfully');
+            // Optionally, show a toast/modal here for generic errors
+            console.error('[PhilosophyIQ] Error:', error);
+        }
     }
 
     // Initialization
