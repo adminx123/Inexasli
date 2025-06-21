@@ -1036,27 +1036,25 @@
         
         try {
           data = getJSON(responseKey);
-          
+          // Patch: unwrap nested structure if present
+          if (data && data.data && data.data.enneagramIqResponse && data.data.enneagramIqResponse.enneagramAnalysis) {
+            data = data.data.enneagramIqResponse;
+          }
           if (data) {
             // Validate data structure - checking for the new cleaner structure
             if (!data.enneagramAnalysis) {
               throw new Error('Invalid data structure: missing enneagramAnalysis');
             }
-            
             // Format the data directly since it now has the clean structure
             const formattedContent = formatEnneagramAnalysis(data);
-            
             outputSpan.innerHTML = '';
             outputSpan.appendChild(formattedContent);
-            
             // Add enhanced UI elements after content is loaded
             setTimeout(() => {
               // Initialize enhanced UI system
               initEnhancedUISystem();
-              
               // Set up progress bar separately (as requested)
               window.addEventListener('scroll', updateProgressBar);
-              
               // Add main content landmark for accessibility
               const mainContent = document.querySelector('.enneagram-content');
               if (mainContent) {
@@ -1064,7 +1062,6 @@
                 mainContent.setAttribute('role', 'main');
                 mainContent.setAttribute('aria-label', 'Enneagram analysis results');
               }
-              
               // Trigger staggered card animations
               const cards = document.querySelectorAll('.enneagram-card');
               cards.forEach((card, index) => {
@@ -1073,10 +1070,8 @@
                   card.style.transform = 'translateY(0)';
                 }, index * 150);
               });
-              
               // Success toast removed per user request
             }, 100);
-            
             console.log('Data displayed successfully');
           } else {
             outputSpan.innerHTML = '';
