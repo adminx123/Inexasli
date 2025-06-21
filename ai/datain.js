@@ -1459,3 +1459,52 @@ window.dataInContainerManager = {
     adjustContainerSize,
     config: containerSizingConfig
 };
+
+// Import rate limit functions from rateLimiter.js
+import { getRateLimitStatus, renderRateLimitDisplay } from './rate-limiter/rateLimiter.js';
+
+// Utility to update rate limit display from localStorage
+function updateRateLimitDisplayFromLocal(container) {
+    let display = container.querySelector('.rate-limit-display');
+    if (!display) {
+        display = document.createElement('div');
+        display.className = 'rate-limit-display';
+        display.style = 'padding: 4px 0; font-size: 13px; color: #444; font-weight: 500;';
+        container.prepend(display);
+    }
+    const status = JSON.parse(localStorage.getItem('rateLimitStatus') || 'null');
+    if (status && status.remaining && status.limits) {
+        display.textContent = `RateLimit: ${status.remaining.perDay}/${status.limits.perDay} (day)`;
+    } else {
+        display.textContent = 'RateLimit: unavailable';
+    }
+}
+
+// After backend response, update localStorage and display
+window.updateRateLimitStatus = function(container, backendStatus) {
+    if (backendStatus && backendStatus.remaining && backendStatus.limits) {
+        localStorage.setItem('rateLimitStatus', JSON.stringify(backendStatus));
+    }
+    updateRateLimitDisplayFromLocal(container);
+};
+
+// On page load, show localStorage value first, then update from backend
+// (Assume dataContainer is available after initializeDataContainer)
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        const dataContainer = document.querySelector('.data-container-in');
+        if (dataContainer) {
+            updateRateLimitDisplayFromLocal(dataContainer);
+            // Fetch latest from backend and update
+            getRateLimitStatus('https://rate-limiter.4hm7q4q75z.workers.dev', 'check').then(status => {
+                window.updateRateLimitStatus(dataContainer, status);
+            }).catch(() => {
+                // fallback: keep local value
+            });
+        }
+    }, 500);
+});
+
+// After each backend generation or rate limit check, call:
+// window.updateRateLimitStatus(dataContainer, backendResponse.rateLimitStatus)
+// (You may need to pass the correct container and backend response object.)

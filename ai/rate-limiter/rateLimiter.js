@@ -74,13 +74,15 @@ function getOrCreateFingerprint() {
 
 /**
  * Get the current rate limit status for the user (async)
+ * @param {string} rateLimiterUrl
+ * @param {string} action - 'check' (default) or 'consume'
  * @returns {Promise<Object>} - { remaining, limits, allowed, ... }
  */
-async function getRateLimitStatus(rateLimiterUrl) {
+async function getRateLimitStatus(rateLimiterUrl, action = 'check') {
     // Get or create fingerprint/session
     const fingerprint = getOrCreateFingerprint();
     const module = 'datain'; // or dynamically set as needed
-    const payload = { fingerprint, module };
+    const payload = { fingerprint, module, action };
     console.log('[RateLimit] Sending payload:', payload);
     const response = await fetch(rateLimiterUrl, {
         method: 'POST',
@@ -107,7 +109,7 @@ async function renderRateLimitDisplay(container, rateLimiterUrl) {
     }
     display.textContent = 'RateLimit: ...';
     try {
-        const status = await getRateLimitStatus(rateLimiterUrl);
+        const status = await getRateLimitStatus(rateLimiterUrl, 'check');
         if (status && status.remaining && status.limits) {
             display.textContent = `RateLimit: ${status.remaining.perDay}/${status.limits.perDay} (day)`;
         } else {
@@ -116,6 +118,24 @@ async function renderRateLimitDisplay(container, rateLimiterUrl) {
     } catch (e) {
         display.textContent = 'RateLimit: error';
     }
+}
+
+/**
+ * Call the centralized rate-limiter worker from a module worker
+ * @param {Object} fingerprint - { deviceId, sessionId }
+ * @param {string} module - The module name (e.g., 'calorie', 'income')
+ * @param {string} rateLimiterUrl - The rate-limiter worker endpoint
+ * @returns {Promise<Object>} - The rate-limiter response JSON
+ */
+export async function consumeRateLimit(fingerprint, module, rateLimiterUrl) {
+    const payload = { fingerprint, module, action: 'consume' };
+    const response = await fetch(rateLimiterUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    if (!response.ok) throw new Error('Rate limit exceeded');
+    return await response.json();
 }
 
 // Export for use in other modules

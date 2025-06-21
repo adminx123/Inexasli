@@ -96,9 +96,10 @@ const Responses = {
  * @param {Object} fingerprint - User fingerprint data
  * @param {string} module - AI module name (income, calorie, etc.)
  * @param {Object} env - Cloudflare environment with KV binding
+ * @param {string} action - Action type ('consume' or 'check')
  * @returns {Object} Rate limiting result
  */
-async function validateRateLimit(fingerprint, module, env) {
+async function validateRateLimit(fingerprint, module, env, action = 'consume') {
   try {
     // Validate fingerprint structure
     if (!fingerprint || !fingerprint.deviceId || !fingerprint.sessionId) {
@@ -167,26 +168,25 @@ async function validateRateLimit(fingerprint, module, env) {
       };
     }
 
-    // All checks passed - increment counters
+    // All checks passed - increment counters only if action is 'consume'
     const promises = [];
-    
-    // Increment rate limit counters
-    for (const check of rateLimitChecks) {
-      const currentCount = parseInt(await env.RATE_LIMIT_KV.get(check.key)) || 0;
+    if (action === 'consume') {
+      // Increment rate limit counters
+      for (const check of rateLimitChecks) {
+        const currentCount = parseInt(await env.RATE_LIMIT_KV.get(check.key)) || 0;
+        promises.push(
+          env.RATE_LIMIT_KV.put(check.key, (currentCount + 1).toString(), {
+            expirationTtl: check.ttl
+          })
+        );
+      }
+      // Store request times
       promises.push(
-        env.RATE_LIMIT_KV.put(check.key, (currentCount + 1).toString(), {
-          expirationTtl: check.ttl
+        env.RATE_LIMIT_KV.put(timesKey, JSON.stringify(recentTimes), {
+          expirationTtl: 3600 // 1 hour
         })
       );
     }
-    
-    // Store request times
-    promises.push(
-      env.RATE_LIMIT_KV.put(timesKey, JSON.stringify(recentTimes), {
-        expirationTtl: 3600 // 1 hour
-      })
-    );
-    
     // Execute all KV operations
     await Promise.all(promises);
     
@@ -248,8 +248,11 @@ export default {
         return Responses.badRequest("Missing fingerprint or module", origin);
       }
       
+      // Use action field, default to 'consume'
+      const action = requestData.action || 'consume';
+      
       // Validate rate limit
-      const result = await validateRateLimit(requestData.fingerprint, requestData.module, env);
+      const result = await validateRateLimit(requestData.fingerprint, requestData.module, env, action);
       
       if (!result.allowed) {
         if (result.code === "RATE_LIMITED" || result.code === "SUSPICIOUS_ACTIVITY") {
