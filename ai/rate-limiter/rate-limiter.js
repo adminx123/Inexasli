@@ -54,19 +54,26 @@ const Headers = {
 // Response helpers
 const Responses = {
   success(data, origin) {
-    return new Response(JSON.stringify(data), {
+    // Flatten the data object so limits/remaining are at the top level
+    return new Response(JSON.stringify({
+      ...data,
+      // If data contains limits/remaining, spread them to the top
+      ...(data.limits ? { limits: data.limits } : {}),
+      ...(data.remaining ? { remaining: data.remaining } : {})
+    }), {
       status: 200,
       headers: Headers.cors(origin)
     });
   },
   
   rateLimited(message, resetTime, origin, rateLimitStatus) {
+    // Flatten rateLimitStatus to top level
     return new Response(JSON.stringify({
       allowed: false,
       message,
       resetTime,
       retryAfter: Math.ceil((resetTime - Date.now()) / 1000),
-      rateLimitStatus // always include latest status
+      ...(rateLimitStatus || {})
     }), {
       status: 429,
       headers: Headers.cors(origin)

@@ -147,6 +147,7 @@ export async function consumeRateLimit(fingerprint, module, rateLimiterUrl) {
  * @param {boolean} [showError=true] - Whether to show an error message if rate limited
  */
 export function handleRateLimitResponse(container, response, showError = true) {
+    console.log('[RateLimit][Debug] handleRateLimitResponse called with:', response);
     // Find the utility buttons container
     let utilityBar = container.querySelector('.utility-buttons-container');
     if (!utilityBar) {
@@ -163,12 +164,14 @@ export function handleRateLimitResponse(container, response, showError = true) {
     }
     // Prefer rateLimitStatus, fallback to response itself
     const status = response && (response.rateLimitStatus || response);
+    console.log('[RateLimit][Debug] status used for display/localStorage:', status);
     if (status && status.remaining && status.limits) {
         const dailyStatus = {
             remaining: { perDay: status.remaining.perDay },
             limits: { perDay: status.limits.perDay }
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
+        console.log('[RateLimit][Debug] localStorage.rateLimitStatus set to:', dailyStatus);
         display.textContent = `PhilosophyIQ Uses Left: ${dailyStatus.remaining.perDay} / ${dailyStatus.limits.perDay} today`;
     } else {
         display.textContent = 'PhilosophyIQ Uses Left: unavailable';
