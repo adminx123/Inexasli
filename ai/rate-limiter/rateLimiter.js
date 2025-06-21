@@ -100,23 +100,25 @@ async function getRateLimitStatus(rateLimiterUrl, action = 'check') {
  * @param {string} rateLimiterUrl - The endpoint for the rate limiter worker
  */
 async function renderRateLimitDisplay(container, rateLimiterUrl) {
-    let display = container.querySelector('.rate-limit-display');
+    let utilityBar = container.querySelector('.utility-buttons-container');
+    if (!utilityBar) utilityBar = container;
+    let display = utilityBar.querySelector('.rate-limit-display');
     if (!display) {
         display = document.createElement('div');
         display.className = 'rate-limit-display';
-        display.style = 'padding: 4px 0; font-size: 13px; color: #444; font-weight: 500;';
-        container.prepend(display);
+        display.style = 'margin-right: 12px; align-items: center; display: flex; font-size: 13px; color: #444; font-weight: 500; height: 28px;';
+        utilityBar.insertBefore(display, utilityBar.firstChild);
     }
-    display.textContent = 'RateLimit: ...';
+    display.textContent = 'PhilosophyIQ Uses Left: ...';
     try {
         const status = await getRateLimitStatus(rateLimiterUrl, 'check');
         if (status && status.remaining && status.limits) {
-            display.textContent = `RateLimit: ${status.remaining.perDay}/${status.limits.perDay} (day)`;
+            display.textContent = `PhilosophyIQ Uses Left: ${status.remaining.perDay} / ${status.limits.perDay} today`;
         } else {
-            display.textContent = 'RateLimit: unavailable';
+            display.textContent = 'PhilosophyIQ Uses Left: unavailable';
         }
     } catch (e) {
-        display.textContent = 'RateLimit: error';
+        display.textContent = 'PhilosophyIQ Uses Left: error';
     }
 }
 
@@ -145,17 +147,23 @@ export async function consumeRateLimit(fingerprint, module, rateLimiterUrl) {
  * @param {boolean} [showError=true] - Whether to show an error message if rate limited
  */
 export function handleRateLimitResponse(container, response, showError = true) {
-    let display = container.querySelector('.rate-limit-display');
+    // Find the utility buttons container
+    let utilityBar = container.querySelector('.utility-buttons-container');
+    if (!utilityBar) {
+        // fallback: use main container
+        utilityBar = container;
+    }
+    let display = utilityBar.querySelector('.rate-limit-display');
     if (!display) {
         display = document.createElement('div');
         display.className = 'rate-limit-display';
-        display.style = 'padding: 4px 0; font-size: 13px; color: #444; font-weight: 500;';
-        container.prepend(display);
+        display.style = 'margin-right: 12px; align-items: center; display: flex; font-size: 13px; color: #444; font-weight: 500; height: 28px;';
+        // Insert as first child so it's always left of the first button (Categories)
+        utilityBar.insertBefore(display, utilityBar.firstChild);
     }
     // Prefer rateLimitStatus, fallback to response itself
     const status = response && (response.rateLimitStatus || response);
     if (status && status.remaining && status.limits) {
-        // Only store and display daily values
         const dailyStatus = {
             remaining: { perDay: status.remaining.perDay },
             limits: { perDay: status.limits.perDay }
