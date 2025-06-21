@@ -1491,15 +1491,9 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         const dataContainer = document.querySelector('.data-container-in');
         if (dataContainer) {
-            // Use handleRateLimitResponse to update from localStorage first
+            // Only update from localStorage on load
             const status = JSON.parse(localStorage.getItem('rateLimitStatus') || 'null') || {};
             handleRateLimitResponse(dataContainer, status, false);
-            // Fetch latest from backend and update
-            getRateLimitStatus('https://rate-limiter.4hm7q4q75z.workers.dev', 'check').then(status => {
-                handleRateLimitResponse(dataContainer, status, false);
-            }).catch(() => {
-                // fallback: keep local value
-            });
         }
     }, 500);
 });
