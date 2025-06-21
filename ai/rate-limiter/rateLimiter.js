@@ -182,5 +182,28 @@ export function handleRateLimitResponse(container, response, showError = true) {
     }
 }
 
+// Add a global debug log for all backend responses
+window._originalFetch = window.fetch;
+window.fetch = async function(...args) {
+    const res = await window._originalFetch.apply(this, args);
+    // Only log for POSTs to the rate-limiter or module workers
+    if (args[0] && typeof args[0] === 'string' && /rate-limiter|philosophy|enneagram|event|fashion|quiz|research|social/.test(args[0])) {
+        try {
+            const clone = res.clone();
+            const contentType = clone.headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+                const json = await clone.json();
+                console.log('[RateLimit][Debug] Backend response for', args[0], ':', json);
+            } else {
+                const text = await clone.text();
+                console.log('[RateLimit][Debug] Backend response (text) for', args[0], ':', text);
+            }
+        } catch (e) {
+            console.log('[RateLimit][Debug] Could not parse backend response for', args[0]);
+        }
+    }
+    return res;
+};
+
 // Export for use in other modules
 export { getRateLimitStatus, renderRateLimitDisplay };
