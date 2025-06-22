@@ -49,6 +49,15 @@ function injectModalCSS() {
     box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
 }
 
+.modal-content.device-container {
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: #fff;
+    /* Ensure background is solid white for device-container modals */
+}
+
 .modal-content iframe {
     width: 100%;
     height: 100%;
@@ -155,6 +164,13 @@ function openModal(contentSrc) {
         }
     };
     document.addEventListener('click', activeClickOutsideHandler);
+
+    // Use device-container class for legal modals
+    if (contentSrc === '/legal.txt') {
+        modalContent.classList.add('device-container');
+    } else {
+        modalContent.classList.remove('device-container');
+    }
 }
 
 // Function to open the modal with auto height for generated prompts

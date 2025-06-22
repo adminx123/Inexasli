@@ -74,7 +74,11 @@
         </div>
       </div>
     `;
+    // Only block pointer events on the overlay, not the whole body
+    modal.style.pointerEvents = 'auto';
+    modal.style.zIndex = '1000000';
     document.body.appendChild(modal);
+    // Remove global pointer-events: none
     document.body.classList.add('terms-consent-modal-active');
     // Enable button only if both boxes checked
     const btn = modal.querySelector('#accept-both');
@@ -99,6 +103,11 @@
     modal.querySelector('#view-terms-link').onclick = function(e) {
       e.preventDefault();
       if (typeof window.openModal === 'function') {
+        // Use a higher z-index for the modal.js modal
+        setTimeout(() => {
+          const modalEls = document.querySelectorAll('.modal');
+          modalEls.forEach(m => m.style.zIndex = '1000001');
+        }, 10);
         window.openModal('/legal.txt');
       } else {
         window.open('/legal.txt', '_blank');
@@ -106,14 +115,15 @@
     };
   }
 
-  // CSS (matches original modal look)
+  // CSS (no global pointer-events)
   const style = document.createElement('style');
   style.textContent = `
     .terms-consent-overlay {
       position: fixed; top:0; left:0; width:100vw; height:100vh;
-      background: rgba(0,0,0,0.5); z-index: 999999;
+      background: rgba(0,0,0,0.5); z-index: 1000000;
       display: flex; align-items: center; justify-content: center;
       font-family: "Inter", sans-serif;
+      pointer-events: auto;
     }
     .terms-consent-modal {
       background-color: #f2f9f3;
@@ -126,8 +136,8 @@
       text-align: center;
       font-family: "Inter", sans-serif;
       position: relative;
-      z-index: 1000000;
-      pointer-events: auto !important;
+      z-index: 1000001;
+      pointer-events: auto;
     }
     .terms-consent-modal h2 {
       font-size: 1.2rem;
@@ -157,8 +167,6 @@
     .modal-buttons button { background: #2d5a3d; color: #fff; border: none; border-radius: 6px; padding: 10px 18px; font-size: 1em; cursor: pointer; font-weight: bold; }
     .modal-buttons button:disabled { background: #b2b2b2; cursor: not-allowed; }
     .modal-buttons button:hover:enabled { background: #4a7c59; }
-    body.terms-consent-modal-active * { pointer-events: none !important; }
-    body.terms-consent-modal-active .terms-consent-overlay, body.terms-consent-modal-active .terms-consent-overlay * { pointer-events: auto !important; }
   `;
   document.head.appendChild(style);
 
