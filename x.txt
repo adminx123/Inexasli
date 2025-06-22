@@ -27,3 +27,24 @@
 ---
 
 Use this as a concrete example of the changes to make for each module when migrating to the master worker architecture.
+
+/ To update other modules for the master worker pattern, make these changes:
+//
+// 1. Only export config and the full generatePrompt function (do not export response helpers or CORS logic).
+// 2. Use this scaffolding (from calorie.js and enneagram.js):
+//
+// export const MODEL = "grok-3-mini-beta";
+// export const MAX_TOKENS = 4000;
+// export const RESPONSE_KEY = "<module>IqResponse";
+// export const XAI_API_ENDPOINT = "https://api.x.ai/v1/chat/completions";
+//
+// export function generatePrompt(formData) {
+//   // ...full prompt logic here, do not truncate...
+//   return {
+//     systemPrompt: promptWithData,
+//     userMessage: "..."
+//   };
+// }
+//
+// 3. Do not include any processAIResponse or response helpers in the module file.
+// 4. The prompt logic should be as detailed as needed for the module, just like in calorie.js and enneagram.js.
