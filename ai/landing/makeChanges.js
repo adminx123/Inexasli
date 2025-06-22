@@ -3,7 +3,8 @@
 // Warns user that AI-generated tax and contribution calculations will be outdated, affecting other metrics.
 
 (function() {
-    const STORAGE_KEY = 'incomeIqInput1';
+    // Use the exact key as saved elsewhere in the app
+    const STORAGE_KEY = 'incomeIqinput1'; // Note lowercase 'i' in 'input1'
     let lastValue = localStorage.getItem(STORAGE_KEY);
     let modalId = 'income-change-warning-modal';
 
@@ -59,8 +60,15 @@
     // Polling for changes (since localStorage events only fire across tabs)
     setInterval(() => {
         const currentValue = localStorage.getItem(STORAGE_KEY);
+        const hasResponse = !!localStorage.getItem('incomeIqResponse');
         if (currentValue !== lastValue) {
-            showModal();
+            console.log('[makeChanges.js] Detected change in incomeIqinput1.');
+            if (hasResponse) {
+                console.log('[makeChanges.js] incomeIqResponse exists, showing modal.');
+                showModal();
+            } else {
+                console.log('[makeChanges.js] No incomeIqResponse found, not showing modal.');
+            }
             lastValue = currentValue;
         }
     }, 1000);
