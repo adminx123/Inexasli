@@ -48,3 +48,27 @@ Use this as a concrete example of the changes to make for each module when migra
 //
 // 3. Do not include any processAIResponse or response helpers in the module file.
 // 4. The prompt logic should be as detailed as needed for the module, just like in calorie.js and enneagram.js.
+//
+// To update a module's frontend to use the master worker, always do ALL of the following:
+//
+// 1. Change the API endpoint to the master worker:
+//    const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
+//
+// 2. Add the module name to the payload:
+//    const workerPayload = {
+//      module: '<module>',
+//      formData: formData,
+//      fingerprint: fingerprintData
+//    };
+//
+// 3. POST the payload as JSON to the master worker endpoint.
+//
+// 4. Save the response as <module>IqResponse in localStorage (handled by formPersistence.js or similar).
+//
+// 5. The output page should extract .data from the response if present, and display the main data fields at the root.
+//
+// 6. The module file (e.g., event.js) should only export config and the full generatePrompt function, with no response helpers.
+//
+// 7. Do not skip any of these steps for any module.
+//
+// This is the complete checklist for migrating any module to the master worker pattern. When you say "do what's in x.txt", ALL of these steps will be applied.

@@ -197,7 +197,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
             'event',
             async () => {
                 // Send data to worker
-                const apiUrl = 'https://event.4hm7q4q75z.workers.dev/';
+                const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
                 
                 console.log('[EventIQ] Sending eventIqInput to worker');
                 const response = await fetch(apiUrl, {
