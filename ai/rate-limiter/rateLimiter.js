@@ -174,6 +174,9 @@ export function handleRateLimitResponse(container, response, showError = true, m
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
         console.log('[RateLimit][Debug] localStorage.rateLimitStatus set to:', dailyStatus);
+        if (typeof updateRateLimitDisplayFromLocal === 'function') {
+            updateRateLimitDisplayFromLocal(utilityBar);
+        }
         display.textContent = `${moduleName} Uses Left: ${dailyStatus.remaining.perDay} / ${dailyStatus.limits.perDay} today`;
     } else {
         display.textContent = `${moduleName} Uses Left: unavailable`;
