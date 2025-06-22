@@ -2,44 +2,42 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Research Report</title>
+  <title>Research Output</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles/outputstyles.css">
   <style>
     body { background: #f7faf9; font-family: 'Inter', sans-serif; }
-    .research-report-container { max-width: 700px; margin: 32px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(44, 90, 61, 0.07); padding: 32px 24px; }
-    .section-title { color: #2d5a3d; font-size: 22px; font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid #e9ecef; padding-bottom: 6px; }
-    .section { margin-bottom: 32px; }
-    .key-findings-list { margin: 0 0 0 18px; padding: 0; }
-    .key-findings-list li { margin-bottom: 8px; font-size: 16px; }
-    .sources-list { margin: 0 0 0 18px; padding: 0; }
-    .sources-list li { margin-bottom: 8px; font-size: 15px; }
-    .chart-section { margin-bottom: 32px; }
+    .output-container { max-width: 700px; margin: 32px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(44, 90, 61, 0.07); padding: 32px 24px; }
+    .output-section { margin-bottom: 32px; }
+    .output-title { color: #2d5a3d; font-size: 22px; font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid #e9ecef; padding-bottom: 6px; }
+    .output-list { margin: 0 0 0 18px; padding: 0; }
+    .output-list li { margin-bottom: 8px; font-size: 16px; }
+    .output-chart { margin-bottom: 32px; }
     .chart-canvas { max-width: 100%; margin: 0 auto 24px auto; display: block; background: #f2f9f3; border-radius: 8px; padding: 16px; }
     .no-data { color: #a67c7c; font-style: italic; }
-    .copy-btn { float: right; margin-top: -36px; margin-right: 0; background: #e9ecef; border: none; border-radius: 4px; padding: 4px 10px; font-size: 13px; color: #2d5a3d; cursor: pointer; transition: background 0.2s; }
-    .copy-btn:hover { background: #d2e3d7; }
   </style>
 </head>
 <body>
-  <div class="research-report-container">
-    <div id="research-summary-section" class="section">
-      <h2 class="section-title">Executive Summary <button class="copy-btn" onclick="copySection('research-summary-section')">Copy</button></h2>
-      <div id="summary-content"></div>
-    </div>
-    <div id="key-findings-section" class="section">
-      <h2 class="section-title">Key Findings <button class="copy-btn" onclick="copySection('key-findings-section')">Copy</button></h2>
-      <ul id="key-findings-list" class="key-findings-list"></ul>
-    </div>
-    <div id="charts-section" class="section chart-section" style="display:none;">
-      <h2 class="section-title">Charts & Visualizations <button class="copy-btn" onclick="copySection('charts-section')">Copy</button></h2>
-      <div id="charts-content"></div>
-    </div>
-    <div id="sources-section" class="section">
-      <h2 class="section-title">Sources <button class="copy-btn" onclick="copySection('sources-section')">Copy</button></h2>
-      <ul id="sources-list" class="sources-list"></ul>
+  <div class="device-container research-container">
+    <div class="output-container">
+      <div id="summary-section" class="output-section">
+        <h2 class="output-title">Summary</h2>
+        <div id="summary-content"></div>
+      </div>
+      <div id="findings-section" class="output-section">
+        <h2 class="output-title">Key Findings</h2>
+        <ul id="findings-list" class="output-list"></ul>
+      </div>
+      <div id="charts-section" class="output-section output-chart" style="display:none;">
+        <h2 class="output-title">Charts</h2>
+        <div id="charts-content"></div>
+      </div>
+      <div id="sources-section" class="output-section">
+        <h2 class="output-title">Sources</h2>
+        <ul id="sources-list" class="output-list"></ul>
+      </div>
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
@@ -48,23 +46,18 @@
       try {
         const item = localStorage.getItem(key);
         return item ? JSON.parse(item) : null;
-      } catch (e) {
-        return null;
-      }
+      } catch (e) { return null; }
     }
-    function renderResearchReport() {
-      const data = (function() {
-        let d = getJSON('researchIqResponse');
-        if (d && d.message === 'Success' && d.data) d = d.data;
-        return d;
-      })();
+    function updateOutput() {
+      let d = getJSON('researchIqResponse');
+      if (d && d.message === 'Success' && d.data) d = d.data;
       // Summary
-      document.getElementById('summary-content').innerText = data?.summary || 'No summary available.';
+      document.getElementById('summary-content').innerText = d?.summary || 'No summary available.';
       // Key Findings
-      const findingsList = document.getElementById('key-findings-list');
+      const findingsList = document.getElementById('findings-list');
       findingsList.innerHTML = '';
-      if (Array.isArray(data?.keyFindings) && data.keyFindings.length) {
-        data.keyFindings.forEach(f => {
+      if (Array.isArray(d?.keyFindings) && d.keyFindings.length) {
+        d.keyFindings.forEach(f => {
           const li = document.createElement('li');
           li.innerText = f;
           findingsList.appendChild(li);
@@ -76,9 +69,9 @@
       const chartsSection = document.getElementById('charts-section');
       const chartsContent = document.getElementById('charts-content');
       chartsContent.innerHTML = '';
-      if (Array.isArray(data?.charts) && data.charts.length) {
+      if (Array.isArray(d?.charts) && d.charts.length) {
         chartsSection.style.display = '';
-        data.charts.forEach((chart, idx) => {
+        d.charts.forEach((chart, idx) => {
           const canvas = document.createElement('canvas');
           canvas.className = 'chart-canvas';
           canvas.id = 'chart-' + idx;
@@ -104,10 +97,9 @@
       // Sources
       const sourcesList = document.getElementById('sources-list');
       sourcesList.innerHTML = '';
-      if (Array.isArray(data?.sources) && data.sources.length) {
-        data.sources.forEach(src => {
+      if (Array.isArray(d?.sources) && d.sources.length) {
+        d.sources.forEach(src => {
           const li = document.createElement('li');
-          // Try to auto-link URLs
           if (/https?:\/\//.test(src)) {
             li.innerHTML = `<a href="${src}" target="_blank" rel="noopener">${src}</a>`;
           } else {
@@ -119,19 +111,9 @@
         sourcesList.innerHTML = '<li class="no-data">No sources available.</li>';
       }
     }
-    function copySection(sectionId) {
-      const el = document.getElementById(sectionId);
-      if (!el) return;
-      let text = '';
-      if (el.querySelector('ul')) {
-        text = Array.from(el.querySelectorAll('li')).map(li => li.innerText).join('\n');
-      } else {
-        text = el.innerText;
-      }
-      navigator.clipboard.writeText(text);
-    }
-    window.addEventListener('DOMContentLoaded', renderResearchReport);
-    window.addEventListener('storage', renderResearchReport);
+    updateOutput();
+    window.addEventListener('storage', updateOutput);
+    window.addEventListener('DOMContentLoaded', updateOutput);
   </script>
 </body>
 </html>

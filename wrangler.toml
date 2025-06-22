@@ -6,6 +6,9 @@
 # This ensures the correct script, bindings, and environment are used for each worker.
 # Always run these commands from the main project directory (where this wrangler.toml is located).
 #
+# To deploy the master worker, use:
+#   npx wrangler deploy --env master
+#
 # To deploy all main module workers with FACT_STORE KV binding, run:
 #   npx wrangler deploy --env event
 #   npx wrangler deploy --env enneagram
