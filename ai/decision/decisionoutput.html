@@ -123,7 +123,8 @@
   </style>
 </head>
 <body>
-  <div class="device-container">
+  <!-- Main content container with ID for accessibility -->
+  <div id="main-content" class="device-container decision-container">
     <div class="output-wrapper">
       <div id="output-span" class="api-output"></div>
     </div>
@@ -2206,9 +2207,7 @@
     }
   </style>
 
-  <!-- Main content container with ID for accessibility -->
-  <div id="main-content" class="device-container decision-container">
-    <script>
+  <script>
       // Initialize Enhanced UI System
       function initEnhancedUISystem() {
         // Wait a bit to ensure DOM and containers are ready
@@ -2266,3 +2265,6 @@
       };
       }
     </script>
+  </div>
+</body>
+</html>

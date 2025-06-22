@@ -652,8 +652,8 @@ function generatePDF(containerId, getContentCallback) {
     console.log('🎯 Starting PDF generation - checking for output content');
     const progressToast = window.enhancedUI.showToast('📄 Generating PDF...', 'info', 15000);
     
-    // Only target output content - do not capture input forms
-    const outputContainer = document.querySelector('.data-container-out');
+    // Target the main output container with device-container class
+    const outputContainer = document.querySelector('#main-content.device-container');
     if (!outputContainer) {
         window.enhancedUI.closeToast(progressToast);
         window.enhancedUI.showToast('⚠️ No analysis results to save. Please complete the form and generate your analysis first.', 'warning', 6000);
@@ -747,7 +747,7 @@ function captureOutputContainer(outputContainer, progressToast) {
             imageTimeout: 15000,
             onclone: function(clonedDoc) {
                 // Clean up the cloned document
-                const clonedContainer = clonedDoc.querySelector('.data-container-out');
+                const clonedContainer = clonedDoc.querySelector('#main-content.device-container');
                 if (clonedContainer) {
                     // Remove any unwanted elements
                     const elementsToRemove = clonedContainer.querySelectorAll(
@@ -997,7 +997,7 @@ function generateSimpleTextPDF() {
         const doc = new jsPDF();
         
         // Find output container content
-        const outputContainer = document.querySelector('.data-container-out');
+        const outputContainer = document.querySelector('#main-content.device-container');
         if (!outputContainer) {
             throw new Error('Output container not found');
         }
