@@ -95,6 +95,7 @@ Option 3: Build custom solution in-house"></textarea>
 
 // Import fingerprint utilities
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/rateLimiter.js';
+import { handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 (function() {
   console.log("Decision IQ script initializing");
@@ -107,64 +108,65 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
         alert('Please complete the form before generating a decision analysis.'); 
         return;
       }
-
       // Check rate limiting before proceeding
       if (isRateLimited('decision', 12, 60 * 60 * 1000)) { // 12 requests per hour (as per rate-limiter config)
         alert('You have exceeded the request limit for decision analysis. Please try again later.');
         return;
       }
-
       // Get fingerprint data for rate limiting
       const fingerprintData = getFingerprintForWorker();
-      
       // Create combined payload with both form data and fingerprint
       const workerPayload = {
         formData: formData,
         fingerprint: fingerprintData
       };
-
-      // Use enhanced loading with educational facts
-      const result = await window.enhancedLoading(
-        'generate-decision-btn',
-        'decision',
-        async () => {
-          const apiUrl = 'https://decision.4hm7q4q75z.workers.dev/';
-          const response = await fetch(apiUrl, { 
-            method: 'POST', 
-            headers: {'Content-Type':'application/json'}, 
-            body: JSON.stringify(workerPayload) // Use new payload structure
-          });
-          
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+      const dataContainer = document.querySelector('.device-container');
+      let backendResponse = null;
+      try {
+        backendResponse = await window.enhancedLoading(
+          'generate-decision-btn',
+          'decision',
+          async () => {
+            const apiUrl = 'https://decision.4hm7q4q75z.workers.dev/';
+            const response = await fetch(apiUrl, { 
+              method: 'POST', 
+              headers: {'Content-Type':'application/json'}, 
+              body: JSON.stringify(workerPayload)
+            });
+            let responseData;
+            try {
+              responseData = await response.json();
+            } catch (e) {
+              responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
+            }
+            // Always call handleRateLimitResponse with backend response
+            handleRateLimitResponse(dataContainer, responseData, !response.ok, 'DecisionIQ');
+            if (!response.ok) {
+              throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+            }
+            if (responseData.message !== 'Success') {
+              throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            return responseData;
           }
-          
-          const responseData = await response.json();
-          if (responseData.message !== 'Success') {
-            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+        );
+        incrementRequestCount('decision');
+        window.decisionFormPersistence.saveResponseData(backendResponse);
+        const event = new CustomEvent('api-response-received', {
+          detail: {
+            module: 'decisioniq',
+            type: 'worker-response',
+            timestamp: Date.now()
           }
-          
-          return responseData;
+        });
+        document.dispatchEvent(event);
+        console.log('[DecisionIQ] Dispatched api-response-received event');
+      } catch (error) {
+        if (backendResponse && dataContainer) {
+          handleRateLimitResponse(dataContainer, backendResponse, true, 'DecisionIQ');
         }
-      );
-
-      // Increment request count after successful response
-      incrementRequestCount('decision');
-
-      // Store the response using centralized system
-      window.decisionFormPersistence.saveResponseData(result);
-      
-      // Dispatch an event to notify dataout.js that a response was received
-      const event = new CustomEvent('api-response-received', {
-        detail: {
-          module: 'decisioniq',
-          type: 'worker-response',
-          timestamp: Date.now()
-        }
-      });
-      document.dispatchEvent(event);
-      console.log('[DecisionIQ] Dispatched api-response-received event');
-      
+        console.error('[DecisionIQ] Error generating decision analysis:', error);
+      }
     } catch (error) {
       console.error('[DecisionIQ] Error generating decision analysis:', error);
       alert('An error occurred while generating your decision analysis. Please try again later.');

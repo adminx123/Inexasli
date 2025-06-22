@@ -1,25 +1,15 @@
-Operation x: DRY Global Rate Limiter Integration for Calorie Module
+Operation X: DRY Global Rate Limiter Integration Checklist (For Any Module)
 
-1. Refactor `ai/calorie/calorieiq.html` frontend to:
-   - Remove any legacy or module-specific rate limit logic.
-   - Use only the centralized `handleRateLimitResponse` from `rateLimiter.js`, passing the module name ('calorie').
-   - Update the rate limit display and localStorage only after a backend response, using the returned rate limit info.
-   - Ensure all error and display logic is handled by the centralized function.
-
-2. Refactor `ai/calorie/calorie.js` worker to:
-   - Always call the global rate-limiter worker with `{ fingerprint, module: 'calorie', action: 'consume' }` before processing a request.
-   - Always include `limits` and `remaining` at the top level of every response (success and 429), matching the pattern used in `philosophy.js`.
-   - Remove any legacy or module-specific rate limit logic.
-
-3. Confirm:
-   - No legacy or redundant rate limit code remains in the Calorie module.
-   - The frontend always displays the true number of uses left, as returned by the backend.
-   - All rate limit logic is centralized in `rateLimiter.js` and the backend worker.
-
-4. After Calorie, repeat this process for all other modules, alphabetically, one at a time, confirming each before proceeding.
-
-5. Document this plan and progress in `x.txt`.
-
-6. PATCH: Ensure backend responses for all modules (including Calorie) return `limits` and `remaining` at the TOP LEVEL of the response object, not inside `data`. This is required for the frontend's `handleRateLimitResponse` to update localStorage and the display correctly. Follow the exact pattern used in Philosophy.
-
-7. TEST: After every backend change, verify that generating from the module updates the rate limit display and `rateLimitStatus` in localStorage. If it does not, check the backend response structure and patch as needed.
+1. FRONTEND: Remove all legacy/module-specific rate limit logic.
+2. FRONTEND: Import and use only centralized `handleRateLimitResponse` from `rateLimiter.js`, passing the module name.
+3. FRONTEND: Update rate limit display and localStorage only after a backend response, using returned `limits`/`remaining`.
+4. FRONTEND: Ensure all error and display logic is handled by the centralized function.
+5. BACKEND: Always call the global rate-limiter worker with `{ fingerprint, module: <moduleName>, action: 'consume' }` before processing a request.
+6. BACKEND: Always include `limits` and `remaining` at the TOP LEVEL of every response (success and 429), never inside `data`.
+7. BACKEND: Remove any legacy/module-specific rate limit logic.
+8. CONFIRM: No legacy/redundant rate limit code remains in the module (frontend or backend).
+9. CONFIRM: The frontend always displays the true number of uses left, as returned by the backend.
+10. CONFIRM: All rate limit logic is centralized in `rateLimiter.js` and the backend worker.
+11. TEST: After every backend change, verify that generating from the module updates the rate limit display and `rateLimitStatus` in localStorage. If it does not, check the backend response structure and patch as needed.
+12. PATCH: If `limits`/`remaining` are not at the top level, fix the backend to match this checklist.
+13. FINAL TEST: Confirm the checklist is fully satisfied before moving to the next module.
