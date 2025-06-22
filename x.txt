@@ -19,3 +19,7 @@ Operation x: DRY Global Rate Limiter Integration for Calorie Module
 4. After Calorie, repeat this process for all other modules, alphabetically, one at a time, confirming each before proceeding.
 
 5. Document this plan and progress in `x.txt`.
+
+6. PATCH: Ensure backend responses for all modules (including Calorie) return `limits` and `remaining` at the TOP LEVEL of the response object, not inside `data`. This is required for the frontend's `handleRateLimitResponse` to update localStorage and the display correctly. Follow the exact pattern used in Philosophy.
+
+7. TEST: After every backend change, verify that generating from the module updates the rate limit display and `rateLimitStatus` in localStorage. If it does not, check the backend response structure and patch as needed.
