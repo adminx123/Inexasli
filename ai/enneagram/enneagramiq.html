@@ -85,10 +85,11 @@ I prefer working alone on complex problems"></textarea>
                 <div class="grid-item" data-value="Growth-8">At my best, I'm generous and open</div>
                 <div class="grid-item" data-value="Growth-9">At my best, I'm engaged and assertive</div>
             </div>
+
+                        <button class="generate-btn" id="generate-enneagram-btn">Generate EnneagramIQ™ Analysis</button>
+
         </div>
-        <div class="row1">
-            <button class="generate-btn" id="generate-enneagram-btn">Generate EnneagramIQ™ Analysis</button>
-        </div>
+        
   
 
 
@@ -105,6 +106,7 @@ I prefer working alone on complex problems"></textarea>
 
 // Import fingerprint utilities
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/rateLimiter.js';
+import { handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 (function() {
   console.log("Enneagram IQ script initializing");
@@ -117,64 +119,65 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
         alert('Please complete the form before generating an enneagram analysis.'); 
         return;
       }
-
       // Check rate limiting before proceeding
       if (isRateLimited('enneagram', 5, 60 * 60 * 1000)) { // 5 requests per hour (as per rate-limiter config)
         alert('You have exceeded the request limit for enneagram analysis. Please try again later.');
         return;
       }
-
       // Get fingerprint data for rate limiting
       const fingerprintData = getFingerprintForWorker();
-      
       // Create combined payload with both form data and fingerprint
       const workerPayload = {
         formData: formData,
         fingerprint: fingerprintData
       };
-
-      // Use enhanced loading with educational facts
-      const result = await window.enhancedLoading(
-        'generate-enneagram-btn',
-        'enneagram',
-        async () => {
-          const apiUrl = 'https://enneagram.4hm7q4q75z.workers.dev/';
-          const response = await fetch(apiUrl, { 
-            method: 'POST', 
-            headers: {'Content-Type':'application/json'}, 
-            body: JSON.stringify(workerPayload) // Use new payload structure
-          });
-          
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+      const dataContainer = document.querySelector('.device-container');
+      let backendResponse = null;
+      try {
+        backendResponse = await window.enhancedLoading(
+          'generate-enneagram-btn',
+          'enneagram',
+          async () => {
+            const apiUrl = 'https://enneagram.4hm7q4q75z.workers.dev/';
+            const response = await fetch(apiUrl, { 
+              method: 'POST', 
+              headers: {'Content-Type':'application/json'}, 
+              body: JSON.stringify(workerPayload)
+            });
+            let responseData;
+            try {
+              responseData = await response.json();
+            } catch (e) {
+              responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
+            }
+            // Always call handleRateLimitResponse with backend response
+            handleRateLimitResponse(dataContainer, responseData, !response.ok, 'EnneagramIQ');
+            if (!response.ok) {
+              throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+            }
+            if (responseData.message !== 'Success') {
+              throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            return responseData;
           }
-          
-          const responseData = await response.json();
-          if (responseData.message !== 'Success') {
-            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+        );
+        incrementRequestCount('enneagram');
+        window.enneagramFormPersistence.saveResponseData(backendResponse);
+        const event = new CustomEvent('api-response-received', {
+          detail: {
+            module: 'enneagramiq',
+            type: 'worker-response',
+            timestamp: Date.now()
           }
-          
-          return responseData;
+        });
+        document.dispatchEvent(event);
+        console.log('[EnneagramIQ] Dispatched api-response-received event');
+      } catch (error) {
+        if (backendResponse && dataContainer) {
+          handleRateLimitResponse(dataContainer, backendResponse, true, 'EnneagramIQ');
         }
-      );
-
-      // Increment request count after successful response
-      incrementRequestCount('enneagram');
-
-      // Store the response using centralized system
-      window.enneagramFormPersistence.saveResponseData(result);
-      
-      // Dispatch an event to notify dataout.js that a response was received
-      const event = new CustomEvent('api-response-received', {
-        detail: {
-          module: 'enneagramiq',
-          type: 'worker-response',
-          timestamp: Date.now()
-        }
-      });
-      document.dispatchEvent(event);
-      console.log('[EnneagramIQ] Dispatched api-response-received event');
-      
+        console.error('[EnneagramIQ] Error generating enneagram analysis:', error);
+      }
     } catch (error) {
       console.error('[EnneagramIQ] Error generating enneagram analysis:', error);
       alert('An error occurred while generating your enneagram analysis. Please try again later.');
