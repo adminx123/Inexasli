@@ -294,9 +294,8 @@
               }
             }
             
-            // Handle nested response format if present
+            // Handle the worker response format - check if it's nested in a response object
             if (data && data.message === 'Success' && data.data) {
-              console.log('Found nested data structure, using the data property');
               data = data.data;
             }
             

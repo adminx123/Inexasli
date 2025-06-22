@@ -99,15 +99,18 @@ Accepting things I cannot change"></textarea>
                 'philosophy',
                 async () => {
                     // Send data to worker
-                    const apiUrl = 'https://philosophy.4hm7q4q75z.workers.dev/';
-                    
+                    const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
                     console.log('[PhilosophyIQ] Sending philosophyIqInput to worker');
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(workerPayload)
+                        body: JSON.stringify({
+                            module: 'philosophy',
+                            formData: formData,
+                            fingerprint: getFingerprintForWorker()
+                        })
                     });
                     let responseData;
                     try {
