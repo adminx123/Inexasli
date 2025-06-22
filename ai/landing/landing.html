@@ -82,8 +82,8 @@
 
      <script src="/utility/modal.js"></script>
      <script src="/ai/fact-generator/educational-overlay.js"></script>
-       <script src="/utility/dataConsentManager.js"></script>
-     <script src="/utility/termsManager.js"></script>
+       <!-- <script src="/utility/dataConsentManager.js"></script> -->
+    <!-- <script src="/utility/termsManager.js"></script> -->
     
     <script src="/ai/landing/makeChanges.js"></script>
    
@@ -127,6 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
      <script src="/index.js"></script>
      <script src="https://js.stripe.com/v3/" async></script>
- </body>
- 
- </html>
+     
+     <!-- Move the unified modal script to the very end of body for reliable DOM access -->
+    <script src="/utility/termsConsentManager.js"></script>
+    </body>
+    </html>
