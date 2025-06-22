@@ -55,18 +55,21 @@
       <div class="terms-consent-modal">
         <h2>Terms of Service & Data Consent</h2>
         <div class="terms-section">
-          <p style="margin-bottom:8px;font-size:13px;text-align:left;">You must accept our <a href="#" id="view-terms-link">Terms of Service</a> (last updated: ${LAST_UPDATED_DATE}) to use this site.</p>
-          <label style="display:block;text-align:left;margin:10px 0 0 0;font-size:13px;">
+          <div class="modal-align" style="margin-bottom:0;">
+            <span style="margin-bottom:2px;">You must accept our <a href="#" id="view-terms-link" style="display:inline;">Terms of Service</a> to use this site.</span><br>
+            <span style="font-size:12px;color:#666;display:block;margin-top:2px;">(last updated: ${LAST_UPDATED_DATE})</span>
+          </div>
+          <label class="modal-align modal-label">
             <input type="checkbox" id="accept-terms"> I have read and accept the Terms of Service
           </label>
         </div>
         <div class="consent-section">
-          <p style="margin:10px 0 0 0;text-align:left;font-size:13px;">You must also consent to the storage and processing of your data as described in our terms.</p>
-          <label style="display:block;text-align:left;margin:10px 0 0 0;font-size:13px;">
+          <p class="modal-align">You must also consent to the storage and processing of your data as described in our terms.</p>
+          <label class="modal-align modal-label">
             <input type="checkbox" id="accept-consent"> I consent to data storage and processing
           </label>
         </div>
-        <div class="modal-buttons">
+        <div class="modal-buttons modal-align">
           <button id="accept-both" disabled>Accept & Continue</button>
         </div>
       </div>
