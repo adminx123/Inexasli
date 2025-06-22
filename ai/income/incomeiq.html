@@ -1047,6 +1047,12 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
             });
         }
         
+        // Listen for regenerateIncomeCalculations event from modal
+        window.addEventListener('regenerateIncomeCalculations', function() {
+            console.log('[IncomeIQ] Received regenerateIncomeCalculations event, triggering regeneration...');
+            handleGenerateIncomeIq();
+        });
+
         // Export the FormPersistence instance for external access
         window.incomeFormPersistence = incomeFormPersistence;
         console.log("[IncomeIQ] FormPersistence instance exported to window");
