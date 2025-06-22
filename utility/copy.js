@@ -174,6 +174,7 @@ function openShareModal(containerId, getContentCallback) {
     window.enhancedUI.ensureFontAwesome(() => {
         modalContent.innerHTML = `
             <div style="display: flex; flex-direction: column; gap: 12px;">
+                <!--
                 <button class="share-action-btn" data-action="share" style="
                     padding: 14px 20px;
                     background-color: #f2f9f3;
@@ -192,6 +193,7 @@ function openShareModal(containerId, getContentCallback) {
                 ">
                     <i class="fas fa-share-alt" style="margin-right: 8px; font-size: 14px;"></i>Share as PDF
                 </button>
+                -->
                 <button class="share-action-btn" data-action="print" style="
                     padding: 14px 20px;
                     background-color: #f2f9f3;
