@@ -2,760 +2,136 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Research Analysis Output</title>
+  <title>Research Report</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles/outputstyles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-   
-    .api-output {
-      background-color: #ffffff;
-      padding: 0;
-      border-radius: 5px;
-      border: 1px solid #4a7c59;
-    }
-    
-    /* Research content styling - professional muted design */
-    .research-visualization {
-      padding: 20px;
-      line-height: 1.6;
-      font-family: "Inter", sans-serif;
-      color: #333;
-    }
-    
-    .research-visualization h2 {
-      color: #2d5a3d;
-      font-size: 20px;
-      font-weight: 600;
-      font-family: "Geist", sans-serif;
-      margin: 0 0 20px 0;
-      text-align: center;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #e9ecef;
-    }
-    
-    .research-visualization h3 {
-      color: #2d5a3d;
-      font-size: 18px;
-      font-weight: 600;
-      font-family: "Geist", sans-serif;
-      margin: 20px 0 12px 0;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #f2f9f3;
-    }
-    
-    .research-visualization h4 {
-      color: #2d5a3d;
-      font-size: 16px;
-      font-weight: 600;
-      font-family: "Geist", sans-serif;
-      margin: 16px 0 8px 0;
-    }
-    
-    .research-visualization h5 {
-      color: #2d5a3d;
-      font-size: 14px;
-      font-weight: 600;
-      font-family: "Geist", sans-serif;
-      margin: 12px 0 6px 0;
-    }
-    
-    /* Simple section styling - matching site's card style */
-    .research-section {
-      background: #f2f9f3;
-      padding: 15px;
-      margin: 12px 0;
-      border-radius: 5px;
-      border: 1px solid #4a7c59;
-    }
-    
-    /* Card styling matching CalorieIQ's professional look */
-    .source-card, .theme-card, .hypothesis-card, .method-card, 
-    .phase-card, .gap-card, .finding-card, .chart-card, 
-    .kpi-card, .section-card, .checklist-card {
-      background: #ffffff;
-      border: 1px solid #7c7c7c;
-      border-radius: 5px;
-      padding: 12px;
-      margin: 8px 0;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-    
-    .source-card:hover, .theme-card:hover, .hypothesis-card:hover, 
-    .method-card:hover, .phase-card:hover, .gap-card:hover, 
-    .finding-card:hover, .chart-card:hover, .kpi-card:hover, 
-    .section-card:hover, .checklist-card:hover {
-      background-color: #f9f9f9;
-      border-color: #4a7c59;
-    }
-    
-    /* Clean text styling for sources and themes */
-    .source-text, .theme-text {
-      margin: 16px 0;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #e9ecef;
-    }
-    
-    .source-text:last-child, .theme-text:last-child {
-      border-bottom: none;
-    }
-    
-    .gap-text {
-      color: #a67c7c;
-      font-weight: 500;
-      margin: 8px 0;
-      padding-left: 16px;
-    }
-    
-    /* Meta info styling */
-    .source-meta, .theme-support {
-      color: #666;
-      font-size: 14px;
-      margin: 6px 0;
-    }
-    
-    /* Badge styling - professional muted colors */
-    .relevance-badge, .impact-badge, .priority-badge, .significance-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      font-size: 12px;
-      font-weight: 500;
-      border-radius: 3px;
-      margin: 4px 4px 4px 0;
-      font-family: "Inter", sans-serif;
-    }
-    
-    /* Muted professional colors */
-    .relevance-high, .impact-high, .priority-high, .significance-high { 
-      background: #7a9b8a; color: white; 
-    }
-    .relevance-medium, .impact-medium, .priority-medium, .significance-medium { 
-      background: #b8956d; color: white; 
-    }
-    .relevance-low, .impact-low, .priority-low, .significance-low { 
-      background: #a67c7c; color: white; 
-    }
-    
-    /* Simple list items */
-    .gap-item {
-      background: #ffffff;
-      padding: 12px;
-      margin: 8px 0;
-      border: 1px solid #7c7c7c;
-      border-left: 4px solid #a67c7c;
-      border-radius: 3px;
-      color: #333;
-    }
-    
-    /* Synthesis content layout */
-    .synthesis-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin: 12px 0;
-    }
-    
-    .findings-card {
-      background: #ffffff;
-      border: 1px solid #7c7c7c;
-      border-radius: 5px;
-      padding: 12px;
-      border-left: 4px solid #7a9b8a;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-    
-    .findings-text {
-      margin: 12px 0;
-    }
-    
-    .findings-text h4 {
-      color: #2d5a3d;
-      border-bottom: 1px solid #e9ecef;
-      padding-bottom: 6px;
-      margin-bottom: 10px;
-    }
-    
-    /* Simple table styling */
-    .comparison-table table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 12px 0;
-      background: #ffffff;
-      border: 1px solid #7c7c7c;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-    
-    .comparison-table th, .comparison-table td {
-      padding: 10px 12px;
-      text-align: left;
-      border-bottom: 1px solid #e9ecef;
-      font-size: 14px;
-    }
-    
-    .comparison-table th {
-      background-color: #f2f9f3;
-      font-weight: 600;
-      color: #2d5a3d;
-      font-family: "Geist", sans-serif;
-    }
-    
-    .comparison-table td {
-      color: #333;
-    }
-    
-    /* Professional paragraph styling */
-    .research-visualization p {
-      color: #333;
-      font-size: 14px;
-      line-height: 1.6;
-      margin: 8px 0;
-    }
-    
-    /* Strong text styling */
-    .research-visualization strong {
-      color: #2d5a3d;
-      font-weight: 600;
-    }
-    
-    /* Responsive design */
-    @media (max-width: 768px) {
-      .research-visualization {
-        padding: 15px;
-      }
-      
-      .synthesis-content {
-        grid-template-columns: 1fr;
-      }
-      
-      .research-visualization h2 {
-        font-size: 18px;
-      }
-      
-      .research-visualization h3 {
-        font-size: 16px;
-      }
-      
-      .source-card, .theme-card, .hypothesis-card, .method-card, 
-      .phase-card, .gap-card, .finding-card, .chart-card, 
-      .kpi-card, .section-card, .checklist-card {
-        padding: 10px;
-      }
-    }
+    body { background: #f7faf9; font-family: 'Inter', sans-serif; }
+    .research-report-container { max-width: 700px; margin: 32px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(44, 90, 61, 0.07); padding: 32px 24px; }
+    .section-title { color: #2d5a3d; font-size: 22px; font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid #e9ecef; padding-bottom: 6px; }
+    .section { margin-bottom: 32px; }
+    .key-findings-list { margin: 0 0 0 18px; padding: 0; }
+    .key-findings-list li { margin-bottom: 8px; font-size: 16px; }
+    .sources-list { margin: 0 0 0 18px; padding: 0; }
+    .sources-list li { margin-bottom: 8px; font-size: 15px; }
+    .chart-section { margin-bottom: 32px; }
+    .chart-canvas { max-width: 100%; margin: 0 auto 24px auto; display: block; background: #f2f9f3; border-radius: 8px; padding: 16px; }
+    .no-data { color: #a67c7c; font-style: italic; }
+    .copy-btn { float: right; margin-top: -36px; margin-right: 0; background: #e9ecef; border: none; border-radius: 4px; padding: 4px 10px; font-size: 13px; color: #2d5a3d; cursor: pointer; transition: background 0.2s; }
+    .copy-btn:hover { background: #d2e3d7; }
   </style>
 </head>
 <body>
-  <div class="device-container">
-    <div class="output-wrapper">
-      <div id="output-span" class="api-output"></div>
+  <div class="research-report-container">
+    <div id="research-summary-section" class="section">
+      <h2 class="section-title">Executive Summary <button class="copy-btn" onclick="copySection('research-summary-section')">Copy</button></h2>
+      <div id="summary-content"></div>
+    </div>
+    <div id="key-findings-section" class="section">
+      <h2 class="section-title">Key Findings <button class="copy-btn" onclick="copySection('key-findings-section')">Copy</button></h2>
+      <ul id="key-findings-list" class="key-findings-list"></ul>
+    </div>
+    <div id="charts-section" class="section chart-section" style="display:none;">
+      <h2 class="section-title">Charts & Visualizations <button class="copy-btn" onclick="copySection('charts-section')">Copy</button></h2>
+      <div id="charts-content"></div>
+    </div>
+    <div id="sources-section" class="section">
+      <h2 class="section-title">Sources <button class="copy-btn" onclick="copySection('sources-section')">Copy</button></h2>
+      <ul id="sources-list" class="sources-list"></ul>
     </div>
   </div>
-
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-  <script src="../../utility/copy.js"></script>
-  
   <script>
-    // Initialize Mermaid
-    if (typeof mermaid !== 'undefined') {
+    function getJSON(key) {
       try {
-        mermaid.initialize({ startOnLoad: true, theme: 'default' });
-      } catch (error) {
-        console.warn('Failed to initialize mermaid:', error);
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : null;
+      } catch (e) {
+        return null;
       }
     }
-
-    // Run immediately without waiting for DOMContentLoaded
-    (function() {
-      console.log('Research API Output script running');
-      
-      const getJSON = window.getJSON || function(key) {
-        try {
-          const item = localStorage.getItem(key);
-          return item ? JSON.parse(item) : null;
-        } catch (e) {
-          console.error('Error parsing JSON:', e);
-          return null;
-        }
-      };
-
-      // Research methodology visualization creators
-      const researchVisualizers = {
-        'literature-review': createLiteratureReviewViz,
-        'empirical-research': createEmpiricalResearchViz,
-        'analytical-framework': createAnalyticalFrameworkViz,
-        'data-visualization': createDataVisualizationViz,
-        'academic-report': createAcademicReportViz
-      };
-
-      function createLiteratureReviewViz(data, container) {
-        const html = `
-          <div class="research-visualization literature-review">
-            <h2>${data.researchTitle || 'Literature Review'}</h2>
-            
-            <div class="research-section">
-              <h3>Executive Summary</h3>
-              <p>${data.executiveSummary || 'Summary not available'}</p>
-            </div>
-            
-            ${data.searchStrategy ? `
-            <div class="research-section">
-              <h3>Search Strategy</h3>
-              <p><strong>Databases:</strong> ${data.searchStrategy.databases?.join(', ') || 'Not specified'}</p>
-              <p><strong>Keywords:</strong> ${data.searchStrategy.keywords?.join(', ') || 'Not specified'}</p>
-              <p><strong>Timeframe:</strong> ${data.searchStrategy.timeframe || 'Not specified'}</p>
-            </div>
-            ` : ''}
-            
-            ${data.literatureSources ? `
-            <div class="research-section">
-              <h3>Literature Sources (${data.literatureSources.length})</h3>
-              ${data.literatureSources.map(source => `
-                <div class="source-text">
-                  <h4>${source.title}</h4>
-                  <p class="source-meta">${source.authors} (${source.year}) • <span class="relevance-badge relevance-${source.relevance?.toLowerCase()}">${source.relevance} Relevance</span></p>
-                  <p>${source.keyFindings}</p>
-                </div>
-              `).join('')}
-            </div>
-            ` : ''}
-            
-            ${data.thematicAnalysis ? `
-            <div class="research-section">
-              <h3>Thematic Analysis</h3>
-              ${data.thematicAnalysis.majorThemes ? `
-                <h4>Major Themes</h4>
-                ${data.thematicAnalysis.majorThemes.map(theme => `
-                  <div class="theme-text">
-                    <h5>${theme.theme}</h5>
-                    <p>${theme.description}</p>
-                    <p class="theme-support">${theme.supportingStudies} supporting studies</p>
-                  </div>
-                `).join('')}
-              ` : ''}
-              
-              ${data.thematicAnalysis.researchGaps ? `
-                <h4>Research Gaps</h4>
-                ${data.thematicAnalysis.researchGaps.map(gap => `<p class="gap-text">⚠ ${gap}</p>`).join('')}
-              ` : ''}
-            </div>
-            ` : ''}
-            
-            ${data.synthesis ? `
-            <div class="research-section">
-              <h3>Synthesis</h3>
-              <div class="synthesis-content">
-                <div class="findings-text">
-                  <h4>Key Findings</h4>
-                  ${data.synthesis.keyFindings?.map(finding => `<p>✓ ${finding}</p>`).join('') || '<p>No findings available</p>'}
-                </div>
-                <div class="findings-text">
-                  <h4>Implications</h4>
-                  ${data.synthesis.implications?.map(implication => `<p>→ ${implication}</p>`).join('') || '<p>No implications available</p>'}
-                </div>
-              </div>
-            </div>
-            ` : ''}
-          </div>
-        `;
-        container.innerHTML = html;
-      }
-
-      function createEmpiricalResearchViz(data, container) {
-        const html = `
-          <div class="research-visualization empirical-research">
-            <h2>${data.researchTitle || 'Empirical Research'}</h2>
-            
-            <div class="research-section">
-              <h3>Abstract</h3>
-              <p>${data.abstract || 'Abstract not available'}</p>
-            </div>
-            
-            ${data.researchDesign ? `
-            <div class="research-section">
-              <h3>Research Design</h3>
-              <p><strong>Approach:</strong> ${data.researchDesign.approach}</p>
-              <p><strong>Design:</strong> ${data.researchDesign.design}</p>
-              <p><strong>Timeline:</strong> ${data.researchDesign.timeline}</p>
-              <p><strong>Setting:</strong> ${data.researchDesign.setting}</p>
-            </div>
-            ` : ''}
-            
-            ${data.hypotheses ? `
-            <div class="research-section">
-              <h3>Hypotheses</h3>
-              ${data.hypotheses.map(hyp => `
-                <div class="hypothesis-card">
-                  <h4>Hypothesis</h4>
-                  <p>${hyp.hypothesis}</p>
-                  <p><strong>Rationale:</strong> ${hyp.rationale}</p>
-                </div>
-              `).join('')}
-            </div>
-            ` : ''}
-            
-            ${data.methodology ? `
-            <div class="research-section">
-              <h3>Methodology</h3>
-              ${data.methodology.participants ? `
-                <div class="method-card">
-                  <h4>Participants</h4>
-                  <p><strong>Target Population:</strong> ${data.methodology.participants.targetPopulation}</p>
-                  <p><strong>Sample Size:</strong> ${data.methodology.participants.sampleSize}</p>
-                  <p><strong>Sampling Method:</strong> ${data.methodology.participants.samplingMethod}</p>
-                </div>
-              ` : ''}
-              
-              ${data.methodology.variables ? `
-                <div class="method-card">
-                  <h4>Variables</h4>
-                  <p><strong>Dependent:</strong> ${data.methodology.variables.dependent?.join(', ')}</p>
-                  <p><strong>Independent:</strong> ${data.methodology.variables.independent?.join(', ')}</p>
-                  <p><strong>Control:</strong> ${data.methodology.variables.control?.join(', ')}</p>
-                </div>
-              ` : ''}
-            </div>
-            ` : ''}
-            
-            ${data.timeline ? `
-            <div class="research-section">
-              <h3>Timeline</h3>
-              ${data.timeline.phases?.map(phase => `
-                <div class="phase-card">
-                  <h4>${phase.phase}</h4>
-                  <p><strong>Duration:</strong> ${phase.duration}</p>
-                  <p><strong>Activities:</strong> ${phase.activities?.join(', ')}</p>
-                </div>
-              `).join('') || '<p>No timeline phases available</p>'}
-            </div>
-            ` : ''}
-          </div>
-        `;
-        container.innerHTML = html;
-      }      function createAnalyticalFrameworkViz(data, container) {
-        const html = `
-          <div class="research-visualization analytical-framework">
-            <h2>${data.researchTitle || 'Analytical Framework'}</h2>
-            
-            <div class="research-section">
-              <h3>Framework Overview</h3>
-              <p>${data.frameworkOverview || 'Overview not available'}</p>
-            </div>
-            
-            ${data.comparisonMatrix ? `
-            <div class="research-section">
-              <h3>Comparison Matrix</h3>
-              <div class="comparison-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Entity</th>
-                      ${data.comparisonMatrix.criteria?.map(criterion => `<th>${criterion.criterion}</th>`).join('') || '<th>No criteria</th>'}
-                      <th>Overall Rating</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${data.comparisonMatrix.assessmentResults?.map(result => `
-                      <tr>
-                        <td><strong>${result.entity}</strong></td>
-                        ${result.scores?.map(score => `<td>${score.score}</td>`).join('') || '<td>No scores</td>'}
-                        <td><strong>${result.overallRating}</strong></td>
-                      </tr>
-                    `).join('') || '<tr><td colspan="100%">No assessment results available</td></tr>'}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            ` : ''}
-            
-            ${data.gapAnalysis ? `
-            <div class="research-section">
-              <h3>Gap Analysis</h3>
-              <div class="gap-card">
-                <h4>Current State</h4>
-                <p><strong>Strengths:</strong> ${data.gapAnalysis.currentState?.strengths?.join(', ')}</p>
-                <p><strong>Weaknesses:</strong> ${data.gapAnalysis.currentState?.weaknesses?.join(', ')}</p>
-              </div>
-              <div class="gap-card">
-                <h4>Desired State</h4>
-                <p><strong>Goals:</strong> ${data.gapAnalysis.desiredState?.goals?.join(', ')}</p>
-                <p><strong>Requirements:</strong> ${data.gapAnalysis.desiredState?.requirements?.join(', ')}</p>
-              </div>
-              ${data.gapAnalysis.identifiedGaps ? `
-                <h4>Identified Gaps</h4>
-                ${data.gapAnalysis.identifiedGaps.map(gap => `
-                  <div class="gap-item">
-                    <p>${gap.gap}</p>
-                    <span class="impact-badge impact-${gap.impact?.toLowerCase()}">${gap.impact} Impact</span>
-                    <span class="priority-badge priority-${gap.priority?.toLowerCase()}">${gap.priority} Priority</span>
-                  </div>
-                `).join('')}
-              ` : ''}
-            </div>
-            ` : ''}
-            
-            ${data.keyFindings ? `
-            <div class="research-section">
-              <h3>Key Findings</h3>
-              ${data.keyFindings.map(finding => `
-                <div class="finding-card">
-                  <p>${finding.finding}</p>
-                  <span class="significance-badge significance-${finding.significance?.toLowerCase()}">${finding.significance} Significance</span>
-                </div>
-              `).join('')}
-            </div>
-            ` : ''}
-          </div>
-        `;
-        container.innerHTML = html;
-      }
-
-      function createDataVisualizationViz(data, container) {
-        const html = `
-          <div class="research-visualization data-visualization">
-            <h2>${data.researchTitle || 'Data Visualization Strategy'}</h2>
-            
-            <div class="research-section">
-              <h3>Visualization Strategy</h3>
-              <p>${data.visualizationStrategy || 'Strategy not available'}</p>
-            </div>
-            
-            ${data.dataRequirements ? `
-            <div class="research-section">
-              <h3>Data Requirements</h3>
-              <p><strong>Primary Sources:</strong> ${data.dataRequirements.primaryDataSources?.join(', ')}</p>
-              <p><strong>Data Types:</strong> ${data.dataRequirements.dataTypes?.join(', ')}</p>
-              <p><strong>Update Frequency:</strong> ${data.dataRequirements.updateFrequency}</p>
-            </div>
-            ` : ''}
-            
-            ${data.visualizationDashboard ? `
-            <div class="research-section">
-              <h3>Dashboard Design</h3>
-              <p><strong>Layout:</strong> ${data.visualizationDashboard.layout}</p>
-              
-              ${data.visualizationDashboard.charts ? `
-                <h4>Charts & Visualizations</h4>
-                ${data.visualizationDashboard.charts.map(chart => `
-                  <div class="chart-card">
-                    <h5>${chart.title}</h5>
-                    <p><strong>Type:</strong> ${chart.chartType}</p>
-                    <p><strong>Purpose:</strong> ${chart.purpose}</p>
-                    <span class="priority-badge priority-${chart.priority?.toLowerCase()}">${chart.priority} Priority</span>
-                  </div>
-                `).join('')}
-              ` : ''}
-              
-              ${data.visualizationDashboard.kpis ? `
-                <h4>Key Performance Indicators</h4>
-                ${data.visualizationDashboard.kpis.map(kpi => `
-                  <div class="kpi-card">
-                    <h5>${kpi.metric}</h5>
-                    <p><strong>Calculation:</strong> ${kpi.calculation}</p>
-                    <p><strong>Visualization:</strong> ${kpi.visualization}</p>
-                  </div>
-                `).join('')}
-              ` : ''}
-            </div>
-            ` : ''}
-            
-            ${data.technicalImplementation ? `
-            <div class="research-section">
-              <h3>Technical Implementation</h3>
-              <p><strong>Platforms:</strong> ${data.technicalImplementation.platforms?.join(', ')}</p>
-              <p><strong>Data Processing:</strong> ${data.technicalImplementation.dataProcessing}</p>
-              <p><strong>Performance:</strong> ${data.technicalImplementation.performance}</p>
-            </div>
-            ` : ''}
-          </div>
-        `;
-        container.innerHTML = html;
-      }
-
-      function createAcademicReportViz(data, container) {
-        const html = `
-          <div class="research-visualization academic-report">
-            <h2>${data.researchTitle || 'Academic Report Structure'}</h2>
-            
-            ${data.documentStructure ? `
-            <div class="research-section">
-              <h3>Document Structure</h3>
-              ${data.documentStructure.sections?.map(section => `
-                <div class="section-card">
-                  <h4>${section.sectionNumber}. ${section.title}</h4>
-                  <p><strong>Length:</strong> ${section.length}</p>
-                  <p><strong>Purpose:</strong> ${section.purpose}</p>
-                  <p><strong>Key Elements:</strong> ${section.keyElements?.join(', ')}</p>
-                  <p><strong>Audience:</strong> ${section.audience}</p>
-                </div>
-              `).join('') || '<p>No sections available</p>'}
-            </div>
-            ` : ''}
-            
-            ${data.writingGuidelines ? `
-            <div class="research-section">
-              <h3>Writing Guidelines</h3>
-              <p><strong>Tone:</strong> ${data.writingGuidelines.tone}</p>
-              <p><strong>Person:</strong> ${data.writingGuidelines.person}</p>
-              <p><strong>Citation Style:</strong> ${data.writingGuidelines.citationStyle}</p>
-              ${data.writingGuidelines.lengthGuidance ? `
-                <p><strong>Length:</strong> ${data.writingGuidelines.lengthGuidance.totalPages} pages (${data.writingGuidelines.lengthGuidance.wordCount} words)</p>
-              ` : ''}
-            </div>
-            ` : ''}
-            
-            ${data.timeline ? `
-            <div class="research-section">
-              <h3>Project Timeline</h3>
-              ${data.timeline.phases?.map(phase => `
-                <div class="phase-card">
-                  <h4>${phase.phase}</h4>
-                  <p><strong>Duration:</strong> ${phase.duration}</p>
-                  <p><strong>Deliverables:</strong> ${phase.deliverables?.join(', ')}</p>
-                </div>
-              `).join('') || '<p>No timeline phases available</p>'}
-            </div>
-            ` : ''}
-            
-            ${data.qualityChecklist ? `
-            <div class="research-section">
-              <h3>Quality Checklist</h3>
-              ${Object.entries(data.qualityChecklist).map(([category, items]) => `
-                <div class="checklist-card">
-                  <h4>${category.charAt(0).toUpperCase() + category.slice(1)}</h4>
-                  ${Array.isArray(items) 
-                    ? items.map(item => `<p>✓ ${item}</p>`).join('') 
-                    : `<p>✓ ${items}</p>`
-                  }
-                </div>
-              `).join('')}
-            </div>
-            ` : ''}
-          </div>
-        `;
-        container.innerHTML = html;
-      }
-
-      window.updateOutput = function updateOutput() {
-        const outputSpan = document.getElementById('output-span');
-        if (!outputSpan) {
-          console.log('Output span not found, will retry');
-          setTimeout(window.updateOutput, 100);
-          return;
-        }
-
-        const responseKey = 'researchIqResponse';
-        console.log('Looking for data with key:', responseKey);
-        
-        let data;
-        try {
-          data = getJSON(responseKey);
-        } catch (err) {
-          console.error('Error getting data:', err);
-        }
-
-        if (data) {
-          // Handle nested response format if present
-          if (data && data.message === 'Success' && data.data) {
-            console.log('Found nested data structure, using the data property');
-            data = data.data;
-          }
-          
-          console.log('Research data found:', data);
-          
-          // Check if it's already processed response data (legacy handling)
-          if (data.data) {
-            data = data.data;
-          }
-          
-          // Determine research type and create appropriate visualization
-          const researchType = data.researchType || 'literature-review';
-          console.log('Creating visualization for research type:', researchType);
-          
-          const visualizer = researchVisualizers[researchType] || researchVisualizers['literature-review'];
-          
-          try {
-            visualizer(data, outputSpan);
-            console.log('Research visualization created successfully');
-            
-            // Initialize copy functionality
-            if (window.initializeCopyButtons) {
-              window.initializeCopyButtons();
-            }
-          } catch (vizError) {
-            console.error('Error creating visualization:', vizError);
-            outputSpan.innerHTML = `
-              <div class="error-display">
-                <h3>Visualization Error</h3>
-                <p>Could not create visualization for ${researchType}</p>
-                <details>
-                  <summary>Raw Data</summary>
-                  <pre>${JSON.stringify(data, null, 2)}</pre>
-                </details>
-              </div>
-            `;
-          }
-        } else {
-          // Show nothing when no data - let dataout.js handle messaging
-          console.log('No research data found');
-        }
-      };
-      setTimeout(window.updateOutput, 100);
-    })();
-  </script>
-  <script src="../../utility/copy.js"></script>
-  <style>
-    /* Additional styles for loading and empty state */
-    /* Card animation setup */
-    .quote-card {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-  </style>
-<body>
-  <!-- Main content container with ID for accessibility -->
-  <div id="main-content" class="device-container research-container">
-    <!-- Content will be dynamically inserted here -->
-    
-    <script>
-      // Initialize Enhanced UI System
-      function initEnhancedUISystem() {
-        // Wait a bit to ensure DOM and containers are ready
-        setTimeout(() => {
-          // Initialize the enhanced UI with embed detection
-          if (window.enhancedUI) {
-            window.enhancedUI.init({
-              containerId: 'main-content',
-              scrollToTop: true,
-              embedEnforcement: true,
-              accessibility: true
-            });
-          } else {
-            console.warn('Enhanced UI system not loaded');
-          }
-        }, 100);
-      }
-      
-      // Initialize when page loads
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initEnhancedUISystem);
+    function renderResearchReport() {
+      const data = (function() {
+        let d = getJSON('researchIqResponse');
+        if (d && d.message === 'Success' && d.data) d = d.data;
+        return d;
+      })();
+      // Summary
+      document.getElementById('summary-content').innerText = data?.summary || 'No summary available.';
+      // Key Findings
+      const findingsList = document.getElementById('key-findings-list');
+      findingsList.innerHTML = '';
+      if (Array.isArray(data?.keyFindings) && data.keyFindings.length) {
+        data.keyFindings.forEach(f => {
+          const li = document.createElement('li');
+          li.innerText = f;
+          findingsList.appendChild(li);
+        });
       } else {
-        initEnhancedUISystem();
+        findingsList.innerHTML = '<li class="no-data">No key findings available.</li>';
       }
-    </script>
-  </div>
-
-  <!-- Call updateOutput on load -->
-  <script>
-    (function() {
-      // Call updateOutput on load
-      updateOutput();
-      // Optionally, listen for storage events to auto-update if needed
-      window.addEventListener('storage', updateOutput);
-    })();
+      // Charts
+      const chartsSection = document.getElementById('charts-section');
+      const chartsContent = document.getElementById('charts-content');
+      chartsContent.innerHTML = '';
+      if (Array.isArray(data?.charts) && data.charts.length) {
+        chartsSection.style.display = '';
+        data.charts.forEach((chart, idx) => {
+          const canvas = document.createElement('canvas');
+          canvas.className = 'chart-canvas';
+          canvas.id = 'chart-' + idx;
+          chartsContent.appendChild(canvas);
+          new Chart(canvas.getContext('2d'), {
+            type: chart.chartType || 'bar',
+            data: {
+              labels: chart.labels || [],
+              datasets: [{
+                label: chart.title || 'Chart',
+                data: chart.values || [],
+                backgroundColor: '#7a9b8a',
+                borderColor: '#2d5a3d',
+                borderWidth: 1
+              }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+          });
+        });
+      } else {
+        chartsSection.style.display = 'none';
+      }
+      // Sources
+      const sourcesList = document.getElementById('sources-list');
+      sourcesList.innerHTML = '';
+      if (Array.isArray(data?.sources) && data.sources.length) {
+        data.sources.forEach(src => {
+          const li = document.createElement('li');
+          // Try to auto-link URLs
+          if (/https?:\/\//.test(src)) {
+            li.innerHTML = `<a href="${src}" target="_blank" rel="noopener">${src}</a>`;
+          } else {
+            li.innerText = src;
+          }
+          sourcesList.appendChild(li);
+        });
+      } else {
+        sourcesList.innerHTML = '<li class="no-data">No sources available.</li>';
+      }
+    }
+    function copySection(sectionId) {
+      const el = document.getElementById(sectionId);
+      if (!el) return;
+      let text = '';
+      if (el.querySelector('ul')) {
+        text = Array.from(el.querySelectorAll('li')).map(li => li.innerText).join('\n');
+      } else {
+        text = el.innerText;
+      }
+      navigator.clipboard.writeText(text);
+    }
+    window.addEventListener('DOMContentLoaded', renderResearchReport);
+    window.addEventListener('storage', renderResearchReport);
   </script>
 </body>
 </html>
