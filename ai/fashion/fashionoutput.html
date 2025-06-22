@@ -151,18 +151,19 @@
         }
         
         if (data) {
-          if (data.fashionAnalysis) {
+          // For the new master worker response format, data contains the fashion analysis directly
+          if (data.fashionAnalysis || data.overallRating || data.analysisScores) {
             try {
-              // fashionAnalysis could be a string or object
-              let fashionAnalysis = data.fashionAnalysis;
+              // If we have the main fashion data fields at the root, use them directly
+              let fashionData = data.fashionAnalysis || data;
               
               // Handle both string and object formats
-              if (typeof fashionAnalysis === 'string') {
+              if (typeof fashionData === 'string') {
                 console.log('Fashion analysis is a string, displaying as formatted text');
-                displayFashionAnalysis(fashionAnalysis, outputSpan);
-              } else if (typeof fashionAnalysis === 'object' && fashionAnalysis !== null) {
+                displayFashionAnalysis(fashionData, outputSpan);
+              } else if (typeof fashionData === 'object' && fashionData !== null) {
                 console.log('Fashion analysis is an object, converting to formatted display');
-                displayFashionAnalysis(JSON.stringify(fashionAnalysis, null, 2), outputSpan);
+                displayFashionAnalysis(JSON.stringify(fashionData, null, 2), outputSpan);
               } else {
                 throw new Error('Invalid fashionAnalysis format');
               }

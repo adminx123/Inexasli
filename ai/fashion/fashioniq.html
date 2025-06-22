@@ -174,19 +174,21 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
       const fashionFormData = {
         ...formData,
         images: images // Add images to the form data
-      };
-
-      // Use enhanced loading with educational facts
-      const result = await window.enhancedLoading(
-        'generate-fashion-btn',
-        'fashion',
-        async () => {
-          const apiUrl = 'https://fashion.4hm7q4q75z.workers.dev/';
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ formData: fashionFormData, fingerprint })
-          });
+      };        // Use enhanced loading with educational facts
+        const result = await window.enhancedLoading(
+          'generate-fashion-btn',
+          'fashion',
+          async () => {
+            const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
+            const response = await fetch(apiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                module: 'fashion',
+                formData: fashionFormData, 
+                fingerprint 
+              })
+            });
 
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
