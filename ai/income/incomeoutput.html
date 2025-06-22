@@ -1597,57 +1597,6 @@
         }
     });
 
-    // Check if tax calculations are stale on load
-    function checkTaxCalculationsStale() {
-        const isStale = localStorage.getItem('taxCalculationsStale') === 'true';
-        const staleTimestamp = localStorage.getItem('taxCalculationsStaleTimestamp');
-        
-        if (isStale && staleTimestamp) {
-            const staleTime = new Date(parseInt(staleTimestamp));
-            const now = new Date();
-            const minutesStale = Math.floor((now - staleTime) / (1000 * 60));
-            
-            console.log(`[IncomeOutput] Tax calculations are ${minutesStale} minutes stale`);
-            showStaleWarning(minutesStale);
-        }
-    }
-
-    function showStaleWarning(minutesStale) {
-        // Add a warning banner to the dashboard
-        const outputSpan = document.getElementById('output-span');
-        if (outputSpan && outputSpan.querySelector('.stale-warning') === null) {
-            const warningBanner = document.createElement('div');
-            warningBanner.className = 'stale-warning';
-            warningBanner.style.cssText = `
-                background: linear-gradient(135deg, #fef3c7, #fcd34d);
-                border: 2px solid #f59e0b;
-                border-radius: 12px;
-                padding: 15px 20px;
-                margin: 20px 0;
-                text-align: center;
-                font-family: "Inter", sans-serif;
-            `;
-            
-            warningBanner.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
-                    <i class="fas fa-exclamation-triangle" style="color: #f59e0b; font-size: 1.5em;"></i>
-                    <div>
-                        <h4 style="margin: 0; color: #92400e; font-size: 1.1em;">Tax Calculations May Be Outdated</h4>
-                        <p style="margin: 5px 0 0 0; color: #92400e; font-size: 0.95em;">
-                            Income or tax residency changed ${minutesStale} minute${minutesStale !== 1 ? 's' : ''} ago. 
-                            <strong>Submit the form to refresh tax calculations.</strong>
-                        </p>
-                    </div>
-                </div>
-            `;
-            
-            outputSpan.insertBefore(warningBanner, outputSpan.firstChild);
-        }
-    }
-
-    // Check for stale calculations when dashboard loads
-    setTimeout(checkTaxCalculationsStale, 500);
-    
 })();
 </script>
 </body>

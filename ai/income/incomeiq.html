@@ -1350,9 +1350,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
             if (result.success) {
                 console.log("[IncomeIQ] ✅ Data normalized and saved to localStorage");
                 
-                // Mark tax calculations as stale
-                markTaxCalculationsStale();
-                
                 // Show notification for income changes (not already covered by intro changes)
                 if (event.target.id.startsWith('income-') && !event.target.id.includes('country') && !event.target.id.includes('subregion') && !event.target.id.includes('residency') && !event.target.id.includes('filingStatus')) {
                     showIncomeRecalculationNeeded(event.target);
