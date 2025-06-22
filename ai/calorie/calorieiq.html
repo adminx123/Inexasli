@@ -93,6 +93,7 @@
 <script type="module">
 import { initAutoExpandTextareas } from '../styles/inputFunctionality.js';
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/rateLimiter.js';
+import { handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 (function() {
   console.log("Calorie IQ script initializing");
@@ -131,48 +132,53 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
         fingerprint: fingerprintData
       };
 
-      // Use enhanced loading with educational facts
-      const result = await window.enhancedLoading(
-        'generate-calorie-btn',
-        'calorie',
-        async () => {
-          const apiUrl = 'https://calorie.4hm7q4q75z.workers.dev/';
-          const response = await fetch(apiUrl, { 
-            method: 'POST', 
-            headers: {'Content-Type':'application/json'}, 
-            body: JSON.stringify(workerPayload) // Use new payload structure
-          });
-          
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+      const dataContainer = document.querySelector('.device-container');
+      let backendResponse = null;
+      try {
+        backendResponse = await window.enhancedLoading(
+          'generate-calorie-btn',
+          'calorie',
+          async () => {
+            const apiUrl = 'https://calorie.4hm7q4q75z.workers.dev/';
+            const response = await fetch(apiUrl, { 
+              method: 'POST', 
+              headers: {'Content-Type':'application/json'}, 
+              body: JSON.stringify(workerPayload)
+            });
+            let responseData;
+            try {
+              responseData = await response.json();
+            } catch (e) {
+              responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
+            }
+            // Always call handleRateLimitResponse with backend response
+            handleRateLimitResponse(dataContainer, responseData, !response.ok, 'CalorieIQ');
+            if (!response.ok) {
+              throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+            }
+            if (responseData.message !== 'Success') {
+              throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+            }
+            return responseData;
           }
-          
-          const responseData = await response.json();
-          if (responseData.message !== 'Success') {
-            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+        );
+        incrementRequestCount('calorie');
+        window.calorieFormPersistence.saveResponseData(backendResponse);
+        const event = new CustomEvent('api-response-received', {
+          detail: {
+            module: 'calorieiq',
+            type: 'worker-response',
+            timestamp: Date.now()
           }
-          
-          return responseData;
+        });
+        document.dispatchEvent(event);
+        console.log('[CalorieIQ] Dispatched api-response-received event');
+      } catch (error) {
+        if (backendResponse && dataContainer) {
+          handleRateLimitResponse(dataContainer, backendResponse, true, 'CalorieIQ');
         }
-      );
-
-      // Increment request count after successful response
-      incrementRequestCount('calorie');
-
-      // Store the response using centralized system
-      window.calorieFormPersistence.saveResponseData(result);
-      
-      // Dispatch an event to notify dataout.js that a response was received
-      const event = new CustomEvent('api-response-received', {
-        detail: {
-          module: 'calorieiq',
-          type: 'worker-response',
-          timestamp: Date.now()
-        }
-      });
-      document.dispatchEvent(event);
-      console.log('[CalorieIQ] Dispatched api-response-received event');
-      
+        console.error('[CalorieIQ] Error generating calorie plan:', error);
+      }
     } catch (error) {
       console.error('[CalorieIQ] Error generating calorie plan:', error);
       alert('An error occurred while generating your calorie plan. Please try again later.');

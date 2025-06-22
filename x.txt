@@ -1,0 +1,21 @@
+Operation x: DRY Global Rate Limiter Integration for Calorie Module
+
+1. Refactor `ai/calorie/calorieiq.html` frontend to:
+   - Remove any legacy or module-specific rate limit logic.
+   - Use only the centralized `handleRateLimitResponse` from `rateLimiter.js`, passing the module name ('calorie').
+   - Update the rate limit display and localStorage only after a backend response, using the returned rate limit info.
+   - Ensure all error and display logic is handled by the centralized function.
+
+2. Refactor `ai/calorie/calorie.js` worker to:
+   - Always call the global rate-limiter worker with `{ fingerprint, module: 'calorie', action: 'consume' }` before processing a request.
+   - Always include `limits` and `remaining` at the top level of every response (success and 429), matching the pattern used in `philosophy.js`.
+   - Remove any legacy or module-specific rate limit logic.
+
+3. Confirm:
+   - No legacy or redundant rate limit code remains in the Calorie module.
+   - The frontend always displays the true number of uses left, as returned by the backend.
+   - All rate limit logic is centralized in `rateLimiter.js` and the backend worker.
+
+4. After Calorie, repeat this process for all other modules, alphabetically, one at a time, confirming each before proceeding.
+
+5. Document this plan and progress in `x.txt`.
