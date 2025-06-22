@@ -1,15 +1,36 @@
-Operation X: DRY Global Rate Limiter Integration Checklist (For Any Module)
+<!-- Reference: Standardized Module Integration with Master Worker (2025-06-21) -->
+<!-- Use this as a checklist/template for updating other modules -->
 
-1. FRONTEND: Remove all legacy/module-specific rate limit logic.
-2. FRONTEND: Import and use only centralized `handleRateLimitResponse` from `rateLimiter.js`, passing the module name.
-3. FRONTEND: Update rate limit display and localStorage only after a backend response, using returned `limits`/`remaining`.
-4. FRONTEND: Ensure all error and display logic is handled by the centralized function.
-5. BACKEND: Always call the global rate-limiter worker with `{ fingerprint, module: <moduleName>, action: 'consume' }` before processing a request.
-6. BACKEND: Always include `limits` and `remaining` at the TOP LEVEL of every response (success and 429), never inside `data`.
-7. BACKEND: Remove any legacy/module-specific rate limit logic.
-8. CONFIRM: No legacy/redundant rate limit code remains in the module (frontend or backend).
-9. CONFIRM: The frontend always displays the true number of uses left, as returned by the backend.
-10. CONFIRM: All rate limit logic is centralized in `rateLimiter.js` and the backend worker.
-11. TEST: After every backend change, verify that generating from the module updates the rate limit display and `rateLimitStatus` in localStorage. If it does not, check the backend response structure and patch as needed.
-12. PATCH: If `limits`/`remaining` are not at the top level, fix the backend to match this checklist.
-13. FINAL TEST: Confirm the checklist is fully satisfied before moving to the next module.
+1. **Frontend Input (e.g., moduleiq.html):**
+   - Set the API endpoint to the master worker (e.g. https://master.4hm7q4q75z.workers.dev/)
+   - POST payload: `{ module: "<module>", formData: ..., fingerprint: ... }`
+   - On response, save the full response object to localStorage as `<module>IqResponse` (e.g., `decisionIqResponse`)
+
+2. **Form Persistence (formPersistence.js):**
+   - Ensure `saveResponseData` saves the response under `<module>IqResponse` only (no extra keys)
+
+3. **Master Worker (master.js):**
+   - Always return the main module data under a `data` property:
+     ```json
+     { "message": "Success", "data": { ... }, ... }
+     ```
+   - Do not use module-specific keys at the top level (e.g., no `decisionResponse`)
+
+4. **Frontend Output (e.g., moduleoutput.html):**
+   - Retrieve the response from localStorage using `<module>IqResponse`
+   - If the response has a `.data` property, use it for display:
+     ```js
+     if (data && data.message === 'Success' && data.data) {
+       data = data.data;
+     }
+     ```
+   - The enhanced UI should expect the main data fields (e.g., `bmi`, `individualFoods`, etc.) at the root of the object
+   - If supporting legacy formats, fallback to previous keys as needed
+
+5. **Module File (e.g., ai/decision/decision.js):**
+   - Only export config and prompt generator (no response processor)
+   - Set `RESPONSE_KEY` to a unique value (e.g., `decisionResponse`)
+
+---
+
+<!-- Use this as a step-by-step guide for each module you migrate to the new master worker architecture. -->

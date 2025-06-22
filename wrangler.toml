@@ -268,3 +268,20 @@ id = "2da5e6f46847458a9aa83ffe54dea66e"
 preview_id = "2da5e6f46847458a9aa83ffe54dea66e"
 
 # --- Worker Environments ---
+
+[env.master]
+name = "master"
+main = "./ai/master.js"
+
+[[env.master.kv_namespaces]]
+binding = "FACT_STORE"
+id = "285495ae3e0f468a86f47bdd056ecfc3"
+preview_id = "02f5fab88e5143a5aa52c315fde404d1"
+
+[[env.master.services]]
+binding = "secret_binding"
+service = "secretworker"
+
+[[env.master.services]]
+binding = "rate_limiter_binding"
+service = "rate-limiter"

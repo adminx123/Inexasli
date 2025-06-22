@@ -194,10 +194,11 @@
         }
         
         if (data) {
-          if (data.calorieAnalysis) {
+          // Check if we have individual foods (new API format) or calorieAnalysis (legacy format)
+          if (data.individualFoods || data.bmi || data.calorieAnalysis) {
             try {
-              // calorieAnalysis is now a parsed object from the worker
-              let calorieAnalysis = data.calorieAnalysis;
+              // Use data directly if it has the right structure, otherwise use calorieAnalysis
+              let calorieAnalysis = data.individualFoods || data.bmi ? data : data.calorieAnalysis;
               
               // Handle both old (string) and new (object) formats for backward compatibility
               if (typeof calorieAnalysis === 'string') {

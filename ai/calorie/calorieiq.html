@@ -128,6 +128,7 @@ import { handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
       
       // Create combined payload with both form data and fingerprint
       const workerPayload = {
+        module: "calorie",
         formData: formData,
         fingerprint: fingerprintData
       };
@@ -139,7 +140,7 @@ import { handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
           'generate-calorie-btn',
           'calorie',
           async () => {
-            const apiUrl = 'https://calorie.4hm7q4q75z.workers.dev/';
+            const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
             const response = await fetch(apiUrl, { 
               method: 'POST', 
               headers: {'Content-Type':'application/json'}, 

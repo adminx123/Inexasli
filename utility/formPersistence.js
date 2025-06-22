@@ -707,6 +707,8 @@ class FormPersistence {
      */
     saveResponseData(responseData) {
         setJSON(this.storageKeys.response, responseData);
+        // Remove saving under calorieIqData, only save under calorieIqResponse for calorie module
+        // (No extra key for new standard)
         console.log(`[FormPersistence] Response data saved for ${this.moduleName}`);
     }
 
