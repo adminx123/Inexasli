@@ -35,11 +35,37 @@
  
  <body id="main-content">
 
-        
-
-
-
-
+         <!-- Load splash.html and inject it at the top of the body -->
+         <script>
+      // Load splash.html and inject it at the top of the body
+      const splashStart = Date.now();
+      (async function() {
+        const res = await fetch('/utility/splash.html');
+        const html = await res.text();
+        const temp = document.createElement('div');
+        temp.innerHTML = html;
+        // Move all <style> tags to <head> for proper CSS application
+        temp.querySelectorAll('style').forEach(style => document.head.appendChild(style));
+        // Insert splash markup at the top of <body>
+        const splash = temp.querySelector('#splash-screen');
+        if (splash) document.body.insertBefore(splash, document.body.firstChild);
+      })();
+      // Hide splash when page is fully loaded, but keep it for at least 1.5s
+      window.addEventListener('load', function() {
+        var splash = document.getElementById('splash-screen');
+        var minTime = 1500; // milliseconds
+        var elapsed = Date.now() - splashStart;
+        var delay = Math.max(0, minTime - elapsed);
+        setTimeout(function() {
+          if (splash) {
+            splash.style.opacity = '0';
+            setTimeout(function() {
+              splash.style.display = 'none';
+            }, 400);
+          }
+        }, delay);
+      });
+    </script>
 
      <script src="/utility/toolTip.js"></script>
      <!-- <script src="/utility/tray.js"></script> -->

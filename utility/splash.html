@@ -1,0 +1,78 @@
+<!-- splash.html: Reusable Splash Screen with slower animation and fade-in text -->
+<style>
+  #splash-screen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: opacity 0.4s;
+  }
+  .splash-logo {
+    width: 60px;
+    height: 60px;
+    opacity: 0;
+    animation: rotateImage 6s linear 1;
+    animation-delay: 0.5s;
+    animation-fill-mode: forwards;
+    margin-bottom: 10px;
+  }
+  .splash-inexasli {
+    font-family: Arial, sans-serif;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: white;
+    opacity: 1;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+  .splash-empowering {
+    color: rgb(49, 49, 49);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 1.2em;
+    margin: 0;
+    opacity: 0;
+    animation: fadeIn 4s ease-in forwards;
+    animation-delay: 2s;
+    text-align: center;
+  }
+  .tm {
+    font-size: 0.5em;
+    position: relative;
+    top: -0.2em;
+    vertical-align: top;
+  }
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes rotateImage {
+    0% { transform: rotate(0deg); opacity: 0; }
+    100% { transform: rotate(180deg); opacity: 1; }
+  }
+</style>
+<div id="splash-screen">
+  <img src="/images/apple-touch-icon.png" alt="Logo" class="splash-logo">
+  <div class="splash-inexasli">INEXASLI</div>
+  <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
+</div>
+<script>
+  // Ensure logo animation and empowering text fade in
+  document.addEventListener('DOMContentLoaded', function() {
+    const logo = document.querySelector('#splash-screen .splash-logo');
+    if (logo) {
+      logo.style.opacity = '0';
+      setTimeout(() => {
+        logo.style.opacity = '1';
+      }, 500);
+    }
+  });
+</script>
