@@ -69,3 +69,4 @@ logs
 *.swo
 
 ai/rate-limiter/rate-limiter.js
+ai/master.js
