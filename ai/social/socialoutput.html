@@ -71,6 +71,10 @@
           console.error('Error getting data:', err);
         }
         if (data) {
+          // If response has a .data property (master worker), use it; else fallback to legacy
+          if (data && data.message === 'Success' && data.data) {
+            data = data.data;
+          }
           outputSpan.textContent = JSON.stringify(data, null, 2);
           console.log('Data displayed successfully');
         } else {

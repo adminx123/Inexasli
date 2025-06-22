@@ -202,7 +202,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
             'social',
             async () => {
                 // Send data to worker
-                const apiUrl = 'https://social.4hm7q4q75z.workers.dev/';
+                const apiUrl = 'https://master.4hm7q4q75z.workers.dev/'; // Per x.txt: use master worker endpoint
                 
                 console.log('[SocialIQ] Sending socialIqInput to worker');
                 const response = await fetch(apiUrl, {
@@ -210,7 +210,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(workerPayload) // Use new payload structure
+                    body: JSON.stringify({ ...workerPayload, module: 'social' }) // Add module property for master worker
                 });
                 
                 if (!response.ok) {

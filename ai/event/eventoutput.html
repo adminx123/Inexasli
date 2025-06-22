@@ -80,7 +80,13 @@
         }
         const responseKey = 'eventIqResponse';
         console.log('Looking for data with key:', responseKey);
-        const data = getJSON(responseKey);
+        let data = getJSON(responseKey);
+        
+        // Handle nested response format if present
+        if (data && data.message === 'Success' && data.data) {
+          console.log('Found nested data structure, using the data property');
+          data = data.data;
+        }
         
         outputSpan.textContent = JSON.stringify(data, null, 2);
         console.log('Data displayed successfully');

@@ -658,9 +658,15 @@
         }
 
         if (data) {
+          // Handle nested response format if present
+          if (data && data.message === 'Success' && data.data) {
+            console.log('Found nested data structure, using the data property');
+            data = data.data;
+          }
+          
           console.log('Research data found:', data);
           
-          // Check if it's already processed response data
+          // Check if it's already processed response data (legacy handling)
           if (data.data) {
             data = data.data;
           }

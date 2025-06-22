@@ -82,11 +82,11 @@ async function handleGenerateResearchIq() {
             'generate-research-btn',
             'research',
             async () => {
-                const apiUrl = 'https://research.4hm7q4q75z.workers.dev/';
+                const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
                 const response = await fetch(apiUrl, { 
                     method: 'POST', 
                     headers: {'Content-Type':'application/json'}, 
-                    body: JSON.stringify({ formData, fingerprint })
+                    body: JSON.stringify({ module: "research", formData, fingerprint })
                 });
                 
                 if (!response.ok) {

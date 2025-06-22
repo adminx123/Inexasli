@@ -1037,6 +1037,9 @@
         try {
           data = getJSON(responseKey);
           // Patch: unwrap nested structure if present
+          if (data && data.message === 'Success' && data.data) {
+            data = data.data;
+          }
           if (data && data.data && data.data.enneagramIqResponse && data.data.enneagramIqResponse.enneagramAnalysis) {
             data = data.data.enneagramIqResponse;
           }

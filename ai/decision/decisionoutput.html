@@ -1163,6 +1163,12 @@
         }
         
         if (data) {
+          // Handle nested response format if present
+          if (data && data.message === 'Success' && data.data) {
+            console.log('Found nested data structure, using the data property');
+            data = data.data;
+          }
+          
           // Use built-in visualization logic
           console.log('Data found:', data);
           
@@ -1793,8 +1799,9 @@
 
     .option-strengths li, .option-weaknesses li {
       margin-bottom: 4px;
-      font-size: 13px;
-      line-height: 1.4;
+      padding: 5px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 4px;
     }
 
     .criterion-name {
