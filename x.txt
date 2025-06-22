@@ -1,36 +1,29 @@
-<!-- Reference: Standardized Module Integration with Master Worker (2025-06-21) -->
-<!-- Use this as a checklist/template for updating other modules -->
+<!-- Reference: Actual Changes Made to Calorie Module Files (2025-06-21) -->
 
-1. **Frontend Input (e.g., moduleiq.html):**
-   - Set the API endpoint to the master worker (e.g. https://master.4hm7q4q75z.workers.dev/)
-   - POST payload: `{ module: "<module>", formData: ..., fingerprint: ... }`
-   - On response, save the full response object to localStorage as `<module>IqResponse` (e.g., `decisionIqResponse`)
+1. ai/master.js
+- Standardized the API response to always return the main module data under a `data` property:
+  { "message": "Success", "data": { ... }, ... }
+- Removed any module-specific response key from the top-level response.
 
-2. **Form Persistence (formPersistence.js):**
-   - Ensure `saveResponseData` saves the response under `<module>IqResponse` only (no extra keys)
+2. ai/calorie/calorie.js
+- No changes needed for the new response structure (already exports only config and prompt generator).
 
-3. **Master Worker (master.js):**
-   - Always return the main module data under a `data` property:
-     ```json
-     { "message": "Success", "data": { ... }, ... }
-     ```
-   - Do not use module-specific keys at the top level (e.g., no `decisionResponse`)
+3. ai/calorie/calorieiq.html
+- Set the API endpoint to the master worker: https://master.4hm7q4q75z.workers.dev/
+- POST payload: { module: "calorie", formData: ..., fingerprint: ... }
+- On response, save the full response object to localStorage as calorieIqResponse.
 
-4. **Frontend Output (e.g., moduleoutput.html):**
-   - Retrieve the response from localStorage using `<module>IqResponse`
-   - If the response has a `.data` property, use it for display:
-     ```js
-     if (data && data.message === 'Success' && data.data) {
-       data = data.data;
-     }
-     ```
-   - The enhanced UI should expect the main data fields (e.g., `bmi`, `individualFoods`, etc.) at the root of the object
-   - If supporting legacy formats, fallback to previous keys as needed
+4. ai/calorie/calorieoutput.html
+- Retrieve the response from localStorage using the key calorieIqResponse.
+- If the response has a `.data` property, use it for display:
+  if (data && data.message === 'Success' && data.data) { data = data.data; }
+- Enhanced UI expects main data fields (bmi, individualFoods, etc.) at the root of the object.
+- Updated logic to use the extracted data directly for display, not looking for calorieAnalysis unless in legacy format.
 
-5. **Module File (e.g., ai/decision/decision.js):**
-   - Only export config and prompt generator (no response processor)
-   - Set `RESPONSE_KEY` to a unique value (e.g., `decisionResponse`)
+5. utility/formPersistence.js
+- Ensured that the response is only saved under the key calorieIqResponse for the calorie module, matching what the output page expects.
+- Removed saving under any extra keys (like calorieIqData).
 
 ---
 
-<!-- Use this as a step-by-step guide for each module you migrate to the new master worker architecture. -->
+Use this as a concrete example of the changes to make for each module when migrating to the master worker architecture.
