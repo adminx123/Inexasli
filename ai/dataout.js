@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <div class="data-content">${content}</div>
             `;
 
+            // Show container after content is loaded to prevent flash
+            dataContainer.style.display = 'block';
+
             dataContainer.querySelectorAll('script').forEach(oldScript => {
                 const newScript = document.createElement('script');
                 if (oldScript.src) {
@@ -49,6 +52,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.innerHTML = `
                 <div class="data-content">Error loading content: ${error.message}</div>
             `;
+            // Show container even on error
+            dataContainer.style.display = 'block';
             // Removed close-data-container span
         }
     }
@@ -60,11 +65,14 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Load initial content if a lastDataOutUrl exists
             const lastUrl = getLocal('lastDataOutUrl');
             if (lastUrl) {
+                dataContainer.style.display = 'none'; // Hide until content loads
                 loadStoredContent(lastUrl);
             } else {
                  dataContainer.innerHTML = `
                     <div class="data-content">No content loaded yet.</div>
                 `;
+                // Show container if no content to load
+                dataContainer.style.display = 'block';
             }
             return;
         }
@@ -85,11 +93,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
                 z-index: 500;
                 width: 100%;
-                min-height: 50vh;
-                max-height: 98vh;
+                min-height: 100vh;
+                max-height: 100vh;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
-                visibility: visible;
+                /* visibility controlled by JavaScript to prevent flash */
                 opacity: 1;
             }
 
@@ -100,8 +108,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-out .data-content {
                 padding: 0;
                 font-size: 14px;
-                min-height: calc(50vh - 40px);
-                max-height: calc(98vh - 40px);
+                min-height: calc(100vh - 40px);
+                max-height: calc(100vh - 40px);
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
@@ -116,8 +124,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     max-width: 100%;
                     width: 100%;
                     min-width: 100%;
-                    min-height: 90vh;
-                    max-height: 95vh;
+                    min-height: 100vh;
+                    max-height: 100vh;
                     top: 0;
                     left: 0;
                     right: 0;
@@ -134,8 +142,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     overflow-x: auto;
                     overflow-y: auto;
                     margin-top: 25px;
-                    min-height: calc(90vh - 25px);
-                    max-height: calc(95vh - 25px);
+                    min-height: calc(100vh - 25px);
+                    max-height: calc(100vh - 25px);
                 }
             }
         `;
@@ -143,11 +151,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         dataContainer = document.createElement('div');
         dataContainer.className = 'data-container-out';
+        dataContainer.style.display = 'none'; // Completely hide until content loads
         dataContainer.innerHTML = `
             <div class="data-content">No content loaded yet.</div> 
         `;
         document.body.appendChild(dataContainer);
-        console.log('Data out container injected and always expanded (dataout.js)');
+        console.log('Data out container injected and hidden until content loads (dataout.js)');
 
         // REMOVED click listeners for container, close button, and data label for toggling
         // REMOVED initializeGridItems function as it seems unrelated to dataout toggling
@@ -176,6 +185,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             const outUrl = outputMap[url];
             if (outUrl) {
                 setLocal('lastDataOutUrl', outUrl);
+                // Hide container before loading new content to prevent flash
+                if (dataContainer) {
+                    dataContainer.style.display = 'none';
+                }
                 // Directly load content when a new product is selected
                 console.log(`[DataOut] Product switched. Loading content for: ${outUrl}`);
                 loadStoredContent(outUrl); 
@@ -211,6 +224,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (outUrl) {
                 console.log(`[DataOut] Loading content for ${moduleName} into always-open container. URL: ${outUrl}`);
                 setLocal('lastDataOutUrl', outUrl);
+                // Hide container before loading content to prevent flash
+                if (dataContainer) {
+                    dataContainer.style.display = 'none';
+                }
                 loadStoredContent(outUrl);
             } else {
                 console.warn(`[DataOut] No output URL mapping found for module: ${moduleName}`);
@@ -220,6 +237,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         window.addEventListener('storage', function (e) {
             if (e.key === 'lastDataOutUrl' && e.newValue) {
                 console.log(`Detected lastDataOutUrl change to: ${e.newValue} (dataout.js)`);
+                // Hide container before loading content from storage to prevent flash
+                if (dataContainer) {
+                    dataContainer.style.display = 'none';
+                }
                 loadStoredContent(e.newValue);
             }
         });
@@ -232,9 +253,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         const initialUrl = getLocal('lastDataOutUrl');
         if (initialUrl) {
             console.log('[DataOut] Loading initial content from localStorage:', initialUrl);
+            // Container is already hidden, loadStoredContent will show it after loading
             loadStoredContent(initialUrl);
         } else {
-            // No default message - leave content area empty
+            // No content to load, show container with placeholder
+            dataContainer.style.display = 'block';
         }
     }
 
