@@ -326,6 +326,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 // Setup utility buttons early
                 setupUtilityButtons();
+                renderRateLimitDisplay(dataContainer, 'https://rate-limiter.4hm7q4q75z.workers.dev');
                 
                 // Function to show content after guided forms is ready
                 const showContentAfterGuidedForms = () => {
@@ -445,6 +446,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 // Setup utility buttons
                 setupUtilityButtons();
+                renderRateLimitDisplay(dataContainer, 'https://rate-limiter.4hm7q4q75z.workers.dev');
             }
 
             // Dispatch custom event to notify that data-in content has loaded
@@ -818,6 +820,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Setup utility buttons for initial state
         setupUtilityButtons();
+        renderRateLimitDisplay(dataContainer, 'https://rate-limiter.4hm7q4q75z.workers.dev');
 
         // Initialize simple vertical swipe for container toggle
         initializeSimpleVerticalSwipe(dataContainer, toggleDataContainer);
