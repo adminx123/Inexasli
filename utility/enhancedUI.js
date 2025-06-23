@@ -241,7 +241,7 @@ function initScrollToTopFAB() {
         let scrollY = window.scrollY || document.documentElement.scrollTop;
         
         // Check if we're in a dataout.js context and get container scroll position
-        const dataContainer = document.querySelector('.data-container-out.expanded .data-content');
+        const dataContainer = document.querySelector('.data-container-out .data-content');
         if (dataContainer) {
             scrollY = dataContainer.scrollTop;
         }
@@ -276,7 +276,7 @@ function initScrollToTopFAB() {
 
     // Monitor for data container creation and add scroll listener
     const observeDataContainers = () => {
-        const dataContainer = document.querySelector('.data-container-out.expanded .data-content');
+        const dataContainer = document.querySelector('.data-container-out .data-content');
         if (dataContainer) {
             dataContainer.addEventListener('scroll', () => {
                 if (scrollTimeout) return;
@@ -320,8 +320,8 @@ function initScrollToTopFAB() {
  * Smooth scroll to top function
  */
 function scrollToTop() {
-    // Check if we're in a dataout.js context with an expanded data container
-    const dataContainer = document.querySelector('.data-container-out.expanded .data-content');
+    // Check if we're in a dataout.js context with data container
+    const dataContainer = document.querySelector('.data-container-out .data-content');
     
     if (dataContainer) {
         // Scroll the content container to top
