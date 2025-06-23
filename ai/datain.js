@@ -14,6 +14,7 @@ import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
 import { renderRateLimitDisplay, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
+import '/ai/faq.js'; // Add FAQ modal script
 
 // Prevent zoom/pinch on content containers
 function preventZoom() {
@@ -320,6 +321,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-copy" style="font-size: 14px;"></i>
                         </button>
+                        <button id="datain-faq-btn" title="Tips & FAQ" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-question-mark" style="font-size: 16px;"></i>
+                        </button>
                     </div>
                     <div class="data-content" style="opacity: 0; transition: opacity 0.2s ease;">${content}</div>
                 `;
@@ -433,6 +437,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                         </button>
                         <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                             <i class="bx bx-copy" style="font-size: 14px;"></i>
+                        </button>
+                        <button id="datain-faq-btn" title="Tips & FAQ" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                            <i class="bx bx-question-mark" style="font-size: 16px;"></i>
                         </button>
                     </div>
                     <div class="data-content">${content}</div>
@@ -809,6 +816,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                     <i class="bx bx-copy" style="font-size: 14px;"></i>
                 </button>
+                <button id="datain-faq-btn" title="Tips & FAQ" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <i class="bx bx-question-mark" style="font-size: 16px;"></i>
+                </button>
             </div>
             <div class="data-content" style="display: none;">No content selected. Please select a grid item.</div>
         `;
@@ -1025,6 +1035,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const copyBtn = document.getElementById('datain-copy-btn');
         const categoryBtn = document.getElementById('datain-category-btn');
         const paymentBtn = document.getElementById('datain-payment-btn');
+        const faqBtn = document.getElementById('datain-faq-btn');
         
         if (overwriteBtn) {
             // Add hover effects
@@ -1160,6 +1171,23 @@ document.addEventListener('DOMContentLoaded', async function () {
                     window.openPaymentModal();
                 } else {
                     console.error('Payment modal function not available');
+                }
+            });
+        }
+        
+        if (faqBtn) {
+            // Add hover effects
+            faqBtn.addEventListener('mouseenter', () => {
+                faqBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+            });
+            faqBtn.addEventListener('mouseleave', () => {
+                faqBtn.style.backgroundColor = 'transparent';
+            });
+            faqBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.openFaqModal) {
+                    window.openFaqModal();
                 }
             });
         }
