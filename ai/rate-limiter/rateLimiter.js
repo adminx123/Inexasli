@@ -81,24 +81,37 @@ function getOrCreateFingerprint() {
 function renderRateLimitDisplay(container, rateLimiterUrl, moduleName = 'Module') {
     let utilityBar = container.querySelector('.utility-buttons-container');
     if (!utilityBar) utilityBar = container;
-    let display = utilityBar.querySelector('.rate-limit-display');
-    if (!display) {
-        display = document.createElement('div');
-        display.className = 'rate-limit-display';
-        display.style = 'margin-right: 12px; align-items: center; display: flex; font-size: 13px; color: #444; font-weight: 500; height: 28px;';
-        utilityBar.insertBefore(display, utilityBar.firstChild);
-    }
-    // Try to read from localStorage
+    let paymentBtn = utilityBar.querySelector('#datain-payment-btn');
+    if (!paymentBtn) paymentBtn = utilityBar;
+    let oldBadge = utilityBar.querySelector('.token-count-badge');
+    if (oldBadge) oldBadge.remove();
     let dailyStatus = null;
     try {
         dailyStatus = JSON.parse(localStorage.getItem('rateLimitStatus'));
     } catch (e) {
         dailyStatus = null;
     }
-    if (dailyStatus && dailyStatus.remaining && dailyStatus.limits) {
-        display.textContent = `${moduleName} Uses Left: ${dailyStatus.remaining.perDay} / ${dailyStatus.limits.perDay} today`;
+    // Remove bold from the $ icon if present
+    if (paymentBtn && paymentBtn.querySelector('span')) {
+        paymentBtn.querySelector('span').style.fontWeight = 'normal';
+        paymentBtn.querySelector('span').style.fontSize = '14px';
+    }
+    let badge = document.createElement('span');
+    badge.className = 'token-count-badge';
+    badge.style.display = 'inline';
+    badge.style.fontSize = '14px';
+    badge.style.fontWeight = 'normal';
+    badge.style.color = '#000';
+    badge.style.marginLeft = '2px';
+    badge.style.verticalAlign = 'middle';
+    badge.textContent = (dailyStatus && dailyStatus.remaining && dailyStatus.limits) ? `${dailyStatus.remaining.perDay}` : '...';
+    // Insert after the payment button's span (the $ icon)
+    if (paymentBtn && paymentBtn.querySelector('span')) {
+        paymentBtn.querySelector('span').after(badge);
+    } else if (paymentBtn && paymentBtn.appendChild) {
+        paymentBtn.appendChild(badge);
     } else {
-        display.textContent = `${moduleName} Uses Left: ...`;
+        utilityBar.appendChild(badge);
     }
 }
 
@@ -135,30 +148,43 @@ export function handleRateLimitResponse(container, response, showError = true, m
         // fallback: use main container
         utilityBar = container;
     }
-    let display = utilityBar.querySelector('.rate-limit-display');
-    if (!display) {
-        display = document.createElement('div');
-        display.className = 'rate-limit-display';
-        display.style = 'margin-right: 12px; align-items: center; display: flex; font-size: 13px; color: #444; font-weight: 500; height: 28px;';
-        // Insert as first child so it's always left of the first button (Categories)
-        utilityBar.insertBefore(display, utilityBar.firstChild);
+    let paymentBtn = utilityBar.querySelector('#datain-payment-btn');
+    if (!paymentBtn) paymentBtn = utilityBar;
+    // Remove any previous token count
+    let oldBadge = utilityBar.querySelector('.token-count-badge');
+    if (oldBadge) oldBadge.remove();
+    // Remove bold from the $ icon if present
+    if (paymentBtn && paymentBtn.querySelector('span')) {
+        paymentBtn.querySelector('span').style.fontWeight = 'normal';
+        paymentBtn.querySelector('span').style.fontSize = '14px';
     }
     // Prefer rateLimitStatus, fallback to response itself
     const status = response && (response.rateLimitStatus || response);
-    console.log('[RateLimit][Debug] status used for display/localStorage:', status);
+    let badge = document.createElement('span');
+    badge.className = 'token-count-badge';
+    badge.style.display = 'inline';
+    badge.style.fontSize = '14px';
+    badge.style.fontWeight = 'normal';
+    badge.style.color = '#000';
+    badge.style.marginLeft = '2px';
+    badge.style.verticalAlign = 'middle';
     if (status && status.remaining && status.limits) {
         const dailyStatus = {
             remaining: { perDay: status.remaining.perDay },
             limits: { perDay: status.limits.perDay }
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
-        console.log('[RateLimit][Debug] localStorage.rateLimitStatus set to:', dailyStatus);
-        if (typeof updateRateLimitDisplayFromLocal === 'function') {
-            updateRateLimitDisplayFromLocal(utilityBar);
-        }
-        display.textContent = `${moduleName} Uses Left: ${dailyStatus.remaining.perDay} / ${dailyStatus.limits.perDay} today`;
+        badge.textContent = `${dailyStatus.remaining.perDay}`;
     } else {
-        display.textContent = `${moduleName} Uses Left: unavailable`;
+        badge.textContent = '...';
+    }
+    // Insert after the payment button's span (the $ icon)
+    if (paymentBtn && paymentBtn.querySelector('span')) {
+        paymentBtn.querySelector('span').after(badge);
+    } else if (paymentBtn && paymentBtn.appendChild) {
+        paymentBtn.appendChild(badge);
+    } else {
+        utilityBar.appendChild(badge);
     }
     // Show error if present
     if (showError && response && (response.error || response.message) && response.error === 'Rate limit exceeded') {
