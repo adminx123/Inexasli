@@ -39,6 +39,9 @@ ai/*.secret.js
 .env.test.local
 .env.production.local
 
+# Private rate limiter logic
+ai/rate-limiter/rateLimit.js
+
 # API keys and secrets
 *.pem
 *.key

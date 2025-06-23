@@ -33,7 +33,7 @@ watch_dir = "build/worker"
 # --- Rate Limiter Worker (CRITICAL - Deploy First) ---
 [env.rate-limiter]
 name = "rate-limiter"
-main = "./ai/rate-limiter/rate-limiter.js"
+main = "./ai/rate-limiter/rateLimit.js"
 
 # KV namespace for rate limiting data storage
 [[env.rate-limiter.kv_namespaces]]
