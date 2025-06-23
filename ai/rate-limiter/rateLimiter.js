@@ -188,6 +188,7 @@ export function handleRateLimitResponse(container, response, showError = true, m
     }
     // Show error if present
     if (showError && response && (response.error || response.message) && response.error === 'Rate limit exceeded') {
+        // Only show a minimal alert if needed, no warning message or extra UI
         alert(response.message || 'You have reached your rate limit. Please try again later.');
     }
 }
