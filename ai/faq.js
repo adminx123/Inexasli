@@ -30,6 +30,8 @@
             <ul style="padding-left:18px;font-size:1em;line-height:1.6;color:#222;">
                 <li>You can enter information naturally, e.g. <b>"180lb"</b> or <b>"80kg"</b>—the AI will understand and convert it for you.</li>
                 <li>Use any common units, formats, or phrasing. The system is designed to be flexible and intelligent.</li>
+                <li>Enter information in any language</li>
+
                 <li>Look for more tips and help in this section as we add new features!</li>
             </ul>
             <div style="margin-top:18px;font-size:0.95em;color:#666;">Have a question or suggestion? Contact <a href="mailto:info@inexasli.com">info@inexasli.com</a></div>
