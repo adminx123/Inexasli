@@ -6,20 +6,9 @@
 
 // Configuration
 const CONFIG = {
-  ALLOWED_ORIGINS: [
-    'http://127.0.0.1:5500',
-    'https://inexasli.com',
-    'https://income.4hm7q4q75z.workers.dev',
-    'https://calorie.4hm7q4q75z.workers.dev',
-    'https://decision.4hm7q4q75z.workers.dev',
-    'https://rate-limiter.4hm7q4q75z.workers.dev'
-    // Add other AI module worker URLs
-  ],
   // Global rate limit config (adjust as needed)
   GLOBAL_RATE_LIMITS: {
-    perMinute: 5,
-    perHour: 30,
-    perDay: 13 // increased from 10 to 13 for testing
+    perDay: 13 // Only daily limit is enforced
   },
   SUSPICIOUS_ACTIVITY: {
     rapidRequestsThreshold: 5,
@@ -28,46 +17,20 @@ const CONFIG = {
   }
 };
 
-// CORS headers helper
-const Headers = {
-  cors(origin) {
-    // Fix: handle null/undefined/empty origin safely
-    if (typeof origin !== 'string' || !origin) {
-      return {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Content-Type": "application/json"
-      };
-    }
-    const matchedOrigin = CONFIG.ALLOWED_ORIGINS.find(allowed => 
-      origin.startsWith(allowed)) || "*";
-    return {
-      "Access-Control-Allow-Origin": matchedOrigin,
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Content-Type": "application/json"
-    };
-  }
-};
-
-// Response helpers
+// Response helpers (no CORS, only Content-Type)
 const Responses = {
-  success(data, origin) {
-    // Flatten the data object so limits/remaining are at the top level
+  success(data) {
     return new Response(JSON.stringify({
       ...data,
-      // If data contains limits/remaining, spread them to the top
       ...(data.limits ? { limits: data.limits } : {}),
       ...(data.remaining ? { remaining: data.remaining } : {})
     }), {
       status: 200,
-      headers: Headers.cors(origin)
+      headers: { "Content-Type": "application/json" }
     });
   },
   
-  rateLimited(message, resetTime, origin, rateLimitStatus) {
-    // Flatten rateLimitStatus to top level
+  rateLimited(message, resetTime, rateLimitStatus) {
     return new Response(JSON.stringify({
       allowed: false,
       message,
@@ -76,25 +39,24 @@ const Responses = {
       ...(rateLimitStatus || {})
     }), {
       status: 429,
-      headers: Headers.cors(origin)
+      headers: { "Content-Type": "application/json" }
     });
   },
   
-  badRequest(message, origin) {
+  badRequest(message) {
     return new Response(JSON.stringify({
       allowed: false,
       error: message
     }), {
       status: 400,
-      headers: Headers.cors(origin)
+      headers: { "Content-Type": "application/json" }
     });
   },
   
-  cors(request) {
-    const origin = request.headers.get("Origin") || "";
+  options() {
     return new Response(null, {
       status: 204,
-      headers: Headers.cors(origin)
+      headers: { "Content-Type": "application/json" }
     });
   }
 };
@@ -129,28 +91,20 @@ async function validateRateLimit(fingerprint, module, env, action = 'consume') {
     const limits = CONFIG.GLOBAL_RATE_LIMITS;
     const now = Date.now();
 
-    // Define global rate limiting windows
-    const rateLimitChecks = [
-      { key: `m:${hashString}`, limit: limits.perMinute, ttl: 60, window: 60000, name: "per minute" },
-      { key: `h:${hashString}`, limit: limits.perHour, ttl: 3600, window: 3600000, name: "per hour" },
-      { key: `d:${hashString}`, limit: limits.perDay, ttl: 86400, window: 86400000, name: "per day" }
-    ];
-
-    // Check each rate limit
-    for (const check of rateLimitChecks) {
-      const count = parseInt(await env.RATE_LIMIT_KV.get(check.key)) || 0;
-      if (count >= check.limit) {
-        const resetTime = now + check.window;
-        return {
-          allowed: false,
-          error: `Global rate limit exceeded: ${check.limit} requests ${check.name}`,
-          code: "RATE_LIMITED",
-          limit: check.limit,
-          window: check.name,
-          resetTime,
-          current: count
-        };
-      }
+    // Only daily limit
+    const dayKey = `d:${hashString}`;
+    const dayCount = parseInt(await env.RATE_LIMIT_KV.get(dayKey)) || 0;
+    if (dayCount >= limits.perDay) {
+      const resetTime = now + 86400000; // 24 hours
+      return {
+        allowed: false,
+        error: `Global rate limit exceeded: ${limits.perDay} requests per day`,
+        code: "RATE_LIMITED",
+        limit: limits.perDay,
+        window: "per day",
+        resetTime,
+        current: dayCount
+      };
     }
 
     // Check for suspicious activity patterns
@@ -176,33 +130,23 @@ async function validateRateLimit(fingerprint, module, env, action = 'consume') {
       };
     }
 
-    // All checks passed - increment counters only if action is 'consume'
+    // Increment counters if action is 'consume'
     const promises = [];
     if (action === 'consume') {
-      // Increment rate limit counters
-      for (const check of rateLimitChecks) {
-        const currentCount = parseInt(await env.RATE_LIMIT_KV.get(check.key)) || 0;
-        promises.push(
-          env.RATE_LIMIT_KV.put(check.key, (currentCount + 1).toString(), {
-            expirationTtl: check.ttl
-          })
-        );
-      }
-      // Store request times
+      promises.push(
+        env.RATE_LIMIT_KV.put(dayKey, (dayCount + 1).toString(), {
+          expirationTtl: 86400 // 1 day
+        })
+      );
       promises.push(
         env.RATE_LIMIT_KV.put(timesKey, JSON.stringify(recentTimes), {
           expirationTtl: 3600 // 1 hour
         })
       );
     }
-    // Execute all KV operations
     await Promise.all(promises);
-    
-    // Calculate remaining requests
     const remaining = {
-      perMinute: limits.perMinute - (parseInt(await env.RATE_LIMIT_KV.get(`m:${hashString}`)) || 0),
-      perHour: limits.perHour - (parseInt(await env.RATE_LIMIT_KV.get(`h:${hashString}`)) || 0),
-      perDay: limits.perDay - (parseInt(await env.RATE_LIMIT_KV.get(`d:${hashString}`)) || 0)
+      perDay: limits.perDay - (parseInt(await env.RATE_LIMIT_KV.get(dayKey)) || 0)
     };
     
     return {
@@ -236,24 +180,22 @@ export default {
       time: Date.now()
     });
     
-    // Handle CORS preflight
+    // OPTIONS preflight (not needed, but respond for robustness)
     if (request.method === 'OPTIONS') {
-      return Responses.cors(request);
+      return Responses.options();
     }
     
     // Only allow POST requests
     if (request.method !== 'POST') {
-      return Responses.badRequest("Only POST requests allowed", request.headers.get("Origin"));
+      return Responses.badRequest("Only POST requests allowed");
     }
-    
-    const origin = request.headers.get("Origin") || "";
     
     try {
       // Parse request data
       const requestData = await request.json();
       
       if (!requestData.fingerprint || !requestData.module) {
-        return Responses.badRequest("Missing fingerprint or module", origin);
+        return Responses.badRequest("Missing fingerprint or module");
       }
       
       // Use action field, default to 'consume'
@@ -266,21 +208,21 @@ export default {
         if (result.code === "RATE_LIMITED" || result.code === "SUSPICIOUS_ACTIVITY") {
           // Get latest status for response
           const latestStatus = await validateRateLimit(requestData.fingerprint, requestData.module, env, 'check');
-          return Responses.rateLimited(result.error, result.resetTime, origin, {
+          return Responses.rateLimited(result.error, result.resetTime, {
             limits: latestStatus.limits,
             remaining: latestStatus.remaining
           });
         } else {
-          return Responses.badRequest(result.error, origin);
+          return Responses.badRequest(result.error);
         }
       }
       
       // Return success with rate limit info
-      return Responses.success(result, origin);
+      return Responses.success(result);
       
     } catch (error) {
       console.error('Rate limiter worker error:', error);
-      return Responses.badRequest("Invalid request format", origin);
+      return Responses.badRequest("Invalid request format");
     }
   }
 };
