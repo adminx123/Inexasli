@@ -193,6 +193,29 @@ export function handleRateLimitResponse(container, response, showError = true, m
     }
 }
 
+// Simple per-minute rate limit (client-side only, not secure)
+function canSendRequest() {
+    const now = Date.now();
+    const windowMs = 60000; // 1 minute
+    const maxPerMinute = 2; // You can use RATE_LIMIT_CONFIG.MAX_REQUESTS_PER_MINUTE if you want
+    let timestamps = [];
+    try {
+        timestamps = JSON.parse(localStorage.getItem('rateLimitTimestamps') || '[]');
+    } catch (e) {
+        timestamps = [];
+    }
+    // Remove timestamps older than 1 minute
+    timestamps = timestamps.filter(ts => now - ts < windowMs);
+    if (timestamps.length >= maxPerMinute) {
+        alert('Too many requests. Please wait a minute before trying again.');
+        return false;
+    }
+    // Add current timestamp and save
+    timestamps.push(now);
+    localStorage.setItem('rateLimitTimestamps', JSON.stringify(timestamps));
+    return true;
+}
+
 // Add a global debug log for all backend responses
 window._originalFetch = window.fetch;
 window.fetch = async function(...args) {
@@ -217,4 +240,4 @@ window.fetch = async function(...args) {
 };
 
 // Export for use in other modules
-export { renderRateLimitDisplay };
+export { renderRateLimitDisplay, canSendRequest };
