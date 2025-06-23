@@ -73,34 +73,12 @@ function getOrCreateFingerprint() {
 }
 
 /**
- * Get the current rate limit status for the user (async)
- * @param {string} rateLimiterUrl
- * @param {string} action - 'check' (default) or 'consume'
- * @returns {Promise<Object>} - { remaining, limits, allowed, ... }
- */
-async function getRateLimitStatus(rateLimiterUrl, action = 'check') {
-    // Get or create fingerprint/session
-    const fingerprint = getOrCreateFingerprint();
-    const module = 'datain'; // or dynamically set as needed
-    const payload = { fingerprint, module, action };
-    console.log('[RateLimit] Sending payload:', payload);
-    const response = await fetch(rateLimiterUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    });
-    if (!response.ok) throw new Error('Failed to fetch rate limit status');
-    const data = await response.json();
-    return data;
-}
-
-/**
  * Render the RateLimit display in a container
  * @param {HTMLElement} container - The container to inject the display into
- * @param {string} rateLimiterUrl - The endpoint for the rate limiter worker
+ * @param {string} rateLimiterUrl - The endpoint for the rate limiter worker (unused)
  * @param {string} moduleName - The display name for the module (e.g., 'PhilosophyIQ', 'CalorieIQ')
  */
-async function renderRateLimitDisplay(container, rateLimiterUrl, moduleName = 'Module') {
+function renderRateLimitDisplay(container, rateLimiterUrl, moduleName = 'Module') {
     let utilityBar = container.querySelector('.utility-buttons-container');
     if (!utilityBar) utilityBar = container;
     let display = utilityBar.querySelector('.rate-limit-display');
@@ -110,16 +88,17 @@ async function renderRateLimitDisplay(container, rateLimiterUrl, moduleName = 'M
         display.style = 'margin-right: 12px; align-items: center; display: flex; font-size: 13px; color: #444; font-weight: 500; height: 28px;';
         utilityBar.insertBefore(display, utilityBar.firstChild);
     }
-    display.textContent = `${moduleName} Uses Left: ...`;
+    // Try to read from localStorage
+    let dailyStatus = null;
     try {
-        const status = await getRateLimitStatus(rateLimiterUrl, 'check');
-        if (status && status.remaining && status.limits) {
-            display.textContent = `${moduleName} Uses Left: ${status.remaining.perDay} / ${status.limits.perDay} today`;
-        } else {
-            display.textContent = `${moduleName} Uses Left: unavailable`;
-        }
+        dailyStatus = JSON.parse(localStorage.getItem('rateLimitStatus'));
     } catch (e) {
-        display.textContent = `${moduleName} Uses Left: error`;
+        dailyStatus = null;
+    }
+    if (dailyStatus && dailyStatus.remaining && dailyStatus.limits) {
+        display.textContent = `${moduleName} Uses Left: ${dailyStatus.remaining.perDay} / ${dailyStatus.limits.perDay} today`;
+    } else {
+        display.textContent = `${moduleName} Uses Left: ...`;
     }
 }
 
@@ -211,4 +190,4 @@ window.fetch = async function(...args) {
 };
 
 // Export for use in other modules
-export { getRateLimitStatus, renderRateLimitDisplay };
+export { renderRateLimitDisplay };

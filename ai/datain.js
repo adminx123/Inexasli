@@ -13,7 +13,7 @@ import { initializeBidirectionalSwipe, initializeSimpleVerticalSwipe } from '/ut
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
-import { getRateLimitStatus, renderRateLimitDisplay, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
+import { renderRateLimitDisplay, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 // Prevent zoom/pinch on content containers
 function preventZoom() {
@@ -845,11 +845,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             
             // Check if click is on close button (let that handle it)
             const isCloseButton = e.target.closest('.close-data-container') || 
-                                 e.target.classList.contains('close-data-container');
+                                 e.target.classList.contains('.close-data-container');
             
             // Check if click is within the data-content area (form content)
             const isDataContent = e.target.closest('.data-content') || 
-                                 e.target.classList.contains('data-content');
+                                 e.target.classList.contains('.data-content');
             
             const currentState = dataContainer.dataset.state;
             
@@ -1477,43 +1477,17 @@ window.dataInContainerManager = {
     config: containerSizingConfig
 };
 
-// Utility to update rate limit display from localStorage
-function updateRateLimitDisplayFromLocal(container) {
-    let display = container.querySelector('.rate-limit-display');
-    if (!display) {
-        display = document.createElement('div');
-        display.className = 'rate-limit-display';
-        display.style = 'padding: 4px 0; font-size: 13px; color: #444; font-weight: 500;';
-        container.prepend(display);
-    }
-    const status = JSON.parse(localStorage.getItem('rateLimitStatus') || 'null');
-    if (status && status.remaining && status.limits) {
-        display.textContent = `RateLimit: ${status.remaining.perDay}/${status.limits.perDay} (day)`;
-    } else {
-        display.textContent = 'RateLimit: unavailable';
-    }
-}
-
-// After backend response, update localStorage and display
-window.updateRateLimitStatus = function(container, backendStatus) {
-    if (backendStatus && backendStatus.remaining && backendStatus.limits) {
-        localStorage.setItem('rateLimitStatus', JSON.stringify(backendStatus));
-    }
-    updateRateLimitDisplayFromLocal(container);
-};
-
-// On page load, show localStorage value first, then update from backend
+// Remove local rate limit display logic; use centralized logic from rateLimiter.js
+// On page load, show localStorage value first, then update from backend using centralized handler
 // (Assume dataContainer is available after initializeDataContainer)
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         const dataContainer = document.querySelector('.data-container-in');
         if (dataContainer) {
-            // Only update from localStorage on load
+            // Only update from localStorage on load, using centralized handler
             const status = JSON.parse(localStorage.getItem('rateLimitStatus') || 'null') || {};
-            handleRateLimitResponse(dataContainer, status, false);
+            // Use the imported handleRateLimitResponse from rateLimiter.js
+            handleRateLimitResponse(dataContainer, status, false, 'Module');
         }
     }, 500);
 });
-
-// After each backend generation or rate limit check, call:
-// handleRateLimitResponse(dataContainer, backendResponse)
