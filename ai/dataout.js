@@ -30,13 +30,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
             const content = await response.text();
 
-            // Simply update content - no state management needed since it's always expanded
+            // Update content - container is always visible at 100% viewport
             dataContainer.innerHTML = `
                 <div class="data-content">${content}</div>
             `;
-
-            // Show container after content is loaded to prevent flash
-            dataContainer.style.display = 'block';
 
             dataContainer.querySelectorAll('script').forEach(oldScript => {
                 const newScript = document.createElement('script');
@@ -52,9 +49,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             dataContainer.innerHTML = `
                 <div class="data-content">Error loading content: ${error.message}</div>
             `;
-            // Show container even on error
-            dataContainer.style.display = 'block';
-            // Removed close-data-container span
         }
     }
 
@@ -65,26 +59,22 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Load initial content if a lastDataOutUrl exists
             const lastUrl = getLocal('lastDataOutUrl');
             if (lastUrl) {
-                dataContainer.style.display = 'none'; // Hide until content loads
                 loadStoredContent(lastUrl);
             } else {
                  dataContainer.innerHTML = `
                     <div class="data-content">No content loaded yet.</div>
                 `;
-                // Show container if no content to load
-                dataContainer.style.display = 'block';
             }
             return;
         }
 
         const style = document.createElement('style');
         style.textContent = `
-            /* Data out container - always expanded, no states */
+            /* Data out container - always 100% viewport, no state management */
             .data-container-out {
                 position: fixed;
                 top: 0;
                 left: 0;
-                transform: none;
                 background-color: #f2f9f3;
                 padding: 4px;
                 border: 1px solid #4a7c59;
@@ -93,11 +83,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
                 z-index: 500;
                 width: 100%;
-                min-height: 100vh;
-                max-height: 100vh;
+                height: 100vh;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
-                /* visibility controlled by JavaScript to prevent flash */
                 opacity: 1;
             }
 
@@ -108,28 +96,22 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-out .data-content {
                 padding: 0;
                 font-size: 14px;
-                min-height: calc(100vh - 40px);
-                max-height: calc(100vh - 40px);
+                height: calc(100vh - 40px);
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
                 width: 100%;
-                max-width: 100%;
                 margin-top: 30px;
             }
 
             /* Mobile responsiveness */
             @media (max-width: 480px) {
                 .data-container-out {
-                    max-width: 100%;
                     width: 100%;
-                    min-width: 100%;
-                    min-height: 100vh;
-                    max-height: 100vh;
+                    height: 100vh;
                     top: 0;
                     left: 0;
                     right: 0;
-                    transform: none;
                     border-radius: 0;
                     border: none;
                     box-shadow: none;
@@ -142,8 +124,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     overflow-x: auto;
                     overflow-y: auto;
                     margin-top: 25px;
-                    min-height: calc(100vh - 25px);
-                    max-height: calc(100vh - 25px);
+                    height: calc(100vh - 25px);
                 }
             }
         `;
@@ -151,12 +132,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         dataContainer = document.createElement('div');
         dataContainer.className = 'data-container-out';
-        dataContainer.style.display = 'none'; // Completely hide until content loads
         dataContainer.innerHTML = `
             <div class="data-content">No content loaded yet.</div> 
         `;
         document.body.appendChild(dataContainer);
-        console.log('Data out container injected and hidden until content loads (dataout.js)');
+        console.log('Data out container injected - always visible at 100% viewport (dataout.js)');
 
         // REMOVED click listeners for container, close button, and data label for toggling
         // REMOVED initializeGridItems function as it seems unrelated to dataout toggling
@@ -174,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/decision/decisioniq.html': '/ai/decision/decisionoutput.html',
                 '/ai/enneagram/enneagramiq.html': '/ai/enneagram/enneagramoutput.html',
                 '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
-                '/ai/fashion/fashioniq.html': '/ai/fashion/fashionoutput.html', // Added this line
+                '/ai/fashion/fashioniq.html': '/ai/fashion/fashionoutput.html',
                 '/ai/income/incomeiq.html': '/ai/income/incomeoutput.html',
                 '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
                 '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
@@ -185,11 +165,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const outUrl = outputMap[url];
             if (outUrl) {
                 setLocal('lastDataOutUrl', outUrl);
-                // Hide container before loading new content to prevent flash
-                if (dataContainer) {
-                    dataContainer.style.display = 'none';
-                }
-                // Directly load content when a new product is selected
+                // Load content directly since container is always visible
                 console.log(`[DataOut] Product switched. Loading content for: ${outUrl}`);
                 loadStoredContent(outUrl); 
             } else {
@@ -217,17 +193,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'socialiq': '/ai/social/socialoutput.html',
                 'speculationiq': '/ai/speculation/speculationoutput.html',
                 'philosophyiq': '/ai/philosophy/philosophyoutput.html',
-                                'fashioniq': '/ai/fashion/fashionoutput.html'
-
+                'fashioniq': '/ai/fashion/fashionoutput.html'
             };
             const outUrl = moduleOutputMap[moduleName];
             if (outUrl) {
-                console.log(`[DataOut] Loading content for ${moduleName} into always-open container. URL: ${outUrl}`);
+                console.log(`[DataOut] Loading content for ${moduleName} into always-visible container. URL: ${outUrl}`);
                 setLocal('lastDataOutUrl', outUrl);
-                // Hide container before loading content to prevent flash
-                if (dataContainer) {
-                    dataContainer.style.display = 'none';
-                }
+                // Load content directly since container is always visible
                 loadStoredContent(outUrl);
             } else {
                 console.warn(`[DataOut] No output URL mapping found for module: ${moduleName}`);
@@ -237,40 +209,26 @@ document.addEventListener('DOMContentLoaded', async function () {
         window.addEventListener('storage', function (e) {
             if (e.key === 'lastDataOutUrl' && e.newValue) {
                 console.log(`Detected lastDataOutUrl change to: ${e.newValue} (dataout.js)`);
-                // Hide container before loading content from storage to prevent flash
-                if (dataContainer) {
-                    dataContainer.style.display = 'none';
-                }
+                // Load content directly since container is always visible
                 loadStoredContent(e.newValue);
             }
         });
 
         // REMOVED click listener for document (click outside)
-        // REMOVED Restore last state logic (it's always expanded)
+        // REMOVED Restore last state logic (container is always visible)
         // REMOVED Swipe functionality (if any was here)
         
         // Load initial content if a lastDataOutUrl exists from a previous session
         const initialUrl = getLocal('lastDataOutUrl');
         if (initialUrl) {
             console.log('[DataOut] Loading initial content from localStorage:', initialUrl);
-            // Container is already hidden, loadStoredContent will show it after loading
             loadStoredContent(initialUrl);
-        } else {
-            // No content to load, show container with placeholder
-            dataContainer.style.display = 'block';
         }
     }
 
     async function initializeApp() {
-        // Always initialize the data container regardless of cookie state
-        // The cookie check was preventing initialization after consent modals
+        // Always initialize the data container - no state management needed
         initializeDataContainer();
-
-        // REMOVED: Check if data-in is already expanded to adjust z-index appropriately
-        // const dataInContainer = document.querySelector('.data-container-in');
-        // if (dataInContainer && dataInContainer.dataset.state === 'expanded') {
-        //     dataContainer.style.zIndex = '12000';
-        // }
 
         try {
             // Mobile device detection for debugging
@@ -283,9 +241,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 console.log(`Screen size: ${window.screen.width}x${window.screen.height}`);
             }
         } catch (error) {
-            console.error('Error initializing right data container (dataout.js):', error);
+            console.error('Error initializing data out container (dataout.js):', error);
         }
     }
 
-    initializeApp(); // Always initialize container after consent
+    initializeApp(); // Always initialize container - no state management
 });
