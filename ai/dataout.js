@@ -30,16 +30,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
             const content = await response.text();
 
-            // Ensure container is in the expanded state visually
-            dataContainer.classList.remove('initial'); // Ensure 'initial' is removed if it was ever set
-            dataContainer.classList.add('expanded');
-            dataContainer.dataset.state = 'expanded'; // Keep state for CSS and potential future logic
-            // No need to setLocal for 'dataOutContainerState' as it's always expanded
-
+            // Simply update content - no state management needed since it's always expanded
             dataContainer.innerHTML = `
                 <div class="data-content">${content}</div>
             `;
-            // Removed close-data-container span
 
             dataContainer.querySelectorAll('script').forEach(oldScript => {
                 const newScript = document.createElement('script');
@@ -62,10 +56,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     function initializeDataContainer() {
         if (document.querySelector('.data-container-out')) {
             console.log('Data out container already exists, skipping initialization (dataout.js)');
-            dataContainer = document.querySelector('.data-container-out'); // Assign existing
-            // Ensure it's in the correct state if re-initializing somehow
-            dataContainer.className = 'data-container-out expanded';
-            dataContainer.dataset.state = 'expanded';
+            dataContainer = document.querySelector('.data-container-out');
             // Load initial content if a lastDataOutUrl exists
             const lastUrl = getLocal('lastDataOutUrl');
             if (lastUrl) {
@@ -80,100 +71,55 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const style = document.createElement('style');
         style.textContent = `
-            /* Data out container specific styling */
+            /* Data out container - always expanded, no states */
             .data-container-out {
                 position: fixed;
                 top: 0;
-                left: 0; /* Changed from 50% */
-                transform: none; /* Changed from translateX(-50%) */
+                left: 0;
+                transform: none;
                 background-color: #f2f9f3;
                 padding: 4px;
                 border: 1px solid #4a7c59;
                 border-top: none;
                 border-radius: 0 0 27px 27px;
                 box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
-                z-index: 500; /* Adjusted z-index if needed, ensure it's below datain when datain is active */
-                width: 100%; /* Always full width */
-                min-height: 50vh; /* Minimum 50% of viewport height */
-                max-height: 98vh; /* Maximum 98% of viewport height */
+                z-index: 500;
+                width: 100%;
+                min-height: 50vh;
+                max-height: 98vh;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 visibility: visible;
                 opacity: 1;
-                /* Removed transition as it's always open */
-            }
-
-            /* REMOVED .initial and .collapsed styles as they are no longer needed */
-
-            .data-container-out.expanded { /* This is now the default and only state */
-                max-width: 100%;
-                width: 100%;
-                min-width: 100%;
-                min-height: 50vh; 
-                max-height: 98vh; 
-                top: 0;
-                left: 0;
-                transform: none;
-                border: 1px solid #4a7c59; 
-                border-top: none; 
-                border-radius: 0 0 27px 27px; 
-                box-shadow: 0 2px 6px rgba(74, 124, 89, 0.25); 
-                padding: 4px; 
             }
 
             .data-container-out:hover {
-                background-color: #eef7f0; /* Keep hover effect if desired */
+                background-color: #eef7f0;
             }
-
-            /* REMOVED .close-data-container styles as it's removed */
-            
-            .data-container-out .data-label {
-                text-decoration: none;
-                color: #000;
-                font-size: 12px; /* Adjusted from expanded specific */
-                display: flex;
-                justify-content: center;
-                text-align: center;
-                padding: 4px;
-                /* cursor: pointer; REMOVED - no longer clickable to toggle */
-                transition: color 0.2s ease;
-                line-height: 1.2;
-                font-family: "Geist", sans-serif;
-                writing-mode: horizontal-tb; /* Keep as is */
-                text-orientation: mixed; /* Keep as is */
-                position: absolute; /* To position it like before in expanded state */
-                top: 4px;
-                left: 50%;
-                transform: translateX(-50%);
-                background-color: #f5f5f5;
-                border-radius: 4px;
-            }
-            
-            /* REMOVED .data-container-out.expanded .data-label as it's merged above */
 
             .data-container-out .data-content {
                 padding: 0;
                 font-size: 14px;
-                min-height: calc(50vh - 40px); 
-                max-height: calc(98vh - 40px); 
+                min-height: calc(50vh - 40px);
+                max-height: calc(98vh - 40px);
                 overflow-y: auto;
                 overflow-x: auto;
                 font-family: "Inter", sans-serif;
                 width: 100%;
                 max-width: 100%;
-                margin-top: 30px; /* To clear the data-label */
+                margin-top: 30px;
             }
 
-            /* Mobile responsiveness for data out container */
+            /* Mobile responsiveness */
             @media (max-width: 480px) {
-                .data-container-out { /* Simplified, as it's always expanded */
+                .data-container-out {
                     max-width: 100%;
                     width: 100%;
                     min-width: 100%;
-                    min-height: 90vh; 
-                    max-height: 95vh; 
+                    min-height: 90vh;
+                    max-height: 95vh;
                     top: 0;
-                    left:0; /* ensure it takes full width */
+                    left: 0;
                     right: 0;
                     transform: none;
                     border-radius: 0;
@@ -182,37 +128,26 @@ document.addEventListener('DOMContentLoaded', async function () {
                     padding: 0;
                 }
 
-                /* REMOVED .initial, .collapsed mobile styles */
-
-                .data-container-out .data-label { /* Adjusted from expanded specific */
-                    font-size: 16px;
-                    padding: 4px;
-                }
-                
-                /* REMOVED .close-data-container mobile styles */
-
                 .data-container-out .data-content {
                     font-size: 12px;
                     padding: 0;
                     overflow-x: auto;
                     overflow-y: auto;
-                    margin-top: 25px; /* To clear data-label */
-                    min-height: calc(90vh - 25px); 
-                    max-height: calc(95vh - 25px); 
+                    margin-top: 25px;
+                    min-height: calc(90vh - 25px);
+                    max-height: calc(95vh - 25px);
                 }
             }
         `;
         document.head.appendChild(style);
 
         dataContainer = document.createElement('div');
-        // Set to expanded state directly
-        dataContainer.className = 'data-container-out expanded'; 
-        dataContainer.dataset.state = 'expanded';
+        dataContainer.className = 'data-container-out';
         dataContainer.innerHTML = `
-            <div class="data-content">Initializing Data Out...</div> 
+            <div class="data-content">No content loaded yet.</div> 
         `;
         document.body.appendChild(dataContainer);
-        console.log('Data out container injected and set to always expanded (dataout.js)');
+        console.log('Data out container injected and always expanded (dataout.js)');
 
         // REMOVED click listeners for container, close button, and data label for toggling
         // REMOVED initializeGridItems function as it seems unrelated to dataout toggling
@@ -276,19 +211,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (outUrl) {
                 console.log(`[DataOut] Loading content for ${moduleName} into always-open container. URL: ${outUrl}`);
                 setLocal('lastDataOutUrl', outUrl);
-                
-                const dataInContainer = document.querySelector('.data-container-in');
-                if (dataInContainer && dataInContainer.dataset.state === 'expanded') {
-                    console.log('[DataOut] Collapsing datain container first');
-                    const collapseDatinEvent = new CustomEvent('collapse-datain-container');
-                    document.dispatchEvent(collapseDatinEvent);
-                    
-                    setTimeout(() => {
-                        loadStoredContent(outUrl);
-                    }, 100); // Delay to allow datain to collapse
-                } else {
-                    loadStoredContent(outUrl);
-                }
+                loadStoredContent(outUrl);
             } else {
                 console.warn(`[DataOut] No output URL mapping found for module: ${moduleName}`);
             }
@@ -297,7 +220,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         window.addEventListener('storage', function (e) {
             if (e.key === 'lastDataOutUrl' && e.newValue) {
                 console.log(`Detected lastDataOutUrl change to: ${e.newValue} (dataout.js)`);
-                // Since dataContainer is always open, just load the new content.
                 loadStoredContent(e.newValue);
             }
         });
