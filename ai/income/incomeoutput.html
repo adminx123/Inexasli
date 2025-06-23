@@ -14,6 +14,7 @@
   
   <!-- Chart.js CDN for interactive charts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script src="../../utility/enhancedUI.js"></script>
   
   <style>
     /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
@@ -1598,6 +1599,23 @@
     });
 
 })();
+
+// Initialize enhanced UI system
+function initEnhancedUISystem() {
+  setTimeout(() => {
+    if (window.enhancedUI) {
+      window.enhancedUI.init({
+        containerId: 'main-content',
+        scrollToTop: true,
+        embedEnforcement: true,
+        accessibility: true
+      });
+    } else {
+      console.warn('Enhanced UI system not loaded');
+    }
+  }, 100);
+}
+initEnhancedUISystem();
 </script>
 </body>
 </html>
