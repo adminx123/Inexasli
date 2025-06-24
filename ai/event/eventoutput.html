@@ -570,7 +570,7 @@
 
       function createEventPlanVisualization(data, container) {
         if (!data) {
-          container.innerHTML = '<div class="error-message">No event plan data available.</div>';
+          container.innerHTML = '';
           return;
         }
 
@@ -1007,7 +1007,7 @@
           createEventPlanVisualization(data, outputSpan);
         } else {
           console.log('No event plan data found');
-          outputSpan.innerHTML = '<div class="error-message">No event plan data available. Please generate an event plan first.</div>';
+          outputSpan.innerHTML = '';
         }
       }
 

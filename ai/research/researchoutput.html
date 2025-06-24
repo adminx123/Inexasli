@@ -52,6 +52,13 @@
     function updateOutput() {
       let d = getJSON('researchIqResponse');
       if (d && d.message === 'Success' && d.data) d = d.data;
+      
+      // If no data at all, show blank screen
+      if (!d || (!d.summary && (!d.keyFindings || !d.keyFindings.length) && (!d.sources || !d.sources.length) && (!d.charts || !d.charts.length))) {
+        document.getElementById('main-content').innerHTML = '';
+        return;
+      }
+      
       // Summary
       document.getElementById('summary-content').innerText = d?.summary || 'No summary available.';
       // Key Findings
