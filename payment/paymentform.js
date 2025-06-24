@@ -224,11 +224,12 @@ function addPaymentModalStyles() {
         
         .payment-button-row {
             display: flex;
+            flex-direction: column;
             gap: 8px;
         }
         
         .payment-support-link {
-            flex: 1;
+            width: 100%;
             padding: 10px 12px;
             background-color: #f2f9f3;
             color: #2d5a3d;
@@ -245,6 +246,7 @@ function addPaymentModalStyles() {
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
+            box-sizing: border-box;
         }
         
         .payment-support-link:hover {
