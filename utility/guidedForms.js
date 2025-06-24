@@ -423,6 +423,16 @@ class GuidedFormSystem {
         this.currentStep = stepIndex;
         this.displayStep(nextStep);
         this.updateProgressIndicator();
+        
+        // Dispatch event for datain.js button updates
+        document.dispatchEvent(new CustomEvent('guided-forms-step-changed', {
+            detail: {
+                currentStep: this.currentStep,
+                totalSteps: this.steps.length,
+                canGoPrevious: this.currentStep > 0,
+                canGoNext: this.currentStep < this.steps.length - 1
+            }
+        }));
 
         // --- SCROLL TO TOP LOGIC (robust debug) ---
         setTimeout(() => {
@@ -572,101 +582,16 @@ class GuidedFormSystem {
      * Create progress indicator
      */
     createProgressIndicator() {
-        if (!this.config.showProgressIndicator) return;
-        
-        // Don't show progress indicator when datain is collapsed
-        const datainContainer = document.querySelector('.data-container-in');
-        if (datainContainer && (datainContainer.classList.contains('collapsed') || datainContainer.classList.contains('visually-collapsed'))) {
-            return;
-        }
-        
-        // Remove existing indicator
-        const existingIndicator = document.getElementById('guided-form-progress');
-        if (existingIndicator) {
-            existingIndicator.remove();
-        }
-
-        const progressContainer = document.createElement('div');
-        progressContainer.id = 'guided-form-progress';
-        progressContainer.style.cssText = `
-            position: absolute;
-            top: 10px;
-            left: 15px;
-            border-radius: 50px;
-            padding: 4px 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: "Inter", sans-serif;
-            font-size: 12px;
-            font-weight: 500;
-            z-index: 11003;
-        `;
-        
-        // Progress dots
-        const dotsContainer = document.createElement('div');
-        dotsContainer.id = 'progress-dots';
-        dotsContainer.style.cssText = 'display: flex; gap: 12px; touch-action: pan-x;'; // Larger gap for touch
-
-        this.steps.forEach((_, index) => {
-            const dot = document.createElement('div');
-            dot.className = 'progress-dot';
-            dot.style.cssText = `
-                width: 18px;
-                height: 18px;
-                border-radius: 50%;
-                background: ${index === this.currentStep ? '#000' : '#ccc'};
-                transition: background 0.2s ease, box-shadow 0.2s;
-                cursor: pointer;
-                box-shadow: ${index === this.currentStep ? '0 0 0 3px #aaa' : 'none'};
-            `;
-            dot.title = this.steps[index]?.label || `Step ${index + 1}`;
-            dot.addEventListener('click', () => {
-                this.showStep(index);
-            });
-            dotsContainer.appendChild(dot);
-        });
-        // Swipe support for mobile
-        let touchStartX = null;
-        dotsContainer.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 1) {
-                touchStartX = e.touches[0].clientX;
-            }
-        });
-        dotsContainer.addEventListener('touchend', (e) => {
-            if (touchStartX !== null && e.changedTouches.length === 1) {
-                const dx = e.changedTouches[0].clientX - touchStartX;
-                if (Math.abs(dx) > 40) {
-                    if (dx < 0 && this.currentStep < this.steps.length - 1) {
-                        this.showStep(this.currentStep + 1);
-                    } else if (dx > 0 && this.currentStep > 0) {
-                        this.showStep(this.currentStep - 1);
-                    }
-                }
-            }
-            touchStartX = null;
-        });
-        progressContainer.appendChild(dotsContainer);
-        
-        // Append to datain container since we know it exists and is expanded
-        datainContainer.appendChild(progressContainer);
+        // No longer creating progress indicator - navigation handled by datain.js buttons
+        return;
     }
     
     /**
      * Update progress indicator
      */
     updateProgressIndicator() {
-        const dots = document.querySelectorAll('.progress-dot');
-        
-        dots.forEach((dot, index) => {
-            if (index === this.currentStep) {
-                dot.style.background = '#000';
-            } else if (this.completedSteps.has(index)) {
-                dot.style.background = '#666';
-            } else {
-                dot.style.background = '#ccc';
-            }
-        });
+        // No longer updating progress indicator - navigation handled by datain.js buttons
+        return;
     }
     
     /**
@@ -833,9 +758,56 @@ function toggleGuidedMode() {
     }
 }
 
+/**
+ * Navigate to previous step - called by datain.js buttons
+ */
+function guidedFormsPrevious() {
+    if (window.guidedForms && window.guidedForms.isInitialized && window.guidedForms.currentStep > 0) {
+        window.guidedForms.showStep(window.guidedForms.currentStep - 1);
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Navigate to next step - called by datain.js buttons
+ */
+function guidedFormsNext() {
+    if (window.guidedForms && window.guidedForms.isInitialized && window.guidedForms.steps && window.guidedForms.currentStep < window.guidedForms.steps.length - 1) {
+        window.guidedForms.showStep(window.guidedForms.currentStep + 1);
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Get current step info for button states - called by datain.js buttons
+ */
+function getGuidedFormsState() {
+    if (window.guidedForms && window.guidedForms.isInitialized) {
+        return {
+            currentStep: window.guidedForms.currentStep,
+            totalSteps: window.guidedForms.steps.length,
+            canGoPrevious: window.guidedForms.currentStep > 0,
+            canGoNext: window.guidedForms.currentStep < window.guidedForms.steps.length - 1,
+            isInitialized: true
+        };
+    }
+    return {
+        currentStep: 0,
+        totalSteps: 0,
+        canGoPrevious: false,
+        canGoNext: false,
+        isInitialized: false
+    };
+}
+
 // Export functions for global access
 window.initGuidedForms = initGuidedForms;
 window.toggleGuidedMode = toggleGuidedMode;
+window.guidedFormsPrevious = guidedFormsPrevious;
+window.guidedFormsNext = guidedFormsNext;
+window.getGuidedFormsState = getGuidedFormsState;
 
 // Auto-initialize when script loads (can be disabled by setting window.autoInitGuidedForms = false)
 document.addEventListener('DOMContentLoaded', () => {
