@@ -1,23 +1,21 @@
-# NOTE: For multi-worker projects, deploy each worker individually using:
-#   npx wrangler deploy --env <worker>
-# Example for the 'event' worker:
-#   npx wrangler deploy --env event
+# CENTRALIZED MASTER WORKER ARCHITECTURE
+# This project uses a master worker that imports all individual modules.
+# Individual modules (calorie.js, event.js, etc.) are NOT standalone workers - 
+# they export configuration and prompt generation functions to the master.
 #
-# This ensures the correct script, bindings, and environment are used for each worker.
-# Always run these commands from the main project directory (where this wrangler.toml is located).
+# DEPLOYMENT SEQUENCE:
+# 1. Deploy rate limiter first (required dependency):
+#    npx wrangler deploy --env ratelimit
 #
-# To deploy the master worker, use:
-#   npx wrangler deploy --env master
+# 2. Deploy master worker (includes all 10 modules from workers.txt):
+#    npx wrangler deploy --env master
 #
-# To deploy all main module workers with FACT_STORE KV binding, run:
-#   npx wrangler deploy --env event
-#   npx wrangler deploy --env enneagram
-#   npx wrangler deploy --env fashion
-#   npx wrangler deploy --env income
-#   npx wrangler deploy --env quiz
-#   npx wrangler deploy --env philosophy
+# The master worker automatically includes all modules listed in workers.txt:
+# - calorie/calorie.js, decision/decision.js, enneagram/enneagram.js
+# - event/event.js, fashion/fashion.js, income/income.js  
+# - philosophy/philosophy.js, quiz/quiz.js, research/research.js, social/social.js
 #
-# (Repeat for any other worker as needed.)
+# NO individual worker deployments needed - master handles everything!
 
 account_id = "b70c309587ed8ba2bfa06320792ea457"
 workers_dev = true
@@ -41,15 +39,18 @@ binding = "RATE_LIMIT_KV"
 id = "2da5e6f46847458a9aa83ffe54dea66e"
 preview_id = "2da5e6f46847458a9aa83ffe54dea66e"
 
+# --- Master Worker (Centralized - Includes All Modules) ---
 [env.master]
 name = "master"
 main = "./ai/master.js"
 
+# KV namespace for storing analysis facts and data
 [[env.master.kv_namespaces]]
 binding = "FACT_STORE"
 id = "285495ae3e0f468a86f47bdd056ecfc3"
 preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 
+# Service bindings for external dependencies
 [[env.master.services]]
 binding = "secret_binding"
 service = "secretworker"

@@ -87,6 +87,7 @@ Accepting things I cannot change"></textarea>
         
         // Create combined payload with both form data and fingerprint
         const workerPayload = {
+            module: 'philosophy',
             formData: formData,
             fingerprint: fingerprintData
         };
@@ -106,11 +107,7 @@ Accepting things I cannot change"></textarea>
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            module: 'philosophy',
-                            formData: formData,
-                            fingerprint: getFingerprintForWorker()
-                        })
+                        body: JSON.stringify(workerPayload)
                     });
                     let responseData;
                     try {

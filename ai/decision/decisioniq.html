@@ -117,6 +117,7 @@ import { handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
       const fingerprintData = getFingerprintForWorker();
       // Create combined payload with both form data and fingerprint
       const workerPayload = {
+        module: 'decision',
         formData: formData,
         fingerprint: fingerprintData
       };

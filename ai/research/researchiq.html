@@ -67,6 +67,13 @@ async function handleGenerateResearchIq() {
         // Get fingerprint for the request
         const fingerprint = getFingerprintForWorker();
 
+        // Create combined payload with both form data and fingerprint
+        const workerPayload = {
+            module: 'research',
+            formData: formData,
+            fingerprint: fingerprint
+        };
+
         // Use enhanced loading with educational facts
         const result = await window.enhancedLoading(
             'generate-research-btn',
@@ -76,7 +83,7 @@ async function handleGenerateResearchIq() {
                 const response = await fetch(apiUrl, { 
                     method: 'POST', 
                     headers: {'Content-Type':'application/json'}, 
-                    body: JSON.stringify({ module: "research", formData, fingerprint })
+                    body: JSON.stringify(workerPayload)
                 });
                 
                 if (!response.ok) {

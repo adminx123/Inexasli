@@ -1400,6 +1400,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
             
             // Create combined payload with both form data and fingerprint
             const workerPayload = {
+                module: 'income',
                 formData: payloadToSend,
                 fingerprint: fingerprintData
             };
@@ -1426,10 +1427,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            module: 'income',
-                            ...workerPayload
-                        })
+                        body: JSON.stringify(workerPayload)
                     });
 
                     if (!response.ok) {

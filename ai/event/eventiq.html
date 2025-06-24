@@ -193,6 +193,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
         
         // Create combined payload with both form data and fingerprint
         const workerPayload = {
+            module: 'event',
             formData: formData,
             fingerprint: fingerprintData
         };

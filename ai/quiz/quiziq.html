@@ -161,6 +161,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
         
         // Create combined payload with both form data and fingerprint
         const workerPayload = {
+            module: 'quiz',
             formData: formData,
             fingerprint: fingerprintData
         };
@@ -179,11 +180,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        module: 'quiz',
-                        formData: formData,
-                        fingerprint: fingerprintData
-                    })
+                    body: JSON.stringify(workerPayload)
                 });
                 
                 if (!response.ok) {

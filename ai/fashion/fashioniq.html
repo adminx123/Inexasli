@@ -175,6 +175,13 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
         images: images // Add images to the form data
       };
 
+      // Create combined payload with both form data and fingerprint
+      const workerPayload = {
+        module: 'fashion',
+        formData: fashionFormData,
+        fingerprint: fingerprint
+      };
+
       // Use enhanced loading with educational facts
       const result = await window.enhancedLoading(
         'generate-fashion-btn',
@@ -184,11 +191,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
           const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              module: 'fashion',
-              formData: fashionFormData, 
-              fingerprint 
-            })
+            body: JSON.stringify(workerPayload)
           });
 
           if (!response.ok) {
