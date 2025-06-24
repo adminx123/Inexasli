@@ -662,9 +662,13 @@ function generatePDF(containerId, getContentCallback) {
         return;
     }
     
-    // Check if output container has actual content (not just "No content loaded yet")
+    // Check if output container has actual content
     const outputContent = outputContainer.textContent || outputContainer.innerText || '';
-    if (outputContent.includes('No content loaded yet') || outputContent.trim().length < 50) {
+    const hasValidContent = outputContent.trim().length > 50 && 
+                           !outputContent.includes('No content loaded yet') &&
+                           outputContainer.querySelector('h3, p, .content-section, .analysis-result');
+    
+    if (!hasValidContent) {
         window.enhancedUI.closeToast(progressToast);
         window.enhancedUI.showToast('⚠️ No analysis results found. Please generate your analysis first.', 'warning', 6000);
         return;

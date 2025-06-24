@@ -442,15 +442,15 @@ class GuidedFormSystem {
                 console.log(`[GuidedForms][Debug] .data-content[${idx}] scrollTop BEFORE:`, el.scrollTop, el);
             });
 
-            // Try to scroll all .data-content inside expanded containers
+            // Try to scroll all .data-content inside visible containers
             let didScroll = false;
-            const expandedContainers = document.querySelectorAll('.data-container-income.expanded, .data-container-in.expanded');
-            expandedContainers.forEach((container, cidx) => {
+            const visibleContainers = document.querySelectorAll('.data-container-income.visible, .data-container-in.visible');
+            visibleContainers.forEach((container, cidx) => {
                 const content = container.querySelector('.data-content');
                 if (content) {
                     content.scrollTop = 0;
                     if (typeof content.scrollTo === 'function') content.scrollTo(0, 0);
-                    console.log(`[GuidedForms] Scrolled .data-content in expanded container[${cidx}] to top`, content);
+                    console.log(`[GuidedForms] Scrolled .data-content in visible container[${cidx}] to top`, content);
                     didScroll = true;
                 }
             });

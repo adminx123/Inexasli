@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 loadStoredContent(lastUrl);
             } else {
                  dataContainer.innerHTML = `
-                    <div class="data-content">No content loaded yet.</div>
+                    <div class="data-content"></div>
                 `;
             }
             return;
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer = document.createElement('div');
         dataContainer.className = 'data-container-out';
         dataContainer.innerHTML = `
-            <div class="data-content">No content loaded yet.</div> 
+            <div class="data-content"></div> 
         `;
         document.body.appendChild(dataContainer);
         console.log('Data out container injected - always visible at 100% viewport (dataout.js)');

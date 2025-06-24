@@ -859,12 +859,13 @@ export function initializeSimpleVerticalSwipe(container, toggleFunction) {
             const isDownSwipe = deltaY > 0;
             
             console.log('[SimpleVerticalSwipe] Swipe detected:', isUpSwipe ? 'UP' : 'DOWN');
-            console.log('[SimpleVerticalSwipe] Current container state:', container.dataset.state);
+            const isContainerVisible = container.classList.contains('visible');
+            console.log('[SimpleVerticalSwipe] Current container visible state:', isContainerVisible);
             
-            if (isUpSwipe && container.dataset.state !== 'expanded') {
+            if (isUpSwipe && !isContainerVisible) {
                 console.log('[SimpleVerticalSwipe] Expanding container via swipe up');
                 toggleFunction();
-            } else if (isDownSwipe && container.dataset.state === 'expanded') {
+            } else if (isDownSwipe && isContainerVisible) {
                 console.log('[SimpleVerticalSwipe] Collapsing container via swipe down');
                 toggleFunction();
             }
