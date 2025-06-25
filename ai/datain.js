@@ -502,6 +502,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 flex-wrap: nowrap;
             }
 
+            /* Hide only the guided form navigation buttons when container is minimized */
+            .data-container-in:not(.visible) #datain-guided-prev-btn,
+            .data-container-in:not(.visible) #datain-guided-next-btn {
+                display: none !important;
+            }
+
             /* Remove close button styles since we don't want it */
 
             /* Content area - always present, scrollable */
