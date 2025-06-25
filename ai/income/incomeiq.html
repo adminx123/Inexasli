@@ -822,7 +822,7 @@
 
 import { FormPersistence } from '/utility/formPersistence.js';
 import setJSON from '/utility/setJSON.js';
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/rateLimiter.js';
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/utility/rateLimiter.js';
 
 (function() {
     console.log("Income IQ script initializing");
@@ -1416,53 +1416,79 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
             }, null, 2));
 
             // Use enhanced loading with educational facts
-            const result = await window.enhancedLoading(
-                'generate-income-btn',
-                'income',
-                async () => {
-                    // Increment request count
-                    incrementRequestCount('income');
-                    
-                    const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(workerPayload)
-                    });
+            const dataContainer = document.querySelector('.device-container') || document.body;
+            let backendResponse = null;
+            
+            try {
+                const result = await window.enhancedLoading(
+                    'generate-income-btn',
+                    'income',
+                    async () => {
+                        const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(workerPayload)
+                        });
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        let responseData;
+                        try {
+                            responseData = await response.json();
+                        } catch (e) {
+                            responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
+                        }
+                        
+                        // Store backend response for error handling
+                        backendResponse = responseData;
+                        
+                        // Always call handleRateLimitResponse with backend response
+                        handleRateLimitResponse(dataContainer, responseData, !response.ok, 'IncomeIQ');
+
+                        if (!response.ok) {
+                            throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+                        }
+
+                        if (responseData.message !== 'Success') {
+                            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                        }
+
+                        return responseData;
                     }
+                );
+                
+                // Increment request count after successful response
+                incrementRequestCount('income');
 
-                    const responseData = await response.json();
-                    if (responseData.message !== 'Success') {
-                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                    }
-
-                    return responseData;
+                // Store the response using centralized system
+                if (window.incomeFormPersistence) {
+                    window.incomeFormPersistence.saveResponseData(result);
                 }
-            );
 
-            // Store the response using centralized system
-            if (window.incomeFormPersistence) {
-                window.incomeFormPersistence.saveResponseData(result);
+                // Clear stale tax calculations flag
+                localStorage.removeItem('taxCalculationsStale');
+                localStorage.removeItem('taxCalculationsStaleTimestamp');
+                console.log("[IncomeIQ] ✅ Tax calculations are now fresh");
+
+                // Dispatch an event to notify dataout.js that a response was received
+                const event = new CustomEvent('api-response-received', {
+                    detail: {
+                        module: 'incomeiq',
+                        type: 'worker-response',
+                        timestamp: Date.now()
+                    }
+                });
+                document.dispatchEvent(event);
+                console.log('[IncomeIQ] Dispatched api-response-received event');
+                
+                console.log('[IncomeIQ] Income report generated successfully');
+            } catch (error) {
+                // If backendResponse is available, update rate limit display and show error
+                if (backendResponse && dataContainer) {
+                    handleRateLimitResponse(dataContainer, backendResponse, true, 'IncomeIQ');
+                }
+                console.error('[IncomeIQ] Error generating income report:', error);
+                alert('An error occurred while generating your income report. Please try again later.');
             }
-
-            // Clear stale tax calculations flag
-            localStorage.removeItem('taxCalculationsStale');
-            localStorage.removeItem('taxCalculationsStaleTimestamp');
-            console.log("[IncomeIQ] ✅ Tax calculations are now fresh");
-
-            // Dispatch an event to notify dataout.js that a response was received
-            const event = new CustomEvent('api-response-received', {
-                detail: {
-                    module: 'incomeiq',
-                    type: 'worker-response',
-                    timestamp: Date.now()
-                }
-            });
-            document.dispatchEvent(event);
-            console.log('[IncomeIQ] Dispatched api-response-received event');
 
         } catch (error) {
             console.error('[IncomeIQ] Error generating income report:', error);

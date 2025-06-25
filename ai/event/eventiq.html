@@ -141,8 +141,8 @@ Need accommodations for 3 wheelchair users"></textarea>
  * jurisdictions worldwide.
 */
 
-// Import fingerprint utilities
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/rateLimiter.js';
+// Import rate limiting utilities
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/utility/rateLimiter.js';
 
 (function() {
     console.log("EventIQ script initializing");
@@ -198,56 +198,78 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
             fingerprint: fingerprintData
         };
         
-        const result = await window.enhancedLoading(
-            'generate-event-btn',
-            'event',
-            async () => {
-                // Send data to worker
-                const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
-                
-                console.log('[EventIQ] Sending eventIqInput to worker');
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(workerPayload) // Use new payload structure
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                
-                const responseData = await response.json();
-                console.log('[EventIQ] Worker response:', responseData);
-                
-                if (responseData.message !== 'Success') {
-                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                }
-                
-                // Store the response
-                window.eventFormPersistence.saveResponseData(responseData);
-                
-                // Dispatch an event to notify dataout.js that a response was received
-                const event = new CustomEvent('api-response-received', {
-                    detail: {
-                        module: 'eventiq',
-                        type: 'worker-response',
-                        timestamp: Date.now()
+        const dataContainer = document.querySelector('.device-container') || document.body;
+        let backendResponse = null;
+        
+        try {
+            const result = await window.enhancedLoading(
+                'generate-event-btn',
+                'event',
+                async () => {
+                    // Send data to worker
+                    const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
+                    
+                    console.log('[EventIQ] Sending eventIqInput to worker');
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(workerPayload) // Use new payload structure
+                    });
+                    
+                    let responseData;
+                    try {
+                        responseData = await response.json();
+                    } catch (e) {
+                        responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
                     }
-                });
-                document.dispatchEvent(event);
-                console.log('[EventIQ] Dispatched api-response-received event');
-                
-                return responseData;
+                    
+                    // Store backend response for error handling
+                    backendResponse = responseData;
+                    
+                    // Always call handleRateLimitResponse with backend response
+                    handleRateLimitResponse(dataContainer, responseData, !response.ok, 'EventIQ');
+                    
+                    if (!response.ok) {
+                        throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    if (responseData.message !== 'Success') {
+                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                    }
+                    
+                    // Store the response
+                    window.eventFormPersistence.saveResponseData(responseData);
+                    
+                    // Dispatch an event to notify dataout.js that a response was received
+                    const event = new CustomEvent('api-response-received', {
+                        detail: {
+                            module: 'eventiq',
+                            type: 'worker-response',
+                            timestamp: Date.now()
+                        }
+                    });
+                    document.dispatchEvent(event);
+                    console.log('[EventIQ] Dispatched api-response-received event');
+                    
+                    return responseData;
+                }
+            );
+            
+            // Increment request count after successful response
+            incrementRequestCount('event');
+            
+            // Enhanced loading either returns result or throws error - no need to check result.success
+            console.log('[EventIQ] Event plan generated successfully');
+        } catch (error) {
+            // If backendResponse is available, update rate limit display and show error
+            if (backendResponse && dataContainer) {
+                handleRateLimitResponse(dataContainer, backendResponse, true, 'EventIQ');
             }
-        );
-        
-        // Increment request count after successful response
-        incrementRequestCount('event');
-        
-        // Enhanced loading either returns result or throws error - no need to check result.success
-        console.log('[EventIQ] Event plan generated successfully');
+            // Optionally, show a toast/modal here for generic errors
+            console.error('[EventIQ] Error:', error);
+        }
     }
 
     // Initialization

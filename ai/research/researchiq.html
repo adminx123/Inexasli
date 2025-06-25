@@ -48,8 +48,8 @@
 <script src="../../utility/toolTip.js" type="module"></script>
 <script src="../../payment/paymentform.js"></script>
 <script type="module">
-// Import fingerprint utilities
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/rateLimiter.js';
+// Import rate limiting utilities
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/utility/rateLimiter.js';
 async function handleGenerateResearchIq() {
     try {
         const formData = window.researchFormPersistence.getSavedFormData();
@@ -75,46 +75,72 @@ async function handleGenerateResearchIq() {
         };
 
         // Use enhanced loading with educational facts
-        const result = await window.enhancedLoading(
-            'generate-research-btn',
-            'research',
-            async () => {
-                const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
-                const response = await fetch(apiUrl, { 
-                    method: 'POST', 
-                    headers: {'Content-Type':'application/json'}, 
-                    body: JSON.stringify(workerPayload)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+        const dataContainer = document.querySelector('.device-container') || document.body;
+        let backendResponse = null;
+        
+        try {
+            const result = await window.enhancedLoading(
+                'generate-research-btn',
+                'research',
+                async () => {
+                    const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
+                    const response = await fetch(apiUrl, { 
+                        method: 'POST', 
+                        headers: {'Content-Type':'application/json'}, 
+                        body: JSON.stringify(workerPayload)
+                    });
+                    
+                    let responseData;
+                    try {
+                        responseData = await response.json();
+                    } catch (e) {
+                        responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
+                    }
+                    
+                    // Store backend response for error handling
+                    backendResponse = responseData;
+                    
+                    // Always call handleRateLimitResponse with backend response
+                    handleRateLimitResponse(dataContainer, responseData, !response.ok, 'ResearchIQ');
+                    
+                    if (!response.ok) {
+                        throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    if (responseData.message !== 'Success') {
+                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                    }
+                    
+                    return responseData;
                 }
-                
-                const responseData = await response.json();
-                if (responseData.message !== 'Success') {
-                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                }
-                
-                return responseData;
-            }
-        );
+            );
 
-        // Increment request count after successful response
-        incrementRequestCount();
-        
-        // Store the response using centralized system
-        window.researchFormPersistence.saveResponseData(result);
-        
-        // Dispatch an event to notify dataout.js that a response was received
-        const event = new CustomEvent('api-response-received', {
-            detail: {
-                module: 'researchiq',
-                type: 'worker-response',
-                timestamp: Date.now()
+            // Increment request count after successful response
+            incrementRequestCount();
+            
+            // Store the response using centralized system
+            window.researchFormPersistence.saveResponseData(result);
+            
+            // Dispatch an event to notify dataout.js that a response was received
+            const event = new CustomEvent('api-response-received', {
+                detail: {
+                    module: 'researchiq',
+                    type: 'worker-response',
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
+            console.log('[ResearchIQ] Dispatched api-response-received event');
+            
+            console.log('[ResearchIQ] Research report generated successfully');
+        } catch (error) {
+            // If backendResponse is available, update rate limit display and show error
+            if (backendResponse && dataContainer) {
+                handleRateLimitResponse(dataContainer, backendResponse, true, 'ResearchIQ');
             }
-        });
-        document.dispatchEvent(event);
-        console.log('[ResearchIQ] Dispatched api-response-received event');
+            console.error('[ResearchIQ] Error generating research report:', error);
+            alert('An error occurred while generating your research report. Please try again later.');
+        }
         
     } catch (error) {
         console.error('[ResearchIQ] Error generating research report:', error);

@@ -134,8 +134,8 @@ Should I apologize first"></textarea>
  * jurisdictions worldwide.
 */
 
-// Import fingerprint utilities
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/utility/rateLimiter.js';
+// Import rate limiting utilities
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/utility/rateLimiter.js';
 
 (function() {
     console.log("SocialIQ script initializing");
@@ -198,56 +198,80 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited } from '/
             fingerprint: fingerprintData
         };
         
-        const result = await window.enhancedLoading(
-            'generate-social-btn',
-            'social',
-            async () => {
-                // Send data to worker
-                const apiUrl = 'https://master.4hm7q4q75z.workers.dev/'; // Per x.txt: use master worker endpoint
-                
-                console.log('[SocialIQ] Sending socialIqInput to worker');
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(workerPayload) // Use consistent payload structure
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                
-                const responseData = await response.json();
-                console.log('[SocialIQ] Worker response:', responseData);
-                
-                if (responseData.message !== 'Success') {
-                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                }
-                
-                // Store the response
-                window.socialFormPersistence.saveResponseData(responseData);
-                
-                // Dispatch an event to notify dataout.js that a response was received
-                const event = new CustomEvent('api-response-received', {
-                    detail: {
-                        module: 'socialiq',
-                        type: 'worker-response',
-                        timestamp: Date.now()
+        const dataContainer = document.querySelector('.device-container') || document.body;
+        let backendResponse = null;
+        
+        try {
+            const result = await window.enhancedLoading(
+                'generate-social-btn',
+                'social',
+                async () => {
+                    // Send data to worker
+                    const apiUrl = 'https://master.4hm7q4q75z.workers.dev/'; // Per x.txt: use master worker endpoint
+                    
+                    console.log('[SocialIQ] Sending socialIqInput to worker');
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(workerPayload) // Use consistent payload structure
+                    });
+                    
+                    let responseData;
+                    try {
+                        responseData = await response.json();
+                    } catch (e) {
+                        responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
                     }
-                });
-                document.dispatchEvent(event);
-                console.log('[SocialIQ] Dispatched api-response-received event');
-                
-                return responseData;
+                    
+                    // Store backend response for error handling
+                    backendResponse = responseData;
+                    
+                    // Always call handleRateLimitResponse with backend response
+                    handleRateLimitResponse(dataContainer, responseData, !response.ok, 'SocialIQ');
+                    
+                    if (!response.ok) {
+                        throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    console.log('[SocialIQ] Worker response:', responseData);
+                    
+                    if (responseData.message !== 'Success') {
+                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                    }
+                    
+                    // Store the response
+                    window.socialFormPersistence.saveResponseData(responseData);
+                    
+                    // Dispatch an event to notify dataout.js that a response was received
+                    const event = new CustomEvent('api-response-received', {
+                        detail: {
+                            module: 'socialiq',
+                            type: 'worker-response',
+                            timestamp: Date.now()
+                        }
+                    });
+                    document.dispatchEvent(event);
+                    console.log('[SocialIQ] Dispatched api-response-received event');
+                    
+                    return responseData;
+                }
+            );
+            
+            // Increment request count after successful response
+            incrementRequestCount('social');
+            
+            // Enhanced loading either returns result or throws error - no need to check result.success
+            console.log('[SocialIQ] Social analysis generated successfully');
+        } catch (error) {
+            // If backendResponse is available, update rate limit display and show error
+            if (backendResponse && dataContainer) {
+                handleRateLimitResponse(dataContainer, backendResponse, true, 'SocialIQ');
             }
-        );
-        
-        // Increment request count after successful response
-        incrementRequestCount('social');
-        
-        // Enhanced loading either returns result or throws error - no need to check result.success
-        console.log('[SocialIQ] Social analysis generated successfully');
+            console.error('[SocialIQ] Error generating social analysis:', error);
+            alert('An error occurred while generating your social analysis. Please try again later.');
+        }
     }
 
     // Initialization
