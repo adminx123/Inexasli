@@ -221,3 +221,23 @@
   line-height: 1.6;
   margin-top: 15px;
 }
+
+/* Highlight and expand active checkboxrow */
+.checkboxrow.active,
+.checkboxrow.dual-input.active {
+  box-shadow: 0 0 0 2px #4a7c59, 0 2px 12px rgba(74,124,89,0.08);
+  background: #f0f8ff;
+  border-radius: 8px;
+  z-index: 2;
+  position: relative;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+/* Optionally, make the row a bit taller when active */
+.checkboxrow.active {
+  min-height: 60px;
+}
+
+.checkboxrow.dual-input.active {
+  min-height: 60px;
+}
