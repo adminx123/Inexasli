@@ -498,16 +498,34 @@ document.addEventListener('DOMContentLoaded', async function () {
                 background-color: inherit;
                 border-radius: 24px 24px 0 0;
                 flex-shrink: 0;
+                box-sizing: border-box;
+            }
+
+            /* Ensure consistent layout when collapsed or expanded */
+            .data-container-in:not(.visible) .container-header {
+                height: 36px;
+                overflow: hidden;
+            }
+
+            .data-container-in.visible .container-header {
+                height: auto;
+                min-height: 36px;
             }
 
             /* Utility buttons - always visible in header */
             .data-container-in .utility-buttons-container {
                 display: flex;
                 flex-direction: row;
-                gap: 8px;
+                gap: 6px;
                 align-items: center;
                 justify-content: flex-end;
                 width: 100%;
+                min-height: 36px;
+                padding: 0;
+                box-sizing: border-box;
+                /* Ensure buttons don't overflow when collapsed */
+                overflow: hidden;
+                flex-wrap: nowrap;
             }
 
             /* Remove close button styles since we don't want it */
@@ -552,21 +570,23 @@ document.addEventListener('DOMContentLoaded', async function () {
             /* Mobile responsiveness */
             @media (max-width: 480px) {
                 .data-container-in .utility-buttons-container {
-                    gap: 6px;
+                    gap: 4px;
+                    min-height: 36px;
                 }
 
                 .data-container-in .utility-buttons-container button {
-                    width: 24px;
-                    height: 24px;
-                    font-size: 12px;
+                    width: 26px;
+                    height: 26px;
+                    font-size: 11px;
+                    flex-shrink: 0;
                 }
 
                 .data-container-in .utility-buttons-container button i {
-                    font-size: 12px;
+                    font-size: 11px;
                 }
 
                 .data-container-in .utility-buttons-container button span {
-                    font-size: 12px;
+                    font-size: 11px;
                 }
 
                 .data-container-in .close-data-container {
@@ -588,12 +608,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.innerHTML = `
             <div class="container-header">
                 <div class="utility-buttons-container">
-                    <button id="datain-guided-prev-btn" title="Previous Step" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; opacity: 0.3;">
-                        <i class="bx bx-left-arrow-alt" style="font-size: 14px;"></i>
-                    </button>
-                    <button id="datain-guided-next-btn" title="Next Step" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; opacity: 0.3;">
-                        <i class="bx bx-right-arrow-alt" style="font-size: 14px;"></i>
-                    </button>
                     <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                     </button>
@@ -608,6 +622,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                     </button>
                     <button id="datain-faq-btn" title="Tips & FAQ" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-question-mark" style="font-size: 16px;"></i>
+                    </button>
+                    <button id="datain-guided-prev-btn" title="Previous Step" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; opacity: 0.3;">
+                        <i class="bx bx-left-arrow-alt" style="font-size: 14px;"></i>
+                    </button>
+                    <button id="datain-guided-next-btn" title="Next Step" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; opacity: 0.3;">
+                        <i class="bx bx-right-arrow-alt" style="font-size: 14px;"></i>
                     </button>
                 </div>
             </div>
