@@ -25,6 +25,19 @@
 </div>
 
 <div class="row1" data-step-label="Personal Style">
+
+       <h3 class="tooltip1" data-tooltip="Basic information to help provide age-appropriate and body-type-conscious fashion advice.">
+        Personal Information<span class="tooltip1-content"></span>
+    </h3>
+    <input id="fashion-age" type="text" placeholder="Age">
+    <input id="fashion-height" type="text" placeholder="5'6">
+    <select id="fashion-gender">
+        <option value="" disabled selected>Select Gender</option>
+        <option value="woman">Woman</option>
+        <option value="man">Man</option>
+    </select>
+
+
     <h3 class="tooltip1" data-tooltip="Select your preferred fashion style to receive personalized recommendations that match your aesthetic preferences.">
         Personal Style<span class="tooltip1-content"></span>
     </h3>
@@ -38,20 +51,10 @@
         <div class="grid-item" data-value="Minimalist">Minimalist & Clean</div>
         <div class="grid-item" data-value="Eclectic">Eclectic & Unique</div>
     </div>
+
+
 </div>
 
-<div class="row1" data-step-label="Personal Information">
-    <h3 class="tooltip1" data-tooltip="Basic information to help provide age-appropriate and body-type-conscious fashion advice.">
-        Personal Information<span class="tooltip1-content"></span>
-    </h3>
-    <input id="fashion-age" type="text" placeholder="Age">
-    <input id="fashion-height" type="text" placeholder="5'6">
-    <select id="fashion-gender">
-        <option value="" disabled selected>Select Gender</option>
-        <option value="woman">Woman</option>
-        <option value="man">Man</option>
-    </select>
-</div>
 
 <div class="row1" data-step-label="Climate/Weather Context">
     <h3 class="tooltip1" data-tooltip="Choose your climate to receive weather-appropriate outfit recommendations and fabric suggestions.">
@@ -107,13 +110,6 @@
         Upload Outfit Photos (Required)<span class="tooltip1-content"></span>
     </h3>
     <div id="image-upload-container" class="image-upload-container" data-image-upload data-module="fashion" data-max-images="5"></div>
-</div>
-
-<div class="row1" data-step-label="Additional Details">
-    <h3 class="tooltip1" data-tooltip="Any specific areas you want feedback on or additional context about your outfits.">
-        Additional Details (Optional)<span class="tooltip1-content"></span>
-    </h3>
-    <textarea id="fashion-additional-details" rows="3" placeholder="e.g., 'Focus on color coordination', 'Looking for professional feedback', 'Help with styling tips'"></textarea>
 
     <button class="generate-btn" id="generate-fashion-btn" disabled>Generate Fashion Analysis</button>
 
