@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 display: flex;
                 flex-direction: column;
                 /* Pure transform approach - only move up/down */
-                transform: translateY(calc(100% - 36px));
+                transform: translateY(calc(100% - 38.5px));
                 transition: transform 0.3s ease-in-out;
                 overflow: hidden;
             }
