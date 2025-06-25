@@ -167,6 +167,27 @@
     .modal-buttons button { background: #2d5a3d; color: #fff; border: none; border-radius: 6px; padding: 10px 18px; font-size: 1em; cursor: pointer; font-weight: bold; }
     .modal-buttons button:disabled { background: #b2b2b2; cursor: not-allowed; }
     .modal-buttons button:hover:enabled { background: #4a7c59; }
+    
+    @media (max-width: 480px) {
+      .terms-consent-modal {
+        padding: 15px;
+        width: 90%;
+        max-width: 300px;
+      }
+      .terms-consent-modal h2 {
+        font-size: 1.1rem;
+      }
+      .terms-consent-modal p {
+        font-size: 12px;
+      }
+      .terms-consent-modal label {
+        font-size: 12px;
+      }
+      .modal-buttons button {
+        padding: 8px 14px;
+        font-size: 0.9em;
+      }
+    }
   `;
   document.head.appendChild(style);
 
