@@ -641,7 +641,7 @@
 
       function createQuizHTML(quizData) {
         console.log('Creating quiz HTML from data:', quizData);
-        const quiz = parseQuizContent(quizData.quizContent);
+        const quiz = parseQuizContent(quizData);
         
         const cleanTitle = cleanText(quiz.quizTitle || quiz.title);
         const cleanIntroduction = cleanText(quiz.introduction);
@@ -743,18 +743,18 @@
             console.log('Data structure check:');
             console.log('- Has data property:', !!data.data);
             console.log('- Has message:', data.message);
-            console.log('- Has quizContent:', !!(data.data && data.data.quizContent));
+            console.log('- Has questions:', !!(data.data && data.data.questions));
             
-            if (data.data && data.data.quizContent) {
-              const contentType = typeof data.data.quizContent;
-              console.log('Quiz content type:', contentType);
+            if (data.data && data.data.questions) {
+              const contentType = typeof data.data.questions;
+              console.log('Quiz questions type:', contentType);
               if (contentType === 'string') {
-                console.log('Quiz content length:', data.data.quizContent.length);
-                console.log('Quiz content preview:', data.data.quizContent.substring(0, 500));
-                console.log('Quiz content ends with:', data.data.quizContent.slice(-200));
+                console.log('Quiz questions length:', data.data.questions.length);
+                console.log('Quiz questions preview:', data.data.questions.substring(0, 500));
+                console.log('Quiz questions ends with:', data.data.questions.slice(-200));
               } else if (contentType === 'object') {
-                console.log('Quiz content is object with keys:', Object.keys(data.data.quizContent));
-                console.log('Quiz content preview:', JSON.stringify(data.data.quizContent).substring(0, 500));
+                console.log('Quiz questions is object with keys:', Object.keys(data.data.questions));
+                console.log('Quiz questions preview:', JSON.stringify(data.data.questions).substring(0, 500));
               }
             }
           }
@@ -775,11 +775,11 @@
           return;
         }
         
-        if (data && data.data && data.data.quizContent) {
+        if (data) {
           console.log('Quiz data found, creating HTML...');
           try {
-            // Check if content appears to be truncated
-            const content = data.data.quizContent;
+            // Use the data directly - it's already extracted above
+            const content = data;
             let contentLength, seemsTruncated;
             
             if (typeof content === 'string') {
@@ -840,7 +840,7 @@
               return;
             }
             
-            const quizHTML = createQuizHTML(data.data);
+            const quizHTML = createQuizHTML(data);
             outputSpan.innerHTML = quizHTML;
             setupQuizInteractivity();
             console.log('Quiz displayed successfully');
@@ -869,22 +869,19 @@
         // Get the original quiz data to compare answers
         const responseKey = "quizIqResponse";
         const originalData = getJSON(responseKey);
-        if (!originalData || !originalData.data || !originalData.data.quizContent) {
+        
+        // Handle nested response format if present
+        let quizData = originalData;
+        if (originalData && originalData.message === 'Success' && originalData.data) {
+          quizData = originalData.data;
+        }
+        
+        if (!quizData || !quizData.questions) {
           console.error('Cannot evaluate quiz: original quiz data not found');
           return results;
         }
 
-        let quizContent;
-        if (typeof originalData.data.quizContent === 'string') {
-          try {
-            quizContent = JSON.parse(originalData.data.quizContent);
-          } catch (e) {
-            console.error('Cannot parse quiz content for evaluation');
-            return results;
-          }
-        } else {
-          quizContent = originalData.data.quizContent;
-        }
+        let quizContent = quizData;
 
         if (!quizContent.questions) {
           console.error('Quiz content has no questions array');
