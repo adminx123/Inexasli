@@ -508,6 +508,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                 display: none !important;
             }
 
+            /* Hide FAQ and overwrite buttons when container is minimized */
+            .data-container-in:not(.visible) #datain-faq-btn,
+            .data-container-in:not(.visible) #datain-overwrite-btn {
+                display: none !important;
+            }
+
+            /* Hide copy button when container is expanded (copy is for output content only) */
+            .data-container-in.visible #datain-copy-btn {
+                display: none !important;
+            }
+
             /* Remove close button styles since we don't want it */
 
             /* Content area - always present, scrollable */

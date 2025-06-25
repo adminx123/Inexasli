@@ -811,6 +811,7 @@ export function initializeSimpleVerticalSwipe(container, toggleFunction) {
     let touchStartTime = 0;
     let isTouching = false;
     let hasMoved = false;
+    let isScrollingContent = false;
 
     container.addEventListener('touchstart', function(e) {
         touchStartY = e.touches[0].clientY;
@@ -818,7 +819,20 @@ export function initializeSimpleVerticalSwipe(container, toggleFunction) {
         touchStartTime = Date.now();
         isTouching = true;
         hasMoved = false;
-        console.log('[SimpleVerticalSwipe] Touch start - Y:', touchStartY);
+        isScrollingContent = false;
+        
+        // Check if touch started within scrollable content area
+        const contentArea = e.target.closest('.data-content');
+        if (contentArea) {
+            // Check if content is actually scrollable
+            const hasScrollableContent = contentArea.scrollHeight > contentArea.clientHeight;
+            if (hasScrollableContent) {
+                isScrollingContent = true;
+                console.log('[SimpleVerticalSwipe] Touch started in scrollable content area');
+            }
+        }
+        
+        console.log('[SimpleVerticalSwipe] Touch start - Y:', touchStartY, 'isScrollingContent:', isScrollingContent);
     }, { passive: true });
 
     container.addEventListener('touchmove', function(e) {
@@ -834,10 +848,27 @@ export function initializeSimpleVerticalSwipe(container, toggleFunction) {
             hasMoved = true;
         }
         
-        // Only handle if it's primarily vertical movement
-        if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 10) {
-            e.preventDefault(); // Prevent scrolling
-            console.log('[SimpleVerticalSwipe] Vertical movement detected - deltaY:', deltaY);
+        // If user is scrolling content, don't interfere with swipe detection
+        if (isScrollingContent) {
+            const contentArea = e.target.closest('.data-content');
+            if (contentArea) {
+                // Allow normal scrolling, don't prevent default
+                console.log('[SimpleVerticalSwipe] Allowing content scroll - deltaY:', deltaY);
+                return;
+            }
+        }
+        
+        // Increase threshold for swipe detection to reduce sensitivity
+        const swipeThreshold = 25; // Increased from 10
+        
+        // Only handle if it's primarily vertical movement and exceeds threshold
+        if (Math.abs(deltaY) > Math.abs(deltaX) * 2 && Math.abs(deltaY) > swipeThreshold) {
+            // Only prevent default if we're confident this is a container swipe
+            const contentArea = e.target.closest('.data-content');
+            if (!contentArea || !contentArea.scrollHeight || contentArea.scrollHeight <= contentArea.clientHeight) {
+                e.preventDefault(); // Prevent scrolling only if not in scrollable content
+                console.log('[SimpleVerticalSwipe] Container swipe movement detected - deltaY:', deltaY);
+            }
         }
     }, { passive: false });
 
@@ -846,15 +877,37 @@ export function initializeSimpleVerticalSwipe(container, toggleFunction) {
         isTouching = false;
         
         const touchEndY = e.changedTouches[0].clientY;
+        const touchEndX = e.changedTouches[0].clientX;
         const deltaY = touchEndY - touchStartY;
-        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        const deltaX = touchEndX - touchStartX;
         const touchDuration = Date.now() - touchStartTime;
         
-        console.log('[SimpleVerticalSwipe] Touch end - deltaY:', deltaY, 'deltaX:', deltaX, 'duration:', touchDuration, 'hasMoved:', hasMoved);
+        console.log('[SimpleVerticalSwipe] Touch end - deltaY:', deltaY, 'deltaX:', deltaX, 'duration:', touchDuration, 'hasMoved:', hasMoved, 'isScrollingContent:', isScrollingContent);
         
-        // Only trigger swipe if user actually moved (not just a tap)
+        // Don't trigger swipe if user was scrolling content
+        if (isScrollingContent) {
+            console.log('[SimpleVerticalSwipe] Ignoring swipe - user was scrolling content');
+            return;
+        }
+        
+        // Check if touch ended within scrollable content (user might have started outside but moved into content)
+        const contentArea = e.target.closest('.data-content');
+        if (contentArea && contentArea.scrollHeight > contentArea.clientHeight) {
+            console.log('[SimpleVerticalSwipe] Ignoring swipe - ended in scrollable content area');
+            return;
+        }
+        
+        // Increased thresholds for more intentional swipe detection
+        const minSwipeDistance = 80; // Increased from 40
+        const maxHorizontalDrift = 50; // Maximum allowed horizontal movement
+        
+        // Only trigger swipe if user actually moved significantly
         // and it's primarily vertical and meets threshold
-        if (hasMoved && Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 40) {
+        if (hasMoved && 
+            Math.abs(deltaY) > minSwipeDistance && 
+            Math.abs(deltaX) < maxHorizontalDrift && 
+            Math.abs(deltaY) > Math.abs(deltaX) * 2) {
+            
             const isUpSwipe = deltaY < 0;
             const isDownSwipe = deltaY > 0;
             
@@ -872,6 +925,8 @@ export function initializeSimpleVerticalSwipe(container, toggleFunction) {
         } else if (!hasMoved && touchDuration < 300) {
             // This was a tap/click - let the normal click handlers deal with it
             console.log('[SimpleVerticalSwipe] Tap detected - letting click handlers handle it');
+        } else {
+            console.log('[SimpleVerticalSwipe] Swipe rejected - insufficient movement or too much horizontal drift');
         }
     }, { passive: true });
 
