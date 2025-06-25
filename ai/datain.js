@@ -204,7 +204,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         '/ai/quiz/quiziq.html',
         '/ai/research/researchiq.html',
         '/ai/social/socialiq.html',
-        '/ai/categories.html'
+        '/ai/categories.html',
+        '/ai/income/incomeiq.html'
     ];
     
     // Define files that should use incomestyles.css
@@ -214,7 +215,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     function shouldLoadInputStyles() {
         const currentPath = window.location.pathname;
         return inputFiles.some(file => currentPath.includes(file.replace('.html', ''))) || 
-               document.querySelector('[data-value*="/ai/calorie/"], [data-value*="/ai/decision/"], [data-value*="/ai/enneagram/"], [data-value*="/ai/event/"], [data-value*="/ai/fashion/"], [data-value*="/ai/fitness/"], [data-value*="/ai/philosophy/"], [data-value*="/ai/quiz/"], [data-value*="/ai/research/"], [data-value*="/ai/social/"], [data-value*="/ai/categories.html"]');
+               document.querySelector('[data-value*="/ai/calorie/"], [data-value*="/ai/decision/"], [data-value*="/ai/enneagram/"], [data-value*="/ai/event/"], [data-value*="/ai/fashion/"], [data-value*="/ai/fitness/"], [data-value*="/ai/philosophy/"], [data-value*="/ai/quiz/"], [data-value*="/ai/research/"], [data-value*="/ai/social/"], [data-value*="/ai/income/"], [data-value*="/ai/categories.html"]');
     }
     
     function shouldLoadIncomeStyles() {
@@ -247,22 +248,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     // Function to load appropriate CSS based on URL
     function loadCSSForUrl(url) {
-        const inputFiles = [
-            '/ai/calorie/calorieiq.html',
-            '/ai/decision/decisioniq.html',
-            '/ai/enneagram/enneagramiq.html',
-            '/ai/event/eventiq.html',
-            '/ai/fashion/fashioniq.html',
-            '/ai/fitness/fitnessiq.html',
-            '/ai/philosophy/philosophyiq.html',
-            '/ai/quiz/quiziq.html',
-            '/ai/research/researchiq.html',
-            '/ai/social/socialiq.html',
-            '/ai/categories.html'
-        ];
-        
-        const incomeFiles = ['/ai/income/incomeiq.html'];
-        
+        // Use the same arrays defined at the top level for consistency
         // Check if URL matches input files and load inputstyles.css
         if (inputFiles.includes(url) && !document.querySelector('link[href*="inputstyles.css"]')) {
             const inputStylesLink = document.createElement('link');
