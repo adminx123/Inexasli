@@ -493,23 +493,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 min-height: 36px;
                 display: flex;
                 align-items: center;
-                justify-content: flex-end;
+                justify-content: center;
                 padding: 0 10px;
                 background-color: inherit;
                 border-radius: 24px 24px 0 0;
                 flex-shrink: 0;
                 box-sizing: border-box;
-            }
-
-            /* Ensure consistent layout when collapsed or expanded */
-            .data-container-in:not(.visible) .container-header {
-                height: 36px;
-                overflow: hidden;
-            }
-
-            .data-container-in.visible .container-header {
-                height: auto;
-                min-height: 36px;
             }
 
             /* Utility buttons - always visible in header */
@@ -518,12 +507,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 flex-direction: row;
                 gap: 6px;
                 align-items: center;
-                justify-content: flex-end;
+                justify-content: space-evenly;
                 width: 100%;
                 min-height: 36px;
                 padding: 0;
                 box-sizing: border-box;
-                /* Ensure buttons don't overflow when collapsed */
                 overflow: hidden;
                 flex-wrap: nowrap;
             }
