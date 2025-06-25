@@ -358,53 +358,62 @@ function showSwipeHint(container, direction, animationDuration) {
     const swipeHint = document.createElement('div');
     swipeHint.className = 'swipe-hint';
     
-    // Always show bidirectional swipe hint for consistency
-    const hintText = '← SWIPE →';
+    // Use a single unified hint that demonstrates container movement
+    const unifiedHint = 'SWIPE';
     
-    // Set content with just SWIPE and arrows
-    swipeHint.innerHTML = `<span class="swipe-animation">${hintText}</span>`;
+    // Set content with static text (container will move, text stays readable)
+    swipeHint.innerHTML = `<span class="static-text">${unifiedHint}</span>`;
     
-    // Apply styles
+    // Apply styles for centered hint with rotation animation
     swipeHint.style.cssText = `
         position: absolute;
-        bottom: 20px;
+        top: 50%;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translate(-50%, -50%);
         background-color: rgba(0, 0, 0, 0.7);
         color: white;
-        padding: 10px 15px;
+        padding: 12px 18px;
         border-radius: 20px;
         font-family: "Geist", sans-serif;
         font-size: 16px;
+        font-weight: 500;
         z-index: 12000;
         opacity: 0;
         transition: opacity 0.5s ease;
     `;
     
-    // Add animation style for the swipe hint
-    const animClass = `swipe-navigate-animation`;
+    // Add container movement animation demonstrating all swipe directions
+    const animClass = `swipe-container-movement`;
     if (!document.querySelector(`style[data-id="${animClass}"]`)) {
         const animStyle = document.createElement('style');
         animStyle.dataset.id = animClass;
         animStyle.textContent = `
-            @keyframes swipeNavigateHint {
-                0% { transform: translateX(0); opacity: 1; }
-                25% { transform: translateX(-8px); opacity: 0.9; }
-                75% { transform: translateX(8px); opacity: 0.9; }
-                100% { transform: translateX(0); opacity: 1; }
+            @keyframes containerSwipeDemo {
+                0% { transform: translate(-50%, -50%); opacity: 1; }
+                10% { transform: translate(-50%, -50%); opacity: 1; }
+                20% { transform: translate(-80%, -50%); opacity: 0.9; }
+                35% { transform: translate(-20%, -50%); opacity: 0.9; }
+                50% { transform: translate(-80%, -50%); opacity: 0.9; }
+                65% { transform: translate(-50%, -50%); opacity: 1; }
+                75% { transform: translate(-50%, -90%); opacity: 0.9; }
+                90% { transform: translate(-50%, -10%); opacity: 0.9; }
+                100% { transform: translate(-50%, -50%); opacity: 1; }
             }
-            .swipe-animation {
+            .swipe-hint {
+                animation: containerSwipeDemo 5s ease-in-out infinite;
+            }
+            .static-text {
                 display: inline-block;
-                animation: swipeNavigateHint 3s ease-in-out infinite;
+                /* Text stays static while container moves */
             }
         `;
         document.head.appendChild(animStyle);
     }
     
-    // Add to container
+    // Add single hint to container
     container.appendChild(swipeHint);
     
-    // Fade in the hint and then fade it out after 15% less time (2.55 seconds instead of 3)
+    // Fade in the hint and then fade it out after the movement cycles
     setTimeout(() => {
         swipeHint.style.opacity = '1';
         setTimeout(() => {
@@ -414,8 +423,8 @@ function showSwipeHint(container, direction, animationDuration) {
                     swipeHint.parentNode.removeChild(swipeHint);
                 }
             }, 500);
-        }, 2550); // 15% reduction: 3000ms * 0.85 = 2550ms
-    }, 500);
+        }, 4000); // Show for 4 seconds to match the 5s animation duration
+    }, 800); // Increased delay to 800ms for container to fully expand first
 }
 
 /**
