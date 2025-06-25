@@ -1,23 +1,29 @@
 /* Checkboxrow styling for symmetrical layout */
 .checkboxrow {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 8px 12px;
+  grid-template-areas: 
+    "label label"
+    "input frequency"
+    "annual annual";
   margin-bottom: 20px;
   width: 100%;
 }
 
 /* Label styling - appears on top */
 .checkboxrow label {
+  grid-area: label;
   font-weight: 500;
   color: #333;
   font-size: 14px;
-  margin-bottom: 8px;
-  order: 1;
+  margin-bottom: 0;
 }
 
 /* Input and frequency container - appears on same line below label */
 .checkboxrow input[type="number"] {
-  flex: 1;
+  grid-area: input;
   height: 40px !important;
   padding: 0 12px !important;
   font-size: 16px;
@@ -25,13 +31,13 @@
   border-radius: 6px;
   background-color: #f9f9f9;
   margin: 0 !important;
-  order: 2;
+  width: 100%;
   min-width: 120px;
 }
 
 .checkboxrow .checkbox-button-group {
-  flex: 1;
-  order: 3;
+  grid-area: frequency;
+  width: 100%;
   min-width: 160px;
   height: 40px !important;
 }
@@ -43,18 +49,12 @@
   border-radius: 6px !important;
 }
 
-/* Create horizontal layout for input and frequency buttons */
-.checkboxrow input[type="number"],
-.checkboxrow .checkbox-button-group {
-  display: inline-flex;
-}
-
 /* Annual display span */
 .checkboxrow span[id$="-annual"] {
-  order: 4;
+  grid-area: annual;
   font-size: 12px;
   color: #666;
-  margin-top: 4px;
+  margin-top: 0;
 }
 
 /* Assets and Liabilities checkboxrow styling - 2 inputs layout */
@@ -98,24 +98,39 @@
 /* Desktop layout - horizontal arrangement for input and frequency */
 @media (min-width: 701px) {
   .checkboxrow {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 8px 12px;
+    grid-template-areas: 
+      "label label"
+      "input frequency"
+      "annual annual";
   }
   
-  /* Create a flex container for input and frequency */
-  .checkboxrow input[type="number"] + div[data-frequency-id] {
-    display: flex;
+  .checkboxrow label {
+    grid-area: label;
+    margin-bottom: 0;
   }
   
-  /* Use flexbox to put input and frequency side by side */
-  .checkboxrow::after {
-    content: '';
-    display: flex;
-    gap: 12px;
-    order: 2;
+  .checkboxrow input[type="number"] {
+    grid-area: input;
+    width: 100%;
   }
   
-  /* Better approach - use CSS Grid for precise control */
+  .checkboxrow .checkbox-button-group {
+    grid-area: frequency;
+    width: 100%;
+  }
+  
+  .checkboxrow span[id$="-annual"] {
+    grid-area: annual;
+    margin-top: 0;
+  }
+}
+
+/* Mobile layout - input and frequency on same row with equal space */
+@media (max-width: 700px) {
   .checkboxrow {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -134,30 +149,13 @@
   
   .checkboxrow input[type="number"] {
     grid-area: input;
+    width: 100%;
+    height: 36px !important;
   }
   
   .checkboxrow .checkbox-button-group {
     grid-area: frequency;
-  }
-  
-  .checkboxrow span[id$="-annual"] {
-    grid-area: annual;
-    margin-top: 0;
-  }
-}
-
-/* Mobile layout - stacked vertically */
-@media (max-width: 700px) {
-  .checkboxrow {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .checkboxrow input[type="number"],
-  .checkboxrow .checkbox-button-group {
-    width: 100% !important;
-    order: unset;
+    width: 100%;
   }
   
   .checkboxrow .checkbox-button {
@@ -165,19 +163,34 @@
     font-size: 13px !important;
   }
   
-  /* Mobile layout for assets/liabilities */
-  .checkboxrow.dual-input {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  .checkboxrow span[id$="-annual"] {
+    grid-area: annual;
+    margin-top: 0;
   }
   
-  .checkboxrow.dual-input input[type="number"] {
+  /* Mobile layout for assets/liabilities */
+  .checkboxrow.dual-input {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    grid-template-rows: auto auto;
+    gap: 8px 12px;
+    grid-template-areas: 
+      "label label"
+      "amount percent";
+  }
+  
+  .checkboxrow.dual-input label {
+    grid-area: label;
+    margin-bottom: 0;
+  }
+  
+  .checkboxrow.dual-input input[type="number"]:not(.percent-input) {
+    grid-area: amount;
     width: 100%;
-    order: unset;
   }
   
   .checkboxrow.dual-input .percent-input {
+    grid-area: percent;
     width: 100%;
     text-align: left;
   }
