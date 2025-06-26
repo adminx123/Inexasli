@@ -312,9 +312,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                     
                     console.log('[DataIn] Content revealed after guided forms initialization');
 
-                    // Initialize swipe functionality for guided forms
-                    if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
-                        console.log('[DataIn] Initializing bidirectional swipe for guided forms on .data-content');
+                    // Initialize swipe functionality for guided forms ONLY if form elements are present AND it's not the categories page
+                    const isCategoriesPage = url.includes('/ai/categories.html');
+                    if (window.guidedForms && typeof window.guidedForms.showStep === 'function' && hasFormElements && !isCategoriesPage) {
+                        console.log('[DataIn] Initializing bidirectional swipe for guided forms on .data-content (form elements detected, not categories page)');
                         
                         // Initialize both left and right swipe handlers with a single call
                         initializeBidirectionalSwipe(dataContent, {
@@ -331,6 +332,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                                 }
                             }
                         }, { sessionStorageKey: 'swipeEducationShownDatain' });
+                    } else if (!hasFormElements) {
+                        console.log('[DataIn] No form elements detected, skipping swipe functionality initialization');
+                    } else if (isCategoriesPage) {
+                        console.log('[DataIn] Categories page detected, skipping swipe functionality initialization');
                     }
                 };
                 
