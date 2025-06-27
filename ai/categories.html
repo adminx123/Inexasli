@@ -93,7 +93,7 @@
 
 
 <div id="favorites-container">
-    <h3>⭐ Your Favorites</h3>
+    
     <div class="grid-container" id="favorites-grid"></div>
 </div>
 
@@ -295,10 +295,27 @@ if (deviceContainer) {
 
         // Handle product selection clicks (if it's a product URL)
         if (gridItem.dataset.value.startsWith('/ai/')) {
-            const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
-                detail: { url: gridItem.dataset.value }
-            });
-            document.dispatchEvent(gridItemEvent);
+            e.stopPropagation(); // Stop the event from bubbling up to datain.js modal handlers
+            // NEW: Check if we are inside the datain.js container
+            const datainContainer = gridItem.closest('#data-in-container');
+            
+            const eventDetail = { detail: { url: gridItem.dataset.value } };
+            
+            if (datainContainer) {
+                // If inside datain, dispatch the event directly on the container
+                // so only datain.js handles it.
+                // We also stop the original click event from bubbling up, which prevents
+                // the datain.js modal from closing.
+                e.stopPropagation();
+                console.log('[Categories] Dispatching event for datain.js and stopping propagation.');
+                const gridItemEvent = new CustomEvent('promptGridItemSelected', eventDetail);
+                datainContainer.dispatchEvent(gridItemEvent);
+            } else {
+                // Otherwise, dispatch globally as before (for when categories is the main page)
+                console.log('[Categories] Dispatching event globally');
+                const gridItemEvent = new CustomEvent('promptGridItemSelected', eventDetail);
+                document.dispatchEvent(gridItemEvent);
+            }
         }
     });
 }
