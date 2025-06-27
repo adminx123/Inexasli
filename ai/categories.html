@@ -74,6 +74,15 @@
     position: relative;
 }
 
+/* Add space for the favorite icon on product items */
+.grid-item[data-category] {
+    /* Using padding on the right pushes the text away from the icon */
+    padding-right: 30px;
+    /* This ensures the padding doesn't break the grid layout */
+    box-sizing: border-box;
+}
+
+
 #favorites-container h3 {
     text-align: center;
     margin-bottom: 10px;
@@ -296,6 +305,10 @@ if (deviceContainer) {
         // Handle product selection clicks (if it's a product URL)
         if (gridItem.dataset.value.startsWith('/ai/')) {
             e.stopPropagation(); // Stop the event from bubbling up to datain.js modal handlers
+            
+            // Set lastGridItemUrl so datain.js can remember the selection
+            localStorage.setItem('lastGridItemUrl', gridItem.dataset.value);
+
             // NEW: Check if we are inside the datain.js container
             const datainContainer = gridItem.closest('#data-in-container');
             
@@ -304,9 +317,6 @@ if (deviceContainer) {
             if (datainContainer) {
                 // If inside datain, dispatch the event directly on the container
                 // so only datain.js handles it.
-                // We also stop the original click event from bubbling up, which prevents
-                // the datain.js modal from closing.
-                e.stopPropagation();
                 console.log('[Categories] Dispatching event for datain.js and stopping propagation.');
                 const gridItemEvent = new CustomEvent('promptGridItemSelected', eventDetail);
                 datainContainer.dispatchEvent(gridItemEvent);
