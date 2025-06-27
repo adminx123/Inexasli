@@ -43,102 +43,227 @@
   <script src="../../utility/enhancedUI.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
   <script>
+    console.log("📊 [RESEARCH-OUTPUT] ResearchOutput script initializing");
+    console.log("📊 [RESEARCH-OUTPUT] Timestamp:", Date.now());
+    console.log("📊 [RESEARCH-OUTPUT] Document readyState:", document.readyState);
+    console.log("📊 [RESEARCH-OUTPUT] Window location:", window.location.href);
+    
     function getJSON(key) {
+      console.log("🔍 [RESEARCH-OUTPUT-JSON] Getting JSON data for key:", key);
       try {
         const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
-      } catch (e) { return null; }
+        console.log("🔍 [RESEARCH-OUTPUT-JSON] Raw localStorage item:", item ? "found" : "null");
+        console.log("🔍 [RESEARCH-OUTPUT-JSON] Item length:", item?.length || 0);
+        const parsed = item ? JSON.parse(item) : null;
+        console.log("🔍 [RESEARCH-OUTPUT-JSON] Parsed successfully:", !!parsed);
+        console.log("🔍 [RESEARCH-OUTPUT-JSON] Parsed keys:", parsed ? Object.keys(parsed) : "none");
+        return parsed;
+      } catch (e) { 
+        console.error("❌ [RESEARCH-OUTPUT-JSON] Error parsing JSON:", e);
+        console.error("❌ [RESEARCH-OUTPUT-JSON] Error message:", e.message);
+        return null; 
+      }
     }
     function updateOutput() {
+      console.log("🔄 [RESEARCH-OUTPUT-UPDATE] Starting output update");
+      console.log("🔄 [RESEARCH-OUTPUT-UPDATE] Timestamp:", Date.now());
+      
+      console.log("📡 [RESEARCH-OUTPUT-DATA] Getting researchIqResponse from localStorage");
       let d = getJSON('researchIqResponse');
-      if (d && d.message === 'Success' && d.data) d = d.data;
+      console.log("📡 [RESEARCH-OUTPUT-DATA] Initial data:", d);
+      console.log("📡 [RESEARCH-OUTPUT-DATA] Data type:", typeof d);
+      
+      if (d && d.message === 'Success' && d.data) {
+        console.log("✅ [RESEARCH-OUTPUT-DATA] Found success response, extracting data");
+        console.log("✅ [RESEARCH-OUTPUT-DATA] Original data keys:", Object.keys(d));
+        d = d.data;
+        console.log("✅ [RESEARCH-OUTPUT-DATA] Extracted data keys:", Object.keys(d || {}));
+      }
       
       // If no data at all, show blank screen
-      if (!d || (!d.summary && (!d.keyFindings || !d.keyFindings.length) && (!d.sources || !d.sources.length) && (!d.charts || !d.charts.length))) {
+      console.log("🔍 [RESEARCH-OUTPUT-CHECK] Checking data availability");
+      console.log("🔍 [RESEARCH-OUTPUT-CHECK] Has summary:", !!d?.summary);
+      console.log("🔍 [RESEARCH-OUTPUT-CHECK] Has keyFindings:", Array.isArray(d?.keyFindings) && d.keyFindings.length > 0);
+      console.log("🔍 [RESEARCH-OUTPUT-CHECK] Has sources:", Array.isArray(d?.sources) && d.sources.length > 0);
+      console.log("🔍 [RESEARCH-OUTPUT-CHECK] Has charts:", Array.isArray(d?.charts) && d.charts.length > 0);
+      
+      const hasAnyData = d && (d.summary || (d.keyFindings && d.keyFindings.length) || (d.sources && d.sources.length) || (d.charts && d.charts.length));
+      console.log("🔍 [RESEARCH-OUTPUT-CHECK] Has any data:", hasAnyData);
+      
+      if (!hasAnyData) {
+        console.warn("⚠️ [RESEARCH-OUTPUT-BLANK] No data found, showing blank screen");
         document.getElementById('main-content').innerHTML = '';
         return;
       }
       
       // Summary
-      document.getElementById('summary-content').innerText = d?.summary || 'No summary available.';
+      console.log("📝 [RESEARCH-OUTPUT-SUMMARY] Processing summary section");
+      const summaryText = d?.summary || 'No summary available.';
+      console.log("📝 [RESEARCH-OUTPUT-SUMMARY] Summary text length:", summaryText.length);
+      document.getElementById('summary-content').innerText = summaryText;
+      console.log("📝 [RESEARCH-OUTPUT-SUMMARY] Summary content updated");
+      
       // Key Findings
+      console.log("🔑 [RESEARCH-OUTPUT-FINDINGS] Processing key findings section");
       const findingsList = document.getElementById('findings-list');
+      console.log("🔑 [RESEARCH-OUTPUT-FINDINGS] Findings list element:", !!findingsList);
       findingsList.innerHTML = '';
+      
+      console.log("🔑 [RESEARCH-OUTPUT-FINDINGS] Key findings data:", d?.keyFindings);
+      console.log("🔑 [RESEARCH-OUTPUT-FINDINGS] Is array:", Array.isArray(d?.keyFindings));
+      console.log("🔑 [RESEARCH-OUTPUT-FINDINGS] Array length:", d?.keyFindings?.length || 0);
+      
       if (Array.isArray(d?.keyFindings) && d.keyFindings.length) {
-        d.keyFindings.forEach(f => {
+        console.log("✅ [RESEARCH-OUTPUT-FINDINGS] Adding findings to list");
+        d.keyFindings.forEach((f, index) => {
+          console.log(`🔑 [RESEARCH-OUTPUT-FINDINGS] Adding finding ${index + 1}:`, f.substring(0, 50) + "...");
           const li = document.createElement('li');
           li.innerText = f;
           findingsList.appendChild(li);
         });
+        console.log("✅ [RESEARCH-OUTPUT-FINDINGS] All findings added successfully");
       } else {
+        console.log("ℹ️ [RESEARCH-OUTPUT-FINDINGS] No findings available, showing placeholder");
         findingsList.innerHTML = '<li class="no-data">No key findings available.</li>';
       }
+      
       // Charts
+      console.log("📊 [RESEARCH-OUTPUT-CHARTS] Processing charts section");
       const chartsSection = document.getElementById('charts-section');
       const chartsContent = document.getElementById('charts-content');
+      console.log("📊 [RESEARCH-OUTPUT-CHARTS] Charts section element:", !!chartsSection);
+      console.log("📊 [RESEARCH-OUTPUT-CHARTS] Charts content element:", !!chartsContent);
       chartsContent.innerHTML = '';
+      
+      console.log("📊 [RESEARCH-OUTPUT-CHARTS] Charts data:", d?.charts);
+      console.log("📊 [RESEARCH-OUTPUT-CHARTS] Is array:", Array.isArray(d?.charts));
+      console.log("📊 [RESEARCH-OUTPUT-CHARTS] Array length:", d?.charts?.length || 0);
+      
       if (Array.isArray(d?.charts) && d.charts.length) {
+        console.log("✅ [RESEARCH-OUTPUT-CHARTS] Found charts, showing section");
         chartsSection.style.display = '';
         d.charts.forEach((chart, idx) => {
+          console.log(`📊 [RESEARCH-OUTPUT-CHARTS] Creating chart ${idx + 1}:`, chart.title || "untitled");
+          console.log(`📊 [RESEARCH-OUTPUT-CHARTS] Chart type:`, chart.chartType || 'bar');
+          console.log(`📊 [RESEARCH-OUTPUT-CHARTS] Chart labels:`, chart.labels?.length || 0);
+          console.log(`📊 [RESEARCH-OUTPUT-CHARTS] Chart values:`, chart.values?.length || 0);
+          
           const canvas = document.createElement('canvas');
           canvas.className = 'chart-canvas';
           canvas.id = 'chart-' + idx;
           chartsContent.appendChild(canvas);
-          new Chart(canvas.getContext('2d'), {
-            type: chart.chartType || 'bar',
-            data: {
-              labels: chart.labels || [],
-              datasets: [{
-                label: chart.title || 'Chart',
-                data: chart.values || [],
-                backgroundColor: '#7a9b8a',
-                borderColor: '#2d5a3d',
-                borderWidth: 1
-              }]
-            },
-            options: { responsive: true, plugins: { legend: { display: false } } }
-          });
+          
+          console.log(`📊 [RESEARCH-OUTPUT-CHARTS] Canvas created with ID: chart-${idx}`);
+          
+          try {
+            const chartInstance = new Chart(canvas.getContext('2d'), {
+              type: chart.chartType || 'bar',
+              data: {
+                labels: chart.labels || [],
+                datasets: [{
+                  label: chart.title || 'Chart',
+                  data: chart.values || [],
+                  backgroundColor: '#7a9b8a',
+                  borderColor: '#2d5a3d',
+                  borderWidth: 1
+                }]
+              },
+              options: { responsive: true, plugins: { legend: { display: false } } }
+            });
+            console.log(`✅ [RESEARCH-OUTPUT-CHARTS] Chart ${idx + 1} created successfully`);
+          } catch (error) {
+            console.error(`❌ [RESEARCH-OUTPUT-CHARTS] Error creating chart ${idx + 1}:`, error);
+          }
         });
+        console.log("✅ [RESEARCH-OUTPUT-CHARTS] All charts processed");
       } else {
+        console.log("ℹ️ [RESEARCH-OUTPUT-CHARTS] No charts available, hiding section");
         chartsSection.style.display = 'none';
       }
+      
       // Sources
+      console.log("📚 [RESEARCH-OUTPUT-SOURCES] Processing sources section");
       const sourcesList = document.getElementById('sources-list');
+      console.log("📚 [RESEARCH-OUTPUT-SOURCES] Sources list element:", !!sourcesList);
       sourcesList.innerHTML = '';
+      
+      console.log("📚 [RESEARCH-OUTPUT-SOURCES] Sources data:", d?.sources);
+      console.log("📚 [RESEARCH-OUTPUT-SOURCES] Is array:", Array.isArray(d?.sources));
+      console.log("📚 [RESEARCH-OUTPUT-SOURCES] Array length:", d?.sources?.length || 0);
+      
       if (Array.isArray(d?.sources) && d.sources.length) {
-        d.sources.forEach(src => {
+        console.log("✅ [RESEARCH-OUTPUT-SOURCES] Adding sources to list");
+        d.sources.forEach((src, index) => {
+          console.log(`📚 [RESEARCH-OUTPUT-SOURCES] Adding source ${index + 1}:`, src.substring(0, 50) + "...");
           const li = document.createElement('li');
-          if (/https?:\/\//.test(src)) {
+          const isUrl = /https?:\/\//.test(src);
+          console.log(`📚 [RESEARCH-OUTPUT-SOURCES] Source ${index + 1} is URL:`, isUrl);
+          
+          if (isUrl) {
             li.innerHTML = `<a href="${src}" target="_blank" rel="noopener">${src}</a>`;
           } else {
             li.innerText = src;
           }
           sourcesList.appendChild(li);
         });
+        console.log("✅ [RESEARCH-OUTPUT-SOURCES] All sources added successfully");
       } else {
+        console.log("ℹ️ [RESEARCH-OUTPUT-SOURCES] No sources available, showing placeholder");
         sourcesList.innerHTML = '<li class="no-data">No sources available.</li>';
       }
+      
+      console.log("🎉 [RESEARCH-OUTPUT-UPDATE] Output update completed successfully");
     }
+    console.log("🎬 [RESEARCH-OUTPUT-STARTUP] Running initial updateOutput");
     updateOutput();
-    window.addEventListener('storage', updateOutput);
-    window.addEventListener('DOMContentLoaded', updateOutput);
+    
+    console.log("👂 [RESEARCH-OUTPUT-EVENTS] Adding storage event listener");
+    window.addEventListener('storage', function(e) {
+      console.log("🔄 [RESEARCH-OUTPUT-STORAGE] Storage event received");
+      console.log("🔄 [RESEARCH-OUTPUT-STORAGE] Changed key:", e.key);
+      console.log("🔄 [RESEARCH-OUTPUT-STORAGE] New value length:", e.newValue?.length || 0);
+      console.log("🔄 [RESEARCH-OUTPUT-STORAGE] Triggering updateOutput");
+      updateOutput();
+    });
+    
+    console.log("👂 [RESEARCH-OUTPUT-EVENTS] Adding DOMContentLoaded event listener");
+    window.addEventListener('DOMContentLoaded', function() {
+      console.log("📋 [RESEARCH-OUTPUT-DOM] DOMContentLoaded event received");
+      console.log("📋 [RESEARCH-OUTPUT-DOM] Triggering updateOutput");
+      updateOutput();
+    });
 
     // Initialize enhanced UI system
     function initEnhancedUISystem() {
+      console.log("🎨 [RESEARCH-OUTPUT-UI] Initializing enhanced UI system");
+      console.log("🎨 [RESEARCH-OUTPUT-UI] Timestamp:", Date.now());
+      
       setTimeout(() => {
+        console.log("🎨 [RESEARCH-OUTPUT-UI] Enhanced UI timeout triggered");
+        console.log("🎨 [RESEARCH-OUTPUT-UI] Enhanced UI available:", !!window.enhancedUI);
+        
         if (window.enhancedUI) {
+          console.log("✅ [RESEARCH-OUTPUT-UI] Initializing enhanced UI");
+          console.log("✅ [RESEARCH-OUTPUT-UI] Container ID: main-content");
+          console.log("✅ [RESEARCH-OUTPUT-UI] Options: scrollToTop=true, embedEnforcement=true, accessibility=true");
+          
           window.enhancedUI.init({
             containerId: 'main-content',
             scrollToTop: true,
             embedEnforcement: true,
             accessibility: true
           });
+          console.log("✅ [RESEARCH-OUTPUT-UI] Enhanced UI initialized successfully");
         } else {
-          console.warn('Enhanced UI system not loaded');
+          console.warn('⚠️ [RESEARCH-OUTPUT-UI] Enhanced UI system not loaded');
         }
       }, 100);
     }
+    
+    console.log("🎨 [RESEARCH-OUTPUT-UI] Starting enhanced UI initialization");
     initEnhancedUISystem();
+    
+    console.log("🎉 [RESEARCH-OUTPUT] ResearchOutput script initialization completed");
   </script>
 </body>
 </html>
