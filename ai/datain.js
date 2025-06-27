@@ -679,14 +679,23 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Collapse container when clicking outside
         document.addEventListener('click', function (e) {
-            const isClickInside = dataContainer.contains(e.target);
-            // Check if click is on copy button or its modal/toast elements
-            const isCopyButton = e.target.closest('#copyButtonContainer, #copyButton, .share-modal-backdrop, .share-modal-content, .share-action-btn') ||
-                                e.target.id === 'copyButton' ||
-                                e.target.id === 'copyButtonContainer' ||
-                                e.target.closest('[id^="toast-"]');
-            
-            if (!isClickInside && !isCopyButton && isVisible) {
+            // If the container isn't visible, do nothing.
+            if (!isVisible) return;
+
+            const isClickInsideDataIn = dataContainer.contains(e.target);
+
+            // Check if the click is inside any known modal that might be on top of datain.
+            // If a click is inside another modal, this listener should ignore it.
+            const isClickInsideAnotherModal = e.target.closest('#faq-modal-backdrop, .data-overwrite-modal, .payment-modal, .share-modal-backdrop');
+            const isClickOnToast = e.target.closest('[id^="toast-"]');
+
+            if (isClickInsideAnotherModal || isClickOnToast) {
+                // Click is inside another modal or a toast, so we do nothing.
+                return;
+            }
+
+            // If the click is outside the datain container, and not inside another modal, close it.
+            if (!isClickInsideDataIn) {
                 toggleDataContainer();
             }
         });
