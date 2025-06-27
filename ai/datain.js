@@ -65,10 +65,6 @@ function initializeFormPersistence(url) {
         moduleType = 'quiz'; // UNDO: revert to original key for quiz module
     } else if (url.includes('/research/')) {
         moduleType = 'research';
-        moduleConfig = {
-            singleSelection: [],
-            multiSelection: []
-        };
     } else if (url.includes('/social/')) {
         moduleType = 'social';
     } else if (url.includes('/fashion/')) {
