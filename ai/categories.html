@@ -186,7 +186,7 @@
         }
     }, 100);
     
-    // Add product selection logic (unchanged)
+    // Add product selection logic
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('grid-item') && e.target.getAttribute('data-value') && e.target.getAttribute('data-value').startsWith('/ai/')) {
             const url = e.target.getAttribute('data-value');
@@ -196,13 +196,6 @@
                 detail: { url: url }
             });
             document.dispatchEvent(gridItemEvent);
-            
-            // Store the URL in localStorage for persistence
-            if (typeof window.setLocal === 'function') {
-                window.setLocal('lastGridItemUrl', url);
-            } else {
-                localStorage.setItem('lastGridItemUrl', url);
-            }
         }
     });
 })();

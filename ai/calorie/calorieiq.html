@@ -24,7 +24,6 @@
         <em>AI can make mistakes, consult a professional.</em>
     </p>
   </div>
-  <!-- Jump to Food Log button is injected by JS if calorieIqResponse exists -->
 
   <div class="row1" data-step-label="Personal Information">
     <h3 class="tooltip1" data-tooltip="Basic physical information needed to calculate your personalized calorie requirements.">
@@ -229,7 +228,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       initialize();
     }
   }, 200);
-  
+
   // Add Jump to Food Log button if calorieIqResponse exists
   document.addEventListener('DOMContentLoaded', function() {
     if (localStorage.getItem('calorieIqResponse')) {
@@ -246,14 +245,42 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         btn.style.color = '#2d5a3d';
       };
       btn.onclick = function() {
-        const foodLog = document.querySelector('[data-step-label="Food Log"]');
-        if (foodLog) foodLog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
+          window.guidedForms.showStep(5); // Jump to Food Log stage
+          const intro = document.querySelector('.product-description-container');
+          if (intro) intro.style.display = 'none';
+          btn.style.display = 'none'; // Hide the button itself
+        } else {
+            const foodLog = document.querySelector('[data-step-label="Food Log"]');
+            if (foodLog) foodLog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       };
       const intro = document.querySelector('.product-description-container');
       if (intro) intro.after(btn);
     }
   });
 
+  // Listen for the promptGridItemSelected event to jump to the Food Log stage
+  document.addEventListener('promptGridItemSelected', function(e) {
+    console.log('[CalorieIQ] promptGridItemSelected event detected', e.detail);
+    if (e.detail.url && e.detail.url.includes('/ai/calorie/calorieiq.html') && localStorage.getItem('calorieIqResponse')) {
+      console.log('[CalorieIQ] Conditions met, attempting to jump to Food Log stage');
+      // Wait for guided forms to initialize then jump to Food Log stage (step 5)
+      setTimeout(() => {
+        if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
+          console.log('[CalorieIQ] Jumping to Food Log stage (step 5)');
+          window.guidedForms.showStep(5);
+          const intro = document.querySelector('.product-description-container');
+          if (intro) intro.style.display = 'none';
+          const jumpButton = document.querySelector('.jump-to-foodlog-btn');
+          if (jumpButton) jumpButton.style.display = 'none';
+        } else {
+          console.log('[CalorieIQ] Guided forms not ready, will not jump to stage.');
+        }
+      }, 500); // A small delay to ensure guidedForms is ready
+    }
+  });
+  
   // Export functions for external access
   window.calorieIq = { 
     getFormData: () => window.calorieFormPersistence.getSavedFormData(),
