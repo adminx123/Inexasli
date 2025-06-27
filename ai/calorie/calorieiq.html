@@ -229,37 +229,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     }
   }, 200);
 
-  // Add Jump to Food Log button if calorieIqResponse exists
-  document.addEventListener('DOMContentLoaded', function() {
-    if (localStorage.getItem('calorieIqResponse')) {
-      const btn = document.createElement('button');
-      btn.textContent = 'Jump to Food Log';
-      btn.className = 'jump-to-foodlog-btn';
-      btn.style.cssText = 'width: 180px; height: 40px; align-self: center; border: 1px solid #4a7c59; box-shadow: 2px 2px 4px rgba(74, 124, 89, 0.15); background-color: #f2f9f3; color: #2d5a3d; border-radius: 5px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0; font-family: "Geist", sans-serif; margin: 18px auto 24px auto;';
-      btn.onmouseenter = function() {
-        btn.style.backgroundColor = '#eef7f0';
-        btn.style.color = '#2d5a3d';
-      };
-      btn.onmouseleave = function() {
-        btn.style.backgroundColor = '#f2f9f3';
-        btn.style.color = '#2d5a3d';
-      };
-      btn.onclick = function() {
-        if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
-          window.guidedForms.showStep(5); // Jump to Food Log stage
-          const intro = document.querySelector('.product-description-container');
-          if (intro) intro.style.display = 'none';
-          btn.style.display = 'none'; // Hide the button itself
-        } else {
-            const foodLog = document.querySelector('[data-step-label="Food Log"]');
-            if (foodLog) foodLog.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      };
-      const intro = document.querySelector('.product-description-container');
-      if (intro) intro.after(btn);
-    }
-  });
-
   // Listen for the promptGridItemSelected event to jump to the Food Log stage
   document.addEventListener('promptGridItemSelected', function(e) {
     console.log('[CalorieIQ] promptGridItemSelected event detected', e.detail);
@@ -272,8 +241,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
           window.guidedForms.showStep(5);
           const intro = document.querySelector('.product-description-container');
           if (intro) intro.style.display = 'none';
-          const jumpButton = document.querySelector('.jump-to-foodlog-btn');
-          if (jumpButton) jumpButton.style.display = 'none';
         } else {
           console.log('[CalorieIQ] Guided forms not ready, will not jump to stage.');
         }
