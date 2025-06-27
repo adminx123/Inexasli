@@ -211,15 +211,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     runInitialization();
   }
 
-  // Handle loading through datain.js - only initialize if calorie module is loaded
-  document.addEventListener('data-in-loaded', function(e) {
-    const moduleType = e.detail?.moduleType;
-    if (moduleType === 'calorie') {
-      console.log("[CalorieIQ] Calorie module loaded through datain.js, reinitializing");
-      runInitialization();
-    }
-  });
-
   // Additional safety net - try again after a short delay
   setTimeout(() => {
     const generateBtn = document.getElementById('generate-calorie-btn');
@@ -229,10 +220,9 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     }
   }, 200);
 
-  // Listen for the promptGridItemSelected event to jump to the Food Log stage
-  document.addEventListener('promptGridItemSelected', function(e) {
-    console.log('[CalorieIQ] promptGridItemSelected event detected', e.detail);
-    if (e.detail.url && e.detail.url.includes('/ai/calorie/calorieiq.html') && localStorage.getItem('calorieIqResponse')) {
+  // Function to handle jumping to the food log stage
+  function jumpToFoodLogStage() {
+    if (localStorage.getItem('calorieIqResponse')) {
       console.log('[CalorieIQ] Conditions met, attempting to jump to Food Log stage');
       // Wait for guided forms to initialize then jump to Food Log stage (step 5)
       setTimeout(() => {
@@ -245,6 +235,24 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
           console.log('[CalorieIQ] Guided forms not ready, will not jump to stage.');
         }
       }, 500); // A small delay to ensure guidedForms is ready
+    }
+  }
+
+  // Listen for the promptGridItemSelected event to jump to the Food Log stage
+  document.addEventListener('promptGridItemSelected', function(e) {
+    console.log('[CalorieIQ] promptGridItemSelected event detected', e.detail);
+    if (e.detail.url && e.detail.url.includes('/ai/calorie/calorieiq.html')) {
+      jumpToFoodLogStage();
+    }
+  });
+
+  // Handle loading through datain.js - also check for jump condition
+  document.addEventListener('data-in-loaded', function(e) {
+    const moduleType = e.detail?.moduleType;
+    if (moduleType === 'calorie') {
+      console.log("[CalorieIQ] Calorie module loaded through datain.js, reinitializing");
+      runInitialization();
+      jumpToFoodLogStage();
     }
   });
   
