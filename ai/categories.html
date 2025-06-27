@@ -57,11 +57,46 @@
     }
 }
 
+.favorite-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #ccc;
+}
 
+.favorite-icon.favorited {
+    color: gold;
+}
+
+.grid-item {
+    position: relative;
+}
+
+#favorites-container h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+#favorites-grid {
+    margin-bottom: 20px;
+}
 </style>
 
 <div class="device-container">
+    
+
 <div class="row1" data-step-label="Select Category">
+
+
+<div id="favorites-container">
+    <h3>⭐ Your Favorites</h3>
+    <div class="grid-container" id="favorites-grid"></div>
+</div>
+
 
         <div class="grid-container" id="category-selection">
 
@@ -106,76 +141,135 @@
 </div>
 
 
-
-<script>
+<script type="module">
 // Execute immediately instead of waiting for DOMContentLoaded since this is dynamically loaded
-(function() {
-    console.log('[Categories] Script executing immediately');
-    
-    // Function to filter products using DIRECT INLINE STYLES (bypasses all CSS)
-    function filterProducts(selectedCategory) {
-        const products = document.querySelectorAll('.grid-item[data-category]');
-        console.log('[Categories] filterProducts called with:', selectedCategory, 'Found products:', products.length);
-        
-        products.forEach(product => {
-            const categories = product.getAttribute('data-category').split(',');
-            
-            if (selectedCategory === 'all' || categories.includes(selectedCategory)) {
-                // FORCE SHOW with inline style (overrides everything)
-                product.style.display = 'flex';
-                console.log('[Categories] Showing:', product.textContent);
+import { getJSON } from '/utility/getJSON.js';
+import { setJSON } from '/utility/setJSON.js';
+
+console.log('[Categories] Script executing immediately');
+
+const favoritesGrid = document.getElementById('favorites-grid');
+const productsGrid = document.querySelector('.row1[data-step-label="Products"] .grid-container');
+const deviceContainer = document.querySelector('.device-container');
+
+function getFavorites() {
+    // Use the imported function directly
+    return getJSON('favoriteProducts', []);
+}
+
+function saveFavorites(favorites) {
+    // Use the imported function directly
+    setJSON('favoriteProducts', favorites);
+}
+
+function renderFavorites() {
+    const favorites = getFavorites();
+    favoritesGrid.innerHTML = '';
+    if (favorites.length === 0) {
+        favoritesGrid.innerHTML = '<p style="text-align:center; color:#888;">You haven\'t favorited any products yet.</p>';
+        return;
+    }
+
+    const allProducts = Array.from(productsGrid.children);
+    favorites.forEach(url => {
+        const product = allProducts.find(p => p.dataset.value === url);
+        if (product) {
+            const clone = product.cloneNode(true);
+            // Event listeners are handled by delegation, no need to add them here
+            favoritesGrid.appendChild(clone);
+        }
+    });
+}
+
+function toggleFavorite(url) {
+    let favorites = getFavorites();
+    const index = favorites.indexOf(url);
+    if (index > -1) {
+        favorites.splice(index, 1);
+    } else {
+        favorites.push(url);
+    }
+    saveFavorites(favorites);
+    renderFavorites();
+    updateFavoriteIcons();
+}
+
+function updateFavoriteIcons() {
+    const favorites = getFavorites();
+    // This will update icons in both the main grid and the favorites grid
+    document.querySelectorAll('.grid-item[data-value]').forEach(item => {
+        const icon = item.querySelector('.favorite-icon');
+        if (icon) {
+            if (favorites.includes(item.dataset.value)) {
+                icon.classList.add('favorited');
             } else {
-                // FORCE HIDE with inline style (overrides everything)
-                product.style.display = 'none';
-                console.log('[Categories] Hiding:', product.textContent);
+                icon.classList.remove('favorited');
+            }
+        }
+    });
+}
+
+function addFavoriteIcons() {
+    document.querySelectorAll('.grid-item[data-category]').forEach(product => {
+        if (product.querySelector('.favorite-icon')) return; // Don't add twice
+        const icon = document.createElement('span');
+        icon.className = 'favorite-icon';
+        icon.innerHTML = '★';
+        // Listener is handled by event delegation on the container
+        product.appendChild(icon);
+    });
+}
+
+// Function to filter products using DIRECT INLINE STYLES (bypasses all CSS)
+function filterProducts(selectedCategory) {
+    const products = document.querySelectorAll('.grid-item[data-category]');
+    console.log('[Categories] filterProducts called with:', selectedCategory, 'Found products:', products.length);
+    
+    products.forEach(product => {
+        const categories = product.getAttribute('data-category').split(',');
+        
+        if (selectedCategory === 'all' || categories.includes(selectedCategory)) {
+            product.style.display = 'flex';
+        } else {
+            product.style.display = 'none';
+        }
+    });
+    
+    localStorage.setItem('categoriesPageSelection', selectedCategory);
+    console.log('[Categories] Category filtered:', selectedCategory);
+}
+
+// Wait a bit for DOM to be ready, then initialize
+setTimeout(function() {
+    addFavoriteIcons();
+    renderFavorites();
+    updateFavoriteIcons();
+    
+    const categoryContainer = document.getElementById('category-selection');
+    if (categoryContainer) {
+        categoryContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('grid-item')) {
+                const selectedCategory = e.target.getAttribute('data-value');
+                e.stopPropagation();
+                
+                document.querySelectorAll('#category-selection .grid-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                e.target.classList.add('active');
+                
+                filterProducts(selectedCategory);
+                
+                if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
+                    window.guidedForms.showStep(1);
+                }
             }
         });
         
-        // Store selection in localStorage for other modules to access
-        localStorage.setItem('categoriesPageSelection', selectedCategory);
-        console.log('[Categories] Category filtered:', selectedCategory, 'Total products found:', products.length);
-    }
-    
-    // Wait a bit for DOM to be ready, then initialize
-    setTimeout(function() {
-        // Add category selection logic
-        const categoryContainer = document.getElementById('category-selection');
-        console.log('[Categories] Category container found:', !!categoryContainer);
-        
-        if (categoryContainer) {
-            categoryContainer.addEventListener('click', function(e) {
-                console.log('[Categories] Click detected on:', e.target);
-                if (e.target.classList.contains('grid-item')) {
-                    const selectedCategory = e.target.getAttribute('data-value');
-                    console.log('[Categories] Category clicked:', selectedCategory);
-                    
-                    // Prevent event bubbling to avoid conflicts with datain.js
-                    e.stopPropagation();
-                    
-                    // Update active state
-                    document.querySelectorAll('#category-selection .grid-item').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                    e.target.classList.add('active');
-                    
-                    // Filter products with FORCE
-                    filterProducts(selectedCategory);
-                    
-                    // Advance guided form step if available (auto-advance for this page only)
-                    if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
-                        window.guidedForms.showStep(1);
-                    }
-                }
-            });
-            
-            // Initialize: FORCE HIDE all products first, then show 'all'
-            console.log('[Categories] Initializing - hiding all products first');
-            const allProducts = document.querySelectorAll('.grid-item[data-category]');
-        allProducts.forEach(product => {
+        console.log('[Categories] Initializing - hiding all products first');
+        document.querySelectorAll('.grid-item[data-category]').forEach(product => {
             product.style.display = 'none';
         });
-        
-        // Now show all products and set active
+    
         setTimeout(() => {
             filterProducts('all');
             const allCategoriesItem = document.querySelector('#category-selection .grid-item[data-value="all"]');
@@ -183,26 +277,35 @@
                 allCategoriesItem.classList.add('active');
             }
         }, 100);
+    }
+}, 100);
+
+// Consolidated event listener for both product selection and favorite toggling
+if (deviceContainer) {
+    deviceContainer.addEventListener('click', function(e) {
+        const gridItem = e.target.closest('.grid-item');
+        if (!gridItem || !gridItem.dataset.value) return;
+
+        // Handle favorite icon clicks
+        if (e.target.classList.contains('favorite-icon')) {
+            e.stopPropagation(); // Prevent product selection from firing
+            toggleFavorite(gridItem.dataset.value);
+            return;
         }
-    }, 100);
-    
-    // Add product selection logic
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('grid-item') && e.target.getAttribute('data-value') && e.target.getAttribute('data-value').startsWith('/ai/')) {
-            const url = e.target.getAttribute('data-value');
-            
-            // Use regular content loading for all modules
+
+        // Handle product selection clicks (if it's a product URL)
+        if (gridItem.dataset.value.startsWith('/ai/')) {
             const gridItemEvent = new CustomEvent('promptGridItemSelected', { 
-                detail: { url: url }
+                detail: { url: gridItem.dataset.value }
             });
             document.dispatchEvent(gridItemEvent);
         }
     });
-})();
+}
 </script>
 
 <script>
-  // Only enable autoAdvance for categories.html
+// Only enable autoAdvance for categories.html
   // Wait for guidedForms to be loaded by datain.js
   function initGuidedFormsForCategories() {
     if (window.GuidedFormSystem) {
