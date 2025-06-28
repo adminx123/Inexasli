@@ -1,4 +1,4 @@
-const CACHE_NAME = 'inexasli-v13'; //#CHANGEVERSION with each major update
+const CACHE_NAME = 'inexasli-v14'; //#CHANGEVERSION with each major update
 const urlsToCache = [
   '/budget/index.html'
 ];
@@ -39,8 +39,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   
-  // Bypass Service Worker for direct Cloudflare IP requests or API endpoints
-  if (url.hostname === '172.67.134.54' || url.pathname.startsWith('/api/')) {
+  // Bypass Service Worker for API endpoints only (not for any IP addresses)
+  if (url.pathname.startsWith('/api/')) {
     // Let the request go directly to the network without Service Worker intervention
     return;
   }
