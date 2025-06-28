@@ -13,7 +13,7 @@ import { initializeBidirectionalSwipe, initializeSimpleVerticalSwipe } from '/ut
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
-import { renderRateLimitDisplay, handleRateLimitResponse } from '/utility/rateLimiter.js';
+import { renderRateLimitDisplay, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 import '/ai/faq.js'; // Add FAQ modal script
 
 // Prevent zoom/pinch on content containers
