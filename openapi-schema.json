@@ -1,9 +1,25 @@
 {
+  "_comment": "DISABLED - API Shield Schema Validation was blocking legitimate requests",
+  "_issues": [
+    "Schema mismatch - OpenAPI schema too strict vs actual requests",
+    "Missing optional fields - Schema required fields app doesn't always send",
+    "Wrong data types - Schema expected different formats than actual",
+    "Extra fields - Requests had fields not defined in schema",
+    "Nested object structure - Fingerprint object structure didn't match exactly"
+  ],
+  "_fix_needed": [
+    "Capture actual request - Log real request from working browser call",
+    "Update OpenAPI schema - Match exact structure of working requests",
+    "Make fields optional - Use required: [] only for truly mandatory fields",
+    "Allow additional properties - Add additionalProperties: true",
+    "Test incrementally - Enable, test one module, fix schema, repeat"
+  ],
+  "_recommendation": "Keep API Shield disabled - WAF + rate limiting is sufficient security",
   "openapi": "3.0.0",
   "info": {
     "title": "Inexasli AI API",
     "version": "1.0.0",
-    "description": "API for Inexasli AI modules"
+    "description": "API for Inexasli AI modules - DISABLED DUE TO BLOCKING LEGITIMATE REQUESTS"
   },
   "servers": [
     {
