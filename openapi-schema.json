@@ -1,0 +1,66 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Inexasli AI API",
+    "version": "1.0.0",
+    "description": "API for Inexasli AI modules"
+  },
+  "servers": [
+    {
+      "url": "https://inexasli.com",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/api/generate": {
+      "post": {
+        "summary": "Generate AI content",
+        "description": "Receives a module name, form data, and fingerprint for rate limiting, then returns a generated response.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "module": {
+                    "type": "string",
+                    "description": "The name of the AI module to use (e.g., 'calorie', 'decision', 'income')."
+                  },
+                  "formData": {
+                    "type": "object",
+                    "description": "The form data containing the user inputs for the specific module."
+                  },
+                  "fingerprint": {
+                    "type": "object",
+                    "properties": {
+                      "deviceId": {
+                        "type": "string"
+                      },
+                      "sessionId": {
+                        "type": "string"
+                      },
+                      "requestCounts": {
+                        "type": "object"
+                      }
+                    },
+                    "description": "Rate limiting fingerprint data for user identification."
+                  }
+                },
+                "required": ["module", "formData", "fingerprint"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Bad Request - Invalid input"
+          }
+        }
+      }
+    }
+  }
+}

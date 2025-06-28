@@ -1,4 +1,4 @@
-const CACHE_NAME = 'inexasli-v12'; //#CHANGEVERSION with each major update
+const CACHE_NAME = 'inexasli-v13'; //#CHANGEVERSION with each major update
 const urlsToCache = [
   '/budget/index.html'
 ];
@@ -37,6 +37,14 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  
+  // Bypass Service Worker for direct Cloudflare IP requests or API endpoints
+  if (url.hostname === '172.67.134.54' || url.pathname.startsWith('/api/')) {
+    // Let the request go directly to the network without Service Worker intervention
+    return;
+  }
+  
   // Bypass cache for local development
   if (self.location.hostname === '127.0.0.1' || self.location.hostname === 'localhost') {
     event.respondWith(fetch(event.request));

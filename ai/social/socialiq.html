@@ -207,7 +207,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
                 'social',
                 async () => {
                     // Send data to worker
-                    const apiUrl = 'https://master.4hm7q4q75z.workers.dev/'; // Per x.txt: use master worker endpoint
+                    const apiUrl = '/api/generate';
                     
                     console.log('[SocialIQ] Sending socialIqInput to worker');
                     const response = await fetch(apiUrl, {
@@ -215,7 +215,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(workerPayload) // Use consistent payload structure
+                        body: JSON.stringify(workerPayload)
                     });
                     
                     let responseData;

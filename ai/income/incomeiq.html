@@ -1424,10 +1424,13 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
                     'generate-income-btn',
                     'income',
                     async () => {
-                        const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
+                        // Use the proper Cloudflare-secured API endpoint
+                        const apiUrl = '/api/generate';
                         const response = await fetch(apiUrl, {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 
+                                'Content-Type': 'application/json'
+                            },
                             body: JSON.stringify(workerPayload)
                         });
 

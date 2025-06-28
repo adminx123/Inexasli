@@ -100,7 +100,7 @@ Accepting things I cannot change"></textarea>
                 'philosophy',
                 async () => {
                     // Send data to worker
-                    const apiUrl = 'https://master.4hm7q4q75z.workers.dev/';
+                    const apiUrl = '/api/generate';
                     console.log('[PhilosophyIQ] Sending philosophyIqInput to worker');
                     const response = await fetch(apiUrl, {
                         method: 'POST',
