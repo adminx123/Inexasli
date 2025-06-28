@@ -63,3 +63,8 @@ service = "secretworker"
 [[env.master.services]]
 binding = "rateLimit_binding"
 service = "ratelimit"
+
+# --- Stripe Payment Worker ---
+[env.stripeintegration]
+name = "stripe-integration"
+main = "./payment/stripeintegration.js"

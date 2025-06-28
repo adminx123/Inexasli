@@ -74,3 +74,6 @@ logs
 
 ai/rate-limiter/rate-limiter.js
 ai/master.js
+
+# Payment processing worker
+payment/stripeintegration.js
