@@ -44,6 +44,11 @@ preview_id = "2da5e6f46847458a9aa83ffe54dea66e"
 name = "master"
 main = "./ai/master.js"
 
+# Routes for the master worker
+routes = [
+  { pattern = "*inexasli.com/api/*", zone_name = "inexasli.com" }
+]
+
 # KV namespace for storing analysis facts and data
 [[env.master.kv_namespaces]]
 binding = "FACT_STORE"
@@ -56,5 +61,5 @@ binding = "secret_binding"
 service = "secretworker"
 
 [[env.master.services]]
-binding = "rate_limiter_binding"
+binding = "rateLimit_binding"
 service = "ratelimit"

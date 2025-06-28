@@ -1425,7 +1425,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
                     'income',
                     async () => {
                         // Use the proper Cloudflare-secured API endpoint
-                        const apiUrl = '/api/generate';
+                        const apiUrl = 'https://inexasli.com/api/generate';
                         const response = await fetch(apiUrl, {
                             method: 'POST',
                             headers: { 

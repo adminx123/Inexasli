@@ -100,7 +100,7 @@ Accepting things I cannot change"></textarea>
                 'philosophy',
                 async () => {
                     // Send data to worker
-                    const apiUrl = '/api/generate';
+                    const apiUrl = 'https://inexasli.com/api/generate';
                     console.log('[PhilosophyIQ] Sending philosophyIqInput to worker');
                     const response = await fetch(apiUrl, {
                         method: 'POST',

@@ -35,15 +35,34 @@
                     "type": "object",
                     "properties": {
                       "deviceId": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Unique device identifier"
                       },
                       "sessionId": {
-                        "type": "string"
+                        "type": "string", 
+                        "description": "Session identifier"
+                      },
+                      "sessionCreated": {
+                        "type": "number",
+                        "description": "Session creation timestamp"
                       },
                       "requestCounts": {
-                        "type": "object"
+                        "type": "object",
+                        "description": "Request count tracking by module"
+                      },
+                      "lastRequestTimes": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "description": "Array of recent request timestamps"
+                      },
+                      "rateLimitStatus": {
+                        "type": "object",
+                        "description": "Rate limit status tracking"
                       }
                     },
+                    "required": ["deviceId", "sessionId"],
                     "description": "Rate limiting fingerprint data for user identification."
                   }
                 },

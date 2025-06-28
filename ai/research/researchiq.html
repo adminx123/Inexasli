@@ -85,7 +85,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
           'generate-research-btn',
           'research',
           async () => {
-            const apiUrl = '/api/generate';
+            const apiUrl = 'https://inexasli.com/api/generate';
             const response = await fetch(apiUrl, { 
               method: 'POST', 
               headers: {'Content-Type':'application/json'}, 

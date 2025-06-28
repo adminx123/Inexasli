@@ -207,7 +207,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
                 'social',
                 async () => {
                     // Send data to worker
-                    const apiUrl = '/api/generate';
+                    const apiUrl = 'https://inexasli.com/api/generate';
                     
                     console.log('[SocialIQ] Sending socialIqInput to worker');
                     const response = await fetch(apiUrl, {

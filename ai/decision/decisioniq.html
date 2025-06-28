@@ -132,7 +132,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
           'generate-decision-btn',
           'decision',
           async () => {
-            const apiUrl = '/api/generate';
+            const apiUrl = 'https://inexasli.com/api/generate';
             const response = await fetch(apiUrl, { 
               method: 'POST', 
               headers: {'Content-Type':'application/json'}, 
