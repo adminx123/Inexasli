@@ -26,6 +26,30 @@
 
 ---
 
+Operation: ratepay
+Update rateLimitStatus in localStorage immediately after payment confirmation
+
+Files to modify:
+- /payment/redirectUrl.html
+
+Implementation:
+1. After successful payment linking call to stripeintegration worker
+2. Add rate limit status refresh function
+3. Call rate limiter with task: 'checkPaymentAndLimits'
+4. Update rateLimitStatus in localStorage immediately  
+5. Show updated usage/limits to user
+
+Flow:
+Payment completes → redirectUrl.html loads → call stripeintegration worker to link payment ✓ (exists) → NEW: call rate limiter to get fresh status → NEW: update localStorage rateLimitStatus → NEW: display success message with new limits → user sees "unlimited" or updated usage immediately
+
+Benefits:
+- Instant UI feedback after payment
+- Uses existing backend infrastructure  
+- No new endpoints needed
+- Seamless user experience
+
+---
+
 Use this as a concrete example of the changes to make for each module when migrating to the master worker architecture.
 
 / To update other modules for the master worker pattern, make these changes:

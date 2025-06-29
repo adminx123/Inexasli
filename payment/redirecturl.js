@@ -14,7 +14,7 @@ import { getLocal } from '/utility/getlocal.js';
 const urlParams = new URLSearchParams(window.location.search);
 const sessionId = urlParams.get("session_id");
 const container = document.querySelector(".container");
-// Updated from Lambda to Cloudflare Worker URL
+// Payment endpoint
 const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
 
 document.addEventListener("DOMContentLoaded", async () => {

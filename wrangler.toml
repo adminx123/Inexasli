@@ -39,6 +39,10 @@ binding = "RATE_LIMIT_KV"
 id = "2da5e6f46847458a9aa83ffe54dea66e"
 preview_id = "2da5e6f46847458a9aa83ffe54dea66e"
 
+# Admin key for support operations
+[env.ratelimit.vars]
+ADMIN_KEY = "your-secure-admin-key-here"
+
 # --- Master Worker (Centralized - Includes All Modules) ---
 [env.master]
 name = "master"
@@ -66,5 +70,15 @@ service = "ratelimit"
 
 # --- Stripe Payment Worker ---
 [env.stripeintegration]
-name = "stripe-integration"
+name = "stripeintegration"
 main = "./payment/stripeintegration.js"
+
+# Variables for Stripe integration
+[env.stripeintegration.vars]
+DOMAIN_URL = "http://127.0.0.1:5500"  # Temporarily set to local for testing
+
+# KV namespace for payment data storage  
+[[env.stripeintegration.kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "2da5e6f46847458a9aa83ffe54dea66e"
+preview_id = "2da5e6f46847458a9aa83ffe54dea66e"

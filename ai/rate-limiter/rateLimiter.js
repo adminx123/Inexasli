@@ -197,6 +197,11 @@ export function incrementRequestCount() {
  */
 export function handleRateLimitResponse(container, response, showError = true, moduleName = 'Module') {
     console.log('[RateLimit][Debug] handleRateLimitResponse called with:', response);
+    
+    // Check if user is authenticated as paid but rateLimitStatus doesn't exist
+    const authenticated = localStorage.getItem('authenticated');
+    const isPaidUser = authenticated && decodeURIComponent(authenticated) === 'paid';
+    
     // Find the utility buttons container
     let utilityBar = container.querySelector('.utility-buttons-container');
     if (!utilityBar) {
@@ -223,13 +228,32 @@ export function handleRateLimitResponse(container, response, showError = true, m
     badge.style.color = '#000';
     badge.style.marginLeft = '2px';
     badge.style.verticalAlign = 'middle';
+    
     if (status && status.remaining && status.limits) {
         const dailyStatus = {
             remaining: { perDay: status.remaining.perDay },
-            limits: { perDay: status.limits.perDay }
+            limits: { perDay: status.limits.perDay },
+            isPaid: status.isPaid || isPaidUser,
+            allowed: status.allowed,
+            email: status.email,
+            lastUpdated: Date.now()
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
         badge.textContent = `${dailyStatus.remaining.perDay}`;
+        console.log('[RateLimit] rateLimitStatus created from backend response:', dailyStatus);
+    } else if (isPaidUser) {
+        // Create rateLimitStatus for paid users even if backend response is empty
+        const paidUserStatus = {
+            remaining: { perDay: 5 }, // Default paid user limit
+            limits: { perDay: 5 },
+            isPaid: true,
+            allowed: true,
+            email: localStorage.getItem('userEmail') ? decodeURIComponent(localStorage.getItem('userEmail')) : null,
+            lastUpdated: Date.now()
+        };
+        localStorage.setItem('rateLimitStatus', JSON.stringify(paidUserStatus));
+        badge.textContent = '5'; // Show paid user limit
+        console.log('[RateLimit] rateLimitStatus created for paid user (empty backend response):', paidUserStatus);
     } else {
         badge.textContent = '...';
     }
@@ -318,5 +342,79 @@ export function renderRateLimitDisplay(container, rateLimiterUrl, moduleName = '
         paymentBtn.appendChild(badge);
     } else {
         utilityBar.appendChild(badge);
+    }
+}
+
+/**
+ * Update rateLimitStatus in localStorage from backend response
+ * @param {Object} rateLimitData - Backend response containing rate limit status
+ */
+export function updateRateLimitStatus(rateLimitData) {
+    try {
+        const rateLimitStatus = {
+            allowed: rateLimitData.allowed,
+            isPaid: rateLimitData.isPaid,
+            limits: rateLimitData.limits,
+            remaining: rateLimitData.remaining,
+            email: rateLimitData.email,
+            lastUpdated: Date.now()
+        };
+        
+        localStorage.setItem('rateLimitStatus', JSON.stringify(rateLimitStatus));
+        console.log('[RateLimit] rateLimitStatus updated:', rateLimitStatus);
+        return rateLimitStatus;
+    } catch (error) {
+        console.error('[RateLimit] Error updating rateLimitStatus:', error);
+        return null;
+    }
+}
+
+/**
+ * Ensure rateLimitStatus exists for authenticated paid users
+ * Call this when user is authenticated but rateLimitStatus might be missing
+ */
+export function ensureRateLimitStatusForPaidUser() {
+    console.log('[RateLimit][DEBUG] 🔍 ensureRateLimitStatusForPaidUser() called');
+    
+    try {
+        const authenticated = localStorage.getItem('authenticated');
+        console.log('[RateLimit][DEBUG] 🔍 Raw authenticated value:', authenticated);
+        
+        const isPaidUser = authenticated && decodeURIComponent(authenticated) === 'paid';
+        console.log('[RateLimit][DEBUG] 🔍 isPaidUser:', isPaidUser);
+        
+        const existingStatus = localStorage.getItem('rateLimitStatus');
+        console.log('[RateLimit][DEBUG] 🔍 Existing rateLimitStatus:', existingStatus);
+        
+        if (isPaidUser && !existingStatus) {
+            console.log('[RateLimit][DEBUG] 🚀 CREATING rateLimitStatus for paid user!');
+            
+            const paidUserStatus = {
+                remaining: { perDay: 5 }, // Default paid user limit
+                limits: { perDay: 5 },
+                isPaid: true,
+                allowed: true,
+                email: localStorage.getItem('userEmail') ? decodeURIComponent(localStorage.getItem('userEmail')) : null,
+                lastUpdated: Date.now()
+            };
+            
+            console.log('[RateLimit][DEBUG] 🚀 About to set rateLimitStatus:', paidUserStatus);
+            localStorage.setItem('rateLimitStatus', JSON.stringify(paidUserStatus));
+            console.log('[RateLimit][DEBUG] ✅ localStorage.setItem() completed');
+            
+            // Verify it was actually set
+            const verification = localStorage.getItem('rateLimitStatus');
+            console.log('[RateLimit][DEBUG] 🔍 Verification - rateLimitStatus after setting:', verification);
+            
+            console.log('[RateLimit] rateLimitStatus created for authenticated paid user:', paidUserStatus);
+            return paidUserStatus;
+        } else {
+            console.log('[RateLimit][DEBUG] ❌ NOT creating rateLimitStatus. isPaidUser:', isPaidUser, 'existingStatus:', !!existingStatus);
+        }
+        
+        return existingStatus ? JSON.parse(existingStatus) : null;
+    } catch (error) {
+        console.error('[RateLimit][DEBUG] 💥 ERROR in ensureRateLimitStatusForPaidUser:', error);
+        return null;
     }
 }

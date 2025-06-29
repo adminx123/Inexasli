@@ -36,8 +36,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <input type="email" class="payment-input" id="useremail" placeholder="Input your email" required>
                 <button class="payment-pay-button" id="pay-button" type="button">Subscribe - $2.99</button>
                 <div class="payment-button-row">
-                    <a href="mailto:support@inexasli.com" class="payment-support-link">I have paid</a>
+                    <button class="payment-support-link recovery-button" id="recovery-button" type="button">I have paid</button>
                     <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="payment-support-link">Customer Portal</a>
+                </div>
+                <div id="recovery-form" class="recovery-form" style="display: none;">
+                    <input type="email" class="payment-input" id="recovery-email" placeholder="Enter your email to recover access" required>
+                    <button class="payment-recover-button" id="recover-button" type="button">Recover Access</button>
+                    <button class="payment-cancel-button" id="cancel-recovery" type="button">Cancel</button>
                 </div>
                 <button id="terms-button" class="payment-terms-button" type="button">Terms of Service</button>
             </form>
@@ -70,6 +75,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Initialize payment processing directly (combined from payment.js)
         initializePaymentProcessing();
+
+        // Ensure rateLimitStatus exists for paid users
+        try {
+            const { ensureRateLimitStatusForPaidUser } = await import('/ai/rate-limiter/rateLimiter.js');
+            ensureRateLimitStatusForPaidUser();
+        } catch (error) {
+            console.warn('[PaymentForm] Could not ensure rate limit status for paid user:', error);
+        }
 
         console.log('Payment form and processing initialized');
     }
@@ -278,6 +291,66 @@ function addPaymentModalStyles() {
         .payment-terms-button:hover {
             background-color: #f5f5f5;
             color: #333;
+        }
+        
+        /* Recovery Form Styles */
+        .recovery-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8fdf9;
+            border: 1px solid #4a7c59;
+            border-radius: 8px;
+        }
+        
+        .payment-recover-button {
+            padding: 12px 16px;
+            background-color: #4a7c59;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: 'Geist', sans-serif;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .payment-recover-button:hover {
+            background-color: #3d6349;
+            transform: translateY(-1px);
+        }
+        
+        .payment-recover-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .payment-cancel-button {
+            padding: 10px 16px;
+            background-color: #f0f0f0;
+            color: #666;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: 'Geist', sans-serif;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .payment-cancel-button:hover {
+            background-color: #e8e8e8;
+            border-color: #ccc;
+        }
+        
+        .recovery-button {
+            background: none !important;
+            border: 1px solid #4a7c59 !important;
+            text-decoration: none !important;
         }
         
         /* Premium Section Styling */
@@ -567,6 +640,167 @@ async function initializePaymentProcessing() {
                 payForm.dispatchEvent(submitEvent);
             });
             console.log("Pay button click listener added");
+        }
+
+        // Add recovery functionality event listeners
+        const recoveryButton = document.querySelector("#recovery-button");
+        const recoveryForm = document.querySelector("#recovery-form");
+        const recoverButton = document.querySelector("#recover-button");
+        const cancelRecoveryButton = document.querySelector("#cancel-recovery");
+        const recoveryEmailInput = document.querySelector("#recovery-email");
+        
+        if (recoveryButton && recoveryForm) {
+            recoveryButton.addEventListener("click", function(e) {
+                e.preventDefault();
+                console.log("Recovery button clicked");
+                
+                // Hide main form, show recovery form
+                document.querySelector(".payment-form").style.display = "none";
+                recoveryForm.style.display = "block";
+            });
+            
+            console.log("Recovery button listener added");
+        }
+        
+        if (recoverButton && recoveryEmailInput) {
+            recoverButton.addEventListener("click", async function(e) {
+                e.preventDefault();
+                console.log("Recover access button clicked");
+                
+                const email = recoveryEmailInput.value.trim();
+                const payStatus = document.querySelector("#status");
+                
+                if (!email) {
+                    payStatus.innerHTML = "Please enter your email address";
+                    return;
+                }
+                
+                payStatus.innerHTML = "Verifying email...";
+                recoverButton.disabled = true;
+                
+                try {
+                    // Get fingerprint data
+                    const fingerprintData = localStorage.getItem("fingerprintData");
+                    if (!fingerprintData) {
+                        throw new Error("Unable to get device fingerprint");
+                    }
+                    
+                    const fingerprint = JSON.parse(decodeURIComponent(fingerprintData));
+                    
+                    // Call the new addDeviceToAccount endpoint
+                    const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
+                    
+                    const response = await fetch(paymentEndpoint, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            task: "addDeviceToAccount",
+                            email: email,
+                            fingerprint: fingerprint
+                        }),
+                        mode: "cors"
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        // Store authentication locally
+                        localStorage.setItem("authenticated", encodeURIComponent("paid"));
+                        localStorage.setItem("userEmail", encodeURIComponent(email));
+                        
+                        // OPERATION RATEPAY: Update rateLimitStatus after successful email recovery
+                        try {
+                            const rateLimitEndpoint = "https://ratelimit.4hm7q4q75z.workers.dev/";
+                            const rateLimitResponse = await fetch(rateLimitEndpoint, {
+                                method: "POST",
+                                headers: { 
+                                    "Content-Type": "application/json",
+                                    "Accept": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    task: "checkPaymentAndLimits",
+                                    fingerprint: fingerprint,
+                                    email: email,
+                                    module: "payment" // Generic module for status check
+                                }),
+                                mode: "cors"
+                            });
+                            
+                            if (rateLimitResponse.ok) {
+                                const rateLimitData = await rateLimitResponse.json();
+                                
+                                // Update rateLimitStatus in localStorage immediately
+                                const rateLimitStatus = {
+                                    allowed: rateLimitData.allowed,
+                                    isPaid: rateLimitData.isPaid,
+                                    limits: rateLimitData.limits,
+                                    remaining: rateLimitData.remaining,
+                                    email: rateLimitData.email,
+                                    lastUpdated: Date.now()
+                                };
+                                
+                                localStorage.setItem("rateLimitStatus", JSON.stringify(rateLimitStatus));
+                                console.log("Rate limit status updated after email recovery:", rateLimitStatus);
+                                
+                                // Update success message with new limits
+                                const limitsText = rateLimitData.isPaid ? "unlimited" : `${rateLimitData.remaining?.perDay || 0} remaining today`;
+                                payStatus.innerHTML = `Access recovered successfully! You now have ${limitsText} generations. Redirecting...`;
+                            } else {
+                                console.warn("Failed to refresh rate limit status after email recovery");
+                                payStatus.innerHTML = "Access recovered successfully! Redirecting...";
+                            }
+                        } catch (rateLimitError) {
+                            console.warn("Error refreshing rate limit status:", rateLimitError);
+                            payStatus.innerHTML = "Access recovered successfully! Redirecting...";
+                        }
+                        
+                        // Close modal and redirect after delay
+                        setTimeout(() => {
+                            closePaymentModal();
+                            // Reload or redirect to refresh premium features
+                            window.location.reload();
+                        }, 2000);
+                        
+                    } else {
+                        payStatus.innerHTML = data.error || "Email verification failed. Please check your email or contact support.";
+                    }
+                    
+                } catch (error) {
+                    console.error("Recovery error:", error);
+                    payStatus.innerHTML = "Error occurred during recovery. Please try again or contact support.";
+                } finally {
+                    recoverButton.disabled = false;
+                }
+            });
+            
+            console.log("Recover access button listener added");
+        }
+        
+        if (cancelRecoveryButton) {
+            cancelRecoveryButton.addEventListener("click", function(e) {
+                e.preventDefault();
+                console.log("Cancel recovery clicked");
+                
+                // Show main form, hide recovery form
+                document.querySelector(".payment-form").style.display = "block";
+                recoveryForm.style.display = "none";
+                
+                // Clear recovery email input
+                if (recoveryEmailInput) {
+                    recoveryEmailInput.value = "";
+                }
+                
+                // Clear status
+                const payStatus = document.querySelector("#status");
+                if (payStatus) {
+                    payStatus.innerHTML = "";
+                }
+            });
+            
+            console.log("Cancel recovery button listener added");
         }
 
     } catch (error) {

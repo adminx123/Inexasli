@@ -120,6 +120,16 @@ document.addEventListener('DOMContentLoaded', function() {
       dataLabel.click();
     }
   }, 100);
+  
+  // Ensure rateLimitStatus exists for paid users on page load
+  setTimeout(async () => {
+    try {
+      const { ensureRateLimitStatusForPaidUser } = await import('/ai/rate-limiter/rateLimiter.js');
+      ensureRateLimitStatusForPaidUser();
+    } catch (error) {
+      console.warn('[Landing] Could not ensure rate limit status for paid user:', error);
+    }
+  }, 500); // Small delay to ensure other scripts have loaded
 });
 </script>
      <script src="/index.js"></script>

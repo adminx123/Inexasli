@@ -73,7 +73,96 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (data.paymentStatus) {
           if (data.paymentStatus === "paid" || data.paymentStatus === "no_payment_required") {
             setLocal("authenticated", "paid");
-            container.innerHTML = "Payment successful! Redirecting...";
+            
+            // Get fingerprint data for linking
+            const fingerprintData = getLocal("fingerprintData");
+            
+            if (fingerprintData && data.customerEmail && data.customerId) {
+              try {
+                // Parse fingerprint data
+                const fingerprint = JSON.parse(fingerprintData);
+                
+                // Link payment to fingerprint in backend KV
+                const linkResponse = await fetch(paymentEndpoint, {
+                  method: "POST",
+                  headers: { 
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                  },
+                  body: JSON.stringify({
+                    task: "linkPaymentToFingerprint",
+                    email: data.customerEmail,
+                    fingerprint: fingerprint,
+                    customerId: data.customerId
+                  }),
+                  mode: "cors"
+                });
+                
+                if (linkResponse.ok) {
+                  const linkData = await linkResponse.json();
+                  console.log("Payment linked to fingerprint:", linkData);
+                  
+                  // Store email for future device recovery
+                  setLocal("userEmail", data.customerEmail);
+                  
+                  // OPERATION RATEPAY: Refresh rate limit status immediately after payment
+                  try {
+                    const rateLimitEndpoint = "https://ratelimit.4hm7q4q75z.workers.dev/";
+                    const rateLimitResponse = await fetch(rateLimitEndpoint, {
+                      method: "POST",
+                      headers: { 
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                      },
+                      body: JSON.stringify({
+                        task: "checkPaymentAndLimits",
+                        fingerprint: fingerprint,
+                        email: data.customerEmail,
+                        module: "payment" // Generic module for status check
+                      }),
+                      mode: "cors"
+                    });
+                    
+                    if (rateLimitResponse.ok) {
+                      const rateLimitData = await rateLimitResponse.json();
+                      
+                      // Update rateLimitStatus in localStorage immediately
+                      const rateLimitStatus = {
+                        allowed: rateLimitData.allowed,
+                        isPaid: rateLimitData.isPaid,
+                        limits: rateLimitData.limits,
+                        remaining: rateLimitData.remaining,
+                        email: rateLimitData.email,
+                        lastUpdated: Date.now()
+                      };
+                      
+                      setLocal("rateLimitStatus", JSON.stringify(rateLimitStatus));
+                      console.log("Rate limit status updated after payment:", rateLimitStatus);
+                      
+                      // Update container with success message showing new limits
+                      const limitsText = rateLimitData.isPaid ? "unlimited" : `${rateLimitData.remaining?.perDay || 0} remaining today`;
+                      container.innerHTML = `Payment successful! You now have ${limitsText} generations. Redirecting...`;
+                    } else {
+                      console.warn("Failed to refresh rate limit status after payment");
+                      container.innerHTML = "Payment successful! Redirecting...";
+                    }
+                  } catch (rateLimitError) {
+                    console.warn("Error refreshing rate limit status:", rateLimitError);
+                    container.innerHTML = "Payment successful! Redirecting...";
+                  }
+                } else {
+                  console.warn("Failed to link payment to fingerprint");
+                  container.innerHTML = "Payment successful! Redirecting...";
+                }
+                
+              } catch (linkError) {
+                console.warn("Error linking payment:", linkError);
+                container.innerHTML = "Payment successful! Redirecting...";
+              }
+            } else {
+              container.innerHTML = "Payment successful! Redirecting...";
+            }
+            
             setTimeout(redirectToLanding, 2000);
           }
         } else if (data.error) {
