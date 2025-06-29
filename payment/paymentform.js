@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="payment-support-link">Customer Portal</a>
                 </div>
                 <div id="recovery-form" class="recovery-form" style="display: none;">
-                    <input type="email" class="payment-input" id="recovery-email" placeholder="Enter your email to recover access" required>
+                    <input type="email" class="payment-input recovery-input" id="recovery-email" placeholder="Recovery Email" required>
                     <button class="payment-recover-button" id="recover-button" type="button">Recover Access</button>
                     <button class="payment-cancel-button" id="cancel-recovery" type="button">Cancel</button>
                 </div>
@@ -316,6 +316,8 @@ function addPaymentModalStyles() {
             font-family: 'Geist', sans-serif;
             font-weight: 600;
             transition: all 0.2s ease;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         .payment-recover-button:hover {
@@ -330,21 +332,29 @@ function addPaymentModalStyles() {
         }
         
         .payment-cancel-button {
-            padding: 10px 16px;
+            padding: 12px 16px;
             background-color: #f0f0f0;
             color: #666;
             border: 1px solid #ddd;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 13px;
             cursor: pointer;
             font-family: 'Geist', sans-serif;
             font-weight: 500;
             transition: all 0.2s ease;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         .payment-cancel-button:hover {
             background-color: #e8e8e8;
             border-color: #ccc;
+        }
+        
+        .recovery-input {
+            flex: none !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
         }
         
         .recovery-button {
@@ -654,8 +664,9 @@ async function initializePaymentProcessing() {
                 e.preventDefault();
                 console.log("Recovery button clicked");
                 
-                // Hide main form, show recovery form
-                document.querySelector(".payment-form").style.display = "none";
+                // Hide main form elements, show recovery form
+                const mainFormElements = document.querySelectorAll("#username, #useremail, #pay-button, .payment-button-row, #terms-button");
+                mainFormElements.forEach(el => el.style.display = "none");
                 recoveryForm.style.display = "block";
             });
             
@@ -784,8 +795,9 @@ async function initializePaymentProcessing() {
                 e.preventDefault();
                 console.log("Cancel recovery clicked");
                 
-                // Show main form, hide recovery form
-                document.querySelector(".payment-form").style.display = "block";
+                // Show main form elements, hide recovery form
+                const mainFormElements = document.querySelectorAll("#username, #useremail, #pay-button, .payment-button-row, #terms-button");
+                mainFormElements.forEach(el => el.style.display = "");
                 recoveryForm.style.display = "none";
                 
                 // Clear recovery email input
