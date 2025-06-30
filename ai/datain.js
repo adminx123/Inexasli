@@ -513,18 +513,18 @@ document.addEventListener('DOMContentLoaded', async function () {
             /* Hide only the guided form navigation buttons when container is minimized */
             .data-container-in:not(.visible) #datain-guided-prev-btn,
             .data-container-in:not(.visible) #datain-guided-next-btn {
-                display: none;
+                display: none !important;
             }
 
             /* Hide FAQ and overwrite buttons when container is minimized */
             .data-container-in:not(.visible) #datain-faq-btn,
             .data-container-in:not(.visible) #datain-overwrite-btn {
-                display: none;
+                display: none !important;
             }
 
             /* Hide copy button when container is expanded (copy is for output content only) */
             .data-container-in.visible #datain-copy-btn {
-                display: none;
+                display: none !important;
             }
 
             /* Remove close button styles since we don't want it */
