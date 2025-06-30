@@ -189,7 +189,7 @@ function createLegalModal() {
         background-color: rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(5px);
         -webkit-backdrop-filter: blur(5px);
-        z-index: 10000;
+        z-index: 1000001;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -205,7 +205,7 @@ function createLegalModal() {
         background: white;
         border-radius: 16px;
         width: 100%;
-        max-width: 800px;
+        max-width: 480px;
         max-height: 90vh;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         display: flex;
@@ -215,14 +215,12 @@ function createLegalModal() {
         font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     `;
 
-    // Create header
+    // Create header (without close button)
     const header = document.createElement('div');
     header.style.cssText = `
         padding: 24px 28px 16px;
         border-bottom: 1px solid #e5e7eb;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        text-align: center;
         flex-shrink: 0;
     `;
 
@@ -236,37 +234,7 @@ function createLegalModal() {
         line-height: 1.2;
     `;
 
-    const closeButton = document.createElement('button');
-    closeButton.innerHTML = '×';
-    closeButton.style.cssText = `
-        background: none;
-        border: none;
-        font-size: 28px;
-        color: #6b7280;
-        cursor: pointer;
-        padding: 4px;
-        line-height: 1;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    `;
-
-    closeButton.addEventListener('mouseenter', () => {
-        closeButton.style.backgroundColor = '#f3f4f6';
-        closeButton.style.color = '#374151';
-    });
-
-    closeButton.addEventListener('mouseleave', () => {
-        closeButton.style.backgroundColor = 'transparent';
-        closeButton.style.color = '#6b7280';
-    });
-
     header.appendChild(title);
-    header.appendChild(closeButton);
 
     // Create content area
     const content = document.createElement('div');
@@ -375,11 +343,15 @@ function createLegalModal() {
         setTimeout(() => {
             if (modalBackdrop.parentNode) {
                 modalBackdrop.remove();
+                // Dispatch modalClosed event for other components that may be listening
+                document.dispatchEvent(new CustomEvent('modalClosed', { 
+                    detail: { modalType: 'legal' } 
+                }));
             }
         }, 300);
     };
 
-    closeButton.addEventListener('click', closeModal);
+    // Close on backdrop click (not on modal content click)
     modalBackdrop.addEventListener('click', (e) => {
         if (e.target === modalBackdrop) {
             closeModal();
@@ -405,8 +377,9 @@ function createLegalModal() {
     modalBackdrop.style.opacity = '1';
     modalContainer.style.transform = 'scale(1) translateY(0)';
 
-    // Focus management for accessibility
-    closeButton.focus();
+    // Focus management for accessibility - focus the modal container
+    modalContainer.setAttribute('tabindex', '-1');
+    modalContainer.focus();
 
     return {
         modal: modalBackdrop,
