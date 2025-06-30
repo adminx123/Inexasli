@@ -510,9 +510,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 flex-wrap: nowrap;
             }
 
-            /* Hide only the guided form navigation buttons when container is minimized */
-            .data-container-in:not(.visible) #datain-guided-prev-btn,
-            .data-container-in:not(.visible) #datain-guided-next-btn {
+            /* Hide only the guided form navigation button when container is minimized */
+            .data-container-in:not(.visible) #datain-guided-nav-btn {
                 display: none !important;
             }
 
@@ -622,11 +621,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <button id="datain-faq-btn" title="Tips & FAQ" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-question-mark" style="font-size: 16px;"></i>
                     </button>
-                    <button id="datain-guided-prev-btn" title="Previous Step" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; opacity: 0.3;">
-                        <i class="bx bx-left-arrow-alt" style="font-size: 14px;"></i>
-                    </button>
-                    <button id="datain-guided-next-btn" title="Next Step" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; opacity: 0.3;">
-                        <i class="bx bx-right-arrow-alt" style="font-size: 14px;"></i>
+                    <button id="datain-guided-nav-btn" title="Step Navigation" style="width: 56px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: space-between; transition: all 0.2s ease; flex-shrink: 0; padding: 0 4px; position: relative;">
+                        <i id="datain-guided-prev-icon" class="bx bx-left-arrow-alt" style="font-size: 14px; opacity: 0.3; transition: opacity 0.2s ease, transform 0.15s ease;"></i>
+                        <div style="width: 1px; height: 16px; background-color: rgba(0, 0, 0, 0.1); position: absolute; left: 50%; transform: translateX(-50%);"></div>
+                        <i id="datain-guided-next-icon" class="bx bx-right-arrow-alt" style="font-size: 14px; opacity: 0.3; transition: opacity 0.2s ease, transform 0.15s ease;"></i>
                     </button>
                 </div>
             </div>
@@ -794,55 +792,65 @@ document.addEventListener('DOMContentLoaded', async function () {
         const categoryBtn = document.getElementById('datain-category-btn');
         const paymentBtn = document.getElementById('datain-payment-btn');
         const faqBtn = document.getElementById('datain-faq-btn');
-        const guidedPrevBtn = document.getElementById('datain-guided-prev-btn');
-        const guidedNextBtn = document.getElementById('datain-guided-next-btn');
+        const guidedNavBtn = document.getElementById('datain-guided-nav-btn');
         
         // Update payment button display with current usage info
         updatePaymentButtonDisplay();
         
-        // Setup guided forms navigation buttons
-        if (guidedPrevBtn) {
-            // Add hover effects
-            guidedPrevBtn.addEventListener('mouseenter', () => {
-                if (guidedPrevBtn.style.opacity !== '0.3') {
-                    guidedPrevBtn.style.transform = 'translateY(-2px)';
-                }
+        // Setup guided forms navigation button
+        if (guidedNavBtn) {
+            const prevIcon = document.getElementById('datain-guided-prev-icon');
+            const nextIcon = document.getElementById('datain-guided-next-icon');
+            
+            // Add hover effects for the button
+            guidedNavBtn.addEventListener('mouseenter', () => {
+                guidedNavBtn.style.transform = 'translateY(-2px)';
             });
-            guidedPrevBtn.addEventListener('mouseleave', () => {
-                guidedPrevBtn.style.transform = '';
+            guidedNavBtn.addEventListener('mouseleave', () => {
+                guidedNavBtn.style.transform = '';
             });
             
-            // Add click handler for previous step
-            guidedPrevBtn.addEventListener('click', (e) => {
+            // Add mousemove event for icon hover effects
+            guidedNavBtn.addEventListener('mousemove', (e) => {
+                const rect = guidedNavBtn.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const buttonWidth = rect.width;
+                const isLeftSide = mouseX < buttonWidth / 2;
+                
+                // Highlight the appropriate side
+                if (isLeftSide) {
+                    prevIcon.style.transform = 'scale(1.1)';
+                    nextIcon.style.transform = 'scale(1)';
+                } else {
+                    prevIcon.style.transform = 'scale(1)';
+                    nextIcon.style.transform = 'scale(1.1)';
+                }
+            });
+            
+            // Reset icon transforms when leaving the button
+            guidedNavBtn.addEventListener('mouseleave', () => {
+                prevIcon.style.transform = 'scale(1)';
+                nextIcon.style.transform = 'scale(1)';
+            });
+            
+            // Add click handler for bidirectional navigation
+            guidedNavBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                if (window.guidedFormsPrevious) {
+                const rect = guidedNavBtn.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const buttonWidth = rect.width;
+                const isLeftSide = clickX < buttonWidth / 2;
+                
+                if (isLeftSide && window.guidedFormsPrevious) {
+                    // Left side clicked - go to previous step
                     const success = window.guidedFormsPrevious();
                     if (success) {
                         updateGuidedButtonStates();
                     }
-                }
-            });
-        }
-        
-        if (guidedNextBtn) {
-            // Add hover effects
-            guidedNextBtn.addEventListener('mouseenter', () => {
-                if (guidedNextBtn.style.opacity !== '0.3') {
-                    guidedNextBtn.style.transform = 'translateY(-2px)';
-                }
-            });
-            guidedNextBtn.addEventListener('mouseleave', () => {
-                guidedNextBtn.style.transform = '';
-            });
-            
-            // Add click handler for next step
-            guidedNextBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                if (window.guidedFormsNext) {
+                } else if (!isLeftSide && window.guidedFormsNext) {
+                    // Right side clicked - go to next step
                     const success = window.guidedFormsNext();
                     if (success) {
                         updateGuidedButtonStates();
@@ -1012,30 +1020,30 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Update guided forms navigation button states
     function updateGuidedButtonStates() {
-        const guidedPrevBtn = document.getElementById('datain-guided-prev-btn');
-        const guidedNextBtn = document.getElementById('datain-guided-next-btn');
+        const guidedNavBtn = document.getElementById('datain-guided-nav-btn');
+        const prevIcon = document.getElementById('datain-guided-prev-icon');
+        const nextIcon = document.getElementById('datain-guided-next-icon');
         
-        if (guidedPrevBtn && guidedNextBtn) {
+        if (guidedNavBtn && prevIcon && nextIcon) {
             const state = window.getGuidedFormsState ? window.getGuidedFormsState() : { isInitialized: false };
             
             if (state.isInitialized) {
-                // Show buttons when guided forms is active
-                guidedPrevBtn.style.display = 'flex';
-                guidedNextBtn.style.display = 'flex';
+                // Show button when guided forms is active
+                guidedNavBtn.style.display = 'flex';
                 
-                // Update previous button
-                guidedPrevBtn.style.opacity = state.canGoPrevious ? '1' : '0.3';
-                guidedPrevBtn.style.cursor = state.canGoPrevious ? 'pointer' : 'not-allowed';
-                guidedPrevBtn.title = state.canGoPrevious ? `Previous Step (${state.currentStep}/${state.totalSteps})` : 'No previous step';
+                // Update previous icon
+                prevIcon.style.opacity = state.canGoPrevious ? '1' : '0.3';
                 
-                // Update next button
-                guidedNextBtn.style.opacity = state.canGoNext ? '1' : '0.3';
-                guidedNextBtn.style.cursor = state.canGoNext ? 'pointer' : 'not-allowed';
-                guidedNextBtn.title = state.canGoNext ? `Next Step (${state.currentStep + 2}/${state.totalSteps})` : 'No next step';
+                // Update next icon
+                nextIcon.style.opacity = state.canGoNext ? '1' : '0.3';
+                
+                // Update button cursor and title
+                const canNavigate = state.canGoPrevious || state.canGoNext;
+                guidedNavBtn.style.cursor = canNavigate ? 'pointer' : 'not-allowed';
+                guidedNavBtn.title = `Step Navigation (${state.currentStep + 1}/${state.totalSteps})`;
             } else {
-                // Hide buttons when guided forms is not active
-                guidedPrevBtn.style.display = 'none';
-                guidedNextBtn.style.display = 'none';
+                // Hide button when guided forms is not active
+                guidedNavBtn.style.display = 'none';
             }
         }
     }
