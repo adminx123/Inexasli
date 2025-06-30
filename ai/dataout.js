@@ -77,8 +77,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 left: 0;
                 background-color: #f2f9f3;
                 padding: 4px;
-                border: 1px solid #4a7c59;
-                border-top: none;
                 border-radius: 0 0 27px 27px;
                 box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
                 z-index: 500;

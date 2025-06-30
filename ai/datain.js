@@ -455,13 +455,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 left: 0;
                 width: 100%;
                 height: 90vh;
-                background-color: rgba(242, 249, 243, 0.95);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                border: 1px solid transparent;
+                background-color: rgba(255, 255, 255, 0.97);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
                 border-bottom: none;
                 border-radius: 24px 24px 0 0;
-                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15), 0 -2px 6px rgba(74, 124, 89, 0.25);
+                box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12), 0 -4px 16px rgba(0, 0, 0, 0.08), 0 -1px 4px rgba(0, 0, 0, 0.04);
                 z-index: 1000;
                 font-family: "Inter", sans-serif;
                 display: flex;
@@ -478,7 +478,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-in:hover {
-                background-color: #eef7f0;
+                background-color: rgba(255, 255, 255, 0.99);
+                box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.15), 0 -6px 20px rgba(0, 0, 0, 0.1), 0 -2px 8px rgba(0, 0, 0, 0.06);
             }
 
             /* Header always visible at top */
@@ -512,18 +513,18 @@ document.addEventListener('DOMContentLoaded', async function () {
             /* Hide only the guided form navigation buttons when container is minimized */
             .data-container-in:not(.visible) #datain-guided-prev-btn,
             .data-container-in:not(.visible) #datain-guided-next-btn {
-                display: none !important;
+                display: none;
             }
 
             /* Hide FAQ and overwrite buttons when container is minimized */
             .data-container-in:not(.visible) #datain-faq-btn,
             .data-container-in:not(.visible) #datain-overwrite-btn {
-                display: none !important;
+                display: none;
             }
 
             /* Hide copy button when container is expanded (copy is for output content only) */
             .data-container-in.visible #datain-copy-btn {
-                display: none !important;
+                display: none;
             }
 
             /* Remove close button styles since we don't want it */
@@ -539,7 +540,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 box-sizing: border-box;
                 scroll-behavior: smooth;
                 scrollbar-width: thin;
-                scrollbar-color: rgba(74, 124, 89, 0.3) transparent;
+                scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
             }
 
             /* Custom scrollbar for webkit browsers */
@@ -552,17 +553,17 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-in .data-content::-webkit-scrollbar-thumb {
-                background-color: rgba(74, 124, 89, 0.3);
+                background-color: rgba(0, 0, 0, 0.2);
                 border-radius: 3px;
             }
 
             .data-container-in .data-content::-webkit-scrollbar-thumb:hover {
-                background-color: rgba(74, 124, 89, 0.5);
+                background-color: rgba(0, 0, 0, 0.3);
             }
 
             /* Button hover effects */
             .data-container-in .utility-buttons-container button:hover {
-                background-color: rgba(255, 255, 255, 0.8);
+                transform: translateY(-2px);
             }
 
             /* Mobile responsiveness */
@@ -606,25 +607,25 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.innerHTML = `
             <div class="container-header">
                 <div class="utility-buttons-container">
-                    <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                     </button>
-                    <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <span style="font-size: 14px; font-weight: bold;">$</span>
                     </button>
-                    <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-trash" style="font-size: 14px;"></i>
                     </button>
-                    <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-copy" style="font-size: 14px;"></i>
                     </button>
-                    <button id="datain-faq-btn" title="Tips & FAQ" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-faq-btn" title="Tips & FAQ" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-question-mark" style="font-size: 16px;"></i>
                     </button>
-                    <button id="datain-guided-prev-btn" title="Previous Step" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; opacity: 0.3;">
+                    <button id="datain-guided-prev-btn" title="Previous Step" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; opacity: 0.3;">
                         <i class="bx bx-left-arrow-alt" style="font-size: 14px;"></i>
                     </button>
-                    <button id="datain-guided-next-btn" title="Next Step" style="width: 28px; height: 28px; border: none; border-radius: 4px; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; opacity: 0.3;">
+                    <button id="datain-guided-next-btn" title="Next Step" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0; opacity: 0.3;">
                         <i class="bx bx-right-arrow-alt" style="font-size: 14px;"></i>
                     </button>
                 </div>
@@ -762,11 +763,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Add hover effects
             guidedPrevBtn.addEventListener('mouseenter', () => {
                 if (guidedPrevBtn.style.opacity !== '0.3') {
-                    guidedPrevBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                    guidedPrevBtn.style.transform = 'translateY(-2px)';
                 }
             });
             guidedPrevBtn.addEventListener('mouseleave', () => {
-                guidedPrevBtn.style.backgroundColor = 'transparent';
+                guidedPrevBtn.style.transform = '';
             });
             
             // Add click handler for previous step
@@ -787,11 +788,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Add hover effects
             guidedNextBtn.addEventListener('mouseenter', () => {
                 if (guidedNextBtn.style.opacity !== '0.3') {
-                    guidedNextBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                    guidedNextBtn.style.transform = 'translateY(-2px)';
                 }
             });
             guidedNextBtn.addEventListener('mouseleave', () => {
-                guidedNextBtn.style.backgroundColor = 'transparent';
+                guidedNextBtn.style.transform = '';
             });
             
             // Add click handler for next step
@@ -814,10 +815,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (overwriteBtn) {
             // Add hover effects
             overwriteBtn.addEventListener('mouseenter', () => {
-                overwriteBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                overwriteBtn.style.transform = 'translateY(-2px)';
             });
             overwriteBtn.addEventListener('mouseleave', () => {
-                overwriteBtn.style.backgroundColor = 'transparent';
+                overwriteBtn.style.transform = '';
             });
             
             // Add click handler for data overwrite
@@ -849,10 +850,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (copyBtn) {
             // Add hover effects
             copyBtn.addEventListener('mouseenter', () => {
-                copyBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                copyBtn.style.transform = 'translateY(-2px)';
             });
             copyBtn.addEventListener('mouseleave', () => {
-                copyBtn.style.backgroundColor = 'transparent';
+                copyBtn.style.transform = '';
             });
             
             // Add click handler for copy functionality - open modal from copy.js
@@ -900,10 +901,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (categoryBtn) {
             // Add hover effects
             categoryBtn.addEventListener('mouseenter', () => {
-                categoryBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                categoryBtn.style.transform = 'translateY(-2px)';
             });
             categoryBtn.addEventListener('mouseleave', () => {
-                categoryBtn.style.backgroundColor = 'transparent';
+                categoryBtn.style.transform = '';
             });
             
             // Add click handler to load categories.html
@@ -929,10 +930,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (paymentBtn) {
             // Add hover effects
             paymentBtn.addEventListener('mouseenter', () => {
-                paymentBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                paymentBtn.style.transform = 'translateY(-2px)';
             });
             paymentBtn.addEventListener('mouseleave', () => {
-                paymentBtn.style.backgroundColor = 'transparent';
+                paymentBtn.style.transform = '';
             });
             
             // Add click handler for payment modal
@@ -952,10 +953,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (faqBtn) {
             // Add hover effects
             faqBtn.addEventListener('mouseenter', () => {
-                faqBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                faqBtn.style.transform = 'translateY(-2px)';
             });
             faqBtn.addEventListener('mouseleave', () => {
-                faqBtn.style.backgroundColor = 'transparent';
+                faqBtn.style.transform = '';
             });
             faqBtn.addEventListener('click', (e) => {
                 e.preventDefault();
