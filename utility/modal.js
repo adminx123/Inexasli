@@ -1,7 +1,7 @@
 // filepath: /Users/dallasp/Library/Mobile Documents/com~apple~CloudDocs/Finance/Inexasli/utility/modal.js
 //
 // Generic modal system for the application. Direct uses:
-// - /utility/termsManager.js - Uses window.openModal() for displaying terms and conditions
+// - /utility/termsConsentManager.js - Uses window.openModal() for displaying terms and conditions
 // - /utility/dataConsentManager.js - Uses window.openModal() for legal/consent displays
 //
 // Educational loading overlay moved to: /ai/fact-generator/educational-overlay.js
