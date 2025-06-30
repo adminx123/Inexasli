@@ -139,8 +139,6 @@
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 (function() {
-  console.log("[FashionIQ] Module initialized");
-
   async function handleGenerateFashionIq() {
     try {
       const formData = window.fashionFormPersistence.getSavedFormData();
@@ -235,7 +233,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         });
         document.dispatchEvent(event);
         
-        console.log('[FashionIQ] Fashion analysis generated successfully');
       } catch (error) {
         // If backendResponse is available, update rate limit display and show error
         if (backendResponse && dataContainer) {
@@ -267,14 +264,11 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
 
   // Simple initialization - set up event listeners
   function initialize() {
-    console.log("[FashionIQ] Initializing...");
-    
     // Set up generate button event listener
     const generateBtn = document.getElementById('generate-fashion-btn');
     if (generateBtn) {
       generateBtn.removeEventListener('click', handleGenerateFashionIq);
       generateBtn.addEventListener('click', handleGenerateFashionIq);
-      console.log("[FashionIQ] Generate button event listener set up");
     } else {
       console.error("[FashionIQ] Generate button not found!");
     }
@@ -297,7 +291,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
   document.addEventListener('data-in-loaded', function(e) {
     const moduleType = e.detail?.moduleType;
     if (moduleType === 'fashion') {
-      console.log("[FashionIQ] Fashion module loaded through datain.js, reinitializing");
       initialize();
     }
   });

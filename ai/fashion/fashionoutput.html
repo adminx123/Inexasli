@@ -92,8 +92,6 @@
 
   <script>
     (function() {
-      console.log('Fashion API Output script running');
-      
       // Reference the global utility functions
       const getLocal = window.getLocal || function(key) {
         try {
@@ -119,14 +117,12 @@
       function updateOutput() {
         const outputSpan = document.getElementById('output-span');
         if (!outputSpan) {
-          console.log('Output span not found, will retry');
           setTimeout(updateOutput, 100);
           return;
         }
 
         // Specifically look for fashionIQResponse data
         const responseKey = 'fashionIQResponse';
-        console.log('Looking for data with key:', responseKey);
         
         // Try several approaches to get the data
         let data;
@@ -137,13 +133,11 @@
             const rawData = localStorage.getItem(responseKey);
             if (rawData) {
               data = JSON.parse(rawData);
-              console.log('Retrieved data directly from localStorage');
             }
           }
           
           // Handle nested response format if present
           if (data && data.message === 'Success' && data.data) {
-            console.log('Found nested data structure, using the data property');
             data = data.data;
           }
         } catch (err) {
@@ -159,10 +153,8 @@
               
               // Handle both string and object formats
               if (typeof fashionData === 'string') {
-                console.log('Fashion analysis is a string, displaying as formatted text');
                 displayFashionAnalysis(fashionData, outputSpan);
               } else if (typeof fashionData === 'object' && fashionData !== null) {
-                console.log('Fashion analysis is an object, converting to formatted display');
                 displayFashionAnalysis(JSON.stringify(fashionData, null, 2), outputSpan);
               } else {
                 throw new Error('Invalid fashionAnalysis format');
@@ -191,10 +183,8 @@
           } else {
             displayFashionAnalysis(data, outputSpan);
           }
-          console.log('Data displayed successfully');
         } else {
           outputSpan.innerHTML = '';
-          console.log('No data found for key:', responseKey);
         }
       }
       
