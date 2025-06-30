@@ -239,22 +239,18 @@ export function handleRateLimitResponse(container, response, showError = true, m
             lastUpdated: Date.now()
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
-        badge.textContent = `${dailyStatus.remaining.perDay}`;
         console.log('[RateLimit] rateLimitStatus created from backend response:', dailyStatus);
+        
+        // Trigger updatePaymentButtonDisplay to refresh the button text
+        if (typeof window.updatePaymentButtonDisplay === 'function') {
+            window.updatePaymentButtonDisplay();
+        }
     } else {
         // Don't create hardcoded rateLimitStatus for paid users with empty backend response
         // Let the backend be the source of truth for rate limits
         console.log('[RateLimit] No backend rate limit data - displaying placeholder until backend provides status');
-        badge.textContent = '...';
     }
-    // Insert after the payment button's span (the $ icon)
-    if (paymentBtn && paymentBtn.querySelector('span')) {
-        paymentBtn.querySelector('span').after(badge);
-    } else if (paymentBtn && paymentBtn.appendChild) {
-        paymentBtn.appendChild(badge);
-    } else {
-        utilityBar.appendChild(badge);
-    }
+    // Don't create extra badges - let updatePaymentButtonDisplay handle the display
     // Show error if present
     if (showError && response && (response.error || response.message) && response.error === 'Rate limit exceeded') {
         // Only show a minimal alert if needed, no warning message or extra UI

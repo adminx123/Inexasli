@@ -774,6 +774,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const usesLeft = rateLimitStatus.remaining.perDay || 0;
                 const usesTotal = rateLimitStatus.limits.perDay || 0;
                 paymentSpan.textContent = `${usesLeft}|${usesTotal}`;
+                console.log('[DataIn] Updated payment button display:', `${usesLeft}|${usesTotal}`);
             } else {
                 // Fallback to $ for new users or when no rate limit data
                 paymentSpan.textContent = '$';
@@ -784,6 +785,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             paymentSpan.textContent = '$';
         }
     }
+
+    // Make updatePaymentButtonDisplay globally accessible
+    window.updatePaymentButtonDisplay = updatePaymentButtonDisplay;
 
     // Setup utility buttons within the datain container
     function setupUtilityButtons() {
