@@ -145,8 +145,6 @@ Need accommodations for 3 wheelchair users"></textarea>
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 (function() {
-    console.log("EventIQ script initializing");
-
     // Initialize FormPersistence for eventiq module
     const fields = [
         { id: 'event-types', type: 'grid' },
@@ -167,14 +165,11 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
 
     // Listen for grid-item-toggled event from datain.js
     function handleGridItemToggled(event) {
-        console.log('[EventIQ] Grid item toggled event received');
         // UI behavior only - persistence handled centrally
     }
 
     // Handle the generate button click
     async function handleGenerateEventIq() {
-        console.log('[EventIQ] Generate button clicked.');
-        
         const formData = window.eventFormPersistence.getSavedFormData();
         if (!formData) {
             console.error('[EventIQ] No input data found in localStorage.');
@@ -209,7 +204,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
                     // Send data to worker
                     const apiUrl = 'https://inexasli.com/api/generate';
                     
-                    console.log('[EventIQ] Sending eventIqInput to worker');
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: {
@@ -251,7 +245,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
                         }
                     });
                     document.dispatchEvent(event);
-                    console.log('[EventIQ] Dispatched api-response-received event');
                     
                     return responseData;
                 }
@@ -261,7 +254,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
             incrementRequestCount('event');
             
             // Enhanced loading either returns result or throws error - no need to check result.success
-            console.log('[EventIQ] Event plan generated successfully');
         } catch (error) {
             // If backendResponse is available, update rate limit display and show error
             if (backendResponse && dataContainer) {
