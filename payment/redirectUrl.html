@@ -244,6 +244,49 @@
                 localStorage.setItem('authenticated', 'paid');
                 log('Updated localStorage.authenticated to "paid"');
 
+                // Update rate limit status after payment success
+                try {
+                    log('Calling Stripe integration to get rate limit data...');
+                    const rateLimitResponse = await fetch('https://stripeintegration.4hm7q4q75z.workers.dev/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            task: 'linkPaymentToFingerprint',
+                            email: checkData.customerEmail,
+                            customerId: checkData.customerId,
+                            fingerprint: fingerprint
+                        })
+                    });
+
+                    if (rateLimitResponse.ok) {
+                        const rateLimitData = await rateLimitResponse.json();
+                        log('Rate limit data received: ' + JSON.stringify(rateLimitData));
+                        
+                        // Create rateLimitStatus in localStorage from backend response
+                        if (rateLimitData.limits && rateLimitData.remaining) {
+                            const rateLimitStatus = {
+                                allowed: rateLimitData.allowed,
+                                isPaid: rateLimitData.isPaid,
+                                limits: rateLimitData.limits,
+                                remaining: rateLimitData.remaining,
+                                email: rateLimitData.email,
+                                lastUpdated: Date.now()
+                            };
+                            
+                            localStorage.setItem('rateLimitStatus', JSON.stringify(rateLimitStatus));
+                            log('Rate limit status created in localStorage: ' + JSON.stringify(rateLimitStatus));
+                        } else {
+                            log('No rate limit data in response - will be set on first AI generation');
+                        }
+                    } else {
+                        log('Failed to get rate limit data: ' + rateLimitResponse.status);
+                    }
+                } catch (rateLimitError) {
+                    log('Error getting rate limit data: ' + rateLimitError.message);
+                }
+
                 // Success!
                 document.getElementById('spinner').style.display = 'none';
                 updateUI('Payment Successful!', 'Redirecting you to the application...', false);
