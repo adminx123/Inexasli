@@ -455,11 +455,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 left: 0;
                 width: 100%;
                 height: 90vh;
-                background-color: #f2f9f3;
-                border: 1px solid #4a7c59;
+                background-color: rgba(242, 249, 243, 0.95);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid transparent;
                 border-bottom: none;
                 border-radius: 24px 24px 0 0;
-                box-shadow: 0 -2px 6px rgba(74, 124, 89, 0.25);
+                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15), 0 -2px 6px rgba(74, 124, 89, 0.25);
                 z-index: 1000;
                 font-family: "Inter", sans-serif;
                 display: flex;
