@@ -241,21 +241,10 @@ export function handleRateLimitResponse(container, response, showError = true, m
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
         badge.textContent = `${dailyStatus.remaining.perDay}`;
         console.log('[RateLimit] rateLimitStatus created from backend response:', dailyStatus);
-    } else if (isPaidUser) {
-        // Create rateLimitStatus for paid users even if backend response is empty
-        // IMPORTANT: If backend rates change in rateLimit.js CONFIG.RATE_LIMITS, update these hardcoded values too
-        const paidUserStatus = {
-            remaining: { perDay: 5 }, // Default paid user limit - MUST MATCH backend PAID.perDay
-            limits: { perDay: 5 },     // MUST MATCH backend PAID.perDay
-            isPaid: true,
-            allowed: true,
-            email: localStorage.getItem('userEmail') ? decodeURIComponent(localStorage.getItem('userEmail')) : null,
-            lastUpdated: Date.now()
-        };
-        localStorage.setItem('rateLimitStatus', JSON.stringify(paidUserStatus));
-        badge.textContent = '5'; // Show paid user limit
-        console.log('[RateLimit] rateLimitStatus created for paid user (empty backend response):', paidUserStatus);
     } else {
+        // Don't create hardcoded rateLimitStatus for paid users with empty backend response
+        // Let the backend be the source of truth for rate limits
+        console.log('[RateLimit] No backend rate limit data - displaying placeholder until backend provides status');
         badge.textContent = '...';
     }
     // Insert after the payment button's span (the $ icon)
@@ -371,8 +360,9 @@ export function updateRateLimitStatus(rateLimitData) {
 }
 
 /**
- * Ensure rateLimitStatus exists for authenticated paid users
- * Call this when user is authenticated but rateLimitStatus might be missing
+ * Check rateLimitStatus for authenticated paid users
+ * Returns existing status only - does not create hardcoded values
+ * Backend is the source of truth for rate limits after payment or generation
  */
 export function ensureRateLimitStatusForPaidUser() {
     console.log('[RateLimit][DEBUG] 🔍 ensureRateLimitStatusForPaidUser() called');
@@ -387,29 +377,10 @@ export function ensureRateLimitStatusForPaidUser() {
         const existingStatus = localStorage.getItem('rateLimitStatus');
         console.log('[RateLimit][DEBUG] 🔍 Existing rateLimitStatus:', existingStatus);
         
+        // Only return existing status - do not create hardcoded localStorage entries
+        // Let the backend be the source of truth for rate limits after payment or generation
         if (isPaidUser && !existingStatus) {
-            console.log('[RateLimit][DEBUG] 🚀 CREATING rateLimitStatus for paid user!');
-            
-            // IMPORTANT: If backend rates change in rateLimit.js CONFIG.RATE_LIMITS, update these hardcoded values too
-            const paidUserStatus = {
-                remaining: { perDay: 5 }, // Default paid user limit - MUST MATCH backend PAID.perDay
-                limits: { perDay: 5 },     // MUST MATCH backend PAID.perDay
-                isPaid: true,
-                allowed: true,
-                email: localStorage.getItem('userEmail') ? decodeURIComponent(localStorage.getItem('userEmail')) : null,
-                lastUpdated: Date.now()
-            };
-            
-            console.log('[RateLimit][DEBUG] 🚀 About to set rateLimitStatus:', paidUserStatus);
-            localStorage.setItem('rateLimitStatus', JSON.stringify(paidUserStatus));
-            console.log('[RateLimit][DEBUG] ✅ localStorage.setItem() completed');
-            
-            // Verify it was actually set
-            const verification = localStorage.getItem('rateLimitStatus');
-            console.log('[RateLimit][DEBUG] 🔍 Verification - rateLimitStatus after setting:', verification);
-            
-            console.log('[RateLimit] rateLimitStatus created for authenticated paid user:', paidUserStatus);
-            return paidUserStatus;
+            console.log('[RateLimit][DEBUG] ❌ No rateLimitStatus found for paid user - backend should provide this after payment/generation');
         } else {
             console.log('[RateLimit][DEBUG] ❌ NOT creating rateLimitStatus. isPaidUser:', isPaidUser, 'existingStatus:', !!existingStatus);
         }

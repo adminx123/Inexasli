@@ -76,13 +76,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Initialize payment processing directly (combined from payment.js)
         initializePaymentProcessing();
 
-        // Ensure rateLimitStatus exists for paid users
-        try {
-            const { ensureRateLimitStatusForPaidUser } = await import('/ai/rate-limiter/rateLimiter.js');
-            ensureRateLimitStatusForPaidUser();
-        } catch (error) {
-            console.warn('[PaymentForm] Could not ensure rate limit status for paid user:', error);
-        }
+        // Rate limit status will be set by backend after payment completion
+        // No need to create hardcoded frontend values
 
         console.log('Payment form and processing initialized');
     }
