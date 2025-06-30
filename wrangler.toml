@@ -7,13 +7,13 @@
 # 1. Deploy rate limiter first (required dependency):
 #    npx wrangler deploy --env ratelimit
 #
-# 2. Deploy master worker (includes all 10 modules from workers.txt):
+# 2. Deploy master worker (includes all 11 modules from workers.txt):
 #    npx wrangler deploy --env master
 #
 # The master worker automatically includes all modules listed in workers.txt:
 # - calorie/calorie.js, decision/decision.js, enneagram/enneagram.js
 # - event/event.js, fashion/fashion.js, income/income.js  
-# - philosophy/philosophy.js, quiz/quiz.js, research/research.js, social/social.js
+# - philosophy/philosophy.js, quiz/quiz.js, research/research.js, social/social.js, period/period.js
 #
 # NO individual worker deployments needed - master handles everything!
 

@@ -309,15 +309,178 @@ function addDynamicInput(inputType = null, value = '', skipRepositioning = false
 }
 
 /**
- * Main initialization function
+ * Creates a split textarea component with "when" and "what" fields
+ * @param {Object} options - Configuration options
+ * @param {string} options.id - Base ID for the component
+ * @param {string} options.whenPlaceholder - Placeholder for when field
+ * @param {string} options.whatPlaceholder - Placeholder for what field
+ * @param {string} options.whenValue - Default value for when field
+ * @param {string} options.whatValue - Default value for what field
+ * @param {number} options.entryNumber - Entry number for display
+ * @returns {HTMLElement} The created split textarea component
  */
-function initInputFunctionality() {
-    console.log('[Text Functionality] Initializing auto-expand for existing textareas...');
-    initAutoExpandTextareas();
-    initMutationObserver();
+function createSplitTextarea(options = {}) {
+    const {
+        id = 'split-textarea',
+        whenPlaceholder = 'When?',
+        whatPlaceholder = 'What happened?',
+        whenValue = '',
+        whatValue = '',
+        entryNumber = 1
+    } = options;
+
+    // Create container
+    const container = document.createElement('div');
+    container.className = 'split-textarea-container';
+    container.dataset.entryId = id;
+
+    // Create entry header
+    const header = document.createElement('div');
+    header.className = 'entry-header';
+    header.innerHTML = `<span class="entry-number">Entry #${entryNumber}</span>`;
+
+    // Create when field
+    const whenField = document.createElement('input');
+    whenField.type = 'text';
+    whenField.className = 'when-field';
+    whenField.id = `${id}-when`;
+    whenField.placeholder = whenPlaceholder;
+    whenField.value = whenValue;
+
+    // Create what field
+    const whatField = document.createElement('textarea');
+    whatField.className = 'what-field';
+    whatField.id = `${id}-what`;
+    whatField.placeholder = whatPlaceholder;
+    whatField.value = whatValue;
+    whatField.rows = 2;
+
+    // Create fields container
+    const fieldsContainer = document.createElement('div');
+    fieldsContainer.className = 'split-fields-container';
     
-    // Listen for form repopulation events
-    document.addEventListener('formpersistence:repopulated', triggerTextareaExpansion);
+    const whenContainer = document.createElement('div');
+    whenContainer.className = 'when-container';
+    const whenLabel = document.createElement('label');
+    whenLabel.textContent = 'When:';
+    whenLabel.htmlFor = whenField.id;
+    whenContainer.appendChild(whenLabel);
+    whenContainer.appendChild(whenField);
+
+    const whatContainer = document.createElement('div');
+    whatContainer.className = 'what-container';
+    const whatLabel = document.createElement('label');
+    whatLabel.textContent = 'What:';
+    whatLabel.htmlFor = whatField.id;
+    whatContainer.appendChild(whatLabel);
+    whatContainer.appendChild(whatField);
+
+    fieldsContainer.appendChild(whenContainer);
+    fieldsContainer.appendChild(whatContainer);
+
+    // Add event listeners
+    [whenField, whatField].forEach(field => {
+        field.addEventListener('input', () => {
+            // Trigger custom event for form persistence
+            document.dispatchEvent(new CustomEvent('textarea:changed', {
+                detail: { field, container }
+            }));
+        });
+    });
+
+    // Auto-expand the textarea
+    whatField.addEventListener('input', () => autoExpandTextarea(whatField));
+
+    // Assemble container
+    container.appendChild(header);
+    container.appendChild(fieldsContainer);
+
+    // Add CSS if not already present
+    if (!document.querySelector('#split-textarea-styles')) {
+        const style = document.createElement('style');
+        style.id = 'split-textarea-styles';
+        style.textContent = `
+            .split-textarea-container {
+                margin-bottom: 20px;
+                padding: 15px;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                background: #fafafa;
+            }
+            
+            .entry-header {
+                margin-bottom: 10px;
+                font-weight: bold;
+                color: #666;
+                font-size: 14px;
+            }
+            
+            .split-fields-container {
+                display: flex;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .when-container {
+                flex: 0 0 180px;
+            }
+            
+            .what-container {
+                flex: 1;
+            }
+            
+            .when-container label,
+            .what-container label {
+                display: block;
+                margin-bottom: 5px;
+                font-size: 13px;
+                font-weight: 600;
+                color: #555;
+            }
+            
+            .when-field {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+                background: white;
+            }
+            
+            .what-field {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+                background: white;
+                resize: none;
+                overflow: hidden;
+                min-height: 40px;
+            }
+            
+            .when-field:focus,
+            .what-field:focus {
+                outline: none;
+                border-color: #ff6b9d;
+                box-shadow: 0 0 5px rgba(255, 107, 157, 0.3);
+            }
+            
+            @media (max-width: 480px) {
+                .split-fields-container {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                
+                .when-container {
+                    flex: none;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    return container;
 }
 
 // ==========================================
@@ -332,7 +495,15 @@ export {
     initAutoExpandTextareas,
     initMutationObserver,
     debugTextareaExpansionSequence,
-    initInputFunctionality
+    initInputFunctionality,
+    createSplitTextarea
+};
+
+// Export functions for external use
+export { 
+    initAutoExpandTextareas, 
+    autoExpandTextarea, 
+    createSplitTextarea
 };
 
 // Global window exposures for backward compatibility and direct script usage
@@ -345,7 +516,8 @@ if (typeof window !== 'undefined') {
         initMutationObserver,
         debugTextareaExpansionSequence,
         triggerTextareaExpansion,
-        init: initInputFunctionality
+        init: initInputFunctionality,
+        createSplitTextarea
     };
     
     // Legacy global functions for existing code compatibility

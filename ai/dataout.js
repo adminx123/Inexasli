@@ -191,7 +191,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'socialiq': '/ai/social/socialoutput.html',
                 'speculationiq': '/ai/speculation/speculationoutput.html',
                 'philosophyiq': '/ai/philosophy/philosophyoutput.html',
-                'fashioniq': '/ai/fashion/fashionoutput.html'
+                'fashioniq': '/ai/fashion/fashionoutput.html',
+                'periodiq': '/ai/period/periodoutput.html'
             };
             const outUrl = moduleOutputMap[moduleName];
             if (outUrl) {

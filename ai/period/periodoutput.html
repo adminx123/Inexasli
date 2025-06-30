@@ -1,0 +1,326 @@
+<!-- /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */ -->
+
+<div class="analysis-container">
+    <div class="header-section">
+        <h1 class="analysis-title">Your Personalized Period Analysis</h1>
+        <p class="analysis-subtitle">AI-powered insights from your tracking data</p>
+    </div>
+
+    <div class="insights-container" id="insights-container">
+        <!-- Content will be populated by JavaScript -->
+    </div>
+
+    <div class="actions-section">
+        <button class="action-btn" onclick="location.reload()">Add More Entries</button>
+        <button class="action-btn copy-btn" onclick="window.copyUtil.copyMainContent()">Copy Analysis</button>
+    </div>
+</div>
+
+<style>
+.analysis-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.header-section {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ff6b9d, #ff8cc8);
+    border-radius: 15px;
+    color: white;
+}
+
+.analysis-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+}
+
+.analysis-subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.insights-container {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    line-height: 1.6;
+}
+
+.insight-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    border-left: 4px solid #ff6b9d;
+    background: #fdf7f9;
+    border-radius: 0 8px 8px 0;
+}
+
+.insight-title {
+    color: #d63384;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.insight-content {
+    color: #333;
+    font-size: 15px;
+}
+
+.pattern-highlight {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.prediction-box {
+    background: #e7f3ff;
+    border: 1px solid #bee5eb;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.actions-section {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.action-btn {
+    background: #ff6b9d;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 25px;
+    margin: 0 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    background: #e55a87;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 107, 157, 0.3);
+}
+
+@media (max-width: 480px) {
+    .analysis-container {
+        padding: 15px;
+    }
+    
+    .header-section {
+        padding: 15px;
+    }
+    
+    .analysis-title {
+        font-size: 24px;
+    }
+    
+    .insights-container {
+        padding: 20px;
+    }
+    
+    .action-btn {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+</style>
+
+<script type="module">
+import { getJSON } from '/utility/getJSON.js';
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('[PeriodOutput] Loading period analysis...');
+    
+    try {
+        // Get the stored response data
+        const responseData = getJSON('periodIqResponse');
+        console.log('[PeriodOutput] Retrieved response data:', responseData);
+
+        if (!responseData) {
+            console.warn('[PeriodOutput] No response data found');
+            document.getElementById('insights-container').innerHTML = `
+                <div class="insight-section">
+                    <div class="insight-title">No Analysis Available</div>
+                    <div class="insight-content">
+                        No period analysis data was found. Please complete the period tracking form and generate your analysis.
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        // Handle nested response structure if present
+        let data = responseData;
+        if (data && data.message === 'Success' && data.data) {
+            console.log('[PeriodOutput] Found nested data structure, using the data property');
+            data = data.data;
+        }
+
+        // Display the analysis
+        displayPeriodAnalysis(data);
+
+    } catch (error) {
+        console.error('[PeriodOutput] Error loading period analysis:', error);
+        document.getElementById('insights-container').innerHTML = `
+            <div class="insight-section">
+                <div class="insight-title">Error Loading Analysis</div>
+                <div class="insight-content">
+                    An error occurred while loading your period analysis. Please try generating your analysis again.
+                </div>
+            </div>
+        `;
+    }
+});
+
+function displayPeriodAnalysis(data) {
+    const container = document.getElementById('insights-container');
+    
+    if (typeof data === 'string') {
+        // Simple string response - format it nicely
+        container.innerHTML = formatStringResponse(data);
+    } else if (typeof data === 'object' && data !== null) {
+        // Structured object response
+        container.innerHTML = formatObjectResponse(data);
+    } else {
+        // Fallback
+        container.innerHTML = `
+            <div class="insight-section">
+                <div class="insight-title">Period Analysis</div>
+                <div class="insight-content">${data || 'Analysis completed successfully.'}</div>
+            </div>
+        `;
+    }
+}
+
+function formatStringResponse(response) {
+    // Split response into sections and format
+    const sections = response.split(/(?=\*\*|##|#)/);
+    let formattedContent = '';
+    
+    sections.forEach(section => {
+        if (section.trim()) {
+            // Check if it's a header
+            if (section.startsWith('**') || section.startsWith('##')) {
+                const title = section.replace(/\*\*|##/g, '').split('\n')[0].trim();
+                const content = section.replace(/\*\*|##/g, '').split('\n').slice(1).join('\n').trim();
+                
+                formattedContent += `
+                    <div class="insight-section">
+                        <div class="insight-title">${title}</div>
+                        <div class="insight-content">${formatContent(content)}</div>
+                    </div>
+                `;
+            } else {
+                formattedContent += `
+                    <div class="insight-section">
+                        <div class="insight-content">${formatContent(section.trim())}</div>
+                    </div>
+                `;
+            }
+        }
+    });
+    
+    return formattedContent || `
+        <div class="insight-section">
+            <div class="insight-title">Your Period Analysis</div>
+            <div class="insight-content">${formatContent(response)}</div>
+        </div>
+    `;
+}
+
+function formatObjectResponse(data) {
+    let content = '';
+    
+    // Handle common structured response properties
+    if (data.cycleInsights) {
+        content += `
+            <div class="insight-section">
+                <div class="insight-title">Cycle Insights</div>
+                <div class="insight-content">${formatContent(data.cycleInsights)}</div>
+            </div>
+        `;
+    }
+    
+    if (data.patterns) {
+        content += `
+            <div class="insight-section">
+                <div class="insight-title">Patterns Detected</div>
+                <div class="insight-content pattern-highlight">${formatContent(data.patterns)}</div>
+            </div>
+        `;
+    }
+    
+    if (data.predictions) {
+        content += `
+            <div class="insight-section">
+                <div class="insight-title">Predictions</div>
+                <div class="insight-content prediction-box">${formatContent(data.predictions)}</div>
+            </div>
+        `;
+    }
+    
+    if (data.recommendations) {
+        content += `
+            <div class="insight-section">
+                <div class="insight-title">Recommendations</div>
+                <div class="insight-content">${formatContent(data.recommendations)}</div>
+            </div>
+        `;
+    }
+    
+    // If no specific properties, try to display all properties
+    if (!content) {
+        Object.keys(data).forEach(key => {
+            if (typeof data[key] === 'string' && data[key].trim()) {
+                content += `
+                    <div class="insight-section">
+                        <div class="insight-title">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
+                        <div class="insight-content">${formatContent(data[key])}</div>
+                    </div>
+                `;
+            }
+        });
+    }
+    
+    return content || `
+        <div class="insight-section">
+            <div class="insight-title">Period Analysis Complete</div>
+            <div class="insight-content">Your period analysis has been generated successfully.</div>
+        </div>
+    `;
+}
+
+function formatContent(content) {
+    if (!content) return '';
+    
+    return content
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/^/, '<p>')
+        .replace(/$/, '</p>')
+        .replace(/<p><\/p>/g, '');
+}
+</script>
