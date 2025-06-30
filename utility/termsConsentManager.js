@@ -248,20 +248,21 @@
   `;
   document.head.appendChild(style);
 
-  // Main logic: show modal if not accepted
-  const status = loadStatus();
-  if (!(status.termsAccepted && status.consentGiven)) {
-    showUnifiedModal();
-  }
+  // No longer show modal automatically on page load
+  // Modal will be triggered by datain.js when container expands
 
   // DEBUG: Force modal to show for testing
   // localStorage.removeItem(STORAGE_KEY);
   // setCookie(COOKIE_NAME, '', -1);
 
-  // Expose for debugging
+  // Expose for debugging and external triggering
   window.termsConsentManager = {
     show: showUnifiedModal,
     saveStatus,
-    loadStatus
+    loadStatus,
+    checkStatus: () => {
+      const status = loadStatus();
+      return status.termsAccepted && status.consentGiven;
+    }
   };
 })();

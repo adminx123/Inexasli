@@ -703,14 +703,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         });
 
-        // Restore last state
-        const lastState = getLocal('dataContainerState') || 'hidden';
+        // Don't auto-expand on page load - let user choose when to engage
+        // This prevents terms/consent modal from appearing immediately
+        // Instead, show hint animation on categories button for new users
         const lastGridItemUrl = getLocal('lastGridItemUrl');
         
-        if (lastState === 'visible') {
+        // Only auto-expand if user has already accepted terms/consent AND had container visible
+        const lastState = getLocal('dataContainerState') || 'hidden';
+        const hasAcceptedTerms = window.termsConsentManager && window.termsConsentManager.checkStatus();
+        
+        if (lastState === 'visible' && hasAcceptedTerms) {
             toggleDataContainer();
-        } else if (lastGridItemUrl === '/ai/categories.html') {
-            toggleDataContainer();
+        } else {
+            // Show hint animation for new users or those who haven't accepted terms
+            showCategoriesButtonHint();
         }
     }
 
@@ -723,6 +729,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         isVisible = !isVisible;
         
         if (isVisible) {
+            // Check for terms and consent before showing content
+            if (window.termsConsentManager && !window.termsConsentManager.checkStatus()) {
+                console.log('[DataIn] Terms/consent not accepted, showing modal');
+                window.termsConsentManager.show();
+            }
+            
             // Show: move container up
             dataContainer.classList.add('visible');
             document.body.style.overflow = 'hidden';
@@ -1374,4 +1386,42 @@ document.addEventListener('DOMContentLoaded', function() {
             updatePaymentButtonDisplay();
         }
     }, 500);
-});
+});    // Show simulated hover hint on categories button for new users
+    function showCategoriesButtonHint() {
+        const categoryBtn = document.getElementById('datain-category-btn');
+        if (!categoryBtn) return;
+        
+        let hintStopped = false;
+        let hintInterval;
+        
+        const doHoverEffect = () => {
+            if (hintStopped) return;
+            
+            // Simulate hover: move up
+            categoryBtn.style.transform = 'translateY(-2px)';
+            
+            setTimeout(() => {
+                if (hintStopped) return;
+                // Simulate hover leave: move back down
+                categoryBtn.style.transform = '';
+            }, 250); // Hold "hover" for 250ms (faster)
+        };
+        
+        const stopHint = () => {
+            if (!hintStopped) {
+                hintStopped = true;
+                categoryBtn.style.transform = '';
+                if (hintInterval) {
+                    clearInterval(hintInterval);
+                }
+            }
+        };
+        
+        // Start the hint cycle - repeat every 1 second (faster)
+        doHoverEffect(); // Do it once immediately
+        hintInterval = setInterval(doHoverEffect, 1000);
+        
+        // Stop hint when user clicks or after 10 seconds
+        categoryBtn.addEventListener('click', stopHint, { once: true });
+        setTimeout(stopHint, 10000); // Stop after 10 seconds
+    }
