@@ -493,8 +493,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 flex-shrink: 0;
                 box-sizing: border-box;
                 backdrop-filter: blur(2px);
-                border: 1px solid transparent;
-                box-shadow: 0 1px 2px rgba(74, 124, 89, 0.04);
             }
 
             /* Utility buttons - always visible in header */
