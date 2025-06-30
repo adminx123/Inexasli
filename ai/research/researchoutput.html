@@ -91,8 +91,8 @@
       console.log("🔍 [RESEARCH-OUTPUT-CHECK] Has any data:", hasAnyData);
       
       if (!hasAnyData) {
-        console.warn("⚠️ [RESEARCH-OUTPUT-BLANK] No data found, showing blank screen");
-        document.getElementById('main-content').innerHTML = '';
+        console.warn("⚠️ [RESEARCH-OUTPUT-BLANK] No data found");
+        document.querySelector('.output-container').style.display = 'none';
         return;
       }
       
