@@ -13,7 +13,6 @@ import { initializeBidirectionalSwipe, initializeSimpleVerticalSwipe } from '/ut
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
-import { renderRateLimitDisplay, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 import '/ai/faq.js'; // Add FAQ modal script
 
 // Prevent zoom/pinch on content containers
@@ -611,7 +610,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                     </button>
                     <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
-                        <span style="font-size: 14px; font-weight: bold;">$</span>
+                        <span style="font-size: 14px; font-weight: normal;">$</span>
                     </button>
                     <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-trash" style="font-size: 14px;"></i>
@@ -634,9 +633,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         `;
 
         document.body.appendChild(dataContainer);
-
-        // Inject RateLimit display at the top of the data container
-        renderRateLimitDisplay(dataContainer, 'https://rate-limiter.4hm7q4q75z.workers.dev');
 
         // Setup utility buttons for initial state
         setupUtilityButtons();
@@ -677,6 +673,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         window.addEventListener('storage', function (e) {
             if (e.key === 'lastGridItemUrl' && e.newValue && isVisible) {
                 loadStoredContent(e.newValue);
+            }
+            // Update payment button when rate limit status changes
+            if (e.key === 'rateLimitStatus') {
+                updatePaymentButtonDisplay();
             }
         });
 
@@ -748,6 +748,32 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
+    // Update payment button display with usage information
+    function updatePaymentButtonDisplay() {
+        const paymentBtn = document.getElementById('datain-payment-btn');
+        if (!paymentBtn) return;
+        
+        const paymentSpan = paymentBtn.querySelector('span');
+        if (!paymentSpan) return;
+        
+        try {
+            const rateLimitStatus = JSON.parse(localStorage.getItem('rateLimitStatus') || 'null');
+            
+            if (rateLimitStatus && rateLimitStatus.remaining && rateLimitStatus.limits) {
+                const usesLeft = rateLimitStatus.remaining.perDay || 0;
+                const usesTotal = rateLimitStatus.limits.perDay || 0;
+                paymentSpan.textContent = `${usesLeft}|${usesTotal}`;
+            } else {
+                // Fallback to $ for new users or when no rate limit data
+                paymentSpan.textContent = '$';
+            }
+        } catch (error) {
+            console.warn('[DataIn] Error updating payment button display:', error);
+            // Fallback to $ on error
+            paymentSpan.textContent = '$';
+        }
+    }
+
     // Setup utility buttons within the datain container
     function setupUtilityButtons() {
         const overwriteBtn = document.getElementById('datain-overwrite-btn');
@@ -757,6 +783,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         const faqBtn = document.getElementById('datain-faq-btn');
         const guidedPrevBtn = document.getElementById('datain-guided-prev-btn');
         const guidedNextBtn = document.getElementById('datain-guided-next-btn');
+        
+        // Update payment button display with current usage info
+        updatePaymentButtonDisplay();
         
         // Setup guided forms navigation buttons
         if (guidedPrevBtn) {
@@ -1341,10 +1370,8 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         const dataContainer = document.querySelector('.data-container-in');
         if (dataContainer) {
-            // Only update from localStorage on load, using centralized handler
-            const status = JSON.parse(localStorage.getItem('rateLimitStatus') || 'null') || {};
-            // Use the imported handleRateLimitResponse from rateLimiter.js
-            handleRateLimitResponse(dataContainer, status, false, 'Module');
+            // Update payment button display directly from localStorage
+            updatePaymentButtonDisplay();
         }
     }, 500);
 });
