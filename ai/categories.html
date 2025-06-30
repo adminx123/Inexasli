@@ -175,7 +175,6 @@ function renderFavorites() {
     const favorites = getFavorites();
     favoritesGrid.innerHTML = '';
     if (favorites.length === 0) {
-        favoritesGrid.innerHTML = '<p style="text-align:center; color:#888;">You haven\'t favorited any products yet.</p>';
         return;
     }
 
