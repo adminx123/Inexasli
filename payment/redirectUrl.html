@@ -1,198 +1,263 @@
-<!-- /*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
- */ -->
-
- <!DOCTYPE html>
- <html lang="en">
-   <head>
-     <meta charset="UTF-8" />
-     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     <title>please wait</title>
-     
-     <!-- this is an extended list of places icon could be needed -->
-     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-     <link rel="shortcut icon" href="/images/favicon.ico" />
-     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-     <link rel="manifest" href="/manifest.json">
- 
-     <link rel="stylesheet" href="/ai/styles/incomestyles.css">
-   </head>
- 
-   <body style="background: #000; margin: 0; height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center;">
-     <div class="container" style="display: flex; align-items: center; justify-content: center; height: 100vh; width: 100vw; background: #000;">
-       <img src="/images/apple-touch-icon.png" alt="App Logo" style="width: 80px; height: 80px; object-fit: contain; display: block; margin: 0 auto;" />
-     </div>
- 
-     <script type="module">
-// Minimal localStorage helpers for this page
-function setLocal(name, value) {
-    localStorage.setItem(name, encodeURIComponent(value));
-}
-function getLocal(name) {
-    const value = localStorage.getItem(name);
-    return value !== null ? decodeURIComponent(value) : '';
-}
-
-// Payment redirect logic
-const urlParams = new URLSearchParams(window.location.search);
-const sessionId = urlParams.get("session_id");
-const container = document.querySelector(".container");
-const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
-
-document.addEventListener("DOMContentLoaded", async () => {
-  const paid = getLocal("authenticated");
-  const redirectToLanding = () => {
-    window.location.href = "/ai/landing/landing.html";
-  };
-  if (paid === "paid") {
-    redirectToLanding();
-  } else {
-    if (sessionId) {
-      try {
-        const res = await fetch(paymentEndpoint, {
-          method: "POST",
-          headers: { 
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify({ task: "checkPayment", sessionId: sessionId }),
-          mode: "cors"
-        });
-        if (!res.ok) {
-          const errorText = await res.text();
-          throw new Error(`Payment verification failed: ${res.status} ${errorText}`);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Processing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
         }
-        const data = await res.json();
-        if (data.paymentStatus) {
-          if (data.paymentStatus === "paid" || data.paymentStatus === "no_payment_required") {
-            setLocal("authenticated", "paid");
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .success {
+            color: #27ae60;
+        }
+        .error {
+            color: #e74c3c;
+        }
+        .debug {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 0.9em;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner" id="spinner"></div>
+        <h2 id="status">Processing your payment...</h2>
+        <p id="message">Please wait while we verify your payment and update your account.</p>
+        <div id="debug" class="debug" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Debug logging
+        function log(message) {
+            console.log('[RedirectUrl]', message);
+            const debugDiv = document.getElementById('debug');
+            debugDiv.style.display = 'block';
+            debugDiv.innerHTML += '<div>' + new Date().toISOString() + ': ' + message + '</div>';
+        }
+
+        // Update UI
+        function updateUI(status, message, isError = false) {
+            document.getElementById('spinner').style.display = isError ? 'none' : 'block';
+            document.getElementById('status').textContent = status;
+            document.getElementById('status').className = isError ? 'error' : 'success';
+            document.getElementById('message').textContent = message;
+        }
+
+        // Generate device fingerprint (matching rateLimiter.js)
+        function generateDeviceFingerprint() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillText('Fingerprint test', 2, 2);
+            const canvasFingerprint = canvas.toDataURL();
             
-            // Get fingerprint data for linking
-            const fingerprintData = getLocal("fingerprintData");
+            const fingerprint = [
+                navigator.userAgent,
+                navigator.language,
+                screen.width + 'x' + screen.height,
+                screen.colorDepth,
+                new Date().getTimezoneOffset(),
+                navigator.platform,
+                navigator.cookieEnabled,
+                canvasFingerprint.slice(-50) // Last 50 chars of canvas fingerprint
+            ].join('|');
             
-            if (fingerprintData && data.customerEmail && data.customerId) {
-              try {
-                // Parse fingerprint data
-                const fingerprint = JSON.parse(fingerprintData);
-                
-                // Link payment to fingerprint in backend KV
-                const linkResponse = await fetch(paymentEndpoint, {
-                  method: "POST",
-                  headers: { 
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                  },
-                  body: JSON.stringify({
-                    task: "linkPaymentToFingerprint",
-                    email: data.customerEmail,
-                    fingerprint: fingerprint,
-                    customerId: data.customerId
-                  }),
-                  mode: "cors"
-                });
-                
-                if (linkResponse.ok) {
-                  const linkData = await linkResponse.json();
-                  console.log("Payment linked to fingerprint:", linkData);
-                  
-                  // Store email for future device recovery
-                  setLocal("userEmail", data.customerEmail);
-                  
-                  // OPERATION RATEPAY: Refresh rate limit status immediately after payment
-                  try {
-                    const rateLimitEndpoint = "https://ratelimit.4hm7q4q75z.workers.dev/";
-                    const rateLimitResponse = await fetch(rateLimitEndpoint, {
-                      method: "POST",
-                      headers: { 
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                      },
-                      body: JSON.stringify({
-                        task: "checkPaymentAndLimits",
-                        fingerprint: fingerprint,
-                        email: data.customerEmail,
-                        module: "payment" // Generic module for status check
-                      }),
-                      mode: "cors"
-                    });
-                    
-                    if (rateLimitResponse.ok) {
-                      const rateLimitData = await rateLimitResponse.json();
-                      
-                      // Update rateLimitStatus in localStorage immediately
-                      const rateLimitStatus = {
-                        allowed: rateLimitData.allowed,
-                        isPaid: rateLimitData.isPaid,
-                        limits: rateLimitData.limits,
-                        remaining: rateLimitData.remaining,
-                        email: rateLimitData.email,
-                        lastUpdated: Date.now()
-                      };
-                      
-                      setLocal("rateLimitStatus", JSON.stringify(rateLimitStatus));
-                      console.log("Rate limit status updated after payment:", rateLimitStatus);
-                      
-                      // Update container with success message showing new limits
-                      const limitsText = rateLimitData.isPaid ? "unlimited" : `${rateLimitData.remaining?.perDay || 0} remaining today`;
-                      container.innerHTML = `Payment successful! You now have ${limitsText} generations. Redirecting...`;
-                    } else {
-                      console.warn("Failed to refresh rate limit status after payment");
-                      container.innerHTML = "Payment successful! Redirecting...";
-                    }
-                  } catch (rateLimitError) {
-                    console.warn("Error refreshing rate limit status:", rateLimitError);
-                    container.innerHTML = "Payment successful! Redirecting...";
-                  }
-                } else {
-                  console.warn("Failed to link payment to fingerprint");
-                  container.innerHTML = "Payment successful! Redirecting...";
-                }
-                
-              } catch (linkError) {
-                console.warn("Error linking payment:", linkError);
-                container.innerHTML = "Payment successful! Redirecting...";
-              }
-            } else {
-              container.innerHTML = "Payment successful! Redirecting...";
+            // Simple hash function
+            let hash = 0;
+            for (let i = 0; i < fingerprint.length; i++) {
+                const char = fingerprint.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32-bit integer
             }
             
-            setTimeout(redirectToLanding, 2000);
-          }
-        } else if (data.error) {
-          container.innerHTML = `
-            <h1 style="text-transform: capitalize;">Payment Failed</h1>
-            <p>Sorry, your payment attempt failed</p>
-            <p>${data.error || ""}</p>
-            <a href="mailto:support@inexasli.com" class="contact-support">Something's wrong? Contact support</a>
-          `;
-        } else {
-          container.innerHTML = `
-            <h1 style="text-transform: capitalize;">Payment Failed</h1>
-            <p>Sorry, your payment attempt failed</p>
-            <a href="mailto:support@inexasli.com" class="contact-support">Something's wrong? Contact support</a>
-          `;
+            return Math.abs(hash).toString(36);
         }
-      } catch (error) {
-        container.innerHTML = `
-          <h1 style="text-transform: capitalize;">Something Went Wrong</h1>
-          <p>${error.message}</p>
-          <p>Please try again later or contact support.</p>
-          <a href="mailto:support@inexasli.com" class="contact-support">Contact Support</a>`;
-      }
-    } else {
-      container.innerHTML = "No or invalid session ID";
-      redirectToLanding();
-    }
-  }
-});
-     </script>
 
-   </body>
- </html>
+        // Generate session ID
+        function generateSessionId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Get or create fingerprint (matching rateLimiter.js structure)
+        function getFingerprint() {
+            const FINGERPRINT_KEY = '_userFingerprint';
+            
+            try {
+                const stored = localStorage.getItem(FINGERPRINT_KEY);
+                let fingerprintData;
+                
+                if (stored) {
+                    try {
+                        fingerprintData = JSON.parse(stored);
+                        // Check if session expired (24 hours)
+                        const sessionAge = Date.now() - fingerprintData.sessionCreated;
+                        if (sessionAge > 24 * 60 * 60 * 1000) {
+                            // Create new session but keep device ID
+                            fingerprintData.sessionId = generateSessionId();
+                            fingerprintData.sessionCreated = Date.now();
+                            fingerprintData.requestCounts = {};
+                            fingerprintData.lastRequestTimes = [];
+                        }
+                    } catch (e) {
+                        fingerprintData = null;
+                    }
+                }
+                
+                if (!fingerprintData || !fingerprintData.deviceId) {
+                    fingerprintData = {
+                        deviceId: generateDeviceFingerprint(),
+                        sessionId: generateSessionId(),
+                        sessionCreated: Date.now(),
+                        requestCounts: {},
+                        lastRequestTimes: [],
+                        rateLimitStatus: {}
+                    };
+                    log('Created new fingerprint: deviceId=' + fingerprintData.deviceId + ', sessionId=' + fingerprintData.sessionId);
+                } else {
+                    log('Using existing fingerprint: deviceId=' + fingerprintData.deviceId + ', sessionId=' + fingerprintData.sessionId);
+                }
+                
+                // Save updated fingerprint
+                localStorage.setItem(FINGERPRINT_KEY, JSON.stringify(fingerprintData));
+                return fingerprintData;
+                
+            } catch (error) {
+                log('Error getting fingerprint: ' + error.message);
+                // Return minimal fingerprint if storage fails
+                return {
+                    deviceId: generateDeviceFingerprint(),
+                    sessionId: generateSessionId(),
+                    sessionCreated: Date.now(),
+                    requestCounts: {},
+                    lastRequestTimes: [],
+                    rateLimitStatus: {}
+                };
+            }
+        }
+
+        // Main processing function
+        async function processPayment() {
+            try {
+                // Get session ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const sessionId = urlParams.get('session_id');
+                
+                log('Session ID from URL: ' + (sessionId || 'NOT FOUND'));
+                
+                if (!sessionId) {
+                    throw new Error('No session ID found in URL');
+                }
+
+                // Get or create fingerprint
+                const fingerprint = getFingerprint();
+                
+                // Step 1: Verify payment with backend
+                log('Calling checkPayment API...');
+                const checkResponse = await fetch('https://stripeintegration.4hm7q4q75z.workers.dev/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        task: 'checkPayment',
+                        sessionId: sessionId,
+                        fingerprint: fingerprint
+                    })
+                });
+
+                if (!checkResponse.ok) {
+                    throw new Error('Payment verification failed: ' + checkResponse.status);
+                }
+
+                const checkData = await checkResponse.json();
+                log('checkPayment response: ' + JSON.stringify(checkData));
+
+                if (checkData.paymentStatus !== 'paid') {
+                    throw new Error('Payment not completed: ' + (checkData.message || checkData.paymentStatus || 'Unknown error'));
+                }
+
+                // Step 2: Link payment to fingerprint in KV
+                log('Calling linkPaymentToFingerprint API...');
+                const linkResponse = await fetch('https://stripeintegration.4hm7q4q75z.workers.dev/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        task: 'linkPaymentToFingerprint',
+                        email: checkData.customerEmail,
+                        customerId: checkData.customerId,
+                        fingerprint: fingerprint
+                    })
+                });
+
+                if (!linkResponse.ok) {
+                    throw new Error('Failed to link payment: ' + linkResponse.status);
+                }
+
+                const linkData = await linkResponse.json();
+                log('linkPaymentToFingerprint response: ' + JSON.stringify(linkData));
+
+                if (!linkData.success) {
+                    throw new Error('Failed to link payment: ' + (linkData.message || 'Unknown error'));
+                }
+
+                // Update localStorage
+                localStorage.setItem('authenticated', 'paid');
+                log('Updated localStorage.authenticated to "paid"');
+
+                // Success!
+                document.getElementById('spinner').style.display = 'none';
+                updateUI('Payment Successful!', 'Your account has been upgraded. You now have unlimited access to all features.', false);
+                
+                // Redirect after a delay
+                setTimeout(() => {
+                    log('Redirecting to main application...');
+                    window.location.href = '/ai/landing/landing.html';
+                }, 3000);
+
+            } catch (error) {
+                log('ERROR: ' + error.message);
+                updateUI('Payment Processing Failed', error.message, true);
+            }
+        }
+
+        // Start processing when page loads
+        document.addEventListener('DOMContentLoaded', processPayment);
+    </script>
+</body>
+</html>
