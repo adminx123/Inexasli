@@ -77,9 +77,36 @@
 /* Add space for the favorite icon on product items */
 .grid-item[data-category] {
     /* Using padding on the right pushes the text away from the icon */
-    padding-right: 30px;
+    padding-right: 35px;
     /* This ensures the padding doesn't break the grid layout */
     box-sizing: border-box;
+}
+
+/* Mobile-specific adjustments for favorite star and premium tag spacing */
+@media (max-width: 480px) {
+    .grid-item[data-category] {
+        padding-right: 40px; /* More space needed on mobile */
+    }
+    
+    .favorite-icon {
+        top: 6px;
+        right: 6px;
+        font-size: 18px; /* Slightly smaller on mobile */
+    }
+    
+    .premium-tag {
+        margin-right: 25px !important; /* Push $ symbol away from favorite star */
+    }
+}
+
+@media (max-width: 375px) {
+    .grid-item[data-category] {
+        padding-right: 42px; /* Even more space on smaller screens */
+    }
+    
+    .premium-tag {
+        margin-right: 28px !important;
+    }
 }
 
 
