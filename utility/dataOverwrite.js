@@ -31,15 +31,19 @@ function openDataOverwriteModal() {
     const modalContent = document.createElement('div');
     modalContent.className = 'data-overwrite-modal-content';
     modalContent.style.cssText = `
-        background-color: #f2f9f3;
+        background-color: rgba(242, 249, 243, 0.95);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         padding: 20px;
-        border-radius: 8px;
-        border: 1px solid #4a7c59;
-        box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(74, 124, 89, 0.12), 0 4px 16px rgba(74, 124, 89, 0.08), 0 1px 4px rgba(74, 124, 89, 0.04);
         max-width: 300px;
         width: 90%;
         text-align: center;
         font-family: "Inter", sans-serif;
+        transform: scale(0.95);
+        transition: all 0.3s ease;
     `;
     
     modalContent.innerHTML = `
@@ -49,19 +53,21 @@ function openDataOverwriteModal() {
             </div>
             <button onclick="confirmDataOverwrite()" class="data-overwrite-action-btn" style="
                 padding: 14px 20px;
-                background-color: #f2f9f3;
+                background-color: rgba(242, 249, 243, 0.9);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
                 color: #2d5a3d;
-                border: 1px solid #4a7c59;
-                border-radius: 8px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
                 font-size: 14px;
                 cursor: pointer;
                 font-family: 'Geist', sans-serif;
                 font-weight: bold;
-                transition: all 0.2s ease;
+                transition: all 0.3s ease;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
+                box-shadow: 0 4px 16px rgba(74, 124, 89, 0.08);
             ">
                 <i class="bx bx-trash" style="margin-right: 8px; font-size: 14px;"></i>Clear all data
             </button>
@@ -79,7 +85,9 @@ function openDataOverwriteModal() {
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -106,20 +114,20 @@ function addButtonHoverEffects() {
     
     modal.querySelectorAll('.data-overwrite-action-btn').forEach(btn => {
         btn.addEventListener('mouseenter', function() {
-            this.style.backgroundColor = '#eef7f0';
-            this.style.transform = 'translateY(-1px)';
-            this.style.boxShadow = '0 3px 8px rgba(74, 124, 89, 0.3)';
+            this.style.backgroundColor = 'rgba(238, 247, 240, 0.95)';
+            this.style.transform = 'translateY(-2px)';
+            this.style.boxShadow = '0 6px 20px rgba(74, 124, 89, 0.12)';
         });
         
         btn.addEventListener('mouseleave', function() {
-            this.style.backgroundColor = '#f2f9f3';
+            this.style.backgroundColor = 'rgba(242, 249, 243, 0.9)';
             this.style.transform = 'translateY(0)';
-            this.style.boxShadow = '0 2px 4px rgba(74, 124, 89, 0.2)';
+            this.style.boxShadow = '0 4px 16px rgba(74, 124, 89, 0.08)';
         });
         
         btn.addEventListener('mousedown', function() {
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = '0 1px 2px rgba(74, 124, 89, 0.3)';
+            this.style.transform = 'translateY(-1px)';
+            this.style.boxShadow = '0 2px 8px rgba(74, 124, 89, 0.1)';
         });
         
         btn.addEventListener('mouseup', function() {

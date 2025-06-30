@@ -139,7 +139,9 @@ function addPaymentModalStyles() {
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             display: none;
             justify-content: center;
             align-items: center;
@@ -148,15 +150,19 @@ function addPaymentModalStyles() {
         }
         
         .payment-modal-content {
-            background-color: #f2f9f3;
+            background-color: rgba(242, 249, 243, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #4a7c59;
-            box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(74, 124, 89, 0.12), 0 4px 16px rgba(74, 124, 89, 0.08), 0 1px 4px rgba(74, 124, 89, 0.04);
             max-width: 300px;
             width: 90%;
             text-align: center;
             font-family: "Inter", sans-serif;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
         }
         
         .payment-modal-header {
@@ -164,6 +170,7 @@ function addPaymentModalStyles() {
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            text-align: left;
         }
         
         .payment-modal-title {
@@ -305,10 +312,12 @@ function addPaymentModalStyles() {
         
         .payment-recover-button {
             padding: 12px 16px;
-            background-color: #4a7c59;
+            background-color: rgba(74, 124, 89, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             color: white;
-            border: none;
-            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
             font-size: 13px;
             cursor: pointer;
             font-family: 'Geist', sans-serif;
@@ -319,14 +328,16 @@ function addPaymentModalStyles() {
         }
         
         .payment-recover-button:hover {
-            background-color: #3d6349;
-            transform: translateY(-1px);
+            background-color: rgba(61, 99, 73, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 124, 89, 0.2);
         }
         
         .payment-recover-button:disabled {
-            background-color: #cccccc;
+            background-color: rgba(204, 204, 204, 0.7);
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
         
         .payment-cancel-button {

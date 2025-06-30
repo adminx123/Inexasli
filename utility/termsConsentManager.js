@@ -70,17 +70,17 @@
       <div class="terms-consent-modal">
         <h2>Terms of Service & Data Consent</h2>
         <div class="terms-section">
-          <div class="modal-align" style="margin-bottom:0;">
-            <span style="margin-bottom:2px;">You must accept our <a href="#" id="view-terms-link" style="display:inline;">Terms of Service</a> to use this site.</span><br>
+          <div class="modal-align" style="margin-bottom:15px;">
+            <span style="font-size:13px;margin-bottom:2px;">Please accept our <a href="#" id="view-terms-link" style="display:inline;">Terms of Service</a> to use our services.</span><br>
             <span style="font-size:12px;color:#666;display:block;margin-top:2px;">(last updated: ${LAST_UPDATED_DATE})</span>
           </div>
-          <label class="modal-align modal-label">
+          <label class="modal-align modal-label" style="display:block;margin-bottom:15px;">
             <input type="checkbox" id="accept-terms"> I have read and accept the Terms of Service
           </label>
         </div>
         <div class="consent-section">
-          <p class="modal-align">You must also consent to the storage and processing of your data as described in our terms.</p>
-          <label class="modal-align modal-label">
+          <p class="modal-align" style="font-size:13px;margin-bottom:15px;">Please consent to the storage and processing of your data as described in our terms.</p>
+          <label class="modal-align modal-label" style="display:block;margin-bottom:15px;">
             <input type="checkbox" id="accept-consent"> I consent to data storage and processing
           </label>
         </div>
@@ -144,17 +144,22 @@
   style.textContent = `
     .terms-consent-overlay {
       position: fixed; top:0; left:0; width:100vw; height:100vh;
-      background: rgba(0,0,0,0.5); z-index: 1000000;
+      background: rgba(0,0,0,0.7); 
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 1000000;
       display: flex; align-items: center; justify-content: center;
       font-family: "Inter", sans-serif;
       pointer-events: auto;
     }
     .terms-consent-modal {
-      background-color: #f2f9f3;
+      background-color: rgba(242, 249, 243, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       padding: 20px;
-      border-radius: 8px;
-      border: 1px solid #4a7c59;
-      box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(74, 124, 89, 0.12), 0 4px 16px rgba(74, 124, 89, 0.08), 0 1px 4px rgba(74, 124, 89, 0.04);
       max-width: 400px;
       width: 90%;
       text-align: center;
@@ -162,6 +167,8 @@
       position: relative;
       z-index: 1000001;
       pointer-events: auto;
+      transform: scale(0.95);
+      transition: all 0.3s ease;
     }
     .terms-consent-modal h2 {
       font-size: 1.2rem;
@@ -169,12 +176,14 @@
       margin-top: 0;
       margin-bottom: 15px;
       font-family: "Geist", sans-serif;
+      text-align: center;
     }
     .terms-consent-modal p {
       font-size: 13px;
       line-height: 1.5;
       color: #666;
       margin-bottom: 15px;
+      text-align: left;
     }
     .terms-consent-modal label {
       font-size: 13px;
@@ -182,15 +191,39 @@
       margin-bottom: 0;
       cursor: pointer;
       user-select: none;
+      text-align: left;
+      display: block;
     }
     .terms-consent-modal input[type="checkbox"] {
       margin-right: 8px;
       accent-color: #4a7c59;
     }
-    .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
-    .modal-buttons button { background: #2d5a3d; color: #fff; border: none; border-radius: 6px; padding: 10px 18px; font-size: 1em; cursor: pointer; font-weight: bold; }
-    .modal-buttons button:disabled { background: #b2b2b2; cursor: not-allowed; }
-    .modal-buttons button:hover:enabled { background: #4a7c59; }
+    .modal-buttons { display: flex; justify-content: center; gap: 10px; margin-top: 18px; }
+    .modal-buttons button { 
+      background: rgba(45, 90, 61, 0.9); 
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #fff; 
+      border: 1px solid rgba(255, 255, 255, 0.2); 
+      border-radius: 12px; 
+      padding: 12px 20px; 
+      font-size: 1em; 
+      cursor: pointer; 
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
+    }
+    .modal-buttons button:disabled { 
+      background: rgba(178, 178, 178, 0.7); 
+      cursor: not-allowed;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: none;
+    }
+    .modal-buttons button:hover:enabled { 
+      background: rgba(74, 124, 89, 0.95);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(45, 90, 61, 0.2);
+    }
     
     @media (max-width: 480px) {
       .terms-consent-modal {
