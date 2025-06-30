@@ -82,3 +82,8 @@ DOMAIN_URL = "http://127.0.0.1:5501"  # Temporarily set to local for testing
 binding = "RATE_LIMIT_KV"
 id = "2da5e6f46847458a9aa83ffe54dea66e"
 preview_id = "2da5e6f46847458a9aa83ffe54dea66e"
+
+# Service binding for rate limit integration
+[[env.stripeintegration.services]]
+binding = "rateLimit_binding"
+service = "ratelimit"
