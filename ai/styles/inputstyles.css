@@ -6,34 +6,95 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Inter", sans-serif;
-  background-color: #ffffff;
-  color: #000;
-  text-align: left;
-  margin-bottom: 75px;
-  padding-bottom: 25px;
-  position: relative;
+/* INPUT VALIDATION STYLES */
+/* ====================== */
+
+/* Validation error messages */
+.validation-error {
+  color: #dc2626 !important;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-body::before {
-  content: '';
-  position: absolute;
-  top: -48px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 96px;
-  height: 96px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 50%);
-  animation: smallPulse 4s infinite ease-in-out;
-  z-index: -1;
+.validation-error::before {
+  content: "⚠ ";
+  font-weight: bold;
 }
 
-@keyframes smallPulse {
-  0% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
+/* Input fields with validation errors */
+input.validation-error-field,
+textarea.validation-error-field,
+select.validation-error-field {
+  border: 2px solid #dc2626 !important;
+  background-color: #fef2f2 !important;
 }
+
+/* Validation success styling */
+input.validation-success-field,
+textarea.validation-success-field,
+select.validation-success-field {
+  border: 2px solid #16a34a !important;
+  background-color: #f0fdf4 !important;
+}
+
+/* Form validation summary */
+.validation-summary {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  color: #991b1b;
+}
+
+.validation-summary h4 {
+  color: #991b1b;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.validation-summary ul {
+  margin-left: 16px;
+  list-style-type: disc;
+}
+
+.validation-summary li {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Security notice styling */
+.security-notice {
+  background-color: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-left: 4px solid #0ea5e9;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #0c4a6e;
+}
+
+.security-notice .icon {
+  display: inline-block;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+/* ====================== */
+/* END VALIDATION STYLES  */
 
 /* Headings */
 h1 {

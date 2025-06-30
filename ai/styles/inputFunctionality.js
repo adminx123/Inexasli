@@ -291,6 +291,15 @@ function triggerTextareaExpansion() {
 }
 
 /**
+ * Main initialization function for input functionality
+ */
+function initInputFunctionality() {
+    console.log('[Input Functionality] Initializing...');
+    initAutoExpandTextareas();
+    initMutationObserver();
+}
+
+/**
  * Generic dynamic input creation function
  * @param {string} inputType - Type of input (for placeholder)
  * @param {string} value - Initial value
@@ -496,13 +505,6 @@ export {
     initMutationObserver,
     debugTextareaExpansionSequence,
     initInputFunctionality,
-    createSplitTextarea
-};
-
-// Export functions for external use
-export { 
-    initAutoExpandTextareas, 
-    autoExpandTextarea, 
     createSplitTextarea
 };
 

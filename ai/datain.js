@@ -15,6 +15,157 @@ import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
 import '/ai/faq.js'; // Add FAQ modal script
 
+// Import validation utilities
+import { 
+    validateModuleData, 
+    ValidationError, 
+    displayValidationErrors 
+} from '/utility/inputValidation.js';
+
+// Universal validation function for all modules
+function validateFormDataForModule(moduleName, formData) {
+    try {
+        // For natural language inputs, we want to be more permissive
+        // Apply basic security validation but don't block creative content
+        const validatedData = validateModuleData(moduleName, formData);
+        console.log(`[DataIn] Validation passed for module: ${moduleName}`);
+        return { valid: true, data: validatedData };
+    } catch (error) {
+        if (error instanceof ValidationError) {
+            console.warn(`[DataIn] Validation failed for module ${moduleName}:`, error.message);
+            return { 
+                valid: false, 
+                error: error.message, 
+                field: error.field,
+                errors: error.errors || [] 
+            };
+        }
+        console.error(`[DataIn] Unexpected validation error for module ${moduleName}:`, error);
+        return { 
+            valid: false, 
+            error: 'Validation failed due to unexpected error',
+            field: 'general'
+        };
+    }
+}
+
+// Enhanced generate button handler that adds validation
+function wrapGenerateHandler(originalHandler, moduleName) {
+    return async function(event) {
+        console.log(`[DataIn] Enhanced generate handler called for module: ${moduleName}`);
+        
+        try {
+            // Get form persistence instance for this module
+            const formPersistenceInstance = window[`${moduleName}FormPersistence`];
+            if (!formPersistenceInstance) {
+                console.warn(`[DataIn] No FormPersistence instance found for module: ${moduleName}`);
+                return originalHandler.call(this, event);
+            }
+            
+            // Get current form data
+            const formData = formPersistenceInstance.getSavedFormData();
+            if (!formData) {
+                console.warn(`[DataIn] No form data found for module: ${moduleName}`);
+                alert('Please complete the form before generating results.');
+                return;
+            }
+            
+            // Validate form data
+            const validationResult = validateFormDataForModule(moduleName, formData);
+            
+            if (!validationResult.valid) {
+                // Show validation errors to user
+                console.warn(`[DataIn] Validation failed:`, validationResult.error);
+                
+                // Find form element to show errors
+                const formElement = document.querySelector('.device-container') || document.body;
+                
+                if (validationResult.errors && validationResult.errors.length > 0) {
+                    // Multiple field errors
+                    displayValidationErrors(validationResult.errors, formElement);
+                    alert(`Please fix the following errors:\n${validationResult.errors.map(e => `• ${e.message}`).join('\n')}`);
+                } else {
+                    // Single error
+                    alert(`Validation Error: ${validationResult.error}`);
+                }
+                return;
+            }
+            
+            console.log(`[DataIn] Validation passed, proceeding with generation for module: ${moduleName}`);
+            
+            // Call original handler with validated data
+            return originalHandler.call(this, event);
+            
+        } catch (error) {
+            console.error(`[DataIn] Error in enhanced generate handler for module ${moduleName}:`, error);
+            // Fall back to original handler if validation fails unexpectedly
+            return originalHandler.call(this, event);
+        }
+    };
+}
+
+// Function to enhance generate buttons with validation
+function enhanceGenerateButtons() {
+    console.log('[DataIn] Enhancing generate buttons with validation');
+    
+    // List of known generate button patterns
+    const generateButtonSelectors = [
+        '#generate-calorie-btn',
+        '#generate-decision-btn', 
+        '#generate-enneagram-btn',
+        '#generate-event-btn',
+        '#generate-fashion-btn',
+        '#generate-income-btn',
+        '#generate-philosophy-btn',
+        '#generate-quiz-btn',
+        '#generate-research-btn',
+        '#generate-social-btn',
+        '#generate-period-btn'
+    ];
+    
+    generateButtonSelectors.forEach(selector => {
+        const button = document.querySelector(selector);
+        if (button) {
+            // Extract module name from button ID
+            const moduleName = selector.replace('#generate-', '').replace('-btn', '');
+            console.log(`[DataIn] Found generate button for module: ${moduleName}`);
+            
+            // Store original onclick handler if it exists
+            const originalOnClick = button.onclick;
+            if (originalOnClick) {
+                console.log(`[DataIn] Wrapping existing onclick handler for ${moduleName}`);
+                button.onclick = wrapGenerateHandler(originalOnClick, moduleName);
+            }
+            
+            // Also wrap any addEventListener handlers by storing reference to the button
+            // This is a bit more complex but ensures we catch all handlers
+            button.setAttribute('data-validation-enhanced', 'true');
+            button.setAttribute('data-module-name', moduleName);
+        }
+    });
+}
+
+// Override addEventListener for generate buttons to ensure validation
+function enhanceEventListeners() {
+    // Store original addEventListener
+    const originalAddEventListener = EventTarget.prototype.addEventListener;
+    
+    EventTarget.prototype.addEventListener = function(type, listener, options) {
+        if (type === 'click' && this.id && this.id.includes('generate') && this.id.includes('btn')) {
+            const moduleName = this.getAttribute('data-module-name') || 
+                              this.id.replace('generate-', '').replace('-btn', '');
+            
+            if (moduleName && typeof listener === 'function') {
+                console.log(`[DataIn] Enhancing addEventListener for generate button: ${moduleName}`);
+                const enhancedListener = wrapGenerateHandler(listener, moduleName);
+                return originalAddEventListener.call(this, type, enhancedListener, options);
+            }
+        }
+        
+        return originalAddEventListener.call(this, type, listener, options);
+    };
+}
+
 // Prevent zoom/pinch on content containers
 function preventZoom() {
     const style = document.createElement('style');
@@ -1143,6 +1294,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             window.guidedFormsButtonUpdateInterval = setInterval(() => {
                 updateGuidedButtonStates();
             }, 500); // Update every 500ms when guided forms are active
+            
+            // Re-enhance generate buttons after content loads
+            enhanceGenerateButtons();
+            console.log('[DataIn] Re-enhanced generate buttons after content load');
         }, 200);
     });
     
@@ -1407,6 +1562,16 @@ document.addEventListener('DOMContentLoaded', function() {
             updatePaymentButtonDisplay();
         }
     }, 500);
+    
+    // Initialize validation enhancements
+    console.log('[DataIn] Initializing validation enhancements');
+    enhanceEventListeners();
+    
+    // Add a slight delay to ensure all modules are loaded before enhancing buttons
+    setTimeout(() => {
+        enhanceGenerateButtons();
+        console.log('[DataIn] Validation enhancements complete');
+    }, 1000);
 });    // Show simulated hover hint on categories button for new users
     function showCategoriesButtonHint() {
         const categoryBtn = document.getElementById('datain-category-btn');

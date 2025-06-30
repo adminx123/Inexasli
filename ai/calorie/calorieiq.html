@@ -92,6 +92,8 @@
 <script type="module">
 import { initAutoExpandTextareas } from '../styles/inputFunctionality.js';
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
+// Temporarily disabled validation import until deployment
+// import { validateModuleData, displayValidationErrors, ValidationError } from '/utility/inputValidation.js';
 
 (function() {
   console.log("Calorie IQ script initializing");
@@ -115,6 +117,9 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         return;
       }
 
+      // Validation will be handled centrally by datain.js
+      const validatedFormData = formData;
+
       // Check rate limiting before proceeding
       if (isRateLimited('calorie', 8, 60 * 60 * 1000)) { // 8 requests per hour (as per rate-limiter config)
         alert('You have exceeded the request limit for calorie analysis. Please try again later.');
@@ -124,10 +129,10 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       // Get fingerprint data for rate limiting
       const fingerprintData = getFingerprintForWorker();
       
-      // Create combined payload with both form data and fingerprint
+      // Create combined payload with form data and fingerprint
       const workerPayload = {
         module: "calorie",
-        formData: formData,
+        formData: validatedFormData,
         fingerprint: fingerprintData
       };
 
