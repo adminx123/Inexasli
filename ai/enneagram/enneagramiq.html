@@ -108,8 +108,6 @@ I prefer working alone on complex problems"></textarea>
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 (function() {
-  console.log("Enneagram IQ script initializing");
-
   // Generate button handler - IMPLEMENTING COMPLETE CALORIEIQ ARCHITECTURE
   async function handleGenerateEnneagramIq() {
     try {
@@ -171,7 +169,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
           }
         });
         document.dispatchEvent(event);
-        console.log('[EnneagramIQ] Dispatched api-response-received event');
       } catch (error) {
         if (backendResponse && dataContainer) {
           handleRateLimitResponse(dataContainer, backendResponse, true, 'EnneagramIQ');
@@ -186,14 +183,11 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
 
   // Simple initialization - set up event listeners
   function initialize() {
-    console.log("[EnneagramIQ] Initializing...");
-    
     // Set up generate button event listener - CRITICAL FUNCTIONALITY FROM CALORIEIQ TEMPLATE
     const generateBtn = document.getElementById('generate-enneagram-btn');
     if (generateBtn) {
       generateBtn.removeEventListener('click', handleGenerateEnneagramIq);
       generateBtn.addEventListener('click', handleGenerateEnneagramIq);
-      console.log("[EnneagramIQ] Generate button event listener set up");
     } else {
       console.error("[EnneagramIQ] Generate button not found!");
     }
@@ -210,7 +204,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
   let guidedFormsInstance = null;
   
   function toggleGuidedForms() {
-    console.log('[EnneagramIQ] Toggling guided forms');
     const toggleBtn = document.getElementById('guided-forms-toggle');
     
     if (guidedFormsInstance) {
@@ -219,7 +212,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       guidedFormsInstance = null;
       toggleBtn.textContent = '🚀 Enable Guided Form';
       toggleBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-      console.log('[EnneagramIQ] Guided forms disabled');
     } else {
       // Enable guided forms
       if (window.GuidedFormSystem) {
@@ -236,7 +228,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         
         toggleBtn.textContent = '⏹️ Disable Guided Form';
         toggleBtn.style.background = 'linear-gradient(135deg, #ea667e 0%, #a24b76 100%)';
-        console.log('[EnneagramIQ] Guided forms enabled');
       } else {
         console.error('[EnneagramIQ] GuidedFormSystem not available');
         alert('Guided forms system is not loaded. Please refresh the page.');
@@ -252,8 +243,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
 
   // Initialize form persistence when DOM is ready
   function initializeEnneagramIQ() {
-    console.log("Enneagram IQ DOM ready, initializing form persistence");
-    
     // Import and initialize form persistence
     import('../../utility/formPersistence.js').then(module => {
       const FormPersistence = module.FormPersistence;
@@ -267,8 +256,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         singleSelection: [],
         multiSelection: ['enneagram-traits', 'enneagram-behaviors']
       });
-      
-      console.log("Enneagram IQ form persistence initialized");
       
       // Initialize the rest of the functionality after form persistence is set up
       runInitialization();
@@ -288,7 +275,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
   document.addEventListener('data-in-loaded', function(e) {
     const moduleType = e.detail?.moduleType;
     if (moduleType === 'enneagram') {
-      console.log("[EnneagramIQ] Enneagram module loaded through datain.js, reinitializing");
       runInitialization();
     }
   });
@@ -297,7 +283,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
   setTimeout(() => {
     const generateBtn = document.getElementById('generate-enneagram-btn');
     if (generateBtn && !generateBtn.onclick) {
-      console.log("[EnneagramIQ] Generate button found but no handler, trying initialization again");
       initialize();
     }
   }, 200);

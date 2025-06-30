@@ -702,8 +702,6 @@
   <script>
     // Run immediately without waiting for DOMContentLoaded
     (function() {
-      console.log('Enneagram API Output script running');
-     
       const getLocal = window.getLocal || function(key) {
         try {
           const value = localStorage.getItem(key);
@@ -1026,13 +1024,11 @@
       function updateOutput() {
         const outputSpan = document.getElementById('output-span');
         if (!outputSpan) {
-          console.log('Output span not found, will retry');
           setTimeout(updateOutput, 100);
           return;
         }
         
         const responseKey = 'enneagramIqResponse';
-        console.log('Looking for data with key:', responseKey);
         let data;
         
         try {
@@ -1074,10 +1070,8 @@
               });
               // Success toast removed per user request
             }, 100);
-            console.log('Data displayed successfully');
           } else {
             outputSpan.innerHTML = '';
-            console.log('No data found for key: enneagramIqResponse');
           }
         } catch (err) {
           console.error('Error processing data:', err);
@@ -1094,16 +1088,13 @@
       function initializeCopyButton() {
         if (window.copyUtil && window.copyUtil.init) {
           try {
-            console.log('Initializing copy button for enneagram output...');
             window.copyUtil.init({
               containerId: 'output-span'
             });
-            console.log('Copy button initialized successfully');
           } catch (err) {
             console.error('Error initializing copy button:', err);
           }
         } else {
-          console.log('Copy utility not available yet, retrying...');
           // Retry after a short delay if copy.js hasn't loaded yet
           setTimeout(initializeCopyButton, 500);
         }
