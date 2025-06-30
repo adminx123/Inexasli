@@ -203,8 +203,6 @@
   <script>
     // Run immediately without waiting for DOMContentLoaded
     (function() {
-      console.log('Philosophy API Output script running');
-      
       // Reference the global utility functions
       const getLocal = window.getLocal || function(key) {
         try {
@@ -230,14 +228,12 @@
       function updateOutput() {
         const outputSpan = document.getElementById('output-span');
         if (!outputSpan) {
-          console.log('Output span not found, will retry');
           setTimeout(updateOutput, 100);
           return;
         }
 
         // Specifically look for philosophyIqResponse data
         const responseKey = 'philosophyIqResponse';
-        console.log('Looking for data with key:', responseKey);
         
         // Try several approaches to get the data
         let data;
@@ -290,7 +286,6 @@
               const rawData = localStorage.getItem(responseKey);
               if (rawData) {
                 data = JSON.parse(rawData);
-                console.log('Retrieved data directly from localStorage');
               }
             }
             
@@ -301,7 +296,6 @@
             
             // Get the philosophical wisdom if it's nested in an object
             if (data && data.philosophicalWisdom) {
-              console.log('Found philosophicalWisdom property, using it');
               data = data.philosophicalWisdom;
             }
           }
@@ -318,10 +312,8 @@
           } else {
             outputSpan.textContent = data;
           }
-          console.log('Data displayed successfully');
         } else {
           outputSpan.innerHTML = '';
-          console.log('No data found for key:', responseKey);
         }
       }
       
