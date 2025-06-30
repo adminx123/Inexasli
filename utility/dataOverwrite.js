@@ -170,12 +170,9 @@ function showDataOverwriteError() {
     const errorContent = `
         <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
             <div style="color: #dc3545; font-size: 48px; margin-bottom: 20px;">✗</div>
-            <p style="color: #555; font-size: 0.95rem; margin-bottom: 20px;">
+            <p style="color: #555; font-size: 0.95rem; margin: 0;">
                 Error occurred. Try again.
             </p>
-            <button onclick="window.closeModal()" style="margin: 0;">
-                Close
-            </button>
         </div>
     `;
     

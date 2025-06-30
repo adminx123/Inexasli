@@ -42,7 +42,7 @@ function injectModalCSS() {
     padding: 20px;
     gap: 20px;
     width: 90%;
-    max-width: 800px;
+    max-width: 480px;
     height: 90%;
     max-height: 90vh;
     overflow: auto;
@@ -53,11 +53,17 @@ function injectModalCSS() {
     box-shadow: 0 8px 32px rgba(74, 124, 89, 0.12), 0 4px 16px rgba(74, 124, 89, 0.08), 0 1px 4px rgba(74, 124, 89, 0.04);
     transform: scale(0.95);
     transition: all 0.3s ease;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.modal-content::-webkit-scrollbar {
+    display: none;
 }
 
 .modal-content.device-container {
-    max-width: 480px;
     width: 100%;
+    max-width: 480px;
     margin: 0 auto;
     box-sizing: border-box;
     background-color: rgba(255, 255, 255, 0.95);
@@ -70,6 +76,9 @@ function injectModalCSS() {
     max-height: 85vh;
     align-items: center;
     text-align: center;
+    width: 100%;
+    max-width: 480px;
+    padding: 12px;
 }
 
 .modal-content iframe {
@@ -125,6 +134,56 @@ function injectModalCSS() {
     box-shadow: 2px 2px 0 #000;
 }
 
+/* Markdown-style content formatting */
+.modal-content .markdown-content {
+    line-height: 1.6;
+    text-align: left;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.modal-content .markdown-content::-webkit-scrollbar {
+    display: none;
+}
+
+.modal-content .markdown-content strong,
+.modal-content .markdown-content b {
+    font-weight: bold;
+    color: #2d5a3d;
+    font-family: "Geist", sans-serif;
+}
+
+/* Handle **text** patterns in content */
+.modal-content .markdown-content {
+    white-space: pre-line;
+}
+
+/* Legal document formatting - remove bullets, use clean numbered structure */
+.modal-content .markdown-content div {
+    margin-bottom: 16px;
+}
+
+.modal-content .markdown-content h3 {
+    color: #2d5a3d;
+    font-family: "Geist", sans-serif;
+    font-size: 1.1em;
+    margin: 20px 0 12px 0;
+    border-bottom: 1px solid rgba(45, 90, 61, 0.2);
+    padding-bottom: 4px;
+}
+
+/* Convert bullet points to clean paragraphs */
+.modal-content .legal-section {
+    margin-bottom: 20px;
+    padding: 12px 0;
+}
+
+.modal-content .legal-subsection {
+    margin: 8px 0;
+    padding-left: 0;
+    line-height: 1.5;
+}
+
 @media (min-width: 800px) {
     .modal {
         padding: 50px;
@@ -135,7 +194,7 @@ function injectModalCSS() {
     .modal-content {
         padding: 15px;
         width: 90%;
-        max-width: 300px;
+        max-width: 480px;
     }
     
     .modal-content button {
@@ -274,6 +333,9 @@ function openCustomModal(htmlContent, options = {}) {
     // Clear existing content and add custom content
     modalContent.innerHTML = htmlContent;
     
+    // Process markdown-style formatting in content
+    processMarkdownContent(modalContent);
+    
     // Apply custom content styling
     modalContent.classList.add('custom-content');
     
@@ -315,6 +377,47 @@ function openCustomModal(htmlContent, options = {}) {
     }
     
     return modal;
+}
+
+// Process markdown-style formatting in modal content
+function processMarkdownContent(container) {
+    // Find all text nodes and process them for **text** patterns and bullet points
+    const walker = document.createTreeWalker(
+        container,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+    );
+    
+    const textNodes = [];
+    let node;
+    while (node = walker.nextNode()) {
+        textNodes.push(node);
+    }
+    
+    textNodes.forEach(textNode => {
+        let content = textNode.textContent;
+        let changed = false;
+        
+        // Replace **text** with <strong>text</strong>
+        if (content.includes('**')) {
+            content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            changed = true;
+        }
+        
+        // Remove bullet points and clean up formatting
+        if (content.includes('- ')) {
+            content = content.replace(/^- /gm, '');
+            changed = true;
+        }
+        
+        if (changed) {
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = content;
+            wrapper.className = 'legal-subsection';
+            textNode.parentNode.replaceChild(wrapper, textNode);
+        }
+    });
 }
 
 // Helper function to remove existing event listeners
