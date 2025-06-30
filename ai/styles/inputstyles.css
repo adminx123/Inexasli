@@ -36,18 +36,86 @@ body::before {
 }
 
 /* Headings */
+h1 {
+  font-family: "Geist", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #2d5a3d;
+  text-align: center;
+  margin: 8px auto 16px auto;
+  max-width: 460px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(200, 220, 205, 1) 0%, rgba(185, 210, 195, 1) 100%);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 8px rgba(74, 124, 89, 0.15);
+  transition: all 0.2s ease;
+}
+
+h1:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 124, 89, 0.22);
+}
+
 h2 {
   font-family: "Geist", sans-serif;
-  margin: 0;
-  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #2d5a3d;
+  text-align: center;
+  margin: 8px auto 12px auto;
+  max-width: 460px;
+  padding: 10px 14px;
+  background: rgba(210, 230, 218, 1);
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+h2:hover {
+  background: rgba(195, 220, 205, 1);
 }
 
 h3 {
-  text-align: center;
+  font-family: "Geist", sans-serif;
   font-size: 18px;
-  margin-bottom: 15px;
-  border-bottom: 2px solid black;
-  padding-bottom: 5px;
+  font-weight: 500;
+  color: #2d5a3d;
+  text-align: center;
+  margin: 8px auto 12px auto;
+  max-width: 460px;
+  padding: 8px 12px;
+  background: rgba(218, 238, 225, 1);
+  border-radius: 6px;
+  border: 1px solid transparent;
+  box-shadow: 0 1px 3px rgba(74, 124, 89, 0.1);
+  transition: all 0.2s ease;
+}
+
+h3:hover {
+  background: rgba(205, 230, 215, 1);
+  transform: translateY(-0.5px);
+}
+
+/* Mobile responsive headings */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 22px;
+    padding: 10px 12px;
+    margin: 6px auto 12px auto;
+  }
+  
+  h2 {
+    font-size: 18px;
+    padding: 8px 10px;
+    margin: 6px auto 10px auto;
+  }
+  
+  h3 {
+    font-size: 16px;
+    padding: 6px 8px;
+    margin: 6px auto 8px auto;
+  }
 }
 
 /* Links (for logo link) */
