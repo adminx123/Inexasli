@@ -243,9 +243,10 @@ export function handleRateLimitResponse(container, response, showError = true, m
         console.log('[RateLimit] rateLimitStatus created from backend response:', dailyStatus);
     } else if (isPaidUser) {
         // Create rateLimitStatus for paid users even if backend response is empty
+        // IMPORTANT: If backend rates change in rateLimit.js CONFIG.RATE_LIMITS, update these hardcoded values too
         const paidUserStatus = {
-            remaining: { perDay: 5 }, // Default paid user limit
-            limits: { perDay: 5 },
+            remaining: { perDay: 5 }, // Default paid user limit - MUST MATCH backend PAID.perDay
+            limits: { perDay: 5 },     // MUST MATCH backend PAID.perDay
             isPaid: true,
             allowed: true,
             email: localStorage.getItem('userEmail') ? decodeURIComponent(localStorage.getItem('userEmail')) : null,
@@ -389,9 +390,10 @@ export function ensureRateLimitStatusForPaidUser() {
         if (isPaidUser && !existingStatus) {
             console.log('[RateLimit][DEBUG] 🚀 CREATING rateLimitStatus for paid user!');
             
+            // IMPORTANT: If backend rates change in rateLimit.js CONFIG.RATE_LIMITS, update these hardcoded values too
             const paidUserStatus = {
-                remaining: { perDay: 5 }, // Default paid user limit
-                limits: { perDay: 5 },
+                remaining: { perDay: 5 }, // Default paid user limit - MUST MATCH backend PAID.perDay
+                limits: { perDay: 5 },     // MUST MATCH backend PAID.perDay
                 isPaid: true,
                 allowed: true,
                 email: localStorage.getItem('userEmail') ? decodeURIComponent(localStorage.getItem('userEmail')) : null,
