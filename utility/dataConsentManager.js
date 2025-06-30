@@ -424,34 +424,43 @@
         if (viewTermsLink) {
             viewTermsLink.addEventListener('click', function(e) {
                 e.preventDefault();
-                // Use modal.js to show the terms
-                if (typeof window.openModal === 'function') {
-                    // Hide the consent modal temporarily
-                    const consentOverlay = document.getElementById('dataConsentOverlay');
-                    if (consentOverlay) {
-                        consentOverlay.style.display = 'none';
-                        
-                        // Temporarily unfreeze the page for the legal modal
-                        unfreezePage();
-                        
-                        // Set up a one-time listener for when the modal closes
-                        const handleModalClosed = () => {
-                            // Show the consent modal again
-                            consentOverlay.style.display = 'flex';
-                            
-                            // Refreeze the page
-                            const newUnfreezePage = freezePage();
-                            
-                            // Update the unfreeze function reference for other event handlers
-                            Object.defineProperty(this, 'unfreezePage', { value: newUnfreezePage, writable: true });
-                            
-                            // Remove the event listener
-                            document.removeEventListener('modalClosed', handleModalClosed);
-                        };
-                        
-                        document.addEventListener('modalClosed', handleModalClosed);
-                    }
+                
+                // Hide the consent modal temporarily if it's showing
+                const consentOverlay = document.getElementById('dataConsentOverlay');
+                if (consentOverlay && typeof window.openModal === 'function') {
+                    consentOverlay.style.display = 'none';
                     
+                    // Temporarily unfreeze the page for the legal modal
+                    unfreezePage();
+                    
+                    // Set up a one-time listener for when the modal closes
+                    const handleModalClosed = () => {
+                        // Show the consent modal again
+                        consentOverlay.style.display = 'flex';
+                        
+                        // Refreeze the page
+                        const newUnfreezePage = freezePage();
+                        
+                        // Update the unfreeze function reference for other event handlers
+                        Object.defineProperty(this, 'unfreezePage', { value: newUnfreezePage, writable: true });
+                        
+                        // Remove the event listener
+                        document.removeEventListener('modalClosed', handleModalClosed);
+                    };
+                    
+                    document.addEventListener('modalClosed', handleModalClosed);
+                }
+                
+                // Try to use the legal modal first
+                if (typeof window.openLegalModal === 'function') {
+                    window.openLegalModal();
+                } else if (typeof window.openTermsOfService === 'function') {
+                    window.openTermsOfService();
+                } else if (typeof window.showTermsOfService === 'function') {
+                    window.showTermsOfService();
+                } else if (typeof window.showLegal === 'function') {
+                    window.showLegal();
+                } else if (typeof window.openModal === 'function') {
                     // Open the legal modal
                     window.openModal('/legal.txt');
                 } else {

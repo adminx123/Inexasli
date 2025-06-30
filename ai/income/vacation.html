@@ -288,7 +288,7 @@
  
      <div id="TERMS-modal" class="modal">
          <div class="modal-content">
-             <iframe src="/budget/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
+             <iframe src="/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
          </div>
      </div>
  
@@ -297,6 +297,7 @@
      </div>
  
      <script src="/utility/modal.js"></script>
+     <script src="/utility/legal.js"></script>
      <script src="/utility/toolTip.js"></script>
  
      <!-- Merged JavaScript from vacation.js with getJSON and setJSON implementation -->
@@ -620,6 +621,30 @@
      document.addEventListener('DOMContentLoaded', () => {
          console.log('DOMContentLoaded event fired');
          loadLocalStorage();
+
+         // Add click handler for Terms of Service link
+         const termsLink = document.getElementById('TERMS_MODAL_OPEN');
+         if (termsLink) {
+             termsLink.addEventListener('click', (e) => {
+                 e.preventDefault();
+                 // Try to use the legal modal first
+                 if (typeof window.openLegalModal === 'function') {
+                     window.openLegalModal();
+                 } else if (typeof window.openTermsOfService === 'function') {
+                     window.openTermsOfService();
+                 } else if (typeof window.showTermsOfService === 'function') {
+                     window.showTermsOfService();
+                 } else if (typeof window.showLegal === 'function') {
+                     window.showLegal();
+                 } else if (typeof window.openModal === 'function') {
+                     // Fallback to iframe modal
+                     window.openModal('/legal.txt');
+                 } else {
+                     // Final fallback
+                     window.open('/legal.txt', '_blank');
+                 }
+             });
+         }
 
          document.querySelectorAll('.checkbox-button-group').forEach(group => {
              const checkboxes = group.querySelectorAll('input[type="checkbox"]');

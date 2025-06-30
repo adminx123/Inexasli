@@ -132,6 +132,43 @@ function createModal() {
 
 // Function to open the modal with specified content
 function openModal(contentSrc) {
+    // Check if this is a request for legal content - use dedicated legal modal instead
+    if (contentSrc === '/legal.txt') {
+        // Try to use the legal modal first
+        if (typeof window.openLegalModal === 'function') {
+            window.openLegalModal();
+            return;
+        } else if (typeof window.openTermsOfService === 'function') {
+            window.openTermsOfService();
+            return;
+        } else if (typeof window.showTermsOfService === 'function') {
+            window.showTermsOfService();
+            return;
+        } else if (typeof window.showLegal === 'function') {
+            window.showLegal();
+            return;
+        }
+        // If no legal modal functions available, load the legal module
+        import('/utility/legal.js').then(() => {
+            if (typeof window.openLegalModal === 'function') {
+                window.openLegalModal();
+            } else {
+                // Fallback to iframe if legal module fails
+                openModalWithIframe(contentSrc);
+            }
+        }).catch(() => {
+            // Fallback to iframe if import fails
+            openModalWithIframe(contentSrc);
+        });
+        return;
+    }
+    
+    // For non-legal content, use the regular iframe modal
+    openModalWithIframe(contentSrc);
+}
+
+// Separate function for iframe-based modals
+function openModalWithIframe(contentSrc) {
     const modal = createModal();
     const modalContent = modal.querySelector('.modal-content');
     
@@ -165,7 +202,7 @@ function openModal(contentSrc) {
     };
     document.addEventListener('click', activeClickOutsideHandler);
 
-    // Use device-container class for legal modals
+    // Use device-container class for legal modals (legacy support)
     if (contentSrc === '/legal.txt') {
         modalContent.classList.add('device-container');
     } else {

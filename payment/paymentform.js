@@ -87,22 +87,20 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.log('Payment form and processing initialized');
     }
 
-    // Create legal modal function - simple alert for now
-    window.openLegalModal = async function() {
+    // Load and initialize legal modal
+    if (!window.openLegalModal) {
         try {
-            // Close payment modal if it's open
-            if (typeof window.closePaymentModal === 'function') {
-                window.closePaymentModal();
-            }
-            
-            // Simple alert for legal content for now
-            alert('Terms of Service functionality will be added.');
-            
+            // Dynamically import the legal module
+            const legalModule = await import('/utility/legal.js');
+            console.log('[PaymentForm] Legal module loaded successfully');
         } catch (error) {
-            console.error('Failed to load legal content:', error);
-            alert('Failed to load Terms of Service. Please try again.');
+            console.error('[PaymentForm] Failed to load legal module:', error);
+            // Fallback function if legal.js fails to load
+            window.openLegalModal = function() {
+                alert('Terms of Service functionality is temporarily unavailable. Please try again later.');
+            };
         }
-    };
+    }
 
     // Add event listener for Terms of Service button
     document.addEventListener('click', function(e) {

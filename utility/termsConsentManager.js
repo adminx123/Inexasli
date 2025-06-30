@@ -4,6 +4,21 @@
  * User must check both boxes to continue. Styled like the original modals.
  */
 (function() {
+  // Load legal modal functionality
+  async function loadLegalModule() {
+    if (!window.openLegalModal) {
+      try {
+        await import('/utility/legal.js');
+        console.log('[TermsConsentManager] Legal module loaded successfully');
+      } catch (error) {
+        console.warn('[TermsConsentManager] Failed to load legal module:', error);
+      }
+    }
+  }
+  
+  // Load legal module immediately
+  loadLegalModule();
+
   const STORAGE_KEY = 'userLegalStatus';
   const COOKIE_NAME = 'user_legal_status';
   const EXPIRY_DAYS = 365;
@@ -102,8 +117,17 @@
     // View full terms link
     modal.querySelector('#view-terms-link').onclick = function(e) {
       e.preventDefault();
-      if (typeof window.openModal === 'function') {
-        // Use a higher z-index for the modal.js modal
+      // Try to use the legal modal first
+      if (typeof window.openLegalModal === 'function') {
+        window.openLegalModal();
+      } else if (typeof window.openTermsOfService === 'function') {
+        window.openTermsOfService();
+      } else if (typeof window.showTermsOfService === 'function') {
+        window.showTermsOfService();
+      } else if (typeof window.showLegal === 'function') {
+        window.showLegal();
+      } else if (typeof window.openModal === 'function') {
+        // Use a higher z-index for the modal.js modal as fallback
         setTimeout(() => {
           const modalEls = document.querySelectorAll('.modal');
           modalEls.forEach(m => m.style.zIndex = '1000001');
