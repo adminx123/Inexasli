@@ -391,3 +391,26 @@ export function validateModuleData(moduleName, formData) {
   
   return validated;
 }
+
+/**
+ * Sanitize error messages from backend to prevent XSS
+ * @param {string} message - The error message to sanitize
+ * @returns {string} - Sanitized error message
+ */
+export function sanitizeErrorMessage(message) {
+    if (!message || typeof message !== 'string') {
+        return 'An error occurred';
+    }
+    
+    // HTML entity encoding for error messages
+    return message.replace(/[<>&"']/g, (char) => {
+        const entities = {
+            '<': '&lt;',
+            '>': '&gt;',
+            '&': '&amp;',
+            '"': '&quot;',
+            "'": '&#x27;'
+        };
+        return entities[char];
+    });
+}

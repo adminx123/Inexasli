@@ -1,5 +1,7 @@
 // paymentform.js
 document.addEventListener('DOMContentLoaded', async function() {
+    // Import sanitizeErrorMessage function
+    const { sanitizeErrorMessage } = await import('../utility/inputValidation.js');
     // Skip external button creation - now integrated into datain.js
     console.log('[PaymentForm] Button creation skipped - integrated into datain.js');
     // createPaymentCornerButton();
@@ -821,7 +823,7 @@ async function initializePaymentProcessing() {
                         }, 2000);
                         
                     } else {
-                        payStatus.innerHTML = data.error || "Email verification failed. Please check your email or contact support.";
+                        payStatus.innerHTML = sanitizeErrorMessage(data.error) || "Email verification failed. Please check your email or contact support.";
                     }
                     
                 } catch (error) {
