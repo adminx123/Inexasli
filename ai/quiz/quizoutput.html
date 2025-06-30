@@ -374,7 +374,6 @@
       }
 
       function parseQuizContent(content) {
-        console.log('Parsing quiz content, type:', typeof content);
         
         // First try to parse as JSON (structured data from quiz.js)
         try {
@@ -382,11 +381,8 @@
           
           // Handle both direct object and stringified JSON
           if (typeof content === 'object' && content !== null) {
-            console.log('Content is already an object');
             jsonData = content;
           } else if (typeof content === 'string') {
-            console.log('Content is string, length:', content.length);
-            console.log('Content preview:', content.substring(0, 200) + '...');
             jsonData = JSON.parse(content);
           } else {
             throw new Error('Unsupported content type: ' + typeof content);
@@ -394,13 +390,10 @@
           
           // Check if it's the expected quiz structure
           if (jsonData.quizTitle && jsonData.questions && Array.isArray(jsonData.questions)) {
-            console.log('Successfully parsed structured JSON quiz data');
             return jsonData;
           } else {
-            console.log('Object does not have expected quiz structure. Keys:', Object.keys(jsonData));
           }
         } catch (e) {
-          console.log('Content is not valid JSON, trying text parsing...', e.message);
         }
         
         // If we get here, it's either not JSON or doesn't have the expected structure
@@ -430,27 +423,21 @@
           // Skip empty lines
           if (!line) continue;
           
-          console.log(`Line ${i}: "${line}"`);
-          
           // Check for quiz title - more flexible matching
           if (line.includes('Quiz Title') || line.includes('quiz') && line.includes('title')) {
             quiz.quizTitle = line.replace(/\*\*Quiz Title:\*\*/, '').replace('Quiz Title:', '').replace(/\*\*/g, '').trim();
-            console.log('Found title:', quiz.quizTitle);
             continue;
           }
           
           // Check for sections
           if (line.includes('Introduction') && !line.includes('**Questions')) {
             currentSection = 'introduction';
-            console.log('Switched to introduction section');
             continue;
           } else if (line.includes('Instructions')) {
             currentSection = 'instructions';
-            console.log('Switched to instructions section');
             continue;
           } else if (line.includes('Questions') && !line.includes('Instructions')) {
             currentSection = 'questions';
-            console.log('Switched to questions section');
             continue;
           }
           
@@ -459,7 +446,6 @@
           if (questionMatch && (currentSection === 'questions' || line.includes('Question'))) {
             // Save previous question
             if (currentQuestion) {
-              console.log('Saving previous question:', currentQuestion);
               quiz.questions.push(currentQuestion);
             }
             
@@ -471,7 +457,6 @@
               options: []
             };
             collectingQuestion = true;
-            console.log('Started new question:', currentQuestion.questionNumber, currentQuestion.questionText.substring(0, 50));
             continue;
           }
           
@@ -482,7 +467,6 @@
               letter: optionMatch[1],
               text: optionMatch[2]
             });
-            console.log('Added option:', optionMatch[1], optionMatch[2].substring(0, 30));
             continue;
           }
           
@@ -499,19 +483,15 @@
             // Continue collecting question text if it spans multiple lines
             if (!line.includes('A)') && !line.includes('B)') && !line.includes('C)') && !line.includes('D)')) {
               currentQuestion.questionText += ' ' + line;
-              console.log('Extended question text:', currentQuestion.questionText.substring(0, 50));
             }
           }
         }
 
         // Add the last question
         if (currentQuestion) {
-          console.log('Saving final question:', currentQuestion);
           quiz.questions.push(currentQuestion);
         }
 
-        console.log('Final parsed quiz:', quiz);
-        console.log('Questions found:', quiz.questions.length);
         
         return quiz;
       }
@@ -583,7 +563,6 @@
       }
       
       function parseQuizContentFallback(content) {
-        console.log('Using fallback parsing method...');
         const quiz = {
           title: 'Technical Analysis Quiz',
           introduction: 'Advanced quiz on stock market technical analysis focusing on chart patterns.',
@@ -629,18 +608,15 @@
               
               if (question.text && question.options.length > 0) {
                 quiz.questions.push(question);
-                console.log('Fallback found question:', questionNum, question.text.substring(0, 50));
               }
             }
           }
         }
         
-        console.log('Fallback parsing result:', quiz.questions.length, 'questions found');
         return quiz;
       }
 
       function createQuizHTML(quizData) {
-        console.log('Creating quiz HTML from data:', quizData);
         const quiz = parseQuizContent(quizData);
         
         const cleanTitle = cleanText(quiz.quizTitle || quiz.title);
@@ -720,12 +696,9 @@
           return;
         }
         const responseKey = 'quizIqResponse';
-        console.log('Looking for data with key:', responseKey);
         
         // First, let's check what's actually in localStorage
         const rawItem = localStorage.getItem(responseKey);
-        console.log('Raw localStorage item:', rawItem);
-        console.log('Raw item length:', rawItem ? rawItem.length : 'null');
         
         let data;
         try {
@@ -733,34 +706,20 @@
           
           // Handle nested response format if present
           if (data && data.message === 'Success' && data.data) {
-            console.log('Found nested data structure, using the data property');
             data = data.data;
           }
           
-          console.log('Parsed data:', data);
-          
           if (data) {
-            console.log('Data structure check:');
-            console.log('- Has data property:', !!data.data);
-            console.log('- Has message:', data.message);
-            console.log('- Has questions:', !!(data.data && data.data.questions));
             
             if (data.data && data.data.questions) {
               const contentType = typeof data.data.questions;
-              console.log('Quiz questions type:', contentType);
               if (contentType === 'string') {
-                console.log('Quiz questions length:', data.data.questions.length);
-                console.log('Quiz questions preview:', data.data.questions.substring(0, 500));
-                console.log('Quiz questions ends with:', data.data.questions.slice(-200));
               } else if (contentType === 'object') {
-                console.log('Quiz questions is object with keys:', Object.keys(data.data.questions));
-                console.log('Quiz questions preview:', JSON.stringify(data.data.questions).substring(0, 500));
               }
             }
           }
         } catch (err) {
           console.error('Error parsing JSON:', err);
-          console.log('Attempting to display raw content...');
           
           // If JSON parsing fails, show the raw content for debugging
           outputSpan.innerHTML = `
@@ -776,7 +735,6 @@
         }
         
         if (data) {
-          console.log('Quiz data found, creating HTML...');
           try {
             // Use the data directly - it's already extracted above
             const content = data;
@@ -843,13 +801,11 @@
             const quizHTML = createQuizHTML(data);
             outputSpan.innerHTML = quizHTML;
             setupQuizInteractivity();
-            console.log('Quiz displayed successfully');
           } catch (error) {
             console.error('Error creating quiz HTML:', error);
             outputSpan.innerHTML = '';
           }
         } else {
-          console.log('No quiz data found in expected format');
           outputSpan.innerHTML = '';
         }
       }
@@ -1315,9 +1271,6 @@
             submittedAt: new Date().toISOString(),
             totalQuestions: totalQuestions
           };
-          
-          console.log('Quiz submitted successfully!');
-          console.log('All answers:', allAnswers);
           
           // Evaluate quiz and show results
           const results = evaluateQuiz(allAnswers);
