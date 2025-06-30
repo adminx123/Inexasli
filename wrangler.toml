@@ -39,9 +39,7 @@ binding = "RATE_LIMIT_KV"
 id = "2da5e6f46847458a9aa83ffe54dea66e"
 preview_id = "2da5e6f46847458a9aa83ffe54dea66e"
 
-# Admin key for support operations
-[env.ratelimit.vars]
-ADMIN_KEY = "your-secure-admin-key-here"
+# No admin access required for user-facing application
 
 # --- Master Worker (Centralized - Includes All Modules) ---
 [env.master]
