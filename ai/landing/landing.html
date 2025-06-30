@@ -48,10 +48,10 @@
         const splash = temp.querySelector('#splash-screen');
         if (splash) document.body.insertBefore(splash, document.body.firstChild);
       })();
-      // Hide splash when page is fully loaded, but wait for faster animation + brief pause
+      // Hide splash when page is fully loaded, but wait for half-time animation + brief pause
       window.addEventListener('load', function() {
         var splash = document.getElementById('splash-screen');
-        var minTime = 5700; // milliseconds - wait for 30% faster animation (4.7s) + 1s pause
+        var minTime = 2850; // milliseconds - wait for 50% faster animation (2.35s) + 0.5s pause
         var elapsed = Date.now() - splashStart;
         var delay = Math.max(0, minTime - elapsed);
         setTimeout(function() {

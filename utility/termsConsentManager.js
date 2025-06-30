@@ -64,189 +64,75 @@
 
   // Show unified modal
   async function showUnifiedModal() {
-    const modal = document.createElement('div');
-    modal.className = 'terms-consent-overlay';
-    modal.innerHTML = `
-      <div class="terms-consent-modal">
-        <h2>Terms of Service & Data Consent</h2>
+    const htmlContent = `
+      <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
+        <h2 style="font-size: 1.2rem; color: #333; margin-top: 0; margin-bottom: 15px; font-family: 'Geist', sans-serif;">Terms of Service & Data Consent</h2>
         <div class="terms-section">
-          <div class="modal-align" style="margin-bottom:15px;">
+          <div style="margin-bottom:15px; text-align: left;">
             <span style="font-size:13px;margin-bottom:2px;">Please accept our <a href="#" id="view-terms-link" style="display:inline;">Terms of Service</a> to use our services.</span><br>
             <span style="font-size:12px;color:#666;display:block;margin-top:2px;">(last updated: ${LAST_UPDATED_DATE})</span>
           </div>
-          <label class="modal-align modal-label" style="display:block;margin-bottom:15px;">
-            <input type="checkbox" id="accept-terms"> I have read and accept the Terms of Service
+          <label style="display:block;margin-bottom:15px;font-size:13px;color:#222;text-align:left;cursor:pointer;user-select:none;">
+            <input type="checkbox" id="accept-terms" style="margin-right:8px;accent-color:#4a7c59;"> I have read and accept the Terms of Service
           </label>
         </div>
         <div class="consent-section">
-          <p class="modal-align" style="font-size:13px;margin-bottom:15px;">Please consent to the storage and processing of your data as described in our terms.</p>
-          <label class="modal-align modal-label" style="display:block;margin-bottom:15px;">
-            <input type="checkbox" id="accept-consent"> I consent to data storage and processing
+          <p style="font-size:13px;margin-bottom:15px;text-align:left;line-height:1.5;color:#666;">Please consent to the storage and processing of your data as described in our terms.</p>
+          <label style="display:block;margin-bottom:15px;font-size:13px;color:#222;text-align:left;cursor:pointer;user-select:none;">
+            <input type="checkbox" id="accept-consent" style="margin-right:8px;accent-color:#4a7c59;"> I consent to data storage and processing
           </label>
         </div>
-        <div class="modal-buttons modal-align">
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 18px;">
           <button id="accept-both" disabled>Accept & Continue</button>
         </div>
       </div>
     `;
-    // Only block pointer events on the overlay, not the whole body
-    modal.style.pointerEvents = 'auto';
-    modal.style.zIndex = '1000000';
-    document.body.appendChild(modal);
-    // Remove global pointer-events: none
-    document.body.classList.add('terms-consent-modal-active');
-    // Enable button only if both boxes checked
-    const btn = modal.querySelector('#accept-both');
-    const box1 = modal.querySelector('#accept-terms');
-    const box2 = modal.querySelector('#accept-consent');
-    function updateBtn() {
-      btn.disabled = !(box1.checked && box2.checked);
-    }
-    box1.addEventListener('change', updateBtn);
-    box2.addEventListener('change', updateBtn);
-    // Accept handler
-    btn.onclick = function() {
-      saveStatus({
-        termsAccepted: true,
-        consentGiven: true,
-        acceptedDate: new Date().toISOString()
-      });
-      document.body.classList.remove('terms-consent-modal-active');
-      modal.remove();
-    };
-    // View full terms link
-    modal.querySelector('#view-terms-link').onclick = function(e) {
-      e.preventDefault();
-      // Try to use the legal modal first
-      if (typeof window.openLegalModal === 'function') {
-        window.openLegalModal();
-      } else if (typeof window.openTermsOfService === 'function') {
-        window.openTermsOfService();
-      } else if (typeof window.showTermsOfService === 'function') {
-        window.showTermsOfService();
-      } else if (typeof window.showLegal === 'function') {
-        window.showLegal();
-      } else if (typeof window.openModal === 'function') {
-        // Use a higher z-index for the modal.js modal as fallback
-        setTimeout(() => {
-          const modalEls = document.querySelectorAll('.modal');
-          modalEls.forEach(m => m.style.zIndex = '1000001');
-        }, 10);
-        window.openModal('/legal.txt');
-      } else {
-        window.open('/legal.txt', '_blank');
-      }
-    };
-  }
 
-  // CSS (no global pointer-events)
-  const style = document.createElement('style');
-  style.textContent = `
-    .terms-consent-overlay {
-      position: fixed; top:0; left:0; width:100vw; height:100vh;
-      background: rgba(0,0,0,0.7); 
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      z-index: 1000000;
-      display: flex; align-items: center; justify-content: center;
-      font-family: "Inter", sans-serif;
-      pointer-events: auto;
-    }
-    .terms-consent-modal {
-      background-color: rgba(242, 249, 243, 0.95);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      padding: 20px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px rgba(74, 124, 89, 0.12), 0 4px 16px rgba(74, 124, 89, 0.08), 0 1px 4px rgba(74, 124, 89, 0.04);
-      max-width: 400px;
-      width: 90%;
-      text-align: center;
-      font-family: "Inter", sans-serif;
-      position: relative;
-      z-index: 1000001;
-      pointer-events: auto;
-      transform: scale(0.95);
-      transition: all 0.3s ease;
-    }
-    .terms-consent-modal h2 {
-      font-size: 1.2rem;
-      color: #333;
-      margin-top: 0;
-      margin-bottom: 15px;
-      font-family: "Geist", sans-serif;
-      text-align: center;
-    }
-    .terms-consent-modal p {
-      font-size: 13px;
-      line-height: 1.5;
-      color: #666;
-      margin-bottom: 15px;
-      text-align: left;
-    }
-    .terms-consent-modal label {
-      font-size: 13px;
-      color: #222;
-      margin-bottom: 0;
-      cursor: pointer;
-      user-select: none;
-      text-align: left;
-      display: block;
-    }
-    .terms-consent-modal input[type="checkbox"] {
-      margin-right: 8px;
-      accent-color: #4a7c59;
-    }
-    .modal-buttons { display: flex; justify-content: center; gap: 10px; margin-top: 18px; }
-    .modal-buttons button { 
-      background: rgba(45, 90, 61, 0.9); 
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: #fff; 
-      border: 1px solid rgba(255, 255, 255, 0.2); 
-      border-radius: 12px; 
-      padding: 12px 20px; 
-      font-size: 1em; 
-      cursor: pointer; 
-      font-weight: bold;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
-    }
-    .modal-buttons button:disabled { 
-      background: rgba(178, 178, 178, 0.7); 
-      cursor: not-allowed;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: none;
-    }
-    .modal-buttons button:hover:enabled { 
-      background: rgba(74, 124, 89, 0.95);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(45, 90, 61, 0.2);
-    }
-    
-    @media (max-width: 480px) {
-      .terms-consent-modal {
-        padding: 15px;
-        width: 90%;
-        max-width: 300px;
+    const modal = window.openCustomModal(htmlContent, {
+      maxWidth: '400px',
+      onOpen: (modal, modalContent) => {
+        // Enable button only if both boxes checked
+        const btn = modal.querySelector('#accept-both');
+        const box1 = modal.querySelector('#accept-terms');
+        const box2 = modal.querySelector('#accept-consent');
+        
+        function updateBtn() {
+          btn.disabled = !(box1.checked && box2.checked);
+        }
+        box1.addEventListener('change', updateBtn);
+        box2.addEventListener('change', updateBtn);
+        
+        // Accept handler
+        btn.onclick = function() {
+          saveStatus({
+            termsAccepted: true,
+            consentGiven: true,
+            acceptedDate: new Date().toISOString()
+          });
+          window.closeModal();
+        };
+        
+        // View full terms link
+        modal.querySelector('#view-terms-link').onclick = function(e) {
+          e.preventDefault();
+          // Try to use the legal modal first
+          if (typeof window.openLegalModal === 'function') {
+            window.openLegalModal();
+          } else if (typeof window.openTermsOfService === 'function') {
+            window.openTermsOfService();
+          } else if (typeof window.showTermsOfService === 'function') {
+            window.showTermsOfService();
+          } else if (typeof window.showLegal === 'function') {
+            window.showLegal();
+          } else if (typeof window.openModal === 'function') {
+            window.openModal('/legal.txt');
+          } else {
+            window.open('/legal.txt', '_blank');
+          }
+        };
       }
-      .terms-consent-modal h2 {
-        font-size: 1.1rem;
-      }
-      .terms-consent-modal p {
-        font-size: 12px;
-      }
-      .terms-consent-modal label {
-        font-size: 12px;
-      }
-      .modal-buttons button {
-        padding: 8px 14px;
-        font-size: 0.9em;
-      }
-    }
-  `;
-  document.head.appendChild(style);
+    });
+  }
 
   // No longer show modal automatically on page load
   // Modal will be triggered by datain.js when container expands

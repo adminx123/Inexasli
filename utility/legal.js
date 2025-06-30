@@ -168,223 +168,44 @@ You agree that your use of the Services is at your own risk, understanding the e
 };
 
 /**
- * Create and show the legal modal
+ * Create and show the legal modal using unified modal system
  */
 function createLegalModal() {
-    // Remove existing modal if present
-    const existingModal = document.getElementById('legal-modal-backdrop');
-    if (existingModal) {
-        existingModal.remove();
-    }
+    console.log('[Legal] Creating Terms of Service modal');
 
-    // Create modal backdrop
-    const modalBackdrop = document.createElement('div');
-    modalBackdrop.id = 'legal-modal-backdrop';
-    modalBackdrop.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-        z-index: 1000001;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        padding: 20px;
-        box-sizing: border-box;
+    // Generate HTML content for all sections
+    let sectionsHtml = '';
+    
+    // Add disclaimer at the top
+    sectionsHtml += `
+        <div style="margin-bottom: 20px; padding: 15px; background-color: rgba(255, 0, 0, 0.1); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 8px;">
+            <p style="margin: 0; font-size: 0.9em; line-height: 1.4; color: #d32f2f; font-weight: 500;">${TERMS_OF_SERVICE.disclaimer}</p>
+        </div>
     `;
-
-    // Create modal container
-    const modalContainer = document.createElement('div');
-    modalContainer.style.cssText = `
-        background: white;
-        border-radius: 16px;
-        width: 100%;
-        max-width: 480px;
-        max-height: 90vh;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        display: flex;
-        flex-direction: column;
-        transform: scale(0.9) translateY(20px);
-        transition: all 0.3s ease;
-        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    `;
-
-    // Create header (without close button)
-    const header = document.createElement('div');
-    header.style.cssText = `
-        padding: 24px 28px 16px;
-        border-bottom: 1px solid #e5e7eb;
-        text-align: center;
-        flex-shrink: 0;
-    `;
-
-    const title = document.createElement('h2');
-    title.textContent = 'Terms of Service';
-    title.style.cssText = `
-        margin: 0;
-        font-size: 24px;
-        font-weight: 700;
-        color: #111827;
-        line-height: 1.2;
-    `;
-
-    header.appendChild(title);
-
-    // Create content area
-    const content = document.createElement('div');
-    content.style.cssText = `
-        padding: 0 28px 28px;
-        overflow-y: auto;
-        flex: 1;
-        line-height: 1.6;
-        color: #374151;
-    `;
-
-    // Add main disclaimer
-    const disclaimerDiv = document.createElement('div');
-    disclaimerDiv.style.cssText = `
-        background: #fef3c7;
-        border: 1px solid #f59e0b;
-        border-radius: 8px;
-        padding: 16px;
-        margin-bottom: 24px;
-        font-size: 14px;
-        line-height: 1.5;
-    `;
-    disclaimerDiv.innerHTML = `<strong>Important:</strong> ${TERMS_OF_SERVICE.disclaimer.replace(/\*/g, '')}`;
-
-    content.appendChild(disclaimerDiv);
-
-    // Add sections
-    TERMS_OF_SERVICE.sections.forEach(section => {
-        const sectionDiv = document.createElement('div');
-        sectionDiv.style.cssText = `
-            margin-bottom: 32px;
+    
+    // Add all sections
+    TERMS_OF_SERVICE.sections.forEach((section, index) => {
+        sectionsHtml += `
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #2d5a3d; margin: 0 0 10px 0; font-size: 1.1em; font-family: 'Geist', sans-serif;">${section.title}</h3>
+                <div style="font-size: 0.95em; line-height: 1.5; color: #333; white-space: pre-line;">${section.content}</div>
+            </div>
         `;
-
-        const sectionTitle = document.createElement('h3');
-        sectionTitle.textContent = section.title;
-        sectionTitle.style.cssText = `
-            font-size: 20px;
-            font-weight: 600;
-            color: #111827;
-            margin: 0 0 16px 0;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e5e7eb;
-        `;
-
-        const sectionContent = document.createElement('div');
-        sectionContent.style.cssText = `
-            font-size: 15px;
-            line-height: 1.7;
-            white-space: pre-line;
-        `;
-        
-        // Process markdown-style formatting
-        let processedContent = section.content
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\- (.*?)(?=\n|$)/g, '• $1');
-        
-        sectionContent.innerHTML = processedContent;
-
-        sectionDiv.appendChild(sectionTitle);
-        sectionDiv.appendChild(sectionContent);
-        content.appendChild(sectionDiv);
     });
 
-    // Add acceptance section
-    const acceptanceDiv = document.createElement('div');
-    acceptanceDiv.style.cssText = `
-        background: #f0fdf4;
-        border: 1px solid #10b981;
-        border-radius: 8px;
-        padding: 20px;
-        margin-top: 24px;
-        font-size: 15px;
-        line-height: 1.6;
-    `;
-    acceptanceDiv.innerHTML = `<strong>Acceptance:</strong><br>${TERMS_OF_SERVICE.acceptance}`;
-
-    content.appendChild(acceptanceDiv);
-
-    // Create footer with contact info
-    const footer = document.createElement('div');
-    footer.style.cssText = `
-        padding: 16px 28px;
-        border-top: 1px solid #e5e7eb;
-        background: #f9fafb;
-        border-radius: 0 0 16px 16px;
-        text-align: center;
-        font-size: 14px;
-        color: #6b7280;
-        flex-shrink: 0;
-    `;
-    footer.innerHTML = `
-        For questions or concerns about these terms, contact us at: 
-        <a href="mailto:support@inexasli.com" style="color: #2563eb; text-decoration: none;">support@inexasli.com</a>
+    const htmlContent = `
+        <div style="text-align: left; font-family: 'Inter', sans-serif; width: 100%; max-height: 70vh; overflow-y: auto;">
+            <h2 style="color: #2d5a3d; margin-top: 0; margin-bottom: 20px; font-size: 1.3em; font-family: 'Geist', sans-serif; text-align: center;">${TERMS_OF_SERVICE.title}</h2>
+            ${sectionsHtml}
+            <div style="display: flex; justify-content: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(74, 124, 89, 0.2);">
+                <button onclick="window.closeModal()" style="margin: 0;">Close</button>
+            </div>
+        </div>
     `;
 
-    // Assemble modal
-    modalContainer.appendChild(header);
-    modalContainer.appendChild(content);
-    modalContainer.appendChild(footer);
-    modalBackdrop.appendChild(modalContainer);
-
-    // Add event listeners
-    const closeModal = () => {
-        modalBackdrop.style.opacity = '0';
-        modalContainer.style.transform = 'scale(0.9) translateY(20px)';
-        setTimeout(() => {
-            if (modalBackdrop.parentNode) {
-                modalBackdrop.remove();
-                // Dispatch modalClosed event for other components that may be listening
-                document.dispatchEvent(new CustomEvent('modalClosed', { 
-                    detail: { modalType: 'legal' } 
-                }));
-            }
-        }, 300);
-    };
-
-    // Close on backdrop click (not on modal content click)
-    modalBackdrop.addEventListener('click', (e) => {
-        if (e.target === modalBackdrop) {
-            closeModal();
-        }
+    window.openCustomModal(htmlContent, {
+        maxWidth: '800px'
     });
-
-    // Keyboard support
-    const handleKeydown = (e) => {
-        if (e.key === 'Escape') {
-            closeModal();
-            document.removeEventListener('keydown', handleKeydown);
-        }
-    };
-    document.addEventListener('keydown', handleKeydown);
-
-    // Add to DOM and animate in
-    document.body.appendChild(modalBackdrop);
-    
-    // Force reflow
-    modalBackdrop.offsetHeight;
-    
-    // Animate in
-    modalBackdrop.style.opacity = '1';
-    modalContainer.style.transform = 'scale(1) translateY(0)';
-
-    // Focus management for accessibility - focus the modal container
-    modalContainer.setAttribute('tabindex', '-1');
-    modalContainer.focus();
-
-    return {
-        modal: modalBackdrop,
-        close: closeModal
-    };
 }
 
 /**

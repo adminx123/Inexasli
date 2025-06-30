@@ -9,30 +9,11 @@
         document.head.appendChild(boxIconsLink);
     }
 
-    // Create modal HTML
+    // Create FAQ modal content
     function createFaqModal() {
-        if (document.getElementById('faq-modal-backdrop')) return; // Only one modal
-        const backdrop = document.createElement('div');
-        backdrop.id = 'faq-modal-backdrop';
-        backdrop.style = `
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.7); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 9999; display: flex; align-items: center; justify-content: center;`;
-        const modal = document.createElement('div');
-        modal.id = 'faq-modal-content';
-        modal.style = `
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 16px; 
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
-            max-width: 95vw; width: 420px; max-height: 85vh; overflow-y: auto;
-            padding: 24px; position: relative; font-family: 'Inter', sans-serif;
-            transform: scale(0.95); transition: all 0.3s ease;`;
-        modal.innerHTML = `
+        if (document.querySelector('.modal[style*="flex"]')) return; // Prevent multiple modals
+        
+        const htmlContent = `
             <h2 style="margin-top:0;font-size:1.4em;color:#4a7c59;text-align:center;margin-bottom:20px;">Tips & FAQ</h2>
             
             <div style="margin-bottom:20px;">
@@ -73,12 +54,15 @@
                 Have questions or suggestions?<br>
                 <a href="mailto:info@inexasli.com" style="color:#4a7c59;text-decoration:none;font-weight:500;">info@inexasli.com</a>
             </div>
+
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <button onclick="window.closeModal()" style="margin: 0;">Got It</button>
+            </div>
         `;
-        backdrop.appendChild(modal);
-        document.body.appendChild(backdrop);
-        backdrop.onclick = function(e) {
-            if (e.target === backdrop) document.body.removeChild(backdrop);
-        };
+
+        window.openCustomModal(htmlContent, {
+            maxWidth: '420px'
+        });
     }
 
     // Expose to window

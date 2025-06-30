@@ -139,7 +139,7 @@ function addPaymentModalStyles() {
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             display: none;
@@ -147,6 +147,8 @@ function addPaymentModalStyles() {
             align-items: center;
             z-index: 20000;
             font-family: "Inter", sans-serif;
+            padding: 30px;
+            overflow-y: auto;
         }
         
         .payment-modal-content {
@@ -216,28 +218,30 @@ function addPaymentModalStyles() {
         }
         
         .payment-pay-button {
+            background: rgba(45, 90, 61, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
             padding: 14px 20px;
-            background-color: #f2f9f3;
-            color: #2d5a3d;
-            border: 1px solid #4a7c59;
-            border-radius: 8px;
             font-size: 14px;
             cursor: pointer;
             font-family: 'Geist', sans-serif;
             font-weight: bold;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
         }
         
         .payment-pay-button:hover {
-            background-color: #eef7f0;
+            background: rgba(74, 124, 89, 0.95);
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(74, 124, 89, 0.3);
+            box-shadow: 0 6px 20px rgba(45, 90, 61, 0.2);
         }
         
         .payment-pay-button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0 #000;
         }
         
         .payment-button-row {
@@ -248,54 +252,66 @@ function addPaymentModalStyles() {
         
         .payment-support-link {
             width: 100%;
-            padding: 10px 12px;
-            background-color: #f2f9f3;
-            color: #2d5a3d;
-            border: 1px solid #4a7c59;
-            border-radius: 6px;
+            padding: 12px 20px;
+            background: rgba(45, 90, 61, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
             font-size: 12px;
             cursor: pointer;
             font-family: 'Geist', sans-serif;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            font-weight: bold;
+            transition: all 0.3s ease;
             text-decoration: none;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
+            box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
             box-sizing: border-box;
         }
         
         .payment-support-link:hover {
-            background-color: #eef7f0;
+            background: rgba(74, 124, 89, 0.95);
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(74, 124, 89, 0.3);
+            box-shadow: 0 6px 20px rgba(45, 90, 61, 0.2);
             text-decoration: none;
-            color: #2d5a3d;
+            color: #fff;
         }
         
         .payment-support-link:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0 #000;
         }
         
         .payment-terms-button {
+            background: rgba(45, 90, 61, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
             padding: 8px 16px;
-            background-color: transparent;
-            color: #666;
-            border: 1px solid #ccc;
-            border-radius: 6px;
             font-family: "Inter", sans-serif;
             font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            font-weight: bold;
+            transition: all 0.3s ease;
             margin-top: 8px;
+            box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
         }
         
         .payment-terms-button:hover {
-            background-color: #f5f5f5;
-            color: #333;
+            background: rgba(74, 124, 89, 0.95);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(45, 90, 61, 0.2);
+        }
+        
+        .payment-terms-button:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0 #000;
         }
         
         /* Recovery Form Styles */
@@ -305,59 +321,78 @@ function addPaymentModalStyles() {
             gap: 10px;
             margin-top: 15px;
             padding: 15px;
-            background-color: #f8fdf9;
-            border: 1px solid #4a7c59;
-            border-radius: 8px;
+            background-color: rgba(242, 249, 243, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(74, 124, 89, 0.08);
         }
         
         .payment-recover-button {
-            padding: 12px 16px;
-            background-color: rgba(74, 124, 89, 0.9);
+            background: rgba(45, 90, 61, 0.9);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            color: white;
+            color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
+            padding: 12px 16px;
             font-size: 13px;
             cursor: pointer;
             font-family: 'Geist', sans-serif;
-            font-weight: 600;
-            transition: all 0.2s ease;
+            font-weight: bold;
+            transition: all 0.3s ease;
             width: 100%;
             box-sizing: border-box;
+            box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
         }
         
         .payment-recover-button:hover {
-            background-color: rgba(61, 99, 73, 0.95);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 124, 89, 0.2);
+            background: rgba(74, 124, 89, 0.95);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(45, 90, 61, 0.2);
         }
         
         .payment-recover-button:disabled {
-            background-color: rgba(204, 204, 204, 0.7);
+            background: rgba(178, 178, 178, 0.7);
             cursor: not-allowed;
-            transform: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: none;
+            transform: none;
+        }
+        
+        .payment-recover-button:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0 #000;
         }
         
         .payment-cancel-button {
+            background: rgba(45, 90, 61, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
             padding: 12px 16px;
-            background-color: #f0f0f0;
-            color: #666;
-            border: 1px solid #ddd;
-            border-radius: 6px;
             font-size: 13px;
             cursor: pointer;
             font-family: 'Geist', sans-serif;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            font-weight: bold;
+            transition: all 0.3s ease;
             width: 100%;
             box-sizing: border-box;
+            box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
         }
         
         .payment-cancel-button:hover {
-            background-color: #e8e8e8;
-            border-color: #ccc;
+            background: rgba(74, 124, 89, 0.95);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(45, 90, 61, 0.2);
+        }
+        
+        .payment-cancel-button:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0 #000;
         }
         
         .recovery-input {
@@ -367,8 +402,14 @@ function addPaymentModalStyles() {
         }
         
         .recovery-button {
-            background: none !important;
-            border: 1px solid #4a7c59 !important;
+            background: rgba(45, 90, 61, 0.9) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 12px !important;
+            font-weight: bold !important;
+            box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15) !important;
             text-decoration: none !important;
         }
         
