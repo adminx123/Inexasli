@@ -488,10 +488,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 align-items: center;
                 justify-content: center;
                 padding: 0 10px;
-                background-color: inherit;
+                background: linear-gradient(180deg, rgba(235, 245, 240, 0.6) 0%, rgba(245, 250, 247, 0.3) 70%, rgba(255, 255, 255, 0.05) 100%);
                 border-radius: 24px 24px 0 0;
                 flex-shrink: 0;
                 box-sizing: border-box;
+                backdrop-filter: blur(2px);
+                border: 1px solid transparent;
+                box-shadow: 0 1px 2px rgba(74, 124, 89, 0.04);
             }
 
             /* Utility buttons - always visible in header */
