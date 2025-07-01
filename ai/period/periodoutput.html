@@ -8,21 +8,7 @@
  * jurisdictions worldwide.
  */ -->
 
-<div class="analysis-container">
-    <div class="header-section">
-        <h1 class="analysis-title">Your Personalized Period Analysis</h1>
-        <p class="analysis-subtitle">AI-powered insights from your tracking data</p>
-    </div>
-
-    <div class="insights-container" id="insights-container">
-        <!-- Content will be populated by JavaScript -->
-    </div>
-
-    <div class="actions-section">
-        <button class="action-btn" onclick="location.reload()">Add More Entries</button>
-        <button class="action-btn copy-btn" onclick="window.copyUtil.copyMainContent()">Copy Analysis</button>
-    </div>
-</div>
+<div id="output-span" class="period-output"></div>
 
 <style>
 .analysis-container {
@@ -152,6 +138,13 @@ import { getJSON } from '/utility/getJSON.js';
 document.addEventListener('DOMContentLoaded', function() {
     console.log('[PeriodOutput] Loading period analysis...');
     
+    // Get the output span element
+    const outputSpan = document.getElementById('output-span');
+    if (!outputSpan) {
+        console.error('[PeriodOutput] Output span not found');
+        return;
+    }
+    
     try {
         // Get the stored response data
         const responseData = getJSON('periodIqResponse');
@@ -159,14 +152,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!responseData) {
             console.warn('[PeriodOutput] No response data found');
-            document.getElementById('insights-container').innerHTML = `
-                <div class="insight-section">
-                    <div class="insight-title">No Analysis Available</div>
-                    <div class="insight-content">
-                        No period analysis data was found. Please complete the period tracking form and generate your analysis.
-                    </div>
-                </div>
-            `;
+            // Clear the output span like calorie module does
+            outputSpan.innerHTML = '';
             return;
         }
 
@@ -177,21 +164,53 @@ document.addEventListener('DOMContentLoaded', function() {
             data = data.data;
         }
 
-        // Display the analysis
-        displayPeriodAnalysis(data);
+        // Generate and display the complete analysis
+        generatePeriodOutput(data, outputSpan);
 
     } catch (error) {
         console.error('[PeriodOutput] Error loading period analysis:', error);
-        document.getElementById('insights-container').innerHTML = `
+        // Clear the output span like calorie module does
+        outputSpan.innerHTML = '';
+    }
+});
+
+function generatePeriodOutput(data, outputSpan) {
+    // Generate the complete HTML structure with the analysis data
+    const analysisContent = formatPeriodAnalysis(data);
+    
+    outputSpan.innerHTML = `
+        <div class="analysis-container">
+            <div class="header-section">
+                <h1 class="analysis-title">Your Personalized Period Analysis</h1>
+                <p class="analysis-subtitle">AI-powered insights from your tracking data</p>
+            </div>
+
+            <div class="insights-container">
+                ${analysisContent}
+            </div>
+
+            <div class="actions-section">
+                <button class="action-btn" onclick="location.reload()">Add More Entries</button>
+                <button class="action-btn copy-btn" onclick="window.copyUtil.copyMainContent()">Copy Analysis</button>
+            </div>
+        </div>
+    `;
+}
+
+function formatPeriodAnalysis(data) {
+    if (typeof data === 'string') {
+        return formatStringResponse(data);
+    } else if (typeof data === 'object' && data !== null) {
+        return formatObjectResponse(data);
+    } else {
+        return `
             <div class="insight-section">
-                <div class="insight-title">Error Loading Analysis</div>
-                <div class="insight-content">
-                    An error occurred while loading your period analysis. Please try generating your analysis again.
-                </div>
+                <div class="insight-title">Period Analysis</div>
+                <div class="insight-content">${data || 'Analysis completed successfully.'}</div>
             </div>
         `;
     }
-});
+}
 
 function displayPeriodAnalysis(data) {
     const container = document.getElementById('insights-container');
