@@ -492,123 +492,86 @@ function createSplitTextarea(options = {}) {
     return container;
 }
 
-// ==========================================
-// MODULE EXPORTS AND GLOBAL EXPOSURES
-// ==========================================
-
-// Core API exports for ES6 modules
-export {
-    autoExpandTextarea,
-    addDynamicTextareaInput,
-    addDynamicTextareaAddButton,
-    initAutoExpandTextareas,
-    initMutationObserver,
-    debugTextareaExpansionSequence,
-    initInputFunctionality,
-    createSplitTextarea
-};
-
-// Global window exposures for backward compatibility and direct script usage
-if (typeof window !== 'undefined') {
-    window.InputFunctionality = {
-        autoExpandTextarea,
-        addDynamicTextareaInput,
-        addDynamicTextareaAddButton,
-        initAutoExpandTextareas,
-        initMutationObserver,
-        debugTextareaExpansionSequence,
-        triggerTextareaExpansion,
-        init: initInputFunctionality,
-        createSplitTextarea
-    };
+/**
+ * Handles conditional input display based on select dropdown value
+ * @param {string} selectId - ID of the select dropdown element
+ * @param {string} conditionalInputId - ID of the conditional input element
+ * @param {Object} placeholderMap - Map of select values to placeholder text
+ * @param {string} hideValue - Value that should hide the conditional input (default: 'none')
+ * @param {Function} persistenceCallback - Optional callback to save form data
+ */
+function handleConditionalInput(selectId, conditionalInputId, placeholderMap, hideValue = 'none', persistenceCallback = null) {
+    const selectElement = document.getElementById(selectId);
+    const conditionalInput = document.getElementById(conditionalInputId);
     
-    // Legacy global functions for existing code compatibility
-    window.autoExpandTextarea = autoExpandTextarea;
-    window.addDynamicTextareaInput = addDynamicTextareaInput;
-    window.addDynamicTextareaAddButton = addDynamicTextareaAddButton;
-    window.addDynamicInput = addDynamicInput;
-    window.debugTextareaExpansionSequence = debugTextareaExpansionSequence;
-    
-    // Legacy wrapper for backward compatibility
-    window.addMealInput = (mealType, value, skip) => addDynamicInput(mealType, value, skip);
-}
-
-// ==========================================
-// AUTO-INITIALIZATION (Only when not imported as ES6 module)
-// ==========================================
-
-// Detect if this script is being used as an ES6 module by checking import.meta
-let isES6Module = false;
-try {
-    // This will throw an error if not in a module context
-    isES6Module = typeof import.meta !== 'undefined';
-} catch (e) {
-    isES6Module = false;
-}
-
-// Only auto-initialize if NOT being imported as an ES6 module
-if (!isES6Module) {
-    // Initialize immediately if DOM is already ready, otherwise wait for DOMContentLoaded
-    if (document.readyState === 'loading') {
-        console.log('[Text Functionality] DOM still loading, waiting for DOMContentLoaded...');
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('[Text Functionality] DOM loaded, initializing...');
-            initInputFunctionality();
-        });
-    } else {
-        console.log('[Text Functionality] DOM already ready, initializing immediately...');
-        initInputFunctionality();
+    if (!selectElement || !conditionalInput) {
+        console.warn('[Input Functionality] Conditional input elements not found:', selectId, conditionalInputId);
+        return null;
     }
+    
+    function updateConditionalInput() {
+        const selectedValue = selectElement.value;
+        
+        if (selectedValue && selectedValue !== hideValue) {
+            conditionalInput.style.display = 'block';
+            conditionalInput.placeholder = placeholderMap[selectedValue] || 'Specify details';
+        } else {
+            conditionalInput.style.display = 'none';
+            conditionalInput.value = '';
+        }
+        
+        // Trigger container resize for datain.js
+        triggerContainerResize();
+        
+        // Call persistence callback if provided
+        if (persistenceCallback && typeof persistenceCallback === 'function') {
+            persistenceCallback();
+        }
+    }
+    
+    // Add event listener
+    selectElement.addEventListener('change', updateConditionalInput);
+    
+    return updateConditionalInput;
 }
-
-// ==========================================
-// GENERIC ADD FIELD INITIALIZATION
-// ==========================================
 
 /**
- * Auto-detect and initialize add buttons for any module
+ * Triggers container resize to prevent layout issues when content changes
  */
-function initGenericAddButtons() {
-    // Look for any .row1 containers that could benefit from add buttons
-    const containers = document.querySelectorAll('.row1');
+function triggerContainerResize() {
+    console.log('[Input Functionality] Triggering container resize');
     
+    // Force a reflow by temporarily changing display
+    const containers = document.querySelectorAll('.device-container, .row1');
     containers.forEach(container => {
-        // Skip if already has an add button
-        if (container.querySelector('.dynamic-add-btn')) return;
-        
-        // Check if container has textareas (potential for dynamic fields)
-        const hasTextareas = container.querySelectorAll('textarea').length > 0;
-        
-        if (hasTextareas) {
-            // Auto-detect module from URL or container attributes
-            const moduleFromUrl = window.location.pathname.match(/\/(\w+)\//)?.[1] || 'generic';
-            const stepLabel = container.getAttribute('data-step-label') || '';
-            
-            // Add generic add button
-            addDynamicTextareaAddButton({
-                containerSelector: `[data-step-label="${stepLabel}"]`,
-                baseId: `${moduleFromUrl}-`,
-                placeholder: 'Additional item: Enter details here'
-            });
-        }
+        const originalDisplay = container.style.display;
+        container.style.display = 'none';
+        void container.offsetHeight; // Force reflow
+        container.style.display = originalDisplay || '';
     });
-}
-
-// Only auto-initialize add buttons if NOT being imported as an ES6 module
-if (!isES6Module) {
-    // Initialize generic add buttons
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initGenericAddButtons);
-    } else {
-        initGenericAddButtons();
+    
+    // Dispatch resize event
+    const resizeEvent = new Event('resize');
+    document.dispatchEvent(resizeEvent);
+    
+    // Also try to trigger any global resize handlers
+    if (window.dispatchEvent) {
+        window.dispatchEvent(new Event('resize'));
     }
-
-    // MutationObserver to ensure add buttons are present when content loads dynamically
-    (function ensureGenericAddButtons() {
-        const observer = new MutationObserver(() => {
-            initGenericAddButtons();
-        });
-        observer.observe(document.body, { childList: true, subtree: true });
-    })();
+    
+    // Force reflow of device container if present
+    const deviceContainer = document.querySelector('.device-container');
+    if (deviceContainer) {
+        deviceContainer.style.height = 'auto';
+        void deviceContainer.offsetHeight; // Force reflow
+    }
 }
+
+// Export functions for module use
+export { 
+    initAutoExpandTextareas, 
+    createSplitTextarea, 
+    handleConditionalInput, 
+    triggerContainerResize 
+};
 

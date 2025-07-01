@@ -23,27 +23,29 @@
   </div>
 
   <div class="row1" data-step-label="Basic Information">
+
     <h3 class="tooltip1" data-tooltip="Basic information to help personalize your period tracking experience.">
       Basic Information<span class="tooltip1-content"></span>
     </h3>
-    <input id="period-age" type="text" placeholder="Age">
-    <select id="period-tracking-reason">
-      <option value="" disabled selected>Why are you tracking?</option>
-      <option value="General Health">General Health</option>
-      <option value="Trying to Conceive">Trying to Conceive</option>
-      <option value="Birth Control">Birth Control</option>
-      <option value="Health Issues">Health Issues</option>
-      <option value="Just Curious">Just Curious</option>
-    </select>
-  </div>
 
-  <div class="row1" data-step-label="Cycle History">
-    <h3 class="tooltip1" data-tooltip="Tell us about your typical cycle if you know it, or leave blank if unsure.">
-      Cycle History (Optional)<span class="tooltip1-content"></span>
-    </h3>
-    <input id="period-last-period" type="text" placeholder="When did your last period start? (e.g. June 15th)">
+ <select id="period-birth-control-type">
+      <option value="" disabled selected>Birth control type</option>
+      <option value="pill">Birth Control Pill</option>
+      <option value="iud">IUD</option>
+      <option value="implant">Implant</option>
+      <option value="injectable">Injectable</option>
+      <option value="patch">Patch</option>
+      <option value="ring">Ring</option>
+      <option value="condoms">Condoms</option>
+      <option value="diaphragm">Diaphragm</option>
+      <option value="spermicide">Spermicide</option>
+      <option value="none">None</option>
+    </select>
+    <input id="period-birth-control-detail" type="text" placeholder="Specify brand/type" style="display: none;">
+
+    <input id="period-age" type="text" placeholder="Age">
     <input id="period-cycle-length" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
-    <input id="period-period-length" type="text" placeholder="Period duration (e.g. 5 days, 3-7 days)">
+   
   </div>
 
   <div class="row1" data-step-label="Period Events Log">
@@ -59,7 +61,7 @@
 </div>
 
 <script type="module">
-import { initAutoExpandTextareas, createSplitTextarea } from '../styles/inputFunctionality.js';
+import { initAutoExpandTextareas, createSplitTextarea, handleConditionalInput } from '../styles/inputFunctionality.js';
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 (function() {
@@ -75,6 +77,14 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     if (window.periodFormPersistence) {
       window.periodFormPersistence.saveFormData();
     }
+  });
+
+  // Listen for form data restoration to trigger conditional logic
+  document.addEventListener('formpersistence:repopulated', function(e) {
+    console.log('[PeriodIQ] Form repopulated, triggering conditional logic');
+    setTimeout(() => {
+      triggerConditionalLogic();
+    }, 50);
   });
 
   // Function to add a new period entry
@@ -200,6 +210,38 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     }
   }
 
+  // Handle birth control type change
+  const placeholderMap = {
+    'pill': 'Brand name (e.g. Yasmin, Ortho Tri-Cyclen, Alesse)',
+    'iud': 'IUD type (e.g. Mirena, Paragard, Skyla, Kyleena)',
+    'implant': 'Implant type (e.g. Nexplanon, Implanon)',
+    'injectable': 'Injectable type (e.g. Depo-Provera)',
+    'patch': 'Patch brand (e.g. Ortho Evra)',
+    'ring': 'Ring type (e.g. NuvaRing)',
+    'condoms': 'Brand/type (e.g. Trojan, Durex, latex-free)',
+    'diaphragm': 'Brand/type (e.g. Milex, Ortho)',
+    'spermicide': 'Brand/type (e.g. VCF, Conceptrol)'
+  };
+
+  const handleBirthControlChange = handleConditionalInput(
+    'period-birth-control-type',
+    'period-birth-control-detail',
+    placeholderMap,
+    'none',
+    () => {
+      if (window.periodFormPersistence) {
+        window.periodFormPersistence.saveFormData();
+      }
+    }
+  );
+
+  // Function to trigger conditional logic manually (for form repopulation)
+  function triggerConditionalLogic() {
+    if (handleBirthControlChange && typeof handleBirthControlChange === 'function') {
+      handleBirthControlChange();
+    }
+  }
+
   function initialize() {
     console.log("[PeriodIQ] Initializing...");
     
@@ -214,6 +256,17 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     if (addEntryBtn) {
       addEntryBtn.removeEventListener('click', addPeriodEntry);
       addEntryBtn.addEventListener('click', addPeriodEntry);
+    }
+
+    const birthControlTypeSelect = document.getElementById('period-birth-control-type');
+    if (birthControlTypeSelect && handleBirthControlChange) {
+      // The event listener is already set up by handleConditionalInput
+      console.log('[PeriodIQ] Birth control conditional logic initialized');
+      
+      // Trigger conditional logic to handle any pre-existing values
+      setTimeout(() => {
+        triggerConditionalLogic();
+      }, 100);
     }
 
     // Add initial entry
@@ -236,6 +289,11 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     if (moduleType === 'period') {
       console.log("[PeriodIQ] Period module loaded through datain.js, reinitializing");
       runInitialization();
+      
+      // Also trigger conditional logic after data loads
+      setTimeout(() => {
+        triggerConditionalLogic();
+      }, 200);
     }
   });
   
