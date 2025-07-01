@@ -567,11 +567,111 @@ function triggerContainerResize() {
     }
 }
 
+/**
+ * Adds a generic "Add Entry" button for split textarea entries to a container.
+ * @param {Object} options
+ * @param {string} options.containerSelector - CSS selector for the container (e.g., '#period-entries-container')
+ * @param {string} options.buttonId - ID for the add button (e.g., 'add-period-entry-btn')
+ * @param {string} options.buttonText - Text for the button (e.g., 'Add Entry')
+ * @param {string} options.entryIdPrefix - Prefix for entry IDs (e.g., 'period-entry')
+ * @param {string} options.whenPlaceholder - Placeholder for when field
+ * @param {string} options.whatPlaceholder - Placeholder for what field
+ * @param {Function} options.onAdd - Optional callback when entry is added
+ */
+function addEntryButton({
+  containerSelector,
+  buttonId,
+  buttonText = 'Add Entry',
+  entryIdPrefix,
+  whenPlaceholder = 'When?',
+  whatPlaceholder = 'What happened?',
+  onAdd = null
+}) {
+  const container = document.querySelector(containerSelector);
+  if (!container) {
+    console.error('[InputFunctionality] Container not found for add entry button:', containerSelector);
+    return;
+  }
+
+  // Prevent duplicate buttons
+  if (document.getElementById(buttonId)) return;
+
+  let entryCounter = 1;
+
+  function addEntry(whenValue = '', whatValue = '') {
+    // Find existing entries to determine counter
+    const existingEntries = container.querySelectorAll(`[data-entry-id^="${entryIdPrefix}"]`);
+    entryCounter = existingEntries.length + 1;
+
+    // Default "when" value to current time if empty
+    if (!whenValue) {
+      const now = new Date();
+      whenValue = `Today ${now.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+      })}`;
+    }
+
+    const entryDiv = createSplitTextarea({
+      id: `${entryIdPrefix}-${entryCounter}`,
+      whenPlaceholder: whenPlaceholder,
+      whatPlaceholder: whatPlaceholder,
+      whenValue: whenValue,
+      whatValue: whatValue,
+      entryNumber: entryCounter
+    });
+
+    container.appendChild(entryDiv);
+    
+    // Initialize auto-expand for the new textarea
+    initAutoExpandTextareas();
+    
+    // Call callback if provided
+    if (typeof onAdd === 'function') {
+      onAdd(entryCounter, entryDiv);
+    }
+
+    return entryDiv;
+  }
+
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.id = buttonId;
+  addBtn.textContent = buttonText;
+  addBtn.style.cssText = [
+    'padding: 10px 20px',
+    'margin: 10px auto',
+    'display: block',
+    'border: 1px solid #4a7c59',
+    'background: #f2f9f3',
+    'color: #2d5a3d',
+    'border-radius: 5px',
+    'font-size: 14px',
+    'cursor: pointer',
+    'font-family: inherit',
+    'box-sizing: border-box'
+  ].join(';');
+  
+  addBtn.onclick = () => addEntry();
+
+  // Insert after the container
+  container.parentNode.insertBefore(addBtn, container.nextSibling);
+
+  // Expose the addEntry function globally for module use
+  window[`add${entryIdPrefix.split('-').map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1)
+  ).join('')}`] = addEntry;
+
+  return { button: addBtn, addEntry };
+}
+
 // Export functions for module use
 export { 
     initAutoExpandTextareas, 
     createSplitTextarea, 
     handleConditionalInput, 
-    triggerContainerResize 
+    triggerContainerResize,
+    addEntryButton
 };
 
