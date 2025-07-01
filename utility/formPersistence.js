@@ -236,6 +236,12 @@ class FormPersistence {
             this.saveFormData();
         });
 
+        // Listen for entry deletion to auto-save form data
+        document.addEventListener('entry:deleted', (event) => {
+            console.log(`[FormPersistence] Entry deleted, auto-saving form data for ${this.moduleName}`);
+            this.saveFormData();
+        });
+
         console.log(`[FormPersistence] Event listeners set up for ${this.moduleName}`);
     }
 
@@ -423,15 +429,15 @@ class FormPersistence {
         const patterns = [];
         const fieldNames = Object.keys(data);
         
-        // Look for numbered patterns like "snack4", "snack5", "meal2", etc.
-        const numberedPatternRegex = /^([a-zA-Z]+)(\d+)$/;
+        // Look for numbered patterns like "snack4", "snack5", "entry1-when", "entry1-what", etc.
+        const numberedPatternRegex = /^([a-zA-Z-]+?)(\d+)(-\w+)?$/;
         const numberedFields = {};
         
         fieldNames.forEach(fieldName => {
             const match = fieldName.match(numberedPatternRegex);
             if (match) {
-                const basePattern = match[1]; // e.g., "snack"
-                const number = parseInt(match[2], 10); // e.g., 4
+                const basePattern = match[1].replace(/-$/, ''); // e.g., "snack", "entry"
+                const number = parseInt(match[2], 10); // e.g., 4, 1
                 
                 if (!numberedFields[basePattern]) {
                     numberedFields[basePattern] = [];
@@ -443,12 +449,12 @@ class FormPersistence {
         // Convert detected numbered fields to patterns
         Object.entries(numberedFields).forEach(([basePattern, numbers]) => {
             if (numbers.length > 0) {
-                const maxNumber = Math.max(...numbers);
+                // Remove duplicates and sort
+                const uniqueNumbers = [...new Set(numbers)].sort((a, b) => a - b);
                 patterns.push({
                     type: 'numbered',
                     basePattern: basePattern,
-                    maxNumber: maxNumber,
-                    detectedNumbers: numbers.sort((a, b) => a - b)
+                    detectedNumbers: uniqueNumbers
                 });
             }
         });
@@ -467,108 +473,49 @@ class FormPersistence {
     }
 
     /**
-     * Recreate numbered dynamic inputs (e.g., snack4, snack5)
+     * Recreate numbered dynamic inputs (e.g., snack4, snack5, entry1, entry2)
      * @param {Object} pattern - The numbered pattern object
      */
     recreateNumberedInputs(pattern) {
-        const { basePattern, maxNumber, detectedNumbers } = pattern;
+        const { basePattern, detectedNumbers } = pattern;
         
-        console.log('[FormPersistence] Recreating numbered inputs for pattern:', basePattern, 'up to number:', maxNumber);
+        console.log('[FormPersistence] Recreating numbered inputs for pattern:', basePattern, 'numbers:', detectedNumbers);
         
-        // CalorieIQ specific: handle meal inputs (snack, breakfast, lunch, dinner)
-        if (this.moduleName === 'calorie' && ['snack', 'breakfast', 'lunch', 'dinner'].includes(basePattern)) {
-            this.recreateCalorieMealInputs(basePattern, detectedNumbers);
+        // Look for module-specific recreation function
+        const functionName = this.getRecreationFunctionName(basePattern);
+        let recreationFunction = this.findRecreationFunction(functionName);
+        
+        if (!recreationFunction) {
+            console.warn('[FormPersistence] No recreation function found for pattern:', basePattern, 'expected function:', functionName);
             return;
         }
         
-        // Generic numbered input recreation - look for add functions in the global scope
-        this.recreateGenericNumberedInputs(pattern);
-    }
-
-    /**
-     * Recreate CalorieIQ meal inputs by calling addMealInput function
-     * @param {string} basePattern - The base pattern (e.g., "snack")
-     * @param {Array} numbers - Array of numbers that need to be recreated
-     */
-    recreateCalorieMealInputs(basePattern, numbers) {
-        // Check if addMealInput function exists in global scope or window.calorieIq
-        let addMealInputFn = null;
-        
-        if (typeof window.addMealInput === 'function') {
-            addMealInputFn = window.addMealInput;
-        } else if (window.calorieIq && typeof window.calorieIq.addMealInput === 'function') {
-            addMealInputFn = window.calorieIq.addMealInput;
-        }
-        
-        if (!addMealInputFn) {
-            console.warn('[FormPersistence] addMealInput function not found in global scope for CalorieIQ');
-            return;
-        }
-        
-        // For CalorieIQ, we need to call addMealInput for each missing dynamic input
-        numbers.forEach(number => {
-            // Check if the DOM element already exists
-            const expectedElementId = `calorie-${basePattern}${number}`;
+        // For each detected number, check if DOM element exists and recreate if missing
+        detectedNumbers.forEach(number => {
+            const expectedElementId = this.getExpectedElementId(basePattern, number);
+            
             if (!document.getElementById(expectedElementId)) {
-                console.log('[FormPersistence] Recreating CalorieIQ meal input for:', basePattern, number);
+                console.log('[FormPersistence] Recreating input for:', basePattern, 'number:', number);
+                
                 try {
-                    // Call addMealInput with the specific meal type and skip repositioning during repopulation
-                    addMealInputFn(`${basePattern}${number}`, '', true);
+                    // Get saved values for recreation
+                    const savedData = this.getSavedFormData();
+                    const fieldName = this.getFieldName(expectedElementId);
+                    const savedValue = savedData && savedData[fieldName] ? savedData[fieldName] : '';
+                    
+                    // Call recreation function with appropriate parameters
+                    if (this.moduleName === 'calorie') {
+                        // CalorieIQ expects (fieldName, value, skipRepositioning)
+                        recreationFunction(`${basePattern}${number}`, savedValue, true);
+                    } else {
+                        // Other modules expect (value1, value2) or just ()
+                        recreationFunction();
+                    }
                 } catch (error) {
-                    console.error('[FormPersistence] Error calling addMealInput:', error);
+                    console.error('[FormPersistence] Error calling recreation function:', error);
                 }
             }
         });
-    }
-
-    /**
-     * Generic recreation of numbered inputs by looking for appropriate functions
-     * @param {Object} pattern - The pattern object
-     */
-    recreateGenericNumberedInputs(pattern) {
-        const { basePattern, detectedNumbers } = pattern;
-        
-        // Look for common function naming patterns
-        const possibleFunctionNames = [
-            `add${basePattern.charAt(0).toUpperCase() + basePattern.slice(1)}Input`,
-            `add${basePattern.charAt(0).toUpperCase() + basePattern.slice(1)}`,
-            `addInput`,
-            `addField`,
-            `addDynamicInput`
-        ];
-        
-        let foundFunction = null;
-        for (const functionName of possibleFunctionNames) {
-            if (typeof window[functionName] === 'function') {
-                foundFunction = window[functionName];
-                console.log('[FormPersistence] Found recreation function:', functionName);
-                break;
-            }
-        }
-        
-        if (foundFunction) {
-            detectedNumbers.forEach(number => {
-                // Check if the DOM element already exists
-                const possibleElementIds = [
-                    `${this.moduleName}-${basePattern}${number}`,
-                    `${basePattern}${number}`,
-                    `${basePattern}-${number}`
-                ];
-                
-                const elementExists = possibleElementIds.some(id => document.getElementById(id));
-                
-                if (!elementExists) {
-                    console.log('[FormPersistence] Recreating generic numbered input for:', basePattern, number);
-                    try {
-                        foundFunction();
-                    } catch (error) {
-                        console.error('[FormPersistence] Error calling recreation function:', error);
-                    }
-                }
-            });
-        } else {
-            console.warn('[FormPersistence] No recreation function found for pattern:', basePattern);
-        }
     }
 
     /**
@@ -818,6 +765,71 @@ class FormPersistence {
         
         // Refresh input handlers to pick up any newly created dynamic inputs
         this.refreshInputHandlers();
+    }
+
+    /**
+     * Get the expected recreation function name for a base pattern
+     * @param {string} basePattern - The base pattern (e.g., "snack", "entry")
+     * @returns {string} The expected function name
+     */
+    getRecreationFunctionName(basePattern) {
+        // For specific modules, use module-specific function names
+        if (this.moduleName === 'calorie' && ['snack', 'breakfast', 'lunch', 'dinner'].includes(basePattern)) {
+            return 'addMealInput';
+        }
+        
+        // For other patterns, generate function name from pattern
+        // "entry" -> "addEntry", "period-entry" -> "addPeriodEntry"
+        if (basePattern.includes('-')) {
+            // Handle hyphenated patterns like "period-entry"
+            return `add${basePattern.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join('')}`;
+        } else {
+            // Handle simple patterns like "entry"
+            return `add${basePattern.charAt(0).toUpperCase() + basePattern.slice(1)}`;
+        }
+    }
+
+    /**
+     * Find the recreation function in global scope
+     * @param {string} functionName - The function name to look for
+     * @returns {Function|null} The recreation function or null if not found
+     */
+    findRecreationFunction(functionName) {
+        // Check window scope
+        if (typeof window[functionName] === 'function') {
+            return window[functionName];
+        }
+        
+        // Check module-specific namespaces
+        const moduleNamespace = window[`${this.moduleName}Iq`];
+        if (moduleNamespace && typeof moduleNamespace[functionName] === 'function') {
+            return moduleNamespace[functionName];
+        }
+        
+        return null;
+    }
+
+    /**
+     * Get the expected element ID for a base pattern and number
+     * @param {string} basePattern - The base pattern
+     * @param {number} number - The number
+     * @returns {string} The expected element ID
+     */
+    getExpectedElementId(basePattern, number) {
+        if (this.moduleName === 'calorie') {
+            return `calorie-${basePattern}${number}`;
+        } else {
+            // For other modules, check for dual inputs first
+            const dualInputId = `${basePattern}${number}-when`;
+            if (document.getElementById(dualInputId)) {
+                return dualInputId;
+            }
+            
+            // Otherwise check for single input patterns
+            return `${this.moduleName}-${basePattern}${number}`;
+        }
     }
 }
 

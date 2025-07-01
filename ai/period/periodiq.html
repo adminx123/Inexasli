@@ -61,7 +61,7 @@
 </div>
 
 <script type="module">
-import { initAutoExpandTextareas, createSplitTextarea, handleConditionalInput } from '../styles/inputFunctionality.js';
+import { initAutoExpandTextareas, createSplitTextarea, deleteEntry, handleConditionalInput } from '../styles/inputFunctionality.js';
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 (function() {
@@ -103,7 +103,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     }
 
     const entryDiv = createSplitTextarea({
-      id: `period-entry-${entryCounter}`,
+      id: `entry${entryCounter}`, // Changed to match numbered pattern
       whenPlaceholder: 'When?',
       whatPlaceholder: 'What happened? (e.g., spotting started, heavy flow, cramps, mood changes)',
       whenValue: whenValue,
@@ -131,8 +131,12 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
   // Handle generate button click
   async function handleGeneratePeriodIq() {
     try {
-      const formData = window.periodFormPersistence.getSavedFormData();
-      if (!formData || !formData.entries || formData.entries.length === 0) { 
+      const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
+      
+      // Check if we have any period entries
+      const hasEntries = Object.keys(formData).some(key => key.includes('entry') && key.includes('what') && formData[key]);
+      
+      if (!hasEntries) { 
         alert('Please add at least one period event before generating analysis.'); 
         return;
       }
@@ -269,8 +273,18 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       }, 100);
     }
 
-    // Add initial entry
-    addPeriodEntry();
+    // Add initial entry only if no entries exist and no saved data
+    setTimeout(() => {
+      const container = document.getElementById('period-entries-container');
+      const hasExistingEntries = container && container.querySelectorAll('textarea').length > 0;
+      const hasSavedData = window.periodFormPersistence && 
+        Object.keys(window.periodFormPersistence.getSavedFormData() || {}).some(key => key.includes('entry'));
+      
+      if (!hasExistingEntries && !hasSavedData) {
+        console.log("[PeriodIQ] Adding initial entry");
+        addPeriodEntry();
+      }
+    }, 300); // Delay to let FormPersistence finish recreation
   }
 
   function runInitialization() {
@@ -299,9 +313,14 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
   
   // Export functions for external access
   window.periodIq = { 
-    getFormData: () => window.periodFormPersistence.getSavedFormData(),
-    saveFormData: () => window.periodFormPersistence.saveFormData(),
-    addEntry: addPeriodEntry
+    getFormData: () => window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {},
+    saveFormData: () => window.periodFormPersistence ? window.periodFormPersistence.saveFormData() : false,
+    addEntry: addPeriodEntry,
+    deleteEntry: deleteEntry
   };
+  
+  // Register global function for FormPersistence recreation
+  window.addEntry = addPeriodEntry;
+  window.deleteEntry = deleteEntry;
 })();
 </script>

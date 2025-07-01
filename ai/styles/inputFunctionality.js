@@ -318,6 +318,42 @@ function addDynamicInput(inputType = null, value = '', skipRepositioning = false
 }
 
 /**
+ * Delete an entry and trigger form persistence save
+ * @param {HTMLElement} entryContainer - The entry container to delete
+ */
+function deleteEntry(entryContainer) {
+    if (!entryContainer) return;
+    
+    // Get the entry ID for logging
+    const entryId = entryContainer.dataset.entryId;
+    
+    // Optional confirmation dialog
+    if (!confirm('Are you sure you want to delete this entry?')) {
+        return;
+    }
+    
+    // Remove the container with a smooth animation
+    entryContainer.style.transition = 'opacity 0.3s ease, height 0.3s ease';
+    entryContainer.style.opacity = '0';
+    entryContainer.style.height = '0';
+    entryContainer.style.overflow = 'hidden';
+    entryContainer.style.marginBottom = '0';
+    entryContainer.style.paddingTop = '0';
+    entryContainer.style.paddingBottom = '0';
+    
+    setTimeout(() => {
+        entryContainer.remove();
+        
+        // Trigger form persistence save after deletion
+        document.dispatchEvent(new CustomEvent('entry:deleted', {
+            detail: { entryId, timestamp: Date.now() }
+        }));
+        
+        console.log('[InputFunctionality] Entry deleted:', entryId);
+    }, 300);
+}
+
+/**
  * Creates a split textarea component with "when" and "what" fields
  * @param {Object} options - Configuration options
  * @param {string} options.id - Base ID for the component
@@ -343,10 +379,13 @@ function createSplitTextarea(options = {}) {
     container.className = 'split-textarea-container';
     container.dataset.entryId = id;
 
-    // Create entry header
+    // Create entry header with delete button
     const header = document.createElement('div');
     header.className = 'entry-header';
-    header.innerHTML = `<span class="entry-number">Entry #${entryNumber}</span>`;
+    header.innerHTML = `
+        <span class="entry-number">Entry #${entryNumber}</span>
+        <button type="button" class="delete-entry-btn" data-entry-id="${id}" title="Delete this entry">×</button>
+    `;
 
     // Create when field
     const whenField = document.createElement('input');
@@ -397,6 +436,12 @@ function createSplitTextarea(options = {}) {
         });
     });
 
+    // Delete button event listener
+    const deleteBtn = header.querySelector('.delete-entry-btn');
+    deleteBtn.addEventListener('click', () => {
+        deleteEntry(container);
+    });
+
     // Auto-expand the textarea
     whatField.addEventListener('input', () => autoExpandTextarea(whatField));
 
@@ -422,6 +467,29 @@ function createSplitTextarea(options = {}) {
                 font-weight: bold;
                 color: #666;
                 font-size: 14px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .delete-entry-btn {
+                background: #ff4444;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+                font-size: 16px;
+                line-height: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.2s;
+            }
+            
+            .delete-entry-btn:hover {
+                background: #cc0000;
             }
             
             .split-fields-container {
@@ -670,6 +738,7 @@ function addEntryButton({
 export { 
     initAutoExpandTextareas, 
     createSplitTextarea, 
+    deleteEntry,
     handleConditionalInput, 
     triggerContainerResize,
     addEntryButton
