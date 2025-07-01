@@ -414,3 +414,37 @@ export function sanitizeErrorMessage(message) {
         return entities[char];
     });
 }
+
+// Sanitize JSON content recursively for backend responses
+export function sanitizeJsonContent(obj) {
+    if (obj === null || obj === undefined) {
+        return obj;
+    }
+    
+    if (typeof obj === 'string') {
+        // Remove script tags, HTML tags, and dangerous attributes
+        return obj
+            .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+            .replace(/<[^>]*>/g, '')
+            .replace(/javascript:/gi, '')
+            .replace(/on\w+\s*=/gi, '');
+    }
+    
+    if (typeof obj === 'number' || typeof obj === 'boolean') {
+        return obj;
+    }
+    
+    if (Array.isArray(obj)) {
+        return obj.map(item => sanitizeJsonContent(item));
+    }
+    
+    if (typeof obj === 'object') {
+        const sanitized = {};
+        for (const [key, value] of Object.entries(obj)) {
+            sanitized[key] = sanitizeJsonContent(value);
+        }
+        return sanitized;
+    }
+    
+    return obj;
+}
