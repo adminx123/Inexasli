@@ -379,21 +379,28 @@ function createSplitTextarea(options = {}) {
     container.className = 'split-textarea-container';
     container.dataset.entryId = id;
 
-    // Create entry header with delete button
+    // Create entry header
     const header = document.createElement('div');
     header.className = 'entry-header';
     header.innerHTML = `
         <span class="entry-number">Entry #${entryNumber}</span>
-        <button type="button" class="delete-entry-btn" data-entry-id="${id}" title="Delete this entry">×</button>
     `;
 
-    // Create when field
-    const whenField = document.createElement('input');
-    whenField.type = 'text';
+    // Create delete button (positioned absolutely in top right)
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'plain-x-delete-btn';
+    deleteBtn.dataset.entryId = id;
+    deleteBtn.title = 'Delete this entry';
+    deleteBtn.innerHTML = '×';
+
+    // Create when field (using textarea for consistent height)
+    const whenField = document.createElement('textarea');
     whenField.className = 'when-field';
     whenField.id = `${id}-when`;
     whenField.placeholder = whenPlaceholder;
     whenField.value = whenValue;
+    whenField.rows = 2;
 
     // Create what field
     const whatField = document.createElement('textarea');
@@ -437,15 +444,20 @@ function createSplitTextarea(options = {}) {
     });
 
     // Delete button event listener
-    const deleteBtn = header.querySelector('.delete-entry-btn');
     deleteBtn.addEventListener('click', () => {
         deleteEntry(container);
     });
 
-    // Auto-expand the textarea
+    // Auto-expand both textareas
+    whenField.addEventListener('input', () => autoExpandTextarea(whenField));
     whatField.addEventListener('input', () => autoExpandTextarea(whatField));
 
+    // Initial auto-expand for both fields
+    autoExpandTextarea(whenField);
+    autoExpandTextarea(whatField);
+
     // Assemble container
+    container.appendChild(deleteBtn);
     container.appendChild(header);
     container.appendChild(fieldsContainer);
 
@@ -460,6 +472,7 @@ function createSplitTextarea(options = {}) {
                 border: 1px solid #e0e0e0;
                 border-radius: 8px;
                 background: #fafafa;
+                position: relative;
             }
             
             .entry-header {
@@ -467,29 +480,45 @@ function createSplitTextarea(options = {}) {
                 font-weight: bold;
                 color: #666;
                 font-size: 14px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
             }
             
-            .delete-entry-btn {
-                background: #ff4444;
-                color: white;
-                border: none;
-                border-radius: 50%;
-                width: 24px;
-                height: 24px;
-                cursor: pointer;
-                font-size: 16px;
-                line-height: 1;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: background-color 0.2s;
+            .plain-x-delete-btn {
+                position: absolute !important;
+                top: 8px !important;
+                right: 8px !important;
+                background: none !important;
+                color: #666 !important;
+                border: none !important;
+                width: auto !important;
+                height: auto !important;
+                cursor: pointer !important;
+                font-size: 16px !important;
+                line-height: 1 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                z-index: 10 !important;
+                font-weight: normal !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                text-decoration: none !important;
+                outline: none !important;
+                transition: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+                display: inline !important;
+                font-family: inherit !important;
             }
             
-            .delete-entry-btn:hover {
-                background: #cc0000;
+            .plain-x-delete-btn:hover,
+            .plain-x-delete-btn:focus,
+            .plain-x-delete-btn:active {
+                background: none !important;
+                color: #666 !important;
+                border: none !important;
+                box-shadow: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+                outline: none !important;
             }
             
             .split-fields-container {
@@ -522,6 +551,9 @@ function createSplitTextarea(options = {}) {
                 border-radius: 5px;
                 font-size: 14px;
                 background: white;
+                resize: none;
+                overflow: hidden;
+                min-height: 40px;
             }
             
             .what-field {
@@ -692,8 +724,15 @@ function addEntryButton({
 
     container.appendChild(entryDiv);
     
-    // Initialize auto-expand for the new textarea
-    initAutoExpandTextareas();
+    // Initialize auto-expand for the new textareas
+    const newTextareas = entryDiv.querySelectorAll('textarea');
+    newTextareas.forEach(textarea => {
+        autoExpandTextarea(textarea);
+        textarea.addEventListener('input', () => autoExpandTextarea(textarea));
+        textarea.addEventListener('paste', () => {
+            setTimeout(() => autoExpandTextarea(textarea), 0);
+        });
+    });
     
     // Call callback if provided
     if (typeof onAdd === 'function') {
