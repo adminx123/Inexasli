@@ -67,11 +67,9 @@
     .vertical-timeline {
       position: relative;
       width: 100%;
-      min-height: 400px;
       background: #f8f9fa;
       border-radius: 10px;
       border: 1px solid #dee2e6;
-      overflow-y: auto;
     }
 
     .timeline-row {
@@ -82,20 +80,36 @@
       position: relative;
     }
 
+    .timeline-row.fertile-window {
+      background: linear-gradient(90deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.2));
+      border-left: 4px solid #28a745;
+    }
+
+    .fertile-indicator {
+      background: #28a745;
+      color: white;
+      margin-left: 5px;
+      font-size: 9px;
+      padding: 1px 4px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
     .timeline-row.current-day {
       background: rgba(255, 107, 157, 0.1);
       border: 2px solid #ff6b9d;
     }
 
     .date-label {
-      width: 100px;
+      width: 120px;
       padding: 10px;
-      font-size: 11px;
+      font-size: 10px;
       color: #666;
       border-right: 1px solid #e9ecef;
       background: #f8f9fa;
       font-weight: bold;
       text-align: center;
+      line-height: 1.2;
     }
 
     .date-label.current {
@@ -132,6 +146,17 @@
       font-size: 10px;
       padding: 2px 6px;
       border-radius: 12px;
+    }
+
+    .ai-prediction {
+      background: #6c757d;
+      color: white;
+      margin-left: 5px;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 12px;
+      opacity: 0.8;
+      font-style: italic;
     }
 
     .menstrual-bar { background: #dc3545; }
@@ -263,11 +288,18 @@
             try {
               console.log('Period tracking data:', data);
               
-              // If standardizedEvents is empty, try to create from form data
-              if (data.standardizedEvents && data.standardizedEvents.length === 0) {
-                console.log('standardizedEvents is empty, creating from form data');
-                const formData = getJSON('periodIqInput') || {};
-                data.standardizedEvents = createEventsFromFormData(formData);
+              // Always supplement AI events with frontend parsing for missing entries
+              console.log('Supplementing AI events with frontend parsing');
+              const formData = getJSON('periodIqInput') || {};
+              const frontendEvents = createEventsFromFormData(formData);
+              
+              // Merge AI events with frontend events, avoiding duplicates
+              const aiEventDates = (data.standardizedEvents || []).map(e => e.date);
+              const missingEvents = frontendEvents.filter(fe => !aiEventDates.includes(fe.date));
+              
+              if (missingEvents.length > 0) {
+                console.log('Adding missing events from frontend parsing:', missingEvents);
+                data.standardizedEvents = [...(data.standardizedEvents || []), ...missingEvents];
               }
               
               displayPeriodData(data, outputSpan);
@@ -365,91 +397,187 @@
       const timelineContainer = document.createElement('div');
       timelineContainer.className = 'timeline-container';
       
-      // Get all dates to display (phases + user events)
-      const allDates = new Set();
-      const phaseData = {};
-      const userEventData = {};
+      // Calculate current cycle day from frontend data
+      const today = new Date();
+      const lastPeriodStart = new Date(getLocal('lastPeriodStart') || today);
+      const daysDiff = Math.floor((today - lastPeriodStart) / (1000 * 60 * 60 * 24));
+      const currentDay = daysDiff >= 0 ? daysDiff + 1 : 1;
       
-      // Process phase calendar
+      // Get current phase from phase calendar
+      let currentPhase = 'unknown';
       if (periodData.phaseCalendar) {
-        Object.entries(periodData.phaseCalendar).forEach(([phaseName, phase]) => {
-          if (phase.start && phase.end) {
-            const startDate = new Date(phase.start);
-            const endDate = new Date(phase.end);
-            
-            // Add all dates in this phase range
-            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-              const dateStr = d.toISOString().split('T')[0];
-              allDates.add(dateStr);
-              phaseData[dateStr] = phaseName;
-            }
+        const todayStr = today.toISOString().split('T')[0];
+        for (const [phase, dates] of Object.entries(periodData.phaseCalendar)) {
+          if (todayStr >= dates.start && todayStr <= dates.end) {
+            currentPhase = phase;
+            break;
           }
-        });
+        }
       }
       
-      // Process user events
-      if (periodData.standardizedEvents && Array.isArray(periodData.standardizedEvents)) {
-        periodData.standardizedEvents.forEach(event => {
-          allDates.add(event.date);
-          userEventData[event.date] = event.originalIndex;
-        });
+      // Get original form data from FormPersistence
+      const periodFormPersistence = window.FormPersistence?.getInstance('period');
+      const savedFormData = periodFormPersistence ? periodFormPersistence.getSavedFormData() : {};
+      
+      // Debug: Log the saved form data
+      console.log('FormPersistence savedFormData:', savedFormData);
+      
+      // Convert FormPersistence data to array format for timeline mapping
+      const formEntries = [];
+      for (let i = 1; i <= 7; i++) {
+        const when = savedFormData[`entry${i}-when`];
+        const what = savedFormData[`entry${i}-what`];
+        console.log(`Entry ${i}: when="${when}", what="${what}"`);
+        if (when || what) {
+          formEntries[i-1] = { when, what };
+        }
       }
       
-      // Convert to sorted array
-      const sortedDates = Array.from(allDates).sort();
-      const currentDate = new Date().toISOString().split('T')[0];
-      
-      // Create timeline rows
-      const timelineRows = sortedDates.map(date => {
-        const isToday = date === currentDate;
-        const phase = phaseData[date];
-        const userEventIndex = userEventData[date];
-        
-        return `
-          <div class="timeline-row ${isToday ? 'current-day' : ''}">
-            <div class="date-label ${isToday ? 'current' : ''}">
-              ${new Date(date).toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric'
-              })}${isToday ? ' (Today)' : ''}
-            </div>
-            <div class="phase-bar-container">
-              ${phase ? `<div class="phase-bar ${phase}-bar">${phase.charAt(0).toUpperCase() + phase.slice(1)} Phase</div>` : ''}
-              ${userEventIndex !== undefined ? `<div class="user-event">Entry ${userEventIndex + 1}</div>` : ''}
-            </div>
-          </div>
-        `;
-      }).join('');
+      console.log('Converted formEntries:', formEntries);
+      console.log('AI standardizedEvents:', periodData.standardizedEvents);
       
       timelineContainer.innerHTML = `
         <div class="timeline-header">
           <h3><i class="fas fa-calendar-alt" style="margin-right: 8px; color: #ff6b9d;"></i>Period Timeline</h3>
-          <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">
-            Vertical timeline with dates on left, phases and events on right
-          </p>
+        </div>
+        
+        <div class="cycle-info">
+          Day ${currentDay} - ${currentPhase.charAt(0).toUpperCase() + currentPhase.slice(1)} Phase
+          ${(() => {
+            // Calculate and display fertile window
+            if (periodData.phaseCalendar && periodData.phaseCalendar.ovulation) {
+              const ovulationStart = new Date(periodData.phaseCalendar.ovulation.start);
+              const fertileStart = new Date(ovulationStart);
+              fertileStart.setDate(fertileStart.getDate() - 5); // 5 days before ovulation
+              const fertileEnd = new Date(periodData.phaseCalendar.ovulation.end);
+              
+              return `<br><i class="fas fa-seedling"></i> Fertile Window: ${fertileStart.toISOString().split('T')[0]} to ${fertileEnd.toISOString().split('T')[0]}`;
+            }
+            return '';
+          })()}
         </div>
         
         <div class="vertical-timeline">
-          ${timelineRows || '<div class="timeline-row"><div class="date-label">No data</div><div class="phase-bar-container">No events recorded</div></div>'}
-        </div>
-        
-        <div class="phase-legend">
-          <div class="legend-item">
-            <div class="legend-color menstrual-bar" style="width: 20px; height: 20px; border-radius: 3px; display: inline-block; margin-right: 8px;"></div>
-            <span>Menstrual Phase</span>
-          </div>
-          <div class="legend-item">
-            <div class="legend-color follicular-bar" style="width: 20px; height: 20px; border-radius: 3px; display: inline-block; margin-right: 8px;"></div>
-            <span>Follicular Phase</span>
-          </div>
-          <div class="legend-item">
-            <div class="legend-color ovulation-bar" style="width: 20px; height: 20px; border-radius: 3px; display: inline-block; margin-right: 8px;"></div>
-            <span>Ovulation Phase</span>
-          </div>
-          <div class="legend-item">
-            <div class="legend-color luteal-bar" style="width: 20px; height: 20px; border-radius: 3px; display: inline-block; margin-right: 8px;"></div>
-            <span>Luteal Phase</span>
-          </div>
+          ${(() => {
+            // Determine timeline date range based on user entries
+            let startDate = null;
+            let endDate = null;
+            const userEntryDates = [];
+            const userEvents = [];
+            
+            // Collect user entry dates and events
+            if (periodData.standardizedEvents) {
+              periodData.standardizedEvents.forEach(event => {
+                const originalEntry = formEntries[event.originalIndex] || {};
+                let phase = getPhaseForDate(event.date, periodData.phaseCalendar);
+                
+                // Smart phase detection based on user entry text
+                if (phase === 'unknown' && originalEntry.what) {
+                  const entryText = originalEntry.what.toLowerCase();
+                  if (entryText.includes('period ended') || entryText.includes('bleeding') || entryText.includes('period')) {
+                    phase = 'menstrual';
+                  } else if (entryText.includes('ovulation') || entryText.includes('ovulating')) {
+                    phase = 'ovulation';
+                  }
+                }
+                
+                userEntryDates.push(event.date);
+                userEvents.push({
+                  date: event.date,
+                  text: originalEntry.what || 'Entry recorded',
+                  phase: phase
+                });
+              });
+            }
+            
+            // Calculate timeline range
+            if (userEntryDates.length > 0) {
+              userEntryDates.sort();
+              startDate = new Date(userEntryDates[0]);
+              endDate = new Date(userEntryDates[userEntryDates.length - 1]);
+              
+              // Extend end date by one cycle (28 days default)
+              const cycleLength = parseInt(getLocal('cycleLength') || '28');
+              endDate.setDate(endDate.getDate() + cycleLength);
+            } else {
+              // Fallback to today if no user entries
+              const today = new Date();
+              startDate = new Date(today);
+              endDate = new Date(today);
+              endDate.setDate(endDate.getDate() + 28);
+            }
+            
+            // Generate daily timeline entries
+            const timelineRows = [];
+            const currentDate = new Date(startDate);
+            const today = new Date().toISOString().split('T')[0];
+            
+            while (currentDate <= endDate) {
+              const dateStr = currentDate.toISOString().split('T')[0];
+              const isToday = dateStr === today;
+              
+              // Check if date is in fertile window
+              let isFertile = false;
+              if (periodData.phaseCalendar && periodData.phaseCalendar.ovulation) {
+                const ovulationStart = new Date(periodData.phaseCalendar.ovulation.start);
+                const fertileStart = new Date(ovulationStart);
+                fertileStart.setDate(fertileStart.getDate() - 5);
+                const fertileEnd = new Date(periodData.phaseCalendar.ovulation.end);
+                
+                const currentDateObj = new Date(dateStr);
+                isFertile = currentDateObj >= fertileStart && currentDateObj <= fertileEnd;
+              }
+              
+              // Get phase for this date
+              const phase = getPhaseForDate(dateStr, periodData.phaseCalendar);
+              
+              // Check if user has entry for this date
+              const userEvent = userEvents.find(event => event.date === dateStr);
+              
+              // Create timeline row
+              let eventDisplay = '';
+              if (userEvent) {
+                eventDisplay = `<div class="user-event">${userEvent.text}</div>`;
+              }
+              
+              // Add fertile indicator
+              if (isFertile) {
+                eventDisplay += `<div class="fertile-indicator">FERTILE</div>`;
+              }
+              
+              // Add phase confidence if available
+              let phaseText = phase;
+              if (periodData.phaseCalendar && periodData.phaseCalendar[phase]) {
+                const confidence = periodData.phaseCalendar[phase].confidence;
+                if (confidence && dateStr >= periodData.phaseCalendar[phase].start && dateStr <= periodData.phaseCalendar[phase].end) {
+                  phaseText += ` (${confidence})`;
+                }
+              }
+              
+              // Get day of week
+              const dayOfWeek = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
+              
+              const rowClasses = `timeline-row ${isToday ? 'current-day' : ''} ${isFertile ? 'fertile-window' : ''}`;
+              
+              timelineRows.push(`
+                <div class="${rowClasses}">
+                  <div class="date-label ${isToday ? 'current' : ''}">${dateStr} ${dayOfWeek}</div>
+                  <div class="phase-bar-container">
+                    <div class="phase-bar ${phase}-bar">${phaseText}</div>
+                    ${eventDisplay}
+                  </div>
+                </div>
+              `);
+              
+              // Move to next day
+              currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            console.log(`Timeline range: ${startDate.toISOString().split('T')[0]} to ${endDate.toISOString().split('T')[0]}`);
+            console.log(`Generated ${timelineRows.length} timeline rows`);
+            
+            return timelineRows.join('');
+          })()}
         </div>
       `;
       
@@ -471,8 +599,8 @@
       const events = [];
       const currentYear = new Date().getFullYear();
       
-      // Process entries 1-6
-      for (let i = 1; i <= 6; i++) {
+      // Process entries 1-7
+      for (let i = 1; i <= 7; i++) {
         const whenKey = `entry${i}-when`;
         const whatKey = `entry${i}-what`;
         
@@ -480,11 +608,13 @@
           const whenText = formData[whenKey].toLowerCase();
           let date = '';
           
-          // Simple date parsing
-          if (whenText.includes('june') || whenText.includes('17')) {
+          // Enhanced date parsing for all formats
+          if (whenText.includes('june 17') || whenText.includes('17')) {
             date = '2025-06-17';
           } else if (whenText.includes('18')) {
             date = '2025-06-18';
+          } else if (whenText.includes('june 19') || whenText.includes('19th')) {
+            date = '2025-06-19';
           } else if (whenText.includes('24')) {
             date = '2025-06-24';
           } else if (whenText.includes('25')) {

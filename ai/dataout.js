@@ -8,6 +8,16 @@ rotected under Canadian and international copyright laws.
 
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
+import { getJSON } from '/utility/getJSON.js';
+import { setJSON } from '/utility/setJSON.js';
+import { FormPersistence } from '/utility/formPersistence.js';
+
+// Make utilities globally available for all output modules
+window.getLocal = getLocal;
+window.setLocal = setLocal;
+window.getJSON = getJSON;
+window.setJSON = setJSON;
+window.FormPersistence = FormPersistence;
 
 document.addEventListener('DOMContentLoaded', async function () {
     // Additional logging for debugging
