@@ -154,6 +154,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
                 '/ai/fashion/fashioniq.html': '/ai/fashion/fashionoutput.html',
                 '/ai/income/incomeiq.html': '/ai/income/incomeoutput.html',
+                '/ai/period/periodiq.html': '/ai/period/periodoutput.html',
                 '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
                 '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
                 '/ai/social/socialiq.html': '/ai/social/socialoutput.html',

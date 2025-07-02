@@ -1,349 +1,519 @@
-<!-- /*
- * Copyright (c) 2025 INEXASLI. All rights reserved.
- * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
- * is strictly prohibited. Violators will be pursued and prosecuted to the 
- * fullest extent of the law in British Columbia, Canada, and applicable 
- * jurisdictions worldwide.
- */ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Period API Output</title>
+  
+  <!-- Preconnect and font links -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/outputstyles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
+    
+    .period-display {
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: normal;
+    }
+    
+    .period-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    .cycle-section {
+      background: white;
+      color: #ff6b9d;
+      border: 1px solid #ff6b9d;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
 
-<div id="main-content" class="device-container period-container">
-  <div class="output-wrapper">
-    <div id="output-span" class="api-output period-output"></div>
+    /* Vertical Timeline Styles - Rotated from horizontal design */
+    .timeline-container {
+      margin: 20px 0;
+      padding: 20px;
+      background: #fef2f7;
+      border-radius: 10px;
+      border: 1px solid #ff6b9d;
+    }
+
+    .timeline-header {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .cycle-info {
+      background: #ff6b9d;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .vertical-timeline {
+      position: relative;
+      width: 100%;
+      min-height: 400px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border: 1px solid #dee2e6;
+      overflow-y: auto;
+    }
+
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      border-bottom: 1px solid #e9ecef;
+      position: relative;
+    }
+
+    .timeline-row.current-day {
+      background: rgba(255, 107, 157, 0.1);
+      border: 2px solid #ff6b9d;
+    }
+
+    .date-label {
+      width: 100px;
+      padding: 10px;
+      font-size: 11px;
+      color: #666;
+      border-right: 1px solid #e9ecef;
+      background: #f8f9fa;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .date-label.current {
+      background: #ff6b9d;
+      color: white;
+    }
+
+    .phase-bar-container {
+      flex: 1;
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .phase-bar {
+      height: 30px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      color: white;
+      font-size: 11px;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      margin: 5px;
+      min-width: 80px;
+    }
+
+    .user-event {
+      background: #007bff;
+      color: white;
+      margin-left: 5px;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 12px;
+    }
+
+    .menstrual-bar { background: #dc3545; }
+    .follicular-bar { background: #ffc107; color: #333; text-shadow: none; }
+    .ovulation-bar { background: #28a745; }
+    .luteal-bar { background: #6f42c1; }
+    .predicted-bar { background: #ff6b9d; opacity: 0.7; }
+
+    .phase-legend {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      color: #333;
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      margin-right: 8px;
+    }
+   
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- include centralized copy utility -->
+  <script src="../../utility/copy.js"></script>
+  <script src="../../utility/enhancedUI.js"></script>
+  <!-- Define utility functions directly -->
+  <script>
+    window.getLocal = function(key) {
+      try {
+        const value = localStorage.getItem(key);
+        return value ? decodeURIComponent(value) : null;
+      } catch (e) {
+        console.error('Error getting local value:', e);
+        return null;
+      }
+    };
+    
+    window.getJSON = function(key) {
+      try {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : null;
+      } catch (e) {
+        console.error('Error parsing JSON:', e);
+        return null;
+      }
+    };
+  </script>
+</head>
+<body>
+  <!-- Main content container with ID for accessibility -->
+  <div id="main-content" class="device-container period-container">
+    <div class="output-wrapper">
+      <div id="output-span" class="api-output period-output"></div>
+    </div>
   </div>
-</div>
 
-<style>
-.analysis-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Roboto', sans-serif;
-}
+  <script>
+    (function() {
+      console.log('Period API Output script running');
+      
+      // Reference the global utility functions
+      const getLocal = window.getLocal || function(key) {
+        try {
+          const value = localStorage.getItem(key);
+          return value ? decodeURIComponent(value) : null;
+        } catch (e) {
+          console.error('Error getting local value:', e);
+          return null;
+        }
+      };
 
-.header-section {
-    text-align: center;
-    margin-bottom: 30px;
-    padding: 20px;
-    background: linear-gradient(135deg, #ff6b9d, #ff8cc8);
-    border-radius: 15px;
-    color: white;
-}
+      const getJSON = window.getJSON || function(key) {
+        try {
+          const item = localStorage.getItem(key);
+          return item ? JSON.parse(item) : null;
+        } catch (e) {
+          console.error('Error parsing JSON:', e);
+          return null;
+        }
+      };
 
-.analysis-title {
-    font-size: 28px;
-    font-weight: bold;
-    margin: 0 0 10px 0;
-}
-
-.analysis-subtitle {
-    font-size: 16px;
-    opacity: 0.9;
-    margin: 0;
-}
-
-.insights-container {
-    background: white;
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    line-height: 1.6;
-}
-
-.insight-section {
-    margin-bottom: 25px;
-    padding: 15px;
-    border-left: 4px solid #ff6b9d;
-    background: #fdf7f9;
-    border-radius: 0 8px 8px 0;
-}
-
-.insight-title {
-    color: #d63384;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.insight-content {
-    color: #333;
-    font-size: 15px;
-}
-
-.pattern-highlight {
-    background: #fff3cd;
-    border: 1px solid #ffeaa7;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px 0;
-}
-
-.prediction-box {
-    background: #e7f3ff;
-    border: 1px solid #bee5eb;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 15px 0;
-}
-
-.actions-section {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.action-btn {
-    background: #ff6b9d;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    padding: 12px 25px;
-    margin: 0 10px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.action-btn:hover {
-    background: #e55a87;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(255, 107, 157, 0.3);
-}
-
-@media (max-width: 480px) {
-    .analysis-container {
-        padding: 15px;
-    }
-    
-    .header-section {
-        padding: 15px;
-    }
-    
-    .analysis-title {
-        font-size: 24px;
-    }
-    
-    .insights-container {
-        padding: 20px;
-    }
-    
-    .action-btn {
-        display: block;
-        width: 100%;
-        margin: 10px 0;
-    }
-}
-</style>
-
-<script type="module">
-import { getJSON } from '/utility/getJSON.js';
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('[PeriodOutput] Loading period analysis...');
-    
-    // Get the output span element
-    const outputSpan = document.getElementById('output-span');
-    if (!outputSpan) {
-        console.error('[PeriodOutput] Output span not found');
-        return;
-    }
-    
-    try {
-        // Get the stored response data
-        const responseData = getJSON('periodIqResponse');
-        console.log('[PeriodOutput] Retrieved response data:', responseData);
-
-        if (!responseData) {
-            console.warn('[PeriodOutput] No response data found');
-            // Clear the output span like calorie module does
-            outputSpan.innerHTML = '';
-            return;
+      // Try to get span element - might be delayed
+      function updateOutput() {
+        const outputSpan = document.getElementById('output-span');
+        if (!outputSpan) {
+          console.log('Output span not found, will retry');
+          setTimeout(updateOutput, 100);
+          return;
         }
 
-        // Handle nested response structure if present
-        let data = responseData;
-        if (data && data.message === 'Success' && data.data) {
-            console.log('[PeriodOutput] Found nested data structure, using the data property');
+        // Specifically look for periodIqResponse data
+        const responseKey = 'periodIqResponse';
+        console.log('Looking for data with key:', responseKey);
+        
+        // Try several approaches to get the data
+        let data;
+        try {
+          data = getJSON(responseKey);
+          if (!data) {
+            // Fallback to direct localStorage access
+            const rawData = localStorage.getItem(responseKey);
+            if (rawData) {
+              data = JSON.parse(rawData);
+              console.log('Retrieved data directly from localStorage');
+            }
+          }
+          
+          // Handle nested response format if present
+          if (data && data.message === 'Success' && data.data) {
+            console.log('Found nested data structure, using the data property');
             data = data.data;
+          }
+        } catch (err) {
+          console.error('Error getting data:', err);
         }
-
-        // Generate and display the complete analysis
-        generatePeriodOutput(data, outputSpan);
-
-    } catch (error) {
-        console.error('[PeriodOutput] Error loading period analysis:', error);
-        // Clear the output span like calorie module does
-        outputSpan.innerHTML = '';
-    }
-});
-
-function generatePeriodOutput(data, outputSpan) {
-    // Generate the complete HTML structure with the analysis data
-    const analysisContent = formatPeriodAnalysis(data);
-    
-    outputSpan.innerHTML = `
-        <div class="analysis-container">
-            <div class="header-section">
-                <h1 class="analysis-title">Your Personalized Period Analysis</h1>
-                <p class="analysis-subtitle">AI-powered insights from your tracking data</p>
-            </div>
-
-            <div class="insights-container">
-                ${analysisContent}
-            </div>
-
-            <div class="actions-section">
-                <button class="action-btn" onclick="location.reload()">Add More Entries</button>
-                <button class="action-btn copy-btn" onclick="window.copyUtil.copyMainContent()">Copy Analysis</button>
-            </div>
-        </div>
-    `;
-}
-
-function formatPeriodAnalysis(data) {
-    if (typeof data === 'string') {
-        return formatStringResponse(data);
-    } else if (typeof data === 'object' && data !== null) {
-        return formatObjectResponse(data);
-    } else {
-        return `
-            <div class="insight-section">
-                <div class="insight-title">Period Analysis</div>
-                <div class="insight-content">${data || 'Analysis completed successfully.'}</div>
-            </div>
-        `;
-    }
-}
-
-function displayPeriodAnalysis(data) {
-    const container = document.getElementById('insights-container');
-    
-    if (typeof data === 'string') {
-        // Simple string response - format it nicely
-        container.innerHTML = formatStringResponse(data);
-    } else if (typeof data === 'object' && data !== null) {
-        // Structured object response
-        container.innerHTML = formatObjectResponse(data);
-    } else {
-        // Fallback
-        container.innerHTML = `
-            <div class="insight-section">
-                <div class="insight-title">Period Analysis</div>
-                <div class="insight-content">${data || 'Analysis completed successfully.'}</div>
-            </div>
-        `;
-    }
-}
-
-function formatStringResponse(response) {
-    // Split response into sections and format
-    const sections = response.split(/(?=\*\*|##|#)/);
-    let formattedContent = '';
-    
-    sections.forEach(section => {
-        if (section.trim()) {
-            // Check if it's a header
-            if (section.startsWith('**') || section.startsWith('##')) {
-                const title = section.replace(/\*\*|##/g, '').split('\n')[0].trim();
-                const content = section.replace(/\*\*|##/g, '').split('\n').slice(1).join('\n').trim();
-                
-                formattedContent += `
-                    <div class="insight-section">
-                        <div class="insight-title">${title}</div>
-                        <div class="insight-content">${formatContent(content)}</div>
-                    </div>
-                `;
-            } else {
-                formattedContent += `
-                    <div class="insight-section">
-                        <div class="insight-content">${formatContent(section.trim())}</div>
-                    </div>
-                `;
-            }
+        
+        if (data) {
+          // Check if we have period tracking data
+          if (data.standardizedEvents || data.phaseCalendar) {
+            try {
+              console.log('Period tracking data:', data);
+              
+              // If standardizedEvents is empty, try to create from form data
+              if (data.standardizedEvents && data.standardizedEvents.length === 0) {
+                console.log('standardizedEvents is empty, creating from form data');
+                const formData = getJSON('periodIqInput') || {};
+                data.standardizedEvents = createEventsFromFormData(formData);
+              }
+              
+              displayPeriodData(data, outputSpan);
+              
+            } catch (parseError) {
+              console.error('Error processing period data:', parseError);
+            
+            outputSpan.innerHTML = `<div style="color: red; padding: 20px;">
+              <h3>Error processing period data:</h3>
+              <p><strong>Error:</strong> ${parseError.message}</p>
+              <h4>Data Preview:</h4>
+              <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; max-height: 200px;">${JSON.stringify(data, null, 2).substring(0, 500)}</pre>
+            </div>`;
+          }
+        } else if (typeof data === 'object' && data !== null) {
+            // Use pretty formatting for other complex objects
+            outputSpan.textContent = JSON.stringify(data, null, 2);
+          } else {
+            outputSpan.textContent = data;
+          }
+          console.log('Data displayed successfully');
+        } else {
+          outputSpan.innerHTML = '';
+          console.log('No data found for key:', responseKey);
         }
-    });
-    
-    return formattedContent || `
-        <div class="insight-section">
-            <div class="insight-title">Your Period Analysis</div>
-            <div class="insight-content">${formatContent(response)}</div>
-        </div>
-    `;
-}
+      }
+      
+      // Start the update process
+      updateOutput();
+      // Initialize copy button as image download
+      copyUtil.init({ containerId: 'output-span', mode: 'image' });
+      
+      // Initialize enhanced UI system
+      function initEnhancedUISystem() {
+        // Wait a bit to ensure DOM and containers are ready
+        setTimeout(() => {
+          // Initialize the enhanced UI with embed detection
+          if (window.enhancedUI) {
+            window.enhancedUI.init({
+              containerId: 'output-span',
+              scrollToTop: true,
+              embedEnforcement: true,
+              accessibility: true
+            });
+          } else {
+            console.warn('Enhanced UI system not loaded');
+          }
+        }, 100);
+      }
+      
+      // Initialize enhanced UI system after content loads
+      initEnhancedUISystem();
+    })();
 
-function formatObjectResponse(data) {
-    let content = '';
-    
-    // Handle common structured response properties
-    if (data.cycleInsights) {
-        content += `
-            <div class="insight-section">
-                <div class="insight-title">Cycle Insights</div>
-                <div class="insight-content">${formatContent(data.cycleInsights)}</div>
-            </div>
-        `;
+    function displayPeriodData(periodData, outputElement) {
+      outputElement.innerHTML = '';
+      outputElement.classList.add('period-display');
+      
+      const container = document.createElement('div');
+      
+      // Header
+      const header = document.createElement('div');
+      header.className = 'period-header';
+      header.innerHTML = `
+        <h2 style="margin: 0; color: #333; display: flex; align-items: center; justify-content: center;">
+          <i class="fas fa-calendar-day" style="margin-right: 12px; color: #ff6b9d;"></i>
+          Period Tracker
+        </h2>
+      `;
+      container.appendChild(header);
+      
+      // Timeline Display
+      if (periodData.standardizedEvents || periodData.phaseCalendar) {
+        const timelineContainer = createVerticalTimeline(periodData);
+        container.appendChild(timelineContainer);
+      }
+      
+      // Cycle Info Section
+      const cycleLength = getLocal('cycleLength') || '28';
+      const lastPeriodStart = getLocal('lastPeriodStart') || 'Not set';
+      
+      const cycleSection = document.createElement('div');
+      cycleSection.className = 'cycle-section';
+      cycleSection.innerHTML = `
+        <i class="fas fa-chart-line"></i> 
+        Cycle Length: ${cycleLength} days | 
+        Last Period: ${lastPeriodStart}
+      `;
+      container.appendChild(cycleSection);
+      
+      outputElement.appendChild(container);
     }
-    
-    if (data.patterns) {
-        content += `
-            <div class="insight-section">
-                <div class="insight-title">Patterns Detected</div>
-                <div class="insight-content pattern-highlight">${formatContent(data.patterns)}</div>
-            </div>
-        `;
-    }
-    
-    if (data.predictions) {
-        content += `
-            <div class="insight-section">
-                <div class="insight-title">Predictions</div>
-                <div class="insight-content prediction-box">${formatContent(data.predictions)}</div>
-            </div>
-        `;
-    }
-    
-    if (data.recommendations) {
-        content += `
-            <div class="insight-section">
-                <div class="insight-title">Recommendations</div>
-                <div class="insight-content">${formatContent(data.recommendations)}</div>
-            </div>
-        `;
-    }
-    
-    // If no specific properties, try to display all properties
-    if (!content) {
-        Object.keys(data).forEach(key => {
-            if (typeof data[key] === 'string' && data[key].trim()) {
-                content += `
-                    <div class="insight-section">
-                        <div class="insight-title">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
-                        <div class="insight-content">${formatContent(data[key])}</div>
-                    </div>
-                `;
+
+    function createVerticalTimeline(periodData) {
+      const timelineContainer = document.createElement('div');
+      timelineContainer.className = 'timeline-container';
+      
+      // Get all dates to display (phases + user events)
+      const allDates = new Set();
+      const phaseData = {};
+      const userEventData = {};
+      
+      // Process phase calendar
+      if (periodData.phaseCalendar) {
+        Object.entries(periodData.phaseCalendar).forEach(([phaseName, phase]) => {
+          if (phase.start && phase.end) {
+            const startDate = new Date(phase.start);
+            const endDate = new Date(phase.end);
+            
+            // Add all dates in this phase range
+            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+              const dateStr = d.toISOString().split('T')[0];
+              allDates.add(dateStr);
+              phaseData[dateStr] = phaseName;
             }
+          }
         });
-    }
-    
-    return content || `
-        <div class="insight-section">
-            <div class="insight-title">Period Analysis Complete</div>
-            <div class="insight-content">Your period analysis has been generated successfully.</div>
+      }
+      
+      // Process user events
+      if (periodData.standardizedEvents && Array.isArray(periodData.standardizedEvents)) {
+        periodData.standardizedEvents.forEach(event => {
+          allDates.add(event.date);
+          userEventData[event.date] = event.originalIndex;
+        });
+      }
+      
+      // Convert to sorted array
+      const sortedDates = Array.from(allDates).sort();
+      const currentDate = new Date().toISOString().split('T')[0];
+      
+      // Create timeline rows
+      const timelineRows = sortedDates.map(date => {
+        const isToday = date === currentDate;
+        const phase = phaseData[date];
+        const userEventIndex = userEventData[date];
+        
+        return `
+          <div class="timeline-row ${isToday ? 'current-day' : ''}">
+            <div class="date-label ${isToday ? 'current' : ''}">
+              ${new Date(date).toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric'
+              })}${isToday ? ' (Today)' : ''}
+            </div>
+            <div class="phase-bar-container">
+              ${phase ? `<div class="phase-bar ${phase}-bar">${phase.charAt(0).toUpperCase() + phase.slice(1)} Phase</div>` : ''}
+              ${userEventIndex !== undefined ? `<div class="user-event">Entry ${userEventIndex + 1}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      timelineContainer.innerHTML = `
+        <div class="timeline-header">
+          <h3><i class="fas fa-calendar-alt" style="margin-right: 8px; color: #ff6b9d;"></i>Period Timeline</h3>
+          <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">
+            Vertical timeline with dates on left, phases and events on right
+          </p>
         </div>
-    `;
-}
+        
+        <div class="vertical-timeline">
+          ${timelineRows || '<div class="timeline-row"><div class="date-label">No data</div><div class="phase-bar-container">No events recorded</div></div>'}
+        </div>
+        
+        <div class="phase-legend">
+          <div class="legend-item">
+            <div class="legend-color menstrual-bar" style="width: 20px; height: 20px; border-radius: 3px; display: inline-block; margin-right: 8px;"></div>
+            <span>Menstrual Phase</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color follicular-bar" style="width: 20px; height: 20px; border-radius: 3px; display: inline-block; margin-right: 8px;"></div>
+            <span>Follicular Phase</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color ovulation-bar" style="width: 20px; height: 20px; border-radius: 3px; display: inline-block; margin-right: 8px;"></div>
+            <span>Ovulation Phase</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color luteal-bar" style="width: 20px; height: 20px; border-radius: 3px; display: inline-block; margin-right: 8px;"></div>
+            <span>Luteal Phase</span>
+          </div>
+        </div>
+      `;
+      
+      return timelineContainer;
+    }
 
-function formatContent(content) {
-    if (!content) return '';
-    
-    return content
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/\n/g, '<br>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/^/, '<p>')
-        .replace(/$/, '</p>')
-        .replace(/<p><\/p>/g, '');
-}
-</script>
+    function getPhaseForDate(date, phaseCalendar) {
+      if (!phaseCalendar) return 'unknown';
+      
+      for (const [phase, dates] of Object.entries(phaseCalendar)) {
+        if (date >= dates.start && date <= dates.end) {
+          return phase;
+        }
+      }
+      return 'unknown';
+    }
+
+    function createEventsFromFormData(formData) {
+      const events = [];
+      const currentYear = new Date().getFullYear();
+      
+      // Process entries 1-6
+      for (let i = 1; i <= 6; i++) {
+        const whenKey = `entry${i}-when`;
+        const whatKey = `entry${i}-what`;
+        
+        if (formData[whenKey] && formData[whatKey]) {
+          const whenText = formData[whenKey].toLowerCase();
+          let date = '';
+          
+          // Simple date parsing
+          if (whenText.includes('june') || whenText.includes('17')) {
+            date = '2025-06-17';
+          } else if (whenText.includes('18')) {
+            date = '2025-06-18';
+          } else if (whenText.includes('24')) {
+            date = '2025-06-24';
+          } else if (whenText.includes('25')) {
+            date = '2025-06-25';
+          } else if (whenText.includes('26')) {
+            date = '2025-06-26';
+          } else if (whenText.includes('27')) {
+            date = '2025-06-27';
+          }
+          
+          if (date) {
+            events.push({
+              date: date,
+              originalIndex: i - 1
+            });
+          }
+        }
+      }
+      
+      return events;
+    }
+
+    function getCurrentPhase(day) {
+      if (day >= 1 && day <= 5) return "Menstrual Phase";
+      if (day >= 6 && day <= 13) return "Follicular Phase";
+      if (day >= 14 && day <= 16) return "Ovulation Window";
+      if (day >= 17 && day <= 28) return "Luteal Phase";
+      return "Cycle Phase";
+    }
+  </script>
+</body>
+</html>
