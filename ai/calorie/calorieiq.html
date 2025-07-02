@@ -90,7 +90,6 @@
 <!-- Jump to Food Log button (conditionally rendered by JS) -->
 
 <script type="module">
-import { initAutoExpandTextareas } from '../styles/inputFunctionality.js';
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 
@@ -98,7 +97,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
   console.log("Calorie IQ script initializing");
 
   // Initialize textarea auto-expand
-  initAutoExpandTextareas();
+  window.initAutoExpandTextareas();
   document.addEventListener('textarea:changed', function(e) {
     // Save form data when any textarea changes
     if (window.calorieFormPersistence) {

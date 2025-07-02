@@ -41,14 +41,13 @@
 </div>
 
 <script type="module">
-import { initAutoExpandTextareas } from '../styles/inputFunctionality.js';
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 (function() {
   console.log("ResearchIQ script initializing");
 
   // Initialize textarea auto-expand
-  initAutoExpandTextareas();
+  window.initAutoExpandTextareas();
   document.addEventListener('textarea:changed', function(e) {
     if (window.researchFormPersistence) {
       window.researchFormPersistence.saveFormData();

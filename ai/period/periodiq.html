@@ -61,7 +61,6 @@
 </div>
 
 <script type="module">
-import { initAutoExpandTextareas, createSplitTextarea, deleteEntry, handleConditionalInput } from '../styles/inputFunctionality.js';
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 (function() {
@@ -70,7 +69,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
   let entryCounter = 0;
 
   // Initialize textarea auto-expand
-  initAutoExpandTextareas();
+  window.initAutoExpandTextareas();
   
   // Listen for textarea changes to save data
   document.addEventListener('textarea:changed', function(e) {
@@ -102,7 +101,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       })}`;
     }
 
-    const entryDiv = createSplitTextarea({
+    const entryDiv = window.createSplitTextarea({
       id: `entry${entryCounter}`, // Changed to match numbered pattern
       whenPlaceholder: 'When?',
       whatPlaceholder: 'What happened? (e.g., spotting started, heavy flow, cramps, mood changes)',
@@ -114,7 +113,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     container.appendChild(entryDiv);
     
     // Initialize auto-expand for the new textarea
-    initAutoExpandTextareas();
+    window.initAutoExpandTextareas();
     
     // Save form data after adding entry
     if (window.periodFormPersistence) {
@@ -227,7 +226,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     'spermicide': 'Brand/type (e.g. VCF, Conceptrol)'
   };
 
-  const handleBirthControlChange = handleConditionalInput(
+  const handleBirthControlChange = window.handleConditionalInput(
     'period-birth-control-type',
     'period-birth-control-detail',
     placeholderMap,
@@ -316,11 +315,11 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     getFormData: () => window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {},
     saveFormData: () => window.periodFormPersistence ? window.periodFormPersistence.saveFormData() : false,
     addEntry: addPeriodEntry,
-    deleteEntry: deleteEntry
+    deleteEntry: window.deleteEntry
   };
   
   // Register global function for FormPersistence recreation
   window.addEntry = addPeriodEntry;
-  window.deleteEntry = deleteEntry;
+  window.deleteEntry = window.deleteEntry;
 })();
 </script>

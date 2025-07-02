@@ -10,6 +10,7 @@ import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 import { FormPersistence } from '/utility/formPersistence.js';
 import { initializeBidirectionalSwipe, initializeSimpleVerticalSwipe } from '/utility/swipeFunctionality.js';
+import { initAutoExpandTextareas, createSplitTextarea, deleteEntry, handleConditionalInput, addEntryButton } from '/ai/styles/inputFunctionality.js';
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
@@ -947,6 +948,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Make updatePaymentButtonDisplay globally accessible
     window.updatePaymentButtonDisplay = updatePaymentButtonDisplay;
+
+    // Make inputFunctionality functions globally accessible
+    window.initAutoExpandTextareas = initAutoExpandTextareas;
+    window.createSplitTextarea = createSplitTextarea;
+    window.deleteEntry = deleteEntry;
+    window.handleConditionalInput = handleConditionalInput;
+    window.addEntryButton = addEntryButton;
 
     // Setup utility buttons within the datain container
     function setupUtilityButtons() {
