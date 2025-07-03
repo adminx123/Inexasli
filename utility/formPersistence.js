@@ -683,7 +683,7 @@ class FormPersistence {
         const formData = {};
         let foundRelevantField = false;
         // Collect from text inputs, textareas, and selects
-        document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], textarea, select').forEach(element => {
+        document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], textarea, select').forEach(element => {
             if (element.id) {
                 // Only collect fields that belong to this module (have the module prefix) or are in the device-container
                 const modulePrefix = `${this.moduleName}-`;
@@ -773,11 +773,6 @@ class FormPersistence {
      * @returns {string} The expected function name
      */
     getRecreationFunctionName(basePattern) {
-        // For specific modules, use module-specific function names
-        if (this.moduleName === 'calorie' && ['snack', 'breakfast', 'lunch', 'dinner'].includes(basePattern)) {
-            return 'addMealInput';
-        }
-        
         // For other patterns, generate function name from pattern
         // "entry" -> "addEntry", "period-entry" -> "addPeriodEntry"
         if (basePattern.includes('-')) {
