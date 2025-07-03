@@ -466,16 +466,35 @@
         ${(() => {
           // Add phase confidence legend at top
           if (periodData.phaseCalendar) {
-            const confidenceInfo = [];
+            const confidenceEntries = [];
             Object.entries(periodData.phaseCalendar).forEach(([phase, data]) => {
               if (data.confidence) {
-                confidenceInfo.push(`${phase.charAt(0).toUpperCase() + phase.slice(1)}: ${data.confidence}`);
+                const phaseColors = {
+                  'menstrual': '#ff6b9d',
+                  'follicular': '#4CAF50', 
+                  'ovulation': '#FF9800',
+                  'luteal': '#9C27B0'
+                };
+                const color = phaseColors[phase] || '#666';
+                confidenceEntries.push(`
+                  <div class="confidence-item" style="display: flex; align-items: center; gap: 6px;">
+                    <span class="phase-dot" style="width: 8px; height: 8px; border-radius: 50%; background: ${color};"></span>
+                    <span class="phase-name" style="font-weight: 500; color: ${color};">${phase.charAt(0).toUpperCase() + phase.slice(1)}</span>
+                    <span class="confidence-level" style="font-size: 11px; padding: 2px 6px; background: ${color}20; color: ${color}; border-radius: 10px;">${data.confidence}</span>
+                  </div>
+                `);
               }
             });
             
-            if (confidenceInfo.length > 0) {
-              return `<div class="phase-legend" style="margin-bottom: 15px; font-size: 12px; color: #666; text-align: center; background: #f8f9fa; padding: 10px; border-radius: 5px;">
-                <i class="fas fa-info-circle"></i> AI Confidence: ${confidenceInfo.join(' | ')}
+            if (confidenceEntries.length > 0) {
+              return `<div class="confidence-legend" style="margin-bottom: 15px; padding: 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; border-left: 4px solid #ff6b9d;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <i class="fas fa-brain" style="color: #ff6b9d; font-size: 14px;"></i>
+                  <span style="font-weight: 600; color: #495057; font-size: 13px;">AI Phase Detection Confidence</span>
+                </div>
+                <div class="confidence-grid" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
+                  ${confidenceEntries.join('')}
+                </div>
               </div>`;
             }
           }
@@ -623,25 +642,6 @@
             return timelineRows.join('');
           })()}
         </div>
-        
-        ${(() => {
-          // Add phase confidence legend
-          if (periodData.phaseCalendar) {
-            const confidenceInfo = [];
-            Object.entries(periodData.phaseCalendar).forEach(([phase, data]) => {
-              if (data.confidence) {
-                confidenceInfo.push(`${phase.charAt(0).toUpperCase() + phase.slice(1)}: ${data.confidence} confidence`);
-              }
-            });
-            
-            if (confidenceInfo.length > 0) {
-              return `<div class="phase-legend" style="margin-top: 15px; font-size: 12px; color: #666; text-align: center;">
-                <i class="fas fa-info-circle"></i> AI Confidence: ${confidenceInfo.join(' | ')}
-              </div>`;
-            }
-          }
-          return '';
-        })()}
       `;
       
       return timelineContainer;
