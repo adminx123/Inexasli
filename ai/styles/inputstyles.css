@@ -726,3 +726,114 @@ button:hover {
   text-align: center;
 }
 
+/* Split Calendar Text Component Styles */
+/* ==================================== */
+
+.split-calendar-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px;
+  background-color: #f9f9f9;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.split-calendar-text:hover {
+  border-color: #c1c1c1;
+}
+
+.split-calendar-text:focus-within {
+  border-color: #007acc;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.1);
+}
+
+.split-calendar-text .when-field {
+  flex: 0 0 140px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.split-calendar-text .when-field:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.1);
+}
+
+.split-calendar-text .what-field {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  background-color: #fff;
+  color: #333;
+  resize: vertical;
+  min-height: 38px;
+  transition: border-color 0.2s ease;
+}
+
+.split-calendar-text .what-field:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.1);
+}
+
+.split-calendar-text .what-field::placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+.split-calendar-text .delete-btn {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  background-color: #ff4444;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.split-calendar-text .delete-btn:hover {
+  background-color: #cc0000;
+}
+
+.split-calendar-text .delete-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.3);
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .split-calendar-text {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .split-calendar-text .when-field {
+    flex: 1;
+    width: 100%;
+  }
+  
+  .split-calendar-text .delete-btn {
+    align-self: flex-end;
+  }
+}
+

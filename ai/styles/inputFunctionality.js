@@ -589,6 +589,272 @@ function createSplitTextarea(options = {}) {
         document.head.appendChild(style);
     }
 
+    // Refresh FormPersistence input handlers to pick up the new fields
+    // This is done with a small delay to ensure the DOM is fully ready
+    setTimeout(() => {
+        if (window.periodFormPersistence && window.periodFormPersistence.refreshInputHandlers) {
+            window.periodFormPersistence.refreshInputHandlers();
+        }
+    }, 10);
+
+    return container;
+}
+
+/**
+ * Creates a split calendar-text component with date picker and "what" field
+ * @param {Object} options - Configuration options
+ * @param {string} options.id - Base ID for the component
+ * @param {string} options.whatPlaceholder - Placeholder for what field
+ * @param {string} options.whenValue - Default value for date field (YYYY-MM-DD)
+ * @param {string} options.whatValue - Default value for what field
+ * @param {number} options.entryNumber - Entry number for display
+ * @returns {HTMLElement} The created split calendar-text component
+ */
+function createSplitCalendarText(options = {}) {
+    const {
+        id = 'split-calendar-text',
+        whatPlaceholder = 'What happened?',
+        whenValue = '',
+        whatValue = '',
+        entryNumber = 1
+    } = options;
+
+    // Create container
+    const container = document.createElement('div');
+    container.className = 'split-calendar-container';
+    container.dataset.entryId = id;
+
+    // Create entry header
+    const header = document.createElement('div');
+    header.className = 'entry-header';
+    header.innerHTML = `
+        <span class="entry-number">Entry #${entryNumber}</span>
+    `;
+
+    // Create delete button (positioned absolutely in top right)
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'plain-x-delete-btn';
+    deleteBtn.dataset.entryId = id;
+    deleteBtn.title = 'Delete this entry';
+    deleteBtn.innerHTML = '×';
+
+    // Create date picker field
+    const whenField = document.createElement('input');
+    whenField.type = 'date';
+    whenField.className = 'when-date-field';
+    whenField.id = `${id}-when`;
+    whenField.value = whenValue;
+
+    // Create what field (textarea)
+    const whatField = document.createElement('textarea');
+    whatField.className = 'what-field';
+    whatField.id = `${id}-what`;
+    whatField.placeholder = whatPlaceholder;
+    whatField.value = whatValue;
+    whatField.rows = 2;
+
+    // Create fields container
+    const fieldsContainer = document.createElement('div');
+    fieldsContainer.className = 'split-fields-container';
+    
+    const whenContainer = document.createElement('div');
+    whenContainer.className = 'when-container';
+    const whenLabel = document.createElement('label');
+    whenLabel.textContent = 'When:';
+    whenLabel.htmlFor = whenField.id;
+    whenContainer.appendChild(whenLabel);
+    whenContainer.appendChild(whenField);
+
+    const whatContainer = document.createElement('div');
+    whatContainer.className = 'what-container';
+    const whatLabel = document.createElement('label');
+    whatLabel.textContent = 'What:';
+    whatLabel.htmlFor = whatField.id;
+    whatContainer.appendChild(whatLabel);
+    whatContainer.appendChild(whatField);
+
+    fieldsContainer.appendChild(whenContainer);
+    fieldsContainer.appendChild(whatContainer);
+
+    // Add event listeners
+    whenField.addEventListener('change', () => {
+        // Trigger custom event for form persistence (same as textarea for consistency)
+        document.dispatchEvent(new CustomEvent('textarea:changed', {
+            detail: { field: whenField, container }
+        }));
+    });
+
+    whatField.addEventListener('input', () => {
+        // Trigger custom event for form persistence
+        document.dispatchEvent(new CustomEvent('textarea:changed', {
+            detail: { field: whatField, container }
+        }));
+    });
+
+    // Delete button event listener
+    deleteBtn.addEventListener('click', () => {
+        deleteEntry(container);
+    });
+
+    // Auto-expand textarea only
+    whatField.addEventListener('input', () => autoExpandTextarea(whatField));
+
+    // Initial auto-expand for what field
+    autoExpandTextarea(whatField);
+
+    // Assemble container
+    container.appendChild(deleteBtn);
+    container.appendChild(header);
+    container.appendChild(fieldsContainer);
+
+    // Add CSS if not already present
+    if (!document.querySelector('#split-calendar-styles')) {
+        const style = document.createElement('style');
+        style.id = 'split-calendar-styles';
+        style.textContent = `
+            .split-calendar-container {
+                margin-bottom: 20px;
+                padding: 15px;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                background: #fafafa;
+                position: relative;
+            }
+            
+            .entry-header {
+                margin-bottom: 10px;
+                font-weight: bold;
+                color: #666;
+                font-size: 14px;
+            }
+            
+            .plain-x-delete-btn {
+                position: absolute !important;
+                top: 8px !important;
+                right: 8px !important;
+                background: none !important;
+                color: #666 !important;
+                border: none !important;
+                width: auto !important;
+                height: auto !important;
+                cursor: pointer !important;
+                font-size: 16px !important;
+                line-height: 1 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                z-index: 10 !important;
+                font-weight: normal !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                text-decoration: none !important;
+                outline: none !important;
+                transition: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+                display: inline !important;
+                font-family: inherit !important;
+            }
+            
+            .plain-x-delete-btn:hover,
+            .plain-x-delete-btn:focus,
+            .plain-x-delete-btn:active {
+                background: none !important;
+                color: #666 !important;
+                border: none !important;
+                box-shadow: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+                outline: none !important;
+            }
+            
+            .split-fields-container {
+                display: flex;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .when-container {
+                flex: 0 0 180px;
+            }
+            
+            .what-container {
+                flex: 1;
+            }
+            
+            .when-container label,
+            .what-container label {
+                display: block;
+                margin-bottom: 5px;
+                font-size: 13px;
+                font-weight: 600;
+                color: #555;
+            }
+            
+            .when-date-field {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+                font-family: inherit;
+                background: white;
+                color: #333;
+                min-height: 38px;
+                box-sizing: border-box;
+            }
+            
+            .when-date-field:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+            }
+            
+            .what-field {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+                background: white;
+                resize: none;
+                overflow: hidden;
+                min-height: 40px;
+            }
+            
+            .what-field:focus {
+                outline: none;
+                border-color: #ff6b9d;
+                box-shadow: 0 0 5px rgba(255, 107, 157, 0.3);
+            }
+            
+            @media (max-width: 600px) {
+                .split-calendar-container .split-fields-container {
+                    flex-direction: column;
+                }
+                
+                .split-calendar-container .when-container,
+                .split-calendar-container .what-container {
+                    width: 100%;
+                    margin-bottom: 15px;
+                }
+                
+                .split-calendar-container .what-container {
+                    margin-bottom: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // Refresh FormPersistence input handlers to pick up the new fields
+    // This is done with a small delay to ensure the DOM is fully ready
+    setTimeout(() => {
+        if (window.periodFormPersistence && window.periodFormPersistence.refreshInputHandlers) {
+            window.periodFormPersistence.refreshInputHandlers();
+        }
+    }, 10);
+
     return container;
 }
 
@@ -773,13 +1039,114 @@ function addEntryButton({
   return { button: addBtn, addEntry };
 }
 
+/**
+ * Adds a generic "Add Entry" button for split calendar-text entries to a container.
+ * @param {Object} options
+ * @param {string} options.containerSelector - CSS selector for the container (e.g., '#period-entries-container')
+ * @param {string} options.buttonId - ID for the add button (e.g., 'add-period-entry-btn')
+ * @param {string} options.buttonText - Text for the button (e.g., 'Add Entry')
+ * @param {string} options.entryIdPrefix - Prefix for entry IDs (e.g., 'period-entry')
+ * @param {string} options.whatPlaceholder - Placeholder for what field
+ * @param {Function} options.onAdd - Optional callback when entry is added
+ */
+function addCalendarEntryButton({
+  containerSelector,
+  buttonId,
+  buttonText = 'Add Entry',
+  entryIdPrefix,
+  whatPlaceholder = 'What happened?',
+  onAdd = null
+}) {
+  const container = document.querySelector(containerSelector);
+  if (!container) {
+    console.error('[InputFunctionality] Container not found for add calendar entry button:', containerSelector);
+    return;
+  }
+
+  // Prevent duplicate buttons
+  if (document.getElementById(buttonId)) return;
+
+  let entryCounter = 1;
+
+  function addEntry(whenValue = '', whatValue = '') {
+    // Find existing entries to determine counter
+    const existingEntries = container.querySelectorAll(`[data-entry-id^="${entryIdPrefix}"]`);
+    entryCounter = existingEntries.length + 1;
+
+    // Default "when" value to current date if empty
+    if (!whenValue) {
+      const now = new Date();
+      whenValue = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+    }
+
+    const entryDiv = createSplitCalendarText({
+      id: `${entryIdPrefix}-${entryCounter}`,
+      whatPlaceholder: whatPlaceholder,
+      whenValue: whenValue,
+      whatValue: whatValue,
+      entryNumber: entryCounter
+    });
+
+    container.appendChild(entryDiv);
+    
+    // Initialize auto-expand for the new textarea
+    const newTextarea = entryDiv.querySelector('textarea');
+    if (newTextarea) {
+        autoExpandTextarea(newTextarea);
+        newTextarea.addEventListener('input', () => autoExpandTextarea(newTextarea));
+        newTextarea.addEventListener('paste', () => {
+            setTimeout(() => autoExpandTextarea(newTextarea), 0);
+        });
+    }
+    
+    // Call callback if provided
+    if (typeof onAdd === 'function') {
+      onAdd(entryCounter, entryDiv);
+    }
+
+    return entryDiv;
+  }
+
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.id = buttonId;
+  addBtn.textContent = buttonText;
+  addBtn.style.cssText = [
+    'padding: 10px 20px',
+    'margin: 10px auto',
+    'display: block',
+    'border: 1px solid #4a7c59',
+    'background: #f2f9f3',
+    'color: #2d5a3d',
+    'border-radius: 5px',
+    'font-size: 14px',
+    'cursor: pointer',
+    'font-family: inherit',
+    'box-sizing: border-box'
+  ].join(';');
+  
+  addBtn.onclick = () => addEntry();
+
+  // Insert after the container
+  container.parentNode.insertBefore(addBtn, container.nextSibling);
+
+  // Expose the addEntry function globally for module use
+  window[`add${entryIdPrefix.split('-').map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1)
+  ).join('')}`] = addEntry;
+
+  return { button: addBtn, addEntry };
+}
+
 // Export functions for module use
 export { 
     initAutoExpandTextareas, 
-    createSplitTextarea, 
+    createSplitTextarea,
+    createSplitCalendarText,
     deleteEntry,
     handleConditionalInput, 
     triggerContainerResize,
-    addEntryButton
+    addEntryButton,
+    addCalendarEntryButton
 };
 
