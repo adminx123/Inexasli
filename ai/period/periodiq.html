@@ -214,12 +214,13 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     }
 
     // Initialize the calendar entry button using the scaffolding
-    window.addCalendarEntryButton({
+    window.addEntryButton({
       containerSelector: '#period-entries-container',
       buttonId: 'add-period-entry-btn',
       buttonText: '+ Add New Entry',
       entryIdPrefix: 'entry',
       whatPlaceholder: 'What happened? (e.g., spotting started, heavy flow, cramps, mood changes)',
+      useCalendar: true,
       onAdd: (entryNumber, entryDiv) => {
         // Refresh FormPersistence input handlers to pick up the new fields
         if (window.periodFormPersistence) {

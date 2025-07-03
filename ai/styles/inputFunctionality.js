@@ -589,14 +589,6 @@ function createSplitTextarea(options = {}) {
         document.head.appendChild(style);
     }
 
-    // Refresh FormPersistence input handlers to pick up the new fields
-    // This is done with a small delay to ensure the DOM is fully ready
-    setTimeout(() => {
-        if (window.periodFormPersistence && window.periodFormPersistence.refreshInputHandlers) {
-            window.periodFormPersistence.refreshInputHandlers();
-        }
-    }, 10);
-
     return container;
 }
 
@@ -847,14 +839,6 @@ function createSplitCalendarText(options = {}) {
         document.head.appendChild(style);
     }
 
-    // Refresh FormPersistence input handlers to pick up the new fields
-    // This is done with a small delay to ensure the DOM is fully ready
-    setTimeout(() => {
-        if (window.periodFormPersistence && window.periodFormPersistence.refreshInputHandlers) {
-            window.periodFormPersistence.refreshInputHandlers();
-        }
-    }, 10);
-
     return container;
 }
 
@@ -934,14 +918,15 @@ function triggerContainerResize() {
 }
 
 /**
- * Adds a generic "Add Entry" button for split textarea entries to a container.
+ * Adds a generic "Add Entry" button for split entries to a container.
  * @param {Object} options
  * @param {string} options.containerSelector - CSS selector for the container (e.g., '#period-entries-container')
  * @param {string} options.buttonId - ID for the add button (e.g., 'add-period-entry-btn')
  * @param {string} options.buttonText - Text for the button (e.g., 'Add Entry')
  * @param {string} options.entryIdPrefix - Prefix for entry IDs (e.g., 'period-entry')
- * @param {string} options.whenPlaceholder - Placeholder for when field
+ * @param {string} options.whenPlaceholder - Placeholder for when field (textarea only)
  * @param {string} options.whatPlaceholder - Placeholder for what field
+ * @param {boolean} options.useCalendar - Use calendar date picker instead of textarea for when field
  * @param {Function} options.onAdd - Optional callback when entry is added
  */
 function addEntryButton({
@@ -951,6 +936,7 @@ function addEntryButton({
   entryIdPrefix,
   whenPlaceholder = 'When?',
   whatPlaceholder = 'What happened?',
+  useCalendar = false,
   onAdd = null
 }) {
   const container = document.querySelector(containerSelector);
@@ -969,135 +955,48 @@ function addEntryButton({
     const existingEntries = container.querySelectorAll(`[data-entry-id^="${entryIdPrefix}"]`);
     entryCounter = existingEntries.length + 1;
 
-    // Default "when" value to current time if empty
+    // Default "when" value based on calendar vs textarea
     if (!whenValue) {
       const now = new Date();
-      whenValue = `Today ${now.toLocaleTimeString('en-US', { 
-        hour: 'numeric', 
-        minute: '2-digit',
-        hour12: true 
-      })}`;
+      if (useCalendar) {
+        whenValue = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+      } else {
+        whenValue = `Today ${now.toLocaleTimeString('en-US', { 
+          hour: 'numeric', 
+          minute: '2-digit',
+          hour12: true 
+        })}`;
+      }
     }
 
-    const entryDiv = createSplitTextarea({
-      id: `${entryIdPrefix}-${entryCounter}`,
-      whenPlaceholder: whenPlaceholder,
-      whatPlaceholder: whatPlaceholder,
-      whenValue: whenValue,
-      whatValue: whatValue,
-      entryNumber: entryCounter
-    });
+    const entryDiv = useCalendar ? 
+      createSplitCalendarText({
+        id: `${entryIdPrefix}-${entryCounter}`,
+        whatPlaceholder: whatPlaceholder,
+        whenValue: whenValue,
+        whatValue: whatValue,
+        entryNumber: entryCounter
+      }) :
+      createSplitTextarea({
+        id: `${entryIdPrefix}-${entryCounter}`,
+        whenPlaceholder: whenPlaceholder,
+        whatPlaceholder: whatPlaceholder,
+        whenValue: whenValue,
+        whatValue: whatValue,
+        entryNumber: entryCounter
+      });
 
     container.appendChild(entryDiv);
     
-    // Initialize auto-expand for the new textareas
-    const newTextareas = entryDiv.querySelectorAll('textarea');
-    newTextareas.forEach(textarea => {
+    // Initialize auto-expand for textareas
+    const textareas = entryDiv.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
         autoExpandTextarea(textarea);
         textarea.addEventListener('input', () => autoExpandTextarea(textarea));
         textarea.addEventListener('paste', () => {
             setTimeout(() => autoExpandTextarea(textarea), 0);
         });
     });
-    
-    // Call callback if provided
-    if (typeof onAdd === 'function') {
-      onAdd(entryCounter, entryDiv);
-    }
-
-    return entryDiv;
-  }
-
-  const addBtn = document.createElement('button');
-  addBtn.type = 'button';
-  addBtn.id = buttonId;
-  addBtn.textContent = buttonText;
-  addBtn.style.cssText = [
-    'padding: 10px 20px',
-    'margin: 10px auto',
-    'display: block',
-    'border: 1px solid #4a7c59',
-    'background: #f2f9f3',
-    'color: #2d5a3d',
-    'border-radius: 5px',
-    'font-size: 14px',
-    'cursor: pointer',
-    'font-family: inherit',
-    'box-sizing: border-box'
-  ].join(';');
-  
-  addBtn.onclick = () => addEntry();
-
-  // Insert after the container
-  container.parentNode.insertBefore(addBtn, container.nextSibling);
-
-  // Expose the addEntry function globally for module use
-  window[`add${entryIdPrefix.split('-').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
-  ).join('')}`] = addEntry;
-
-  return { button: addBtn, addEntry };
-}
-
-/**
- * Adds a generic "Add Entry" button for split calendar-text entries to a container.
- * @param {Object} options
- * @param {string} options.containerSelector - CSS selector for the container (e.g., '#period-entries-container')
- * @param {string} options.buttonId - ID for the add button (e.g., 'add-period-entry-btn')
- * @param {string} options.buttonText - Text for the button (e.g., 'Add Entry')
- * @param {string} options.entryIdPrefix - Prefix for entry IDs (e.g., 'period-entry')
- * @param {string} options.whatPlaceholder - Placeholder for what field
- * @param {Function} options.onAdd - Optional callback when entry is added
- */
-function addCalendarEntryButton({
-  containerSelector,
-  buttonId,
-  buttonText = 'Add Entry',
-  entryIdPrefix,
-  whatPlaceholder = 'What happened?',
-  onAdd = null
-}) {
-  const container = document.querySelector(containerSelector);
-  if (!container) {
-    console.error('[InputFunctionality] Container not found for add calendar entry button:', containerSelector);
-    return;
-  }
-
-  // Prevent duplicate buttons
-  if (document.getElementById(buttonId)) return;
-
-  let entryCounter = 1;
-
-  function addEntry(whenValue = '', whatValue = '') {
-    // Find existing entries to determine counter
-    const existingEntries = container.querySelectorAll(`[data-entry-id^="${entryIdPrefix}"]`);
-    entryCounter = existingEntries.length + 1;
-
-    // Default "when" value to current date if empty
-    if (!whenValue) {
-      const now = new Date();
-      whenValue = now.toISOString().split('T')[0]; // YYYY-MM-DD format
-    }
-
-    const entryDiv = createSplitCalendarText({
-      id: `${entryIdPrefix}-${entryCounter}`,
-      whatPlaceholder: whatPlaceholder,
-      whenValue: whenValue,
-      whatValue: whatValue,
-      entryNumber: entryCounter
-    });
-
-    container.appendChild(entryDiv);
-    
-    // Initialize auto-expand for the new textarea
-    const newTextarea = entryDiv.querySelector('textarea');
-    if (newTextarea) {
-        autoExpandTextarea(newTextarea);
-        newTextarea.addEventListener('input', () => autoExpandTextarea(newTextarea));
-        newTextarea.addEventListener('paste', () => {
-            setTimeout(() => autoExpandTextarea(newTextarea), 0);
-        });
-    }
     
     // Call callback if provided
     if (typeof onAdd === 'function') {
@@ -1146,7 +1045,6 @@ export {
     deleteEntry,
     handleConditionalInput, 
     triggerContainerResize,
-    addEntryButton,
-    addCalendarEntryButton
+    addEntryButton
 };
 

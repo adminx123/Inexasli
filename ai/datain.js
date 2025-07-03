@@ -10,7 +10,7 @@ import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 import { FormPersistence } from '/utility/formPersistence.js';
 import { initializeBidirectionalSwipe, initializeSimpleVerticalSwipe } from '/utility/swipeFunctionality.js';
-import { initAutoExpandTextareas, createSplitTextarea, createSplitCalendarText, deleteEntry, handleConditionalInput, addEntryButton, addCalendarEntryButton } from '/ai/styles/inputFunctionality.js';
+import { initAutoExpandTextareas, createSplitTextarea, createSplitCalendarText, deleteEntry, handleConditionalInput, addEntryButton } from '/ai/styles/inputFunctionality.js';
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
@@ -956,7 +956,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     window.deleteEntry = deleteEntry;
     window.handleConditionalInput = handleConditionalInput;
     window.addEntryButton = addEntryButton;
-    window.addCalendarEntryButton = addCalendarEntryButton;
 
     // Setup utility buttons within the datain container
     function setupUtilityButtons() {
