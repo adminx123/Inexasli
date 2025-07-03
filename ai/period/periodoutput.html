@@ -587,11 +587,23 @@
     function getPhaseForDate(date, phaseCalendar) {
       if (!phaseCalendar) return 'unknown';
       
-      for (const [phase, dates] of Object.entries(phaseCalendar)) {
-        if (date >= dates.start && date <= dates.end) {
+      // Check ovulation first to handle overlaps (ovulation takes priority)
+      if (phaseCalendar.ovulation && 
+          date >= phaseCalendar.ovulation.start && 
+          date <= phaseCalendar.ovulation.end) {
+        return 'ovulation';
+      }
+      
+      // Check other phases in priority order
+      const phaseOrder = ['menstrual', 'follicular', 'luteal'];
+      for (const phase of phaseOrder) {
+        if (phaseCalendar[phase] && 
+            date >= phaseCalendar[phase].start && 
+            date <= phaseCalendar[phase].end) {
           return phase;
         }
       }
+      
       return 'unknown';
     }
 
