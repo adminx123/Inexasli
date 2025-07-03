@@ -284,38 +284,17 @@
         
         if (data) {
           // Check if we have period tracking data
-          if (data.standardizedEvents || data.phaseCalendar) {
+          if (data.phaseCalendar) {
             try {
               console.log('Period tracking data:', data);
               
-              // Always supplement AI events with frontend parsing for missing entries
-              console.log('Supplementing AI events with frontend parsing');
+              // Use frontend parsing for all events
+              console.log('Using frontend event parsing');
               const formData = getJSON('periodIqInput') || {};
               const frontendEvents = createEventsFromFormData(formData);
               
-              // Merge AI events with frontend events, avoiding duplicates
-              const aiEventDates = (data.standardizedEvents || []).map(e => e.date);
-              const missingEvents = frontendEvents.filter(fe => !aiEventDates.includes(fe.date));
-              
-              // Also check for AI date mapping errors (e.g., "June 19th" mapped to June 18)
-              const inputFormData = getJSON('periodIqInput') || {};
-              const aiDateErrors = [];
-              
-              for (let i = 0; i < (data.standardizedEvents || []).length; i++) {
-                const aiEvent = data.standardizedEvents[i];
-                const entryKey = `entry${aiEvent.originalIndex + 1}-when`;
-                const userWhen = inputFormData[entryKey];
-                
-                if (userWhen && userWhen.toLowerCase().includes('19th') && aiEvent.date.includes('06-18')) {
-                  console.log('AI date error detected: June 19th mapped to June 18, correcting...');
-                  aiEvent.date = '2025-06-19';
-                }
-              }
-              
-              if (missingEvents.length > 0) {
-                console.log('Adding missing events from frontend parsing:', missingEvents);
-                data.standardizedEvents = [...(data.standardizedEvents || []), ...missingEvents];
-              }
+              // Add frontend events to data for timeline display
+              data.frontendEvents = frontendEvents;
               
               displayPeriodData(data, outputSpan);
               
@@ -407,7 +386,7 @@
       container.appendChild(profileSection);
       
       // Timeline Display
-      if (periodData.standardizedEvents || periodData.phaseCalendar) {
+      if (periodData.phaseCalendar) {
         const timelineContainer = createVerticalTimeline(periodData);
         container.appendChild(timelineContainer);
       }
@@ -456,7 +435,7 @@
       }
       
       console.log('Converted formEntries:', formEntries);
-      console.log('AI standardizedEvents:', periodData.standardizedEvents);
+      console.log('Frontend events:', periodData.frontendEvents);
       
       timelineContainer.innerHTML = `
         <div class="timeline-header">
@@ -539,9 +518,9 @@
             const userEntryDates = [];
             const userEvents = [];
             
-            // Collect user entry dates and events
-            if (periodData.standardizedEvents) {
-              periodData.standardizedEvents.forEach(event => {
+            // Collect user entry dates and events from frontend parsing
+            if (periodData.frontendEvents) {
+              periodData.frontendEvents.forEach(event => {
                 const originalEntry = formEntries[event.originalIndex] || {};
                 let phase = getPhaseForDate(event.date, periodData.phaseCalendar);
                 
