@@ -8,16 +8,6 @@ rotected under Canadian and international copyright laws.
 
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
-import { getJSON } from '/utility/getJSON.js';
-import { setJSON } from '/utility/setJSON.js';
-import { FormPersistence } from '/utility/formPersistence.js';
-
-// Make utilities globally available for all output modules
-window.getLocal = getLocal;
-window.setLocal = setLocal;
-window.getJSON = getJSON;
-window.setJSON = setJSON;
-window.FormPersistence = FormPersistence;
 
 document.addEventListener('DOMContentLoaded', async function () {
     // Additional logging for debugging
@@ -164,7 +154,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
                 '/ai/fashion/fashioniq.html': '/ai/fashion/fashionoutput.html',
                 '/ai/income/incomeiq.html': '/ai/income/incomeoutput.html',
-                '/ai/period/periodiq.html': '/ai/period/periodoutput.html',
                 '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
                 '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
                 '/ai/social/socialiq.html': '/ai/social/socialoutput.html',
@@ -202,8 +191,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'socialiq': '/ai/social/socialoutput.html',
                 'speculationiq': '/ai/speculation/speculationoutput.html',
                 'philosophyiq': '/ai/philosophy/philosophyoutput.html',
-                'fashioniq': '/ai/fashion/fashionoutput.html',
-                'periodiq': '/ai/period/periodoutput.html'
+                'fashioniq': '/ai/fashion/fashionoutput.html'
             };
             const outUrl = moduleOutputMap[moduleName];
             if (outUrl) {
