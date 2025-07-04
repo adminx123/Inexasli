@@ -90,137 +90,112 @@
 <!-- Jump to Food Log button (conditionally rendered by JS) -->
 
 <script type="module">
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
+
 // Rate limiting utilities are now available globally via window.rateLimiter
 
 (function() {
-  console.log("Calorie IQ script initializing");
+  // FormPersistence is initialized by datain.js and available as window.calorieFormPersistence
+  // No need to create it here - just ensure it's available when we need it
 
-  // Initialize textarea auto-expand
-  window.initAutoExpandTextareas();
-  document.addEventListener('textarea:changed', function(e) {
-    // Save form data when any textarea changes
-    if (window.calorieFormPersistence) {
-      window.calorieFormPersistence.saveFormData();
-    }
-  });
-
-
-
+  // Handle the generate button click
   async function handleGenerateCalorieIq() {
-    try {
-      const formData = window.calorieFormPersistence.getSavedFormData();
-      if (!formData) { 
-        alert('Please complete the form before generating a calorie plan.'); 
-        return;
-      }
-
-      // Validation will be handled centrally by datain.js
-      const validatedFormData = formData;
-
-      // Check rate limiting before proceeding
-      if (window.rateLimiter.isRateLimited('calorie', 8, 60 * 60 * 1000)) { // 8 requests per hour (as per rate-limiter config)
-        alert('You have exceeded the request limit for calorie analysis. Please try again later.');
-        return;
-      }
-
-      // Get fingerprint data for rate limiting
-      const fingerprintData = window.rateLimiter.getFingerprintForWorker();
-      
-      // Create combined payload with form data and fingerprint
-      const workerPayload = {
-        module: "calorie",
-        formData: validatedFormData,
-        fingerprint: fingerprintData
-      };
-
-      const dataContainer = document.querySelector('.device-container');
-      let backendResponse = null;
-      try {
-        backendResponse = await window.enhancedLoading(
-          'generate-calorie-btn',
-          'calorie',
-          async () => {
-            const apiUrl = 'https://inexasli.com/api/generate';
-            const response = await fetch(apiUrl, { 
-              method: 'POST', 
-              headers: {'Content-Type':'application/json'}, 
-              body: JSON.stringify(workerPayload)
-            });
-            let responseData;
-            try {
-              responseData = await response.json();
-            } catch (e) {
-              responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
-            }
-            // Always call handleRateLimitResponse with backend response
-            window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'CalorieIQ');
-            if (!response.ok) {
-              throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
-            }
-            if (responseData.message !== 'Success') {
-              throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-            return responseData;
-          }
-        );
-        window.rateLimiter.incrementRequestCount('calorie');
-        window.calorieFormPersistence.saveResponseData(backendResponse);
-        const event = new CustomEvent('api-response-received', {
-          detail: {
-            module: 'calorieiq',
-            type: 'worker-response',
-            timestamp: Date.now()
-          }
-        });
-        document.dispatchEvent(event);
-        console.log('[CalorieIQ] Dispatched api-response-received event');
-      } catch (error) {
-        if (backendResponse && dataContainer) {
-          window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'CalorieIQ');
-        }
-        console.error('[CalorieIQ] Error generating calorie plan:', error);
-      }
-    } catch (error) {
-      console.error('[CalorieIQ] Error generating calorie plan:', error);
-      alert('An error occurred while generating your calorie plan. Please try again later.');
+    const formData = window.calorieFormPersistence.getSavedFormData();
+    if (!formData) {
+      console.error('[CalorieIQ] No input data found in localStorage.');
+      alert('Please complete the form before generating a calorie plan.');
+      return;
     }
-  }
 
-  // Simple initialization - just ensure the add button exists
-  function initialize() {
-    console.log("[CalorieIQ] Initializing...");
+    // Check rate limiting before proceeding
+    if (window.rateLimiter.isRateLimited('calorie', 8, 60 * 60 * 1000)) { // 8 requests per hour (as per rate-limiter config)
+      alert('You have exceeded the request limit for calorie analysis. Please try again later.');
+      return;
+    }
+
+    // Get fingerprint data for rate limiting
+    const fingerprintData = window.rateLimiter.getFingerprintForWorker();
     
-    // Set up event listeners
-    const generateBtn = document.getElementById('generate-calorie-btn');
-    if (generateBtn) {
-      generateBtn.removeEventListener('click', handleGenerateCalorieIq);
-      generateBtn.addEventListener('click', handleGenerateCalorieIq);
+    // Create combined payload with both form data and fingerprint
+    const workerPayload = {
+      module: 'calorie',
+      formData: formData,
+      fingerprint: fingerprintData
+    };
+    
+    const dataContainer = document.querySelector('.data-container-in');
+    let backendResponse = null;
+    try {
+      backendResponse = await window.enhancedLoading(
+        'generate-calorie-btn',
+        'calorie',
+        async () => {
+          // Send data to worker
+          const apiUrl = 'https://inexasli.com/api/generate';
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(workerPayload)
+          });
+          let responseData;
+          try {
+            responseData = await response.json();
+          } catch (e) {
+            responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
+          }
+          // Always call handleRateLimitResponse with backend response
+          window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok);
+          if (!response.ok) {
+            throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+          }
+          if (responseData.message !== 'Success') {
+            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+          }
+          
+          // Store the response
+          window.calorieFormPersistence.saveResponseData(responseData);
+          
+          // Dispatch an event to notify dataout.js that a response was received
+          const event = new CustomEvent('api-response-received', {
+            detail: {
+              module: 'calorieiq',
+              type: 'worker-response',
+              timestamp: Date.now()
+            }
+          });
+          document.dispatchEvent(event);
+          
+          return responseData;
+        }
+      );
+      window.rateLimiter.incrementRequestCount('calorie');
+    } catch (error) {
+      // If backendResponse is available, update rate limit display and show error
+      if (backendResponse && dataContainer) {
+        window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true);
+      }
+      // Optionally, show a toast/modal here for generic errors
+      console.error('[CalorieIQ] Error:', error);
     }
   }
 
+  // Initialization
+  document.getElementById('generate-calorie-btn').addEventListener('click', handleGenerateCalorieIq);
 
-
-  // Initialize with multiple triggers to ensure reliability
-  function runInitialization() {
-    // Use a small delay to ensure DOM is ready
-    setTimeout(initialize, 50);
+  // Guided forms integration
+  if (typeof GuidedForms !== 'undefined' && GuidedForms.calorieiq) {
+    new GuidedForms.calorieiq();
   }
-
-  // Initialize immediately if DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', runInitialization);
-  } else {
-    runInitialization();
-  }
-
-  // Additional safety net - try again after a short delay
-  setTimeout(() => {
-    const generateBtn = document.getElementById('generate-calorie-btn');
-    if (generateBtn && !generateBtn.onclick) {
-      console.log("[CalorieIQ] Generate button not initialized, trying again");
-      initialize();
-    }
-  }, 200);
 
   // Function to handle jumping to the food log stage
   function jumpToFoodLogStage() {
@@ -240,6 +215,9 @@
     }
   }
 
+  // Try to jump immediately on load (for page refresh/reopen scenarios)
+  jumpToFoodLogStage();
+
   // Listen for the promptGridItemSelected event to jump to the Food Log stage
   document.addEventListener('promptGridItemSelected', function(e) {
     console.log('[CalorieIQ] promptGridItemSelected event detected', e.detail);
@@ -250,19 +228,11 @@
 
   // Handle loading through datain.js - also check for jump condition
   document.addEventListener('data-in-loaded', function(e) {
-    const moduleType = e.detail?.moduleType;
-    if (moduleType === 'calorie') {
-      console.log("[CalorieIQ] Calorie module loaded through datain.js, reinitializing");
-      runInitialization();
+    if (e.detail && e.detail.module === 'calorie') {
+      console.log("[CalorieIQ] Calorie module loaded through datain.js");
       jumpToFoodLogStage();
     }
   });
-  
-  // Export functions for external access
-  window.calorieIq = { 
-    getFormData: () => window.calorieFormPersistence.getSavedFormData(),
-    saveFormData: () => window.calorieFormPersistence.saveFormData()
-  };
 })();
 </script>
 
