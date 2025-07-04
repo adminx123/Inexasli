@@ -192,8 +192,8 @@ function initializeFormPersistence(url) {
     if (url.includes('/calorie/')) {
         moduleType = 'calorie';
         moduleConfig = {
-            singleSelection: ['calorie-activity', 'calorie-sex'],
-            multiSelection: ['calorie-goal', 'calorie-recommendations', 'calorie-diet-type']
+            singleSelection: ['calorie-activity', 'calorie-sex', 'calorie-goal'],
+            multiSelection: ['calorie-recommendations', 'calorie-diet-type']
         };
     } else if (url.includes('/income/')) {
         moduleType = 'income';
