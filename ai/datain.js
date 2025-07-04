@@ -119,7 +119,6 @@ function enhanceGenerateButtons() {
         '#generate-income-btn',
         '#generate-philosophy-btn',
         '#generate-quiz-btn',
-        '#generate-research-btn',
         '#generate-period-btn'
     ];
     
@@ -213,8 +212,6 @@ function initializeFormPersistence(url) {
         moduleType = 'philosophy';
     } else if (url.includes('/quiz/')) {
         moduleType = 'quiz'; // UNDO: revert to original key for quiz module
-    } else if (url.includes('/research/')) {
-        moduleType = 'research';
     } else if (url.includes('/fashion/')) {
         moduleType = 'fashion';
     } else if (url.includes('/categories.html')) {
@@ -358,7 +355,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         '/ai/period/periodiq.html',
         '/ai/philosophy/philosophyiq.html',
         '/ai/quiz/quiziq.html',
-        '/ai/research/researchiq.html',
         '/ai/categories.html',
         '/ai/income/incomeiq.html'
     ];
@@ -370,7 +366,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     function shouldLoadInputStyles() {
         const currentPath = window.location.pathname;
         return inputFiles.some(file => currentPath.includes(file.replace('.html', ''))) || 
-               document.querySelector('[data-value*="/ai/calorie/"], [data-value*="/ai/decision/"], [data-value*="/ai/enneagram/"], [data-value*="/ai/event/"], [data-value*="/ai/fashion/"], [data-value*="/ai/fitness/"], [data-value*="/ai/philosophy/"], [data-value*="/ai/quiz/"], [data-value*="/ai/research/"], [data-value*="/ai/income/"], [data-value*="/ai/categories.html"]');
+               document.querySelector('[data-value*="/ai/calorie/"], [data-value*="/ai/decision/"], [data-value*="/ai/enneagram/"], [data-value*="/ai/event/"], [data-value*="/ai/fashion/"], [data-value*="/ai/fitness/"], [data-value*="/ai/philosophy/"], [data-value*="/ai/quiz/"], [data-value*="/ai/income/"], [data-value*="/ai/categories.html"]');
     }
     
     function shouldLoadIncomeStyles() {
@@ -552,7 +548,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                               url.includes('/event/') ? 'event' :
                               url.includes('/philosophy/') ? 'philosophy' :
                               url.includes('/quiz/') ? 'quiz' :
-                              url.includes('/research/') ? 'research' :
                               url.includes('/income/') ? 'income' :
                               'unknown';
                               
@@ -1275,9 +1270,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
         if (window.philosophyFormPersistence && typeof window.philosophyFormPersistence.rebindGridItemEvents === 'function') {
             window.philosophyFormPersistence.rebindGridItemEvents();
-        }
-        if (window.researchFormPersistence && typeof window.researchFormPersistence.rebindGridItemEvents === 'function') {
-            window.researchFormPersistence.rebindGridItemEvents();
         }
         if (window.categoriesFormPersistence && typeof window.categoriesFormPersistence.rebindGridItemEvents === 'function') {
             window.categoriesFormPersistence.rebindGridItemEvents();

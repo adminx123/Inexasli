@@ -89,8 +89,6 @@ function confirmDataOverwrite() {
             'philosophyIqResponse',
             'quizIqInput',
             'quizIqResponse',
-            'researchIqInput',
-            'researchIqResponse',
             
             // Future modules
             'adventureIqInput',

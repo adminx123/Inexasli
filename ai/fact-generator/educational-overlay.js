@@ -203,7 +203,6 @@ function getModuleApiUrl(moduleName) {
     const moduleUrls = {
         'calorie': 'https://calorie.4hm7q4q75z.workers.dev',
         'decision': 'https://decision.4hm7q4q75z.workers.dev',
-        'research': 'https://research.4hm7q4q75z.workers.dev',
         'enneagram': 'https://enneagram.4hm7q4q75z.workers.dev',
         'philosophy': 'https://philosophy.4hm7q4q75z.workers.dev',
         'event': 'https://event.4hm7q4q75z.workers.dev',

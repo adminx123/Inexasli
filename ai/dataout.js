@@ -155,7 +155,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/ai/fashion/fashioniq.html': '/ai/fashion/fashionoutput.html',
                 '/ai/income/incomeiq.html': '/ai/income/incomeoutput.html',
                 '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
-                '/ai/research/researchiq.html': '/ai/research/researchoutput.html',
                 '/ai/speculation/speculationiq.html': '/ai/speculation/speculationoutput.html',
                 '/ai/philosophy/philosophyiq.html': '/ai/philosophy/philosophyoutput.html'
             };
@@ -186,7 +185,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'eventiq': '/ai/event/eventoutput.html',
                 'incomeiq': '/ai/income/incomeoutput.html',
                 'quiziq': '/ai/quiz/quizoutput.html',
-                'researchiq': '/ai/research/researchoutput.html',
                 'speculationiq': '/ai/speculation/speculationoutput.html',
                 'philosophyiq': '/ai/philosophy/philosophyoutput.html',
                 'fashioniq': '/ai/fashion/fashionoutput.html'

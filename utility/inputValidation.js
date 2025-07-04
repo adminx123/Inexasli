@@ -283,15 +283,6 @@ export const MODULE_VALIDATION_RULES = {
     'questions': { type: 'text', required: false, maxLength: 100 }
   },
   
-  research: {
-    'research-topic': { type: 'text', required: false, maxLength: 1000 },
-    'research-depth': { type: 'text', required: false, maxLength: 200 },
-    'research-sources': { type: 'text', required: false, maxLength: 1000 },
-    'topic': { type: 'text', required: false, maxLength: 1000 },
-    'depth': { type: 'text', required: false, maxLength: 200 },
-    'sources': { type: 'text', required: false, maxLength: 1000 }
-  },
-  
   period: {
     'period-entries': { type: 'array', required: false, itemType: 'text', maxLength: 500 },
     'entries': { type: 'array', required: false, itemType: 'text', maxLength: 500 }

@@ -883,10 +883,6 @@ function getAnalysisTypeFromPage() {
             console.log('[PDF] Matched adventure pattern');
             return { analysisType: 'adventure-analysis', title: 'Adventure Analysis' };
         }
-        if (url.includes('/research/') || url.includes('research')) {
-            console.log('[PDF] Matched research pattern');
-            return { analysisType: 'research-analysis', title: 'Research Analysis' };
-        }
         if (url.includes('/newbiz/') || url.includes('newbiz') || url.includes('business')) {
             console.log('[PDF] Matched business pattern');
             return { analysisType: 'business-analysis', title: 'Business Analysis' };
