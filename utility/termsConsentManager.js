@@ -1,7 +1,15 @@
 /*
  * termsConsentManager.js - Unified Terms & Data Consent Modal (checkbox version)
- * Combines terms of service and data consent into a single modal.
- * User must check both boxes to continue. Styled like the original modals.
+ * 
+ * FEATURES:
+ * • Shows modal with two checkboxes for terms and consent
+ * • Validates user consent against TOS last updated date
+ * • Forces re-acceptance if TOS updated after user's last consent
+ * • Single source of truth for TOS versioning
+ * 
+ * TOS UPDATE WORKFLOW:
+ * • Change TOS_LAST_UPDATED date below
+ * • Users with older consent will be re-prompted
  */
 (function() {
   // Load legal modal functionality
@@ -23,7 +31,9 @@
   const COOKIE_NAME = 'user_legal_status';
   const EXPIRY_DAYS = 365;
   const TERMS_FILE_PATH = '/legal.txt';
-  const LAST_UPDATED_DATE = 'June 22, 2025';
+  
+  // AUTO-UPDATE-HELPER: Change this date when updating Terms of Service
+  const TOS_LAST_UPDATED = "2025-07-04T16:19:01.000Z"; // ISO format for comparison
 
   // Utility: Set cookie
   function setCookie(name, value, days) {
@@ -56,21 +66,52 @@
     return status;
   }
 
-  // Utility: Fetch terms text
-  async function fetchTerms() {
-    const res = await fetch(TERMS_FILE_PATH);
-    return await res.text();
+  // Get TOS display date (formatted for UI)
+  function getTOSDisplayDate() {
+    return new Date(TOS_LAST_UPDATED).toLocaleDateString();
+  }
+
+  // Check if user's consent is still valid (not outdated by TOS updates)
+  function isConsentValid() {
+    const status = loadStatus();
+    
+    // Must have both terms accepted and consent given with acceptance date
+    if (!status.termsAccepted || !status.consentGiven || !status.acceptedDate) {
+      return false;
+    }
+    
+    // Compare user's acceptance date with last TOS update
+    const userAcceptedDate = new Date(status.acceptedDate);
+    const lastUpdatedDate = new Date(TOS_LAST_UPDATED);
+    
+    // If user accepted before TOS was last updated, consent is invalid
+    if (userAcceptedDate < lastUpdatedDate) {
+      console.log('[TermsConsentManager] Consent invalidated - TOS updated after user acceptance');
+      return false;
+    }
+    
+    return true;
   }
 
   // Show unified modal
   async function showUnifiedModal() {
+    // Check if user had previous consent that's now outdated
+    const status = loadStatus();
+    const isReturningUser = status.acceptedDate && new Date(status.acceptedDate) < new Date(TOS_LAST_UPDATED);
+    
+    const updateNotice = isReturningUser 
+      ? `<div style="margin-bottom:15px;padding:8px;background-color:#fff3cd;border:1px solid #ffeaa7;border-radius:4px;color:#856404;font-size:12px;text-align:center;">
+           <strong>Updated Terms:</strong> Our Terms of Service and consent requirements have been updated. Please review and re-accept to continue.
+         </div>`
+      : '';
+    
     const htmlContent = `
       <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
         <h2 style="font-size: 1.2rem; color: #333; margin-top: 0; margin-bottom: 15px; font-family: 'Geist', sans-serif;">Terms of Service & Data Consent</h2>
+        ${updateNotice}
         <div class="terms-section">
           <div style="margin-bottom:15px; text-align: left;">
-            <span style="font-size:13px;margin-bottom:2px;">Please accept our <a href="#" id="view-terms-link" style="display:inline;">Terms of Service</a> to use our services.</span><br>
-            <span style="font-size:12px;color:#666;display:block;margin-top:2px;">(last updated: ${LAST_UPDATED_DATE})</span>
+            <span style="font-size:13px;margin-bottom:2px;">Please accept our <a href="#" id="view-terms-link" style="display:inline;">Terms of Service</a> to use our services.</span>
           </div>
           <label style="display:block;margin-bottom:15px;font-size:13px;color:#222;text-align:left;cursor:pointer;user-select:none;">
             <input type="checkbox" id="accept-terms" style="margin-right:8px;accent-color:#4a7c59;"> I have read and accept the Terms of Service
@@ -134,21 +175,22 @@
     });
   }
 
-  // No longer show modal automatically on page load
-  // Modal will be triggered by datain.js when container expands
-
-  // DEBUG: Force modal to show for testing
-  // localStorage.removeItem(STORAGE_KEY);
-  // setCookie(COOKIE_NAME, '', -1);
-
   // Expose for debugging and external triggering
   window.termsConsentManager = {
     show: showUnifiedModal,
     saveStatus,
     loadStatus,
-    checkStatus: () => {
-      const status = loadStatus();
-      return status.termsAccepted && status.consentGiven;
-    }
+    checkStatus: isConsentValid,
+    
+    // TOS Version Control API
+    getTOSLastUpdated: () => TOS_LAST_UPDATED,
+    getTOSDisplayDate: getTOSDisplayDate,
+    isConsentValid: isConsentValid,
+    
+    // Constants for other modules
+    TOS_LAST_UPDATED: TOS_LAST_UPDATED
   };
+
+  // Also expose globally for compatibility
+  window.TOS_LAST_UPDATED = TOS_LAST_UPDATED;
 })();
