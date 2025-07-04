@@ -458,10 +458,20 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Update content with initial hiding to prevent flash
                 dataContent.innerHTML = `<div style="opacity: 0; transition: opacity 0.2s ease;">${content}</div>`;
                 
+                // Initialize auto-expand textareas immediately after content is loaded
+                console.log('[DataIn] Initializing auto-expand textareas immediately after content load');
+                initAutoExpandTextareas();
+                
                 // Function to show content after guided forms is ready
                 const showContentAfterGuidedForms = () => {
                     // Initialize FormPersistence for this module
                     initializeFormPersistence(url);
+                    
+                    // Re-initialize auto-expand after form persistence (in case it repopulates textareas)
+                    setTimeout(() => {
+                        console.log('[DataIn] Re-initializing auto-expand after form persistence');
+                        initAutoExpandTextareas();
+                    }, 100);
                     
                     // Show content with smooth transition
                     const contentWrapper = dataContent.querySelector('div');
@@ -548,8 +558,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // No form elements, insert content normally without guided forms
                 dataContent.innerHTML = content;
                 
+                // Initialize auto-expand textareas for non-form content too
+                console.log('[DataIn] Initializing auto-expand textareas for non-form content');
+                initAutoExpandTextareas();
+                
                 // Initialize FormPersistence for this module
                 initializeFormPersistence(url);
+                
+                // Re-initialize auto-expand after form persistence
+                setTimeout(() => {
+                    console.log('[DataIn] Re-initializing auto-expand after form persistence (non-form content)');
+                    initAutoExpandTextareas();
+                }, 100);
             }
 
             // Dispatch custom event to notify that data-in content has loaded
