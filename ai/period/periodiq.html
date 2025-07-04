@@ -56,7 +56,7 @@
     <div id="period-entries-container">
       <!-- Split calendar-text entries will be added here dynamically -->
     </div>
-    <!-- Add entry button will be inserted here by addCalendarEntryButton -->
+    <!-- Add entry button created directly by periodiq.html -->
     <button class="generate-btn" id="generate-period-btn">Analyze My Patterns!</button>
   </div>
 </div>
@@ -213,28 +213,94 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       generateBtn.addEventListener('click', handleGeneratePeriodIq);
     }
 
-    // Initialize the calendar entry button using the scaffolding
-    window.addEntryButton({
-      containerSelector: '#period-entries-container',
-      buttonId: 'add-period-entry-btn',
-      buttonText: '+ Add New Entry',
-      entryIdPrefix: 'entry',
-      whatPlaceholder: 'What happened? (e.g., spotting started, heavy flow, cramps, mood changes)',
-      useCalendar: true,
-      onAdd: (entryNumber, entryDiv) => {
-        // Refresh FormPersistence input handlers to pick up the new fields
-        if (window.periodFormPersistence) {
-          window.periodFormPersistence.refreshInputHandlers();
-          window.periodFormPersistence.saveFormData();
-        }
-        
-        // Focus on the "what" field of the new entry
-        const whatField = entryDiv.querySelector('.what-field');
-        if (whatField) {
-          whatField.focus();
-        }
+    // Create and add the "Add Entry" button directly
+    const container = document.getElementById('period-entries-container');
+    if (container && !document.getElementById('add-period-entry-btn')) {
+      const addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.id = 'add-period-entry-btn';
+      addBtn.textContent = '+ Add New Entry';
+      addBtn.style.cssText = [
+        'padding: 10px 20px',
+        'margin: 10px auto',
+        'display: block',
+        'border: 1px solid #4a7c59',
+        'background: #f2f9f3',
+        'color: #2d5a3d',
+        'border-radius: 5px',
+        'font-size: 14px',
+        'cursor: pointer',
+        'font-family: inherit',
+        'box-sizing: border-box'
+      ].join(';');
+      
+      addBtn.onclick = () => addEntry();
+      container.parentNode.insertBefore(addBtn, container.nextSibling);
+    }
+
+    // Direct addEntry function implementation
+    function addEntry(whenValue = '', whatValue = '', entryNumber = null) {
+      const container = document.getElementById('period-entries-container');
+      if (!container) return null;
+
+      // Determine entry number: use provided number, or find next available
+      let actualEntryNumber = entryNumber;
+      if (!actualEntryNumber) {
+        const existingEntries = container.querySelectorAll('[data-entry-id^="entry-"]');
+        actualEntryNumber = existingEntries.length + 1;
       }
-    });
+
+      // Default "when" value to today's date if not provided
+      if (!whenValue) {
+        const now = new Date();
+        whenValue = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+      }
+
+      // Create the entry using the existing createSplitCalendarText function
+      const entryDiv = window.createSplitCalendarText({
+        id: `entry-${actualEntryNumber}`,
+        whatPlaceholder: 'What happened? (e.g., spotting started, heavy flow, cramps, mood changes)',
+        whenValue: whenValue,
+        whatValue: whatValue,
+        entryNumber: actualEntryNumber
+      });
+
+      if (!entryDiv) {
+        console.error('[PeriodIQ] Failed to create entry div');
+        return null;
+      }
+
+      container.appendChild(entryDiv);
+      
+      // Initialize auto-expand for textareas
+      const textareas = entryDiv.querySelectorAll('textarea');
+      textareas.forEach(textarea => {
+        if (window.autoExpandTextarea) {
+          window.autoExpandTextarea(textarea);
+          textarea.addEventListener('input', () => window.autoExpandTextarea(textarea));
+          textarea.addEventListener('paste', () => {
+            setTimeout(() => window.autoExpandTextarea(textarea), 0);
+          });
+        }
+      });
+      
+      // Refresh FormPersistence input handlers to pick up the new fields
+      if (window.periodFormPersistence) {
+        window.periodFormPersistence.refreshInputHandlers();
+        window.periodFormPersistence.saveFormData();
+      }
+      
+      // Focus on the "what" field of the new entry
+      const whatField = entryDiv.querySelector('.what-field');
+      if (whatField) {
+        whatField.focus();
+      }
+
+      return entryDiv;
+    }
+
+    // Expose addEntry globally for FormPersistence recreation
+    window.addEntry = addEntry;
 
     const birthControlTypeSelect = document.getElementById('period-birth-control-type');
     if (birthControlTypeSelect && handleBirthControlChange) {
@@ -256,7 +322,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       
       if (!hasExistingEntries && !hasSavedData) {
         console.log("[PeriodIQ] Adding initial entry");
-        // Use the scaffolding-created function
+        // Use our direct addEntry function
         if (window.addEntry) {
           window.addEntry();
         }
@@ -296,7 +362,6 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
     deleteEntry: window.deleteEntry
   };
   
-  // The addEntry function will be exposed by addCalendarEntryButton scaffolding
-  // No need to manually register it here
+  // addEntry function exposed globally for FormPersistence recreation
 })();
 </script>
