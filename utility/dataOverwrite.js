@@ -91,8 +91,6 @@ function confirmDataOverwrite() {
             'quizIqResponse',
             'researchIqInput',
             'researchIqResponse',
-            'socialIqInput',
-            'socialIqResponse',
             
             // Future modules
             'adventureIqInput',

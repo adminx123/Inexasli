@@ -204,7 +204,6 @@ function getModuleApiUrl(moduleName) {
         'calorie': 'https://calorie.4hm7q4q75z.workers.dev',
         'decision': 'https://decision.4hm7q4q75z.workers.dev',
         'research': 'https://research.4hm7q4q75z.workers.dev',
-        'social': 'https://social.4hm7q4q75z.workers.dev',
         'enneagram': 'https://enneagram.4hm7q4q75z.workers.dev',
         'philosophy': 'https://philosophy.4hm7q4q75z.workers.dev',
         'event': 'https://event.4hm7q4q75z.workers.dev',
@@ -234,7 +233,7 @@ function getFallbackFactsForModule(moduleName) {
             "Deep breathing activates your calming system",
             "Exercise is as effective as medication for mild depression",
             "Gratitude practice rewires brain for positivity",
-            "Social connections boost immune function",
+            "Healthy connections boost immune function",
             "Sleep deprivation amplifies negative emotions"
         ],
         'decision': [
@@ -257,13 +256,6 @@ function getFallbackFactsForModule(moduleName) {
             "Mistakes help strengthen neural pathways",
             "Active recall beats passive review",
             "Teaching others reinforces learning"
-        ],
-        'social': [
-            "Active listening builds stronger relationships",
-            "Body language conveys 55% of communication",
-            "Shared experiences create lasting bonds",
-            "Empathy can be learned and improved",
-            "Vulnerability often increases trust"
         ],
         'enneagram': [
             "Self-awareness is the first step to growth",

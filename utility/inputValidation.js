@@ -292,15 +292,6 @@ export const MODULE_VALIDATION_RULES = {
     'sources': { type: 'text', required: false, maxLength: 1000 }
   },
   
-  social: {
-    'social-platform': { type: 'text', required: false, maxLength: 100 },
-    'social-content': { type: 'text', required: false, maxLength: 3000 },
-    'social-tone': { type: 'text', required: false, maxLength: 200 },
-    'platform': { type: 'text', required: false, maxLength: 100 },
-    'content': { type: 'text', required: false, maxLength: 3000 },
-    'tone': { type: 'text', required: false, maxLength: 200 }
-  },
-  
   period: {
     'period-entries': { type: 'array', required: false, itemType: 'text', maxLength: 500 },
     'entries': { type: 'array', required: false, itemType: 'text', maxLength: 500 }

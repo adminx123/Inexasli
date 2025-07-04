@@ -19,7 +19,7 @@ const TERMS_OF_SERVICE = {
             title: "Introduction",
             content: `Note: This document outlines the terms of service for the use of the INEXASLI platform and all associated AI-powered analysis tools (referred to collectively as the "Services") provided by INEXASLI (hereinafter referred to as the "Developer"). By using any of these Services, you agree to be bound by these terms of service. The term "user" refers to you, the reader, when accessing any of the Services. If you do not agree with these terms, you must not use the Services.
 
-Description: The Services include various AI-powered exploration tools designed to help users explore concepts, generate insights, and prepare questions for professional consultation across multiple domains including but not limited to nutrition, decision-making, personality analysis, research assistance, social guidance, event planning, philosophy, and other areas of personal and professional interest. All AI-generated content is intended as exploratory material to inform your discussions with qualified professionals, not as definitive guidance for decision-making.
+Description: The Services include various AI-powered exploration tools designed to help users explore concepts, generate insights, and prepare questions for professional consultation across multiple domains including but not limited to nutrition, decision-making, personality analysis, research assistance, event planning, philosophy, and other areas of personal and professional interest. All AI-generated content is intended as exploratory material to inform your discussions with qualified professionals, not as definitive guidance for decision-making.
 
 Privacy Policy Compliance:
 - The Developer complies with the General Data Protection Regulation (GDPR) for users within the European Union and also adheres to the Personal Information Protection and Electronic Documents Act (PIPEDA) for users in Canada.`
@@ -47,7 +47,7 @@ Privacy Policy Compliance:
         {
             title: "Services Purpose",
             content: `**AI-Powered Exploration Tools**
-- The INEXASLI platform provides AI-powered analysis tools designed to help users explore concepts and generate insights across various domains including nutrition, decision-making, personality analysis, research, social interactions, event planning, philosophy, and other areas of personal interest.
+- The INEXASLI platform provides AI-powered analysis tools designed to help users explore concepts and generate insights across various domains including nutrition, decision-making, personality analysis, research, event planning, philosophy, and other areas of personal interest.
 - These tools are educational exploration aids intended to help users formulate better questions and prepare for consultations with qualified professionals in relevant fields.
 - Interactive Learning: Users engage with AI-generated insights by inputting personal data, receiving exploratory analysis, and using these insights as starting points for further research and professional consultation.
 - Visualization and Analysis: The Services provide visual representations and analyses of user data, serving as educational aids to help users understand concepts and explore possibilities before consulting with professionals.

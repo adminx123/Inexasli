@@ -26,7 +26,7 @@ export default {
                 return new Response(JSON.stringify({
                     status: 'active',
                     lastGeneration: await env.FACT_STORE.get('last_generation_date'),
-                    modules: ['calorie', 'decision', 'enneagram', 'event', 'fashion', 'income', 'philosophy', 'quiz', 'research', 'social']
+                    modules: ['calorie', 'decision', 'enneagram', 'event', 'fashion', 'income', 'philosophy', 'quiz', 'research']
                 }), {
                     headers: {
                         'Content-Type': 'application/json',
@@ -77,8 +77,7 @@ async function generateWeeklyFacts(env, corsHeaders = {}) {
         { name: 'income', topic: 'income, finance, budgeting, and money management' },
         { name: 'philosophy', topic: 'philosophy, wisdom, meaning, and life purpose' },
         { name: 'quiz', topic: 'learning, knowledge, trivia, and cognitive skills' },
-        { name: 'research', topic: 'research, science, discovery, and knowledge' },
-        { name: 'social', topic: 'social relationships, communication, and human interaction' }
+        { name: 'research', topic: 'research, science, discovery, and knowledge' }
     ];
 
     console.log(`📋 Processing ${modules.length} modules:`, modules.map(m => m.name).join(', '));
