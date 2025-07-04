@@ -23,6 +23,9 @@ import {
     displayValidationErrors 
 } from '/utility/inputValidation.js';
 
+// Import rate limiting utilities centrally
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
+
 // Universal validation function for all modules
 function validateFormDataForModule(moduleName, formData) {
     try {
@@ -256,6 +259,15 @@ function initializeFormPersistence(url) {
         formPersistence.init({ moduleName: moduleType, ...moduleConfig });
         // Attach to window for module scripts to use
         window[`${moduleType}FormPersistence`] = formPersistence;
+        
+        // Make rate limiting utilities available globally for all modules
+        window.rateLimiter = {
+            getFingerprintForWorker,
+            incrementRequestCount,
+            isRateLimited,
+            handleRateLimitResponse
+        };
+        
         console.log('[DataIn] FormPersistence instance initialized for module:', moduleType);
     } catch (error) {
         console.error('[DataIn] Error initializing FormPersistence:', error);

@@ -98,9 +98,7 @@ Option 3: Build custom solution in-house"></textarea>
  * jurisdictions worldwide.
 */
 
-// Import fingerprint utilities
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
-
+// Rate limiting utilities are now available globally via window.rateLimiter
 
 (function() {
   console.log("Decision IQ script initializing");
@@ -118,12 +116,12 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       const validatedFormData = formData;
 
       // Check rate limiting before proceeding
-      if (isRateLimited('decision', 12, 60 * 60 * 1000)) { // 12 requests per hour (as per rate-limiter config)
+      if (window.rateLimiter.isRateLimited('decision', 12, 60 * 60 * 1000)) { // 12 requests per hour (as per rate-limiter config)
         alert('You have exceeded the request limit for decision analysis. Please try again later.');
         return;
       }
       // Get fingerprint data for rate limiting
-      const fingerprintData = getFingerprintForWorker();
+      const fingerprintData = window.rateLimiter.getFingerprintForWorker();
       // Create combined payload with form data and fingerprint
       const workerPayload = {
         module: 'decision',
@@ -150,7 +148,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
               responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
             }
             // Always call handleRateLimitResponse with backend response
-            handleRateLimitResponse(dataContainer, responseData, !response.ok, 'DecisionIQ');
+            window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'DecisionIQ');
             if (!response.ok) {
               throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
             }
@@ -160,7 +158,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
             return responseData;
           }
         );
-        incrementRequestCount('decision');
+        window.rateLimiter.incrementRequestCount('decision');
         window.decisionFormPersistence.saveResponseData(backendResponse);
         const event = new CustomEvent('api-response-received', {
           detail: {
@@ -173,7 +171,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         console.log('[DecisionIQ] Dispatched api-response-received event');
       } catch (error) {
         if (backendResponse && dataContainer) {
-          handleRateLimitResponse(dataContainer, backendResponse, true, 'DecisionIQ');
+          window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'DecisionIQ');
         }
         console.error('[DecisionIQ] Error generating decision analysis:', error);
       }

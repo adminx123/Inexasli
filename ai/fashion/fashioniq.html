@@ -135,8 +135,7 @@
  * jurisdictions worldwide.
 */
 
-// Import rate limiting utilities
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
+// Rate limiting utilities are now available globally via window.rateLimiter
 
 (function() {
   async function handleGenerateFashionIq() {
@@ -155,13 +154,13 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       }
 
       // Check rate limits before proceeding
-      if (isRateLimited()) {
+      if (window.rateLimiter.isRateLimited()) {
         alert('Rate limit exceeded. Please wait before making another request.');
         return;
       }
 
       // Get fingerprint for the request
-      const fingerprint = getFingerprintForWorker();
+      const fingerprint = window.rateLimiter.getFingerprintForWorker();
 
       // Fashion module needs special payload structure with images
       const fashionFormData = {
@@ -203,7 +202,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
             backendResponse = responseData;
             
             // Always call handleRateLimitResponse with backend response
-            handleRateLimitResponse(dataContainer, responseData, !response.ok, 'FashionIQ');
+            window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'FashionIQ');
 
             if (!response.ok) {
               throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
@@ -218,7 +217,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         );
 
         // Increment request count after successful response
-        incrementRequestCount();
+        window.rateLimiter.incrementRequestCount();
 
         // Store the response using centralized system
         window.fashionFormPersistence.saveResponseData(result);
@@ -236,7 +235,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       } catch (error) {
         // If backendResponse is available, update rate limit display and show error
         if (backendResponse && dataContainer) {
-          handleRateLimitResponse(dataContainer, backendResponse, true, 'FashionIQ');
+          window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'FashionIQ');
         }
         console.error('[FashionIQ] Error generating fashion analysis:', error);
         alert('An error occurred while analyzing your fashion. Please try again later.');

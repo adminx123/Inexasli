@@ -822,7 +822,7 @@
 
 import { FormPersistence } from '/utility/formPersistence.js';
 import setJSON from '/utility/setJSON.js';
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
+// Rate limiting utilities are now available globally via window.rateLimiter
 
 (function() {
     console.log("Income IQ script initializing");
@@ -1380,7 +1380,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
             }
 
             // Check rate limiting before proceeding
-            if (isRateLimited('income', 10, 60 * 60 * 1000)) { // 10 requests per hour
+            if (window.rateLimiter.isRateLimited('income', 10, 60 * 60 * 1000)) { // 10 requests per hour
                 alert('You have exceeded the request limit for income analysis. Please try again later.');
                 return;
             }
@@ -1396,7 +1396,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
             }
 
             // Get fingerprint data for rate limiting
-            const fingerprintData = getFingerprintForWorker();
+            const fingerprintData = window.rateLimiter.getFingerprintForWorker();
             
             // Create combined payload with both form data and fingerprint
             const workerPayload = {
@@ -1445,7 +1445,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
                         backendResponse = responseData;
                         
                         // Always call handleRateLimitResponse with backend response
-                        handleRateLimitResponse(dataContainer, responseData, !response.ok, 'IncomeIQ');
+                        window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'IncomeIQ');
 
                         if (!response.ok) {
                             throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
@@ -1460,7 +1460,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
                 );
                 
                 // Increment request count after successful response
-                incrementRequestCount('income');
+                window.rateLimiter.incrementRequestCount('income');
 
                 // Store the response using centralized system
                 if (window.incomeFormPersistence) {
@@ -1487,7 +1487,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
             } catch (error) {
                 // If backendResponse is available, update rate limit display and show error
                 if (backendResponse && dataContainer) {
-                    handleRateLimitResponse(dataContainer, backendResponse, true, 'IncomeIQ');
+                    window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'IncomeIQ');
                 }
                 console.error('[IncomeIQ] Error generating income report:', error);
                 alert('An error occurred while generating your income report. Please try again later.');

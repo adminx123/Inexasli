@@ -104,8 +104,7 @@ I prefer working alone on complex problems"></textarea>
  * jurisdictions worldwide.
 */
 
-// Import fingerprint utilities
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
+// Rate limiting utilities are now available globally via window.rateLimiter
 
 (function() {
   // Generate button handler - IMPLEMENTING COMPLETE CALORIEIQ ARCHITECTURE
@@ -117,12 +116,12 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         return;
       }
       // Check rate limiting before proceeding
-      if (isRateLimited('enneagram', 5, 60 * 60 * 1000)) { // 5 requests per hour (as per rate-limiter config)
+      if (window.rateLimiter.isRateLimited('enneagram', 5, 60 * 60 * 1000)) { // 5 requests per hour (as per rate-limiter config)
         alert('You have exceeded the request limit for enneagram analysis. Please try again later.');
         return;
       }
       // Get fingerprint data for rate limiting
-      const fingerprintData = getFingerprintForWorker();
+      const fingerprintData = window.rateLimiter.getFingerprintForWorker();
       // Create combined payload with both form data and fingerprint
       const workerPayload = {
         module: "enneagram",
@@ -149,7 +148,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
               responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
             }
             // Always call handleRateLimitResponse with backend response
-            handleRateLimitResponse(dataContainer, responseData, !response.ok, 'EnneagramIQ');
+            window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'EnneagramIQ');
             if (!response.ok) {
               throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
             }
@@ -159,7 +158,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
             return responseData;
           }
         );
-        incrementRequestCount('enneagram');
+        window.rateLimiter.incrementRequestCount('enneagram');
         window.enneagramFormPersistence.saveResponseData(backendResponse);
         const event = new CustomEvent('api-response-received', {
           detail: {
@@ -171,7 +170,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         document.dispatchEvent(event);
       } catch (error) {
         if (backendResponse && dataContainer) {
-          handleRateLimitResponse(dataContainer, backendResponse, true, 'EnneagramIQ');
+          window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'EnneagramIQ');
         }
         console.error('[EnneagramIQ] Error generating enneagram analysis:', error);
       }

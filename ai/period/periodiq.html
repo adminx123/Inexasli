@@ -62,7 +62,7 @@
 </div>
 
 <script type="module">
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
+// Rate limiting utilities are now available globally via window.rateLimiter
 
 (function() {
   console.log("Period IQ script initializing");
@@ -99,12 +99,12 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       }
 
       // Check rate limiting
-      if (isRateLimited('period', 8, 60 * 60 * 1000)) {
+      if (window.rateLimiter.isRateLimited('period', 8, 60 * 60 * 1000)) {
         alert('You have exceeded the request limit for period analysis. Please try again later.');
         return;
       }
 
-      const fingerprintData = getFingerprintForWorker();
+      const fingerprintData = window.rateLimiter.getFingerprintForWorker();
       
       const workerPayload = {
         module: "period",
@@ -134,7 +134,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
               responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
             }
             
-            handleRateLimitResponse(dataContainer, responseData, !response.ok, 'PeriodIQ');
+            window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'PeriodIQ');
             
             if (!response.ok) {
               throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
@@ -146,7 +146,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
           }
         );
         
-        incrementRequestCount('period');
+        window.rateLimiter.incrementRequestCount('period');
         window.periodFormPersistence.saveResponseData(backendResponse);
         
         const event = new CustomEvent('api-response-received', {
@@ -161,7 +161,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         
       } catch (error) {
         if (backendResponse && dataContainer) {
-          handleRateLimitResponse(dataContainer, backendResponse, true, 'PeriodIQ');
+          window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'PeriodIQ');
         }
         console.error('[PeriodIQ] Error generating period analysis:', error);
       }

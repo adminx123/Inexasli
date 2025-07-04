@@ -90,8 +90,7 @@
 <!-- Jump to Food Log button (conditionally rendered by JS) -->
 
 <script type="module">
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
-
+// Rate limiting utilities are now available globally via window.rateLimiter
 
 (function() {
   console.log("Calorie IQ script initializing");
@@ -119,13 +118,13 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
       const validatedFormData = formData;
 
       // Check rate limiting before proceeding
-      if (isRateLimited('calorie', 8, 60 * 60 * 1000)) { // 8 requests per hour (as per rate-limiter config)
+      if (window.rateLimiter.isRateLimited('calorie', 8, 60 * 60 * 1000)) { // 8 requests per hour (as per rate-limiter config)
         alert('You have exceeded the request limit for calorie analysis. Please try again later.');
         return;
       }
 
       // Get fingerprint data for rate limiting
-      const fingerprintData = getFingerprintForWorker();
+      const fingerprintData = window.rateLimiter.getFingerprintForWorker();
       
       // Create combined payload with form data and fingerprint
       const workerPayload = {
@@ -154,7 +153,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
               responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
             }
             // Always call handleRateLimitResponse with backend response
-            handleRateLimitResponse(dataContainer, responseData, !response.ok, 'CalorieIQ');
+            window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'CalorieIQ');
             if (!response.ok) {
               throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
             }
@@ -164,7 +163,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
             return responseData;
           }
         );
-        incrementRequestCount('calorie');
+        window.rateLimiter.incrementRequestCount('calorie');
         window.calorieFormPersistence.saveResponseData(backendResponse);
         const event = new CustomEvent('api-response-received', {
           detail: {
@@ -177,7 +176,7 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
         console.log('[CalorieIQ] Dispatched api-response-received event');
       } catch (error) {
         if (backendResponse && dataContainer) {
-          handleRateLimitResponse(dataContainer, backendResponse, true, 'CalorieIQ');
+          window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'CalorieIQ');
         }
         console.error('[CalorieIQ] Error generating calorie plan:', error);
       }
