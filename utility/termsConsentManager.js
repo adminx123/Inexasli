@@ -30,7 +30,6 @@
   const STORAGE_KEY = 'userLegalStatus';
   const COOKIE_NAME = 'user_legal_status';
   const EXPIRY_DAYS = 365;
-  const TERMS_FILE_PATH = '/legal.txt';
   
   // AUTO-UPDATE-HELPER: Change this date when updating Terms of Service
   const TOS_LAST_UPDATED = "2025-07-04T16:19:01.000Z"; // ISO format for comparison
