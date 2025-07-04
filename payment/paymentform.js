@@ -900,6 +900,13 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
     try {
         console.log("Initiating fetch to:", paymentEndpoint);
         console.log("Current origin:", window.location.origin);
+        console.log("Sending origin to backend for dynamic redirect URLs");
+        
+        // Validate origin before sending
+        const currentOrigin = window.location.origin;
+        if (!currentOrigin || !currentOrigin.startsWith('http')) {
+            console.warn("Invalid origin detected, payment may fail:", currentOrigin);
+        }
         
         // Increase timeout to 20 seconds
         const controller = new AbortController();
@@ -913,7 +920,7 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
             headers: { 
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "Origin": window.location.origin
+                "Origin": currentOrigin // Dynamic origin for redirect URLs
             },
             body: JSON.stringify(payload),
             mode: "cors",
