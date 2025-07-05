@@ -455,8 +455,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (hasFormElements) {
                 console.log('[DataIn] Form content detected, preparing guided forms initialization');
                 
-                // Update content with initial hiding to prevent flash
-                dataContent.innerHTML = `<div style="opacity: 0; transition: opacity 0.2s ease;">${content}</div>`;
+                // Update content directly without opacity transitions
+                dataContent.innerHTML = content;
                 
                 // Initialize auto-expand textareas immediately after content is loaded
                 console.log('[DataIn] Initializing auto-expand textareas immediately after content load');
@@ -472,12 +472,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                         console.log('[DataIn] Re-initializing auto-expand after form persistence');
                         initAutoExpandTextareas();
                     }, 100);
-                    
-                    // Show content with smooth transition
-                    const contentWrapper = dataContent.querySelector('div');
-                    if (contentWrapper) {
-                        contentWrapper.style.opacity = '1';
-                    }
                     
                     console.log('[DataIn] Content revealed after guided forms initialization');
 
@@ -658,26 +652,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 transform: translateY(0);
             }
 
-            .data-container-in:hover {
-                background-color: rgba(255, 255, 255, 0.99);
-                box-shadow: 0 -12px 40px rgba(255, 255, 255, 0.2), 0 -6px 20px rgba(255, 255, 255, 0.15), 0 -2px 8px rgba(255, 255, 255, 0.1);
-            }
-
-            /* Header always visible at top */
-            .data-container-in .container-header {
-                min-height: 36px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0 10px;
-                background: linear-gradient(180deg, rgba(235, 245, 240, 0.6) 0%, rgba(245, 250, 247, 0.3) 70%, rgba(255, 255, 255, 0.05) 100%);
-                border-radius: 24px 24px 0 0;
-                flex-shrink: 0;
-                box-sizing: border-box;
-                backdrop-filter: blur(2px);
-            }
-
-            /* Utility buttons - always visible in header */
+            /* Utility buttons - always visible at top */
             .data-container-in .utility-buttons-container {
                 display: flex;
                 flex-direction: row;
@@ -686,10 +661,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 justify-content: space-evenly;
                 width: 100%;
                 min-height: 36px;
-                padding: 0;
+                padding: 0 10px;
                 box-sizing: border-box;
                 overflow: hidden;
                 flex-wrap: nowrap;
+                background-color: transparent;
+                border-radius: 24px 24px 0 0;
+                flex-shrink: 0;
             }
 
             /* Hide only the guided form navigation button when container is minimized */

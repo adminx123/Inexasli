@@ -33,7 +33,7 @@ function injectModalCSS() {
 }
 
 .modal-content {
-    background-color: rgba(242, 249, 243, 0.95);
+    background-color: rgba(248, 250, 252, 0.95);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
@@ -50,7 +50,7 @@ function injectModalCSS() {
     font-family: "Inter", sans-serif;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(74, 124, 89, 0.12), 0 4px 16px rgba(74, 124, 89, 0.08), 0 1px 4px rgba(74, 124, 89, 0.04);
+    box-shadow: 0 8px 32px rgba(107, 114, 128, 0.12), 0 4px 16px rgba(107, 114, 128, 0.08), 0 1px 4px rgba(107, 114, 128, 0.04);
     transform: scale(0.95);
     transition: all 0.3s ease;
     scrollbar-width: none;
@@ -95,13 +95,13 @@ function injectModalCSS() {
 }
 
 .modal-trigger:hover {
-    color: #4a7c59;
+    color: #6b7280;
     text-decoration: none;
 }
 
 /* Button styling */
 .modal-content button {
-    background: rgba(45, 90, 61, 0.9);
+    background: rgba(75, 85, 99, 0.9);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     color: #fff;
@@ -113,13 +113,13 @@ function injectModalCSS() {
     font-weight: bold;
     font-family: "Geist", sans-serif;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
+    box-shadow: 0 4px 16px rgba(75, 85, 99, 0.15);
 }
 
 .modal-content button:hover {
-    background: rgba(74, 124, 89, 0.95);
+    background: rgba(107, 114, 128, 0.95);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(45, 90, 61, 0.2);
+    box-shadow: 0 6px 20px rgba(75, 85, 99, 0.2);
 }
 
 .modal-content button:disabled {
@@ -149,7 +149,7 @@ function injectModalCSS() {
 .modal-content .markdown-content strong,
 .modal-content .markdown-content b {
     font-weight: bold;
-    color: #2d5a3d;
+    color: #4b5563;
     font-family: "Geist", sans-serif;
 }
 
@@ -164,11 +164,11 @@ function injectModalCSS() {
 }
 
 .modal-content .markdown-content h3 {
-    color: #2d5a3d;
+    color: #4b5563;
     font-family: "Geist", sans-serif;
     font-size: 1.1em;
     margin: 20px 0 12px 0;
-    border-bottom: 1px solid rgba(45, 90, 61, 0.2);
+    border-bottom: 1px solid rgba(75, 85, 99, 0.2);
     padding-bottom: 4px;
 }
 
