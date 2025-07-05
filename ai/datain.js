@@ -880,7 +880,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             // Check if the click is inside any known modal that might be on top of datain.
             // If a click is inside another modal, this listener should ignore it.
-            const isClickInsideAnotherModal = e.target.closest('#faq-modal-backdrop, .data-overwrite-modal, .payment-modal, .share-modal-backdrop');
+            const isClickInsideAnotherModal = e.target.closest('#faq-modal-backdrop, .data-overwrite-modal, .payment-modal, .share-modal-backdrop, .modal');
             const isClickOnToast = e.target.closest('[id^="toast-"]');
 
             if (isClickInsideAnotherModal || isClickOnToast) {
