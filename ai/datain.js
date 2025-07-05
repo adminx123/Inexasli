@@ -639,10 +639,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 background-color: rgba(255, 255, 255, 0.97);
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.7);
                 border-bottom: none;
                 border-radius: 24px 24px 0 0;
-                box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12), 0 -4px 16px rgba(0, 0, 0, 0.08), 0 -1px 4px rgba(0, 0, 0, 0.04);
+                box-shadow: 0 -8px 32px rgba(255, 255, 255, 0.15), 0 -4px 16px rgba(255, 255, 255, 0.1), 0 -1px 4px rgba(255, 255, 255, 0.08);
                 z-index: 1000;
                 font-family: "Inter", sans-serif;
                 display: flex;
@@ -660,7 +660,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             .data-container-in:hover {
                 background-color: rgba(255, 255, 255, 0.99);
-                box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.15), 0 -6px 20px rgba(0, 0, 0, 0.1), 0 -2px 8px rgba(0, 0, 0, 0.06);
+                box-shadow: 0 -12px 40px rgba(255, 255, 255, 0.2), 0 -6px 20px rgba(255, 255, 255, 0.15), 0 -2px 8px rgba(255, 255, 255, 0.1);
             }
 
             /* Header always visible at top */

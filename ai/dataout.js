@@ -75,20 +75,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                 position: fixed;
                 top: 0;
                 left: 0;
-                background-color: #f2f9f3;
+                background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #2a2a2a 100%);
                 padding: 4px;
                 border-radius: 0 0 27px 27px;
-                box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
                 z-index: 500;
                 width: 100%;
                 height: 100vh;
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 opacity: 1;
-            }
-
-            .data-container-out:hover {
-                background-color: #eef7f0;
+                color: #e0e0e0;
             }
 
             .data-container-out .data-content {
